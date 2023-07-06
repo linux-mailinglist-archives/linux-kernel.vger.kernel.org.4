@@ -2,195 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9DE749B44
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A02749B4B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjGFMAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S232692AbjGFMBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjGFMAm (ORCPT
+        with ESMTP id S232469AbjGFMBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:00:42 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C99128;
-        Thu,  6 Jul 2023 05:00:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688644841; x=1720180841;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZDJycbQzQdGx49/hXHpAZTUVfY/mTPwVhJwoARAumb0=;
-  b=TbXY5GGsZkc+uP+9Op4eLSa/BQwi0JzARu2NdlnBWpDuvQG4imqW2Wv9
-   PFLFi95SNlXr2/Y/Sprn4oe0xqSQenaASKf76PK8Q6F3y6chfO/LkTfRM
-   jMejne1uVpGZr47j2qrmf42kUBeCGFi8q061WS83SgYsnJA0JZg8lubC7
-   LnPWGrI3MzD6YYmz68P4yJNkjet3dMWddZMCzCC12+y4U10cPRjakma1H
-   RrOjruT+Tr/EzTsg3pU/SkdljkC//bNmqRqBOaa1S7jKrZ063mHGJgNp5
-   7NxZdMmIorVopBAHNY5R/XqqhyUjN7i2IkhILTNl8b1L2Vfu024p6MFtT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="394339449"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="394339449"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 05:00:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="784907215"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="784907215"
-Received: from azsigmon-mobl.ger.corp.intel.com (HELO [10.249.33.88]) ([10.249.33.88])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 05:00:38 -0700
-Message-ID: <45c8ebd7-c394-49f9-ca2b-39755c867f7e@linux.intel.com>
-Date:   Thu, 6 Jul 2023 15:00:36 +0300
+        Thu, 6 Jul 2023 08:01:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128381BC9;
+        Thu,  6 Jul 2023 05:01:03 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366Bkvwv025204;
+        Thu, 6 Jul 2023 12:01:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=MgFgLExdzOXDVINyezCyX4yUENhWZqwwJnX9EcPhS+k=;
+ b=d3CSNkTMZVngjGCaLvJJPXSAen9vba8RcNfFRRVUAD/pT7TV5QKQ4dVSy6QmtbvEsiqo
+ D3F1WdlkIcMI2eeKX7Ql78v5rCvyQFW2hcmj2vi9B7oliTUscB31+d4wGTQz+49hE4mI
+ Cec+KlyjO/7iPFh++dBdygNMX1DLG2Dslkn9M0vBiTUTsw7cATLgFpLFP3AH8yPeG+Q4
+ HdD/svUhr3V1nKW6KTykfH3UkOwZ0lJ0QIcAGYc4WNFAcHHFYSyTpAmmmKIFqLtlUbjG
+ vTdUefIDHQkRdNjCB6Q5ZKi7QbnRa0lfs6hDnK1wBS2LuryQnmKqszhZynICJ3P39jQN 2Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rnw1uga63-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 12:01:01 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 366BrYrf013547;
+        Thu, 6 Jul 2023 12:01:00 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rnw1uga1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 12:00:58 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3660IFFs012401;
+        Thu, 6 Jul 2023 12:00:55 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3rjbs4ua9p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 12:00:55 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 366C0qA860686700
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jul 2023 12:00:52 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3089D20043;
+        Thu,  6 Jul 2023 12:00:52 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 60A1A2004D;
+        Thu,  6 Jul 2023 12:00:51 +0000 (GMT)
+Received: from [9.171.3.14] (unknown [9.171.3.14])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jul 2023 12:00:51 +0000 (GMT)
+Message-ID: <bf41a4c062f2b7f7fb63bdee2c4ef1333c624393.camel@linux.ibm.com>
+Subject: Re: [PATCH net] s390/ism: Fix locking for forwarding of IRQs and
+ events to clients
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Paolo Abeni <pabeni@redhat.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jan Karcher <jaka@linux.ibm.com>,
+        Stefan Raspl <raspl@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Julian Ruess <julianr@linux.ibm.com>, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Jul 2023 14:00:51 +0200
+In-Reply-To: <c6835aae95dd18da35795d2231e9326e0d21b60b.camel@redhat.com>
+References: <20230705121722.2700998-1-schnelle@linux.ibm.com>
+         <c6835aae95dd18da35795d2231e9326e0d21b60b.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
-Content-Language: en-US
-To:     Yonghong Song <yhs@meta.com>, shuah@kernel.org, tglx@linutronix.de,
-        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        mingo@redhat.com
-Cc:     ast@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org
-References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
- <20230703105745.1314475-2-tero.kristo@linux.intel.com>
- <0ec3be00-1be1-540b-7598-a693c5a92c8a@meta.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <0ec3be00-1be1-540b-7598-a693c5a92c8a@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tWzEmQdFitVBYpCA-AFhCw9nIldilkBJ
+X-Proofpoint-ORIG-GUID: s_wrybLu8I4tGK9XkCtwr6o9M0-244VQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_07,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 phishscore=0 mlxlogscore=575 clxscore=1015 adultscore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2023-07-06 at 12:47 +0200, Paolo Abeni wrote:
+> On Wed, 2023-07-05 at 14:17 +0200, Niklas Schnelle wrote:
+> > The clients array references all registered clients and is protected by
+> > the clients_lock. Besides its use as general list of clients the client=
+s
+> > array is accessed in ism_handle_irq() to forward IRQs and events to
+> > clients. This use in an interrupt handler thus requires all code that
+> > takes the clients_lock to be IRQ save.
+> >=20
+> > This is problematic since the add() and remove() callbacks which are
+> > called for all clients when an ISM device is added or removed cannot be
+> > called directly while iterating over the clients array and holding the
+> > clients_lock since clients need to allocate and/or take mutexes in thes=
+e
+> > callbacks. To deal with this the calls get pushed to workqueues with
+> > additional housekeeping to be able to wait for the completion outside
+> > the clients_lock.
+> >=20
+> > Moreover while the clients_lock is taken in the IRQ handler when callin=
+g
+> > handle_event() it is incorrectly not held during the
+> > client->handle_irq() call and for the preceding clients[] access. This
+> > leaves the clients array unprotected. Similarly the accesses to
+> > ism->sba_client_arr[] in ism_register_dmb() and ism_unregister_dmb() ar=
+e
+> > also not protected by any lock. This is especially problematic as the
+> > the client ID from the ism->sba_client_arr[] is not checked against
+> > NO_CLIENT.
+> >=20
+> > Instead of expanding the use of the clients_lock further add a separate
+> > array in struct ism_dev which references clients subscribed to the
+> > device's events and IRQs. This array is protected by ism->lock which is
+> > already taken in ism_handle_irq() and can be taken outside the IRQ
+> > handler when adding/removing subscribers or the accessing
+> > ism->sba_client_arr[].
+> >=20
+> > With the clients_lock no longer accessed from IRQ context it is turned
+> > into a mutex and the add and remove workqueues plus their housekeeping
+> > can be removed in favor of simple direct calls.
+> >=20
+> > Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
+> > Tested-by: Julian Ruess <julianr@linux.ibm.com>
+> > Reviewed-by: Julian Ruess <julianr@linux.ibm.com>
+> > Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
+> > Reviewed-by: Wenjia Zhang <wenjia@linux.ibm.com>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> > Note: I realize this is a rather large patch. So I'd understand if it's=
+ not
+> > acceptable as is and needs to be broken up. That said it removes more l=
+ines
+> > than it adds and the complexity of the resulting code is in my opinion =
+reduced.
+>=20
+> This is indeed unusually large for a -net patch. IMHO it would be
+> better split it in 2 separated patches: 1 introducing the ism->lock and
+> one turning the clients_lock in a mutex. The series should still target
+> -net, but should be more easily reviewable.
+>=20
+> Thanks,
+>=20
+> Paolo
+>=20
 
-On 04/07/2023 07:49, Yonghong Song wrote:
->
->
-> On 7/3/23 3:57 AM, Tero Kristo wrote:
->> Currently the raw TSC counter can be read within kernel via 
->> rdtsc_ordered()
->> and friends, and additionally even userspace has access to it via the
->> RDTSC assembly instruction. BPF programs on the other hand don't have
->> direct access to the TSC counter, but alternatively must go through the
->> performance subsystem (bpf_perf_event_read), which only provides 
->> relative
->> value compared to the start point of the program, and is also much 
->> slower
->> than the direct read. Add a new BPF helper definition for bpf_rdtsc() 
->> which
->> can be used for any accurate profiling needs.
->>
->> A use-case for the new API is for example wakeup latency tracing via
->> eBPF on Intel architecture, where it is extremely beneficial to be able
->> to get raw TSC timestamps and compare these directly to the value
->> programmed to the MSR_IA32_TSC_DEADLINE register. This way a direct
->> latency value from the hardware interrupt to the execution of the
->> interrupt handler can be calculated. Having the functionality within
->> eBPF also has added benefits of allowing to filter any other relevant
->> data like C-state residency values, and also to drop any irrelevant
->> data points directly in the kernel context, without passing all the
->> data to userspace for post-processing.
->>
->> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
->> ---
->>   arch/x86/include/asm/msr.h |  1 +
->>   arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
->>   2 files changed, 24 insertions(+)
->>
->> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
->> index 65ec1965cd28..3dde673cb563 100644
->> --- a/arch/x86/include/asm/msr.h
->> +++ b/arch/x86/include/asm/msr.h
->> @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
->>   void msrs_free(struct msr *msrs);
->>   int msr_set_bit(u32 msr, u8 bit);
->>   int msr_clear_bit(u32 msr, u8 bit);
->> +u64 bpf_rdtsc(void);
->>     #ifdef CONFIG_SMP
->>   int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
->> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
->> index 344698852146..ded857abef81 100644
->> --- a/arch/x86/kernel/tsc.c
->> +++ b/arch/x86/kernel/tsc.c
->> @@ -15,6 +15,8 @@
->>   #include <linux/timex.h>
->>   #include <linux/static_key.h>
->>   #include <linux/static_call.h>
->> +#include <linux/btf.h>
->> +#include <linux/btf_ids.h>
->>     #include <asm/hpet.h>
->>   #include <asm/timer.h>
->> @@ -29,6 +31,7 @@
->>   #include <asm/intel-family.h>
->>   #include <asm/i8259.h>
->>   #include <asm/uv/uv.h>
->> +#include <asm/tlbflush.h>
->>     unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, not 
->> used here */
->>   EXPORT_SYMBOL(cpu_khz);
->> @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
->>       tsc_enable_sched_clock();
->>   }
->>   +u64 bpf_rdtsc(void)
->
-> Please see kernel/bpf/helpers.c. For kfunc definition, we should have
->
-> __diag_push();
-> __diag_ignore_all("-Wmissing-prototypes",
->                   "Global functions as their definitions will be in 
-> vmlinux BTF");
->
-> _bpf_kfunc u64 bpf_rdtsc(void)
-> {
->     ...
-> }
->
-> __diag_pop();
-Thanks, I'll modify this for next rev.
->
->
->> +{
->> +    /* Check if Time Stamp is enabled only in ring 0 */
->> +    if (cr4_read_shadow() & X86_CR4_TSD)
->> +        return 0;
->> +
->> +    return rdtsc_ordered();
->> +}
->> +
->> +BTF_SET8_START(tsc_bpf_kfunc_ids)
->> +BTF_ID_FLAGS(func, bpf_rdtsc)
->> +BTF_SET8_END(tsc_bpf_kfunc_ids)
->> +
->> +static const struct btf_kfunc_id_set tsc_bpf_kfunc_set = {
->> +    .owner        = THIS_MODULE,
->> +    .set        = &tsc_bpf_kfunc_ids,
->> +};
->> +
->>   void __init tsc_init(void)
->>   {
->>       if (!cpu_feature_enabled(X86_FEATURE_TSC)) {
->> @@ -1594,6 +1615,8 @@ void __init tsc_init(void)
->>         clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
->>       detect_art();
->> +
->> +    register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, 
->> &tsc_bpf_kfunc_set);
->
-> register_btf_kfunc_id_set() could fail, maybe you at least wants to
-> have a warning so bpf prog users may be aware that kfunc bpf_rdtsc()
-> not really available to bpf programs?
+Sounds reasonable. Patch 1 would introduce and use the ism->subs[]
+array under the ism->lock and also protect the ism->sba_client_arr[]
+under that lock. Patch 2 would then turn clients_lock into a mutex and
+remove the workqueues. I think strictly speaking the second one then
+isn't a fix but let's see. @Alexandra, Wenjia, Julian I'll drop your R-
+bs as its a larger rework but I hope to end up at the same code after
+both patches so should be easy to re-revievie for you.
 
-Yes, I'll add a warning print.
-
--Tero
-
->
->>   }
->>     #ifdef CONFIG_SMP
+Thanks,
+Niklas
