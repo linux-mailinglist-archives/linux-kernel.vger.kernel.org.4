@@ -2,194 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0999F7497C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38177497C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbjGFIyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S231652AbjGFI42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjGFIyD (ORCPT
+        with ESMTP id S230125AbjGFI40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:54:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBED1BC2;
-        Thu,  6 Jul 2023 01:54:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05C38618DB;
-        Thu,  6 Jul 2023 08:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3B1C43391;
-        Thu,  6 Jul 2023 08:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688633641;
-        bh=BPOKAtKEZsLQYqxQEn58ctnADIlq6pN2eFukwAbEnx8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=beK9deYduBKqS6YLBFt6ppsVe0yRoy/MxMQzFsFYHino2LJojmD4O3AJ+B4Yl1RJF
-         dGnh4V4Li31VNs2Y+7nQDfDpk4PKlJ45B/KlZBcAIEbvxynjot5ZboGePcVNC3Lv40
-         vwGChjUciBKXxb2/pu0O03gJHrVskzYXp63FM4OkTSjnDrveESvJ5Eeg56aT2PxM91
-         wOfX5CmosO+5xSay9JkfVR2wD8g8pyMpGofqcf28kCTlluWqsgYvy3pyNB7gQxlWuc
-         pWeBK8yvPd1gJfEfkT86DPTi+kgxGFI9V339Z3FdwzoVwsFuyrViC8VKupLbMgk7Tk
-         BDNw7C5cGMNqQ==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b6c5ede714so20427091fa.1;
-        Thu, 06 Jul 2023 01:54:01 -0700 (PDT)
-X-Gm-Message-State: ABy/qLakTVrCb2SU3UfV6YMmmadsLYesUzKTZL+TbUet/ukcnqhhAZGj
-        zyVos7hfJB4egkspuFp/yL7Uow/yZFXioUQJnnY=
-X-Google-Smtp-Source: APBJJlG9hlQ+baCj1Ocfd/bosbNpQBdbn4u1x8CKtqovKY5A5awNf90avWLlllSXL8AumOkcJPtGKWz5NpOAyzGZjfc=
-X-Received: by 2002:a2e:95d4:0:b0:2b6:da61:d5b9 with SMTP id
- y20-20020a2e95d4000000b002b6da61d5b9mr543533ljh.14.1688633639271; Thu, 06 Jul
- 2023 01:53:59 -0700 (PDT)
+        Thu, 6 Jul 2023 04:56:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4441BC2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688633740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YtiptVHvMzNWj7OK86AmKFH74I1effK+jyGBu3N7VtM=;
+        b=YRnzcskxSmlYiSwJe51YVkDwqC5MOkLyMEDICHyXe++I+Kydk5B+6DtFBhlyt4zIwiyvkm
+        +Yejh0vH2w+lb8CCZ9dmJByjKVbFieH3ocmFB8xsHXSr+1s9+iOPbEBZvTBIslRgIw8xuD
+        2mJ1T54/Uc0NwAbX9UqpL4KPUOBxsd8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-479-5qfQ8JuYNhqKEVvsdbkCAA-1; Thu, 06 Jul 2023 04:55:39 -0400
+X-MC-Unique: 5qfQ8JuYNhqKEVvsdbkCAA-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-314394a798dso250757f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:55:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688633738; x=1691225738;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YtiptVHvMzNWj7OK86AmKFH74I1effK+jyGBu3N7VtM=;
+        b=Svm0zkEi1VTGg29NlZYlnmXiiM0WLP2obkfSUdqsfuf8h9tc1cdK/yDa1Hrov73Jl8
+         EYR6OlrLau0CiHcrVOwfgSHkWsn6BO78HD5Oek0OdtwKYxs+LjmS0tTAGxJYxLboai8c
+         k9py7rPWHeOWs5HmfQcfoyGxztTCnSYcbTq1vvad8K4Lf1vhGwFpKcK72hWtiNX01WK1
+         q/V1BqBTfb4y/Rs6IFSA8uyM44wYr+4FXPoAP2sazAxzs70a4Hbqy5ZGAWHKcd+Oo3CR
+         L34GRwFkfzo2LVrJVNS5N9qXOxatMihJddeaQtfB4zuNkPsBPEOI1BR31Je/mWS+5NQ3
+         apXA==
+X-Gm-Message-State: ABy/qLaSRqzt81G/9aHOmIOV/Uw/vTEHadXwC89VCmBxP2Mncyq0BHqS
+        rVLdqSySENQpFE4VV2n/BLOkL8VIObNZd5Zbvnih78nYPlPJaRzWB+SjPp8HhcqMA55dqT1thXd
+        /bbYuPVyxtz/5oYp5PtSLnWFn
+X-Received: by 2002:adf:fd84:0:b0:314:a8d:2c9 with SMTP id d4-20020adffd84000000b003140a8d02c9mr1487461wrr.0.1688633738634;
+        Thu, 06 Jul 2023 01:55:38 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEfmHL4/hrNwfFY2QHgZie0XBPZya149E8ViI5Z5J/tcb8dm63kfZ9X06WtwuK0F+AYU+yPzg==
+X-Received: by 2002:adf:fd84:0:b0:314:a8d:2c9 with SMTP id d4-20020adffd84000000b003140a8d02c9mr1487445wrr.0.1688633738310;
+        Thu, 06 Jul 2023 01:55:38 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id p7-20020adff207000000b00313f031876esm1301923wro.43.2023.07.06.01.55.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 01:55:37 -0700 (PDT)
+Message-ID: <492be1c2-9078-1923-51f9-e01156455ea1@redhat.com>
+Date:   Thu, 6 Jul 2023 10:55:37 +0200
 MIME-Version: 1.0
-References: <20230705114251.661-1-cuiyunhui@bytedance.com> <mhng-48837062-b9f6-4968-be9e-9d3b352be117@palmer-ri-x1c9>
- <CAEEQ3wmRZGHNMB+CyfmAAGmapvFeQMVsgtQJh5nE01KG_3UBiw@mail.gmail.com>
-In-Reply-To: <CAEEQ3wmRZGHNMB+CyfmAAGmapvFeQMVsgtQJh5nE01KG_3UBiw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 6 Jul 2023 10:53:47 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFZren0Q19DimwQaETCLz64D4bZQC5B2N=i3SAWHygkTQ@mail.gmail.com>
-Message-ID: <CAMj1kXFZren0Q19DimwQaETCLz64D4bZQC5B2N=i3SAWHygkTQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from FFI
-To:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>, sunilvl@ventanamicro.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, Mark Rutland <mark.rutland@arm.com>,
-        lpieralisi@kernel.org, rafael@kernel.org, lenb@kernel.org,
-        jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] mm/ksm: prepare to remove the redundant ksm_merging_pages
+ in procfs
+Content-Language: en-US
+To:     Nanyong Sun <sunnanyong@huawei.com>, akpm@linux-foundation.org
+Cc:     xu.xin16@zte.com.cn, wangkefeng.wang@huawei.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20230706094917.588213-1-sunnanyong@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230706094917.588213-1-sunnanyong@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jul 2023 at 04:04, =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@bytedan=
-ce.com> wrote:
->
-> Hi Palmer,
->
-> On Wed, Jul 5, 2023 at 10:17=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.co=
-m> wrote:
-> >
-> > On Wed, 05 Jul 2023 04:42:47 PDT (-0700), cuiyunhui@bytedance.com wrote=
-:
-> > > Here's version 3 of patch series.
-> > >
-> > > V1: The FFI (FDT FIRMWARE INTERFACE) scheme has reached a
-> > > consensus with the Maintainers.
-> > > Please refer to:
-> > > https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16=
--1-cuiyunhui@bytedance.com/
-> >
-> > From looking at that thread it seems that the consensus is this is a ba=
-d
-> > idea?  Sorry if I'm just missing something...
-> >
->
-> First of all, Coreboot does not support EFI, Ron has expressed, as follow=
-s:
-> "I am wondering if we can focus on risc-v here, and not drag in ARM,
-> b/c the ARM ACPI+UEFI ship has sailed. I had that discussion in 2013
-> ;-) and it's clear we don't want to redo it.
-> In general, in my world, because of the many problems that come with
-> UEFI (security, code quality, performance), we'd like to avoid
-> requiring a dependency on UEFI just to get ACPI on RISC-V. It also
-> seems, from other discussions I'm having, that there is some belief
-> that ACPI will be wanted on RISC-V. It would be nice to separate those
-> pieces on RISC-V; certainly they were separate for a very long time in
-> the x86 world (we had ACPI+SMM on coreboot laptops without UEFI for
-> example)."
->
-
-There appears to be a bit of cargo cult going on here.
-
-I agree that the traditional BIOS vendors did a terrible job pivoting
-to (U)EFI when it became a requirement for booting Windows on x86 PCs,
-and coreboot did an excellent job providing a retrofit alternative
-that was more secure and robust.
-
-However, it makes sense to distinguish between
-a) the UEFI specification
-b) the UEFI reference implementation (edk2)
-c) commercial implementations created by BIOS vendors for x86 PC OEMs
-that do not perform any testing beyond booting Windows.
-
-coreboot decided not to implement EFI at all, which on x86 means
-booting in a mode that is similar to BIOS boot. Given how the ACPI and
-DMTF (for SMBIOS) specifications were already under development when
-UEFI was being rolled out on x86, those specs contain provisions
-defining how to obtain the ACPI and SMBIOS tables by scanning regions
-of memory and looking for magic strings. But this is only defined for
-x86, and only works on x86 because all x86 machines are essentially
-PCs with a highly uniform system topology.
-
-The ARM case is very different, and while I am no expect on RISC-V,
-the following probably applies to it as well:
-- there is no need to work around buggy proprietary firmware that can
-boot Windows but not Linux
-- there is no 'prior art' when it comes to pre-EFI boot interfaces
-except for embedded style bare metal boot where all initialization is
-done by the kernel (e.g., PCI enumeration and resource assignment
-etc), and this is fundamentally arch specific
-- ACPI is a rich firmware interface, and the ACPI specification layers
-it on top of UEFI so the OS can make certain assumptions about the
-extent to which the platform has been initialized by the time it hands
-over.
-
-This is why the maintainers of the arm64 and RISC-V ports appear to
-agree that ACPI will only be supported when booting from firmware that
-implements the EFI specification. Note that this does not impose any
-requirement at all regarding which EFI implementation is going to be
-used: suggestions have been made on the thread to use a) a coreboot
-specific minimal EFI shim that describes the firmware tables and the
-EFI memory map, b) the UPL payload for coreboot, and c) U-Boot's EFI
-implementation.
-
-I will also note that booting according to the EFI spec is not
-fundamentally  more secure or faster: I have done some experiments on
-arm64 comparing bare metal boot with EFI boot using a minimal
-implementation in Rust, for booting virtual machines under KVM. Due to
-cache maintenance overhead and execution with the MMU disabled, bare
-metal boot is actually slightly slower. And due to the fact that the
-minimal EFI firmware enables the MMU and caches straight out of reset,
-it is also arguably more secure, given that all memory permission
-based protections and other page table based hardening measures (e.g.,
-BTI) are always enabled.
-
-In summary, I think it may be time to stop extrapolating from bad
-experiences with buggy proprietary x86 PC firmware created by
-traditional BIOS vendors for booting Windows (and nothing else) 15+
-years ago. The situation is very different for non-x86 Linux
-architectures, where we are trying hard to beat some sense into the
-fragmented embedded ecosystem, where every SoC vendor used to have its
-own fork of u-boot that booted in a slightly different manner,
-requiring a lot of effort on the part of the distros to track all
-those moving targets.
+On 06.07.23 11:49, Nanyong Sun wrote:
+> Since the ksm_merging_pages information already included in
+> /proc/<pid>/ksm_stat, we could remove /proc/<pid>/ksm_merging_pages
+> to make the directory more clean, and can save a little bit resources.
+> 
+> To delete this interface more smoothly and avoid userspace break,
+> retain this interface temporarily and modify its function to hint
+> users to use ksm_stat instead.
+> 
+> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
+> ---
+>   fs/proc/base.c | 9 +--------
+>   1 file changed, 1 insertion(+), 8 deletions(-)
+> 
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index eb2e498e3b8d..d080c58cbe6c 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -3189,14 +3189,7 @@ static int proc_pid_patch_state(struct seq_file *m, struct pid_namespace *ns,
+>   static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *ns,
+>   				struct pid *pid, struct task_struct *task)
+>   {
+> -	struct mm_struct *mm;
+> -
+> -	mm = get_task_mm(task);
+> -	if (mm) {
+> -		seq_printf(m, "%lu\n", mm->ksm_merging_pages);
+> -		mmput(mm);
+> -	}
+> -
+> +	seq_puts(m, "please use /proc/<pid>/ksm_stat instead\n");
+>   	return 0;
+>   }
+>   static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
 
 
-> Then, a consensus was reached with Ard, that FFI can be applied to RISC-V=
-.
->
+Why do we care so much about removing 15 simple LOC? That change here 
+will already mess with user space.
 
-For the record, I would not characterize this as consensus. What I said was
-- SMBIOS has very little significance to the kernel itself or impact
-on its internal operation, and so it can be exposed via DT in a
-generic manner;
-- ACPI without UEFI on non-x86 is a) a bad idea, and b) fundamentally
-broken on arm64. So b) is out of the question, but it is not up to me
-to decide whether or not the RISC-V maintainers should entertain bad
-ideas.
+Sorry, but IMHO it's all not worth the churn.
+
+-- 
+Cheers,
+
+David / dhildenb
+
