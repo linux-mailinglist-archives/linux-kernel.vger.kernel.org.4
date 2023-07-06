@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB117497D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993217497D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjGFI64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S231751AbjGFJAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 05:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjGFI6z (ORCPT
+        with ESMTP id S229489AbjGFJAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:58:55 -0400
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FB61990
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:58:53 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
-        by APP-05 (Coremail) with SMTP id zQCowADX3rJAgqZkbVj+CA--.43353S2;
-        Thu, 06 Jul 2023 16:58:40 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ira.weiny@intel.com, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, dave.jiang@intel.com, oohall@gmail.com,
-        aneesh.kumar@linux.ibm.com
-Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] libnvdimm/of_pmem: Replace kstrdup with devm_kstrdup and add check
-Date:   Thu,  6 Jul 2023 16:58:39 +0800
-Message-Id: <20230706085839.31145-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADX3rJAgqZkbVj+CA--.43353S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFWfWr4fZrW5ZrWrAFWfGrg_yoWkAFcEkr
-        40va43Xr1UC39I9wnIkwnakF9Ikw4UuFWrurnYq3ZxJFZ8GF13JrWUAws8G393Xrn7JFsx
-        ur4qqFZ8Wr9rGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUeHUDDUUUU
-X-Originating-IP: [124.16.138.129]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 05:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5031A1BC8;
+        Thu,  6 Jul 2023 02:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB165618CB;
+        Thu,  6 Jul 2023 09:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1132DC433C7;
+        Thu,  6 Jul 2023 09:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688634018;
+        bh=kUhi5w1JB2IJs4oDFUOm+9QXAiYHR4Uf/ijhCdJFvfQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jQ/F1QlXtsreGV/oJu2cGL/Xln/At0TcYnAd7nPR9SNSr/y39AqZicf4eJJui0j22
+         7IM+cM/XiQjOZ87wKh+HlUbqAgK6e4qMRRsVaGvlZ1DrHZLHwwDgKx+lAuX6Zn76LZ
+         D4YhqcAo8Vv69FGRRsZELYkGZqbAkF39ziHJSgx4ts+Gpw1NoSH/+1MgP6DDETl79r
+         cY7JnVt7p5DunRUPPPcmaLmV1LtYuDGZr6aPOFPUPxVMRbL4IuEe2Dr5ptelFYR5CJ
+         NY+1wzfvP820rsv4gp6TRGnhrHUPaIWYoSoGxpRCkXW1u/TDx54xBnA5YHlHSClwiW
+         PQxpan39yZwJg==
+Date:   Thu, 6 Jul 2023 18:00:14 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/retpoline,kprobes: Avoid treating rethunk as an
+ indirect jump
+Message-Id: <20230706180014.06705096a594b71250ff3c94@kernel.org>
+In-Reply-To: <20230706071705.GD2833176@hirez.programming.kicks-ass.net>
+References: <20230705081547.25130-1-petr.pavlu@suse.com>
+        <20230705081547.25130-3-petr.pavlu@suse.com>
+        <20230705085857.GG462772@hirez.programming.kicks-ass.net>
+        <20230705232038.3a6d03e18f7bafb14cdfed42@kernel.org>
+        <20230705145017.GC4253@hirez.programming.kicks-ass.net>
+        <20230706094723.6934105e03f652923796bf7e@kernel.org>
+        <20230706071705.GD2833176@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace kstrdup() with devm_kstrdup() to avoid memory leak and
-add check for the return value of the devm_kstrdup() to avoid
-NULL pointer dereference
+On Thu, 6 Jul 2023 09:17:05 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+> On Thu, Jul 06, 2023 at 09:47:23AM +0900, Masami Hiramatsu wrote:
+> 
+> > > > If I understand correctly, all indirect jump will be replaced with JMP_NOSPEC.
+> > > > If you read the insn_jump_into_range, I onlu jecks the jump code, not call.
+> > > > So the functions only have indirect call still allow optprobe.
+> > > 
+> > > With the introduction of kCFI JMP_NOSPEC is no longer an equivalent to a
+> > > C indirect jump.
+> > 
+> > If I understand correctly, kCFI is enabled by CFI_CLANG, and clang is not
+> > using jump-tables by default, so we can focus on gcc. In that case
+> > current check still work, correct?
+> 
+> IIRC clang can use jump tables, but like GCC needs RETPOLINE=n and
+> IBT=n, so effectively nobody has them.
 
-v2 -> v3:
+So if it requires RETPOLINE=n, current __indirect_thunk_start/end checking
+is not required, right? (that code is embraced with "#ifdef CONFIG_RETPOLINE")
 
-1. Correct the usage of devm_kstrdup().
+> 
+> The reason I did mention kCFI though is that kCFI has a larger 'indirect
+> jump' sequence, and I'm not sure we've thought about what can go
+> sideways if that's optprobed.
 
-v1 -> v2:
+If I understand correctly, kCFI checks only indirect function call (check
+pointer), so no jump tables. Or does it use indirect 'jump' ?
 
-1. Replace kstrdup() with devm_kstrdup().
----
- drivers/nvdimm/of_pmem.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> I suspect the UD2 that's in there will go 'funny' if it's relocated into
+> an optprobe, as in, it'll not be recognised as a CFI fail.
 
-diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
-index 10dbdcdfb9ce..1d2b1ab5b737 100644
---- a/drivers/nvdimm/of_pmem.c
-+++ b/drivers/nvdimm/of_pmem.c
-@@ -30,7 +30,12 @@ static int of_pmem_region_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	priv->bus_desc.provider_name = kstrdup(pdev->name, GFP_KERNEL);
-+	priv->bus_desc.provider_name = devm_kstrdup(&pdev->dev, pdev->name, GFP_KERNEL);
-+	if (!priv->bus_desc.provider_name) {
-+		kfree(priv);
-+		return -ENOMEM;
-+	}
-+
- 	priv->bus_desc.module = THIS_MODULE;
- 	priv->bus_desc.of_node = np;
- 
+UD2 can't be optprobed (kprobe neither) because it can change the dumped
+BUG address...
+
+Thank you,
 -- 
-2.25.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
