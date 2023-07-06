@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21495749FD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF867749FDA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbjGFOvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
+        id S232977AbjGFOwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjGFOvc (ORCPT
+        with ESMTP id S233421AbjGFOwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:51:32 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D6C1FD5;
-        Thu,  6 Jul 2023 07:51:13 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3458a08310aso2656835ab.3;
-        Thu, 06 Jul 2023 07:51:13 -0700 (PDT)
+        Thu, 6 Jul 2023 10:52:24 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4ED1FE1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:52:10 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7659924cd9bso87796585a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 07:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google; t=1688655129; x=1691247129;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=fyfUbQSETzEWvemqOE851lvgUnh/NkXs0bSTrstNyr8=;
+        b=i2Un2fu71+vZBbntcXyVTNvEdBIziZ1L1uzjczm6qGVJ0CcOsqnSyQlN1MIb5HRjl/
+         blyyG7I4BbHEFeKIY7zcCUXcy3fvaNpk6nm48dG9XlvMphfL1yAOussSZ87hQ1B4qUJt
+         9KxljrOCEWESkbhuCN4agXIrZhw9jsey0wGD8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688655073; x=1691247073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1688655129; x=1691247129;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cgnDkKPeeJQpJAr8Igz1bUHZ3qFXqLqwtv/vw0h6laQ=;
-        b=kIozDjF9k2z7Nu63E9sHCTX/pltPyr0bPhA63FccOoxaBohDe7o5lmYjG/52fAyE1/
-         pw79ttNXcoTml/v563MHKkTPkV9v/qNtSQ0SqDPz1yp4m1OYeIQyXZwF8xq4ILkivBBQ
-         bXfd+pRrt+sCq8baYVhVVJuavk4elTRlah/LKJGuMGRwxZFIrfrnqGoPIJ9D+bpkmSad
-         /fypbmbcZgocR+hklnziihUB3EznXMXbuq6bW6cENaToyTI619PeGp/xTI94SHV3rUVf
-         X4Q577jCqu7QWvQ2wpLoYvJKthtvPtkHGj7AnVrz41HF20wlGTtEWMl1SvTi4TbliaTR
-         w/Vw==
-X-Gm-Message-State: ABy/qLapwLmRPxFLgb3Ceiq4EvH2Oo+KK/hGkMaiVRH5ZjhBJ3a69gQg
-        GQ/JQhXe2MMkITqDP3vksA==
-X-Google-Smtp-Source: APBJJlF67lR6D5NqnrBz/z/xaj4p5WF0VZl589v9nUuz7XC/TU588WYs6w03reMlD4UBeRhzLPXgQw==
-X-Received: by 2002:a92:c52c:0:b0:345:d458:d227 with SMTP id m12-20020a92c52c000000b00345d458d227mr2368778ili.7.1688655072884;
-        Thu, 06 Jul 2023 07:51:12 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id g17-20020a0566380bd100b0042b3e2e5ca1sm569170jad.122.2023.07.06.07.51.09
+        bh=fyfUbQSETzEWvemqOE851lvgUnh/NkXs0bSTrstNyr8=;
+        b=bRw/t2rWSJr0WffOZY73Vxkm5OBgLPVWU4p4WqhajyNh0C/nnQX2vUwbgEjQG/v7np
+         lr2ZowbTS6iVPn729wkUeC6+vGEWoTKiZYJummFpcCC83YBVDKh6swVey9TiPK9tZFcS
+         DhDGQBYslXmS4dgRHHn2iLwRhOb23X/R9X3xxt0E8I98k7S6JOPGsbkn9ZP3ijJKycaK
+         xTmkKuB3nWG+S66XCh+MqpH7SknVKW2VwlEHXFJJIdhAmvQtrFUe5CY4douU78wvUWDU
+         7cKuvUstdQZMe55ejUbO+MgF2QD/aOREmWi8+38Yx6SFmpuRMU/o0ASuNB+oH5J40wqf
+         VvTA==
+X-Gm-Message-State: ABy/qLZapt1Bsmg3xuBx1OVxU8Wj9brQPpoSpiWE81bwdSWRzLD1rgw5
+        y9br7M/6To0pWahjhm3zY2k0IQ==
+X-Google-Smtp-Source: APBJJlFT1vALIK6K0rOyw2waZxmnCl6+oNCTAyz6E25Ih5OW5YyHLA3Lb1ef3b6AIXboa4N85r+RfQ==
+X-Received: by 2002:a05:620a:44d3:b0:765:6556:1113 with SMTP id y19-20020a05620a44d300b0076565561113mr3065592qkp.46.1688655129166;
+        Thu, 06 Jul 2023 07:52:09 -0700 (PDT)
+Received: from fedora64.linuxtx.org ([99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id ou23-20020a05620a621700b00767303dc070sm836984qkn.8.2023.07.06.07.52.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 07:51:12 -0700 (PDT)
-Received: (nullmailer pid 3861827 invoked by uid 1000);
-        Thu, 06 Jul 2023 14:51:08 -0000
-Date:   Thu, 6 Jul 2023 08:51:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-Message-ID: <20230706145108.GA3858320-robh@kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
+        Thu, 06 Jul 2023 07:52:08 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+From:   "Justin M. Forbes" <jforbes@fedoraproject.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jmforbes@linuxtx.org
+Subject: [PATCH] Move rmnet out of NET_VENDOR_QUALCOMM dependency
+Date:   Thu,  6 Jul 2023 09:51:52 -0500
+Message-Id: <20230706145154.2517870-1-jforbes@fedoraproject.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
-> feature-domains is an optional property that allows a peripheral to
-> refer to one or more feature domain controller(s).
-> 
-> Description of this property is added to all peripheral binding files of
-> the peripheral under the STM32 firewall controllers. It allows an accurate
-> representation of the hardware, where various peripherals are connected
-> to this firewall bus. The firewall can then check the peripheral accesses
-> before allowing it to probe.
-> 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> ---
-> 
-> Disclaimer: Some error with dtbs_check will be observed as I've
-> considered the property to be generic, as Rob asked
-> 
->  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
->  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
->  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
->  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
->  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
->  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
->  .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
->  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
->  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
->  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
->  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
->  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
->  Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
->  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
->  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
->  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
->  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
->  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
->  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
->  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
->  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
->  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
->  Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
->  24 files changed, 97 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> index b767ec72a999..daf8dcaef627 100644
-> --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> @@ -50,6 +50,10 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  feature-domains:
-> +    minItems: 1
-> +    maxItems: 3
+The rmnet driver is useful for chipsets that are not hidden behind
+NET_VENDOR_QUALCOMM.  Move sourcing the rmnet Kconfig outside of the if
+NET_VENDOR_QUALCOMM as there is no dependency here.
 
-What are the 3 entries?
+Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
+---
+ drivers/net/ethernet/qualcomm/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Rob
+diff --git a/drivers/net/ethernet/qualcomm/Kconfig b/drivers/net/ethernet/qualcomm/Kconfig
+index 9210ff360fdc..5beebe6b486e 100644
+--- a/drivers/net/ethernet/qualcomm/Kconfig
++++ b/drivers/net/ethernet/qualcomm/Kconfig
+@@ -61,6 +61,6 @@ config QCOM_EMAC
+ 	  low power, Receive-Side Scaling (RSS), and IEEE 1588-2008
+ 	  Precision Clock Synchronization Protocol.
+
+-source "drivers/net/ethernet/qualcomm/rmnet/Kconfig"
+-
+ endif # NET_VENDOR_QUALCOMM
++
++source "drivers/net/ethernet/qualcomm/rmnet/Kconfig"
+-- 
+2.40.1
+
