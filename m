@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B314E7496EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1747496F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbjGFH7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S233952AbjGFIA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjGFH7N (ORCPT
+        with ESMTP id S231431AbjGFIAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:59:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2F3121;
-        Thu,  6 Jul 2023 00:59:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2861F618B9;
-        Thu,  6 Jul 2023 07:59:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB58C433C7;
-        Thu,  6 Jul 2023 07:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688630351;
-        bh=zTimcz4m7Wp96vq+YDSDJkwi80FeyVfIxn6cyWrRfJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RBESkY+zvwyfdrR4c7z0AO0ed0WI+rvXAr5CRSnCq81U2jPZTGlvBTTMyXVnMgXqV
-         OrefwdEtZopCjmHgBjgdqWqiOYi0EzQJR1M6i9paUGLh2IZKGu/xQ2BUxuDWbm8lHj
-         p5JAA807/XKuJkl9dQQzagBbkXZYK5X25vVgHK9zUy91zfOpO7EDcACxuC4Xt9cpjs
-         qFdy1aNod3QFONk4xF5efZOpLosNCtObtPWYR9EDw/EHfqkfToBWSdprhEsx+hg07L
-         8U7kNGFyTTxVmcWtAE0V1cV1i3z0/D/sqCpD5K23esL6DMRqXTBxqufk3PRxxPS6Q7
-         Z+0ej/bzjs6PQ==
-Date:   Thu, 6 Jul 2023 09:59:08 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <dri-devel@lists.freedesktop.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Subject: Re: RFC: DSI host capabilities (was: [PATCH RFC 03/10] drm/panel:
- Add LGD panel driver for Sony Xperia XZ3)
-Message-ID: <nfc6ih43gjpi5u67fpkkxgwwygv53grdldq7tfp5iiukrkiy2u@53fsrtezzkyt>
-References: <epds77sccy4cc5cdpoc4ir7sfz5sz3biwep6rbks2nuyqncidu@77gb4t2wy6vn>
- <47a5678c-1eb3-dfc2-a9ac-f8e497455d11@linaro.org>
- <unsithzszj7awvsmxwr7reshso5ju7u4nssil5tty6pocictf5@gwoltpgeecer>
- <6e070141-8c0e-59ed-8a08-58c3fadb17df@linaro.org>
- <lidknise4copce3vb2wth4z3fl2p4npsc4u6ajqb6zsp6lnpca@rp6wxcmy2aa4>
- <CAA8EJpq_VeY=44FqYm7QAT32AR=rmMOV0RtAfNFkb1hpSp29dw@mail.gmail.com>
- <djrx34qwb7yen47dmlsym4mg2pib4syncvdy52ma3sin7uhs7j@gi3znayuucnj>
- <a718f7c1-4ef1-18c8-33c7-c5da22e92c89@linaro.org>
- <q7wrbmdhdy2d3gqig3j34lqxdcwzbom7djlncfznxsa6ktm7j2@i5x4ngi7p2ia>
- <9e071beb-9d9d-c6dc-8196-a3e23ea73713@linaro.org>
+        Thu, 6 Jul 2023 04:00:25 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292261725
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:00:24 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so5133421fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688630422; x=1691222422;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/DNkwga6/1zv+vFjJEB0SiQmwB5Ncp/pmSfHFUcuS9M=;
+        b=G7qX29I1jdpViSoQGgBbNX5C8dKhOdGzeZbvLWDR1rzLF7CVPQQd6GDia7C9VWs/1K
+         v4w6+eXenU58ba8bcfw+DUQqbgXsSTg8cIOSY2GnoFyxw9PhHpzh7QwO+9NCEVbCNjN1
+         LgoMqpsnok/1Bd9RtTBOC7xe+BShfRjwXOu1k0s0Fmd1t46rMNOTYZXxizv5qCga04lS
+         uEhpPHTG5Iz+wAn0A101N3SmE6O2PYr60+JDNmBxywhXBSNwlMIeP+uZB5OUEXxToLSc
+         zrGeIIDBs2XgQZmVVRExcPUkVPXn8+n0fEBO/u4dF0B8vbojWU7ROC4Ccag3sxDSRuUR
+         rGOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688630422; x=1691222422;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/DNkwga6/1zv+vFjJEB0SiQmwB5Ncp/pmSfHFUcuS9M=;
+        b=iJWPFnoU8vLNHwQeRHnGA1nBOfvtAznmtNIdhHuVBRah7frEw2Qc4bBBiWB/vzjWm8
+         2cplFNA/MoDbajcIaUKfhn4Me58PLLs8pT5iujltJemp8zMykENoMj1qF7vX2WhTlkR+
+         tOgTam5N5Uw8Id+fCeB4hRaouw86O7Ba3n1/WwSZWCGtEaUvAjJG2GJfTIQxu4dhoePx
+         HTbNLrv7Mudghva2iADIww8v/MOaOHNvpn1nlqpv7tnZDGWbRirO8JvpwvY71QNa24Nb
+         naGB8gGrIytw8vqgufDUc18SXU7wNQzCI2GfVVCdvwVtecptZ/PGzXkJoV+Dr1YRGNbT
+         XKsg==
+X-Gm-Message-State: ABy/qLaGSVoRD47N249SLV3WZMjz9UHPOj4xy33Bs/VrJNhW66iROrq6
+        wcyYEAiuKAJssgQHIZktUKITPQ==
+X-Google-Smtp-Source: APBJJlEnXhY57vPXHaptivx2QID3UN3PcCRn5dL8PFd7YS6Al9ICw2IXkurEZoa0Pc8MfVmloyHkzQ==
+X-Received: by 2002:a05:6512:10cf:b0:4f3:d682:7b1c with SMTP id k15-20020a05651210cf00b004f3d6827b1cmr1061597lfg.45.1688630422283;
+        Thu, 06 Jul 2023 01:00:22 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003fbb1ce274fsm5587375wmn.0.2023.07.06.01.00.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 01:00:21 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/3] arm64: meson: bunch of DT fixes, take 3
+Date:   Thu, 06 Jul 2023 10:00:18 +0200
+Message-Id: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-0-63ed070eeab2@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tz763qdeh2jjkufg"
-Content-Disposition: inline
-In-Reply-To: <9e071beb-9d9d-c6dc-8196-a3e23ea73713@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJJ0pmQC/x2M0QrCMAwAf2Xk2UBdYUV/RXzI2mwG3VqaToSxf
+ 1/w6TgObgflKqxw73ao/BWVvJpcLx3EF60zoyRz6F3vXXADtlwkIi2fPBu3oq0yLZgaTvJjxUZ
+ v9himW/CJ2I0+gL1K5X+21eN5HCdo8is2dwAAAA==
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=885;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=9h0g8V0w4EZoDM1hBdRwvYsmKbF4/IRNYRMwqyBNE84=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkpnST3ef3Co4BQAMsluEBGzZJtGLRbBpeHL0x8pHU
+ 3GCjLwOJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKZ0kwAKCRB33NvayMhJ0WJ0EA
+ CQ4qXCQThfkl+Emmx3JFRIMpaWg6plyZsXdJDXQ/863MYrlAs8/E7y92jh+Z3zgLtht6RkS2P4SQ9w
+ +ds1nUPxTRSKY18bkPqW1EbRR6wqTE6WusHxDsebA39Q7iDU4Q26/25RfKwv4EiT5awYGX0h6IHqPQ
+ JVOLttScBO9oeqEEg7iBfGwWE6nC5Z4cBVEUnDduycnC9hbh9ryYY0uDjbJ3euyQaA6WKVc8PdAjks
+ mwcS9Bdd2RHYoa/MpGdrJsebeIKbtK3dqktRmwjMBXdZqKRtLdlmX7De2FLov/GWh1pp3rIIMtqJHZ
+ ZAF7BiwWRURsUS64JvAztfFmZhT492pa9wyDakwFzyrP0WrwDaUsKOp7G+M62IFFWF6dJLjgNQt5nm
+ fWT8KdjdLQof6HZr11ymke8v/bU1flFAQB+5pgX5D3I35MeQBjGrqLHVriwucdYO7gaqg2U88056ly
+ mzSq2DQDFDnMMp3kZYPadJOpOUjoNemlMwQoTHzedohzHyIn7G8iH1NwHZehcHj3zUmNPDwv41POWi
+ dcHCTFcvFbVmkxtAcsKV6EbC/gvj196z/oBaTiCls6zFvcyIjnWwCCjxxBxCPtFE2i9o9Ct/zviutT
+ 4a8iLWD8s5L1mBJd5qIpyUjy5Nej6LO+Amy28RgWgfdqDB9sELuI1GPUMbHw==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,204 +95,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a bunch of fixes against the current applied and reviewed bindings.
 
---tz763qdeh2jjkufg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (3):
+      arm64: dts: amlogic: meson-g12b-odroid-n2: fix usb hub hog name
+      arm64: dtb: amlogic: meson-g12-common: change aobus-pinctrl node name
+      arm64: dts: amlogic: drop cooling-[min|max]-state from pwm-fan
 
-On Thu, Jul 06, 2023 at 09:33:15AM +0200, Neil Armstrong wrote:
-> On 06/07/2023 09:24, Maxime Ripard wrote:
-> > On Wed, Jul 05, 2023 at 11:09:40PM +0300, Dmitry Baryshkov wrote:
-> > > On 05/07/2023 19:53, Maxime Ripard wrote:
-> > > > On Wed, Jul 05, 2023 at 06:20:13PM +0300, Dmitry Baryshkov wrote:
-> > > > > On Wed, 5 Jul 2023 at 17:24, Maxime Ripard <mripard@kernel.org> w=
-rote:
-> > > > > >=20
-> > > > > > On Wed, Jul 05, 2023 at 04:37:57PM +0300, Dmitry Baryshkov wrot=
-e:
-> > > > > > > > > >=20
-> > > > > > > > > > Either way, I'm not really sure it's a good idea to mul=
-tiply the
-> > > > > > > > > > capabilities flags of the DSI host, and we should just =
-stick to the
-> > > > > > > > > > spec. If the spec says that we have to support DSC whil=
-e video is
-> > > > > > > > > > output, then that's what the panels should expect.
-> > > > > > > > >=20
-> > > > > > > > > Except some panels supports DSC & non-DSC, Video and Comm=
-and mode, and
-> > > > > > > > > all that is runtime configurable. How do you handle that ?
-> > > > > > > >=20
-> > > > > > > > In this case, most of the constraints are going to be on th=
-e encoder
-> > > > > > > > still so it should be the one driving it. The panel will on=
-ly care about
-> > > > > > > > which mode has been selected, but it shouldn't be the one d=
-riving it,
-> > > > > > > > and thus we still don't really need to expose the host capa=
-bilities.
-> > > > > > >=20
-> > > > > > > This is an interesting perspective. This means that we can an=
-d actually have
-> > > > > > > to extend the drm_display_mode with the DSI data and compress=
-ion
-> > > > > > > information.
-> > > > > >=20
-> > > > > > I wouldn't extend drm_display_mode, but extending one of the st=
-ate
-> > > > > > structures definitely.
-> > > > > >=20
-> > > > > > We already have some extra variables in drm_connector_state for=
- HDMI,
-> > > > > > I don't think it would be a big deal to add a few for MIPI-DSI.
-> > > > > >=20
-> > > > > > We also floated the idea for a while to create bus-specific sta=
-tes, with
-> > > > > > helpers to match. Maybe it would be a good occasion to start do=
-ing it?
-> > > > > >=20
-> > > > > > > For example, the panel that supports all four types for the 1=
-080p should
-> > > > > > > export several modes:
-> > > > > > >=20
-> > > > > > > 1920x1080-command
-> > > > > > > 1920x1080-command-DSC
-> > > > > > > 1920x1080-video
-> > > > > > > 1920x1080-video-DSC
-> > > > > > >=20
-> > > > > > > where video/command and DSC are some kinds of flags and/or in=
-formation in
-> > > > > > > the drm_display_mode? Ideally DSC also has several sub-flags,=
- which denote
-> > > > > > > what kind of configuration is supported by the DSC sink (e.g.=
- bpp, yuv,
-> > > > > > > etc).
-> > > > > >=20
-> > > > > > So we have two things to do, right? We need to expose what the =
-panel can
-> > > > > > take (ie, EDID for HDMI), and then we need to tell it what we p=
-icked
-> > > > > > (infoframes).
-> > > > > >=20
-> > > > > > We already express the former in mipi_dsi_device, so we could e=
-xtend the
-> > > > > > flags stored there.
-> > > > > >=20
-> > > > > > And then, we need to tie what the DSI host chose to a given ato=
-mic state
-> > > > > > so the panel knows what was picked and how it should set everyt=
-hing up.
-> > > > >=20
-> > > > > This is definitely something we need. Marijn has been stuck with =
-the
-> > > > > panels that support different models ([1]).
-> > > > >=20
-> > > > > Would you prefer a separate API for this kind of information or
-> > > > > abusing atomic_enable() is fine from your point of view?
-> > > > >=20
-> > > > > My vote would be for going with existing operations, with the sli=
-ght
-> > > > > fear of ending up with another DSI-specific hack (like
-> > > > > pre_enable_prev_first).
-> > > >=20
-> > > > I don't think we can get away without getting access to the atomic_=
-state
-> > > > from the panel at least.
-> > > >=20
-> > > > Choosing one setup over another is likely going to depend on the mo=
-de,
-> > > > and that's only available in the state.
-> > > >=20
-> > > > We don't have to go the whole way though and create the sub-classes=
- of
-> > > > drm_connector_state, but I think we should at least provide it to t=
-he
-> > > > panel.
-> > > >=20
-> > > > What do you think of creating a new set of atomic_* callbacks for
-> > > > panels, call that new set of functions from msm and start from ther=
-e?
-> > >=20
-> > > We are (somewhat) bound by the panel_bridge, but yeah, it seems possi=
-ble.
-> >=20
-> > Bridges have access to the atomic state already, so it's another place
-> > to plumb this through but I guess it would still be doable?
->=20
-> It's definitely doable, but I fear we won't be able to test most of the
-> panel drivers, should we introduce a new atomic set of panel callbacks ?
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi     | 2 +-
+ arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi  | 2 --
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi | 2 +-
+ arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts  | 2 --
+ 4 files changed, 2 insertions(+), 6 deletions(-)
+---
+base-commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+change-id: 20230706-topic-amlogic-upstream-dt-fixes-take3-7f973dae0b37
 
-That was my original intent yeah :)
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
-Creating an atomic_enable/disable/ etc. and then switch
-drm_panel_enable() to take the state (and fixing up all the callers), or
-create a drm_panel_enable_atomic() function.
-
-The latter is probably simpler, something like:
-
-int drm_panel_enable_atomic(struct drm_panel *panel,
-    			    struct drm_atomic_state *state)
-{
-	struct drm_panel_funcs *funcs =3D panel->funcs;
-
-	if (funcs->atomic_enable)
-		return funcs->atomic_enable(panel, state);
-
-	return funcs->enable(panel);
-}
-
-And we should probably mention that it supersedes/deprecates
-drm_panel_enable.
-
-We've switched most of the other atomic hooks to take the full
-drm_atomic_state so I'd prefer to use it. However, for it to be somewhat
-useful we'd need to have access to the connector assigned to that panel.
-
-drm_panel doesn't store the drm_connector it's connected to at all, and
-of_drm_find_panel() doesn't take it as an argument so we can't fill it
-when we retrieve it either.
-
-So I guess we can go for:
-
- - Create a new set of atomic hooks
-
- - Create a new set of functions to call those hooks, that we would
-   document as deprecating the former functions. Those functions would
-   take a pointer to the drm_connector_state of the drm_connector it's
-   connected to.
-
- - We add a TODO item to add a pointer to the connector in drm_panel
-
- - We add a TODO item that depend on the first one to switch the new
-   functions and hooks to drm_atomic_state
-
- - We add a TODO item to convert callers of drm_panel_enable et al. to
-   our new functions.
-
-It should work in all setups, paves a nice way forward and documents the
-trade-offs we had to take and eventually address. And without creating a
-dependency on 30+ patches series.
-
-Does it sound like a plan?
-
-> Or shall be simply move the "new" panel driver supporting atomic to bridge
-> and only use panel_bridge for basic panels ?
-
-I don't think we can expect panel_bridge to be used all the time any
-time soon, so I'd rather avoid to rely on it.
-
-Maxime
-
---tz763qdeh2jjkufg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZKZ0TAAKCRDj7w1vZxhR
-xSohAPoDIUmfiZHt7PetbXTCY20gBYiDpa5re8QZstc4d38bewEAztydb7mEAxL+
-oSXavXHhgNOkk2mJg9D2fD0hXIkbOAw=
-=MrP7
------END PGP SIGNATURE-----
-
---tz763qdeh2jjkufg--
