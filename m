@@ -2,300 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F00574A3B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7064674A3B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbjGFSZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S232215AbjGFSZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGFSZX (ORCPT
+        with ESMTP id S231956AbjGFSZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:25:23 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6891BC3;
-        Thu,  6 Jul 2023 11:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688667922; x=1720203922;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=rZNz2zs/clgX93c8a4NPMLbcB8ZeCcXwRZ2Ub0i5euA=;
-  b=DjgCBUWTTSAFCoWOY3euo+H0WWMXSEMK0wBu8QkWAbxeS3gh6gt59CdQ
-   5zKjxkkD7oh+b+wHKxiX84Ne5R7PwJn5POsi/oB1wwGUVgoomRcNEOaPL
-   pxR2JDwLJe28gb/Qo7KKEpkEZc/ndWBfdmJPzj20tQxSmMe1vl7qD82fQ
-   CHy6pAohft+ye1LqaakQn1LUNcJKlQW2IgfSzoyxhYbTfRSnNGxRLrgOs
-   F83REfcXJgFwW+rAepUmAxZSf0udzkAP+WEcOOVH2JUbh0oq41A4Q20D4
-   29nwsAqRdH5ongrgZbztDhHym4lzLv7H7JIkI8sbXKHG/wPkSJk1fIFVB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="427368790"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="427368790"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 11:25:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="713674414"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="713674414"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 06 Jul 2023 11:25:19 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 6 Jul 2023 11:25:18 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 6 Jul 2023 11:25:18 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Thu, 6 Jul 2023 11:25:18 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Thu, 6 Jul 2023 11:25:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WmIRLzk9acbpEUryNFXZuxja2n5MFjIxwa/bRM4LxpAjxTgd+vbZbu55eXMateb0j/49twIT3uUUC4AeMXTpWGG7UwaQNlokC+4K3NL10FZZuQqFdnjUimBUbscwuujQaLBM8k1qTjR730ZnaMb2xQ6zCiSIyjG9aePo8DbUvhgemZPPQ1MqgqDDcOKviFTZC5XYpg0bieVdfz0Epv9gOeAZ+q0btSzjyH2EBtaKUNP0cGitYU2TTTKDi06rF5U0jyh8wsqs/+lPn3R0IXnw4XJ7YFKHko/i0YO9fy6NMlL0R1K+AYpirFKGaC0G+5as1CCXCTR9xxK9iCoOjnB7Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rZNz2zs/clgX93c8a4NPMLbcB8ZeCcXwRZ2Ub0i5euA=;
- b=JikTqY5YkkmHBR14ubSvJQYn/DUVtCXyjEmAjNPpb3yo53XqnVywpJ4WiznmljQp4d1f/s9rH8uMrAXHhrP5S+kXvOHln4dnHvgbN3MkaPLoMNpyNbULsZ+UDujWXWQceXans+iBeEcbHywy5lzUB6QEKUmVgGLX5QqncViz6pSQEPJi8e8BgvfhbgLUHAfyF8jzPKDrHbbS1yFhoUW65d5HapB7E2PGEWxkMkXhjkVBiuCIrIR8HIB7WeZGlR84fhwOcuorEOsDgKhs5WRfRTtwQT32hNyks3iqmSg+RuOiHJdmGqxcxA9of41yqoGuXaplaMy8HsB+Z9Il4cc4uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by SN7PR11MB7667.namprd11.prod.outlook.com (2603:10b6:806:32a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
- 2023 18:25:14 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::6984:19a5:fe1c:dfec]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::6984:19a5:fe1c:dfec%7]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 18:25:14 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "Lutomirski, Andy" <luto@kernel.org>
-CC:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Thread-Topic: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Thread-Index: AQHZnYvD++9jHqJtDEOZ5j0eN4/f+6+IoOQAgAALyMOAACwFgIAAIG6AgAAMtoCAACGsAIAA96CAgABofQCAB1K5gIAAhUGAgAEVRoCAAKx+AIABDK+AgAB6bICAAPF/AIAAZrmAgAAVNICAAG62AIAKh/oAgATXZwCAAZabAIADLBsAgAEz1ACAAFjMgA==
-Date:   Thu, 6 Jul 2023 18:25:14 +0000
-Message-ID: <68b7f983ffd3b7c629940b6c6ee9533bb55d9a13.camel@intel.com>
-References: <ZJLgp29mM3BLb3xa@arm.com>
-         <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
-         <ZJQR7slVHvjeCQG8@arm.com>
-         <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
-         <ZJR545en+dYx399c@arm.com>
-         <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
-         <ZJ2sTu9QRmiWNISy@arm.com>
-         <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
-         <ZKMRFNSYQBC6S+ga@arm.com>
-         <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
-         <ZKa8jB4lOik/aFn2@arm.com>
-In-Reply-To: <ZKa8jB4lOik/aFn2@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|SN7PR11MB7667:EE_
-x-ms-office365-filtering-correlation-id: c4ac2476-24b1-4ddf-2766-08db7e4e5762
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fkXyqj8AoPKGBCU6uccPuGms0Mx4Dht9NKuGVdwyMV8SW48meHO8ANkorv3eZNnqu/cI/2uk6fJiN4xQtVkT7vgBFcYlxydQI5r+Zadkt2siFnck1BCtwR1FPcw4zb5KYnlvJzq0on8biDb4TzyZYa6FPK2Hv6b3q7NI2p/gXKjXKw4MkHJz90kxz0Kya6+leBO3MRInryRDioNdgHW+o3yAt3bjJwhBZ8VUCw/MzOn9O/1IZiP3NvmYHFw7c7lqfczBnDzJAXwcrb428eqTRfYhAPn6wg2JX0nC68pWEIm31QgstTO63w3NfnhF/c7z3zOTiCiMM/f7wy2TtI6QxkVZe7/oC2wG2hvLrwICJWruKSxBk3cnS61T3OOcSOIeEg5mXOjA+E1+gfHRp9iMKA5Ce91Pxd4SDOkarHUD6lhv0BXXl2LFrhyWge79pVRdH3eOqB4LvRHq/NhlkaAbYFYT12cUy1+PlzZwaDOM3r0sL/FqBf711R6q+XhmyDL/k1YS3BQg7gPqk8y39Z0MSQIf3kiUOMLgOpiNqklid+rbVDyE1yjVEBFntRuiQzPbf0+pJyimkGwBiwbdkI+9YoaNPKPFYiED5rjD0q3yHsjYoVdJh3GjWLWXC5Qz4kQ+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(376002)(366004)(136003)(346002)(451199021)(66899021)(71200400001)(6486002)(478600001)(110136005)(76116006)(91956017)(54906003)(38100700002)(2616005)(83380400001)(36756003)(86362001)(38070700005)(2906002)(66946007)(26005)(6506007)(186003)(6512007)(122000001)(82960400001)(66476007)(4326008)(66556008)(66446008)(41300700001)(316002)(64756008)(5660300002)(8936002)(8676002)(7416002)(7406005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RFJ2VkNRMldRVFBPQ2NjamtaOUNQd3JSdGNwNU5mWjlNcHU3cWVTNmtUdmkv?=
- =?utf-8?B?ZDlZazBFanZVV0xRRlJBSTBZbUxUMlhFR3RuQWRkVW1xa2xKYVo0enNCUU94?=
- =?utf-8?B?NlJKVkZreHlkUVN5dTlxUC9lcTBUTmViS2NkOXRaZ3BKSWlLcGJ4aEt0bGIy?=
- =?utf-8?B?dU40ODFjSnFZRW1pb2pKOTJ2YmVuREtyd0x6cllqdHZ5N3l0Z0JaK04yeUJP?=
- =?utf-8?B?TkMxZUFsZXJnc1QxaHlzVEZSSDlCNmtDV2lvam1FanU2cDY4TkptRll2WExz?=
- =?utf-8?B?Z2JLVkJoTzdMN1RIQ2RaRE5hRkJ5OTBnZzFqSXVkVmxiK0pKQXBTQ080VmRG?=
- =?utf-8?B?VzZMQWNwZlcwQ0o0T1BYd2daQW9RUjVYRFhPVWlNalJ4d04vM1E5V2FHdlBR?=
- =?utf-8?B?eG1MWHh4NEtjZHRVTEVoNDNlTjJlbjBFM2pBaXpjUGVNZVRBUXhHUzNISVY3?=
- =?utf-8?B?MG8vNS9CMGthd0tSTEZRQVlDbUZtekw4b1pUTWNvUTNWcCtoTzBnL05sSmtD?=
- =?utf-8?B?UVpsdEJ6RzgxZVpUN25XMU5PWlN2YlJiWmlha1MvOVhOcWlMdTRSeGt6cXFj?=
- =?utf-8?B?aXh2Qm8ycUJDUkJVQ0F5UkJzZzN4cFgvMUNyeWthL1ExZ2d4UlZKMFN6QWNm?=
- =?utf-8?B?ei8wOW1Xb0xNeDljNUZLcERENjdjZVg5bXJkUXVCZGxRWnNXM1EwdXl0TG5O?=
- =?utf-8?B?aisyckh2MEpnQUZYVGJoMEp4WVFoLytMSzQ4eUMzenpsb2lLRnFyRWEzWVcx?=
- =?utf-8?B?U0ROTGhwazVuenJQL2ZhbmxkNHAzQ3pJSWtNOHpFdjczUDJCYWh2ZU5nY3Vp?=
- =?utf-8?B?WEdqTU9YQ2pkdUF6L1dvUS9GcTVGaERLZHVtM1RWOUNrYloxamdsT0NxZld0?=
- =?utf-8?B?YTZjbnBQWHdZTUZlRVY0Z3JiNUZYNnc0NU50eis3elVGYlhTR3FYcWVqM1Rx?=
- =?utf-8?B?VXFxd00wbzVpVFhpY0pJdTVDZy9zMGczUVdPRHF0UUVhV281cmxlY0lhQ0xO?=
- =?utf-8?B?eFNydTIxYUFIVU45eGoyc0RuNkI2Yno4ZkYrU2puNHFwdzhPUXB4aVVPWTRS?=
- =?utf-8?B?QTFTV3dzS3pZRVoxTTJ5SzAxdXUvSGFQVWlHRmZiTXpmcXA0Z29NRURoS3Nz?=
- =?utf-8?B?bGRLR2gxYlhzanAvMHdzTTRhcm5SMEFmUHI4SzVwZEhMK2wvdmZEL1J4K2wy?=
- =?utf-8?B?UkRDTThXbzFJVS94Ymt6ZHpObEEycS9VWFRhdnJZVHMvc2s3cTJiRGc0QUs1?=
- =?utf-8?B?WFhXd29QY1N6a3FyRUtIQTA5Y3ZaaFkyelpGS05wVzdsM2JYWFY4ZHhvZTl1?=
- =?utf-8?B?K2RucVBrbWg1cGJlSTh0QzVkc1pRZmNaVTNUUGJvWW9ka3NFeTllQzRiaElm?=
- =?utf-8?B?V3gwY1daNm9BVGUrd1FiaW9VNkNMOWJiRHRmRFV2VW5lYVp3eUZUcjNsZWt3?=
- =?utf-8?B?T1NIRGpZMS84SUVjSiswMVozTXI5cHR4a1JPdzN1K1VSQU5PRHJwMU5hSE1p?=
- =?utf-8?B?MW5oTWZSSVhNUGJpYUZ6MXBxM0hnazBxY2RqSXo5R0FLT2ZpK1A5QW5hMDN2?=
- =?utf-8?B?Z3Z0Q0ZsU3NReHVneUpzMXM1c2VUTWlFcW1xQy9UamFYT0JlQkdhS1dIeWxZ?=
- =?utf-8?B?OENFZkhadTRNQUxCNW1CdG9WNXFPWWdPMnB6dmIreWtGVDJwQmhhWkhjZU13?=
- =?utf-8?B?YUZmUWhvY0dFUnRZVTV5c2hHQUhKR0xSOFRROVNHWFFlbUEwZzNDbmc5dUtl?=
- =?utf-8?B?TjJQTlYzeXJJcjIvTWw5S0tXQUFmcXlJdjU2dnd1M3BNaVhGUEIzbUdSRnY1?=
- =?utf-8?B?SmRueGhKY2NqR05HM3ZuVTFQckdmUW9nbkhtZUlBa0JRWjNISFRPejdicXQx?=
- =?utf-8?B?YmxwOUMvMXAydXJPRlFLckVMczlQOGhJWmFLUGYvdGxvRzJGeVpHZkdBR1ZV?=
- =?utf-8?B?Rlk4UEl3L1cxZjJTYW5GMkZXbUZqaEpqdFFucDhiYmUySzdDTHNGNkcvUlI2?=
- =?utf-8?B?cnV4cC9XN1haWGNlc2dvRnZuU3BrOUhYNG50UVd5K1pZWmlSamRRbk1mYXZC?=
- =?utf-8?B?MUZ6akNLM1ZNbkZzUFRuVnptRUFGdXBQWXR5M1BibC91TFBHOXVVQWp4ZCtt?=
- =?utf-8?B?cmprYUtpc0sxd0ovZjAranlPWGdCeUhVNXhheE53T0VjTHJEaldiQkc4dGRV?=
- =?utf-8?Q?2X+dzpKMVX+90C3bOpsdBH0=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4ECF3F0EAB5EF146866A6A6D4215FEBC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 6 Jul 2023 14:25:28 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAD31BF8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:25:27 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5700b15c12fso12784427b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688667927; x=1691259927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWFgfPgGoLKqTDSSqG8QcMK5uhrLKHKXGtxaWQuRFrs=;
+        b=TmLg7EeANHof3EJKbciWU5J8LMsEIwR/OHNvoUdluWhILf99UZmTNILMzHFezQ2Oae
+         bfWpuZnKo8ESL6gU4PVuanKSs9u2IkCt1ZFUrEmIYDIm2Y1IQwbqN5Y96bf5VDKs4fK6
+         +UIc/fXP1uZzC4+ufeNTUQuOwyLQymZrH8myYOrMOHhKutRzzLJV9AInKgWi4q1NRCIk
+         tF0Gr6D1EzNKQ1R5PC4Xurb8OR4HHnjz4nnKLiI0l3PxqnFnhJjV2WQVY+bibMhXrGE0
+         wxXBl82wvk9to6Yrl9iMmKcaMhMQOjXn6U9LRDcqbQsKttPzLHMb+/MFFWGA/Ofy+RHV
+         E2ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688667927; x=1691259927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WWFgfPgGoLKqTDSSqG8QcMK5uhrLKHKXGtxaWQuRFrs=;
+        b=TgmB3ttJIz9LcGZxd2DgxfeSV8XCGfUjSZ6qZzufkyWpZ+M3HNoahtt+siN9KQFew+
+         8KiVPTO51cwepcL/Jb8PWlscGDFNVXo6R+Jddl9r+tm94QKJIK3rLTd6lA2LiqaWNAQt
+         gCs9qIf9QdYXDeX0bovQdrU6ja2mb4XSKeFT0pmiKGxv6OOJXUEL7WQD3SJxlop+45Hj
+         Is3H/h9pHABFuiRfoIIM//KxrQUV3hfdLUyAkOk79VXw4vl/KP0Ct467kVOABms8YB6b
+         vvvDMwvxjdMZYL/GHcp8C3MLHlOJPAyyAxDT88iXUzxf+dRoOD3hogIcNokuqhBQAVxx
+         JL1Q==
+X-Gm-Message-State: ABy/qLYsPeqBaaNYXYsuazSDCrLEzxLbV8BST+S5SQjbfNVTHwMV1W5J
+        SEh/KvsEFXxcUrMGkQCLg25pmXceEPBHpMWjrohuJQ==
+X-Google-Smtp-Source: APBJJlGt5s+qN3+MlugdTjd5BHq9Gd9N6Bj4jGVrcAHiiIF7IqFsDoJ6W9XPGep06nFmJ+uAU5LfN+oe3MkQys0D9oE=
+X-Received: by 2002:a0d:e241:0:b0:573:d710:6f88 with SMTP id
+ l62-20020a0de241000000b00573d7106f88mr2552493ywe.36.1688667926648; Thu, 06
+ Jul 2023 11:25:26 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4ac2476-24b1-4ddf-2766-08db7e4e5762
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 18:25:14.1337
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: egi8Yz2lU7jDCoBgKJtvH4DyO8SWKY29Ovel2FsEnpxaO0w0tWm5kzzVfLUhNeqBEft8neT36bM18pE10m1SrKcV9n8+WJjP48XSR60w3wA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7667
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230623164015.3431990-1-jiaqiyan@google.com> <20230623164015.3431990-3-jiaqiyan@google.com>
+ <20230705235705.GE41006@monkey>
+In-Reply-To: <20230705235705.GE41006@monkey>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Thu, 6 Jul 2023 11:25:15 -0700
+Message-ID: <CACw3F511Hk-XM46fYnciKy6=t0bdmGpu9y1qsqrpJOA0zFKWhw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
+ is raw HWPOISON
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     naoya.horiguchi@nec.com, songmuchun@bytedance.com,
+        shy828301@gmail.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA3LTA2IGF0IDE0OjA3ICswMTAwLCBzemFib2xjcy5uYWd5QGFybS5jb20g
-d3JvdGU6DQoNClsgc25pcCBdDQo+IA0KPiBpbnN0ZWFkIG9mIHByaW9yaXR5LCBpJ2Qgc2F5ICJw
-b3NpeCBjb25mb3JtIGMgYXBwcyB3b3JrDQo+IHdpdGhvdXQgY2hhbmdlIiBpcyBhIGJlbmNobWFy
-ayBpIHVzZSB0byBzZWUgaWYgdGhlIGRlc2lnbg0KPiBpcyBzb3VuZC4NCg0KVGhpcyBpbnZvbHZl
-cyBsZWFraW5nIHNoYWRvdyBzdGFja3MgZm9yIHNpZ2FsdHN0YWNrIGFuZCBtYWtlY29udGV4dCwN
-CnRob3VnaCwgcmlnaHQ/IFRoaXMgc2VlbXMga2luZCBvZiB3cm9uZy4gSXQgbWlnaHQgYmUgdXNl
-ZnVsIGZvcg0KYXZvaWRpbmcgY3Jhc2hlcyBhdCBhbGwgY29zdHMsIGJ1dCBwcm9iYWJseSBzaG91
-bGRuJ3QgYmUgdGhlIGxvbmcgdGVybQ0Kc29sdXRpb24uIEkgdGhvdWdodCB5b3VyIEFQSSB1cGRh
-dGVzIHdlcmUgdGhlIHJpZ2h0IGRpcmVjdGlvbi4NCg0KQnV0LCBJJ20gb2YgY291cnNlIG5vdCBh
-IGdsaWJjIGRldmVsb3Blci4gSEogYW5kIGZyaWVuZHMgd291bGQgaGF2ZSB0bw0KYWdyZWUgdG8g
-YWxsIG9mIHRoYXQuDQoNCj4gDQo+IGkgZG8gbm90IGhhdmUgYSBwYXJ0aWN1bGFyIHdvcmtsb2Fk
-IChvciBkaXN0cm8pIGluIG1pbmQsIHNvDQo+IGkgaGF2ZSB0byByZWFzb24gdGhyb3VnaCB0aGUg
-Y2FzZXMgdGhhdCBtYWtlIHNlbnNlIGFuZCB0aGUNCj4gY3VycmVudCBsaW51eCBzeXNjYWxsIGFi
-aSBhbGxvd3MsIGJ1dCBmYWlsIG9yIGRpZmZpY3VsdCB0bw0KPiBzdXBwb3J0IHdpdGggc2hhZG93
-IHN0YWNrcy4NCj4gDQo+IG9uZSBzdWNoIGNhc2UgaXMganVtcGluZyBiYWNrIHRvIGFuIGFsdCBz
-dGFjayAoaS5lLiBpbmFjdGl2ZQ0KPiBsaXZlIGFsdCBzdGFjayk6DQo+IA0KPiAtIHdpdGggc2hh
-cmVkIHNoYWRvdyBzdGFjayB0aGlzIGRvZXMgbm90IHdvcmsgaW4gbWFueSBjYXNlcy4NCj4gDQo+
-IC0gd2l0aCBhbHQgc2hhZG93IHN0YWNrIHRoaXMgZXh0ZW5kcyB0aGUgbGlmZXRpbWUgYmV5b25k
-IHRoZQ0KPiDCoCBwb2ludCBpdCBiZWNvbWUgaW5hY3RpdmUgKHNvIGl0IGNhbm5vdCBiZSBmcmVl
-ZCkuDQo+IA0KPiBpZiB0aGVyZSBhcmUgbm8gaW5hY3RpdmUgbGl2ZSBhbHQgc3RhY2tzIHRoZW4g
-KmJvdGgqIHNoYXJlZA0KPiBhbmQgaW1wbGljaXQgYWx0IHNoYWRvdyBzdGFjayB3b3Jrcy4gYW5k
-IHRvIG1lIGl0IGxvb2tlZA0KPiBsaWtlIGltcGxpY2l0IGFsdCBzaGFkb3cgc3RhY2sgaXMgc2lt
-cGx5IGJldHRlciBvZiB0aG9zZSB0d28NCj4gKG1vcmUgYWx0IHNoYWRvdyBzdGFjayB1c2UtY2Fz
-ZXMgYXJlIHN1cHBvcnRlZCwgc2hhZG93IHN0YWNrDQo+IG92ZXJmbG93IGNhbiBiZSBoYW5kbGVk
-LiBkcmF3YmFjazogY29tcGxpY2F0aW9ucyBkdWUgdG8gdGhlDQo+IGRpc2NvbnRpbm91cyBzaGFk
-b3cgc3RhY2suKQ0KPiANCj4gb24gYXJtNjQgaSBwZXJzb25hbGx5IGRvbid0IGxpa2UgdGhlIGlk
-ZWEgb2YgImRlYWwgd2l0aCBhbHQNCj4gc2hhZG93IHN0YWNrIGxhdGVyIiBiZWNhdXNlIGl0IGxp
-a2VseSByZXF1aXJlcyBhIHYyIGFiaQ0KPiBhZmZlY3RpbmcgdGhlIHVud2luZGVyIGFuZCBqdW1w
-IGltcGxlbWVudGF0aW9ucy4gKGxhdGVyDQo+IGV4dGVuc2lvbnMgYXJlIGZpbmUgaWYgdGhleSBh
-cmUgYncgY29tcGF0IGFuZCBkaXNjb3ZlcmFibGUpDQoNCkkgdGhpbmsgeW91IGNvdWxkIGRvIGl0
-LCBpZiB5b3VyIHNpZ25hbCBoYW5kbGVyIGNhbiBwdXNoIGRhdGEgb24gdGhlDQpzaGFkb3cgc3Rh
-Y2sgbGlrZSB4ODYgZG9lcy4gSSdkIHN0YXJ0IHdpdGggYSBwYWRkZWQgc2hhZG93IHN0YWNrIHNp
-Z25hbA0KZnJhbWUgdGhvdWdoLCBhbmQgbm90IHRydXN0IHVzZXJzcGFjZSB0byBwYXJzZSBpdC4N
-Cg0KPiANCj4gb25lIG5hc3R5IGNhc2UgaXMgc2hhZG93IHN0YWNrIG92ZXJmbG93IGhhbmRsaW5n
-LCBidXQgaQ0KPiB0aGluayBpIGhhdmUgYSBzb2x1dGlvbiBmb3IgdGhhdCAobm90IHRoZSBuaWNl
-c3QgdGhpbmc6DQo+IGl0IGludm9sdmVzIHNldHRpbmcgdGhlIHRvcCBiaXQgb24gdGhlIGxhc3Qg
-ZW50cnkgb24gdGhlDQo+IHNoYWRvdyBzdGFjayBpbnN0ZWFkIG9mIGFkZGluZyBhIG5ldyBlbnRy
-eSB0byBpdC4gKyBhIG5ldw0KPiBzeXNjYWxsIHRoYXQgY2FuIHN3aXRjaCB0byB0aGlzIGVudHJ5
-LiBpIGhhdmVudCBjb252aW5jZWQNCj4gbXlzZWxmIGFib3V0IHRoaXMgeWV0KS4NCg0KVGhlcmUg
-bWlnaHQgYmUgc29tZSBjb21wbGljYXRlZCB0aGluZyBhcm91bmQgc3RvcmluZyB0aGUgbGFzdCBz
-aGFkb3cNCnN0YWNrIGVudHJ5IGludG8gdGhlIHNoYWRvdyBzdGFjayBzaWdmcmFtZSBhbmQgcmVz
-dG9yaW5nIGl0IG9uDQpzaWdyZXR1cm4uIFRoZW4gd3JpdGluZyBhIHRva2VuIGZyb20gdGhlIGtl
-cm5lbCB0byB3aGVyZSB0aGUgc2F2ZWQNCmZyYW1lIHdhcyB0byBsaXZlIHRoZXJlIGluIHRoZSBt
-ZWFudGltZS4NCg0KQnV0IHRvIG1lIHRoaXMgd2hvbGUgc2VhcmNoLCByZXN0b3JlIGFuZCBJTkNT
-U1AgdGhpbmcgaXMgc3VzcGVjdCBhdA0KdGhpcyBwb2ludCB0aG91Z2guIFdlIGNvdWxkIGFsc28g
-aW5jcmVhc2UgY29tcGF0aWJpbGl0eSBhbmQgcGVyZm9ybWFuY2UNCm1vcmUgc2ltcGx5LCBieSBh
-ZGRpbmcga2VybmVsIGhlbHAsIGF0IHRoZSBleHBlbnNlIG9mIHNlY3VyaXR5Lg0KDQoNClsgc25p
-cCBdDQoNCj4gc2xvdyBsb25nam1wIGlzIGJhZC4gKHdlbGwgbG9uZ2ptcCBpcyBhY3R1YWxseSBh
-bHdheXMgc2xvdw0KPiBpbiBnbGliYyBiZWNhdXNlIGl0IHNldHMgdGhlIHNpZ25hbG1hc2sgd2l0
-aCBhIHN5c2NhbGwsIGJ1dA0KPiB0aGVyZSBhcmUgb3RoZXIganVtcCBvcGVyYXRpb25zIHRoYXQg
-ZG9uJ3QgZG8gdGhpcyBhbmQgd2FudA0KPiB0byBiZSBmYXN0IHNvIHllcyB3ZSB3YW50IGZhc3Qg
-anVtcCB0byBiZSBwb3NzaWJsZSkuDQo+IA0KPiBqdW1waW5nIHVwIHRoZSBzaGFkb3cgc3RhY2sg
-aXMgYXQgbGVhc3QgbGluZWFyIHRpbWUgaW4gdGhlDQo+IG51bWJlciBvZiBmcmFtZXMganVtcGVk
-IG92ZXIgKHdoaWNoIGFscmVhZHkgc291bmRzIHNpZ25pZmljYW50DQo+IHNsb3dkb3duIGhvd2V2
-ZXIgdGhpcyBpcyBhbW9ydGl6ZWQgYnkgdGhlIGZhY3QgdGhhdCB0aGUgc3RhY2sNCj4gZnJhbWVz
-IGhhZCB0byBiZSBjcmVhdGVkIGF0IHNvbWUgcG9pbnQgYW5kIHRoYXQgaXMgYWN0dWFsbHkgYQ0K
-PiBsb3QgbW9yZSBleHBlbnNpdmUgYmVjYXVzZSBpdCBpbnZvbHZlcyB3cml0ZSBvcGVyYXRpb25z
-LCBzbyBhDQo+IHplcm8gY29zdCBqdW1wIHdpbGwgbm90IGRvIGFueSBhc3ltcHRvdGljIHNwZWVk
-dXAgY29tcGFyZWQgdG8NCj4gYSBsaW5lYXIgY29zdCBqdW1wIGFzIGZhciBhcyBpIGNhbiBzZWUu
-KS4NCj4gDQo+IHdpdGggbXkgcHJvcG9zZWQgc29sdXRpb24gdGhlIGp1bXAgaXMgc3RpbGwgbGlu
-ZWFyLiAoaSBrbm93DQo+IHg4NiBpbmNzc3AgY2FuIGp1bXAgbWFueSBlbnRyaWVzIGF0IGEgdGlt
-ZSBhbmQgZG9lcyBub3QgaGF2ZQ0KPiB0byBhY3R1YWxseSByZWFkIGFuZCBjaGVjayB0aGUgZW50
-cmllcywgYnV0IHRlY2huaWNhbGx5IGl0J3MNCj4gbGluZWFyIHRpbWUgdG9vOiB5b3UgaGF2ZSB0
-byBkbyBhdCBsZWFzdCBvbmUgcmVhZCBwZXIgcGFnZSB0bw0KPiBoYXZlIHRoZSBndWFyZHBhZ2Ug
-cHJvdGVjdGlvbikuIHRoaXMgYWxsIGxvb2tzIGZpbmUgdG8gbWUNCj4gZXZlbiBmb3IgZXh0cmVt
-ZSBtYWRlIHVwIHdvcmtsb2Fkcy4NCg0KV2VsbCBJIGd1ZXNzIHdlIGFyZSB0YWxraW5nIGFib3V0
-IGh5cG90aGV0aWNhbCBwZXJmb3JtYW5jZS4gQnV0IGxpbmVhcg0KdGltZSBpcyBzdGlsbCB3b3Jz
-ZSB0aGFuIE8oMSkuIEFuZCBJIHRob3VnaHQgbG9uZ2ptcCgpIHdhcyBzdXBwb3NlZCB0bw0KYmUg
-YW4gTygxKSB0eXBlIHRoaW5nLg0KDQoNClNlcGFyYXRlIGZyb20gYWxsIG9mIHRoaXMuLi5ub3cg
-dGhhdCBhbGwgdGhlIGNvbnN0cmFpbnRzIGFyZSBjbGVhcmVyLA0KaWYgeW91IGhhdmUgY2hhbmdl
-ZCB5b3VyIG1pbmQgb24gd2hldGhlciB0aGlzIHNlcmllcyBpcyByZWFkeSwgY291bGQNCnlvdSBj
-b21tZW50IGF0IHRoZSB0b3Agb2YgdGhpcyB0aHJlYWQgc29tZXRoaW5nIHRvIHRoYXQgZWZmZWN0
-PyBJJ20NCmltYWdpbmluZyBub3QgbWFueSBhcmUgcmVhZGluZyBzbyBmYXIgZG93biBhdCB0aGlz
-IHBvaW50Lg0KDQpGb3IgbXkgcGFydCwgSSB0aGluayB3ZSBzaG91bGQgZ28gZm9yd2FyZCB3aXRo
-IHdoYXQgd2UgaGF2ZSBvbiB0aGUNCmtlcm5lbCBzaWRlLCB1bmxlc3MgZ2xpYmMvZ2NjIGRldmVs
-b3BlcnMgd291bGQgbGlrZSB0byBzdGFydCBieQ0KZGVwcmVjYXRpbmcgdGhlIGV4aXN0aW5nIGJp
-bmFyaWVzLiBJIGp1c3QgdGFsa2VkIHdpdGggSEosIGFuZCBoZSBoYXMNCm5vdCBjaGFuZ2VkIGhp
-cyBwbGFucyBhcm91bmQgdGhpcy4gSWYgYW55b25lIGVsc2UgaW4gdGhhdCBjb21tdW5pdHkgaGFz
-DQooRmxvcmlhbj8pLCBwbGVhc2Ugc3BlYWsgdXAuIEJ1dCBvdGhlcndpc2UgSSB0aGluayBpdCdz
-IGJldHRlciB0byBzdGFydA0KZ2V0dGluZyByZWFsIHdvcmxkIGZlZWRiYWNrIGFuZCBncm93IGJh
-c2VkIG9uIHRoYXQuDQoNCg==
+On Wed, Jul 5, 2023 at 4:57=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.co=
+m> wrote:
+>
+> On 06/23/23 16:40, Jiaqi Yan wrote:
+> > Adds the functionality to tell if a subpage of a hugetlb folio is a
+> > raw HWPOISON page. This functionality relies on RawHwpUnreliable to
+> > be not set; otherwise hugepage's HWPOISON list becomes meaningless.
+> >
+> > Exports this functionality to be immediately used in the read operation
+> > for hugetlbfs.
+> >
+> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> > ---
+> >  include/linux/hugetlb.h | 19 +++++++++++++++++++
+> >  include/linux/mm.h      |  7 +++++++
+> >  mm/hugetlb.c            | 10 ++++++++++
+> >  mm/memory-failure.c     | 34 ++++++++++++++++++++++++----------
+> >  4 files changed, 60 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> > index 21f942025fec..8b73a12b7b38 100644
+> > --- a/include/linux/hugetlb.h
+> > +++ b/include/linux/hugetlb.h
+> > @@ -1013,6 +1013,25 @@ void hugetlb_register_node(struct node *node);
+> >  void hugetlb_unregister_node(struct node *node);
+> >  #endif
+> >
+> > +/*
+> > + * Struct raw_hwp_page represents information about "raw error page",
+> > + * constructing singly linked list from ->_hugetlb_hwpoison field of f=
+olio.
+> > + */
+> > +struct raw_hwp_page {
+> > +     struct llist_node node;
+> > +     struct page *page;
+> > +};
+> > +
+> > +static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
+)
+> > +{
+> > +     return (struct llist_head *)&folio->_hugetlb_hwpoison;
+> > +}
+> > +
+> > +/*
+> > + * Check if a given raw @subpage in a hugepage @folio is HWPOISON.
+> > + */
+> > +bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage);
+> > +
+> >  #else        /* CONFIG_HUGETLB_PAGE */
+> >  struct hstate {};
+> >
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 66032f0d515c..41a283bd41a7 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -3671,6 +3671,7 @@ extern const struct attribute_group memory_failur=
+e_attr_group;
+> >  extern void memory_failure_queue(unsigned long pfn, int flags);
+> >  extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags,
+> >                                       bool *migratable_cleared);
+> > +extern bool __is_raw_hwp_subpage(struct folio *folio, struct page *sub=
+page);
+> >  void num_poisoned_pages_inc(unsigned long pfn);
+> >  void num_poisoned_pages_sub(unsigned long pfn, long i);
+> >  struct task_struct *task_early_kill(struct task_struct *tsk, int force=
+_early);
+> > @@ -3685,6 +3686,12 @@ static inline int __get_huge_page_for_hwpoison(u=
+nsigned long pfn, int flags,
+> >       return 0;
+> >  }
+> >
+> > +static inline bool __is_raw_hwp_subpage(struct folio *folio,
+> > +                                     struct page *subpage)
+> > +{
+> > +     return false;
+> > +}
+> > +
+> >  static inline void num_poisoned_pages_inc(unsigned long pfn)
+> >  {
+> >  }
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index ea24718db4af..6b860de87590 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -7377,6 +7377,16 @@ int get_huge_page_for_hwpoison(unsigned long pfn=
+, int flags,
+> >       return ret;
+> >  }
+> >
+> > +bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
+> > +{
+> > +     bool ret;
+> > +
+> > +     spin_lock_irq(&hugetlb_lock);
+> > +     ret =3D __is_raw_hwp_subpage(folio, subpage);
+> > +     spin_unlock_irq(&hugetlb_lock);
+>
+> Can you describe what races the hugetlb_lock prevents here?
+
+I think we should sync here with __get_huge_page_for_hwpoison, who
+iterates and inserts an entry to raw_hwp_list. llist itself doesn't
+ensure insertion is synchronized with iterating from
+__is_raw_hwp_subpage.
+
+> --
+> Mike Kravetz
+>
+> > +     return ret;
+> > +}
+> > +
+> >  void folio_putback_active_hugetlb(struct folio *folio)
+> >  {
+> >       spin_lock_irq(&hugetlb_lock);
+> > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> > index c415c3c462a3..891248e2930e 100644
+> > --- a/mm/memory-failure.c
+> > +++ b/mm/memory-failure.c
+> > @@ -1809,18 +1809,32 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
+> >  #endif /* CONFIG_FS_DAX */
+> >
+> >  #ifdef CONFIG_HUGETLB_PAGE
+> > -/*
+> > - * Struct raw_hwp_page represents information about "raw error page",
+> > - * constructing singly linked list from ->_hugetlb_hwpoison field of f=
+olio.
+> > - */
+> > -struct raw_hwp_page {
+> > -     struct llist_node node;
+> > -     struct page *page;
+> > -};
+> >
+> > -static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
+)
+> > +bool __is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
+> >  {
+> > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
+> > +     struct llist_head *raw_hwp_head;
+> > +     struct raw_hwp_page *p, *tmp;
+> > +     bool ret =3D false;
+> > +
+> > +     if (!folio_test_hwpoison(folio))
+> > +             return false;
+> > +
+> > +     /*
+> > +      * When RawHwpUnreliable is set, kernel lost track of which subpa=
+ges
+> > +      * are HWPOISON. So return as if ALL subpages are HWPOISONed.
+> > +      */
+> > +     if (folio_test_hugetlb_raw_hwp_unreliable(folio))
+> > +             return true;
+> > +
+> > +     raw_hwp_head =3D raw_hwp_list_head(folio);
+> > +     llist_for_each_entry_safe(p, tmp, raw_hwp_head->first, node) {
+> > +             if (subpage =3D=3D p->page) {
+> > +                     ret =3D true;
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     return ret;
+> >  }
+> >
+> >  static unsigned long __folio_free_raw_hwp(struct folio *folio, bool mo=
+ve_flag)
+> > --
+> > 2.41.0.162.gfafddb0af9-goog
+> >
