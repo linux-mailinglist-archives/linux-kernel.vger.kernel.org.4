@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D893674A37B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4049F74A37E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjGFR5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S232151AbjGFR6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjGFR5X (ORCPT
+        with ESMTP id S229501AbjGFR57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:57:23 -0400
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE37BA;
-        Thu,  6 Jul 2023 10:57:22 -0700 (PDT)
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3461163c0b6so3635235ab.2;
-        Thu, 06 Jul 2023 10:57:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688666241; x=1691258241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PV1zMg54RJPWlDZe+X9hD1kl6IZTlt7E6/xw4ZsYjnI=;
-        b=Y68xvb6unAPDTVfBAedmxUhzOTjOQxsVL7bfWK1uCky+SMSKbdIQF9lUDtLkPYnXgW
-         CDopWkpIGPEB+H3kgOyL6eYcWIedc2n8hLMENFSnhmnFhRLnpmAIpUlLz/SZFB3PR8Wb
-         LdYaVldyZB5peVmfywKCFnTuvojkCtInD/+A5gAexnG/PClltu/fQhjkGju+Z3Dy6ute
-         v3X/rhSy5ugAZeIyiSdYwe9oVOI60jY+pXH0AzYETrWNwp9EbKP7mQVDuMROBNzp1YH0
-         sGlcqfWQwIPMwG83AWG4cetiReh8XQQhwuCy5RM9BBLb13xk9rzucv5VA/bWWgFmt7dB
-         80cg==
-X-Gm-Message-State: ABy/qLbKq3m0eo7OXXjioZhRlUNr+HZMHOi5KEDPqz3G0XJjHyycenc4
-        iMBVynDk3mTZbxhZdGLrjA==
-X-Google-Smtp-Source: APBJJlFwswbERMy55C04zEpNuMZqN7dDP8aAwJZViP81idcmehEyswZ9IkHk4oBuVoBzoxTREvItGQ==
-X-Received: by 2002:a92:dc09:0:b0:345:db54:47ee with SMTP id t9-20020a92dc09000000b00345db5447eemr3137644iln.10.1688666241586;
-        Thu, 06 Jul 2023 10:57:21 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id n13-20020a02a90d000000b0041fb2506011sm647956jam.172.2023.07.06.10.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 10:57:20 -0700 (PDT)
-Received: (nullmailer pid 64315 invoked by uid 1000);
-        Thu, 06 Jul 2023 17:57:18 -0000
-Date:   Thu, 6 Jul 2023 11:57:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        linux-serial@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        conor+dt@kernel.org, jirislaby@kernel.org,
-        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        xianwei.zhao@amlogic.com, linux-kernel@vger.kernel.org,
-        neil.armstrong@linaro.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kelvin.zhang@amlogic.com,
-        rockosov@gmail.com, khilman@baylibre.com,
-        devicetree@vger.kernel.org, kernel@sberdevices.ru
-Subject: Re: [PATCH v2 6/7] dt-bindings: serial: amlogic,meson-uart: support
- Amlogic A1
-Message-ID: <168866621271.63404.12853551833647005497.robh@kernel.org>
-References: <20230705181833.16137-1-ddrokosov@sberdevices.ru>
- <20230705181833.16137-7-ddrokosov@sberdevices.ru>
+        Thu, 6 Jul 2023 13:57:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4904C199F;
+        Thu,  6 Jul 2023 10:57:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8B4461140;
+        Thu,  6 Jul 2023 17:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F233C433C8;
+        Thu,  6 Jul 2023 17:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688666277;
+        bh=F0YCEMz+odMRbJqorHQE3V8C/7tKkwnudxHV68TPaNk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=tyg0mflToQ+t1YTLf03Rb3HotFd44LCSdV8mOF8CDfjjcIVAGSfNnmOZrwy5Rt599
+         9aiRQenEh7raYpqYohB2snebRwfWrcCN/W37GB9WxUSixwIwYpGbnvtgRqcKQPLHvj
+         abMtiXbemSry0vIk5shP5vhSBychVo3kExxy8v4C+ch+pWAYn3sJ7MOD/SDvRuQQdR
+         Pz0xdmnXCUY39qFwdGS6CkBQ1o4yhNNfK+h8NDX8DCYMRsO3vitatFcYgXQzkH+ofr
+         1WZ8l6R3nFu1hxuDpz5AxfT21Llp+DGn/cH5RQkeU+IDzbQ/cQGXGJJ/fQSoNiYXWO
+         ZcJKRIQDkGmew==
+Date:   Thu, 6 Jul 2023 12:57:55 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Achal Verma <a-verma1@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: j721e: Delay 100ms T_PVPERL from power stable to
+ PERST# inactive
+Message-ID: <20230706175755.GA104094@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705181833.16137-7-ddrokosov@sberdevices.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20230706043438.407600-1-a-verma1@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +60,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 06, 2023 at 10:04:38AM +0530, Achal Verma wrote:
+> As per the PCIe Card Electromechanical specification REV. 5.0, PERST#
+> signal should be de-asserted after minimum 100ms from the time power-rails
+> become stable.
+> So, to ensure 100ms delay to give sufficient time for power-rails and
+> refclk to become stable, change delay from 100us to 100ms.
 
-On Wed, 05 Jul 2023 21:18:32 +0300, Dmitry Rokosov wrote:
-> Introduce meson uart serial bindings for A1 SoC family.
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Looks like the above is intended to be two paragraphs.  Add a blank
+line between, or rewrap into a single paragraph if you prefer that.
+
+> From PCIe Card Electromechanical specification REV. 5.0 section 2.9.2:
+> TPVPERL: Power stable to PERST# inactive - 100ms
+> T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
+
+Is T-PERST-CLK relevant here?  Omit if not.
+
+> Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
+> Signed-off-by: Achal Verma <a-verma1@ti.com>
 > ---
->  .../devicetree/bindings/serial/amlogic,meson-uart.yaml          | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/pci/controller/cadence/pci-j721e.c | 11 +++++------
+>  drivers/pci/pci.h                          |  2 ++
+>  2 files changed, 7 insertions(+), 6 deletions(-)
 > 
+> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+> index e70213c9060a..a3c8273b7320 100644
+> --- a/drivers/pci/controller/cadence/pci-j721e.c
+> +++ b/drivers/pci/controller/cadence/pci-j721e.c
+> @@ -498,14 +498,13 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+>  
+>  		/*
+>  		 * "Power Sequencing and Reset Signal Timings" table in
+> -		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
+> -		 * indicates PERST# should be deasserted after minimum of 100us
+> -		 * once REFCLK is stable. The REFCLK to the connector in RC
+> -		 * mode is selected while enabling the PHY. So deassert PERST#
+> -		 * after 100 us.
+> +		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 5.0
+> +		 * indicates PERST# should be deasserted after minimum of 100ms
+> +		 * after power rails achieve specified operating limits and
+> +		 * within this period reference clock should also become stable.
+>  		 */
+>  		if (gpiod) {
+> -			usleep_range(100, 200);
+> +			msleep(PCI_TPVPERL_DELAY);
+>  			gpiod_set_value_cansleep(gpiod, 1);
+>  		}
+>  
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index a4c397434057..7482cff16fef 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -13,6 +13,8 @@
+>  
+>  #define PCIE_LINK_RETRAIN_TIMEOUT_MS	1000
+>  
+> +#define PCI_TPVPERL_DELAY	100	/* msec; see PCIe r5.0, sec 2.9.2 */
 
+Perhaps make the name "PCIE_..." since this is a PCIe-specific time.
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+Also add "_MS" to the name so it's easy to verify that users are using
+the correct mechanism (usleep/msleep/etc).
 
-If a tag was not added on purpose, please state why and what changed.
+Otherwise looks good to me, thanks!
 
-Missing tags:
-
-Acked-by: Rob Herring <robh@kernel.org>
-
-
-
+>  extern const unsigned char pcie_link_speed[];
+>  extern bool pci_early_dump;
+>  
+> -- 
+> 2.25.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
