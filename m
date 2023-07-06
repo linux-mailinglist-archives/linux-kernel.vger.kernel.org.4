@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54D574A1A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BB174A1A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjGFP6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S233034AbjGFP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbjGFP6M (ORCPT
+        with ESMTP id S232763AbjGFP6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Jul 2023 11:58:12 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1672F9D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:58:10 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-401d1d967beso362961cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 08:58:10 -0700 (PDT)
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8F91BCA;
+        Thu,  6 Jul 2023 08:58:09 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b71cdb47e1so810906a34.2;
+        Thu, 06 Jul 2023 08:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688659089; x=1691251089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J/q3P7CS9uJYb3EpqCqB4dU/m8Tw67KDptXeIckI6/I=;
-        b=qOVVnvz1Y7U8AnM0HlDDFWVHldI36d4YXweD21ynFw1Sgrz7XkG4iz6bvnuAzbqMvU
-         AeGPJdTQ/rcAzZfVig9JPhJiA42Hx5k6+z0lifS0Xg44ppSAYakqfsVJrBJwXRXn3Dbu
-         kISCU8SzAS2sMhbgl43Q0zMvUhHfbbu0UcyIbEtdU0lpNjSpTvSVrn86ymR/aX8Jug9U
-         1/UFyAWajx7SjWeeWaSyTh8pNyVXS1VbJBGT5l3cY1gcmLaMbbiQ7G2OQrZVipgL1aP7
-         oHk6KqLJ63PjD0OdkP3SGn3QSW3aYbgkhupplcOmSDe4wHahgcOJt0eLQlAs0HFNjYJl
-         xqtA==
+        d=gmail.com; s=20221208; t=1688659088; x=1691251088;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ELX9uuKAjfgek1/p+NwumoGO6BxLWYptg064O9OiHBc=;
+        b=eom9rNUvY8PSvEiS2yEy5jzWdJZzDvOogRDYqmeCMmwnH49PDRAlb6A64DC/BsFdvw
+         8sB/gBTWnJUy3Vf5sxBQdnzN798+8M5al/Six8srqG7vFuN2j7eIGkCoIn1jGVbxOdlQ
+         k0TJlPB+p1leNL2pQtt57MxN0BJjUABkoTMJ7K06jyI0oSeTnDNIW3BFtD36isceJnhC
+         Ov1RKDxVv9ttVhyc/ajzhjVYQ408TrEBueG0oqMFX09h5Wm5fiw3CBKSJWuZpbbW9mDl
+         fzgNaq6H/z5+MW47FmpSbb1giv9UrEZWmHwC2aEaPtVkw0QUhiZaco32bqgO4JpuPB+3
+         c8qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688659089; x=1691251089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J/q3P7CS9uJYb3EpqCqB4dU/m8Tw67KDptXeIckI6/I=;
-        b=NKyb+FFkd5qNI6w3iukPULX3H/8JEPRgySqMGTKwBNz+4NMxsm5wfS8IZAWWFvkkkw
-         oUwWQQ+hKrvtCFJv518t8WCrr0S8UxkmODRwSfNGymTyWGmm3nr6KhP3WM05y2WWstTO
-         H1nwSFSYjJJ9l+XFTqdVkQD4W186gMxbA+qc/KcJQiWvKVx2+KQhfiuKgibAW7WJYxbT
-         8D+HMcB2YWH2vfD3hqIIfl8U4OD1RwxLvs4ZcUJPluQZoME2lY47t7iZ9o26ezyKxNEW
-         NvzSHZgvQ4DrRuVTvVXa0D9lqg1ufVsxb6BbsIcJlLfe1mLm/1wAPgiCmI4DJDPR8dKY
-         vLyQ==
-X-Gm-Message-State: ABy/qLYUjnTCURjwbcP06xex01EM6fvgUbhAWDR6P6QGZoiamFXpFQ9X
-        Y5vXh4qFzlnjroZKONpwjGA49zY1b5qRnWxRopg2UQ==
-X-Google-Smtp-Source: APBJJlEamxJvcPH3ytPHOCsBY9gPtDu/+sjexDcIF/Pjl5o/bPOpa+l1OGJzteQPkUyXknGHwfUp30kVY4KcCASP0Fs=
-X-Received: by 2002:a05:622a:15ca:b0:403:58e8:2d96 with SMTP id
- d10-20020a05622a15ca00b0040358e82d96mr143699qty.7.1688659089064; Thu, 06 Jul
- 2023 08:58:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688659088; x=1691251088;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ELX9uuKAjfgek1/p+NwumoGO6BxLWYptg064O9OiHBc=;
+        b=AUApLFpYG4JtsH8Ada6zAVwbzfKHCysmoLg0f02x7s+1Ee1xvVc/p2JzJMHVwz3v9e
+         srLriQcIVb4lS3Q1iXV/z4hpGaYQUi74niKJZdEEL0pV+Gfrf+nBFIEXDObq1FIxPpiK
+         qbtOBnw3jw/E/gs4syooJI9JYL2MDfHwUKFXI0sLtBuu1/2D4t5753+n6aCWTlgLdgPk
+         7ArsZ6Y/68We2enz2YeYreHKWdaclBxhP5tzpClodOSDsq9DVbqxceUI4YWFVQCmnIMa
+         JgZkzKTwbRAaLt2WXnCH5ACHVeSjhl4OvgsDZx8ScmGj24c0X7nl+3lkbrY63sjlg1Cj
+         gqvw==
+X-Gm-Message-State: ABy/qLbzbckLuIUsRDDTjM9DyN2v6fzWVe3HMuIDOdzOco0iIjNloGWO
+        LjA4N04rX+xPX0KqZMBjzj0=
+X-Google-Smtp-Source: APBJJlFDnf5rOYi7hzzNB1UrOiVyacVt/Eu6Y2AcAbTzk9CE0nP6/LyCfIuOIjrJ9jJQIFHGu3ZFYg==
+X-Received: by 2002:a05:6830:1e42:b0:6b7:4e97:343 with SMTP id e2-20020a0568301e4200b006b74e970343mr2928881otj.27.1688659088029;
+        Thu, 06 Jul 2023 08:58:08 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id q17-20020a656a91000000b005533c53f550sm1366282pgu.45.2023.07.06.08.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 08:58:07 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 08:58:05 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org, isaku.yamahata@gmail.com
+Subject: Re: [PATCH v7 5/8] KVM: x86/mmu: Don't pass FOLL_GET to
+ __kvm_follow_pfn
+Message-ID: <20230706155805.GD3894444@ls.amr.corp.intel.com>
+References: <20230704075054.3344915-1-stevensd@google.com>
+ <20230704075054.3344915-6-stevensd@google.com>
+ <20230705101800.ut4c6topn6ylwczs@linux.intel.com>
+ <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
 MIME-Version: 1.0
-References: <cover.1687375189.git.anupnewsmail@gmail.com> <4d0ac80521ebd44322a360ac331ce2443a1f0f26.1687375189.git.anupnewsmail@gmail.com>
- <CAM9d7cgAfvzrGiU0QiEigTAYKMe+OEP0b3o3Xd-0VhXX5Wkx1g@mail.gmail.com> <ZKXMJFckLMcGcVkP@yoga>
-In-Reply-To: <ZKXMJFckLMcGcVkP@yoga>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 6 Jul 2023 08:57:57 -0700
-Message-ID: <CAP-5=fUhC7NOxvE=gJFVFU3HtsMe2Jr2uR8ftmozaGtbWn0Ajg@mail.gmail.com>
-Subject: Re: [PATCH 7/9] scripts: python: implement get or create frame function
-To:     Anup Sharma <anupnewsmail@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,114 +83,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 1:01=E2=80=AFPM Anup Sharma <anupnewsmail@gmail.com>=
- wrote:
->
-> On Fri, Jun 23, 2023 at 05:04:56PM -0700, Namhyung Kim wrote:
-> > On Wed, Jun 21, 2023 at 12:45=E2=80=AFPM Anup Sharma <anupnewsmail@gmai=
-l.com> wrote:
-> > >
-> > > The CATEGORIES list and the USER_CATEGORY_INDEX and
-> > > KERNEL_CATEGORY_INDEX constants has been introduced.
-> > >
-> > > The get_or_create_frame function is responsible for retrieving or
-> > > creating a frame based on the provided frameString. If the frame
-> > > corresponding to the frameString is found in the frameMap, it is
-> > > returned. Otherwise, a new frame is created by appending relevant
-> > > information to the frameTable's 'data' array and adding the
-> > > frameString to the stringTable.
-> > >
-> > > The index of the newly created frame is added to the frameMap.
-> > >
-> > > Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
-> > > ---
-> > >  .../scripts/python/firefox-gecko-converter.py | 38 +++++++++++++++++=
-++
-> > >  1 file changed, 38 insertions(+)
-> > >
-> > > diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/t=
-ools/perf/scripts/python/firefox-gecko-converter.py
-> > > index 30fc542cfdeb..866751e5d1ce 100644
-> > > --- a/tools/perf/scripts/python/firefox-gecko-converter.py
-> > > +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
-> > > @@ -15,6 +15,13 @@ def isPerfScriptFormat(profile):
-> > >      firstLine =3D profile[:profile.index('\n')]
-> > >      return bool(re.match(r'^\S.*?\s+(?:\d+/)?\d+\s+(?:\d+\d+\s+)?[\d=
-.]+:', firstLine))
-> > >
-> > > +CATEGORIES =3D [
-> > > +{'name': 'User', 'color': 'yellow', 'subcategories': ['Other']},
-> > > +{'name': 'Kernel', 'color': 'orange', 'subcategories': ['Other']}
-> > > +]
-> > > +USER_CATEGORY_INDEX =3D 0
-> > > +KERNEL_CATEGORY_INDEX =3D 1
-> > > +
-> > >  def convertPerfScriptProfile(profile):
-> > >      def _createtread(name, pid, tid):
-> > >          markers =3D {
-> > > @@ -70,6 +77,37 @@ def convertPerfScriptProfile(profile):
-> > >                  stackMap[key] =3D stack
-> > >              return stack
-> > >
-> > > +        frameMap =3D dict()
-> > > +        def get_or_create_frame(frameString):
-> > > +            frame =3D frameMap.get(frameString)
-> > > +            if frame is None:
-> > > +                frame =3D len(frameTable['data'])
-> > > +                location =3D len(stringTable)
-> > > +                stringTable.append(frameString)
-> > > +
-> > > +                category =3D KERNEL_CATEGORY_INDEX if frameString.fi=
-nd('kallsyms') !=3D -1 or frameString.find('/vmlinux') !=3D -1 or frameStri=
-ng.endswith('.ko)') else USER_CATEGORY_INDEX
-> >
-> > This line is too long, we usually don't allow long lines
-> > over 100 characters.
->
-> Thanks for your suggestion. I have taken care in latest version.
-> Is there any way to add such checks in editor itself ? I used checkpatch.=
-pl
-> scripts, however it didnt catch this.
+On Thu, Jul 06, 2023 at 01:52:08PM +0900,
+David Stevens <stevensd@chromium.org> wrote:
 
-Unfortunately checkpatch.pl doesn't work for python code yet. I think
-using mypy types would be useful:
-https://github.com/python/mypy
-Also having docstring on functions would be useful. Some of the code
-has some fairly complex indirection and it'd be nice to understand
-why.
+> On Wed, Jul 5, 2023 at 7:17 PM Yu Zhang <yu.c.zhang@linux.intel.com> wrote:
+> >
+> > On Tue, Jul 04, 2023 at 04:50:50PM +0900, David Stevens wrote:
+> > > From: David Stevens <stevensd@chromium.org>
+> > >
+> > > Stop passing FOLL_GET to __kvm_follow_pfn. This allows the host to map
+> > > memory into the guest that is backed by un-refcounted struct pages - for
+> > > example, higher order non-compound pages allocated by the amdgpu driver
+> > > via ttm_pool_alloc_page.
+> >
+> > I guess you mean the tail pages of the higher order non-compound pages?
+> > And as to the head page, it is said to be set to one coincidentally[*],
+> > and shall not be considered as refcounted.  IIUC, refcount of this head
+> > page will be increased and decreased soon in hva_to_pfn_remapped(), so
+> > this may not be a problem(?). But treating this head page differently,
+> > as a refcounted one(e.g., to set the A/D flags), is weired.
+> >
+> > Or maybe I missed some context, e.g., can the head page be allocted to
+> > guest at all?
+> 
+> Yes, this is to allow mapping the tail pages of higher order
+> non-compound pages - I should have been more precise in my wording.
+> The head pages can already be mapped into the guest.
+> 
+> Treating the head and tail pages would require changing how KVM
+> behaves in a situation it supports today (rather than just adding
+> support for an unsupported situation). Currently, without this series,
+> KVM can map VM_PFNMAP|VM_IO memory backed by refcounted pages into the
+> guest. When that happens, KVM sets the A/D flags. I'm not sure whether
+> that's actually valid behavior, nor do I know whether anyone actually
+> cares about it. But it's what KVM does today, and I would shy away
+> from modifying that behavior without good reason.
+> 
+> > >
+> > > The bulk of this change is tracking the is_refcounted_page flag so that
+> > > non-refcounted pages don't trigger page_count() == 0 warnings. This is
+> > > done by storing the flag in an unused bit in the sptes.
+> >
+> > Also, maybe we should mention this only works on x86-64.
+> >
+> > >
+> > > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c          | 44 +++++++++++++++++++++------------
+> > >  arch/x86/kvm/mmu/mmu_internal.h |  1 +
+> > >  arch/x86/kvm/mmu/paging_tmpl.h  |  9 ++++---
+> > >  arch/x86/kvm/mmu/spte.c         |  4 ++-
+> > >  arch/x86/kvm/mmu/spte.h         | 12 ++++++++-
+> > >  arch/x86/kvm/mmu/tdp_mmu.c      | 22 ++++++++++-------
+> > >  6 files changed, 62 insertions(+), 30 deletions(-)
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index e44ab512c3a1..b1607e314497 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> >
+> > ...
+> >
+> > > @@ -2937,6 +2943,7 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
+> > >       bool host_writable = !fault || fault->map_writable;
+> > >       bool prefetch = !fault || fault->prefetch;
+> > >       bool write_fault = fault && fault->write;
+> > > +     bool is_refcounted = !fault || fault->is_refcounted_page;
+> >
+> > Just wonder, what if a non-refcounted page is prefetched?  Or is it possible in
+> > practice?
+> 
+> Prefetching is still done via gfn_to_page_many_atomic, which sets
+> FOLL_GET. That's fixable, but it's not something this series currently
+> does.
+
+So if we prefetch a page, REFCOUNTED bit is cleared unconditionally with this
+hunk.  kvm_set_page_{dirty, accessed} won't be called as expected for prefetched
+spte.  If I read the patch correctly, REFCOUNTED bit in SPTE should represent
+whether the corresponding page is ref-countable or not, right?
+
+Because direct_pte_prefetch_many() is for legacy KVM MMU and FNAME(prefetch_pte)
+is shadow paging, we need to test it with legacy KVM MMU or shadow paging to hit
+the issue, though.
 
 Thanks,
-Ian
-
-> > Thanks,
-> > Namhyung
-> >
-> >
-> > > +                implementation =3D None
-> > > +                optimizations =3D None
-> > > +                line =3D None
-> > > +                relevantForJS =3D False
-> > > +                subcategory =3D None
-> > > +                innerWindowID =3D 0
-> > > +                column =3D None
-> > > +
-> > > +                frameTable['data'].append([
-> > > +                    location,
-> > > +                    relevantForJS,
-> > > +                    innerWindowID,
-> > > +                    implementation,
-> > > +                    optimizations,
-> > > +                    line,
-> > > +                    column,
-> > > +                    category,
-> > > +                    subcategory,
-> > > +                ])
-> > > +                frameMap[frameString] =3D frame
-> > > +            return frame
-> > > +
-> > >          def addSample(threadName, stackArray, time):
-> > >              nonlocal name
-> > >              if name !=3D threadName:
-> > > --
-> > > 2.34.1
-> > >
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
