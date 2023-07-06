@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C33E74A746
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ADF74A747
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbjGFWvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 18:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S232298AbjGFWve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 18:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjGFWvP (ORCPT
+        with ESMTP id S231666AbjGFWvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Jul 2023 18:51:15 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F691FE8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:51:01 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56942442eb0so14211477b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 15:51:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5E01FF6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:51:03 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57704aace46so13053777b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 15:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688683860; x=1691275860;
+        d=google.com; s=20221208; t=1688683862; x=1691275862;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qwjh0UAlAYXVze8TCXBt1h/rZKLWFE0vCD0k3jVLMVk=;
-        b=Y2yizmMpjzL0EwPNfj1fzhhPy4fB1Fio/333NC+Pl3+CabD5WvQiBObIAnbDvfdIz0
-         55qqIyoV/B43yRJQMgc5PRzcnEO7oZ13pzUFcnMsRpYGZDSVSZeMWMJRv9WA6h3i6GfT
-         TXaYPaz84vks82iZ0vbDvAGXP/Ef7g9EhKOVR1CvAJFhj45Vp0/ta+dk/HgbDOBioOwa
-         2BKF9RsPqJx9l5jS/r3knSsrH/fNyDrHo/fZURqQr/YXnDI5GwojI2TLVLkJxGr1ous4
-         fBuKAKMZ/SIafScZO/gr72YFQKtZJ6oKMnuQ1yiJQjaFtVwKCY9iv6k7Pl0tvv06AM6a
-         3A8g==
+        bh=7OMVl3YxFVN2A+Ry/UxbO1YmCHHRZcxw7VDxaJg9ek4=;
+        b=MUCpPcJ5Cgcqj6eW6sHdBBG776f5QGOT4kgvGYw/zAIra7r+ur1/6MP7Dq6MkoSZmq
+         4xRE3PYyIXD4h8qZWQWCXhWmcWP1AwGUjGAf2ElqV4yAkcG0gjhOddOoakQQadmYz+QD
+         Is/7A9d1hSTithrMC6POOEAOeFEch61LmagZDJM30S0vYIcKNDDe5/OQ3z3oRxh6zHQl
+         utpA3lGtPFljt8j9Ntkp9LhkEyWfCZ3raeDW8NKQTH9gVvZpq5Wizvy5vkyeCh1Pwwja
+         CGEW2G1lqZ2p9p/Ga+J136aVMeRPFS8hQNLl5QI5DDjAJCWHkUOphl3NTJbnSXMCQUoE
+         o8sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688683860; x=1691275860;
+        d=1e100.net; s=20221208; t=1688683862; x=1691275862;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qwjh0UAlAYXVze8TCXBt1h/rZKLWFE0vCD0k3jVLMVk=;
-        b=F1PZt3LzZsWhOcehX913UjRnrh982k6ZJiYpV5R2ePEHRkCCvrMnTfwWxtC+YFTjP4
-         EmOXReFP95w106KUD0hYaxGOlvjun545vYUCTEHq2qZoqnkj+ku8/eZnMEkkuz+o6sbi
-         dF1KK83uAZPQ7rSQARsgpLJqIK4gNbEo6408mvu1cJecJXS6U+zLGQFl2SsLgBRXaFDy
-         tMfPcez1QPA/BkYReQXCh20ZshKVA7oHXlcp+lmc/oFYEepwc9hgcEVQILtH85d/zmf0
-         coC1mjXDJ/NKeQbIeWkJYCo8R/jHt+HOwQN+ALhOOJk6/vSZ4pZNuW159Yq2iIXq5Jrm
-         I+aQ==
-X-Gm-Message-State: ABy/qLbkX7zdVKIypukAFUVApBkRE14Ky3ElPzPJdF7CFYh0exHANV3u
-        lkmkb71Mdsg+vjz5a4EnnuWvuOt0x92sQ7VvecfT
-X-Google-Smtp-Source: APBJJlEpiTBdlhXFZSaqCdtDMzVQ5W4G5GGFJKBbdNzbEaJCnt1GA18H5a/L9p5DQaoHYiuhi3h9J1K3iDtJg/4EMWJg
+        bh=7OMVl3YxFVN2A+Ry/UxbO1YmCHHRZcxw7VDxaJg9ek4=;
+        b=WsKGT1buqPxOx3vTQVAwn6tsDwGEqPPKgzaJ0p7d8DAK6XVY8Ke9j3iTrb6UyUHWYk
+         lgloddgXs6FnF+tDo1BiD6mAl87SohZEqW8TVHqstx4OiFz30dEI11zCN4i2caRiSloK
+         5fofFne+gkrNxlzFWWfL7bKXS5RszmNipP6ZavP0T+wiCyp/WuZbt11o2Ilft43hfp5M
+         FiIZjA1cz6CWoqs02J4+YB13Fxsnh2jmqVVUzy/JYfCj/nDp6AYq4XT668QTREpae9Aq
+         yP3chGvwhJ7dqFXlGITV+yAAtrkhcBKMyghnDutgEipKq/xAs9pFLQ8OkIfggRkOEITK
+         /soA==
+X-Gm-Message-State: ABy/qLbuWKyEsCMtAJ7WBBY6jueADjo8chRuHmrqyGSqsa5Lx8U87zQ8
+        OeU9GdZF2UR+PK2hc8XIO8+0Xy+ur4Go+EUttAhJ
+X-Google-Smtp-Source: APBJJlG1dkyvwdYp0IICzgcbHzfcY4HpHckyy/miTsDbBSll9Umrn8xTYfU/5fbclpora7Bohc9XblNeG3IvM415E6Ta
 X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:bec3:2b1c:87a:fca2])
- (user=axelrasmussen job=sendgmr) by 2002:a81:c642:0:b0:576:d9ea:1331 with
- SMTP id q2-20020a81c642000000b00576d9ea1331mr27910ywj.4.1688683860327; Thu,
- 06 Jul 2023 15:51:00 -0700 (PDT)
-Date:   Thu,  6 Jul 2023 15:50:33 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a81:af07:0:b0:565:a33a:a49f with
+ SMTP id n7-20020a81af07000000b00565a33aa49fmr25333ywh.6.1688683862421; Thu,
+ 06 Jul 2023 15:51:02 -0700 (PDT)
+Date:   Thu,  6 Jul 2023 15:50:34 -0700
 In-Reply-To: <20230706225037.1164380-1-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20230706225037.1164380-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230706225037.1164380-6-axelrasmussen@google.com>
-Subject: [PATCH v3 5/8] mm: userfaultfd: support UFFDIO_POISON for hugetlbfs
+Message-ID: <20230706225037.1164380-7-axelrasmussen@google.com>
+Subject: [PATCH v3 6/8] mm: userfaultfd: document and enable new UFFDIO_POISON feature
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -97,59 +97,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The behavior here is the same as it is for anon/shmem. This is done
-separately because hugetlb pte marker handling is a bit different.
+Update the userfaultfd API to advertise this feature as part of feature
+flags and supported ioctls (returned upon registration).
 
+Add basic documentation describing the new feature.
+
+Acked-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- mm/hugetlb.c     | 19 +++++++++++++++++++
- mm/userfaultfd.c |  3 +--
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/mm/userfaultfd.rst | 15 +++++++++++++++
+ include/uapi/linux/userfaultfd.h             |  9 ++++++---
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 934e129d9939..20c5f6a5420a 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6263,6 +6263,25 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
- 	int writable;
- 	bool folio_in_pagecache = false;
+diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+index 7c304e432205..4349a8c2b978 100644
+--- a/Documentation/admin-guide/mm/userfaultfd.rst
++++ b/Documentation/admin-guide/mm/userfaultfd.rst
+@@ -244,6 +244,21 @@ write-protected (so future writes will also result in a WP fault). These ioctls
+ support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
+ respectively) to configure the mapping this way.
  
-+	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
-+		ptl = huge_pte_lock(h, dst_mm, dst_pte);
++Memory Poisioning Emulation
++---------------------------
 +
-+		/* Don't overwrite any existing PTEs (even markers) */
-+		if (!huge_pte_none(huge_ptep_get(dst_pte))) {
-+			spin_unlock(ptl);
-+			return -EEXIST;
-+		}
++In response to a fault (either missing or minor), an action userspace can
++take to "resolve" it is to issue a ``UFFDIO_POISON``. This will cause any
++future faulters to either get a SIGBUS, or in KVM's case the guest will
++receive an MCE as if there were hardware memory poisoning.
 +
-+		_dst_pte = make_pte_marker(PTE_MARKER_ERROR);
-+		set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
++This is used to emulate hardware memory poisoning. Imagine a VM running on a
++machine which experiences a real hardware memory error. Later, we live migrate
++the VM to another physical machine. Since we want the migration to be
++transparent to the guest, we want that same address range to act as if it was
++still poisoned, even though it's on a new physical host which ostensibly
++doesn't have a memory error in the exact same spot.
 +
-+		/* No need to invalidate - it was non-present before */
-+		update_mmu_cache(dst_vma, dst_addr, dst_pte);
-+
-+		spin_unlock(ptl);
-+		return 0;
-+	}
-+
- 	if (is_continue) {
- 		ret = -EFAULT;
- 		folio = filemap_lock_folio(mapping, idx);
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 899aa621d7c1..9ce129fdd596 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -373,8 +373,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- 	 * by THP.  Since we can not reliably insert a zero page, this
- 	 * feature is not supported.
- 	 */
--	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
--	    uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
-+	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
- 		mmap_read_unlock(dst_mm);
- 		return -EINVAL;
- 	}
+ QEMU/KVM
+ ========
+ 
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index b5f07eacc697..62151706c5a3 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -39,7 +39,8 @@
+ 			   UFFD_FEATURE_MINOR_SHMEM |		\
+ 			   UFFD_FEATURE_EXACT_ADDRESS |		\
+ 			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
+-			   UFFD_FEATURE_WP_UNPOPULATED)
++			   UFFD_FEATURE_WP_UNPOPULATED |	\
++			   UFFD_FEATURE_POISON)
+ #define UFFD_API_IOCTLS				\
+ 	((__u64)1 << _UFFDIO_REGISTER |		\
+ 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
+@@ -49,12 +50,14 @@
+ 	 (__u64)1 << _UFFDIO_COPY |		\
+ 	 (__u64)1 << _UFFDIO_ZEROPAGE |		\
+ 	 (__u64)1 << _UFFDIO_WRITEPROTECT |	\
+-	 (__u64)1 << _UFFDIO_CONTINUE)
++	 (__u64)1 << _UFFDIO_CONTINUE |		\
++	 (__u64)1 << _UFFDIO_POISON)
+ #define UFFD_API_RANGE_IOCTLS_BASIC		\
+ 	((__u64)1 << _UFFDIO_WAKE |		\
+ 	 (__u64)1 << _UFFDIO_COPY |		\
++	 (__u64)1 << _UFFDIO_WRITEPROTECT |	\
+ 	 (__u64)1 << _UFFDIO_CONTINUE |		\
+-	 (__u64)1 << _UFFDIO_WRITEPROTECT)
++	 (__u64)1 << _UFFDIO_POISON)
+ 
+ /*
+  * Valid ioctl command number range with this API is from 0x00 to
 -- 
 2.41.0.255.g8b1d071c50-goog
 
