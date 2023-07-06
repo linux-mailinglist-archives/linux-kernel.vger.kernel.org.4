@@ -2,101 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88E3749381
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB02A749383
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjGFCIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 22:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S232547AbjGFCJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 22:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGFCIn (ORCPT
+        with ESMTP id S229489AbjGFCJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 22:08:43 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CA512A;
-        Wed,  5 Jul 2023 19:08:41 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8b2b60731so327335ad.2;
-        Wed, 05 Jul 2023 19:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688609321; x=1691201321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=77anvOT5bLFxXQVZM5kxPamh8S2PE+VxEcnJtsBp0Yw=;
-        b=DdwvclS4+IsQyx7gSXs22HDf3DYQKzCDm4AhPkr7/avsHxfL1WZTNH4QIrpevymPwJ
-         QszRUR9DtLmf12Pnnw1Ac6+OubQ66P1cg58OSj+/M9whCBOYyKIO1/cT3GnYFPOHUsDI
-         /yn4lbHwZDG9n+HmvjMYBqG/riVjd+qpPvY8rGw0p61d34XqS8JZiPZd/3fOQWM6QxNZ
-         c806E3mdNBSltZWPXTUJ1mSC+Sg10jUmYN1HFhjMk8m58f33oFhIj/nQnktKeJp+gWc/
-         vjbAemxLiNCC0yws2r3+oDuzjMkzkN0Gd2f7aZ71G+XVVFN+xFLS7oMATpaIOa53FHeK
-         pJ8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688609321; x=1691201321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=77anvOT5bLFxXQVZM5kxPamh8S2PE+VxEcnJtsBp0Yw=;
-        b=XhsWwhCF8QXOJeIYfzNgw8enG1b9iXTRXyRy1ejSDA/ytnDpT4OKd60+22SP3Db0s2
-         +6YeU0FWlSJ6mx1IlxkpCzivJUPPLBW1zgk3ZXCl/CcWd3sqJrGAy0XZaFVUQxIRijcN
-         k4h7PFozJZbi1gi5fgGeJiJN2bruJqQlphKa6KR/VaUoU9v1YetAWekmjqrYKNT2NUdN
-         tRizqOs1uLxa0hvF7Ql5G/JhbI5leASdFJAYZCtT70iwBWZSBe0Wa0um8De6AgKrUlLP
-         i/oCOag85FVkLm/qVwktAydqfUWQ5IsXOGEccqvrP8ktHopg2oW6ykQB7C+pmyxCKv4P
-         9XYQ==
-X-Gm-Message-State: ABy/qLZiocB3g2RoVh8poug2QzwMmcEpKYZw/3uHwy6EjmQenPZaxYCN
-        Tu5B4tJ4ORf08kaZHH+rTgIiovF+NFYP8yjGPB8=
-X-Google-Smtp-Source: APBJJlFowzTvNO8nzHMinESmJbMA0aaUBd+8+a3lJjli2/rpAhRAhpiL/LaEBbMdVHD2LNBkJK3ARQ==
-X-Received: by 2002:a17:902:d4c7:b0:1b6:a99b:ceb1 with SMTP id o7-20020a170902d4c700b001b6a99bceb1mr554825plg.50.1688609320976;
-        Wed, 05 Jul 2023 19:08:40 -0700 (PDT)
-Received: from localhost.localdomain ([221.231.171.18])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902b28100b001b87bedcc6fsm144023plr.93.2023.07.05.19.08.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 19:08:40 -0700 (PDT)
-From:   pinkperfect <pinkperfect2021@gmail.com>
-To:     amitkarwar@gmail.com, kvalo@kernel.org, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pinkperfect <pinkperfect2021@gmail.com>
-Subject: [PATCH] wifi: mwifiex: Security: Fix memcpy oobs in mwifiex_set_encode
-Date:   Thu,  6 Jul 2023 02:07:51 +0000
-Message-Id: <20230706020751.859773-1-pinkperfect2021@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 5 Jul 2023 22:09:23 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9BBBE;
+        Wed,  5 Jul 2023 19:09:21 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QxKcz5dTqz67HqD;
+        Thu,  6 Jul 2023 10:05:55 +0800 (CST)
+Received: from localhost (10.34.206.101) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 6 Jul
+ 2023 03:09:17 +0100
+Date:   Thu, 6 Jul 2023 10:09:13 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Wolfram Sang <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        "Shyam Sundar S K" <shyam-sundar.s-k@amd.com>
+Subject: Re: [PATCH 01/23] i2c: amd-mp2: Remove #ifdef guards for PM related
+ functions
+Message-ID: <20230706100913.00007c4a@Huawei.com>
+In-Reply-To: <20230705204314.89800-2-paul@crapouillou.net>
+References: <20230705204314.89800-1-paul@crapouillou.net>
+        <20230705204314.89800-2-paul@crapouillou.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.34.206.101]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cfg80211 flow, when handling userspace netlink messages
-if input cipher mode is WLAN_CIPHER_SUITE_SMS4
-will make cfg80211_validate_key_settings not check key_len and seq_len
-which will cause controllable memcpy overwrite
-So needs to check them in mwifiex_set_encode.
+On Wed,  5 Jul 2023 22:42:52 +0200
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-Signed-off-by: pinkperfect <pinkperfect2021@gmail.com>
----
- drivers/net/wireless/marvell/mwifiex/sta_ioctl.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> Use the new PM macros for the suspend and resume functions to be
+> automatically dropped by the compiler when CONFIG_PM or
+> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+> 
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+> 
+> Note that the use of the UNIVERSAL_DEV_PM_OPS() macro was likely to be
+> wrong, as it sets the same callbacks for the runtime-PM and system
+> suspend/resume. This patch does not change this behaviour, but I suspect
+> that it should be changed to use DEFINE_RUNTIME_DEV_PM_OPS() instead, as
+> the current documentation for UNIVERSAL_DEV_PM_OPS() suggests.
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/sta_ioctl.c b/drivers/net/wireless/marvell/mwifiex/sta_ioctl.c
-index a2ad2b53f016..bddc11eac8a9 100644
---- a/drivers/net/wireless/marvell/mwifiex/sta_ioctl.c
-+++ b/drivers/net/wireless/marvell/mwifiex/sta_ioctl.c
-@@ -1099,6 +1099,11 @@ int mwifiex_set_encode(struct mwifiex_private *priv, struct key_params *kp,
- {
- 	struct mwifiex_ds_encrypt_key encrypt_key;
- 
-+	if (key_len > WLAN_MAX_KEY_LEN || (kp && kp->seq_len > PN_LEN)) {
-+		mwifiex_dbg(priv->adapter, ERROR, "invalid parameters");
-+		return -1;
-+	}
-+
- 	memset(&encrypt_key, 0, sizeof(encrypt_key));
- 	encrypt_key.key_len = key_len;
- 	encrypt_key.key_index = key_index;
--- 
-2.25.1
+I'd be tempted to leave this one alone because it'll be much harder
+to spot that it's an ex UNIVERSAL_DEV_PM_OPS() that needs some thinking
+about after this change.
+
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> 
+> ---
+> Cc: Elie Morisse <syniurge@gmail.com>
+> Cc: Shyam Sundar S K <shyam-sundar.s-k@amd.com>
+> ---
+>  drivers/i2c/busses/i2c-amd-mp2-pci.c  | 14 +++++---------
+>  drivers/i2c/busses/i2c-amd-mp2-plat.c |  8 ++------
+>  drivers/i2c/busses/i2c-amd-mp2.h      |  2 --
+>  3 files changed, 7 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> index 143165300949..114fe329279a 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> @@ -382,7 +382,6 @@ static void amd_mp2_pci_remove(struct pci_dev *pci_dev)
+>  	amd_mp2_clear_reg(privdata);
+>  }
+>  
+> -#ifdef CONFIG_PM
+>  static int amd_mp2_pci_suspend(struct device *dev)
+>  {
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+> @@ -434,9 +433,10 @@ static int amd_mp2_pci_resume(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static UNIVERSAL_DEV_PM_OPS(amd_mp2_pci_pm_ops, amd_mp2_pci_suspend,
+> -			    amd_mp2_pci_resume, NULL);
+> -#endif /* CONFIG_PM */
+> +static const struct dev_pm_ops amd_mp2_pci_pm_ops = {
+> +	SYSTEM_SLEEP_PM_OPS(amd_mp2_pci_suspend, amd_mp2_pci_resume)
+> +	RUNTIME_PM_OPS(amd_mp2_pci_suspend, amd_mp2_pci_resume, NULL)
+> +};
+>  
+>  static const struct pci_device_id amd_mp2_pci_tbl[] = {
+>  	{PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_MP2)},
+> @@ -449,11 +449,7 @@ static struct pci_driver amd_mp2_pci_driver = {
+>  	.id_table	= amd_mp2_pci_tbl,
+>  	.probe		= amd_mp2_pci_probe,
+>  	.remove		= amd_mp2_pci_remove,
+> -#ifdef CONFIG_PM
+> -	.driver = {
+> -		.pm	= &amd_mp2_pci_pm_ops,
+> -	},
+> -#endif
+> +	.driver.pm	= pm_ptr(&amd_mp2_pci_pm_ops),
+>  };
+>  module_pci_driver(amd_mp2_pci_driver);
+>  
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2-plat.c b/drivers/i2c/busses/i2c-amd-mp2-plat.c
+> index 112fe2bc5662..4c677aeaca29 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2-plat.c
+> +++ b/drivers/i2c/busses/i2c-amd-mp2-plat.c
+> @@ -183,7 +183,6 @@ static const struct i2c_algorithm i2c_amd_algorithm = {
+>  	.functionality = i2c_amd_func,
+>  };
+>  
+> -#ifdef CONFIG_PM
+>  static int i2c_amd_suspend(struct amd_i2c_common *i2c_common)
+>  {
+>  	struct amd_i2c_dev *i2c_dev = amd_i2c_dev_common(i2c_common);
+> @@ -198,7 +197,6 @@ static int i2c_amd_resume(struct amd_i2c_common *i2c_common)
+>  
+>  	return i2c_amd_enable_set(i2c_dev, true);
+>  }
+> -#endif
+>  
+>  static const u32 supported_speeds[] = {
+>  	I2C_MAX_HIGH_SPEED_MODE_FREQ,
+> @@ -276,10 +274,8 @@ static int i2c_amd_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, i2c_dev);
+>  
+>  	i2c_dev->common.cmd_completion = &i2c_amd_cmd_completion;
+> -#ifdef CONFIG_PM
+> -	i2c_dev->common.suspend = &i2c_amd_suspend;
+> -	i2c_dev->common.resume = &i2c_amd_resume;
+> -#endif
+> +	i2c_dev->common.suspend = pm_ptr(&i2c_amd_suspend);
+> +	i2c_dev->common.resume = pm_ptr(&i2c_amd_resume);
+>  
+>  	/* Register the adapter */
+>  	amd_mp2_pm_runtime_get(mp2_dev);
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2.h b/drivers/i2c/busses/i2c-amd-mp2.h
+> index 018a42de8b1e..40f3cdcc60aa 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2.h
+> +++ b/drivers/i2c/busses/i2c-amd-mp2.h
+> @@ -160,10 +160,8 @@ struct amd_i2c_common {
+>  	enum speed_enum i2c_speed;
+>  	u8 *dma_buf;
+>  	dma_addr_t dma_addr;
+> -#ifdef CONFIG_PM
+>  	int (*suspend)(struct amd_i2c_common *i2c_common);
+>  	int (*resume)(struct amd_i2c_common *i2c_common);
+> -#endif /* CONFIG_PM */
+>  };
+>  
+>  /**
 
