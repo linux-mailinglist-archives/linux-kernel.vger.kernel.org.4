@@ -2,224 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5071C749CD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083FD749CE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjGFM6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S231721AbjGFNB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjGFM6W (ORCPT
+        with ESMTP id S229843AbjGFNB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:58:22 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CCD1BD9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:58:19 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-55779047021so483737a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688648299; x=1691240299;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vELZbnMmNkmoaEABtrT3W1r0gqpXFf7Q4yaW/PDd3ic=;
-        b=uriX3xdK4G/u9PN6mBy8tlT2/KJ0P8M7jWAuBjRLJ/Sih3nSDbV8mAztivxafEVHNJ
-         8YJ5Ev71rDYVS9sAbJ4BjQPZARo+x8auRWKyfab4iBTVE92X8XvjqEj4HXMOEd3dmHV3
-         spkEelpiOCMbkw46ss1wqPgSEKkaaChQthhVO5EiD0Yd/fWwaE/0elDbZImJXl0pdZeu
-         3wlswkkrivh5CCwZ0/WXW+SkRAtnye0ZCgZSHBwcSbbQKjr/yfHhKnaB5ceempEX5KIP
-         FfBlzoShO2K9CpwEf5NbX1i3xMioI2FI5vXnTigvPtnjTNnEychuIEnnCP2M0qxpXUOf
-         b5bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688648299; x=1691240299;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vELZbnMmNkmoaEABtrT3W1r0gqpXFf7Q4yaW/PDd3ic=;
-        b=hzk8rVpP/5U5D5kCOuCq1jsDkMmuNrrerfKhNzkQPseA8BSCJf291KjAKTLCndDpEI
-         iwtMUwghmLP0TUow2dArtkUJGoPCXuiWMkmgmJkxxUnihzSKJURjDUCJXsSSqYyVIdss
-         5PMLF4YEJgGgBAF2Ynlh2iKoJQGLSQJ4RhXylUaSas65N33DTi8cOabC/d0R3tHS+Hyw
-         YIxxCDJebCVV19f4zFAaDsGGsNKrqkbV2J36WSBUfznEr3rF2N1+itedFwRsl2GgdSuh
-         1exPNe1+Nc+yz0q6LKqCDCvYsbfDqDtKplnv+pXxEb/02NuKMGAdxd8uH7g4qBQn/05r
-         g9bg==
-X-Gm-Message-State: ABy/qLYqrZgNUXvw2qsk4c7TBGToEHeAIG1/FhxqcSTG9Q7rxPg3ekbo
-        5mn9yCl7Gw6kmn3yxel/kRNc
-X-Google-Smtp-Source: APBJJlGgY2DJvQ7WORsziR5TIY14wortK+8ttKQP052qE+ZwOWaxnLN1tSdZdAigWZhWWtZHBBQ2zw==
-X-Received: by 2002:a17:90b:1d81:b0:263:5eea:e820 with SMTP id pf1-20020a17090b1d8100b002635eeae820mr1179773pjb.26.1688648298965;
-        Thu, 06 Jul 2023 05:58:18 -0700 (PDT)
-Received: from thinkpad ([117.216.120.100])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090b018300b002635db431a0sm1275171pjs.45.2023.07.06.05.58.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 05:58:18 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 18:28:11 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Sajid Dalvi <sdalvi@google.com>,
-        Ajay Agarwal <ajayagarwal@google.com>
-Subject: Re: [PATCH] Revert "PCI: dwc: Wait for link up only if link is
- started"
-Message-ID: <20230706125811.GD4808@thinkpad>
-References: <20230706082610.26584-1-johan+linaro@kernel.org>
+        Thu, 6 Jul 2023 09:01:56 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC430E65;
+        Thu,  6 Jul 2023 06:01:53 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5C3AD61E5FE01;
+        Thu,  6 Jul 2023 15:01:05 +0200 (CEST)
+Message-ID: <37c7a3f7-f769-a313-3279-e8e415369ba4@molgen.mpg.de>
+Date:   Thu, 6 Jul 2023 15:01:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH -next 2/3] md/dm-raid: cleanup multiple equivalent goto
+ tags from raid_ctr()
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        song@kernel.org, heinzm@redhat.com, neilb@suse.de,
+        jbrassow@redhat.com, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230706071622.563073-1-yukuai1@huaweicloud.com>
+ <20230706071622.563073-3-yukuai1@huaweicloud.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230706071622.563073-3-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230706082610.26584-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 10:26:10AM +0200, Johan Hovold wrote:
-> This reverts commit da56a1bfbab55189595e588f1d984bdfb5cf5924.
-> 
-> A recent commit broke controller probe by returning an error in case the
-> link does not come up during host initialisation.
-> 
-> As explained in commit 886a9c134755 ("PCI: dwc: Move link handling into
-> common code") and as indicated by the comment "Ignore errors, the link
-> may come up later" in the code, waiting for link up and ignoring errors
-> is the intended behaviour:
-> 
-> 	 Let's standardize this to succeed as there are usecases where
-> 	 devices (and the link) appear later even without hotplug. For
-> 	 example, a reconfigured FPGA device.
-> 
-> Reverting the offending commit specifically fixes a regression on
-> Qualcomm platforms like the Lenovo ThinkPad X13s which no longer reach
-> the interconnect sync state if a slot does not have a device populated
-> (e.g. an optional modem).
-> 
-> Note that enabling asynchronous probing by default as was done for
-> Qualcomm platforms by commit c0e1eb441b1d ("PCI: qcom: Enable async
-> probe by default"), should take care of any related boot time concerns.
-> 
-> Finally, note that the intel-gw driver is the only driver currently not
-> providing a start_link callback and instead starts the link in its
-> host_init callback, and which may avoid an additional one-second timeout
-> during probe by making the link-up wait conditional. If anyone cares,
-> that can be done in a follow-up patch with a proper motivation.
-> 
+Dear Yu,
 
-The offending commit is bogus since it makes the intel-gw _special_ w.r.t
-waiting for the link up. Most of the drivers call dw_pcie_host_init() during the
-probe time and they all have to wait for 1 sec if the slot is empty.
 
-As Johan noted, intel-gw should make use of the async probe to avoid the boot
-delay instead of adding a special case.
+Thank you for your patch. Some minor nits, if you are interested.
 
-> Fixes: da56a1bfbab5 ("PCI: dwc: Wait for link up only if link is started")
-> Reported-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Cc: Sajid Dalvi <sdalvi@google.com>
-> Cc: Ajay Agarwal <ajayagarwal@google.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Am 06.07.23 um 09:16 schrieb Yu Kuai:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> There are four equivalent goto tags in raid_ctr(), clean them up to use
+> just one, there are no functional change and prepare to fix that
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Maybe:
 
-- Mani
+There *is* no functional change, and is a preparation to fix an 
+unprotected `md_stop()`.
 
+> md_stop() is not protected.
+
+In the commit message summary/title, I’d spell the verb with a space:
+
+     Clean up four equivalent goto tags in raid_ctr()
+
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
->  .../pci/controller/dwc/pcie-designware-host.c | 13 ++++--------
->  drivers/pci/controller/dwc/pcie-designware.c  | 20 +++++++------------
->  drivers/pci/controller/dwc/pcie-designware.h  |  1 -
->  3 files changed, 11 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index cf61733bf78d..9952057c8819 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -485,20 +485,15 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
->  	if (ret)
->  		goto err_remove_edma;
->  
-> -	if (dw_pcie_link_up(pci)) {
-> -		dw_pcie_print_link_status(pci);
-> -	} else {
-> +	if (!dw_pcie_link_up(pci)) {
->  		ret = dw_pcie_start_link(pci);
->  		if (ret)
->  			goto err_remove_edma;
-> -
-> -		if (pci->ops && pci->ops->start_link) {
-> -			ret = dw_pcie_wait_for_link(pci);
-> -			if (ret)
-> -				goto err_stop_link;
-> -		}
->  	}
->  
-> +	/* Ignore errors, the link may come up later */
-> +	dw_pcie_wait_for_link(pci);
-> +
->  	bridge->sysdata = pp;
->  
->  	ret = pci_host_probe(bridge);
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index df092229e97d..8e33e6e59e68 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -644,20 +644,9 @@ void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index)
->  	dw_pcie_writel_atu(pci, dir, index, PCIE_ATU_REGION_CTRL2, 0);
->  }
->  
-> -void dw_pcie_print_link_status(struct dw_pcie *pci)
-> -{
-> -	u32 offset, val;
-> -
-> -	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> -	val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
-> -
-> -	dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
-> -		 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
-> -		 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
-> -}
-> -
->  int dw_pcie_wait_for_link(struct dw_pcie *pci)
->  {
-> +	u32 offset, val;
->  	int retries;
->  
->  	/* Check if the link is up or not */
-> @@ -673,7 +662,12 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
->  		return -ETIMEDOUT;
->  	}
->  
-> -	dw_pcie_print_link_status(pci);
-> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> +	val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
-> +
-> +	dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
-> +		 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
-> +		 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
->  
->  	return 0;
->  }
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> index 615660640801..79713ce075cc 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.h
-> +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> @@ -429,7 +429,6 @@ void dw_pcie_setup(struct dw_pcie *pci);
->  void dw_pcie_iatu_detect(struct dw_pcie *pci);
->  int dw_pcie_edma_detect(struct dw_pcie *pci);
->  void dw_pcie_edma_remove(struct dw_pcie *pci);
-> -void dw_pcie_print_link_status(struct dw_pcie *pci);
->  
->  static inline void dw_pcie_writel_dbi(struct dw_pcie *pci, u32 reg, u32 val)
->  {
-> -- 
-> 2.39.3
-> 
+>   drivers/md/dm-raid.c | 27 +++++++++------------------
+>   1 file changed, 9 insertions(+), 18 deletions(-)
 
--- 
-மணிவண்ணன் சதாசிவம்
+[…]
+
+
+Kind regards,
+
+Paul
