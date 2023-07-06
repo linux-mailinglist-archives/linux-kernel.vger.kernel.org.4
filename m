@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4126749C63
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9645749C65
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbjGFMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
+        id S232478AbjGFMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjGFMsJ (ORCPT
+        with ESMTP id S232095AbjGFMsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Jul 2023 08:48:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B8A1FFC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:47:44 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7302113;
+        Thu,  6 Jul 2023 05:47:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0609C6606FBA;
-        Thu,  6 Jul 2023 13:47:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688647651;
-        bh=zXq0RxESpSkRSGtoAWJi6JGEGgsz7+mOEqGxgmgm5F0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QWRwQrxYxEJii4Oy32ULOt49iEq2NvCXfSWiYq1uVb0ISH25jO1fQqLl8XZ7p0na0
-         8W5v74OYEWDgDegmPjTOu/5iqn+Kb9WXI1KNGWOTUf1DMqn7xJoDBLh2BRXyT9suYS
-         2kMgqKdIITNXxzNuBra3luErq+Gy9f+0aN1fvHy4DH6yV0unaiwLQUlFsOXVQukhRW
-         TQqSUfpI88zRTyUVdjkv2KCos8Mh6/OlGTTT2YIEOBoq5sjlesR3FdnSs8ObjigLyr
-         iS1svXJgKtFT8XOwDk9AuxqfPPdT1flRG+LiPrmhami61Vm74IZcxr8KA45UZ0WNQr
-         hUBpKoXlctegw==
-Message-ID: <be63fd1b-7659-75b8-e037-38528e8a8276@collabora.com>
-Date:   Thu, 6 Jul 2023 14:47:28 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D415021C4E;
+        Thu,  6 Jul 2023 12:47:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688647654; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nO7HoBp+tBDfiO8NyqBxFWNIdjOzmscimrRAo3po1O4=;
+        b=n+Y6nDQXpv79YjzQkvXGkus7Qt0TtPVGo9RQs3l5LAwKX3w7PXijWXmIMgNXw02cjZsaFT
+        GgbCr43AP+f5+JT+x2ryzTU5q+HVv9q6ANT4/O/FYRCqXkrRBqaDfcnGuz33puZbFB1iQf
+        ZsU/sn57IVTgLisPwiA0ACfhP8T4UO4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688647654;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nO7HoBp+tBDfiO8NyqBxFWNIdjOzmscimrRAo3po1O4=;
+        b=UcI+C+HTa4GWg8vtBITaev7k5cEqqqBCrt69ZHj8vo/Q+7kD8Kf/vTXM+5vpQs3nRqNzmg
+        VPShQWuf2S+N8BCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C566C138FC;
+        Thu,  6 Jul 2023 12:47:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HrQnMOa3pmToQQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 12:47:34 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 63516A0707; Thu,  6 Jul 2023 14:47:34 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 14:47:34 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 51/92] hpfs: convert to ctime accessor functions
+Message-ID: <20230706124734.ew57trrtzkegqg6y@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-49-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/mediatek: Fix potential memory leak if vmap() fail
-Content-Language: en-US
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230626185801.684451-1-suijingfeng@loongson.cn>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230626185801.684451-1-suijingfeng@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705190309.579783-49-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,38 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/06/23 20:58, Sui Jingfeng ha scritto:
-> Also return -ENOMEM if such a failure happens, the implement should take
-> responsibility for the error handling.
+On Wed 05-07-23 15:01:16, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-This commit needs a Fixes tag. Please add the relevant one and resend.
+...
 
-Thanks,
-Angelo
+> diff --git a/fs/hpfs/namei.c b/fs/hpfs/namei.c
+> index 69fb40b2c99a..36babb78b510 100644
+> --- a/fs/hpfs/namei.c
+> +++ b/fs/hpfs/namei.c
+> @@ -13,10 +13,10 @@ static void hpfs_update_directory_times(struct inode *dir)
+>  {
+>  	time64_t t = local_to_gmt(dir->i_sb, local_get_seconds(dir->i_sb));
+>  	if (t == dir->i_mtime.tv_sec &&
+> -	    t == dir->i_ctime.tv_sec)
+> +	    t == inode_get_ctime(dir).tv_sec)
+>  		return;
+> -	dir->i_mtime.tv_sec = dir->i_ctime.tv_sec = t;
+> -	dir->i_mtime.tv_nsec = dir->i_ctime.tv_nsec = 0;
+> +	dir->i_mtime.tv_sec = inode_set_ctime(dir, t, 0).tv_sec;
+> +	dir->i_mtime.tv_nsec = 0;
 
-> ---
->   drivers/gpu/drm/mediatek/mtk_drm_gem.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> index a25b28d3ee90..9f364df52478 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> @@ -247,7 +247,11 @@ int mtk_drm_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map)
->   
->   	mtk_gem->kvaddr = vmap(mtk_gem->pages, npages, VM_MAP,
->   			       pgprot_writecombine(PAGE_KERNEL));
-> -
-> +	if (!mtk_gem->kvaddr) {
-> +		kfree(sgt);
-> +		kfree(mtk_gem->pages);
-> +		return -ENOMEM;
-> +	}
->   out:
->   	kfree(sgt);
->   	iosys_map_set_vaddr(map, mtk_gem->kvaddr);
+Easier to read:
 
+	dir->i_mtime = inode_set_ctime(dir, t, 0);
 
+> @@ -59,8 +59,9 @@ static int hpfs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
+>  	result->i_ino = fno;
+>  	hpfs_i(result)->i_parent_dir = dir->i_ino;
+>  	hpfs_i(result)->i_dno = dno;
+> -	result->i_ctime.tv_sec = result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date));
+> -	result->i_ctime.tv_nsec = 0; 
+> +	inode_set_ctime(result,
+> +			result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date)),
+> +			0);
+>  	result->i_mtime.tv_nsec = 0; 
+>  	result->i_atime.tv_nsec = 0; 
 
+Here also:
+	result->i_mtime = result->i_atime = inode_set_ctime(result,
+		local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date)), 0)
+
+> @@ -167,8 +168,9 @@ static int hpfs_create(struct mnt_idmap *idmap, struct inode *dir,
+>  	result->i_fop = &hpfs_file_ops;
+>  	set_nlink(result, 1);
+>  	hpfs_i(result)->i_parent_dir = dir->i_ino;
+> -	result->i_ctime.tv_sec = result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date));
+> -	result->i_ctime.tv_nsec = 0;
+> +	inode_set_ctime(result,
+> +			result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date)),
+> +			0);
+>  	result->i_mtime.tv_nsec = 0;
+>  	result->i_atime.tv_nsec = 0;
+
+And here exactly the same.
+
+> @@ -250,8 +252,9 @@ static int hpfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
+>  	hpfs_init_inode(result);
+>  	result->i_ino = fno;
+>  	hpfs_i(result)->i_parent_dir = dir->i_ino;
+> -	result->i_ctime.tv_sec = result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date));
+> -	result->i_ctime.tv_nsec = 0;
+> +	inode_set_ctime(result,
+> +			result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date)),
+> +			0);
+>  	result->i_mtime.tv_nsec = 0;
+>  	result->i_atime.tv_nsec = 0;
+>  	hpfs_i(result)->i_ea_size = 0;
+> @@ -326,8 +329,9 @@ static int hpfs_symlink(struct mnt_idmap *idmap, struct inode *dir,
+>  	result->i_ino = fno;
+>  	hpfs_init_inode(result);
+>  	hpfs_i(result)->i_parent_dir = dir->i_ino;
+> -	result->i_ctime.tv_sec = result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date));
+> -	result->i_ctime.tv_nsec = 0;
+> +	inode_set_ctime(result,
+> +			result->i_mtime.tv_sec = result->i_atime.tv_sec = local_to_gmt(dir->i_sb, le32_to_cpu(dee.creation_date)),
+> +			0);
+>  	result->i_mtime.tv_nsec = 0;
+>  	result->i_atime.tv_nsec = 0;
+>  	hpfs_i(result)->i_ea_size = 0;
+
+And in above two as well.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
