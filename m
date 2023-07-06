@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192C774A3E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BDB74A3EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbjGFSpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S231263AbjGFSvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGFSpr (ORCPT
+        with ESMTP id S229536AbjGFSvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:45:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E971BF6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688669143; x=1720205143;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3wOeUZs6JXKyWVNdi7+CcHIAObG75WGMUOy+RpNjDSU=;
-  b=KhHY8dIEJasY1471xuqGd7veoQhf0/N94/aWPMtWNty5s5XT95s3AWI1
-   bJ16M6t+BOnz9vC05j43dfwZcFScDwCm6gC1G9YJYWFXLs+RO9fpco51T
-   58PbL8SbV9/IQmRH7/6WlMV7yyiRaS4wBcAAThF2jo11Ufmj41Oqa3CgN
-   wWS74zPqwI9NmN4G51n3Y4jA6iXNfKNcTCTBPoR+ULDFY040RXKrxhoBz
-   cmMitDxnrspta2BunqXQFirKrXgtCRss2To7EfMmZEBW1xLDZfinZcjEP
-   iCC7HgjrlQthtr1I/DytQCsis59MY8S3QmVpuhp+P1+0RReXMewTqh/2d
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="344021164"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="344021164"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 11:45:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="719668691"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="719668691"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Jul 2023 11:45:40 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qHTz2-0001Va-11;
-        Thu, 06 Jul 2023 18:45:40 +0000
-Date:   Fri, 7 Jul 2023 02:45:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vishal Verma <vishal.l.verma@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: memdev.c:undefined reference to `firmware_upload_unregister'
-Message-ID: <202307070209.tLMRS8xd-lkp@intel.com>
+        Thu, 6 Jul 2023 14:51:10 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA75B2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=rI+8S7w+5wae4yvhZ4wNULs/xtvCq38AsDvZDV1s+XA=; b=R
+        69MOA17vuBfB1Penjn6uVmOGkl7d8gMlbQlfxbeXLHuT6j5rTfCGiksUJxFZu5vgHUCtyhB6fIT5p
+        sXhGLR+vvpiqKmjLEPcXyNUGz5KrX8NOHzBhUUqzrx6eGO+EuD+9YwIgJ+BAy/Q0I8ExLHVdP5iHS
+        scK0kkBM8tzJk26M=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:39080 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qHU4E-0002oN-Iu; Thu, 06 Jul 2023 14:51:03 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-kernel@vger.kernel.org
+Date:   Thu,  6 Jul 2023 14:50:59 -0400
+Message-Id: <20230706185100.84322-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] auxdisplay: hd44780: move cursor home after clear display command
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c17414a273b81fe4e34e11d69fc30cc8b1431614
-commit: 9521875bbe0055805557fff0b08fd9a29d02b7bc cxl: add a firmware update mechanism using the sysfs firmware loader
-date:   11 days ago
-config: xtensa-randconfig-r035-20230706 (https://download.01.org/0day-ci/archive/20230707/202307070209.tLMRS8xd-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230707/202307070209.tLMRS8xd-lkp@intel.com/reproduce)
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307070209.tLMRS8xd-lkp@intel.com/
+The "clear display" command on the NewHaven NHD-0220DZW-AG5 display
+does NOT change the DDRAM address to 00h (home position) like the
+standard Hitachi HD44780 controller. As a consequence, the starting
+position of the initial string LCD_INIT_TEXT is not guaranteed to be
+at 0,0 depending on where the cursor was before the clear display
+command.
 
-All errors (new ones prefixed by >>):
+Extract of CLEAR_DISPLAY command from datasheets of:
 
-   xtensa-linux-ld: drivers/cxl/core/memdev.o: in function `cxl_memdev_shutdown':
->> memdev.c:(.text+0xb10): undefined reference to `firmware_upload_unregister'
-   xtensa-linux-ld: drivers/cxl/core/memdev.o: in function `devm_cxl_remove_fw_upload':
-   memdev.c:(.text+0xb32): undefined reference to `firmware_upload_unregister'
-   xtensa-linux-ld: drivers/cxl/core/memdev.o: in function `clear_exclusive_cxl_commands':
->> memdev.c:(.text+0x2334): undefined reference to `firmware_upload_register'
-   xtensa-linux-ld: drivers/cxl/core/memdev.o: in function `cxl_memdev_setup_fw_upload':
-   memdev.c:(.text+0x23d6): undefined reference to `firmware_upload_register'
-   xtensa-linux-ld: drivers/cxl/core/memdev.o: in function `clear_exclusive_cxl_commands':
-   memdev.c:(.text+0x2344): undefined reference to `firmware_upload_unregister'
-   xtensa-linux-ld: drivers/cxl/core/memdev.o: in function `cxl_memdev_setup_fw_upload':
-   memdev.c:(.text+0x24ab): undefined reference to `firmware_upload_unregister'
+    Hitachi HD44780:
+        ... It then sets DDRAM address 0 into the address counter...
 
+    NewHaven NHD-0220DZW-AG5 datasheet:
+	... This instruction does not change the DDRAM Address
+
+Move the cursor home after sending clear display command to support
+non-standard LCDs.
+
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/auxdisplay/hd44780_common.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/auxdisplay/hd44780_common.c b/drivers/auxdisplay/hd44780_common.c
+index 3934c2eebf33..70c818945a74 100644
+--- a/drivers/auxdisplay/hd44780_common.c
++++ b/drivers/auxdisplay/hd44780_common.c
+@@ -82,7 +82,13 @@ int hd44780_common_clear_display(struct charlcd *lcd)
+ 	hdc->write_cmd(hdc, LCD_CMD_DISPLAY_CLEAR);
+ 	/* datasheet says to wait 1,64 milliseconds */
+ 	long_sleep(2);
+-	return 0;
++
++	/*
++	 * Some LCDs (ex: NewHaven) do not reset the DDRAM address when
++	 * executing the CLEAR_DISPLAY command. Explicitely move cursor
++	 * to home position to account for these non-standard LCDs:
++	 */
++	return hd44780_common_home(lcd);
+ }
+ EXPORT_SYMBOL_GPL(hd44780_common_clear_display);
+ 
+
+base-commit: c17414a273b81fe4e34e11d69fc30cc8b1431614
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.30.2
+
