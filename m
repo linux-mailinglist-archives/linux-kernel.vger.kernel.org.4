@@ -2,124 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0377F74A112
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C932C74A118
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbjGFPd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S233362AbjGFPfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232960AbjGFPdz (ORCPT
+        with ESMTP id S229548AbjGFPfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:33:55 -0400
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F346BFF;
-        Thu,  6 Jul 2023 08:33:53 -0700 (PDT)
+        Thu, 6 Jul 2023 11:35:17 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D112AA;
+        Thu,  6 Jul 2023 08:35:14 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-99342a599e9so107150066b.3;
+        Thu, 06 Jul 2023 08:35:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688657635; x=1720193635;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=trA35bhtZS7sC65wm9GfBeAVYdZXIA5psrybUjewGIQ=;
-  b=A0UumUCQtccE+sL4EQW3IA6Wg1hcfLSmRSmI/JZD/sedyT5VYzAKy+fS
-   qjJCBdlLKda+gxGC1/nglq1eFqaJmASSIL1vTr72VH8gF+r8AifyGvAa4
-   QqOoXm+zYDyY8Tu1M2r39/T7cT4zFNhrTsSoccqGOyygiR2iLn3AaIYYA
-   8=;
-X-IronPort-AV: E=Sophos;i="6.01,185,1684800000"; 
-   d="scan'208";a="658357472"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-21d8d9f4.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 15:33:49 +0000
-Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-21d8d9f4.us-west-2.amazon.com (Postfix) with ESMTPS id 7CCA88103C;
-        Thu,  6 Jul 2023 15:33:42 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 15:33:40 +0000
-Received: from 88665a182662.ant.amazon.com (10.187.171.32) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 15:33:35 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-Date:   Thu, 6 Jul 2023 08:33:27 -0700
-Message-ID: <20230706153327.99298-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CAN+4W8iRH6kpDmmY8i5r1nKbckaYghmOCqRXe+4bDHE7vzVMMA@mail.gmail.com>
-References: <CAN+4W8iRH6kpDmmY8i5r1nKbckaYghmOCqRXe+4bDHE7vzVMMA@mail.gmail.com>
-MIME-Version: 1.0
+        d=gmail.com; s=20221208; t=1688657713; x=1691249713;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=M/uitRjGuRmzMmSyM4ApavrZukW5U7OcNDtPTc/YVXQ=;
+        b=RG65KIIJdMd1VGNtOBPcC1YQsiHPdYkjsacGTz1KP8+bNQ//MY0NPTbgpd/BxU/FLe
+         aMePLDxBnVOuyjCss+cx0h6kTvC0R0aE7+Y+fmH+AJpCu2nYqTKD3DsP57vvhItwERTW
+         gwcC6oN5x8JLtZQM+2DALPQDhck+ehO4lYm8TXZ++wnLp2FJcGbFol2X3GaBc97mPg1V
+         14hGYKYgjIgvm2CS3tEU0nGjE3x7Cw3CsWFkoOtsGoepxT5W9zTJrL4fHWxC957XbXpx
+         36gsiKoBEBclZQHB69iUZgSXQXO9UdISjdn1jo0JL+/rGzpzk+oB9lYkooI66SLUj1Kt
+         V83w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688657713; x=1691249713;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M/uitRjGuRmzMmSyM4ApavrZukW5U7OcNDtPTc/YVXQ=;
+        b=ct1AkE8cG4Q0eAGXES37rWckNK0d6R8qBIidR871uSe48vHkmyATSlcfF+P49KseO9
+         hBppxMHtDya6e8jbebb4JcawoojMGlr5vtx2VWpNNIu2aRMVzqfMDN5nyfAl2jROtNyO
+         TiXjwlE8eyOOGsma2ovl+UiHvF32H5p9eHb+zEGNSPJtldVMmMEW4t3uBxkeoRlTRP+f
+         XSQxtq+zJIf2z90O++oSjI0jGQ48diGPNpmsYcGTXaZ6LTDlebwSwywWIqmlnc4iM427
+         B1ZtG8sS3YI8IYyNQ22ZyCL6PhpfWH2/WRGs5uOjq1GgRaPniFz3SGfU9GvGCRHUbJMa
+         IwNQ==
+X-Gm-Message-State: ABy/qLblaF7+yIGgESeuZk0UcJhn4t1EEI1Pz5sn3DucdS/o+/SCWxAO
+        JB3q8fPwo2H1ym3MbzW0ZfU=
+X-Google-Smtp-Source: APBJJlEepcIxqRzevyC7/Pyw+Ik5jZAAdVE0xCERlU/fWyzM0CRmPaRXMW5KGqHpEwtyECqx92qWQg==
+X-Received: by 2002:a17:906:74d7:b0:987:59b6:c9fa with SMTP id z23-20020a17090674d700b0098759b6c9famr2023590ejl.19.1688657712758;
+        Thu, 06 Jul 2023 08:35:12 -0700 (PDT)
+Received: from [10.0.0.98] (snat-11.cgn.sat-an.net. [176.222.226.11])
+        by smtp.gmail.com with ESMTPSA id gz2-20020a170906f2c200b0098d2d219649sm964147ejb.174.2023.07.06.08.35.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 08:35:12 -0700 (PDT)
+Message-ID: <d4576e776d49498dcc1f82ddf2b81b415e0c6e4b.camel@gmail.com>
+Subject: Re: [PATCH] usb: dwc3: Disable AutoRetry controller feature for
+ dwc_usb3 v2.00a
+From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Mauro Ribeiro <mauro.ribeiro@hardkernel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Thu, 06 Jul 2023 17:35:11 +0200
+In-Reply-To: <20230705224754.zmffebz2geg3bclh@synopsys.com>
+References: <20230630223638.2250-1-linuxtardis@gmail.com>
+         <20230705224754.zmffebz2geg3bclh@synopsys.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.187.171.32]
-X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Thu, 6 Jul 2023 09:11:15 +0100
-> On Thu, Jul 6, 2023 at 1:41 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> >
-> > Sorry for late reply.
-> >
-> > What we know about sk before inet6?_lookup_reuseport() are
-> >
-> >   (1) sk was full socket in bpf_sk_assign()
-> >   (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
-> >   (3) sk was TCP_LISTEN here if TCP
-> 
-> Are we looking at the same bpf_sk_assign? Confusingly there are two
-> very similarly named functions. The one we care about is:
-> 
-> BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
-> {
->     if (!sk || flags != 0)
->         return -EINVAL;
->     if (!skb_at_tc_ingress(skb))
->         return -EOPNOTSUPP;
->     if (unlikely(dev_net(skb->dev) != sock_net(sk)))
->         return -ENETUNREACH;
->     if (sk_is_refcounted(sk) &&
->         unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
->         return -ENOENT;
-> 
->     skb_orphan(skb);
->     skb->sk = sk;
->     skb->destructor = sock_pfree;
-> 
->     return 0;
-> }
-> 
-> From this we can't tell what state the socket is in or whether it is
-> RCU freed or not.
+On Wed, 2023-07-05 at 22:47 +0000, Thinh Nguyen wrote:
+> Hi,
+>=20
+> On Sat, Jul 01, 2023, Jakub Vanek wrote:
+> > AutoRetry has been found to cause issues in this controller revision.
+> > This feature allows the controller to send non-terminating/burst retry
+> > ACKs (Retry=3D1 and Nump!=3D0) as opposed to terminating retry ACKs
+> > (Retry=3D1 and Nump=3D0) to devices when a transaction error occurs.
+> >=20
+> > Unfortunately, some USB devices do not retry transfers when
+> > the controller sends them a non-terminating retry ACK. After the transf=
+er
+> > times out, the xHCI driver tries to resume normal operation of the
+> > controller by sending a Stop Endpoint command to it. However, this
+> > revision of the controller fails to respond to that command in this
+> > state and the xHCI driver therefore gives up. This is reported via dmes=
+g:
+> >=20
+> > [sda] tag#29 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
+> > [sda] tag#29 CDB: opcode=3D0x28 28 00 00 69 42 80 00 00 48 00
+> > xhci-hcd: xHCI host not responding to stop endpoint command
+> > xhci-hcd: xHCI host controller not responding, assume dead
+> > xhci-hcd: HC died; cleaning up
+> >=20
+> > This problem has been observed on Odroid HC2. This board has
+> > an integrated JMS578 USB3-to-SATA bridge. The above problem could be
+> > triggered by starting a read-heavy workload on an attached SSD.
+> > After a while, the host controller would die and the SSD would disappea=
+r
+> > from the system.
+> >=20
+> > Reverting b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in
+> > the controller") stopped the issue from occurring on Odroid HC2.
+> > As this problem hasn't been reported on other devices, disable
+> > AutoRetry just for the dwc_usb3 revision v2.00a that the board SoC
+> > (Exynos 5422) uses.
+> >=20
+> > Fixes: b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in the =
+controller")
+> > Link: https://urldefense.com/v3/__https://lore.kernel.org/r/a21f34c0463=
+2d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com/__;!!A4F2R9G_pg!YWgF6oqfuVY6x=
+stZmroukjlrwAFEYEQE8uj_iUu4fd10mnJxEPG345k75dMLLdNFP8rT1leok-aPNkz_FuAJ1zxn=
+mw$=C2=A0
+> > Link: https://urldefense.com/v3/__https://forum.odroid.com/viewtopic.ph=
+p?t=3D42630__;!!A4F2R9G_pg!YWgF6oqfuVY6xstZmroukjlrwAFEYEQE8uj_iUu4fd10mnJx=
+EPG345k75dMLLdNFP8rT1leok-aPNkz_FuCzOGIVPA$=C2=A0
+> > Cc: stable@vger.kernel.org
+> > Cc: Mauro Ribeiro <mauro.ribeiro@hardkernel.com>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > Signed-off-by: Jakub Vanek <linuxtardis@gmail.com>
+> > ---
+> > =C2=A0drivers/usb/dwc3/core.c | 10 ++++++++--
+> > =C2=A01 file changed, 8 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index d68958e151a7..d742fc882d7e 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1218,9 +1218,15 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Host mode on seeing transaction errors(CRC er=
+rors or internal
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 * overrun scenerios) on IN transfers to reply t=
+o the device
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 * with a non-terminating retry ACK (i.e, an ACK=
+ transcation
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * packet with Retry=3D1 & Nump !=3D 0)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * packet with Retry=3D1 & Nump !=3D 0).
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 *
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * Do not enable this for DWC_usb3 v2.00a. This contro=
+ller
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * revision stops responding to Stop Endpoint commands=
+ if
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * a USB device does not retry after a non-terminating=
+ retry
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * ACK is sent to it.
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0reg |=3D DWC3_GUCTL_HSTINAUTORETRY;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (!DWC3_VER_IS(DWC3, 200A))
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg |=
+=3D DWC3_GUCTL_HSTINAUTORETRY;
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > --=20
+> > 2.25.1
+> >=20
+>=20
+> I brought up this inquiry internally. Please wait as I need to review
+> this further. The handling for this may be different depending on the
+> team's feedback.
+>=20
 
-But we can in inet6?_steal_sock() by calling sk_is_refcounted() again
-via skb_steal_sock().
+OK; feel free to contact me if I could be of any help.
 
-In inet6?_steal_sock(), we call inet6?_lookup_reuseport() only for
-sk that was a TCP listener or UDP non-connected socket until just before
-the sk_state checks.  Then, we know *refcounted should be false for such
-sockets even before inet6?_lookup_reuseport().
+> Thanks,
+> Thinh
 
-After the checks, sk might be poped out of the reuseport group before
-inet6?_lookup_reuseport() and reuse_sk might be NULL, but it's not
-related because *refcounted is a value for sk, not for reuse_sk.
+Thank you,
+Jakub
