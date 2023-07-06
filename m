@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A237496D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B797496D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbjGFHxW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 03:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S233850AbjGFHym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjGFHxU (ORCPT
+        with ESMTP id S233590AbjGFHyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:53:20 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243C5121
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:53:20 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bb3a77abd7bso395264276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:53:20 -0700 (PDT)
+        Thu, 6 Jul 2023 03:54:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8C81BD9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688630038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nKBmnBKEUa4kIHIIVbn3CB8RgCuJtdcen85aZwjfZ9A=;
+        b=cgO3Ao/QwYvJ2gp93evs9d4JOUhKcAp3PjrDd4AOOxKnH163FMYi51np9OMZTsf/jKeR4K
+        j1YW0KBcRdfqqkbN0I2p19aR2HXFcItM0jI69gnx/mgizMqMhWFCAu/Nn91PkcHhmccooh
+        V5URG8tOXga6GG3ql/3TnnHXDfc5H5w=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-253-N3qiKpGOP6GPt2qa_hD4jQ-1; Thu, 06 Jul 2023 03:53:57 -0400
+X-MC-Unique: N3qiKpGOP6GPt2qa_hD4jQ-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-635eb5b04e1so1466376d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:53:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688629999; x=1691221999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oLFxQ4JHG9tvjlmQac1kJ2yw4Iq48iBlz2d7dmbQkwM=;
-        b=Xmv8nu2NisZ1/cDKLFN9JzF+WIMGDSnW5CijkRATou4msOFbKP++x2uEGn0dEIfKuY
-         uizBcoKrtaU7y8mCko9EqzQTSYYoFlBGp5qDbMc3SZV1qVI0JECpOkeaYZKAWif0G6EL
-         jeJcocnU4um8TjF5y1bowI8oQ5uiHof2bRgUURv1bs6v5yN8zCavrzVmIf14EVvUVEuv
-         CyqVwcKXUoOKJgGj34jYD+EASMEbSL6e75YerS1OB8apSB8lYyzvcINv90HLuXh04CI0
-         e3t2OLUWEwcaIf2xNjytUZ+YfKYpqlkgu8jY4vJtRdr4k8gpwVezvGpitQyaiFHWPp+y
-         sCjw==
-X-Gm-Message-State: ABy/qLYQz/avAoQvsGIv2SQcSq/GlUqTOMN5nWVR4DI5vfw3m1E1YOpN
-        LCJrEUXskQZbyH1OsWe9vACJj4Eto9HBZw==
-X-Google-Smtp-Source: APBJJlHZLt2Ka2h8cc2EgLmHwGyAwQIf3gR5GbAoyR+46wZoBTZd8p+D8kUUm2LvQGnwEUe8JpxIxA==
-X-Received: by 2002:a25:becd:0:b0:c64:5116:795 with SMTP id k13-20020a25becd000000b00c6451160795mr1065525ybm.65.1688629999206;
-        Thu, 06 Jul 2023 00:53:19 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id u9-20020a25f809000000b00c64ff4e745bsm188001ybd.51.2023.07.06.00.53.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 00:53:19 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bfe6ea01ff5so381043276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:53:17 -0700 (PDT)
-X-Received: by 2002:a25:7804:0:b0:bd6:8725:2258 with SMTP id
- t4-20020a257804000000b00bd687252258mr1002406ybc.60.1688629997542; Thu, 06 Jul
- 2023 00:53:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230706071310.38388-1-luhongfei@vivo.com> <CAMuHMdV1TTKYMQfnZ_6H1Vee9NcYtN1TK0wNesqsjiKwBHZz=A@mail.gmail.com>
-In-Reply-To: <CAMuHMdV1TTKYMQfnZ_6H1Vee9NcYtN1TK0wNesqsjiKwBHZz=A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 6 Jul 2023 09:53:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWG01LNa2Umgzcv6knAtbPnRSQYs71bwh3yL9W9XN=CFw@mail.gmail.com>
-Message-ID: <CAMuHMdWG01LNa2Umgzcv6knAtbPnRSQYs71bwh3yL9W9XN=CFw@mail.gmail.com>
-Subject: Re: [PATCH] drivers: bus: Fix resource leaks in for_each_available_child_of_node
- loop
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        opensource.kernel@vivo.com
+        d=1e100.net; s=20221208; t=1688630036; x=1691222036;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nKBmnBKEUa4kIHIIVbn3CB8RgCuJtdcen85aZwjfZ9A=;
+        b=Ol8eO7S1iKr016zB/shgmXzsx6lqtSK/ASF3kBC6Vbaft/KwjAWdT5MKq0OtpJHd4G
+         QlRjwcbSrtc5/t1h5jb/1SH1kwCW8rFK2SWLSknhHRw6PDqxTg/iuz7kLWm1xxS3Ygqk
+         H39P001DC+taSjX9pN8vDXPlEiU9HXP5GaFTf+9d3WHGhrfHX1tl6JQii1pnTzqe5urf
+         bouh9iEzADIRHmmwdfKFpmHqnTEeqUTw6D1iY/sF1jUn+IV4vbdb+y/XFqGr6aFsYi2H
+         JfL3OtMu71UrwZv5cRvep/L4IdMdJOJtKa/4fxZQPFPGqI5RlhwDyIt+yLNQjtjPOQ2V
+         d52w==
+X-Gm-Message-State: ABy/qLYD/GGu0FS9pS6W9uhIPXe7IZMrBwrR9JgfEPKDRc4KxNru7/7b
+        IN2YkqG4NYRpG89r/0C2UkMCrtFFs9zjTQsJtP6bAQHL0utOBD+W1S3XTOxmac6IZ3mikcx+dBW
+        EXUIMdL3LIqNkThDcuTYG37dE
+X-Received: by 2002:a05:6214:411c:b0:62b:5410:322d with SMTP id kc28-20020a056214411c00b0062b5410322dmr1165914qvb.6.1688630036747;
+        Thu, 06 Jul 2023 00:53:56 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlE7pglwfQF4xq5TglIJ6uR2vClIsuu/IvhrP/6YsBkTnQXWu6b64dYBkJzMsfFw8ae0u5QZwA==
+X-Received: by 2002:a05:6214:411c:b0:62b:5410:322d with SMTP id kc28-20020a056214411c00b0062b5410322dmr1165900qvb.6.1688630036501;
+        Thu, 06 Jul 2023 00:53:56 -0700 (PDT)
+Received: from gerbillo.redhat.com (host-95-248-55-118.retail.telecomitalia.it. [95.248.55.118])
+        by smtp.gmail.com with ESMTPSA id g30-20020a0caade000000b00637615a1f33sm579065qvb.20.2023.07.06.00.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 00:53:56 -0700 (PDT)
+Message-ID: <a8c6e741a9c704dad9b63e1e85136a8e6da09b44.camel@redhat.com>
+Subject: Re: [PATCH] net: wireless: cisco: Fix possible uninit bug
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Yu Hao <yhao016@ucr.edu>, kvalo@kernel.org, keescook@chromium.org,
+        gustavoars@kernel.org, Jason@zx2c4.com,
+        linux-wireless@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Thu, 06 Jul 2023 09:53:53 +0200
+In-Reply-To: <CA+UBctBLWF14TsgT4OfanmnxTqbm9mNxyHhjJqpFo7c+kdjDsw@mail.gmail.com>
+References: <CA+UBctBLWF14TsgT4OfanmnxTqbm9mNxyHhjJqpFo7c+kdjDsw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 9:43 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, Jul 6, 2023 at 9:13 AM Lu Hongfei <luhongfei@vivo.com> wrote:
-> > Ensure child node references are decremented properly in
-> > the error path.
->
-> Which error path?
->
-> >
-> > Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> > ---
-> >  drivers/bus/imx-weim.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> > index 52a5d0447390..d05472f7c20f 100644
-> > --- a/drivers/bus/imx-weim.c
-> > +++ b/drivers/bus/imx-weim.c
-> > @@ -251,6 +251,7 @@ static int weim_parse_dt(struct platform_device *pdev)
-> >                 else
-> >                         have_child = 1;
-> >         }
-> > +       of_node_put(child);
->
-> This is not an error path.
->
-> for_each_available_child_of_node() walks a list, getting a reference
-> to each child, and releasing the reference afterwards.
+On Tue, 2023-07-04 at 16:50 -0700, Yu Hao wrote:
+> The struct cap_rid should be initialized by function readCapabilityRid.
+> However, there is not return value check. Iit is possible that
+> the function readCapabilityRid returns error code and cap_rid.softCap
+> is not initialized. But there is a read later for this field.
+>=20
+> Signed-off-by: Yu Hao <yhao016@ucr.edu>
+> ---
+>  drivers/net/wireless/cisco/airo.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/wireless/cisco/airo.c
+> b/drivers/net/wireless/cisco/airo.c
+> index 7c4cc5f5e1eb..b3736d76a5d5 100644
+> --- a/drivers/net/wireless/cisco/airo.c
+> +++ b/drivers/net/wireless/cisco/airo.c
+> @@ -6950,8 +6950,11 @@ static int airo_get_range(struct net_device *dev,
+>     CapabilityRid cap_rid;      /* Card capability info */
+>     int     i;
+>     int     k;
+> +   int     status;
+>=20
+> -   readCapabilityRid(local, &cap_rid, 1);
+> +   status =3D readCapabilityRid(local, &cap_rid, 1);
+> +   if (status !=3D SUCCESS)
+> +       return ERROR;
 
-FTR, calling of_node_put() manually is only needed when breaking
-out of for_each_available_child_of_node().
+This value is returned directly to the network stack, you must use a
+standard error code instead (e.g. -EINVAL).
 
->
-> Have you tested this patch?
-> I expect the of_node_put() to trigger a refcount underflow error
-> message on the console.
->
-> >
-> >         if (have_child)
-> >                 ret = of_platform_default_populate(pdev->dev.of_node,
+Also, please add a suitable 'Fixes' tag, thanks!
 
-Gr{oetje,eeting}s,
+Paolo
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
