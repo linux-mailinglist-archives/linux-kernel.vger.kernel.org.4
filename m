@@ -2,153 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437D2749510
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0153749522
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjGFFrI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 01:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        id S233236AbjGFFwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjGFFrH (ORCPT
+        with ESMTP id S232583AbjGFFwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 01:47:07 -0400
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF169110;
-        Wed,  5 Jul 2023 22:47:05 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2b70404a5a0so3206941fa.2;
-        Wed, 05 Jul 2023 22:47:05 -0700 (PDT)
+        Thu, 6 Jul 2023 01:52:47 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D050A1732
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 22:52:45 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3144098df56so238204f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 22:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688622764; x=1691214764;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QmghjAxIZETM80Y4eowuI0+E6FG3YgixB48nOwNbm9o=;
+        b=fijStf/B9+AaMmivN5Y7sR0r3hGVdHsGhuNl+G+aRAtLdP3jH3ZPz7/vkKqUWhe6Bk
+         BP9VQUm/JxQBF2bob8wpUcm7qduGQNN/nKCXdc8azilpt5LbSK/PthyyqM6bGmUS1VQu
+         x4nM4WX0jK3YD6uvsxZLAbAmTP0fBmfSTzYSqwcVkXBfJd5710+M3qUgX28cY4gtxKdH
+         qGe5JAl1KOfNr5J2j7DrpN0RfoDG2gyihrYgIWTgLU5O7axu0UW3e8/tfUhwq+IcQz5n
+         p1x956FfC5vuAWCcQrNq3/DEThZQWG9sU2z3dyS+MZJicozt8Amk+wpDUQozbnX/u+fc
+         YAqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688622424; x=1691214424;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DAe3DO8JeNcAT9Td7jWMVHE4ZoYfI8wkTCrsNfJQcfM=;
-        b=GhbHCYupYOMrEEjirznOd3DEYa4brv8qj80Cgb1WV7248yKunpWaIm/3jWIZAl6GPq
-         NtrsEsM/curZy5sM1+KEE3PNGmXSW/YhJIw2HpOsnOmBLZcAAiAZqEiE46Mg2ooW2hMR
-         hQoPPPRNrqK6xsEHNjWQFK8pS0oAcATIlTJa+C8nBuUj/YBy/QM4IguSpiANqgHuoOU1
-         3HU03eghv0j3GkBSnT0x0Jl3u6Ujh9Ku0tL6I5/7ToqhJuFslL+0hYHzgtGxnxSRYdYO
-         /mxRYZft5y3HUVmFr2X+5jrWl3hUU8UZv97+gsoLb/KItaW40f9b+1Tqfd3tEHEMVrQx
-         E0dg==
-X-Gm-Message-State: ABy/qLbmxYBqq5v4kFMwr41auvGD2QhhVaDTG7q+OJ5LVCjwebB6Q3mk
-        HF0mKBVEgkb7HVtkcYICi4WrbGDWnGOMQeG3/sw=
-X-Google-Smtp-Source: APBJJlH2A9JGeuMpPfUkDUalNHw1IcFAuO9slDxvx16xMY1cOpb26f+l1AdXlrCse2GEHfv8LIx2GQzNNvM9EhVUGFE=
-X-Received: by 2002:a05:6512:60f:b0:4f9:5196:5ed0 with SMTP id
- b15-20020a056512060f00b004f951965ed0mr878972lfe.7.1688622423686; Wed, 05 Jul
- 2023 22:47:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688622764; x=1691214764;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QmghjAxIZETM80Y4eowuI0+E6FG3YgixB48nOwNbm9o=;
+        b=SBj9ildATE+LlU8LXm394syPGbPxHaFy2lHNJ+scETNcCtg8tpOEpS8+etLYTvwVkP
+         B2neZ892Pp0/+dhMmZmY5fIqkX/MImmS8OV+SV8TLj2X0BZletaTYKQdc+GUyblSB8D+
+         c7WwtKTXBahrdn8EUB6NXLIRZ/0k4ZgOnC5qlQjR2A51UhuTxgxxKt1G/hvkA2pX2OqK
+         YCrgQMFIEoLgBwDjh2zg4sZeHtewXdEGXXhfWIj3F0au2wqoNV4PAHo6innwFZTJXHCT
+         M9YSXl88fQi93XE01wZ6FAUxEbT/LdDIgEQi6oSoMWSVJjTJWKfvWviv434ZeitVLWzT
+         7/Uw==
+X-Gm-Message-State: ABy/qLZOkJVJQOVbvoZVhJDpXac7PA+um/L7x7yyUZWQsbZWsJXyaKXw
+        Il7iSEOfOpmiYrt4KBzcazO6rQ==
+X-Google-Smtp-Source: APBJJlHnPFczuKzdfSvVB/cmZ/mpGY1gDA4k27AnPCEwZ0jE72NwRJSOh2Sd/E4gFlWZsi51jSA4KA==
+X-Received: by 2002:adf:e28a:0:b0:314:521:ce0a with SMTP id v10-20020adfe28a000000b003140521ce0amr636808wri.40.1688622764323;
+        Wed, 05 Jul 2023 22:52:44 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id z8-20020adfdf88000000b003143bb5ecd5sm855993wrl.69.2023.07.05.22.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 22:52:43 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 08:52:39 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] smackfs: Prevent underflow in smk_set_cipso()
+Message-ID: <5070f3eb-55e2-44db-a97d-41f9b9878c6d@moroto.mountain>
 MIME-Version: 1.0
-References: <cover.1688585597.git.anupnewsmail@gmail.com> <d56fd5874314728e79c084e9d6ce805a24d61707.1688585597.git.anupnewsmail@gmail.com>
-In-Reply-To: <d56fd5874314728e79c084e9d6ce805a24d61707.1688585597.git.anupnewsmail@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 5 Jul 2023 22:46:51 -0700
-Message-ID: <CAM9d7chnbr6LpLdv0AEaxu9kCL=tGB9PgdDgzatAawaKoPDimw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] scripts: python: create threads with schemas
-To:     Anup Sharma <anupnewsmail@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 12:47 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
->
-> The markers structure defines the schema and data for
-> thread markers, including fields such as 'name',
-> 'startTime', 'endTime', 'phase', 'category', and 'data'.
->
-> The samples structure defines the schema and data for thread
-> samples, including fields such as 'stack', 'time', and
-> 'responsiveness'.
->
-> The frameTable structure defines the schema and data for frame
-> information, including fields such as 'location', 'relevantForJS',
-> 'innerWindowID', 'implementation', 'optimizations', 'line',
-> 'column', 'category', and 'subcategory'.
->
-> The purpose of this function is to create a new thread structure
-> These structures provide a framework for storing and organizing
-> information related to thread markers, samples, frame details,
-> and stack information.
->
-> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
-> ---
->  .../scripts/python/firefox-gecko-converter.py | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->
-> diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
-> index 95b061a97cbc..e56864e78dc1 100644
-> --- a/tools/perf/scripts/python/firefox-gecko-converter.py
-> +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
-> @@ -24,6 +24,47 @@ start_time = None
->  def process_event(param_dict):
->         global start_time
->         global thread_map
-> +       def _createtread(name, pid, tid):
-> +               markers = {
-> +                       'schema': {
-> +                               'name': 0,
-> +                               'startTime': 1,
-> +                               'endTime': 2,
-> +                               'phase': 3,
-> +                               'category': 4,
-> +                               'data': 5,
-> +                       },
-> +                       'data': [],
-> +               }
-> +               samples = {
-> +                       'schema': {
-> +                               'stack': 0,
-> +                               'time': 1,
-> +                               'responsiveness': 2,
-> +                               },
-> +                       'data': [],
-> +               }
-> +               frameTable = {
-> +                       'schema': {
-> +                               'location': 0,
-> +                               'relevantForJS': 1,
-> +                               'innerWindowID': 2,
-> +                               'implementation': 3,
-> +                               'optimizations': 4,
-> +                               'line': 5,
-> +                               'column': 6,
-> +                               'category': 7,
-> +                               'subcategory': 8,
-> +                       },
-> +                       'data': [],
-> +               }
-> +               stackTable = {
-> +                       'schema': {
-> +                               'prefix': 0,
-> +                               'frame': 1,
-> +                       },
-> +                       'data': [],
-> +               }
+There is a upper bound to "catlen" but no lower bound to prevent
+negatives.  I don't see that this necessarily causes a problem but we
+may as well be safe.
 
-It seems this function doesn't return anything.
-Can we have a complete definition?  Otherwise it's hard to
-know how these tables are used.
+Fixes: e114e473771c ("Smack: Simplified Mandatory Access Control Kernel")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ security/smack/smackfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Namhyung
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index 5590eaad241b..25f67d1b5c73 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -896,7 +896,7 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 	}
+ 
+ 	ret = sscanf(rule, "%d", &catlen);
+-	if (ret != 1 || catlen > SMACK_CIPSO_MAXCATNUM)
++	if (ret != 1 || catlen < 0 || catlen > SMACK_CIPSO_MAXCATNUM)
+ 		goto out;
+ 
+ 	if (format == SMK_FIXED24_FMT &&
+-- 
+2.39.2
 
-
->
->         def _addThreadSample(pid, tid, threadName, time_stamp, stack):
->                 thread = thread_map.get(tid)
-> --
-> 2.34.1
->
