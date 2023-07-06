@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE046749598
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A03574959F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbjGFG2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S233293AbjGFGa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbjGFG2g (ORCPT
+        with ESMTP id S232501AbjGFGaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:28:36 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13510F2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:28:32 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-992acf67388so31787866b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:28:32 -0700 (PDT)
+        Thu, 6 Jul 2023 02:30:55 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B8E1B6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:30:54 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3142a9ff6d8so233295f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688624911; x=1691216911;
+        d=linaro.org; s=google; t=1688625053; x=1691217053;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pqu4vTxoeW2yTwRCEetSQZvh47NKMtjn0RrXMB1JAGg=;
-        b=dRSL6aukgIkfv+NlQasUhI0WW8PrgXzou5v2QVss3xqfKaQ4M1Yt2cin2pOZmhQd17
-         mLGsmRk6KQ96V2gbe6flKfOcIDP8C6aJ94MYdy2hTnRpIigR7o/uS07D4CETNP/87UAG
-         Te3mFVnmowcotJ+p+kvuGY85+Df/k9sYz1L9gl3LDrpMcUkuBaCO8WTequflxZTiDoTT
-         JMZMZqgL5RQtdtgjCToseEau/xKW62TMq6KzpDrpxszgG+HHnYaK/7KRjWMGum9WC1ss
-         tpYb7Y62RIr5F4RyB4vq3Q8QtCd9PUd2GSuCjupyh7ZdQj3zgjJEZ/rUnmhwmkQP56L0
-         GcnQ==
+        bh=QAx0zzZBH3vJ3zYXTImqXKLwPTv5LFpuSZLAoB3gyh8=;
+        b=pj9BWCQnSTyNUIepazWS9qHh3NCIvW6mOZA9WeObO+hlR3nDeFbM+35uynR+ieHB1t
+         FABwwgmGB1MuWVNiuA10/Zu6jeImjWz1sVKN9jXK4yVtyJHZLKTS95xV6M6CiQRAOggR
+         lgmyumJZbKHmamvi9GwK3ARK7zpj7jmaGc0RITjSH4iyifObRzhZZ0qR22ScO0gJb1+d
+         xDaB0T6ur7hHHeAMUxNc1MEsvr0QXlDyy830XkNSfZPxKY1BLbX00Q3wKtFloVhWwOpp
+         t2nr8Yvb5nfQpAGJ2hsI449g60MLLfafkPS8om+xYnESsN77py0wdmCiCK7ii8dniJHB
+         mM0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688624911; x=1691216911;
+        d=1e100.net; s=20221208; t=1688625053; x=1691217053;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pqu4vTxoeW2yTwRCEetSQZvh47NKMtjn0RrXMB1JAGg=;
-        b=d4cKOZdr4R/vfB1Dq9jsdHks1/iit7vdCah5hw2KC2KqxyLZL9GKPoDb/X3HKW1TR+
-         YnXheMz8LnJyIEtM9B1BhxuZu1h8mAWlTX7pOZtdpzCrh8804DEeKvm2Bwe94sONpesu
-         daA/sFuFy7aXHn6cfpsOBob1S/rHWCAJhm2n/2mNvoiLUC1XZLTxNB5Zzl6+WvBWrDEh
-         pDcnM9mtpPP48yTAPN0+k/FNV7XsuQpUPF2gMoitPXdY1UBbU7htN0glhi+lIQWrmn3H
-         6pSg2wF3SH8d2+c/UreT05RIfDiFb4OtX2/rYJPZLAxZo2iqXngW/UT96zgyZubXQw4S
-         aEYw==
-X-Gm-Message-State: ABy/qLbQHdADkLE+HwsGBkyIljHXCVc6iPIfd5NUoxO+5jFPCv0urTsB
-        ym0sVb0Dk3hNk3NaWWMKgUH6wQ==
-X-Google-Smtp-Source: APBJJlEu2RGF4uBuUPfkX4wlSxPa3Cu2L5C0YRWwOysyPz8/vFYVscoSMwhTBIDQpkpak+dxq034Sw==
-X-Received: by 2002:a17:906:10cf:b0:991:8328:50e3 with SMTP id v15-20020a17090610cf00b00991832850e3mr696668ejv.9.1688624910680;
-        Wed, 05 Jul 2023 23:28:30 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id lf20-20020a170906ae5400b009920e9a3a73sm372590ejb.115.2023.07.05.23.28.26
+        bh=QAx0zzZBH3vJ3zYXTImqXKLwPTv5LFpuSZLAoB3gyh8=;
+        b=Gv0/MONAHHSGcaOGN+pvKI/NLVl/YxxTtBPG0vdmT4CdxpwrDn2Qm/w5ORdSLDOEFr
+         ViFC6iHltji4o5JSOPQ/5QNRnlvCzpAwv3l9kMpxvZFbsnRxWqu2gxGl+MFNicipHCXS
+         1RQ41tW1GhvPtnfzZL16UpyDtJMCw5YTbEJHwCBex7O7C34wTgyQUAHHodZPLiheSOUO
+         ks/BgKaELs8qt/WrkZleCzaJX4dh4zuIahCyUDW/iwkPX3ABbmUMXeTXjm/Gp7OEwLzL
+         vDSd6+7Pm08FnTWGcnBdOr+WzvRR5w6+X/ua3zDCrlrfscCKDpERp7AemsivlcQItom0
+         COyA==
+X-Gm-Message-State: ABy/qLa4tzHHJU+nqokHQZFSzA5+jnZq58XmWJZSr6ZDzMfinNY3WaeK
+        0NZT+FZEqGo34mL2e73WOZJl7w==
+X-Google-Smtp-Source: APBJJlFAPFSbjMBxwG92flXkhw2d9dQpQiiXgI9QJfyjY4KmxKdFx3W2AJqlSUwX4MsetY1xbEoa3w==
+X-Received: by 2002:adf:f60b:0:b0:314:50b4:c3c with SMTP id t11-20020adff60b000000b0031450b40c3cmr604098wrp.71.1688625052744;
+        Wed, 05 Jul 2023 23:30:52 -0700 (PDT)
+Received: from [192.168.45.155] ([95.152.217.99])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b0030e5bd253aasm942566wrw.39.2023.07.05.23.30.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 23:28:30 -0700 (PDT)
-Message-ID: <e871ad32-dfa4-067d-4f2c-207ffd42aafd@linaro.org>
-Date:   Thu, 6 Jul 2023 08:28:25 +0200
+        Wed, 05 Jul 2023 23:30:52 -0700 (PDT)
+Message-ID: <c4b9f02f-3f6a-74b4-4e0d-3da314f90aa8@linaro.org>
+Date:   Thu, 6 Jul 2023 07:30:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
- RIFSC
+ Thunderbird/102.11.0
+Subject: Re: qemu-x86_64 booting with 8.0.0 stil see int3: when running LTP
+ tracing testing.
 Content-Language: en-US
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, alexandre.torgue@foss.st.com,
-        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
-        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
-        fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
-        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
-        richardcochran@gmail.com
-Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Richard W.M. Jones" <rjones@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>,
+        Benjamin Copeland <ben.copeland@linaro.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
+ <2d7595b1-b655-4425-85d3-423801bce644@app.fastmail.com>
+ <20230621160655.GL2053369@hirez.programming.kicks-ass.net>
+ <20230704074620.GA17440@redhat.com> <20230705162830.GC17440@redhat.com>
+ <20230705215008.GD17440@redhat.com>
+From:   Richard Henderson <richard.henderson@linaro.org>
+In-Reply-To: <20230705215008.GD17440@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,143 +86,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 19:27, Gatien Chevallier wrote:
-> Document RIFSC (RIF security controller). RIFSC is a firewall controller
-> composed of different kinds of hardware resources.
+On 7/5/23 22:50, Richard W.M. Jones wrote:
+> tb_invalidate_phys_range_fast() *is* called, and we end up calling
+>    tb_invalidate_phys_page_range__locked ->
+>      tb_phys_invalidate__locked ->
+>        do_tb_phys_invalidate
 > 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-
-A nit, subject: drop second/last, redundant "device tree bindings for".
-The "dt-bindings" prefix is already stating that these are bindings. 4
-words of your 6 word subject is meaningless...
-
-> ---
->  .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+> Nevertheless the old TB (containing the call to the int3 helper) is
+> still called after the code has been replaced with a NOP.
 > 
-> diff --git a/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
-> new file mode 100644
-> index 000000000000..68d585ed369c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+> Of course there are 4 MTTCG threads so maybe another thread is in the
+> middle of executing the same TB when it gets invalidated.
 
-Filename like compatible, unless you know list of compatibles will
-grow... but then add them.
+Yes.
 
-> @@ -0,0 +1,101 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/bus/st,stm32-rifsc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STM32 Resource isolation framework security controller bindings
+> tb_invalidate_phys_page_range__locked goes to some effort to check if
+> the current TB is being invalidated and restart the TB, but as far as
+> I can see the test can only work for the current core, and won't
+> restart the TB on other cores.
 
-Drop bindings
+Yes.
 
-> +
-> +maintainers:
-> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
-> +
-> +description: |
-> +  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
-> +  designed to enforce and manage isolation of STM32 hardware resources like
-> +  memory and peripherals.
-> +
-> +  The RIFSC (RIF security controller) is composed of three sets of registers,
-> +  each managing a specific set of hardware resources:
-> +    - RISC registers associated with RISUP logic (resource isolation device unit
-> +      for peripherals), assign all non-RIF aware peripherals to zero, one or
-> +      any security domains (secure, privilege, compartment).
-> +    - RIMC registers: associated with RIMU logic (resource isolation master
-> +      unit), assign all non RIF-aware bus master to one security domain by
-> +      setting secure, privileged and compartment information on the system bus.
-> +      Alternatively, the RISUP logic controlling the device port access to a
-> +      peripheral can assign target bus attributes to this peripheral master port
-> +      (supported attribute: CID).
-> +    - RISC registers associated with RISAL logic (resource isolation device unit
-> +      for address space - Lite version), assign address space subregions to one
-> +      security domains (secure, privilege, compartment).
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stm32mp25-rifsc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +  "#feature-domain-cells":
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +  feature-domain-controller: true
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-> +    description: Peripherals
-> +    type: object
-> +    properties:
-> +      feature-domains:
-> +        minItems: 1
-> +        maxItems: 2
-> +        description:
-> +          The first argument must always be a phandle that references to the
-> +          firewall controller of the peripheral. The second can contain the
-> +          platform specific firewall ID of the peripheral.
+The assumption with any of these sorts of races is that it is "as if" the other thread has 
+already passed the location of the write within that block.  But by the time this thread 
+has finished do_tb_phys_invalidate, any other thread cannot execute the same block *again*.
 
-It does not make much sense to me to have hierarchy parent-child and via
-phandle at the same time. You express the similar relationship twice.
+There's a race here, and now that I think about it, there's been mail about it in the past:
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - feature-domain-controller
-> +  - "#feature-domain-cells"
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    // In this example, the usart2 device refers to rifsc as its domain
-> +    // controller.
-> +    // Access rights are verified before creating devices.
-> +
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    rifsc: rifsc-bus@42080000 {
-> +        compatible = "st,stm32mp25-rifsc";
-> +        reg = <0x42080000 0x1000>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +        feature-domain-controller;
-> +        #feature-domain-cells = <1>;
-> +
-> +        usart2: serial@400e0000 {
-> +            compatible = "st,stm32h7-uart";
-> +            reg = <0x400e0000 0x400>;
-> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&ck_flexgen_08>;
-> +            feature-domains = <&rifsc 32>;
-> +            status = "disabled";
+https://lore.kernel.org/qemu-devel/cebad06c-48f2-6dbd-6d7f-3a3cf5aebbe3@linaro.org/
 
-No status in the examples.
+We take care of the same race for user-only in translator_access, by ensuring that each 
+translated page is read-only *before* performing the read for translation.  But for system 
+mode we grab the page locks *after* the reads.  Which means there's a race.
 
-> +        };
-> +    };
+The email above describes the race pretty clearly, with a new TB being generated before 
+the write is even complete.
 
-Best regards,
-Krzysztof
+It'll be non-trivial fixing this, because not only do we need to grab the lock earlier, 
+there are ordering issues for a TB that spans two pages, in that one must grab the two 
+locks in the correct order lest we deadlock.
 
+
+r~
