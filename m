@@ -2,70 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A4F7494FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C32B7494FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjGFF3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 01:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S233173AbjGFFaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGFF3i (ORCPT
+        with ESMTP id S233158AbjGFFaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 01:29:38 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27761BD5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 22:29:36 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b5c2433134so3526911fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 22:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688621375; x=1691213375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FaztYOK3CeeSOgdOjNlGUDoiqmvgCpcAtf+Kjtl/Zxo=;
-        b=oLDUHC7o8LLIpKQ47Bka4IhCDsnUOJ8PJa0mHtGy5+xmtH0ph+DN7fT2bOCyxUZ/OK
-         voaasNoiVitwlvc6GdEXWSG+xw+zAyvNt5YIOkZ1Gv4N8GPo9GksM1sfnehNwooTJ6MC
-         TIGRcSt6tw1MrfY6kMBuzzrrO3OFxrZGWrz+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688621375; x=1691213375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FaztYOK3CeeSOgdOjNlGUDoiqmvgCpcAtf+Kjtl/Zxo=;
-        b=XD/mVeYzWqMc62hvAfnsq+9NYhQj3QI5cOIWBGd9/KTAag9sZSq5xp11nz96E/6m0/
-         dx35GrsE2pfSRdNrRIq6FMI06L4iu7bkdGrRtOv2s6KtTWnWGZRKALdJ/FcHYTiEZ5v4
-         gbntQdzrjduQX0EY2bbyynCd4Hv/BiC/JhLFiX6lxPNiaHuqpFIvOSLW+2r+n/AlsKW+
-         gHjvLYI77XI7xtPdHbaKxqgGuLojf0dDq29tLiC7ruZRonYoqk7WOwaLsFXbjc36dXia
-         sPC5gWoU59SNEs5+IcfE8PRw8iIJTatCk3/Pr1pOruYbIJFejAs7yHvzdN/4GPZCYpnC
-         fNfQ==
-X-Gm-Message-State: ABy/qLZaQgKaw0eXbB/jIfNuhwq8mpTtNiC73vf4oh+AfAnO4kqzSPEM
-        TChW3/KY0vnCtaJltFUvMx+pRYAbu4WvyL+Og+Zaww==
-X-Google-Smtp-Source: APBJJlFoQbGHquM/8F8vHFVN0DzDyQkinz8d9jngOAhWJR4+2GRUPIv/nW729Pai2dwCQYTiCsN6nZl/3HDPmf9AC/g=
-X-Received: by 2002:a05:651c:107b:b0:2b6:d7d2:1a65 with SMTP id
- y27-20020a05651c107b00b002b6d7d21a65mr1632317ljm.18.1688621375279; Wed, 05
- Jul 2023 22:29:35 -0700 (PDT)
+        Thu, 6 Jul 2023 01:30:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B121A1BD6;
+        Wed,  5 Jul 2023 22:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=tdQdAo2qFTj9DGBuoLP2bbCYlpn9+aYrsvBc/jj9Rf8=; b=u4VkgAOorIJnIks7BeD4quSFTl
+        ISGBFW6rKQ/t2PCT2iUGMw5XoZCSTI73o0HG1Ow7DLVUlRSCNP7NCrva+xHeUJJGlR9047v4XLOCt
+        M5wzogth/xpQ1WAooFH5OIc7wIK07fz/D6pjjx0Pvqfb7b5envA4VuM+v6535aMJEVQ2AVchMopCN
+        ohURXs3HMho+WOF79xj3MTLacTTEzUGzpZsXuCid00fuZRV4PtUYa2MfQJ+dbum+RcHG83Jsrit9M
+        Itt8fANfH8AO2G3tI9Fa7XRmsuLj51T+B1qoIMueE1HzKCg6IyVwblWb1ZoSrLLzQk3eK6ekuHJ8e
+        5XCzkzjA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qHHZ5-000UqT-21;
+        Thu, 06 Jul 2023 05:30:03 +0000
+Message-ID: <fc9ebfc8-87cd-9488-20cd-85ed2a164bc9@infradead.org>
+Date:   Wed, 5 Jul 2023 22:30:02 -0700
 MIME-Version: 1.0
-References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-3-stevensd@google.com>
- <20230705031002.xrxk42hli6oavtlt@linux.intel.com> <CAD=HUj6-VbznOOtn5WJee7Of_nh33ygg7_ph2G=hgnvNk_Cbsw@mail.gmail.com>
- <20230705105343.iounmlflfued7lco@linux.intel.com>
-In-Reply-To: <20230705105343.iounmlflfued7lco@linux.intel.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Thu, 6 Jul 2023 14:29:24 +0900
-Message-ID: <CAD=HUj5ezWt7rLAv2qOpFsMHyFU87Hqtw_p8pWNF5+oxbLhxDg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND PATCH v3 2/2] RISC-V: mm: Update documentation and
+ include test
+To:     Charlie Jenkins <charlie@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com
+References: <20230705190002.384799-1-charlie@rivosinc.com>
+ <20230705190002.384799-3-charlie@rivosinc.com>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230705190002.384799-3-charlie@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,73 +60,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 7:53=E2=80=AFPM Yu Zhang <yu.c.zhang@linux.intel.com=
-> wrote:
->
-> On Wed, Jul 05, 2023 at 06:22:59PM +0900, David Stevens wrote:
-> > On Wed, Jul 5, 2023 at 12:10=E2=80=AFPM Yu Zhang <yu.c.zhang@linux.inte=
-l.com> wrote:
-> > >
-> > > > @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long a=
-ddr, bool write_fault,
-> > > >   * The slow path to get the pfn of the specified host virtual addr=
-ess,
-> > > >   * 1 indicates success, -errno is returned if error is detected.
-> > > >   */
-> > > > -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool w=
-rite_fault,
-> > > > -                        bool interruptible, bool *writable, kvm_pf=
-n_t *pfn)
-> > > > +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t =
-*pfn)
-> > > >  {
-> > > > -     unsigned int flags =3D FOLL_HWPOISON;
-> > > > +     unsigned int flags =3D FOLL_HWPOISON | FOLL_GET | foll->flags=
-;
-> > > >       struct page *page;
-> > > >       int npages;
-> > > >
-> > > >       might_sleep();
-> > > >
-> > > > -     if (writable)
-> > > > -             *writable =3D write_fault;
-> > > > -
-> > > > -     if (write_fault)
-> > > > -             flags |=3D FOLL_WRITE;
-> > > > -     if (async)
-> > > > -             flags |=3D FOLL_NOWAIT;
-> > > > -     if (interruptible)
-> > > > -             flags |=3D FOLL_INTERRUPTIBLE;
-> > > > -
-> > > > -     npages =3D get_user_pages_unlocked(addr, 1, &page, flags);
-> > > > +     npages =3D get_user_pages_unlocked(foll->hva, 1, &page, flags=
-);
-> > > >       if (npages !=3D 1)
-> > > >               return npages;
-> > > >
-> > > > +     foll->writable =3D (foll->flags & FOLL_WRITE) && foll->allow_=
-write_mapping;
-> > > > +
-> > > >       /* map read fault as writable if possible */
-> > > > -     if (unlikely(!write_fault) && writable) {
-> > > > +     if (unlikely(!foll->writable) && foll->allow_write_mapping) {
-> > >
-> > > I guess !foll->writable should be !(foll->flags & FOLL_WRITE) here.
-> >
-> > The two statements are logically equivalent, although I guess using
-> > !(foll->flags & FOLL_WRITE) may be a little clearer, if a little more
-> > verbose.
->
-> Well, as the comment says, we wanna try to map the read fault as writable
-> whenever possible. And __gfn_to_pfn_memslot() will only set the FOLL_WRIT=
-E
-> for write faults. So I guess using !foll->writable will not allow this.
-> Did I miss anything?
+Hi--
 
-We just set the foll->writable out parameter to be equal to
-((foll->flags & FOLL_WRITE) && foll->allow_write_mapping). Taking a =3D
-foll->flags & FOLL_WRITE and b =3D foll->allow_write_mapping, we have
-!(a && b) && b -> (!a || !b) && b -> (!a && b) || (!b && b) -> !a &&
-b.
+On 7/5/23 11:59, Charlie Jenkins wrote:
+> Add documentation explaining the behavior of mmap. Include
+> a simple test that ensures that mmap returns an address less
+> than the hint address while there are still addresses available.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  Documentation/riscv/vm-layout.rst             | 22 +++++++++
+>  arch/riscv/include/asm/pgtable.h              |  8 +--
+>  tools/testing/selftests/riscv/Makefile        |  2 +-
+>  tools/testing/selftests/riscv/mm/.gitignore   |  1 +
+>  tools/testing/selftests/riscv/mm/Makefile     | 21 ++++++++
+>  .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++++
+>  6 files changed, 99 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
+>  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
+> 
+> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
+> index 5462c84f4723..a610c68c9f3f 100644
+> --- a/Documentation/riscv/vm-layout.rst
+> +++ b/Documentation/riscv/vm-layout.rst
+> @@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
+>     ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
+>     ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
+>    __________________|____________|__________________|_________|____________________________________________________________
+> +
+> +
+> +Userspace VAs
+> +--------------------
+> +To maintain compatibility with software that relies on the VA space
+> +with a maximum of 39-bits, the kernel will, by default, return virtual
 
--David
+                     39 bits,
+
+> +return virtual addresses to userspace from a 48-bit range (sv48). This
+
+^^ duplicate "return virtual"
+
+> +default behavior is achieved by passing 0 into the hint address parameter
+> +of mmap.
+> +
+
+> diff --git a/tools/testing/selftests/riscv/mm/.gitignore b/tools/testing/selftests/riscv/mm/.gitignore
+> new file mode 100644
+> index 000000000000..022ea0a3f7df
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/mm/.gitignore
+> @@ -0,0 +1 @@
+> +mmap
+> \ No newline at end of file
+
+add a newline, please.
+
+> diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
+> new file mode 100644
+> index 000000000000..d41a0b3d2ca2
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/mm/Makefile
+> @@ -0,0 +1,21 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Originally tools/testing/selftests/arm64/signal
+> +
+> +# Additional include paths needed by kselftest.h and local headers
+> +CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
+> +
+> +SRCS := $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
+> +PROGS := $(patsubst %.c,%,$(SRCS))
+> +
+> +# Generated binaries to be installed by top KSFT script
+> +TEST_GEN_PROGS := $(notdir $(PROGS))
+> +
+> +# Get Kernel headers installed and use them.
+> +
+> +# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
+> +# to account for any OUTPUT target-dirs optionally provided by
+> +# the toplevel makefile
+> +include ../../lib.mk
+> +
+> +$(TEST_GEN_PROGS): $(PROGS)
+> +	cp $(PROGS) $(OUTPUT)/
+> \ No newline at end of file
+
+add a newline, please.
+
+-- 
+~Randy
