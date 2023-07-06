@@ -2,126 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A8D749A65
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A87749A68
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjGFLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S231623AbjGFLRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjGFLQN (ORCPT
+        with ESMTP id S229486AbjGFLRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:16:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5876ADC;
-        Thu,  6 Jul 2023 04:16:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB55761904;
-        Thu,  6 Jul 2023 11:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2FB5C433C7;
-        Thu,  6 Jul 2023 11:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688642171;
-        bh=EtLxxaDrtWDWMjtWpF0JDkHpy6Um3KDkSIFd31LcdXM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qTkbQ5Njh0DaCBrrXUpooQS8SC9FQDlfJxuXnMuxd5cqSAgydbnIvHWW6sIQaquuS
-         zeFfDDUhIJPkA+oOAnaP6qTJ8HQreaSaWRryZOwCf9OPrtjGrerqRRiZvIUXtxoprp
-         7OtL0YDCmFr8QNiUZSdTzkNUafHgLlkA9y7Of1xNSHhWmV9jkzru1RCyEvGVKH7Y/h
-         /4tolyVGqrMzHw30lYLD5W0hvzFI/QoWxog9ICIpH7U5CITykbfxd3BrjQwj1Kl7fc
-         z88GJMkwcQHJJKBfpIbvEBEQtLP0ssQyGpERWKpwXorJ8kwK0lOHJDlFQqxSkqdZKM
-         eEj6d5u+fb0+A==
-Date:   Thu, 6 Jul 2023 16:45:53 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Mrinmay Sarkar <quic_msarkar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, quic_shazhuss@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_ramkri@quicinc.com,
-        quic_nayiluri@quicinc.com,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH v1 5/6] arm64: dts: qcom: sa8775p: Add pcie0 and pcie1
- nodes
-Message-ID: <20230706111553.GB4808@thinkpad>
-References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
- <1688545032-17748-6-git-send-email-quic_msarkar@quicinc.com>
- <e31564e1-31cf-2cda-df6f-6210e6a1c1fc@linaro.org>
+        Thu, 6 Jul 2023 07:17:34 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E47170F;
+        Thu,  6 Jul 2023 04:17:33 -0700 (PDT)
+Received: from pride-poweredge-r740.. ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 366BH8YK013936-366BH8YN013936
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 6 Jul 2023 19:17:13 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] wifi: ath9k: fix printk specifier
+Date:   Thu,  6 Jul 2023 19:17:00 +0800
+Message-Id: <20230706111700.14305-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e31564e1-31cf-2cda-df6f-6210e6a1c1fc@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 12:01:37PM +0200, Konrad Dybcio wrote:
-> On 5.07.2023 10:17, Mrinmay Sarkar wrote:
-> > Add pcie dtsi nodes for two controllers found on sa8775p platform.
-> > 
-> > Signed-off-by: Mrinmay Sarkar <quic_msarkar@quicinc.com>
-> > ---[...]
-> 
-> > +	pcie1_phy: phy@1c14000 {
-> > +		compatible = "qcom,sa8775p-qmp-gen4x4-pcie-phy";
-> > +		reg = <0x0 0x1c14000 0x0 0x4000>;
-> > +
-> > +		clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
-> > +			 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-> > +			 <&gcc GCC_PCIE_CLKREF_EN>,
-> > +			 <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>,
-> > +			 <&gcc GCC_PCIE_1_PHY_AUX_CLK>,
-> > +			 <&gcc GCC_PCIE_1_PIPE_CLK>,
-> > +			 <&gcc GCC_PCIE_1_PIPEDIV2_CLK>;
-> > +
-> > +		clock-names = "aux", "cfg_ahb", "ref", "rchng", "phy_aux",
-> > +						"pipe", "pipediv2";
-> > +
-> > +		assigned-clocks = <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>;
-> > +		assigned-clock-rates = <100000000>;
-> > +
-> > +		power-domains = <&gcc PCIE_1_GDSC>;
-> Please check if it's the correct power domain. I've heard that the PCIe PHY
-> may be hooked up to something else but have no way of confirming myself.
-> 
+Smatch reports:
 
-Right, I missed it during my review. PHYs are powered by MX domain on all the
-platforms I have seen so far, so this should be cross checked.
+ath_pci_probe() warn: argument 4 to %lx specifier is cast from pointer
+ath_ahb_probe() warn: argument 4 to %lx specifier is cast from pointer
 
-And someone should fix the existing dts.
+Fix it by modifying %lx to %p in printk.
 
-- Mani
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v2->v3: modify %px to %p in the patch
+v1->v2: modify %px to %p in the commit message
 
-> Konrad
-> > +
-> > +		resets = <&gcc GCC_PCIE_1_PHY_BCR>;
-> > +		reset-names = "phy";
-> > +
-> > +		#clock-cells = <0>;
-> > +		clock-output-names = "pcie_1_pipe_clk";
-> > +
-> > +		#phy-cells = <0>;
-> > +
-> > +		status = "disabled";
-> > +
-> > +	};
-> >  };
+ drivers/net/wireless/ath/ath9k/ahb.c | 4 ++--
+ drivers/net/wireless/ath/ath9k/pci.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/net/wireless/ath/ath9k/ahb.c b/drivers/net/wireless/ath/ath9k/ahb.c
+index 9cd12b20b18d..a683757eecd4 100644
+--- a/drivers/net/wireless/ath/ath9k/ahb.c
++++ b/drivers/net/wireless/ath/ath9k/ahb.c
+@@ -132,8 +132,8 @@ static int ath_ahb_probe(struct platform_device *pdev)
+ 
+ 	ah = sc->sc_ah;
+ 	ath9k_hw_name(ah, hw_name, sizeof(hw_name));
+-	wiphy_info(hw->wiphy, "%s mem=0x%lx, irq=%d\n",
+-		   hw_name, (unsigned long)mem, irq);
++	wiphy_info(hw->wiphy, "%s mem=0x%p, irq=%d\n",
++		   hw_name, mem, irq);
+ 
+ 	return 0;
+ 
+diff --git a/drivers/net/wireless/ath/ath9k/pci.c b/drivers/net/wireless/ath/ath9k/pci.c
+index a09f9d223f3d..12c00c7c1408 100644
+--- a/drivers/net/wireless/ath/ath9k/pci.c
++++ b/drivers/net/wireless/ath/ath9k/pci.c
+@@ -988,8 +988,8 @@ static int ath_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	sc->sc_ah->msi_reg = 0;
+ 
+ 	ath9k_hw_name(sc->sc_ah, hw_name, sizeof(hw_name));
+-	wiphy_info(hw->wiphy, "%s mem=0x%lx, irq=%d\n",
+-		   hw_name, (unsigned long)sc->mem, pdev->irq);
++	wiphy_info(hw->wiphy, "%s mem=0x%p, irq=%d\n",
++		   hw_name, sc->mem, pdev->irq);
+ 
+ 	return 0;
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
