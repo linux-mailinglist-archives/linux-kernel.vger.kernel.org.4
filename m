@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD597749D6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4A9749D71
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjGFNYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S231202AbjGFNYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbjGFNXv (ORCPT
+        with ESMTP id S232108AbjGFNXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:23:51 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28B31BC9;
-        Thu,  6 Jul 2023 06:23:50 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-992f6d7c7fbso88722066b.3;
-        Thu, 06 Jul 2023 06:23:50 -0700 (PDT)
+        Thu, 6 Jul 2023 09:23:53 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A6F1BD0;
+        Thu,  6 Jul 2023 06:23:52 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-992b66e5affso87869066b.3;
+        Thu, 06 Jul 2023 06:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1688649829; x=1691241829;
+        d=googlemail.com; s=20221208; t=1688649830; x=1691241830;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fjeU+oFwnLoTGw/GiFQxSoA+QryPefibnYvK0tDSOi0=;
-        b=MqKQaLP19EQnZquTr15z2LYEMWk0lbI5ahUOyiCTMkO8YK8LPDbmlgOI1nxf7s91Je
-         iGlcY/sOWLM8xRhikuBOXXIghPJCylRJDoZMIu32VvAgTY86pJgwqEQk3p8fxOObj/7f
-         LvypWTZxm7AJtBNKRR2383uF0sqquAmpMfEfz1wZYdiJuoOTKU+3EzQMgFHD8pX6x4fX
-         /kT1jVDeH85FVHRdN43fwgGmiPS5csGgjmrY6Ji6MlU4CZvjJyDbq3YhD3LWeNVM5MQ5
-         A6RnA9ztb1WrIgir9cG5fIFtq/o3yHGYCMyRQviIhzKNmMHQ3Q1efnXp1SczW5VkF0Zd
-         0L2Q==
+        bh=SkBksRN7bdprO5MQOGhCkpjrSYNKbvjJ8BXlsGQfvbA=;
+        b=XHZjH3uHqOB8pfbX97fSIP4Cmqu8I8oGtx+y4X5VGJED3j1RGgyne9bDc3pDI2EC69
+         SOZU5SqQjIrmOEqrII3G5hSuySj0v8TOzQ2OiXRRBtIKNBh3o9J5ZjX3dNE4p1zgeeM+
+         mVrEpA8HlL5RfePue4ttSeNTW56CNys+++3aW8F7aUyT6Vnh/rSekfFFkfwIWqLbgGuM
+         uZaE4blGBC6f8iqhVJJjVVJlOy9dwdZwka1DRoY2Ef/dOoho+QFNi3PCLF8TwpH6jmhJ
+         uCZMaZgDhNSQ+cPPcdNEaFEZDbvr49yX7onnWWp2Rquk5n2wIbOq7jBz7x9D+XSKnPoc
+         pRuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688649829; x=1691241829;
+        d=1e100.net; s=20221208; t=1688649830; x=1691241830;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fjeU+oFwnLoTGw/GiFQxSoA+QryPefibnYvK0tDSOi0=;
-        b=C7tSbsO7jcL70oTkoLLTnxktjQstGKsHbpFOzvpZHDKf+zysijiHXIo4iVXJgGVX0v
-         0+xUkc1jHajIQVdoKXdhpn1jQUqrB2n40hNl6MdkI+SwtQHCEOZi/XsMPEO7KJGcazZ2
-         HC1ZoKosY9dMNOS6suaQjx7kLResGJ4n7x41mJvUIC/N5IN9ng9a+bOTFUxfedJwbEDE
-         hS4XeGjLAAeWIvnGTO4XBO9T8e+LecB3u+x4+Z2KlMdbpmm54eOUAwv3eJLM4bx12NB9
-         nFKywrslIdb2UqZMAZ+Dpw3POPgBVYNbT1VnhuhSY9tGl/xR+23K1aaox/wlsi+3LmOH
-         LUzw==
-X-Gm-Message-State: ABy/qLaQe8JgYTXc4kLSdtvjbstSFhVmYEZQmMSAGIlkRkOVJRFDWwyb
-        pbOUmepoDz+11mduULLm4FNukVt87iIZDECs
-X-Google-Smtp-Source: APBJJlGu2Uc3SG18KkFyWv+L8uehha8QzRmMB+1/NtU2kDc89k5qj+QydVBy+B1kR4EUTVWBoeWnWw==
-X-Received: by 2002:a17:906:6492:b0:992:d013:1130 with SMTP id e18-20020a170906649200b00992d0131130mr1581300ejm.6.1688649829104;
-        Thu, 06 Jul 2023 06:23:49 -0700 (PDT)
+        bh=SkBksRN7bdprO5MQOGhCkpjrSYNKbvjJ8BXlsGQfvbA=;
+        b=kYJnX4HLM59mqCbURZhNwu8NysSQQiFb12lmYLl48E2EOLg0mwZ5BW7JxUNiDNvTin
+         JGNUKL9Oj7dARUc8ynrb2wfqmkvmprmR/QUMXck0wMm7sOOA+rkgHPk0c6Dm1qy6MSO+
+         sANz8t01gDxn5aqtYdvFMyCKVqvZ4DZXhUtWymNqLVOLDX7bgttqD+13HW24jWeHvbn5
+         GpqfTQy6jIeaUzvQUT0SLXNqMjaTJEJDR3XxWNRKYtXZ0bFHgzzDKBn6PFE4HRpU9nd6
+         62BXisx2RBnjLpuBnEUtdPOlOPkntdo9CsW49LLjiTDV+AOvuqJ+gSFJrDcg+MVnmetD
+         357w==
+X-Gm-Message-State: ABy/qLZ5DpB8sV6qnZTAeK24TETXrmt3Q78PKKC2gBKrFCDpYpa3jV/K
+        MSYEF6p1VuJCyJJPOVn0gm8nYFqT8ay3LW3C
+X-Google-Smtp-Source: APBJJlE0ZxoHa/axZ9BSuMs4JTTWHi8l90/a5i/e5FANIZ0p+QRLaY5st3EStnGzq3xLBU/BhN98SQ==
+X-Received: by 2002:a17:906:f55:b0:988:4dc:e3a3 with SMTP id h21-20020a1709060f5500b0098804dce3a3mr1289943ejj.31.1688649830532;
+        Thu, 06 Jul 2023 06:23:50 -0700 (PDT)
 Received: from debian_development.DebianHome (dynamic-077-008-088-179.77.8.pool.telefonica.de. [77.8.88.179])
-        by smtp.gmail.com with ESMTPSA id r2-20020a170906364200b00988dbbd1f7esm808024ejb.213.2023.07.06.06.23.48
+        by smtp.gmail.com with ESMTPSA id r2-20020a170906364200b00988dbbd1f7esm808024ejb.213.2023.07.06.06.23.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 06:23:48 -0700 (PDT)
+        Thu, 06 Jul 2023 06:23:50 -0700 (PDT)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
 Cc:     Paul Moore <paul@paul-moore.com>,
         Stephen Smalley <stephen.smalley.work@gmail.com>,
         Eric Paris <eparis@parisplace.org>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 06/20] selinux: mls: avoid implicit conversions
-Date:   Thu,  6 Jul 2023 15:23:21 +0200
-Message-Id: <20230706132337.15924-6-cgzones@googlemail.com>
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        "GONG, Ruiqi" <gongruiqi1@huawei.com>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 07/20] selinux: services: update type for umber of class permissions
+Date:   Thu,  6 Jul 2023 15:23:22 +0200
+Message-Id: <20230706132337.15924-7-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230706132337.15924-1-cgzones@googlemail.com>
 References: <20230706132337.15924-1-cgzones@googlemail.com>
@@ -75,65 +76,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use u32 for ebitmap bits.
+Security classes have only up to 32 permissions, hence using an u16 is
+sufficient (while improving padding).
 
-Use char for the default range of a class.
+Also use a fixed sized cast in a bit shift to work correctly on
+architectures where sizeof(unsigned int) != sizeof(u32).
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- security/selinux/ss/mls.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ security/selinux/ss/services.c | 6 +++---
+ security/selinux/ss/services.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/security/selinux/ss/mls.c b/security/selinux/ss/mls.c
-index 99571b19d4a9..1976f6b857e9 100644
---- a/security/selinux/ss/mls.c
-+++ b/security/selinux/ss/mls.c
-@@ -45,7 +45,7 @@ int mls_compute_context_len(struct policydb *p, struct context *context)
+diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+index 78946b71c1c1..3275cfe2c8f7 100644
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@ -97,7 +97,6 @@ static int selinux_set_mapping(struct policydb *pol,
+ 			       struct selinux_map *out_map)
+ {
+ 	u16 i, j;
+-	unsigned k;
+ 	bool print_unknown_handle = false;
  
- 	len = 1; /* for the beginning ":" */
- 	for (l = 0; l < 2; l++) {
--		int index_sens = context->range.level[l].sens;
-+		u32 index_sens = context->range.level[l].sens;
- 		len += strlen(sym_name(p, SYM_LEVELS, index_sens - 1));
+ 	/* Find number of classes in the input mapping */
+@@ -117,6 +116,7 @@ static int selinux_set_mapping(struct policydb *pol,
+ 	while (map[j].name) {
+ 		const struct security_class_mapping *p_in = map + (j++);
+ 		struct selinux_mapping *p_out = out_map->mapping + j;
++		u16 k;
  
- 		/* categories */
-@@ -240,7 +240,7 @@ int mls_context_to_sid(struct policydb *pol,
- 	char *sensitivity, *cur_cat, *next_cat, *rngptr;
- 	struct level_datum *levdatum;
- 	struct cat_datum *catdatum, *rngdatum;
--	int l, rc, i;
-+	int l, rc;
- 	char *rangep[2];
+ 		/* An empty class string skips ahead */
+ 		if (!strcmp(p_in->name, "")) {
+@@ -202,7 +202,7 @@ static void map_decision(struct selinux_map *map,
+ {
+ 	if (tclass < map->size) {
+ 		struct selinux_mapping *mapping = &map->mapping[tclass];
+-		unsigned int i, n = mapping->num_perms;
++		u16 i, n = mapping->num_perms;
+ 		u32 result;
  
- 	if (!pol->mls_enabled) {
-@@ -331,7 +331,7 @@ int mls_context_to_sid(struct policydb *pol,
- 			if (catdatum->value >= rngdatum->value)
- 				return -EINVAL;
+ 		for (i = 0, result = 0; i < n; i++) {
+@@ -230,7 +230,7 @@ static void map_decision(struct selinux_map *map,
+ 		 * should audit that denial
+ 		 */
+ 		for (; i < (sizeof(u32)*8); i++)
+-			result |= 1<<i;
++			result |= 1<<((u32)i);
+ 		avd->auditdeny = result;
+ 	}
+ }
+diff --git a/security/selinux/ss/services.h b/security/selinux/ss/services.h
+index 8a9b85f44b66..b6f99353301e 100644
+--- a/security/selinux/ss/services.h
++++ b/security/selinux/ss/services.h
+@@ -12,7 +12,7 @@
+ /* Mapping for a single class */
+ struct selinux_mapping {
+ 	u16 value; /* policy value for class */
+-	unsigned int num_perms; /* number of permissions in class */
++	u16 num_perms; /* number of permissions in class */
+ 	u32 perms[sizeof(u32) * 8]; /* policy values for permissions */
+ };
  
--			for (i = catdatum->value; i < rngdatum->value; i++) {
-+			for (u32 i = catdatum->value; i < rngdatum->value; i++) {
- 				rc = ebitmap_set_bit(&context->range.level[l].cat, i, 1);
- 				if (rc)
- 					return rc;
-@@ -451,7 +451,8 @@ int mls_convert_context(struct policydb *oldp,
- 	struct level_datum *levdatum;
- 	struct cat_datum *catdatum;
- 	struct ebitmap_node *node;
--	int l, i;
-+	u32 i;
-+	int l;
- 
- 	if (!oldp->mls_enabled || !newp->mls_enabled)
- 		return 0;
-@@ -495,7 +496,7 @@ int mls_compute_sid(struct policydb *p,
- 	struct range_trans rtr;
- 	struct mls_range *r;
- 	struct class_datum *cladatum;
--	int default_range = 0;
-+	char default_range = 0;
- 
- 	if (!p->mls_enabled)
- 		return 0;
 -- 
 2.40.1
 
