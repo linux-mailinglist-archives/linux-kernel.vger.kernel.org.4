@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EC174A43B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C91974A43D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbjGFTKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S232344AbjGFTMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjGFTKw (ORCPT
+        with ESMTP id S229510AbjGFTMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:10:52 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0D41BDB;
-        Thu,  6 Jul 2023 12:10:50 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b703a0453fso16480101fa.3;
-        Thu, 06 Jul 2023 12:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688670648; x=1691262648;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MaYfKa6Jro6TyMSU8O8QMq0cvfghUSw2v0aXm5AsGyI=;
-        b=Zb5tqU20H7U7WHqC2bsIR6kB6jwW9Xe7+FOAfpNI7vdm2mOjMUvwKFXT+7k5JoKPWi
-         hFQBLekuMv76Kh1qNltsjxj5h2B75mEx4VDlV9vRHHWwYirUDhgBQBAv8AJrsnO1EGsN
-         XIQT3gfo0jc3/nX5JWVvlGKOChHHDauTDS6GRm5gIHEhDDPYNUCcKb5syn0p4xLmf/Uo
-         No7djShnoGOaQiQnxH5BnEhvt2Pu4zWlAZGAY3zqqxjAco+dlAKaFAoU9Xu4h75RCpPQ
-         V7TvhwyxDaJRizIFofH4XUdODPtZR0ybIlYzSM6WWxYYyKIZuOQsN7kMms8+i4CaUC2E
-         6fqw==
+        Thu, 6 Jul 2023 15:12:01 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6D01BDB;
+        Thu,  6 Jul 2023 12:12:00 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-785cbc5bfd2so38024039f.2;
+        Thu, 06 Jul 2023 12:12:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688670648; x=1691262648;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MaYfKa6Jro6TyMSU8O8QMq0cvfghUSw2v0aXm5AsGyI=;
-        b=OPAXryl8WDf3iaOI4dFaym6argHUOVuXQ3hawX+gvkszt1/pFwMi43m0Aj5W7Ptzwo
-         sqkVXFvkeUtH59EhyWDw0MwP03KCkBpvXmSnZUwltHV5RU7552xJcrFhN76wHduaTpEe
-         wA9F2JSzSl28NDhLSvbNGF2D73KSIaKfPhvefJzrrwzzZFx+I0aXNyjG/fBtu9ExvvX0
-         ZboS3WWiJ4kml0o1uzfix4/lUia0j6unhOGASpdzJlbl8gfCAc2ZAmZnQ2nWatb4Z4+m
-         kReajloaoIfVjPqaxBOeUJoX9mSaURbdE0kiFo8BgqE1C6bxDfwlxrkIqS4Ww4rz/08f
-         uHKA==
-X-Gm-Message-State: ABy/qLZ2MtHigXRB91OzsW+KATT7lzmNsut0d0KvmvPqihKMotSMQkcc
-        1Fz3wna45WHKdCdghzYmIbc=
-X-Google-Smtp-Source: APBJJlH4o9qgApaB3xb6gLdGi0pqv8JAUlkH3nnofKAb4ErX5/bvZOfRIwYIUpqRlSXYIgnjr4MV5Q==
-X-Received: by 2002:a2e:b045:0:b0:2b6:e618:b597 with SMTP id d5-20020a2eb045000000b002b6e618b597mr2647318ljl.28.1688670648002;
-        Thu, 06 Jul 2023 12:10:48 -0700 (PDT)
-Received: from valmont.froyen.eu ([2a01:799:ba5:6500::80f])
-        by smtp.gmail.com with ESMTPSA id p15-20020a2e804f000000b002b6a32e21casm441611ljg.40.2023.07.06.12.10.47
+        d=1e100.net; s=20221208; t=1688670720; x=1691262720;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rXU7Wt2272aI2cWoAWkzUapCyXWe+5UzEWsEVDkssTE=;
+        b=KIhP2M2D5arM0QCytoyBxUogEOoNdu/LtCIjCNwaV9AS72h9ekqEPJId7Ti48hwVIU
+         wk2p2eXipqgU7tvva6fibhaCtVNax5RaCpGrsBWtcjhQEa+37i2o3OlTyNHEpqgZg38X
+         J3zTvyIgTJ4KthiLe8fAsviquUtIlUq3FX/I9pJDo+EAID35VmsAnBhTFg3O62al8iJw
+         H/BU2vGEJEZiCYwPcHvTHEUNetbDoivaFbiDF7OBSAEwEo5jL3otQWpyRzcnBvOjdKus
+         c3ZjhjNeeh3I/Kor+hM4hkJgiDtoK3EF29ug9hJHVpCo8mmWWVS2D0izbKK128T18zFB
+         AwIQ==
+X-Gm-Message-State: ABy/qLaAhOpPwRmXqMXMjbzrhO72cLpNXClD+ilHpg/SWpn3t6wISwil
+        JCXibcDRrI6WwWBjvb900g==
+X-Google-Smtp-Source: APBJJlF07iocpCggVXaw78JSKNekrgWfNt3CbG1McmPUCJtGyu2pbeZDDeztboCM4rurH1+MtXodYA==
+X-Received: by 2002:a05:6602:2774:b0:780:ccb9:297b with SMTP id l20-20020a056602277400b00780ccb9297bmr3152305ioe.11.1688670720022;
+        Thu, 06 Jul 2023 12:12:00 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id u16-20020a02c950000000b0042b85d6e125sm112599jao.24.2023.07.06.12.11.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 12:10:47 -0700 (PDT)
-From:   Valentin David <valentin.david@gmail.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Valentin David <valentin.david@gmail.com>
-Subject: [PATCH v2] Bluetooth: btusb: Add device 0489:e0f5 as MT7922 device
-Date:   Thu,  6 Jul 2023 21:10:18 +0200
-Message-ID: <20230706191035.736632-1-valentin.david@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230702210138.226929-1-valentin.david@gmail.com>
-References: <20230702210138.226929-1-valentin.david@gmail.com>
+        Thu, 06 Jul 2023 12:11:59 -0700 (PDT)
+Received: (nullmailer pid 168322 invoked by uid 1000);
+        Thu, 06 Jul 2023 19:11:57 -0000
+Date:   Thu, 6 Jul 2023 13:11:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandru Ardelean <alex@shruggie.ro>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        olteanv@gmail.com, marius.muresan@mxt.ro
+Subject: Re: [PATCH 2/2] dt-bindings: net: phy: vsc8531: document
+ 'vsc8531,clkout-freq-mhz' property
+Message-ID: <20230706191157.GA163793-robh@kernel.org>
+References: <20230706081554.1616839-1-alex@shruggie.ro>
+ <20230706081554.1616839-2-alex@shruggie.ro>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706081554.1616839-2-alex@shruggie.ro>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Asus ROG Ally gaming computer has a MediaTek MT7922 chip that uses USB id
-0489:e0f5 and needs to be added to the table. Without this, the device is
-not usable and gives the following error:
+On Thu, Jul 06, 2023 at 11:15:54AM +0300, Alexandru Ardelean wrote:
+> For VSC8351 and similar PHYs, a new property was added to generate a clock
+> signal on the CLKOUT pin.
+> This change documents the change in the device-tree bindings doc.
+> 
+> Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
+> ---
+>  Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt b/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt
+> index 0a3647fe331b..133bdd644618 100644
+> --- a/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt
+> +++ b/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt
+> @@ -31,6 +31,10 @@ Optional properties:
+>  			  VSC8531_LINK_100_ACTIVITY (2),
+>  			  VSC8531_LINK_ACTIVITY (0) and
+>  			  VSC8531_DUPLEX_COLLISION (8).
+> +- vsc8531,clkout-freq-mhz : For VSC8531 and similar PHYs, this will output
 
-Bluetooth: hci0: Opcode 0x c03 failed: -110
+Please don't continue this naming pattern with 'vsc8531' prefix. The 
+prefix should be the vendor prefix.
 
-Output from /sys/kernel/debug/usb/devices:
-
-T:  Bus=01 Lev=01 Prnt=01 Port=03 Cnt=03 Dev#=  4 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0489 ProdID=e0f5 Rev= 1.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=000000000
-C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
-
-Signed-off-by: Valentin David <valentin.david@gmail.com>
----
-v2: Add the missing sign-off in commit message
----
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 2a8e2bb038f5..b36967205de6 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -625,6 +625,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x0489, 0xe0f2), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x0489, 0xe0f5), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
- 
- 	/* Additional Realtek 8723AE Bluetooth devices */
- 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
--- 
-2.41.0
-
+> +			  a clock signal on the CLKOUT pin of the chip.
+> +			  The supported values are 25, 50 & 125 Mhz.
+> +			  Default value is no clock signal on the CLKOUT pin.
+>  - load-save-gpios	: GPIO used for the load/save operation of the PTP
+>  			  hardware clock (PHC).
+>  
+> @@ -69,5 +73,6 @@ Example:
+>                  vsc8531,edge-slowdown	= <7>;
+>                  vsc8531,led-0-mode	= <VSC8531_LINK_1000_ACTIVITY>;
+>                  vsc8531,led-1-mode	= <VSC8531_LINK_100_ACTIVITY>;
+> +                vsc8531,clkout-freq-mhz	= <50>;
+>  		load-save-gpios		= <&gpio 10 GPIO_ACTIVE_HIGH>;
+>          };
+> -- 
+> 2.40.1
+> 
