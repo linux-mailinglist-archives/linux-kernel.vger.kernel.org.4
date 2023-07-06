@@ -2,128 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2FC7495DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66127495DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjGFGoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S230445AbjGFGpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjGFGof (ORCPT
+        with ESMTP id S229527AbjGFGpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:44:35 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26B119B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:44:33 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QxRnB2d43zTm85;
-        Thu,  6 Jul 2023 14:43:26 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+        Thu, 6 Jul 2023 02:45:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1957B19B;
+        Wed,  5 Jul 2023 23:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688625927; x=1720161927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YI3foU5MblPQyUbd2sUSOe4Ngn7M7sWkAvN3y52gY9Y=;
+  b=T1jftbJBn64zlkLFks64NHNSeWJTdCmyCU9nEKysMRcUWpuZWN4LN/Vz
+   3szOQn1QlNksiXPgYDPqEcwBIocU9MfOlrB2x8ZFlPkaAHBZ4MlDDjzrf
+   PGH+r02nNsXSqTOeXLKxtZIDNg0OlpTf6FXKCVD6GZ/GA4MgdOkMLXyoq
+   NPeOoZwXxtV2bh7sPJ9MMFX5tjS4R6W/0FP7MsXU6d+Mh0GwN8iUGdTDg
+   hSi8Ew+DSYs71BSngc0CYJ5k5kXLSrJdeCKG8O9idqWuD5tvAnRKa5P7/
+   rouv52p/E/WVj0AyKArK5T4ZoB+HLbRs7WD9W2ep7GfYJFlKDDoko1su7
+   w==;
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="asc'?scan'208";a="219119976"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2023 23:45:24 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 6 Jul 2023 14:44:29 +0800
-Message-ID: <d7f266fd-e34d-e26e-e371-ee6ff13b6696@huawei.com>
-Date:   Thu, 6 Jul 2023 14:44:29 +0800
+ 15.1.2507.21; Wed, 5 Jul 2023 23:45:16 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 5 Jul 2023 23:45:12 -0700
+Date:   Thu, 6 Jul 2023 07:44:42 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     =?utf-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+CC:     Conor Dooley <conor@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <sunilvl@ventanamicro.com>,
+        <ardb@kernel.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>, <rminnich@gmail.com>,
+        <mark.rutland@arm.com>, <lpieralisi@kernel.org>,
+        <rafael@kernel.org>, <lenb@kernel.org>, <jdelvare@suse.com>,
+        <yc.hung@mediatek.com>, <angelogioacchino.delregno@collabora.com>,
+        <allen-kh.cheng@mediatek.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <tinghan.shen@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <geshijian@bytedance.com>,
+        <weidong.wd@bytedance.com>
+Subject: Re: [External] Re: [PATCH v3 4/4] dt-bindings: firmware: Document
+ ffitbl binding
+Message-ID: <20230706-syndrome-wise-c1097518f2c6@wendy>
+References: <20230705114251.661-1-cuiyunhui@bytedance.com>
+ <20230705114251.661-5-cuiyunhui@bytedance.com>
+ <20230705-oblivious-unstuffed-8e028a5b243c@spud>
+ <CAEEQ3wmG1OiE3GFqQp9SP+oKUbTfuTPx=rNGd-sjKsW7vv3bew@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [BUG REPORT] Triggering a panic in an x86 virtual machine does
- not wait
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     <arjan@linux.intel.com>, <ashok.raj@intel.com>,
-        <ashok.raj@linux.intel.com>, <ebiederm@xmission.com>,
-        <linux-kernel@vger.kernel.org>, <mario.limonciello@amd.com>,
-        <thomas.lendacky@amd.com>, <tony.luck@intel.com>,
-        <tonyb@cybernetics.com>, <x86@kernel.org>,
-        yangerkun <yangerkun@huawei.com>, Baoquan He <bhe@redhat.com>,
-        <kexec@lists.infradead.org>, Baokun Li <libaokun1@huawei.com>
-References: <20230615193330.608657211@linutronix.de>
- <71578392-63ed-02a9-24da-2adf8cce38c7@huawei.com> <87ttui91jo.ffs@tglx>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <87ttui91jo.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UxRv2D6dZld+dL4w"
+Content-Disposition: inline
+In-Reply-To: <CAEEQ3wmG1OiE3GFqQp9SP+oKUbTfuTPx=rNGd-sjKsW7vv3bew@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/5 16:59, Thomas Gleixner wrote:
-> On Mon, Jul 03 2023 at 11:44, Baokun Li wrote:
->
->> When I manually trigger panic in a qume x86 VM with
->>
->>          `echo c > /proc/sysrq-trigger`,
->>
->>    I find that the VM will probably reboot directly, but the
->> PANIC_TIMEOUT is 0.
->> This prevents us from exporting the vmcore via panic, and even if we succeed
->> in panic exporting the vmcore, the processes in the vmcore are mostly
->> stop_this_cpu(). By dichotomizing we found the patch that introduced the
->> behavior change
->>
->>      45e34c8af58f ("x86/smp: Put CPUs into INIT on shutdown if possible"),
-> Bah, I missed that this is used by crash too. So if this happens to be
-> invoked on an AP, i.e. not on CPU 0, then the INIT will reset the
-> machine. Fix below.
->
-> Thanks,
->
->          tglx
-> ---
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index ed2d51960a7d..e1aa2cd7734b 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1348,6 +1348,14 @@ bool smp_park_other_cpus_in_init(void)
->   	if (apic->wakeup_secondary_cpu_64 || apic->wakeup_secondary_cpu)
->   		return false;
->   
-> +	/*
-> +	 * If this is a crash stop which does not execute on the boot CPU,
-> +	 * then this cannot use the INIT mechanism because INIT to the boot
-> +	 * CPU will reset the machine.
-> +	 */
-> +	if (this_cpu)
-> +		return false;
-> +
->   	for_each_present_cpu(cpu) {
->   		if (cpu == this_cpu)
->   			continue;
-This patch does fix the problem of rebooting at panic, but the exported 
-stack
-stays at stop_this_cpu() like below, instead of showing what the 
-corresponding
-process is doing as before.
+--UxRv2D6dZld+dL4w
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-PID: 681      TASK: ffff9ac2429d3080  CPU: 2    COMMAND: "fsstress"
-  #0 [ffffb00200184fd0] stop_this_cpu at ffffffff89a4ffd8
-  #1 [ffffb00200184fe8] __sysvec_reboot at ffffffff89a94213
-  #2 [ffffb00200184ff0] sysvec_reboot at ffffffff8aee7491
---- <IRQ stack> ---
-     RIP: 0000000000000010  RSP: 0000000000000018  RFLAGS: ffffb00200f8bd08
-     RAX: ffff9ac256fda9d8  RBX: 0000000009973a85  RCX: ffff9ac256fda078
-     RDX: ffff9ac24416e300  RSI: ffff9ac256fda9e0  RDI: ffffffffffffffff
-     RBP: ffff9ac2443a5f88   R8: 0000000000000000   R9: ffff9ac2422eeea0
-     R10: ffff9ac256fda9d8  R11: 0000000000549921  R12: ffff9ac2422eeea0
-     R13: ffff9ac251cd23c8  R14: ffff9ac24269a800  R15: ffff9ac251cd2150
-     ORIG_RAX: ffffffff8a1719e4  CS: 0206  SS: ffffffff8a1719c8
-bt: WARNING: possibly bogus exception frame
+On Thu, Jul 06, 2023 at 11:43:55AM +0800, =E8=BF=90=E8=BE=89=E5=B4=94 wrote:
+> On Wed, Jul 5, 2023 at 11:07=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+rote:
+> > On Wed, Jul 05, 2023 at 07:42:51PM +0800, Yunhui Cui wrote:
+> > > Add the description for ffitbl subnode.
+> > >
+> > > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> > > ---
+> > >  .../devicetree/bindings/firmware/ffitbl.txt   | 27 +++++++++++++++++=
+++
+> > >  MAINTAINERS                                   |  1 +
+> > >  2 files changed, 28 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/firmware/ffitbl=
+=2Etxt
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/firmware/ffitbl.txt b/=
+Documentation/devicetree/bindings/firmware/ffitbl.txt
+> > > new file mode 100644
+> > > index 000000000000..c42368626199
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/firmware/ffitbl.txt
+> >
+> > Firstly, new dt-bindings need to be done in yaml, not in text form.
+> > Secondly, you didn't re-run get_maintainer.pl after adding this binding,
+> > so you have not CCed any of the other dt-binding maintainers nor the
+> > devicetree mailing list.
+>=20
+> Re-run get_maintainer.pl and added maintainers into the maillist.
+> emm.. There is some *txt in
+> Documentation/devicetree/bindings/firmware/, isn't it?
 
-Do you know how this happened? I would be grateful if you could fix it.
+There might be, but that's not an excuse for adding _new_ ones, sorry.
 
-Thanks!
--- 
-With Best Regards,
-Baokun Li
-.
+> > > +FFI(FDT FIRMWARE INTERFACE) driver
+> > > +
+> > > +Required properties:
+> > > + - entry             : acpi or smbios root pointer, u64
+> > > + - reg                       : acpi or smbios version, u32
+> >
+> > Please go look at any other dt-binding (or the example schema) as to how
+> > these properties should be used. A "reg" certainly should not be being
+> > used to store the revision...
+>=20
+> Okay, If so=EF=BC=8CI'll add a property "version" into the dts instead of
+> "reg", just like, WDYT?
+> ffitbl {
+
+Firstly, I'd much rather you spelt this out, like "ffi-table".
+
+>     smbios {
+>         entry =3D "";
+
+I still don't understand why "entry", which is an address, is being
+represented by an empty string.
+I also don't really get why you have not used "reg" to describe its
+start address and size.
+
+>         version =3D < 0x02 >;
+
+Probably missing a vendor prefix, and the spaces are unusual, but better
+than it was, yes.
+
+>     }
+>    acpi {
+>          entry =3D "";
+>          version =3D < 0x06 >;
+>   }
+> }
+
+Thanks,
+Conor.
+
+--UxRv2D6dZld+dL4w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKZi1gAKCRB4tDGHoIJi
+0kPBAQC+/8gAglhv+DsGHS+G2SMUClIIP7J58SEWQ7XovHEq5AEA011nqKPb8Sr9
+/KtHr/6v6qHXYUtkKGNwJwxU8cRl8A0=
+=cxHv
+-----END PGP SIGNATURE-----
+
+--UxRv2D6dZld+dL4w--
