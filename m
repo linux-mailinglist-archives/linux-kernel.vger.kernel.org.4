@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12903749898
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111F87498B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjGFJe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 05:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S232203AbjGFJuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 05:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjGFJeY (ORCPT
+        with ESMTP id S229518AbjGFJuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:34:24 -0400
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9534A1725;
-        Thu,  6 Jul 2023 02:34:23 -0700 (PDT)
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id DF9DC40204; Thu,  6 Jul 2023 11:34:20 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org DF9DC40204
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1688636060;
-        bh=7IUX/efmY5qu26AolpxRuBTswD3/yIZVYtuzPfuO3UI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vtwUn8Bx8RHgDP3qB1c2siMUYIwhsy8uslWWby8JljdGrYAWosC567SbHC5z8Xn5X
-         BGiGL9kusKnZ0DGnNlsrMYXtO23Uv1tChK/Yd+293ykT3NB/meKdqmx1bt4vm5z2PP
-         RUn2YxgM/hnFE0XT0VttiEkHVwPEAhMUHzrWFDEE=
-Date:   Thu, 6 Jul 2023 11:34:20 +0200
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
-Message-ID: <20230706093420.GA1442@www.linux-watchdog.org>
-References: <20230705122357.GA14855@www.linux-watchdog.org>
- <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
+        Thu, 6 Jul 2023 05:50:44 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 02:50:41 PDT
+Received: from mail.wsbck.net (unknown [IPv6:2a03:4000:6:f837:b87d:beff:fe7a:4fa2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF31998;
+        Thu,  6 Jul 2023 02:50:41 -0700 (PDT)
+From:   Johannes Wiesboeck <johannes.wiesboeck@aisec.fraunhofer.de>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Johannes Wiesboeck <johannes.wiesboeck@aisec.fraunhofer.de>,
+        =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] wifi: mwifiex: Set WIPHY_FLAG_NETNS_OK flag
+Date:   Thu,  6 Jul 2023 11:34:36 +0200
+Message-ID: <20230706093437.3380526-1-johannes.wiesboeck@aisec.fraunhofer.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
-User-Agent: Mutt/1.5.20 (2009-12-10)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Allow moving the wiphy device for mwififex to a non-inital network
+namespace. Many wireless drivers enable this flag implicitly by
+initializing through the generic ieee80211_alloc_hw_nm function. As
+mwifiex does not utilize this function WIPHY_FLAG_NETNS_OK must be set
+explicitly.
 
-> On Wed, 5 Jul 2023 at 05:24, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
-> >
-> >   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
-> 
-> I think that machine is feeling a bit sick. I just get "Connection refused".
+Moving to network namespace and working connection tested using
+wpa_supplicant from a network namespace as well as from a container on
+GyroidOS. The hardware was the Toradex Apalis i.MX8QM Board using the
+Azurewave AW-CM276NF wireless module.
 
-Should be fixed.
+Signed-off-by: Johannes Wiesboeck <johannes.wiesboeck@aisec.fraunhofer.de>
+Reviewed-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
+---
+ drivers/net/wireless/marvell/mwifiex/cfg80211.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Kind regards,
-Wim.
+diff --git a/drivers/net/wireless/marvell/mwifiex/cfg80211.c b/drivers/net/wireless/marvell/mwifiex/cfg80211.c
+index 813d1cbebe19b..ba4e29713a8c9 100644
+--- a/drivers/net/wireless/marvell/mwifiex/cfg80211.c
++++ b/drivers/net/wireless/marvell/mwifiex/cfg80211.c
+@@ -4395,6 +4395,7 @@ int mwifiex_register_cfg80211(struct mwifiex_adapter *adapter)
+ 			WIPHY_FLAG_AP_UAPSD |
+ 			WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL |
+ 			WIPHY_FLAG_HAS_CHANNEL_SWITCH |
++			WIPHY_FLAG_NETNS_OK |
+ 			WIPHY_FLAG_PS_ON_BY_DEFAULT;
+ 
+ 	if (ISSUPP_TDLS_ENABLED(adapter->fw_cap_info))
+-- 
+2.41.0
 
