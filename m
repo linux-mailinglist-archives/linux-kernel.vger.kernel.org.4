@@ -2,99 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63196749782
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0815749797
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjGFIaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S231254AbjGFIi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjGFIaT (ORCPT
+        with ESMTP id S229489AbjGFIix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:30:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BD91BC2;
-        Thu,  6 Jul 2023 01:30:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9558C618C7;
-        Thu,  6 Jul 2023 08:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432EFC433C8;
-        Thu,  6 Jul 2023 08:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688632216;
-        bh=WHBpAo0uBocGZWMTcYEiDtdYOSVrcOFnyDnjE2bMwqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V0rkyP831wal4VV/DWPMEigKMDYuZrCYZCe5ub55EnkQ44OZDoyXx3rhl5E4yEUEm
-         8mGPprr69u74dsxCcFhQUizflSw7z/vzT8BZ81bVbsw2+aQpjr4BngigvvJqT4JwIo
-         AdczluF5r7asS7onOTQbuLx12bcWj65xZdicl5VW3dXHqa6NvtDKl9B/ZwM7aJkbhg
-         29xGTThQ1QuQPOdQmkIgAOcxs5wmI7XaFFi2Soz86sLTpYUatwWjTY1xqEsn8BoaJ6
-         Im8HLdR04g6xj1PicLOt+5p18vYCDutsJOrIOmyW5BU7NcYQ3hzxK32lotrNHcdX6x
-         aha53qRM8Ls/A==
-Date:   Thu, 6 Jul 2023 10:30:10 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Luca Vizzarro <Luca.Vizzarro@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        David Laight <David.Laight@ACULAB.com>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        linux-fsdevel@vger.kernel.org, linux-morello@op-lists.linaro.org
-Subject: Re: [PATCH v2 0/5] Alter fcntl to handle int arguments correctly
-Message-ID: <20230706-truthahn-knecht-c0902bf61ae5@brauner>
-References: <20230414152459.816046-1-Luca.Vizzarro@arm.com>
+        Thu, 6 Jul 2023 04:38:53 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146961BC2;
+        Thu,  6 Jul 2023 01:38:52 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QxVLH6LdXz4f3pHf;
+        Thu,  6 Jul 2023 16:38:47 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgA34qWWfaZkk+xQNQ--.47999S4;
+        Thu, 06 Jul 2023 16:38:48 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     song@kernel.org, guoqing.jiang@linux.dev, neilb@suse.com
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next 0/2] md/md-bimap: hold 'reconfig_mutex' in backlog_store()
+Date:   Thu,  6 Jul 2023 16:37:25 +0800
+Message-Id: <20230706083727.608914-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230414152459.816046-1-Luca.Vizzarro@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgA34qWWfaZkk+xQNQ--.47999S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5E7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 04:24:54PM +0100, Luca Vizzarro wrote:
-> According to the documentation of fcntl, some commands take an int as
-> argument. In practice not all of them enforce this behaviour, as they
-> instead accept a more permissive long and in most cases not even a
-> range check is performed.
-> 
-> An issue could possibly arise from a combination of the handling of the
-> varargs in user space and the ABI rules of the target, which may result
-> in the top bits of an int argument being non-zero.
-> 
-> This issue was originally raised and detailed in the following thread:
->   https://lore.kernel.org/linux-api/Y1%2FDS6uoWP7OSkmd@arm.com/
-> And was discovered during the porting of Linux to Morello [1].
-> 
-> This series modifies the interested commands so that they explicitly
-> take an int argument. It also propagates this change down to helper and
-> related functions as necessary.
-> 
-> This series is also available on my fork at:
->   https://git.morello-project.org/Sevenarth/linux/-/commits/fcntl-int-handling-v2
-> 
-> Best regards,
-> Luca Vizzarro
-> 
-> [1] https://git.morello-project.org/morello/kernel/linux
-> 
-> Luca Vizzarro (5):
->   fcntl: Cast commands with int args explicitly
->   fs: Pass argument to fcntl_setlease as int
->   pipe: Pass argument of pipe_fcntl as int
->   memfd: Pass argument of memfd_fcntl as int
->   dnotify: Pass argument of fcntl_dirnotify as int
+From: Yu Kuai <yukuai3@huawei.com>
 
-Applied, minus the already upstreamed memfd patch.
+Yu Kuai (2):
+  md/md-bitmap: remove unnecessary local variable in backlog_store()
+  md/md-bitmap: hold 'reconfig_mutex' in backlog_store()
+
+ drivers/md/md-bitmap.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+-- 
+2.39.2
+
