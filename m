@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD7074999B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99017499B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjGFKlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S231954AbjGFKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGFKlu (ORCPT
+        with ESMTP id S231921AbjGFKs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:41:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACF3171A;
-        Thu,  6 Jul 2023 03:41:49 -0700 (PDT)
+        Thu, 6 Jul 2023 06:48:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC251BE3;
+        Thu,  6 Jul 2023 03:48:55 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 809E92039C;
-        Thu,  6 Jul 2023 10:41:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688640108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WFDOykfedKgFhlqR22HMMVD2pfNBZ1bhgYlbvr0wgR4=;
-        b=OLQ+joYitJw2RRY4o5s236BotMqjCy2oj0QQ9Fv7GXLBmDXy12926yP+WQi2wX+VtdbwuK
-        f+/jBjzhx/W9l6HqhDHMukZHW57kPXeB7nUimdltyXo7QvafTY5TAL5Y6ld01GON42TkZv
-        hdKTqITJjgKN3l8nzwIQH33PNGU+mBk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688640108;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A3C55229D2;
+        Thu,  6 Jul 2023 10:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688640534; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=fdccDL/2gY7MVJiBv6HySUTnssAS/IzsINY4DdaHR98=;
+        b=JbOuQ1uwS33lIYSEo7DM5MmTaKIf3b9IswyTcs7QkzZWJc6QWcbxBmJ5KecJmO0ils47LG
+        /d44K6KDFcilxC5HynwVQXejSUpPTmvu1ZJOJobmRQDvlgWhAwCHUobMjZLVC0++mcMnYy
+        Xp0WpMu3EXcCgzErT41Rli4VGyF1PdA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688640534;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WFDOykfedKgFhlqR22HMMVD2pfNBZ1bhgYlbvr0wgR4=;
-        b=TJWH/UFh/gg7KbolCtBkuy9nF2QwoTkXbwZdKm09R9vnFMB5OT2XJIRLNmF6dYhmGrLB2z
-        2TO3XhehGVDLwQDA==
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=fdccDL/2gY7MVJiBv6HySUTnssAS/IzsINY4DdaHR98=;
+        b=hOkVUUyhDO2O4Nr6IRJY3NuSB8KrmNGHLH8kdbGf/sAYqgtxcLKvyQfKqEWMaIVVjmAEtC
+        A4jOjqtLkXIiE3Cg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7448C138EE;
-        Thu,  6 Jul 2023 10:41:48 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69D6B138EE;
+        Thu,  6 Jul 2023 10:48:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id v5V/HGyapmSQfAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 10:41:48 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 049ABA0707; Thu,  6 Jul 2023 12:41:48 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 12:41:47 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 19/92] ibm: convert to ctime accessor functions
-Message-ID: <20230706104147.xtaqzmdvcxz7bg43@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-17-jlayton@kernel.org>
+        id aeThGBacpmSDAQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 06 Jul 2023 10:48:54 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     javierm@redhat.com, suijingfeng@loongson.cn, arnd@arndb.de
+Cc:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2 0/4] Remove unnecessary includes of <linux/screen_info.h>
+Date:   Thu,  6 Jul 2023 12:42:13 +0200
+Message-ID: <20230706104852.27451-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705190309.579783-17-jlayton@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,54 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 05-07-23 15:00:44, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+(was: arch,fbdev: Move screen_info into arch/)
 
-Looks good. Feel free to add:
+Remove include statements of <linux/screen_info.h> The patches have
+been reviewed as part of the patchset at [1]. Patch 1 has a fix to make
+it build on loongarch. 
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+v2:
+	* update loongarch
 
-									Honza
+[1] https://patchwork.freedesktop.org/series/120010/#rev1
 
-> ---
->  drivers/misc/ibmasm/ibmasmfs.c | 2 +-
->  drivers/misc/ibmvmc.c          | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/misc/ibmasm/ibmasmfs.c b/drivers/misc/ibmasm/ibmasmfs.c
-> index 35fec1bf1b3d..5867af9f592c 100644
-> --- a/drivers/misc/ibmasm/ibmasmfs.c
-> +++ b/drivers/misc/ibmasm/ibmasmfs.c
-> @@ -139,7 +139,7 @@ static struct inode *ibmasmfs_make_inode(struct super_block *sb, int mode)
->  	if (ret) {
->  		ret->i_ino = get_next_ino();
->  		ret->i_mode = mode;
-> -		ret->i_atime = ret->i_mtime = ret->i_ctime = current_time(ret);
-> +		ret->i_atime = ret->i_mtime = inode_set_ctime_current(ret);
->  	}
->  	return ret;
->  }
-> diff --git a/drivers/misc/ibmvmc.c b/drivers/misc/ibmvmc.c
-> index d7c7f0305257..2101eb12bcba 100644
-> --- a/drivers/misc/ibmvmc.c
-> +++ b/drivers/misc/ibmvmc.c
-> @@ -1124,7 +1124,7 @@ static ssize_t ibmvmc_write(struct file *file, const char *buffer,
->  		goto out;
->  
->  	inode = file_inode(file);
-> -	inode->i_mtime = inode->i_ctime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  	mark_inode_dirty(inode);
->  
->  	dev_dbg(adapter->dev, "write: file = 0x%lx, count = 0x%lx\n",
-> -- 
-> 2.41.0
-> 
+Thomas Zimmermann (4):
+  efi: Do not include <linux/screen_info.h> from EFI header
+  fbdev/sm712fb: Do not include <linux/screen_info.h>
+  sysfb: Do not include <linux/screen_info.h> from sysfb header
+  staging/sm750fb: Do not include <linux/screen_info.h>
+
+ arch/arm/kernel/efi.c                         | 2 ++
+ arch/arm64/kernel/efi.c                       | 1 +
+ arch/loongarch/kernel/efi.c                   | 1 +
+ drivers/firmware/efi/libstub/efi-stub-entry.c | 2 ++
+ drivers/firmware/efi/libstub/screen_info.c    | 2 ++
+ drivers/staging/sm750fb/sm750.c               | 1 -
+ drivers/staging/sm750fb/sm750_accel.c         | 1 -
+ drivers/staging/sm750fb/sm750_cursor.c        | 1 -
+ drivers/staging/sm750fb/sm750_hw.c            | 1 -
+ drivers/video/fbdev/sm712fb.c                 | 9 +++++++--
+ include/linux/efi.h                           | 3 ++-
+ include/linux/sysfb.h                         | 3 ++-
+ 12 files changed, 19 insertions(+), 8 deletions(-)
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.41.0
+
