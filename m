@@ -2,150 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC36F74933E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D942749342
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjGFBms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 21:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S232704AbjGFBom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 21:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjGFBmr (ORCPT
+        with ESMTP id S229524AbjGFBol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 21:42:47 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E9A122;
-        Wed,  5 Jul 2023 18:42:45 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36605H5p021669;
-        Thu, 6 Jul 2023 01:42:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-03-30;
- bh=c8GD1Dxva+lPMqbs4KMfAQ+X/lVEotfjukN/yAfD3hU=;
- b=2OXaxvHNcpkOKchuC8glx43xNB+1jgw7vevWO3MF/QCe+YpUXcs9Pks+pcGWYSuuKSMv
- DPo0k77UiQMUdlPPJ/oEc/FN1UYS/pZz+k3pGLE/bkY0/l+3PulOYmNNKbjJGjGXKh4J
- ipUEo85j0iWgcTB46KgYpHRCELTT4vmTllSt8Tvb5hwUT9utysAfFOIzKz+ndIHNTTei
- p1GpRGXjA7pb2NJIzBVpwixvU0/j3WMpZYywtIUGkMFWMHjhOwFKSD1nknWazBwl2hMp
- IhRKob7hYr6yIn256FGel9ucKz9wG+9SrvXnVAvnyW3O03nD8+44tygi5RWx09ZsLDc0 wg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rnf138d6q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jul 2023 01:42:38 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 365NlZeh025202;
-        Thu, 6 Jul 2023 01:42:37 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2043.outbound.protection.outlook.com [104.47.74.43])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rjak6tu3k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jul 2023 01:42:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lfNTfCLTiq5HEOnGSyz3ljNVSiVhiom1K7U5Fn8YpaCsd5WFwUsZJ9DI5HSfs1UF0mT3AOYRo7DGVLUb8DT/IXJ3/ONgTHuAwy6CXweuWmPqwLjNOq3MIg0C2Hh3pUCCwZfH25KKtYwH4Ucmz6TjIj98UzikPZOf3ZiMmqG0iuMLvV4pVSyU9kiuIwrn8eMQ9v76tiq0lVgMC9Tv2F6W+9Gk5W2p6n4wEVvCFbUpOJfJoa7QIUkU3uAoHb6YIxUcxnAlnvdRgZW/Z0C78A9PA242jNkFfq+NEvboQIEekDxDkwxTYohygomV8KxL4MzIj1lsI+QNzcbTI3otRRwxtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c8GD1Dxva+lPMqbs4KMfAQ+X/lVEotfjukN/yAfD3hU=;
- b=X/c83bPFkBJulR/x4VdYUCxRf8jcE/aWXHEI5U4zFzI6aRhAhVkTG9Iwa2dUZsNpkllJ24r/zfXV0s/ydDDX3cjWCX7fuCf5d6nYJfR8AurCLWWuQCP07Z9YH936ME6KX/PhYHm51Wpowyk3UtG4/bAnPDIFKDm8QCDStaPC+axiDhqvey9BGyZyosc36pWfMbT6A/pMHktLccaG+MqXzthb8sRO/iJ6YJdY+UC2B7ca3e33L0lG02aMTq1eqtsQFzNzkYJEuZjtCHZy1ESXxJqE1kYprz+ye4niSpPsFGE3Y7bSPNxiTd7mAirRtB5mjXXIt0IWwC9vyIfIJ9nQww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 5 Jul 2023 21:44:41 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC2D122;
+        Wed,  5 Jul 2023 18:44:40 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-47e4d002e0bso71757e0c.0;
+        Wed, 05 Jul 2023 18:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c8GD1Dxva+lPMqbs4KMfAQ+X/lVEotfjukN/yAfD3hU=;
- b=gHXULp7XrQuIQ9LkOsdAt/5CRx8KNGWSp13hC8SwSCOQuryPXI/HbxpKjpUKezuPQhwgo7Upczl/J4CV1SVvZO9R6/l7WONYDAlboSVJFpwLj4yz557Oc09dM3UTx/HZ5WqmlnMmy7Gf9VaUMz+a7EBLa8bEltLTAMDVsBZgqiM=
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com (2603:10b6:303:91::24)
- by CO1PR10MB4561.namprd10.prod.outlook.com (2603:10b6:303:9d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
- 2023 01:42:34 +0000
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::9f29:328c:1592:d5bb]) by CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::9f29:328c:1592:d5bb%7]) with mapi id 15.20.6544.024; Thu, 6 Jul 2023
- 01:42:34 +0000
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sagar Biradar <sagar.biradar@microchip.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Gilbert Wu <gilbert.wu@microchip.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: aacraid: avoid -Warray-bounds warning
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq18rbtlssg.fsf@ca-mkp.ca.oracle.com>
-References: <20230703114851.1194510-1-arnd@kernel.org>
-Date:   Wed, 05 Jul 2023 21:42:31 -0400
-In-Reply-To: <20230703114851.1194510-1-arnd@kernel.org> (Arnd Bergmann's
-        message of "Mon, 3 Jul 2023 13:48:46 +0200")
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR13CA0009.namprd13.prod.outlook.com
- (2603:10b6:a03:180::22) To CO1PR10MB4754.namprd10.prod.outlook.com
- (2603:10b6:303:91::24)
+        d=gmail.com; s=20221208; t=1688607878; x=1691199878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xmpRLvUfTZLqM9ZpnuCqFVQ58lvwiT3vQOsEDk5km+Q=;
+        b=I6YVQfUIj8lzt2fI/bCphHtVJqPy+UEQnTUAx680BWERE7g2HDrvFDgd/a05U30Ea/
+         //FQmw9oENUhQalC+JVW5IsBJO3zWCGDHtmIvqPRwtszxGTfUbuX5PEmYkXYl3MF3qbP
+         jPAzqiLwMD3mCLsZ1O8I7GJjzzJAAPVfOEvFvIIYEkIPTnIeJis8gPv/q0V9zrVq8VZ1
+         swNVPf8Z2FJNMaQ9AA/lQ5gaI+dsl5AcQ6/JYpiAZwBf+NFw1l3XkQPWFTkAtboToY46
+         cI97pCPU2ZLHWZKkcyy/WCNygcDDlq3AXEMbP/yE6pD3bCj4cs8vGyoJyI92+/bwfibZ
+         kE6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688607878; x=1691199878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xmpRLvUfTZLqM9ZpnuCqFVQ58lvwiT3vQOsEDk5km+Q=;
+        b=lShq5VHRFXgHBv1fAbshHIvAx07iiBFRk6FntAz0HyulGAxLJ7wbJa/LDOit59esNm
+         0ogumcqXzHQu8HPzAn4zlF9q7h/Fvx1x5p4ghhWoS3TY7TsY7GDhcioZ1MRo7Hs+VBEN
+         7IH2EsO0YW5I8AtRVaozeSvEgtTa6QGsDSHImC1BpEijgj5zpMP/WJ/arKcXlkqvFleM
+         6tj2+qk/3NnbSQDh2iEu1gQR6aDNVUUrYpF63hc84AvvLtwGRG7LmSD4walAKC8MbS/c
+         KbvM6xCgFkAlVasLnK8lE3DJFizE/SeXpfWok7P2NHpEy2JM5tjN4xR5inhdgGEpL+3b
+         WF0w==
+X-Gm-Message-State: ABy/qLbLRkPQZor+Bucci2XKvPwrYzjthInrqZOLDiZ/HQeCSnyllR5n
+        EpU9g6fI+cvj61PwZDoq+QQQNWwF2dSZHcH+tMo=
+X-Google-Smtp-Source: APBJJlE9Tu0UPfz3oRm/JkfoD6KT1ISbqyHuA8pDYvoTeRAt1Apah1qLl/63M9RDKErndIEIYOrPLXcxwsOk92fjuoo=
+X-Received: by 2002:a1f:ecc1:0:b0:471:1b41:dbb2 with SMTP id
+ k184-20020a1fecc1000000b004711b41dbb2mr696948vkh.10.1688607878592; Wed, 05
+ Jul 2023 18:44:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4754:EE_|CO1PR10MB4561:EE_
-X-MS-Office365-Filtering-Correlation-Id: 148d27e8-5821-4e9f-fe3a-08db7dc24545
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6PnVHHxy3nsyD8IX1gpljMDldn8b3zQYkvEhTHTpz14Rwhnuh4594qK3HWUfZTJ3zKgWDCF0tQafruaH2WJ/R5jwb94BFN+GPfSVME2ywo6MFQqwxUmq7K72GxxpZESL0o4rUzE+G3oSzyYcicOTenYU8Pz+FxOBPC/LHVUvbHd1P4n2nBPVyEVGLdOpiI4sV6z7y2MBF4u5bml0hWz0twtLJUC567nL9VJi3pd0HSqVbXc1zpyWdPm+k9PHb0ejSbQJF3naMqSGE2NrOug7MwOdOXXuf2V4MPkRavRKSz6rBI2FnwW857cTH/GItRJ9p11hsEIXyi9Vv96fxma8otRILWMDsKqRCbSj9DZCAcvSjijIbrtdyj4qomNq5z7NRf7pWa8JUQJeJ7AWA1BT/L6Sgq+YXNKfy3+z43ScHsolNl4IPsKa61rM2tBCYVCTvsE5xbpIwbq81WwkFFYBVFaD7pMpeXtUYWbo8YnRX8sNqHznYhrTyehNrpDkal4gqATGR6Gtj7ZLBb/sHhAUCFC1YylN1bxsD6MMajwLgvmU76SKffg72e7/csUAe1S4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4754.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39860400002)(376002)(396003)(136003)(366004)(451199021)(6512007)(6666004)(6486002)(478600001)(54906003)(36916002)(186003)(6506007)(26005)(2906002)(6916009)(66476007)(316002)(8936002)(66556008)(8676002)(41300700001)(5660300002)(4326008)(66946007)(38100700002)(558084003)(86362001)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+jDIQprgDN1X9WfMCqT1izSHmBZQIlsqQXsuLDDrXINwRiQEAPDAkci4zVGF?=
- =?us-ascii?Q?yqmYnGZE+Euwwrn79No039PvbMvcEoy5+kjlTA4J2MdVRT7uBUEEs8qqD7Z/?=
- =?us-ascii?Q?j/bBwo8W981IsnvR69wL8YIjvt0Xt9j0F/+6JvzsdNTjp7E3QVNzAuUCJ1ds?=
- =?us-ascii?Q?DSBXcrIXN1Ge5SFTy+85LXi5FEYWG0/g0nR3yc/rQJvs4SvxzV+A3p+86a7E?=
- =?us-ascii?Q?/wSX+HL2ZaqbV9xA35tvcyA6hPMk0s1voKrGQChvdk4tLNdoojqycbf6WFe3?=
- =?us-ascii?Q?8a7wB+9MDPbuwT5QVHoqroYe4HzDd14MNUvwS5kg2tKTwOum6VRrfOQGZtVe?=
- =?us-ascii?Q?dzSJbbQI8BQxymBhbzA/sVUOvTOnSg4lob2NENvC+RmI6KUMCRe6P6ynQXLz?=
- =?us-ascii?Q?LlB2cHxapccXPjZXIu1O1BbsbNlAD5vO7nFGRci7i7JU/BATEbyMm04QchUe?=
- =?us-ascii?Q?fmFE59mAINomQafWDjPPe12wWv836gdrVz9Dip0jwP7Afx8awyFFHF1RBy9u?=
- =?us-ascii?Q?1MOpddvWfqVHRZPzk/ZABiBVeGGl8GJa9a66R36ilFODoZ7hFWfKLAAOOeDW?=
- =?us-ascii?Q?nQvQ15/k6vmbi6LWKT8f84dGu9jHYlZCmmNJcKujoEnBXE5mm/lzoisl2Hjg?=
- =?us-ascii?Q?1lFH8+eR+jtaULw8bxpCRo8g+llQb0ZH2Zjyl9AHz9DmpHrRAWKiVzG3nmNN?=
- =?us-ascii?Q?GIiZJwg9V9HE8wJQTIO5Wh3U+Kb85fLoXeyi3LPFIZurLtMofCZGtZt2nhcv?=
- =?us-ascii?Q?nrn+0WI63CebOZWZ0PzNS7GLlo/GRwyZETLmgF4eQ3DrTlfdI7JGga5vvevd?=
- =?us-ascii?Q?GpFu9E5/HQUm5cHgov7MQyFU6BtM6Tralpi9SQHwOpEPL5IFRopL322zHUe0?=
- =?us-ascii?Q?wIeja5RLDFmX197063Mp8O6gerog4FOgnb4cFAJPlahVBoZ+ivUiB4lSRNAg?=
- =?us-ascii?Q?ryx5LH4mP6cC2/ziq5k/iaxJy2p8sM9h3qJJlVRkL5B3GbR1E/HTMmyJLylz?=
- =?us-ascii?Q?KL1cOZb039ckPpHOjUV9QCl2ac0xw/Z2bDVOEUcIG1RsQD8yz+co7X0mO5Ec?=
- =?us-ascii?Q?lRRB6CAwkI3Fn5afMM0dqkaPQbfc0eGHkPPUhbUJIqeTBtSQSlN3doQFwl0A?=
- =?us-ascii?Q?Prf57H26eiAvHc16NCnMiKg86JahDO+BWgNXkDtXekKO3GVx4yaiwtEjje0O?=
- =?us-ascii?Q?sRFTCXvhMugTjPiUhx98+is1IrRWeOC/gKtuCdsZDneb8+ZkqWa+A6n0OAJz?=
- =?us-ascii?Q?FHeKehFMSzwcx3cYPF3b9pC1J/tOpbOPnr9OuCu/xMx1vYvZDBhUDB9W7uPk?=
- =?us-ascii?Q?J1kImcMCwAOh6bws6+8xbExq1e2ZwunKwXBqPQwLlesyKVfN7K32vClpFx5B?=
- =?us-ascii?Q?LJob+HsY10ZQSgP3kOKEN4vsnszAu5RapfYSgq39PL8lvDRTIJCC9fccX4PN?=
- =?us-ascii?Q?R9InYkrqFB8ufRNct6roVTB5819q/+fu8AIdCH8Fav4atcomX4o8BuvlWGJy?=
- =?us-ascii?Q?5bhuT/x7M77HLM+TTAnKTzELZw+CV6TTEXgMX+u3CnTvOavLEwam4N2TyjpE?=
- =?us-ascii?Q?SIKCClaYcdSyywAZHpBnSzxmbbxXONwxeBKqP+2I8R4bpgqleYafdDOxPmOL?=
- =?us-ascii?Q?KQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: g3PKg6HOmSNBqSGOf9pjQz8lzwLV4ce1KvCoYRryd9EMhd8T9nf70giib5smxTUnUbv0oTYYZuY0nSN+i6R4sgsYNvS/E6jPuGqh33ZNouhXy3hQteKKGy10JJpZYmKRTqz2ksgMzf8MiWjiV0PqQHVHMbUnhlzM39TzeGGDTayto6QdvvpbbYq5H4mBFh071KtCPbxzC4qTF4dMWV9cmXCTC56roP4+KDGw+S+c2qs2bPygfX5peTee2BS0pApfRjTsvsf7sGhoGGLiW5jDjO5NPnL/+XBBaLJAlFoJpnCteuaBToRH4omthVxvtKvwyn5dBm9pMCzCOa4LERx57y3iWnEl7kHE5c6JwyVHFRdpxY4o2oAAl7WeOWqHap7Opmmc23L1+4iWsO/+K3iOi7i+3KX9JZUh2BMYMAXITbGxVrfLqgSLcsabo+1L7a0Vb84ivIhw3uuWs3AcXwhy67K2d9jf4SmdNzDhxtSUzWX/QPFcacr25LnmpW1+l5gUU/AYWhc4MmSzTJsT3NP97wKZ5w+UaKna87Z2QWjWhcrR50cxgnPN0KAAFZWiaQ5CQPUY5X378Uefx6jXpDG/T1F0/ml6Fyfh9gKoeUntle38W4u9ZfWXzIpcd9vu8UiBPI8KhUpVfGXQp8Ag1XdC7bqYzj77gJjktwM7jEBHYSTkG1pffu6a4QfKE78UVGLSmsS1S4EsPevXksOBD/zpoGB2e9xIbH7xUpEmIGCNMsMdEUjg2y1F75OsVyZsuhsg3nJ2ByQyWSwF8Dd/mUwSaY52IsFSPi4k+DZELB7LqZWs4CDCn6UW0SyIvQQjKZMsDADNUhpoiZyKe0rRPKV5B1rXrGVdMthBAC94RzhTw8sD8ZhuZAPqFLM6snQnEN8T3HozouIWvz9GAkZiQVHQpRloaCQ0fm6KJDKDmZVmjRI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 148d27e8-5821-4e9f-fe3a-08db7dc24545
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 01:42:34.3452
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jJ2AnRokyRtBQZij7THWmksJrylichFDWQvOvI+n7b+Z6U3Y3W2o2Tce1zlj4VGCYPkAYwM1gaUr2Y1f/QCbl+qWc5gTBfV/JtO9w/AgGFI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4561
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_11,2023-07-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=540 phishscore=0
- malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307060013
-X-Proofpoint-GUID: f1uv4VaSoQSOjO5pRbsMqPVsGfDLcUDZ
-X-Proofpoint-ORIG-GUID: f1uv4VaSoQSOjO5pRbsMqPVsGfDLcUDZ
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+References: <20230705104824.174396-1-alistair@alistair23.me>
+ <7536d9a3-4738-2bc2-e33e-d93347893865@kernel.org> <20230705114443.GA3555378@rocinante>
+ <CAKmqyKMD99cDwfyY8BJ0_ExB+VXytT3VdeENwuw5ZyqAKq3X0w@mail.gmail.com> <20230705131546.GA333066@rocinante>
+In-Reply-To: <20230705131546.GA333066@rocinante>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Thu, 6 Jul 2023 11:44:12 +1000
+Message-ID: <CAKmqyKP_nBHHqgB5Zf1JcXNNMJCZ-nFsUmWYvcidB_u1Sqe7NQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: rcar-ep: Include linux/pci-epf.h instead of linux/pci-epc.h
+To:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Damien Le Moal <dlemoal@kernel.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        marek.vasut+renesas@gmail.com, yoshihiro.shimoda.uh@renesas.com,
+        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lpieralisi@kernel.org,
+        robh@kernel.org, bhelgaas@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -153,14 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 5, 2023 at 11:15=E2=80=AFPM Krzysztof Wilczy=C5=84ski <kw@linux=
+.com> wrote:
+>
+> Hello,
+>
+> > > > > pci-epc.h doesn't define the members of the pci_epf_header struct=
+, so
+> > > > > trying to access them results in errors like this:
+> > > > >
+> > > > >     error: invalid use of undefined type 'struct pci_epf_header'
+> > > > >       167 |                 val =3D hdr->vendorid;
+> > > > >
+> > > > > Instead let's include pci-epf.h which not only defines the
+> > > > > pci_epf_header but also includes pci-epc.h.
+> > >
+> > > [...]
+> > > > It is odd that the the build bot did not detect this...
+> > >
+> > > This is a bit of a surprise to me too, especially since none of the u=
+sual
+> > > bots pick this up, and I can't seem to find such a failure in the nig=
+htly
+> > > CI logs either.
+> > >
+> > > Alistair, how did you stumble into this issue?  Also, which version o=
+r
+> > > a tree would that be?
+> >
+> > I was building the kernel with this defconfig [1] inside OpenEmbedded.
+> > It was the 6.4-rc7 kernel, specifically this one [2].
+> >
+> > 1: https://github.com/damien-lemoal/buildroot/blob/rockpro64_ep_v23/boa=
+rd/pine64/rockpro64_ep/linux.config
+> > 2: https://github.com/damien-lemoal/linux/tree/rockpro64_ep_v23
+>
+> Thank you!  Much appreciated.
+>
+> So, the vanilla kernel does not have headers arranged like this custom tr=
+ee
+> that Damien maintains for his own needs, per:
+>
+>   - https://elixir.bootlin.com/linux/v6.4-rc7/source/include/linux/pci-ep=
+c.h
+>   - https://elixir.bootlin.com/linux/v6.4-rc7/source/include/linux/pci-ep=
+f.h
+>
+> I suppose, there are some changes that break it for you, for example:
+>
+>   https://github.com/damien-lemoal/linux/commit/c7aa8ddd76a141b975a097532=
+050a76c6a58c436
+>
+> So, I cannot take this patch as it would break vanilla kernel for us. :)
 
-Arnd,
+Urgh! Sorry about that. I should have double checked if it was an
+issue upstream. Thanks for looking into it though
 
-> The one-element array in aac_aifcmd is actually meant as a flexible
-> array, and causes an overflow warning that can be avoided using the
-> normal flex arrays:
+Alistair
 
-Applied to 6.5/scsi-staging, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+>
+> Try building using vanilla kernel, and see if that helps.
+>
+>         Krzysztof
