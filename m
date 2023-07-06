@@ -2,106 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287A0749726
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439CD74972D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbjGFINj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
+        id S233712AbjGFIOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbjGFINh (ORCPT
+        with ESMTP id S232942AbjGFIOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:13:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05C21726
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688631217; x=1720167217;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=9Y4RKqquLT3bLD39/xyJkPPz/58Je7W/hNpP2VEk0Fk=;
-  b=Ok0dZh804aO8fLcgoO/xnsyI+4rESA1mGm+fpeHrQftajSdTQ68A/zD+
-   gIMs/Hz63flTtCb8tiGMKUdxRyI/76u1rvhzKmYcVvOxdz6HRiQQA2Ktw
-   uyuR1wA1BA4/9RVmqZcyQSrgoIgNtpP50QnxSIPuVs4nW6Su3S7eiuQ3/
-   Vlvb25ObCltvXGKBDH3I0qEAe2t35Z6GU82o22CAdZ9AVPnvTwZV4G2IG
-   rkM92upypM2wVg5qHiuZ9la5MDrAM7WHrpCoATJPP91f2052ugQ85zrV9
-   Ip6IWB6seYm+Yrmbz46BBLYbpanHmK5iJsH/NTaPP9+/7+kwJAGnWzctQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="367026118"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="367026118"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 01:13:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="789461616"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="789461616"
-Received: from jmvuilla-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.41.105])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 01:13:32 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Minjie Du <duminjie@vivo.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Minjie Du <duminjie@vivo.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] gpu: i915: display: Replace define function
-In-Reply-To: <20230706072902.4845-1-duminjie@vivo.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230706072902.4845-1-duminjie@vivo.com>
-Date:   Thu, 06 Jul 2023 11:13:30 +0300
-Message-ID: <87fs61zcd1.fsf@intel.com>
+        Thu, 6 Jul 2023 04:14:15 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB571726;
+        Thu,  6 Jul 2023 01:14:14 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3667J5QN028460;
+        Thu, 6 Jul 2023 10:14:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=c5EMg95qPheNNBLTXxowIRmmt2QQXYhtphsjHwo2EsE=;
+ b=WihLRuSUCIhlwL+cWQwqVD6B8J5Dtfk3gpEE+UbA3mP0ihvqIw+cqM+S1ikLtfgReAco
+ ON8+lal6RSr08FvS71H8KjR3yXZS0/qdEdYph3aYaysyaJ4u6pFhtLjeowUJM24ajzHQ
+ 3ZhiPHimqnPqcjQGgG3a+VDyH5IWBDGH01wvDGEkpLkXRXLrR8coybE/E4o/Zi4u+U0n
+ 3EPQSKEzJOfkduMHPIpzWRH+QWvjS8WEeWDLmEupQS9g12u93TylEf4hJ+aMFXoFtIMi
+ P+Pm+aJQx1sduToqRUzH8OZPsTQL/QKLFZ/2rMgp2PBNNH7FUHKPSMYVPJ3dEC+zrU9N jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rns47re5w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 10:14:00 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0BC80100052;
+        Thu,  6 Jul 2023 10:14:00 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F15C62138E1;
+        Thu,  6 Jul 2023 10:13:59 +0200 (CEST)
+Received: from localhost (10.201.20.168) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 6 Jul
+ 2023 10:13:59 +0200
+From:   Valentin Caron <valentin.caron@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH v3] spi: stm32: disable device mode with st,stm32f4-spi compatible
+Date:   Thu, 6 Jul 2023 10:13:42 +0200
+Message-ID: <20230706081342.468090-1-valentin.caron@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.201.20.168]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_04,2023-07-06_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Jul 2023, Minjie Du <duminjie@vivo.com> wrote:
-> Replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE.
+STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
+Stop probing if this case happens.
 
-The subject prefix should be "drm/i915/psr: ". Please try git log on the
-file to see what is commonly used.
+Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+---
+Changes since v2:
+- Do not cast of_device_get_match_data() function
+- Remove compatible in dev_err
 
-The subject should say what's being done. "Replace define function" is
-way too generic to be useful. Even "Prefer DEFINE_DEBUGFS_ATTRIBUTE" is
-better.
+Changes since v1:
+- Replace of_match_device()->data by of_device_get_match_data()
 
-Finally, the commit message itself should say *why*. Why are we
-replacing DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE?
+ drivers/spi/spi-stm32.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-BR,
-Jani.
-
->
-> Signed-off-by: Minjie Du <duminjie@vivo.com>
-> ---
->  drivers/gpu/drm/i915/display/intel_psr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/display/intel_psr.c b/drivers/gpu/drm/i915/display/intel_psr.c
-> index 56c17283b..822858f3e 100644
-> --- a/drivers/gpu/drm/i915/display/intel_psr.c
-> +++ b/drivers/gpu/drm/i915/display/intel_psr.c
-> @@ -2998,7 +2998,7 @@ i915_edp_psr_debug_get(void *data, u64 *val)
->  	return -ENODEV;
->  }
->  
-> -DEFINE_SIMPLE_ATTRIBUTE(i915_edp_psr_debug_fops,
-> +DEFINE_DEBUGFS_ATTRIBUTE(i915_edp_psr_debug_fops,
->  			i915_edp_psr_debug_get, i915_edp_psr_debug_set,
->  			"%llu\n");
-
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 6d10fa4ab783..536d89e044cf 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -238,6 +238,7 @@ struct stm32_spi;
+  * @baud_rate_div_min: minimum baud rate divisor
+  * @baud_rate_div_max: maximum baud rate divisor
+  * @has_fifo: boolean to know if fifo is used for driver
++ * @has_device_mode: is this compatible capable to switch on device mode
+  * @flags: compatible specific SPI controller flags used at registration time
+  */
+ struct stm32_spi_cfg {
+@@ -259,6 +260,7 @@ struct stm32_spi_cfg {
+ 	unsigned int baud_rate_div_min;
+ 	unsigned int baud_rate_div_max;
+ 	bool has_fifo;
++	bool has_device_mode;
+ 	u16 flags;
+ };
+ 
+@@ -1750,6 +1752,7 @@ static const struct stm32_spi_cfg stm32f4_spi_cfg = {
+ 	.baud_rate_div_min = STM32F4_SPI_BR_DIV_MIN,
+ 	.baud_rate_div_max = STM32F4_SPI_BR_DIV_MAX,
+ 	.has_fifo = false,
++	.has_device_mode = false,
+ 	.flags = SPI_MASTER_MUST_TX,
+ };
+ 
+@@ -1774,6 +1777,7 @@ static const struct stm32_spi_cfg stm32h7_spi_cfg = {
+ 	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
+ 	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
+ 	.has_fifo = true,
++	.has_device_mode = true,
+ };
+ 
+ static const struct of_device_id stm32_spi_of_match[] = {
+@@ -1798,8 +1802,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	bool device_mode;
+ 	int ret;
++	const struct stm32_spi_cfg *cfg = of_device_get_match_data(&pdev->dev);
+ 
+ 	device_mode = of_property_read_bool(np, "spi-slave");
++	if (!cfg->has_device_mode && device_mode) {
++		dev_err(&pdev->dev, "spi-slave not supported\n");
++		return -EPERM;
++	}
+ 
+ 	if (device_mode)
+ 		ctrl = devm_spi_alloc_slave(&pdev->dev, sizeof(struct stm32_spi));
+@@ -1817,9 +1826,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	spi->device_mode = device_mode;
+ 	spin_lock_init(&spi->lock);
+ 
+-	spi->cfg = (const struct stm32_spi_cfg *)
+-		of_match_device(pdev->dev.driver->of_match_table,
+-				&pdev->dev)->data;
++	spi->cfg = cfg;
+ 
+ 	spi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(spi->base))
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.25.1
+
