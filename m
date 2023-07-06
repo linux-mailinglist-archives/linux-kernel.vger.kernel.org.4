@@ -2,77 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099B37494F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A4F7494FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbjGFFXP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 01:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S233145AbjGFF3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGFFXN (ORCPT
+        with ESMTP id S231218AbjGFF3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 01:23:13 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D679E18B;
-        Wed,  5 Jul 2023 22:23:12 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso3102775e9.0;
-        Wed, 05 Jul 2023 22:23:12 -0700 (PDT)
+        Thu, 6 Jul 2023 01:29:38 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27761BD5
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 22:29:36 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b5c2433134so3526911fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 22:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688621375; x=1691213375;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FaztYOK3CeeSOgdOjNlGUDoiqmvgCpcAtf+Kjtl/Zxo=;
+        b=oLDUHC7o8LLIpKQ47Bka4IhCDsnUOJ8PJa0mHtGy5+xmtH0ph+DN7fT2bOCyxUZ/OK
+         voaasNoiVitwlvc6GdEXWSG+xw+zAyvNt5YIOkZ1Gv4N8GPo9GksM1sfnehNwooTJ6MC
+         TIGRcSt6tw1MrfY6kMBuzzrrO3OFxrZGWrz+M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688620991; x=1691212991;
+        d=1e100.net; s=20221208; t=1688621375; x=1691213375;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pMivQtxtxVUkXur2SbbNLbhHmemosTg/TiJqhMBJ3M0=;
-        b=BEyHmsRnqke93A03sYAeIn+Rc7Y28fo5yzhEhD9z2I1CRebSP3JylX17xp/GJqkU82
-         koKsy18ggkczr3rZvgM/tz52psSJrmjo6MOEP+tMVxymYUfqLoEiEpnIUcyU8Uy+rCel
-         J4QsHlwGQgLJav6qvjpgMj5Em3bTJHPR8k9+WGusFVAsWawJPoq65CDsmjmEuLdXO79c
-         YYxZlwDALi2v7iGGSCEr+/QBPWBWYqEu2Xhge/IceetayNJjgW+W/6hVpqgubXsL2flo
-         m26Y+Xb0e2fGLd2eouUchA9M4GHbrfU2n/KnFhhP/4cE1IFcS2P5ZnnN6gvRAP7IO993
-         Lfiw==
-X-Gm-Message-State: ABy/qLZyjDtVdHtoanUjtg+8H0IYcBX8e7M6mRQRtlRPU070xKHCFFX6
-        zgzWzCm8RjZ/lRQDK5TaamKurb1DDvSJxY8vnes=
-X-Google-Smtp-Source: APBJJlH7tOA4DkAWHPhcX+7tjzo2ZuUlCn7WFo5kWzL1Ww/wCAhcVy50CtWBo7tnpsDUEdqHNhCDPo4eEDxrBKSBdxA=
-X-Received: by 2002:a1c:7416:0:b0:3fb:b3aa:1c88 with SMTP id
- p22-20020a1c7416000000b003fbb3aa1c88mr438796wmc.26.1688620991009; Wed, 05 Jul
- 2023 22:23:11 -0700 (PDT)
+        bh=FaztYOK3CeeSOgdOjNlGUDoiqmvgCpcAtf+Kjtl/Zxo=;
+        b=XD/mVeYzWqMc62hvAfnsq+9NYhQj3QI5cOIWBGd9/KTAag9sZSq5xp11nz96E/6m0/
+         dx35GrsE2pfSRdNrRIq6FMI06L4iu7bkdGrRtOv2s6KtTWnWGZRKALdJ/FcHYTiEZ5v4
+         gbntQdzrjduQX0EY2bbyynCd4Hv/BiC/JhLFiX6lxPNiaHuqpFIvOSLW+2r+n/AlsKW+
+         gHjvLYI77XI7xtPdHbaKxqgGuLojf0dDq29tLiC7ruZRonYoqk7WOwaLsFXbjc36dXia
+         sPC5gWoU59SNEs5+IcfE8PRw8iIJTatCk3/Pr1pOruYbIJFejAs7yHvzdN/4GPZCYpnC
+         fNfQ==
+X-Gm-Message-State: ABy/qLZaQgKaw0eXbB/jIfNuhwq8mpTtNiC73vf4oh+AfAnO4kqzSPEM
+        TChW3/KY0vnCtaJltFUvMx+pRYAbu4WvyL+Og+Zaww==
+X-Google-Smtp-Source: APBJJlFoQbGHquM/8F8vHFVN0DzDyQkinz8d9jngOAhWJR4+2GRUPIv/nW729Pai2dwCQYTiCsN6nZl/3HDPmf9AC/g=
+X-Received: by 2002:a05:651c:107b:b0:2b6:d7d2:1a65 with SMTP id
+ y27-20020a05651c107b00b002b6d7d21a65mr1632317ljm.18.1688621375279; Wed, 05
+ Jul 2023 22:29:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230705082653.23566-1-james.clark@arm.com>
-In-Reply-To: <20230705082653.23566-1-james.clark@arm.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 5 Jul 2023 22:22:57 -0700
-Message-ID: <CAM9d7chiPmHkbNh2vAT3tU5skWVy-Eu10_igZErJ4wC0VLzSiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] perf test: Fix event parsing test on Arm
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org, irogers@google.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
+References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-3-stevensd@google.com>
+ <20230705031002.xrxk42hli6oavtlt@linux.intel.com> <CAD=HUj6-VbznOOtn5WJee7Of_nh33ygg7_ph2G=hgnvNk_Cbsw@mail.gmail.com>
+ <20230705105343.iounmlflfued7lco@linux.intel.com>
+In-Reply-To: <20230705105343.iounmlflfued7lco@linux.intel.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Thu, 6 Jul 2023 14:29:24 +0900
+Message-ID: <CAD=HUj5ezWt7rLAv2qOpFsMHyFU87Hqtw_p8pWNF5+oxbLhxDg@mail.gmail.com>
+Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 1:27 AM James Clark <james.clark@arm.com> wrote:
+On Wed, Jul 5, 2023 at 7:53=E2=80=AFPM Yu Zhang <yu.c.zhang@linux.intel.com=
+> wrote:
 >
-> Changes since v1:
+> On Wed, Jul 05, 2023 at 06:22:59PM +0900, David Stevens wrote:
+> > On Wed, Jul 5, 2023 at 12:10=E2=80=AFPM Yu Zhang <yu.c.zhang@linux.inte=
+l.com> wrote:
+> > >
+> > > > @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long a=
+ddr, bool write_fault,
+> > > >   * The slow path to get the pfn of the specified host virtual addr=
+ess,
+> > > >   * 1 indicates success, -errno is returned if error is detected.
+> > > >   */
+> > > > -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool w=
+rite_fault,
+> > > > -                        bool interruptible, bool *writable, kvm_pf=
+n_t *pfn)
+> > > > +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t =
+*pfn)
+> > > >  {
+> > > > -     unsigned int flags =3D FOLL_HWPOISON;
+> > > > +     unsigned int flags =3D FOLL_HWPOISON | FOLL_GET | foll->flags=
+;
+> > > >       struct page *page;
+> > > >       int npages;
+> > > >
+> > > >       might_sleep();
+> > > >
+> > > > -     if (writable)
+> > > > -             *writable =3D write_fault;
+> > > > -
+> > > > -     if (write_fault)
+> > > > -             flags |=3D FOLL_WRITE;
+> > > > -     if (async)
+> > > > -             flags |=3D FOLL_NOWAIT;
+> > > > -     if (interruptible)
+> > > > -             flags |=3D FOLL_INTERRUPTIBLE;
+> > > > -
+> > > > -     npages =3D get_user_pages_unlocked(addr, 1, &page, flags);
+> > > > +     npages =3D get_user_pages_unlocked(foll->hva, 1, &page, flags=
+);
+> > > >       if (npages !=3D 1)
+> > > >               return npages;
+> > > >
+> > > > +     foll->writable =3D (foll->flags & FOLL_WRITE) && foll->allow_=
+write_mapping;
+> > > > +
+> > > >       /* map read fault as writable if possible */
+> > > > -     if (unlikely(!write_fault) && writable) {
+> > > > +     if (unlikely(!foll->writable) && foll->allow_write_mapping) {
+> > >
+> > > I guess !foll->writable should be !(foll->flags & FOLL_WRITE) here.
+> >
+> > The two statements are logically equivalent, although I guess using
+> > !(foll->flags & FOLL_WRITE) may be a little clearer, if a little more
+> > verbose.
 >
->   * num_entries() -> num_core_entries()
->
-> James Clark (2):
->   perf test: Fix event parsing test on Arm
->   perf test: Fix event parsing test when PERF_PMU_CAP_EXTENDED_HW_TYPE
->     isn't supported.
+> Well, as the comment says, we wanna try to map the read fault as writable
+> whenever possible. And __gfn_to_pfn_memslot() will only set the FOLL_WRIT=
+E
+> for write faults. So I guess using !foll->writable will not allow this.
+> Did I miss anything?
 
-Applied to perf-tools-next, thanks!
+We just set the foll->writable out parameter to be equal to
+((foll->flags & FOLL_WRITE) && foll->allow_write_mapping). Taking a =3D
+foll->flags & FOLL_WRITE and b =3D foll->allow_write_mapping, we have
+!(a && b) && b -> (!a || !b) && b -> (!a && b) || (!b && b) -> !a &&
+b.
+
+-David
