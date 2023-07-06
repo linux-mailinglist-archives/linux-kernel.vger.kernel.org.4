@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73099749B87
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CF8749B8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbjGFMQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S232758AbjGFMQU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 08:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjGFMQF (ORCPT
+        with ESMTP id S232482AbjGFMQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:16:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A25171A;
-        Thu,  6 Jul 2023 05:16:04 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366AbvCt021882;
-        Thu, 6 Jul 2023 12:15:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=GcBIT0sS7MrSeyjv3sE6TIt3m0HTmwbA2u/pvCo3jIo=;
- b=L6aUxjbvJVWcvwGNn4JdOQ0tm1YcQXaJRBZ7pXl3jydat39ar8+hnJ7SPFZqWZH3sM1t
- z+BD9UD0liRDoSEIN1Aj+7H2SJbysHDAA2lp/SiLMUa+yZNf61+fFnFoyhM3x/aqw4qs
- s32FBXCzwcwGMmF0yVtw4/1RrjyPA7Z2DcRO1OLdJpPwhCS7p2Z1ssZsxOsa/sBrC9jw
- JfFItp+pz2XBjqc8n0JJeBcxKfSXgkr4o8GJSpj+1wpQZS0tP1Jzab02v1/h1im1vgJ8
- 3NM1IaC1YfmsoOVjH5Cpw4F+W1NYw3Pe/HvW62EvsNQmLCzKg4p8o2wPIqw5y33Gt4i/ 2Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnsu70d5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 12:15:57 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366CFuPp010670
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 12:15:56 GMT
-Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 05:15:51 -0700
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh@kernel.org>, <mani@kernel.org>,
-        <lpieralisi@kernel.org>, <bhelgaas@google.com>, <kw@linux.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <quic_srichara@quicinc.com>
-CC:     <stable@vger.kernel.org>
-Subject: [PATCH V3] PCI: qcom: Fix broken pcie bring up for 2_3_3 configs ops
-Date:   Thu, 6 Jul 2023 17:45:37 +0530
-Message-ID: <20230706121537.3129617-1-quic_srichara@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jul 2023 08:16:13 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F261BC9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:16:11 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-56fff21c2ebso7537597b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:16:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688645771; x=1691237771;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tzl2SvwgN5dAVGpY419AzobIOEk8FC71RqlBpVF0wLs=;
+        b=ivPdjnPvnwNuTHBpODUBzAKHTQ6Donjm2JSPcGZnWL/jbB5ByugsyV4sEVyDdg7CQn
+         poaQG1MgIUCpiKU7p0NLME9C6Tgvhu3kJY14Za2PbvacrEn5/O+wuyKZT8CR1d/zdR+e
+         ttkKCljBlCi2NLTskN0wV5K86EQ07uiTbc7a5NkaVzLz6097xekPSPgMLiK8B8rRQ585
+         zAqO+nu6UF+1SG1RRztUAxAe5W6U3RW4ABf2c3Fc+EHlKh18zgqgNlwNA0OJyvoqFVJC
+         jL64HzpLvzdqGQDD2iA+MV6yS4xGwMFXohNLdq90NLFOFW/xThxuyhqRF0Nnv+0TVjTm
+         Dpaw==
+X-Gm-Message-State: ABy/qLZUgF+7HsEldEts5d/EQUuJMdwg1bmiOkJWWBfM3G82zMEe5EEL
+        7DD4CWx7ASy8tFvlsKsWj7R8O73cK/3vZw==
+X-Google-Smtp-Source: APBJJlGoxdollN9cdG6vKFkiwu8SZWGU5uBq9xEtg+4yNgr01rf0Ry3gj+dWOjus0tLJdFMGEnPePA==
+X-Received: by 2002:a25:3253:0:b0:c68:e302:c906 with SMTP id y80-20020a253253000000b00c68e302c906mr1096263yby.21.1688645770986;
+        Thu, 06 Jul 2023 05:16:10 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id c12-20020a5b014c000000b00c624de0d9absm281119ybp.5.2023.07.06.05.16.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 05:16:09 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-c5e76dfcc36so652399276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:16:09 -0700 (PDT)
+X-Received: by 2002:a25:c050:0:b0:bc4:515e:cb0f with SMTP id
+ c77-20020a25c050000000b00bc4515ecb0fmr1494840ybf.1.1688645769466; Thu, 06 Jul
+ 2023 05:16:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: V_WrC91rPDWp0UVredRq6u4fr3iOmPoI
-X-Proofpoint-ORIG-GUID: V_WrC91rPDWp0UVredRq6u4fr3iOmPoI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_07,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- adultscore=0 bulkscore=0 clxscore=1011 priorityscore=1501 suspectscore=0
- spamscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307060109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1688643442.git.geert@linux-m68k.org> <cafd878747e7951914a7d9fea33788a4a230d1f0.1688643442.git.geert@linux-m68k.org>
+ <bd265a83-ca5e-4196-936e-0f753ea47a25@sirena.org.uk>
+In-Reply-To: <bd265a83-ca5e-4196-936e-0f753ea47a25@sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 6 Jul 2023 14:15:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUc-6ga7G5xuXXcKXU0ya3XBBM-tEJ3tZ-BY-oa+wozsQ@mail.gmail.com>
+Message-ID: <CAMuHMdUc-6ga7G5xuXXcKXU0ya3XBBM-tEJ3tZ-BY-oa+wozsQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ASoC: codecs: SND_SOC_WCD934X should select REGMAP_IRQ
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Benjamin Gray <bgray@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro is used for IPQ8074
-2_3_3 post_init ops. PCIe slave addr size was initially set
-to 0x358, but was wrongly changed to 0x168 as a part of
+Hi Mark,
 
-commit 39171b33f652 ("PCI: qcom: Remove PCIE20_ prefix from
-register definitions"). Fixing it, by using the right macro
-PARF_SLV_ADDR_SPACE_SIZE and removing the unused
-PARF_SLV_ADDR_SPACE_SIZE_2_3_3.
+On Thu, Jul 6, 2023 at 2:09 PM Mark Brown <broonie@kernel.org> wrote:
+> On Thu, Jul 06, 2023 at 01:42:04PM +0200, Geert Uytterhoeven wrote:
+> > If CONFIG_SND_SOC_WCD934X=y, CONFIG_COMPILE_TEST=y,
+> > CONFIG_MFD_WCD934X=n, CONFIG_REGMAP_IRQ=n:
+>
+> There appears to be at best a marginal relationship between this and the
+> rest of the series, please don't group things needlessly like this, it
+> just creates spurious dependencies which complicates getting things
+> merged.
 
-Without this pcie bring up on IPQ8074 is broken now.
+Well, unless you have CONFIG_REGMAP=y due to some other reason, you
+won't reach the mentioned link error without applying [PATCH 2/3] first.
 
-Fixes: 39171b33f652 ("PCI: qcom: Remove PCIE20_ prefix from register definitions")
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
----
- [v3] Added reviewed-by tag, fixed subject, commit text
+It doesn't hurt to apply this patch independently, though.
+Do you want me to resend it (to your sound-persona) as a separate patch?
 
- drivers/pci/controller/dwc/pcie-qcom.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks!
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 4ab30892f6ef..8418894b3de7 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -43,7 +43,6 @@
- #define PARF_PHY_REFCLK				0x4c
- #define PARF_CONFIG_BITS			0x50
- #define PARF_DBI_BASE_ADDR			0x168
--#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
- #define PARF_MHI_CLOCK_RESET_CTRL		0x174
- #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
- #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
-@@ -810,8 +809,7 @@ static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
- 	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
- 	u32 val;
- 
--	writel(SLV_ADDR_SPACE_SZ,
--		pcie->parf + PARF_SLV_ADDR_SPACE_SIZE_2_3_3);
-+	writel(SLV_ADDR_SPACE_SZ, pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
- 
- 	val = readl(pcie->parf + PARF_PHY_CTRL);
- 	val &= ~PHY_TEST_PWR_DOWN;
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
