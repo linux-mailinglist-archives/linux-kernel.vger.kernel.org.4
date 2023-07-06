@@ -2,108 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1658A749DCD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F52F749DD2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjGFNdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S231833AbjGFNeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjGFNdj (ORCPT
+        with ESMTP id S229555AbjGFNeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:33:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FDA102
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688650418; x=1720186418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VQYAGOy4mHGCVmcTL61GMJ4UBsZ5/jjfANV8gUIZHI4=;
-  b=HGVE1GFqb0EGzUFYP+c4zr8Mbj9+2v1js8CpSGoDxax0K7L4/MLnZE4P
-   2/IEpBkWpa014wNxCUJOlx5eQa80MWV2nkAveIGqwJR3jcNCzsjRdj4Xz
-   WPvDbZMdJn0w++q5gZ44vXulQWM9PD+SaBxiIn+RDXbI9KGgJkfBfYiQ3
-   rpcyixpFAT3W6/TW4FumYRn01RYxF1CrNhZfN3sqblO6OVtWzB+oCpeM/
-   TGNgzLyToKeZ+2Vdj0cZcPS8JNcPlBZqBrC3SAKf9AO9PKrvyS9mHyL5i
-   OzzXwDOkY6BHlzKQNusOdSGxD9h9odMueqCRkshgyzyxx950U+Ars1HpY
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="asc'?scan'208";a="219183784"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2023 06:33:37 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 6 Jul 2023 06:33:35 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 6 Jul 2023 06:33:32 -0700
-Date:   Thu, 6 Jul 2023 14:33:02 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Ortiz <sameo@rivosinc.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Subject: Re: [PATCH v2 3/3] RISC-V: Implement archrandom when Zkr is available
-Message-ID: <20230706-putdown-unedited-012eafe854f6@wendy>
-References: <20230628131442.3022772-1-sameo@rivosinc.com>
- <20230628131442.3022772-4-sameo@rivosinc.com>
+        Thu, 6 Jul 2023 09:34:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D83E1;
+        Thu,  6 Jul 2023 06:34:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 795831F85D;
+        Thu,  6 Jul 2023 13:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688650441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/9eJ3Erdx8B4G76ayrt3zb+T19QpIXYKBh0mLA4FckM=;
+        b=0J6QoB9neeT7C5+95HyIWdM3cTvtQb9xBA/Ckga/9DoJObolH6Q2hJFJ2ItZ1b/t3tpFKf
+        N+LVs9E0uwrWngI63LLg3UAToNlXVgPAG13DAyYuQzFde/k8bcVorLwS1ZaR1gUB8cshm9
+        ib05b/igMDuG1K1zAfroDK64qXJvw9A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688650441;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/9eJ3Erdx8B4G76ayrt3zb+T19QpIXYKBh0mLA4FckM=;
+        b=13KnK50BomFMMW2DNaowZJNU/B3aLhNTuQTETIMHICarY0gGQM/RL4Isc5NdoQKOclDHLm
+        PkEDM90nH7BZWgDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A0E1138EE;
+        Thu,  6 Jul 2023 13:34:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gHTWGcnCpmTwWQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 13:34:01 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 0006BA0707; Thu,  6 Jul 2023 15:34:00 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 15:34:00 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org
+Subject: Re: [PATCH v2 57/92] nfs: convert to ctime accessor functions
+Message-ID: <20230706133400.esyj5hebcly23qiq@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-55-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jHRuTEvE7B4wrY25"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628131442.3022772-4-sameo@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230705190309.579783-55-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---jHRuTEvE7B4wrY25
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed 05-07-23 15:01:22, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-On Wed, Jun 28, 2023 at 03:14:35PM +0200, Samuel Ortiz wrote:
-> The Zkr extension is ratified and provides 16 bits of entropy seed when
-> reading the SEED CSR.
->=20
-> We can implement arch_get_random_seed_longs() by doing multiple csrrw to
-> that CSR and filling an unsigned long with valid entropy bits.
->=20
-> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+Looks good. Feel free to add:
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Cheers,
-Conor.
+								Honza
 
---jHRuTEvE7B4wrY25
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKbCjgAKCRB4tDGHoIJi
-0rUUAQD2SibyQT5ig13MedvYPovD5MwTLc3X3FPiCRKhEyiGNgEAxh2SNdG5Av37
-RK24M0lgtLEsw/YArvcqo8AUYAdAIA8=
-=Pwkn
------END PGP SIGNATURE-----
-
---jHRuTEvE7B4wrY25--
+> ---
+>  fs/nfs/callback_proc.c |  2 +-
+>  fs/nfs/fscache.h       |  4 ++--
+>  fs/nfs/inode.c         | 20 ++++++++++----------
+>  3 files changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+> index c1eda73254e1..6bed1394d748 100644
+> --- a/fs/nfs/callback_proc.c
+> +++ b/fs/nfs/callback_proc.c
+> @@ -59,7 +59,7 @@ __be32 nfs4_callback_getattr(void *argp, void *resp,
+>  	res->change_attr = delegation->change_attr;
+>  	if (nfs_have_writebacks(inode))
+>  		res->change_attr++;
+> -	res->ctime = inode->i_ctime;
+> +	res->ctime = inode_get_ctime(inode);
+>  	res->mtime = inode->i_mtime;
+>  	res->bitmap[0] = (FATTR4_WORD0_CHANGE|FATTR4_WORD0_SIZE) &
+>  		args->bitmap[0];
+> diff --git a/fs/nfs/fscache.h b/fs/nfs/fscache.h
+> index e1706e736c64..2dc64454492b 100644
+> --- a/fs/nfs/fscache.h
+> +++ b/fs/nfs/fscache.h
+> @@ -116,8 +116,8 @@ static inline void nfs_fscache_update_auxdata(struct nfs_fscache_inode_auxdata *
+>  	memset(auxdata, 0, sizeof(*auxdata));
+>  	auxdata->mtime_sec  = inode->i_mtime.tv_sec;
+>  	auxdata->mtime_nsec = inode->i_mtime.tv_nsec;
+> -	auxdata->ctime_sec  = inode->i_ctime.tv_sec;
+> -	auxdata->ctime_nsec = inode->i_ctime.tv_nsec;
+> +	auxdata->ctime_sec  = inode_get_ctime(inode).tv_sec;
+> +	auxdata->ctime_nsec = inode_get_ctime(inode).tv_nsec;
+>  
+>  	if (NFS_SERVER(inode)->nfs_client->rpc_ops->version == 4)
+>  		auxdata->change_attr = inode_peek_iversion_raw(inode);
+> diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+> index 8172dd4135a1..1283fdfa4b0a 100644
+> --- a/fs/nfs/inode.c
+> +++ b/fs/nfs/inode.c
+> @@ -514,7 +514,7 @@ nfs_fhget(struct super_block *sb, struct nfs_fh *fh, struct nfs_fattr *fattr)
+>  
+>  		memset(&inode->i_atime, 0, sizeof(inode->i_atime));
+>  		memset(&inode->i_mtime, 0, sizeof(inode->i_mtime));
+> -		memset(&inode->i_ctime, 0, sizeof(inode->i_ctime));
+> +		inode_set_ctime(inode, 0, 0);
+>  		inode_set_iversion_raw(inode, 0);
+>  		inode->i_size = 0;
+>  		clear_nlink(inode);
+> @@ -535,7 +535,7 @@ nfs_fhget(struct super_block *sb, struct nfs_fh *fh, struct nfs_fattr *fattr)
+>  		else if (fattr_supported & NFS_ATTR_FATTR_MTIME)
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_MTIME);
+>  		if (fattr->valid & NFS_ATTR_FATTR_CTIME)
+> -			inode->i_ctime = fattr->ctime;
+> +			inode_set_ctime_to_ts(inode, fattr->ctime);
+>  		else if (fattr_supported & NFS_ATTR_FATTR_CTIME)
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_CTIME);
+>  		if (fattr->valid & NFS_ATTR_FATTR_CHANGE)
+> @@ -731,7 +731,7 @@ void nfs_setattr_update_inode(struct inode *inode, struct iattr *attr,
+>  		if ((attr->ia_valid & ATTR_GID) != 0)
+>  			inode->i_gid = attr->ia_gid;
+>  		if (fattr->valid & NFS_ATTR_FATTR_CTIME)
+> -			inode->i_ctime = fattr->ctime;
+> +			inode_set_ctime_to_ts(inode, fattr->ctime);
+>  		else
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_CHANGE
+>  					| NFS_INO_INVALID_CTIME);
+> @@ -749,7 +749,7 @@ void nfs_setattr_update_inode(struct inode *inode, struct iattr *attr,
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_ATIME);
+>  
+>  		if (fattr->valid & NFS_ATTR_FATTR_CTIME)
+> -			inode->i_ctime = fattr->ctime;
+> +			inode_set_ctime_to_ts(inode, fattr->ctime);
+>  		else
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_CHANGE
+>  					| NFS_INO_INVALID_CTIME);
+> @@ -765,7 +765,7 @@ void nfs_setattr_update_inode(struct inode *inode, struct iattr *attr,
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_MTIME);
+>  
+>  		if (fattr->valid & NFS_ATTR_FATTR_CTIME)
+> -			inode->i_ctime = fattr->ctime;
+> +			inode_set_ctime_to_ts(inode, fattr->ctime);
+>  		else
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_CHANGE
+>  					| NFS_INO_INVALID_CTIME);
+> @@ -1444,11 +1444,11 @@ static void nfs_wcc_update_inode(struct inode *inode, struct nfs_fattr *fattr)
+>  			nfs_set_cache_invalid(inode, NFS_INO_INVALID_XATTR);
+>  	}
+>  	/* If we have atomic WCC data, we may update some attributes */
+> -	ts = inode->i_ctime;
+> +	ts = inode_get_ctime(inode);
+>  	if ((fattr->valid & NFS_ATTR_FATTR_PRECTIME)
+>  			&& (fattr->valid & NFS_ATTR_FATTR_CTIME)
+>  			&& timespec64_equal(&ts, &fattr->pre_ctime)) {
+> -		inode->i_ctime = fattr->ctime;
+> +		inode_set_ctime_to_ts(inode, fattr->ctime);
+>  	}
+>  
+>  	ts = inode->i_mtime;
+> @@ -1510,7 +1510,7 @@ static int nfs_check_inode_attributes(struct inode *inode, struct nfs_fattr *fat
+>  		if ((fattr->valid & NFS_ATTR_FATTR_MTIME) && !timespec64_equal(&ts, &fattr->mtime))
+>  			invalid |= NFS_INO_INVALID_MTIME;
+>  
+> -		ts = inode->i_ctime;
+> +		ts = inode_get_ctime(inode);
+>  		if ((fattr->valid & NFS_ATTR_FATTR_CTIME) && !timespec64_equal(&ts, &fattr->ctime))
+>  			invalid |= NFS_INO_INVALID_CTIME;
+>  
+> @@ -1997,7 +1997,7 @@ int nfs_post_op_update_inode_force_wcc_locked(struct inode *inode, struct nfs_fa
+>  	}
+>  	if ((fattr->valid & NFS_ATTR_FATTR_CTIME) != 0 &&
+>  			(fattr->valid & NFS_ATTR_FATTR_PRECTIME) == 0) {
+> -		fattr->pre_ctime = inode->i_ctime;
+> +		fattr->pre_ctime = inode_get_ctime(inode);
+>  		fattr->valid |= NFS_ATTR_FATTR_PRECTIME;
+>  	}
+>  	if ((fattr->valid & NFS_ATTR_FATTR_MTIME) != 0 &&
+> @@ -2190,7 +2190,7 @@ static int nfs_update_inode(struct inode *inode, struct nfs_fattr *fattr)
+>  			save_cache_validity & NFS_INO_INVALID_MTIME;
+>  
+>  	if (fattr->valid & NFS_ATTR_FATTR_CTIME)
+> -		inode->i_ctime = fattr->ctime;
+> +		inode_set_ctime_to_ts(inode, fattr->ctime);
+>  	else if (fattr_supported & NFS_ATTR_FATTR_CTIME)
+>  		nfsi->cache_validity |=
+>  			save_cache_validity & NFS_INO_INVALID_CTIME;
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
