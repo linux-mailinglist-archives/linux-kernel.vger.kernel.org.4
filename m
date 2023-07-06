@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41E97499BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA14974999F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjGFKtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S231346AbjGFKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjGFKs7 (ORCPT
+        with ESMTP id S229509AbjGFKny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:48:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787EE1BEF;
-        Thu,  6 Jul 2023 03:48:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C5F9120527;
-        Thu,  6 Jul 2023 10:48:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688640535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6IQse9Ci+6BuJu92+Tlb4VQ/loHLj6fZX2PSRhDLRfs=;
-        b=rPiQO52hmp/q6FguwE88lYtcvI1sL9Nta/vMBo2Oc9eISn+vWsTbL+XMOe9N9SofDdiygZ
-        w01dH8jLKkkuJzfkC8VKGtLq2cF7LyWshdb5oTTTcyFiqhyo3+N9sUGodHZuUYMq6Ho8MR
-        rklpliiQDVjGRVnJqnnY8DbYjLM8txc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688640535;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6IQse9Ci+6BuJu92+Tlb4VQ/loHLj6fZX2PSRhDLRfs=;
-        b=4IBVpZARJrETGFFUgtTFeYGsq3n4Y0+wJgPKohJ7VUGz4fmN2NSPLil1ZsPhVcHnNYxSmF
-        yDcG2dfMZuiSRYCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 88862138EE;
-        Thu,  6 Jul 2023 10:48:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6Bh1IBecpmSDAQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 06 Jul 2023 10:48:55 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     javierm@redhat.com, suijingfeng@loongson.cn, arnd@arndb.de
-Cc:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>
-Subject: [PATCH v2 4/4] staging/sm750fb: Do not include <linux/screen_info.h>
-Date:   Thu,  6 Jul 2023 12:42:17 +0200
-Message-ID: <20230706104852.27451-5-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230706104852.27451-1-tzimmermann@suse.de>
-References: <20230706104852.27451-1-tzimmermann@suse.de>
+        Thu, 6 Jul 2023 06:43:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6F1171A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:43:53 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9939fbb7191so102712266b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688640232; x=1691232232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZlDMTzsKNMidmUdvGl8KWau1B0O61dJBW9y0FhLiN4c=;
+        b=CntR0Z4AQaH70ULKuK4ws5fg8VwI6RkXvH/jM/35U1758RZQOBz+3Kj2dJumsRIIZq
+         /n/z4sW9I+ya/u39JaJgdfMEJqKWc7OCC8ooMwwtu/ucwdQuMGXL0dNGPCevGWrIzmgY
+         v+ijlbpPBxIzFnH9l96i7ph4AFFRwAYZM1oyVRPnhqiFAvSyDMwk6qSVvw5mnqnwfizv
+         4AgHNEaelytnFYwKpJH35pRLjuKDRGSqIsg5lhrLdhmbQsI9vVepSJEr5SK2b6DqbgtC
+         56joC4SU4gKbmuIPUDk99o8/oVl0WLk+INUffmsJtyJXnhqDA20IiGlvOodjxo+9Aj0q
+         oEwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688640232; x=1691232232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZlDMTzsKNMidmUdvGl8KWau1B0O61dJBW9y0FhLiN4c=;
+        b=SPfcC/6sFSQHSO+FrYt5BM1uzTpyPKL7TIxKsPcGoNt1FGeUKr8HjYMXFvlxTUX1mR
+         sLMP3Gv2IOaFifAMwQp8INAjNWYHRL/npoMrAw/iTmxtt0ofa3twznUqZGfQZqFccRKI
+         v2cRXEyXclFQ68jzp7ddB/PncKmy+TPEbHCMysgbGdhnMO6KRkK27vl2RHKT3wjtHWn1
+         xJ9whzFHYwatNdnpvzwE7eWY8K4L4E+dFJ2jjGaBBVB7RoGCDdyzENnL4+Tx+zq49L5d
+         txLA/VP1XpBS+fwGuGRKjluMj96MVJ6vQ3WGVArD36qGAqSvwzHqlAHYXk0AFX/2UZGJ
+         9ajg==
+X-Gm-Message-State: ABy/qLY84RyjAlUEI5GMNjnUvkuryB0/3cC/0Oh4pmEZGEOCd9/98YWq
+        6WXio71n2x9mKmjF/8H3KcmIwg==
+X-Google-Smtp-Source: APBJJlGj3/9m6yl/nRf0ABw8E5K1spIchFLi90TK/GD98lFspv/f0NtTveCxXYHXGF3dtw3kBg2V3Q==
+X-Received: by 2002:a17:906:6a1b:b0:98f:450e:fc20 with SMTP id qw27-20020a1709066a1b00b0098f450efc20mr4598238ejc.17.1688640231840;
+        Thu, 06 Jul 2023 03:43:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id pv11-20020a170907208b00b0098e2969ed44sm633935ejb.45.2023.07.06.03.43.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 03:43:51 -0700 (PDT)
+Message-ID: <97f2bcd7-cf78-d4e6-7c5f-672ec8d4d2c5@linaro.org>
+Date:   Thu, 6 Jul 2023 12:43:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 0/2] Update PD Macros
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
+References: <1688635428-25127-1-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1688635428-25127-1-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sm750fb driver does not need anything from <linux/screen_info.h>.
-Remove the include statements.
+On 06/07/2023 11:23, Rohit Agarwal wrote:
+> Hi,
+> 
+> This series updates the PD macros for the Qualcomm chipsets
+> in the devicetree files based on [1].
+> 
+> [1] https://lore.kernel.org/all/1688635218-23779-1-git-send-email-quic_rohiagar@quicinc.com/
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Teddy Wang <teddy.wang@siliconmotion.com>
----
- drivers/staging/sm750fb/sm750.c        | 1 -
- drivers/staging/sm750fb/sm750_accel.c  | 1 -
- drivers/staging/sm750fb/sm750_cursor.c | 1 -
- drivers/staging/sm750fb/sm750_hw.c     | 1 -
- 4 files changed, 4 deletions(-)
+You need to clearly mark dependencies also in other patchset, otherwise
+this is unmerge'able. Specifically, the header changes should go with
+DTS branch, so you need to give proper hint to Bjorn about that.
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index 55e302a27847..c260f73cf570 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -14,7 +14,6 @@
- #include <linux/mm_types.h>
- #include <linux/vmalloc.h>
- #include <linux/pagemap.h>
--#include <linux/screen_info.h>
- #include <linux/console.h>
- 
- #include "sm750.h"
-diff --git a/drivers/staging/sm750fb/sm750_accel.c b/drivers/staging/sm750fb/sm750_accel.c
-index 24b9077a634a..44b9e3fe3a41 100644
---- a/drivers/staging/sm750fb/sm750_accel.c
-+++ b/drivers/staging/sm750fb/sm750_accel.c
-@@ -14,7 +14,6 @@
- #include <linux/pagemap.h>
- #include <linux/console.h>
- #include <linux/platform_device.h>
--#include <linux/screen_info.h>
- 
- #include "sm750.h"
- #include "sm750_accel.h"
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2551..eea4d1bd36ce 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -14,7 +14,6 @@
- #include <linux/pagemap.h>
- #include <linux/console.h>
- #include <linux/platform_device.h>
--#include <linux/screen_info.h>
- 
- #include "sm750.h"
- #include "sm750_cursor.h"
-diff --git a/drivers/staging/sm750fb/sm750_hw.c b/drivers/staging/sm750fb/sm750_hw.c
-index 55cb00e8b0d1..71247eaf26ee 100644
---- a/drivers/staging/sm750fb/sm750_hw.c
-+++ b/drivers/staging/sm750fb/sm750_hw.c
-@@ -17,7 +17,6 @@
- #include <asm/mtrr.h>
- #endif
- #include <linux/platform_device.h>
--#include <linux/screen_info.h>
- #include <linux/sizes.h>
- 
- #include "sm750.h"
--- 
-2.41.0
+Best regards,
+Krzysztof
 
