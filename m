@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1F774A106
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF69D74A107
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbjGFPak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S233779AbjGFPao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbjGFPai (ORCPT
+        with ESMTP id S233748AbjGFPak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:30:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559BC1BE8;
-        Thu,  6 Jul 2023 08:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wY5Dot1/zTMAJ+7vVNWs/yMvd7ZTGFOfgJeR2bahFjQ=; b=BTSyek31EkyyPudrxmynZoVthN
-        81KWr6uMtnlBbcKq8tTiT4/oN//7sPQ0IUO+/LCa93l+kiLgsCVrkBZe1tB0n7QFBCKuhIAvFK10p
-        n13Zryn1H3WWsvqTg7C7I7IJSTEs0sopsCb8K10HznqFkXscj+lpyQsaX37JCHieii+swEiwRnSWA
-        JHzgvaU73n1x7ULgjhfZVyOTFik7lvZ8l3ZUFHRoAxlUUy+d2nrIt96GfPJgBOXoHFSpkCP86iuU+
-        ALoVEjNSHGDfyGlACeQ0IsaYd24bkCCK3ClVrO+fwcVu/0F92ch134xa1t3tW2DKFQ7G03FUtfOkT
-        sOI9ztiw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHQw8-0020gL-0X;
-        Thu, 06 Jul 2023 15:30:28 +0000
-Date:   Thu, 6 Jul 2023 08:30:28 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [RFC PATCH 06/11] iov_iter: Use op_is_write() rather than
- iterator direction
-Message-ID: <ZKbeFNG5bF5HbcgT@infradead.org>
-References: <20230630152524.661208-1-dhowells@redhat.com>
- <20230630152524.661208-7-dhowells@redhat.com>
+        Thu, 6 Jul 2023 11:30:40 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA5F1BEB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:30:36 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:5979:7b6f:39a:b9cb])
+        by michel.telenet-ops.be with bizsmtp
+        id HrWZ2A00W45Xpxs06rWZ2S; Thu, 06 Jul 2023 17:30:34 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qHQw9-000g6y-2O;
+        Thu, 06 Jul 2023 17:30:33 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qHQwD-000qrS-DI;
+        Thu, 06 Jul 2023 17:30:33 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] drm/fbdev-dma: Fix documented default preferred_bpp value
+Date:   Thu,  6 Jul 2023 17:30:31 +0200
+Message-Id: <91f093ffe436a9f94d58fb2bfbc1407f1ebe8bb0.1688656591.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630152524.661208-7-dhowells@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 04:25:19PM +0100, David Howells wrote:
-> If a request struct is available, use op_is_write() instead of the iterator
-> direction.
+As of commit 6c80a93be62d398e ("drm/fb-helper: Initialize fb-helper's
+preferred BPP in prepare function"), the preferred_bpp parameter of
+drm_fb_helper_prepare() defaults to 32 instead of
+drm_mode_config.preferred_depth.  Hence this also applies to
+drm_fbdev_dma_setup(), which just passes its own preferred_bpp
+parameter.
 
-s/iov_iter/block/ in the subject.
+Fixes: b79fe9abd58bab73 ("drm/fbdev-dma: Implement fbdev emulation for GEM DMA helpers")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/gpu/drm/drm_fbdev_dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_fbdev_dma.c b/drivers/gpu/drm/drm_fbdev_dma.c
+index d86773fa8ab00f49..76aa52b38a13ed63 100644
+--- a/drivers/gpu/drm/drm_fbdev_dma.c
++++ b/drivers/gpu/drm/drm_fbdev_dma.c
+@@ -217,7 +217,7 @@ static const struct drm_client_funcs drm_fbdev_dma_client_funcs = {
+  * drm_fbdev_dma_setup() - Setup fbdev emulation for GEM DMA helpers
+  * @dev: DRM device
+  * @preferred_bpp: Preferred bits per pixel for the device.
+- *                 @dev->mode_config.preferred_depth is used if this is zero.
++ *                 32 is used if this is zero.
+  *
+  * This function sets up fbdev emulation for GEM DMA drivers that support
+  * dumb buffers with a virtual address and that can be mmap'ed.
+-- 
+2.34.1
 
