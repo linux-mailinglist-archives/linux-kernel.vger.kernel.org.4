@@ -2,112 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4377574A24F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9589B74A255
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjGFQjM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 12:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S231781AbjGFQja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjGFQjL (ORCPT
+        with ESMTP id S231675AbjGFQjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:39:11 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4251730;
-        Thu,  6 Jul 2023 09:39:09 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qHS0P-001GI4-MW; Thu, 06 Jul 2023 18:38:57 +0200
-Received: from p57bd990e.dip0.t-ipconnect.de ([87.189.153.14] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qHS0P-000n6b-Ew; Thu, 06 Jul 2023 18:38:57 +0200
-Message-ID: <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 06 Jul 2023 18:38:55 +0200
-In-Reply-To: <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
-         <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
+        Thu, 6 Jul 2023 12:39:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB71BD4;
+        Thu,  6 Jul 2023 09:39:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 817B660F4F;
+        Thu,  6 Jul 2023 16:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5B4C433C8;
+        Thu,  6 Jul 2023 16:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688661556;
+        bh=h0OgFh+n1mPvFs2BQeBGKqCup9+gz5oIEYrZdP/kZ1I=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=R0xErIoJDEDCPvtj6yutBpmBjH5+sNN2DTcaezc0n9WR9TmEy1Nr2SEjJS8AccSd3
+         25C6dIotYWq8C5oJ9XdKjIpstBZeJWrrI9E27qO7jpwLOi76bYLKoIyXlH2wfstEMQ
+         tPDpcvtxi4PytZqu0bwUna2NlsoyPW4LBUJOY/NsN0hai4AjwHDjPZzylD8bgAPtdb
+         Cwl4u1kw+cVOCyrTxYlUiTtFJt//p8FjGirDXyUgy4nS8jwMLqoMNQN/rB22Oc6zG4
+         gH6et2pDl9nnxtn2MeaAt2F24E81hxy8q8zy8E74z/IjrpOLVV0NQ5YhU+0Jter5Dd
+         vcGyaW6m9hrYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6BCE5CE3BFC; Thu,  6 Jul 2023 09:39:16 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 09:39:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
+ infrastructure
+Message-ID: <4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230705181256.3539027-1-vschneid@redhat.com>
+ <20230705181256.3539027-12-vschneid@redhat.com>
+ <ZKXtfWZiM66dK5xC@localhost.localdomain>
+ <xhsmhttuhuvix.mognet@vschneid.remote.csb>
+ <ZKaoHrm0Fejb7kAl@lothringen>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.14
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKaoHrm0Fejb7kAl@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
-
-On Thu, 2023-07-06 at 17:39 +0200, Geert Uytterhoeven wrote:
-> Which sh4 platforms in particular?
+On Thu, Jul 06, 2023 at 01:40:14PM +0200, Frederic Weisbecker wrote:
+> On Thu, Jul 06, 2023 at 12:30:46PM +0100, Valentin Schneider wrote:
+> > >> +		ret = atomic_try_cmpxchg(&ct->work, &old_work, old_work | work);
+> > >> +
+> > >> +	preempt_enable();
+> > >> +	return ret;
+> > >> +}
+> > > [...]
+> > >> @@ -100,14 +158,19 @@ static noinstr void ct_kernel_exit_state(int offset)
+> > >>   */
+> > >>  static noinstr void ct_kernel_enter_state(int offset)
+> > >>  {
+> > >> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+> > >>      int seq;
+> > >> +	unsigned int work;
+> > >>
+> > >> +	work = ct_work_fetch(ct);
+> > >
+> > > So this adds another fully ordered operation on user <-> kernel transition.
+> > > How many such IPIs can we expect?
+> > >
+> > 
+> > Despite having spent quite a lot of time on that question, I think I still
+> > only have a hunch.
+> > 
+> > Poking around RHEL systems, I'd say 99% of the problematic IPIs are
+> > instruction patching and TLB flushes.
+> > 
+> > Staring at the code, there's quite a lot of smp_calls for which it's hard
+> > to say whether the target CPUs can actually be isolated or not (e.g. the
+> > CPU comes from a cpumask shoved in a struct that was built using data from
+> > another struct of uncertain origins), but then again some of them don't
+> > need to hook into context_tracking.
+> > 
+> > Long story short: I /think/ we can consider that number to be fairly small,
+> > but there could be more lurking in the shadows.
 > 
-> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
-> (physical) two days ago.
+> I guess it will still be time to reconsider the design if we ever reach such size.
+> 
+> > > If this is just about a dozen, can we stuff them in the state like in the
+> > > following? We can potentially add more of them especially on 64 bits we could
+> > > afford 30 different works, this is just shrinking the RCU extended quiescent
+> > > state counter space. Worst case that can happen is that RCU misses 65535
+> > > idle/user <-> kernel transitions and delays a grace period...
+> > >
+> > 
+> > I'm trying to grok how this impacts RCU, IIUC most of RCU mostly cares about the
+> > even/odd-ness of the thing, and rcu_gp_fqs() cares about the actual value
+> > but only to check if it has changed over time (rcu_dynticks_in_eqs_since()
+> > only does a !=).
+> > 
+> > I'm rephrasing here to make sure I get it - is it then that the worst case
+> > here is 2^(dynticks_counter_size) transitions happen between saving the
+> > dynticks snapshot and checking it again, so RCU waits some more?
+> 
+> That's my understanding as well but I have to defer on Paul to make sure I'm
+> not overlooking something.
 
-I gave it a try with the command line Guenter suggested and indeed the kernel locks
-up right here with the patch applied and boots fine without it:
+That does look plausible to me.
 
-Creating 4 MTD partitions on "physmap-flash":
-0x000000000000-0x000000040000 : "U-Boot"
-0x000000040000-0x000000080000 : "Environment"
-0x000000080000-0x000000240000 : "Kernel"
-0x000000240000-0x000001000000 : "Flash_FS"
-8139too: 8139too Fast Ethernet driver 0.9.28
-8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
-sm501-usb sm501-usb: SM501 OHCI
-sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
-sm501-usb sm501-usb: irq 116, io mem 0x13e40000
-usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.04
-usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb1: Product: SM501 OHCI
-usb usb1: Manufacturer: Linux 6.4.0-12069-gc17414a273b8 ohci_hcd
-usb usb1: SerialNumber: sm501-usb
-hub 1-0:1.0: USB hub found
-hub 1-0:1.0: 2 ports detected
-usbcore: registered new interface driver usb-storage
-rtc-r9701 spi0.0: cannot read RTC register
-usbcore: registered new interface driver usbhid
-usbhid: USB HID core driver
-NET: Registered PF_PACKET protocol family
-heartbeat: version 0.1.2 loaded
-ata1: found unknown device (class 0)
-(stops here)
+And yes, RCU really cares about whether its part of this counter has
+been a multiple of two during a given interval of time, because this
+indicates that the CPU has no pre-existing RCU readers still active.
+One way that this can happen is for that value to be a multiple of two
+at some point in time.  The other way that this can happen is for the
+value to have changed.  No matter what the start and end values, if they
+are different, the counter must necessarily have at least passed through
+multiple of two in the meantime, again guaranteeing that any RCU readers
+that around when the count was first fetched have now finished.
 
-Using rts7751r2dplus_defconfig and the following command line:
+But we should take the machine's opinions much more seriously than we
+take any of our own opinions.  Why not adjust RCU_DYNTICKS_IDX so as
+to crank RCU's portion of this counter down to (say) two or three bits
+and let rcutorture have at it on TREE04 or TREE07, both of which have
+nohz_full CPUs?
 
-qemu-system-sh4 -M r2d -kernel vmlinuz-6.5-rc1 -hda debian_sid_sh4_standard.qcow2 -no-reboot -device rtl8139,netdev=net0 -netdev user,id=net0 -append "root=/dev/sda1 console=ttySC1,115200
-earlycon=scif,mmio16,0xffe80000 noiotrap" -serial null -serial stdio -nographic -monitor null
+Maybe also adjust mkinitrd.sh to make the user/kernel transitions more
+frequent?
 
-And using this old qcow2 image:
+Please note that I do -not- recommend production use of a three-bit
+(let alone a two-bit) RCU portion because this has a high probability
+of excessively extending grace periods.  But it might be good to keep
+a tiny counter as a debug option so that we regularly rcutorture it.
 
-> https://people.debian.org/~aurel32/qemu/sh4/debian_sid_sh4_standard.qcow2
-
-Maybe it's a configuration issue if it works for you?
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+							Thanx, Paul
