@@ -2,137 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2D274A4CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9755A74A4D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjGFUVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 16:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
+        id S232673AbjGFUVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 16:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjGFUVW (ORCPT
+        with ESMTP id S229787AbjGFUVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 16:21:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED28AA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 13:21:20 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qHVTK-00079V-RD; Thu, 06 Jul 2023 22:21:02 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qHVTG-00Ca44-Ox; Thu, 06 Jul 2023 22:20:58 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qHVTG-002pmZ-02; Thu, 06 Jul 2023 22:20:58 +0200
-Date:   Thu, 6 Jul 2023 22:20:57 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     privatesub2@gmail.com, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, p.zabel@pengutronix.de,
-        cristian.ciocaltea@collabora.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/3] Add support for Allwinner PWM on D1/T113s/R329
- SoCs
-Message-ID: <20230706202057.k6rfwfhe3msfkrc4@pengutronix.de>
-References: <20230627082334.1253020-1-privatesub2@gmail.com>
- <mhng-0cca3d46-6031-4e8a-8e8f-2c479a20b95d@palmer-ri-x1c9a>
+        Thu, 6 Jul 2023 16:21:52 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3937E1996;
+        Thu,  6 Jul 2023 13:21:50 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id DC821209B4;
+        Thu,  6 Jul 2023 22:21:47 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 22:21:43 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH 2/2] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <ZKciVy4juK55OUrG@francesco-nb.int.toradex.com>
+References: <20230705195356.866774-1-jm@ti.com>
+ <20230705195356.866774-3-jm@ti.com>
+ <20230706-unstopped-skedaddle-7168f2b12189-mkl@pengutronix.de>
+ <0ba17779-9cd9-6cb2-a79c-6b14b73a42db@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bwmf3jgjaq2y6ndf"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-0cca3d46-6031-4e8a-8e8f-2c479a20b95d@palmer-ri-x1c9a>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0ba17779-9cd9-6cb2-a79c-6b14b73a42db@ti.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 06, 2023 at 10:20:59AM -0500, Judith Mendez wrote:
+> Hi Marc
+> 
+> On 7/6/23 2:25 AM, Marc Kleine-Budde wrote:
+> > On 05.07.2023 14:53:56, Judith Mendez wrote:
+> > > Introduce timer polling method to MCAN since some SoCs may not
+> > > have M_CAN interrupt routed to A53 Linux and do not have
+> > > interrupt property in device tree M_CAN node.
+> > > 
+> > > On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> > > routed to A53 Linux, instead they will use timer polling method.
+> > > 
+> > > Add an hrtimer to MCAN class device. Each MCAN will have its own
+> > > hrtimer instantiated if there is no hardware interrupt found in
+> > > device tree M_CAN node. The timer will generate a software
+> > > interrupt every 1 ms. In hrtimer callback, we check if there is
+> > > a transaction pending by reading a register, then process by
+> > > calling the isr if there is.
+> > > 
+> > > Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Toradex Verdin AM62
+> > > Reviewed-by: Tony Lindgren <tony@atomide.com>
+> > > Signed-off-by: Judith Mendez <jm@ti.com>
+> > > ---
 
---bwmf3jgjaq2y6ndf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-Hello,
+> > > diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+> > > index 94dc82644113..76d11ce38220 100644
+> > > --- a/drivers/net/can/m_can/m_can_platform.c
+> > > +++ b/drivers/net/can/m_can/m_can_platform.c
+> > > @@ -5,6 +5,7 @@
+> > >   //
+> > >   // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
+> > > +#include <linux/hrtimer.h>
+> > >   #include <linux/phy/phy.h>
+> > >   #include <linux/platform_device.h>
+> > > @@ -96,12 +97,28 @@ static int m_can_plat_probe(struct platform_device *pdev)
+> > >   		goto probe_fail;
+> > 
+> > Please set "irq" to 0 during declaration.
+> 
+> During declaration of irq, it is already set to 0:
+> 
+> int irq, ret = 0;
 
-On Thu, Jul 06, 2023 at 10:08:47AM -0700, Palmer Dabbelt wrote:
-> On Tue, 27 Jun 2023 01:23:23 PDT (-0700), privatesub2@gmail.com wrote:
-> > Hi,
-> >=20
-> > This series adds support for PWM controller on new
-> > Allwinner's SoCs, such as D1, T113s and R329. The implemented driver
-> > provides basic functionality for control PWM channels.
-> >=20
-> > v2:
-> >  - fix dt-bindings
-> >  - fix a remark in the driver
-> >=20
-> > v3:
-> >  - fix dt-bindings
-> >  - fix sunxi-d1s-t113.dtsi
-> >=20
-> > Aleksandr Shubin (3):
-> >   dt-bindings: pwm: Add binding for Allwinner D1/T113-S3/R329 PWM
-> >     controller
-> >   pwm: Add Allwinner's D1/T113-S3/R329 SoCs PWM support
-> >   riscv: dts: allwinner: d1: Add pwm node
-> >=20
-> >  .../bindings/pwm/allwinner,sun20i-pwm.yaml    |  86 +++++
-> >  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  11 +
-> >  drivers/pwm/Kconfig                           |  10 +
-> >  drivers/pwm/Makefile                          |   1 +
-> >  drivers/pwm/pwm-sun20i.c                      | 322 ++++++++++++++++++
-> >  5 files changed, 430 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/pwm/allwinner,sun=
-20i-pwm.yaml
-> >  create mode 100644 drivers/pwm/pwm-sun20i.c
->=20
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->=20
-> I'm not sure if this ended up somewhere, but I'm assuming it's not aimed =
-at
-> my tree.  LMK if you guys want me to pick it up, I'm dropping it from
-> patchwork.
+The initialization here applies only to ret.
 
-At least patch #2 should go via the pwm tree. It's on my list to review.
+int irq = 0, ret = 0;
 
-Best regards
-Uwe
+> > >   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
+> > > -	irq = platform_get_irq_byname(pdev, "int0");
+> > > -	if (IS_ERR(addr) || irq < 0) {
+> > > -		ret = -EINVAL;
+> > > +	if (IS_ERR(addr)) {
+> > > +		ret = PTR_ERR(addr);
+> > >   		goto probe_fail;
+> > >   	}
+> > > +	if (device_property_present(mcan_class->dev, "interrupts") ||
+> > > +	    device_property_present(mcan_class->dev, "interrupt-names")) {
+> > > +		irq = platform_get_irq_byname(pdev, "int0");
+> > > +		if (irq == -EPROBE_DEFER) {
+> > > +			ret = -EPROBE_DEFER;
+> > > +			goto probe_fail;
+> > > +		}
+> > > +		if (irq < 0) {
+> > > +			ret = -EINVAL;
+> > 
+> > Please return the original error value.
+> 
+> The original value returned is -EINVAL:
+> 
+> -	if (IS_ERR(addr) || irq < 0) {
+> -		ret = -EINVAL;
+> 
+> Perhaps I am missing something here?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+if (irq < 0) {
+	ret = irq;
+	...
+}
 
---bwmf3jgjaq2y6ndf
-Content-Type: application/pgp-signature; name="signature.asc"
+And you can also get rid of the explicit test for -EPROBE_DEFER this
+way simplifying the code.
 
------BEGIN PGP SIGNATURE-----
+Francesco
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSnIigACgkQj4D7WH0S
-/k6gIwgArBV+EKUdCW1iBFu0o7FWEVZpy0poxb9iDyJN0csWczfWqJw3UbnGdVrq
-l8Nt25eIW8lbOaL7Xl1hK49QCeuWFkt7IRk+ZYzD4coLOcK87MrJNJe43SDBOAXX
-LiHvL22jR6y5aNpiAgTiXW6mYnX9qrz6cAUzTKqeOqm/s4bwuWR13jHpTQ6lOt1F
-w3LuV9R5h38LqFjfPCbQxgstp5816SdoBIiwitKZfyBfCPt7yYDpAq2zn0OQmp2k
-cKkqQEOGqE+IzH046/h0PdsmBc7wPqrG+5/GSvdPt6sa2aUkF2TO5nbjaaK/w+GJ
-F+8Bd8vtafCPp+QmG+fV9IcYTEqZ6Q==
-=VC6G
------END PGP SIGNATURE-----
-
---bwmf3jgjaq2y6ndf--
