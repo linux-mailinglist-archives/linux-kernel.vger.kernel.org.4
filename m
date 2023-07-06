@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116C37492E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196E27492ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjGFBKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 21:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S232240AbjGFBOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 21:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjGFBKr (ORCPT
+        with ESMTP id S229634AbjGFBOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 21:10:47 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B986B1995;
-        Wed,  5 Jul 2023 18:10:45 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6f943383eso1152661fa.2;
-        Wed, 05 Jul 2023 18:10:45 -0700 (PDT)
+        Wed, 5 Jul 2023 21:14:05 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019221700
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 18:14:05 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bb0d11a56abso104525276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 18:14:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688605844; x=1691197844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MjwBdXF1omyqPra/29ms0Vi+bZo8i0ip6SKqToNp0PU=;
-        b=LtiEwjeo7A4AxPIu5X1SdLlGwHl6arlOHkl1ovK6lx9cew/YSsxEBzMObSEly4sRd1
-         0HRM/RmsTPW5+uiQ/hiUYda0KGJvGO8EMW4H0O+AGhWoyyrizYB5dAruupp82X+73DlT
-         Xez5SNgqH4fGnYb98Ov8Ca1gAqvDRCqElrxcHPJcKfc/YndH2wpCyjSsPRJ4HlP2Ax/d
-         QvIEdgnvlsEQo5e4tghY7in5tvjsHdAqVFh9QDyHO1YsPU4Xajeaw3IV6+iQ35gFYzib
-         k70MGNZBRlFmGN28Zpv/prbtnbRFj7y5K0Zt2Zc6st7yLyh8O3fN8jlB9jdZ4cWxxFzS
-         wruw==
+        d=google.com; s=20221208; t=1688606044; x=1691198044;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/ZvjsLzR90/Ihxg7W2cQFYrdAaC3RTmM6cS2FPW4Hig=;
+        b=M5IX75oaI5+U+XxwObu9YSuPnYLffE9WfpI1afLQJyuZ8ZdqQzSucCDlj3g5M5PuYZ
+         GsZp07pN00tTE+vWh7rvzdQ2h/PvSjrslMecjY9k8CxrDbycHpXPsX/eJlCQoGUrIPpz
+         5DjkcITZwm9WsevSIjZ5YrQVBsdE/akRWew0G7xNfaEdgcd2aG2WvNO2LOgCnmYUfkUx
+         RZ7L0soWGM73GloOpd8UJJCcY4U+Nkb2yrVBeQGyNKQAVhdwZPP7lEjQzjA0VM9wmdPP
+         hrLCj2TQXAmiBvtocX3y+KheOs+hqyBVAJUjvTR+A5I1O3diUYY/iVRtZGt06Dx+fZrK
+         qc3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688605844; x=1691197844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MjwBdXF1omyqPra/29ms0Vi+bZo8i0ip6SKqToNp0PU=;
-        b=P7W5HLW/I9lKV0doy/lz2JQnEJbyloJBWg79BGuQYCMOjv5UGGfHp3FAmpwJ0F+/O/
-         /R0WIr3LAPCSvB3zBZC/mJOQF2jKMU9oRyd0jFeJeDazSPnIKUGOKLeF08kD866YIB8X
-         YrZyT9QUz7RN4wpAGJV0kykz5bYdyrGSynZPK/s2LUYT4lJ7YpkPRvFKaHFEVzdA1zZS
-         2cD/A+B2XTpOHpcpMAJU5fMQzoH+/lq0pMXmH9Z3gXlS5l5X7jdEimCSMgVJ0pHEJ+wc
-         TTabl/5m4hGVao0a8njjXKahWZE/nlrkTRcF7s/4/YKwDiMIwXA7S/0OzplyfLxSKdQm
-         Cesw==
-X-Gm-Message-State: ABy/qLa5BgEugcKyN3BHx9hGzYDiN0CcxNcbRrSKHOc0wqTFOPtLeR6a
-        hR+1Svc0WsygKvOaDykXP2fq+XTW8GHe8+ysyVPL9rlu5qY=
-X-Google-Smtp-Source: APBJJlGpZnNx3Rr5Mhu3UgNSB4U3aY/o++mEbnMSFgvHz5GTZvONS6sD+RjI0haxyxDq5f00Bpfvx8rSylYNYo3W1dc=
-X-Received: by 2002:a2e:9dd5:0:b0:2b6:f8d0:7d3d with SMTP id
- x21-20020a2e9dd5000000b002b6f8d07d3dmr184173ljj.49.1688605843533; Wed, 05 Jul
- 2023 18:10:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <c35fbb4cb0a3a9b4653f9a032698469d94ca6e9c.1688123230.git.legion@kernel.org>
- <babdf7a8-9663-6d71-821a-34da2aff80e2@huaweicloud.com> <20230704-anrollen-beenden-9187c7b1b570@brauner>
-In-Reply-To: <20230704-anrollen-beenden-9187c7b1b570@brauner>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 5 Jul 2023 18:10:32 -0700
-Message-ID: <CAADnVQLAhDepRpbbi_EU6Ca3wnuBtSuAPO9mE6pGoxj8i9=caQ@mail.gmail.com>
-Subject: Re: [PATCH v1] fs: Add kfuncs to handle idmapped mounts
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Hou Tao <houtao@huaweicloud.com>,
-        Alexey Gladkov <legion@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
+        d=1e100.net; s=20221208; t=1688606044; x=1691198044;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/ZvjsLzR90/Ihxg7W2cQFYrdAaC3RTmM6cS2FPW4Hig=;
+        b=B3AHDrPQDqddfveSTe8lGdL9ch0MmihjPMwOPNfhroOdgE1T833x/f+hc4ud03NFpe
+         cMR8gPhmFBv5GwiDX/DmMhkXTbU+Brk9fJax30phzB5ELbxUQeKp20fzPJeYH+WWBWyl
+         rkzHa00jrWFM+YkBDvhnXYmmuzOKvRl/qDTJc8gjTIaNMqK4gJkrWUkfBoxHAHgOOQfl
+         Gfx/oACNnd+J6+KXMdNGouGa2e8GnyhJv9Jcw7A42BeHpI4c9OSxdHUkqEG0PiVAyv45
+         TrNWoeRhTIY3lOINHHbusOa00v/es7wcSv9F8IGOpZtOj9OOD2IHJKxwyHA1+Dq8Y56J
+         vr2g==
+X-Gm-Message-State: ABy/qLa2OXMdQ+KfcIzvRaZ8bR59M8gGrtekv7REbKIVAVyxqHt9Qq0p
+        2NP3uy2lfOPZ14lV+njp6qMoR8ThGQE=
+X-Google-Smtp-Source: APBJJlEt8HfzqWqwQiw75adRHvjlP3xBCgQKrxmzHqhU1j9EJbyqaYHCgGKMeEKDjFzgklMWWacm6BoOT+0=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:946c:be30:90d9:9093])
+ (user=surenb job=sendgmr) by 2002:a05:6902:30b:b0:c67:ebc5:de5d with SMTP id
+ b11-20020a056902030b00b00c67ebc5de5dmr2439ybs.4.1688606044026; Wed, 05 Jul
+ 2023 18:14:04 -0700 (PDT)
+Date:   Wed,  5 Jul 2023 18:13:58 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230706011400.2949242-1-surenb@google.com>
+Subject: [PATCH v4 0/2] Avoid memory corruption caused by per-VMA locks
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     jirislaby@kernel.org, jacobly.alt@gmail.com,
+        holger@applied-asynchrony.com, hdegoede@redhat.com,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        chriscli@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, rppt@kernel.org, jannh@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,96 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 6:01=E2=80=AFAM Christian Brauner <brauner@kernel.or=
-g> wrote:
->
-> > > +/**
-> > > + * bpf_is_idmapped_mnt - check whether a mount is idmapped
-> > > + * @mnt: the mount to check
-> > > + *
-> > > + * Return: true if mount is mapped, false if not.
-> > > + */
-> > > +__bpf_kfunc bool bpf_is_idmapped_mnt(struct vfsmount *mnt)
-> > > +{
-> > > +   return is_idmapped_mnt(mnt);
-> > > +}
-...
->
-> I don't want any of these helpers as kfuncs as they are peeking deeply
-> into implementation details that we reserve to change. Specifically in
-> the light of:
->
->     3. kfunc lifecycle expectations part b):
->
->     "Unlike with regular kernel symbols, this is expected behavior for BP=
-F
->      symbols, and out-of-tree BPF programs that use kfuncs should be cons=
-idered
->      relevant to discussions and decisions around modifying and removing =
-those
->      kfuncs. The BPF community will take an active role in participating =
-in
->      upstream discussions when necessary to ensure that the perspectives =
-of such
->      users are taken into account."
->
-> That's too much stability for my taste for these helpers. The helpers
-> here exposed have been modified multiple times and once we wean off
-> idmapped mounts from user namespaces completely they will change again.
-> So I'm fine if they're traceable but not as kfuncs with any - even
-> minimal - stability guarantees.
+A memory corruption was reported in [1] with bisection pointing to the
+patch [2] enabling per-VMA locks for x86. Based on the reproducer
+provided in [1] we suspect this is caused by the lack of VMA locking
+while forking a child process.
 
-Christian,
-That quote is taken out of context.
-In the first place the Documentation/bpf/kfuncs.rst says:
-"
-kfuncs provide a kernel <-> kernel API, and thus are not bound by any of th=
-e
-strict stability restrictions associated with kernel <-> user UAPIs. This m=
-eans
-they can be thought of as similar to EXPORT_SYMBOL_GPL, and can therefore b=
-e
-modified or removed by a maintainer of the subsystem they're defined in whe=
-n
-it's deemed necessary.
-"
+Patch 1/2 in the series implements proper VMA locking during fork.
+I tested the fix locally using the reproducer and was unable to reproduce
+the memory corruption problem.
+This fix can potentially regress some fork-heavy workloads. Kernel build
+time did not show noticeable regression on a 56-core machine while a
+stress test mapping 10000 VMAs and forking 5000 times in a tight loop
+shows ~7% regression. If such fork time regression is unacceptable,
+disabling CONFIG_PER_VMA_LOCK should restore its performance. Further
+optimizations are possible if this regression proves to be problematic.
 
-bpf_get_file_vfs_ids is vfs related, so you guys decide when and how
-to add/remove them. It's ok that you don't want this particular one
-for whatever reason, but that reason shouldn't be 'stability guarantees'.
-There are really none. The kernel kfuncs can change at any time.
-There are plenty of examples in git log where we added and then
-tweaked/removed kfuncs.
+Patch 2/2 disables per-VMA locks until the fix is tested and verified.
 
-The doc also says:
-"
-As described above, while sometimes a maintainer may find that a kfunc must=
- be
-changed or removed immediately to accommodate some changes in their subsyst=
-em,
-"
-and git log of such cases proves the point.
+Both patches apply cleanly over Linus' ToT and stable 6.4.y branch.
 
-The quote about out-of-tree bpf progs is necessary today, since
-very few bpf progs are in-tree, so when maintainers of a subsystem
-want to remove kfunc the program authors need something in the doc
-to point to and explain why and how they use the kfunc otherwise
-maintainers will just say 'go away. you're out-of-tree'.
-The users need their voice to be heard. Even if the result is the same.
-In other words the part you quoted is needed to make kfuncs usable.
-Otherwise 'kfunc is 100% unstable and maintainers can rename it
-every release just to make life of bpf prog writers harder'
-becomes a real possibility in the minds of bpf users.
-The kfunc doc makes it 100% clear that there are no stability guarantees.
-So please don't say 'minimal stability'.
+Changes from v3 posted at [3]:
+- Replace vma_iter_init with vma_iter_set, per Liam R. Howlett
+- Update the regression number caused by additional VMA tree walk
 
-In your other reply:
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=217624
+[2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@google.com
+[3] https://lore.kernel.org/all/20230705171213.2843068-1-surenb@google.com
 
-> we can look at the in-kernel users of is_idmapped_mnt(),
-> convert them and then kill this thing off if we wanted to.
+Suren Baghdasaryan (2):
+  fork: lock VMAs of the parent process when forking
+  mm: disable CONFIG_PER_VMA_LOCK until its fixed
 
-you can absolutely do that even if is_idmapped_mnt() is exposed as a kfunc.
-You'll just delete it with zero notice if you like.
-Just like what you would do with a normal export_symbol.
-The doc is pretty clear about it and there are examples where we did
-such things.
+ kernel/fork.c | 6 ++++++
+ mm/Kconfig    | 3 ++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+-- 
+2.41.0.255.g8b1d071c50-goog
+
