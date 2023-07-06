@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452357492A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 02:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAB57492AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 02:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjGFAej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 20:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60852 "EHLO
+        id S232662AbjGFAlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 20:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjGFAeh (ORCPT
+        with ESMTP id S231218AbjGFAlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 20:34:37 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF1D19B2;
-        Wed,  5 Jul 2023 17:34:35 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666e64e97e2so164252b3a.1;
-        Wed, 05 Jul 2023 17:34:35 -0700 (PDT)
+        Wed, 5 Jul 2023 20:41:05 -0400
+Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE92219A9;
+        Wed,  5 Jul 2023 17:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688603675; x=1691195675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ybX/bwtG0CmtH+U4NpvKW0NQGOexYoxkE3fuma27f0I=;
-        b=k1iHycX+tCjJBIBV+Ri3x6SJuYwjEIOT7ffQdj+CuDwgn8UMypxzJHmmd0FdpQHPKC
-         XfSxqoCG7hzYbfbsAkGXvgmvBwyYi0L+OsHD2e2J2+3GpNOg5omDCXuW46oGSdSrOXjw
-         4sBYFGd4qw5o6h0jadlbCYy7SY4IiUhffKWyhZ+du/L/MHX8gOzL2qMUc1+4bevSEW4w
-         a+2o6DYOVZOyWttWSRWV31e+QRLxhSg5dqRk/JD+s84pQOXE942BX5Bjopb+OP64aZ1w
-         TcEnNnBJif39U4goOOCmQsxrWcQwNVHmQDoxWDnLX2OEmD+ycqVV0G6yUBYaDlorDTWa
-         6onQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688603675; x=1691195675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybX/bwtG0CmtH+U4NpvKW0NQGOexYoxkE3fuma27f0I=;
-        b=G9dCRFARWrcuOn+vr7foOaqVvoma+IdIH3oYjMMzxb17j++huuXu6GBQK5xOqmxHoT
-         JJHEYiyuV5Y5G9hZ5iiAdbYmm5ZvtPHthrp9E5ur4iF+1EgzyFXXh3gCvY/6XKx6hzCV
-         PBEuViD8CvZlWaU+ZMPLflgZN39zCozPyZHVYyMdJQChbbqeHIl8m3alMRQLePBWFPEJ
-         NjhhW336tz00lfCsq7k76QIxVMIFo1f61ltINKRTIaIU56PxMkH+41Vu7LRWvGjZTFHu
-         QvXVlT8RSX8mXxOugPclZFdxsthBsiU8gjowerliQjGQabndH6GKnIYjVRT4eoE9nAc5
-         ohAw==
-X-Gm-Message-State: ABy/qLYzarDFIA0/HJI+vd7maOLy1HXGAUU0mgBqt1jdkTo1jVHZfrTA
-        D9Y7V/sNyplbffvGtaW7SE5vIqoWC0s=
-X-Google-Smtp-Source: APBJJlEnVjFEZxCyfzfN+p9VRkkkRB8RDzv8+t5HS1o6EnM+JhadmVZrv104FgWsN7sk8Cq2bHm2tg==
-X-Received: by 2002:a05:6a00:1915:b0:64a:2dd6:4f18 with SMTP id y21-20020a056a00191500b0064a2dd64f18mr419956pfi.13.1688603675180;
-        Wed, 05 Jul 2023 17:34:35 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa785cc000000b0064928cb5f03sm112281pfn.69.2023.07.05.17.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 17:34:34 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 17:34:32 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/1] Input: gameport: add ISA and HAS_IOPORT
- dependencies
-Message-ID: <ZKYMGMKuYC0/wOLN@google.com>
-References: <20230703152355.3897456-1-schnelle@linux.ibm.com>
- <20230703152355.3897456-2-schnelle@linux.ibm.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1688604065; x=1720140065;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v+tsYcKm5P9WlsDhSBE+NcvZuf+VkDCTV0XouTKcUlk=;
+  b=S2l9TwrnnFEUAbIaUDOkTvSDkcp+K2B7GoftUG3YRHsUqQxVrggjjWLg
+   ZzAGz1iz7W6JmlcezonMbT77Jcx/nsqyusjGQn0zDulM7MqaOJVwi7kS0
+   ekx5K20hGZcWijspOt+qBEx8FEO8X6FWCXegDj9yIBXRKCFC3952XqpN3
+   Y=;
+X-IronPort-AV: E=Sophos;i="6.01,184,1684800000"; 
+   d="scan'208";a="591314401"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:41:01 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 0977F40D9F;
+        Thu,  6 Jul 2023 00:40:58 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 00:40:58 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.170.47) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 00:40:53 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+Date:   Wed, 5 Jul 2023 17:40:44 -0700
+Message-ID: <20230706004044.79850-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
+References: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703152355.3897456-2-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.187.170.47]
+X-ClientProxiedBy: EX19D038UWC004.ant.amazon.com (10.13.139.229) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Niklas,
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Mon, 3 Jul 2023 10:57:23 +0100
+> On Wed, Jun 28, 2023 at 7:54 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> 
+> > > +     reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
+> > > +                                       saddr, sport, daddr, ntohs(dport),
+> > > +                                       ehashfn);
+> > > +     if (!reuse_sk || reuse_sk == sk)
+> > > +             return sk;
+> > > +
+> > > +     /* We've chosen a new reuseport sock which is never refcounted. This
+> > > +      * implies that sk also isn't refcounted.
+> > > +      */
+> > > +     WARN_ON_ONCE(*refcounted);
+> >
+> > One more nit.
+> >
+> > WARN_ON_ONCE() should be tested before inet6?_lookup_reuseport() not to
+> > miss the !reuse_sk case.
+> 
+> I was just pondering that as well, but I came to the opposite
+> conclusion. In the !reuse_sk case we don't really know anything about
+> sk, except that it isn't part of a reuseport group. How can we be sure
+> that it's not refcounted?
 
-On Mon, Jul 03, 2023 at 05:23:55PM +0200, Niklas Schnelle wrote:
-> +static void gameport_setup_default_handlers(struct gameport *gameport)
-> +{
-> +	if (gameport->trigger && gameport->read)
-> +		return;
-> +
-> +	if (!IS_ENABLED(CONFIG_HAS_IOPORT))
-> +		dev_err(&gameport->dev,
-> +			"I/O port access is required for %s (%s) but is not available\n",
-> +			gameport->phys, gameport->name);
+Sorry for late reply.
 
-I combined these 2 conditions into one and applied, thank you.
+What we know about sk before inet6?_lookup_reuseport() are
 
--- 
-Dmitry
+  (1) sk was full socket in bpf_sk_assign()
+  (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
+  (3) sk was TCP_LISTEN here if TCP
+
+After bpf_sk_assign(), reqsk is never converted to fullsock, and UDP
+never clears SOCK_RCU_FREE.  If sk is TCP, now we are in the RCU grace
+period and confirmed sk->sk_state was TCP_LISTEN.  Then, TCP_LISTEN sk
+cannot be reused and SOCK_RCU_FREE is never cleared.
+
+So, before/after inet6?_lookup_reuseport(), the fact that sk is not
+refcounted here should not change in spite of that reuse_sk is NULL.
+
+What do you think ?
