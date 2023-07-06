@@ -2,80 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CDE749EF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F7F749EF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjGFO1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S231779AbjGFO1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGFO1G (ORCPT
+        with ESMTP id S229479AbjGFO1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:27:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD7210F5;
-        Thu,  6 Jul 2023 07:27:05 -0700 (PDT)
+        Thu, 6 Jul 2023 10:27:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A6710F5
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:27:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0668D61989;
-        Thu,  6 Jul 2023 14:27:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8203AC433C8;
-        Thu,  6 Jul 2023 14:27:03 +0000 (UTC)
-Date:   Thu, 6 Jul 2023 10:27:01 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 77/92] tracefs: convert to ctime accessor functions
-Message-ID: <20230706102701.2b8ac596@gandalf.local.home>
-In-Reply-To: <20230705190309.579783-75-jlayton@kernel.org>
-References: <20230705185755.579053-1-jlayton@kernel.org>
-        <20230705190309.579783-1-jlayton@kernel.org>
-        <20230705190309.579783-75-jlayton@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC4AF61983
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 14:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449FFC433C7;
+        Thu,  6 Jul 2023 14:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688653667;
+        bh=XjMcz5uZNstuRDH3jnBWjbSJFiV7skHvPFlp98zFaNI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BhAi0ogwapMqRb9bpapU3oUWnc7D4mZZ/5AokTrCdVsbl2BdVT8SJyQdWKJ+VC1Fk
+         v3yy86953vnQPJI3nGDoREpbFSt8as5YUGBSRKx6AsGMRkOXbAlZXdjOyJrIkORYCy
+         YeStLA8+YflkUTqkGJ2lhVq41/1NhacWHTx9CmjetWfE5r29mJEypyKVd5TALcIRqE
+         sbdye9kHbOYkLY8kkdLUmu3n/B5k9EilXDMNcXRHCw7SjWfu+v4M3t41dvaD+kpt/e
+         G0Rk0/05pAAoDhG2BAHT04XZKysR7Jp7Do3dbLTpbyzw52RVthudlnw7wFAoMlqFAX
+         5N9P0FJZD55xw==
+Received: from 84-53-99-172.bbserv.nl ([84.53.99.172] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qHPxQ-00AxTm-Ul;
+        Thu, 06 Jul 2023 15:27:45 +0100
+Date:   Thu, 06 Jul 2023 15:27:36 +0100
+Message-ID: <873521yv1j.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     oliver.upton@linux.dev, Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com,
+        will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com
+Subject: Re: [PATCH v3] KVM: arm64: Use BTI for nvhe
+In-Reply-To: <CAFgf54rQmBMgvRWj2yqQ90=12x-Tm1BkHj_-pf+ZBYPmBU_Swg@mail.gmail.com>
+References: <20230530150845.2856828-1-smostafa@google.com>
+        <20230704134136.a5znw4jupt5yp5kg@bogus>
+        <ZKQqIYRrckLlXqkx@google.com>
+        <20230704143339.cqrvntq7rmmb2on3@bogus>
+        <ZKRIWJKn7aVSOvjd@google.com>
+        <20230704192529.d4x2p7ndz2dc4q52@bogus>
+        <ZKWSkB1/5Zlm7mdR@google.com>
+        <CAFgf54rQmBMgvRWj2yqQ90=12x-Tm1BkHj_-pf+ZBYPmBU_Swg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 84.53.99.172
+X-SA-Exim-Rcpt-To: smostafa@google.com, oliver.upton@linux.dev, sudeep.holla@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com, will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com, gshan@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  5 Jul 2023 15:01:42 -0400
-Jeff Layton <jlayton@kernel.org> wrote:
+Hi Mostafa,
 
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On Thu, 06 Jul 2023 13:49:04 +0100,
+Mostafa Saleh <smostafa@google.com> wrote:
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/tracefs/inode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Marc and Oliver,
 > 
-> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-> index 57ac8aa4a724..2feb6c58648c 100644
-> --- a/fs/tracefs/inode.c
-> +++ b/fs/tracefs/inode.c
-> @@ -132,7 +132,7 @@ static struct inode *tracefs_get_inode(struct super_block *sb)
->  	struct inode *inode = new_inode(sb);
->  	if (inode) {
->  		inode->i_ino = get_next_ino();
-> -		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-> +		inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
->  	}
->  	return inode;
->  }
+> I was double checking that nothing else was missed.
+> 
+> I found there is another problem for hw that has BTI and is affected
+> by specterv3a.
+> 
+> "br'' instructions are generated at runtime for the vector
+> table(__bp_harden_hyp_vecs).  These branches would land on vectors
+> in __kvm_hyp_vector at offset 8.
+> 
+> As all the macros are defined with valid_vect/invalid_vect, it is
+> sufficient to add "bti j" there at the correct offset.
+>
+> I am not sure if such hardware exists. I tested this with a stubbed
+> "has_spectre_v3a" which confirms the issue and the fix.
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Thanks for the heads up.
 
--- Steve
+Fortunately, there is no such HW as far as I can tell. Only Cortex-A57
+and A72 are affected by this (and the only two CPUs for which we
+engage the mitigation), and they are way too old to know about BTI.
+
+> Please let me know if this fix suitable, I can include it with the other fix in
+> "[PATCH] KVM: arm64: Add missing BTI instruction in kvm_host_psci_cpu_entry"
+> 
+> diff --git a/arch/arm64/kvm/hyp/hyp-entry.S b/arch/arm64/kvm/hyp/hyp-entry.S
+> index 8f3f93fa119e..175c030379e3 100644
+> --- a/arch/arm64/kvm/hyp/hyp-entry.S
+> +++ b/arch/arm64/kvm/hyp/hyp-entry.S
+> @@ -154,6 +154,12 @@ SYM_CODE_END(\label)
+>   esb
+>   stp x0, x1, [sp, #-16]!
+>  662:
+> + /*
+> + * Specter vectors __bp_harden_hyp_vecs generate br instructions at runtime
+> + * that jump at offset 8 at __kvm_hyp_vector.
+> + * As hyp .text is guarded section, it needs bti j.
+> + */
+> + bti j
+>   b \target
+> 
+>  check_preamble_length 661b, 662b
+> @@ -165,6 +171,8 @@ check_preamble_length 661b, 662b
+>   nop
+>   stp x0, x1, [sp, #-16]!
+>  662:
+> + /* Check valid_vect */
+> + bti j
+>   b \target
+> 
+>  check_preamble_length 661b, 662b
+
+This looks correct to me.
+
+If you can respin you initial patch (with maybe a slightly more
+generic subject) so that Oliver can pick it up as part of the next
+batch of fixes, that'd be great.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
