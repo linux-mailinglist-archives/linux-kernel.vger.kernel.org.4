@@ -2,186 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06B5749653
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE706749657
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjGFHZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S233662AbjGFH0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGFHZL (ORCPT
+        with ESMTP id S233200AbjGFH0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:25:11 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395BD1BD9;
-        Thu,  6 Jul 2023 00:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688628310; x=1720164310;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=a2KS8s1gZbFMriwko2/qhjr1YZr2L048YbePHJtgbVo=;
-  b=Vx2wc84zjxfJAKfdQVZsK3A0F/PABTygTBO9DLa03SYJHO09eHP369zt
-   c0zWQRulC4He5Ls9mi6orM9+aKTkU7OyY1rGU2u0mAE9qkz8yarFrv3rD
-   Id8GCsXQfzwG1k2RsXrt5H9sn4oj2VZ3sIu4IS+7otCsK38rgMJMxjTlo
-   RX8O93U23PyMyuhwnL0XxOI4+2f9BUSCHsZ8DXu25OKXFAihd8/bHAdBc
-   IRJIsEMDA46zPQaEpa3fciyGfXJTbYQytDETqdKewki7jPeijydALzSX3
-   Kqcec9K91gThaArdSsjHTYIYxJ+a56ItoDvdRvh02MCwbzVZHUODOzuPQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="394283669"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="394283669"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:25:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="749032369"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="749032369"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2023 00:25:08 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 6 Jul 2023 00:25:07 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Thu, 6 Jul 2023 00:25:07 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Thu, 6 Jul 2023 00:25:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mV3p6grbbgU5EZ5xkGq02KqNx06oE80yPP42JJTEBTzgZgqTWYMVvOK163XvcLeaXA2jxIyxbFPGu7kEWOuWe/5AnqziR2RBeB2D1/jZaaInngFykKGtdW2dSgbruBLOvm29qCKII6hxHpeGyW6ocVYZafOwn0RIAwQ5SbTVrfZ9Aqbs2uNWT+qzj1KHYBicWw4z3jSRrkcAoe2FQXkLFtG1mZunLRX5hyMWvfvauq3SyehqLE0OzLWt/8fYOhR1QsT+bl8AkfzjRCdRVu1/rcUuaqqSOfFZaV6C9MV1btFphVyiE9I3XRTyWrvk1fj+Q+empPs+0vjcIDUe1pPEzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XyL0qjvI6QwsQ306WQLUd+t3RBq7r+DrvkkLGPJ05jE=;
- b=TPtHngGi22Ie72Gm45c3f52vC0IPoiqku1nxgx5GjVSTWaMKMHoQUHHp1hoNPfFPeybrPOh0VQoF3LNJYTLMEustfAiCihhFco9jepaVHouo0H1CuSsAFVVTtdZoIx5itAEctbmX4o7Dtqq71BewWPq3nucAf5BrszM/TQO2+7NWjp+rKZi4VGxy3hE9t2t95IT05ZoBiJV9Y6gE5jQ+zMjIcZCuVq2ua0a4RbZ23vYP8ZxBWgZM8w3h+XlYvH9CKEXoSBz31sZwWNIZZxfFiiaHt+ZSOBna92Kx45HQtp2ECpLnWWOpKM/A+3ffNKhLj3FdSzuz5yaE+fPwlkfPug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by BL1PR11MB5415.namprd11.prod.outlook.com (2603:10b6:208:315::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.24; Thu, 6 Jul
- 2023 07:25:04 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::c016:653d:c037:44fc]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::c016:653d:c037:44fc%7]) with mapi id 15.20.6544.024; Thu, 6 Jul 2023
- 07:25:04 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>
-Subject: RE: [PATCH] x86/trapnr: Add event type macros to <asm/trapnr.h>
-Thread-Topic: [PATCH] x86/trapnr: Add event type macros to <asm/trapnr.h>
-Thread-Index: AQHZr8ysO2SxX3x+7keRZu3fDfiVha+sS0KAgAAIsxA=
-Date:   Thu, 6 Jul 2023 07:25:03 +0000
-Message-ID: <SA1PR11MB67344CAD2EF26F37AF06A8B2A82CA@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230706051443.2054-1-xin3.li@intel.com>
- <20230706064519.GC2833176@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230706064519.GC2833176@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|BL1PR11MB5415:EE_
-x-ms-office365-filtering-correlation-id: 5a0b8b9e-b10b-4b07-a5b8-08db7df21da8
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oM2lYZuZcLU+r4YE1h0QqUYpX1mmL2AAI8LB5mNI49D7FIi0UTZpBr2PiHdCLDE+ZOtlP7p1Ql80sR0UexUrHhmP6pUd1rjO3EmZg6r/EpPlGrNZM2RT6vvT76BvfxkdATq62R3gLd+PdNWgwk+QylT64+sKeqWP3tyqpAZcT9JqE4W/rU3Fw3s5oJy2zNOUExfcUH0/1gSsnD/RDLnPnoDUNwlW/+4Em0zco1CdryfiMlDMzIoURkiyWd1JmNaCYbvZ2zBdjy+GUa5j9qkKYdTBhjutwO6an1zvjEElv4dKsNjxAX4yKg57VinrSOz+M08ODz6LolWhPP0LClUFODy+g5K3Spz0WEEFmREj22rGfBjU154uA2YNR9Th5pXi6B2HzK8uN2yfuDtKUjL79bIzDTZFY35pqQGkoPz6hN01zoYbx3CspBJrKRSyTIDEMmn5dEzNT90oO9sYF5qhdiIrj8ccHhUfbIOmmU3Cpif0srds4BJcd/8lhcmhxWgdj7HPKno213IUCP+IvfCwNCHV8DuafuPcoqYl4m4aOMi7by5dyh0z7Azfivri5+f9IjwbJQM5I6DI+9TibjppoRmGBQ1VPS0poEx7HQIy7MEn21/C0JH0BmGhMJNL8mb7
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(396003)(346002)(39860400002)(451199021)(82960400001)(122000001)(33656002)(86362001)(38070700005)(55016003)(38100700002)(54906003)(71200400001)(7696005)(41300700001)(8676002)(5660300002)(8936002)(478600001)(52536014)(7416002)(316002)(6916009)(4326008)(2906002)(64756008)(66446008)(76116006)(66946007)(66556008)(66476007)(4744005)(186003)(9686003)(6506007)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yhkbXyrd131gNz4S1uL3I7d2t5fd8bgUpufX2fFzDs4TmHasHbVPj0yu0Qw1?=
- =?us-ascii?Q?p++8cRXG4ww8a1Nv5sP+3VrNl/NUbU3Vk0YDf9rVhtmeOhByCdXCluB/Zb06?=
- =?us-ascii?Q?o3qtPH6c0Fb/t1fEBgQYxCwzHHiEbKU9Eor3alWg4IWMHBuH1Ng8KVyyMiV6?=
- =?us-ascii?Q?Mcz/cIW1Ol76bsqw3I3YmU43IL3m16BDnPz/+27kg32G4PTepYOIaNqxODOz?=
- =?us-ascii?Q?VrT962glssYpKj3eLBN5Y83izDAj0aZ2ltHcTz8ewODoy8ODqXawUJDcTOEW?=
- =?us-ascii?Q?e7/qtCKDMopCocovpeQrqFduMgrc7rCdIB156iLRppbxmWP7HnaT3sDUhiz4?=
- =?us-ascii?Q?2wggrikYS0LbFeUKUG6c6y0O1FYhkTjZoafuFUxjlHo4RCrXEWkVTzB7QOeY?=
- =?us-ascii?Q?rejJyMgRMd82yTRlKSYrT49YbXt+N4rtFE/AQIoHc8dE+m/BU6Xs4bni5yKE?=
- =?us-ascii?Q?VQKa5E/JBia16yqrg4yj2QNdxJdDaLkJEuFs2t2tL2tjxkQCgvMdko9i7sxE?=
- =?us-ascii?Q?BaNFDlCat3oZhHZbZSlMSnYgeuk4FVKfKgX2oC7wU3zsGLTc/DEyb3lnv3NZ?=
- =?us-ascii?Q?tAi9qAPrtBj+gDxAugK60bmeobr2kcHwpHUKcYz8JthBtDRFkR6AuRJpTFSv?=
- =?us-ascii?Q?1aHCoFoqOO83cj1+lj5/SnfuJX/397V6HjWn6BCMkLWA0WsuW8dqXZFYUkGC?=
- =?us-ascii?Q?b+jF5d4ZLdXMA+xjeeKij8WgG5g5my4mMWYmwb30nt7SOey8fKSPGuMm0E2v?=
- =?us-ascii?Q?TPGedm3z8mfXwO4kiKIkp8MlkNk9O11m63+1fuFYq3vhC8WCU0/D5L3elacI?=
- =?us-ascii?Q?sHBcLHZKSFhvX4i/jtcD3SPFSPDlKeJx0NZN15bnIw6OMB9+5C4Q3YovFNTP?=
- =?us-ascii?Q?9uspbuLoJyhfhwMtDHeHG4YOl06yYFrlp+hrtrfgq37nBKrzX3atxoVaS8f8?=
- =?us-ascii?Q?KeNjG+BTfdshDhLlnwaUKf7iS0mSCqSiYnADKFO/6lC6TEu94CHdxerUwOAg?=
- =?us-ascii?Q?RfgzIV8N56zBsXX9IyZpcnPAzL9mwt2qTYrt2X3ah/u+8oiNfKYl9j4Wjsnu?=
- =?us-ascii?Q?mKJ7CcB/ZyD746RkqL3HkRxZrWsWQa39+mswj2/A0AeYefokHCzxUoRTgs7J?=
- =?us-ascii?Q?DDXQ/ZBh4O3moohxtjOgP5+eBn+DblqVXo5buv+ESDwSwoerZO96oN1sAWyA?=
- =?us-ascii?Q?gfCPxZeUkht4RUI/IL6WMcucs6nfjTUkh5hfG+svWLmzJ+tcln8QnnNyU+h6?=
- =?us-ascii?Q?Mk9zv+jxV1xwPiRXg7vhiMHYllXuIemD05o8pW0TEVC/unqagAWQrM7MG3tt?=
- =?us-ascii?Q?RIuKa77WwV0c8Bx04sCH85RW3TGudL0BVv2M8kVT10J5nwc0nU6zgUisy1sz?=
- =?us-ascii?Q?TzlqMRGIJkhyu8fkmok1NDgi9QdLGPK/dgTG0YHrr9p221zgPht+MipA1TWl?=
- =?us-ascii?Q?BOIpcbfCZ9ypVJgiz7l60IFTTzxoFfkZ5tOG6+4H0XfSByaZ7QxXU17LS4NY?=
- =?us-ascii?Q?FRzvmeUrMXwqPN69qdSLnrp9Axwm63VlpZRkxQqLJz3gysKykwhhEWITeBVh?=
- =?us-ascii?Q?Wge8JqFW9UvcqWektlE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 6 Jul 2023 03:26:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577C1BDB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:25:58 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qHJMf-0004nH-2I; Thu, 06 Jul 2023 09:25:21 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3B9B51EA41D;
+        Thu,  6 Jul 2023 07:25:14 +0000 (UTC)
+Date:   Thu, 6 Jul 2023 09:25:13 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH 2/2] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <20230706-unstopped-skedaddle-7168f2b12189-mkl@pengutronix.de>
+References: <20230705195356.866774-1-jm@ti.com>
+ <20230705195356.866774-3-jm@ti.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a0b8b9e-b10b-4b07-a5b8-08db7df21da8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 07:25:03.5977
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Rs/2n/kPB/CNGhRyLcxIy1BfaB5xR1GfSwZ9E3erum54rq8RSuxv3rkw7OISGCd1X7Voajhw+eReMde8kTGOPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5415
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tmycw3ojonpci4ns"
+Content-Disposition: inline
+In-Reply-To: <20230705195356.866774-3-jm@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +/*
-> > + * Event type codes used by both Intel VT-x and FRED  */
-> > +/* Maskable external interrupt */
-> > +#define EVENT_TYPE_HWINT	0
-> > +#define EVENT_TYPE_RESERVED	1
-> > +#define EVENT_TYPE_NMI		2
-> > +/* Hardware exceptions (e.g., page fault) */
-> > +#define EVENT_TYPE_HWFAULT	3
-> > +/* Software interrupt (INT n) */
-> > +#define EVENT_TYPE_SWINT	4
-> > +/* INT1 (ICEBP) */
-> > +#define EVENT_TYPE_PRIVSW	5
-> > +/* Software exception (INT3 or INTO) */
-> > +#define EVENT_TYPE_SWFAULT	6
-> > +/* VT-x MTF or FRED SYSCALL/SYSENTER */
-> > +#define EVENT_TYPE_OTHER	7
+
+--tmycw3ojonpci4ns
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 05.07.2023 14:53:56, Judith Mendez wrote:
+> Introduce timer polling method to MCAN since some SoCs may not
+> have M_CAN interrupt routed to A53 Linux and do not have
+> interrupt property in device tree M_CAN node.
 >=20
-> So I know tglx hates on tail comments, but I find the below *MUCH* more r=
-eadable
-> than the above horror show.
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use timer polling method.
+>=20
+> Add an hrtimer to MCAN class device. Each MCAN will have its own
+> hrtimer instantiated if there is no hardware interrupt found in
+> device tree M_CAN node. The timer will generate a software
+> interrupt every 1 ms. In hrtimer callback, we check if there is
+> a transaction pending by reading a register, then process by
+> calling the isr if there is.
+>=20
+> Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Toradex Verdin AM=
+62
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
+> Changelog:
+> v9:
+> - Change add MS to HRTIMER_POLL_INTERVAL
+> - Change syntax from "=3D 0" to "!"
+> v8:
+> - Cancel hrtimer after interrupts in m_can_stop
+> - Move assignment of hrtimer_callback to m_can_class_register()
+> - Initialize irq =3D 0 if polling mode is used
 
-Agree, sometimes a tail comment looks much better.
+This change has been lost :(
 
-Maybe tglx could give more specific directions on when it's okay to use
-tail comments.
+> - Add reson for polling mode in commit msg
+> - Remove unrelated change
+> - Remove polling flag
+> v7:
+> - Clean up m_can_platform.c if/else section after removing poll-interval
+> - Remove poll-interval from patch description
+> v6:
+> - Move hrtimer stop/start function calls to m_can_open and m_can_close to
+> support power suspend/resume
+> v5:
+> - Change dev_dbg to dev_info if hardware interrupt exists and polling
+> is enabled
+> v4:
+> - No changes
+> v3:
+> - Create a define for 1 ms polling interval
+> - Change plarform_get_irq to optional to not print error msg
+> v2:
+> - Add functionality to check for 'poll-interval' property in MCAN node=20
+> - Add 'polling' flag in driver to check if device is using polling method
+> - Check for timer polling and hardware interrupt cases, default to
+> hardware interrupt method
+> - Change ns_to_ktime() to ms_to_ktime()
+> ---
+>  drivers/net/can/m_can/m_can.c          | 32 +++++++++++++++++++++++++-
+>  drivers/net/can/m_can/m_can.h          |  3 +++
+>  drivers/net/can/m_can/m_can_platform.c | 23 +++++++++++++++---
+>  3 files changed, 54 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index c5af92bcc9c9..13fd84b2e2dd 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/can/dev.h>
+>  #include <linux/ethtool.h>
+> +#include <linux/hrtimer.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+> @@ -308,6 +309,9 @@ enum m_can_reg {
+>  #define TX_EVENT_MM_MASK	GENMASK(31, 24)
+>  #define TX_EVENT_TXTS_MASK	GENMASK(15, 0)
+> =20
+> +/* Hrtimer polling interval */
+> +#define HRTIMER_POLL_INTERVAL_MS		1
+> +
+>  /* The ID and DLC registers are adjacent in M_CAN FIFO memory,
+>   * and we can save a (potentially slow) bus round trip by combining
+>   * reads and writes to them.
+> @@ -1414,6 +1418,12 @@ static int m_can_start(struct net_device *dev)
+> =20
+>  	m_can_enable_all_interrupts(cdev);
+> =20
+> +	if (!dev->irq) {
+> +		dev_dbg(cdev->dev, "Start hrtimer\n");
+> +		hrtimer_start(&cdev->hrtimer, ms_to_ktime(HRTIMER_POLL_INTERVAL_MS),
+> +			      HRTIMER_MODE_REL_PINNED);
+> +	}
+> +
+>  	return 0;
+>  }
+> =20
+> @@ -1568,6 +1578,11 @@ static void m_can_stop(struct net_device *dev)
+>  {
+>  	struct m_can_classdev *cdev =3D netdev_priv(dev);
+> =20
+> +	if (!dev->irq) {
+> +		dev_dbg(cdev->dev, "Stop hrtimer\n");
+> +		hrtimer_cancel(&cdev->hrtimer);
+> +	}
+> +
+>  	/* disable all interrupts */
+>  	m_can_disable_all_interrupts(cdev);
+> =20
+> @@ -1793,6 +1808,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff=
+ *skb,
+>  	return NETDEV_TX_OK;
+>  }
+> =20
+> +static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
+> +{
+> +	struct m_can_classdev *cdev =3D container_of(timer, struct
+> +						   m_can_classdev, hrtimer);
+> +
+> +	m_can_isr(0, cdev->net);
+> +
+> +	hrtimer_forward_now(timer, ms_to_ktime(HRTIMER_POLL_INTERVAL_MS));
+> +
+> +	return HRTIMER_RESTART;
+> +}
+> +
+>  static int m_can_open(struct net_device *dev)
+>  {
+>  	struct m_can_classdev *cdev =3D netdev_priv(dev);
+> @@ -1831,7 +1858,7 @@ static int m_can_open(struct net_device *dev)
+>  		err =3D request_threaded_irq(dev->irq, NULL, m_can_isr,
+>  					   IRQF_ONESHOT,
+>  					   dev->name, dev);
+> -	} else {
+> +	} else if (dev->irq) {
+>  		err =3D request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
+>  				  dev);
+>  	}
+> @@ -2027,6 +2054,9 @@ int m_can_class_register(struct m_can_classdev *cde=
+v)
+>  			goto clk_disable;
+>  	}
+> =20
+> +	if (!cdev->net->irq)
+> +		cdev->hrtimer.function =3D &hrtimer_callback;
+> +
+>  	ret =3D m_can_dev_setup(cdev);
+>  	if (ret)
+>  		goto rx_offload_del;
+> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+> index a839dc71dc9b..2ac18ac867a4 100644
+> --- a/drivers/net/can/m_can/m_can.h
+> +++ b/drivers/net/can/m_can/m_can.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/device.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/freezer.h>
+> +#include <linux/hrtimer.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+> @@ -93,6 +94,8 @@ struct m_can_classdev {
+>  	int is_peripheral;
+> =20
+>  	struct mram_cfg mcfg[MRAM_CFG_NUM];
+> +
+> +	struct hrtimer hrtimer;
+>  };
+> =20
+>  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int =
+sizeof_priv);
+> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
+an/m_can_platform.c
+> index 94dc82644113..76d11ce38220 100644
+> --- a/drivers/net/can/m_can/m_can_platform.c
+> +++ b/drivers/net/can/m_can/m_can_platform.c
+> @@ -5,6 +5,7 @@
+>  //
+>  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.=
+com/
+> =20
+> +#include <linux/hrtimer.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+> =20
+> @@ -96,12 +97,28 @@ static int m_can_plat_probe(struct platform_device *p=
+dev)
+>  		goto probe_fail;
 
-Thanks!
-  Xin
+Please set "irq" to 0 during declaration.
+
+> =20
+>  	addr =3D devm_platform_ioremap_resource_byname(pdev, "m_can");
+> -	irq =3D platform_get_irq_byname(pdev, "int0");
+> -	if (IS_ERR(addr) || irq < 0) {
+> -		ret =3D -EINVAL;
+> +	if (IS_ERR(addr)) {
+> +		ret =3D PTR_ERR(addr);
+>  		goto probe_fail;
+>  	}
+> =20
+> +	if (device_property_present(mcan_class->dev, "interrupts") ||
+> +	    device_property_present(mcan_class->dev, "interrupt-names")) {
+> +		irq =3D platform_get_irq_byname(pdev, "int0");
+> +		if (irq =3D=3D -EPROBE_DEFER) {
+> +			ret =3D -EPROBE_DEFER;
+> +			goto probe_fail;
+> +		}
+> +		if (irq < 0) {
+> +			ret =3D -EINVAL;
+
+Please return the original error value.
+
+> +			goto probe_fail;
+> +		}
+> +	} else {
+> +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
+> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
+> +			     HRTIMER_MODE_REL_PINNED);
+> +	}
+> +
+>  	/* message ram could be shared */
+>  	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram=
+");
+>  	if (!res) {
+> --=20
+> 2.34.1
+>=20
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--tmycw3ojonpci4ns
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSmbFYACgkQvlAcSiqK
+BOgJaQgAhz4eZqUAOMPrcuu3yj+65snWRq39dbNtx7p8P3zynTmJTY/u+/5FcduW
+zPjps+bE+c+GKIPZXzsAPqVVJqxUunIFZJUC8kPEtMB1jQE9b6dGFeQlh0ssgrHg
+OfGhmKJ6IqDpOOTx5edZgBYphH0rMsoFXTiZK0QKlqjtLny0JC1iq9+zas+/YY4p
+/rbDoNFZQLcLwRAubcQHZ2ihhDvSN0kzGk89q3yCKZ489RwtGq4e+h1Ols7Sxp6+
+c0gglKT4SAETZtzOSl1O+wiKS/o8A88bPzdnWSOOhCxU2ZdouOzEEMrYyiWhZW3L
+1xrmb/4u+8uKcZb0ViUZ+LH26P8pOg==
+=mZ8A
+-----END PGP SIGNATURE-----
+
+--tmycw3ojonpci4ns--
