@@ -2,149 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3283E749B5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F02749B5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjGFMGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S232344AbjGFMHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjGFMGa (ORCPT
+        with ESMTP id S229560AbjGFMHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:06:30 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82024171A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:06:29 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-45739737afcso159700e0c.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688645188; x=1691237188;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+en178Cl6iQ5BRYxnHo5Dcr68jDKvEi3JCQZvb0sU/k=;
-        b=ZuLvHFBG8JzTYHBEjdR6N8DQDxp63For0i8HE5cbrkX6TWJ6pNKXdID4DM8LbcCjU8
-         k00BmpssqYrUgUcg5cbWq3js84amDzeVZ6mCkmIN+UOPmQPY8h8clGKQ6HXp7gScdKoJ
-         Y0YBp8FhRMFkI/j2tSjF2Zwhvc9/1r3VGHea6D/J8qH2IedmfXJ4ejuh3ljEC3qahvnt
-         9CUGGtfgs30+dJ1qy/p9cq3+D5OptrO2uAg6D613HFug1OGuRRNK2uwEAfSpOYfWcIW1
-         unWvPPGR8Jdf6thB7lg3IvtWLDrwSpyC0jNcGTu87CouUsW2miLMyDVCrHI8lTixC72s
-         mIxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688645188; x=1691237188;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+en178Cl6iQ5BRYxnHo5Dcr68jDKvEi3JCQZvb0sU/k=;
-        b=ZwdaEfGzkT3eWTJdCpsxifjFHm98gpEl9XK58dqMoqT14SvOVayDK8B9D1WjnssMQJ
-         JUh8miAtrF9pXbYR9Yxt8CPj1V1PIF4iYthrnqhhHQ7rn2myAP0Zf1xIvkhv51II4l1T
-         KtL8NOdfOTPm7WHz5PvP6jHnmlJrTJiZHKJVGFkIYZahWsKAtRuBgziVuqdAAdoO05YY
-         gfka1xlw2g6NMn3QTmN6ed2g/jL7/koTw3elMTw6BtKJtmmz/UwNA5l/mEN2xMf2eH8a
-         wIZOqW0N9Sk+pyY0FowjroNSse9QRNGr6bCNNRGCul4lYM2i2OeYkXoUFgTNh4ZoNvfz
-         Gt5w==
-X-Gm-Message-State: ABy/qLYWhQRmM5Dj7elTEIxKLfWFT8hw3mgrW3ISv+rg8/V9PGVVA1nX
-        yOtMz+BGvO7wXQquvDJaxJC310bLQnnrsTDW9IgneEe0yR9i42Sa66w=
-X-Google-Smtp-Source: APBJJlEr+S/SxlC8on+YPoPgJVDUU6m84TPNtgPAoK/XkqVyGLTlYrf57fAHuu62UGciScrsqJMlt3NeMdEwc8xWYag=
-X-Received: by 2002:a1f:6244:0:b0:471:4ceb:675f with SMTP id
- w65-20020a1f6244000000b004714ceb675fmr596732vkb.9.1688645188433; Thu, 06 Jul
- 2023 05:06:28 -0700 (PDT)
+        Thu, 6 Jul 2023 08:07:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C081726;
+        Thu,  6 Jul 2023 05:07:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1C7D221DEA;
+        Thu,  6 Jul 2023 12:07:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688645229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A6CSdnWoHNwfH4kj12EMC7KfnLYNWpmURNF30/yrN+g=;
+        b=hy57rb9Aa0kmR9Oh5ZsHhxr/R1DCQFjEsTU4FrlPUH+krueOoG6ESYIt1VjXW/oxUB7hEk
+        Vsp5Qm6yg7kC1ZLcyAh9XIPY3Iy6JRUjYH7O6BDsv+sIsynud6qu+EP9BnV0uFiUrzDR+M
+        Z2XhHOUJeN+zbYTxxANeAZjFOnkf6MU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688645229;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A6CSdnWoHNwfH4kj12EMC7KfnLYNWpmURNF30/yrN+g=;
+        b=yJ7gydxHy8JaOUPrLu4a7gjy+YgzsJuhq4bX1+ZxeOXKg+2BcWqmlvUaJCmXwJkpL2mZgF
+        yMpJ5OqQjNWdvHCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D90E1390F;
+        Thu,  6 Jul 2023 12:07:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YNuiAm2upmRyLAAAMHmgww
+        (envelope-from <dwagner@suse.de>); Thu, 06 Jul 2023 12:07:09 +0000
+Date:   Thu, 6 Jul 2023 14:07:08 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>, Ewan Milne <emilne@redhat.com>
+Subject: Re: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
+Message-ID: <7kcc75btp5bo5oqjnpqlwwo37l2f4atwfemknbmvqagrqicl2i@njn4tai7e4m7>
+References: <20230620133711.22840-1-dwagner@suse.de>
+ <20230620133711.22840-5-dwagner@suse.de>
+ <594f73f2-59b0-bbcb-d7a0-6d89e2446830@gmail.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 6 Jul 2023 17:36:17 +0530
-Message-ID: <CA+G9fYvHxcU-gdgFY6r6UrYpzA8bh262ChABZREkBQrmA-L91A@mail.gmail.com>
-Subject: next: s390: arch/s390/kernel/machine_kexec.c:192:18: error: invalid
- use of undefined type 'struct kimage'
-To:     linux-s390@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <594f73f2-59b0-bbcb-d7a0-6d89e2446830@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regressions found on Linux next-20230706.
+Hi James,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Sat, Jul 01, 2023 at 05:11:11AM -0700, James Smart wrote:
+> As much as you want to make this change to make transports "similar", I am
+> dead set against it unless you are completing a long qualification of the
+> change on real FC hardware and FC-NVME devices. There is probably 1.5 yrs of
+> testing of different race conditions that drove this change. You cannot
+> declare success from a simplistic toy tool such as fcloop for validation.
+> 
+> The original issues exist, probably have even morphed given the time from
+> the original change, and this will seriously disrupt the transport and any
+> downstream releases.  So I have a very strong NACK on this change.
+> 
+> Yes - things such as the connect failure results are difficult to return
+> back to nvme-cli. I have had many gripes about the nvme-cli's behavior over
+> the years, especially on negative cases due to race conditions which
+> required retries. It still fails this miserably.  The async reconnect path
+> solved many of these issues for fc.
+> 
+> For the auth failure, how do we deal with things if auth fails over time as
+> reconnects fail due to a credential changes ?  I would think commonality of
+> this behavior drives part of the choice.
 
-Regressions found on s390:
+Alright, what do you think about the idea to introduce a new '--sync' option to
+nvme-cli which forwards this info to the kernel that we want to wait for the
+initial connect to succeed or fail? Obviously, this needs to handle signals too.
 
- - build/gcc-8-tinyconfig
- - build/clang-nightly-allnoconfig
- - build/gcc-12-allnoconfig
- - build/gcc-12-tinyconfig
- - build/clang-nightly-tinyconfig
- - build/clang-16-allnoconfig
- - build/clang-16-tinyconfig
- - build/gcc-8-allnoconfig
+From what I understood this is also what Ewan would like to have.
 
-Build error:
-====
-arch/s390/kernel/machine_kexec.c:120:37: warning: 'struct kimage'
-declared inside parameter list will not be visible outside of this
-definition or declaration
-  120 | static bool kdump_csum_valid(struct kimage *image)
-      |                                     ^~~~~~
-arch/s390/kernel/machine_kexec.c:188:34: warning: 'struct kimage'
-declared inside parameter list will not be visible outside of this
-definition or declaration
-  188 | int machine_kexec_prepare(struct kimage *image)
-      |                                  ^~~~~~
-arch/s390/kernel/machine_kexec.c: In function 'machine_kexec_prepare':
-arch/s390/kernel/machine_kexec.c:192:18: error: invalid use of
-undefined type 'struct kimage'
-  192 |         if (image->type == KEXEC_TYPE_CRASH)
-      |                  ^~
-arch/s390/kernel/machine_kexec.c:192:28: error: 'KEXEC_TYPE_CRASH'
-undeclared (first use in this function); did you mean
-'KEXEC_ON_CRASH'?
-  192 |         if (image->type == KEXEC_TYPE_CRASH)
-      |                            ^~~~~~~~~~~~~~~~
-      |                            KEXEC_ON_CRASH
-arch/s390/kernel/machine_kexec.c:192:28: note: each undeclared
-identifier is reported only once for each function it appears in
-arch/s390/kernel/machine_kexec.c:196:18: error: invalid use of
-undefined type 'struct kimage'
-  196 |         if (image->type != KEXEC_TYPE_DEFAULT)
-      |                  ^~
-arch/s390/kernel/machine_kexec.c:196:28: error: 'KEXEC_TYPE_DEFAULT'
-undeclared (first use in this function); did you mean
-'KEXEC_ARCH_DEFAULT'?
-  196 |         if (image->type != KEXEC_TYPE_DEFAULT)
-      |                            ^~~~~~~~~~~~~~~~~~
-      |                            KEXEC_ARCH_DEFAULT
-In file included from arch/s390/include/asm/thread_info.h:31,
-                 from include/linux/thread_info.h:60,
-                 from arch/s390/include/asm/preempt.h:6,
-                 from include/linux/preempt.h:79,
-                 from arch/s390/include/asm/percpu.h:5,
-                 from include/linux/irqflags.h:18,
-                 from include/linux/rcupdate.h:26,
-                 from include/linux/rculist.h:11,
-                 from include/linux/pid.h:5,
-                 from include/linux/sched.h:14,
-                 from include/linux/ratelimit.h:6,
-                 from include/linux/dev_printk.h:16,
-                 from include/linux/device.h:15,
-                 from arch/s390/kernel/machine_kexec.c:9:
-arch/s390/kernel/machine_kexec.c:200:48: error: invalid use of
-undefined type 'struct kimage'
-  200 |         reboot_code_buffer = page_to_virt(image->control_code_page);
-      |                                                ^~
+Hannes thought it would make sense to use the same initial connect logic in
+tcp/rdma, because there could also be transient erros (e.g. spanning tree
+protocol). In short making the tcp/rdma do the same thing as fc?
 
+So let's drop the final patch from this series for the time. Could you give some
+feedback on the rest of the patches?
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230706/testrun/18173978/suite/build/test/gcc-12-tinyconfig/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230706/testrun/18173978/suite/build/test/gcc-12-tinyconfig/history/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2SBB5EGvx1egXcvg0fwoJIyLbSK/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+Daniel
