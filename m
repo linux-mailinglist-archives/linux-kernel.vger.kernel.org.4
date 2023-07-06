@@ -2,142 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EEB7496AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D023B74967D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbjGFHk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
+        id S233808AbjGFHhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbjGFHkR (ORCPT
+        with ESMTP id S233488AbjGFHhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:40:17 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11CF1FED;
-        Thu,  6 Jul 2023 00:39:53 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3666e8eF007738;
-        Thu, 6 Jul 2023 09:39:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=FZKwpNeBGlxN/ZIvsZPy3W+zmOhekBrbZPOvSP0D2ZU=;
- b=5HoHR1oPoBJr9gIwXYu4497yaPXosZDZhQAFns8q982Yx6JJ+PT3xIsoJcnnzV2uHulv
- sZbWceX1qPdmPPbA+8r966N8nIJPklZ/Mf6p8HYJNItaqeSSlRDAn+28Kzl6e88InyVw
- D4a6CGMP7ngYcSAZV3VuDqcfSqC3BNSlFedlAIF2Q3qd+uA6auhVNUaAaWC5d8HWyuVw
- t1RZvFGezisqQMAaoaxeJeHGQkWYjhIiv7yhOVPZqP/DWaY0BCvd2bXK6Jsi/MZb4aDM
- eMCr3xfIIkR4vCKezKi8GwhzG1tpBTY1WL4AUYqeaJ2THQiGMJpHj9kOpoe7GPPUCEU1 ag== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rna75nd2j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 09:39:37 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B880C10005B;
-        Thu,  6 Jul 2023 09:39:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ACAF8212FB7;
-        Thu,  6 Jul 2023 09:39:36 +0200 (CEST)
-Received: from localhost (10.201.22.9) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 6 Jul
- 2023 09:39:36 +0200
-From:   Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
-To:     Thomas BOURGOIN <thomas.bourgoin@foss.st.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 7/7] crypto: stm32 - remove flag HASH_FLAGS_DMA_READY
-Date:   Thu, 6 Jul 2023 09:37:19 +0200
-Message-ID: <20230706073719.1156288-8-thomas.bourgoin@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230706073719.1156288-1-thomas.bourgoin@foss.st.com>
-References: <20230706073719.1156288-1-thomas.bourgoin@foss.st.com>
+        Thu, 6 Jul 2023 03:37:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D5C1990
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:37:35 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1qHJYM-0006DP-4Z; Thu, 06 Jul 2023 09:37:26 +0200
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1qHJYK-0007Ou-CB; Thu, 06 Jul 2023 09:37:24 +0200
+Date:   Thu, 6 Jul 2023 09:37:24 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, m.szyprowski@samsung.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        kernel@pengutronix.de, nicolas.dufresne@collabora.com,
+        didi.debian@cknow.org, hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
+Message-ID: <20230706073724.GG13288@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, m.szyprowski@samsung.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        kernel@pengutronix.de, nicolas.dufresne@collabora.com,
+        didi.debian@cknow.org, hverkuil-cisco@xs4all.nl
+References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
+ <20230601132749.GA31313@pengutronix.de>
+ <2a892e71-f1be-41eb-5397-87484db7d592@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.22.9]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_04,2023-07-06_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2a892e71-f1be-41eb-5397-87484db7d592@collabora.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+On Thu, 01 Jun 2023 16:08:13 +0200, Benjamin Gaignard wrote:
+> Le 01/06/2023 à 15:27, Michael Tretter a écrit :
+> > On Thu, 13 Apr 2023 12:47:56 +0200, Benjamin Gaignard wrote:
+> > > ctx->vpu_dst_fmt is no more initialized before calling hantro_try_fmt()
+> > > so assigne it to vpu_fmt led to crash the kernel.
+> > > Like for decoder case use 'fmt' as format for encoder and clean up
+> > > the code.
+> > > 
+> > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > > Fixes: db6f68b51e5c ("media: verisilicon: Do not set context src/dst formats in reset functions")
+> > > ---
+> > > version 2:
+> > > - Remove useless vpu_fmt.
+> > > 
+> > >   drivers/media/platform/verisilicon/hantro_v4l2.c | 10 +++-------
+> > >   1 file changed, 3 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > index 8f1414085f47..d71f79471396 100644
+> > > --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > @@ -275,7 +275,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+> > >   			  struct v4l2_pix_format_mplane *pix_mp,
+> > >   			  enum v4l2_buf_type type)
+> > >   {
+> > > -	const struct hantro_fmt *fmt, *vpu_fmt;
+> > > +	const struct hantro_fmt *fmt;
+> > >   	bool capture = V4L2_TYPE_IS_CAPTURE(type);
+> > >   	bool coded;
+> > > @@ -295,11 +295,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+> > >   	if (coded) {
+> > >   		pix_mp->num_planes = 1;
+> > > -		vpu_fmt = fmt;
+> > > -	} else if (ctx->is_encoder) {
+> > > -		vpu_fmt = ctx->vpu_dst_fmt;
+> > > -	} else {
+> > > -		vpu_fmt = fmt;
+> > > +	} else if (!ctx->is_encoder) {
+> > >   		/*
+> > >   		 * Width/height on the CAPTURE end of a decoder are ignored and
+> > >   		 * replaced by the OUTPUT ones.
+> > > @@ -311,7 +307,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+> > >   	pix_mp->field = V4L2_FIELD_NONE;
+> > >   	v4l2_apply_frmsize_constraints(&pix_mp->width, &pix_mp->height,
+> > > -				       &vpu_fmt->frmsize);
+> > > +				       &fmt->frmsize);
+> > This causes a regression on the OUTPUT device of the encoder. fmt->frmsize is
+> > only valid for coded ("bitstream") formats, but fmt on the OUTPUT of an
+> > encoder will be a raw format. This results in width and height to be clamped
+> > to 0.
+> > 
+> > I think the correct fix would be to apply the frmsize constraints of the
+> > currently configured coded format, but as ctx->vpu_dst_fmt is not initialized
+> > before calling this code, I don't know how to get the coded format.
+> 
+> if ctx->dst_fmt is correctly set (and it should be) then doing:
+> 
+> pix_mp->width = ctx->dst_fmt.width;
+> pix_mp->height = ctx->dst_fmt.height;
+> 
+> should solve the issue.
 
-Remove flag HASH_FLAGS_DMA_READY as it can put the driver in a deadlock
-state.
-If the DMA automatically set the DCAL bit, the interrupt indicating the
-end of a computation can be raised before the DMA complete sequence.
+Using the width and height of dst_fmt for OUTPUT is not correct, since the
+v4l2 stateless encoder spec dictates that the size is set on the OUTPUT device
+and will be ignored on the CAPTURE device.
 
-Signed-off-by: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
----
- drivers/crypto/stm32/stm32-hash.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+I sent a patch [0] to apply the frame constraints using dst_fmt.
 
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index 0b5e580efbba..a50d73c18d5c 100644
---- a/drivers/crypto/stm32/stm32-hash.c
-+++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -84,12 +84,11 @@
- #define HASH_FLAGS_INIT			BIT(0)
- #define HASH_FLAGS_OUTPUT_READY		BIT(1)
- #define HASH_FLAGS_CPU			BIT(2)
--#define HASH_FLAGS_DMA_READY		BIT(3)
--#define HASH_FLAGS_DMA_ACTIVE		BIT(4)
--#define HASH_FLAGS_HMAC_INIT		BIT(5)
--#define HASH_FLAGS_HMAC_FINAL		BIT(6)
--#define HASH_FLAGS_HMAC_KEY		BIT(7)
--#define HASH_FLAGS_SHA3_MODE		BIT(8)
-+#define HASH_FLAGS_DMA_ACTIVE		BIT(3)
-+#define HASH_FLAGS_HMAC_INIT		BIT(4)
-+#define HASH_FLAGS_HMAC_FINAL		BIT(5)
-+#define HASH_FLAGS_HMAC_KEY		BIT(6)
-+#define HASH_FLAGS_SHA3_MODE		BIT(7)
- #define HASH_FLAGS_FINAL		BIT(15)
- #define HASH_FLAGS_FINUP		BIT(16)
- #define HASH_FLAGS_ALGO_MASK		GENMASK(20, 17)
-@@ -585,8 +584,6 @@ static void stm32_hash_dma_callback(void *param)
- 	struct stm32_hash_dev *hdev = param;
- 
- 	complete(&hdev->dma_completion);
--
--	hdev->flags |= HASH_FLAGS_DMA_READY;
- }
- 
- static int stm32_hash_hmac_dma_send(struct stm32_hash_dev *hdev)
-@@ -1241,11 +1238,9 @@ static irqreturn_t stm32_hash_irq_thread(int irq, void *dev_id)
- 			hdev->flags &= ~HASH_FLAGS_OUTPUT_READY;
- 			goto finish;
- 		}
--	} else if (HASH_FLAGS_DMA_READY & hdev->flags) {
--		if (HASH_FLAGS_DMA_ACTIVE & hdev->flags) {
--			hdev->flags &= ~HASH_FLAGS_DMA_ACTIVE;
--				goto finish;
--		}
-+	} else if (HASH_FLAGS_DMA_ACTIVE & hdev->flags) {
-+		hdev->flags &= ~HASH_FLAGS_DMA_ACTIVE;
-+			goto finish;
- 	}
- 
- 	return IRQ_HANDLED;
--- 
-2.25.1
+Michael
 
+[0] https://lore.kernel.org/linux-media/20230706071510.1717684-1-m.tretter@pengutronix.de/
+
+> > >   	if (!coded) {
+> > >   		/* Fill remaining fields */
+> > > -- 
+> > > 2.34.1
+> > > 
+> 
