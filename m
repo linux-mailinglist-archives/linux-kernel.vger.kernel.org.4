@@ -2,132 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB807498D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C5D7498E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjGFJ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 05:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S229720AbjGFKBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjGFJ7u (ORCPT
+        with ESMTP id S231628AbjGFKBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:59:50 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE787199E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 02:59:48 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56fffdea2d0so5935437b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 02:59:48 -0700 (PDT)
+        Thu, 6 Jul 2023 06:01:45 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717F619A7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:01:43 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso632781e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688637588; x=1691229588;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dzgfTpUADHR89gqDoPU9ysqJa9QsDW5j+s8pKt5q+bc=;
-        b=AakCV45/0sahFCAXprX+Pg9csDM7DLLf2u7uhF4A/r5vb7Cjt57qvA24/5pfyXMyCk
-         4oPQy+yk4NHwHrd2dntMlQvYIPFsoEoaaxq+xJjx6wn10qS66vyuzWPf46VXknQAAbaA
-         lvGeVRESZBco8li9XHns1zoZvNT93sRnYy+6ZbBvhKEEl+8dK7FvqW1SHni/lJYMILQc
-         TZLldBHHCpJaD3TBbZjk+t2/AKeg6lRUcs4eKL0W8RC4jCAS6sdll/B34xWZMsE6Lydl
-         bY2ErOYnLmLUD79RUXetQtJWU6qEfzfQPyF73kALiD96xXRrQxbGXoEuVAOIbZRjhSdG
-         JJUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688637588; x=1691229588;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=linaro.org; s=google; t=1688637702; x=1691229702;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dzgfTpUADHR89gqDoPU9ysqJa9QsDW5j+s8pKt5q+bc=;
-        b=YOMPVAjiW61P89wABxGpNIyIjVWP+07O2Eiw/UwfYa9cTKAeA/GSi8VXV2/g4FE9p4
-         ZR0UcOaVDBTbTBnKyBPrHqx8oOSzml3OLaXfeivshKlojs1LwlrzWqkYwS+wA83d/JMi
-         k5v09NofSYBZJUWNs9Ran5d6HkNgLP0NfB09xr0qmydN96w3AjUkCbe73b5kpUS9LRop
-         c/G2BUaM/Of7/5AxYgRziEFRyh2DmvIKG20v5YZxkpFU7oKza1cJzeOy8XjYsIBrAhWQ
-         Hi++vL60fxvGS6K+193cG9hVxe5kCat0A8WfqGnzp3XtBni9mM1+vJ3FtwEL9B6CgOcM
-         /FtA==
-X-Gm-Message-State: ABy/qLZbFBQCnLMoPJkgrMIu9m6IgRvgUHElADRRoKsPPPFDZMi2lDdR
-        inE7HHyo57T3pEKMYODa+u9Qa3u2LiU=
-X-Google-Smtp-Source: APBJJlHMfBRT0M+aS1/KhC3L1hUXt/ZIyP6zjytaAb3B1jYJL1X9408X5DeAZ3GsTlTZs+Vk/S01TiWcKf4=
-X-Received: from koudai.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:1150])
- (user=koudai job=sendgmr) by 2002:a81:4506:0:b0:577:619e:d3c9 with SMTP id
- s6-20020a814506000000b00577619ed3c9mr11980ywa.10.1688637587943; Thu, 06 Jul
- 2023 02:59:47 -0700 (PDT)
-Date:   Thu,  6 Jul 2023 02:59:14 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230706095915.2256452-1-koudai@google.com>
-Subject: [PATCH] scripts/gdb: Fix lx-symbols command for arm64 LLVM
-From:   Koudai Iwahori <koudai@google.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>
-Cc:     Koudai Iwahori <koudai@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=XT60ydGbek1AFjPkAEjevV8MYxSepx4EylzL/gQ0j8Q=;
+        b=teFm+rkwOF4Fscx6FU5McwhsHg+3oRElnEWE9vJpbTvsJ92FFxKspLKWyi3SnfdOyn
+         Q77e4UPLlwWG95SIw0plNmt/BGzuYK5MKz3mLAGUnODGEvu7xhULrbzoeA9eF/5cLAqs
+         LWvIGAVwI+C0wG5w0SruZQ7MavLr6QszRrzLlgAnKfnAzO1GP718EIK602Rjhm9D+tgC
+         I2pinO5tdVG7BX0tBYR+q/7Dbd9oEYQJ3QrAL6urFjqP+S05NzKckDgD9a0h1F8nSp7V
+         1vYaHT6kkSEFWuvPHAAkC/gGZLot4KOpth2/XZRS0YjWgGcWvOLXdX4c08n3eAEdFWVv
+         HNAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688637702; x=1691229702;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XT60ydGbek1AFjPkAEjevV8MYxSepx4EylzL/gQ0j8Q=;
+        b=ZgZrtt7kEkpmHI/ccyX6eVtCotfbEsout0fG97fvS3BV2J4LMFylDCed8t96nc3U7Z
+         f4BemfSP5TzgCa46v/w3zpU81JJjwc44V36hxHKNP5XZ+iPvofFHSvA2qQ1FWh5smvoj
+         1glOw5azDfSpyD18qlhn+Aru58It+Bhz2+q6o4kFbu9FPA4H7Mln2PxoohCcU49CBo9E
+         48C5+Vzxk/s9cSJJ8UrYvQCAWCr3kpO6UDGcf3ntxPN9zuwvWPNDNNYva8P4Ivz0PqX+
+         lMW0TExClb4+TSwaiGmnDMvT6PchIsqo7COro76ntRzZ1B2C6RhFOmnBgih6kaVOkeMz
+         vIIA==
+X-Gm-Message-State: ABy/qLYcS/Dz/4B7ahrVz8gLuOmVH1kUURbGFn1eq+blrp6Qwho5EFB8
+        LTJIan0wesg6wA655zPOWuQhBQ==
+X-Google-Smtp-Source: APBJJlHtbIbK40+kpbF5561nZK98zdUI+BAnFKMpIjZfYgqBtLSrABL4QxB7dMwedNHt3vfsOGhFsA==
+X-Received: by 2002:a19:2d4e:0:b0:4f8:7734:8dd0 with SMTP id t14-20020a192d4e000000b004f877348dd0mr1058895lft.2.1688637701624;
+        Thu, 06 Jul 2023 03:01:41 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id y2-20020ac255a2000000b004fb88fffd19sm188136lfg.146.2023.07.06.03.01.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 03:01:41 -0700 (PDT)
+Message-ID: <e31564e1-31cf-2cda-df6f-6210e6a1c1fc@linaro.org>
+Date:   Thu, 6 Jul 2023 12:01:37 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 5/6] arm64: dts: qcom: sa8775p: Add pcie0 and pcie1
+ nodes
+Content-Language: en-US
+To:     Mrinmay Sarkar <quic_msarkar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, mani@kernel.org
+Cc:     quic_shazhuss@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_ramkri@quicinc.com, quic_nayiluri@quicinc.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
+ <1688545032-17748-6-git-send-email-quic_msarkar@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1688545032-17748-6-git-send-email-quic_msarkar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lx-symbols assumes that module's .text sections is located at
-`module->mem[MOD_TEXT].base` and passes it to add-symbol-file command.
-However, .text section follows after .plt section in modules built by
-LLVM toolchain for arm64 target. Symbol addresses are skewed in GDB.
+On 5.07.2023 10:17, Mrinmay Sarkar wrote:
+> Add pcie dtsi nodes for two controllers found on sa8775p platform.
+> 
+> Signed-off-by: Mrinmay Sarkar <quic_msarkar@quicinc.com>
+> ---[...]
 
-Fix this issue by using the address of .text section stored in
-`module->sect_attrs`.
+> +	pcie1_phy: phy@1c14000 {
+> +		compatible = "qcom,sa8775p-qmp-gen4x4-pcie-phy";
+> +		reg = <0x0 0x1c14000 0x0 0x4000>;
+> +
+> +		clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
+> +			 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+> +			 <&gcc GCC_PCIE_CLKREF_EN>,
+> +			 <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>,
+> +			 <&gcc GCC_PCIE_1_PHY_AUX_CLK>,
+> +			 <&gcc GCC_PCIE_1_PIPE_CLK>,
+> +			 <&gcc GCC_PCIE_1_PIPEDIV2_CLK>;
+> +
+> +		clock-names = "aux", "cfg_ahb", "ref", "rchng", "phy_aux",
+> +						"pipe", "pipediv2";
+> +
+> +		assigned-clocks = <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>;
+> +		assigned-clock-rates = <100000000>;
+> +
+> +		power-domains = <&gcc PCIE_1_GDSC>;
+Please check if it's the correct power domain. I've heard that the PCIe PHY
+may be hooked up to something else but have no way of confirming myself.
 
-Signed-off-by: Koudai Iwahori <koudai@google.com>
----
- scripts/gdb/linux/symbols.py | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/scripts/gdb/linux/symbols.py b/scripts/gdb/linux/symbols.py
-index fdad3f32c747..c8047f4441e6 100644
---- a/scripts/gdb/linux/symbols.py
-+++ b/scripts/gdb/linux/symbols.py
-@@ -89,23 +89,27 @@ lx-symbols command."""
-                 return name
-         return None
- 
--    def _section_arguments(self, module):
-+    def _section_arguments(self, module, module_addr):
-         try:
-             sect_attrs = module['sect_attrs'].dereference()
-         except gdb.error:
--            return ""
-+            return str(module_addr)
-+
-         attrs = sect_attrs['attrs']
-         section_name_to_address = {
-             attrs[n]['battr']['attr']['name'].string(): attrs[n]['address']
-             for n in range(int(sect_attrs['nsections']))}
-+
-+        textaddr = section_name_to_address.get(".text", module_addr)
-         args = []
-         for section_name in [".data", ".data..read_mostly", ".rodata", ".bss",
--                             ".text", ".text.hot", ".text.unlikely"]:
-+                             ".text.hot", ".text.unlikely"]:
-             address = section_name_to_address.get(section_name)
-             if address:
-                 args.append(" -s {name} {addr}".format(
-                     name=section_name, addr=str(address)))
--        return "".join(args)
-+        return "{textaddr} {sections}".format(
-+            textaddr=textaddr, sections="".join(args))
- 
-     def load_module_symbols(self, module):
-         module_name = module['name'].string()
-@@ -125,10 +129,9 @@ lx-symbols command."""
-                 module_addr = hex(int(module_addr, 0) + plt_offset + plt_size)
-             gdb.write("loading @{addr}: {filename}\n".format(
-                 addr=module_addr, filename=module_file))
--            cmdline = "add-symbol-file {filename} {addr}{sections}".format(
-+            cmdline = "add-symbol-file {filename} {sections}".format(
-                 filename=module_file,
--                addr=module_addr,
--                sections=self._section_arguments(module))
-+                sections=self._section_arguments(module, module_addr))
-             gdb.execute(cmdline, to_string=True)
-             if module_name not in self.loaded_modules:
-                 self.loaded_modules.append(module_name)
--- 
-2.41.0.255.g8b1d071c50-goog
-
+Konrad
+> +
+> +		resets = <&gcc GCC_PCIE_1_PHY_BCR>;
+> +		reset-names = "phy";
+> +
+> +		#clock-cells = <0>;
+> +		clock-output-names = "pcie_1_pipe_clk";
+> +
+> +		#phy-cells = <0>;
+> +
+> +		status = "disabled";
+> +
+> +	};
+>  };
