@@ -2,501 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D48749321
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F53749330
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjGFBe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 21:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S232882AbjGFBhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 21:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjGFBe2 (ORCPT
+        with ESMTP id S229700AbjGFBhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 21:34:28 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BD0171B;
-        Wed,  5 Jul 2023 18:34:26 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-55b83ae9be2so161967a12.2;
-        Wed, 05 Jul 2023 18:34:26 -0700 (PDT)
+        Wed, 5 Jul 2023 21:37:00 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4559B116;
+        Wed,  5 Jul 2023 18:36:59 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36605GLR021479;
+        Thu, 6 Jul 2023 01:36:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=ECk6RBdE1tZAtA82Ulx/bgaLkPQLBbE+JmlmMx51VYo=;
+ b=yzFqTSG3k1BvzUw8tkiZSX9Xcvxwptbe/C6e60wZDVCOi9ZPLUNTl2mJkkDbwmf4XkCd
+ tborVs1LhyQ8mI5/NCM4SZAfz3ReGTSU1xIIuVs0I0+6ehOlp0XiI9OXPKoepQpLTUuy
+ ktVvTriqLBu1f7gfVyU5C9gQRdZreIGU5uW45SNZWmDsxY60uSs3yfyjYbCA14oUYtEt
+ 01y34ptrglB6/C9LibG29644JVUhFxaJnpE6tpV630g7yxd70CUy2aXZoRtINqSWQJP0
+ DuicesSyz9vAhfCqv98Es8bTAux6dfFQRpLwBHRbw97G3vLD4173MeSAentlvX44kbx9 Wg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rnf138d13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jul 2023 01:36:02 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 365NSuDK024885;
+        Thu, 6 Jul 2023 01:36:01 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rjak6tqhn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jul 2023 01:36:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XQbax9RZnI2PcDkgnQWmlYd7ttT5w8t/PvR1DvUv/Jc1SU7EyHTcn2q4HJZnSyW1x/4QiC1OuktvNNHOd+TZEM2oWsF2ws5boQLbdD7Tm0vcdB3K6ESu6qBmSW5ArqE9XS1lHTwH0l15SJAkm/1oeZc8M2AbToDTnjJ1OK+CvyWnGcjs7p4H63xh7Xr//jF4j5gGeUwWgh5mdBIXHGpBTmLaQ8Gyu/YylBnTQDwD93l6tv0Ga+fQznD5NeW+omzhvaGdtU1CTdddsrElGZ9REn5gumkLgiO8PVLkAM8Ku7naKu5xS+wruMa6dn+FczXZqJXxgewHs4hJiISmOJf4MQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ECk6RBdE1tZAtA82Ulx/bgaLkPQLBbE+JmlmMx51VYo=;
+ b=YUVpsHIAZGSMW3JjOk79IhT9XyLKLvkXFEUPYi78ha06wdSkxYaZJeJD2uiGhWa2kGFVjqCPpgIHjiNKjkfEEibrs0AFiuttiCuZTETpZLgjDmtZd3HT2rzueqhsF9FN6cbw/I0qnBbieJxiiKHtQkcxu+VYU6XQl1DREtn54rapoKvRtl3qy04BLATSh8G7fbLqabdXjKUhYKw1FKvRR/x3v8pOw2XfZnZxCxWuEnxCeAGYQqOQ0n7JNMbz97UEpgU1Uaf1+5FDEIx15fD75FjPDcgUg1O20fHkBbpyppbPiN1YEwZbDsJXXUPFPch3bYFTnbtMkjiaTAd7dOdogA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688607266; x=1691199266;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2z8PnN8KkyatR/iExIdxTC6Q1MI9UWQ7DGb3pnOB+0w=;
-        b=iZ/PBanTWLJ6hbGVmIyAfv510opDHOsuxJTIQLbHPBgNBe19Mw5X9SMWjCbgYygnnI
-         l/1Nx7eu2yqlIUo1ZxDojlJ1DjuOB37OiiZXXxnmDopdOU5Dt1DkymMSHEgprQnsUGNv
-         ozm+ZGERGk2HGchcyqGhxbPe5hI9zH1qwMpmgoadAYUvZA1iyCTUNBWCXjK3Uo4+WC+E
-         aGG2JipUgVCYl3ha6exz0hGh4bJqBBzLvIsjJtVflX+p9LsD7py3GBzIi00BBwY5xOEW
-         mZZre7BCgwaHzhOn9tYvk3WAEGtbEV0pMYYuLtZHVvZl4jEowrJFyj8Cg4TCNiOyaSgA
-         8kDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688607266; x=1691199266;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2z8PnN8KkyatR/iExIdxTC6Q1MI9UWQ7DGb3pnOB+0w=;
-        b=c+VBtUUFQd2wK0tDYq3ioBUFZXAi55sD6fvi+1ibXlB1m5FeSkX7lH1kINbzN6ojnt
-         NlGeqR/wTwuaa0spZgONIGIajM+R/DArKVQn3YqeRyTHrqKuXwtJQOQB6dOrRE0VeTFm
-         oLywHlSxDbMgsScU0WiZGgYVQc+wx+SH3aTOZNNvswMxl2xbUn7wGfVPkticWjmai8UR
-         eEiB3dhIutZFXKTrzgBX2dZsmFijtch2GMisedWfQftW9M4+wFGKGHLeeCjVCX7qM1GU
-         etpx4do6LpE6r0EMchacwt/rJJ23e2oqei7pS+tYs5hxIknODQf4LgfzSeF4kl9DICak
-         kTPQ==
-X-Gm-Message-State: ABy/qLax7Wlq3J/dpCC32X9GVgjAdcxVoxTsXJgEfWIjzmYrgxIHdMzd
-        fTXLYWMMVC5ulBxWnm0UP+A=
-X-Google-Smtp-Source: APBJJlE2fLWVc5FBU1iez9G6bx8tNEAnPtmPjPbUG15dSkIAwuTIm53BpyqLXGkirGpFpCP1WuBetw==
-X-Received: by 2002:a05:6a20:8408:b0:12d:39c6:9f94 with SMTP id c8-20020a056a20840800b0012d39c69f94mr558590pzd.47.1688607265581;
-        Wed, 05 Jul 2023 18:34:25 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id ji11-20020a170903324b00b001ab01598f40sm108150plb.173.2023.07.05.18.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 18:34:25 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 18:34:23 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
-Message-ID: <20230706013423.GA3894444@ls.amr.corp.intel.com>
-References: <20230704075054.3344915-1-stevensd@google.com>
- <20230704075054.3344915-3-stevensd@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ECk6RBdE1tZAtA82Ulx/bgaLkPQLBbE+JmlmMx51VYo=;
+ b=KSuCsMGmwg5231B/GvHluPZ7atm4QepEuT8uJcqiPGjl3i4r500WS63HfnUtvDUXh/UXg13X9DwWRbTwLuVul+R/QEVZyXoaEGj2OgnEqBMzrTN81uHbRT6jswCn6UCpiqT2Ee58D4p0qwIwjDtgMGHcBtStigiRkk59Ojl/AO8=
+Received: from CO1PR10MB4754.namprd10.prod.outlook.com (2603:10b6:303:91::24)
+ by BN0PR10MB5254.namprd10.prod.outlook.com (2603:10b6:408:117::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 01:35:58 +0000
+Received: from CO1PR10MB4754.namprd10.prod.outlook.com
+ ([fe80::9f29:328c:1592:d5bb]) by CO1PR10MB4754.namprd10.prod.outlook.com
+ ([fe80::9f29:328c:1592:d5bb%7]) with mapi id 15.20.6544.024; Thu, 6 Jul 2023
+ 01:35:57 +0000
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     linux-hyperv@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        keescook@chromium.org, christophe.jaillet@wanadoo.fr,
+        kuba@kernel.org, kasan-dev@googlegroups.com,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, iommu@lists.linux.dev,
+        linux-tegra@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        linux-scsi@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Laura Abbott <labbott@redhat.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Shailend Chand <shailend@google.com>,
+        linux-rdma@vger.kernel.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-sgx@vger.kernel.org
+Subject: Re: [PATCH v2 00/24] use vmalloc_array and vcalloc
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1pm55lt3y.fsf@ca-mkp.ca.oracle.com>
+References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
+Date:   Wed, 05 Jul 2023 21:35:55 -0400
+In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr> (Julia Lawall's
+        message of "Tue, 27 Jun 2023 16:43:15 +0200")
+Content-Type: text/plain
+X-ClientProxiedBy: SA0PR12CA0004.namprd12.prod.outlook.com
+ (2603:10b6:806:6f::9) To CO1PR10MB4754.namprd10.prod.outlook.com
+ (2603:10b6:303:91::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230704075054.3344915-3-stevensd@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4754:EE_|BN0PR10MB5254:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80bd8360-6f2f-4f07-bdb3-08db7dc158f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aXgzwYBWKBECwY25Ix26qaJznGDbEV1pbi+zF6JHCoR4tzCR2uwIxluJ9EM88bfvzLko4PH9fHWVp71ViS+9HtqKN4fnuIHBL+053NdcREM/fWxtqdKVTgYfbjG8Cgn2AhtWR83BfrBgDBy9k7C/uRXwa7lCGI24uIn+l+y3E24K7x254c/jC6a9UtlKGGqPvmVU3YLFzFxcwkqxmrcP9WZGdkmPwHbHfHrLUkteRTGgKnY+nCZ+s/vN1mArIKdQ+zuUvmU3chmcr3JYAc2Yqxhtmg6t9ZHcBcVvgarwJO7kFjVp11mL0ToJhDAOSBN34roYsmCKxVlGZ7BDC9qf6iZsy04T8SOlrXERoeJS22wgxC+pa7oUyndTj2uDjcOfN8YJVk9wiSgb/FMW8/e3RxTjA9jxdLcBNxzJKcI+ZbM9VkYobgVv4LlZUQ+ha61IAxqQevjo+fqx4dU+lHt1AsTfhhbRd0sNxIj1UYR/JqwP0Hsk6R/RIVHNKFJ9ObsFzvtrm9XJjMHS+Qbm3fjbwIEDC4BCJCweEHDqMKfyh+tuxadpGc3i2mlyrvJ5COEA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4754.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199021)(66476007)(66556008)(6916009)(4326008)(66946007)(186003)(86362001)(38100700002)(6506007)(26005)(478600001)(6512007)(54906003)(4744005)(41300700001)(8936002)(8676002)(7406005)(7416002)(2906002)(5660300002)(36916002)(6486002)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oZnd1vC+ZeSjMXdCx87EfRMyfwojEc/Frm0T5UjAVAeGh3aMFwJZwHtcZYCa?=
+ =?us-ascii?Q?5girqPHQNfoTvj+0scFQZwophCzQ29Vdsf1nyW9SmOxDojXLXNqV5cyiwkDG?=
+ =?us-ascii?Q?u0ZeCvqRizVf0YmePuS4B4XKPRXZeWtdBJgERhesq84h5MmbVMVJzglbthFd?=
+ =?us-ascii?Q?bnr/NulJ6XSj3aE858oqQ1ZgjMnpi4EswZTnTy4FuH4asu4vDTRD7ecFnS7U?=
+ =?us-ascii?Q?/iVVD69XgZYO32khyhPpVg7t5rEQbmKhMwpAwEf7uy6Md6fHTk2nUBxrYDVL?=
+ =?us-ascii?Q?z3RE/jCrrERGegYqMdeS+NUnQdHVq00Q4Qz//Yh3avlokJ+bHA13Xrfv3Taz?=
+ =?us-ascii?Q?Y0XGCe5PDmvPzFngLaVikR9MCbDbdu/otqWYWs7SsPq2eEpa/TLEOOUpJHNF?=
+ =?us-ascii?Q?/fm3z4/wipteA2ZPKUTq7LSb+SdrQxLsFdWD3f9CzLDKZbWiYLB3pBl8UBer?=
+ =?us-ascii?Q?cD0MGDGas7sRwDph6c7M963dHI114loaLB1S8qfrGlNz7drSencAOBwPV/bG?=
+ =?us-ascii?Q?hwWX8/4SMht4TTWkEeMZ7K4HTblN+XA6g0Ob4DIHMUSVD1tuVjs4uV4sAhLQ?=
+ =?us-ascii?Q?KefngYRZlXIHQ98wJOZLgeqh2YE2A9FdANa7S5ThTmSNNh36i6DpVTWNx4Z0?=
+ =?us-ascii?Q?yBzuTLEGwluhP1GKIXdVvOngjBMf27+bjTlAsJu5QqsoxWu3OXpNcKmQ0eR4?=
+ =?us-ascii?Q?p1e5jR78m+7FwpIm5t56IBnY71UMj8OlcH9PjJahIiF0ln7RUQ3+8KF8pIuX?=
+ =?us-ascii?Q?01auqN5+6CyC/uBWntqvT0oxr/+uPgQ3I4HnOZBu+8ZYUACa1PJ+qrpyBaR1?=
+ =?us-ascii?Q?AtJPUxq8iAvvx575iPQpvxOc1bh6hkADYQWigA0pIkpVh6vfTjwkV29pC6UW?=
+ =?us-ascii?Q?NFJq5tIw/UF/2Mf5V/pmmCEKsJ+dJecwzfKzPbrJaHI//cP7bp3f7WlEHuVI?=
+ =?us-ascii?Q?SOpHBjHKvMb4BRPt/D/PvaShaFqXOcfY+ZVv9FB9QFAqdtlcPpjuB2czHXgU?=
+ =?us-ascii?Q?4menLEzYQsNw/axT6f2gnilPKfh4BiAGCuQ66Uvatz0M5MgSuA/CtzFIAmQJ?=
+ =?us-ascii?Q?FqEO0J9NgzixAh4zHM63V0ovofeW41L2NnomwNKsOK9oxWFMRRsioOv19d52?=
+ =?us-ascii?Q?96QfpRTMrdcHRc55+/pMwl0USPrMcOFH9PpwX5xFmXSCBoEISzcX+sygb/mB?=
+ =?us-ascii?Q?R9gMq4NyWCxJiYOUiiEYDxrefAsdtoThDurMu9IZFy4E6/n0NK0iscydE4WZ?=
+ =?us-ascii?Q?RK1qD8b31FXIjqlX0bLP438f9D6RR8rKS6taVYoJPXPe7EIOOfYE8UhNyVpD?=
+ =?us-ascii?Q?rAEoirTk5+B2r3WCD5ljks3RDuzLdLiDOh9gATgGDOLtO840Bstb6LE3BXDc?=
+ =?us-ascii?Q?+6DpYKyhk3xqSa6yyUE9cn0fVyE42IsiOOT3BIw/vp/5XYmVXdIxq17vkuTV?=
+ =?us-ascii?Q?WihMR3SE79WDmg8Aem37dJy+qnQPq3NvBKMzrSlqa+NT5wV8r4JgtYtPCBfy?=
+ =?us-ascii?Q?Sik12ACwKJmHRbKp+5lQ4wvv59FMPO3E0Qom2+UleSA7sPgeY05Bz/8tSNE2?=
+ =?us-ascii?Q?J731y06zhKIaGkcqT5It5FR7tNfmSxm1/UyvvpgdQdwueYYmpUwK+E8glJpn?=
+ =?us-ascii?Q?xg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?LgKkHi00kqRPLGHs3CCY+gNJJssq2gGm9nnjkbhWEA25FOZreU3WRZwKsCH6?=
+ =?us-ascii?Q?MzMxdnU3lUcZ+48PfahkR/hAFgY1WKlGMwIOLH9+Guyf8+8n8H4IWl835Hoi?=
+ =?us-ascii?Q?hywIRZp8P/gNZX3jeHBst0l7zrQ/Nqg6D5+1pv8TIidYuOYDHz9F+bglQ0uD?=
+ =?us-ascii?Q?6EIDJtfso9PBdTW6TgG6KxuUg6K7NuMEXqxr1abkvLb6Vnj6UkUp3WN/JAip?=
+ =?us-ascii?Q?DH4pHsOyyyVmapTLD91F7Izk0PWQI8YYm7qicRhSdo2BLGkYsR/AHUOWZ9r7?=
+ =?us-ascii?Q?jr6edtHA4Jkq3yxh7R6QmK1A5AaYosmDZNKY373wzb7hntWECXQufC0vSmF6?=
+ =?us-ascii?Q?WrQpE5IMkQ573cSJxoqUdTBwfJg0+o9fgvdtu4qQvWD8BAU0wL69/WMg0G+Q?=
+ =?us-ascii?Q?IgGe90KGejmPA627NllcBQJYK067QViXu6akhpuSCF2mopMi+kPe20hzOkNC?=
+ =?us-ascii?Q?EZR/yhTyOYqeLlVhsJ4hz5Vo5OB9vYqNkcCROtakAkAxJKp2pLQOpm4kDJHY?=
+ =?us-ascii?Q?lO3ZG+7rmYbrJOWVE43wu+Gc9NLahPbZ/aJzBPurpla9YvZeZZRMQ9o2huQz?=
+ =?us-ascii?Q?O68t+TtGVDFhVxZFVLOxeoy1RxoALc+koXh2pG4gfFmlhqJtlldiYM4EMNiS?=
+ =?us-ascii?Q?mK6wuXmDX1QTuqpyeJv+qEt7luU8HgaMmFMnxq9qbIcelyhnabJxmOFqg+Gu?=
+ =?us-ascii?Q?AAVOlWMugLJvhA2C8w+vR71PVtd9n+ts9vsCb0L8lHgCMefGoS/DPSF5pT1/?=
+ =?us-ascii?Q?jpC42YAYb3gFgW3yK9NlFfrAQar0IZc/eVdO00J6M40MrmUZlGq1jNao368H?=
+ =?us-ascii?Q?wSnY6hpbsh1DiMVZIMezDuX7aXM8r+OXOoZpM+NQEliYnlbX6yw3IgG6qJ9C?=
+ =?us-ascii?Q?2cW+aGhlnGQHcj6lBJukReWifB8ntl/ZANV8sDB3iljtO9ulcNfEU1GPChOs?=
+ =?us-ascii?Q?JsIPU9hPIJyhjpY8GDaJonEhZceGKBNIzQog+gMdPLLnHup3wQmrFqs8tGRv?=
+ =?us-ascii?Q?gy1yqBzHJ7TcDjoF+CdZ/wWnSxTIBvqsZoa3ifZhjfmP2ozgtKudXNiHMbXI?=
+ =?us-ascii?Q?WB+KFD7Uv9kLW9NBPiErOA2iuKMPgQuAa3DPf3PuaBmQSUzY99fs/0B/RGIe?=
+ =?us-ascii?Q?HCVViB19o2NtGhfJA/uDj4OlzievuASc+rI9XypGNpzSL2V+MdnXPSSW7YCF?=
+ =?us-ascii?Q?g8QE4BAsXcsmR/E0fvW+0TchRoX/aYG+i3s2BBC0rxgYM5ThsLsmd1NvgJ6u?=
+ =?us-ascii?Q?d2si66re7OTOynmKM8OeX/Ki2dfjqpYRtZKOoMcM8pOhLVQvcPFwBMn0TDM4?=
+ =?us-ascii?Q?4wFBmMPg2gE11bKrTCB6WZbR2Sc1VC+zZP+5VY6wGom7IUwSfABTguALJA/I?=
+ =?us-ascii?Q?qQKegHo7UMhaPSoTmtWDBv2DgKZQpSPP+79X5+7u1xea8uZMGTk4sBGooThc?=
+ =?us-ascii?Q?bcx4UcXOcaPwUkZLr9hMeW1FackgQLSmwMJTgJaoCOgToQXiBl5ghA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80bd8360-6f2f-4f07-bdb3-08db7dc158f2
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 01:35:57.8748
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eAhclqw7W/GWz8jwtzmOYOJlGA61zQkb/N+8gSuF1yF8N+VWkMqA0mH/RuvAR1OPH92lDBO5L4wE/ANS+D+HmMBBOcW3Lzeyt7JF6w4vCtI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5254
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_11,2023-07-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=682 phishscore=0
+ malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307060012
+X-Proofpoint-GUID: su_bl4C-U7ciyxbD_1fxKbYxq45udROG
+X-Proofpoint-ORIG-GUID: su_bl4C-U7ciyxbD_1fxKbYxq45udROG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 04:50:47PM +0900,
-David Stevens <stevensd@chromium.org> wrote:
 
-> From: David Stevens <stevensd@chromium.org>
-> 
-> Introduce __kvm_follow_pfn, which will replace __gfn_to_pfn_memslot.
-> __kvm_follow_pfn refactors the old API's arguments into a struct and,
-> where possible, combines the boolean arguments into a single flags
-> argument.
-> 
-> Signed-off-by: David Stevens <stevensd@chromium.org>
-> ---
->  include/linux/kvm_host.h |  16 ++++
->  virt/kvm/kvm_main.c      | 171 ++++++++++++++++++++++-----------------
->  virt/kvm/kvm_mm.h        |   3 +-
->  virt/kvm/pfncache.c      |   8 +-
->  4 files changed, 122 insertions(+), 76 deletions(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 9d3ac7720da9..ef2763c2b12e 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -97,6 +97,7 @@
->  #define KVM_PFN_ERR_HWPOISON	(KVM_PFN_ERR_MASK + 1)
->  #define KVM_PFN_ERR_RO_FAULT	(KVM_PFN_ERR_MASK + 2)
->  #define KVM_PFN_ERR_SIGPENDING	(KVM_PFN_ERR_MASK + 3)
-> +#define KVM_PFN_ERR_NEEDS_IO	(KVM_PFN_ERR_MASK + 4)
->  
->  /*
->   * error pfns indicate that the gfn is in slot but faild to
-> @@ -1156,6 +1157,21 @@ unsigned long gfn_to_hva_memslot_prot(struct kvm_memory_slot *slot, gfn_t gfn,
->  void kvm_release_page_clean(struct page *page);
->  void kvm_release_page_dirty(struct page *page);
->  
-> +struct kvm_follow_pfn {
-> +	const struct kvm_memory_slot *slot;
-> +	gfn_t gfn;
-> +	unsigned int flags;
-> +	bool atomic;
-> +	/* Allow a read fault to create a writeable mapping. */
-> +	bool allow_write_mapping;
+Julia,
 
-Maybe, make them const for input arguments?
+> The functions vmalloc_array and vcalloc were introduced in
+>
+> commit a8749a35c399 ("mm: vmalloc: introduce array allocation functions")
+>
+> but are not used much yet.  This series introduces uses of
+> these functions, to protect against multiplication overflows.
 
-
-> +
-> +	/* Outputs of __kvm_follow_pfn */
-> +	hva_t hva;
-> +	bool writable;
-> +};
-> +
-> +kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll);
-> +
->  kvm_pfn_t gfn_to_pfn(struct kvm *kvm, gfn_t gfn);
->  kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
->  		      bool *writable);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 371bd783ff2b..b13f22861d2f 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2486,24 +2486,22 @@ static inline int check_user_page_hwpoison(unsigned long addr)
->   * true indicates success, otherwise false is returned.  It's also the
->   * only part that runs if we can in atomic context.
->   */
-> -static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
-> -			    bool *writable, kvm_pfn_t *pfn)
-> +static bool hva_to_pfn_fast(struct kvm_follow_pfn *foll, kvm_pfn_t *pfn)
->  {
->  	struct page *page[1];
-> +	bool write_fault = foll->flags & FOLL_WRITE;
->  
->  	/*
->  	 * Fast pin a writable pfn only if it is a write fault request
->  	 * or the caller allows to map a writable pfn for a read fault
->  	 * request.
->  	 */
-> -	if (!(write_fault || writable))
-> +	if (!(write_fault || foll->allow_write_mapping))
->  		return false;
->  
-> -	if (get_user_page_fast_only(addr, FOLL_WRITE, page)) {
-> +	if (get_user_page_fast_only(foll->hva, FOLL_WRITE, page)) {
->  		*pfn = page_to_pfn(page[0]);
-> -
-> -		if (writable)
-> -			*writable = true;
-> +		foll->writable = foll->allow_write_mapping;
->  		return true;
->  	}
->  
-> @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
->   * The slow path to get the pfn of the specified host virtual address,
->   * 1 indicates success, -errno is returned if error is detected.
->   */
-> -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
-> -			   bool interruptible, bool *writable, kvm_pfn_t *pfn)
-> +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t *pfn)
->  {
-> -	unsigned int flags = FOLL_HWPOISON;
-> +	unsigned int flags = FOLL_HWPOISON | FOLL_GET | foll->flags;
-
-Although adding FOLL_GET doesn't affect the behavior of
-get_user_pages_unlocked(), I wondered how this affects the next change
-It's better to mention it in the commit message.
-get_user_pages_*() called by hva_to_pfn_{fast, slot} imply FOLL_GET,
-but __kvm_follow_pfn() doesn't imply FOLL_GET.
-
-
->  	struct page *page;
->  	int npages;
->  
->  	might_sleep();
->  
-> -	if (writable)
-> -		*writable = write_fault;
-> -
-> -	if (write_fault)
-> -		flags |= FOLL_WRITE;
-> -	if (async)
-> -		flags |= FOLL_NOWAIT;
-> -	if (interruptible)
-> -		flags |= FOLL_INTERRUPTIBLE;
-> -
-> -	npages = get_user_pages_unlocked(addr, 1, &page, flags);
-> +	npages = get_user_pages_unlocked(foll->hva, 1, &page, flags);
->  	if (npages != 1)
->  		return npages;
->  
-> +	foll->writable = (foll->flags & FOLL_WRITE) && foll->allow_write_mapping;
-> +
->  	/* map read fault as writable if possible */
-> -	if (unlikely(!write_fault) && writable) {
-> +	if (unlikely(!foll->writable) && foll->allow_write_mapping) {
->  		struct page *wpage;
->  
-> -		if (get_user_page_fast_only(addr, FOLL_WRITE, &wpage)) {
-> -			*writable = true;
-> +		if (get_user_page_fast_only(foll->hva, FOLL_WRITE, &wpage)) {
-> +			foll->writable = true;
->  			put_page(page);
->  			page = wpage;
->  		}
-> @@ -2572,23 +2561,23 @@ static int kvm_try_get_pfn(kvm_pfn_t pfn)
->  	return get_page_unless_zero(page);
->  }
->  
-> -static int hva_to_pfn_remapped(struct vm_area_struct *vma,
-> -			       unsigned long addr, bool write_fault,
-> -			       bool *writable, kvm_pfn_t *p_pfn)
-> +static int hva_to_pfn_remapped(struct vm_area_struct *vma, struct kvm_follow_pfn *foll,
-> +			       kvm_pfn_t *p_pfn)
->  {
->  	kvm_pfn_t pfn;
->  	pte_t *ptep;
->  	spinlock_t *ptl;
-> +	bool write_fault = foll->flags & FOLL_WRITE;
->  	int r;
->  
-> -	r = follow_pte(vma->vm_mm, addr, &ptep, &ptl);
-> +	r = follow_pte(vma->vm_mm, foll->hva, &ptep, &ptl);
->  	if (r) {
->  		/*
->  		 * get_user_pages fails for VM_IO and VM_PFNMAP vmas and does
->  		 * not call the fault handler, so do it here.
->  		 */
->  		bool unlocked = false;
-> -		r = fixup_user_fault(current->mm, addr,
-> +		r = fixup_user_fault(current->mm, foll->hva,
->  				     (write_fault ? FAULT_FLAG_WRITE : 0),
->  				     &unlocked);
->  		if (unlocked)
-> @@ -2596,7 +2585,7 @@ static int hva_to_pfn_remapped(struct vm_area_struct *vma,
->  		if (r)
->  			return r;
->  
-> -		r = follow_pte(vma->vm_mm, addr, &ptep, &ptl);
-> +		r = follow_pte(vma->vm_mm, foll->hva, &ptep, &ptl);
->  		if (r)
->  			return r;
->  	}
-> @@ -2606,8 +2595,7 @@ static int hva_to_pfn_remapped(struct vm_area_struct *vma,
->  		goto out;
->  	}
->  
-> -	if (writable)
-> -		*writable = pte_write(*ptep);
-> +	foll->writable = pte_write(*ptep) && foll->allow_write_mapping;
->  	pfn = pte_pfn(*ptep);
->  
->  	/*
-> @@ -2652,24 +2640,22 @@ static int hva_to_pfn_remapped(struct vm_area_struct *vma,
->   * 2): @write_fault = false && @writable, @writable will tell the caller
->   *     whether the mapping is writable.
->   */
-> -kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
-> -		     bool *async, bool write_fault, bool *writable)
-> +kvm_pfn_t hva_to_pfn(struct kvm_follow_pfn *foll)
->  {
->  	struct vm_area_struct *vma;
->  	kvm_pfn_t pfn;
->  	int npages, r;
->  
->  	/* we can do it either atomically or asynchronously, not both */
-> -	BUG_ON(atomic && async);
-> +	BUG_ON(foll->atomic && (foll->flags & FOLL_NOWAIT));
->  
-> -	if (hva_to_pfn_fast(addr, write_fault, writable, &pfn))
-> +	if (hva_to_pfn_fast(foll, &pfn))
->  		return pfn;
->  
-> -	if (atomic)
-> +	if (foll->atomic)
->  		return KVM_PFN_ERR_FAULT;
->  
-> -	npages = hva_to_pfn_slow(addr, async, write_fault, interruptible,
-> -				 writable, &pfn);
-> +	npages = hva_to_pfn_slow(foll, &pfn);
->  	if (npages == 1)
->  		return pfn;
->  	if (npages == -EINTR)
-> @@ -2677,83 +2663,122 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
->  
->  	mmap_read_lock(current->mm);
->  	if (npages == -EHWPOISON ||
-> -	      (!async && check_user_page_hwpoison(addr))) {
-> +	      (!(foll->flags & FOLL_NOWAIT) && check_user_page_hwpoison(foll->hva))) {
->  		pfn = KVM_PFN_ERR_HWPOISON;
->  		goto exit;
->  	}
->  
->  retry:
-> -	vma = vma_lookup(current->mm, addr);
-> +	vma = vma_lookup(current->mm, foll->hva);
->  
->  	if (vma == NULL)
->  		pfn = KVM_PFN_ERR_FAULT;
->  	else if (vma->vm_flags & (VM_IO | VM_PFNMAP)) {
-> -		r = hva_to_pfn_remapped(vma, addr, write_fault, writable, &pfn);
-> +		r = hva_to_pfn_remapped(vma, foll, &pfn);
->  		if (r == -EAGAIN)
->  			goto retry;
->  		if (r < 0)
->  			pfn = KVM_PFN_ERR_FAULT;
->  	} else {
-> -		if (async && vma_is_valid(vma, write_fault))
-> -			*async = true;
-> -		pfn = KVM_PFN_ERR_FAULT;
-> +		if ((foll->flags & FOLL_NOWAIT) &&
-> +		    vma_is_valid(vma, foll->flags & FOLL_WRITE))
-> +			pfn = KVM_PFN_ERR_NEEDS_IO;
-> +		else
-> +			pfn = KVM_PFN_ERR_FAULT;
->  	}
->  exit:
->  	mmap_read_unlock(current->mm);
->  	return pfn;
->  }
->  
-> -kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-> -			       bool atomic, bool interruptible, bool *async,
-> -			       bool write_fault, bool *writable, hva_t *hva)
-> +kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
->  {
-> -	unsigned long addr = __gfn_to_hva_many(slot, gfn, NULL, write_fault);
-> -
-> -	if (hva)
-> -		*hva = addr;
-> +	foll->hva = __gfn_to_hva_many(foll->slot, foll->gfn, NULL,
-> +				      foll->flags & FOLL_WRITE);
->  
-> -	if (addr == KVM_HVA_ERR_RO_BAD) {
-> -		if (writable)
-> -			*writable = false;
-> +	if (foll->hva == KVM_HVA_ERR_RO_BAD)
->  		return KVM_PFN_ERR_RO_FAULT;
-> -	}
->  
-> -	if (kvm_is_error_hva(addr)) {
-> -		if (writable)
-> -			*writable = false;
-> +	if (kvm_is_error_hva(foll->hva))
->  		return KVM_PFN_NOSLOT;
-> -	}
->  
-> -	/* Do not map writable pfn in the readonly memslot. */
-> -	if (writable && memslot_is_readonly(slot)) {
-> -		*writable = false;
-> -		writable = NULL;
-> -	}
-> +	if (memslot_is_readonly(foll->slot))
-> +		foll->allow_write_mapping = false;
-> +
-> +	return hva_to_pfn(foll);
-> +}
-> +EXPORT_SYMBOL_GPL(__kvm_follow_pfn);
->  
-> -	return hva_to_pfn(addr, atomic, interruptible, async, write_fault,
-> -			  writable);
-> +kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-> +			       bool atomic, bool interruptible, bool *async,
-> +			       bool write_fault, bool *writable, hva_t *hva)
-> +{
-> +	kvm_pfn_t pfn;
-> +	struct kvm_follow_pfn foll = {
-> +		.slot = slot,
-> +		.gfn = gfn,
-> +		.flags = 0,
-> +		.atomic = atomic,
-> +		.allow_write_mapping = !!writable,
-> +	};
-> +
-> +	if (write_fault)
-> +		foll.flags |= FOLL_WRITE;
-> +	if (async)
-> +		foll.flags |= FOLL_NOWAIT;
-> +	if (interruptible)
-> +		foll.flags |= FOLL_INTERRUPTIBLE;
-> +
-> +	pfn = __kvm_follow_pfn(&foll);
-> +	if (pfn == KVM_PFN_ERR_NEEDS_IO) {
-> +		*async = true;
-> +		pfn = KVM_PFN_ERR_FAULT;
-> +	}
-> +	if (hva)
-> +		*hva = foll.hva;
-> +	if (writable)
-> +		*writable = foll.writable;
-> +	return pfn;
->  }
->  EXPORT_SYMBOL_GPL(__gfn_to_pfn_memslot);
->  
->  kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
->  		      bool *writable)
->  {
-> -	return __gfn_to_pfn_memslot(gfn_to_memslot(kvm, gfn), gfn, false, false,
-> -				    NULL, write_fault, writable, NULL);
-> +	kvm_pfn_t pfn;
-> +	struct kvm_follow_pfn foll = {
-> +		.slot = gfn_to_memslot(kvm, gfn),
-> +		.gfn = gfn,
-> +		.flags = write_fault ? FOLL_WRITE : 0,
-> +		.allow_write_mapping = !!writable,
-> +	};
-> +	pfn = __kvm_follow_pfn(&foll);
-> +	if (writable)
-> +		*writable = foll.writable;
-> +	return pfn;
->  }
->  EXPORT_SYMBOL_GPL(gfn_to_pfn_prot);
->  
->  kvm_pfn_t gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn)
->  {
-> -	return __gfn_to_pfn_memslot(slot, gfn, false, false, NULL, true,
-> -				    NULL, NULL);
-> +	struct kvm_follow_pfn foll = {
-> +		.slot = slot,
-> +		.gfn = gfn,
-> +		.flags = FOLL_WRITE,
-> +	};
-> +	return __kvm_follow_pfn(&foll);
->  }
->  EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot);
->  
->  kvm_pfn_t gfn_to_pfn_memslot_atomic(const struct kvm_memory_slot *slot, gfn_t gfn)
->  {
-> -	return __gfn_to_pfn_memslot(slot, gfn, true, false, NULL, true,
-> -				    NULL, NULL);
-> +	struct kvm_follow_pfn foll = {
-> +		.slot = slot,
-> +		.gfn = gfn,
-> +		.flags = FOLL_WRITE,
-> +		.atomic = true,
-> +	};
-> +	return __kvm_follow_pfn(&foll);
->  }
->  EXPORT_SYMBOL_GPL(gfn_to_pfn_memslot_atomic);
->  
-> diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
-> index 180f1a09e6ba..ed896aee5396 100644
-> --- a/virt/kvm/kvm_mm.h
-> +++ b/virt/kvm/kvm_mm.h
-> @@ -20,8 +20,7 @@
->  #define KVM_MMU_UNLOCK(kvm)		spin_unlock(&(kvm)->mmu_lock)
->  #endif /* KVM_HAVE_MMU_RWLOCK */
->  
-> -kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
-> -		     bool *async, bool write_fault, bool *writable);
-> +kvm_pfn_t hva_to_pfn(struct kvm_follow_pfn *foll);
->  
->  #ifdef CONFIG_HAVE_KVM_PFNCACHE
->  void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm,
-> diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-> index 2d6aba677830..e3fefa753a51 100644
-> --- a/virt/kvm/pfncache.c
-> +++ b/virt/kvm/pfncache.c
-> @@ -144,6 +144,12 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
->  	kvm_pfn_t new_pfn = KVM_PFN_ERR_FAULT;
->  	void *new_khva = NULL;
->  	unsigned long mmu_seq;
-> +	struct kvm_follow_pfn foll = {
-> +		.slot = gpc->memslot,
-> +		.gfn = gpa_to_gfn(gpc->gpa),
-> +		.flags = FOLL_WRITE,
-> +		.hva = gpc->uhva,
-> +	};
->  
->  	lockdep_assert_held(&gpc->refresh_lock);
->  
-> @@ -183,7 +189,7 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
->  		}
->  
->  		/* We always request a writeable mapping */
-> -		new_pfn = hva_to_pfn(gpc->uhva, false, false, NULL, true, NULL);
-> +		new_pfn = hva_to_pfn(&foll);
->  		if (is_error_noslot_pfn(new_pfn))
->  			goto out_error;
->  
-> -- 
-> 2.41.0.255.g8b1d071c50-goog
-> 
+Applied #7 and #24 to 6.5/scsi-staging, thanks!
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Martin K. Petersen	Oracle Linux Engineering
