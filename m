@@ -2,85 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DEF74929E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 02:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E867074929F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 02:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjGFAao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 20:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S232570AbjGFAar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 20:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbjGFAam (ORCPT
+        with ESMTP id S232305AbjGFAan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 20:30:42 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA119A9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 17:30:41 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c2cf29195f8so83151276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 17:30:41 -0700 (PDT)
+        Wed, 5 Jul 2023 20:30:43 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548F519B2
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 17:30:42 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b89b75dc1cso9205795ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 17:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688603441; x=1691195441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fDNtb8VGNsWJMd94B1yvjb9baMo04ogysNrDvAUSWkk=;
-        b=iPWV8L1jyHGFjgPG1e5DkKfQtY3x/CGt89+fMJ/bu3j/1cV87OyziFgyMwLBr32FHf
-         eJAll/hxbFiau5yzj/0Xxv1XL4TrpqOek4oJPr+TWFqHfOyLAo4Ezfs6GXxb8GDL3nTT
-         rraj5yM6rOwTWTUhoQ6EFOEPYXTzSqqYg6EqUuuh3uhasSCtxx6M7pB8nzeUxR9IEkai
-         es1f/vIFQs89by4IxE+GjuqppQ5L53M6CJWf/ZaQdW0DW3FBm7fBzko1gzm6lkd3KqcN
-         n0EHMop9F4f72B6zSYgFWgSG/QvKNC3uvRcsaZXjFndUnGrWi8n8AVKq5CKgDTEQR4px
-         wpDw==
+        d=gmail.com; s=20221208; t=1688603441; x=1691195441;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F8Jhj6afcnoCn+BxeDwfU74i3bb4E3uZLGQ1h/Zplhs=;
+        b=XvtSueIVj2DbVpiQ3SULx9iOP69/r5l1+DwOc1Aq5zh5oUIFp03CoqDBLg1mIpJeq4
+         cVyDZLKM7wA6LBYncxTsbUvogx/hTYLcrkWfxa3+NyEa7ceelvijiUn/cVPnffbFdgiA
+         IIqvkqTeLvnKs9FFbR+9WSerGsrZg9WStILEIqzPIN0v6dWAUabCdwLxpeoA1olUv3Qf
+         OZ5m/7MwgdJyX+SgvNs2A6yf76jEnWDsSwJSbboXMzRJ5kP8LZ05rUrZ544MrwVFh7Bs
+         68gi5LNqSkvf6oBzT3XlzpJU2g6kTSe13b0/nM1dmtchJQngAje3YbanJ8I+vok80ESY
+         b09Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1688603441; x=1691195441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fDNtb8VGNsWJMd94B1yvjb9baMo04ogysNrDvAUSWkk=;
-        b=N7p372AHFFneIlE5S17QUDtziEMFT51beQ56U5qNqBpy94yARfJBkqPv/J7px9EhGB
-         5qR3/96eZqne6DFYICINSYECGxkV/nJ00xU6d6C2zRoAx2P2ZSD1pRz/4MPGOaHIX196
-         RuBcVOzsd1iM9x+D594UiEVxgnEEd2EM5Syt7Rn5oKwc7cnry3F4bZC83e1+6dev7QsK
-         Scr0L77nJMoSYl3gGfvrGK11kpt4dJoyImvZDnFJTE3P4zpNvMVCh7znG1/e4cDJOq76
-         UkUpqQoHUuP+qrK/2VYZSSNBe3bY5G5OuGer9V2NCwmTf/3A2c/G297KPzuFs3aEvvrs
-         RIRg==
-X-Gm-Message-State: ABy/qLb6oDKgBcqVSunxWGqH3YWRRONmKw3A5RjJ3u4ZlDjPI6vroKb9
-        JcmKeU++5kIiNeyjJW7z++AI4qjRMp4I9i7Kt/nchA==
-X-Google-Smtp-Source: APBJJlGTkJWTILVgZXDRlL1p0hLqObb6Qq5zIIPhh84UNi8OaQy1jTvMQiQf1KyO7Y1YLXWRj8pKQK81+RRrsDVVNdk=
-X-Received: by 2002:a25:98c6:0:b0:c0b:7483:5cdb with SMTP id
- m6-20020a2598c6000000b00c0b74835cdbmr342231ybo.35.1688603440921; Wed, 05 Jul
- 2023 17:30:40 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8Jhj6afcnoCn+BxeDwfU74i3bb4E3uZLGQ1h/Zplhs=;
+        b=MEXUZRLMg2/MULTeS3EUa3tAd8QKDMwcsCdwMUpOmERhE1GT/RvRgQXsbjg8GNfATn
+         ECVrnJwNn1A8sMcBaWbqBh8C9GSDZdQl8/yDRa2O0SveFLL14QUXNyV50MY7hgqxU1+u
+         FFAU+dWu0IFuAl3BP9jSk+r8Esk2SVQyn0A42xo0HxwJNGS+1sD3uTfRH1r07JCIo708
+         r4JdOuQZseNI9aaFlq636IOpNNXScN5WpRT7WgdEYfi0MNepp3SmNVx0hvUrS7nSFD4y
+         krhH2IloMtY2NH2tbNJ0DNfdrakWknFrs5rXxR4wqMW4QUV3MNa7Fx1j57O7bV27woi0
+         zvKw==
+X-Gm-Message-State: ABy/qLZGAXOLhlFjNnsD3JTJRgUMkhTzuJGp7lR+A35UVjfRBZTRz2PP
+        WM3lWyeWj4KOGt8AibN40DgJRZDmwKo=
+X-Google-Smtp-Source: APBJJlE6oJ9KpW+EmfwA4bZbgZjGHlEgaG/78WXn16doRBLh2RyfuNM2HnxPwCyq11e4g4GmCU1fFg==
+X-Received: by 2002:a17:902:c94c:b0:1b5:674d:2aa5 with SMTP id i12-20020a170902c94c00b001b5674d2aa5mr988197pla.13.1688603441424;
+        Wed, 05 Jul 2023 17:30:41 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170902b28700b001b89119aa30sm47889plr.289.2023.07.05.17.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 17:30:41 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 17:30:38 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: gameport - use IS_REACHABLE() instead of open-coding
+ it
+Message-ID: <ZKYLLmsdCH0Gp7TO@google.com>
 MIME-Version: 1.0
-References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-3-surenb@google.com>
- <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com> <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
- <ZKXRsQC8ufiebDGu@x1n> <CAJuCfpGHRfK1ZC3YmF1caKHiR7hD73goOXLKQubFLuOgzCr0dg@mail.gmail.com>
- <20230705172424.e505f5013bfdf44543d9c6be@linux-foundation.org>
-In-Reply-To: <20230705172424.e505f5013bfdf44543d9c6be@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 5 Jul 2023 17:30:29 -0700
-Message-ID: <CAJuCfpFLRePeOsrSg--5GtWbC1M5y21Sq7gzrs1vVEUE7C+30A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        jirislaby@kernel.org, jacobly.alt@gmail.com,
-        holger@applied-asynchrony.com, hdegoede@redhat.com,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,21 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 5:24=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Wed, 5 Jul 2023 13:33:26 -0700 Suren Baghdasaryan <surenb@google.com> =
-wrote:
->
-> > I was hoping we could re-enable VMA locks in 6.4 once we get more
-> > confirmations that the problem is gone. Is that not possible once the
-> > BROKEN dependency is merged?
->
-> I think "no".  By doing this we're effectively backporting a minor
-> performance optimization, which isn't a thing we'd normally do.
+Replace an open-coded preprocessor conditional with an equivalent helper.
 
-In that case, maybe for 6.4 we send the fix and only disable it by
-default without marking BROKEN? That way we still have a way to enable
-it if desired?
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ include/linux/gameport.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
+diff --git a/include/linux/gameport.h b/include/linux/gameport.h
+index 0a221e768ea4..07e370113b2b 100644
+--- a/include/linux/gameport.h
++++ b/include/linux/gameport.h
+@@ -63,7 +63,7 @@ struct gameport_driver {
+ int gameport_open(struct gameport *gameport, struct gameport_driver *drv, int mode);
+ void gameport_close(struct gameport *gameport);
+ 
+-#if defined(CONFIG_GAMEPORT) || (defined(MODULE) && defined(CONFIG_GAMEPORT_MODULE))
++#if IS_REACHABLE(CONFIG_GAMEPORT)
+ 
+ void __gameport_register_port(struct gameport *gameport, struct module *owner);
+ /* use a define to avoid include chaining to get THIS_MODULE */
+-- 
+2.41.0.255.g8b1d071c50-goog
+
+
+-- 
+Dmitry
