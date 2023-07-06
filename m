@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1362749E0B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0AC749E0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbjGFNnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S232600AbjGFNn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjGFNnW (ORCPT
+        with ESMTP id S230290AbjGFNnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:43:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D968F1FC6;
-        Thu,  6 Jul 2023 06:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EF1761956;
-        Thu,  6 Jul 2023 13:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C683DC433C7;
-        Thu,  6 Jul 2023 13:43:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688650992;
-        bh=FUjvj+1KggTKf3IJ7E9yOc6WsvJXizVjHxqnoZ8GHtU=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=HcLTEbcH6/iC3K0d3H89WJpztQgQD/sCOz5U04lYXNdkEa0OB03R7CCOSGHKKAdfK
-         9BK0o8aYaN1Pwp+gXqZBUnK1Tj3brEXIiKwj/qybu61bjoV56WCkcmmVHfC5flq1jy
-         ixNEmpPItlRnFiOv/mxS/sySQ74E5qW6ZFRDZVsTCsf2UntXYir9yxTo4zCBY/QMCx
-         tpyh7nvIX0GYRlZmF1LJZrvT8I4l3TcNLLHtr5fnfXuKMjSACKGvgCdGcI+tDni6c3
-         1dvNckWuZEDXHaTk0XicV5XqAZWzYHvcwRd9sepBXzgK0il9ixCkXMH0uV4AOMGfs1
-         HXNOZIXTD/gSA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id A5B22EB64D9;
-        Thu,  6 Jul 2023 13:43:12 +0000 (UTC)
-From:   =?utf-8?q?T=C3=B3th_J=C3=A1nos?= via B4 Relay 
-        <devnull+gomba007.gmail.com@kernel.org>
-Date:   Thu, 06 Jul 2023 15:42:47 +0200
-Subject: [PATCH] security: smack: smackfs: fix typo (lables->labels)
+        Thu, 6 Jul 2023 09:43:52 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B5131BFD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:43:45 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxlPAQxaZkSvgAAA--.3874S3;
+        Thu, 06 Jul 2023 21:43:44 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax3c4OxaZkq_ceAA--.27112S3;
+        Thu, 06 Jul 2023 21:43:42 +0800 (CST)
+Message-ID: <7869d9d7-1763-58d8-119f-08befff9615e@loongson.cn>
+Date:   Thu, 6 Jul 2023 21:43:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] drm/mediatek: Fix potential memory leak if vmap() fail
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        loongson-kernel@lists.loongnix.cn
+References: <20230626185801.684451-1-suijingfeng@loongson.cn>
+ <be63fd1b-7659-75b8-e037-38528e8a8276@collabora.com>
+From:   suijingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <be63fd1b-7659-75b8-e037-38528e8a8276@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230706-smackfs-lables-fix-v1-1-228c8da5a526@gmail.com>
-X-B4-Tracking: v=1; b=H4sIANbEpmQC/x2MSQqAMAwAvyI5G6g7+hXxUGOqwZUGRJD+3eJxB
- mZeUPbCCl3ygudbVM4jQpYmQIs9ZkaZIkNu8sI0pkbdLa1OcbPjxopOHrTU1hWVVDatgxhenqP
- +p/0QwgfggIfrZAAAAA==
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688650991; l=959;
- i=gomba007@gmail.com; s=20230706; h=from:subject:message-id;
- bh=S9HyRNyzLwD2W29A0DsX2ZZZiM4IO3L3DpcXXpfmTVs=;
- b=+l3RH2YK8ag+dH4tuUELH+9cCBBPq/Q/0jA3y2RaAMzIg/aM05m2xuKO2LqP1+WPWo8bU9u9R
- eJrj3WH5m+wCBZgCrQW0f5XpFTJJfh+0d8KcynKf72E51KCl0BZbNoI
-X-Developer-Key: i=gomba007@gmail.com; a=ed25519;
- pk=iY9MjPCbud82ULS2PQJIq3QwjKyP/Sg730I6T2M8Y5U=
-X-Endpoint-Received: by B4 Relay for gomba007@gmail.com/20230706 with auth_id=60
-X-Original-From: =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
-Reply-To: <gomba007@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Ax3c4OxaZkq_ceAA--.27112S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Ww1rCFWxZF1kWrykWFWDWrX_yoW8Xr4fpF
+        4ktay5ArWjkr4FqF1Iy3WqvFy5A3WFga1DGr1Iqa1qvr1DAF10qFyUZ34jgrW2vr4Ikw47
+        tw1DXr9xur1qyFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_GFv_Wrylx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DU
+        UUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tóth János <gomba007@gmail.com>
+Hi,
 
-Fix a spelling error in smakcfs.
+On 2023/7/6 20:47, AngeloGioacchino Del Regno wrote:
+> Il 26/06/23 20:58, Sui Jingfeng ha scritto:
+>> Also return -ENOMEM if such a failure happens, the implement should take
+>> responsibility for the error handling.
+>>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>
+> This commit needs a Fixes tag. Please add the relevant one and resend.
+>
+Done at [1],
 
-Signed-off-by: Tóth János <gomba007@gmail.com>
----
- security/smack/smackfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 5590eaad241b..2b79c30d4bb6 100644
---- a/security/smack/smackfs.c
-+++ b/security/smack/smackfs.c
-@@ -114,7 +114,7 @@ struct smack_known *smack_syslog_label;
-  * SMACK_PTRACE_DEFAULT    regular smack ptrace rules (/proc based)
-  * SMACK_PTRACE_EXACT      labels must match, but can be overriden with
-  *			   CAP_SYS_PTRACE
-- * SMACK_PTRACE_DRACONIAN  lables must match, CAP_SYS_PTRACE has no effect
-+ * SMACK_PTRACE_DRACONIAN  labels must match, CAP_SYS_PTRACE has no effect
-  */
- int smack_ptrace_rule = SMACK_PTRACE_DEFAULT;
- 
+Thanks for point this out, I got it.
 
----
-base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
-change-id: 20230706-smackfs-lables-fix-ac965c4c479f
+[1] https://patchwork.freedesktop.org/patch/545843/?series=119885&rev=2
 
-Best regards,
--- 
-Tóth János <gomba007@gmail.com>
+
+> Thanks,
+> Angelo
+>
+>> ---
+>>   drivers/gpu/drm/mediatek/mtk_drm_gem.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c 
+>> b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+>> index a25b28d3ee90..9f364df52478 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+>> @@ -247,7 +247,11 @@ int mtk_drm_gem_prime_vmap(struct drm_gem_object 
+>> *obj, struct iosys_map *map)
+>>         mtk_gem->kvaddr = vmap(mtk_gem->pages, npages, VM_MAP,
+>>                      pgprot_writecombine(PAGE_KERNEL));
+>> -
+>> +    if (!mtk_gem->kvaddr) {
+>> +        kfree(sgt);
+>> +        kfree(mtk_gem->pages);
+>> +        return -ENOMEM;
+>> +    }
+>>   out:
+>>       kfree(sgt);
+>>       iosys_map_set_vaddr(map, mtk_gem->kvaddr);
+>
+>
 
