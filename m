@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C8A749442
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 05:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B097749443
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 05:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjGFDcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 23:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S232842AbjGFDdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 23:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjGFDco (ORCPT
+        with ESMTP id S232414AbjGFDcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 23:32:44 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635071BCB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 20:32:43 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-668711086f4so157472b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 20:32:43 -0700 (PDT)
+        Wed, 5 Jul 2023 23:32:46 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D316C1BC8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 20:32:44 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6686708c986so305188b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 20:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688614362; x=1691206362;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688614364; x=1691206364;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1tlqEDwtRwx6uylosFQCtOuy8lBa96SgAwEz93e0NjI=;
-        b=dgvUiTH0tF+IXJGUSbU/qOy8YrB08kHgQ8/arUCFTyddQbneanC9tezL8lXIpoOByK
-         g4/tb/g6cLn8nAqGWrq699W04LhdinFbnL00Oi0d0C7PnQWyyThCRxydAeh0ujC94vdJ
-         qVxv39E/siIKroL1TPStJTyP6bnLrwui9rdstp7Eik75uddLnX5ozwjWUSVnhoAv6sRB
-         mU/SBpAJz005Ec7YqsWPrJh1dmlIgHWUKj8dBGrYGZEdWb6AjCcxfrmaihF00HVpZUMK
-         ltoeoi84WmR6i5+ls9KsvIduAfSHUHBhS4f8ktnIJECF7lvQp7ZIITS+IoBFm2Yn+XfI
-         aCWQ==
+        bh=X54Cbu5zOMSO9e4vO2L+KNC0L67rHLP6N1OU6Cg3wA8=;
+        b=zKJJNZDxACZFWxRB/zHvfSWKhUbPKItCK9lk7EtkWevhCtdWzJp57LMr7M5SO4p889
+         0CEiHoOsfhUxrxRMxAOHQLCywtikLQX2OGGV+bpxtN+jTpHfVSeyyPdIIIC5Wq0/MDpt
+         6TV8xKx/89fEhdUG01aTS1EBWXNSz833xGU9iSxfFYTnU6hcpPzki+i8Gka177fS/dfN
+         Xf5Ikzkgi7UOGvY+SkskucsCEtYH0OZlRBSr30r3SKHrN83Ru3p3d+JduZjia9Vy2lpw
+         WXaYeBvWbvGBmnzlNn3c4ko+ygBEiZNgGcJjq84w5pgjn3GjSCuCTuPEi0DPa1GsQDD9
+         M6jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688614363; x=1691206363;
+        d=1e100.net; s=20221208; t=1688614364; x=1691206364;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1tlqEDwtRwx6uylosFQCtOuy8lBa96SgAwEz93e0NjI=;
-        b=M3/9IEAizMXVc4GjbaPZYiQIH6G+K5r8ZMiPgdP6/8Xmr1p8JzdiGm088oY8VQTw+0
-         +gGLqg4YiVSgZ8wbljD9+/held3nTYVuuDeU7Z8tIxWlDQyl0FUk8r+dW7lybFAKw8Z7
-         THX0LdC2EvCLLpeoH6cEY1K6L7SCMY3mHIqzbB8WeoK26hClgYrEiJ9hL7PfYAW0kWsa
-         m7Ii2pDxQ1FMdnKXQnqTxbqlFAXRkX2r1s0I7tXrvwzbfSYnpTfpGqfNgyN66abnOE4q
-         ZUdPz/jNg/ivGWAxaIT9NAafSWYD2D6/SxG0ADdqPcleDzyVncjaRnY8RfHlrcR4QPwT
-         pSxw==
-X-Gm-Message-State: ABy/qLalXtOF95QiHA9nehjsnJsUcOCObOTx3QbJHCPNBb90Vfn5wl8h
-        Cihpy8Cex4SDEX0cMI/8+tG+d1i4Qwl8quvPu3k=
-X-Google-Smtp-Source: APBJJlHRoO3OOf/Yu8KIk2dz7/z/aRnJLFW/TkOd0McK/ZFZgWFWJTIVEe3mL+IgCv3DGUL326qHIA==
-X-Received: by 2002:a05:6a00:3a0a:b0:678:7744:31fd with SMTP id fj10-20020a056a003a0a00b00678774431fdmr6980140pfb.0.1688614362670;
-        Wed, 05 Jul 2023 20:32:42 -0700 (PDT)
+        bh=X54Cbu5zOMSO9e4vO2L+KNC0L67rHLP6N1OU6Cg3wA8=;
+        b=YJsmuvAOnzKBupgcNH2g+VmrgIdGHjgfe1mJAq1o/X+LdVhIu64ZHusENRO3ZBRylt
+         8/MPe5MfVcRgzPg8ROsq6Xx+Y25euh+vDxjwFt87z8GpErYaaxkazf4p51DoVG3efmqI
+         BVHrZ2U9ALlVY5g4yNi0dtj9BqfQriq57DvZtq2VVpsu8zFArqTQ9dpnhw6zVQiy30bD
+         w8zC7afP0Mw9ZQ6zz/aPltGH1umhZs5weN15yT7PnympiPU2lgS5YhPMFXn4ySn7bAS8
+         07x9alpoIqmfSCSityvyS9QdIdtqZunLUuPOz4yOc1Xn/V+w5ijOIt0SqUkEvTNcL5V+
+         oCYQ==
+X-Gm-Message-State: ABy/qLbdIG+PMU7F0UHFbgbVKk6I0Twy8fa0t2c4xZ+s/5O5rDbxUgx5
+        qtEi3lw/OQbKyV73uwnSLxqw2AktzQZVF+hyHTY=
+X-Google-Smtp-Source: APBJJlEibChBqnf08BaWR2lS6f718PlTQs2OsmFSQ3SEhFbZq18oY01nl+i2/jd3tsACHZQGlvlb+Q==
+X-Received: by 2002:a05:6a00:841:b0:668:9fb6:b311 with SMTP id q1-20020a056a00084100b006689fb6b311mr777400pfk.32.1688614363983;
+        Wed, 05 Jul 2023 20:32:43 -0700 (PDT)
 Received: from charlie.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id fk13-20020a056a003a8d00b006589cf6d88bsm239785pfb.145.2023.07.05.20.32.41
+        by smtp.gmail.com with ESMTPSA id fk13-20020a056a003a8d00b006589cf6d88bsm239785pfb.145.2023.07.05.20.32.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 20:32:42 -0700 (PDT)
+        Wed, 05 Jul 2023 20:32:43 -0700 (PDT)
 From:   Charlie Jenkins <charlie@rivosinc.com>
-Date:   Wed, 05 Jul 2023 20:30:17 -0700
-Subject: [PATCH 1/3] RISC-V: Framework for vendor extensions
+Date:   Wed, 05 Jul 2023 20:30:18 -0700
+Subject: [PATCH 2/3] RISC-V: Add T-Head 0.7.1 vector extension to hwprobe
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230705-thead_vendor_extensions-v1-1-ad6915349c4d@rivosinc.com>
+Message-Id: <20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com>
 References: <20230705-thead_vendor_extensions-v1-0-ad6915349c4d@rivosinc.com>
 In-Reply-To: <20230705-thead_vendor_extensions-v1-0-ad6915349c4d@rivosinc.com>
 To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -76,138 +76,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create Kconfig files, Makefiles, and functions to enable vendors to
-provide information via the riscv_hwprobe syscall about which vendor
-extensions are available.
+Using vendor extensions in hwprobe, add the ability to query if the
+0.7.1 vector extension is available. It is determined to be available
+only if the kernel is compiled with vector support, and the user is
+using the c906.
 
 Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
- arch/riscv/Kbuild                     |  1 +
- arch/riscv/Kconfig                    |  1 +
- arch/riscv/Kconfig.vendor             |  3 +++
- arch/riscv/include/asm/hwprobe.h      |  1 +
- arch/riscv/kernel/sys_riscv.c         | 40 ++++++++++++++++++++++++++++++++---
- arch/riscv/vendor_extensions/Makefile |  3 +++
- 6 files changed, 46 insertions(+), 3 deletions(-)
+ arch/riscv/Kconfig.vendor                       | 11 +++++++++++
+ arch/riscv/include/asm/extensions.h             | 16 ++++++++++++++++
+ arch/riscv/kernel/sys_riscv.c                   | 20 ++++++++++++++++++++
+ arch/riscv/vendor_extensions/Makefile           |  2 ++
+ arch/riscv/vendor_extensions/thead/Makefile     |  8 ++++++++
+ arch/riscv/vendor_extensions/thead/extensions.c | 24 ++++++++++++++++++++++++
+ 6 files changed, 81 insertions(+)
 
-diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
-index afa83e307a2e..bea38010d9db 100644
---- a/arch/riscv/Kbuild
-+++ b/arch/riscv/Kbuild
-@@ -3,6 +3,7 @@
- obj-y += kernel/ mm/ net/
- obj-$(CONFIG_BUILTIN_DTB) += boot/dts/
- obj-y += errata/
-+obj-y += vendor_extensions/
- obj-$(CONFIG_KVM) += kvm/
- 
- obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c1505c7729ec..19404ede0ee3 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -276,6 +276,7 @@ config AS_HAS_OPTION_ARCH
- 
- source "arch/riscv/Kconfig.socs"
- source "arch/riscv/Kconfig.errata"
-+source "arch/riscv/Kconfig.vendor"
- 
- menu "Platform type"
- 
 diff --git a/arch/riscv/Kconfig.vendor b/arch/riscv/Kconfig.vendor
-new file mode 100644
-index 000000000000..213ac3e6fed5
---- /dev/null
+index 213ac3e6fed5..b8b9d15153eb 100644
+--- a/arch/riscv/Kconfig.vendor
 +++ b/arch/riscv/Kconfig.vendor
-@@ -0,0 +1,3 @@
-+menu "Vendor extensions selection"
+@@ -1,3 +1,14 @@
+ menu "Vendor extensions selection"
+ 
++config VENDOR_EXTENSIONS_THEAD
++	bool "T-HEAD vendor extensions"
++	depends on RISCV_ALTERNATIVE
++	default n
++	help
++	  All T-HEAD vendor extensions Kconfig depend on this Kconfig. Disabling
++	  this Kconfig will disable all T-HEAD vendor extensions. Please say "Y"
++	  here if your platform uses T-HEAD vendor extensions.
 +
-+endmenu # "Vendor extensions selection"
-diff --git a/arch/riscv/include/asm/hwprobe.h b/arch/riscv/include/asm/hwprobe.h
-index 78936f4ff513..fadb38b83243 100644
---- a/arch/riscv/include/asm/hwprobe.h
-+++ b/arch/riscv/include/asm/hwprobe.h
-@@ -9,5 +9,6 @@
- #include <uapi/asm/hwprobe.h>
- 
- #define RISCV_HWPROBE_MAX_KEY 5
-+#define RISCV_HWPROBE_VENDOR_EXTENSION_SPACE (UL(1)<<63)
- 
- #endif
++	  Otherwise, please say "N" here to avoid unnecessary overhead.
++
+ endmenu # "Vendor extensions selection"
+diff --git a/arch/riscv/include/asm/extensions.h b/arch/riscv/include/asm/extensions.h
+new file mode 100644
+index 000000000000..27ce294a3d65
+--- /dev/null
++++ b/arch/riscv/include/asm/extensions.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2023 by Rivos Inc.
++ */
++#ifndef __ASM_EXTENSIONS_H
++#define __ASM_EXTENSIONS_H
++
++#include <asm/hwprobe.h>
++#include <linux/cpumask.h>
++
++#define THEAD_ISA_EXT0 (RISCV_HWPROBE_VENDOR_EXTENSION_SPACE)
++#define THEAD_ISA_EXT0_V0_7_1 (1 << 0)
++
++int hwprobe_thead(__u64 marchid, __u64 mimpid, struct riscv_hwprobe *pair,
++		  const struct cpumask *cpus);
++#endif
 diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 26ef5526bfb4..2351a5f7b8b1 100644
+index 2351a5f7b8b1..58b12eaeaf46 100644
 --- a/arch/riscv/kernel/sys_riscv.c
 +++ b/arch/riscv/kernel/sys_riscv.c
-@@ -188,9 +188,35 @@ static u64 hwprobe_misaligned(const struct cpumask *cpus)
- 	return perf;
- }
- 
-+static int hwprobe_vendor(__u64 mvendorid, struct riscv_hwprobe *pair,
-+			 const struct cpumask *cpus)
+@@ -13,6 +13,7 @@
+ #include <asm/vector.h>
+ #include <asm/switch_to.h>
+ #include <asm/uaccess.h>
++#include <asm/extensions.h>
+ #include <asm/unistd.h>
+ #include <asm-generic/mman-common.h>
+ #include <vdso/vsyscall.h>
+@@ -192,6 +193,25 @@ static int hwprobe_vendor(__u64 mvendorid, struct riscv_hwprobe *pair,
+ 			 const struct cpumask *cpus)
+ {
+ 	switch (mvendorid) {
++#ifdef CONFIG_VENDOR_EXTENSIONS_THEAD
++	case THEAD_VENDOR_ID:
++		struct riscv_hwprobe marchid = {
++			.key = RISCV_HWPROBE_KEY_MARCHID,
++			.value = 0
++		};
++		struct riscv_hwprobe mimpid = {
++			.key = RISCV_HWPROBE_KEY_MIMPID,
++			.value = 0
++		};
++
++		hwprobe_arch_id(&marchid, cpus);
++		hwprobe_arch_id(&mimpid, cpus);
++		if (marchid.value != -1ULL && mimpid.value != -1ULL)
++			hwprobe_thead(marchid.value, mimpid.value, pair, cpus);
++		else
++			return -1;
++		break;
++#endif
+ 	default:
+ 		return -1;
+ 	}
+diff --git a/arch/riscv/vendor_extensions/Makefile b/arch/riscv/vendor_extensions/Makefile
+index e815895e9372..38c3e80469fd 100644
+--- a/arch/riscv/vendor_extensions/Makefile
++++ b/arch/riscv/vendor_extensions/Makefile
+@@ -1,3 +1,5 @@
+ ifdef CONFIG_RELOCATABLE
+ KBUILD_CFLAGS += -fno-pie
+ endif
++
++obj-$(CONFIG_VENDOR_EXTENSIONS_THEAD) += thead/
+diff --git a/arch/riscv/vendor_extensions/thead/Makefile b/arch/riscv/vendor_extensions/thead/Makefile
+new file mode 100644
+index 000000000000..7cf43c629b66
+--- /dev/null
++++ b/arch/riscv/vendor_extensions/thead/Makefile
+@@ -0,0 +1,8 @@
++ifdef CONFIG_FTRACE
++CFLAGS_REMOVE_extensions.o = $(CC_FLAGS_FTRACE)
++endif
++ifdef CONFIG_KASAN
++KASAN_SANITIZE_extensions.o := n
++endif
++
++obj-y += extensions.o
+diff --git a/arch/riscv/vendor_extensions/thead/extensions.c b/arch/riscv/vendor_extensions/thead/extensions.c
+new file mode 100644
+index 000000000000..a177501bc99c
+--- /dev/null
++++ b/arch/riscv/vendor_extensions/thead/extensions.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023 by Rivos Inc.
++ */
++
++#include <asm/extensions.h>
++
++int hwprobe_thead(__u64 marchid, __u64 mimpid, struct riscv_hwprobe *pair,
++		  const struct cpumask *cpus)
 +{
-+	switch (mvendorid) {
++	pair->value = 0;
++	switch (pair->key) {
++	case THEAD_ISA_EXT0:
++#ifdef CONFIG_RISCV_ISA_V
++		if (marchid == 0 && mimpid == 0)
++			pair->value |= THEAD_ISA_EXT0_V0_7_1;
++#endif
++		break;
 +	default:
 +		return -1;
 +	}
 +
 +	return 0;
 +}
-+
- static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 			     const struct cpumask *cpus)
- {
-+	int err;
-+
-+	if (((unsigned long) pair->key) >= RISCV_HWPROBE_VENDOR_EXTENSION_SPACE) {
-+		struct riscv_hwprobe mvendorid = {
-+			.key = RISCV_HWPROBE_KEY_MVENDORID,
-+			.value = 0
-+		};
-+
-+		hwprobe_arch_id(&mvendorid, cpus);
-+		if (mvendorid.value != -1ULL)
-+			err = hwprobe_vendor(mvendorid.value, pair, cpus);
-+		else
-+			err = -1;
-+	}
-+
- 	switch (pair->key) {
- 	case RISCV_HWPROBE_KEY_MVENDORID:
- 	case RISCV_HWPROBE_KEY_MARCHID:
-@@ -217,13 +243,21 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 
- 	/*
- 	 * For forward compatibility, unknown keys don't fail the whole
--	 * call, but get their element key set to -1 and value set to 0
--	 * indicating they're unrecognized.
-+	 * call, instead an error is raised to indicate the element key
-+	 * is unrecognized.
- 	 */
- 	default:
-+		err = -1;
-+		break;
-+	}
-+
-+	/*
-+	 * Setting the element key to -1 and value to 0 indicates that
-+	 * hwprobe was unable to find the requested key.
-+	 */
-+	if (err != 0) {
- 		pair->key = -1;
- 		pair->value = 0;
--		break;
- 	}
- }
- 
-diff --git a/arch/riscv/vendor_extensions/Makefile b/arch/riscv/vendor_extensions/Makefile
-new file mode 100644
-index 000000000000..e815895e9372
---- /dev/null
-+++ b/arch/riscv/vendor_extensions/Makefile
-@@ -0,0 +1,3 @@
-+ifdef CONFIG_RELOCATABLE
-+KBUILD_CFLAGS += -fno-pie
-+endif
 
 -- 
 2.41.0
