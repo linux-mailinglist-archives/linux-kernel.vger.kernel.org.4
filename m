@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006F274A067
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCB174A066
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbjGFPFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S233760AbjGFPFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbjGFPFr (ORCPT
+        with ESMTP id S233703AbjGFPFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:05:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D965E72
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688655897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=hzl1oBmdQuVl+ZNqL8T8RCyz6ttDV4G7nQumbbXOol0=;
-        b=amVwSP4lV1lb92CC/+orBR3b+ZVSX31RLazwFWZ7/i/vgK5ZhAe+77VQZRcmCeeWyXf/da
-        LqxumMopKxxEFP5hrjpPX7t1Kic9MDTWnJmh5aRIOXDCDmwg5z59fNtG2Kxc26RilKS+Ik
-        5nVxKqs+GsEb76E1jOeJshxuJwDRwrw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-44-SnlEUc1INPyZlv3934nZBA-1; Thu, 06 Jul 2023 11:04:55 -0400
-X-MC-Unique: SnlEUc1INPyZlv3934nZBA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6EAA856506;
-        Thu,  6 Jul 2023 15:04:54 +0000 (UTC)
-Received: from localhost (unknown [10.22.17.175])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D65240C206F;
-        Thu,  6 Jul 2023 15:04:54 +0000 (UTC)
-Date:   Thu, 6 Jul 2023 12:04:53 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 4.14.320-rt151
-Message-ID: <ZKbYFel0cWrYp/UN@uudg.org>
+        Thu, 6 Jul 2023 11:05:44 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5511732
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:05:40 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-401d1d967beso343911cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 08:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688655939; x=1691247939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=msEvTjDikrgnhkRF3xJHOMkj86YrSM0qTZJUNmF80v4=;
+        b=X4BDECg3HA6xRYn5CdWL0nOgUUnK1bioxo6zmKYJTvqxEdQ9U8HIOZAa/2QiMzqiXC
+         xgkPTQI5EcaHvb7gM8hdCN/sMNjuacB1CVFdVGw/1MJqOehOMJiHNnj9hLWg5U535ncM
+         bC/q2cccDX7zSEKUo0QrXGKfBfV62JbSEIBMggcxbxg+2nqsgeotkvzfWi4j8TdqR87Y
+         9oJxlSt0M6moa98ZDo9hyIqaTzB5VbrVtnpn/y39iprMCaMXrHb292SyAsNDNmc3drPi
+         JnFQA97PUbDF1Gh+Whn/PYp/9Z6mu/SeMfxTGtvekIIuLVJlTIyHpyMaj/jrBWQ2Myx9
+         XbSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688655939; x=1691247939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=msEvTjDikrgnhkRF3xJHOMkj86YrSM0qTZJUNmF80v4=;
+        b=DY+8SIaYw5z8GmWExBmhIpWYk0yrbIXBFJ/K/K9PkEKtT9oW04ROandp8GWHy7Ajql
+         E0seIT3BpiAaATFVEkF7ChVdw2b2bMYQYwb2BymzZ5g1mtsk0zfQypzUt5a0edsytO1E
+         cGOcIGJdhwvItCJigp2rGeCxD6ERlxU502vXaeUHoR8wn2Bm+mGpd9Y5Gx2e+N7cUbiD
+         7g8kxLFFyFVNuMXR8CngGktmScg6CcZdC1aJp6rPRahmxqLf9bw8cEcrD6I3w43KTcJG
+         y9iP0sWr+cOdeM4UUbps15ib8Y0IFMl2UvKZRSCaKvsr9ZOhhiOt4uez6fsK/SfW56RS
+         4qEA==
+X-Gm-Message-State: ABy/qLbVLFYNafXiPeHDNQbmWqdC7mHfuO7bqh4i0KiqFJPqJS4znyEF
+        De7iwG9U+Kfu+kHPN8UaRg5HSfJt7mcLcg8SHL0+Aw==
+X-Google-Smtp-Source: APBJJlGOPYnRx4voPuHx8soGZwPPsIqGhSC2eDD71kFlff+Kq85+Ni5Sa25sG/PtaOHU+0UvpsZkC6JEc630C2fkX8Y=
+X-Received: by 2002:ac8:5994:0:b0:3f8:5b2:aeed with SMTP id
+ e20-20020ac85994000000b003f805b2aeedmr146287qte.21.1688655939226; Thu, 06 Jul
+ 2023 08:05:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230706130800.85963-1-squirrel.prog@gmail.com>
+ <CANn89iKxGVDQba1UCbpYKhNo=rZXuN2j=610DbJx0z=kWa7N3w@mail.gmail.com> <CAJfyFi3OEz2Dz9gopigkVJRa4qCToJ+ob952O_qkOFiNn08LwA@mail.gmail.com>
+In-Reply-To: <CAJfyFi3OEz2Dz9gopigkVJRa4qCToJ+ob952O_qkOFiNn08LwA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 6 Jul 2023 17:05:28 +0200
+Message-ID: <CANn89iLBO7U40gNDysTD0wCPMAsgUQV3u_T1yzv1oaa=sLKyfQ@mail.gmail.com>
+Subject: Re: [PATCH] gro: check returned skb of napi_frags_skb() against NULL
+To:     Kaiyu Zhang <squirrel.prog@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Thu, Jul 6, 2023 at 4:35=E2=80=AFPM Kaiyu Zhang <squirrel.prog@gmail.com=
+> wrote:
+>
+> Yes the network adapter needs to be fixed for passing invalid packets to =
+GRO. And a message like "dropping impossible skb" should be indicative enou=
+gh for developers to do so.
+>
+> And yet I propose this patch because an immediate system crash caused by =
+NULL pointer access after the above warning message is a bit more difficult=
+ to analyse on some test bed where developers have to restore kernel messag=
+es after a reboot .
+>
+> Furthermore, the adapter I'm working with is capable of receiving very sm=
+all packets (1 or 2 bytes). They insist this is a feature rather than a bug=
+. I can, and I will check packet length before passing them to GRO, for thi=
+s particular adapter. But maybe a non-crash warning in general might be hel=
+pful to other developers who will face the same problem and spare them some=
+ effort on debugging.
 
-I'm pleased to announce the 4.14.320-rt151 stable release.
+1 or 2 bytes would still be stored in an skb, right ?
 
-This release is just an update to the new stable 4.14.320
-version and no RT specific changes have been made.
+GRO is already very slow, we do not want to make it even slower so
+that some developers can save time.
+A kernel crash would point to the NULL deref just fine.
 
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v4.14-rt
-  Head SHA1: b0e6196114833f4b07008e8f0e8b223e7514c058
-
-Or to build 4.14.320-rt151 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.320.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/older/patch-4.14.320-rt151.patch.xz
-
-Signing key fingerprint:
-
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Luis
-
+If we continue this path, we will soon add "if (!skb) be_kind" to all
+functions accepting an skb as a parameter,
+then everything else...
