@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45FA7494CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7186A7494D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjGFE5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 00:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S232283AbjGFFCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjGFE5u (ORCPT
+        with ESMTP id S229793AbjGFFCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 00:57:50 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F54E70;
-        Wed,  5 Jul 2023 21:57:49 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b89e10d356so777415ad.3;
-        Wed, 05 Jul 2023 21:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688619468; x=1691211468;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PffpYhO66g6RXIDBBiQYXYb6x5BedqVmxNHpoGpWUD8=;
-        b=ioDkucAEMlYCMC8dIMAEqAAkt4Td9vNex+vULu0/6v1jyIuvlkw0e4oMdoUyjRmIRN
-         y86Q6bG8KrLKnyVPG4KJ0t6ay6+y8j98BkAyvJewPQBTU94lmJ7D3HnNNc26K1ZYTXoa
-         pyF+VVFiMfQjsQXccssAYQ/Hi+IMSNHLcOjo5DoKU/DFZw62gVK8yzCeLGz3WUBwCJCK
-         pgSHSBRn80iKQcKSS+3C0ChA32wmFndxHU7WYFZga4xLsKJyKq2bQ26w3KxbwvLWNkgo
-         sipSpE2P37xoPzm5QPY34id/48KE5KGwLk6yyAAqzV/FKu2VAHlSn/9P498nxaVti40y
-         Qj1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688619468; x=1691211468;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PffpYhO66g6RXIDBBiQYXYb6x5BedqVmxNHpoGpWUD8=;
-        b=M2plWDOZTf/1azOq50CuugwX4OGTKSTqy04fEV19VNL3ozjMYG5AP8Gh/NhJDAq2c6
-         3xqjSQof2dhJKZ4d/Sh8dYT+9QdR2yrGj5C1dCAK8+W28yWCM4/LoKOeQ2s3YmpP8ywZ
-         Ag1PZzaeT8BJhei5bUG0YE6ODUCN8Vca7XAVmDr9w0O+mp0kSqdZwPDYiuPXz1xspf0O
-         AJ8QcYKA814uOvAKCicDnU63ayiLZySVlRMhMAFIbgYX0w+5RNodKn62GpbtITiTCoB7
-         h3Xci6GezTnvCb2cZDrz3WizNxGDNVDZB+645g6qPvrM7UkY9OYWiUIagDHEcM9gdlgH
-         i3Pw==
-X-Gm-Message-State: ABy/qLbbUSpI5VB5IzTB0gkK3eBdweIryngxx/sVdbgFRKN+UsmCdQQ/
-        WEFjmceKeU/hGLsdnqfmE+c=
-X-Google-Smtp-Source: APBJJlE9CW5i8KWVJEOk2KFdPpIpsBbe1W0CQHb3nw38eJrECxe4aWhUBjBjdh5KBteUsmV5Ry3iPg==
-X-Received: by 2002:a17:903:428d:b0:1b7:c166:f197 with SMTP id ju13-20020a170903428d00b001b7c166f197mr715773plb.29.1688619468557;
-        Wed, 05 Jul 2023 21:57:48 -0700 (PDT)
-Received: from localhost ([2605:59c8:148:ba10::41f])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902b28100b001b8903d6773sm350879plr.85.2023.07.05.21.57.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 21:57:47 -0700 (PDT)
-Date:   Wed, 05 Jul 2023 21:57:46 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Tero Kristo <tero.kristo@linux.intel.com>,
-        John Fastabend <john.fastabend@gmail.com>, shuah@kernel.org,
-        tglx@linutronix.de, x86@kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, mingo@redhat.com
-Cc:     ast@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org
-Message-ID: <64a649cab3dba_b20ce2081c@john.notmuch>
-In-Reply-To: <2901d37a-6b5a-9076-1423-0db95b4c12d3@linux.intel.com>
-References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
- <20230703105745.1314475-3-tero.kristo@linux.intel.com>
- <64a3450a2a062_65205208a9@john.notmuch>
- <2901d37a-6b5a-9076-1423-0db95b4c12d3@linux.intel.com>
-Subject: Re: [PATCH 2/2] selftests/bpf: Add test for bpf_rdtsc
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        Thu, 6 Jul 2023 01:02:50 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774991BD9;
+        Wed,  5 Jul 2023 22:02:48 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 2D58C60171;
+        Thu,  6 Jul 2023 07:02:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1688619755; bh=x+TliPLqS2k/24Fs2irqgh/j+t+Qk21Wb7pLn+QCGj4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=1tscRhauMmSuk4ljitKrOhDn1XJXmMU4sdOn4Heu8jYvATLNW1n29UvEsuDduYMLr
+         rMuLAjWisOVw/9dx+p4+aQZ628rxU4dBBx39MNPDJ87XG/lH3kFtVzJjU+WDxXSXjr
+         fBaGOKWqk31dgt21db5jAG8Lbs2/MlAUtP++1ZCrKghqQf1U9WAe/EkxdfcoyRTaR1
+         TBtfXuTl6vhiU1pLGi/xawCxCV9H30NmW4CdgSagkmE93N7OfI22SHq7i7+IVTTF+h
+         1ZDqZ6XGbdSh4uOWjZIOY8y92btNGTwQTBAw7S5rLVPyAiFCP6A9aYZuUHuG9z5Ur9
+         QKZlBA8EVQK1w==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9kGYQNc82_0p; Thu,  6 Jul 2023 07:02:33 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id E61326016E;
+        Thu,  6 Jul 2023 07:02:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1688619753; bh=x+TliPLqS2k/24Fs2irqgh/j+t+Qk21Wb7pLn+QCGj4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=B9/8kyiw6ezkyKM+F9IPFO898PSbHHlSWE0n2B6RqWo1Ot/OZvqcKrwyR4yriMElg
+         UbrYZRCeOBz+bQ+1qiZ2juhWI+AI5CA2AaxcvsXm01kJU09iRF2X2NnRv2wVkwJ6KX
+         wYNUiBlhXF6z25hrmAbYEoEA5yDsGCbYaYWPoPXrDgK9YVS9+jFZqTLAolJZ5DNJbC
+         Vq4ssmnysgU9mb1wH15pLKWO1Wo+G+51KOT9demKQQxk5zVjGIwAI57G4SsKbPtpnL
+         vlaQMrcBEB4IgE1c8qYdjW5yL0pc2zrRMlxiASuzxFRDv+DMP2aa1amIiSxXviT6ky
+         682ZxRHfegnrw==
+Message-ID: <f189719f-c7b9-e247-9251-8a336e41141d@alu.unizg.hr>
+Date:   Thu, 6 Jul 2023 07:02:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+To:     Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LLVM <llvm@lists.linux.dev>,
+        linux-kbuild@vger.kernel.org,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-hardening@vger.kernel.org
+References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
+ <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
+ <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
+ <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
+ <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
+ <202307022230.6121D6896@keescook>
+ <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
+ <202307031149.823F9A3@keescook> <202307031606.3FD9D0D@keescook>
+ <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
+ <3CDD1188-7B2A-4D53-9B8F-C07BC39844E9@kernel.org>
+ <19d0e63c-db47-8f02-2f79-0923f675898c@alu.unizg.hr>
+ <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
+Content-Language: en-US
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tero Kristo wrote:
+On 7/5/23 04:09, Kees Cook wrote:
+>>>
+>>> Hmm, is CONFIG_UBSAN_TRAP set?
+>>
+>> marvin@defiant:~/linux/kernel/linux_torvalds$ grep CONFIG_UBSAN_TRAP .config
+>> CONFIG_UBSAN_TRAP=y
 > 
-> On 04/07/2023 01:00, John Fastabend wrote:
-> > Tero Kristo wrote:
-> >> Add selftest for bpf_rdtsc() which reads the TSC (Time Stamp Counter) on
-> >> x86_64 architectures. The test reads the TSC from both userspace and the
-> >> BPF program, and verifies the TSC values are in incremental order as
-> >> expected. The test is automatically skipped on architectures that do not
-> >> support the feature.
-> >>
-> >> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> >> ---
-> >>   .../selftests/bpf/prog_tests/test_rdtsc.c     | 67 +++++++++++++++++++
-> >>   .../testing/selftests/bpf/progs/test_rdtsc.c  | 21 ++++++
-> >>   2 files changed, 88 insertions(+)
-> >>   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> >>   create mode 100644 tools/testing/selftests/bpf/progs/test_rdtsc.c
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> >> new file mode 100644
-> >> index 000000000000..2b26deb5b35a
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> >> @@ -0,0 +1,67 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/* Copyright(c) 2023 Intel Corporation */
-> >> +
-> >> +#include "test_progs.h"
-> >> +#include "test_rdtsc.skel.h"
-> >> +
-> >> +#ifdef __x86_64__
-> >> +
-> >> +static inline u64 _rdtsc(void)
-> >> +{
-> >> +	u32 low, high;
-> >> +
-> >> +	__asm__ __volatile__("rdtscp" : "=a" (low), "=d" (high));
-> > I think its ok but note this could fail if user doesn't have
-> > access to rdtscp and iirc that can be restricted?
-> 
-> It is possible to restrict RDTSC access from userspace by enabling the 
-> TSD bit in CR4 register, and it will cause the userspace process to trap 
-> with general protection fault.
-> 
-> However, the usage of RDTSC appears to be built-in to C standard 
-> libraries (probably some timer routines) and enabling the CR4 TSD makes 
-> the system near unusable. Things like sshd + systemd also start 
-> generating the same general protection faults if RDTSC is blocked. Also, 
-> attempting to run anything at all with the BPF selftest suite causes the 
-> same general protection fault; not only the rdtsc test.
-> 
-> I tried this with couple of setups, one system running a minimalistic 
-> buildroot and another one running a fedora37 installation and the 
-> results were similar.
+> Ah-ha! Turn that off please. With it off you will get much more useful reports from USBAN.
 
-Thanks. Good enough for me.
+Done that. And it appears to work.
 
-> 
-> -Tero
+Great job.
+
+There should be a way to store the earliest kernel messages while in the initrd phase, but
+I can't think of any either ...
+
+Have a nice day!
+
+Best regards,
+Mirsad Todorovac
