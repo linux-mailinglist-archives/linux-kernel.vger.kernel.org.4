@@ -2,89 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107C3749E6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B84749E76
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjGFOCH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 10:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
+        id S231721AbjGFOD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbjGFOCA (ORCPT
+        with ESMTP id S231566AbjGFODY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:02:00 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092C61FC6;
-        Thu,  6 Jul 2023 07:01:56 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qHPYI-000OJj-If; Thu, 06 Jul 2023 16:01:46 +0200
-Received: from p57bd990e.dip0.t-ipconnect.de ([87.189.153.14] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qHPYI-000JBU-BM; Thu, 06 Jul 2023 16:01:46 +0200
-Message-ID: <544f02b696a0a1554efe63f799754f3e5fbfecdc.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 06 Jul 2023 16:01:45 +0200
-In-Reply-To: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
+        Thu, 6 Jul 2023 10:03:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21CE123
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688652155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0GE7k8I9982HVE9TTWbDiwrZOKfvdOMPK3S9DyegjXE=;
+        b=GnnYYBVJmo2uCLfifojLwx7c1N2vfd+WiWg5I0CwGIFS3b7oaf2+1uhgoTlh4SsnMmVwrH
+        XKqOr2EmNhnjSB2O8HWL3Lsf/Pa6SHEfkVW+8KfHNHQCLghB8bgiaK/UUswePm7P4goJNp
+        YkiBnMxmtL4SekcydNwcBzSbnJb3YBc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-372-U9jCQa7JO5u0lm6YUCGx5w-1; Thu, 06 Jul 2023 10:02:25 -0400
+X-MC-Unique: U9jCQa7JO5u0lm6YUCGx5w-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-314394a798dso423160f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 07:02:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688652140; x=1691244140;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0GE7k8I9982HVE9TTWbDiwrZOKfvdOMPK3S9DyegjXE=;
+        b=PdrcfUbZu/IK9hJJ8w+cBNmnJDyAo7mWULcUt6b4eH2Wenyu8gMLpnz+CqY8/ZfRyX
+         jGmoubJUuGRc2A+jfqV/mpWU/50lQAA9wQl3+7LkwpaTvr3Ll7JmxEzxthHB8ek/wt4w
+         CKoS5oYv8SomGTFPK4zmif6DvV3fZ76V1ErpAV2GvO5kSl48UibqN88mvtoIHT6UoSU/
+         rVZHz5jeACVWsxRl7wvgXl97rbqQtOymhpxmq3/kIr1GHQ1VquJSYk13AFQiqb5USEZz
+         2T++6ajv2pOeBMnpgZlyFN6BZdzMlKMJRnofDKpZclE/QJevq6n02OpMBXod/p4S6YbD
+         SBUg==
+X-Gm-Message-State: ABy/qLb5xAHZxtPdy2qtOJQL5JAOQX6qczzkj9wo+JexdGDiKUZJTqTz
+        rrUzA3pgAENpF+Wo1RcG7VyFyCbjAzIFSUxgkme7G+asJFJVd21FTHZ3nO9jvaohQhLqfrvcGrl
+        vaGe3N0K2IZkrQ80br7AbvsCJ
+X-Received: by 2002:a5d:4e12:0:b0:313:e2c8:bed1 with SMTP id p18-20020a5d4e12000000b00313e2c8bed1mr2235664wrt.34.1688652140611;
+        Thu, 06 Jul 2023 07:02:20 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHcrZAK048UNMfdOsb+IYlPvPsKZoDto6N+0HK8CkttE8tg+x61xjZ/Drujf9ZKOumGT2ngEg==
+X-Received: by 2002:a5d:4e12:0:b0:313:e2c8:bed1 with SMTP id p18-20020a5d4e12000000b00313e2c8bed1mr2235624wrt.34.1688652140228;
+        Thu, 06 Jul 2023 07:02:20 -0700 (PDT)
+Received: from redhat.com ([2.52.13.33])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d4742000000b0031434936f0dsm1960350wrs.68.2023.07.06.07.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 07:02:19 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 10:02:13 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yang Rong <yangrong@vivo.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Alvin Lee <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Max Tseng <Max.Tseng@amd.com>,
+        Josip Pavic <Josip.Pavic@amd.com>,
+        Cruise Hung <cruise.hung@amd.com>,
+        "open list:AMD DISPLAY CORE" <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: Re: [PATCH] Fix max/min warnings in virtio_net, amd/display, and
+ io_uring
+Message-ID: <20230706100133-mutt-send-email-mst@kernel.org>
+References: <20230706021102.2066-1-yangrong@vivo.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.14
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230706021102.2066-1-yangrong@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter!
+On Thu, Jul 06, 2023 at 10:06:16AM +0800, Yang Rong wrote:
+> The files drivers/net/virtio_net.c, drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c, and io_uring/io_uring.c were modified to fix warnings.
 
-On Thu, 2023-07-06 at 06:57 -0700, Guenter Roeck wrote:
-> On Thu, Jun 01, 2023 at 11:22:17PM +0300, Sergey Shtylyov wrote:
-> > IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
-> > return -EINVAL instead.  However, the kernel code supporting SH3/4-based
-> > SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
-> > IRQ #s from 16 instead.
-> > 
-> > The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-> > indeed are using IRQ0 for the SMSC911x compatible Ethernet chip.
-> > 
+what warnings? the point of the warning is to analyze it not "fix" it
+blindly.
+
+> Specifically, the opportunities for max() and min() were utilized to address the warnings.
 > 
-> Unfortunately it also affects all sh4 emulations in qemu, and results in
-> boot stalls with those. There isn't a relevant log to attach because there
-> is no error message - booting just stalls until the emulation is aborted.
+> Signed-off-by: Yang Rong <yangrong@vivo.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 6 +++---
+>  drivers/net/virtio_net.c                     | 3 ++-
+>  io_uring/io_uring.c                          | 3 ++-
+>  3 files changed, 7 insertions(+), 5 deletions(-)
 > 
-> Reverting this patch fixes the problem.
+> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> index c753c6f30dd7..df79aea49a3c 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> @@ -22,7 +22,7 @@
+>   * Authors: AMD
+>   *
+>   */
+> -
+> +#include <linux/minmax.h>
+>  #include "dc.h"
+>  #include "dc_dmub_srv.h"
+>  #include "../dmub/dmub_srv.h"
+> @@ -481,7 +481,7 @@ static void populate_subvp_cmd_drr_info(struct dc *dc,
+>         max_drr_vblank_us = div64_u64((subvp_active_us - prefetch_us -
+>                         dc->caps.subvp_fw_processing_delay_us - drr_active_us), 2) + drr_active_us;
+>         max_drr_mallregion_us = subvp_active_us - prefetch_us - mall_region_us - dc->caps.subvp_fw_processing_delay_us;
+> -       max_drr_supported_us = max_drr_vblank_us > max_drr_mallregion_us ? max_drr_vblank_us : max_drr_mallregion_us;
+> +       max_drr_supported_us = max(max_drr_vblank_us, max_drr_mallregion_us);
+>         max_vtotal_supported = div64_u64(((uint64_t)drr_timing->pix_clk_100hz * 100 * max_drr_supported_us),
+>                         (((uint64_t)drr_timing->h_total * 1000000)));
 > 
-> Bisect log is attached for reference. Note that bisect requires applying
-> commit 7497840d462c ("sh: Provide unxlate_dev_mem_ptr() in asm/io.h"),
-> which is also the reason why the problem was not observed earlier since
-> it was hiding behind a build failure.
+> @@ -771,7 +771,7 @@ void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
+>                 wm_val_refclk = context->bw_ctx.bw.dcn.watermarks.a.cstate_pstate.pstate_change_ns *
+>                                 (dc->res_pool->ref_clocks.dchub_ref_clock_inKhz / 1000) / 1000;
+> 
+> -               cmd.fw_assisted_mclk_switch_v2.config_data.watermark_a_cache = wm_val_refclk < 0xFFFF ? wm_val_refclk : 0xFFFF;
+> +               cmd.fw_assisted_mclk_switch_v2.config_data.watermark_a_cache = min(wm_val_refclk, 0xFFFF);
+>         }
+> 
+>         dm_execute_dmub_cmd(dc->ctx, &cmd, DM_DMUB_WAIT_TYPE_WAIT);
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 9b3721424e71..5bb7da885f00 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -22,6 +22,7 @@
+>  #include <net/route.h>
+>  #include <net/xdp.h>
+>  #include <net/net_failover.h>
+> +#include <linux/minmax.h>
+> 
+>  static int napi_weight = NAPI_POLL_WEIGHT;
+>  module_param(napi_weight, int, 0444);
+> @@ -1291,7 +1292,7 @@ static struct sk_buff *build_skb_from_xdp_buff(struct net_device *dev,
+>         __skb_put(skb, data_len);
+> 
+>         metasize = xdp->data - xdp->data_meta;
+> -       metasize = metasize > 0 ? metasize : 0;
+> +       metasize = max(metasize, 0);
+>         if (metasize)
+>                 skb_metadata_set(skb, metasize);
+> 
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index e8096d502a7c..875ca657227d 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -47,6 +47,7 @@
+>  #include <linux/refcount.h>
+>  #include <linux/uio.h>
+>  #include <linux/bits.h>
+> +#include <linux/minmax.h>
+> 
+>  #include <linux/sched/signal.h>
+>  #include <linux/fs.h>
+> @@ -2660,7 +2661,7 @@ static void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
+>                                         page_array);
+>         if (ret != nr_pages) {
+>  err:
+> -               io_pages_free(&page_array, ret > 0 ? ret : 0);
+> +               io_pages_free(&page_array, max(ret, 0));
+>                 return ret < 0 ? ERR_PTR(ret) : ERR_PTR(-EFAULT);
+>         }
+>         /*
+> --
+> 2.35.3
+> 
+> 
+> ________________________________
+> 本邮件及其附件内容可能含有机密和/或隐私信息，仅供指定个人或机构使用。若您非发件人指定收件人或其代理人，请勿使用、传播、复制或存储此邮件之任何内容或其附件。如您误收本邮件，请即以回复或电话方式通知发件人，并将原始邮件、附件及其所有复本删除。谢谢。
+> The contents of this message and any attachments may contain confidential and/or privileged information and are intended exclusively for the addressee(s). If you are not the intended recipient of this message or their agent, please note that any use, dissemination, copying, or storage of this message or its attachments is not allowed. If you receive this message in error, please notify the sender by reply the message or phone and delete this message, any attachments and any copies immediately.
+> Thank you
 
-Interesting. My naive understanding was that IRQ0 is no longer usable in the
-kernel as Sergey claimed. Was that not correct?
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
