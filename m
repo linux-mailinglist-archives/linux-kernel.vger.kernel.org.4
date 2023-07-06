@@ -2,133 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA007492C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 02:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387857492C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 02:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjGFAt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 20:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S232808AbjGFAw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 20:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbjGFAt5 (ORCPT
+        with ESMTP id S232489AbjGFAwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 20:49:57 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCEB171D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 17:49:56 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-c4dfe2a95fbso89297276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 17:49:56 -0700 (PDT)
+        Wed, 5 Jul 2023 20:52:54 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7061995
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 17:52:52 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5768a7e3adbso20064717b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 17:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688604595; x=1691196595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uS0XZ1fUS0VGPojYqzvpfVl4CXPI8Do8FblmEQ8ODms=;
-        b=EIAi6itQYEmH6xFZ4o9n4NzNBBUltsEavCtIyk/jEAlvRTjak+IwP9IekJezSBDiFP
-         rag/e41OhG9t9xYdYtU2rb0z3vz4vWCpb2R3Jhr6laoakm5drAfmUicusk6sG0tWQ32K
-         Zpkj/e0ViWHHp6TEGfIOLOwx+2dv6SDMdAguax94iUKkb79YK+U9jNvJy0ZAep8QXWZU
-         Mx5+rdGhWx6Xl+8PHphq1cULfnKYHtodg6hKjwk5dxm7SLwCYtez1/U8W4PryMOdrAYQ
-         ynEP0SBWRn3FeEu98EO9Kyjsapq36Nvsmh1X0nVvDEpDoSZgWE01iqvx1ipoxAZUKnEG
-         kR9A==
+        d=google.com; s=20221208; t=1688604771; x=1691196771;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=brYvfzxZIpzg2ekRWtSDETsKA5c6SQ0IrxunDSGxGEc=;
+        b=xC2HINTq+WsZ6bkXuW3ZbQpuGJQPT0iM01isllTqlWtK8a2fGIX46T+CbpEjT8G16s
+         qDwnKfQKJVRy3oyeXo3yIpwxKde63vyF9pF0VSWiUoHLL8dLOXgHf+38v8oCfcvJw4Er
+         ejlXEu+OTpfpAhBvOyVGD80VixV4DfU44J6sigPGD6rA2/MjKGssOiRnE44ygD7T63vp
+         t+E6BvJuJrICBNXpe1Szr6pynzSjeStiuBoj25z5M9pljiFW7x7bX1duA718XuUIxoIv
+         aPIZ+mwTRAfYj6FjsOtWyUjzjmTTqQ+MgOlxxBZxAlxSWo3w6TfWylHqInFCKAu2bu68
+         t/Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688604595; x=1691196595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uS0XZ1fUS0VGPojYqzvpfVl4CXPI8Do8FblmEQ8ODms=;
-        b=Q9lrHv3zRK1c2Q5pwCkiE6lhBWPsHT8fUehEq7PYjjK4Kxy0JZUw2nqqW8WbrxvpwY
-         T0G9E6LjN3yVKEqnDjRk3X2F8zv5UNzWwqxr5DRk/OZU+C/JEiiJM9TULL1QLx19buIQ
-         eWry8LCCrVKL6lmEiMPKWXrLzrR1H5hZEcnsW+ZzBMMXlUjA9PKEf+seyUD51DpUvw3F
-         42Gp/Za90N2n+TwxkSXYvTnc8ymWC0Kzj1pcnWxSjqxPra2C4MZBkGxnm0iCFDmhwwrv
-         AGeeRsk88EmM5yvY3cKTDXW6mhYPthJYOQD/0uZepUnPdB7BajTKKV/id5H6qYAFqTol
-         /giQ==
-X-Gm-Message-State: ABy/qLZlxBMlXzxy9wpmNrHBmWP2d/BW838w0nVOgfmJ9959hSzPzXin
-        5wRUkuq+zEZN1BBpzdD7PhRs72kbemWp6awQGBlJrA==
-X-Google-Smtp-Source: APBJJlHpt9JQ+AIigpgGbyrUOJU9M9UGcUJA4d6s+0oOFsqwkgrKB/j6NACCn3Myn8DaEFaYZKMfK4zc8Jfpe5uDn4g=
-X-Received: by 2002:a05:6902:513:b0:bc1:dfa5:8399 with SMTP id
- x19-20020a056902051300b00bc1dfa58399mr418671ybs.13.1688604595099; Wed, 05 Jul
- 2023 17:49:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688604771; x=1691196771;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=brYvfzxZIpzg2ekRWtSDETsKA5c6SQ0IrxunDSGxGEc=;
+        b=ABi54mis9uY1+wY1EJgZ4NFX1q4nGmZoRv5DVNSIMp0qjw9IsUMqj1J+vv5r+4mfM3
+         NvfkDlmOhks6NttBDl4KDI1ds1GlY24pl61D03WJF7g69RwtiFfjaoD5j9pI2CVvJqtD
+         StFQ2yJ7L6uRhPlb4I6ps5EoOSr0ZDX8u+cNZeNEjfdBWgfQWfNmT2IEQfEYgSI2vRb5
+         OclBNrNYfyduYvPg7MqaNAmAWcFhbzcsJIYYWRtPk5gZ+vQxQguhgWF3xv83USMZMQCR
+         LaqdVHaTlCL5KH+2SEVxgz6tmeZ4QG+fr6976aPgB3nt7P68J9rALSPpkYmSw08LpSxY
+         wkFg==
+X-Gm-Message-State: ABy/qLapBfvkVSU5uS7OncEtyxUWyRxZmZ2IuRXqSxyyKKeHbw3Pk+Qf
+        4P4Oxqb92w+cPtZEq0LjtqdrGA==
+X-Google-Smtp-Source: APBJJlGRAVoxAYVowQcijWwmVf4ESHfCTlO+TpznIilMWn3o7JH0E6ojbd/bR9jPjq/VIj7YN/NLDQ==
+X-Received: by 2002:a0d:dfca:0:b0:56c:fbd2:edec with SMTP id i193-20020a0ddfca000000b0056cfbd2edecmr557929ywe.6.1688604771513;
+        Wed, 05 Jul 2023 17:52:51 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id o207-20020a0dccd8000000b00568c1c919d2sm29463ywd.29.2023.07.05.17.52.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 17:52:51 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 17:52:40 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
+ page
+In-Reply-To: <ZKUR0HItN2Va8J1D@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+Message-ID: <8c6a4a46-2d17-8cfb-50f-f89f1d44973f@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com> <20230628211624.531cdc58@thinkpad-T15> <cd7c2851-1440-7220-6c53-16b343b1474@google.com> <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca> <20230629175645.7654d0a8@thinkpad-T15>
+ <edaa96f-80c1-1252-acbb-71c4f045b035@google.com> <7bef5695-fa4a-7215-7e9d-d4a83161c7ab@google.com> <ZKUR0HItN2Va8J1D@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 MIME-Version: 1.0
-References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-3-surenb@google.com>
- <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com> <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
- <ZKXRsQC8ufiebDGu@x1n> <CAJuCfpGHRfK1ZC3YmF1caKHiR7hD73goOXLKQubFLuOgzCr0dg@mail.gmail.com>
- <20230705172424.e505f5013bfdf44543d9c6be@linux-foundation.org>
- <CAJuCfpFLRePeOsrSg--5GtWbC1M5y21Sq7gzrs1vVEUE7C+30A@mail.gmail.com>
- <CAJuCfpGWW7wsrtqi4rZUz4vxW-N0CaUEeUqY4e7iX1hzgRsT2g@mail.gmail.com> <20230705174440.9adb53f2e362056867135b84@linux-foundation.org>
-In-Reply-To: <20230705174440.9adb53f2e362056867135b84@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 5 Jul 2023 17:49:44 -0700
-Message-ID: <CAJuCfpEjytSBKN0gn0t7e5bCSmZLXU-86Ko0Kt-rkXD7hZeNNA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        jirislaby@kernel.org, jacobly.alt@gmail.com,
-        holger@applied-asynchrony.com, hdegoede@redhat.com,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 5:44=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Wed, 5 Jul 2023 17:32:09 -0700 Suren Baghdasaryan <surenb@google.com> =
-wrote:
->
-> > On Wed, Jul 5, 2023 at 5:30=E2=80=AFPM Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> > >
-> > > On Wed, Jul 5, 2023 at 5:24=E2=80=AFPM Andrew Morton <akpm@linux-foun=
-dation.org> wrote:
-> > > >
-> > > > On Wed, 5 Jul 2023 13:33:26 -0700 Suren Baghdasaryan <surenb@google=
-.com> wrote:
-> > > >
-> > > > > I was hoping we could re-enable VMA locks in 6.4 once we get more
-> > > > > confirmations that the problem is gone. Is that not possible once=
- the
-> > > > > BROKEN dependency is merged?
-> > > >
-> > > > I think "no".  By doing this we're effectively backporting a minor
-> > > > performance optimization, which isn't a thing we'd normally do.
-> > >
-> > > In that case, maybe for 6.4 we send the fix and only disable it by
-> > > default without marking BROKEN? That way we still have a way to enabl=
-e
-> > > it if desired?
-> >
-> > I'm preparing the next version with Liam's corrections. If the above
-> > option I suggested is acceptable I can send a modified second patch
-> > which would not have BROKEN dependency.
->
-> I think just mark it broken and move on.  At some later time we can
-> consider backporting the fixes into 6.4.x and reenabling, but I don't
-> think it's likely that we'll do this.
+On Wed, 5 Jul 2023, Alexander Gordeev wrote:
+> On Sat, Jul 01, 2023 at 09:32:38PM -0700, Hugh Dickins wrote:
+> > On Thu, 29 Jun 2023, Hugh Dickins wrote:
+> 
+> Hi Hugh,
+> 
+> ...
+> 
+> > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
+> > +{
+> > +	struct page *page;
+> 
+> If I got your and Claudio conversation right, you were going to add
+> here WARN_ON_ONCE() in case of mm_alloc_pgste(mm)?
 
-Uh, ok. I'll send the next version shortly with the patch fixing the
-issue and another one marking it BROKEN. Hopefully in the next version
-we can roll it our more carefully, removing BROKEN dependency but
-keeping it disabled by default?
+Well, Claudio approved, so I would have put it in, if we had stuck with
+that version which had "if (mm_alloc_pgste(mm)) {" in pte_free_defer();
+but once that went away, it became somewhat irrelevant... to me anyway.
 
->
+But I don't mind adding it here, in the v3 I'll post when -rc1 is out,
+if it might help you guys - there is some point, since pte_free_defer()
+is a route which can usefully check for such a case, without confusion
+from harmless traffic from immediate frees of just-in-case allocations.
+
+But don't expect it to catch all such cases (if they exist): another
+category of s390 page_table_free()s comes from the PageAnon
+zap_deposited_table() in zap_huge_pmd(): those tables might or might
+not have been exposed to userspace at some time in the past.
+
+I'll add the WARN_ON_ONCE in pte_free_defer() (after checking that
+WARN_ON_ONCE is the one we want - I get confused by all the different
+flavours of WARN, and have to check the header file each time to be
+sure of the syntax and semantics): but be aware that it won't be
+checking all potential cases.
+
+Hugh
+
+> 
+> > +	page = virt_to_page(pgtable);
+> > +	SetPageActive(page);
+> > +	page_table_free(mm, (unsigned long *)pgtable);
+> > +}
+> > +#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> > +
+> >  /*
+> >   * Base infrastructure required to generate basic asces, region, segment,
+> >   * and page tables that do not make use of enhanced features like EDAT1.
+> 
+> Thanks!
