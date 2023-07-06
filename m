@@ -2,150 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C32B7494FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44784749500
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjGFFaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 01:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S233218AbjGFFcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjGFFaK (ORCPT
+        with ESMTP id S233158AbjGFFcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 01:30:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B121A1BD6;
-        Wed,  5 Jul 2023 22:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=tdQdAo2qFTj9DGBuoLP2bbCYlpn9+aYrsvBc/jj9Rf8=; b=u4VkgAOorIJnIks7BeD4quSFTl
-        ISGBFW6rKQ/t2PCT2iUGMw5XoZCSTI73o0HG1Ow7DLVUlRSCNP7NCrva+xHeUJJGlR9047v4XLOCt
-        M5wzogth/xpQ1WAooFH5OIc7wIK07fz/D6pjjx0Pvqfb7b5envA4VuM+v6535aMJEVQ2AVchMopCN
-        ohURXs3HMho+WOF79xj3MTLacTTEzUGzpZsXuCid00fuZRV4PtUYa2MfQJ+dbum+RcHG83Jsrit9M
-        Itt8fANfH8AO2G3tI9Fa7XRmsuLj51T+B1qoIMueE1HzKCg6IyVwblWb1ZoSrLLzQk3eK6ekuHJ8e
-        5XCzkzjA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHHZ5-000UqT-21;
-        Thu, 06 Jul 2023 05:30:03 +0000
-Message-ID: <fc9ebfc8-87cd-9488-20cd-85ed2a164bc9@infradead.org>
-Date:   Wed, 5 Jul 2023 22:30:02 -0700
+        Thu, 6 Jul 2023 01:32:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D561BC7;
+        Wed,  5 Jul 2023 22:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688621527; x=1720157527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KVUs4bhGOt3/uYXQH2AZkEfvp9H4c7HOkrp0u7M/8fQ=;
+  b=aBdYe7U2BT31atEpq1sLqj5cmXWPRU+YYYcMNeVEs10BUrivbvDXa3mM
+   zFe26kG550XNcFn9M6yCx/kSLovZrWCik7dZIMvpwlfjJQcFgkG11QO6K
+   uVymlm0cdrRg1RaqzLR0eV6Rfz+4DBhQqVy67DnNRaxOh1GWj/4j9Ysym
+   kVFYzYwLDqMARNDe+nK0ZqGJKrn5U3VGPgGDYvWxMdR685DunLUTC/+D8
+   c3lzABYNy2/5XQuA786582ipSz125qmGK1g3nVQtBmOfZiUVjp99iJcFw
+   w89lxcUjmq6Ly2x1GMoGhbkCSxFZzN8k0h4Ig1kZmCa2uZz7Om5L4XVOM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362379815"
+X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
+   d="scan'208";a="362379815"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 22:32:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="719477423"
+X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
+   d="scan'208";a="719477423"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga002.jf.intel.com with ESMTP; 05 Jul 2023 22:31:59 -0700
+Date:   Thu, 6 Jul 2023 13:31:58 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 16/22] x86/virt/tdx: Initialize all TDMRs
+Message-ID: <20230706053158.73plfugwqvwwkdeo@yy-desk-7060>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <e01bbbc3ff4611adea84df683d83664714cd200f.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RESEND PATCH v3 2/2] RISC-V: mm: Update documentation and
- include test
-To:     Charlie Jenkins <charlie@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com
-References: <20230705190002.384799-1-charlie@rivosinc.com>
- <20230705190002.384799-3-charlie@rivosinc.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230705190002.384799-3-charlie@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e01bbbc3ff4611adea84df683d83664714cd200f.1687784645.git.kai.huang@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Tue, Jun 27, 2023 at 02:12:46AM +1200, Kai Huang wrote:
+> After the global KeyID has been configured on all packages, initialize
+> all TDMRs to make all TDX-usable memory regions that are passed to the
+> TDX module become usable.
+>
+> This is the last step of initializing the TDX module.
+>
+> Initializing TDMRs can be time consuming on large memory systems as it
+> involves initializing all metadata entries for all pages that can be
+> used by TDX guests.  Initializing different TDMRs can be parallelized.
+> For now to keep it simple, just initialize all TDMRs one by one.  It can
+> be enhanced in the future.
 
-On 7/5/23 11:59, Charlie Jenkins wrote:
-> Add documentation explaining the behavior of mmap. Include
-> a simple test that ensures that mmap returns an address less
-> than the hint address while there are still addresses available.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Reviewed-by: Yuan Yao <yuan.yao@intel.com>
+
+>
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > ---
->  Documentation/riscv/vm-layout.rst             | 22 +++++++++
->  arch/riscv/include/asm/pgtable.h              |  8 +--
->  tools/testing/selftests/riscv/Makefile        |  2 +-
->  tools/testing/selftests/riscv/mm/.gitignore   |  1 +
->  tools/testing/selftests/riscv/mm/Makefile     | 21 ++++++++
->  .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++++
->  6 files changed, 99 insertions(+), 4 deletions(-)
->  create mode 100644 tools/testing/selftests/riscv/mm/.gitignore
->  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
->  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
-> 
-> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-> index 5462c84f4723..a610c68c9f3f 100644
-> --- a/Documentation/riscv/vm-layout.rst
-> +++ b/Documentation/riscv/vm-layout.rst
-> @@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
->     ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
->     ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
->    __________________|____________|__________________|_________|____________________________________________________________
+>
+> v11 -> v12:
+>  - Added Kirill's tag
+>
+> v10 -> v11:
+>  - No update
+>
+> v9 -> v10:
+>  - Code change due to change static 'tdx_tdmr_list' to local 'tdmr_list'.
+>
+> v8 -> v9:
+>  - Improved changlog to explain why initializing TDMRs can take long
+>    time (Dave).
+>  - Improved comments around 'next-to-initialize' address (Dave).
+>
+> v7 -> v8: (Dave)
+>  - Changelog:
+>    - explicitly call out this is the last step of TDX module initialization.
+>    - Trimed down changelog by removing SEAMCALL name and details.
+>  - Removed/trimmed down unnecessary comments.
+>  - Other changes due to 'struct tdmr_info_list'.
+>
+> v6 -> v7:
+>  - Removed need_resched() check. -- Andi.
+>
+>
+> ---
+>  arch/x86/virt/vmx/tdx/tdx.c | 60 ++++++++++++++++++++++++++++++++-----
+>  arch/x86/virt/vmx/tdx/tdx.h |  1 +
+>  2 files changed, 53 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index f5d4dbc11aee..52b7267ea226 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -994,6 +994,56 @@ static int config_global_keyid(void)
+>  	return ret;
+>  }
+>
+> +static int init_tdmr(struct tdmr_info *tdmr)
+> +{
+> +	u64 next;
 > +
+> +	/*
+> +	 * Initializing a TDMR can be time consuming.  To avoid long
+> +	 * SEAMCALLs, the TDX module may only initialize a part of the
+> +	 * TDMR in each call.
+> +	 */
+> +	do {
+> +		struct tdx_module_output out;
+> +		int ret;
 > +
-> +Userspace VAs
-> +--------------------
-> +To maintain compatibility with software that relies on the VA space
-> +with a maximum of 39-bits, the kernel will, by default, return virtual
-
-                     39 bits,
-
-> +return virtual addresses to userspace from a 48-bit range (sv48). This
-
-^^ duplicate "return virtual"
-
-> +default behavior is achieved by passing 0 into the hint address parameter
-> +of mmap.
+> +		/* All 0's are unused parameters, they mean nothing. */
+> +		ret = seamcall(TDH_SYS_TDMR_INIT, tdmr->base, 0, 0, 0, NULL,
+> +				&out);
+> +		if (ret)
+> +			return ret;
+> +		/*
+> +		 * RDX contains 'next-to-initialize' address if
+> +		 * TDH.SYS.TDMR.INIT did not fully complete and
+> +		 * should be retried.
+> +		 */
+> +		next = out.rdx;
+> +		cond_resched();
+> +		/* Keep making SEAMCALLs until the TDMR is done */
+> +	} while (next < tdmr->base + tdmr->size);
 > +
-
-> diff --git a/tools/testing/selftests/riscv/mm/.gitignore b/tools/testing/selftests/riscv/mm/.gitignore
-> new file mode 100644
-> index 000000000000..022ea0a3f7df
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/mm/.gitignore
-> @@ -0,0 +1 @@
-> +mmap
-> \ No newline at end of file
-
-add a newline, please.
-
-> diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
-> new file mode 100644
-> index 000000000000..d41a0b3d2ca2
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/mm/Makefile
-> @@ -0,0 +1,21 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Originally tools/testing/selftests/arm64/signal
+> +	return 0;
+> +}
 > +
-> +# Additional include paths needed by kselftest.h and local headers
-> +CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
+> +static int init_tdmrs(struct tdmr_info_list *tdmr_list)
+> +{
+> +	int i;
 > +
-> +SRCS := $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
-> +PROGS := $(patsubst %.c,%,$(SRCS))
+> +	/*
+> +	 * This operation is costly.  It can be parallelized,
+> +	 * but keep it simple for now.
+> +	 */
+> +	for (i = 0; i < tdmr_list->nr_consumed_tdmrs; i++) {
+> +		int ret;
 > +
-> +# Generated binaries to be installed by top KSFT script
-> +TEST_GEN_PROGS := $(notdir $(PROGS))
+> +		ret = init_tdmr(tdmr_entry(tdmr_list, i));
+> +		if (ret)
+> +			return ret;
+> +	}
 > +
-> +# Get Kernel headers installed and use them.
+> +	return 0;
+> +}
 > +
-> +# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
-> +# to account for any OUTPUT target-dirs optionally provided by
-> +# the toplevel makefile
-> +include ../../lib.mk
-> +
-> +$(TEST_GEN_PROGS): $(PROGS)
-> +	cp $(PROGS) $(OUTPUT)/
-> \ No newline at end of file
-
-add a newline, please.
-
--- 
-~Randy
+>  static int init_tdx_module(void)
+>  {
+>  	struct tdsysinfo_struct *sysinfo;
+> @@ -1067,14 +1117,8 @@ static int init_tdx_module(void)
+>  	if (ret)
+>  		goto out_reset_pamts;
+>
+> -	/*
+> -	 * TODO:
+> -	 *
+> -	 *  - Initialize all TDMRs.
+> -	 *
+> -	 *  Return error before all steps are done.
+> -	 */
+> -	ret = -EINVAL;
+> +	/* Initialize TDMRs to complete the TDX module initialization */
+> +	ret = init_tdmrs(&tdmr_list);
+>  out_reset_pamts:
+>  	if (ret) {
+>  		/*
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index a0438513bec0..f6b4e153890d 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -25,6 +25,7 @@
+>  #define TDH_SYS_INFO		32
+>  #define TDH_SYS_INIT		33
+>  #define TDH_SYS_LP_INIT		35
+> +#define TDH_SYS_TDMR_INIT	36
+>  #define TDH_SYS_CONFIG		45
+>
+>  struct cmr_info {
+> --
+> 2.40.1
+>
