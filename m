@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3649D74968B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2EA749692
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233821AbjGFHiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S233853AbjGFHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjGFHiX (ORCPT
+        with ESMTP id S229946AbjGFHi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:38:23 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6845D1995;
-        Thu,  6 Jul 2023 00:38:22 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3667J8I8028476;
-        Thu, 6 Jul 2023 09:37:35 +0200
+        Thu, 6 Jul 2023 03:38:26 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436351995;
+        Thu,  6 Jul 2023 00:38:25 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36634pK6012110;
+        Thu, 6 Jul 2023 09:37:57 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=ES9mEQ4W/mYtGfnJvsQpQ4qc2idTc5oG7veLTWENpDs=;
- b=OLbrXkKzIsrt7qj01syiZl6eIwSSM81SFyjHLQT4VMy4Fr347+zSoE9RPyPUlofW47Bm
- Iaq6l1Q1tSFBKk2Eed9DqQvcIEzi+/v/S3bMjySEEJMnWHPzcs04TS1r/chYeshbXFim
- xgVO+hJWAn3dQpisy8A9/GEDcWxCHgXaqX8h47mo3oTBnEDWrt/RfpljrpLlBw0KP1pm
- AiTwgVSzyV1mYunEuOLe4mlR9Yn2IQGhxXKkXBcoWvmAOeMUqpKiBbcIicW6KaESVhU8
- Q+oNTaIJwyrSPuQgTSg1LwGRyEmvC5KDP5eLtDOkI3YZM66dlc525kMYWzE9mXxt4ecS 4A== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=leUMqDJp8a4kVVlHQjIs5kBdTGi6ve5jmuhMSLqDE2A=;
+ b=ubI37ovG2wEs4vOgesIDYAeOBeSrQIQqPQqbXVnp7v6vL110Lp5ZCEPEnKOmVw8Y712G
+ sju/adoVPGIlid4zhlyoKma+AWOfEUWAhnx/4felMqH4elnFeq3JiLsuZYeHtKFxrakL
+ s+W0kcJSnt3LUEKw6RwJLQ5rda5Q9QWSVPwbCAUeahnTozpTmKQkIUT8CyhynvloTCpf
+ eb7f3T25oCTAPskr41DH53eAmcxLfS02x47b27ULmGqDSFOb0oLEbXdxhYPa51jKqXDZ
+ zscAzwbvxXeNeZrhy3i66ZNOrguAe7E2nvxkVfG3UQ7ozAqdvgPruhXVUmHUpqKNNpzb kw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rns47r4ks-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rnnd49rma-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 09:37:35 +0200
+        Thu, 06 Jul 2023 09:37:57 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 15641100052;
-        Thu,  6 Jul 2023 09:37:33 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 03D4F100052;
+        Thu,  6 Jul 2023 09:37:43 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CC22621058D;
-        Thu,  6 Jul 2023 09:37:33 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F0D10210F6B;
+        Thu,  6 Jul 2023 09:37:42 +0200 (CEST)
 Received: from localhost (10.201.22.9) by SHFDAG1NODE3.st.com (10.75.129.71)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 6 Jul
- 2023 09:37:33 +0200
+ 2023 09:37:42 +0200
 From:   Thomas BOURGOIN <thomas.bourgoin@foss.st.com>
 To:     Thomas BOURGOIN <thomas.bourgoin@foss.st.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -56,10 +56,12 @@ CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/7] Support of HASH on STM32MP13
-Date:   Thu, 6 Jul 2023 09:37:12 +0200
-Message-ID: <20230706073719.1156288-1-thomas.bourgoin@foss.st.com>
+Subject: [PATCH 1/7] dt-bindings: crypto: add new compatible for stm32-hash
+Date:   Thu, 6 Jul 2023 09:37:13 +0200
+Message-ID: <20230706073719.1156288-2-thomas.bourgoin@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230706073719.1156288-1-thomas.bourgoin@foss.st.com>
+References: <20230706073719.1156288-1-thomas.bourgoin@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -78,39 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
+From: Lionel Debieve <lionel.debieve@foss.st.com>
 
-The STM32MP13 platform introduces a new version of the IP HASH.
-This version of the IP support SHA1, SHA2, SHA3 algorithms and HMAC.
-This serie also add some fixes when using the DMA to feed data to the IP.
+Add a new compatible for stm32mp13 support.
 
-1. Add new YAML compatible st,stm32mp13-hash.
+Signed-off-by: Lionel Debieve <lionel.debieve@foss.st.com>
+---
+ Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-2. Update driver to support SHA2, SHA3 algorithms for the compatible
-st,stm32mp13-hash.
-
-3. Argument bufcnt is unused in function stm32_hash_write_ctrl. Removes it
-to simplify the declaration of the function.
-
-4-7. DMA fixes
-
-Lionel Debieve (1):
-  dt-bindings: crypto: add new compatible for stm32-hash
-
-Thomas Bourgoin (6):
-  crypto: stm32 - add new algorithms support
-  crypto: stm32 - remove bufcnt in stm32_hash_write_ctrl.
-  crypto: stm32 - fix loop iterating through scatterlist for DMA
-  crypto: stm32 - check request size and scatterlist size when using
-    DMA.
-  crypto: stm32 - fix MDMAT condition
-  crypto: stm32 - remove flag HASH_FLAGS_DMA_READY
-
- .../bindings/crypto/st,stm32-hash.yaml        |   1 +
- drivers/crypto/stm32/Kconfig                  |   2 +
- drivers/crypto/stm32/stm32-hash.c             | 710 ++++++++++++++----
- 3 files changed, 566 insertions(+), 147 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+index b767ec72a999..ac480765cde0 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+@@ -20,6 +20,7 @@ properties:
+       - stericsson,ux500-hash
+       - st,stm32f456-hash
+       - st,stm32f756-hash
++      - st,stm32mp13-hash
+ 
+   reg:
+     maxItems: 1
 -- 
 2.25.1
 
