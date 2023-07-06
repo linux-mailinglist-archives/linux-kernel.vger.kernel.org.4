@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E8474A0B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C878274A0BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbjGFPSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S230159AbjGFPSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjGFPS3 (ORCPT
+        with ESMTP id S232129AbjGFPSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:18:29 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA021730;
-        Thu,  6 Jul 2023 08:18:28 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-263121cd04eso498774a91.2;
-        Thu, 06 Jul 2023 08:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688656708; x=1691248708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zPB85WR0P+xgxqs8Q8QLiKAMJpfbqqxVyu2DnLqctsg=;
-        b=UzHtICmgU/4K1rkod7vW7YianCzTXkLEfApsbzxnNRVFSML67a+WEeZgjdGNQtaOUS
-         PhSFodmYF1UYuQK2PxXSUMuk9s+fWS4PFHbLpoEzBBIcL7XpnEVYo+zay7WSad3x+e1b
-         UZfGln8snwQfvjSqE8fBjPW2qj3wIGsaw5/SbfZ9BZa1YTgOKgPDNXjxMhuoKKrvXlft
-         KoDOMe9MvIqkyfC05Vsk4ywZiVPrNn6Vy2WxiDMmWi3uH3Xtzs8ukz+pK8jyiz6IFRov
-         0jkDQYZHWWLANre+0+IXeknMuUc2youFbr0s0TNgB8proRli0iJ+kuqk6JbWBsP5CmbC
-         9AIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688656708; x=1691248708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zPB85WR0P+xgxqs8Q8QLiKAMJpfbqqxVyu2DnLqctsg=;
-        b=l3E8RhN2qH4SDCUNLb/ljOMcP3l+m8VmddWbsPRZz7Gw2V3VojX/Y2QcY6VxLNG/fJ
-         uPTwSG0zV25MKt3BfRWdiPoGbje6XsKbwNJGjhfBqB8dIf7D9jJM7M4B0hhBV/p3UsyI
-         JMTJUauWthVbIBEXPeTnKCS2fwt1oFZJCf3wLcf8PmANhpkiyhqGOMKuaFILNWV7fFmf
-         HfQi28JVWnAKOJdSSQh6Lqy+oOOwC1r9/pntN0Y+dKenH7bH2YsVbk3fWaVXMhzGrNSx
-         WzRu/j92IsHuOyXMBfBp4zqSCSLCT2K5oVQeIxVtLr6YRSr9ZEujQJRe8LhxDWUExunK
-         ONbQ==
-X-Gm-Message-State: ABy/qLanIjw2iYE1zNknoITzRmIdS4cpwYRx6Gk+60f6fZ6Dt3o+lNSk
-        xSZDSUff1nwOR2cO4YjBhezAeSqeTQfNmxhDyx0=
-X-Google-Smtp-Source: APBJJlGbEK7+CMHGVikG5qSAkmi1koYQ7PRIaz5FQN5/ZPfU4hjy6xAtf8Iu7wMQZ/X0FMTcoopzGs9SvwJ6Mw+QQ+4=
-X-Received: by 2002:a17:90b:1d10:b0:262:d4c8:cb3c with SMTP id
- on16-20020a17090b1d1000b00262d4c8cb3cmr1341343pjb.49.1688656708131; Thu, 06
- Jul 2023 08:18:28 -0700 (PDT)
+        Thu, 6 Jul 2023 11:18:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1351997
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:18:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B36536023A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:18:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB965C433C8;
+        Thu,  6 Jul 2023 15:18:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688656722;
+        bh=PbZ1+K7/ycQgt3p7bChWS7NewJZAPs5Z0ueIwPNsb/s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iTfZ/YjXi6ibhTuFaou9mv3Q9Kov1pZMwM+Ah+ObPeBtVH0DeZtYT4ZZBo/GS6MX6
+         55LMdthnWRAKaYgtwbGIYUfpkxPIEjqE+Ynq64XMTkjNw1GYHlP4Gs0OorGMA8ffv6
+         lXf0UIexh9jJLRGRhxB2Y8avLMD0Wbkx6sAJqhI2kNVXaFmF7i6CkkzBmBLRfbD5e3
+         /fpXmbpq1h8cQKEP2C+guqrcYjp/609KDXiGoITkP4q5rADtXfVnsAu9u6QYiGOxqn
+         sV3aEid5TAtffJvYVvje/Z96rQEaEJV+lOsdJkIH2SwqRMh9Mc2N13Scmepb69mvi/
+         PsSQaZ1gnNUzg==
+Message-ID: <2ca3892e-a018-37e1-5a3d-288e6af2ec4d@kernel.org>
+Date:   Thu, 6 Jul 2023 10:18:40 -0500
 MIME-Version: 1.0
-References: <20230607151127.1542024-1-pavacic.p@gmail.com> <20230607151127.1542024-4-pavacic.p@gmail.com>
- <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com>
- <CAO9szn00vRFm+iM1m7KgkW0WRuKyJEgVU4tVx4f5tF6KPnE=2w@mail.gmail.com>
- <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com>
- <CAO9szn29A0qCABG0ACni42UGpsGKLwG7OT1y_ho3DgQ0WLvfmw@mail.gmail.com>
- <CACRpkdYXtQwmZR1u-1fwmyC_8Yq4bMkjDBcUCfuGqSz_UhXWJQ@mail.gmail.com>
- <CAO9szn0OuKW+-JZMs3TPUHiwLCe6cUPcsUq+og64K2utMyZpqQ@mail.gmail.com> <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com>
-In-Reply-To: <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com>
-From:   Paulo Pavacic <pavacic.p@gmail.com>
-Date:   Thu, 6 Jul 2023 17:18:17 +0200
-Message-ID: <CAO9szn3oTzrrwiyr91H14ep7OPUkA-SDST3CSQAQHvFFnkJWfA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Vasut <marex@denx.de>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: =?UTF-8?B?UmU6IOWbnuWkjTog5Zue5aSNOiBbUEFUQ0hdIGZpcm13YXJlOiBzdHJh?=
+ =?UTF-8?Q?tix10-svc=3a_Fix_an_NULL_vs_IS=5fERR=28=29_bug_in_svc=5fcreate=5f?=
+ =?UTF-8?Q?memory=5fpool=28=29?=
+Content-Language: en-US
+To:     =?UTF-8?B?546L5piOLei9r+S7tuW6leWxguaKgOacr+mDqA==?= 
+        <machel@vivo.com>, Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "opensource.kernel" <opensource.kernel@vivo.com>
+References: <20230704082706.1721-1-machel@vivo.com>
+ <fe780326-2150-a3e6-e451-ea82be65e0cf@web.de>
+ <daa12e00-1d01-45d0-89c8-03ff94fa3399@kadam.mountain>
+ <SG2PR06MB3743AC289C8C124CA57C77DABD2CA@SG2PR06MB3743.apcprd06.prod.outlook.com>
+ <fe812000-c5bf-4510-a3a9-76684a59ecc9@kadam.mountain>
+ <SG2PR06MB3743DD3C50017612CF3BE38ABD2CA@SG2PR06MB3743.apcprd06.prod.outlook.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <SG2PR06MB3743DD3C50017612CF3BE38ABD2CA@SG2PR06MB3743.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,42 +66,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
 
-=C4=8Det, 22. lip 2023. u 10:22 Linus Walleij <linus.walleij@linaro.org> na=
-pisao je:
->
-> On Wed, Jun 21, 2023 at 5:09=E2=80=AFPM Paulo Pavacic <pavacic.p@gmail.co=
-m> wrote:
->
-> > A lot of modifications to st7701 are required. I believe it would
-> > result in a driver that doesn't look or work the same. e.g compare
-> > delays between initialization sequences of panel-fannal-c3004 and
-> > panel-st7701. I think it would be optimal to create st7701s driver and
-> > have special handling for st7701s panels. If there was a flag for
-> > whether panel is st7701 or st7701s it would end up looking like a
-> > mess.
->
-> What matters is if the original authors of the old st7701 driver are
-> around and reviewing and testing patches at all. What we need is
-> active maintainers. (Added Jagan, Marek & Maya).
->
-> I buy the reasoning that the st7701s is perhaps substantially different
-> from st7701.
->
-> If st7701s is very different then I suppose it needs a separate driver,
-> then all we need to to name the driver properly, i.e.
-> panel-sitronix-st7701s.c.
 
-I had in person talk with Paul Kocialkowski and I have concluded that
-this is the best solution.
-I believe I should rename it to st7701s due to the hardware changes. I
-would like to create V5 patch with driver renamed to st7701s.
-Please let me know if you agree / disagree.
+On 7/6/23 03:56, 王明-软件底层技术部 wrote:
+> I see. Thank you
+> 
+> -----邮件原件-----
+> 发件人: Dan Carpenter <dan.carpenter@linaro.org>
+> 发送时间: 2023年7月6日 16:52
+> 收件人: 王明-软件底层技术部 <machel@vivo.com>
+> 抄送: Dinh Nguyen <dinguyen@kernel.org>; LKML <linux-kernel@vger.kernel.org>; opensource.kernel <opensource.kernel@vivo.com>
+> 主题: Re: 回复: [PATCH] firmware: stratix10-svc: Fix an NULL vs IS_ERR() bug in svc_create_memory_pool()
+> 
+> On Thu, Jul 06, 2023 at 08:44:39AM +0000, 王明-软件底层技术部 wrote:
+>> Thank you Dan carpenter.
+>> This patch has been submitted for a long time, but I have not heard
+>> back from the maintainer, and I am confused whether I need to send it
+>> again
 
->
-> Yours,
-> Linus Walleij
+Looks like you sent an original patch on July 1st, then you sent another 
+patch on July 4th. In the future, please take Dan's advice on 2 weeks 
+and if you do need to resend you can add a 'RESEND' to the subject line, 
+or just reply with a ping to the original patch. I was on a short leave. 
+I'll take your patch next week with the edits from Dan's comments.
 
-Thank you for your time,
-Paulo Pava=C4=8Di=C4=87
+Thanks,
+Dinh
+
+
