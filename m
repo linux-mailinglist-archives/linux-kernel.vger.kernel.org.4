@@ -2,112 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F53B749F3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F36749F4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjGFOmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S233291AbjGFOpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjGFOmX (ORCPT
+        with ESMTP id S231895AbjGFOpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:42:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E1E10F5;
-        Thu,  6 Jul 2023 07:42:22 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366Dl7Xi002795;
-        Thu, 6 Jul 2023 14:42:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cOy/D9wwF+YVZW0ZIhp1zNdTAQ7GSvA0zuPjMg2pfCw=;
- b=nw9wfHYpWg0E+3+ZIfYtFkz1XsAgPn/DjUrOLy1nvwSnGgp2V9thA5zrnjLtP/j3X82X
- 3nmTLYDPVDcIDRON8xigEGPBV95p7e49wYTbV0RJjjH7f4dPK17yRSflVy9kUUNfUDFf
- scFtu8AFM8m2PMZEOkAao1TBwkRc+30HzIUAMwhmwciQFxtpTSEJapLrppUQvyFSZgYU
- 7zUfsjNPQjdPhliumCEfry8uUHabYCKAQIWde/A6sqS3hyPyScoCrLdilcyrOshlWqCY
- Y/QsrVKfPiBWhhJAxhkhnopa0U/TZaXmB0C/7U9tthko2eyqUUvuydC9iKl1scNaW3Bw DQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn152kty6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 14:42:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366EgHHa005936
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 14:42:17 GMT
-Received: from [10.216.13.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
- 2023 07:42:13 -0700
-Message-ID: <337a8204-033f-3c00-ffc3-0bd3a6050e54@quicinc.com>
-Date:   Thu, 6 Jul 2023 20:12:09 +0530
+        Thu, 6 Jul 2023 10:45:13 -0400
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F62D199F;
+        Thu,  6 Jul 2023 07:45:10 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QxfDL74Rpz9xFGL;
+        Thu,  6 Jul 2023 22:34:10 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S2;
+        Thu, 06 Jul 2023 15:44:25 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jarkko@kernel.org, song@kernel.org, jolsa@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, mykolal@fb.com,
+        shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbrobinson@gmail.com,
+        zbyszek@in.waw.pl, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, wiktor@metacode.biz,
+        devel@lists.sequoia-pgp.org, gnupg-devel@gnupg.org,
+        ebiggers@kernel.org, Jason@zx2c4.com, mail@maciej.szmigiero.name,
+        antony@vennard.ch, konstantin@linuxfoundation.org,
+        James.Bottomley@HansenPartnership.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 00/10] KEYS: Introduce user asymmetric keys and signatures
+Date:   Thu,  6 Jul 2023 16:42:13 +0200
+Message-Id: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/3] dt-bindings: power: rpmpd: Add Generic RPM(h) PD
- indexes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1688647793-20950-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688647793-20950-2-git-send-email-quic_rohiagar@quicinc.com>
- <9e25ca29-9e19-b48c-06a7-f748af3fd243@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <9e25ca29-9e19-b48c-06a7-f748af3fd243@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Dk8QoSW3p9f_FB-kWGpmnCZuV4063PEH
-X-Proofpoint-ORIG-GUID: Dk8QoSW3p9f_FB-kWGpmnCZuV4063PEH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_11,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 clxscore=1015 mlxlogscore=703
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060131
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFyDJFyUWrW7XryxWF13CFg_yoW3Xw15pF
+        Z5KrWrtryktr1xKayrAw4Iga1rZr1Fyay3Kwnakw15AasIqr18ArWIkF45ur9ayF48WF1F
+        vrsav34UKw18t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V4AAAsE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-On 7/6/2023 8:06 PM, Krzysztof Kozlowski wrote:
-> On 06/07/2023 14:49, Rohit Agarwal wrote:
->> Add Generic RPM(h) Power Domain indexes that can be used
->> for all the Qualcomm SoC henceforth.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   include/dt-bindings/power/qcom-rpmpd.h | 49 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 49 insertions(+)
-> Didn't you just send a patch doing similar? There is no changelog, no
-> versioning, how can anyone figure out which patch is the latest or which
-> one should be ignored?
-No, that patch was removing all the other SoCs macro which was against 
-the ABI.
-So dropping that series completely and this being new series didnt 
-include the versioning.
-Since all the patches in that series needed to be dropped I thought to 
-start a new series.
+Define a new TLV-based format for keys and signatures, aiming to store and
+use in the kernel the crypto material from other unsupported formats
+(e.g. PGP).
 
-Thanks,
-Rohit.
-> Best regards,
-> Krzysztof
->
+TLV fields have been defined to fill the corresponding kernel structures
+public_key, public_key_signature and key_preparsed_payload.
+
+Keys:
+                struct public_key {     struct key_preparsed_payload {
+KEY_PUB       -->  void *key;
+                   u32 keylen;         --> prep->payload.data[asym_crypto]
+KEY_ALGO      -->  const char *pkey_algo;
+KEY_KID0
+KEY_KID1                               --> prep->payload.data[asym_key_ids]
+KEY_KID2  
+KEY_DESC                               --> prep->description
+
+
+Signatures:
+                struct public_key_signature {
+SIG_S         -->  u8 *s;
+                   u32 s_size;
+SIG_KEY_ALGO  -->  const char *pkey_algo;
+SIG_HASH_ALGO -->  const char *hash_algo;
+                   u32 digest_size;
+SIG_ENC       -->  const char *encoding;   
+SIG_KID0
+SIG_KID1      -->  struct asymmetric_key_id *auth_ids[3];
+SIG_KID2  
+
+
+For keys, since the format conversion has to be done in user space, user
+space is assumed to be trusted, in this proposal. Without this assumption,
+a malicious conversion tool could make a user load to the kernel a
+different key than the one expected.
+
+That should not be a particular problem for keys that are embedded in the
+kernel image and loaded at boot, since the conversion happens in a trusted
+environment such as the building infrastructure of the Linux distribution
+vendor.
+
+In the other cases, such as enrolling a key through the Machine Owner Key
+(MOK) mechanism, the user is responsible to ensure that the crypto material
+carried in the original format remains the same after the conversion.
+
+For signatures, assuming the strength of the crypto algorithms, altering
+the crypto material is simply a Denial-of-Service (DoS), as data can be
+validated only with the right signature.
+
+
+This patch set also offers the following contributions:
+
+- An API similar to the PKCS#7 one, to verify the authenticity of system
+  data through user asymmetric keys and signatures
+
+- A mechanism to store a keyring blob in the kernel image and to extract
+  and load the keys at system boot
+  
+- eBPF binding, so that data authenticity verification with user asymmetric
+  keys and signatures can be carried out also with eBPF programs
+
+- A new command for gnupg (in user space), to convert keys and signatures
+  from PGP to the new kernel format
+
+
+The primary use case for this patch set is to verify the authenticity of
+RPM package headers with the PGP keys of the Linux distribution. Once their
+authenticity is verified, file digests can be extracted from those RPM
+headers and used as reference values for IMA Appraisal.
+
+
+Compared to the previous patch set, the main difference is not relying on
+User Mode Drivers (UMDs) for the conversion from the original format to the
+kernel format, due to the concern that full isolation of the UMD process
+cannot be achieved against a fully privileged system user (root).
+
+The discussion is still ongoing here:
+
+https://lore.kernel.org/linux-integrity/eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com/
+
+This however does not prevent the goal mentioned above of verifying the
+authenticity of RPM headers to be achieved. The fact that Linux
+distribution vendors do the conversion in their infrastructure is a good
+enough guarantee.
+
+
+A very quick way to test the patch set is to execute:
+
+# gpg --conv-kernel /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-rawhide-primary | keyctl padd asymmetric "" @u
+
+# keyctl show @u
+Keyring
+ 762357580 --alswrv      0 65534  keyring: _uid.0
+ 567216072 --als--v      0     0   \_ asymmetric: PGP: 18b8e74c
+
+
+Patches 1-2 preliminarly export some definitions to user space so that
+conversion tools can specify the right public key algorithms and signature
+encodings (digest algorithms are already exported).
+
+Patches 3-5 introduce the user asymmetric keys and signatures.
+
+Patches 6 introduces a system API for verifying the authenticity of system
+data through user asymmetric keys and signatures.
+
+Patch 7-8 introduce a mechanism to store a keyring blob with user
+asymmetric keys in the kernel image, and load them at system boot.
+
+Patches 9-10 introduce the eBPF binding and corresponding test (which can
+be enabled only after the gnupg patches are upstreamed).
+
+Patches 1-2 [GNUPG] introduce the new gpg command --conv-kernel to convert
+PGP keys and signatures to the new kernel format.
+
+Changelog
+
+v1:
+- Remove useless check in validate_key() (suggested by Yonghong)
+- Don't rely on User Mode Drivers for the conversion from the original
+  format to the kernel format
+- Use the more extensible TLV format, instead of a fixed structure
+
+Roberto Sassu (10):
+  crypto: Export public key algorithm information
+  crypto: Export signature encoding information
+  KEYS: asymmetric: Introduce a parser for user asymmetric keys and sigs
+  KEYS: asymmetric: Introduce the user asymmetric key parser
+  KEYS: asymmetric: Introduce the user asymmetric key signature parser
+  verification: Add verify_uasym_signature() and
+    verify_uasym_sig_message()
+  KEYS: asymmetric: Preload user asymmetric keys from a keyring blob
+  KEYS: Introduce load_uasym_keyring()
+  bpf: Introduce bpf_verify_uasym_signature() kfunc
+  selftests/bpf: Prepare a test for user asymmetric key signatures
+
+ MAINTAINERS                                   |   1 +
+ certs/Kconfig                                 |  11 +
+ certs/Makefile                                |   7 +
+ certs/system_certificates.S                   |  18 +
+ certs/system_keyring.c                        | 166 +++++-
+ crypto/Kconfig                                |   6 +
+ crypto/Makefile                               |   2 +
+ crypto/asymmetric_keys/Kconfig                |  14 +
+ crypto/asymmetric_keys/Makefile               |  10 +
+ crypto/asymmetric_keys/asymmetric_type.c      |   3 +-
+ crypto/asymmetric_keys/uasym_key_parser.c     | 229 ++++++++
+ crypto/asymmetric_keys/uasym_key_preload.c    |  99 ++++
+ crypto/asymmetric_keys/uasym_parser.c         | 201 +++++++
+ crypto/asymmetric_keys/uasym_parser.h         |  43 ++
+ crypto/asymmetric_keys/uasym_sig_parser.c     | 491 ++++++++++++++++++
+ crypto/pub_key_info.c                         |  20 +
+ crypto/sig_enc_info.c                         |  16 +
+ include/crypto/pub_key_info.h                 |  15 +
+ include/crypto/sig_enc_info.h                 |  15 +
+ include/crypto/uasym_keys_sigs.h              |  82 +++
+ include/keys/asymmetric-type.h                |   1 +
+ include/linux/verification.h                  |  50 ++
+ include/uapi/linux/pub_key_info.h             |  22 +
+ include/uapi/linux/sig_enc_info.h             |  18 +
+ include/uapi/linux/uasym_parser.h             | 107 ++++
+ kernel/trace/bpf_trace.c                      |  68 ++-
+ ...y_pkcs7_sig.c => verify_pkcs7_uasym_sig.c} | 159 +++++-
+ ...s7_sig.c => test_verify_pkcs7_uasym_sig.c} |  18 +-
+ .../testing/selftests/bpf/verify_sig_setup.sh |  82 ++-
+ 29 files changed, 1924 insertions(+), 50 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/uasym_key_parser.c
+ create mode 100644 crypto/asymmetric_keys/uasym_key_preload.c
+ create mode 100644 crypto/asymmetric_keys/uasym_parser.c
+ create mode 100644 crypto/asymmetric_keys/uasym_parser.h
+ create mode 100644 crypto/asymmetric_keys/uasym_sig_parser.c
+ create mode 100644 crypto/pub_key_info.c
+ create mode 100644 crypto/sig_enc_info.c
+ create mode 100644 include/crypto/pub_key_info.h
+ create mode 100644 include/crypto/sig_enc_info.h
+ create mode 100644 include/crypto/uasym_keys_sigs.h
+ create mode 100644 include/uapi/linux/pub_key_info.h
+ create mode 100644 include/uapi/linux/sig_enc_info.h
+ create mode 100644 include/uapi/linux/uasym_parser.h
+ rename tools/testing/selftests/bpf/prog_tests/{verify_pkcs7_sig.c => verify_pkcs7_uasym_sig.c} (69%)
+ rename tools/testing/selftests/bpf/progs/{test_verify_pkcs7_sig.c => test_verify_pkcs7_uasym_sig.c} (82%)
+
+-- 
+2.34.1
+
