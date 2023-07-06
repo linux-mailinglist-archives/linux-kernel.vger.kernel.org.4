@@ -2,93 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0678174A44F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FA174A450
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjGFTRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S232412AbjGFTSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjGFTRc (ORCPT
+        with ESMTP id S229501AbjGFTSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:17:32 -0400
-Received: from sandeen.net (sandeen.net [63.231.237.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EEC31BD3;
-        Thu,  6 Jul 2023 12:17:31 -0700 (PDT)
-Received: from [10.0.0.71] (liberator.sandeen.net [10.0.0.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by sandeen.net (Postfix) with ESMTPSA id C1A6E4EA2A8;
-        Thu,  6 Jul 2023 14:17:29 -0500 (CDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 sandeen.net C1A6E4EA2A8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sandeen.net;
-        s=default; t=1688671049;
-        bh=v4i+72g7D6iVCKKo2ymKFetMv3GnuiL/PAAAefQkWsM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hiKWH+L6yJHx5fVUwoip0hsaDM6VWhtZYBLYtvtqS0ZSOX2FyU7ByhQebtZP5pL5q
-         woycrGQYJZJcOfinUYEI35vyvvoOj3axUDlTdOZsfQjqFED+6pMJnlmyJplY0Uvdl4
-         liWnkn4XjJyqUgqFmrDNw32iBgrGZANTlAnPLtAY45V3GgvbSvbJw22dlo9IV23x54
-         ZuzrKgIZnEsSKts3AQLUVrM3T0AYTz2cUbabIuvVWI92hN/Cn5hKe6cRB9dclyBKNJ
-         cBhdTs/9n+qxbfLgOFlkcjptd5Q49JrZC0SYZyn7j4YRumIIYXo7ma2pF1ISp2Si99
-         JWrvhqLeigZfg==
-Message-ID: <d2a06111-c8c6-cdb6-c8ac-ae7148742786@sandeen.net>
-Date:   Thu, 6 Jul 2023 14:17:29 -0500
+        Thu, 6 Jul 2023 15:18:10 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A3B1BDB;
+        Thu,  6 Jul 2023 12:18:09 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so16921531fa.1;
+        Thu, 06 Jul 2023 12:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688671088; x=1691263088;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KJ8xlnwwG75DABomjaI7QqlxiiSgIPWY3Gi9RsGEoCA=;
+        b=DncxFNWwCFbdrSjJxSYqFDPVWaVajWn9H0YCGO+yFZy2UwIoz/6ypnWPxnvj6XXykn
+         moJU4kiCO9a8LILaoo7QJ098RH6E1yYHsxR8uEuqwEyFaP82tLEMoAb805Hi8GO0CM92
+         ZYbrDTiVvD6Tb+XxK4YMP33xMVvWU69STULo7vLbNLwRwVlQR9AjO8SZYYkjO0KZy6jl
+         MwMXOMi7PY5V32Gv70CG58WrQPKuRH3WwJxf3zqsoy+EFiAmA6ETlBNAjCf90SS8g/S6
+         Hnjw2g/91L5YUQivLPJrzBeC6NRXgEjNJnhvKkdYhGn0muy2d8Ub9EYvN9rEHa0fz58N
+         JF2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688671088; x=1691263088;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KJ8xlnwwG75DABomjaI7QqlxiiSgIPWY3Gi9RsGEoCA=;
+        b=Jlxm3RVnrfGtpjlImKFRERcNVdS1DJlIEiznyQi1NkNuz6cF0mK2bR4xUxZdKgTh4f
+         fKFMNEkMN86fjh/zTgs1mj3xs1DLIhlJ21gR1L5eJ1bEn+Wkuy69OJjtuJVv/Af4sFkr
+         Ps+DCRGrAz7DOTeexN7pnqGJVaj7xOe0YOUN/UxDZIMh5zldyZ0IFEezd3ls3yb51EZH
+         y62/NQqY7tv2EY37ZVNKswmXJecirp/nOHMwi4q/brqM+vhud0NN7vk+cVsCvi9PFaAO
+         K6FV/9Xb/uCCj6OOn/jQhqO2VSoy4oi+H8AUCpfylnnK4+L7i/rGLE52pbx0fJV/1wBA
+         lvvw==
+X-Gm-Message-State: ABy/qLYDEyNlXAtCBidlkitWPYEETgGqMRaRn3x+OXX5UMYaKuMGfIzI
+        RPwn0iCCgeyJmYqTglxURrBkPzjhwGwHZ3ncS5k=
+X-Google-Smtp-Source: APBJJlFSrfGsuI1nlxg860DIpmq2c4FEKlks4TgweGqMuykwf8uclJG9TycE6f6WQknLrbdfL+zAc6WsJuFW0mJ+y0w=
+X-Received: by 2002:a2e:b681:0:b0:2b6:cad9:75ba with SMTP id
+ l1-20020a2eb681000000b002b6cad975bamr2096948ljo.29.1688671087635; Thu, 06 Jul
+ 2023 12:18:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Josef Bacik <josef@toxicpanda.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        djwong@kernel.org, dchinner@redhat.com, sandeen@redhat.com,
-        willy@infradead.org, tytso@mit.edu, bfoster@redhat.com,
-        jack@suse.cz, andreas.gruenbacher@gmail.com, brauner@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        dhowells@redhat.com
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
-From:   Eric Sandeen <sandeen@sandeen.net>
-In-Reply-To: <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230702210138.226929-1-valentin.david@gmail.com> <20230706191035.736632-1-valentin.david@gmail.com>
+In-Reply-To: <20230706191035.736632-1-valentin.david@gmail.com>
+From:   Valentin David <valentin.david@gmail.com>
+Date:   Thu, 6 Jul 2023 21:17:56 +0200
+Message-ID: <CAM06Q5T7LtyenM05gY0BcyFeGqGbwTLPaL70Fv6pT9cAChpmSg@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: btusb: Add device 0489:e0f5 as MT7922 device
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/23 12:38 PM, Kent Overstreet wrote:
-> Right now what I'm hearing, in particular from Redhat, is that they want
-> it upstream in order to commit more resources. Which, I know, is not
-> what kernel people want to hear, but it's the chicken-and-the-egg
-> situation I'm in.
-
-I need to temper that a little. Folks in and around filesystems and 
-storage at Red Hat find bcachefs to be quite compelling and interesting, 
-and we've spent some resources in the past several months to 
-investigate, test, benchmark, and even do some bugfixing.
-
-Upstream acceptance is going to be a necessary condition for almost any 
-distro to consider shipping or investing significantly in bcachefs. But 
-it's not a given that once it's upstream we'll immediately commit more 
-resources - I just wanted to clarify that.
-
-It is a tough chicken and egg problem to be sure. That said, I think 
-you're right Kent - landing it upstream will quite likely encourage more 
-interest, users, and hopefully developers.
-
-Maybe it'd be reasonable to mark bcachefs as EXPERIMENTAL or similar in 
-Kconfig, documentation, and printks - it'd give us options in case it 
-doesn't attract developers and Kent does get hit by a bus or decide to 
-go start a goat farm instead (i.e. in the worst case, it could be 
-yanked, having set expectations.)
-
--Eric
+Forget about this patch, while rebasing I saw someone else had the same fix.
