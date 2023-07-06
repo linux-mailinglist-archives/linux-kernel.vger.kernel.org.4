@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58CB74A2C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B89774A2C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjGFRF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
+        id S232412AbjGFRGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbjGFRF5 (ORCPT
+        with ESMTP id S232257AbjGFRGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:05:57 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF88F1BE8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:05:55 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3a3373211a1so856790b6e.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 10:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1688663155; x=1691255155;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DbYorBSGNgBnNiqoshTpZfEFQccGjhuwwnRL/44SoP0=;
-        b=i4T0nNOBYy25Tum7t/4GwKsh3/lK7Uikcmkb4kOyw4gG9SEUDys1g5J3pJUji2g/jJ
-         LPaszbqCG0hhdxw9/hcWYxo+RYH1ml6lnNIyZhbERDGwRvHc2ctOj7XJ44sxi7yENjUw
-         ISHeOYxF9bfqqQgSJQFLfwKIWcXdzga6nV9hUibEpf/kvOAbkrIbqaSJYSVMFCC5fXPg
-         NqTooUkkAax89B8soY2d4ySMk4P3KloKJZNOjV7UtnbJUPzBK/u/RQMv8olff4elOxxD
-         8bPApwuR0J8ZY0C0moK+z9bNXqPu0MEPf38pn/4p0aoolZvo2R1Y15goKKKXtRMx59w7
-         uAOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688663155; x=1691255155;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DbYorBSGNgBnNiqoshTpZfEFQccGjhuwwnRL/44SoP0=;
-        b=HR3Iy26Dpyb80Bdz/h2f2CklNJCPtjR+wJEx8IoMNikIn9AgTLWeqwhQf+fgH5Y9na
-         +zh13JnYj+S3AU+rRo2o0fnNPjCCoZrAq5+xoSDxfF0bCLwIAB7JkFR57VRkKBJw/RHK
-         6zVLAqLZ3y+C3uEM/NJp41DvPXaCkdz2qMXQurmY8r3NRiH7j6yvTQ/l/xUiTE0DyVyO
-         vrySWMYc6bcOa8Thaz/iCcLa+Orq+qZRbpuFCGNvi5AnsP17gM0jpF1yf92E9XSmgS5b
-         k0GyH0f0iu36kENksyMev49YOsKLQWklqialntPij8RMg59sog1vjRYSbMwtXz4PX2mL
-         F09A==
-X-Gm-Message-State: ABy/qLZih4zIj6eoQvPZMhhteJB6mS35mHP19TfacYlp2Wvn/mowxPM9
-        8naMt4WxziMjK97NIoBE80BX3A==
-X-Google-Smtp-Source: APBJJlHVjAgGUeOK5ZObTBmnmtOv0vpCjPIptZy244A4rKJYcvX5zFmOq+/846tjHtfgDBgeTsJodw==
-X-Received: by 2002:a05:6808:2784:b0:3a2:1b3b:494b with SMTP id es4-20020a056808278400b003a21b3b494bmr2067218oib.45.1688663154961;
-        Thu, 06 Jul 2023 10:05:54 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a030300b0026390b2d136sm46808pje.18.2023.07.06.10.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 10:05:54 -0700 (PDT)
-Date:   Thu, 06 Jul 2023 10:05:54 -0700 (PDT)
-X-Google-Original-Date: Thu, 06 Jul 2023 10:05:06 PDT (-0700)
-Subject:     Re: [PATCH] riscv: Start of DRAM should at least be aligned on PMD size for the direct mapping
-In-Reply-To: <20230704121837.248976-1-alexghiti@rivosinc.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        suagrfillet@gmail.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, alexghiti@rivosinc.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alexghiti@rivosinc.com
-Message-ID: <mhng-c5a71036-061e-4704-bcdf-2b23cab36908@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 13:06:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2A31BE1;
+        Thu,  6 Jul 2023 10:06:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2711B60F64;
+        Thu,  6 Jul 2023 17:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE9BC433AD;
+        Thu,  6 Jul 2023 17:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688663160;
+        bh=nW2uMa3dM6Rbpdf1TtLn2cGbPwpI8W7PDo0lEnEFIxo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SWQafKJlJ7E/0yn9ufCoZvx/NoEBiYJHc61mdMpnnacnpDz07NaiCNlvi2k5srhYT
+         W2mw2oixgaAUZFWxUUoqaA8k2HKhyPQPf6fcu0f/2pN04y6NzTBqcUdbO13M/GPQHk
+         ytKt9+GLoN81PZe/8WLPclNtbZ1V1cm+2GMq4wTKLlOJTUr8q569oKNiYD5GOWApXj
+         iA2kw+RxPy0Gvrq7zc4b4hxudYjjtcjHggPBVHTJqa8+ZDPxPWc7qtrpQ87CSzYDmW
+         sG0Fwo6IAhNIWn0A1oXsclwNl15X2jzBUzJCxd1f+G69Ma4hPVEq6EbUgycUQN0eZ7
+         71pvLdVnOTwJw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 16493CE3A5C; Thu,  6 Jul 2023 10:06:00 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 10:06:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang.zhang1211@gmail.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] srcu: Priority check rcu_gp_is_expedited() in
+ synchronize_srcu()
+Message-ID: <2728d9db-d20d-4203-8152-f6bc7c089bbd@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230704070809.31951-1-qiang.zhang1211@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704070809.31951-1-qiang.zhang1211@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Jul 2023 05:18:37 PDT (-0700), alexghiti@rivosinc.com wrote:
-> So that we do not end up mapping the whole linear mapping using 4K
-> pages, which is slow at boot time, and also very likely at runtime.
->
-> So make sure we align the start of DRAM on a PMD boundary.
->
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+On Tue, Jul 04, 2023 at 03:08:09PM +0800, Zqiang wrote:
+> Since the atomic variable rcu_expedited_nesting is initialized to
+> true, so the rcu_gp_is_expedited() is always return true during
+> system startup until the rcu_end_inkernel_boot() is called. this
+> means that without setting rcupdate.rcu_normal=1 and before the
+> rcu_end_inkernel_boot() is executed, regardless of whether the
+> return value of srcu_might_be_idle() is true, call synchronize_srcu()
+> always fall back to synchronize_srcu_expedited(), so there is
+> no need to checking srcu_might_be_idle() return value.
+> 
+> For the rcupdate.rcu_normal=0, rcupdate.rcu_normal_after_boot=0 and
+> rcupdate.rcu_expedited=1 kernels, there is also no need to checking
+> srcu_might_be_idle() return value.
+> 
+> This commit therefore priority check rcu_gp_is_expedited() return value
+> in synchronize_srcu().
+> 
+> Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
+
+Thank you for taking the time to look into SRCU!
+
+But are you seeing real performance issues that this addresses?
+
+My guess is "no", given that this is nowhere near a fastpath, but I
+figured that I should ask.
+
+							Thanx, Paul
+
 > ---
->  arch/riscv/mm/init.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 4fa420faa780..4a43ec275c6d 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -214,8 +214,13 @@ static void __init setup_bootmem(void)
->  	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
->
->  	phys_ram_end = memblock_end_of_DRAM();
-> +
-> +	/*
-> +	 * Make sure we align the start of the memory on a PMD boundary so that
-> +	 * at worst, we map the linear mapping with PMD mappings.
-> +	 */
->  	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
-> -		phys_ram_base = memblock_start_of_DRAM();
-> +		phys_ram_base = memblock_start_of_DRAM() & PMD_MASK;
-
-This rounds down, which IIUC will result in mappings outside what 
-memblock detected as the start af DRAM.  I'd expect that to cause bad 
-behavior somewhere.
-
-Shouldn't we be rounding up?
-
->
->  	/*
->  	 * In 64-bit, any use of __va/__pa before this point is wrong as we
+>  kernel/rcu/srcutree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 20d7a238d675..a819f11d9b90 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -1435,7 +1435,7 @@ EXPORT_SYMBOL_GPL(synchronize_srcu_expedited);
+>   */
+>  void synchronize_srcu(struct srcu_struct *ssp)
+>  {
+> -	if (srcu_might_be_idle(ssp) || rcu_gp_is_expedited())
+> +	if (rcu_gp_is_expedited() || srcu_might_be_idle(ssp))
+>  		synchronize_srcu_expedited(ssp);
+>  	else
+>  		__synchronize_srcu(ssp, true);
+> -- 
+> 2.17.1
+> 
