@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606377499C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD57499C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjGFKu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S231833AbjGFKvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjGFKuP (ORCPT
+        with ESMTP id S232016AbjGFKuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:50:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F16210D;
-        Thu,  6 Jul 2023 03:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688640590; x=1720176590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O2939U5ty2TolRbfyGjefCGhnUFfQlvKQ0xUsYPEdMY=;
-  b=HbeQev9rSCoYMBCSKjtsy4EiIvCCZKVxI1yX/WmOr74fVa8+mj71Z9Qf
-   3sEg0MVAoTEWTpCQcV3Cm0w48Ngm0P7Bpj06QyvxZAXYgvy5GeAMjjc4U
-   FufnHzRM2CK8q2J1jfaaRwMjk4zrISn09xTHknHYbq07GdM2Wd/HHbPhx
-   rnQIcK2bCp9iAeMXGVhD2gtbCtoI0D2/o/bEVGGlK3uwcfDtX6ugbkMQN
-   QJtuGIzl6OJsFO22+7JLS1bNrDs8+eD1AHjaHbLL4T+96FTPiSB8Em9/9
-   ox4MUE6vV35VlElMxfOpRNrUQoJ1t/YjBz10mVnVW/kS6BlCUSU6gZo8Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="366146988"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="366146988"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 03:49:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="669716936"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="669716936"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 06 Jul 2023 03:49:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qHMY9-000V0Z-2a;
-        Thu, 06 Jul 2023 13:49:25 +0300
-Date:   Thu, 6 Jul 2023 13:49:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Armin Wolf <W_Armin@gmx.de>,
-        =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v1 1/2] platform/x86: wmi: Break possible infinite loop
- when parsing GUID
-Message-ID: <ZKacNbTKz6rgWgww@smile.fi.intel.com>
-References: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com>
- <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
- <TnTqU2wwXh3DG07kYUwMAe0hdBiaKiuoMOqBCBIttT27lXdw-KZVV8fZ7x-Zrg_Ux8mJUHClgyFHRbDoCRmhaOI7GwOPhUPYBRLzThV8iYI=@protonmail.com>
- <b4dc2571-1163-805a-f92b-30dcc8b69246@gmx.de>
- <ZJQJqHbZy+00qhsz@smile.fi.intel.com>
- <ZJRh9o1a0k0yMbOG@smile.fi.intel.com>
- <decdc3d2-8e30-3ca9-d64c-4c76b8f160ca@redhat.com>
+        Thu, 6 Jul 2023 06:50:50 -0400
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5231F1FED;
+        Thu,  6 Jul 2023 03:50:47 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="103028920"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684767600"; 
+   d="scan'208";a="103028920"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 19:50:44 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id DC349D29E1;
+        Thu,  6 Jul 2023 19:50:42 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 1A1D0D9482;
+        Thu,  6 Jul 2023 19:50:42 +0900 (JST)
+Received: from [10.167.215.54] (unknown [10.167.215.54])
+        by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id BEBCC70BD9;
+        Thu,  6 Jul 2023 19:50:39 +0900 (JST)
+Message-ID: <7816e721-d0be-a146-4ab3-981a0619311e@fujitsu.com>
+Date:   Thu, 6 Jul 2023 18:50:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <decdc3d2-8e30-3ca9-d64c-4c76b8f160ca@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] cxl: fix CONFIG_FW_LOADER dependency
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230703112928.332321-1-arnd@kernel.org>
+From:   Xiao Yang <yangx.jy@fujitsu.com>
+In-Reply-To: <20230703112928.332321-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27734.005
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27734.005
+X-TMASE-Result: 10-0.799300-10.000000
+X-TMASE-MatchedRID: hwtUKlde9zGPvrMjLFD6eK5i3jK3KDOoC/ExpXrHizwzOk0/RiyBuak4
+        lLAFOnmC/Pc8drndASe+tYGi9QLNmq5eIDD1ppIU0QlBRwJqtSMbbhhV65kaY9uEAkFobdWZo8W
+        MkQWv6iUD0yuKrQIMCCAtDqHg/4Qmv79FIUygvZzZs3HUcS/scCq2rl3dzGQ1+hga1eR27pK58k
+        oA2iD482k6ZMp6CQdf0mnT/JDrtEpKDrTZjLnbCY2I6ly/IS1oILTEvFaCkR4CqAzD4rdFIwZjb
+        HmFoHt/5KURsc/QZz6F2JJaIjBHcl5/kgk8Ja9wMsqIZ2nIuPT3Bu44zcQFvQ==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 01:02:11PM +0200, Hans de Goede wrote:
-> On 6/22/23 17:00, Andy Shevchenko wrote:
-> > On Thu, Jun 22, 2023 at 11:43:20AM +0300, Andy Shevchenko wrote:
-> >> On Wed, Jun 21, 2023 at 11:50:51PM +0200, Armin Wolf wrote:
-
-...
-
-> >> I think that WARN_ON() is a bit bogus. First of all, it can be easily
-> >> transformed to BUG()-equivalent with panic_on_oops and hence kill the
-> >> entire system. If we need the message about wrong GUID format, it should
-> >> be done elsewhere (modpost ?). I.o.w. we shan't expect that code,
-> >> controlled by us, shoots to our foot.
-> > 
-> > Additional info. There will be another driver elsewhere that may use similar
-> > API and also needs GUID in device ID table.
-> > 
-> > Looking into that implementation it seems that validation should be made in
-> > file2alias.c for WMI and reused by that driver.
-> > 
-> > So, taking into account that we have no wrong IDs so far, I would drop
-> > WARN_ON() here and guarantee that file2alias.c will be changed to validate
-> > the GUID one way or the other.
-> > 
-> > Would it work? Hans, what is your comment here?
+On 2023/7/3 19:29, Arnd Bergmann wrote:
+> From: Arnd Bergmann<arnd@arndb.de>
 > 
+> When FW_LOADER is disabled, cxl fails to link:
 > 
-> I agree that warning on malformed GUIDs does not belong here and
-> your patch already drops the WARN_ON while switching to the new
-> guid_parse_and_compare() helper.
+> arm-linux-gnueabi-ld: drivers/cxl/core/memdev.o: in function `cxl_memdev_setup_fw_upload':
+> memdev.c:(.text+0x90e): undefined reference to `firmware_upload_register'
+> memdev.c:(.text+0x93c): undefined reference to `firmware_upload_unregister'
 > 
-> So I'll go and merge this into my fixes branch once rc1 is out.
+> In order to use the firmware_upload_register() function, both FW_LOADER
+> and FW_UPLOAD have to be enabled, which is a bit confusing. In addition,
+> the dependency is on the wrong symbol, as the caller is part of the
+> cxl_core.ko module, not the cxl_mem.ko module.
+> 
+> Fixes: 9521875bbe005 ("cxl: add a firmware update mechanism using the sysfs firmware loader")
+> Signed-off-by: Arnd Bergmann<arnd@arndb.de>
 
-Thank you!
+Hi Arnd,
 
--- 
-With Best Regards,
-Andy Shevchenko
+It makes sense.
 
+Reviewed-by: Xiao Yang <yangx.jy@fujitsu.com>
 
+Best Regards,
+Xiao Yang
