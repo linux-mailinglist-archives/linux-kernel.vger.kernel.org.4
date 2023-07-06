@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2C87494F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7082D749512
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbjGFFSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 01:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S233106AbjGFFuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGFFSW (ORCPT
+        with ESMTP id S229527AbjGFFuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 01:18:22 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D261F18B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 22:18:19 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b703d7ed3aso3354741fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 22:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688620698; x=1691212698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Pyew4brPaMX67Blh5xxcFOiu+e7xaU8tvYkzN+gBE8=;
-        b=ZboYtskoEVGQ3PAqWlv+EBZjzbuk1OtrqlZtJIldGS6YDLutnht+md5ynH3JRJ8reP
-         O9sA9xzXz5EHSG2POC0lUxSiVgvc7g7xpfmgJTsbBuVsmqpgLvDG6AOnubNdoIhOMyYk
-         j58tsmmg6qUEhR8g9N0K5S6HWrxFegfdCvcp4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688620698; x=1691212698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Pyew4brPaMX67Blh5xxcFOiu+e7xaU8tvYkzN+gBE8=;
-        b=lM3dqKI4diCzOvUNI7FPFHrB9gu8A9Frv2+z2OfkbqSDx/sPN0DWRaMl8OjCLYHhky
-         GyuGMXg6aOHt3jBpjjh3qkJtssROVc4t/dpWwySUs9VS9mh9399kkUhzwU13A3oxrEu8
-         eegyvQRsLmnTmZOBf6O3f9VB+FH4O6YJAR87IVfO1uWI3/Hkh9aMFEL5fxsCLh8ZSqrZ
-         oYfA515TxhChwHRl/S6URlOqGAV9EAv3+aGLjMpZkXUgU8BLv4Ol5ksq7rTCrg09kOft
-         WH7HL57GADjJ/4afP6r2PV4on9A65v3mN8feVOezYzbicd+Jt7uApva4HxdnmYd3aZw0
-         +FFQ==
-X-Gm-Message-State: ABy/qLZc+fMfR0eRR/YQ5sBNRrhskcXsetm97jRUliOUwlTMqnlv8dUN
-        ayuIekfrykX09PVa/CYQKads7TPucaQilVYPdyYVjw==
-X-Google-Smtp-Source: APBJJlFiaE5Rjy8N1mpXTKWuoY2gflHQlG7Qa0YN0CEaaUlIylK7sjjnfKxe8x2S2ynq0UzPO6qqGQ3z9DYXcAHxgSU=
-X-Received: by 2002:a2e:8902:0:b0:2b6:de6d:8148 with SMTP id
- d2-20020a2e8902000000b002b6de6d8148mr499717lji.31.1688620697982; Wed, 05 Jul
- 2023 22:18:17 -0700 (PDT)
+        Thu, 6 Jul 2023 01:50:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C36110
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 22:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688622613; x=1720158613;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w6/BBpGC9o6TMtXs4FPV+zb5Oys3dj7edttjfM+T3Mw=;
+  b=LSS5NONWXJKLNGkMKCuGFNZcNd8BvO9C8u7pZi8qEcS8szSFGY2lZPfl
+   hHeJHFdikCrM++Ny+D0PhSLxoduSSzmXhqAl1NTXqFJJg9KbKekoIu+wW
+   GO3oA7P2euTsUpj8n7dngl8HAO3UkhPTFPF0EQjNBt494mojrXzMxdr4B
+   inY7Jdk50usDBVNtN74ZilDkHcbWqFwtqVpiZfgh2OOJzy/9AT8EXmUlW
+   C8ku/Qj3PwP9FqWuDgiBxFVCAoNqE1Igz9VoLrHXbXsRra/vT8uIzY5Tj
+   3ETeUwTDh3FRq0bMQyHpadmXFbUIresocPijXhp9AXtc4J8kRYo1ivhv+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362383031"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="362383031"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 22:50:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="719479867"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="719479867"
+Received: from unknown (HELO fred..) ([172.25.112.68])
+  by orsmga002.jf.intel.com with ESMTP; 05 Jul 2023 22:50:12 -0700
+From:   Xin Li <xin3.li@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, brgerst@gmail.com,
+        ebiederm@xmission.com, xin3.li@intel.com
+Subject: [PATCH] x86/ia32: Do not modify the DPL bits for a null selector
+Date:   Wed,  5 Jul 2023 22:22:31 -0700
+Message-Id: <20230706052231.2183-1-xin3.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-6-stevensd@google.com>
- <20230706021016.GC3894444@ls.amr.corp.intel.com>
-In-Reply-To: <20230706021016.GC3894444@ls.amr.corp.intel.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Thu, 6 Jul 2023 14:18:06 +0900
-Message-ID: <CAD=HUj5ermRAjxVYhERDA7fE0cZ5TAGunP6j7zM5YC6PyiZh-g@mail.gmail.com>
-Subject: Re: [PATCH v7 5/8] KVM: x86/mmu: Don't pass FOLL_GET to __kvm_follow_pfn
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,39 +60,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 11:10=E2=80=AFAM Isaku Yamahata <isaku.yamahata@gmai=
-l.com> wrote:
->
-> On Tue, Jul 04, 2023 at 04:50:50PM +0900,
-> David Stevens <stevensd@chromium.org> wrote:
->
-> > diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> > index cf2c6426a6fc..46c681dc45e6 100644
-> > --- a/arch/x86/kvm/mmu/spte.c
-> > +++ b/arch/x86/kvm/mmu/spte.c
-> > @@ -138,7 +138,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mm=
-u_page *sp,
-> >              const struct kvm_memory_slot *slot,
-> >              unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
-> >              u64 old_spte, bool prefetch, bool can_unsync,
-> > -            bool host_writable, u64 *new_spte)
-> > +            bool host_writable, bool is_refcounted, u64 *new_spte)
-> >  {
-> >       int level =3D sp->role.level;
-> >       u64 spte =3D SPTE_MMU_PRESENT_MASK;
-> > @@ -188,6 +188,8 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mm=
-u_page *sp,
-> >
-> >       if (level > PG_LEVEL_4K)
-> >               spte |=3D PT_PAGE_SIZE_MASK;
-> > +     else if (is_refcounted)
-> > +             spte |=3D SPTE_MMU_PAGE_REFCOUNTED;
->
-> Is REFCOUNTED for 4K page only?  What guarantees that large page doesn't =
-have
-> FOLL_GET? or can we set the bit for large page?
+When a null selector is to be loaded into a segment register,
+reload_segments() sets its DPL bits to 3. Later when an IRET
+instruction loads it, it zeros the segment register. The two
+operations offset each other to actually effect a nop.
 
-Oh, you're right, it should apply to >4K pages as well. This was based
-on stale thinking from earlier versions of this series.
+Fix it by not modifying the DPL bits for a null selector.
 
--David
+Signed-off-by: Xin Li <xin3.li@intel.com>
+---
+ arch/x86/kernel/signal_32.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
+index 9027fc088f97..7796cf84fca2 100644
+--- a/arch/x86/kernel/signal_32.c
++++ b/arch/x86/kernel/signal_32.c
+@@ -36,22 +36,27 @@
+ #ifdef CONFIG_IA32_EMULATION
+ #include <asm/ia32_unistd.h>
+ 
++static inline u16 usrseg(u16 sel)
++{
++	return sel <= 3 ? sel : sel | 3;
++}
++
+ static inline void reload_segments(struct sigcontext_32 *sc)
+ {
+ 	unsigned int cur;
+ 
+ 	savesegment(gs, cur);
+-	if ((sc->gs | 0x03) != cur)
+-		load_gs_index(sc->gs | 0x03);
++	if (usrseg(sc->gs) != cur)
++		load_gs_index(usrseg(sc->gs));
+ 	savesegment(fs, cur);
+-	if ((sc->fs | 0x03) != cur)
+-		loadsegment(fs, sc->fs | 0x03);
++	if (usrseg(sc->fs) != cur)
++		loadsegment(fs, usrseg(sc->fs));
+ 	savesegment(ds, cur);
+-	if ((sc->ds | 0x03) != cur)
+-		loadsegment(ds, sc->ds | 0x03);
++	if (usrseg(sc->ds) != cur)
++		loadsegment(ds, usrseg(sc->ds));
+ 	savesegment(es, cur);
+-	if ((sc->es | 0x03) != cur)
+-		loadsegment(es, sc->es | 0x03);
++	if (usrseg(sc->es) != cur)
++		loadsegment(es, usrseg(sc->es));
+ }
+ 
+ #define sigset32_t			compat_sigset_t
+-- 
+2.34.1
+
