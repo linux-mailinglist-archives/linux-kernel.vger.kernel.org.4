@@ -2,109 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C91974A43D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650F774A44A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjGFTMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S231906AbjGFTO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjGFTMB (ORCPT
+        with ESMTP id S229672AbjGFTO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:12:01 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6D01BDB;
-        Thu,  6 Jul 2023 12:12:00 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-785cbc5bfd2so38024039f.2;
-        Thu, 06 Jul 2023 12:12:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688670720; x=1691262720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 6 Jul 2023 15:14:27 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C721B1BDB;
+        Thu,  6 Jul 2023 12:14:25 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so1671619e87.0;
+        Thu, 06 Jul 2023 12:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688670864; x=1691262864;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rXU7Wt2272aI2cWoAWkzUapCyXWe+5UzEWsEVDkssTE=;
-        b=KIhP2M2D5arM0QCytoyBxUogEOoNdu/LtCIjCNwaV9AS72h9ekqEPJId7Ti48hwVIU
-         wk2p2eXipqgU7tvva6fibhaCtVNax5RaCpGrsBWtcjhQEa+37i2o3OlTyNHEpqgZg38X
-         J3zTvyIgTJ4KthiLe8fAsviquUtIlUq3FX/I9pJDo+EAID35VmsAnBhTFg3O62al8iJw
-         H/BU2vGEJEZiCYwPcHvTHEUNetbDoivaFbiDF7OBSAEwEo5jL3otQWpyRzcnBvOjdKus
-         c3ZjhjNeeh3I/Kor+hM4hkJgiDtoK3EF29ug9hJHVpCo8mmWWVS2D0izbKK128T18zFB
-         AwIQ==
-X-Gm-Message-State: ABy/qLaAhOpPwRmXqMXMjbzrhO72cLpNXClD+ilHpg/SWpn3t6wISwil
-        JCXibcDRrI6WwWBjvb900g==
-X-Google-Smtp-Source: APBJJlF07iocpCggVXaw78JSKNekrgWfNt3CbG1McmPUCJtGyu2pbeZDDeztboCM4rurH1+MtXodYA==
-X-Received: by 2002:a05:6602:2774:b0:780:ccb9:297b with SMTP id l20-20020a056602277400b00780ccb9297bmr3152305ioe.11.1688670720022;
-        Thu, 06 Jul 2023 12:12:00 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id u16-20020a02c950000000b0042b85d6e125sm112599jao.24.2023.07.06.12.11.58
+        bh=knhfEEL6pgJDiH6jDH9axq86hl1v5IF4lIkzXelYSDY=;
+        b=PGeS5SArw9ya3mfRNoD2y1rbKTvOeqhVsjLKCjfq/N+azCAd37y+tjBo9HAxAug0yn
+         V44xRpHSJreS94PEH6FAi81LTh+K5ZyhbqSKi1fGzactN5Ef3+PacdMmJN8pjf2l6zwe
+         yPV7DVsTflgcnqEI6zzE3srEKI8MQ4uc3t8QsB1sDmKFG95hh2MQRM96Z0D5aMfDSXBI
+         rpHI49Mu/0ANmBlzscnHbd/bk5HAIsbSCBMzMR4g5wErjuFIx47x6WNG7d4BELSKqm8G
+         7Uxi8cHFpeitPDtwtwWVUNRGx6WTqndLmV6hHES9v1BWcgrPA37WxHHSkT6+eLMlXpkw
+         L6zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688670864; x=1691262864;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=knhfEEL6pgJDiH6jDH9axq86hl1v5IF4lIkzXelYSDY=;
+        b=QWb3GhQYsDw5EDh6hBQQfX3XE3JUe62kejLxfhsGU/+SvlHRCqYjGFIR453zsFIMXp
+         G68H0usf9eZJS842uOie8dTOWrve8TGupM/OJ/WYpBDXWxGI31lMjGWs31Kc8S+awLQv
+         blmAwu/VNdnTm8UUGivPvSZm96izslOBh2rOLZfQx8FA2Kj1i1F1o6pjlPzdXFmKBiN0
+         C2zUkUQEd6im73s2dbIMSd4/cKKpuwwsYqD9IHP+6NJ7X+2hC1PX43HRQZNQa3wxkh9W
+         /qXBzW95ZCTOV4FqAzZeydTt+Tga5ZaeAgL/hNK7gpaGfV13AZ3DuoWZnCaoaHgtlxoO
+         3EQQ==
+X-Gm-Message-State: ABy/qLbPCbbcZuLba+s50UMw20K8qtwfFj6uBG//WFW1qzSbrvptsacK
+        T1S+0lFi2UkAr3AQmr8yz38=
+X-Google-Smtp-Source: APBJJlH201cL2j5Ew4p8ZimnPzMs1jn2Qz+PNJ9BgeJOqFBKztGVDFdRhCTBzPKQtNs3DNzPS2D9wg==
+X-Received: by 2002:a05:6512:39cb:b0:4f3:93d6:f969 with SMTP id k11-20020a05651239cb00b004f393d6f969mr2377728lfu.59.1688670863666;
+        Thu, 06 Jul 2023 12:14:23 -0700 (PDT)
+Received: from valmont.froyen.eu ([2a01:799:ba5:6500::80f])
+        by smtp.gmail.com with ESMTPSA id o23-20020a056512051700b004fbb011c9bcsm370409lfb.161.2023.07.06.12.14.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 12:11:59 -0700 (PDT)
-Received: (nullmailer pid 168322 invoked by uid 1000);
-        Thu, 06 Jul 2023 19:11:57 -0000
-Date:   Thu, 6 Jul 2023 13:11:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandru Ardelean <alex@shruggie.ro>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        olteanv@gmail.com, marius.muresan@mxt.ro
-Subject: Re: [PATCH 2/2] dt-bindings: net: phy: vsc8531: document
- 'vsc8531,clkout-freq-mhz' property
-Message-ID: <20230706191157.GA163793-robh@kernel.org>
-References: <20230706081554.1616839-1-alex@shruggie.ro>
- <20230706081554.1616839-2-alex@shruggie.ro>
+        Thu, 06 Jul 2023 12:14:23 -0700 (PDT)
+From:   Valentin David <valentin.david@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Valentin David <valentin.david@gmail.com>
+Subject: [PATCH v2] tpm: Do not remap from ACPI resouces again for Pluton TPM
+Date:   Thu,  6 Jul 2023 21:13:40 +0200
+Message-ID: <20230706191409.737080-1-valentin.david@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230701153329.6476-1-valentin.david@gmail.com>
+References: <20230701153329.6476-1-valentin.david@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706081554.1616839-2-alex@shruggie.ro>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 11:15:54AM +0300, Alexandru Ardelean wrote:
-> For VSC8351 and similar PHYs, a new property was added to generate a clock
-> signal on the CLKOUT pin.
-> This change documents the change in the device-tree bindings doc.
-> 
-> Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
-> ---
->  Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt b/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt
-> index 0a3647fe331b..133bdd644618 100644
-> --- a/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt
-> +++ b/Documentation/devicetree/bindings/net/mscc-phy-vsc8531.txt
-> @@ -31,6 +31,10 @@ Optional properties:
->  			  VSC8531_LINK_100_ACTIVITY (2),
->  			  VSC8531_LINK_ACTIVITY (0) and
->  			  VSC8531_DUPLEX_COLLISION (8).
-> +- vsc8531,clkout-freq-mhz : For VSC8531 and similar PHYs, this will output
+For Pluton TPM devices, it was assumed that there was no ACPI memory
+regions. This is not true for ASUS ROG Ally. ACPI advertises
+0xfd500000-0xfd5fffff.
 
-Please don't continue this naming pattern with 'vsc8531' prefix. The 
-prefix should be the vendor prefix.
+Since remapping is already done in `crb_map_pluton`, remapping again
+in `crb_map_io` causes EBUSY error:
+```
+[    3.510453] tpm_crb MSFT0101:00: can't request region for resource [mem 0xfd500000-0xfd5fffff]
+[    3.510463] tpm_crb: probe of MSFT0101:00 failed with error -16
+```
 
-> +			  a clock signal on the CLKOUT pin of the chip.
-> +			  The supported values are 25, 50 & 125 Mhz.
-> +			  Default value is no clock signal on the CLKOUT pin.
->  - load-save-gpios	: GPIO used for the load/save operation of the PTP
->  			  hardware clock (PHC).
->  
-> @@ -69,5 +73,6 @@ Example:
->                  vsc8531,edge-slowdown	= <7>;
->                  vsc8531,led-0-mode	= <VSC8531_LINK_1000_ACTIVITY>;
->                  vsc8531,led-1-mode	= <VSC8531_LINK_100_ACTIVITY>;
-> +                vsc8531,clkout-freq-mhz	= <50>;
->  		load-save-gpios		= <&gpio 10 GPIO_ACTIVE_HIGH>;
->          };
-> -- 
-> 2.40.1
-> 
+Signed-off-by: Valentin David <valentin.david@gmail.com>
+---
+v2: add missing sign-off in commit message
+---
+ drivers/char/tpm/tpm_crb.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+index d43a0d7b97a8..1a5d09b18513 100644
+--- a/drivers/char/tpm/tpm_crb.c
++++ b/drivers/char/tpm/tpm_crb.c
+@@ -563,15 +563,18 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
+ 	u32 rsp_size;
+ 	int ret;
+ 
+-	INIT_LIST_HEAD(&acpi_resource_list);
+-	ret = acpi_dev_get_resources(device, &acpi_resource_list,
+-				     crb_check_resource, iores_array);
+-	if (ret < 0)
+-		return ret;
+-	acpi_dev_free_resource_list(&acpi_resource_list);
+-
+-	/* Pluton doesn't appear to define ACPI memory regions */
++	/*
++	 * Pluton sometimes does not define ACPI memory regions.
++	 * Mapping is then done in crb_map_pluton
++	 */
+ 	if (priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
++		INIT_LIST_HEAD(&acpi_resource_list);
++		ret = acpi_dev_get_resources(device, &acpi_resource_list,
++					     crb_check_resource, iores_array);
++		if (ret < 0)
++			return ret;
++		acpi_dev_free_resource_list(&acpi_resource_list);
++
+ 		if (resource_type(iores_array) != IORESOURCE_MEM) {
+ 			dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
+ 			return -EINVAL;
+-- 
+2.41.0
+
