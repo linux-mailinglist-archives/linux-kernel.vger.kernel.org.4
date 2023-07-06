@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7387499F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4737499F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjGFKyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S232412AbjGFKzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbjGFKy0 (ORCPT
+        with ESMTP id S232235AbjGFKye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:54:26 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9E71BEE;
-        Thu,  6 Jul 2023 03:54:00 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366AEbnF009506;
-        Thu, 6 Jul 2023 10:53:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ih7z/Q3fMAtR53Mtzle7zDTJoHNfuUSl0vXeUw7jgYU=;
- b=gd2ie4l13tYVmQCY14f/kHEyzC22nbeMngbMIwFu2FFkMebuCBzscM4fQJbThc7yNNgF
- D/5YNK3xefTIxIkPKbbEYVzPLQ2ekvB7x/hLZshkV+siUTvXTWnum5UmkdyMPkzyiw27
- cHwBbX9Cs+HTwvdk1zGSllnvxUCzxePBxo/n6bzfUqrEOnyHXiZ56fELHjowkNEweE42
- NouD7WPFfaWyl37OEnSLo3qby92dnt1uCkUhM48b+duSdo6YxQe60/F0tDVL0zs4wkAd
- mSMb/MG97grdHgNgeM+e91xTCvIJwwYdW1lRQcuPdEkOIB1MxybeLFh69+9bY3f8HalT Lw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rndvp1h49-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 10:53:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366Arrot027853
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 10:53:53 GMT
-Received: from [10.216.13.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
- 2023 03:53:49 -0700
-Message-ID: <b994f92c-331b-ca64-01ec-ec285fb2a76e@quicinc.com>
-Date:   Thu, 6 Jul 2023 16:23:46 +0530
+        Thu, 6 Jul 2023 06:54:34 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C49E1BDB;
+        Thu,  6 Jul 2023 03:54:17 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qHMco-0005gy-HF; Thu, 06 Jul 2023 12:54:14 +0200
+Message-ID: <7336b8ea-64bd-d08d-1d85-bf942d5660e2@leemhuis.info>
+Date:   Thu, 6 Jul 2023 12:54:13 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/3] dt-bindings: power: rpmpd: Remove the SoC specific
- entries
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <1688635218-23779-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688635218-23779-2-git-send-email-quic_rohiagar@quicinc.com>
- <318ab229-f29f-e6aa-16b8-79fa09013794@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <318ab229-f29f-e6aa-16b8-79fa09013794@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
+To:     Forza <forza@tnonline.net>, Uladzislau Rezki <urezki@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
+References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
+ <fcf1d04.faed4a1a.18844d8e78f@tnonline.net> <ZGwcVTpQNBoJHBB+@debian.me>
+ <ZGyVVQxnw6Tn7Xb8@pc636> <c9db92d.faed4a1c.1884c5550fb@tnonline.net>
+ <20230524091357.GH32559@suse.cz> <ZHClGA9szxSqzDf8@pc636>
+ <cf07f03.70397026.18918ef7f95@tnonline.net>
+ <2063d59.8f9f4a3a.1892a3ec50f@tnonline.net>
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <2063d59.8f9f4a3a.1892a3ec50f@tnonline.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wiILH_ZUYwFX2d_LZY08-VzG9Bv0OXRm
-X-Proofpoint-GUID: wiILH_ZUYwFX2d_LZY08-VzG9Bv0OXRm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_07,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 mlxlogscore=555
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060096
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688640857;1fe2e194;
+X-HE-SMSGID: 1qHMco-0005gy-HF
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06.07.23 10:08, Forza wrote:
+>>> On Wed, May 24, 2023 at 11:13:57AM +0200, David Sterba wrote:
+> [...]
+> A small update.
 
-On 7/6/2023 4:15 PM, Krzysztof Kozlowski wrote:
-> On 06/07/2023 11:20, Rohit Agarwal wrote:
->> Remove the SoC specific entries and add a generic set of defines
->> that can be used by all the SoCs. This will remove the duplicate
->> entries among SoCs.
->> The arrangement of the defines is done according to the frequency
->> used in SoC specific entries in the driver to avoid wastage of
->> memory.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Please compile kernel with this commit and tell us what is wrong... Even
-> if bindings were not an ABI, but they are, this would not work.
-Do you mean that individually this commit would fail compilation?
-Yes, we would need all the patches together for compilation to be 
-successful.
-Sorry for this mistake. Will keep in mind from next time.
+Thx for this.
 
-Thanks,
-Rohit.
-> Best regards,
-> Krzysztof
->
+> I have been able test 6.2.16, all 6.3.x and 6.4.1 and they all show
+> the same issue.
+> 
+> I am now trying 6.1.37 since two days and have not been able to
+> reproduce this issue on any of my virtual qemu/kvm machines. Perhaps
+> this information is helpful in finding the root cause?
+
+That means it's most likely a regression between v6.1..v6.2 (or
+v6.1..v6.2.16 if we are unlucky) somewhere (from earlier in the thread
+it sounds like it might not be Btrfs).
+
+Which makes we wonder: how long do you usually need to reproduce the
+issue? If it's not too long it might mean that a bisection is the best
+way forward, unless some developer sits down and looks closely at the
+logs. With a bit of luck some dev will do that; but if we are unlucky we
+likely will need a bisection.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
