@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D310874A5D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C88774A5D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjGFVWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 17:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S230521AbjGFVWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 17:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGFVV5 (ORCPT
+        with ESMTP id S230435AbjGFVWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:21:57 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943B1BD3;
-        Thu,  6 Jul 2023 14:21:56 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.74.43) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 7 Jul 2023
- 00:21:49 +0300
-Subject: Re: [PATCH 8/8] pata: imx: Use
- devm_platform_get_and_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-CC:     <linux-ide@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230706124239.23366-1-frank.li@vivo.com>
- <20230706124239.23366-8-frank.li@vivo.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <2bcc72f0-e551-eb91-ddea-5b3d9477a8b3@omp.ru>
-Date:   Fri, 7 Jul 2023 00:21:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 6 Jul 2023 17:22:07 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372811BF0;
+        Thu,  6 Jul 2023 14:22:06 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3142ee41fd2so1170238f8f.3;
+        Thu, 06 Jul 2023 14:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688678524; x=1691270524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0FvpS/+1YUK2280YM22guyluj/H/r120tkVYHERIJhg=;
+        b=E2724ppdCPfiRw6I8upDJQov4YlJgquzq6akts6GGTIazp0OM1zdRgSKJJMniM2Rmn
+         BmWCvjasy/B3bi6+ttfMgVIJALHUhshM69IYu3tMIpKc3JFauVa60jh2W8gtohxMvynM
+         fPzbSO4HX1P5c4Zw8DqWa4w6EIOEHS6MM6rJ6akjBnupBsRu8ZnmP3ZzT2Rfh13NoS+g
+         Fpt7wX8jcwN5fcj2rKpX6zACKeF4Xpy9cRjX5ZOwvZLVeDkDPxFm2kj9vgfFVy8whVku
+         A0+2dKAsrbC/VXG1AkD7I5hduzzA6/1aIM7k48O3U85AIYXd0+1TLyHp4C2t62TckLPO
+         enfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688678524; x=1691270524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0FvpS/+1YUK2280YM22guyluj/H/r120tkVYHERIJhg=;
+        b=bCeQYw+HoXato6oWrzN2iRyzAUBZTp0Ntl8qbAlJwzLwLjJE9KiOaw0FOCMR8sRiZf
+         b5ap0tYWVsauY0/6evg5PQO1Z0p3Oky0POKovMa370s2djUHblbz636QmvPyiorQljLB
+         hUiJmKN+Ar2wZv2Fyl5qyXPmHRaK2uAQURcFX1o70/fmFtnpGGWj4twMgHvTJQwcwvKZ
+         3uUjA6GMXZ4rtZl8Iuukv+T4fVez5A6+SVRHATsqLPY2AgECjPWtSYMYYnGNNqgc8aGj
+         N/5t48pDMeM9RMqUQi+0m1+Xl5hLJIMIsesv4U7tDRaulb0HyIM/ogAYEPdfMo2l+gU5
+         qsuA==
+X-Gm-Message-State: ABy/qLYgsT918mcD/jc+OaG4NpfndjJVgT4Wwv92AuIY4I9Ppw7f/J6x
+        T6PIWvuxSPqPtsFTkfr+r8PacclYwsoyTTPHWlc=
+X-Google-Smtp-Source: APBJJlHRel6vaU4WRUoQQhFpLXuRxT5GKkO7wlb0TzaYHYtxp+R1anuSt3SxIQrA+1XykMalY0T9JlPu3tdhBk1Em6I=
+X-Received: by 2002:a5d:58cf:0:b0:314:77a:c2b2 with SMTP id
+ o15-20020a5d58cf000000b00314077ac2b2mr2256584wrf.32.1688678524280; Thu, 06
+ Jul 2023 14:22:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230706124239.23366-8-frank.li@vivo.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.74.43]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/06/2023 21:02:16
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 178485 [Jul 06 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.43 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.43 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.74.43
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/06/2023 21:09:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/6/2023 6:28:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230706211414.10660-1-dg573847474@gmail.com>
+In-Reply-To: <20230706211414.10660-1-dg573847474@gmail.com>
+From:   Chengfeng Ye <dg573847474@gmail.com>
+Date:   Fri, 7 Jul 2023 05:21:53 +0800
+Message-ID: <CAAo+4rW1kmiVGbGxMUBsggQiY7dpOTUq+t6B=QTrikwBp72Kkw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] i2c: bcm-iproc: Fix bcm_iproc_i2c_isr deadlock issue
+To:     andi.shyti@kernel.org, rjui@broadcom.com, sbranden@broadcom.com,
+        wsa@kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/23 3:42 PM, Yangtao Li wrote:
+Hi Ray and Wolfram,
 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> I can't apply it, what version is this against?
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+The patch is based on 6.4-rc7. I resend the patch with this
+email because I had some problems setting up the previous
+one with git send-email. That patch was manually pasted
+so that might be the reason for not being able to be applied.
 
-[...]
-
-MBR, Sergey
+Best Regards,
+Chengfeng
