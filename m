@@ -2,562 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA5874982F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B34749837
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjGFJUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 05:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
+        id S229519AbjGFJWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 05:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjGFJUc (ORCPT
+        with ESMTP id S229793AbjGFJV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:20:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041041BD8;
-        Thu,  6 Jul 2023 02:20:29 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3669KPX5007255;
-        Thu, 6 Jul 2023 09:20:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=jY9ziIqV32GPA6L/bCbsk0le+xfJFpClFeXGbc1h5nk=;
- b=Qp07lHGAaxiVRlyQC1muAizmb6MDgaalDZ+f6U59mBjNYpQG26JOBPsI5L8vq3W5DXB1
- Bkr4vVkxCZdBnaFcZ9t/p0xq3jkZt9wc7GifBpzaTj0Y/izAArqVQJ+FHXfyvD/u4/Tp
- 2U9WiH2HfUBQL2qQKUXmDuuWge63nG8DucINGmaNx/GU++d1k9bH12CX20bNJ2BRGhmi
- tWfSQ+IgEU8qDGBObmALpiyz1zJQnnjsiaEW5yDK0Mb6ecryZuSkS2BvoyrDXtXtL18t
- s3JIQGCxDVG7twaacWuf1uDevOnn5esZ9Jk5+kvp/ilIKViJkwTQFKozPaMCX4YOZq8s hA== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn2w5ayv9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 09:20:25 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3669KLsl015389;
-        Thu, 6 Jul 2023 09:20:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3rjd7ky0xg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 06 Jul 2023 09:20:21 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3669KLJ1015101;
-        Thu, 6 Jul 2023 09:20:21 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3669KLZm014984;
-        Thu, 06 Jul 2023 09:20:21 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id A649A5FE6; Thu,  6 Jul 2023 14:50:20 +0530 (+0530)
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH 3/3] soc: qcom: rpmphd: Update the entries of PD macros
-Date:   Thu,  6 Jul 2023 14:50:18 +0530
-Message-Id: <1688635218-23779-4-git-send-email-quic_rohiagar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1688635218-23779-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1688635218-23779-1-git-send-email-quic_rohiagar@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5aE79JOcWLuo1SKKQUd0w-tmbBpSwR98
-X-Proofpoint-GUID: 5aE79JOcWLuo1SKKQUd0w-tmbBpSwR98
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_06,2023-07-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=744
- malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060082
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 05:21:58 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2118.outbound.protection.outlook.com [40.107.117.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E411FE2;
+        Thu,  6 Jul 2023 02:21:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K+7e1AmlKnBG6H8dyxsDlYjq3pkr7xHbHc8om/x2sogM1gNoC6ly3aVihhwxicjOR6g7CLT6piIxGNOJ7cl6Tc9/V8DFrPPe6cHQHa24hXx5xKqA5kK2Y35NWeayrSQ+euwQw47JVXqc9cYFJpRKeJskcQjABQKpUiSYHciF+J74+oa8bLKljiPa6akuGyiKvJU0oacbMh7XSX6/jZwKXUBTDMDI3uudSShmolFvvoThWYNx6pPlv54Dnu32btL5TCwKO3g36UYOpYsDPQfXOHNKLhuVKVhkHAGPX5KXAySCtFXisd97/OA/HFshjhzIxSVZhj3ybPMPdkBlOQ6t5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=skLC7hv4Gst696jMQBRjUS3Oc+EJCZA71mxKTSe+Pak=;
+ b=msgMuYrP4UzSBdES3bt0BigZbwRVpYC/ti+SL9RFK+T8Ou5PnyDqQrunaueusB1HkU020pDuAT9dSbF3nvC0qq1Pv95qef6Mu/VxQm1wmfglK2tOXPzbxXRq/iUM+ts/acmfRPAWzr0kuSQAsEjgHe7ZAwyBU1AMzLqu9iHwAxTTsJiG1niTCS9nqYJZs5O3bz4ojuvfqai2ddrvzjd8XUvuHp2Kpj/qMWLc8t77EZIV9lYCx2tXJwnfZjIQwyTLxKYxkJqgX61onEbyhqXezOd8h9c6l2fjef3cyEziVxELRdzUTM7IHBBc13p535mEoLP+8XU+bZ/hqrOcSP4JBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=skLC7hv4Gst696jMQBRjUS3Oc+EJCZA71mxKTSe+Pak=;
+ b=i7KguzwBtKVuA4ZQ/L3Xixqa4IRhWbsSX9nNOxLKEjtCySaSVbIWjO7twm13as2frnG5AnHljYbbl5hloj3BC+x2SQoD7mAd63MnjJXyAtZH2i0q0Eo3ZgYXcwHQGYnuUF5L1McOSnyh/xsm8dUsET6L+zkVAxJYgeGhDLdIlKJHi6uxJ2Y48AJMz74bANoyKt4aV6Y22KkX4mKyO6Z2vCoREzRIiQMOBAtKaR3rAfgPno6HM9+u4Ge/Hi+WFih5SKdTD+dCm/yclP+tNysbxrk/tzTqzNhMV1QWeMMrsFI/5L+2DFPfKPcsPY0mIgWQLrBTcIrbRasIUwGJRp6faQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB6378.apcprd06.prod.outlook.com (2603:1096:400:419::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Thu, 6 Jul
+ 2023 09:20:58 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 09:20:57 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] PCI: imx6: Use devm_platform_get_and_ioremap_resource()
+Date:   Thu,  6 Jul 2023 17:20:43 +0800
+Message-Id: <20230706092047.18599-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0035.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::8) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB6378:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebb1feee-9015-412d-e4e4-08db7e024e3c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AdOkFzt01qFRURLNz5aGy5YZSkodVAIiwDlOIZUYOaMJvBpuDMzNXYvj4gewQlxom5xEEYHfCVvnHc/4vNUNVZfyGbIGVR75gixvBCocFCVm3vJIYE4E9l6xk2q4fhhW+yxWl6MI8hTGn5NPnSiWxznS0e1XjPDbQHUczd4s6UEGys7XQZ/trNnRbfoPB0L9VVkjsIQDgFYKbp4resBGQLzpZvwNbsMqVbobxxQuCfwOKUPRYBUW0MPdbcI/pNXp8RCAjUtK04fgvWg4z+I7yCA/F5wT9TrZNthjFK1MP7tZ0Tv3DpKs6aiI3T7kvhBeTazkcFRaYT8pTT0sqgKztn4CG2gJ9dmL7mHKXIDPKiGc+41Y3Simxi2Iqtleu1Gy8bo+yd0HOWzDqdNZN+PfH33tZQ/xzHcFKlxO2LJ8g5JshQ8AxeJ6JHlcNeVf8koZ/IT7JFHsLkaR9YAGDNJekX2MzTPGynYlYPvAHOKBlqu8YfIaccq78YTOOtTvs/X67hnXobV1hMtIoWqw8a4WqpX+FfYd1mWF0EUhYKqNFmQZHomwKgdRbRVG1dR8Qbtxh4Kazk2y46f/ZoxkXeKeVageKLrlQu3GRRrDbHZ5DUcpmr3InNd8wTq91e1UQVqmXoR1EAtoQ+NOT8/kC7J20A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(451199021)(7416002)(1076003)(6512007)(66556008)(4326008)(66476007)(8936002)(66946007)(316002)(36756003)(5660300002)(8676002)(478600001)(2906002)(4744005)(38350700002)(110136005)(26005)(86362001)(41300700001)(6666004)(6486002)(83380400001)(6506007)(921005)(186003)(38100700002)(52116002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m7AZhAd5S+pVKKd7JtuC7oMyCpWAqLs03C8CEHf/IshbGsZKSd2QCabj0HPF?=
+ =?us-ascii?Q?vfcqc0wLb0tIvtqA0imgopKQe6ThorfvqUBFCVkFDUjMG0yf7ayQPfAaGavP?=
+ =?us-ascii?Q?MSnT/65ZGISmOLZr5krFPajnIoi7Qkhn1AFRsRUNQ46Gq0K+aSQcasbuIqaR?=
+ =?us-ascii?Q?Asl5O3Y2gsb5N5ppf2ZkcMR9i9knnGm7j/Txf93sjV7VhjcpzU3B6fiuzhL8?=
+ =?us-ascii?Q?YvwsQKJvFWt3GwWt+Vr3sQKh9CkgAfiqBc7RbrTwoo73cpQ78r6HWTMpWRdF?=
+ =?us-ascii?Q?V2+njHeEI743cJbAnfOS/MkGgaceGmvsTAcQRQAGU+/ssnaGciUbMkAGr0gv?=
+ =?us-ascii?Q?Y5t03R/4KfTU3AQqG6tBuEhXFuRUb1178d9l7BO76mYwW6LpGA4Sn2boNNjd?=
+ =?us-ascii?Q?EttO8zKUcrKS+0Mo2PGQzMyQ7VuajzK3eAOb86Qz3vv+i3XeVFkVg1huwxNc?=
+ =?us-ascii?Q?Ym5VOqH5JKmFbwiH7wjcM3ll2P+05GJUZeSiq89exAK8Soxdk7PQzvpJIcxC?=
+ =?us-ascii?Q?5EMmPzq0GvcBksQZWnX2PNvCNbhNnRk0ELpiOoWrE5KDx9qDeM3ZuzNZIokO?=
+ =?us-ascii?Q?psxvu/t9sMQIEg2HvtK/z480V9ftUuDyrUhNc9yzQ75Vw6/HhpM4ShSq4l48?=
+ =?us-ascii?Q?+atflbM9gWrvzDH0w62CsTWxaVh35CnuQAHs52tzoRFAGqFsGB16AlhnlSXq?=
+ =?us-ascii?Q?ghjMTqwRI1uGOGfagAIRaYdTLrSyRSJh7rp29O1bG97dUWQarT/iobTTmhRz?=
+ =?us-ascii?Q?NlNj9K7Ppg1eO+6YH5nEsKH3DyWNR6r0rP4GZ0M/1zyamqHcezDTnrmW/E7e?=
+ =?us-ascii?Q?sFxkccCzQacEaFRPIMofmSRl8bwg1dXNbXVemdst64YrcCFuUkXOGvC5n4V2?=
+ =?us-ascii?Q?Z0uLOHFx76IvB6PiQ2yVC+K/3nuFC+Upk6TfZFcWuNFeaiatKc09McGM1jef?=
+ =?us-ascii?Q?uxjvaXBrjS0cq+H8zR8o8jmbsLqxM0ba1AiLzIgY6ODQtXUHyfcNr7VXSThs?=
+ =?us-ascii?Q?HRxfqRV6PgJuySI8Pw4W0VLUIrQpjYS7UlEO9DcQgFlp2hlF2tK+Dk3/HjRQ?=
+ =?us-ascii?Q?6Ig4ZAZZX8I3BKfAz7+1iv+R1Z+5PesyzME7xn7lC4omMv8fOqrGcIXWfwL1?=
+ =?us-ascii?Q?6Js+XWZUs87mpKtbPYbcRxsvLfSHjZ3eYdfE7v82SJxfxNNMBpGQSQbg9YPI?=
+ =?us-ascii?Q?+iBpClCFzsyXEnQsplwpeJoIuEctf7icBkjxaXPoB3mHK/WzxxvhdmB2JtBl?=
+ =?us-ascii?Q?DdaTnk8SbOSa6MWljRDMFTIiwjh0yUBftey8+vNLR0AVRP0hvhxIJuJRIwiI?=
+ =?us-ascii?Q?pCFwov1H5OvwRdiIkBpZ106GvvTxlfQmLogn/KcL+09i9RDLGVIJVBDyjG/U?=
+ =?us-ascii?Q?6i9mhIxkCJQCRF0T+68RdP54SrQvqb5/xK/+K1oKar/LbkLy6LB80wMIK9nu?=
+ =?us-ascii?Q?N8yB0NsRQO0BFKoz+tDZT730g7nzgl7fmQFcmAbQja7iPeUQ8qiTGmy21dTE?=
+ =?us-ascii?Q?LkyZ1NQfzrVYmKlQOT6F3DAcySSYkj98od8LIM4QO73BnH4Ms8agyxuAvyF/?=
+ =?us-ascii?Q?UNvNvD1N6bDq2xRmSyybMn2+Otwe1u0B0HsQtzeR?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebb1feee-9015-412d-e4e4-08db7e024e3c
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 09:20:57.3362
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dkbZpYlz0Zpx6sogvhcRYH3HWQfj8NxKSGXsq+d2R/sAlhRtSnofxHKOYSLOig86LlTQy7eyezlQD8HoAxqHEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6378
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the PD macros used in SoC specific entries to use
-the newly defined generic macros.
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- drivers/soc/qcom/rpmhpd.c | 338 +++++++++++++++++++++++-----------------------
- 1 file changed, 169 insertions(+), 169 deletions(-)
+ drivers/pci/controller/dwc/pci-imx6.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-index 63c35a3..0b844a3 100644
---- a/drivers/soc/qcom/rpmhpd.c
-+++ b/drivers/soc/qcom/rpmhpd.c
-@@ -204,17 +204,17 @@ static struct rpmhpd qphy = {
+diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+index 27aaa2a6bf39..6bf7ad2f7b48 100644
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -1282,8 +1282,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 			return PTR_ERR(imx6_pcie->phy_base);
+ 	}
  
- /* SA8540P RPMH powerdomains */
- static struct rpmhpd *sa8540p_rpmhpds[] = {
--	[SC8280XP_CX] = &cx,
--	[SC8280XP_CX_AO] = &cx_ao,
--	[SC8280XP_EBI] = &ebi,
--	[SC8280XP_GFX] = &gfx,
--	[SC8280XP_LCX] = &lcx,
--	[SC8280XP_LMX] = &lmx,
--	[SC8280XP_MMCX] = &mmcx,
--	[SC8280XP_MMCX_AO] = &mmcx_ao,
--	[SC8280XP_MX] = &mx,
--	[SC8280XP_MX_AO] = &mx_ao,
--	[SC8280XP_NSP] = &nsp,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_CX_AO] = &cx_ao,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_NSP] = &nsp,
- };
+-	dbi_base = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	pci->dbi_base = devm_ioremap_resource(dev, dbi_base);
++	pci->dbi_base = devm_platform_get_and_ioremap_resource(pdev, 0, &dbi_base);
+ 	if (IS_ERR(pci->dbi_base))
+ 		return PTR_ERR(pci->dbi_base);
  
- static const struct rpmhpd_desc sa8540p_desc = {
-@@ -224,20 +224,20 @@ static const struct rpmhpd_desc sa8540p_desc = {
- 
- /* SA8775P RPMH power domains */
- static struct rpmhpd *sa8775p_rpmhpds[] = {
--	[SA8775P_CX] = &cx,
--	[SA8775P_CX_AO] = &cx_ao,
--	[SA8775P_EBI] = &ebi,
--	[SA8775P_GFX] = &gfx,
--	[SA8775P_LCX] = &lcx,
--	[SA8775P_LMX] = &lmx,
--	[SA8775P_MMCX] = &mmcx,
--	[SA8775P_MMCX_AO] = &mmcx_ao,
--	[SA8775P_MXC] = &mxc,
--	[SA8775P_MXC_AO] = &mxc_ao,
--	[SA8775P_MX] = &mx,
--	[SA8775P_MX_AO] = &mx_ao,
--	[SA8775P_NSP0] = &nsp0,
--	[SA8775P_NSP1] = &nsp1,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_CX_AO] = &cx_ao,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MXC] = &mxc,
-+	[RPMHPD_MXC_AO] = &mxc_ao,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_NSP0] = &nsp0,
-+	[RPMHPD_NSP1] = &nsp1,
- };
- 
- static const struct rpmhpd_desc sa8775p_desc = {
-@@ -247,14 +247,14 @@ static const struct rpmhpd_desc sa8775p_desc = {
- 
- /* SDM670 RPMH powerdomains */
- static struct rpmhpd *sdm670_rpmhpds[] = {
--	[SDM670_CX] = &cx_w_mx_parent,
--	[SDM670_CX_AO] = &cx_ao_w_mx_parent,
--	[SDM670_GFX] = &gfx,
--	[SDM670_LCX] = &lcx,
--	[SDM670_LMX] = &lmx,
--	[SDM670_MSS] = &mss,
--	[SDM670_MX] = &mx,
--	[SDM670_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sdm670_desc = {
-@@ -264,15 +264,15 @@ static const struct rpmhpd_desc sdm670_desc = {
- 
- /* SDM845 RPMH powerdomains */
- static struct rpmhpd *sdm845_rpmhpds[] = {
--	[SDM845_CX] = &cx_w_mx_parent,
--	[SDM845_CX_AO] = &cx_ao_w_mx_parent,
--	[SDM845_EBI] = &ebi,
--	[SDM845_GFX] = &gfx,
--	[SDM845_LCX] = &lcx,
--	[SDM845_LMX] = &lmx,
--	[SDM845_MSS] = &mss,
--	[SDM845_MX] = &mx,
--	[SDM845_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sdm845_desc = {
-@@ -282,9 +282,9 @@ static const struct rpmhpd_desc sdm845_desc = {
- 
- /* SDX55 RPMH powerdomains */
- static struct rpmhpd *sdx55_rpmhpds[] = {
--	[SDX55_CX] = &cx_w_mx_parent,
--	[SDX55_MSS] = &mss,
--	[SDX55_MX] = &mx,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
- };
- 
- static const struct rpmhpd_desc sdx55_desc = {
-@@ -294,12 +294,12 @@ static const struct rpmhpd_desc sdx55_desc = {
- 
- /* SDX65 RPMH powerdomains */
- static struct rpmhpd *sdx65_rpmhpds[] = {
--	[SDX65_CX] = &cx_w_mx_parent,
--	[SDX65_CX_AO] = &cx_ao_w_mx_parent,
--	[SDX65_MSS] = &mss,
--	[SDX65_MX] = &mx,
--	[SDX65_MX_AO] = &mx_ao,
--	[SDX65_MXC] = &mxc,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_MXC] = &mxc,
- };
- 
- static const struct rpmhpd_desc sdx65_desc = {
-@@ -309,12 +309,12 @@ static const struct rpmhpd_desc sdx65_desc = {
- 
- /* SM6350 RPMH powerdomains */
- static struct rpmhpd *sm6350_rpmhpds[] = {
--	[SM6350_CX] = &cx_w_mx_parent,
--	[SM6350_GFX] = &gfx,
--	[SM6350_LCX] = &lcx,
--	[SM6350_LMX] = &lmx,
--	[SM6350_MSS] = &mss,
--	[SM6350_MX] = &mx,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
- };
- 
- static const struct rpmhpd_desc sm6350_desc = {
-@@ -324,17 +324,17 @@ static const struct rpmhpd_desc sm6350_desc = {
- 
- /* SM8150 RPMH powerdomains */
- static struct rpmhpd *sm8150_rpmhpds[] = {
--	[SM8150_CX] = &cx_w_mx_parent,
--	[SM8150_CX_AO] = &cx_ao_w_mx_parent,
--	[SM8150_EBI] = &ebi,
--	[SM8150_GFX] = &gfx,
--	[SM8150_LCX] = &lcx,
--	[SM8150_LMX] = &lmx,
--	[SM8150_MMCX] = &mmcx,
--	[SM8150_MMCX_AO] = &mmcx_ao,
--	[SM8150_MSS] = &mss,
--	[SM8150_MX] = &mx,
--	[SM8150_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sm8150_desc = {
-@@ -343,13 +343,13 @@ static const struct rpmhpd_desc sm8150_desc = {
- };
- 
- static struct rpmhpd *sa8155p_rpmhpds[] = {
--	[SA8155P_CX] = &cx_w_mx_parent,
--	[SA8155P_CX_AO] = &cx_ao_w_mx_parent,
--	[SA8155P_EBI] = &ebi,
--	[SA8155P_GFX] = &gfx,
--	[SA8155P_MSS] = &mss,
--	[SA8155P_MX] = &mx,
--	[SA8155P_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sa8155p_desc = {
-@@ -359,16 +359,16 @@ static const struct rpmhpd_desc sa8155p_desc = {
- 
- /* SM8250 RPMH powerdomains */
- static struct rpmhpd *sm8250_rpmhpds[] = {
--	[SM8250_CX] = &cx_w_mx_parent,
--	[SM8250_CX_AO] = &cx_ao_w_mx_parent,
--	[SM8250_EBI] = &ebi,
--	[SM8250_GFX] = &gfx,
--	[SM8250_LCX] = &lcx,
--	[SM8250_LMX] = &lmx,
--	[SM8250_MMCX] = &mmcx,
--	[SM8250_MMCX_AO] = &mmcx_ao,
--	[SM8250_MX] = &mx,
--	[SM8250_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sm8250_desc = {
-@@ -378,19 +378,19 @@ static const struct rpmhpd_desc sm8250_desc = {
- 
- /* SM8350 Power domains */
- static struct rpmhpd *sm8350_rpmhpds[] = {
--	[SM8350_CX] = &cx_w_mx_parent,
--	[SM8350_CX_AO] = &cx_ao_w_mx_parent,
--	[SM8350_EBI] = &ebi,
--	[SM8350_GFX] = &gfx,
--	[SM8350_LCX] = &lcx,
--	[SM8350_LMX] = &lmx,
--	[SM8350_MMCX] = &mmcx,
--	[SM8350_MMCX_AO] = &mmcx_ao,
--	[SM8350_MSS] = &mss,
--	[SM8350_MX] = &mx,
--	[SM8350_MX_AO] = &mx_ao,
--	[SM8350_MXC] = &mxc,
--	[SM8350_MXC_AO] = &mxc_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_MXC] = &mxc,
-+	[RPMHPD_MXC_AO] = &mxc_ao,
- };
- 
- static const struct rpmhpd_desc sm8350_desc = {
-@@ -400,19 +400,19 @@ static const struct rpmhpd_desc sm8350_desc = {
- 
- /* SM8450 RPMH powerdomains */
- static struct rpmhpd *sm8450_rpmhpds[] = {
--	[SM8450_CX] = &cx,
--	[SM8450_CX_AO] = &cx_ao,
--	[SM8450_EBI] = &ebi,
--	[SM8450_GFX] = &gfx,
--	[SM8450_LCX] = &lcx,
--	[SM8450_LMX] = &lmx,
--	[SM8450_MMCX] = &mmcx_w_cx_parent,
--	[SM8450_MMCX_AO] = &mmcx_ao_w_cx_parent,
--	[SM8450_MSS] = &mss,
--	[SM8450_MX] = &mx,
--	[SM8450_MX_AO] = &mx_ao,
--	[SM8450_MXC] = &mxc,
--	[SM8450_MXC_AO] = &mxc_ao,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_CX_AO] = &cx_ao,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx_w_cx_parent,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao_w_cx_parent,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_MXC] = &mxc,
-+	[RPMHPD_MXC_AO] = &mxc_ao,
- };
- 
- static const struct rpmhpd_desc sm8450_desc = {
-@@ -422,20 +422,20 @@ static const struct rpmhpd_desc sm8450_desc = {
- 
- /* SM8550 RPMH powerdomains */
- static struct rpmhpd *sm8550_rpmhpds[] = {
--	[SM8550_CX] = &cx,
--	[SM8550_CX_AO] = &cx_ao,
--	[SM8550_EBI] = &ebi,
--	[SM8550_GFX] = &gfx,
--	[SM8550_LCX] = &lcx,
--	[SM8550_LMX] = &lmx,
--	[SM8550_MMCX] = &mmcx_w_cx_parent,
--	[SM8550_MMCX_AO] = &mmcx_ao_w_cx_parent,
--	[SM8550_MSS] = &mss,
--	[SM8550_MX] = &mx,
--	[SM8550_MX_AO] = &mx_ao,
--	[SM8550_MXC] = &mxc,
--	[SM8550_MXC_AO] = &mxc_ao,
--	[SM8550_NSP] = &nsp,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_CX_AO] = &cx_ao,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx_w_cx_parent,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao_w_cx_parent,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_MXC] = &mxc,
-+	[RPMHPD_MXC_AO] = &mxc_ao,
-+	[RPMHPD_NSP] = &nsp,
- };
- 
- static const struct rpmhpd_desc sm8550_desc = {
-@@ -445,10 +445,10 @@ static const struct rpmhpd_desc sm8550_desc = {
- 
- /* QDU1000/QRU1000 RPMH powerdomains */
- static struct rpmhpd *qdu1000_rpmhpds[] = {
--	[QDU1000_CX] = &cx,
--	[QDU1000_EBI] = &ebi,
--	[QDU1000_MSS] = &mss,
--	[QDU1000_MX] = &mx,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
- };
- 
- static const struct rpmhpd_desc qdu1000_desc = {
-@@ -458,14 +458,14 @@ static const struct rpmhpd_desc qdu1000_desc = {
- 
- /* SC7180 RPMH powerdomains */
- static struct rpmhpd *sc7180_rpmhpds[] = {
--	[SC7180_CX] = &cx_w_mx_parent,
--	[SC7180_CX_AO] = &cx_ao_w_mx_parent,
--	[SC7180_GFX] = &gfx,
--	[SC7180_LCX] = &lcx,
--	[SC7180_LMX] = &lmx,
--	[SC7180_MSS] = &mss,
--	[SC7180_MX] = &mx,
--	[SC7180_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sc7180_desc = {
-@@ -475,15 +475,15 @@ static const struct rpmhpd_desc sc7180_desc = {
- 
- /* SC7280 RPMH powerdomains */
- static struct rpmhpd *sc7280_rpmhpds[] = {
--	[SC7280_CX] = &cx,
--	[SC7280_CX_AO] = &cx_ao,
--	[SC7280_EBI] = &ebi,
--	[SC7280_GFX] = &gfx,
--	[SC7280_LCX] = &lcx,
--	[SC7280_LMX] = &lmx,
--	[SC7280_MSS] = &mss,
--	[SC7280_MX] = &mx,
--	[SC7280_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_CX_AO] = &cx_ao,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sc7280_desc = {
-@@ -493,17 +493,17 @@ static const struct rpmhpd_desc sc7280_desc = {
- 
- /* SC8180x RPMH powerdomains */
- static struct rpmhpd *sc8180x_rpmhpds[] = {
--	[SC8180X_CX] = &cx_w_mx_parent,
--	[SC8180X_CX_AO] = &cx_ao_w_mx_parent,
--	[SC8180X_EBI] = &ebi,
--	[SC8180X_GFX] = &gfx,
--	[SC8180X_LCX] = &lcx,
--	[SC8180X_LMX] = &lmx,
--	[SC8180X_MMCX] = &mmcx,
--	[SC8180X_MMCX_AO] = &mmcx_ao,
--	[SC8180X_MSS] = &mss,
--	[SC8180X_MX] = &mx,
--	[SC8180X_MX_AO] = &mx_ao,
-+	[RPMHPD_CX] = &cx_w_mx_parent,
-+	[RPMHPD_CX_AO] = &cx_ao_w_mx_parent,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MSS] = &mss,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
- };
- 
- static const struct rpmhpd_desc sc8180x_desc = {
-@@ -513,18 +513,18 @@ static const struct rpmhpd_desc sc8180x_desc = {
- 
- /* SC8280xp RPMH powerdomains */
- static struct rpmhpd *sc8280xp_rpmhpds[] = {
--	[SC8280XP_CX] = &cx,
--	[SC8280XP_CX_AO] = &cx_ao,
--	[SC8280XP_EBI] = &ebi,
--	[SC8280XP_GFX] = &gfx,
--	[SC8280XP_LCX] = &lcx,
--	[SC8280XP_LMX] = &lmx,
--	[SC8280XP_MMCX] = &mmcx,
--	[SC8280XP_MMCX_AO] = &mmcx_ao,
--	[SC8280XP_MX] = &mx,
--	[SC8280XP_MX_AO] = &mx_ao,
--	[SC8280XP_NSP] = &nsp,
--	[SC8280XP_QPHY] = &qphy,
-+	[RPMHPD_CX] = &cx,
-+	[RPMHPD_CX_AO] = &cx_ao,
-+	[RPMHPD_EBI] = &ebi,
-+	[RPMHPD_GFX] = &gfx,
-+	[RPMHPD_LCX] = &lcx,
-+	[RPMHPD_LMX] = &lmx,
-+	[RPMHPD_MMCX] = &mmcx,
-+	[RPMHPD_MMCX_AO] = &mmcx_ao,
-+	[RPMHPD_MX] = &mx,
-+	[RPMHPD_MX_AO] = &mx_ao,
-+	[RPMHPD_NSP] = &nsp,
-+	[RPMHPD_QPHY] = &qphy,
- };
- 
- static const struct rpmhpd_desc sc8280xp_desc = {
 -- 
-2.7.4
+2.39.0
 
