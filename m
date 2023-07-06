@@ -2,108 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A675A749AB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F3F749AB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjGFLdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S231902AbjGFLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjGFLdL (ORCPT
+        with ESMTP id S229514AbjGFLe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:33:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A23AA;
-        Thu,  6 Jul 2023 04:33:10 -0700 (PDT)
-Received: from [IPv6:2a00:23c8:b70a:ae01:35d0:8e34:613c:c44e] (unknown [IPv6:2a00:23c8:b70a:ae01:35d0:8e34:613c:c44e])
+        Thu, 6 Jul 2023 07:34:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952511727;
+        Thu,  6 Jul 2023 04:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eKY/Uo90bROTMojvs7v+DqKoFW8MQafmKj7nGaM0SMo=; b=DS4GEvci5dv0oamCOC8VOMsYPA
+        0qb9WGqNf7NESEYk7b1y7Osv20dwQHcCS9hxAUM9a0Kg3EyoKgjr3KtTEK6G00Kzk0Q0vpTsLFyu3
+        BnqDv6OmsoMjZezdt6+ARvuS8VWFYBy8hhY99/TqjRsBxVAPKXyxw5QrYt+f/Gh8aVePQFIEaJwYm
+        xQ7nHlpRYUm6VaGEyIMHBKNrUQiulWEXU6mPfZ/wG79dlNH3MHz92m0TJ45Q+8VYc4yfYhD5jeT50
+        vIyQPrxKgLiEk3tehEFDobHnfRFfJG6uorDiESVx8yce88JpLJkQpC4iv7kKFZPYabjgX1GjwuDSK
+        A4/bxYsg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qHNFN-00DZN3-24;
+        Thu, 06 Jul 2023 11:34:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: obbardc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B0B466602242;
-        Thu,  6 Jul 2023 12:33:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688643188;
-        bh=l5+LL5sG+6oNk98vidsTUD1ZT1xF0tRZN4EIfi2Jzz8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=KInwh3I9qZsDTaBRQW8F/t2QGDZ/ofjWuirTgSfnjvf1QBmRrbOhTjY3xbvIQSbpX
-         Pit1IhOCJ2snhlQMmw0aDhv+7mrD/F8ov/0fLaHolXyNQmXdP1Oz7wjPeNxtDucp9A
-         bssu7N7XnEgKC2b/y3ocQaS6HS8MwwCz5W4FdpPBBNo/KxmkXtq3B7u6EBtuDgaCGC
-         B+ft4lFfJSpFsvqJkhNQ5BS0KMpucyYCvZjkvObuLrJcpWi1VI2c+QtHWVjutoWLHq
-         uetic+AXTYY95fYRBXaW9giOQPHdJAf1A1tr/NgWWHrTnHbldG02pyk9wGhQ8lKBGe
-         x/XNpt32UQfGg==
-Message-ID: <7fa80568e37cca3b8c4560e033cd2cfc18b2eb27.camel@collabora.com>
-Subject: Re: [PATCH v1 3/3] arm64: dts: rockchip: Add Radxa ROCK 4SE
-From:   Christopher Obbard <chris.obbard@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-rockchip@lists.infradead.org
-Cc:     kernel@collabora.com, Andy Yan <andyshrk@163.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tianling Shen <cnsztl@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Thu, 06 Jul 2023 12:33:06 +0100
-In-Reply-To: <b573535b-25f8-8986-3d5d-2e8d4b4c5ca1@linaro.org>
-References: <20230705141011.111568-1-chris.obbard@collabora.com>
-         <20230705141011.111568-4-chris.obbard@collabora.com>
-         <b573535b-25f8-8986-3d5d-2e8d4b4c5ca1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4-1 
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 936FC300095;
+        Thu,  6 Jul 2023 13:34:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7C085200BDD20; Thu,  6 Jul 2023 13:34:03 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 13:34:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/retpoline,kprobes: Avoid treating rethunk as an
+ indirect jump
+Message-ID: <20230706113403.GI2833176@hirez.programming.kicks-ass.net>
+References: <20230705081547.25130-1-petr.pavlu@suse.com>
+ <20230705081547.25130-3-petr.pavlu@suse.com>
+ <20230705085857.GG462772@hirez.programming.kicks-ass.net>
+ <20230705232038.3a6d03e18f7bafb14cdfed42@kernel.org>
+ <20230705145017.GC4253@hirez.programming.kicks-ass.net>
+ <20230706094723.6934105e03f652923796bf7e@kernel.org>
+ <20230706071705.GD2833176@hirez.programming.kicks-ass.net>
+ <20230706180014.06705096a594b71250ff3c94@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706180014.06705096a594b71250ff3c94@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, Jul 06, 2023 at 06:00:14PM +0900, Masami Hiramatsu wrote:
+> On Thu, 6 Jul 2023 09:17:05 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Thu, Jul 06, 2023 at 09:47:23AM +0900, Masami Hiramatsu wrote:
+> > 
+> > > > > If I understand correctly, all indirect jump will be replaced with JMP_NOSPEC.
+> > > > > If you read the insn_jump_into_range, I onlu jecks the jump code, not call.
+> > > > > So the functions only have indirect call still allow optprobe.
+> > > > 
+> > > > With the introduction of kCFI JMP_NOSPEC is no longer an equivalent to a
+> > > > C indirect jump.
+> > > 
+> > > If I understand correctly, kCFI is enabled by CFI_CLANG, and clang is not
+> > > using jump-tables by default, so we can focus on gcc. In that case
+> > > current check still work, correct?
+> > 
+> > IIRC clang can use jump tables, but like GCC needs RETPOLINE=n and
+> > IBT=n, so effectively nobody has them.
+> 
+> So if it requires RETPOLINE=n, current __indirect_thunk_start/end checking
+> is not required, right? (that code is embraced with "#ifdef CONFIG_RETPOLINE")
 
-On Wed, 2023-07-05 at 17:53 +0200, Krzysztof Kozlowski wrote:
-> On 05/07/2023 16:10, Christopher Obbard wrote:
-> > Add board-specific devicetree file for the RK3399T-based Radxa ROCK 4SE
-> > board. This board offers similar peripherals in a similar form-factor t=
-o
-> > the existing ROCK Pi 4B but uses the cost-optimised RK3399T processor
-> > (which has different OPP table than the RK3399) and other minimal hardw=
-are
-> > changes.
-> >=20
-> > Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-> > ---
-> >=20
->=20
->=20
-> > +
-> > +&sdio0 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0status =3D "okay";
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0brcmf: wifi@1 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0compatible =3D "brcm,bcm4329-fmac";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0reg =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0interrupt-parent =3D <&gpio0>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0interrupts =3D <RK_PA3 GPIO_ACTIVE_HIGH>;
->=20
-> I just send a patch to fix this in some files, so let's try keep it
-> good. Use proper interrupt type, not none.
+Correct.
 
-Thank you for your review. I missed that patch, sent only a few hours befor=
-e mine. I will address this in v2.
+> > 
+> > The reason I did mention kCFI though is that kCFI has a larger 'indirect
+> > jump' sequence, and I'm not sure we've thought about what can go
+> > sideways if that's optprobed.
+> 
+> If I understand correctly, kCFI checks only indirect function call (check
+> pointer), so no jump tables. Or does it use indirect 'jump' ?
+
+Yes, it's indirect function calls only.
+
+Imagine our function (bar) doing an indirect call, it will (as clang
+always does) have the function pointer in r11:
+
+bar:
+	...
+	movl	$(-0x12345678),%r10d
+	addl	-15(%r11), %r10d
+	je	1f
+	ud2
+1:	call	__x86_indirect_thunk_r11
 
 
-Cheers!
 
-Chris
+And then the function it calls (foo) looks like:
+
+__cfi_foo:
+	movl	$0x12345678, %eax
+	.skip	11, 0x90
+foo:
+	endbr
+	....
+
+
+
+So if the caller (in bar) and the callee (foo) have the same hash value
+(0x12345678 in this case) then it will be equal and we continue on our
+merry way.
+
+However, if they do not match, we'll trip that #UD and the
+handle_cfi_failure() will try and match the address to
+__{start,stop}__kcfi_traps[]. Additinoally decode_cfi_insn() will try
+and decode that whole call sequence in order to obtain the target
+address and typeid (hash).
+
+optprobes might disturb this code.
+
+> > I suspect the UD2 that's in there will go 'funny' if it's relocated into
+> > an optprobe, as in, it'll not be recognised as a CFI fail.
+> 
+> UD2 can't be optprobed (kprobe neither) because it can change the dumped
+> BUG address...
+
+Right, same problem here. But could the movl/addl be opt-probed? That
+would wreck decode_cfi_insn(). Then again, if decode_cfi_insn() fails,
+we'll get report_cfi_failure_noaddr(), which is less informative.
+
+So it looks like nothing too horrible happens...
+
+
