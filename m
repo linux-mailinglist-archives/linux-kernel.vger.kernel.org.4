@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C567493C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3A07493C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbjGFC2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 22:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S233330AbjGFC24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 22:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjGFC2x (ORCPT
+        with ESMTP id S229793AbjGFC2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 22:28:53 -0400
+        Wed, 5 Jul 2023 22:28:52 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EA8D1990;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D7561995;
         Wed,  5 Jul 2023 19:28:51 -0700 (PDT)
 Received: from loongson.cn (unknown [10.2.9.158])
-        by gateway (Coremail) with SMTP id _____8CxbeviJqZkFbQAAA--.345S3;
+        by gateway (Coremail) with SMTP id _____8AxCPLiJqZkGbQAAA--.3114S3;
         Thu, 06 Jul 2023 10:28:50 +0800 (CST)
 Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxjiPhJqZktK8dAA--.49030S2;
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxjiPhJqZktK8dAA--.49030S3;
         Thu, 06 Jul 2023 10:28:49 +0800 (CST)
 From:   Bibo Mao <maobibo@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
@@ -28,30 +28,33 @@ To:     Huacai Chen <chenhuacai@kernel.org>,
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jianmin Lv <lvjianmin@loongson.cn>,
         loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v2 0/2] irqchip/loongson-eiointc: Add simple irq routing method
-Date:   Thu,  6 Jul 2023 10:28:47 +0800
-Message-Id: <20230706022849.1272591-1-maobibo@loongson.cn>
+Subject: [PATCH v2 1/2] irqchip/loongson-eiointc: Fix return value checking of eiointc_index
+Date:   Thu,  6 Jul 2023 10:28:48 +0800
+Message-Id: <20230706022849.1272591-2-maobibo@loongson.cn>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20230706022849.1272591-1-maobibo@loongson.cn>
+References: <20230706022849.1272591-1-maobibo@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxjiPhJqZktK8dAA--.49030S2
+X-CM-TRANSID: AQAAf8AxjiPhJqZktK8dAA--.49030S3
 X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7JFWxZr1xAw48uw47uF4rJFc_yoWxtFX_Wr
-        yIv395JrWSqFWrZa9rA3W7try3uayYgw15AF4q9r15Zr1UJr1DJrZFyrZxJrn7WF18ZFn5
-        Crs5Jr1fAw12yosvyTuYvTs0mTUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
-        6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1EksDUUUUU==
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFW3Zr4DCFyfZF1fZr4kZrc_yoW8JFyUpF
+        W3AFZFvr15Wa4xCrZrKF48JryYyws3t3y7tayxJay7XFs8J34DJr4rA3Z0yr10krW3uFy2
+        gF4rXFWUC3Z8AwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9jb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+        twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y
+        6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
+        AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE
+        2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
+        C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
+        nUUI43ZEXa7IU8q2NtUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -61,26 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix return value checking of eiointc_index where int type
-is converted uint32_t and check smaller than 0.
+return value of function eiointc_index is int, however it is
+converted uint32_t when used. This causes logic problem when
+checking return value. There is eioi initial problem on qemu
+virt-machine where there is only one eioi node and more than 4
+vcpus, external device intr can only be routed to vcpu 0-3.
 
-Add simple irq route support on system with only one eioi node,
-rather than use anysend method.
-
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 ---
-Changes in v2:
-  Use the simple irq routing on embeded board like 2K0500 and 2K2000
-board, since there is only one eio node.
+ drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
----
-Bibo Mao (2):
-  irqchip/loongson-eiointc: fix return value checking of eiointc_index
-  irqchip/loongson-eiointc: simplify irq route on one eioi-node system
-
- drivers/irqchip/irq-loongson-eiointc.c | 91 ++++++++++++++++++++++----
- 1 file changed, 80 insertions(+), 11 deletions(-)
-
-base-commit: d528014517f2b0531862c02865b9d4c908019dc4
+diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+index 92d8aa28bdf5..1c5a5b59f199 100644
+--- a/drivers/irqchip/irq-loongson-eiointc.c
++++ b/drivers/irqchip/irq-loongson-eiointc.c
+@@ -144,12 +144,14 @@ static int eiointc_router_init(unsigned int cpu)
+ 	int i, bit;
+ 	uint32_t data;
+ 	uint32_t node = cpu_to_eio_node(cpu);
+-	uint32_t index = eiointc_index(node);
++	int index = eiointc_index(node);
+ 
+-	if (index < 0) {
+-		pr_err("Error: invalid nodemap!\n");
+-		return -1;
+-	}
++	/*
++	 * qemu virt-machine has only one eio intc and more than four cpus
++	 * irq from eio can only be routed to cpu 0-3 on virt machine
++	 */
++	if (index < 0)
++		return 0;
+ 
+ 	if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
+ 		eiointc_enable();
 -- 
 2.27.0
 
