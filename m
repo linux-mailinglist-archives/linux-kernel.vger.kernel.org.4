@@ -2,142 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269A774A39C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251EE74A39F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjGFSLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S232314AbjGFSNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjGFSLx (ORCPT
+        with ESMTP id S229996AbjGFSNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:11:53 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62C21BEB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:11:49 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-c5f98fc4237so1049130276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688667109; x=1691259109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yoi+Ui/n5ymlKlL4emJAwTL06zox3wOS5TKB3nBjTn0=;
-        b=0ABh7BnJQaOkCm2vwnIyXS85Dm6oN23GDz6XekxiM5iuuvfjXA0V3sc+fj0ZJlKrmW
-         JoRoMZlnwm4pe0qo0/HKiKXtoo2kjmt5Eyl7hzUSwj4Mo+R5UpHYRIdR6UXkQgI2Kl8q
-         cxoI72dPLw8DGkocfdomCxadLgQTPkz+3PIELCGbAXIpeDwnsx6wRaQsldAAZ9lhYLsb
-         HGkcTDMjjasKMcZ8ijtbTGQkQO1Ms+l5fzaabqAyGAM9CXJPihwsb2gxQNwsCmehMJTu
-         RlWbpR719cRHDOMj62gy8n1T5g2b7wEy4PNreo2IScT9KDTvIsh+eBx5Rggsy4b+SYse
-         Kgfw==
+        Thu, 6 Jul 2023 14:13:12 -0400
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE611BEC;
+        Thu,  6 Jul 2023 11:13:11 -0700 (PDT)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-51452556acdso799877a12.2;
+        Thu, 06 Jul 2023 11:13:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688667109; x=1691259109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yoi+Ui/n5ymlKlL4emJAwTL06zox3wOS5TKB3nBjTn0=;
-        b=Fxxh8Tfs8b9xZ45b6eCd53/pdwrCbeCDeiB5uUWYJNDB1qmavjRqn3qkm2bSSFoiN8
-         XGU8QA+heZDAO4E3fungikKAXc0GcJGcez/aCj3sb4gDv0Iv5fv/BiCqHeMikknorg49
-         ABosTORYiivTdu2MoZD1MHRvcd6T5znGnQCYFyD9x5eyySfJFrsC59XVUtJgjyEsD0vT
-         FYV2/9zP3RW5U3GjqcYwiFTZ1d8zmRv3IqfWuQ3S/AozNWHc4ft5j1XCbnMX/Y6MjMqw
-         n3x38phc7KXY+sPCf6EoXBhtEm8+sryHz5u1g8cspN8lkCUR8p4/trOVBgBg8lP+GxKM
-         PIsA==
-X-Gm-Message-State: ABy/qLZCi6eEv49tHyZ9yTDCiRPL70ZiLXNVQZN6+YimP2k0eaezQP+9
-        Qmfnq7nwGVpkdq/HT5mr/JURfy0vjEcjVmeAX8adUw==
-X-Google-Smtp-Source: APBJJlGzNm7UqJPEd+Fa/QFQbbOPQMaa0im+Vjq7G71we1CRLlzVfDB7RlSZeu3QRdeWXIuihMzHbms3Qmv6PKSyiFA=
-X-Received: by 2002:a25:6085:0:b0:c18:1300:6339 with SMTP id
- u127-20020a256085000000b00c1813006339mr2566303ybb.52.1688667108853; Thu, 06
- Jul 2023 11:11:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688667191; x=1691259191;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nswtB4vZ8VNtDa5BPx00Cl/IjX72X4BUKIHp85uPhUE=;
+        b=lrZsCrizh/TeUdwM6UJI5E5BYAbvVgfc8lJrdM7mRyOzZLEwVLTw7AIfUyk12rE2/N
+         ZuHZ7W/pgAZUBnHon9T6gyldbT4Ay1FyAoi+6VR6Df8gLDRAOtnFQpVwDykyYmaVh4z8
+         zDNF6TYIolP9X2jFdsgPk4IdziPrs1naB2NRryrKDitN8zq4iZAJ0LW3VQ7dcVinj/6T
+         VGHzlbU4wzjr65UIp/5EeW9HZkftfxdoWyiVcSbWGFH4sfdHOpIwRqDMIP4cU4O1wKDj
+         JReBGg+wzTXzmH/7yGxfl0+FltgHNJmwAJDQgw6k78EeMqnzKowSZb1A9SIO9EWueOoF
+         AYUg==
+X-Gm-Message-State: ABy/qLYMHkpV3FDH9RLt1EQpUlN0IRWzfh/PtDdF/oJNGNzkrQ9Ysqn5
+        FMmBDjCqgoB37Bj4wI5OJaw=
+X-Google-Smtp-Source: APBJJlFrf4Nj/8dpztQi6qoWSOuUG6PQVmLxG/Hc9wEsGT5qKBJW2yjRLX4ngRzNWrMwcAk87HXzVg==
+X-Received: by 2002:a05:6a20:324e:b0:12e:3442:32fb with SMTP id hm14-20020a056a20324e00b0012e344232fbmr2028276pzc.16.1688667191107;
+        Thu, 06 Jul 2023 11:13:11 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:a75c:9545:5328:a233? ([2620:15c:211:201:a75c:9545:5328:a233])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902d50500b001aae625e422sm1729086plg.37.2023.07.06.11.13.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 11:13:10 -0700 (PDT)
+Message-ID: <3b5caa0e-e63b-3652-cd64-e6cdb9323242@acm.org>
+Date:   Thu, 6 Jul 2023 11:13:07 -0700
 MIME-Version: 1.0
-References: <20230623164015.3431990-1-jiaqiyan@google.com> <20230623164015.3431990-2-jiaqiyan@google.com>
- <20230705233541.GC41006@monkey>
-In-Reply-To: <20230705233541.GC41006@monkey>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Thu, 6 Jul 2023 11:11:37 -0700
-Message-ID: <CACw3F53LeNww_fxAHyhH6-5OLv0obgswEtKq7Q20gwmf4Crk5g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] mm/hwpoison: delete all entries before traversal
- in __folio_free_raw_hwp
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     naoya.horiguchi@nec.com, songmuchun@bytedance.com,
-        shy828301@gmail.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duenwen@google.com,
-        axelrasmussen@google.com, jthoughton@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC 4/7] blk-mq: precalculate available tags for
+ hctx_may_queue()
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230618160738.54385-1-yukuai1@huaweicloud.com>
+ <20230618160738.54385-5-yukuai1@huaweicloud.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230618160738.54385-5-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 4:36=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.co=
-m> wrote:
->
-> On 06/23/23 16:40, Jiaqi Yan wrote:
-> > Traversal on llist (e.g. llist_for_each_safe) is only safe AFTER entrie=
-s
-> > are deleted from the llist.
-> >
-> > llist_del_all are lock free with itself. folio_clear_hugetlb_hwpoison()=
-s
-> > from __update_and_free_hugetlb_folio and memory_failure won't need
-> > explicit locking when freeing the raw_hwp_list.
-> >
-> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > ---
-> >  mm/memory-failure.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> After updating the reason for patch in commit message as suggested by Nao=
-ya,
+On 6/18/23 09:07, Yu Kuai wrote:
+> +static void blk_mq_update_available_driver_tags(struct blk_mq_hw_ctx *hctx)
+> +{
+> +	struct blk_mq_tags *tags = hctx->tags;
+> +	unsigned int nr_tags;
+> +	struct tag_sharing *tag_sharing;
+> +
+> +	if (tags->ctl.share_queues <= 1)
+> +		nr_tags = tags->nr_tags;
+> +	else
+> +		nr_tags = max((tags->nr_tags + tags->ctl.share_queues - 1) /
+> +			       tags->ctl.share_queues, 4U);
+> +
+> +	list_for_each_entry(tag_sharing, &tags->ctl.head, node)
+> +		tag_sharing->available_tags = nr_tags;
+> +}
 
-Thank you both Mike and Naoya! I will add the explanation in the next versi=
-on.
+Since READ_ONCE() is used to read the available_tags member, WRITE_ONCE()
+should be used to update that member, even if a spinlock is held around
+the update.
 
->
-> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
->
-> --
-> Mike Kravetz
->
-> >
-> > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> > index 004a02f44271..c415c3c462a3 100644
-> > --- a/mm/memory-failure.c
-> > +++ b/mm/memory-failure.c
-> > @@ -1825,12 +1825,11 @@ static inline struct llist_head *raw_hwp_list_h=
-ead(struct folio *folio)
-> >
-> >  static unsigned long __folio_free_raw_hwp(struct folio *folio, bool mo=
-ve_flag)
-> >  {
-> > -     struct llist_head *head;
-> > -     struct llist_node *t, *tnode;
-> > +     struct llist_node *t, *tnode, *head;
-> >       unsigned long count =3D 0;
-> >
-> > -     head =3D raw_hwp_list_head(folio);
-> > -     llist_for_each_safe(tnode, t, head->first) {
-> > +     head =3D llist_del_all(raw_hwp_list_head(folio));
-> > +     llist_for_each_safe(tnode, t, head) {
-> >               struct raw_hwp_page *p =3D container_of(tnode, struct raw=
-_hwp_page, node);
-> >
-> >               if (move_flag)
-> > @@ -1840,7 +1839,6 @@ static unsigned long __folio_free_raw_hwp(struct =
-folio *folio, bool move_flag)
-> >               kfree(p);
-> >               count++;
-> >       }
-> > -     llist_del_all(head);
-> >       return count;
-> >  }
-> >
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
+Thanks,
+
+Bart.
