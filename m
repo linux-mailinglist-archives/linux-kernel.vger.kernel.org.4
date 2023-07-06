@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1D8749E6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107C3749E6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232782AbjGFOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S232787AbjGFOCH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 10:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjGFOBq (ORCPT
+        with ESMTP id S232844AbjGFOCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:01:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797331BEA;
-        Thu,  6 Jul 2023 07:01:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 063FC61988;
-        Thu,  6 Jul 2023 14:01:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C98C433C9;
-        Thu,  6 Jul 2023 14:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688652100;
-        bh=RA6lri/m2E0gZF1CUPwJ2FYbrnZahd6ULY8ragN/3e0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=kesckKw+bfEGdhvNzfB/FTcNyo9kIoIxJAmreJAtPz5hlEge2OepS25Vnfv8LdNtG
-         UmAD56IkEDbAtc3KXh8itsLP2qyj4cM3GRFg/N+Pt+FM0dZbj3gxmpkLre4xw7mjdT
-         dz/NzVxZdjZk+/ERBLpiG1kWbq2LfAEVRJMKeBQ0SyvvXrhoTKzeS4m2QYtwOvHyhj
-         K2iFbPJ+jSP8YS16H5edIBaMbB3EeE3rt/e4TT9XubaSg1aV+5NItRsBppnY56mY9e
-         +AjNbAyNtv9lJ/Ltx0eC7I71PQL/GLPAN0VwMi6YSpSVtgXUlAhDQ7QecTBno7bSLW
-         v2L11Dt5gcjsg==
-Message-ID: <8c7efbb0d8b79bd559795e5a29d18c76937f013b.camel@kernel.org>
-Subject: Re: [PATCH v2 66/92] overlayfs: convert to ctime accessor functions
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Date:   Thu, 06 Jul 2023 10:01:38 -0400
-In-Reply-To: <20230706135852.l2yu7xzffrhbctbb@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
-         <20230705190309.579783-1-jlayton@kernel.org>
-         <20230705190309.579783-64-jlayton@kernel.org>
-         <20230706135852.l2yu7xzffrhbctbb@quack3>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Thu, 6 Jul 2023 10:02:00 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092C61FC6;
+        Thu,  6 Jul 2023 07:01:56 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1qHPYI-000OJj-If; Thu, 06 Jul 2023 16:01:46 +0200
+Received: from p57bd990e.dip0.t-ipconnect.de ([87.189.153.14] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1qHPYI-000JBU-BM; Thu, 06 Jul 2023 16:01:46 +0200
+Message-ID: <544f02b696a0a1554efe63f799754f3e5fbfecdc.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 06 Jul 2023 16:01:45 +0200
+In-Reply-To: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.153.14
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-07-06 at 15:58 +0200, Jan Kara wrote:
-> On Wed 05-07-23 15:01:31, Jeff Layton wrote:
-> > In later patches, we're going to change how the inode's ctime field is
-> > used. Switch to using accessor functions instead of raw accesses of
-> > inode->i_ctime.
-> >=20
-> > Reviewed-by: Amir Goldstein <amir73il@gmail.com>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ...
-> > diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-> > index 21245b00722a..7acd3e3fe790 100644
-> > --- a/fs/overlayfs/file.c
-> > +++ b/fs/overlayfs/file.c
-> ...
-> > @@ -249,10 +250,12 @@ static void ovl_file_accessed(struct file *file)
-> >  	if (!upperinode)
-> >  		return;
-> > =20
-> > +	ctime =3D inode_get_ctime(inode);
-> > +	uctime =3D inode_get_ctime(upperinode);
-> >  	if ((!timespec64_equal(&inode->i_mtime, &upperinode->i_mtime) ||
-> > -	     !timespec64_equal(&inode->i_ctime, &upperinode->i_ctime))) {
-> > +	     !timespec64_equal(&ctime, &uctime))) {
-> >  		inode->i_mtime =3D upperinode->i_mtime;
-> > -		inode->i_ctime =3D upperinode->i_ctime;
-> > +		inode_set_ctime_to_ts(inode, inode_get_ctime(upperinode));
->=20
-> I think you can use uctime here instead of inode_get_ctime(upperinode)?
-> Otherwise the patch looks good. Feel free to add:
->=20
-> Reviewed-by: Jan Kara <jack@suse.cz>
->=20
+Hi Guenter!
 
-Thanks, fixed in tree.
---=20
-Jeff Layton <jlayton@kernel.org>
+On Thu, 2023-07-06 at 06:57 -0700, Guenter Roeck wrote:
+> On Thu, Jun 01, 2023 at 11:22:17PM +0300, Sergey Shtylyov wrote:
+> > IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
+> > return -EINVAL instead.  However, the kernel code supporting SH3/4-based
+> > SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
+> > IRQ #s from 16 instead.
+> > 
+> > The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+> > indeed are using IRQ0 for the SMSC911x compatible Ethernet chip.
+> > 
+> 
+> Unfortunately it also affects all sh4 emulations in qemu, and results in
+> boot stalls with those. There isn't a relevant log to attach because there
+> is no error message - booting just stalls until the emulation is aborted.
+> 
+> Reverting this patch fixes the problem.
+> 
+> Bisect log is attached for reference. Note that bisect requires applying
+> commit 7497840d462c ("sh: Provide unxlate_dev_mem_ptr() in asm/io.h"),
+> which is also the reason why the problem was not observed earlier since
+> it was hiding behind a build failure.
+
+Interesting. My naive understanding was that IRQ0 is no longer usable in the
+kernel as Sergey claimed. Was that not correct?
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
