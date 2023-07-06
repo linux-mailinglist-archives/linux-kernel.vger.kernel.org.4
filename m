@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B69B74A699
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C1A74A69C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjGFWLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 18:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
+        id S231820AbjGFWND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 18:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGFWLQ (ORCPT
+        with ESMTP id S229452AbjGFWNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 18:11:16 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DEC1725;
-        Thu,  6 Jul 2023 15:11:14 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5AE3C862AE;
-        Fri,  7 Jul 2023 00:11:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1688681472;
-        bh=0EIkI2jUI4DFcoRWiE7tteNt5GIFvY9v+UbpdSJnVDs=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=il+Bf/oB+qrKGRQGAOOh8OKqT4gYPlcuD3JqNBo5FJuxZcYAtRxtbXrs+QgHXE9jU
-         RKLfszdUe4tvYLquFv7btSnPW6O2WqTejIxax0MLqWlkXWL3M0+k0seG78m34OmXrE
-         jvrwPgn7Hlq+OuHrgi/99ghLKGypxirQV3Kgp1TFaKE8LnUaLWm8vvqx76c6dndWjw
-         8Fuc9aZf0F0U2cIGyjmMWy3ZTPLvue3XNZS9OMJjnoDiAGyB7CANzNMRhWupl0nmLE
-         RrbMMta24Ep8b8JQrvo0zwyk4ZFmN5Nyy13059mLzsR7Kuti6wFiyKIlDryDVEsdvG
-         pqnw/ApBFyuhg==
-Message-ID: <64358ffc-449d-b676-6ac6-a2f273c3129d@denx.de>
-Date:   Fri, 7 Jul 2023 00:11:11 +0200
+        Thu, 6 Jul 2023 18:13:02 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323951B6;
+        Thu,  6 Jul 2023 15:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AOUdoCKv7lMKEBDeJuW8QLGANU11vjlDtc+UqVr1zFk=; b=oejr2bmq1uN3b7HrJx+ElPbSw5
+        we3jUSGkXPajsm1VTvHviFC3GwS/NaHsz1QsPFRkvaUq7r+rBdyS2errjC3EY1PRnVjcDpGUlgYvK
+        /1soI8bcSeGMJWZholjAS8+Qt+OwFn3a0aWHzps1cm/yKVnv/q2YxMXWdR874NBXlbeB4wr+Skl2c
+        nM3+qFNFe9U/hWkDh9MMQME0URBrMEUda85VjmrM7Gu5M5Eh2LxPzWYWt/Fbt8l1kSRtIAT4twoVr
+        jwlsg1lVsmOlMQlJWr5vCfx9rhtl9TtKl2S6xbuCXnbXSHWru+tXgvWDWT4P1WhYRdUGV2SMVYxDS
+        1rK8eJQg==;
+Received: from jlbec by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qHXDb-0035IK-0N;
+        Thu, 06 Jul 2023 22:12:55 +0000
+Date:   Thu, 6 Jul 2023 15:12:51 -0700
+From:   Joel Becker <jlbec@evilplan.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 32/92] configfs: convert to ctime accessor functions
+Message-ID: <ZKc8Y8IB4DShCPZf@google.com>
+Mail-Followup-To: Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-30-jlayton@kernel.org>
+ <20230706105446.r32oft4i3cj5bk3y@quack3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] tty: serial: imx: fix rs485 rx after tx
-Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-To:     Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        linux-serial@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20230616104838.2729694-1-martin.fuzzey@flowbird.group>
- <b7e978c9-43cc-2d9a-f3f8-4bfe143895ca@denx.de>
-In-Reply-To: <b7e978c9-43cc-2d9a-f3f8-4bfe143895ca@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706105446.r32oft4i3cj5bk3y@quack3>
+X-Burt-Line: Trees are cool.
+X-Red-Smith: Ninety feet between bases is perhaps as close as man has ever
+ come to perfection.
+Sender: Joel Becker <jlbec@ftp.linux.org.uk>
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,17 +64,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 13:16, Marek Vasut wrote:
-> On 6/16/23 12:47, Martin Fuzzey wrote:
->> Since commit 79d0224f6bf2 ("tty: serial: imx: Handle RS485 DE signal
->> active high") RS485 reception no longer works after a transmission.
+On Thu, Jul 06, 2023 at 12:54:46PM +0200, Jan Kara wrote:
+> On Wed 05-07-23 15:00:57, Jeff Layton wrote:
+> > In later patches, we're going to change how the inode's ctime field is
+> > used. Switch to using accessor functions instead of raw accesses of
+> > inode->i_ctime.
+> > 
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > 
-> This RS485 is just a gift that keeps on giving, sigh.
+> Looks good. Feel free to add:
 > 
-> I'll dig into this in a few days as time permits.
+> Reviewed-by: Jan Kara <jack@suse.cz>
 
-Alas, time did not permit until now, but yes, this makes sense.
+Agreed.
 
-Thanks
+Acked-by: Joel Becker <jlbec@evilplan.org>
 
-And sorry for the delayed reply.
+> 
+> 								Honza
+> 
+> > ---
+> >  fs/configfs/inode.c | 7 +++----
+> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/fs/configfs/inode.c b/fs/configfs/inode.c
+> > index 1c15edbe70ff..fbdcb3582926 100644
+> > --- a/fs/configfs/inode.c
+> > +++ b/fs/configfs/inode.c
+> > @@ -88,8 +88,7 @@ int configfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+> >  static inline void set_default_inode_attr(struct inode * inode, umode_t mode)
+> >  {
+> >  	inode->i_mode = mode;
+> > -	inode->i_atime = inode->i_mtime =
+> > -		inode->i_ctime = current_time(inode);
+> > +	inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
+> >  }
+> >  
+> >  static inline void set_inode_attr(struct inode * inode, struct iattr * iattr)
+> > @@ -99,7 +98,7 @@ static inline void set_inode_attr(struct inode * inode, struct iattr * iattr)
+> >  	inode->i_gid = iattr->ia_gid;
+> >  	inode->i_atime = iattr->ia_atime;
+> >  	inode->i_mtime = iattr->ia_mtime;
+> > -	inode->i_ctime = iattr->ia_ctime;
+> > +	inode_set_ctime_to_ts(inode, iattr->ia_ctime);
+> >  }
+> >  
+> >  struct inode *configfs_new_inode(umode_t mode, struct configfs_dirent *sd,
+> > @@ -172,7 +171,7 @@ struct inode *configfs_create(struct dentry *dentry, umode_t mode)
+> >  		return ERR_PTR(-ENOMEM);
+> >  
+> >  	p_inode = d_inode(dentry->d_parent);
+> > -	p_inode->i_mtime = p_inode->i_ctime = current_time(p_inode);
+> > +	p_inode->i_mtime = inode_set_ctime_current(p_inode);
+> >  	configfs_set_inode_lock_class(sd, inode);
+> >  	return inode;
+> >  }
+> > -- 
+> > 2.41.0
+> > 
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+
+-- 
+
+Life's Little Instruction Book #237
+
+	"Seek out the good in people."
+
+			http://www.jlbec.org/
+			jlbec@evilplan.org
