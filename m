@@ -2,94 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596B674A7A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 01:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9E374A7AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 01:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjGFX0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 19:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S231594AbjGFX1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 19:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjGFX02 (ORCPT
+        with ESMTP id S229555AbjGFX1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 19:26:28 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3B31BD2;
-        Thu,  6 Jul 2023 16:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=bDdj2ImLWq3orRh5mZ0i6CkrMO5thDbEKJP5vNXEszQ=; b=XOsOwJYXZVQ33w6XPomj04Renh
-        yQFciK3I0zE9Zpzkq3abJrhB3iswgOvCHPxvjEYm27D9reaX9t91tKrcQRzF3ZEIg3mauARWtTTAq
-        mkDRH/+DHf7c/IQjBIpMU4PFnWC9fZf/Mk4YhC1PQFDfKPMfiEuFAFgfkEk5RJRjPiB+/vzjoackT
-        XUOGbqWSIFLQ12Va6M8GH4/uO7EvdbsNRrkafyM8Gy0Ocy6f6sDkMdBgAAnpJEndbyuC8i6sdMtKm
-        oesPnV5GC8cZptTn4JM6aXCMsystUzju5zYlp/j7FmgU2bYHuhRANZ4BtXwvBvgDrM42R/4mR1FSe
-        7OmlOTMw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHYMh-002xMC-1W;
-        Thu, 06 Jul 2023 23:26:23 +0000
-Message-ID: <d785aec5-10b5-cc75-904c-cafdc194a8f0@infradead.org>
-Date:   Thu, 6 Jul 2023 16:26:22 -0700
+        Thu, 6 Jul 2023 19:27:52 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D42139;
+        Thu,  6 Jul 2023 16:27:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-262e839647eso998832a91.2;
+        Thu, 06 Jul 2023 16:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688686035; x=1691278035;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bshFgcOle4AtCEA8BTrEZy72fJQG+YZaemfgC6JBXtM=;
+        b=IOWiwnyWZ8b/Gees9+bG/u0x39WWkdTCEFwE5s22SnFW0XqC5rvrUBYyTAMCmPKnJI
+         4qgrjSpARX+HgWz9r6G2mSEL12oNVjQzOzkJqh3SzPGRq+dOdz2w69HGJqAgtWs3B+FF
+         T6HW7smfo85Kiy1q9wyrh5thmF1HeIclKjwIH6EhYa02ctmARHBhKmOapagUI9oe+V7q
+         uoPvVu9uynFN4Sr5hgnBSuTuO3OcHkSwGSiZFHxXBsK82s4HjycRFyZstD5Yw4wGvRYw
+         1QoXQABJKLn0yVKHJ9xKaDeEnTkTKYmmzeS96+jpOAiqhUnv1SaL0yR9rZHub1JRR4EU
+         /sYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688686035; x=1691278035;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bshFgcOle4AtCEA8BTrEZy72fJQG+YZaemfgC6JBXtM=;
+        b=MHWeUiwqxpYZcakCqf3PvdRNUg2pOpaY9zc2APg1NoPf24mmi9AqGRy1VHiNAPmZtO
+         ePgx1UUD7oAudjizDx0voVDY/zA5uTlRknqncr8F0THC9W8BUz08hPhUzotm+3p6sfjA
+         6oCjD9cZJT+/xfKVWQdSG490UQwXs6JvpyxnScyhqJugb7MSCDs74A1iX+aYPEmPk7OJ
+         HapNR2d6mGYJ4t6CnXJalznW48KQxkgYHMMWcl7dMXhlb2DXdMHFiru4jVcITms6jJYN
+         Tp1ttSmGRh4sSD/EJjlgHVvOSyrXcdiFcJVqk6p6Ug6RfGVH2TS1QP13QvQsnXdEY7mb
+         Z1QQ==
+X-Gm-Message-State: ABy/qLZRDiZ/qHwVbRXiF0Xg8NMMjNqaRGNNxKG4NuPgm1vmYgLE57n5
+        tHllK1GWlUMhiYDsPgRJH2s=
+X-Google-Smtp-Source: APBJJlFvuQWESuYnnmEsR9Q/RlJxwVOHx3CZ7iqj95A72EuTZBpzNQR7aSAdAsIzLqTLdZ3dQSY+iQ==
+X-Received: by 2002:a17:90a:bb84:b0:25b:e07f:4c43 with SMTP id v4-20020a17090abb8400b0025be07f4c43mr3123081pjr.10.1688686035098;
+        Thu, 06 Jul 2023 16:27:15 -0700 (PDT)
+Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:9b44])
+        by smtp.gmail.com with ESMTPSA id bk15-20020a17090b080f00b0025bf1ea918asm270552pjb.55.2023.07.06.16.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 16:27:14 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 16:27:09 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jarkko@kernel.org, song@kernel.org, jolsa@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbrobinson@gmail.com,
+        zbyszek@in.waw.pl, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, wiktor@metacode.biz,
+        devel@lists.sequoia-pgp.org, gnupg-devel@gnupg.org,
+        ebiggers@kernel.org, Jason@zx2c4.com, mail@maciej.szmigiero.name,
+        antony@vennard.ch, konstantin@linuxfoundation.org,
+        James.Bottomley@hansenpartnership.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [RFC][PATCH 00/10] KEYS: Introduce user asymmetric keys and
+ signatures
+Message-ID: <20230706232709.t6imkh3q234b3dlm@macbook-pro-8.dhcp.thefacebook.com>
+References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH virtio] pds_vdpa: protect Makefile from unconfigured
- debugfs
-Content-Language: en-US
-To:     Shannon Nelson <shannon.nelson@amd.com>, jasowang@redhat.com,
-        mst@redhat.com, virtualization@lists.linux-foundation.org,
-        brett.creeley@amd.com
-Cc:     netdev@vger.kernel.org, drivers@pensando.io, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230706231718.54198-1-shannon.nelson@amd.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230706231718.54198-1-shannon.nelson@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/6/23 16:17, Shannon Nelson wrote:
-> debugfs.h protects itself from an undefined DEBUG_FS, so it is
-> not necessary to check it in the driver code or the Makefile.
-> The driver code had been updated for this, but the Makefile had
-> missed the update.
+On Thu, Jul 06, 2023 at 04:42:13PM +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Link: https://lore.kernel.org/linux-next/fec68c3c-8249-7af4-5390-0495386a76f9@infradead.org/
-> Fixes: a16291b5bcbb ("pds_vdpa: Add new vDPA driver for AMD/Pensando DSC")
-> Signed-off-by: Shannon Nelson <shannon.nelson@amd.com>
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
-> ---
->  drivers/vdpa/pds/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> Define a new TLV-based format for keys and signatures, aiming to store and
+> use in the kernel the crypto material from other unsupported formats
+> (e.g. PGP).
 > 
-> diff --git a/drivers/vdpa/pds/Makefile b/drivers/vdpa/pds/Makefile
-> index 2e22418e3ab3..c2d314d4614d 100644
-> --- a/drivers/vdpa/pds/Makefile
-> +++ b/drivers/vdpa/pds/Makefile
-> @@ -5,6 +5,5 @@ obj-$(CONFIG_PDS_VDPA) := pds_vdpa.o
->  
->  pds_vdpa-y := aux_drv.o \
->  	      cmds.o \
-> +	      debugfs.o \
->  	      vdpa_dev.o
-> -
-> -pds_vdpa-$(CONFIG_DEBUG_FS) += debugfs.o
+> TLV fields have been defined to fill the corresponding kernel structures
+> public_key, public_key_signature and key_preparsed_payload.
+> 
+> Keys:
+>                 struct public_key {     struct key_preparsed_payload {
+> KEY_PUB       -->  void *key;
+>                    u32 keylen;         --> prep->payload.data[asym_crypto]
+> KEY_ALGO      -->  const char *pkey_algo;
+> KEY_KID0
+> KEY_KID1                               --> prep->payload.data[asym_key_ids]
+> KEY_KID2  
+> KEY_DESC                               --> prep->description
+> 
+> 
+> Signatures:
+>                 struct public_key_signature {
+> SIG_S         -->  u8 *s;
+>                    u32 s_size;
+> SIG_KEY_ALGO  -->  const char *pkey_algo;
+> SIG_HASH_ALGO -->  const char *hash_algo;
+>                    u32 digest_size;
+> SIG_ENC       -->  const char *encoding;   
+> SIG_KID0
+> SIG_KID1      -->  struct asymmetric_key_id *auth_ids[3];
+> SIG_KID2  
+> 
+> 
+> For keys, since the format conversion has to be done in user space, user
+> space is assumed to be trusted, in this proposal. Without this assumption,
+> a malicious conversion tool could make a user load to the kernel a
+> different key than the one expected.
+> 
+> That should not be a particular problem for keys that are embedded in the
+> kernel image and loaded at boot, since the conversion happens in a trusted
+> environment such as the building infrastructure of the Linux distribution
+> vendor.
+> 
+> In the other cases, such as enrolling a key through the Machine Owner Key
+> (MOK) mechanism, the user is responsible to ensure that the crypto material
+> carried in the original format remains the same after the conversion.
+> 
+> For signatures, assuming the strength of the crypto algorithms, altering
+> the crypto material is simply a Denial-of-Service (DoS), as data can be
+> validated only with the right signature.
+> 
+> 
+> This patch set also offers the following contributions:
+> 
+> - An API similar to the PKCS#7 one, to verify the authenticity of system
+>   data through user asymmetric keys and signatures
+> 
+> - A mechanism to store a keyring blob in the kernel image and to extract
+>   and load the keys at system boot
+>   
+> - eBPF binding, so that data authenticity verification with user asymmetric
+>   keys and signatures can be carried out also with eBPF programs
 
--- 
-~Randy
+Nack to bpf bits.
+You've convinced us that bpf_verify_pkcs7_signature() is what you need.
+Yet, 9 month later there are no users of it and you came back with this new
+bpf_verify_uasym_signature() helper that practically not much different.
+
+Instead of brand new "public key info" format sign your rpms via
+existing pkcs7 mechanism and verify with bpf_verify_pkcs7_signature().
