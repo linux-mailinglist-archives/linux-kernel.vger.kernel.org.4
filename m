@@ -2,83 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C317496BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4177A7496CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbjGFHsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S233917AbjGFHvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbjGFHsX (ORCPT
+        with ESMTP id S230290AbjGFHvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:48:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBEE10B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688629702; x=1720165702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xo0fbN1VsjDMVKPWre0XhLetnWjzyPPJcL/tUzOSN2c=;
-  b=dIKqaO3qsbAXMVitx38wLT3U8b9ethDvcs5UbpFKQRs6y/DjY3Te1FQ/
-   06F03w9BDifG430cJrpYarA9AjZS46Flwf/Aa1IkaK4UHWCZB5/NzvNT7
-   R+o6IK+maRsdIb2eWLNk3YuZeam9IX7XInwmziQvLmStH00/vk7GUVrYJ
-   +aJlxQ9bRrMSA/yT7AnBtEpUr4nk0kNOWPRHt712zntVD9oDwTfSFV2+h
-   u8uUsTszIhJj5cqlKfH33+AW5eHdaAApEgalRAbOAnldyGN5bF5caJnhs
-   Gz2s1pdd7cEZBKTdFuujQ9mMdSciXJ/irEXlMXxBc3tngE5cRifVqKvAj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="429577058"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="429577058"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:48:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="789455211"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="789455211"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jul 2023 00:48:20 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qHJit-0001AU-1i;
-        Thu, 06 Jul 2023 07:48:19 +0000
-Date:   Thu, 6 Jul 2023 15:48:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: drivers/regulator/raa215300.c:42:12: sparse: sparse: symbol
- 'xin_name' was not declared. Should it be static?
-Message-ID: <202307061555.Gx6hEBT4-lkp@intel.com>
+        Thu, 6 Jul 2023 03:51:05 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C89C1BD2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:51:04 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8b318c5cfso2097425ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688629863; x=1691221863;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QhmbPLkoVnQhuhvNhVkHDTHyTpdp4PNjj/xlZtzICCA=;
+        b=pZJlJ0lhz4RO8QoDrWADXtr8A5uaqPG0cwNebZMTSJRHlc338zrRGHFo3MIorFa2tQ
+         oq6MlKfAlG8KZ60E/115YlDf0YYqa4FJzW+ggBF+IfVqyzKcsWvhIlOtly2TXdIAtZIC
+         kQJ1mkIGoR3h9cWBkekYbDH7W1yTJaNw4IgML0FxAYY5e+Sw5eu+aMhdo/Ihcj/IhGkL
+         c5t+jlYZ2/9vc3tgLabzRqijUCaQebkqOnX1LXdznIo7jHagMovL4z991lH/lpNQ3sYZ
+         gkx7jmNwWPYxk5o9hpenRu5awvq/1Ifiy+KXJm5Q/c8apaSwVDVCHTajkHdmZ8HPJOpA
+         06jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688629863; x=1691221863;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QhmbPLkoVnQhuhvNhVkHDTHyTpdp4PNjj/xlZtzICCA=;
+        b=W7A6WiPkfclu6aUUzuZl7HA08XkvTbPiH5nopFd/UBGs5r/ZksokHjOEVFMM6Bt4SU
+         CMiHJ4ascuaaNLdkJ2n7XiSMlchlew1CvJ+hOiKD5RJFMjup4SKbegM02oVTMYE8MK/E
+         auBSLJXkz06Q7s/DuyTst0TEY1/POC/2T3wUiAFKFu/ZB5NWmnna899GkZpjAoYUUOVt
+         kyWA0xbZauUWX5gfpxU10jA72w+BDh60ti1DT2LlJpPb9LwqYf1qM9KaFSvo0gFMucoG
+         y0N3jpaaCGVQ/jXPTyD+b1GGXhAIZQjVnOhf3BvOy885DZJbIY/gSmCqZCUoQSu9bygb
+         CdKQ==
+X-Gm-Message-State: ABy/qLbrsIwUIt7a0Po7fTbGpL2u7rrhlBvCDWX1BVEJVzZdlGRuuuBE
+        DvqVnUoaIb+YTQ+mB3e+0Ui08FB946hfqw==
+X-Google-Smtp-Source: APBJJlHczXf/MN0VAPTai+IfIcf2/+/D8hnfRWRFIWPZptyNQl2VwFGl9sZr3ln/+QTcnNrzEnEylg==
+X-Received: by 2002:a17:902:f7d3:b0:1b8:b73d:a75b with SMTP id h19-20020a170902f7d300b001b8b73da75bmr1127393plw.44.1688629863140;
+        Thu, 06 Jul 2023 00:51:03 -0700 (PDT)
+Received: from localhost-live.default (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id g5-20020a1709026b4500b001b027221393sm750161plt.43.2023.07.06.00.51.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 00:51:02 -0700 (PDT)
+Subject: Re: [PATCH] arch/powerpc: Remove unnecessary endian conversion code
+ in XICS
+To:     Gautam Menghani <gautam@linux.ibm.com>, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230630055628.17790-1-gautam@linux.ibm.com>
+From:   Jordan Niethe <jniethe5@gmail.com>
+Message-ID: <39920b0f-f261-8417-af7a-eef791ad5726@gmail.com>
+Date:   Thu, 6 Jul 2023 17:50:57 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230630055628.17790-1-gautam@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c17414a273b81fe4e34e11d69fc30cc8b1431614
-commit: 7bce16630837c705f72e8fd53a11ae8c236236f4 regulator: Add Renesas PMIC RAA215300 driver
-date:   13 days ago
-config: i386-randconfig-i061-20230706 (https://download.01.org/0day-ci/archive/20230706/202307061555.Gx6hEBT4-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230706/202307061555.Gx6hEBT4-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307061555.Gx6hEBT4-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/regulator/raa215300.c:42:12: sparse: sparse: symbol 'xin_name' was not declared. Should it be static?
+On 30/6/23 3:56 pm, Gautam Menghani wrote:
+> Remove an unnecessary piece of code that does an endianness conversion but
+> does not use the result. The following warning was reported by Clang's
+> static analyzer:
+> 
+> arch/powerpc/sysdev/xics/ics-opal.c:114:2: warning: Value stored to
+> 'server' is never read [deadcode.DeadStores]
+>          server = be16_to_cpu(oserver);
+> 
+> As the result of endianness conversion is never used, delete the line
+> and fix the warning.
+> 
+> Signed-off-by: Gautam Menghani <gautam@linux.ibm.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+'server' was used as a parameter to opal_get_xive() in commit 
+5c7c1e9444d8 ("powerpc/powernv: Add OPAL ICS backend") when it was 
+introduced. 'server' was also used in an error message for the call to 
+opal_get_xive().
+
+'server' was always later set by a call to ics_opal_mangle_server() 
+before being used.
+
+Commit bf8e0f891a32 ("powerpc/powernv: Fix endian issues in OPAL ICS 
+backend") used a new variable 'oserver' as the parameter to 
+opal_get_xive() instead of 'server' for endian correctness. It also 
+removed 'server' from the error message for the call to opal_get_xive().
+
+It was commit bf8e0f891a32 that added the unnecessary conversion and 
+never used the result.
+
+Reviewed-by: Jordan Niethe <jniethe5@gmail.com>
+
+
+> ---
+>   arch/powerpc/sysdev/xics/ics-opal.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/sysdev/xics/ics-opal.c b/arch/powerpc/sysdev/xics/ics-opal.c
+> index 6cfbb4fac7fb..5fe73dabab79 100644
+> --- a/arch/powerpc/sysdev/xics/ics-opal.c
+> +++ b/arch/powerpc/sysdev/xics/ics-opal.c
+> @@ -111,7 +111,6 @@ static int ics_opal_set_affinity(struct irq_data *d,
+>   		       __func__, d->irq, hw_irq, rc);
+>   		return -1;
+>   	}
+> -	server = be16_to_cpu(oserver);
+>   
+>   	wanted_server = xics_get_irq_server(d->irq, cpumask, 1);
+>   	if (wanted_server < 0) {
+> 
