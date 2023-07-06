@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FAA749805
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEBE749808
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbjGFJLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 05:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S231977AbjGFJLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 05:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjGFJLj (ORCPT
+        with ESMTP id S231937AbjGFJLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:11:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAF2DB;
-        Thu,  6 Jul 2023 02:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688634698; x=1720170698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ekHp2nELjYlgyZkKYcsz1RmYnFI0SwFmUC/Z0AuBeuM=;
-  b=ZeXNRTypEx/PZ7J/dlnxOeJOHBvgPmD5FSaXORjkMGyND4tjWBRFBlCz
-   cwmIUd7y3zRtmq4aI4nmNMBJijRpHBBbTLL6SLCm/J7+kTQa93otCuunX
-   1X6i81Cf82y3PsuvcVgD1edkIWXueVSviv2SnuVUeQGF1MwtZytI1UMgw
-   Y1eBMKL9Wrxj8LruEsdn3AvcXJu08SYkfuFGTA9EO5hKNkkbhkOAVM2eG
-   oqRcHIbWUfHvXmQsWinq35EMKjbkgTMNhDrjorhZNScUWif7j8kLkapBS
-   4GqNfWuwwqEqlDVHJxCFwebsaJEMqAjEXqQM8M5JAR63vXigIRJaPTjx9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="343884302"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="343884302"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 02:11:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="864031653"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="864031653"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jul 2023 02:11:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qHL1T-000ThJ-03;
-        Thu, 06 Jul 2023 12:11:35 +0300
-Date:   Thu, 6 Jul 2023 12:11:34 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Subject: Re: [PATCH 06/23] i2c: designware: Remove #ifdef guards for PM
- related functions
-Message-ID: <ZKaFRpm9Ito94fgL@smile.fi.intel.com>
-References: <20230705204314.89800-1-paul@crapouillou.net>
- <20230705204314.89800-7-paul@crapouillou.net>
+        Thu, 6 Jul 2023 05:11:47 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74561BD2;
+        Thu,  6 Jul 2023 02:11:43 -0700 (PDT)
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 237FEFF810;
+        Thu,  6 Jul 2023 09:11:37 +0000 (UTC)
+Message-ID: <2084462d-b11d-7a48-3049-6bafbe81e7b4@ghiti.fr>
+Date:   Thu, 6 Jul 2023 11:11:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705204314.89800-7-paul@crapouillou.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v3 1/2] RISC-V: mm: Restrict address space for
+ sv39,sv48,sv57
+To:     Charlie Jenkins <charlie@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mick@ics.forth.gr, jrtc27@jrtc27.com
+References: <20230705190002.384799-1-charlie@rivosinc.com>
+ <20230705190002.384799-2-charlie@rivosinc.com>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230705190002.384799-2-charlie@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,108 +62,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 10:42:57PM +0200, Paul Cercueil wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
-> 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
+Hi Charlie,
 
-I have wip of something like this in a private branch, so
-I'm glad you beat me up to it!
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 05/07/2023 20:59, Charlie Jenkins wrote:
+> Make sv48 the default address space for mmap as some applications
+> currently depend on this assumption. The RISC-V specification enforces
+> that bits outside of the virtual address range are not used, so
+> restricting the size of the default address space as such should be
+> temporary.
 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
+What do you mean in the last sentence above?
+
+
+>   A hint address passed to mmap will cause the largest address
+> space that fits entirely into the hint to be used. If the hint is less
+> than or equal to 1<<38, an sv39 address will be used. An exception is
+> that if the hint address is 0, then a sv48 address will be used.After
+> an address space is completely full, the next smallest address space
+> will be used.
+>
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 > ---
-> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Jan Dabros <jsd@semihalf.com>
-> ---
->  drivers/i2c/busses/i2c-designware-platdrv.c | 22 ++++++---------------
->  1 file changed, 6 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index 970c1c3b0402..855b698e99c0 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -418,7 +418,6 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
->  	reset_control_assert(dev->rst);
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  static int dw_i2c_plat_prepare(struct device *dev)
->  {
->  	/*
-> @@ -429,11 +428,7 @@ static int dw_i2c_plat_prepare(struct device *dev)
->  	 */
->  	return !has_acpi_companion(dev);
->  }
-> -#else
-> -#define dw_i2c_plat_prepare	NULL
-> -#endif
->  
-> -#ifdef CONFIG_PM
->  static int dw_i2c_plat_runtime_suspend(struct device *dev)
->  {
->  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
-> @@ -447,7 +442,7 @@ static int dw_i2c_plat_runtime_suspend(struct device *dev)
->  	return 0;
->  }
->  
-> -static int __maybe_unused dw_i2c_plat_suspend(struct device *dev)
-> +static int dw_i2c_plat_suspend(struct device *dev)
->  {
->  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
->  
-> @@ -468,7 +463,7 @@ static int dw_i2c_plat_runtime_resume(struct device *dev)
->  	return 0;
->  }
->  
-> -static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
-> +static int dw_i2c_plat_resume(struct device *dev)
->  {
->  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
->  
-> @@ -479,16 +474,11 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
->  }
->  
->  static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
-> -	.prepare = dw_i2c_plat_prepare,
-> -	SET_LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
-> -	SET_RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
-> +	.prepare = pm_sleep_ptr(dw_i2c_plat_prepare),
-> +	LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
-> +	RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
->  };
->  
-> -#define DW_I2C_DEV_PMOPS (&dw_i2c_dev_pm_ops)
-> -#else
-> -#define DW_I2C_DEV_PMOPS NULL
-> -#endif
+>   arch/riscv/include/asm/elf.h       |  2 +-
+>   arch/riscv/include/asm/pgtable.h   | 13 +++++++++++-
+>   arch/riscv/include/asm/processor.h | 34 ++++++++++++++++++++++++------
+>   3 files changed, 40 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> index 30e7d2455960..1b57f13a1afd 100644
+> --- a/arch/riscv/include/asm/elf.h
+> +++ b/arch/riscv/include/asm/elf.h
+> @@ -49,7 +49,7 @@ extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
+>    * the loader.  We need to make sure that it is out of the way of the program
+>    * that it will "exec", and that there is sufficient room for the brk.
+>    */
+> -#define ELF_ET_DYN_BASE		((TASK_SIZE / 3) * 2)
+> +#define ELF_ET_DYN_BASE		((DEFAULT_MAP_WINDOW / 3) * 2)
+>   
+>   #ifdef CONFIG_64BIT
+>   #ifdef CONFIG_COMPAT
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 75970ee2bda2..752e210c7547 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -57,18 +57,29 @@
+>   #define MODULES_END		(PFN_ALIGN((unsigned long)&_start))
+>   #endif
+>   
+> +
+>   /*
+>    * Roughly size the vmemmap space to be large enough to fit enough
+>    * struct pages to map half the virtual address space. Then
+>    * position vmemmap directly below the VMALLOC region.
+>    */
+>   #ifdef CONFIG_64BIT
+> +#define VA_BITS_SV39 39
+> +#define VA_BITS_SV48 48
+> +#define VA_BITS_SV57 57
+> +
+> +#define VA_USER_SV39 (UL(1) << (VA_BITS_SV39 - 1))
+> +#define VA_USER_SV48 (UL(1) << (VA_BITS_SV48 - 1))
+> +#define VA_USER_SV57 (UL(1) << (VA_BITS_SV57 - 1))
+> +
+>   #define VA_BITS		(pgtable_l5_enabled ? \
+> -				57 : (pgtable_l4_enabled ? 48 : 39))
+> +				VA_BITS_SV57 : (pgtable_l4_enabled ? VA_BITS_SV48 : VA_BITS_SV39))
+>   #else
+>   #define VA_BITS		32
+>   #endif
+>   
+> +#define DEFAULT_VA_BITS ((VA_BITS >= VA_BITS_SV48) ? VA_BITS_SV48 : VA_BITS)
+
+
+Maybe rename DEFAULT_VA_BITS into MMAP_VA_BITS? Or something similar?
+
+
+> +
+>   #define VMEMMAP_SHIFT \
+>   	(VA_BITS - PAGE_SHIFT - 1 + STRUCT_PAGE_MAX_SHIFT)
+>   #define VMEMMAP_SIZE	BIT(VMEMMAP_SHIFT)
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index 94a0590c6971..468a1f4b9da4 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -12,20 +12,40 @@
+>   
+>   #include <asm/ptrace.h>
+>   
+> -/*
+> - * This decides where the kernel will search for a free chunk of vm
+> - * space during mmap's.
+> - */
+> -#define TASK_UNMAPPED_BASE	PAGE_ALIGN(TASK_SIZE / 3)
 > -
->  /* Work with hotplug and coldplug */
->  MODULE_ALIAS("platform:i2c_designware");
->  
-> @@ -499,7 +489,7 @@ static struct platform_driver dw_i2c_driver = {
->  		.name	= "i2c_designware",
->  		.of_match_table = of_match_ptr(dw_i2c_of_match),
->  		.acpi_match_table = ACPI_PTR(dw_i2c_acpi_match),
-> -		.pm	= DW_I2C_DEV_PMOPS,
-> +		.pm	= pm_ptr(&dw_i2c_dev_pm_ops),
->  	},
->  };
->  
-> -- 
-> 2.40.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
+> -#define STACK_TOP		TASK_SIZE
+>   #ifdef CONFIG_64BIT
+> +#define DEFAULT_MAP_WINDOW	(UL(1) << (DEFAULT_VA_BITS - 1))
+>   #define STACK_TOP_MAX		TASK_SIZE_64
+> +
+> +#define arch_get_mmap_end(addr, len, flags) \
+> +	((addr) >= VA_USER_SV57 ? STACK_TOP_MAX :   \
+> +	 ((((addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) ? \
+> +						 VA_USER_SV48 : \
+> +						 VA_USER_SV39)
+> +
+> +#define arch_get_mmap_base(addr, base) \
+> +	(((addr >= VA_USER_SV57) && (VA_BITS >= VA_BITS_SV57)) ?   \
 
 
+So IIUC, a user must pass a hint larger than the max address of the mode 
+the user wants right? Shouldn't the user rather pass an address that is 
+larger than the previous mode? I mean if the user wants a 56-bit 
+address, he should just pass an address above 1<<47 no?
+
+
+> +		 VA_USER_SV57 - (DEFAULT_MAP_WINDOW - base) : \
+> +	 ((((addr) >= VA_USER_SV48)) && (VA_BITS >= VA_BITS_SV48)) ? \
+> +		 VA_USER_SV48 - (DEFAULT_MAP_WINDOW - base) : \
+> +	  (addr == 0) ? \
+> +		 base : \
+> +		 VA_USER_SV39 - (DEFAULT_MAP_WINDOW - base))
+> +
+
+
+Can you turn that into a function or use if/else statement? It's very 
+hard to understand what happens there.
+
+And riscv selects ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT which means the 
+base is at the top of the address space (minus the stack IIRC). But if 
+rlimit_stack is set to infinity (see mmap_base() 
+https://elixir.bootlin.com/linux/latest/source/mm/util.c#L412), 
+mmap_base is equal to TASK_UNMAPPED_BASE. Does that work in that case? 
+It seems like this: VA_USER_SV39 - (DEFAULT_MAP_WINDOW - base)) would be 
+negative right?
+
+You should also add a rlimit test.
+
+
+>   #else
+> +#define DEFAULT_MAP_WINDOW	TASK_SIZE
+>   #define STACK_TOP_MAX		TASK_SIZE
+>   #endif
+>   #define STACK_ALIGN		16
+>   
+> +
+> +#define STACK_TOP		DEFAULT_MAP_WINDOW
+> +
+> +/*
+> + * This decides where the kernel will search for a free chunk of vm
+> + * space during mmap's.
+> + */
+> +#define TASK_UNMAPPED_BASE	PAGE_ALIGN(DEFAULT_MAP_WINDOW / 3)
+> +
+>   #ifndef __ASSEMBLY__
+>   
+>   struct task_struct;
