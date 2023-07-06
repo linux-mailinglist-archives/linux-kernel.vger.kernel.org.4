@@ -2,284 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAF374A0F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D09874A0FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbjGFP3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
+        id S233603AbjGFP33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233068AbjGFP3M (ORCPT
+        with ESMTP id S233607AbjGFP3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:29:12 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC18B1BE9;
-        Thu,  6 Jul 2023 08:29:05 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69dcf45faso13173001fa.0;
-        Thu, 06 Jul 2023 08:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688657344; x=1691249344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oBODeVbuwojKcNDean02YI8ZZtZRDm3e6bJ2J8Lxr0U=;
-        b=IYHCv1vZDFCF/CIARfxXXPg4OFhzc7pMmcW5J4ydPupxPx6XC8PQF2+MNwm9jemhqR
-         A1NnJLadw2t+wieL4mzfewENFK1bDuvjHrIaerp5qL8sOs7DSPZVvKD+RdncL228c5QA
-         s6tUamFgZExNDSw2faCtd20bRHZPQD+oXqB0Z7qNHXbg0x8kk3Rb5mHx2sxgxfvnZeew
-         FYfAlqtgbGIcQa59P5LPkEVxiDM4loYPpdRwX94eY8Ekna1agwF8/B6cFzGDvkcZCWJ1
-         +BJQqkfe/PxrDhSCi/hMWxhbc3wYS1MGTT1WCA5ShX3sbqCTBuQzGc0h0mcQK5yArWpw
-         B+Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688657344; x=1691249344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oBODeVbuwojKcNDean02YI8ZZtZRDm3e6bJ2J8Lxr0U=;
-        b=B5/MWuZ+weDgwW/OgpCRfzyDvRYOAEXTZ7rC7M7zqt/gABlJiLma8FHgMLXorOMNMp
-         Vjms03bK5UWvfpi88Yvr/P4T35AgCKQvXmfmQqyGlsGodQmHvZfNPNEykCS+3xYoByeC
-         CnqX+ShwrRzTlSNjzCFAUM82qQamMzS4yqHA1WINGbj2dz4va++9wzzJFh18eYdwA8Y4
-         43soOIwuC/kDCWX+REI6jWL/hkTV29WZHZa7LbicqphaSaLhvHNgQSXRR4XZUSNl+8ek
-         4yicGFLT1C++FjzlrB+Gjt1vG0T6JCXiDK91yIAg5//ZgZJ84DvK/7iEyfxOd/iP4YmV
-         wZAA==
-X-Gm-Message-State: ABy/qLZ2BOCL8PQ6qawtNkyEp7EP0NBMNigsyavKCduix4WKSALNHPJk
-        5zPk9agfjp+jbP7AeexrKfMiqYTbogeGq68H0AA=
-X-Google-Smtp-Source: APBJJlGy0JaoyhsfUnBmUh38vlqnXCeEGZmbHjk1W5mjihasxoCeEd9ZfPcFqvUU/c09asWw2GrojYyEkYTwZCSxiBY=
-X-Received: by 2002:a2e:960e:0:b0:2b6:ebc6:1e86 with SMTP id
- v14-20020a2e960e000000b002b6ebc61e86mr1696109ljh.47.1688657343931; Thu, 06
- Jul 2023 08:29:03 -0700 (PDT)
+        Thu, 6 Jul 2023 11:29:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496821BE2;
+        Thu,  6 Jul 2023 08:29:13 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366DgALP000630;
+        Thu, 6 Jul 2023 15:29:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=QMl9Y/N7O6mnF8m5LLTeVc4dUifp6imZFRX1/7BnFTI=;
+ b=NP1K7RKdXqd9jcHgkG4I3s5RHIVrb2GJksgcd6Xt+pYsggA0gkzwyZseZy9E9r8NrKZh
+ 6PlHeN68Jw0kKdBlsb/oxkC0o9WbVkOLz7qoYY3HCyrUMbhNeuMO6QwHKxsl88I2Vt9F
+ 3zVQYPR4hKoH9VKSxFZB3cjevJ/5AJ29XT64+xLcbrd3HK8r6AEcFSrDsj5a95JPg/2U
+ mU/VJv3WuxIBq0nv94NLh2oYIRdNSkLUepKI/bIxh4HkI2ctfjwkoC2YRepbx05g0AqQ
+ 7WbG7vr30Rfa/N9dEK6lFpyAox7B+NY1+L7K0UsmuaC85IDb1tgXdEaps7FKl6xnz7Rg zw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnsu70umy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 15:29:09 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366FT8RZ018865
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 15:29:08 GMT
+Received: from [10.216.13.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
+ 2023 08:29:04 -0700
+Message-ID: <5a4ea76c-7a54-c7b3-65e2-2f3b41b8c0e3@quicinc.com>
+Date:   Thu, 6 Jul 2023 20:59:01 +0530
 MIME-Version: 1.0
-References: <20230705185755.579053-1-jlayton@kernel.org> <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-72-jlayton@kernel.org>
-In-Reply-To: <20230705190309.579783-72-jlayton@kernel.org>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 6 Jul 2023 10:28:52 -0500
-Message-ID: <CAH2r5mvF2TqT6pR7wp9WGHZJkf39hZyaBMBftqwi+SsGVz7RDA@mail.gmail.com>
-Subject: Re: [PATCH v2 74/92] smb: convert to ctime accessor functions
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm7550ba
+ support
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <1688650209-25119-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1688650209-25119-2-git-send-email-quic_rohiagar@quicinc.com>
+ <4042fa22-8948-49c9-6e5c-dc8926ed5f99@linaro.org>
+ <6d067262-d8af-f6f3-4ef7-870eafa15f46@quicinc.com>
+ <8b04d830-4710-7f26-09e8-326b69d72396@linaro.org>
+ <a50921ca-c858-dacc-6849-4898fdf7683c@quicinc.com>
+ <f8152ec7-e38f-d215-3e1f-3165912b4031@linaro.org>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <f8152ec7-e38f-d215-3e1f-3165912b4031@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _a5N2f2Ifr1-QBfX1xhlP4lLqu2So1bp
+X-Proofpoint-ORIG-GUID: _a5N2f2Ifr1-QBfX1xhlP4lLqu2So1bp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_11,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=947
+ adultscore=0 bulkscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
+ spamscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307060139
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Steve French <stfrench@microsoft.com>
 
-On Wed, Jul 5, 2023 at 2:42=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
-te:
->
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
->
-> Acked-by: Tom Talpey <tom@talpey.com>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/smb/client/file.c    |  4 ++--
->  fs/smb/client/fscache.h |  5 +++--
->  fs/smb/client/inode.c   | 14 +++++++-------
->  fs/smb/client/smb2ops.c |  3 ++-
->  fs/smb/server/smb2pdu.c |  8 ++++----
->  5 files changed, 18 insertions(+), 16 deletions(-)
->
-> diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
-> index 0a5fe8d5314b..689058e1b6e6 100644
-> --- a/fs/smb/client/file.c
-> +++ b/fs/smb/client/file.c
-> @@ -1085,7 +1085,7 @@ int cifs_close(struct inode *inode, struct file *fi=
-le)
->                     !test_bit(CIFS_INO_CLOSE_ON_LOCK, &cinode->flags) &&
->                     dclose) {
->                         if (test_and_clear_bit(CIFS_INO_MODIFIED_ATTR, &c=
-inode->flags)) {
-> -                               inode->i_ctime =3D inode->i_mtime =3D cur=
-rent_time(inode);
-> +                               inode->i_mtime =3D inode_set_ctime_curren=
-t(inode);
->                         }
->                         spin_lock(&cinode->deferred_lock);
->                         cifs_add_deferred_close(cfile, dclose);
-> @@ -2596,7 +2596,7 @@ static int cifs_partialpagewrite(struct page *page,=
- unsigned from, unsigned to)
->                                            write_data, to - from, &offset=
-);
->                 cifsFileInfo_put(open_file);
->                 /* Does mm or vfs already set times? */
-> -               inode->i_atime =3D inode->i_mtime =3D inode->i_ctime =3D =
-current_time(inode);
-> +               inode->i_atime =3D inode->i_mtime =3D inode_set_ctime_cur=
-rent(inode);
->                 if ((bytes_written > 0) && (offset))
->                         rc =3D 0;
->                 else if (bytes_written < 0)
-> diff --git a/fs/smb/client/fscache.h b/fs/smb/client/fscache.h
-> index 173999610997..a228964bc2ce 100644
-> --- a/fs/smb/client/fscache.h
-> +++ b/fs/smb/client/fscache.h
-> @@ -50,12 +50,13 @@ void cifs_fscache_fill_coherency(struct inode *inode,
->                                  struct cifs_fscache_inode_coherency_data=
- *cd)
->  {
->         struct cifsInodeInfo *cifsi =3D CIFS_I(inode);
-> +       struct timespec64 ctime =3D inode_get_ctime(inode);
->
->         memset(cd, 0, sizeof(*cd));
->         cd->last_write_time_sec   =3D cpu_to_le64(cifsi->netfs.inode.i_mt=
-ime.tv_sec);
->         cd->last_write_time_nsec  =3D cpu_to_le32(cifsi->netfs.inode.i_mt=
-ime.tv_nsec);
-> -       cd->last_change_time_sec  =3D cpu_to_le64(cifsi->netfs.inode.i_ct=
-ime.tv_sec);
-> -       cd->last_change_time_nsec =3D cpu_to_le32(cifsi->netfs.inode.i_ct=
-ime.tv_nsec);
-> +       cd->last_change_time_sec  =3D cpu_to_le64(ctime.tv_sec);
-> +       cd->last_change_time_nsec  =3D cpu_to_le64(ctime.tv_nsec);
->  }
->
->
-> diff --git a/fs/smb/client/inode.c b/fs/smb/client/inode.c
-> index c3eeae07e139..218f03dd3f52 100644
-> --- a/fs/smb/client/inode.c
-> +++ b/fs/smb/client/inode.c
-> @@ -172,7 +172,7 @@ cifs_fattr_to_inode(struct inode *inode, struct cifs_=
-fattr *fattr)
->         else
->                 inode->i_atime =3D fattr->cf_atime;
->         inode->i_mtime =3D fattr->cf_mtime;
-> -       inode->i_ctime =3D fattr->cf_ctime;
-> +       inode_set_ctime_to_ts(inode, fattr->cf_ctime);
->         inode->i_rdev =3D fattr->cf_rdev;
->         cifs_nlink_fattr_to_inode(inode, fattr);
->         inode->i_uid =3D fattr->cf_uid;
-> @@ -1744,9 +1744,9 @@ int cifs_unlink(struct inode *dir, struct dentry *d=
-entry)
->                 cifs_inode =3D CIFS_I(inode);
->                 cifs_inode->time =3D 0;   /* will force revalidate to get=
- info
->                                            when needed */
-> -               inode->i_ctime =3D current_time(inode);
-> +               inode_set_ctime_current(inode);
->         }
-> -       dir->i_ctime =3D dir->i_mtime =3D current_time(dir);
-> +       dir->i_mtime =3D inode_set_ctime_current(dir);
->         cifs_inode =3D CIFS_I(dir);
->         CIFS_I(dir)->time =3D 0;  /* force revalidate of dir as well */
->  unlink_out:
-> @@ -2060,8 +2060,8 @@ int cifs_rmdir(struct inode *inode, struct dentry *=
-direntry)
->          */
->         cifsInode->time =3D 0;
->
-> -       d_inode(direntry)->i_ctime =3D inode->i_ctime =3D inode->i_mtime =
-=3D
-> -               current_time(inode);
-> +       inode_set_ctime_current(d_inode(direntry));
-> +       inode->i_mtime =3D inode_set_ctime_current(inode);
->
->  rmdir_exit:
->         free_dentry_path(page);
-> @@ -2267,8 +2267,8 @@ cifs_rename2(struct mnt_idmap *idmap, struct inode =
-*source_dir,
->         /* force revalidate to go get info when needed */
->         CIFS_I(source_dir)->time =3D CIFS_I(target_dir)->time =3D 0;
->
-> -       source_dir->i_ctime =3D source_dir->i_mtime =3D target_dir->i_cti=
-me =3D
-> -               target_dir->i_mtime =3D current_time(source_dir);
-> +       source_dir->i_mtime =3D target_dir->i_mtime =3D inode_set_ctime_t=
-o_ts(source_dir,
-> +                                                                        =
- inode_set_ctime_current(target_dir));
->
->  cifs_rename_exit:
->         kfree(info_buf_source);
-> diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
-> index 87abce010974..3cc3c4a71e32 100644
-> --- a/fs/smb/client/smb2ops.c
-> +++ b/fs/smb/client/smb2ops.c
-> @@ -1396,7 +1396,8 @@ smb2_close_getattr(const unsigned int xid, struct c=
-ifs_tcon *tcon,
->         if (file_inf.LastWriteTime)
->                 inode->i_mtime =3D cifs_NTtimeToUnix(file_inf.LastWriteTi=
-me);
->         if (file_inf.ChangeTime)
-> -               inode->i_ctime =3D cifs_NTtimeToUnix(file_inf.ChangeTime)=
-;
-> +               inode_set_ctime_to_ts(inode,
-> +                                     cifs_NTtimeToUnix(file_inf.ChangeTi=
-me));
->         if (file_inf.LastAccessTime)
->                 inode->i_atime =3D cifs_NTtimeToUnix(file_inf.LastAccessT=
-ime);
->
-> diff --git a/fs/smb/server/smb2pdu.c b/fs/smb/server/smb2pdu.c
-> index cf8822103f50..f9099831c8ff 100644
-> --- a/fs/smb/server/smb2pdu.c
-> +++ b/fs/smb/server/smb2pdu.c
-> @@ -4779,7 +4779,7 @@ static int find_file_posix_info(struct smb2_query_i=
-nfo_rsp *rsp,
->         file_info->LastAccessTime =3D cpu_to_le64(time);
->         time =3D ksmbd_UnixTimeToNT(inode->i_mtime);
->         file_info->LastWriteTime =3D cpu_to_le64(time);
-> -       time =3D ksmbd_UnixTimeToNT(inode->i_ctime);
-> +       time =3D ksmbd_UnixTimeToNT(inode_get_ctime(inode));
->         file_info->ChangeTime =3D cpu_to_le64(time);
->         file_info->DosAttributes =3D fp->f_ci->m_fattr;
->         file_info->Inode =3D cpu_to_le64(inode->i_ino);
-> @@ -5422,7 +5422,7 @@ int smb2_close(struct ksmbd_work *work)
->                 rsp->LastAccessTime =3D cpu_to_le64(time);
->                 time =3D ksmbd_UnixTimeToNT(inode->i_mtime);
->                 rsp->LastWriteTime =3D cpu_to_le64(time);
-> -               time =3D ksmbd_UnixTimeToNT(inode->i_ctime);
-> +               time =3D ksmbd_UnixTimeToNT(inode_get_ctime(inode));
->                 rsp->ChangeTime =3D cpu_to_le64(time);
->                 ksmbd_fd_put(work, fp);
->         } else {
-> @@ -5644,7 +5644,7 @@ static int set_file_basic_info(struct ksmbd_file *f=
-p,
->         if (file_info->ChangeTime)
->                 attrs.ia_ctime =3D ksmbd_NTtimeToUnix(file_info->ChangeTi=
-me);
->         else
-> -               attrs.ia_ctime =3D inode->i_ctime;
-> +               attrs.ia_ctime =3D inode_get_ctime(inode);
->
->         if (file_info->LastWriteTime) {
->                 attrs.ia_mtime =3D ksmbd_NTtimeToUnix(file_info->LastWrit=
-eTime);
-> @@ -5689,7 +5689,7 @@ static int set_file_basic_info(struct ksmbd_file *f=
-p,
->                         return -EACCES;
->
->                 inode_lock(inode);
-> -               inode->i_ctime =3D attrs.ia_ctime;
-> +               inode_set_ctime_to_ts(inode, attrs.ia_ctime);
->                 attrs.ia_valid &=3D ~ATTR_CTIME;
->                 rc =3D notify_change(idmap, dentry, &attrs, NULL);
->                 inode_unlock(inode);
-> --
-> 2.41.0
->
+On 7/6/2023 8:53 PM, Konrad Dybcio wrote:
+> On 6.07.2023 17:11, Rohit Agarwal wrote:
+>> On 7/6/2023 8:34 PM, Konrad Dybcio wrote:
+>>> On 6.07.2023 16:45, Rohit Agarwal wrote:
+>>>> On 7/6/2023 8:05 PM, Krzysztof Kozlowski wrote:
+>>>>> On 06/07/2023 15:30, Rohit Agarwal wrote:
+>>>>>> Add support for the pm7550ba GPIO support to the Qualcomm PMIC GPIO
+>>>>>> binding.
+>>>>>>
+>>>>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>>>>> ---
+>>>>>>     Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 3 +++
+>>>>> I doubt that all your patches here and other patchsets are v1. Otherwise
+>>>>> how did you get my Acks and Rbs? Please use proper versioning and
+>>>>> provide changelog.
+>>>>>
+>>>>> What changed here?
+>>>> Actually this is part of the original bigger series [1] that as per Bjorn's suggestion need to be broken
+>>>> down according to the subsystem/maintainer.
+>>>> Since it got broken down into multiple smaller series, I didnt include the versioning.
+>>> All of that information should be included in the cover letter, to
+>>> limit confusion both for maintainers and patch workflow tools.
+>>>
+>>> Since these patches all come from a separate series, it would be
+>>> good for you to version this one as v(BIG_SERIES_REVISION)+1 because
+>>> they've already been on LKML at least once. That would especially hold
+>>> true if this revision included any changes.
+>> Understood. Will send all the smaller series again with v2 as version with changelog.
+> v3, this was essentially a v2.
+Okay.
 
-
---=20
 Thanks,
-
-Steve
+Rohit.
+>
+> Konrad
+>> Thanks,
+>> Rohit.
+>>> Konrad
+>>>> [1] https://lore.kernel.org/all/9de424ca-271a-8ed2-5550-658a828c4ea5@quicinc.com/
+>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
+>>>>>
