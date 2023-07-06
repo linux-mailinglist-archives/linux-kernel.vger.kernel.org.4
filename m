@@ -2,145 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFAB7495C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A55F7495C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233394AbjGFGj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S233176AbjGFGkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjGFGj0 (ORCPT
+        with ESMTP id S233637AbjGFGkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:39:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F93519B;
-        Wed,  5 Jul 2023 23:39:23 -0700 (PDT)
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QxRd64ml9ztR4R;
-        Thu,  6 Jul 2023 14:36:26 +0800 (CST)
-Received: from [10.67.102.17] (10.67.102.17) by kwepemi500006.china.huawei.com
- (7.221.188.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 6 Jul
- 2023 14:39:19 +0800
-Message-ID: <302f10de-6e4a-d665-e0f1-dee113eeb9c0@hisilicon.com>
-Date:   Thu, 6 Jul 2023 14:39:18 +0800
+        Thu, 6 Jul 2023 02:40:02 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B704EE54
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:40:00 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-992f6d7c7fbso36081866b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688625599; x=1691217599;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g9Lr53a5FzMbobQOgcXx29sEThYjNb3OAfuRJxgypPU=;
+        b=Ojsi/JZ2g42ODEl29O6Pe/nx0eWsLXYUZDLKLcox6/D0JuG4qR5UQSxNxb47yDQSHU
+         4XFMl0nVmZrttdjJyzgT01Lpa8NMss+siHLDEiOmFQ8Rd0BDDLQ9vECwNsz54L34X+Cd
+         ksAlmljSp//0vJufJftwlDcMJuldV2hVMBwjwyWBFHj39WykdbUcfs9RSuAmQ5cb0YaO
+         w9W/r5P+XBRugc5H+NH8vujIz7dQBFt24FVboN7SnobBkw/KRP9TcOpbntcKW8+1UIoj
+         RzbQPCnksoaDLWd9pQleLLFTr19oGDwNoEvQEzAJ5gcyasS4YWsX1V1j51uv4mrrKXvS
+         XPTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688625599; x=1691217599;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g9Lr53a5FzMbobQOgcXx29sEThYjNb3OAfuRJxgypPU=;
+        b=FjsLePK9lJTuyAreBEVav4C4aomYB9td3ZEqcc3N9lrPnjeU95Sz9inrjBLwaV3bTg
+         8FhBilCazyu+UsFL0RcDyhBnLbzyoWl/NBSSZ0JHdV+FDavAp1R3h69edJnAm4QC0MZk
+         pHQYJBFAfdiHPOukuhn1VhbUiff6yyvuJhML8RwsMv7IKGMq41fZqCOWNAn+WcBExWNf
+         enZkImPF5xusOitNNXbFNiaOgiCM+AvNmEPKYinBXejuagOeM3VurXzmQAOFnYPXEYu7
+         kUGvsRSN57ZUBTr9mZkXnoI31Jxm6HA0ALVSbGjpF33R/I3cSKypl1c/TL+cNU5HeV/k
+         Xgug==
+X-Gm-Message-State: ABy/qLZmRnE3UkoskndMBhffUdLABHtvrXBnJSQ2BrPacn8WX087uzCE
+        YoBZR1b90196ovnhVwaaRmQlxg==
+X-Google-Smtp-Source: APBJJlFe3mJbYP5HOYEAflyYq1r1hjT3H2KqDuSD93Sbb4Ats7EOFA2VltdFwHu3Zsd0znCxRd1y2g==
+X-Received: by 2002:a17:906:2a48:b0:988:c3f9:3ad6 with SMTP id k8-20020a1709062a4800b00988c3f93ad6mr540685eje.42.1688625599228;
+        Wed, 05 Jul 2023 23:39:59 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id r11-20020a17090638cb00b00993a508b818sm399619ejd.1.2023.07.05.23.39.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 23:39:58 -0700 (PDT)
+Message-ID: <a450e2e8-307d-49e9-d76d-de397b801a96@linaro.org>
+Date:   Thu, 6 Jul 2023 08:39:54 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v2 for-next] RDMA/core: Get IB width and speed from netdev
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for PCIe
 Content-Language: en-US
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     <jgg@nvidia.com>, <linux-rdma@vger.kernel.org>,
-        <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>
-References: <20230603063833.541682-1-huangjunxian6@hisilicon.com>
- <20230611174605.GG12152@unreal>
- <1b11b9e9-a729-0d61-52e3-6bcf132ca356@hisilicon.com>
- <20230628050019.GC23952@unreal>
- <53e8025d-803d-f6c5-b853-8352163d9a2e@hisilicon.com>
- <20230705071205.GH6455@unreal>
-From:   Junxian Huang <huangjunxian6@hisilicon.com>
-In-Reply-To: <20230705071205.GH6455@unreal>
-Content-Type: text/plain; charset="UTF-8"
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mrinmay Sarkar <quic_msarkar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        konrad.dybcio@linaro.org, quic_shazhuss@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_ramkri@quicinc.com,
+        quic_nayiluri@quicinc.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
+ <20230705084606.GF11854@thinkpad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230705084606.GF11854@thinkpad>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.17]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500006.china.huawei.com (7.221.188.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/7/5 15:12, Leon Romanovsky wrote:
-> On Wed, Jul 05, 2023 at 11:05:50AM +0800, Junxian Huang wrote:
+On 05/07/2023 10:46, Manivannan Sadhasivam wrote:
+> On Wed, Jul 05, 2023 at 01:47:05PM +0530, Mrinmay Sarkar wrote:
+>> Update the relavent DT bindings for PCIe, add new config to the phy
+>> driver add pcie and phy nodes to the .dtsi file and enable then in 
+>> board .dts file for the sa8775p-ride platform.
 >>
->>
->> On 2023/6/28 13:00, Leon Romanovsky wrote:
->>> On Mon, Jun 19, 2023 at 02:20:54PM +0800, Junxian Huang wrote:
->>>>
->>>>
->>>> On 2023/6/12 1:46, Leon Romanovsky wrote:
->>>>> On Sat, Jun 03, 2023 at 02:38:33PM +0800, Junxian Huang wrote:
->>>>>> From: Haoyue Xu <xuhaoyue1@hisilicon.com>
->>>>>>
->>>>>> Previously, there was no way to query the number of lanes for a network
->>>>>> card, so the same netdev_speed would result in a fixed pair of width and
->>>>>> speed. As network card specifications become more diverse, such fixed
->>>>>> mode is no longer suitable, so a method is needed to obtain the correct
->>>>>> width and speed based on the number of lanes.
->>>>>
->>>>> I'm sorry but I didn't understand the problem statement. Can you please
->>>>> provide an example of configuration that will give different results 
->>>>> before this patch and after?
->>>>>
->>>>
->>>> I'll give examples with 20G and 200G netdevs respectively.
->>>>
->>>> 20G:
->>>> Before this patch, regardless of the actual number of lanes, the width and
->>>> speed displayed in ibv_devinfo would be always fixed:
->>>> 	active_width: 4X
->>>> 	active_speed: 5 Gbps
->>>> After this patch, there will be different combinations of width and speed
->>>> according to the number of lanes. For example, for a 20G netdev whose number
->>>> of lanes is 2, the width and speed displayed in ibv_devinfo will be:
->>>> 	active_width: 2X
->>>> 	active_speed: 10 Gbps
->>>>
->>>> 200G:
->>>> Before this patch, netdevs with netdev_speed more than 40G cannot get a right
->>>> width and speed in ibv_devinfo. Only the default result would be displayed:
->>>> 	active_width: 4X
->>>> 	active_speed: 25 Gbps
->>>> After this patch, taking an example with 4 lanes, the displayed results will be:
->>>> 	active_width: 4X
->>>> 	active_speed: 50 Gbps
->>>>
->>>
->>> <...>
->>>
->>>>>> +	cap_link_lanes_supported = netdev->ethtool_ops->cap_link_lanes_supported;
->>>>>>  	rtnl_unlock();
->>>>>>  
->>>>>>  	dev_put(netdev);
->>>>>>  
->>>>>>  	if (!rc && lksettings.base.speed != (u32)SPEED_UNKNOWN) {
->>>>>>  		netdev_speed = lksettings.base.speed;
->>>>>> +		if (cap_link_lanes_supported && lksettings.lanes) {
->>>>>
->>>>> According to the documentation cap_link_lanes_supported defines if
->>>>> number of lanes can be supplied by user and I would expect from
->>>>> __ethtool_get_link_ksettings() to get right numbers after it was
->>>>> changed.
->>>
->>> No, I'm saying that cap_link_lanes_supported is variable which only says
->>> if number of lanes can be changed and __ethtool_get_link_ksettings()
->>> will return right number of lanes every time it is called without need
->>> to call to ib_get_width_and_speed() again.
->>>
->>> Thanks
->>>
->>
->> These two functions have different purposes.
->>
->> The number of lanes is indeed obtained from __ethtool_get_link_ksettings(),
->> and ib_get_width_and_speed() converts the number of lanes into ib_width and
->> ib_speed, which are the output of ib_get_eth_speed().
+>> Mrinmay Sarkar (6):
+>>   dt-bindings: PCI: qcom: Add sa8775p compatible
+>>   dt-bindings: phy: qcom,qmp: Add sa8775p QMP PCIe PHY
+>>   PCI: qcom: Add support for sa8775p SoC
+>>   phy: qcom-qmp-pcie: add support for sa8775p
+>>   arm64: dts: qcom: sa8775p: Add pcie0 and pcie1 nodes
+>>   arm64: dts: qcom: sa8775p-ride: enable pcie nodes
 > 
-> Great, so why do you need to rely on cap_link_lanes_supported in ib_get_width_and_speed()?
-> 
-> Thanks
+> Please note that the dts patches should come before driver patches.
+>
 
-Ah, I see what you mean. If cap_link_lanes_supported is false, lksettings.lanes will become 0,
-and ib_get_width_and_speed() won't be called. Therefore, cap_link_lanes_supported is redundant.
+Why? DTS is always independent thus usually put at the end of patchset
+or better separate. It is the first time I hear that DTS should be
+before driver.
 
-I'll fix it in v3. Thanks.
+Best regards,
+Krzysztof
 
-Junxian
