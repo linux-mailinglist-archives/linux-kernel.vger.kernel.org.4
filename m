@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941FC749C2F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75640749C38
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbjGFMog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S232252AbjGFMol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjGFMo2 (ORCPT
+        with ESMTP id S229556AbjGFMoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:44:28 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8E71BF6;
-        Thu,  6 Jul 2023 05:43:56 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so83382266b.2;
-        Thu, 06 Jul 2023 05:43:56 -0700 (PDT)
+        Thu, 6 Jul 2023 08:44:32 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A111996;
+        Thu,  6 Jul 2023 05:43:59 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98df3dea907so82666566b.3;
+        Thu, 06 Jul 2023 05:43:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688647431; x=1691239431;
+        d=gmail.com; s=20221208; t=1688647432; x=1691239432;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y6EAhfoDoZ7HkHH1SwMxSyZ3vEbeVt8JnBzyWyltbvA=;
-        b=SHIlpUmdIA1NPXZQytetO4r5UBIkepMRPvLol3I5uQMdv2k0o0Gs4ux3QWny4mAzJB
-         mXiqEAuuKCsmvwNuj6b3Pr8SR4hjdMLJi1eM8RtceGZqTTXsIO8U82Yy8gs8CkVGCwcf
-         zzcLVmREnciYtEyGBhcetIuMInUSpMbePHUNqI9ezscnm5GndzeluRZX8Vqhne26uAEs
-         WewKsdCHEbJRnaMepFxmYb7J7s5Mdi9tA0M9QCCK9xmB1frf83PD6BNTEMaiN3+Wx93K
-         VzkDCkPwfAUGnxit3RctHRmA1eMJa6qbWuJbGlTetk21AE/wmMwIRk5MDDdh8kJvl5Wc
-         vY0Q==
+        bh=flUpj1SL0IxzkEf+wAIgzyyLAEa29IzZhs+iHwXJtAI=;
+        b=Dt0Pc/Wh6L50oeuVSkYferwE8MxWg78g9MPMvgZ8qPou6i0gaNdfGqu13cWOVWefya
+         vT7ZKHC9vwWVWJmS7syaN9+6qlIRrMaFTPVLdvSwHAxDjrqZLFD0+wQVygVwEYevYCDQ
+         9Hwjd7GqtH9a0c/nb7Q9kjVbxoPxKTOocaxq6kmJlIBGLdJcozryEk8h4r/w78IBGC1Z
+         OXZFKuWgC2MoxWbRseP8FZQE8Ck8QDEC18TtIR65Q6fWovBczpP89o0CyBseSEy7icbD
+         uo/J1qub2U1ACQrnouaPR+vINLU+v21PgJL9bbxNBEDkceaxwU8gNcjwDgguQwwQTN7+
+         EgUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688647431; x=1691239431;
+        d=1e100.net; s=20221208; t=1688647432; x=1691239432;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y6EAhfoDoZ7HkHH1SwMxSyZ3vEbeVt8JnBzyWyltbvA=;
-        b=ZfpBW7WQzjhKNeqtGstZZaRaARMH75Q3PIXaZsus/fGSlztizY4r6Ts8oSxvOhP4ze
-         zoLYxdAGMXli7NtihL23b4AmdF2lpI/GsuRZdcFCj4Wu+9JJ17Ikzl5meycJ/Y7poxGT
-         7csP4umPfIFu99VhxJL57B8rMZwbTQuBmUEFDElUZSv99YRDlZIF5tpqw4PUSLx8FWPv
-         cJdJlZAZyAD/Hwa1XGhnjVMeB1iDNIt+1tjVNafMi1c1FLhJ+s3ImddkZDdLdRJDBMux
-         gyifkQ7tav2T1TXB2pNZvftOlFZhw4IKJkXyqpSvYHozb85SKk2LN28HKnBMMGe1zIvR
-         B4Qg==
-X-Gm-Message-State: ABy/qLZu0Up5eJfp8kL0rHLYMJWnUzAm2Q0VsxMvXU5g3L8AvLqjit/z
-        iplhbkH0FQOekz85xmDitJc=
-X-Google-Smtp-Source: APBJJlHLASABTYt85CbYVDtNv0qEPcoks80q3a2BO9Q+bkYGR0gPDmi58Sh5pCOPjPGMKuY3OGXRYw==
-X-Received: by 2002:a17:906:101:b0:987:16f5:692f with SMTP id 1-20020a170906010100b0098716f5692fmr1252897eje.44.1688647431500;
-        Thu, 06 Jul 2023 05:43:51 -0700 (PDT)
+        bh=flUpj1SL0IxzkEf+wAIgzyyLAEa29IzZhs+iHwXJtAI=;
+        b=IPLjmhZpORrfY8oE/gMPLgEIOC0bpxn+cy1dNTDzw05WXZN3+hZ8a01Cxkr0R0JwfK
+         3KFk05c999iBJMUJlZreBLQcQGj3kSdx42RJHTc+zuIfhzzJ8rx4Erl1aQMvZvbSZ6DG
+         oIaMR2Xxr4Z/GSdxxwXf4vy027iFKz76rQF7PpIaJYTVYVYm4NPim6nA8ckd5APhd02E
+         ExahlSdKbX0XwR23RZ1P5tV1IpJjo9vml2RcwUil7qBgCTHaI9tj/n3qWJw+ZblsUgoY
+         NKuIj2teyGsMcy4AFySVokEmMkSVgRg8bMSxiCqVdEDpt2cb9V5SKI86lrCMrTWpoQsO
+         WpWw==
+X-Gm-Message-State: ABy/qLYrvY+wbhRjtFYN+XEsrcfEqAKsucrhfSUfVUu45LKdxsFzxkzc
+        lxJpVatqkOD9yabgXye1Sgi94e0K3rP0wA==
+X-Google-Smtp-Source: APBJJlEw6L1FxYH1BSPRmdIw45CdWdYwn2wBSFJahG6iqKqyaL3El1h7gHyq5sH/ONb8UTtVUqdgVA==
+X-Received: by 2002:a17:906:8052:b0:992:9d41:875b with SMTP id x18-20020a170906805200b009929d41875bmr1254648ejw.32.1688647432412;
+        Thu, 06 Jul 2023 05:43:52 -0700 (PDT)
 Received: from david-ryuzu.fritz.box (ipbcc3a9b0.dynamic.kabel-deutschland.de. [188.195.169.176])
-        by smtp.googlemail.com with ESMTPSA id w14-20020a170906b18e00b00992ca779f42sm775915ejy.97.2023.07.06.05.43.50
+        by smtp.googlemail.com with ESMTPSA id w14-20020a170906b18e00b00992ca779f42sm775915ejy.97.2023.07.06.05.43.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 05:43:51 -0700 (PDT)
+        Thu, 06 Jul 2023 05:43:52 -0700 (PDT)
 From:   David Wronek <davidwronek@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         David Wronek <davidwronek@gmail.com>
-Subject: [PATCH v2 1/7] clk: qcom: gcc-sc7180: Fix up gcc_sdcc2_apps_clk_src
-Date:   Thu,  6 Jul 2023 14:40:20 +0200
-Message-ID: <20230706124339.134272-2-davidwronek@gmail.com>
+Subject: [PATCH v2 2/7] dt-bindings: arm: qcom,ids: Add SoC ID for SM7125
+Date:   Thu,  6 Jul 2023 14:40:21 +0200
+Message-ID: <20230706124339.134272-3-davidwronek@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230706124339.134272-1-davidwronek@gmail.com>
 References: <20230706124339.134272-1-davidwronek@gmail.com>
@@ -82,27 +82,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set .flags = CLK_OPS_PARENT_ENABLE to fix "gcc_sdcc2_apps_clk_src: rcg
-didn't update its configuration" error.
+Add the SoC ID for Qualcomm SM7125.
 
-Fixes: 17269568f726 ("clk: qcom: Add Global Clock controller (GCC) driver for SC7180")
 Signed-off-by: David Wronek <davidwronek@gmail.com>
 ---
- drivers/clk/qcom/gcc-sc7180.c | 1 +
+ include/dt-bindings/arm/qcom,ids.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
-index cef3c77564cf..49f36e1df4fa 100644
---- a/drivers/clk/qcom/gcc-sc7180.c
-+++ b/drivers/clk/qcom/gcc-sc7180.c
-@@ -651,6 +651,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
- 		.name = "gcc_sdcc2_apps_clk_src",
- 		.parent_data = gcc_parent_data_5,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_5),
-+		.flags = CLK_OPS_PARENT_ENABLE,
- 		.ops = &clk_rcg2_floor_ops,
- 	},
- };
+diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+index bcbe9ee2cdaf..6a8dd2e42b24 100644
+--- a/include/dt-bindings/arm/qcom,ids.h
++++ b/include/dt-bindings/arm/qcom,ids.h
+@@ -215,6 +215,7 @@
+ #define QCOM_ID_SDA429W			437
+ #define QCOM_ID_SM8350			439
+ #define QCOM_ID_QCM2290			441
++#define QCOM_ID_SM7125			443
+ #define QCOM_ID_SM6115			444
+ #define QCOM_ID_IPQ5010			446
+ #define QCOM_ID_IPQ5018			447
 -- 
 2.41.0
 
