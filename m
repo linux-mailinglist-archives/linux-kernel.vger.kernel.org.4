@@ -2,70 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FA174A450
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA2874A457
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbjGFTSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S232334AbjGFTV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjGFTSK (ORCPT
+        with ESMTP id S229802AbjGFTVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:18:10 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A3B1BDB;
-        Thu,  6 Jul 2023 12:18:09 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so16921531fa.1;
-        Thu, 06 Jul 2023 12:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688671088; x=1691263088;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KJ8xlnwwG75DABomjaI7QqlxiiSgIPWY3Gi9RsGEoCA=;
-        b=DncxFNWwCFbdrSjJxSYqFDPVWaVajWn9H0YCGO+yFZy2UwIoz/6ypnWPxnvj6XXykn
-         moJU4kiCO9a8LILaoo7QJ098RH6E1yYHsxR8uEuqwEyFaP82tLEMoAb805Hi8GO0CM92
-         ZYbrDTiVvD6Tb+XxK4YMP33xMVvWU69STULo7vLbNLwRwVlQR9AjO8SZYYkjO0KZy6jl
-         MwMXOMi7PY5V32Gv70CG58WrQPKuRH3WwJxf3zqsoy+EFiAmA6ETlBNAjCf90SS8g/S6
-         Hnjw2g/91L5YUQivLPJrzBeC6NRXgEjNJnhvKkdYhGn0muy2d8Ub9EYvN9rEHa0fz58N
-         JF2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688671088; x=1691263088;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KJ8xlnwwG75DABomjaI7QqlxiiSgIPWY3Gi9RsGEoCA=;
-        b=Jlxm3RVnrfGtpjlImKFRERcNVdS1DJlIEiznyQi1NkNuz6cF0mK2bR4xUxZdKgTh4f
-         fKFMNEkMN86fjh/zTgs1mj3xs1DLIhlJ21gR1L5eJ1bEn+Wkuy69OJjtuJVv/Af4sFkr
-         Ps+DCRGrAz7DOTeexN7pnqGJVaj7xOe0YOUN/UxDZIMh5zldyZ0IFEezd3ls3yb51EZH
-         y62/NQqY7tv2EY37ZVNKswmXJecirp/nOHMwi4q/brqM+vhud0NN7vk+cVsCvi9PFaAO
-         K6FV/9Xb/uCCj6OOn/jQhqO2VSoy4oi+H8AUCpfylnnK4+L7i/rGLE52pbx0fJV/1wBA
-         lvvw==
-X-Gm-Message-State: ABy/qLYDEyNlXAtCBidlkitWPYEETgGqMRaRn3x+OXX5UMYaKuMGfIzI
-        RPwn0iCCgeyJmYqTglxURrBkPzjhwGwHZ3ncS5k=
-X-Google-Smtp-Source: APBJJlFSrfGsuI1nlxg860DIpmq2c4FEKlks4TgweGqMuykwf8uclJG9TycE6f6WQknLrbdfL+zAc6WsJuFW0mJ+y0w=
-X-Received: by 2002:a2e:b681:0:b0:2b6:cad9:75ba with SMTP id
- l1-20020a2eb681000000b002b6cad975bamr2096948ljo.29.1688671087635; Thu, 06 Jul
- 2023 12:18:07 -0700 (PDT)
+        Thu, 6 Jul 2023 15:21:25 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D5C1BE9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=1jKj
+        8xlJjrL7Y6d+UIx7pLRi8e65njUFajIyuSqjsRI=; b=A49pKfCR1YwszuZ2aVOY
+        lpewxm+/2nHsoMN8RiYmTNUKvi3ssR93nI4Ktme3NLiJ6AWQ+zcmiuc5cVa5nNyk
+        +BNAN3LHJB3IoymjMSWhskpF/+4EAaFcypPt6J8HnI9kq4wpbTbzyWXu+DETtST4
+        CLM60gSlcME/k/5Ws3/MOU3P099sAf9U6MIBG+5AuhczY2xnOVI97fnDZh0Jx9ua
+        K467cEAKO+0y3t38G5QCELzhvPRLWzwxfJrRRPpkDm7lP1KPPr2/LkmtQX40k2uv
+        0FNUzrejA6dW4QYbS/8V5go0zndzVBJuVsuuSTyTsVdnB1GY1QNYk8BiCILDqQv6
+        cw==
+Received: (qmail 2037485 invoked from network); 6 Jul 2023 21:21:18 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2023 21:21:18 +0200
+X-UD-Smtp-Session: l3s3148p1@kch4a9b/Lt0gAQnoAGA2AJvT6+/P6uKA
+Date:   Thu, 6 Jul 2023 21:21:14 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, Andi Shyti <andi.shyti@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] i2c: sh_mobile: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZKcUKv8isBzgPRFk@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yangtao Li <frank.li@vivo.com>, Andi Shyti <andi.shyti@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230705135159.33327-1-frank.li@vivo.com>
+ <20230705135159.33327-8-frank.li@vivo.com>
+ <CAMuHMdXCibwJ0jBYu3Cr3-hW-GykQ7UANeKo=qjJAbQTtmah3A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230702210138.226929-1-valentin.david@gmail.com> <20230706191035.736632-1-valentin.david@gmail.com>
-In-Reply-To: <20230706191035.736632-1-valentin.david@gmail.com>
-From:   Valentin David <valentin.david@gmail.com>
-Date:   Thu, 6 Jul 2023 21:17:56 +0200
-Message-ID: <CAM06Q5T7LtyenM05gY0BcyFeGqGbwTLPaL70Fv6pT9cAChpmSg@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: btusb: Add device 0489:e0f5 as MT7922 device
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7wyTI6ITA1MNV4aj"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXCibwJ0jBYu3Cr3-hW-GykQ7UANeKo=qjJAbQTtmah3A@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Forget about this patch, while rebasing I saw someone else had the same fix.
+
+--7wyTI6ITA1MNV4aj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> Please try to at least compile-test your patches before submitting them.
+
+Yes and no. Not "please try" but "please do". Rejecting this series
+until it has been build tested.
+
+
+--7wyTI6ITA1MNV4aj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSnFCcACgkQFA3kzBSg
+KbYxbhAAoPURiCuIwLEUFVbfsE9pd24PMV3hNuDlovUi6FXkUOWyNq65N1lgFWIY
+SVF5Rgb9Cb5LWu5sNW9eX0Mzyt3vvuzfZovxQc3z1smduT3x7DkgWVhhOzpHzwAr
+I6TewQ5x2jI28N2HNc8q+Ccvx7RoBasXrD3hM3OFL7N8di9gJI9EU/755Zisva1v
+vPPore1ehZSqQPf2TA/o/NpjueWb60wPGhgjlOseYPn1uCpvSCutT2v/jkp+Qni0
+QuPNOeAZYftmJJ5IzYEng5u5ML/WOgxkwL/dgvB0SV7QBxRg7r0QA8lLPDYYJp9o
+Xi6XmygbWt9bMHDKduwDRw6b7wmP0V+v7LuGMbWlsJbRbRSA4TjxG8jN8Sf4Um+u
+fDJWomC0qsblsSWJBonjdeHCTexQ/U/Gra01UZaxjzFcuakAsbA/mmg6vSutkp6z
+p4Ifc7/fJXXQFfwub6ls7Oe0GnHbLOyQBFgI5X92cn1bdwI8MRrgLh5rCZ+KCKz5
+z/HQznndsRdjR9pboOU/5NKVYEy6e2y8veTDou1zGaZSgc5y3F+Pwmj1DuoSWsV5
+q4RWqF9d0eSGm7D0F0D/gjI1Ml4yKP+3qe/R+dCFE9ocZf6hb/1fbBnqkApD5Iis
+HPf9yAH7JljaodIEZ8JMczKOlIQjkUcWQ91DsfTM3LjzaW26vyQ=
+=kUOf
+-----END PGP SIGNATURE-----
+
+--7wyTI6ITA1MNV4aj--
