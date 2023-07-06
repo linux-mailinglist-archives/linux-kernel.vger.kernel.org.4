@@ -2,226 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF54749764
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100C774976D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjGFIVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S231404AbjGFIYT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 04:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjGFIVG (ORCPT
+        with ESMTP id S229519AbjGFIYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:21:06 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A655171A;
-        Thu,  6 Jul 2023 01:21:02 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9DE245C007E;
-        Thu,  6 Jul 2023 04:21:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 06 Jul 2023 04:21:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1688631661; x=1688718061; bh=55VJm6qtHlPp+fjYk7l6T/ue2
-        9vLnD16rjDAkrZPCsQ=; b=miCAnMlkETGEKIiXQn1XzT5/4isbkBlG74gQNg1KR
-        /4YDilL3K5hfcwIMeEDRE0V3Qvsntxu1kxz8iNbk0/LJ/bNahC5uaEK1FF893qkm
-        bHXmbL7xtpiwoiLwA8ZA/lEQtDFTwz/BypxWsmT2yRn3PaPHsSfuWIBsgeSAknLe
-        oNaYwC3Rlm+I8zojHCaEScHwMkOKyVjV7/w/XLxpCEkW31QcY/R5A76mbiWP/svp
-        mbCA0B/a9wEkPhKs7ajBM5MR8dTVwFzH6MP5JvYWcfxw4oNLjHAJcYpy+58amwaA
-        4mmznDbyVxLYgJpuvci4ppnoA3bcSJ3LC1hkbDgqfH4zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1688631661; x=1688718061; bh=55VJm6qtHlPp+fjYk7l6T/ue29vLnD16rjD
-        AkrZPCsQ=; b=pV+kskFaHzqpfS59bdwLgORcyVGSm0aygpOezNUt3cs9gHbazvL
-        HZspQrorWeNDExKSXpzk5Nl7ch6mDdi/sqc1xNpXIDiZuYvOSVEaxJ6MOwX71p6z
-        ax8lbME3R/dY3I1beJMD1KqYfw1xrf7RxlSkUiUD/eyPt1LXfNTL1Jx32G8Grj2B
-        DyMJnozHNgArbdzDr1Bq2Vut2WA/Z3wmNQduML8I2Dn3Uuy8f5gtr9FXNFd86vbg
-        VHCa5N3KtSoEp4zku6wlAeR5Hz2+lMxn04EnI7jIWUxSJgpoo6apV3x65KOtuxue
-        Q7e6tkR9y5fYxrvjWU0+How9qUFYvLXeZFA==
-X-ME-Sender: <xms:bHmmZCwiwxiLK1X9WZoBZcjvpP7VuoNALcRaZ4XDQJYI5wzxjG6RWA>
-    <xme:bHmmZOQwT8zk7fMlguW5SrjroqnyVWj4jmikTPLQGfhA_X98fUHTjNAClRfPwgel8
-    0UcwgRtu4cHteTk8Qo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelgddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:bHmmZEUBNeWSsnViheE8zbA-w2tm8qHio_afBwMGEyYN3U5SxPfCQg>
-    <xmx:bHmmZIj0NH2ZxZSkXD-wiIh6voAZh1r9r88nL5GPvCfgQMGM_BgaTA>
-    <xmx:bHmmZEAS4nzeHTWHe7PTeu5zU3yp1tKhiiM2jI47odFhPt7xuU-S1Q>
-    <xmx:bXmmZHMnJvvm4kyv8BoCnWwx6g1DybRzT2A9ux0zr92FDeiIYN5ZJg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D0BDFB60086; Thu,  6 Jul 2023 04:21:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <9a23db59-1f53-4a24-87d7-a59293972a29@app.fastmail.com>
-Date:   Thu, 06 Jul 2023 10:20:39 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Sohil Mehta" <sohil.mehta@intel.com>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Subject: [GIT PULL] asm-generic updates for 6.5
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 6 Jul 2023 04:24:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397CE130
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:24:16 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qHKHH-0004UP-82; Thu, 06 Jul 2023 10:23:51 +0200
+Message-ID: <0125c54fd1617f3f945bc3f4bbef5b914b701c24.camel@pengutronix.de>
+Subject: Re: [PATCH 1/1] arm64: dts: imx8mp: remove arm, primecell-periphid
+ at etm nodes
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        imx@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
+        Adam Ford <aford173@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Frank Li <Frank.Li@nxp.com>
+Date:   Thu, 06 Jul 2023 10:23:48 +0200
+In-Reply-To: <9405224.NyiUUSuA9g@steina-w>
+References: <20230705205954.4159781-1-Frank.Li@nxp.com>
+         <9405224.NyiUUSuA9g@steina-w>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
+Hi Alexander,
 
-  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
+Am Donnerstag, dem 06.07.2023 um 07:06 +0200 schrieb Alexander Stein:
+> Hi Frank,
+> 
+> Am Mittwoch, 5. Juli 2023, 22:59:53 CEST schrieb Frank Li:
+> > The reg size of etm nodes is incorrectly set to 64k instead of 4k. This
+> > leads to a crash when calling amba_read_periphid().  After corrected reg
+> > size, amba_read_periphid() retrieve the correct periphid.
+> > arm,primecell-periphid were removed from the etm nodes.
+> 
+> So this means the reference manual is wrong here? It clearly states the size 
+> is 64kiB. Reference Manual i.MX8MP Rev 1. 06/2021
+> On a side note: Is imx8mq affected by this as well? The DAP memory table lists 
+> similar sizes in the RM .
+> 
+Note that the 64K MMIO space per device is really an alignment thing.
+It's a recommendation from ARM to allow individual device MMIO regions
+to be mapped on kernels with 64K page size. Most of the time the real
+MMIO space occupied by the device is actually much smaller than 64K.
 
-are available in the Git repository at:
+Regards,
+Lucas
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.5
+> Best regards,
+> Alexander
+> 
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi index
+> > cc406bb338fe..e0ca82ff6f15 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > @@ -306,8 +306,7 @@ soc: soc@0 {
+> > 
+> >  		etm0: etm@28440000 {
+> >  			compatible = "arm,coresight-etm4x", 
+> "arm,primecell";
+> > -			reg = <0x28440000 0x10000>;
+> > -			arm,primecell-periphid = <0xbb95d>;
+> > +			reg = <0x28440000 0x1000>;
+> >  			cpu = <&A53_0>;
+> >  			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> >  			clock-names = "apb_pclk";
+> > @@ -323,8 +322,7 @@ etm0_out_port: endpoint {
+> > 
+> >  		etm1: etm@28540000 {
+> >  			compatible = "arm,coresight-etm4x", 
+> "arm,primecell";
+> > -			reg = <0x28540000 0x10000>;
+> > -			arm,primecell-periphid = <0xbb95d>;
+> > +			reg = <0x28540000 0x1000>;
+> >  			cpu = <&A53_1>;
+> >  			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> >  			clock-names = "apb_pclk";
+> > @@ -340,8 +338,7 @@ etm1_out_port: endpoint {
+> > 
+> >  		etm2: etm@28640000 {
+> >  			compatible = "arm,coresight-etm4x", 
+> "arm,primecell";
+> > -			reg = <0x28640000 0x10000>;
+> > -			arm,primecell-periphid = <0xbb95d>;
+> > +			reg = <0x28640000 0x1000>;
+> >  			cpu = <&A53_2>;
+> >  			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> >  			clock-names = "apb_pclk";
+> > @@ -357,8 +354,7 @@ etm2_out_port: endpoint {
+> > 
+> >  		etm3: etm@28740000 {
+> >  			compatible = "arm,coresight-etm4x", 
+> "arm,primecell";
+> > -			reg = <0x28740000 0x10000>;
+> > -			arm,primecell-periphid = <0xbb95d>;
+> > +			reg = <0x28740000 0x1000>;
+> >  			cpu = <&A53_3>;
+> >  			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> >  			clock-names = "apb_pclk";
+> 
+> 
 
-for you to fetch changes up to 4dd595c34c4bb22c16a76206a18c13e4e194335d:
-
-  syscalls: Remove file path comments from headers (2023-06-22 17:10:09 +0200)
-
-----------------------------------------------------------------
-asm-generic updates for 6.5
-
-These are cleanups for architecture specific header files:
-
- - the comments in include/linux/syscalls.h have gone out of sync
-   and are really pointless, so these get removed
-
- - The asm/bitsperlong.h header no longer needs to be architecture
-   specific on modern compilers, so use a generic version for newer
-   architectures that use new enough userspace compilers
-
- - A cleanup for virt_to_pfn/virt_to_bus to have proper type
-   checking, forcing the use of pointers
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      Merge tag 'virt-to-pfn-for-arch-v6.5-2' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator into asm-generic
-
-Linus Walleij (12):
-      fs/proc/kcore.c: Pass a pointer to virt_addr_valid()
-      m68k: Pass a pointer to virt_to_pfn() virt_to_page()
-      ARC: init: Pass a pointer to virt_to_pfn() in init
-      riscv: mm: init: Pass a pointer to virt_to_page()
-      cifs: Pass a pointer to virt_to_page()
-      cifs: Pass a pointer to virt_to_page() in cifsglob
-      netfs: Pass a pointer to virt_to_page()
-      xen/netback: Pass (void *) to virt_to_page()
-      asm-generic/page.h: Make pfn accessors static inlines
-      ARM: mm: Make virt_to_pfn() a static inline
-      arm64: memory: Make virt_to_pfn() a static inline
-      m68k/mm: Make pfn accessors static inlines
-
-Sohil Mehta (1):
-      syscalls: Remove file path comments from headers
-
-Tiezhu Yang (2):
-      asm-generic: Unify uapi bitsperlong.h for arm64, riscv and loongarch
-      tools arch: Remove uapi bitsperlong.h of hexagon and microblaze
-
- arch/arc/mm/init.c                                 |   2 +-
- arch/arm/common/sharpsl_param.c                    |   2 +-
- arch/arm/include/asm/delay.h                       |   2 +-
- arch/arm/include/asm/io.h                          |   2 +-
- arch/arm/include/asm/memory.h                      |  17 ++-
- arch/arm/include/asm/page.h                        |   4 +-
- arch/arm/include/asm/pgtable.h                     |   2 +-
- arch/arm/include/asm/proc-fns.h                    |   2 -
- arch/arm/include/asm/sparsemem.h                   |   2 +-
- arch/arm/include/asm/uaccess-asm.h                 |   2 +-
- arch/arm/include/asm/uaccess.h                     |   2 +-
- arch/arm/kernel/asm-offsets.c                      |   2 +-
- arch/arm/kernel/entry-armv.S                       |   2 +-
- arch/arm/kernel/entry-common.S                     |   2 +-
- arch/arm/kernel/entry-v7m.S                        |   2 +-
- arch/arm/kernel/head-nommu.S                       |   3 +-
- arch/arm/kernel/head.S                             |   2 +-
- arch/arm/kernel/hibernate.c                        |   2 +-
- arch/arm/kernel/suspend.c                          |   2 +-
- arch/arm/kernel/tcm.c                              |   2 +-
- arch/arm/kernel/vmlinux-xip.lds.S                  |   3 +-
- arch/arm/kernel/vmlinux.lds.S                      |   3 +-
- arch/arm/mach-berlin/platsmp.c                     |   2 +-
- arch/arm/mach-keystone/keystone.c                  |   2 +-
- arch/arm/mach-omap2/sleep33xx.S                    |   2 +-
- arch/arm/mach-omap2/sleep43xx.S                    |   2 +-
- arch/arm/mach-omap2/sleep44xx.S                    |   2 +-
- arch/arm/mach-pxa/gumstix.c                        |   2 +-
- arch/arm/mach-rockchip/sleep.S                     |   2 +-
- arch/arm/mach-sa1100/pm.c                          |   2 +-
- arch/arm/mach-shmobile/headsmp-scu.S               |   2 +-
- arch/arm/mach-shmobile/headsmp.S                   |   2 +-
- arch/arm/mach-socfpga/headsmp.S                    |   2 +-
- arch/arm/mach-spear/spear.h                        |   2 +-
- arch/arm/mm/cache-fa.S                             |   1 -
- arch/arm/mm/cache-v4wb.S                           |   1 -
- arch/arm/mm/dma-mapping.c                          |   2 +-
- arch/arm/mm/dump.c                                 |   2 +-
- arch/arm/mm/init.c                                 |   2 +-
- arch/arm/mm/kasan_init.c                           |   1 -
- arch/arm/mm/mmu.c                                  |   2 +-
- arch/arm/mm/physaddr.c                             |   2 +-
- arch/arm/mm/pmsa-v8.c                              |   2 +-
- arch/arm/mm/proc-v7.S                              |   2 +-
- arch/arm/mm/proc-v7m.S                             |   2 +-
- arch/arm/mm/pv-fixup-asm.S                         |   2 +-
- arch/arm64/include/asm/memory.h                    |   9 +-
- arch/arm64/include/uapi/asm/bitsperlong.h          |  24 ----
- arch/loongarch/include/uapi/asm/bitsperlong.h      |   9 --
- arch/m68k/include/asm/mcf_pgtable.h                |   3 +-
- arch/m68k/include/asm/page_mm.h                    |  11 +-
- arch/m68k/include/asm/page_no.h                    |  11 +-
- arch/m68k/include/asm/sun3_pgtable.h               |   4 +-
- arch/m68k/mm/mcfmmu.c                              |   3 +-
- arch/m68k/mm/motorola.c                            |   4 +-
- arch/m68k/mm/sun3mmu.c                             |   2 +-
- arch/m68k/sun3/dvma.c                              |   2 +-
- arch/m68k/sun3x/dvma.c                             |   2 +-
- arch/riscv/include/uapi/asm/bitsperlong.h          |  14 ---
- arch/riscv/mm/init.c                               |   4 +-
- drivers/memory/ti-emif-sram-pm.S                   |   2 +-
- drivers/net/xen-netback/netback.c                  |   2 +-
- fs/netfs/iterator.c                                |   2 +-
- fs/proc/kcore.c                                    |   2 +-
- fs/smb/client/cifsglob.h                           |   2 +-
- fs/smb/client/smbdirect.c                          |   2 +-
- include/asm-generic/page.h                         |  12 +-
- include/linux/compat.h                             |  82 ++----------
- include/linux/syscalls.h                           | 140 +++------------------
- include/uapi/asm-generic/bitsperlong.h             |  13 +-
- include/uapi/asm-generic/unistd.h                  | 129 +++++--------------
- kernel/sys_ni.c                                    | 110 +---------------
- tools/arch/arm64/include/uapi/asm/bitsperlong.h    |  24 ----
- tools/arch/hexagon/include/uapi/asm/bitsperlong.h  |  27 ----
- .../arch/loongarch/include/uapi/asm/bitsperlong.h  |   9 --
- .../arch/microblaze/include/uapi/asm/bitsperlong.h |   2 -
- tools/arch/riscv/include/uapi/asm/bitsperlong.h    |  14 ---
- tools/include/uapi/asm-generic/bitsperlong.h       |  14 ++-
- tools/include/uapi/asm-generic/unistd.h            | 129 +++++--------------
- tools/include/uapi/asm/bitsperlong.h               |   6 -
- 80 files changed, 218 insertions(+), 716 deletions(-)
- delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
