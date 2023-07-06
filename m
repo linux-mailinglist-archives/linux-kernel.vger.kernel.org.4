@@ -2,94 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F56749B33
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BC8749B35
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjGFLzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
+        id S232166AbjGFLz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjGFLzo (ORCPT
+        with ESMTP id S232681AbjGFLzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:55:44 -0400
+        Thu, 6 Jul 2023 07:55:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0288EE54;
-        Thu,  6 Jul 2023 04:55:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4639C1732
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 04:55:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D09606191D;
-        Thu,  6 Jul 2023 11:55:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4006C433C7;
-        Thu,  6 Jul 2023 11:55:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D50D56190D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:55:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E3EC433C8;
+        Thu,  6 Jul 2023 11:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688644542;
-        bh=ZVX2FMUo6DUhnVIuypz+Mg6dxvARnYElPp//q0SE0qU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aeK1eaSynsCDDKxSD1F3WceQUwfJ0lwG8w7w2wvYdL8l4k+X4A4MkxqN9Y//Vwo8K
-         zduOA5Y4ba9Bt1DoD1eAV69H46QcjEHXBNfhl1fJo16ly2PKYxhvJgBqjZtCkuG45e
-         iegT1G25Wd2n64fjlSfxpmNd3wCSK3EaJU2BOyB8Gf/YNy8MkkgFxfBJMdPagVp6rj
-         8t9HxLcCMvfjFm8rSm46+m8ErvaSrux1gc0n1lYSeP9c+6z444zhcf+koQiZBP3dEF
-         hl8/yImExn67ElaNHSXK8bcXcY912fUYoh+gN9G2pSP32K7DEUstz7jhEa9uKKrWyh
-         xqF79eKz9qH/w==
-Date:   Thu, 6 Jul 2023 13:55:39 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
- infrastructure
-Message-ID: <ZKaru+Ka5kmlwrs/@lothringen>
-References: <20230705181256.3539027-1-vschneid@redhat.com>
- <20230705181256.3539027-12-vschneid@redhat.com>
- <ZKXtfWZiM66dK5xC@localhost.localdomain>
+        s=k20201202; t=1688644554;
+        bh=BGc/sGoxt46gvCplYYAp6lrh85oEpbkPlYP/t1UMvII=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QHrNdqEM7O7UaM9Hk0wAgbbc/0OawSLtVVbHCo+lW91jkW1ivv4ee1wXy5+0HtN5A
+         n0sVLHzoatVIGGHWurEnBQrLdDH1OJ6YYZw+/i2Gwhlp/Mu9z3j2WHmbMfNu1RKWa6
+         fv7bMTWyGavPKaqRyDgU1e9eEf+W8FiVBK5os63ADlB+33bJjcjeAzD2VjaHTQ6pQS
+         asw4acuYkQ3QimKA3jf1ErLHsaVCTXcwu+w/amckpAoR9nfQHnn6drE0+5TPUnaFyZ
+         YA4Yq1Dhjg2+lJAHyI5D+lvoPWkTpFlxAvovuxcug3zmidY7st7IcomGoNFpxqAYDj
+         CQt6pNNmNLIcg==
+Received: by pali.im (Postfix)
+        id CB6A7970; Thu,  6 Jul 2023 13:55:50 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 13:55:50 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: binfmt_misc & different PE binaries
+Message-ID: <20230706115550.sqyh3k26e2glz2lu@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZKXtfWZiM66dK5xC@localhost.localdomain>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -100,39 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 12:23:57AM +0200, Frederic Weisbecker wrote:
-> Le Wed, Jul 05, 2023 at 07:12:53PM +0100, Valentin Schneider a écrit :
-> +bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
-> +{
-> +	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
-> +	unsigned int old, new, state;
-> +	bool ret = false;
-> +
-> +	preempt_disable();
-> +
-> +	work <<= CONTEXT_WORK;
-> +	state = atomic_read(&ct->state);
-> +	/*
-> +	 * Try setting the work until either
-> +	 * - the target CPU is on the kernel
-> +	 * - the work has been set
-> +	 */
-> +	for (;;) {
-> +		/* Only set if running in user/guest */
-> +		old = state;
-> +		old &= ~CONTEXT_MASK;
-> +		old |= CONTEXT_USER;
-> +
-> +		new = old | work;
-> +
-> +		state = atomic_cmpxchg(&ct->state, old, new);
-> +		if (state & work) {
+Hello,
 
-And this should be "if (state == old)", otherwise there is
-a risk that someone else had set the work but atomic_cmpxchg()
-failed due to other modifications is the meantime. It's then
-dangerous in that case to defer the work because atomic_cmpxchg()
-failures don't imply full ordering. So there is a risk that the
-target executes the work but doesn't see the most recent data.
+I would like to ask how to properly register binfmt_misc for different
+PE binaries, so kernel could execute the correct loader for them.
 
-Thanks.
+I mean, how to register support for Win32 (console/gui) PE binaries and
+also for CLR PE binaries (dotnet). Win32 needs to be executed under wine
+and CLR ideally under dotnet core (or mono).
+
+I have read kernel documentation files admin-guide/binfmt-misc.rst
+and admin-guide/mono.rst. But seems that they are in conflicts as both
+wants to registers its own handler for the same magic:
+
+  echo ':DOSWin:M::MZ::/usr/local/bin/wine:' > register
+
+  echo ':CLR:M::MZ::/usr/bin/mono:' > /proc/sys/fs/binfmt_misc/register
+
+Not mentioning the fact that they register DOS MZ handler, which matches
+not only all PE binaries (including EFI, libraries, other processors),
+but also all kind of other NE/LE/LX binaries and different DOS extenders.
+
+From documentation it looks like that even registering PE binaries is
+impossible by binfmt_misc as PE is detected by checking that indirect
+reference from 0x3C is PE\0\0. And distinguish between Win32 and CLR
+needs to parse PE COM descriptor directory.
+
+Or it is possible to write binfmt_misc pattern match based on indirect
+offset?
