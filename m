@@ -2,60 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD32749B29
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F56749B33
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjGFLxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S232469AbjGFLzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjGFLxF (ORCPT
+        with ESMTP id S229721AbjGFLzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBD2E54;
-        Thu,  6 Jul 2023 04:53:04 -0700 (PDT)
+        Thu, 6 Jul 2023 07:55:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0288EE54;
+        Thu,  6 Jul 2023 04:55:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6369E618CE;
-        Thu,  6 Jul 2023 11:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D464FC433CC;
-        Thu,  6 Jul 2023 11:53:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D09606191D;
+        Thu,  6 Jul 2023 11:55:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4006C433C7;
+        Thu,  6 Jul 2023 11:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688644383;
-        bh=DImhtAAJpjJiKkZEkG2LSJB03B+4xwGNCaN9PNMpV6Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SePrBr0s42/gJR7yJhjbFLUq2cYm1S/WFm5gDRN3iw/t+s6Y9KUEIOX3gjLsh45DW
-         mctT9y7hpRwO/Sb94gYLEE/ptkSj2D2mdqcC8gbHm6fc5xeJ7hoT/cdeTdjfEJsouA
-         Jm2fW2OVVe8nhpmchKFKXvd8tTBCvpuQSPrrFA9ptK/wfJpV4evB4M/gu3asi++HzK
-         B3kqojwc7Y64iWO5rE957Pp7esj9S5ZSb7HVhyMtJ8nM7WzwVjYYqZY1bVpW6eg5tX
-         1j6P6GUb20Pp/QgeRNT27d12slmu6rI+cTGtsTQkP7smWFxYa9dzSTAuAkB1UaaFmL
-         iFHPIrNm4SFRw==
-Message-ID: <b1cc6c70a42bf41d023eea9f11ff0aaea10a56c3.camel@kernel.org>
-Subject: Re: [PATCH v2 39/92] erofs: convert to ctime accessor functions
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org
-Date:   Thu, 06 Jul 2023 07:53:01 -0400
-In-Reply-To: <20230706110007.dc4tpyt5e6wxi5pt@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
-         <20230705190309.579783-1-jlayton@kernel.org>
-         <20230705190309.579783-37-jlayton@kernel.org>
-         <20230706110007.dc4tpyt5e6wxi5pt@quack3>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        s=k20201202; t=1688644542;
+        bh=ZVX2FMUo6DUhnVIuypz+Mg6dxvARnYElPp//q0SE0qU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aeK1eaSynsCDDKxSD1F3WceQUwfJ0lwG8w7w2wvYdL8l4k+X4A4MkxqN9Y//Vwo8K
+         zduOA5Y4ba9Bt1DoD1eAV69H46QcjEHXBNfhl1fJo16ly2PKYxhvJgBqjZtCkuG45e
+         iegT1G25Wd2n64fjlSfxpmNd3wCSK3EaJU2BOyB8Gf/YNy8MkkgFxfBJMdPagVp6rj
+         8t9HxLcCMvfjFm8rSm46+m8ErvaSrux1gc0n1lYSeP9c+6z444zhcf+koQiZBP3dEF
+         hl8/yImExn67ElaNHSXK8bcXcY912fUYoh+gN9G2pSP32K7DEUstz7jhEa9uKKrWyh
+         xqF79eKz9qH/w==
+Date:   Thu, 6 Jul 2023 13:55:39 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
+ infrastructure
+Message-ID: <ZKaru+Ka5kmlwrs/@lothringen>
+References: <20230705181256.3539027-1-vschneid@redhat.com>
+ <20230705181256.3539027-12-vschneid@redhat.com>
+ <ZKXtfWZiM66dK5xC@localhost.localdomain>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZKXtfWZiM66dK5xC@localhost.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,39 +100,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-07-06 at 13:00 +0200, Jan Kara wrote:
-> On Wed 05-07-23 15:01:04, Jeff Layton wrote:
-> > In later patches, we're going to change how the inode's ctime field is
-> > used. Switch to using accessor functions instead of raw accesses of
-> > inode->i_ctime.
-> >=20
-> > Acked-by: Gao Xiang <xiang@kernel.org>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
->=20
-> Just one nit below:
->=20
-> > @@ -176,10 +175,10 @@ static void *erofs_read_inode(struct erofs_buf *b=
-uf,
-> >  		vi->chunkbits =3D sb->s_blocksize_bits +
-> >  			(vi->chunkformat & EROFS_CHUNK_FORMAT_BLKBITS_MASK);
-> >  	}
-> > -	inode->i_mtime.tv_sec =3D inode->i_ctime.tv_sec;
-> > -	inode->i_atime.tv_sec =3D inode->i_ctime.tv_sec;
-> > -	inode->i_mtime.tv_nsec =3D inode->i_ctime.tv_nsec;
-> > -	inode->i_atime.tv_nsec =3D inode->i_ctime.tv_nsec;
-> > +	inode->i_mtime.tv_sec =3D inode_get_ctime(inode).tv_sec;
-> > +	inode->i_atime.tv_sec =3D inode_get_ctime(inode).tv_sec;
-> > +	inode->i_mtime.tv_nsec =3D inode_get_ctime(inode).tv_nsec;
-> > +	inode->i_atime.tv_nsec =3D inode_get_ctime(inode).tv_nsec;
->=20
-> Isn't this just longer way to write:
->=20
-> 	inode->i_atime =3D inode->i_mtime =3D inode_get_ctime(inode);
->=20
-> ?
->=20
-> 								Honza
+On Thu, Jul 06, 2023 at 12:23:57AM +0200, Frederic Weisbecker wrote:
+> Le Wed, Jul 05, 2023 at 07:12:53PM +0100, Valentin Schneider a écrit :
+> +bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
+> +{
+> +	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+> +	unsigned int old, new, state;
+> +	bool ret = false;
+> +
+> +	preempt_disable();
+> +
+> +	work <<= CONTEXT_WORK;
+> +	state = atomic_read(&ct->state);
+> +	/*
+> +	 * Try setting the work until either
+> +	 * - the target CPU is on the kernel
+> +	 * - the work has been set
+> +	 */
+> +	for (;;) {
+> +		/* Only set if running in user/guest */
+> +		old = state;
+> +		old &= ~CONTEXT_MASK;
+> +		old |= CONTEXT_USER;
+> +
+> +		new = old | work;
+> +
+> +		state = atomic_cmpxchg(&ct->state, old, new);
+> +		if (state & work) {
 
-Yes. Chalk that one up to coccinelle. Fixed in my tree.
---=20
-Jeff Layton <jlayton@kernel.org>
+And this should be "if (state == old)", otherwise there is
+a risk that someone else had set the work but atomic_cmpxchg()
+failed due to other modifications is the meantime. It's then
+dangerous in that case to defer the work because atomic_cmpxchg()
+failures don't imply full ordering. So there is a risk that the
+target executes the work but doesn't see the most recent data.
+
+Thanks.
