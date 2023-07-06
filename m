@@ -2,134 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C697493EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636F07493F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjGFCyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 22:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S233056AbjGFC7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 22:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjGFCyP (ORCPT
+        with ESMTP id S232893AbjGFC7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 22:54:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1DB1BC5;
-        Wed,  5 Jul 2023 19:54:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6CFD61461;
-        Thu,  6 Jul 2023 02:54:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B43C433C8;
-        Thu,  6 Jul 2023 02:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688612053;
-        bh=HenXvbXh+FMHOsANhghfX7JZNcwVNRAhL9A7ZADg4CE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fd/V7FTEXBp1VYm62AoFVVui6Jv9BmsU8Mpp1Sl/o5TIVF4hN2kDBG3LIsMlsqHJB
-         5XZR2Lf/Mc5TKC13GUPSUFDcz1KH1B+LOyHyJmMiy/5Dum1fn+g18Wg6YAmfS/fYmY
-         pBOPjwLHzHDywF8A92FTjlfCue1bWfPI7YGlI+JW18CP+42bhDWF/v7I5TnkKqViLj
-         8e8CYESNdiSZTvML2GSBKeK6CAS986YYHNEm6VJXNnN7curGU4YIDbWRpO3Pnxm8ye
-         BCcskMdJHDvaV3JzlEHAu3M+ibg9Mqeid80tV/N3uSmpWMTH+CyoMfuOqjme+KM+lj
-         KWuEoy7OgLF8Q==
-Date:   Wed, 5 Jul 2023 19:57:54 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Sarannya S <quic_sarannya@quicinc.com>, quic_bjorande@quicinc.com,
-        swboyd@chromium.org, quic_clew@quicinc.com,
-        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>
-Subject: Re: [PATCH V8 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL
- support
-Message-ID: <qobozhguxj5hc5oo3s7iesvznqohi2trf5os2wlpdx737opics@fkq72gprbtfd>
-References: <1687361648-27688-1-git-send-email-quic_sarannya@quicinc.com>
- <1687361648-27688-4-git-send-email-quic_sarannya@quicinc.com>
- <d0e5a6bf-e89f-bcf0-7009-94edfbcf2a83@foss.st.com>
+        Wed, 5 Jul 2023 22:59:02 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70F81BCB;
+        Wed,  5 Jul 2023 19:58:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PC6P3qVfQoYj2TXJRf1xp7xn4Qb9FTuZbwss/jXfRFsc1iB5BlM2gJnIYI8n0NOVzmqkGjQm7cLghZ6l8DjVkFv7lQpYg4WJ/mIwaQI+d5/6mxD3lnqj1JaUdFaXv0NGWt3I6VlcK1KOpwwGoNJOZl8n8NHE8C7qgkE0c2YwoZo7ZNUi3y7hZt2Q3bh2JmMWOqUggvlkGcdscHcLxzdizc9UA4uNM4ii/KstEMV0nBDTCuSnpV8dlrQBY6NjZVag86LKsoXDAYxZnyTEgPuYk8ZpUhJglc0+jucO+SiUTal415JHT6JvdHksnWBx0VnmImARo73Ha07yquKlj9echQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3nzMFBeX37sOBYyC2WXcj6qtKPd9NPPMmNhFjOnO9S4=;
+ b=UrAaFeEjr+l3aYR6oDlTTNxUmctHXRG+Aw8brqA211Nf/3c+3/q7kGPio46s2wgTefGLGpeCjVvVkQhMxzSntvH6quL8MkDbkuzeoitOCFbkdpg64CNw22pKqOfg/ZcWdw+8n/q1J21HBpwwYE/f1cVYU0zkvxivn2AJDa2msP6+/z9VJKk1tTvLWGIkF3UU4/8FFTzdN8oBZERtLjQmwpVea3BOhvA3V/5M9Cxl8tMCMmI2oQAXJpmlGniX0jzBIfO7ZEgrU7awp0H0xjm3YaGwuSoKQNErAHYiICRpwQdYyYVzteUdIB2GDMECluEGHE5TAQsN142SiLnG5lLnWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3nzMFBeX37sOBYyC2WXcj6qtKPd9NPPMmNhFjOnO9S4=;
+ b=CAchPgZF0sloAFj7WYJlii2aGSZ0nQJ+eH+CvexZvdBBxZhuEtDknUUUq0A7P6eK6lk3GQYqxb9ymYFGxHjkIrrgKssqn+HZwjeEhOP6tgbMukTMBH9ThnCgMJwf/8tPAyBSdgmQt5d+DnahT+OVxZwfL2RNlfVAv3gQuIr3U9U=
+Received: from DM6PR12MB2619.namprd12.prod.outlook.com (2603:10b6:5:45::18) by
+ CYYPR12MB8729.namprd12.prod.outlook.com (2603:10b6:930:c2::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.17; Thu, 6 Jul 2023 02:58:54 +0000
+Received: from DM6PR12MB2619.namprd12.prod.outlook.com
+ ([fe80::3bef:2463:a3e0:e51c]) by DM6PR12MB2619.namprd12.prod.outlook.com
+ ([fe80::3bef:2463:a3e0:e51c%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 02:58:54 +0000
+From:   "Quan, Evan" <Evan.Quan@amd.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "mdaenzer@redhat.com" <mdaenzer@redhat.com>,
+        "maarten.lankhorst@linux.intel.com" 
+        <maarten.lankhorst@linux.intel.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "jingyuwang_vip@163.com" <jingyuwang_vip@163.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        "jim.cromie@gmail.com" <jim.cromie@gmail.com>,
+        "bellosilicio@gmail.com" <bellosilicio@gmail.com>,
+        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "jsg@jsg.id.au" <jsg@jsg.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH V5 1/9] drivers core: Add support for Wifi band RF
+ mitigations
+Thread-Topic: [PATCH V5 1/9] drivers core: Add support for Wifi band RF
+ mitigations
+Thread-Index: AQHZqz5nCvlP5HKi7kqHZhT1UyZB3K+kDOyAgATrEhCAAKJtgIACaF9A
+Date:   Thu, 6 Jul 2023 02:58:53 +0000
+Message-ID: <DM6PR12MB26198720EBBAAB8C989F8D4BE42CA@DM6PR12MB2619.namprd12.prod.outlook.com>
+References: <20230630103240.1557100-1-evan.quan@amd.com>
+ <20230630103240.1557100-2-evan.quan@amd.com>
+ <7e7db6eb-4f46-407a-8d1f-16688554ad80@lunn.ch>
+ <DM6PR12MB2619591A7706A30362E11DC5E42EA@DM6PR12MB2619.namprd12.prod.outlook.com>
+ <18dfe989-2610-4234-ade2-ffbc2f233c19@lunn.ch>
+In-Reply-To: <18dfe989-2610-4234-ade2-ffbc2f233c19@lunn.ch>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=e4b0b34c-4fda-4a3d-9f25-1d15a394cbbc;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-07-06T01:53:19Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR12MB2619:EE_|CYYPR12MB8729:EE_
+x-ms-office365-filtering-correlation-id: 742f7eae-7400-416d-3f71-08db7dcceebd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ugh975M4mkJTtmcRsZz7kRBE9awXV/qMW24NoPvganV7xs3AXvgmmUfY3/2ihPJflP0YQzX7TG9cv1BmYhix2rfSJdj0kjW7VyEfrTdhF/iL9F7N618fNjgc4+HIlnxm1hX1HtjvsXrJUQvl1K6TYVnSsLkO1uoOGb/sSJR+snKqRuY/mPFCp+QO1BMTfxrCw0YOQ1PITyFe1f6zxOwHDqGGBBhC9jGoQ4JG5YJe4IditVgkrRQeKYmnOH0R1teeIso/tMtU6KqlekybmWFUHWoN3PlMd8WjNGGM4EVuFY/jRvObXhTW2L6esd+2fdXEjg238G8QD9T+FkjG/mkZkHDxvEFclad5NVEOUDQq7JxsxgmjRz9RpnK92X9XVAxjVAFuOMZpUe+sqTE7rpwuI7rFKaKqZRADBwUJ2me9fX2XlS/B2mhzLQrtNqOol2M04XYwrJA3K0Ga5o1rwf56XHZaXZ1kdG+jxk9qSfi78SiE7+nqbj07H/+EneS42PEXzgeBI5BWPZmleCAN1nO5woJncQqODMN9p+hsDpzmQBm61gg8xsbpWhTgAwWqvEcYi9xKOzfM8gj7OPmsuqVs99XXpftJDLrlP6QA+8TvaAQb+Htwn94AU7yob3zMSmBX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2619.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(366004)(346002)(396003)(451199021)(66446008)(8676002)(8936002)(2906002)(55016003)(5660300002)(52536014)(26005)(53546011)(7416002)(6506007)(186003)(66556008)(64756008)(41300700001)(7696005)(122000001)(71200400001)(66476007)(76116006)(4326008)(316002)(33656002)(83380400001)(6916009)(66946007)(54906003)(478600001)(38070700005)(9686003)(38100700002)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Xzb67GpqRNMbkw4nkpJSD2GNZIFycPiS+PBLtthdg0buE1P+cLWrEX1/pWEl?=
+ =?us-ascii?Q?F7c5wSOW10K8roNpqhWlqfo8fp7Z83GyyZUbFrBwdgmzD2q2aHAuFQnR79fO?=
+ =?us-ascii?Q?+fXsUeS7i8KRwtAwO2qONuuLNo1ZHTqCVF+2Ed87egHmXIvEjU5hmXY36TOT?=
+ =?us-ascii?Q?L6Lxbr2lAl9w2vbfKuR3bIHjevrzmi8TwSy+j4G2DxWDO9ThjdfxVgU2KyNe?=
+ =?us-ascii?Q?rUvIuOaA8Lzn0tM+fzgxbUFabuRDaFIwJn055r3IcCrtiX509NZN2POG/QrZ?=
+ =?us-ascii?Q?mPCifJafP+WfQXEGzZF5x3RmtyB8uYcxLhjGoPc74HoDjaYUgza7e/O0DHOd?=
+ =?us-ascii?Q?IBY3RicGD17cNCfr1hoDrH/iTc+NOM6NETRt7LugqUZ9ykEELiQ2xsO6MBmj?=
+ =?us-ascii?Q?pzulffV7YRTgwYSRSqHMAZmt91sqkeRDElJCmnUjxve81gcIMtBh2TBGGwpL?=
+ =?us-ascii?Q?mTXwF5dPbmRm9GjdK998i9FvycxDmps5BPkdke8+xoy0zfrvXo8T7524Tcqp?=
+ =?us-ascii?Q?m3grpvlW+8xpsKBeHc1bJUxQpsfmJDzQ3b1/4g4SZbON7MNXBNNZ4Z2a9gcU?=
+ =?us-ascii?Q?OuIYVDNS89uNEpBuI/1cTQGIFi8z/eZ26+oEyuvCPzLmRjLAXnAy9YJzAO3t?=
+ =?us-ascii?Q?bV16PcSGYq8XdGfDBStEel1a41KabeK18J41A0Yx75+WCHg0pCeaVVAj6mhV?=
+ =?us-ascii?Q?qu7cMiOdaDhMX3H5yXjc0IlzaTXZVAzYO4vnhV7H33pbEk82DQN40MPGZj13?=
+ =?us-ascii?Q?YA3RNwx631dDe7YUbIBRcSzRMNa0zpbFQ08wbPPjGAtFv+Yw0Tbnx3J8sGp3?=
+ =?us-ascii?Q?AksDO1PCJ7UoefI45D8QKpnurYd0gHj36JzfgFlcm6cUldazx8iXL9qf8EM7?=
+ =?us-ascii?Q?eqxdK+g/jZFdR8Ue1/JDKHzKp+ZH/NIsL8Ew/Z5rBmALlZsj8Aakz4o0/Fag?=
+ =?us-ascii?Q?OGhmDkZwokX2s6CeaLE4W5j+9kdzj2U8neRcI/yfEZaxr16VoyxVEZolDSQk?=
+ =?us-ascii?Q?GV5wqbeUhR/+3K5nG8N/c1AXoq/n0+2eo90GmWUG1l/oT+9E6OPqEBan8yp/?=
+ =?us-ascii?Q?RByAIDxEJrmcBrz6rivaqwrFx8Grtavw28tij4l8+gm6L7w4F3+UqhYT8I0B?=
+ =?us-ascii?Q?DxTTY9qwf8rAlfGhariUEEOqvwC5dxorf3CDAVeqUbTlhN3Wj/HwdjFFxOMp?=
+ =?us-ascii?Q?B3AmGJg/Q4cbukd+0Kp8gjNfDUu9EcZYlunaWGAZ6ZEwN6dlgu6cN+RsJc98?=
+ =?us-ascii?Q?zcERYioOY60kW5EUpaf4UbNppOTPixr7m44YEXuJCD0l1Of5GIC2yazRl7aZ?=
+ =?us-ascii?Q?i6oJN8T2VT78KvVTU29IbNoMzNsi++hvCN9sDG7mhc8zzW4tWKt9TDv05+MC?=
+ =?us-ascii?Q?9ljuHQ9Bf3Pss1OAxZzpUsJfQo3nURGFqan0aJvLsf4Rlo9mxPRFNKaSpBIQ?=
+ =?us-ascii?Q?N/cthY8T2esfKu4puDPGoALmEvY3sjoqFFTx92famZTqmLxb/Kt8RTNOl9jf?=
+ =?us-ascii?Q?bZE3yBb3KWg1GcFVA6doYsklXSjPzOl4Fu8LJpUw6Rjc+9HMjL2/nJcStJFW?=
+ =?us-ascii?Q?EoDH5PglSWFSJsIwbr0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0e5a6bf-e89f-bcf0-7009-94edfbcf2a83@foss.st.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2619.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 742f7eae-7400-416d-3f71-08db7dcceebd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 02:58:53.4911
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LxB84/e1OdUEVY41H7G1+FOJlC6EQqJdU9beL4Lv1jLQGAZTYewN5SuEhtl7COs8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8729
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 11:11:03AM +0200, Arnaud POULIQUEN wrote:
-> On 6/21/23 17:34, Sarannya S wrote:
-[..]
-> > diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-[..]
-> > +	switch (cmd) {
-> > +	case RPMSG_GET_OUTGOING_FLOWCONTROL:
-> > +		eptdev->remote_flow_updated = false;
-> > +		ret = put_user(eptdev->remote_flow_restricted, (int __user *)arg);
-> > +		break;
-> > +	case RPMSG_SET_INCOMING_FLOWCONTROL:
-> > +		set = !!arg;
-> > +		ret = rpmsg_set_flow_control(eptdev->ept, set, eptdev->chinfo.dst);
-> > +		break;
-> > +	case RPMSG_DESTROY_EPT_IOCTL:
-> > +		/* Don't allow to destroy a default endpoint. */
-> > +		if (eptdev->default_ept) {
-> > +			ret = -EINVAL;
-> > +			break;
-> > +		}
-> > +		ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> > +		break;
-> > +	default:
-> > +		ret = -EINVAL;
-> > +	}
-> >  
-> > -	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> > +	return ret;
-> >  }
-> >  
-> >  static const struct file_operations rpmsg_eptdev_fops = {
-> > diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
-> > index 1637e68..b0a6c17 100644
-> > --- a/include/uapi/linux/rpmsg.h
-> > +++ b/include/uapi/linux/rpmsg.h
-> > @@ -43,4 +43,14 @@ struct rpmsg_endpoint_info {
-> >   */
-> >  #define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
-> >  
-> > +/**
-> > + * Set the flow control for the remote rpmsg char device.
+[AMD Official Use Only - General]
 
-We improved the wording elsewhere in the patch, to make the description
-of what the interface controls/exposes. This would benefit from the same
-attention.
+Hi Andrew,
 
-And this says "Set" while the ioctl says "GET".
+I discussed with Mario about your proposal/concerns here.
+We believe some changes below might address your concerns.
+- place/move the wbrf_supported_producer check inside acpi_amd_wbrf_add_exc=
+lusion and acpi_amd_wbrf_add_exclusion
+- place the wbrf_supported_consumer check inside acpi_amd_wbrf_retrieve_exc=
+lusions
+So that the wbrf_supported_producer and wbrf_supported_consumer can be drop=
+ped.
+We made some prototypes and even performed some tests which showed technica=
+lly it is absolutely practicable.
 
-> > + */
-> > +#define RPMSG_GET_OUTGOING_FLOWCONTROL _IOW(0xb5, 0x5, struct rpmsg_endpoint_info)
-> > +
-> > +/**
-> > + * Set the flow control for the local rpmsg char device.
-> > + */
-> > +#define RPMSG_SET_INCOMING_FLOWCONTROL _IOW(0xb5, 0x6, struct rpmsg_endpoint_info)
-> 
-> 
-> Perhaps I missed something, but you use "rpmsg_endpoint_info" as argument.
-> In rpmsg_eptdev_ioctl the argument is treated as a boolean.
-> Seems to me that something is wrong here.
-> 
+However, we found several issues with that.
+- The overhead caused by the extra _producer/_consumer check on every calli=
+ng of wbrf_add/remove/retrieve_ecxclusion.
+  Especially when you consider there might be multiple producers and consum=
+ers in the system at the same time. And some of
+  them might do in-use band/frequency switching frequently.
+- Some extra costs caused by the "know it only at the last minute". For exa=
+mple, to support WBRF, amdgpu driver needs some preparations: install the n=
+otification hander,
+  setup the delay workqueue(to handle possible events flooding) and even no=
+tify firmware engine to be ready. However, only on the 1st notification rec=
+eiving,
+  it is realized(reported by wbrf_supported_consumer check) the WBRF featur=
+e is actually not supported. All those extra costs can be actually avoided =
+if we can know the WBRF is not supported at first.
+  This could happen to other consumers and producers too.
 
-This is indeed an int in the implementation above.
+After a careful consideration, we think the changes do not benefit us much.=
+ It does not deserve us to spend extra efforts.
+Thus we would like to stick with original implementations. That is to have =
+wbrf_supported_producer and wbrf_supported_consumer interfaces exposed.
+Then other drivers/subsystems can do necessary wbrf support check in advanc=
+e and coordinate their actions accordingly.
+Please let us know your thoughts.
 
-Regards,
-Bjorn
+BR,
+Evan
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Tuesday, July 4, 2023 9:07 PM
+> To: Quan, Evan <Evan.Quan@amd.com>
+> Cc: rafael@kernel.org; lenb@kernel.org; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Koenig, Christian
+> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
+> airlied@gmail.com; daniel@ffwll.ch; johannes@sipsolutions.net;
+> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; Limonciello, Mario <Mario.Limonciello@amd.com>;
+> mdaenzer@redhat.com; maarten.lankhorst@linux.intel.com;
+> tzimmermann@suse.de; hdegoede@redhat.com; jingyuwang_vip@163.com;
+> Lazar, Lijo <Lijo.Lazar@amd.com>; jim.cromie@gmail.com;
+> bellosilicio@gmail.com; andrealmeid@igalia.com; trix@redhat.com;
+> jsg@jsg.id.au; arnd@arndb.de; linux-kernel@vger.kernel.org; linux-
+> acpi@vger.kernel.org; amd-gfx@lists.freedesktop.org; dri-
+> devel@lists.freedesktop.org; linux-wireless@vger.kernel.org;
+> netdev@vger.kernel.org
+> Subject: Re: [PATCH V5 1/9] drivers core: Add support for Wifi band RF
+> mitigations
+>
+> > > What is the purpose of this stage? Why would it not be supported for
+> > > this device?
+> > This is needed for wbrf support via ACPI mechanism. If BIOS(AML code)
+> > does not support the wbrf adding/removing for some device, it should
+> speak that out so that the device can be aware of that.
+>
+> How much overhead is this adding? How deep do you need to go to find the
+> BIOS does not support it? And how often is this called?
+>
+> Where do we want to add complexity? In the generic API? Or maybe a little
+> deeper in the ACPI specific code?
+>
+>        Andrew
 
-> regards,
-> Arnaud
-> 
-> > +
-> >  #endif
