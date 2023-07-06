@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E9574A223
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6D174A229
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjGFQXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 12:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S230235AbjGFQ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjGFQXR (ORCPT
+        with ESMTP id S229640AbjGFQ0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:23:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8C4EDC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 09:23:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2C23D75;
-        Thu,  6 Jul 2023 09:23:56 -0700 (PDT)
-Received: from bogus (unknown [10.57.76.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 210013F762;
-        Thu,  6 Jul 2023 09:23:11 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 17:23:08 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Mostafa Saleh <smostafa@google.com>
-Cc:     maz@kernel.org, oliver.upton@linux.dev,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com,
-        will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com,
-        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
-        gshan@redhat.com, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2] KVM: arm64: Add missing BTI instructions
-Message-ID: <20230706162308.kyeitspgfaqb6vgn@bogus>
-References: <20230706152240.685684-1-smostafa@google.com>
+        Thu, 6 Jul 2023 12:26:37 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051D1727
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 09:26:36 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-3461b58c61dso719105ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 09:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688660796; x=1691252796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xsUQiinDQbgs1GWC6x88zZ62UTNshdq3ifdf5wffGck=;
+        b=FN0aM49NSkNhOMms1+7NZw0wJlPcATTOWjUIc+nNdMqL7TeysiAX8gXgAr7TERX8v8
+         9tu5RtbVaTIO9f+1O+aGbR5sOIcif1gtjX9Oo/6RUj6VQKhugOtyOl/kRtYZjEY24X/g
+         ViXEVBVWBYS7Av7ReprwqE0g5WGMzsLXHd+3lDfF9csV0+EDKx0IuMNxneGue6LZrHzT
+         9joGEnWA8nzWVxD1ZbYr/GFwOhvwchkZL0rgBADvjq5vlTHjAEBj4L1Cpo38ULC25MUB
+         ibTp7dNvjZCVWBmtLKPPjozOZ1cedwBRlhTGxoixwD5ZkTGyQ+C3snRnXyBmzeEjzlRQ
+         2I/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688660796; x=1691252796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xsUQiinDQbgs1GWC6x88zZ62UTNshdq3ifdf5wffGck=;
+        b=B1brl0YkmiGvHrlT/dDOczzUNZ3N7Fio0AmTXJIhaD8qkHP5RkaTjeMU0ay2HMJe6k
+         JsHooC+eNsLpytR7oBqX470U+4Smlahz4YNbT/osvbUnBhqgS5pMdhYnLuU6yzbzYiJ8
+         A2PKJrrNFA5QXv8xbh3JBHuN+XXzr/hSqsWZZug07UTXiFLHsomYP4QTlpPtUnxHvY0u
+         2wnQ0MnIU/CYpNh5ok22XotTkx10/rHuxeTs3sW2rZ521vNbAUf2rjUzIqr1UxZwCDZa
+         Z09wNvngQrpiFBZhA10t9qGkm14kob7CWDHeuYOCZvXqRuDINQ4l7zcORLr045lSnw8C
+         SeIg==
+X-Gm-Message-State: ABy/qLaLWlg+66uovkLroxi+omCF9JijfxlOwk9SgbP53KKkFn6GzZb9
+        pHbt+ygVos/nDuGrQN/kUXqir/TtZo6UzJi0Vek=
+X-Google-Smtp-Source: APBJJlG19lT5NjfnCu4VGDwOcKgkeaoTxH2wv/dSelvO8UX8aLJXZVc1dSRWK+cnH4BcIOHxcM2aZQ==
+X-Received: by 2002:a92:c688:0:b0:346:3173:2374 with SMTP id o8-20020a92c688000000b0034631732374mr3181024ilg.0.1688660796002;
+        Thu, 06 Jul 2023 09:26:36 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id m14-20020a924b0e000000b0033e62b47a49sm617857ilg.41.2023.07.06.09.26.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 09:26:35 -0700 (PDT)
+Message-ID: <48d69cae-902a-a746-e73b-a5b8fdf694b4@kernel.dk>
+Date:   Thu, 6 Jul 2023 10:26:34 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230706152240.685684-1-smostafa@google.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] bcachefs
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Dave Chinner <david@fromorbit.com>, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
+ <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
+ <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
+ <1e2134f1-f48b-1459-a38e-eac9597cd64a@kernel.dk>
+ <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
+ <ZJzXs6C8G2SL10vq@dread.disaster.area>
+ <d6546c44-04db-cbca-1523-a914670a607f@kernel.dk>
+ <20230629-fragen-dennoch-fb5265aaba23@brauner>
+ <20230629153108.wyn32bvaxmztnakl@moria.home.lan>
+ <20230630-aufwiegen-ausrollen-e240052c0aaa@brauner>
+ <20230706152059.smhy7jdbim4qlr6f@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230706152059.smhy7jdbim4qlr6f@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:22:40PM +0000, Mostafa Saleh wrote:
-> Some bti instructions were missing from
-> commit b53d4a272349 ("KVM: arm64: Use BTI for nvhe")
+On 7/6/23 9:20?AM, Kent Overstreet wrote:
+>> My earlier mail clearly said that io_uring can be changed by Jens pretty
+>> quickly to not cause such test failures.
 > 
-> 1) kvm_host_psci_cpu_entry
-> kvm_host_psci_cpu_entry is called from __kvm_hyp_init_cpu through "br"
-> instruction as __kvm_hyp_init_cpu resides in idmap section while
-> kvm_host_psci_cpu_entry is in hyp .text so the offset is larger than
-> 128MB range covered by "b".
-> Which means that this function should start with "bti j" instruction.
-> 
-> LLVM which is the only compiler supporting BTI for Linux, adds "bti j"
-> for jump tables or by when taking the address of the block [1].
-> Same behaviour is observed with GCC.
-> 
-> As kvm_host_psci_cpu_entry is a C function, this must be done in
-> assembly.
-> 
-> Another solution is to use X16/X17 with "br", as according to ARM
-> ARM DDI0487I.a RLJHCL/IGMGRS, PACIASP has an implicit branch
-> target identification instruction that is compatible with
-> PSTATE.BTYPE 0b01 which includes "br X16/X17"
-> And the kvm_host_psci_cpu_entry has PACIASP as it is an external
-> function.
-> Although, using explicit "bti" makes it more clear than relying on
-> which register is used.
-> 
-> A third solution is to clear SCTLR_EL2.BT, which would make PACIASP
-> compatible PSTATE.BTYPE 0b11 ("br" to other registers).
-> However this deviates from the kernel behaviour (in bti_enable()).
-> 
-> 2) Spectre vector table
-> "br" instructions are generated at runtime for the vector table
-> (__bp_harden_hyp_vecs).
-> These branches would land on vectors in __kvm_hyp_vector at offset 8.
-> As all the macros are defined with valid_vect/invalid_vect, it is
-> sufficient to add "bti j" at the correct offset.
-> 
-> [1] https://reviews.llvm.org/D52867
-> 
-> Fixes: b53d4a272349 ("KVM: arm64: Use BTI for nvhe")
-> Signed-off-by: Mostafa Saleh <smostafa@google.com>
-> Reported-by: Sudeep Holla <sudeep.holla@arm.com>
+> Jens posted a fix that didn't actually fix anything, and after that it
+> seemed neither of you were interested in actually fixing this. So
+> based on that, maybe we need to consider switching fstests back to AIO
+> just so we can get work done...
 
-Nothing change w.r.t cpu suspend-resume path in v2 anyways, but I assure
-I tested this again just be absolutely sure and it still fixes the issue
-I reported 😄, so
+Yeah let's keep misrepresenting... I already showed how to hit this
+easily with aio, and you said you'd fix aio. But nothing really happened
+there, unsurprisingly.
 
-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+You do what you want, as per usual these threads just turn into an
+unproductive (and waste of time) shit show. Muted on my end from now on.
 
 -- 
-Regards,
-Sudeep
+Jens Axboe
+
