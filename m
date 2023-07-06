@@ -2,143 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B771749FC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269B2749FBF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbjGFOvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S233546AbjGFOuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbjGFOvO (ORCPT
+        with ESMTP id S229640AbjGFOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:51:14 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91608E70;
-        Thu,  6 Jul 2023 07:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688655058; x=1720191058;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0nzzDQA6LpkeZuLlmFjdXa775S2+WzO38zFOZwwC/sU=;
-  b=JbccH/kiOWKQ9Z56vwZMtb+fTlWhuxAbJM8I37bm101SI2uQxlSk/a1/
-   5s2y+UQaokH3ApRtuKypJwPDcSVIqTrCK1XOkL5sDDMjg8IIVaszoZ/oR
-   PcttBpIGdfE9T8HakJHz8ZsCRPB6qzf2ah4Q418eLScp/VFZaOc3cNriU
-   gwV7tibRpQGgTNYFLL3oxRYRwz6pCJfK2Bb+y9V3vd1JCNPL0nEAreNaq
-   hO4KrBF68+n0hbQXlwjnBiobREJlCPJfeENI9MkN4qw470Wr6JloGafb+
-   C8Il7X2L9lpB95zq93jksUhYAIeWw4159k4YXrVHuHxmHMWJD0+tqkimf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="343209105"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="343209105"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 07:49:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="749174196"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="749174196"
-Received: from adityan1-mobl1.amr.corp.intel.com (HELO [10.212.197.9]) ([10.212.197.9])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 07:49:53 -0700
-Message-ID: <0c32f845-aad0-3059-2efa-9f6e3bb3affb@intel.com>
-Date:   Thu, 6 Jul 2023 07:49:52 -0700
+        Thu, 6 Jul 2023 10:50:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0DC26B7;
+        Thu,  6 Jul 2023 07:49:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3517C1F747;
+        Thu,  6 Jul 2023 14:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688654995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wGjkTKTRKcTLxySBxQpfGABMtzJRkFQxEj/NmakpahE=;
+        b=o5U4IH8LoASHDHPjz4GRDPG3GWidx1AeAJbERcrrW7IgBoizr2+xI8u6kH21PvjWO4u3cw
+        i0ysuBRsw5Qp3vqufih0of1e4skW6NCWGG3QNhqBLaUISP7kMGaKDMm+e+GycqaiXo7iR2
+        aYpBGJHLW9BroFxt2cobMO+itZwCIyE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688654995;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wGjkTKTRKcTLxySBxQpfGABMtzJRkFQxEj/NmakpahE=;
+        b=ynuZM8TbSh6zphgfQYG58XFxrXh3XvXc9lyKbooZ8EX/kE1azle3mGUk7G0MoZQ4uyPu70
+        n1oHd2ArwJuLTDDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 24722138FC;
+        Thu,  6 Jul 2023 14:49:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YszbCJPUpmSMAQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 14:49:55 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 966A8A0707; Thu,  6 Jul 2023 16:49:54 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 16:49:54 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Evgeniy Dushistov <dushistov@mail.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 80/92] ufs: convert to ctime accessor functions
+Message-ID: <20230706144954.qywfdakgk2dxlegh@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-78-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ying Huang <ying.huang@intel.com>,
-        Dan J Williams <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
- <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
- <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
- <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
- <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
- <20230630183020.GA4253@hirez.programming.kicks-ass.net>
- <20230630190514.GH3436214@ls.amr.corp.intel.com>
- <ZJ9IKALhz1Q6ogu1@google.com>
- <20230704165836.GB462772@hirez.programming.kicks-ass.net>
- <1a8099e2-da28-6b2a-7b5a-1d6346b7f95d@intel.com>
- <20230705145750.GD4253@hirez.programming.kicks-ass.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230705145750.GD4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705190309.579783-78-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/23 07:57, Peter Zijlstra wrote:
-> On Wed, Jul 05, 2023 at 07:34:06AM -0700, Dave Hansen wrote:
->> On 7/4/23 09:58, Peter Zijlstra wrote:
->>> If we have concerns about allocating the PAMT array, can't we use CMA
->>> for this? Allocate the whole thing at boot as CMA such that when not
->>> used for TDX it can be used for regular things like userspace and
->>> filecache pages?
->> I never thought of CMA as being super reliable.  Maybe it's improved
->> over the years.
->>
->> KVM also has a rather nasty habit of pinning pages, like for device
->> passthrough.  I suspect that means that we'll have one of two scenarios:
->>
->>  1. CMA works great, but the TDX/CMA area is unusable for KVM because
->>     it's pinning all its pages and they just get moved out of the CMA
->>     area immediately.  The CMA area is effectively wasted.
->>  2. CMA sucks, and users get sporadic TDX failures when they wait a long
->>     time to run a TDX guest after boot.  Users just work around the CMA
->>     support by starting up TDX guests at boot or demanding a module
->>     parameter be set.  Hacking in CMA support was a waste.
->>
->> Am I just too much of a pessimist?
-> Well, if CMA still sucks, then that needs fixing. If CMA works, but we
-> have a circular fail in that KVM needs to long-term pin the PAMT pages
-> but long-term pin is evicted from CMA (the whole point of long-term pin,
-> after all), then surely we can break that cycle somehow, since in this
-> case the purpose of the CMA is being able to grab that memory chunk when
-> we needs it.
+On Wed 05-07-23 15:01:45, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> That is, either way around is just a matter of a little code, no?
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-It's not a circular dependency, it's conflicting requirements.
+Looks good. Feel free to add:
 
-CMA makes memory more available, but only in the face of unpinned pages.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-KVM can pin lots of pages, even outside of TDX-based VMs.
+								Honza
 
-So we either need to change how CMA works fundamentally or stop KVM from
-pinning pages.
-
-
+> ---
+>  fs/ufs/dir.c    |  6 +++---
+>  fs/ufs/ialloc.c |  2 +-
+>  fs/ufs/inode.c  | 23 +++++++++++++----------
+>  fs/ufs/namei.c  |  8 ++++----
+>  4 files changed, 21 insertions(+), 18 deletions(-)
+> 
+> diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
+> index 379d75796a5c..fd57f03b6c93 100644
+> --- a/fs/ufs/dir.c
+> +++ b/fs/ufs/dir.c
+> @@ -107,7 +107,7 @@ void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
+>  	ufs_commit_chunk(page, pos, len);
+>  	ufs_put_page(page);
+>  	if (update_times)
+> -		dir->i_mtime = dir->i_ctime = current_time(dir);
+> +		dir->i_mtime = inode_set_ctime_current(dir);
+>  	mark_inode_dirty(dir);
+>  	ufs_handle_dirsync(dir);
+>  }
+> @@ -397,7 +397,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
+>  	ufs_set_de_type(sb, de, inode->i_mode);
+>  
+>  	ufs_commit_chunk(page, pos, rec_len);
+> -	dir->i_mtime = dir->i_ctime = current_time(dir);
+> +	dir->i_mtime = inode_set_ctime_current(dir);
+>  
+>  	mark_inode_dirty(dir);
+>  	err = ufs_handle_dirsync(dir);
+> @@ -539,7 +539,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+>  		pde->d_reclen = cpu_to_fs16(sb, to - from);
+>  	dir->d_ino = 0;
+>  	ufs_commit_chunk(page, pos, to - from);
+> -	inode->i_ctime = inode->i_mtime = current_time(inode);
+> +	inode->i_mtime = inode_set_ctime_current(inode);
+>  	mark_inode_dirty(inode);
+>  	err = ufs_handle_dirsync(inode);
+>  out:
+> diff --git a/fs/ufs/ialloc.c b/fs/ufs/ialloc.c
+> index 06bd84d555bd..a1e7bd9d1f98 100644
+> --- a/fs/ufs/ialloc.c
+> +++ b/fs/ufs/ialloc.c
+> @@ -292,7 +292,7 @@ struct inode *ufs_new_inode(struct inode *dir, umode_t mode)
+>  	inode_init_owner(&nop_mnt_idmap, inode, dir, mode);
+>  	inode->i_blocks = 0;
+>  	inode->i_generation = 0;
+> -	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
+> +	inode->i_mtime = inode->i_atime = inode_set_ctime_current(inode);
+>  	ufsi->i_flags = UFS_I(dir)->i_flags;
+>  	ufsi->i_lastfrag = 0;
+>  	ufsi->i_shadow = 0;
+> diff --git a/fs/ufs/inode.c b/fs/ufs/inode.c
+> index a4246c83a8cd..21a4779a2de5 100644
+> --- a/fs/ufs/inode.c
+> +++ b/fs/ufs/inode.c
+> @@ -296,7 +296,7 @@ ufs_inode_getfrag(struct inode *inode, unsigned index,
+>  
+>  	if (new)
+>  		*new = 1;
+> -	inode->i_ctime = current_time(inode);
+> +	inode_set_ctime_current(inode);
+>  	if (IS_SYNC(inode))
+>  		ufs_sync_inode (inode);
+>  	mark_inode_dirty(inode);
+> @@ -378,7 +378,7 @@ ufs_inode_getblock(struct inode *inode, u64 ind_block,
+>  	mark_buffer_dirty(bh);
+>  	if (IS_SYNC(inode))
+>  		sync_dirty_buffer(bh);
+> -	inode->i_ctime = current_time(inode);
+> +	inode_set_ctime_current(inode);
+>  	mark_inode_dirty(inode);
+>  out:
+>  	brelse (bh);
+> @@ -580,11 +580,12 @@ static int ufs1_read_inode(struct inode *inode, struct ufs_inode *ufs_inode)
+>  
+>  	inode->i_size = fs64_to_cpu(sb, ufs_inode->ui_size);
+>  	inode->i_atime.tv_sec = (signed)fs32_to_cpu(sb, ufs_inode->ui_atime.tv_sec);
+> -	inode->i_ctime.tv_sec = (signed)fs32_to_cpu(sb, ufs_inode->ui_ctime.tv_sec);
+> +	inode_set_ctime(inode,
+> +			(signed)fs32_to_cpu(sb, ufs_inode->ui_ctime.tv_sec),
+> +			0);
+>  	inode->i_mtime.tv_sec = (signed)fs32_to_cpu(sb, ufs_inode->ui_mtime.tv_sec);
+>  	inode->i_mtime.tv_nsec = 0;
+>  	inode->i_atime.tv_nsec = 0;
+> -	inode->i_ctime.tv_nsec = 0;
+>  	inode->i_blocks = fs32_to_cpu(sb, ufs_inode->ui_blocks);
+>  	inode->i_generation = fs32_to_cpu(sb, ufs_inode->ui_gen);
+>  	ufsi->i_flags = fs32_to_cpu(sb, ufs_inode->ui_flags);
+> @@ -626,10 +627,10 @@ static int ufs2_read_inode(struct inode *inode, struct ufs2_inode *ufs2_inode)
+>  
+>  	inode->i_size = fs64_to_cpu(sb, ufs2_inode->ui_size);
+>  	inode->i_atime.tv_sec = fs64_to_cpu(sb, ufs2_inode->ui_atime);
+> -	inode->i_ctime.tv_sec = fs64_to_cpu(sb, ufs2_inode->ui_ctime);
+> +	inode_set_ctime(inode, fs64_to_cpu(sb, ufs2_inode->ui_ctime),
+> +			fs32_to_cpu(sb, ufs2_inode->ui_ctimensec));
+>  	inode->i_mtime.tv_sec = fs64_to_cpu(sb, ufs2_inode->ui_mtime);
+>  	inode->i_atime.tv_nsec = fs32_to_cpu(sb, ufs2_inode->ui_atimensec);
+> -	inode->i_ctime.tv_nsec = fs32_to_cpu(sb, ufs2_inode->ui_ctimensec);
+>  	inode->i_mtime.tv_nsec = fs32_to_cpu(sb, ufs2_inode->ui_mtimensec);
+>  	inode->i_blocks = fs64_to_cpu(sb, ufs2_inode->ui_blocks);
+>  	inode->i_generation = fs32_to_cpu(sb, ufs2_inode->ui_gen);
+> @@ -726,7 +727,8 @@ static void ufs1_update_inode(struct inode *inode, struct ufs_inode *ufs_inode)
+>  	ufs_inode->ui_size = cpu_to_fs64(sb, inode->i_size);
+>  	ufs_inode->ui_atime.tv_sec = cpu_to_fs32(sb, inode->i_atime.tv_sec);
+>  	ufs_inode->ui_atime.tv_usec = 0;
+> -	ufs_inode->ui_ctime.tv_sec = cpu_to_fs32(sb, inode->i_ctime.tv_sec);
+> +	ufs_inode->ui_ctime.tv_sec = cpu_to_fs32(sb,
+> +						 inode_get_ctime(inode).tv_sec);
+>  	ufs_inode->ui_ctime.tv_usec = 0;
+>  	ufs_inode->ui_mtime.tv_sec = cpu_to_fs32(sb, inode->i_mtime.tv_sec);
+>  	ufs_inode->ui_mtime.tv_usec = 0;
+> @@ -770,8 +772,9 @@ static void ufs2_update_inode(struct inode *inode, struct ufs2_inode *ufs_inode)
+>  	ufs_inode->ui_size = cpu_to_fs64(sb, inode->i_size);
+>  	ufs_inode->ui_atime = cpu_to_fs64(sb, inode->i_atime.tv_sec);
+>  	ufs_inode->ui_atimensec = cpu_to_fs32(sb, inode->i_atime.tv_nsec);
+> -	ufs_inode->ui_ctime = cpu_to_fs64(sb, inode->i_ctime.tv_sec);
+> -	ufs_inode->ui_ctimensec = cpu_to_fs32(sb, inode->i_ctime.tv_nsec);
+> +	ufs_inode->ui_ctime = cpu_to_fs64(sb, inode_get_ctime(inode).tv_sec);
+> +	ufs_inode->ui_ctimensec = cpu_to_fs32(sb,
+> +					      inode_get_ctime(inode).tv_nsec);
+>  	ufs_inode->ui_mtime = cpu_to_fs64(sb, inode->i_mtime.tv_sec);
+>  	ufs_inode->ui_mtimensec = cpu_to_fs32(sb, inode->i_mtime.tv_nsec);
+>  
+> @@ -1205,7 +1208,7 @@ static int ufs_truncate(struct inode *inode, loff_t size)
+>  	truncate_setsize(inode, size);
+>  
+>  	ufs_truncate_blocks(inode);
+> -	inode->i_mtime = inode->i_ctime = current_time(inode);
+> +	inode->i_mtime = inode_set_ctime_current(inode);
+>  	mark_inode_dirty(inode);
+>  out:
+>  	UFSD("EXIT: err %d\n", err);
+> diff --git a/fs/ufs/namei.c b/fs/ufs/namei.c
+> index 36154b5aca6d..9cad29463791 100644
+> --- a/fs/ufs/namei.c
+> +++ b/fs/ufs/namei.c
+> @@ -153,7 +153,7 @@ static int ufs_link (struct dentry * old_dentry, struct inode * dir,
+>  	struct inode *inode = d_inode(old_dentry);
+>  	int error;
+>  
+> -	inode->i_ctime = current_time(inode);
+> +	inode_set_ctime_current(inode);
+>  	inode_inc_link_count(inode);
+>  	ihold(inode);
+>  
+> @@ -220,7 +220,7 @@ static int ufs_unlink(struct inode *dir, struct dentry *dentry)
+>  	if (err)
+>  		goto out;
+>  
+> -	inode->i_ctime = dir->i_ctime;
+> +	inode_set_ctime_to_ts(inode, inode_get_ctime(dir));
+>  	inode_dec_link_count(inode);
+>  	err = 0;
+>  out:
+> @@ -282,7 +282,7 @@ static int ufs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  		if (!new_de)
+>  			goto out_dir;
+>  		ufs_set_link(new_dir, new_de, new_page, old_inode, 1);
+> -		new_inode->i_ctime = current_time(new_inode);
+> +		inode_set_ctime_current(new_inode);
+>  		if (dir_de)
+>  			drop_nlink(new_inode);
+>  		inode_dec_link_count(new_inode);
+> @@ -298,7 +298,7 @@ static int ufs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  	 * Like most other Unix systems, set the ctime for inodes on a
+>   	 * rename.
+>  	 */
+> -	old_inode->i_ctime = current_time(old_inode);
+> +	inode_set_ctime_current(old_inode);
+>  
+>  	ufs_delete_entry(old_dir, old_de, old_page);
+>  	mark_inode_dirty(old_inode);
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
