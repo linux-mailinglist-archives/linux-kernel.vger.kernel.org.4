@@ -2,284 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5FA74A629
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB36974A62C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjGFV5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 17:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S231263AbjGFV6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 17:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGFV5I (ORCPT
+        with ESMTP id S229489AbjGFV6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:57:08 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8F7E1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 14:57:06 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b6afc1ceffso18952821fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 14:57:05 -0700 (PDT)
+        Thu, 6 Jul 2023 17:58:34 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06374E72
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 14:58:33 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbd33a1819so18045e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 14:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688680624; x=1691272624;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVnhNg7qkZFpMTP0oagP3cgCf8IJ5Q1wLEIQcCh535o=;
-        b=MvBMImMhdvHidhBzL6uqZxx6yzVRes6iV58FCq8wlDtFedCDMKFsPCQCW2bAVtyCr7
-         KGD2noEW89s15OLBP5uyX8JKNqczU9IDts0LnmdUTC7F/MYgyD4obOqrl0YMeQUwLDYQ
-         3DvDcCwBZCTVwplFebSInLXoGUMVQhbSnueYM=
+        d=google.com; s=20221208; t=1688680711; x=1691272711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hEParp9WLCAzJ3tEVRlPTLLmfvfF/hCapi/kGt1xYS8=;
+        b=xiB/EdWarYX/DABsjTSbkGjKLUXIBA/on3IZ9C5asF3xRQs7MvPzZ8Yhkw7i6jQstE
+         Y1NbNXGIdu/ToE2OjUzQPG5X4xID1vpsFXasYJyBzZHpwzwUKfSdrKhpaySPn+1SDuwN
+         r+xv0JB8aQTdIjkXPjPlcjdCI/R2dVTzf4SDPIwXsRoaTMlkiAerr48tgWlkfpV/ZZTN
+         Moy/gJeQkmODRoVFubt83Nfon1X5+S4K4sxpa/SGdYU1ukjlH0LEF3jIrfoKsTcGTx9+
+         FXjjAXBchIiKkAxtguMuKtFHHhNSUQLZNMdC+EuM6gRRlyjBP0pwHNI8vpypyaRpZy7q
+         jJlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688680624; x=1691272624;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AVnhNg7qkZFpMTP0oagP3cgCf8IJ5Q1wLEIQcCh535o=;
-        b=jTzE/J7SAYDnhAwhfjJmdWr6WEoJOulhVGgCYFJEqHoE5EVMcX8LIUdyjL3e4ioIIf
-         ziOafV02cl0sE55L08+WMuNYNBYRH7xfCmdGlM/yvx9YZ1Fojx8r3ICt+ZHRzPAqLCPz
-         sSYK17duPROvT0/A9y6F02k8DhWrTu2muvm7zNFCt54enkYgDxbGLMMbLYR96TWYPK+F
-         hvBUYbDxK9a9JHYwMZeIoeLBO4QPu3SVnhzmSc7mFPJSibYqgg5OWDmw91BnOjr6QFaF
-         gX/tdzUidNT919MVl24UeLKxiqZLIzcDLfZ0RH90oMMvbT9l+9qbmKVKzMOTGWCOUiZU
-         6gtQ==
-X-Gm-Message-State: ABy/qLZvHCzlaOIRBqWIU84dvXfHgMgeiTsW+dBBeYD+KDbzySLRyLRC
-        kCww1V5q9OecDS7oLMRpq4luEIyP/xjURfi34rOr6Q==
-X-Google-Smtp-Source: APBJJlGolWvEhohLjbCfMEDDH7dcgRio33ZXPYMpT2uwN/MDvU+flP0iSimdLpFN+j4L0EqcB61y0w==
-X-Received: by 2002:a2e:9685:0:b0:2b6:e332:1d6b with SMTP id q5-20020a2e9685000000b002b6e3321d6bmr2043715lji.52.1688680624038;
-        Thu, 06 Jul 2023 14:57:04 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id o15-20020a2e9b4f000000b002b6ff6e7dccsm494582ljj.26.2023.07.06.14.57.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 14:57:03 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b6afc1ceffso18952401fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 14:57:02 -0700 (PDT)
-X-Received: by 2002:ac2:4c46:0:b0:4fb:85ad:b6e2 with SMTP id
- o6-20020ac24c46000000b004fb85adb6e2mr2691388lfk.50.1688680622427; Thu, 06 Jul
- 2023 14:57:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688680711; x=1691272711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hEParp9WLCAzJ3tEVRlPTLLmfvfF/hCapi/kGt1xYS8=;
+        b=Pg6DTZHkVtLJuXDY0OWZkdkq+QwJepwRKCpn+isA9TEdB5sniMmp78mTq55JkZgXc+
+         4VxYlDp44nMOhc0MnPm+GPrpAup8J8xZxmc1THlcVQeG6WGFn+vOgOpuReaQ9Iwijr0Y
+         Q/2GHOTMjzZzPPAKnUSrZ8nMa/EQm+3Tz+3zLnU09tZS5kwpbuCmC10AiFhxwboi+Fpw
+         yEU7FO30WzFteQ4MKcdJsT27mqbTEkN9C2Z5QnkPpdGgSu9rX/IGWoHvMEJBzb0VJ2Es
+         XF0IkFA+hu6Zr21NH6HgJ+lk8jn3Vu3lEr7JNkS0YZsEpSIYQNPA97HMzLOl+xrIsBPX
+         rRag==
+X-Gm-Message-State: ABy/qLYSk61iMqkhE7K2+jfeNKG+AMBESa9JQQ/aKwT/QoMTSn03vTsA
+        9j3iXm1xxx6ZPULwm6rnZpWaWRrq8JgoZVfovdQjNw==
+X-Google-Smtp-Source: APBJJlEucBcuIwFpFaL47CRMtACqwMy+V+9VA2el4pY1YppjoFasEMeMh2eRbuXA0Dxre1rzbmTDPgUHDjF2z7ZaK9s=
+X-Received: by 2002:a05:600c:46cd:b0:3f6:f4b:d4a6 with SMTP id
+ q13-20020a05600c46cd00b003f60f4bd4a6mr7987wmo.7.1688680711257; Thu, 06 Jul
+ 2023 14:58:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
- <20230626-vorverlegen-setzen-c7f96e10df34@brauner> <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
- <20230626-fazit-campen-d54e428aa4d6@brauner> <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
-In-Reply-To: <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 6 Jul 2023 14:56:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
-Message-ID: <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
-Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
- forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read side?)
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000a4b41205ffd898be"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org>
+ <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230525093151.2338370-5-yangcong5@huaqin.corp-partner.google.com>
+ <CAD=FV=W_Vw=WTuap60PtzU8Jc58T1PsEhJfY96NmFFgmC1DB9w@mail.gmail.com>
+ <CACRpkdZkNio99zS+ttEXncOtS1TcYbfunKSKddErRDV1gTY43w@mail.gmail.com>
+ <CAD=FV=Xx_Bf=Fr1aCmmcjXAv1CyMYwEFba7C6k_HRE1VPtTtHQ@mail.gmail.com> <CACRpkdYif_h38TYDuSjY-0WkWNknFOe8n2Xe7zBydKxySrdZHA@mail.gmail.com>
+In-Reply-To: <CACRpkdYif_h38TYDuSjY-0WkWNknFOe8n2Xe7zBydKxySrdZHA@mail.gmail.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Thu, 6 Jul 2023 14:58:19 -0700
+Message-ID: <CAD=FV=WNgAr=YaMu9+KSxZSHpG9Z31Pbka1N3E-OYR1-WKHiaQ@mail.gmail.com>
+Subject: Re: [v4 4/4] drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        neil.armstrong@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, sam@ravnborg.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        hsinyi@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a4b41205ffd898be
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Mon, 26 Jun 2023 at 09:14, Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
+On Thu, Jul 6, 2023 at 2:36=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
+org> wrote:
 >
-> And even if that was a working work-around, the fundamental problem of
-> ./spl>fifo excluding all other access to fifo is quite unfortunate too.
+> On Thu, Jul 6, 2023 at 11:25=E2=80=AFPM Doug Anderson <dianders@google.co=
+m> wrote:
+>
+> > In my mind it's really a tradeoff and I'm happy to go with whatever
+> > consensus that others agree with. What I'm never super happy with,
+> > though, is changing the bikeshed color too often, so I'd be really
+> > curious to hear Sam's thoughts on the issue and whether he'd like to
+> > see this driver broken out into a dozen drivers.
+>
+> This is not question about a dozen drivers, to be clear.
+>
+> I just want to break out the drivers that have an identifiable
+> display controller that differs from the others, especially this one.
+>
+> The rest of the drivers inside of this boe driver I can't really tell,
+> they seem related? We don't know?
+>
+> So the Ilitek ILI9882t is an obvious break-out.
 
-So I already sent an earlier broken version of this patch to Ahelenia
-and Christian, but here's an actually slightly tested version with the
-obvious bugs fixed.
+I guess. To me it feels like the concept of breaking the driver into
+multiple sub-drivers and the idea of supporting ILI9882t more cleanly
+are orthogonal. You could still do your patch #4 and break out the
+page switching function without breaking up the driver.
 
-The keyword here being "obvious". It's probably broken in many
-non-obvious ways, but I'm sending it out in case anybody wants to play
-around with it.
+It feels to me fairly likely that many of the panels here are just as
+different from each other as the ILI9882t is from them. I guess it's
+not a dozen, but it feels like using the same "how different are they
+from each other" metric we'd end up with at least 5-6 new drivers. It
+seems clear to me that the panel that Sam first commented on is as
+different from the others in the BOE driver as the ILI9882t is.
+Certainly it has a pretty darn big unique command sequence for init...
 
-It boots for me. It even changes behavior of programs that splice()
-and used to keep the pipe lock over the IO and no longer do.
 
-But it might do unspeakable things to your pets, so caveat emptor. It
-"feels" right to me. But it's a rather quick hack, and really needs
-more eyes and more thought. I mention O_NDELAY in the (preliminary)
-commit message, but there are probably other issues that need thinking
-about.
+> For the rest, I guess I would be happier if the Chromium people
+> could use their leverage with vendors to muscle out the details
+> about display controller vendors and provide #defines for all
+> magic commands, we all dislike these opaque firmware-looking
+> jam tables.
 
-                Linus
+Yeah, I've grumbled about this with each new blob added. For instance:
 
---000000000000a4b41205ffd898be
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-splice-lock-the-pages-and-unlock-the-pipe-during-IO.patch"
-Content-Disposition: attachment; 
-	filename="0001-splice-lock-the-pages-and-unlock-the-pipe-during-IO.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljrotv5r0>
-X-Attachment-Id: f_ljrotv5r0
+https://lore.kernel.org/r/CAD=3DFV=3DUo-7rFWGiJG0oJ0ydosA4DxhFqiWGrab1zoZyx=
+yPsOBg@mail.gmail.com/
 
-RnJvbSAzNDc1ZTRkNTZjZWZhYjlmOGIwNjFkYzgyNGRiNGUzMTRkMDc2YTU5IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFRodSwgNiBKdWwgMjAyMyAxMToyMzowNyAtMDcwMApTdWJqZWN0OiBb
-UEFUQ0hdIHNwbGljZTogbG9jayB0aGUgcGFnZXMgYW5kIHVubG9jayB0aGUgcGlwZSBkdXJpbmcg
-SU8KClRoaXMgaXMgYWxyZWFkeSB3aGF0IHdlIGRvIGZvciBwYWdlIGNhY2hlIHBhZ2VzLCB3aGVy
-ZSB3ZSBjYW4gYWRkIHJhdwpwYWdlcyB0aGF0IGFyZSBub3QgdXAtdG8tZGF0ZSB5ZXQgdG8gdGhl
-IHBpcGUsIGFuZCB0aGUgcmVhZGVycyBjYWxsIHRoZQpwaXBlIGJ1ZmZlciAnLT5jb25maXJtKCkn
-IGZ1bmN0aW9uIHRvIHdhaXQgZm9yIHRoZSBkYXRhIHRvIGJlIHJlYWR5LgoKU28ganVzdCBkbyB0
-aGUgc2FtZSBmb3Igc3BsaWNlIHJlYWRpbmcsIGFsbG93aW5nIHVzIHRvIHVubG9jayB0aGUgcGlw
-ZQpkdXJpbmcgdGhlIHJlYWQuICBUaGF0IHRoZW4gYXZvaWRzIHByb2JsZW1zIHdpdGggdXNlcnMg
-dGhhdCBnZXQgYmxvY2tlZApvbiB0aGUgcGlwZSBsb2NrLgoKTm93IHRoZXkgZ2V0IGJsb2NrZWQg
-b24gdGhlIHBpcGUgYnVmZmVyIC0+Y29uZmlybSgpIGluc3RlYWQuCgpUT0RPOiB0ZWFjaCAnT19O
-REVMQVknIGFuZCBzZWxlY3QvcG9sbCBhYm91dCB0aGlzIHRvby4KClNpZ25lZC1vZmYtYnk6IExp
-bnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9yZz4KLS0tCiBmcy9waXBl
-LmMgICAgICAgICAgICAgICB8ICAxOCArKystLS0KIGZzL3NwbGljZS5jICAgICAgICAgICAgIHwg
-MTIyICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0KIGluY2x1ZGUvbGlu
-dXgvcGFnZW1hcC5oIHwgICAxICsKIG1tL2ZpbGVtYXAuYyAgICAgICAgICAgIHwgICA2ICsrCiA0
-IGZpbGVzIGNoYW5nZWQsIDEwNSBpbnNlcnRpb25zKCspLCA0MiBkZWxldGlvbnMoLSkKCmRpZmYg
-LS1naXQgYS9mcy9waXBlLmMgYi9mcy9waXBlLmMKaW5kZXggMmQ4OGY3M2Y1ODVhLi43MTk0MmQy
-NDBjOTggMTAwNjQ0Ci0tLSBhL2ZzL3BpcGUuYworKysgYi9mcy9waXBlLmMKQEAgLTI4NCwxMCAr
-Mjg0LDE3IEBAIHBpcGVfcmVhZChzdHJ1Y3Qga2lvY2IgKmlvY2IsIHN0cnVjdCBpb3ZfaXRlciAq
-dG8pCiAKIAkJaWYgKCFwaXBlX2VtcHR5KGhlYWQsIHRhaWwpKSB7CiAJCQlzdHJ1Y3QgcGlwZV9i
-dWZmZXIgKmJ1ZiA9ICZwaXBlLT5idWZzW3RhaWwgJiBtYXNrXTsKLQkJCXNpemVfdCBjaGFycyA9
-IGJ1Zi0+bGVuOwotCQkJc2l6ZV90IHdyaXR0ZW47CisJCQlzaXplX3QgY2hhcnMsIHdyaXR0ZW47
-CiAJCQlpbnQgZXJyb3I7CiAKKwkJCWVycm9yID0gcGlwZV9idWZfY29uZmlybShwaXBlLCBidWYp
-OworCQkJaWYgKGVycm9yKSB7CisJCQkJaWYgKCFyZXQpCisJCQkJCXJldCA9IGVycm9yOworCQkJ
-CWJyZWFrOworCQkJfQorCisJCQljaGFycyA9IGJ1Zi0+bGVuOwogCQkJaWYgKGNoYXJzID4gdG90
-YWxfbGVuKSB7CiAJCQkJaWYgKGJ1Zi0+ZmxhZ3MgJiBQSVBFX0JVRl9GTEFHX1dIT0xFKSB7CiAJ
-CQkJCWlmIChyZXQgPT0gMCkKQEAgLTI5NywxMyArMzA0LDYgQEAgcGlwZV9yZWFkKHN0cnVjdCBr
-aW9jYiAqaW9jYiwgc3RydWN0IGlvdl9pdGVyICp0bykKIAkJCQljaGFycyA9IHRvdGFsX2xlbjsK
-IAkJCX0KIAotCQkJZXJyb3IgPSBwaXBlX2J1Zl9jb25maXJtKHBpcGUsIGJ1Zik7Ci0JCQlpZiAo
-ZXJyb3IpIHsKLQkJCQlpZiAoIXJldCkKLQkJCQkJcmV0ID0gZXJyb3I7Ci0JCQkJYnJlYWs7Ci0J
-CQl9Ci0KIAkJCXdyaXR0ZW4gPSBjb3B5X3BhZ2VfdG9faXRlcihidWYtPnBhZ2UsIGJ1Zi0+b2Zm
-c2V0LCBjaGFycywgdG8pOwogCQkJaWYgKHVubGlrZWx5KHdyaXR0ZW4gPCBjaGFycykpIHsKIAkJ
-CQlpZiAoIXJldCkKZGlmZiAtLWdpdCBhL2ZzL3NwbGljZS5jIGIvZnMvc3BsaWNlLmMKaW5kZXgg
-MDA0ZWIxYzRjZTMxLi41MDNmN2VmZjQxYjYgMTAwNjQ0Ci0tLSBhL2ZzL3NwbGljZS5jCisrKyBi
-L2ZzL3NwbGljZS5jCkBAIC0zMDAsNiArMzAwLDQyIEBAIHZvaWQgc3BsaWNlX3Nocmlua19zcGQo
-c3RydWN0IHNwbGljZV9waXBlX2Rlc2MgKnNwZCkKIAlrZnJlZShzcGQtPnBhcnRpYWwpOwogfQog
-CitzdGF0aWMgdm9pZCBmaW5hbGl6ZV9waXBlX2J1ZihzdHJ1Y3QgcGlwZV9idWZmZXIgKmJ1Ziwg
-dW5zaWduZWQgaW50IGNodW5rKQoreworCWJ1Zi0+bGVuID0gY2h1bms7CisJYnVmLT5vcHMgPSAm
-ZGVmYXVsdF9waXBlX2J1Zl9vcHM7CisJdW5sb2NrX3BhZ2UoYnVmLT5wYWdlKTsKK30KKworc3Rh
-dGljIGludCBidXN5X3BpcGVfYnVmX2NvbmZpcm0oc3RydWN0IHBpcGVfaW5vZGVfaW5mbyAqcGlw
-ZSwKKwkJCQkgc3RydWN0IHBpcGVfYnVmZmVyICpidWYpCit7CisJc3RydWN0IHBhZ2UgKnBhZ2Ug
-PSBidWYtPnBhZ2U7CisKKwlpZiAoZm9saW9fd2FpdF9iaXRfaW50ZXJydXB0aWJsZShwYWdlX2Zv
-bGlvKHBhZ2UpLCBQR19sb2NrZWQpKQorCQlyZXR1cm4gLUVJTlRSOworCXJldHVybiAwOworfQor
-CisvKgorICogVGhlc2UgYXJlIHRoZSBzYW1lIGFzIHRoZSBkZWZhdWx0IHBpcGUgYnVmIG9wZXJh
-dGlvbnMsCisgKiBidXQgdGhlICcuY29uZmlybSgpJyBmdW5jdGlvbiByZXF1aXJlcyB0aGF0IGFu
-eSB1c2VyCisgKiB3YWl0IGZvciB0aGUgcGFnZSB0byB1bmxvY2sgYmVmb3JlIHVzZS4KKyAqCisg
-KiBJIGd1ZXNzIHdlIGNvdWxkIHVzZSB0aGUgd2hvbGUgUEdfdXB0b2RhdGUgbG9naWMgdG9vLAor
-ICogYW5kIHRyZWF0IHRoZXNlIGFzIHNvbWUga2luZCBvZiBzcGVjaWFsIHBhZ2UgdGFibGUgcGFn
-ZXMuCisgKgorICogUElQRV9CVUZfRkxBR19DQU5fTUVSR0UgbXVzdCBvYnZpb3VzbHkgbm90IGJl
-IHNldCB3aGVuCisgKiB1c2luZyB0aGVzZSwgYW5kIGl0J3MgaW1wb3J0YW50IHRoYXQgYW55IHBp
-cGUgcmVhZGVyCisgKiBsb29rIGF0IGJ1Zi0+bGVuIG9ubHkgX2FmdGVyXyBjb25maXJtaW5nIHRo
-ZSBidWZmZXIhCisgKi8KK2NvbnN0IHN0cnVjdCBwaXBlX2J1Zl9vcGVyYXRpb25zIGJ1c3lfcGlw
-ZV9idWZfb3BzID0geworCS5jb25maXJtCT0gYnVzeV9waXBlX2J1Zl9jb25maXJtLAorCS5yZWxl
-YXNlCT0gZ2VuZXJpY19waXBlX2J1Zl9yZWxlYXNlLAorCS50cnlfc3RlYWwJPSBnZW5lcmljX3Bp
-cGVfYnVmX3RyeV9zdGVhbCwKKwkuZ2V0CQk9IGdlbmVyaWNfcGlwZV9idWZfZ2V0LAorfTsKKwog
-LyoqCiAgKiBjb3B5X3NwbGljZV9yZWFkIC0gIENvcHkgZGF0YSBmcm9tIGEgZmlsZSBhbmQgc3Bs
-aWNlIHRoZSBjb3B5IGludG8gYSBwaXBlCiAgKiBAaW46IFRoZSBmaWxlIHRvIHJlYWQgZnJvbQpA
-QCAtMzI4LDYgKzM2NCw3IEBAIHNzaXplX3QgY29weV9zcGxpY2VfcmVhZChzdHJ1Y3QgZmlsZSAq
-aW4sIGxvZmZfdCAqcHBvcywKIAlzdHJ1Y3QgYmlvX3ZlYyAqYnY7CiAJc3RydWN0IGtpb2NiIGtp
-b2NiOwogCXN0cnVjdCBwYWdlICoqcGFnZXM7CisJc3RydWN0IHBpcGVfYnVmZmVyICoqYnVmczsK
-IAlzc2l6ZV90IHJldDsKIAlzaXplX3QgdXNlZCwgbnBhZ2VzLCBjaHVuaywgcmVtYWluLCBrZWVw
-ID0gMDsKIAlpbnQgaTsKQEAgLTMzOSwxMSArMzc2LDEzIEBAIHNzaXplX3QgY29weV9zcGxpY2Vf
-cmVhZChzdHJ1Y3QgZmlsZSAqaW4sIGxvZmZfdCAqcHBvcywKIAlucGFnZXMgPSBESVZfUk9VTkRf
-VVAobGVuLCBQQUdFX1NJWkUpOwogCiAJYnYgPSBremFsbG9jKGFycmF5X3NpemUobnBhZ2VzLCBz
-aXplb2YoYnZbMF0pKSArCi0JCSAgICAgYXJyYXlfc2l6ZShucGFnZXMsIHNpemVvZihzdHJ1Y3Qg
-cGFnZSAqKSksIEdGUF9LRVJORUwpOworCQkgICAgIGFycmF5X3NpemUobnBhZ2VzLCBzaXplb2Yo
-c3RydWN0IHBhZ2UgKikpICsKKwkJICAgICBhcnJheV9zaXplKG5wYWdlcywgc2l6ZW9mKHN0cnVj
-dCBwaXBlX2J1ZmZlciAqKSksIEdGUF9LRVJORUwpOwogCWlmICghYnYpCiAJCXJldHVybiAtRU5P
-TUVNOwogCiAJcGFnZXMgPSAoc3RydWN0IHBhZ2UgKiopKGJ2ICsgbnBhZ2VzKTsKKwlidWZzID0g
-KHN0cnVjdCBwaXBlX2J1ZmZlciAqKikocGFnZXMgKyBucGFnZXMpOwogCW5wYWdlcyA9IGFsbG9j
-X3BhZ2VzX2J1bGtfYXJyYXkoR0ZQX1VTRVIsIG5wYWdlcywgcGFnZXMpOwogCWlmICghbnBhZ2Vz
-KSB7CiAJCWtmcmVlKGJ2KTsKQEAgLTM1MiwxNCArMzkxLDM0IEBAIHNzaXplX3QgY29weV9zcGxp
-Y2VfcmVhZChzdHJ1Y3QgZmlsZSAqaW4sIGxvZmZfdCAqcHBvcywKIAogCXJlbWFpbiA9IGxlbiA9
-IG1pbl90KHNpemVfdCwgbGVuLCBucGFnZXMgKiBQQUdFX1NJWkUpOwogCisJLyogUHVzaCB0aGVt
-IGludG8gdGhlIHBpcGUgYW5kIGJ1aWxkIHVwIHRoZSBiaW9fdmVjICovCiAJZm9yIChpID0gMDsg
-aSA8IG5wYWdlczsgaSsrKSB7CisJCXN0cnVjdCBwaXBlX2J1ZmZlciAqYnVmID0gcGlwZV9oZWFk
-X2J1ZihwaXBlKTsKKwkJc3RydWN0IHBhZ2UgKnBhZ2UgPSBwYWdlc1tpXTsKKworCQlwaXBlLT5o
-ZWFkKys7CisJCWxvY2tfcGFnZShwYWdlKTsKKwkJKmJ1ZiA9IChzdHJ1Y3QgcGlwZV9idWZmZXIp
-IHsKKwkJCS5vcHMJPSAmYnVzeV9waXBlX2J1Zl9vcHMsCisJCQkucGFnZQk9IHBhZ2UsCisJCQku
-b2Zmc2V0CT0gMCwKKwkJCS5sZW4JPSBjaHVuaywKKwkJfTsKKwkJYnVmc1tpXSA9IGJ1ZjsKKwog
-CQljaHVuayA9IG1pbl90KHNpemVfdCwgUEFHRV9TSVpFLCByZW1haW4pOwotCQlidltpXS5idl9w
-YWdlID0gcGFnZXNbaV07CisJCWJ2W2ldLmJ2X3BhZ2UgPSBwYWdlOwogCQlidltpXS5idl9vZmZz
-ZXQgPSAwOwogCQlidltpXS5idl9sZW4gPSBjaHVuazsKIAkJcmVtYWluIC09IGNodW5rOwogCX0K
-IAorCS8qCisJICogV2UgaGF2ZSBub3cgcmVzZXJ2ZWQgdGhlIHNwYWNlIHdpdGggbG9ja2VkIHBh
-Z2VzLAorCSAqIGFuZCBjYW4gdW5sb2NrIHRoZSBwaXBlIGR1cmluZyB0aGUgSU8uCisJICovCisJ
-cGlwZV91bmxvY2socGlwZSk7CisKIAkvKiBEbyB0aGUgSS9PICovCiAJaW92X2l0ZXJfYnZlYygm
-dG8sIElURVJfREVTVCwgYnYsIG5wYWdlcywgbGVuKTsKIAlpbml0X3N5bmNfa2lvY2IoJmtpb2Ni
-LCBpbik7CkBAIC0zNzgsMjYgKzQzNywyMiBAQCBzc2l6ZV90IGNvcHlfc3BsaWNlX3JlYWQoc3Ry
-dWN0IGZpbGUgKmluLCBsb2ZmX3QgKnBwb3MsCiAJaWYgKHJldCA9PSAtRUZBVUxUKQogCQlyZXQg
-PSAtRUFHQUlOOwogCi0JLyogRnJlZSBhbnkgcGFnZXMgdGhhdCBkaWRuJ3QgZ2V0IHRvdWNoZWQg
-YXQgYWxsLiAqLwotCWlmIChrZWVwIDwgbnBhZ2VzKQotCQlyZWxlYXNlX3BhZ2VzKHBhZ2VzICsg
-a2VlcCwgbnBhZ2VzIC0ga2VlcCk7Ci0KLQkvKiBQdXNoIHRoZSByZW1haW5pbmcgcGFnZXMgaW50
-byB0aGUgcGlwZS4gKi8KKwkvKiBVcGRhdGUgdGhlIHBhZ2Ugc3RhdGUgaW4gdGhlIHBpcGUgKi8K
-IAlyZW1haW4gPSByZXQ7Ci0JZm9yIChpID0gMDsgaSA8IGtlZXA7IGkrKykgewotCQlzdHJ1Y3Qg
-cGlwZV9idWZmZXIgKmJ1ZiA9IHBpcGVfaGVhZF9idWYocGlwZSk7CisJZm9yIChpID0gMDsgaSA8
-IG5wYWdlczsgaSsrKSB7CisJCXN0cnVjdCBwaXBlX2J1ZmZlciAqYnVmID0gYnVmc1tpXTsKIAog
-CQljaHVuayA9IG1pbl90KHNpemVfdCwgcmVtYWluLCBQQUdFX1NJWkUpOwotCQkqYnVmID0gKHN0
-cnVjdCBwaXBlX2J1ZmZlcikgewotCQkJLm9wcwk9ICZkZWZhdWx0X3BpcGVfYnVmX29wcywKLQkJ
-CS5wYWdlCT0gYnZbaV0uYnZfcGFnZSwKLQkJCS5vZmZzZXQJPSAwLAotCQkJLmxlbgk9IGNodW5r
-LAotCQl9OwotCQlwaXBlLT5oZWFkKys7CiAJCXJlbWFpbiAtPSBjaHVuazsKKworCQkvKgorCQkg
-KiBOT1RFISBUaGUgc2l6ZSBtaWdodCBoYXZlIGNoYW5nZWQsIGFuZAorCQkgKiBjaHVuayBtYXkg
-YmUgc21hbGxlciBvciB6ZXJvIQorCQkgKi8KKwkJZmluYWxpemVfcGlwZV9idWYoYnVmLCBjaHVu
-ayk7CiAJfQogCisJcGlwZV9sb2NrKHBpcGUpOwogCWtmcmVlKGJ2KTsKIAlyZXR1cm4gcmV0Owog
-fQpAQCAtNDU1LDEwICs1MTAsNiBAQCBzdGF0aWMgaW50IHNwbGljZV9mcm9tX3BpcGVfZmVlZChz
-dHJ1Y3QgcGlwZV9pbm9kZV9pbmZvICpwaXBlLCBzdHJ1Y3Qgc3BsaWNlX2RlcwogCXdoaWxlICgh
-cGlwZV9lbXB0eShoZWFkLCB0YWlsKSkgewogCQlzdHJ1Y3QgcGlwZV9idWZmZXIgKmJ1ZiA9ICZw
-aXBlLT5idWZzW3RhaWwgJiBtYXNrXTsKIAotCQlzZC0+bGVuID0gYnVmLT5sZW47Ci0JCWlmIChz
-ZC0+bGVuID4gc2QtPnRvdGFsX2xlbikKLQkJCXNkLT5sZW4gPSBzZC0+dG90YWxfbGVuOwotCiAJ
-CXJldCA9IHBpcGVfYnVmX2NvbmZpcm0ocGlwZSwgYnVmKTsKIAkJaWYgKHVubGlrZWx5KHJldCkp
-IHsKIAkJCWlmIChyZXQgPT0gLUVOT0RBVEEpCkBAIC00NjYsNiArNTE3LDEwIEBAIHN0YXRpYyBp
-bnQgc3BsaWNlX2Zyb21fcGlwZV9mZWVkKHN0cnVjdCBwaXBlX2lub2RlX2luZm8gKnBpcGUsIHN0
-cnVjdCBzcGxpY2VfZGVzCiAJCQlyZXR1cm4gcmV0OwogCQl9CiAKKwkJc2QtPmxlbiA9IGJ1Zi0+
-bGVuOworCQlpZiAoc2QtPmxlbiA+IHNkLT50b3RhbF9sZW4pCisJCQlzZC0+bGVuID0gc2QtPnRv
-dGFsX2xlbjsKKwogCQlyZXQgPSBhY3RvcihwaXBlLCBidWYsIHNkKTsKIAkJaWYgKHJldCA8PSAw
-KQogCQkJcmV0dXJuIHJldDsKQEAgLTcxNSwxMiArNzcwLDcgQEAgaXRlcl9maWxlX3NwbGljZV93
-cml0ZShzdHJ1Y3QgcGlwZV9pbm9kZV9pbmZvICpwaXBlLCBzdHJ1Y3QgZmlsZSAqb3V0LAogCQls
-ZWZ0ID0gc2QudG90YWxfbGVuOwogCQlmb3IgKG4gPSAwOyAhcGlwZV9lbXB0eShoZWFkLCB0YWls
-KSAmJiBsZWZ0ICYmIG4gPCBuYnVmczsgdGFpbCsrKSB7CiAJCQlzdHJ1Y3QgcGlwZV9idWZmZXIg
-KmJ1ZiA9ICZwaXBlLT5idWZzW3RhaWwgJiBtYXNrXTsKLQkJCXNpemVfdCB0aGlzX2xlbiA9IGJ1
-Zi0+bGVuOwotCi0JCQkvKiB6ZXJvLWxlbmd0aCBidmVjcyBhcmUgbm90IHN1cHBvcnRlZCwgc2tp
-cCB0aGVtICovCi0JCQlpZiAoIXRoaXNfbGVuKQotCQkJCWNvbnRpbnVlOwotCQkJdGhpc19sZW4g
-PSBtaW4odGhpc19sZW4sIGxlZnQpOworCQkJc2l6ZV90IHRoaXNfbGVuOwogCiAJCQlyZXQgPSBw
-aXBlX2J1Zl9jb25maXJtKHBpcGUsIGJ1Zik7CiAJCQlpZiAodW5saWtlbHkocmV0KSkgewpAQCAt
-NzI5LDYgKzc3OSwxMiBAQCBpdGVyX2ZpbGVfc3BsaWNlX3dyaXRlKHN0cnVjdCBwaXBlX2lub2Rl
-X2luZm8gKnBpcGUsIHN0cnVjdCBmaWxlICpvdXQsCiAJCQkJZ290byBkb25lOwogCQkJfQogCisJ
-CQkvKiB6ZXJvLWxlbmd0aCBidmVjcyBhcmUgbm90IHN1cHBvcnRlZCwgc2tpcCB0aGVtICovCisJ
-CQl0aGlzX2xlbiA9IGJ1Zi0+bGVuOworCQkJaWYgKCF0aGlzX2xlbikKKwkJCQljb250aW51ZTsK
-KwkJCXRoaXNfbGVuID0gbWluKHRoaXNfbGVuLCBsZWZ0KTsKKwogCQkJYnZlY19zZXRfcGFnZSgm
-YXJyYXlbbl0sIGJ1Zi0+cGFnZSwgdGhpc19sZW4sCiAJCQkJICAgICAgYnVmLT5vZmZzZXQpOwog
-CQkJbGVmdCAtPSB0aGlzX2xlbjsKQEAgLTg0NywxMyArOTAzLDYgQEAgc3NpemVfdCBzcGxpY2Vf
-dG9fc29ja2V0KHN0cnVjdCBwaXBlX2lub2RlX2luZm8gKnBpcGUsIHN0cnVjdCBmaWxlICpvdXQs
-CiAJCQlzdHJ1Y3QgcGlwZV9idWZmZXIgKmJ1ZiA9ICZwaXBlLT5idWZzW3RhaWwgJiBtYXNrXTsK
-IAkJCXNpemVfdCBzZWc7CiAKLQkJCWlmICghYnVmLT5sZW4pIHsKLQkJCQl0YWlsKys7Ci0JCQkJ
-Y29udGludWU7Ci0JCQl9Ci0KLQkJCXNlZyA9IG1pbl90KHNpemVfdCwgcmVtYWluLCBidWYtPmxl
-bik7Ci0KIAkJCXJldCA9IHBpcGVfYnVmX2NvbmZpcm0ocGlwZSwgYnVmKTsKIAkJCWlmICh1bmxp
-a2VseShyZXQpKSB7CiAJCQkJaWYgKHJldCA9PSAtRU5PREFUQSkKQEAgLTg2MSw2ICs5MTAsMTMg
-QEAgc3NpemVfdCBzcGxpY2VfdG9fc29ja2V0KHN0cnVjdCBwaXBlX2lub2RlX2luZm8gKnBpcGUs
-IHN0cnVjdCBmaWxlICpvdXQsCiAJCQkJYnJlYWs7CiAJCQl9CiAKKwkJCWlmICghYnVmLT5sZW4p
-IHsKKwkJCQl0YWlsKys7CisJCQkJY29udGludWU7CisJCQl9CisKKwkJCXNlZyA9IG1pbl90KHNp
-emVfdCwgcmVtYWluLCBidWYtPmxlbik7CisKIAkJCWJ2ZWNfc2V0X3BhZ2UoJmJ2ZWNbYmMrK10s
-IGJ1Zi0+cGFnZSwgc2VnLCBidWYtPm9mZnNldCk7CiAJCQlyZW1haW4gLT0gc2VnOwogCQkJaWYg
-KHJlbWFpbiA9PSAwIHx8IGJjID49IEFSUkFZX1NJWkUoYnZlYykpCmRpZmYgLS1naXQgYS9pbmNs
-dWRlL2xpbnV4L3BhZ2VtYXAuaCBiL2luY2x1ZGUvbGludXgvcGFnZW1hcC5oCmluZGV4IDcxNjk1
-M2VlMWViZC4uY2M1MWVhOTEwYTkxIDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L3BhZ2VtYXAu
-aAorKysgYi9pbmNsdWRlL2xpbnV4L3BhZ2VtYXAuaApAQCAtMTAxOCw2ICsxMDE4LDcgQEAgc3Rh
-dGljIGlubGluZSBib29sIGZvbGlvX2xvY2tfb3JfcmV0cnkoc3RydWN0IGZvbGlvICpmb2xpbywK
-ICAqLwogdm9pZCBmb2xpb193YWl0X2JpdChzdHJ1Y3QgZm9saW8gKmZvbGlvLCBpbnQgYml0X25y
-KTsKIGludCBmb2xpb193YWl0X2JpdF9raWxsYWJsZShzdHJ1Y3QgZm9saW8gKmZvbGlvLCBpbnQg
-Yml0X25yKTsKK2ludCBmb2xpb193YWl0X2JpdF9pbnRlcnJ1cHRpYmxlKHN0cnVjdCBmb2xpbyAq
-Zm9saW8sIGludCBiaXRfbnIpOwogCiAvKiAKICAqIFdhaXQgZm9yIGEgZm9saW8gdG8gYmUgdW5s
-b2NrZWQuCmRpZmYgLS1naXQgYS9tbS9maWxlbWFwLmMgYi9tbS9maWxlbWFwLmMKaW5kZXggOWU0
-NGE0OWJiZDc0Li5lMzZlMDUyYmI5OTEgMTAwNjQ0Ci0tLSBhL21tL2ZpbGVtYXAuYworKysgYi9t
-bS9maWxlbWFwLmMKQEAgLTE0NTAsNiArMTQ1MCwxMiBAQCBpbnQgZm9saW9fd2FpdF9iaXRfa2ls
-bGFibGUoc3RydWN0IGZvbGlvICpmb2xpbywgaW50IGJpdF9ucikKIH0KIEVYUE9SVF9TWU1CT0wo
-Zm9saW9fd2FpdF9iaXRfa2lsbGFibGUpOwogCitpbnQgZm9saW9fd2FpdF9iaXRfaW50ZXJydXB0
-aWJsZShzdHJ1Y3QgZm9saW8gKmZvbGlvLCBpbnQgYml0X25yKQoreworCXJldHVybiBmb2xpb193
-YWl0X2JpdF9jb21tb24oZm9saW8sIGJpdF9uciwgVEFTS19JTlRFUlJVUFRJQkxFLCBTSEFSRUQp
-OworfQorRVhQT1JUX1NZTUJPTChmb2xpb193YWl0X2JpdF9pbnRlcnJ1cHRpYmxlKTsKKwogLyoq
-CiAgKiBmb2xpb19wdXRfd2FpdF9sb2NrZWQgLSBEcm9wIGEgcmVmZXJlbmNlIGFuZCB3YWl0IGZv
-ciBpdCB0byBiZSB1bmxvY2tlZAogICogQGZvbGlvOiBUaGUgZm9saW8gdG8gd2FpdCBmb3IuCi0t
-IAoyLjQxLjAuMjAzLmdhNGYyY2QzMmJiLmRpcnR5Cgo=
---000000000000a4b41205ffd898be--
+Where I said:
+
+> I'm not really an expert on
+> MIPI panels but the convention of a big stream of binary commands
+> seems to match what other panels in this driver do, even if their
+> table of binary data isn't quite as long as yours (are all of yours
+> actually needed?)
+
+The problem is that it's hard for me to make a strong argument here
+when there is prior art of panels being supported with blob-sequences.
+In this case, I think you as an upstream developer have more leverage.
+I can help put pressure to make sure that upstream concerns are
+addressed, but I think it's on upstream to put their foot down and say
+that these blob sequences are not OK for new panels. In each case I
+landed a patch with a new blob sequence I tried to give the community
+time to respond and I tried to telegraph what I was going to do to
+make sure nobody was surprised...
+
+-Doug
