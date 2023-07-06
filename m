@@ -2,179 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCBE749BCE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E680749BB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjGFMbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S231701AbjGFMae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjGFMap (ORCPT
+        with ESMTP id S229721AbjGFMad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:30:45 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2125.outbound.protection.outlook.com [40.107.255.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C37D1BF4;
-        Thu,  6 Jul 2023 05:30:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vf7i941MaiYy8q0cTPowKl+Ernki3Px6mBD6dk+r5wY+8hyVIEG4XQAEIzcE4jf6+LN/+EFV9gIxZJLqY21+CAnkXiEwcotmBWe4qqDUu1IKH5P28iwtvb5eXA4hDtjWB5brajPevOkd+2qokjEY/e0Po+jcGs6Ai3DJLNU1HNMf+PfZV96k4WjIeyfkXNiJdMTx3dx5xgGJJgMK6jnJm0RNAYayKxhmNYe461xUudlBI9JaWsgqtkwrwQ0cSta0gR2UjE5fsMer1fHAaVlmQH/aZ992OYmxyHEnsiRZDprLUBmiz7m/v37K1wxN9xFVcbmiwIcKFbE2dcl4dLalww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1nyyRFy5+OGyUTVX4RcYkh6UHqqVpPnEGxgL2VbtmUI=;
- b=LWfGSjDcG5DwrIagslrYyFeLCDSsqnKN2x6SE/m0qMEXGR6LsjhIHuJacH1xxPKF4fe1El5dZ/a9p/6MViRm9RV7Brt4lzBuPEln7ZnKeU8mo0yktXHcfndDjnha/MC6lwvbfm/SIIXxKnB18ofQ25Ox5iWA49kMoKj60m2e2G9f80FwkbgRJsOLjH0+/Xu6ORZUwTCNH2m2NdYZExjhWk5sKaDT/nBjLVPSvUJdjYdLf9Qbfqf51SBHYGM3ay8Y+Hg4Sg/eACrSVLZxxX18g//V4Gk3YaRw5n/DTiOhBITr7oXkb7sy7bYP7ksOapyOeg1IHEOFUWV5xLSCeETomg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1nyyRFy5+OGyUTVX4RcYkh6UHqqVpPnEGxgL2VbtmUI=;
- b=p3t554dHytT6TY0EoRt2U6kRHvJiAnkiWQ11CjQ9K07jxtWUybpa3M5c8y9zhyuGcNErJ42XsP6BqbgJkajYtj/cFlHfh8mBJV+SYMakdw6BIA/1TRe5+rPFpsrUhoJ0HSkczVMqZCAA7t5rpAQE9tFT+l+37KdD33s4lKxu0hVy4D29BYF9TXVwhgFsiv8aBUDN+JiMFNbusqdOTwsCb8TQmTHG9UKvLIfcLQWJxuPdXiAG5ZOxFgvcHyhxk2AM8M2BeyXylS5AiL2UiXgXaZu5V2I/FhysC+h0X3ScCI0/BjPIJ6xYOQH2jjlT5iPlM8V5iZIdI30eVMWYi6we+w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
- SEZPR06MB5558.apcprd06.prod.outlook.com (2603:1096:101:cc::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.17; Thu, 6 Jul 2023 12:30:36 +0000
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c]) by SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 12:30:36 +0000
-From:   Wang Ming <machel@vivo.com>
-To:     Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com, simon.horman@corigine.com,
-        Wang Ming <machel@vivo.com>
-Subject: [PATCH net v2] net:thunder:Fix resource leaks in device_for_each_child_node() loops
-Date:   Thu,  6 Jul 2023 20:30:11 +0800
-Message-Id: <20230706123021.8174-1-machel@vivo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR02CA0042.apcprd02.prod.outlook.com
- (2603:1096:404:a6::30) To SG2PR06MB3743.apcprd06.prod.outlook.com
- (2603:1096:4:d0::18)
+        Thu, 6 Jul 2023 08:30:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5D5E72
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:30:31 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6B7B76606FBA;
+        Thu,  6 Jul 2023 13:30:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688646630;
+        bh=pHMJmwNbtSKYMy6i3xzbiDAPsbITJLjZDpeNrBax1WY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HNIsmBblHxjvSoYlmth1zpKe3gbr8lume50N9BA8jGKtenz9T81nLWPrcbAKI8be8
+         itLehFcqyTZZbeOZ2/WT+KqmFWOPj6z1vp3bCf9oqsLkZ9izj1K3+nZG7ICWEQQp4Y
+         RIPJb7fjovW77FpQZ38wt5P7gqGTv1UPYCoKUV1JfbjRUG/JXF9XMuOOuupSjSXQ9c
+         GWK/MD3Lal7TDvj8qx9lnmQG8VV4UnpRiVcKuPJAGOPwfUALqbFST7/PZzF5TTm6bB
+         i04Mm1bVuNwMW+0irwbQDZ/wruRlLQgDlMMRvD8UcoqoOvFoSBtqdczXYAQHoMgjCZ
+         s+sM/Y2gE9g/A==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        wenst@chromium.org, nfraprado@collabora.com
+Subject: [PATCH v4 0/9] MediaTek DisplayPort: support eDP and aux-bus
+Date:   Thu,  6 Jul 2023 14:30:16 +0200
+Message-Id: <20230706123025.208408-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|SEZPR06MB5558:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00908a29-bd7a-40f9-b0e8-08db7e1cccf5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Obrt5Dn/qTtFsHv87lS3eV6KHf4/IeCd2gE/sEqRE96J24+mfuCNbna+VGBiZoycQqBL5P3xxoo986x4rq7DaJPWV0ZsL05+ORzU/ayM7lv263mPYmg+LeO9VQvCp8uypRkymvlY67om1FfT8fh3DFHh8lIKNLGWiyRAdxxSLBUbSNxhshhVo3o8Mo7D5ZXdhFpFXPH1qbFnDb7CsaO4dmM6kN5i/bBNtZ+GM2oLau20HimJ8MTbICnEv03ML7rNbFR90hutH8Awy6QS8AUqJjQ6nNotwFZEIFt6JGMhsLMdAPDYQTYk53WuEtDPdCFTfvgtjphilH+mDKfwWyGjE8FCU0HtrpJSB7wVbjVLVzov2CBsrpQMqTwvZ3+kcpIgn+4zzIQjlDTbqVDQJK69jMFSYqJviotSjfw6QnbNVp6yqFyHTzmqnu8rOUGjqg294G6XWf30HA7oRwMXwop1GJn4lF5qCVUt+HOxvMSnuPbq4gbo0fC63rIFHNJKisJv8mA45mm07UxdaMcgm8zpL3p10hnlsteT+3YrQ894l/JRAlEyh5o2HbDhBaLTxk8JOYVSTwC5x7kw3fw5vID2PUhnf2JatrwzlwhuyKcRz79yJJqttHHP5zromCkyQmgX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(451199021)(316002)(5660300002)(8936002)(2616005)(86362001)(83380400001)(38100700002)(38350700002)(66476007)(41300700001)(36756003)(66946007)(4326008)(66556008)(6506007)(186003)(6666004)(1076003)(107886003)(110136005)(52116002)(26005)(478600001)(6486002)(6512007)(8676002)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/+ENYQlq4vZqpEoY8XQtclwCgBw3BtabJJ9bLg8GexHcH1cBAu/GerJ9QS/l?=
- =?us-ascii?Q?ZnqXsSPIx5N0Oyl+XyJLW/qV9Ibk7O0GPmKD33kK82XUVc1pHk5eTIG2YU/P?=
- =?us-ascii?Q?0AvKaJpBHKiacGqUU8unAorOD17HzhhxHsbKZs+gjFsXfQ216m5EItIEn6dR?=
- =?us-ascii?Q?1sDxApywonHhJkXjg49rOA1FnKt44H5jLikUZF0ukV/IAX89faenT4jk12hv?=
- =?us-ascii?Q?ltAXUCTUy/uQk+KZXLi8ofzivtznUn1qsh1IQKFjwKmqsH18YEt09CWLSSpo?=
- =?us-ascii?Q?U6yoKLIqHEbTyg0j6m3e+LhIkMVvufmrjmTVsdg/Hm0cpwdZGhidO90gjlPk?=
- =?us-ascii?Q?hSEsTnqC+54zPTbHbEziDATnRVyT5/XHsuMKq9i8pTx/3vOKShQ8HY0bYi0d?=
- =?us-ascii?Q?cZk0DWTUO6HiH11337kIRDXg8Q1WWM33DYArr7cYp2rRMdJr1jwaf6rdr1u1?=
- =?us-ascii?Q?RCi5hXrZVRLsDDWrcoUv7DHH7e7pmAXq+C70GOfNR6Ljkio/eKnT6a74dAmR?=
- =?us-ascii?Q?FarRfHQzzc4/6X+kzIEWuzI2/9faYbAvkGogauknrJBDYDg7cN7L2iuBGnVV?=
- =?us-ascii?Q?BYpEULIfgd0yY/RKychWcNtIAaUWDFhsNjZbapffEMjDIf96UDX60TVRwAVF?=
- =?us-ascii?Q?L0OKdkGz1h5u3xD17c2OFDQ5BdOXnsboNiANHOfo2mDnG+PnSUuPyOlmQCl1?=
- =?us-ascii?Q?f9agIK/i3mLRq5rYg+PAiyW7mGzMf/whNQHBO26d4rhq8sFxYpk0wwoC+Psz?=
- =?us-ascii?Q?03igAVrdwzfdzG3/H/BLhJAzNK1pV6VJOhYXw2TOzHSYC7wa6lf+nF33sOTx?=
- =?us-ascii?Q?yjNaymmRL6TvkjmG+H6EoEg3QHgNtcTrXUqaRjui1oenHuS1NdDqLSWCN4Yq?=
- =?us-ascii?Q?rV8Cq9sY4nBoJXo0ohFcVAgjwlNC2lCD0K9M4z2xcW/G/6qtd4MdECzwr3W7?=
- =?us-ascii?Q?djgXXzQYkRPTMLQYFYZyOSYSVoAWxEkuJsSx5A/UUDmTFnXpgxjLa/5FjXQi?=
- =?us-ascii?Q?VqMTU++F8DRBht3zUFW61JfGVSrKYd8Q3dQj7Sp9sCAaf1fmZ5BUrP36DjGb?=
- =?us-ascii?Q?Tw5Wvhf/J4R69nXJR+4wjLLpRQKlIBYh6+U/38rA7MZcK95C57Drpm1PDX4N?=
- =?us-ascii?Q?QXdtDAo6C/ni8pmF2yQ8/KxTmKkAb3zjTSb7e/CUrp146+nx4eWu1oVFw4bj?=
- =?us-ascii?Q?5RBwWt2MrrMjPaWytX74qP0NxpwZmZVEEA4ZZYhIAk9m7wHIC+jYLDv3tylf?=
- =?us-ascii?Q?AhfWgfRfH+lpteP+A7tJ3FHbcNllHkodkSJO7CcaxZfHi4O2xTYgLSXRj552?=
- =?us-ascii?Q?1oR0HB/bijywD7aX0QpR5MTB17F3wUJDhUdXCvYjRu+RL4c6Xg6Tutm3hb4N?=
- =?us-ascii?Q?lJ+ODDwS9IgmpFA2Uh9Lpypv5IkOaqYV1cDk+b+ALMzhT4e7b6ma24e18AJ7?=
- =?us-ascii?Q?ov/dvbbkwjGz286zw2SHVWrKmbb8c6wZiXvn+RMhoFoaUN0n+iRwWI345WFC?=
- =?us-ascii?Q?Dz/LMlG6MYPaIg+62W9/qudPwNxup+PpzTfsRYMx2VR/2p/Cs+LYaClbXtT2?=
- =?us-ascii?Q?eJkEOFxLjlAmddnajR0r/hcH5Ux6OVwlUV1JQACT?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00908a29-bd7a-40f9-b0e8-08db7e1cccf5
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 12:30:36.8338
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T65pgBu4O7gACO28Hld3YbQA3Yr7xnf8pwirb0euStlnO9wi6eGyU2HJrVY3gHTU4uTJfRAK4X9WxyuJNIeqjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5558
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_for_each_child_node() loop in
-bgx_init_of_phy() function should have
-fwnode_handle_put() before break
-which could avoid resource leaks.
-This patch could fix this bug.
+Changes in v4:
+ - Set data lanes to idle to prevent stalls if bootloader didn't
+   properly close the eDP port
+ - Now using the .done_probing() callback for AUX bus to prevent
+   probe deferral loops in case the panel-edp driver is a module
+   as previously seen with another bridge driver (ANX7625) on
+   some other SoCs (MT8192 and others)
+ - Rebased over next-20230706
+ - Dropped Chen-Yu's T-b tag on last patch as some logic changed
+   (before, I wasn't using the .done_probing() callback).
 
-Signed-off-by: Wang Ming <machel@vivo.com>
----
- drivers/net/ethernet/cavium/thunder/thunder_bgx.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Changes in v3:
+ - Added DPTX AUX block initialization before trying to communicate
+   to stop relying on the bootloader keeping it initialized before
+   booting Linux.
+ - Fixed commit description for patch [09/09] and removed commented
+   out code (that slipped from dev phase.. sorry!).
 
-diff --git a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-index a317feb8decb..f8a8b2ab72aa 100644
---- a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-+++ b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-@@ -1469,6 +1469,7 @@ static int bgx_init_of_phy(struct bgx *bgx)
- 	struct fwnode_handle *fwn;
- 	struct device_node *node = NULL;
- 	u8 lmac = 0;
-+	int err = 0;
- 
- 	device_for_each_child_node(&bgx->pdev->dev, fwn) {
- 		struct phy_device *pd;
-@@ -1479,7 +1480,7 @@ static int bgx_init_of_phy(struct bgx *bgx)
- 		 */
- 		node = to_of_node(fwn);
- 		if (!node)
--			break;
-+			goto out_handle_put;
- 
- 		of_get_mac_address(node, bgx->lmac[lmac].mac);
- 
-@@ -1501,10 +1502,8 @@ static int bgx_init_of_phy(struct bgx *bgx)
- 		}
- 
- 		lmac++;
--		if (lmac == bgx->max_lmac) {
--			of_node_put(node);
--			break;
--		}
-+		if (lmac == bgx->max_lmac)
-+			goto out_node_put;
- 	}
- 	return 0;
- 
-@@ -1519,8 +1518,12 @@ static int bgx_init_of_phy(struct bgx *bgx)
- 		}
- 		lmac--;
- 	}
-+	err = -EPROBE_DEFER;
-+out_node_put:
- 	of_node_put(node);
--	return -EPROBE_DEFER;
-+out_handle_put:
-+	fwnode_handle_put(fwn);
-+	return err;
- }
- 
- #else
+This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
+
+Explaining the "real":
+Before this change, the DisplayPort driver did support eDP to some
+extent, but it was treating it entirely like a regular DP interface
+which is partially fine, after all, embedded DisplayPort *is* actually
+DisplayPort, but there might be some differences to account for... and
+this is for both small performance improvements and, more importantly,
+for correct functionality in some systems.
+
+Functionality first:
+
+One of the common differences found in various boards implementing eDP
+and machines using an eDP panel is that many times the HPD line is not
+connected. This *must* be accounted for: at startup, this specific IP
+will raise a HPD interrupt (which should maybe be ignored... as it does
+not appear to be a "real" event...) that will make the eDP panel to be
+detected and to actually work but, after a suspend-resume cycle, there
+will be no HPD interrupt (as there's no HPD line in my case!) producing
+a functionality issue - specifically, the DP Link Training fails because
+the panel doesn't get powered up, then it stays black and won't work
+until rebooting the machine (or removing and reinserting the module I
+think, but I haven't tried that).
+
+Now for.. both:
+eDP panels are *e*DP because they are *not* removable (in the sense that
+you can't unplug the cable without disassembling the machine, in which
+case, the machine shall be powered down..!): this (correct) assumption
+makes us able to solve some issues and to also gain a little performance
+during PM operations.
+
+What was done here is:
+ - Caching the EDID if the panel is eDP: we're always going to read the
+   same data everytime, so we can just cache that (as it's small enough)
+   shortening PM resume times for the eDP driver instance;
+ - Always return connector_status_connected if it's eDP: non-removable
+   means connector_status_disconnected can't happen during runtime...
+   this also saves us some time and even power, as we won't have to
+   perform yet another power cycle of the HW;
+ - Added aux-bus support!
+   This makes us able to rely on panel autodetection from the EDID,
+   avoiding to add more and more panel timings to panel-edp and, even
+   better, allowing to use one panel node in devicetrees for multiple
+   variants of the same machine since, at that point, it's not important
+   to "preventively know" what panel we have (eh, it's autodetected...!).
+
+This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
+
+
+P.S.: For your own testing commodity, here's a reference devicetree:
+&edp_tx {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&edptx_pins_default>;
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			edp_in: endpoint {
+				remote-endpoint = <&dp_intf0_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			edp_out: endpoint {
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+
+	aux-bus {
+		panel: panel {
+			compatible = "edp-panel";
+			power-supply = <&pp3300_disp_x>;
+			backlight = <&backlight_lcd0>;
+			port {
+				panel_in: endpoint {
+					remote-endpoint = <&edp_out>;
+				};
+			};
+		};
+	};
+};
+
+
+AngeloGioacchino Del Regno (9):
+  drm/mediatek: dp: Cache EDID for eDP panel
+  drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
+  drm/mediatek: dp: Always return connected status for eDP in .detect()
+  drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
+  drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+  drm/mediatek: dp: Enable event interrupt only when bridge attached
+  drm/mediatek: dp: Use devm variant of drm_bridge_add()
+  drm/mediatek: dp: Move AUX_P0 setting to
+    mtk_dp_initialize_aux_settings()
+  drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
+
+ drivers/gpu/drm/mediatek/mtk_dp.c | 197 +++++++++++++++++++-----------
+ 1 file changed, 127 insertions(+), 70 deletions(-)
+
 -- 
-2.25.1
+2.40.1
 
