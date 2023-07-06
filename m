@@ -2,194 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC5474971C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCFB749734
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbjGFIIh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 04:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S233502AbjGFIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjGFIIe (ORCPT
+        with ESMTP id S233710AbjGFIQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:08:34 -0400
-Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED781988;
-        Thu,  6 Jul 2023 01:08:30 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 073213FA35;
-        Thu,  6 Jul 2023 10:08:28 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Score: -1.91
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5UPqS-fiHZfV; Thu,  6 Jul 2023 10:08:26 +0200 (CEST)
-Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 0ED163F399;
-        Thu,  6 Jul 2023 10:08:26 +0200 (CEST)
-Received: from [192.168.0.132] (port=45102)
-        by tnonline.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <forza@tnonline.net>)
-        id 1qHK2K-000Pgc-1b;
-        Thu, 06 Jul 2023 10:08:25 +0200
-Date:   Thu, 6 Jul 2023 10:08:24 +0200 (GMT+02:00)
-From:   Forza <forza@tnonline.net>
-To:     Uladzislau Rezki <urezki@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Stable <stable@vger.kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
-Message-ID: <2063d59.8f9f4a3a.1892a3ec50f@tnonline.net>
-In-Reply-To: <cf07f03.70397026.18918ef7f95@tnonline.net>
-References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com> <fcf1d04.faed4a1a.18844d8e78f@tnonline.net> <ZGwcVTpQNBoJHBB+@debian.me> <ZGyVVQxnw6Tn7Xb8@pc636> <c9db92d.faed4a1c.1884c5550fb@tnonline.net> <20230524091357.GH32559@suse.cz> <ZHClGA9szxSqzDf8@pc636> <cf07f03.70397026.18918ef7f95@tnonline.net>
-Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
- kernel 6.3.x
+        Thu, 6 Jul 2023 04:16:30 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2049.outbound.protection.outlook.com [40.107.15.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF451726;
+        Thu,  6 Jul 2023 01:16:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RIC7NENFerZoKnIJNM3Rba6n2J9ZUxIMsqyJhpiwZy2oShsxG5bCIRIvzNdIwwPX/AH5iRwG8grzOV6YVlqrFACf4ZTdB7a/OJ+KZFsxtb9UCPXunE5eLgLFcC1gbiL6B0B1RPM0i1Ho1Z1IlaCznjv0bMb4F+ZwTkYyD+wwjZM2z/nX4kyiLSgG0W9kYuqE26hLz25dOyBG3jcTpIHqVXPdZX5Uhid0dWdVBglnvKDcnEDltUQSPAwL87MXmayQDpb+2I9gaB8gJNDtebeiAOxXmlROCEwkEkF+APk//Bt8hU69jgUS4wqMgEa+6yMy08pCHNhyAgvZWA50N2VcXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9zSwOI8EilsYcWwuSD/7xGF0BhUHdBbw2kXFWbaacBw=;
+ b=Cm/GsO4qxIGyu0uOasPoh2rVUGlFoFe1PugpvXhRwfINedRLTKIAfw6ZHycSoZc5V1ANqrQ49atGem5aDXygdXiJhfniHzsFwKsWx4LN0+cAe0wQ6n8p40BV8sNaqhCUNGjd9g+E5DxhFiSZnOhQGJT6HdbjwmsvXc9WWXVxJ/9RcB8osQR0s8pOr/hdEl8+yCbD+suBJy4kAAxCUb4nqZtjOGgFxq313PO9JZraMNS7/3s6Kb35cFDl/PNI8gXXKd6vu9bYdrhleolKqCvgnPRC2jAjHqqYSX2JotoyPqpxe4DBTiCI+BLUE3IS+NVtAuCGEjJydDRdbQOoDtky7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9zSwOI8EilsYcWwuSD/7xGF0BhUHdBbw2kXFWbaacBw=;
+ b=lqPtTwThe3ZNXnW8pmPz3lcmwVIapQS+dww0SIEQl6YLy07s8KMT7EOGkHq6f8UcdKFGpxHp4aGiunazDvITtNjDrQ0ZwPhVpaDW0das4vJPdwGYipvaGGt6FZHf2vvuheblFaArl8tP54E4rU4qpL2BQm4RVkRJkT1IiIrJoTs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
+ by DU2PR04MB9132.eurprd04.prod.outlook.com (2603:10a6:10:2f7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 08:16:20 +0000
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::1edd:68cb:85d0:29e0]) by AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::1edd:68cb:85d0:29e0%7]) with mapi id 15.20.6544.024; Thu, 6 Jul 2023
+ 08:16:20 +0000
+From:   wei.fang@nxp.com
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, netdev@vger.kernel.org
+Cc:     linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH V2 net 0/4] net: fec: fix some issues of ndo_xdp_xmit()
+Date:   Thu,  6 Jul 2023 16:10:08 +0800
+Message-Id: <20230706081012.2278063-1-wei.fang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0018.APCP153.PROD.OUTLOOK.COM (2603:1096::28) To
+ AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-X-Mailer: R2Mail2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3139:EE_|DU2PR04MB9132:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff6e7787-cb27-4e9d-3250-08db7df94776
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dyBOgHrGb7mli5o4pMDcuMjjr6k4FTHRvCEVaixqQhcdDJ0228tsPsdoGsUOwvN8vzzLmhx19Jt5trZeL7nPYsqRuwt3q/WoAYWexabXviOhf4moSZFniKODW0ko0OvA847iVBhTyRHdyL/saR/3gI3gu9D5SxReDWtkczA76tKJD36QGneiDzXmyvv6yTUIuY+T9n25SSkcpxeDS1M+O1lfuY7GV2VW8w28jDiRfm+PSfH0bPMmtkmHbFevVLc8UuV10FEPQXvId9V56/140R349NzgCeHir/uLeF64Q3do4E+hvRWZNh0G8KEj9bJj1tngPpeKUexHUIZqKJSKcSOA/OoLLl1ZNyEonfk0eBgOV8JpRiFxx0X44OjIy/vVDCEGU9OWg+vqbxIUxJQC1MqcSdjEbJyl0Fkpjjkzw6u5RCS1qvLLAsXdvQrp+LR/qUjA8hEHNT74/26JNoTiXR+vJ1ZF0ftEpt9sI4Y8DwtK4MefFDWcGVTaPXdENGMS0e0mWV1Vc62UDnglM0Xmr802Rfsa2EnUfBHycVSAnnWGsq98D7dU142rs+u+jX0Kfu5ZwJJvcfD2ZZ/q/5ZOe8a08LcfI/yZbKBCTg0a7RiCUtlc64gj4THD+EppwRGS44MkN77c6UpiyPBhAAbZpA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(376002)(39860400002)(346002)(451199021)(186003)(8676002)(8936002)(6506007)(26005)(2616005)(2906002)(66946007)(1076003)(5660300002)(7416002)(41300700001)(36756003)(921005)(6486002)(4326008)(316002)(66476007)(83380400001)(6666004)(66556008)(6512007)(478600001)(9686003)(52116002)(38350700002)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mqdk6IZBU0NdHLCPVpcBy5rCAEkuivdkyfiDbq1Bpqha9/bAGqjBGvL8fULY?=
+ =?us-ascii?Q?Ian5bYYUnq4STHh9XOWDfSHKW5Ddgcxn0uFsWKbEo4t0WXEUS15LJiGkuMk4?=
+ =?us-ascii?Q?sVUY7IK27bYaT4beTVwEit9Xb75ECgOGWQC7/bY7qgy9dTyF3vAuSzw3YuCP?=
+ =?us-ascii?Q?h7FhFkIZsM/cLF/HzdrJyX9UYFb54Kb0eHgTYqeAOqduJQ0dwSPEJzu2iYuv?=
+ =?us-ascii?Q?NpGcGYuRD/nejoZVBLjgo/3lKwXD9vuhfOZyEbUv/95h6/SQFM7lBRE3E24e?=
+ =?us-ascii?Q?u0g1MsbuSRW/nDvE4QYVVZ8UYAEfJGMMfRAQ5j46wBXTfhLWvtXZhDIeq8Wr?=
+ =?us-ascii?Q?z3XJyslN/wtZYSTmiE3G2HMLCIhfoFM4qQiNG2ZK7MxWDH8qsRIqVHemBb5t?=
+ =?us-ascii?Q?oyCi23jfAr/Yt25a2ptOUpWiaDYjLUWRqnegYSJwYWbM6FeL9cmhOXov8qVJ?=
+ =?us-ascii?Q?iy5kT23HOfoKBNLS5/MJdPrNd9owxdFqxmJc94UOC/w0L7s9j6OPlkPDPTt/?=
+ =?us-ascii?Q?xfL2etqDbOGa7154Wmw+Ek7yzJwKSRqBcQSOopQblhIIIZ468OYZwXA8iob1?=
+ =?us-ascii?Q?by+APxnVKkm5wrj1J6pIvm6SkLfRq8PXq2pdVhBuT5OZ27raeI5AgGRubhro?=
+ =?us-ascii?Q?RhC8UOMqJN6REbTIn/OngAgVtrn2Va4Oj2sa8wpUQQdbusHwsOAzP00XlT5o?=
+ =?us-ascii?Q?F0CyBjHq/Ort5l7a2OoZD3/jm34r2A8Okg6QJAfy6SkjpQSxOtELYbycWHS6?=
+ =?us-ascii?Q?JKIcVeqrxKcikJW3lCl9lyxXJNNm0FUWgfY887HvkdxWeH4xQUivxILF69+P?=
+ =?us-ascii?Q?I3Ez55C0S3BOJpbM3BRu/vrloH34uqNp8uDe9lR1zyhbt9e3CkeY0rCz9fGp?=
+ =?us-ascii?Q?mzfEyLYhaAUnDhyRRualq3RExRRtOi+XMUU5NPLsThV0s4JYn1t2L1Pbm4kt?=
+ =?us-ascii?Q?cauZVUfjDh+R9Dz7ezUeIfEyv7mnlnYjI86stmCBvjjhy8PIyeiC1Iw9z1LJ?=
+ =?us-ascii?Q?PnAG4ky+Dhm8Fv7P4Fih/NCwDoC4ZzWZsTEh0R9f6xgG51W0NObkSWQiSLC5?=
+ =?us-ascii?Q?q3147P4WCgkPu9ww0EydUUzVZDBFKwXtsU2u7GDb+C7ig0w1pgMqe/1I68wl?=
+ =?us-ascii?Q?LLK3csyFyVdWrmtiOUPOzpm7l98cUmDH8F0xpTRlKDTRmklk/4ZC2aTh8NCf?=
+ =?us-ascii?Q?08wBJADA+Px6H/MMz4sBitLc7+jasCZ4BGpaeF56BhyK95vONvJouCH1KSso?=
+ =?us-ascii?Q?qyMYyc5ni7L5toiEdwndOPNzOfFbiZJCqGp5fsZCdPBBNRKOQvkUDi1ytiHU?=
+ =?us-ascii?Q?rcIKbnKNY6636StM0VutFby3pFg14xbge0bArepHhdsh6za6BdfeQwXk1afx?=
+ =?us-ascii?Q?Pwquj4FGqXPjKAWoX/C6cyskXvN6gnFfM3TiQ71y4WGNn6j0efTXzOjiA5lP?=
+ =?us-ascii?Q?i2uG0jJUN2n9kGztS/bmqRN6QBLxD82lWwYsjJnZmz0p1yzoy+O7JpfqbvZX?=
+ =?us-ascii?Q?IKRr6kIFqKVY+o+PsIRpPB7fRKmcKsLNT9CjluURaZzRjExlGJLxZ06tJysJ?=
+ =?us-ascii?Q?Co2SUitIYXmD44ly2+Qbqhz1fhZ9xRxKNpwxcBID?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff6e7787-cb27-4e9d-3250-08db7df94776
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 08:16:20.4344
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ev8IBDVksl3ln+tq4HbyZq/vUZ9W62psWc2Ft/qhPzhPVvEm86ckwzlFujNamCECJ/iDCFzO3kh5h0KE+QRVPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9132
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Wei Fang <wei.fang@nxp.com>
 
+We encountered some issues when testing the ndo_xdp_xmit() interface
+of the fec driver on i.MX8MP and i.MX93 platforms. These issues are
+easy to reproduce, and the specific reproduction steps are as follows.
 
----- From: Forza <forza@tnonline.net> -- Sent: 2023-07-03 - 01:28 ----
+step1: The ethernet port of a board (board A) is connected to the EQOS
+port of i.MX8MP/i.MX93, and the FEC port of i.MX8MP/i.MX93 is connected
+to another ethernet port, such as a switch port.
 
-> 
-> 
-> ---- From: Uladzislau Rezki <urezki@gmail.com> -- Sent: 2023-05-26 - 14:24 ----
-> 
->> On Wed, May 24, 2023 at 11:13:57AM +0200, David Sterba wrote:
->>> This looks like a different set of problems, though all of them seem to
->>> start on the compression write path in btrfs.
->>> 
->>> On Wed, May 24, 2023 at 07:57:19AM +0200, Forza wrote:
->>> > [   8.641506] 8021q: adding VLAN 0 to HW filter on device enp4s0
->>> > [   13.841691] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
->>> > [   13.841705] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
->>> > [13917.280527] ------------[ cut here ]------------
->>> > [13917.280753] default_enter_idle leaked IRQ state
->>> > [13917.281004] WARNING: CPU: 3 PID: 0 at drivers/cpuidle/cpuidle.c:269 cpuidle_enter_state+0x3bb/0x430
->>> 
->>> 
-> ... Snip
->>> 
->>> And again, so something is going wrong
->>> 
->> Indeed.
->> 
->> I suggest you run your kernel with CONFIG_KASAN=y to see if there are
->> any use-after-free or out-of-bounds bugs.
->> 
->> --
->> Uladzislau Rezki
-> 
-> 
-> Pardon the delay... I have enabled KASAN and UBSAN on this kernel. It produced a lot of output and plenty of warnings for misalignment. 
-> 
-> The full dmesg is at https://paste.tnonline.net/files/aBoUMuTd5KBC_dmesg.ubsan.txt (approx 1.7MiB)
-> 
-> The full kernel .conf is. at https://paste.tnonline.net/files/z1mX8TWFgZQ3_kernel.conf-kasan-ubsan.txt
-> 
-> A small exctract around what I think is the  default_enter_idle leaked IRQ event. Is this helpful?
-> 
-> ================================================================================
-> Jul 03 00:33:57 git kernel: UBSAN: misaligned-access in net/ipv4/tcp_ipv4.c:1848:13
-> Jul 03 00:33:57 git kernel: member access within misaligned address 000000007604d82f for type 'const struct tcphdr'
-> Jul 03 00:33:57 git kernel: which requires 4 byte alignment
-> Jul 03 00:33:57 git kernel: CPU: 2 PID: 29 Comm: ksoftirqd/2 Not tainted 6.3.10-ksan-ubsan #8
-> Jul 03 00:33:57 git kernel: Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> Jul 03 00:33:57 git kernel: Call Trace:
-> Jul 03 00:33:57 git kernel:  <TASK>
-> Jul 03 00:33:57 git kernel:  dump_stack_lvl+0x86/0xd0
-> Jul 03 00:33:57 git kernel:  ubsan_type_mismatch_common+0xdf/0x240
-> Jul 03 00:33:57 git kernel:  __ubsan_handle_type_mismatch_v1+0x44/0x60
-> Jul 03 00:33:57 git kernel:  tcp_add_backlog+0x1fac/0x3ab0
-> Jul 03 00:33:57 git kernel:  ? sk_filter_trim_cap+0xcc/0xb60
-> Jul 03 00:33:57 git kernel:  ? __pfx_tcp_add_backlog+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock+0x10/0x10
-> Jul 03 00:33:57 git kernel:  tcp_v4_rcv+0x3583/0x4c40
-> Jul 03 00:33:57 git kernel:  ? __pfx_tcp_v4_rcv+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ip_protocol_deliver_rcu+0x6c/0x480
-> Jul 03 00:33:57 git kernel:  ip_local_deliver_finish+0x2ae/0x4d0
-> Jul 03 00:33:57 git kernel:  ? __pfx_ip_local_deliver+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx_ip_local_deliver+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ip_local_deliver+0x1ba/0x380
-> Jul 03 00:33:57 git kernel:  ? __pfx_ip_local_deliver+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? ipv4_dst_check+0x104/0x250
-> Jul 03 00:33:57 git kernel:  ? __ubsan_handle_type_mismatch_v1+0x44/0x60
-> Jul 03 00:33:57 git kernel:  ip_sublist_rcv_finish+0x172/0x380
-> Jul 03 00:33:57 git kernel: ------------[ cut here ]------------
-> Jul 03 00:33:57 git kernel:  ip_sublist_rcv+0x3cd/0x900
-> Jul 03 00:33:57 git kernel: default_enter_idle leaked IRQ state
-> Jul 03 00:33:57 git kernel:  ? __pfx_ip_sublist_rcv+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __ubsan_handle_type_mismatch_v1+0x44/0x60
-> Jul 03 00:33:57 git kernel:  ? ip_rcv_core+0x972/0x1b20
-> Jul 03 00:33:57 git kernel:  ip_list_rcv+0x318/0x750
-> Jul 03 00:33:57 git kernel:  ? __pfx_ip_list_rcv+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx_ip_list_rcv+0x10/0x10
-> Jul 03 00:33:57 git kernel:  __netif_receive_skb_list_core+0x5ad/0x1170
-> Jul 03 00:33:57 git kernel:  ? tcp_gro_receive+0x1f45/0x2990
-> Jul 03 00:33:57 git kernel:  ? __pfx___netif_receive_skb_list_core+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? kvm_clock_read+0x16/0x40
-> Jul 03 00:33:57 git kernel:  ? ktime_get_with_offset+0xd0/0x1f0
-> Jul 03 00:33:57 git kernel:  netif_receive_skb_list_internal+0x76f/0x1530
-> Jul 03 00:33:57 git kernel:  ? __pfx_netif_receive_skb_list_internal+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? dev_gro_receive+0x67f/0x4900
-> Jul 03 00:33:57 git kernel:  ? free_unref_page+0x2fd/0x680
-> Jul 03 00:33:57 git kernel:  ? put_page+0x69/0x2b0
-> Jul 03 00:33:57 git kernel:  ? __pfx_eth_type_trans+0x10/0x10
-> Jul 03 00:33:57 git kernel:  napi_gro_receive+0x77b/0xdc0
-> Jul 03 00:33:57 git kernel:  receive_buf+0x1001/0xac40
-> Jul 03 00:33:57 git kernel:  ? _raw_spin_lock_irqsave+0xaa/0x180
-> Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx_receive_buf+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? _raw_spin_unlock_irqrestore+0x40/0x80
-> Jul 03 00:33:57 git kernel:  ? trace_hardirqs_on+0x2d/0xd0
-> Jul 03 00:33:57 git kernel:  ? detach_buf_split+0x27e/0xa70
-> Jul 03 00:33:57 git kernel:  ? virtqueue_get_buf_ctx_split+0x3c3/0x1400
-> Jul 03 00:33:57 git kernel:  ? virtqueue_enable_cb_delayed+0x5d0/0x1180
-> Jul 03 00:33:57 git kernel:  virtnet_poll+0x7c7/0x2030
-> Jul 03 00:33:57 git kernel:  ? __pfx_virtnet_poll+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __run_timers+0x43d/0xf70
-> Jul 03 00:33:57 git kernel:  __napi_poll.constprop.0+0xd4/0x840
-> Jul 03 00:33:57 git kernel:  net_rx_action+0x7a0/0x26e0
-> Jul 03 00:33:57 git kernel:  ? __pfx_net_rx_action+0x10/0x10
-> Jul 03 00:33:57 git kernel:  __do_softirq+0x277/0x95d
-> Jul 03 00:33:57 git kernel:  ? __pfx___do_softirq+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx_run_ksoftirqd+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ? __pfx_run_ksoftirqd+0x10/0x10
-> Jul 03 00:33:57 git kernel:  run_ksoftirqd+0x2c/0x40
-> Jul 03 00:33:57 git kernel:  smpboot_thread_fn+0x380/0xbc0
-> Jul 03 00:33:57 git kernel:  ? __kthread_parkme+0xdc/0x280
-> Jul 03 00:33:57 git kernel:  ? schedule+0x158/0x360
-> Jul 03 00:33:57 git kernel:  ? __pfx_smpboot_thread_fn+0x10/0x10
-> Jul 03 00:33:57 git kernel:  kthread+0x259/0x3d0
-> Jul 03 00:33:57 git kernel:  ? __pfx_kthread+0x10/0x10
-> Jul 03 00:33:57 git kernel:  ret_from_fork+0x2c/0x50
-> Jul 03 00:33:57 git kernel:  </TASK>
-> Jul 03 00:33:57 git kernel: ================================================================================
-> 
+step2: Board A uses the pktgen_sample03_burst_single_flow.sh to generate
+and send packets to i.MX8MP/i.MX93. The command is shown below.
+./pktgen_sample03_burst_single_flow.sh -i eth0 -d 192.168.6.8 -m \
+56:bf:0d:68:b0:9e -s 1500
 
+step3: i.MX8MP/i.MX93 use the xdp_redirect bfp program to redirect the
+XDP frames from EQOS port to FEC port. The command is shown below.
+./xdp_redirect eth1 eth0
 
-A small update.
+After a few moments, the warning or error logs will be printed in the
+console, for more details, please refer to the commit message of each
+patch.
 
-I have been able test 6.2.16, all 6.3.x and 6.4.1 and they all show the same issue.
+Wei Fang (4):
+  net: fec: dynamically set the NETDEV_XDP_ACT_NDO_XMIT feature of XDP
+  net: fec: recycle pages for transmitted XDP frames
+  net: fec: increase the size of tx ring and update tx_wake_threshold
+  net: fec: use netdev_err_once() instead of netdev_err()
 
-I am now trying 6.1.37 since two days and have not been able to reproduce this issue on any of my virtual qemu/kvm machines. Perhaps this information is helpful in finding the root cause?
+ drivers/net/ethernet/freescale/fec.h      |  17 ++-
+ drivers/net/ethernet/freescale/fec_main.c | 166 +++++++++++++++-------
+ 2 files changed, 127 insertions(+), 56 deletions(-)
 
-~Forza 
+-- 
+2.25.1
 
