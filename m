@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A1574934D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 03:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E522F749367
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjGFBt7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 21:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S233039AbjGFCAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 22:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbjGFBt6 (ORCPT
+        with ESMTP id S232692AbjGFCAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 21:49:58 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B67C0E57;
-        Wed,  5 Jul 2023 18:49:56 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3661nbrnF018807, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3661nbrnF018807
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 6 Jul 2023 09:49:37 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 6 Jul 2023 09:49:41 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 6 Jul 2023 09:49:41 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 6 Jul 2023 09:49:41 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Zhang Shurong <zhang_shurong@foxmail.com>
-CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3] wifi: rtw89: debug: fix error code in rtw89_debug_priv_send_h2c_set()
-Thread-Topic: [PATCH v3] wifi: rtw89: debug: fix error code in
- rtw89_debug_priv_send_h2c_set()
-Thread-Index: AQHZr1PDKN54W8TZNEupDd7m1ygpGK+r+Pkw
-Date:   Thu, 6 Jul 2023 01:49:41 +0000
-Message-ID: <f1c97de4a97f4225ac0e67778b90bdd4@realtek.com>
-References: <tencent_D74C0118F55D22E6A6B1767CCB01CCC1E305@qq.com>
-In-Reply-To: <tencent_D74C0118F55D22E6A6B1767CCB01CCC1E305@qq.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 5 Jul 2023 22:00:37 -0400
+X-Greylist: delayed 378 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Jul 2023 19:00:31 PDT
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B99981BDF;
+        Wed,  5 Jul 2023 19:00:31 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id D02902055F9C;
+        Thu,  6 Jul 2023 10:54:11 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.17.2/8.17.2/Debian-1) with ESMTPS id 3661sAmO013519
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 10:54:11 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.17.2/8.17.2/Debian-1) with ESMTPS id 3661sAor045796
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 10:54:10 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.17.2/8.17.2/Submit) id 3661s99N045795;
+        Thu, 6 Jul 2023 10:54:09 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 44/92] fat: convert to ctime accessor functions
+In-Reply-To: <20230705190309.579783-42-jlayton@kernel.org> (Jeff Layton's
+        message of "Wed, 5 Jul 2023 15:01:09 -0400")
+References: <20230705185755.579053-1-jlayton@kernel.org>
+        <20230705190309.579783-1-jlayton@kernel.org>
+        <20230705190309.579783-42-jlayton@kernel.org>
+Date:   Thu, 06 Jul 2023 10:54:09 +0900
+Message-ID: <87zg49yfcu.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jeff Layton <jlayton@kernel.org> writes:
 
+> @@ -1407,8 +1407,9 @@ static int fat_read_root(struct inode *inode)
+>  	MSDOS_I(inode)->mmu_private = inode->i_size;
+>  
+>  	fat_save_attrs(inode, ATTR_DIR);
+> -	inode->i_mtime.tv_sec = inode->i_atime.tv_sec = inode->i_ctime.tv_sec = 0;
+> -	inode->i_mtime.tv_nsec = inode->i_atime.tv_nsec = inode->i_ctime.tv_nsec = 0;
+> +	inode->i_mtime.tv_sec = inode->i_atime.tv_sec = inode_set_ctime(inode,
+> +									0, 0).tv_sec;
+> +	inode->i_mtime.tv_nsec = inode->i_atime.tv_nsec = 0;
 
-> -----Original Message-----
-> From: Zhang Shurong <zhang_shurong@foxmail.com>
-> Sent: Wednesday, July 5, 2023 11:11 PM
-> To: Ping-Ke Shih <pkshih@realtek.com>
-> Cc: kvalo@kernel.org; linux-wireless@vger.kernel.org; linux-kernel@vger.kernel.org; Zhang Shurong
-> <zhang_shurong@foxmail.com>
-> Subject: [PATCH v3] wifi: rtw89: debug: fix error code in rtw89_debug_priv_send_h2c_set()
-> 
-> If there is a failure during rtw89_fw_h2c_raw() rtw89_debug_priv_send_h2c
-> should return negative error code instead of a positive value count.
-> Fix this bug by returning correct error code.
-> 
-> Fixes: e3ec7017f6a2 ("rtw89: add Realtek 802.11ax driver")
-> 
+Maybe, this should simply be
 
-No need a blank line here. 
+	inode->i_mtime = inode->i_atime = inode_set_ctime(inode, 0, 0);
 
-> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+?
 
-Acked-by: Ping-Ke Shih <pkshih@realtek.com>
-
-[...]
-
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
