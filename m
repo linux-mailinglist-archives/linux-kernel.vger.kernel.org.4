@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD80774A36C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88F574A370
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjGFRtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S231921AbjGFRtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjGFRtD (ORCPT
+        with ESMTP id S229556AbjGFRtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:49:03 -0400
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC18D199F;
-        Thu,  6 Jul 2023 10:49:01 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b69e11fa0aso2946541fa.0;
-        Thu, 06 Jul 2023 10:49:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688665740; x=1691257740;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4g3iGOTuRVVAduXIDQ5lVw5E6xrdfj8KWQJtFXm23Cc=;
-        b=Ne3ObRdpcWlvemzAczi1zS/jIZ7RlyGvb4NFa3N6O9HHbYIN16hVVAvFarsBGVr96n
-         Jdf4lEQ+Dorm4Rl6ne39wvUaVQYdFoW1V7ew+apkYYnK0r9+VZ+baCnYuo3UeHvHLM+G
-         ql4cbv3XJpudtV+zebErgxlJqYLgpxZkhIn/x0Hgav1k1L8+WkRhLVnYFqFteYidwhoL
-         wjOsDe2FOnlAHxnjFcmW6W5L63oB3lyOv6jIuMFmzaWPYc2tDiIWIMo7Ek3pOL3uVxMB
-         YKe9x07G+fBjHBn7DtAomeP0uP/xlJla9fdqk6cWco20pvR6nMzHtQ2zt4wnE1uAb/8d
-         OcXw==
-X-Gm-Message-State: ABy/qLZ+kpzWRq/YDlCQuIpyNo1ndFK8ESqKY3mjw3KfGrAXLlLiDo0B
-        8BWGAHQQNXohxeTQayPQnsYXozZRhcLJJ8e5Rlh1yXrmwro=
-X-Google-Smtp-Source: APBJJlGmCmIusH5ZTJB91Me490qiv7AARCUFaRGmR4trsXk+WlNixyUkkJlxVNrjM26Ubqg0dpVxLX47GHZRxOYHN/g=
-X-Received: by 2002:a05:651c:989:b0:2b6:99a2:fe00 with SMTP id
- b9-20020a05651c098900b002b699a2fe00mr2324596ljq.2.1688665739811; Thu, 06 Jul
- 2023 10:48:59 -0700 (PDT)
+        Thu, 6 Jul 2023 13:49:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BC62B7;
+        Thu,  6 Jul 2023 10:49:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A197D75;
+        Thu,  6 Jul 2023 10:50:21 -0700 (PDT)
+Received: from [10.57.27.160] (unknown [10.57.27.160])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF5D43F740;
+        Thu,  6 Jul 2023 10:49:37 -0700 (PDT)
+Message-ID: <9d9245fb-463f-c967-46e5-cfc0ac832792@arm.com>
+Date:   Thu, 6 Jul 2023 18:49:33 +0100
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jul 2023 19:48:48 +0200
-Message-ID: <CAJZ5v0hN3FW_wgM_GP6oqLZe=9=aNmHE3_rWnzoAFrgcHXYA+Q@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v6.5-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFT PATCH 1/3] arm64: dts: rockchip: correct audio-codec
+ interrupt flag in eaidk-610
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230705064823.9210-1-krzysztof.kozlowski@linaro.org>
+ <941ead9e-9e46-b5cb-0a8b-345df6606484@linaro.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <941ead9e-9e46-b5cb-0a8b-345df6606484@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2023-07-06 14:54, Krzysztof Kozlowski wrote:
+> On 05/07/2023 08:48, Krzysztof Kozlowski wrote:
+>> GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
+>> These are simple defines so they could be used in DTS but they will not
+>> have the same meaning: GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE.
+>>
+>> Correct the interrupt flags, assuming the author of the code wanted same
+>> logical behavior behind the name "ACTIVE_xxx", this is:
+>>    ACTIVE_LOW  => IRQ_TYPE_LEVEL_LOW
+> 
+> This should be HIGH in both cases. I will send a v2.
 
-Please pull from the tag
+Also the titles say "audio-codec" but they're all touching SDIO WiFi 
+modules ;)
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.5-rc1-3
+Cheers,
+Robin.
 
-with top-most commit 2e178ee13b02d95c7380f6a21149de535ccdfc7f
-
- Merge branches 'acpi-bus' and 'acpi-scan'
-
-on top of commit b5539eb5ee70257520e40bb636a295217c329a50
-
- ACPI: EC: Fix acpi_ec_dispatch_gpe()
-
-to receive additional ACPI updates for 6.5-rc1.
-
-These fix a couple of compiler warnings, refine an ACPI device
-enumeration quirk to address a driver regression and clean up
-code.
-
-Specifics:
-
- - Make acpi_companion_match() return a const pointer and update its
-   callers accordingly (Andy Shevchenko).
-
- - Move the extern declaration of the acpi_root variable to a header
-   file so as to address a compiler warning (Andy Shevchenko).
-
- - Address compiler warnings in the ACPI device enumeration code by
-   adding a missing header file inclusion to it (Ben Dooks).
-
- - Refine the SMB0001 quirk in the ACPI device enumeration code so as to
-   address an i2c-scmi driver regression (Andy Shevchenko).
-
- - Clean up two pieces of the ACPI device enumeration code (Andy
-   Shevchenko).
-
-Thanks!
-
-
----------------
-
-Andy Shevchenko (6):
-      ACPI: scan: Move acpi_root to internal header
-      ACPI: bus: Constify acpi_companion_match() returned value
-      ACPI: bus: Introduce acpi_match_acpi_device() helper
-      ACPI: platform: Ignore SMB0001 only when it has resources
-      ACPI: platform: Move SMB0001 HID to the header and reuse
-      ACPI: scan: Use the acpi_match_acpi_device() helper
-
-Ben Dooks (1):
-      ACPI: scan: fix undeclared variable warnings by including sleep.h
-
----------------
-
- drivers/acpi/acpi_platform.c  | 31 ++++++++++++++++++++++++++++---
- drivers/acpi/bus.c            | 31 ++++++++++++++++++++++++-------
- drivers/acpi/device_sysfs.c   |  2 +-
- drivers/acpi/internal.h       |  4 +++-
- drivers/acpi/scan.c           | 24 +++++++++++++-----------
- drivers/i2c/busses/i2c-scmi.c |  3 ---
- include/acpi/acpi_drivers.h   |  2 ++
- include/linux/acpi.h          |  9 +++++++++
- 8 files changed, 80 insertions(+), 26 deletions(-)
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts b/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
+>> index d1f343345f67..6464ef4d113d 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
+>> @@ -773,7 +773,7 @@ brcmf: wifi@1 {
+>>   		compatible = "brcm,bcm4329-fmac";
+>>   		reg = <1>;
+>>   		interrupt-parent = <&gpio0>;
+>> -		interrupts = <RK_PA3 GPIO_ACTIVE_HIGH>;
+>> +		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_HIGH>;
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
