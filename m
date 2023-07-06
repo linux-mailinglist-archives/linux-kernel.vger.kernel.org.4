@@ -2,123 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AFD74A0E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB0274A0F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjGFP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S232758AbjGFP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbjGFP0c (ORCPT
+        with ESMTP id S229774AbjGFP2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:26:32 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704A81BD3;
-        Thu,  6 Jul 2023 08:26:31 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so12581291fa.1;
-        Thu, 06 Jul 2023 08:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688657190; x=1691249190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XtfE8VfL9/Ahx6GTmCZcc9TQkFw8X5Q1Xxl7Qq4Ume8=;
-        b=LTBnJxGZbM5tJrSwF7zMiCvZrBbFIXzGc2+8VjuqKB3TGKuwP1XsiInHM0fNIBD92N
-         gzzSYp/oYWe9FOvaUgP8y0jNwkn5E65nddSeN68DYLA/PsT5q9jw8vgSwMRIJI+xeT4L
-         PNcFD4TssHnjH7SNR3ZZ8jnh2AWRfFgHXooYsrdv9EjVY+hGdVureO9CzMYfOlaurB5H
-         dxfy8Dtn4WZiNrSfO01h6J4HA7roCuKz+GKc6ZxID5BB/JSWD6emzEpuyuBEKPVX171B
-         J1RPmTkas8vbpZvLa98wPqtXW0utJh43fDFqm2F4MIItA+fcVJUDW3qno/JFF/vlzCCq
-         lfRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688657190; x=1691249190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XtfE8VfL9/Ahx6GTmCZcc9TQkFw8X5Q1Xxl7Qq4Ume8=;
-        b=BswOXBngYgdPfjuO63Z33MuEHUKqxnAvEoM6MNUMAzW2DoTUyT/PX0RH58esVtOiE9
-         C8Bl5Yx5bWX5hgIF2/t1dtXzYwaKusBTQDqvyh1WidsvKXXIl+r9IpKVSgNWOG5w+wpH
-         JybzaYzeaLj/p6+Cv9t8K+HQCY6S0tl4clYPdMX2rS8E9sKkwK4oSYC0oxxxHEZSi/2y
-         9O6khKwb7SgG0Wvf/f41RGF9iu4cyegnOqMeXVmtugiyDCDTNZmk6MOViX8KqRkD8oaP
-         DJDuekJmn4exFFU+86CCcpN2Hc1Oi4z/hnTeL/54pwpKsbEM84w3RfGbj8pqH4merE23
-         HUsg==
-X-Gm-Message-State: ABy/qLbb3vB5ffm1NRREODtwexuyGR8vUe9utSiPFtpA76rlhad23omA
-        zVcxah/hhuiG3R4zAMx8iYEWeFqxrxeFwuqp+7k=
-X-Google-Smtp-Source: APBJJlER+BCDcEUIg4OEmVyyaxgXpw8ib6IqQC2iYtZrUdQ6V/tVqpTRHHCYrROAGxJOx288TdEB4hk8NhZdlX4q6OI=
-X-Received: by 2002:a2e:9c95:0:b0:2b6:c16a:db06 with SMTP id
- x21-20020a2e9c95000000b002b6c16adb06mr1741654lji.39.1688657189389; Thu, 06
- Jul 2023 08:26:29 -0700 (PDT)
+        Thu, 6 Jul 2023 11:28:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1D2AA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688657323; x=1720193323;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/ZY/Jn97U2CeQ+yPrxzKKzEN7eFECFsMXyqEYNMCDLc=;
+  b=Z2yFi94h3kCHTJGqnYAG5ac7NR5EQB4rRJVr5TWmemZKDZzLKPtxqOw9
+   BVufgKiQN/FWZUYIzDW/3VufUqbVMPWIg6/IJk8MCnsY8OEn1q8W7ZOY1
+   GbsGMtf03cLOaRX7VMuiPXm36SDJfRyhs2Y5F130Xnay0HFXRS0iX63PU
+   JaU3rrKJGh988v4nOboF3+xMc6gi53blbxIERiF7mZi8RZqW1JJb/MgfY
+   wfl021bQ1KBA7hPzdCTGpzrRyqM0JBJ52olwxZe/Z/WOfUjVoAIJqsOdj
+   Pd0e/+Wj5gNDaU1M0IL5s9rhFTVntLL3Q/0GrRn6Tm6bv6hrsEBwB/q/5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="366211817"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="366211817"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 08:28:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="832988348"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="832988348"
+Received: from adityan1-mobl1.amr.corp.intel.com (HELO [10.212.197.9]) ([10.212.197.9])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 08:28:08 -0700
+Message-ID: <80383055-7d9f-dea8-1883-91084d0d24a1@intel.com>
+Date:   Thu, 6 Jul 2023 08:28:07 -0700
 MIME-Version: 1.0
-References: <20230705185755.579053-1-jlayton@kernel.org> <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-6-jlayton@kernel.org>
-In-Reply-To: <20230705190309.579783-6-jlayton@kernel.org>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 6 Jul 2023 10:26:18 -0500
-Message-ID: <CAH2r5msVjOVx8FnV6kCErMtkUpfTdPUMHXug3V=9PaA4MevkgA@mail.gmail.com>
-Subject: Re: [PATCH v2 06/92] cifs: update the ctime on a partial page write
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, Al Viro <viro@zeniv.linux.org.uk>,
-        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] x86/ia32: Do not modify the DPL bits for a null selector
+Content-Language: en-US
+To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, brgerst@gmail.com,
+        ebiederm@xmission.com
+References: <20230706052231.2183-1-xin3.li@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230706052231.2183-1-xin3.li@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Steve French <stfrench@microsoft.com>
+On 7/5/23 22:22, Xin Li wrote:
+> When a null selector is to be loaded into a segment register,
+> reload_segments() sets its DPL bits to 3. Later when an IRET
+> instruction loads it, it zeros the segment register. The two
+> operations offset each other to actually effect a nop.
+> 
+> Fix it by not modifying the DPL bits for a null selector.
 
-On Wed, Jul 5, 2023 at 2:04=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
-te:
->
-> POSIX says:
->
->     "Upon successful completion, where nbyte is greater than 0, write()
->      shall mark for update the last data modification and last file statu=
-s
->      change timestamps of the file..."
->
-> Add the missing ctime update.
->
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/smb/client/file.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
-> index 879bc8e6555c..0a5fe8d5314b 100644
-> --- a/fs/smb/client/file.c
-> +++ b/fs/smb/client/file.c
-> @@ -2596,7 +2596,7 @@ static int cifs_partialpagewrite(struct page *page,=
- unsigned from, unsigned to)
->                                            write_data, to - from, &offset=
-);
->                 cifsFileInfo_put(open_file);
->                 /* Does mm or vfs already set times? */
-> -               inode->i_atime =3D inode->i_mtime =3D current_time(inode)=
-;
-> +               inode->i_atime =3D inode->i_mtime =3D inode->i_ctime =3D =
-current_time(inode);
->                 if ((bytes_written > 0) && (offset))
->                         rc =3D 0;
->                 else if (bytes_written < 0)
-> --
-> 2.41.0
->
-
-
---=20
-Thanks,
-
-Steve
+So in the end, this is an optimization attempt?  Is there any other benefit?
