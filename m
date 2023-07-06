@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC1E74A360
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7041074A364
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbjGFRph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S232543AbjGFRqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjGFRpf (ORCPT
+        with ESMTP id S231213AbjGFRqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:45:35 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B781FDE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688665528; x=1720201528;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NRDnbLMW0cXY6ygtX7nwHk3/rr1hm1CMmJHpi3gISkU=;
-  b=fHMD+EiYJcU0b2O43+6AtVS4oBx5+0v3sEnHnaKzZvErLCqyE+VRXc99
-   fgSk3q5DAejCfq5/PMBukmQ5dO4a3TmYm0DXxNEWMEHIfg7DSizCEBhYx
-   FX+G0XiJXRNCNfZqZJNp3NS7o189J4n6ICGTRvZFd0YfdfWrtI/aCVZ4H
-   /mLujn2SpgUR6bat0+tcLt/5rrUhCsxoDF9APO4E/2xZiwaLazy47Rsc7
-   LDb6qkq36W1Dy7wseepavphha2Xr3SGznTPneYsC/L+GU116sXuJ0nDZ5
-   M42t45iVqC1HYkYVqFAzSM5B2oA1p7UpBZnSPzZQfZRhKRjAQgpJiEh4z
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="362544157"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="362544157"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 10:45:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="789631863"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="789631863"
-Received: from adityan1-mobl1.amr.corp.intel.com (HELO [10.212.197.9]) ([10.212.197.9])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 10:45:26 -0700
-Message-ID: <c32e45ed-da25-a7c7-2613-5c94ea89cc27@intel.com>
-Date:   Thu, 6 Jul 2023 10:45:25 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCHv3 0/3] x86/tdx: Fix one more load_unaligned_zeropad()
- issue
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
- <BYAPR21MB168846628450D6089242D3EAD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <BYAPR21MB168846628450D6089242D3EAD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Thu, 6 Jul 2023 13:46:30 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CD11732
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:46:29 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b890ca6718so10535695ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 10:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688665589; x=1691257589;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iYwswXlV1/1qc1QMb8XdbUm0VHdqMuEGHLDmXeCI7tw=;
+        b=JADhELCXVgoD7i7cWTwhQRh73F5YhFYDBv94oM/8VxQQoeG0PhxyPIPeAt5smzYLDQ
+         2VFXs6FDTv58B0PombJgnTJb6SyHVgNKljVNLKJw3EBZa3IM+rDpks3+Z8C/xYtcpoxb
+         LbU/vFpSAvnQ+5Dl4V1lvy11cPRh6gO9C/KaYNRuo5YkMRA5ChZ+B6QR3eNwDAJNHhEv
+         28/VzsSQuyF3hQ7p9xa/+eE3S/Swa0foXq4eOKi4DtfGVPSsoyFlkW+OKOkQEV9Hjwha
+         r2lQN4ScFg+aAQmNbKsoXLuiVXMfbKyZj9wiemASlejBWpa5SFm0+xS1wTFJAhLizRvw
+         VrwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688665589; x=1691257589;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iYwswXlV1/1qc1QMb8XdbUm0VHdqMuEGHLDmXeCI7tw=;
+        b=fRxiTjI+UbhA00pxx6b5AXz2uyn5YJ/QacvAQTBMXroBADfhoMEKRajUyPlnozNtEU
+         YWnPbKKlAMcWX1HU3HwEPcQ0P2WWHwm0xYztkNavb1p+v5KqexdjxGctSaXIdxIBPP6M
+         zPVQl9J72F8Y++GQf2Y1YlRzx43wdMSYtX/zyTGJKUW90fpaQg+pA6UCl3J82X1V/qQe
+         iL0pOZ/chl4ph47e8iu0UN6CARB/y1qd3se9aGzf/6Z9FaL8gBmHmi5GCQjcF8CrneCk
+         6ZapCBZqe/lkuEP5WLg96v7ovY/hDnhx0PEqh2NYTlvvov9CV0IVf3IDgjh5HRA6cIVY
+         EMcQ==
+X-Gm-Message-State: ABy/qLYFNPtjOG3HZo8CEL0pz5KBKSSI2ReVLAFwxa4VjjDTgpTwNK6w
+        Zd6SA5CbOZ1lxxCad6/2+wo6ubk=
+X-Google-Smtp-Source: APBJJlFpjvWRD+oH7cEr3v6mp6VT3nmUJ2yl68awyDOvDt3JNKrMgENCDlaLreMNh3hWPwDXBQWJuWE=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:7085:b0:1b7:eecd:9dae with SMTP id
+ z5-20020a170902708500b001b7eecd9daemr1936538plk.9.1688665589079; Thu, 06 Jul
+ 2023 10:46:29 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 10:46:27 -0700
+In-Reply-To: <20230706142228.1128452-1-bjorn@kernel.org>
+Mime-Version: 1.0
+References: <20230706142228.1128452-1-bjorn@kernel.org>
+Message-ID: <ZKb986L59CTFITjP@google.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Bump and validate MAX_SYMS
+From:   Stanislav Fomichev <sdf@google.com>
+To:     "=?utf-8?B?QmrDtnJuIFTDtnBlbA==?=" <bjorn@kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org,
+        "=?utf-8?B?QmrDtnJuIFTDtnBlbA==?=" <bjorn@rivosinc.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/23 09:48, Michael Kelley (LINUX) wrote:
-> When a page is transitioning, the caller can and should ensure
-> that it is not being accessed during the transition.  But we have
-> the load_unaligned_zeropad() wildcard.   So do the following for
-> the transition sequence in __set_memory_enc_pgtable():
-> 
-> 1.  Remove aliasing mappings
-> 2.  Remove the PRESENT bit from the PTEs of all transitioning pages
-> 3.  Flush the TLB globally
-> 4.  Flush the data cache if needed
-> 5.  Set/clear the encryption attribute as appropriate
-> 6.  Notify the hypervisor of the page status change
-> 7.  Add back the PRESENT bit
-> 
-> With this approach, load_unaligned_zeropad() just takes the
-> normal page-fault-based fixup path if it touches a page that is
-> transitioning.
+On 07/06, Bj=C3=B6rn T=C3=B6pel wrote:
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>=20
+> BPF tests that load /proc/kallsyms, e.g. bpf_cookie, will perform a
+> buffer overrun if the number of syms on the system is larger than
+> MAX_SYMS.
+>=20
+> Bump the MAX_SYMS to 400000, and add a runtime check that bails out if
+> the maximum is reached.
+>=20
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
 
-Yes, this does seem much simpler.  It funnels everything through the
-page fault handler and also doesn't require because careful about the
-ordering of the private<=>shared conversions.
+Acked-by: Stanislav Fomichev <sdf@google.com>
+
+OTOH, should be easy to convert this to malloc/realloc? That should fix
+it once and for all and avoid future need to bump the limit?
+
+> ---
+>  tools/testing/selftests/bpf/trace_helpers.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+> index 9b070cdf44ac..f83d9f65c65b 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -18,7 +18,7 @@
+>  #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+>  #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+> =20
+> -#define MAX_SYMS 300000
+> +#define MAX_SYMS 400000
+>  static struct ksym syms[MAX_SYMS];
+>  static int sym_cnt;
+> =20
+> @@ -46,6 +46,9 @@ int load_kallsyms_refresh(void)
+>  			break;
+>  		if (!addr)
+>  			continue;
+> +		if (i >=3D MAX_SYMS)
+> +			return -EFBIG;
+> +
+>  		syms[i].addr =3D (long) addr;
+>  		syms[i].name =3D strdup(func);
+>  		i++;
+>=20
+> base-commit: fd283ab196a867f8f65f36913e0fadd031fcb823
+> --=20
+> 2.39.2
+>=20
