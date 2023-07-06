@@ -2,138 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCC37495E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB32E7495EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbjGFGrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S229519AbjGFGtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjGFGq7 (ORCPT
+        with ESMTP id S231447AbjGFGtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:46:59 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2132.outbound.protection.outlook.com [40.107.215.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B097E10E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:46:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XtrlTwe8Nx0eN/69QU15GgyW5Ig7zB/LxadIGABkqTTlVrhjornnXVXDuzXhVyxceRY1T5XE/hAGKqKvX0KGCv/E5JZGyqkdjWuDAepPWYBHuhEqSF7jSj09JlufW6W7BD/cTvedd6fq4cU2HPfrAGL1J3GfuZwlw+i5zKqgJ1vo8RkO4fWHGUT1W9m3hUEKOirjmo/NrquUHGxlDMZaqnT9t+Jrznbry0mfHLADUbPw+u+A7BgTDEkRKoM4DFcrOBFpZuXdfIJKNlS4zHtcdgPV10zuVvV9bUpS++MIy0eiepqEyomYphw6k9zaNqfph/jGJ3psjjTOo+5vcA8H2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YWH3isqpK2z1sqNAB0zxDQ1hmqaqS80cxXeh+3zhlLk=;
- b=ZjAj4OnHtp/wWccoh4AclSQQopTW5s46qW1MAEFVglGyext0sjsmcBlVPryAHJoWgR/nuxMVfTkrvvFez/tIk8Ji1bICOlmtI/4wYF7XYDIdCChr9GvVhdCkKTtSRUEKUZ8UpqlZHMwL6RsGChMkxVyHy/KsHJ2z64zNosDfog86C09Sa0rFlZxvaPyrtPOVCeCmZYMjXx1yT+mU4LHOT7wFN+g4aYBciTCbjwHsCOk6FjbuLAPEgm5sIAbRmPZMz0HFOltHKH1nsFRDAGbPahBtcV3JxpBx9cFVcsY9MXPTW8S11AL9EqHidQsqzIUoZRhtUVOxJ3sKfbhkXTN7sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YWH3isqpK2z1sqNAB0zxDQ1hmqaqS80cxXeh+3zhlLk=;
- b=h5EYFxY99GSzBqT7CZx7OIZIwprK8iMnrC9fxXQnocEbH49reE+azIUypMnd9BCWK/A3Ri/0+Sas2pjQhCOWpE7+a65cUcNZQn8iPs3+Xd6XSZyDlUN7eCC/Z0tHr9EVGFUz1pGBUbp6GW9ZeBL8S46PRoSAcDAV9dx4FK5I84OOW4Yr6fPT7rpXqLKL4frPfiMGzb0YjhxK9TH1cWmt4aUDKoqNZGo6owLBWY6AgezbMz9bHB16yRhaABsAEFNcGN9EgCBESHBTA2qbDHj6904PrL5ofi/UX4hHcmrgZeGyWYPE7N58isH1wFy6WmpBp7Ae/l57Amy/SLmd9b5p6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TY0PR06MB5706.apcprd06.prod.outlook.com (2603:1096:400:272::6)
- by TYZPR06MB6237.apcprd06.prod.outlook.com (2603:1096:400:33f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Thu, 6 Jul
- 2023 06:46:54 +0000
-Received: from TY0PR06MB5706.apcprd06.prod.outlook.com
- ([fe80::d6ff:1295:38d7:a019]) by TY0PR06MB5706.apcprd06.prod.outlook.com
- ([fe80::d6ff:1295:38d7:a019%7]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 06:46:54 +0000
-From:   Zehao Zhang <zhangzehao@vivo.com>
-To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch, zhangzehao@vivo.com,
-        luciano.coelho@intel.com
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Covert to use time_before macro
-Date:   Thu,  6 Jul 2023 14:46:41 +0800
-Message-Id: <20230706064641.2296-1-zhangzehao@vivo.com>
-X-Mailer: git-send-email 2.32.0.windows.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0004.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::23) To TY0PR06MB5706.apcprd06.prod.outlook.com
- (2603:1096:400:272::6)
+        Thu, 6 Jul 2023 02:49:53 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8341B6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:49:52 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b700e85950so3945451fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688626190; x=1691218190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r5eWkSj4KC5nS3P+RLvcZXPptH23EBW7FjX/9bZ4xeY=;
+        b=ja4IOO3xVZ6/Tc75u/mIiFFibtnYxJ3DyQJiezKFRO1BT/i/tInsQdPBwqV1K6c8OB
+         NzrTW0CCdwtJDcyKr+K7eaRAfl7gSY3EPoTgo/V1gOdfqehluk6JZK6F4LvwA1z4DQCk
+         aCMPhrABaGhAhTIgENGDgkn/PB5cEiYnULzWI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688626190; x=1691218190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r5eWkSj4KC5nS3P+RLvcZXPptH23EBW7FjX/9bZ4xeY=;
+        b=YZRDxLYttxPCmUF7md1fwyGbzYPH/UkCACGLb+eCqkeWwbQTu4mlkWuwcAKLpAqECz
+         OAKkpsETz6cCetsEFwzyZg+RpCYALjbqG8egCuOQCMogiPnLyI+vRKWNZfM08wts9Myp
+         6HizZpI9EgRGO0uwn0uyhlbXHu6p+iugQmiTvURCpo8xEc3ZVFpT+UVS2G5hiZnnaAtv
+         KWHHYVNvYjDAuq2bt+Xk/hJIdJjH5qovdWp9hc2OwR7BfrvbgoE8xUSzVdyShulAmVqG
+         GG55kDxcMc2nTqjrUOvFNfaTluuqA9T0kcIy1ADB2LllXR+yUFudomT3x7OfvFKblxxZ
+         4nJA==
+X-Gm-Message-State: ABy/qLZTaGWCLJ8HwNWSyF1zgRUruzwa59kEGd3oamIzOZqLcgpnbFZS
+        dmap+R8o3a/mpzrWakb1P3HhsPj5cWB0U1Y+P8Xrz7FG9eruMZkpAZ0=
+X-Google-Smtp-Source: APBJJlF7htU9Rd6ty5mPrsHjdKtTcK7sc+s+47FH3YkpHGjHXvbMbW6eRVcyDM6GyWvtGpLRUG3fOJ+jUV4yvf2Vv+s=
+X-Received: by 2002:a2e:b60d:0:b0:2b6:bb08:91c4 with SMTP id
+ r13-20020a2eb60d000000b002b6bb0891c4mr609674ljn.42.1688626190310; Wed, 05 Jul
+ 2023 23:49:50 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY0PR06MB5706:EE_|TYZPR06MB6237:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91bb20bf-7b04-4e18-a89b-08db7decc931
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cn/BDU1S1MeoH4EdlRG3G+MSagDnTlhix5jXNmN55M06oIRsTfjjkiuM6FIBV8IyRZFxT6npIVo78ubO+WjgU14m5g3v5yzbOiGyCdFUO6vScV4uUQ2PyPGd3zVR+DZVoblbdCZCe9XUSEXOecqiP6psovstVvhQYgV2UWVEPDvkvTE45VfP+ggJlNgqfRwDZX1E8XFYu6Yax4lVu13Er4zcOcrmI1BroPJfX1G+Q35TaKTSN4ZASsP3w7Ne4e5efO5KVyKCSa+5U5pTmXaGt8AxuRvi9LPKoNb2k/RF8wZ8cS+aw4RdSpGJCXBRiAtNTIdqZCF1ZxzjPg1k3sewoqosQ0oZoLIlIKULyS9yaa2HC2PA5eVGnwCKQeYbU0q4twgQ6iIgiB2K01SX1+h9/hungFckQJFWVupD0yCzwRM7BkXXzRRZAwrKVfICG9Hy0DcQRIFADccA2vJddzUmpkURg1wAePbzh1eUGVQwiR+rfK8fEHD86YV0WdOuaFXtfOJHqXSY1HSyGBgZwx7s7vq4EG91qbDUSh1FwX+tQVxH5TLFfXffMoC+I7qpWBhElqy63ZvhhwhvSz5TNmxXY5IIaJThjEF7uPsDnBpwvHmUQ95coqkwUrmI8+3nZjvI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY0PR06MB5706.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(366004)(396003)(136003)(451199021)(26005)(41300700001)(38100700002)(4744005)(6486002)(52116002)(38350700002)(2616005)(83380400001)(1076003)(6506007)(6512007)(6666004)(316002)(36756003)(66476007)(2906002)(4326008)(66556008)(8936002)(8676002)(186003)(86362001)(66946007)(7416002)(478600001)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?shMPVmUdfudC9avnPpUXzao3QMg+2/Qd/NwHXQUIwvIYrOGvum6oBRtWIpT8?=
- =?us-ascii?Q?VqrE1c9sKBbMHALh3Ud/3LBRZoz+kVvz/Ax9yKd9UNY8EWx3nl8REflgubK4?=
- =?us-ascii?Q?MxNQCsTzHSQsBY7IwNuS12n9cRvwhCik2hacIt78DjX75Jh5NKkKfUaqk7ZF?=
- =?us-ascii?Q?lvVcodcM4fI1eMxJkmpxypjdF0Acjnle0nQOopCXRkgW481FopYD0MApFL7T?=
- =?us-ascii?Q?bWohcBt2EUFHXEJVBLeL2/Ir3jOvFIUE8SHbeJa7FPe5a6W4+B2ozo/ke4Pd?=
- =?us-ascii?Q?J0yu5TT1/55PvCXpiTlTaDw1+u8gqIAjD/Vlk4sUksyTAS8PkVslN82GfXZ/?=
- =?us-ascii?Q?oFBimuiY+5JEZFol+uifAPDAPr0TBptpRiugrOxCBmTKjtpab2arP0WjKtA7?=
- =?us-ascii?Q?H9md3P4DtcmT6sxFoKuTTOPsv6+hAq1i0YkWYPu+3n4pw3+IZCnF8nC+yTcO?=
- =?us-ascii?Q?8uHxho7PmHYhMZETgpD5Yc6bGpaTmgEuQyQs/1Ni+Jmae60a1bfpkDV8du6b?=
- =?us-ascii?Q?FZQUJQ+lOGWldJiXztKUpl3nydONFate9laTMBXg8LcU9JaDrNOWqu5rx3XH?=
- =?us-ascii?Q?YOUeLXs+9Re+559OercdxmJmgd9ZqXgbLhOPRcFdLPrOisebEkqDHiMxOOA/?=
- =?us-ascii?Q?fGWR3sE0m1BEZ7KHCkS9kzkr73nz/OGLtxxyFllvni4rwLLlx7iMhO+RyhoB?=
- =?us-ascii?Q?kRUemadZxOp3+uvtLqeQbH1SOHELKnRbr6riBFS1byrR9VjrR9bX/3zvG/IE?=
- =?us-ascii?Q?L8OvqHMp8ViPu8CN+bj+aB7jqfaYEw7fGDjWbrm0vKPd8phj6QWZWGCVfBSn?=
- =?us-ascii?Q?/vsZS/WCjLMlZzOBSnGJIMcdKgJEPCXNPAiEqt03vEskIEznV+yFmTE0uIHY?=
- =?us-ascii?Q?OLV3IUfacwiLL13xac/mfbq87jfE6QVlt5OJhZfIYZuWo76Qu1uMqur73h6f?=
- =?us-ascii?Q?sEJiOBZpAn8TqbmkqW9rZ+003o9e3BPoJg2nn1BoWTePbknLPdl1I8ZFP7Z4?=
- =?us-ascii?Q?VQ5E7cGR+XwKBbCKHATzJw4JhMm12na03bVgJLmYJjVyTP0NhMPtJhanxCf3?=
- =?us-ascii?Q?3dq5DN/wYGVpnRYF5ZkmIqbSCObCdEzCDb0KXuFl/XbXbGZGU4QLoaNUZ4Pi?=
- =?us-ascii?Q?jJ62H1jqwJ+Bm7ffCU8hxCXOEh8LY2iffP8NzorTk2ZmNzqViplil8CQlp4m?=
- =?us-ascii?Q?i9GXTlJdvgnBDJ2Z0IV6TnfWjNjJSKRq4rETKqmBp61tSZ69zgwlg1PVq4ZR?=
- =?us-ascii?Q?QH4Dl1WxAHeHsJoAsVxZw8ow4oPhAvM7NqmDeL2VF4SpNm+JOYR6CE5WYb3v?=
- =?us-ascii?Q?pLeVla08WAWlVOZsN4QxDlvxEZP+NdHoP8EVsQv4wTx2PGhpyJL12i3rEEUo?=
- =?us-ascii?Q?Vyz9TwQEl0EqYQDhNTZnGZAZXPnFgCzTQKsaV1HFws5lQ/z40KGVHj6O2xkI?=
- =?us-ascii?Q?YNeQuaKh0w5NnhTtBvBN49/ssuNqYEzElFnGOpXS7/v+cEan2OYlRlLtq/1l?=
- =?us-ascii?Q?oK0FcFKsUv8u63rtFMStH401/k7vTgXI/p0HJTBEhKwBkl3FDr6/6aTXRrg+?=
- =?us-ascii?Q?JJRc5t+kOzaHWn8MlFC80gC7Z6OY3w1FN3H/BD4p?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91bb20bf-7b04-4e18-a89b-08db7decc931
-X-MS-Exchange-CrossTenant-AuthSource: TY0PR06MB5706.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 06:46:54.6092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lMArdJS9jaxfPfpz+TiATIBBHFMDobAWolRsk8iSYTrFayM+38I0PQkWQJuzYKxy/e7wz5B/C0QId1DV8EFlEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6237
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-4-stevensd@google.com>
+ <20230705161914.00004070.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230705161914.00004070.zhi.wang.linux@gmail.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Thu, 6 Jul 2023 15:49:39 +0900
+Message-ID: <CAD=HUj5cbzjrc0KD7xcibtRMRCzoJRJAzt7jTHSXUSpzyAYbdg@mail.gmail.com>
+Subject: Re: [PATCH v7 3/8] KVM: Make __kvm_follow_pfn not imply FOLL_GET
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use time_before macro instead of open it for readability.
+On Wed, Jul 5, 2023 at 10:19=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com>=
+ wrote:
+>
+> On Tue,  4 Jul 2023 16:50:48 +0900
+> David Stevens <stevensd@chromium.org> wrote:
+>
+> > From: David Stevens <stevensd@chromium.org>
+> >
+> > Make it so that __kvm_follow_pfn does not imply FOLL_GET. This allows
+> > callers to resolve a gfn when the associated pfn has a valid struct pag=
+e
+> > that isn't being actively refcounted (e.g. tail pages of non-compound
+> > higher order pages). For a caller to safely omit FOLL_GET, all usages o=
+f
+> > the returned pfn must be guarded by a mmu notifier.
+> >
+> > This also adds a is_refcounted_page out parameter to kvm_follow_pfn tha=
+t
+> > is set when the returned pfn has an associated struct page with a valid
+> > refcount. Callers that don't pass FOLL_GET should remember this value
+> > and use it to avoid places like kvm_is_ad_tracked_page that assume a
+> > non-zero refcount.
+> >
+> > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > ---
+> >  include/linux/kvm_host.h | 10 ++++++
+> >  virt/kvm/kvm_main.c      | 67 +++++++++++++++++++++-------------------
+> >  virt/kvm/pfncache.c      |  2 +-
+> >  3 files changed, 47 insertions(+), 32 deletions(-)
+> >
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index ef2763c2b12e..a45308c7d2d9 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -1157,6 +1157,9 @@ unsigned long gfn_to_hva_memslot_prot(struct kvm_=
+memory_slot *slot, gfn_t gfn,
+> >  void kvm_release_page_clean(struct page *page);
+> >  void kvm_release_page_dirty(struct page *page);
+> >
+> > +void kvm_set_page_accessed(struct page *page);
+> > +void kvm_set_page_dirty(struct page *page);
+> > +
+> >  struct kvm_follow_pfn {
+> >       const struct kvm_memory_slot *slot;
+> >       gfn_t gfn;
+> > @@ -1164,10 +1167,17 @@ struct kvm_follow_pfn {
+> >       bool atomic;
+> >       /* Allow a read fault to create a writeable mapping. */
+> >       bool allow_write_mapping;
+> > +     /*
+> > +      * Usage of the returned pfn will be guared by a mmu notifier. Mu=
+st
+>                                               ^guarded
+> > +      * be true if FOLL_GET is not set.
+> > +      */
+> > +     bool guarded_by_mmu_notifier;
+> >
+> It seems no one sets the guraded_by_mmu_notifier in this patch. Is
+> guarded_by_mmu_notifier always equal to !foll->FOLL_GET and set by the
+> caller of __kvm_follow_pfn()?
 
-Signed-off-by: Zehao Zhang <zhangzehao@vivo.com>
----
- drivers/gpu/drm/i915/gt/intel_gt_buffer_pool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, this is the case.
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt_buffer_pool.c b/drivers/gpu/drm/i915/gt/intel_gt_buffer_pool.c
-index 86b5a9ba323d..9145f9e22860 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt_buffer_pool.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt_buffer_pool.c
-@@ -57,7 +57,7 @@ static bool pool_free_older_than(struct intel_gt_buffer_pool *pool, long keep)
- 				node = list_entry(pos, typeof(*node), link);
- 
- 				age = READ_ONCE(node->age);
--				if (!age || jiffies - age < keep)
-+				if (!age || time_before(jiffies, age + keep))
- 					break;
- 
- 				/* Check we are the first to claim this node */
--- 
-2.35.3
+> If yes, do we have to use FOLL_GET to resolve GFN associated with a tail =
+page?
+> It seems gup can tolerate gup_flags without FOLL_GET, but it is more like=
+ a
+> temporary solution. I don't think it is a good idea to play tricks with
+> a temporary solution, more like we are abusing the toleration.
 
+I'm not sure I understand what you're getting at. This series never
+calls gup without FOLL_GET.
+
+This series aims to provide kvm_follow_pfn as a unified API on top of
+gup+follow_pte. Since one of the major clients of this API uses an mmu
+notifier, it makes sense to support returning a pfn without taking a
+reference. And we indeed need to do that for certain types of memory.
+
+> Is a flag like guarded_by_mmu_notifier (perhaps a better name) enough to
+> indicate a tail page?
+
+What do you mean by to indicate a tail page? Do you mean to indicate
+that the returned pfn refers to non-refcounted page? That's specified
+by is_refcounted_page.
+
+-David
