@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCB174A066
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B2174A063
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233760AbjGFPFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
+        id S232986AbjGFPFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbjGFPFo (ORCPT
+        with ESMTP id S233707AbjGFPFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:05:44 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5511732
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:05:40 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-401d1d967beso343911cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 08:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688655939; x=1691247939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=msEvTjDikrgnhkRF3xJHOMkj86YrSM0qTZJUNmF80v4=;
-        b=X4BDECg3HA6xRYn5CdWL0nOgUUnK1bioxo6zmKYJTvqxEdQ9U8HIOZAa/2QiMzqiXC
-         xgkPTQI5EcaHvb7gM8hdCN/sMNjuacB1CVFdVGw/1MJqOehOMJiHNnj9hLWg5U535ncM
-         bC/q2cccDX7zSEKUo0QrXGKfBfV62JbSEIBMggcxbxg+2nqsgeotkvzfWi4j8TdqR87Y
-         9oJxlSt0M6moa98ZDo9hyIqaTzB5VbrVtnpn/y39iprMCaMXrHb292SyAsNDNmc3drPi
-         JnFQA97PUbDF1Gh+Whn/PYp/9Z6mu/SeMfxTGtvekIIuLVJlTIyHpyMaj/jrBWQ2Myx9
-         XbSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688655939; x=1691247939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=msEvTjDikrgnhkRF3xJHOMkj86YrSM0qTZJUNmF80v4=;
-        b=DY+8SIaYw5z8GmWExBmhIpWYk0yrbIXBFJ/K/K9PkEKtT9oW04ROandp8GWHy7Ajql
-         E0seIT3BpiAaATFVEkF7ChVdw2b2bMYQYwb2BymzZ5g1mtsk0zfQypzUt5a0edsytO1E
-         cGOcIGJdhwvItCJigp2rGeCxD6ERlxU502vXaeUHoR8wn2Bm+mGpd9Y5Gx2e+N7cUbiD
-         7g8kxLFFyFVNuMXR8CngGktmScg6CcZdC1aJp6rPRahmxqLf9bw8cEcrD6I3w43KTcJG
-         y9iP0sWr+cOdeM4UUbps15ib8Y0IFMl2UvKZRSCaKvsr9ZOhhiOt4uez6fsK/SfW56RS
-         4qEA==
-X-Gm-Message-State: ABy/qLbVLFYNafXiPeHDNQbmWqdC7mHfuO7bqh4i0KiqFJPqJS4znyEF
-        De7iwG9U+Kfu+kHPN8UaRg5HSfJt7mcLcg8SHL0+Aw==
-X-Google-Smtp-Source: APBJJlGOPYnRx4voPuHx8soGZwPPsIqGhSC2eDD71kFlff+Kq85+Ni5Sa25sG/PtaOHU+0UvpsZkC6JEc630C2fkX8Y=
-X-Received: by 2002:ac8:5994:0:b0:3f8:5b2:aeed with SMTP id
- e20-20020ac85994000000b003f805b2aeedmr146287qte.21.1688655939226; Thu, 06 Jul
- 2023 08:05:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230706130800.85963-1-squirrel.prog@gmail.com>
- <CANn89iKxGVDQba1UCbpYKhNo=rZXuN2j=610DbJx0z=kWa7N3w@mail.gmail.com> <CAJfyFi3OEz2Dz9gopigkVJRa4qCToJ+ob952O_qkOFiNn08LwA@mail.gmail.com>
-In-Reply-To: <CAJfyFi3OEz2Dz9gopigkVJRa4qCToJ+ob952O_qkOFiNn08LwA@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 6 Jul 2023 17:05:28 +0200
-Message-ID: <CANn89iLBO7U40gNDysTD0wCPMAsgUQV3u_T1yzv1oaa=sLKyfQ@mail.gmail.com>
-Subject: Re: [PATCH] gro: check returned skb of napi_frags_skb() against NULL
-To:     Kaiyu Zhang <squirrel.prog@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 6 Jul 2023 11:05:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3840C1725;
+        Thu,  6 Jul 2023 08:05:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A46609EB;
+        Thu,  6 Jul 2023 15:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F0AC433C7;
+        Thu,  6 Jul 2023 15:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688655930;
+        bh=Rf7i8I+LfcJ8cIMf7wGyzUSCTROtn6GdIVE4P/kAZIU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=J3lqPtyW8zjsoC8LVCiAH9lmO1BOO+VQYiaQVEWmS2/RZiqBWnMsbTPPowJnafWTv
+         Ka7RcI3DOuM8pttkMqwV+J/H4vH7u3jt+YG68d+FzYX7OMm0U8nsVSlvEXxx1au3mS
+         Z8Pqsusg/Ijo6cTXX98lpWCjDS/74YEHkhOXEwsrYjy8mbm+JDtxesoCTq/YEJo6ZN
+         qu1ky9uRwZl49kpvoMal7dQuog4ETFc0BoI+iQETjaTQPHJFOvL4pJUcvBjAUZ2i+Q
+         kxzGPiKOI/HqoxML5p4AIKAAoqrUCf0BZh9epx4YoKoMT46ZwM4UajklZL7eapOOPR
+         ySIEL7GI1i7Lg==
+Message-ID: <6733eddd632b3a8e85518ef04dae3e28f600c961.camel@kernel.org>
+Subject: Re: [PATCH v2 84/92] linux: convert to ctime accessor functions
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Jul 2023 11:05:28 -0400
+In-Reply-To: <20230706145321.ahfawgtukrmfgfdv@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+         <20230705190309.579783-1-jlayton@kernel.org>
+         <20230705190309.579783-82-jlayton@kernel.org>
+         <20230706145321.ahfawgtukrmfgfdv@quack3>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 4:35=E2=80=AFPM Kaiyu Zhang <squirrel.prog@gmail.com=
-> wrote:
->
-> Yes the network adapter needs to be fixed for passing invalid packets to =
-GRO. And a message like "dropping impossible skb" should be indicative enou=
-gh for developers to do so.
->
-> And yet I propose this patch because an immediate system crash caused by =
-NULL pointer access after the above warning message is a bit more difficult=
- to analyse on some test bed where developers have to restore kernel messag=
-es after a reboot .
->
-> Furthermore, the adapter I'm working with is capable of receiving very sm=
-all packets (1 or 2 bytes). They insist this is a feature rather than a bug=
-. I can, and I will check packet length before passing them to GRO, for thi=
-s particular adapter. But maybe a non-crash warning in general might be hel=
-pful to other developers who will face the same problem and spare them some=
- effort on debugging.
+On Thu, 2023-07-06 at 16:53 +0200, Jan Kara wrote:
+> On Wed 05-07-23 15:01:49, Jeff Layton wrote:
+> > In later patches, we're going to change how the inode's ctime field is
+> > used. Switch to using accessor functions instead of raw accesses of
+> > inode->i_ctime.
+> >=20
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+>=20
+> Looks good. Feel free to add:
+>=20
+> Reviewed-by: Jan Kara <jack@suse.cz>
+>=20
+> 								Honza
+>=20
 
-1 or 2 bytes would still be stored in an skb, right ?
+I'll fix the subject line on this one too, which should be "fs_stack:".
+Many thanks for all of the review!
 
-GRO is already very slow, we do not want to make it even slower so
-that some developers can save time.
-A kernel crash would point to the NULL deref just fine.
+> > ---
+> >  include/linux/fs_stack.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/include/linux/fs_stack.h b/include/linux/fs_stack.h
+> > index 54210a42c30d..010d39d0dc1c 100644
+> > --- a/include/linux/fs_stack.h
+> > +++ b/include/linux/fs_stack.h
+> > @@ -24,7 +24,7 @@ static inline void fsstack_copy_attr_times(struct ino=
+de *dest,
+> >  {
+> >  	dest->i_atime =3D src->i_atime;
+> >  	dest->i_mtime =3D src->i_mtime;
+> > -	dest->i_ctime =3D src->i_ctime;
+> > +	inode_set_ctime_to_ts(dest, inode_get_ctime(src));
+> >  }
+> > =20
+> >  #endif /* _LINUX_FS_STACK_H */
+> > --=20
+> > 2.41.0
+> >=20
 
-If we continue this path, we will soon add "if (!skb) be_kind" to all
-functions accepting an skb as a parameter,
-then everything else...
+--=20
+Jeff Layton <jlayton@kernel.org>
