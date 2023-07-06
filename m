@@ -2,272 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC258749CD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5071C749CD8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjGFM5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S229501AbjGFM6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjGFM5f (ORCPT
+        with ESMTP id S229843AbjGFM6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:57:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870E91986;
-        Thu,  6 Jul 2023 05:57:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 41B19219A6;
-        Thu,  6 Jul 2023 12:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688648253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DaB1i/eVjGm82CcOaGtLXHKjYlR+vBQyld2q2wv94SI=;
-        b=T1nQESGafOfkoRRRhaJm/poP14mik5DvUOE1rH9aI93vyUdn/ZZ3bxetgzuKbit43Fs3rQ
-        nWKIt5gyRT52tTHed5zkLRftO2GMD2jRd5m0dD8dyMT35HCViDQEQIui9n4bxUVc+iODpz
-        /WnwK+Ien9gBIVKkX80Nv/rrkk/elKk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688648253;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DaB1i/eVjGm82CcOaGtLXHKjYlR+vBQyld2q2wv94SI=;
-        b=2LVJpl4XlOHL60QqrV7MkIDkNOVeoZLN8Kg9iutwYXOhBc0Dv3H6YUOkmYalAsVVpxucF/
-        Jol7iowA2RHNtGDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2AABF138FC;
-        Thu,  6 Jul 2023 12:57:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OSBmCj26pmQ7RwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 12:57:33 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id B5994A0707; Thu,  6 Jul 2023 14:57:32 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 14:57:32 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 79/92] udf: convert to ctime accessor functions
-Message-ID: <20230706125732.efftdv4ydag3qvrw@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-77-jlayton@kernel.org>
+        Thu, 6 Jul 2023 08:58:22 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CCD1BD9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:58:19 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-55779047021so483737a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688648299; x=1691240299;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vELZbnMmNkmoaEABtrT3W1r0gqpXFf7Q4yaW/PDd3ic=;
+        b=uriX3xdK4G/u9PN6mBy8tlT2/KJ0P8M7jWAuBjRLJ/Sih3nSDbV8mAztivxafEVHNJ
+         8YJ5Ev71rDYVS9sAbJ4BjQPZARo+x8auRWKyfab4iBTVE92X8XvjqEj4HXMOEd3dmHV3
+         spkEelpiOCMbkw46ss1wqPgSEKkaaChQthhVO5EiD0Yd/fWwaE/0elDbZImJXl0pdZeu
+         3wlswkkrivh5CCwZ0/WXW+SkRAtnye0ZCgZSHBwcSbbQKjr/yfHhKnaB5ceempEX5KIP
+         FfBlzoShO2K9CpwEf5NbX1i3xMioI2FI5vXnTigvPtnjTNnEychuIEnnCP2M0qxpXUOf
+         b5bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688648299; x=1691240299;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vELZbnMmNkmoaEABtrT3W1r0gqpXFf7Q4yaW/PDd3ic=;
+        b=hzk8rVpP/5U5D5kCOuCq1jsDkMmuNrrerfKhNzkQPseA8BSCJf291KjAKTLCndDpEI
+         iwtMUwghmLP0TUow2dArtkUJGoPCXuiWMkmgmJkxxUnihzSKJURjDUCJXsSSqYyVIdss
+         5PMLF4YEJgGgBAF2Ynlh2iKoJQGLSQJ4RhXylUaSas65N33DTi8cOabC/d0R3tHS+Hyw
+         YIxxCDJebCVV19f4zFAaDsGGsNKrqkbV2J36WSBUfznEr3rF2N1+itedFwRsl2GgdSuh
+         1exPNe1+Nc+yz0q6LKqCDCvYsbfDqDtKplnv+pXxEb/02NuKMGAdxd8uH7g4qBQn/05r
+         g9bg==
+X-Gm-Message-State: ABy/qLYqrZgNUXvw2qsk4c7TBGToEHeAIG1/FhxqcSTG9Q7rxPg3ekbo
+        5mn9yCl7Gw6kmn3yxel/kRNc
+X-Google-Smtp-Source: APBJJlGgY2DJvQ7WORsziR5TIY14wortK+8ttKQP052qE+ZwOWaxnLN1tSdZdAigWZhWWtZHBBQ2zw==
+X-Received: by 2002:a17:90b:1d81:b0:263:5eea:e820 with SMTP id pf1-20020a17090b1d8100b002635eeae820mr1179773pjb.26.1688648298965;
+        Thu, 06 Jul 2023 05:58:18 -0700 (PDT)
+Received: from thinkpad ([117.216.120.100])
+        by smtp.gmail.com with ESMTPSA id t3-20020a17090b018300b002635db431a0sm1275171pjs.45.2023.07.06.05.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 05:58:18 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 18:28:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Sajid Dalvi <sdalvi@google.com>,
+        Ajay Agarwal <ajayagarwal@google.com>
+Subject: Re: [PATCH] Revert "PCI: dwc: Wait for link up only if link is
+ started"
+Message-ID: <20230706125811.GD4808@thinkpad>
+References: <20230706082610.26584-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230705190309.579783-77-jlayton@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230706082610.26584-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 05-07-23 15:01:44, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On Thu, Jul 06, 2023 at 10:26:10AM +0200, Johan Hovold wrote:
+> This reverts commit da56a1bfbab55189595e588f1d984bdfb5cf5924.
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> A recent commit broke controller probe by returning an error in case the
+> link does not come up during host initialisation.
+> 
+> As explained in commit 886a9c134755 ("PCI: dwc: Move link handling into
+> common code") and as indicated by the comment "Ignore errors, the link
+> may come up later" in the code, waiting for link up and ignoring errors
+> is the intended behaviour:
+> 
+> 	 Let's standardize this to succeed as there are usecases where
+> 	 devices (and the link) appear later even without hotplug. For
+> 	 example, a reconfigured FPGA device.
+> 
+> Reverting the offending commit specifically fixes a regression on
+> Qualcomm platforms like the Lenovo ThinkPad X13s which no longer reach
+> the interconnect sync state if a slot does not have a device populated
+> (e.g. an optional modem).
+> 
+> Note that enabling asynchronous probing by default as was done for
+> Qualcomm platforms by commit c0e1eb441b1d ("PCI: qcom: Enable async
+> probe by default"), should take care of any related boot time concerns.
+> 
+> Finally, note that the intel-gw driver is the only driver currently not
+> providing a start_link callback and instead starts the link in its
+> host_init callback, and which may avoid an additional one-second timeout
+> during probe by making the link-up wait conditional. If anyone cares,
+> that can be done in a follow-up patch with a proper motivation.
+> 
 
-Looks good to me. Feel free to add:
+The offending commit is bogus since it makes the intel-gw _special_ w.r.t
+waiting for the link up. Most of the drivers call dw_pcie_host_init() during the
+probe time and they all have to wait for 1 sec if the slot is empty.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+As Johan noted, intel-gw should make use of the async probe to avoid the boot
+delay instead of adding a special case.
 
-								Honza
+> Fixes: da56a1bfbab5 ("PCI: dwc: Wait for link up only if link is started")
+> Reported-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Cc: Sajid Dalvi <sdalvi@google.com>
+> Cc: Ajay Agarwal <ajayagarwal@google.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+- Mani
 
 > ---
->  fs/udf/ialloc.c |  2 +-
->  fs/udf/inode.c  | 17 ++++++++++-------
->  fs/udf/namei.c  | 24 ++++++++++++------------
->  3 files changed, 23 insertions(+), 20 deletions(-)
+>  .../pci/controller/dwc/pcie-designware-host.c | 13 ++++--------
+>  drivers/pci/controller/dwc/pcie-designware.c  | 20 +++++++------------
+>  drivers/pci/controller/dwc/pcie-designware.h  |  1 -
+>  3 files changed, 11 insertions(+), 23 deletions(-)
 > 
-> diff --git a/fs/udf/ialloc.c b/fs/udf/ialloc.c
-> index 5f7ac8c84798..6b558cbbeb6b 100644
-> --- a/fs/udf/ialloc.c
-> +++ b/fs/udf/ialloc.c
-> @@ -100,7 +100,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
->  		iinfo->i_alloc_type = ICBTAG_FLAG_AD_SHORT;
->  	else
->  		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
-> -	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-> +	inode->i_mtime = inode->i_atime = inode_set_ctime_current(inode);
->  	iinfo->i_crtime = inode->i_mtime;
->  	if (unlikely(insert_inode_locked(inode) < 0)) {
->  		make_bad_inode(inode);
-> diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-> index 28cdfc57d946..d089795074e8 100644
-> --- a/fs/udf/inode.c
-> +++ b/fs/udf/inode.c
-> @@ -910,7 +910,7 @@ static int inode_getblk(struct inode *inode, struct udf_map_rq *map)
->  	map->oflags = UDF_BLK_NEW | UDF_BLK_MAPPED;
->  	iinfo->i_next_alloc_block = map->lblk + 1;
->  	iinfo->i_next_alloc_goal = newblocknum + 1;
-> -	inode->i_ctime = current_time(inode);
-> +	inode_set_ctime_current(inode);
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index cf61733bf78d..9952057c8819 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -485,20 +485,15 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+>  	if (ret)
+>  		goto err_remove_edma;
 >  
->  	if (IS_SYNC(inode))
->  		udf_sync_inode(inode);
-> @@ -1298,7 +1298,7 @@ int udf_setsize(struct inode *inode, loff_t newsize)
->  			goto out_unlock;
->  	}
->  update_time:
-> -	inode->i_mtime = inode->i_ctime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  	if (IS_SYNC(inode))
->  		udf_sync_inode(inode);
->  	else
-> @@ -1329,6 +1329,7 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
->  	int bs = inode->i_sb->s_blocksize;
->  	int ret = -EIO;
->  	uint32_t uid, gid;
-> +	struct timespec64 ctime;
->  
->  reread:
->  	if (iloc->partitionReferenceNum >= sbi->s_partitions) {
-> @@ -1507,7 +1508,8 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
->  
->  		udf_disk_stamp_to_time(&inode->i_atime, fe->accessTime);
->  		udf_disk_stamp_to_time(&inode->i_mtime, fe->modificationTime);
-> -		udf_disk_stamp_to_time(&inode->i_ctime, fe->attrTime);
-> +		udf_disk_stamp_to_time(&ctime, fe->attrTime);
-> +		inode_set_ctime_to_ts(inode, ctime);
->  
->  		iinfo->i_unique = le64_to_cpu(fe->uniqueID);
->  		iinfo->i_lenEAttr = le32_to_cpu(fe->lengthExtendedAttr);
-> @@ -1522,7 +1524,8 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
->  		udf_disk_stamp_to_time(&inode->i_atime, efe->accessTime);
->  		udf_disk_stamp_to_time(&inode->i_mtime, efe->modificationTime);
->  		udf_disk_stamp_to_time(&iinfo->i_crtime, efe->createTime);
-> -		udf_disk_stamp_to_time(&inode->i_ctime, efe->attrTime);
-> +		udf_disk_stamp_to_time(&ctime, efe->attrTime);
-> +		inode_set_ctime_to_ts(inode, ctime);
->  
->  		iinfo->i_unique = le64_to_cpu(efe->uniqueID);
->  		iinfo->i_lenEAttr = le32_to_cpu(efe->lengthExtendedAttr);
-> @@ -1799,7 +1802,7 @@ static int udf_update_inode(struct inode *inode, int do_sync)
->  
->  		udf_time_to_disk_stamp(&fe->accessTime, inode->i_atime);
->  		udf_time_to_disk_stamp(&fe->modificationTime, inode->i_mtime);
-> -		udf_time_to_disk_stamp(&fe->attrTime, inode->i_ctime);
-> +		udf_time_to_disk_stamp(&fe->attrTime, inode_get_ctime(inode));
->  		memset(&(fe->impIdent), 0, sizeof(struct regid));
->  		strcpy(fe->impIdent.ident, UDF_ID_DEVELOPER);
->  		fe->impIdent.identSuffix[0] = UDF_OS_CLASS_UNIX;
-> @@ -1830,12 +1833,12 @@ static int udf_update_inode(struct inode *inode, int do_sync)
->  
->  		udf_adjust_time(iinfo, inode->i_atime);
->  		udf_adjust_time(iinfo, inode->i_mtime);
-> -		udf_adjust_time(iinfo, inode->i_ctime);
-> +		udf_adjust_time(iinfo, inode_get_ctime(inode));
->  
->  		udf_time_to_disk_stamp(&efe->accessTime, inode->i_atime);
->  		udf_time_to_disk_stamp(&efe->modificationTime, inode->i_mtime);
->  		udf_time_to_disk_stamp(&efe->createTime, iinfo->i_crtime);
-> -		udf_time_to_disk_stamp(&efe->attrTime, inode->i_ctime);
-> +		udf_time_to_disk_stamp(&efe->attrTime, inode_get_ctime(inode));
->  
->  		memset(&(efe->impIdent), 0, sizeof(efe->impIdent));
->  		strcpy(efe->impIdent.ident, UDF_ID_DEVELOPER);
-> diff --git a/fs/udf/namei.c b/fs/udf/namei.c
-> index a95579b043ab..ae55ab8859b6 100644
-> --- a/fs/udf/namei.c
-> +++ b/fs/udf/namei.c
-> @@ -365,7 +365,7 @@ static int udf_add_nondir(struct dentry *dentry, struct inode *inode)
->  	*(__le32 *)((struct allocDescImpUse *)iter.fi.icb.impUse)->impUse =
->  		cpu_to_le32(iinfo->i_unique & 0x00000000FFFFFFFFUL);
->  	udf_fiiter_write_fi(&iter, NULL);
-> -	dir->i_ctime = dir->i_mtime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
->  	udf_fiiter_release(&iter);
->  	udf_add_fid_counter(dir->i_sb, false, 1);
-> @@ -471,7 +471,7 @@ static int udf_mkdir(struct mnt_idmap *idmap, struct inode *dir,
->  	udf_fiiter_release(&iter);
->  	udf_add_fid_counter(dir->i_sb, true, 1);
->  	inc_nlink(dir);
-> -	dir->i_ctime = dir->i_mtime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
->  	d_instantiate_new(dentry, inode);
->  
-> @@ -523,8 +523,8 @@ static int udf_rmdir(struct inode *dir, struct dentry *dentry)
->  	inode->i_size = 0;
->  	inode_dec_link_count(dir);
->  	udf_add_fid_counter(dir->i_sb, true, -1);
-> -	inode->i_ctime = dir->i_ctime = dir->i_mtime =
-> -						current_time(inode);
-> +	dir->i_mtime = inode_set_ctime_to_ts(dir,
-> +					     inode_set_ctime_current(inode));
->  	mark_inode_dirty(dir);
->  	ret = 0;
->  end_rmdir:
-> @@ -555,11 +555,11 @@ static int udf_unlink(struct inode *dir, struct dentry *dentry)
->  		set_nlink(inode, 1);
->  	}
->  	udf_fiiter_delete_entry(&iter);
-> -	dir->i_ctime = dir->i_mtime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
->  	inode_dec_link_count(inode);
->  	udf_add_fid_counter(dir->i_sb, false, -1);
-> -	inode->i_ctime = dir->i_ctime;
-> +	inode_set_ctime_to_ts(inode, inode_get_ctime(dir));
->  	ret = 0;
->  end_unlink:
->  	udf_fiiter_release(&iter);
-> @@ -746,9 +746,9 @@ static int udf_link(struct dentry *old_dentry, struct inode *dir,
->  
->  	inc_nlink(inode);
->  	udf_add_fid_counter(dir->i_sb, false, 1);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_set_ctime_current(inode);
->  	mark_inode_dirty(inode);
-> -	dir->i_ctime = dir->i_mtime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
->  	ihold(inode);
->  	d_instantiate(dentry, inode);
-> @@ -833,7 +833,7 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
->  	 * Like most other Unix systems, set the ctime for inodes on a
->  	 * rename.
->  	 */
-> -	old_inode->i_ctime = current_time(old_inode);
-> +	inode_set_ctime_current(old_inode);
->  	mark_inode_dirty(old_inode);
->  
->  	/*
-> @@ -861,13 +861,13 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+> -	if (dw_pcie_link_up(pci)) {
+> -		dw_pcie_print_link_status(pci);
+> -	} else {
+> +	if (!dw_pcie_link_up(pci)) {
+>  		ret = dw_pcie_start_link(pci);
+>  		if (ret)
+>  			goto err_remove_edma;
+> -
+> -		if (pci->ops && pci->ops->start_link) {
+> -			ret = dw_pcie_wait_for_link(pci);
+> -			if (ret)
+> -				goto err_stop_link;
+> -		}
 >  	}
 >  
->  	if (new_inode) {
-> -		new_inode->i_ctime = current_time(new_inode);
-> +		inode_set_ctime_current(new_inode);
->  		inode_dec_link_count(new_inode);
->  		udf_add_fid_counter(old_dir->i_sb, S_ISDIR(new_inode->i_mode),
->  				    -1);
->  	}
-> -	old_dir->i_ctime = old_dir->i_mtime = current_time(old_dir);
-> -	new_dir->i_ctime = new_dir->i_mtime = current_time(new_dir);
-> +	old_dir->i_mtime = inode_set_ctime_current(old_dir);
-> +	new_dir->i_mtime = inode_set_ctime_current(new_dir);
->  	mark_inode_dirty(old_dir);
->  	mark_inode_dirty(new_dir);
+> +	/* Ignore errors, the link may come up later */
+> +	dw_pcie_wait_for_link(pci);
+> +
+>  	bridge->sysdata = pp;
 >  
+>  	ret = pci_host_probe(bridge);
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index df092229e97d..8e33e6e59e68 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -644,20 +644,9 @@ void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index)
+>  	dw_pcie_writel_atu(pci, dir, index, PCIE_ATU_REGION_CTRL2, 0);
+>  }
+>  
+> -void dw_pcie_print_link_status(struct dw_pcie *pci)
+> -{
+> -	u32 offset, val;
+> -
+> -	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> -	val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
+> -
+> -	dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
+> -		 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
+> -		 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
+> -}
+> -
+>  int dw_pcie_wait_for_link(struct dw_pcie *pci)
+>  {
+> +	u32 offset, val;
+>  	int retries;
+>  
+>  	/* Check if the link is up or not */
+> @@ -673,7 +662,12 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+>  		return -ETIMEDOUT;
+>  	}
+>  
+> -	dw_pcie_print_link_status(pci);
+> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +	val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
+> +
+> +	dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
+> +		 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
+> +		 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 615660640801..79713ce075cc 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -429,7 +429,6 @@ void dw_pcie_setup(struct dw_pcie *pci);
+>  void dw_pcie_iatu_detect(struct dw_pcie *pci);
+>  int dw_pcie_edma_detect(struct dw_pcie *pci);
+>  void dw_pcie_edma_remove(struct dw_pcie *pci);
+> -void dw_pcie_print_link_status(struct dw_pcie *pci);
+>  
+>  static inline void dw_pcie_writel_dbi(struct dw_pcie *pci, u32 reg, u32 val)
+>  {
 > -- 
-> 2.41.0
+> 2.39.3
 > 
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+மணிவண்ணன் சதாசிவம்
