@@ -2,243 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7064674A3B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B6974A3B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjGFSZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S232037AbjGFS0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjGFSZ2 (ORCPT
+        with ESMTP id S230040AbjGFS0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:25:28 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAD31BF8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:25:27 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5700b15c12fso12784427b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688667927; x=1691259927;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WWFgfPgGoLKqTDSSqG8QcMK5uhrLKHKXGtxaWQuRFrs=;
-        b=TmLg7EeANHof3EJKbciWU5J8LMsEIwR/OHNvoUdluWhILf99UZmTNILMzHFezQ2Oae
-         bfWpuZnKo8ESL6gU4PVuanKSs9u2IkCt1ZFUrEmIYDIm2Y1IQwbqN5Y96bf5VDKs4fK6
-         +UIc/fXP1uZzC4+ufeNTUQuOwyLQymZrH8myYOrMOHhKutRzzLJV9AInKgWi4q1NRCIk
-         tF0Gr6D1EzNKQ1R5PC4Xurb8OR4HHnjz4nnKLiI0l3PxqnFnhJjV2WQVY+bibMhXrGE0
-         wxXBl82wvk9to6Yrl9iMmKcaMhMQOjXn6U9LRDcqbQsKttPzLHMb+/MFFWGA/Ofy+RHV
-         E2ew==
+        Thu, 6 Jul 2023 14:26:04 -0400
+Received: from mail-pj1-f80.google.com (mail-pj1-f80.google.com [209.85.216.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524DD1FFB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:25:46 -0700 (PDT)
+Received: by mail-pj1-f80.google.com with SMTP id 98e67ed59e1d1-262e9468034so1725535a91.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:25:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688667927; x=1691259927;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WWFgfPgGoLKqTDSSqG8QcMK5uhrLKHKXGtxaWQuRFrs=;
-        b=TgmB3ttJIz9LcGZxd2DgxfeSV8XCGfUjSZ6qZzufkyWpZ+M3HNoahtt+siN9KQFew+
-         8KiVPTO51cwepcL/Jb8PWlscGDFNVXo6R+Jddl9r+tm94QKJIK3rLTd6lA2LiqaWNAQt
-         gCs9qIf9QdYXDeX0bovQdrU6ja2mb4XSKeFT0pmiKGxv6OOJXUEL7WQD3SJxlop+45Hj
-         Is3H/h9pHABFuiRfoIIM//KxrQUV3hfdLUyAkOk79VXw4vl/KP0Ct467kVOABms8YB6b
-         vvvDMwvxjdMZYL/GHcp8C3MLHlOJPAyyAxDT88iXUzxf+dRoOD3hogIcNokuqhBQAVxx
-         JL1Q==
-X-Gm-Message-State: ABy/qLYsPeqBaaNYXYsuazSDCrLEzxLbV8BST+S5SQjbfNVTHwMV1W5J
-        SEh/KvsEFXxcUrMGkQCLg25pmXceEPBHpMWjrohuJQ==
-X-Google-Smtp-Source: APBJJlGt5s+qN3+MlugdTjd5BHq9Gd9N6Bj4jGVrcAHiiIF7IqFsDoJ6W9XPGep06nFmJ+uAU5LfN+oe3MkQys0D9oE=
-X-Received: by 2002:a0d:e241:0:b0:573:d710:6f88 with SMTP id
- l62-20020a0de241000000b00573d7106f88mr2552493ywe.36.1688667926648; Thu, 06
- Jul 2023 11:25:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688667945; x=1691259945;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OZzgEZl6/g7psZ0E4d9jCKRJiroc9+4BEHoe0FwqD0A=;
+        b=T22wYzAWdhrkSzCue2dXGlhiSaIDl2hKFzk2A35hvtOf36WcKI8jvgim/d7sSBiILU
+         HqstVf8meVlHGW6l43zN7ytqaoH6Le0nsu9vFOkY9N9FkbUM7oSO9AoM6+Qq/EeL/mYS
+         wJY1EK3rlAgcynsDXSoAdm07yY5CFYcUEQjcYwSulLDLowqOP1ixMhsZVaknZX5N0Fyu
+         mGDpF4DF1zQ+rrSvMfHQM8iljrz/0L9893yxWljTP0PuoCaKbH7WSoSplEAsnt3fB4U0
+         XlOdFTLfCmXLL+VbriGS0I4JvLAs9ztNF+eCU/rWN6BCHIIQoHLv1ZJN4guQGY4C9Kkn
+         k9kw==
+X-Gm-Message-State: ABy/qLZx/PWfVYwsb+lbIaRqKZOu552F71tO72vutSw9J0QAmxww5f9J
+        Tq6ek6LnAhcptxH+ae+sHUmKZ6wZ23ZltO7WqrjcC6au83a/
+X-Google-Smtp-Source: APBJJlERvrpoZOMihfbOTAEJysCghlB1JQkU8loiCXpqc2u7eML+so9n5tmRY1ZNli1dxl9JKH9Jdyj8VD5cudXSRC/XpN2FqPEo
 MIME-Version: 1.0
-References: <20230623164015.3431990-1-jiaqiyan@google.com> <20230623164015.3431990-3-jiaqiyan@google.com>
- <20230705235705.GE41006@monkey>
-In-Reply-To: <20230705235705.GE41006@monkey>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Thu, 6 Jul 2023 11:25:15 -0700
-Message-ID: <CACw3F511Hk-XM46fYnciKy6=t0bdmGpu9y1qsqrpJOA0zFKWhw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
- is raw HWPOISON
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     naoya.horiguchi@nec.com, songmuchun@bytedance.com,
-        shy828301@gmail.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duenwen@google.com,
-        axelrasmussen@google.com, jthoughton@google.com
+X-Received: by 2002:a17:90b:1215:b0:263:347:25b3 with SMTP id
+ gl21-20020a17090b121500b00263034725b3mr2029757pjb.6.1688667944984; Thu, 06
+ Jul 2023 11:25:44 -0700 (PDT)
+Date:   Thu, 06 Jul 2023 11:25:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000126ec05ffd5a528@google.com>
+Subject: [syzbot] [ext4?] kernel BUG in ext4_enable_quotas
+From:   syzbot <syzbot+693985588d7a5e439483@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 4:57=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.co=
-m> wrote:
->
-> On 06/23/23 16:40, Jiaqi Yan wrote:
-> > Adds the functionality to tell if a subpage of a hugetlb folio is a
-> > raw HWPOISON page. This functionality relies on RawHwpUnreliable to
-> > be not set; otherwise hugepage's HWPOISON list becomes meaningless.
-> >
-> > Exports this functionality to be immediately used in the read operation
-> > for hugetlbfs.
-> >
-> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > ---
-> >  include/linux/hugetlb.h | 19 +++++++++++++++++++
-> >  include/linux/mm.h      |  7 +++++++
-> >  mm/hugetlb.c            | 10 ++++++++++
-> >  mm/memory-failure.c     | 34 ++++++++++++++++++++++++----------
-> >  4 files changed, 60 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> > index 21f942025fec..8b73a12b7b38 100644
-> > --- a/include/linux/hugetlb.h
-> > +++ b/include/linux/hugetlb.h
-> > @@ -1013,6 +1013,25 @@ void hugetlb_register_node(struct node *node);
-> >  void hugetlb_unregister_node(struct node *node);
-> >  #endif
-> >
-> > +/*
-> > + * Struct raw_hwp_page represents information about "raw error page",
-> > + * constructing singly linked list from ->_hugetlb_hwpoison field of f=
-olio.
-> > + */
-> > +struct raw_hwp_page {
-> > +     struct llist_node node;
-> > +     struct page *page;
-> > +};
-> > +
-> > +static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
-)
-> > +{
-> > +     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > +}
-> > +
-> > +/*
-> > + * Check if a given raw @subpage in a hugepage @folio is HWPOISON.
-> > + */
-> > +bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage);
-> > +
-> >  #else        /* CONFIG_HUGETLB_PAGE */
-> >  struct hstate {};
-> >
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 66032f0d515c..41a283bd41a7 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -3671,6 +3671,7 @@ extern const struct attribute_group memory_failur=
-e_attr_group;
-> >  extern void memory_failure_queue(unsigned long pfn, int flags);
-> >  extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags,
-> >                                       bool *migratable_cleared);
-> > +extern bool __is_raw_hwp_subpage(struct folio *folio, struct page *sub=
-page);
-> >  void num_poisoned_pages_inc(unsigned long pfn);
-> >  void num_poisoned_pages_sub(unsigned long pfn, long i);
-> >  struct task_struct *task_early_kill(struct task_struct *tsk, int force=
-_early);
-> > @@ -3685,6 +3686,12 @@ static inline int __get_huge_page_for_hwpoison(u=
-nsigned long pfn, int flags,
-> >       return 0;
-> >  }
-> >
-> > +static inline bool __is_raw_hwp_subpage(struct folio *folio,
-> > +                                     struct page *subpage)
-> > +{
-> > +     return false;
-> > +}
-> > +
-> >  static inline void num_poisoned_pages_inc(unsigned long pfn)
-> >  {
-> >  }
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index ea24718db4af..6b860de87590 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -7377,6 +7377,16 @@ int get_huge_page_for_hwpoison(unsigned long pfn=
-, int flags,
-> >       return ret;
-> >  }
-> >
-> > +bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
-> > +{
-> > +     bool ret;
-> > +
-> > +     spin_lock_irq(&hugetlb_lock);
-> > +     ret =3D __is_raw_hwp_subpage(folio, subpage);
-> > +     spin_unlock_irq(&hugetlb_lock);
->
-> Can you describe what races the hugetlb_lock prevents here?
+Hello,
 
-I think we should sync here with __get_huge_page_for_hwpoison, who
-iterates and inserts an entry to raw_hwp_list. llist itself doesn't
-ensure insertion is synchronized with iterating from
-__is_raw_hwp_subpage.
+syzbot found the following issue on:
 
-> --
-> Mike Kravetz
->
-> > +     return ret;
-> > +}
-> > +
-> >  void folio_putback_active_hugetlb(struct folio *folio)
-> >  {
-> >       spin_lock_irq(&hugetlb_lock);
-> > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> > index c415c3c462a3..891248e2930e 100644
-> > --- a/mm/memory-failure.c
-> > +++ b/mm/memory-failure.c
-> > @@ -1809,18 +1809,32 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
-> >  #endif /* CONFIG_FS_DAX */
-> >
-> >  #ifdef CONFIG_HUGETLB_PAGE
-> > -/*
-> > - * Struct raw_hwp_page represents information about "raw error page",
-> > - * constructing singly linked list from ->_hugetlb_hwpoison field of f=
-olio.
-> > - */
-> > -struct raw_hwp_page {
-> > -     struct llist_node node;
-> > -     struct page *page;
-> > -};
-> >
-> > -static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
-)
-> > +bool __is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
-> >  {
-> > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > +     struct llist_head *raw_hwp_head;
-> > +     struct raw_hwp_page *p, *tmp;
-> > +     bool ret =3D false;
-> > +
-> > +     if (!folio_test_hwpoison(folio))
-> > +             return false;
-> > +
-> > +     /*
-> > +      * When RawHwpUnreliable is set, kernel lost track of which subpa=
-ges
-> > +      * are HWPOISON. So return as if ALL subpages are HWPOISONed.
-> > +      */
-> > +     if (folio_test_hugetlb_raw_hwp_unreliable(folio))
-> > +             return true;
-> > +
-> > +     raw_hwp_head =3D raw_hwp_list_head(folio);
-> > +     llist_for_each_entry_safe(p, tmp, raw_hwp_head->first, node) {
-> > +             if (subpage =3D=3D p->page) {
-> > +                     ret =3D true;
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     return ret;
-> >  }
-> >
-> >  static unsigned long __folio_free_raw_hwp(struct folio *folio, bool mo=
-ve_flag)
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
+HEAD commit:    995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15fdda4f280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
+dashboard link: https://syzkaller.appspot.com/bug?extid=693985588d7a5e439483
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/01122b567c73/disk-995b406c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/75b7a37e981e/vmlinux-995b406c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/758b5afcf092/bzImage-995b406c.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+693985588d7a5e439483@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/ext4/super.c:7010!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 27977 Comm: syz-executor.2 Not tainted 6.4.0-syzkaller-10098-g995b406c7e97 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:ext4_quota_enable fs/ext4/super.c:7010 [inline]
+RIP: 0010:ext4_enable_quotas+0xb7a/0xb90 fs/ext4/super.c:7057
+Code: ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 3a f7 ff ff 49 89 d6 48 89 df e8 03 10 99 ff 4c 89 f2 e9 27 f7 ff ff e8 46 60 40 ff <0f> 0b e8 3f 60 40 ff 0f 0b e8 18 6e 6e 08 0f 1f 84 00 00 00 00 00
+RSP: 0018:ffffc9000392f880 EFLAGS: 00010293
+RAX: ffffffff824b91aa RBX: 0000000000000000 RCX: ffff88803c1d8000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc9000392fa50 R08: ffffffff824b8aa4 R09: 1ffff11010674957
+R10: dffffc0000000000 R11: ffffed1010674958 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff88807f545464 R15: dffffc0000000000
+FS:  00007f5112313700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002007f000 CR3: 000000002cb28000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __ext4_fill_super fs/ext4/super.c:5562 [inline]
+ ext4_fill_super+0x6157/0x6ce0 fs/ext4/super.c:5696
+ get_tree_bdev+0x468/0x6c0 fs/super.c:1318
+ vfs_get_tree+0x8c/0x270 fs/super.c:1519
+ do_new_mount+0x28f/0xae0 fs/namespace.c:3335
+ do_mount fs/namespace.c:3675 [inline]
+ __do_sys_mount fs/namespace.c:3884 [inline]
+ __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3861
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f511168d8ba
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5112312f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00000000000005d8 RCX: 00007f511168d8ba
+RDX: 0000000020000580 RSI: 00000000200005c0 RDI: 00007f5112312fe0
+RBP: 00007f5112313020 R08: 00007f5112313020 R09: 0000000001008002
+R10: 0000000001008002 R11: 0000000000000202 R12: 0000000020000580
+R13: 00000000200005c0 R14: 00007f5112312fe0 R15: 0000000020000100
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ext4_quota_enable fs/ext4/super.c:7010 [inline]
+RIP: 0010:ext4_enable_quotas+0xb7a/0xb90 fs/ext4/super.c:7057
+Code: ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 3a f7 ff ff 49 89 d6 48 89 df e8 03 10 99 ff 4c 89 f2 e9 27 f7 ff ff e8 46 60 40 ff <0f> 0b e8 3f 60 40 ff 0f 0b e8 18 6e 6e 08 0f 1f 84 00 00 00 00 00
+RSP: 0018:ffffc9000392f880 EFLAGS: 00010293
+RAX: ffffffff824b91aa RBX: 0000000000000000 RCX: ffff88803c1d8000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc9000392fa50 R08: ffffffff824b8aa4 R09: 1ffff11010674957
+R10: dffffc0000000000 R11: ffffed1010674958 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff88807f545464 R15: dffffc0000000000
+FS:  00007f5112313700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2d324000 CR3: 000000002cb28000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
