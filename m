@@ -2,136 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4667498EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0207498E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjGFKCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S232299AbjGFKCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjGFKCg (ORCPT
+        with ESMTP id S231628AbjGFKBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:02:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725F9199E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688637711;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PFB/bHaV+5S4HNAEYX/AEdRm3PBRbuuOs/N7fpLg5iE=;
-        b=hKw1k4X7OtdOsb8IlPWp/krUxNJCPDcMl2THTnD/JQDIDIqEe4jSI/J7Yz18cmLYiPKypi
-        EDb7CnWlLlPCgDjAAtJ5IMW1e6q3sKSGMMt8J+WE4t0IN2A4Y3XQ98j3zEsUCezK0tN6Kr
-        G01gBm5htE8Ppf44EOCIk38faQUsR30=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-264-BD_Yae-hOVqnySsQN8OXUw-1; Thu, 06 Jul 2023 06:01:50 -0400
-X-MC-Unique: BD_Yae-hOVqnySsQN8OXUw-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-56942442eb0so6132007b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:01:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688637709; x=1691229709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PFB/bHaV+5S4HNAEYX/AEdRm3PBRbuuOs/N7fpLg5iE=;
-        b=Lt+wZBPyAWe26FwJUOdicHkRrayjEhpzy4GRVztd8qh/zV7IjDkpIN+wqnsoOdLI2B
-         DuLcHysCzE1+BENWIOkRaHc8RJVaN1UT2EDWr9e6xkFJSwK/b9YyKHmQo8xF8BL8W9+M
-         fBBlmqt+sOJpCr3qFEieujxLybw+xgvkWTgV54C7/7q9Ee7NPaTuCalpKVMnFEFwTm77
-         AMkQtdd7IL3bMvu/Bx18fcc7GQoaU1D4RVPT3Rdqf27h3STcFKiw82rGCUv0wXTIqq0b
-         KJ3Ypync6nLXixIem/xoprJySFe4Sb1RJ1/TiwWWf16dh4iOW+oyuN4RfPbGY5qlk1vX
-         WlYg==
-X-Gm-Message-State: ABy/qLacSE5cHyG5ObdbaQH5Y1JhUnyvIFKX13/UQdn9L6uyeqazkIA+
-        mYZPEfZQRQ5cSBH2wcwKUb717zLrJ4o/6P25iEwL3eI9E3r2iHt36v5ul3or4UWqh8Ne3rvzvxo
-        iagc+Sevey/aoy8LJPDx8wNtJxOq6DtoZbHMOiXqb
-X-Received: by 2002:a81:8384:0:b0:56d:c97:39f4 with SMTP id t126-20020a818384000000b0056d0c9739f4mr1424682ywf.8.1688637709729;
-        Thu, 06 Jul 2023 03:01:49 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHnS8DTGuBigSC1cOUEhrHGP3AjZEn+XIDZR976mIx9TGjJA3wYtGsoU6qHdLxp+gcwyMWCUHKwipRzaY/ylEo=
-X-Received: by 2002:a81:8384:0:b0:56d:c97:39f4 with SMTP id
- t126-20020a818384000000b0056d0c9739f4mr1424668ywf.8.1688637709450; Thu, 06
- Jul 2023 03:01:49 -0700 (PDT)
+        Thu, 6 Jul 2023 06:01:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F201986;
+        Thu,  6 Jul 2023 03:01:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AF05618EC;
+        Thu,  6 Jul 2023 10:01:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD42C433C8;
+        Thu,  6 Jul 2023 10:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688637709;
+        bh=1uw7peNXWbOZLFcB9mq2BFk7tvD/drZrJVzzlsJCqFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=snLh+kbUGeVCMoA+6j1NiXgyGq/FjkZbnGTrm9nidVQVXwFkv/QVK3CL/JdJdM6DD
+         Mk/HKookNBQppeS2LPYd8249BnWwqm4wB2vqfiloLXWNRHrYUMi0Z4zu8O6lJVeXcl
+         ETwReQjSDLhKY6oTbxVrRpRplbDZIaziMv0oJAOlYhOqurXwm/n6Il2lb6fXtAmq0B
+         1nhf0VTZF3pX/pgxr7OcXS1KSRfjTFs6gMLl3gWBfp3aQ4HB5y8TxFmtVk8jpGSdaz
+         sF03Ca3zNDHqfqeHjaHqdg5fmoQgyCM4cSWpq0Yd6oOGBvocG3HDVvgjYE8xKbJwWp
+         G85Mz/024v2zQ==
+Date:   Thu, 6 Jul 2023 12:01:46 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
+ infrastructure
+Message-ID: <ZKaRCsWfYVPVMBcz@lothringen>
+References: <20230705181256.3539027-1-vschneid@redhat.com>
+ <20230705181256.3539027-12-vschneid@redhat.com>
+ <ZKXtfWZiM66dK5xC@localhost.localdomain>
 MIME-Version: 1.0
-References: <20230704234532.532c8ee7.gary@garyguo.net>
-In-Reply-To: <20230704234532.532c8ee7.gary@garyguo.net>
-From:   Stefano Garzarella <sgarzare@redhat.com>
-Date:   Thu, 6 Jul 2023 12:01:38 +0200
-Message-ID: <CAGxU2F4_br6e3hEELXP_wpQSZTs5FYhQ-iahiZKzMMRYWpFXdA@mail.gmail.com>
-Subject: Re: Hyper-V vsock streams do not fill the supplied buffer in full
-To:     Gary Guo <gary@garyguo.net>, Dexuan Cui <decui@microsoft.com>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKXtfWZiM66dK5xC@localhost.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gary,
+On Thu, Jul 06, 2023 at 12:23:57AM +0200, Frederic Weisbecker wrote:
+> diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+> index fdd537ea513f..ec3d172601c5 100644
+> --- a/include/linux/context_tracking_state.h
+> +++ b/include/linux/context_tracking_state.h
+> @@ -10,14 +10,19 @@
+>  #define DYNTICK_IRQ_NONIDLE	((LONG_MAX / 2) + 1)
+>  
+>  enum ctx_state {
+> +	/* Following are values */
+>  	CONTEXT_DISABLED	= -1,	/* returned by ct_state() if unknown */
+>  	CONTEXT_KERNEL		= 0,
+>  	CONTEXT_IDLE		= 1,
+>  	CONTEXT_USER		= 2,
+> -	CONTEXT_GUEST		= 3,
+> -	CONTEXT_MAX		= 4,
+> +	/* Following are bit numbers */
+> +	CONTEXT_WORK		= 2,
+> +	CONTEXT_MAX		= 16,
+>  };
+>  
+> +#define CONTEXT_MASK (BIT(CONTEXT_WORK) - 1)
+> +#define CONTEXT_WORK_MASK ((BIT(CONTEXT_MAX) - 1) & ~(BIT(CONTEXT_WORK) - 1))
+> +
+>  /* Even value for idle, else odd. */
+>  #define RCU_DYNTICKS_IDX CONTEXT_MAX
 
-On Wed, Jul 5, 2023 at 12:45=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
->
-> When a vsock stream is called with recvmsg with a buffer, it only fills
-> the buffer with data from the first single VM packet. Even if there are
-> more VM packets at the time and the buffer is still not completely
-> filled, it will just leave the buffer partially filled.
->
-> This causes some issues when in WSLD which uses the vsock in
-> non-blocking mode and uses epoll.
->
-> For stream-oriented sockets, the epoll man page [1] says that
->
-> > For stream-oriented files (e.g., pipe, FIFO, stream socket),
-> > the condition that the read/write I/O space is exhausted can
-> > also be detected by checking the amount of data read from /
-> > written to the target file descriptor.  For example, if you
-> > call read(2) by asking to read a certain amount of data and
-> > read(2) returns a lower number of bytes, you can be sure of
-> > having exhausted the read I/O space for the file descriptor.
->
-> This has been used as an optimisation in the wild for reducing number
-> of syscalls required for stream sockets (by asserting that the socket
-> will not have to polled to EAGAIN in edge-trigger mode, if the buffer
-> given to recvmsg is not filled completely). An example is Tokio, which
-> starting in v1.21.0 [2].
->
-> When this optimisation combines with the behaviour of Hyper-V vsock, it
-> causes issue in this scenario:
-> * the VM host send data to the guest, and it's splitted into multiple
->   VM packets
-> * sk_data_ready is called and epoll returns, notifying the userspace
->   that the socket is ready
-> * userspace call recvmsg with a buffer, and it's partially filled
-> * userspace assumes that the stream socket is depleted, and if new data
->   arrives epoll will notify it again.
-> * kernel always considers the socket to be ready, and since it's in
->   edge-trigger mode, the epoll instance will never be notified again.
->
-> This different realisation of the readiness causes the userspace to
-> block forever.
+And that should be:
 
-Thanks for the detailed description of the problem.
+#define RCU_DYNTICKS_IDX BIT(CONTEXT_MAX)
 
-I think we should fix the hvs_stream_dequeue() in
-net/vmw_vsock/hyperv_transport.c.
-We can do something similar to what we do in
-virtio_transport_stream_do_dequeue() in
-net/vmw_vsock/virtio_transport_common.c
-
-@Dexuan WDYT?
-
-Thanks,
-Stefano
-
+Did I mention it's not even build tested? :o)
