@@ -2,198 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DA074A22E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0566C74A1BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjGFQ2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 12:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S233153AbjGFQEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjGFQ2U (ORCPT
+        with ESMTP id S229519AbjGFQD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:28:20 -0400
-X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 09:28:19 PDT
-Received: from mx08-00376f01.pphosted.com (mx08-00376f01.pphosted.com [91.207.212.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9866E1727;
-        Thu,  6 Jul 2023 09:28:19 -0700 (PDT)
-Received: from pps.filterd (m0168888.ppops.net [127.0.0.1])
-        by mx08-00376f01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3668moGT005401;
-        Thu, 6 Jul 2023 16:45:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imgtec.com; h=
-        from:to:cc:subject:date:message-id:references:in-reply-to
-        :content-type:content-id:content-transfer-encoding:mime-version;
-         s=dk201812; bh=N8f/aQKB8+497pyVgB+T7ci2teqbRKd4a3QMu+7nq1Q=; b=
-        BLSLfHI8ZEvWhgdaWeBzveNtu1v2Sy8YHlSzLRn/UntLLCsLHF3VuYbaxUmy4ge8
-        BzvTgEGPRPecDOtNorhss4LoEFi0XpiNtvu8MHMbG+X2z7OL+/y3A35KkVeYHeMA
-        3/mz7KHwNZgXJZ/2pQ3bwAOSK2HhScchz2EQ36uyh0RF3VbmzETJhek8mqlm+pb2
-        P1kp1C+akSONRekbuyU6XHIYDH7n9Y578NjvxZw4uE2zCCpWkdyd0RXQkLbWrxk+
-        zT6jCji0aN5SVBLCSsfcv4oWA1JLLG1SC470OPcFEYK0PRe4MK8ACHt8QeGmF/cX
-        vurNlpm5fSmxYJ6JNELRbA==
-Received: from hhmail05.hh.imgtec.org ([217.156.249.195])
-        by mx08-00376f01.pphosted.com (PPS) with ESMTPS id 3rjadqm42v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 06 Jul 2023 16:45:08 +0100 (BST)
-Received: from HHMAIL05.hh.imgtec.org (10.100.10.120) by
- HHMAIL05.hh.imgtec.org (10.100.10.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 6 Jul 2023 16:45:07 +0100
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (104.47.20.58) by
- email.imgtec.com (10.100.10.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27 via Frontend
- Transport; Thu, 6 Jul 2023 16:45:07 +0100
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KBxoof1M7fVQwQfopJbJjK06lOb3yoNxUuQaU0hkXMRJBSi/TS4UxHa7Qdw6rHg8JCp8F7V6fjxZOVDpRJadR2TYepyRCYP8bGXnWQywupg9IIYiZCmfZEoM+77NT58T2K3reztd96BDYsAdNt39smEfBhRq2aoUXBrxTZDqtRTx6TozgKiazNTO6Dq8YeLQG+YhKOE6XSwrzLVgD9N01zgDTELaTLOiEYl4swLnaC7hvWDxPxoLsRz4lG3Eq5pr/CRzPY8BZQ3aPqHq/N8V8Cv+aH3Ur7K0GLJXqp7FQhmRn0sAICff+txtKTzNB0fQqICsihAmLz0/ZewOk/zGvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N8f/aQKB8+497pyVgB+T7ci2teqbRKd4a3QMu+7nq1Q=;
- b=LId0wupFBKANyNP3uTzAcqT754yWk2eMm9DWz8yakw2TALwc+weI9k14Q8HrPRuBZ0Wdu0mB3pNivPZq1QyD1XrgTxLr+2a20rRS8w29r5K4u4IMGhthiU1JOyK1wIMVzxsLr4uOzWzRPeWNB107pStXDQt7JWFwwbCHW0CDg/7QSxYIaykM+Cn3hVCsRnQKfXmi3/5fG1uku7Le4qVFJlkO0Yp+VgQjRKUQtmoiLLFNKlSCq+BXaeGtxpzYm2vBIl9jbTF5lEzpqd1yBWQyKjxgdc3XFmDYI/W+v71HE1rid9nf6lbHOezjoP/zYqLdENNEP+iK/jUxeo+icxa0CA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=imgtec.com; dmarc=pass action=none header.from=imgtec.com;
- dkim=pass header.d=imgtec.com; arc=none
+        Thu, 6 Jul 2023 12:03:58 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151E1DC;
+        Thu,  6 Jul 2023 09:03:57 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5774098f16eso11415367b3.0;
+        Thu, 06 Jul 2023 09:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=IMGTecCRM.onmicrosoft.com; s=selector2-IMGTecCRM-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N8f/aQKB8+497pyVgB+T7ci2teqbRKd4a3QMu+7nq1Q=;
- b=FUPmXuKwV8pZZXyjWogpg7FDRKwkGuFT4/g5miw3H8eIzJ9DJwyl9mSvwQDA/zPSw+IPT/k/YQEcoMew67h2qtfFVx9I2E3D1mN/FSdBzn3aoriOYR/sNEj24nJdzAGSMa2/4mqB4Go1zgYGxVWibJ4YkE3RPKdTJzNwok9V1t4=
-Received: from CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1a0::8)
- by CWXP265MB5650.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:159::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
- 2023 15:45:05 +0000
-Received: from CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM
- ([fe80::4694:a4a9:5649:14eb]) by CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM
- ([fe80::4694:a4a9:5649:14eb%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 15:45:05 +0000
-From:   Donald Robson <Donald.Robson@imgtec.com>
-To:     "corbet@lwn.net" <corbet@lwn.net>,
-        "jason@jlekstrand.net" <jason@jlekstrand.net>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "matthew.brost@intel.com" <matthew.brost@intel.com>,
-        "bskeggs@redhat.com" <bskeggs@redhat.com>,
-        "dakr@redhat.com" <dakr@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "boris.brezillon@collabora.com" <boris.brezillon@collabora.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "alexdeucher@gmail.com" <alexdeucher@gmail.com>,
-        "airlied@gmail.com" <airlied@gmail.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "airlied@redhat.com" <airlied@redhat.com>
-Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
- mappings
-Thread-Topic: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
- mappings
-Thread-Index: AQHZsCDVszc+u6AXYEi0dgSKg2mf4A==
-Date:   Thu, 6 Jul 2023 15:45:05 +0000
-Message-ID: <8d01cb3add315277c86cf4b28d6901fed1977448.camel@imgtec.com>
-References: <20230629222651.3196-1-dakr@redhat.com>
-         <20230629222651.3196-3-dakr@redhat.com>
-In-Reply-To: <20230629222651.3196-3-dakr@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CWLP265MB5770:EE_|CWXP265MB5650:EE_
-x-ms-office365-filtering-correlation-id: 6fba4e03-a841-4e00-64ab-08db7e37f839
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8wVAtJZ4XnWG/shEniPLEoBbescBXfempfylRjOsLwWYTvN7sPTzPeEQozNMwaAeAtT/DwirS1B9NOu6FSTVdoMKhFhH29Q/ETLTa4qaSvZ8UWCTdCfv/pTkt+//EVzR3VuQrINEa0CB5O81fgIAIwXW+C//XrLDqIRBdc5JyU6jnpZAJ+vZmdZtwVm0hpDQpntTJLxm6MErXZQ6bvX2fGHa2zCMeJlen/b9Ct5QCc2OoOfXbxoyaqXoGtQSycUryReph8uSyhM3Ohc5v3eXruoysUl0GKvqyOXT05y49fwNbHaGnp8vQUqnQ9V0rtu7T+1IlljBT+v/YDOkWSwkusM3iLHXn51NI/pDJYyKAZmamNzgoiRCDxX2I+/GlR6dzgdvowbDSeJPywrlA09g2nXRBsIOFC/F8LDoTM5DM6aOYJUhDOzXNaUG9LFbCVGgYNjstIM00faKUPmXiw3IbwSLfoykP2DFvP6/OSwGm0XAMYjR1g3uKrIYakCNtDTTAZ3pI5QE5uMhdVeP5/07eTpW+GX5Hesr5gfCN/SP/vFiYEzGZYG/+6GJ0xeOUOx9vUihxZqjPhpvj6ZtoK0NBS8UkIWhQ3yoG5gX2mznC17abBwN16myf+u6Gvb0Z1gD
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(39850400004)(366004)(346002)(136003)(396003)(451199021)(54906003)(5660300002)(8936002)(8676002)(41300700001)(316002)(2906002)(83380400001)(7416002)(122000001)(921005)(76116006)(2616005)(4326008)(66946007)(66556008)(91956017)(38100700002)(64756008)(66476007)(66446008)(478600001)(86362001)(186003)(26005)(110136005)(6506007)(36756003)(6486002)(38070700005)(6512007)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OGVZc290NXVoUU5kTG5xUVpQSmtCTmdJbVJTWnpRbTY0cmVVTTl0NzJDNnlz?=
- =?utf-8?B?STlUdW9rdlNtUExXV25pT0lYZ3FmUGVGQXFZK1BDc0M2SEdwWVZleGFSajhL?=
- =?utf-8?B?S1pXSVBUOWhqQm1kL1ZqcEg5WWtXZzB3ZW1XWXF5dmpWNFhqUjE1SzNaS0I0?=
- =?utf-8?B?WXNEUGpRclpTZkdUMlV4SW1KcnhWNW5hWGFPaFRWSnZKOSt3Rkwrc3J2NEMr?=
- =?utf-8?B?SldmcmxyUyttRThQQ3NEbkFZODZnTVF1T0FmZ0Nockp3alA1YTFRS2ZxK3Fu?=
- =?utf-8?B?WWlwUVFCQ2VibEt1U2c4QjM0YVJ4cUlJbXd0K0hQUGhZOHI0NlNXWGZuSmp4?=
- =?utf-8?B?cVlWSzVoOHZiOWxucDJEWjRpNWZBeVZUNzF4ODV0dGJKOGViWjk0L1lneDls?=
- =?utf-8?B?SEh6OURuQzBqOGhCbEt3TFVGUVNobHhLL2pVc3NWalZ5czRCd3ZqSWYvNHFp?=
- =?utf-8?B?b0Y0RWJkb2IyWUFsZFdObUVwcW5yUkg4NUN1aWppMGNmOEhlcHNlMzZleXNK?=
- =?utf-8?B?R3JsbmtOR2pZT2FFdVJUODZNbFYwblJoalU2MVowc0c5NU53MUVrOG5pVmIv?=
- =?utf-8?B?OUNyRUhpeVk2dzNRQWg1SW1UdFUwWHJubnk0TGlPYlc5cW1LUEdneDRZRHNa?=
- =?utf-8?B?K1QrZjYxSXVwQ1RHNXBNMjF2LytFL0VWaTMzWGgzMjVpRUQvemR6VVZ3cU9X?=
- =?utf-8?B?STVic09JVDlzS21Nd1hqSHJudFRIRjZvcXVuN1FmTjRzY3dnUEQrQm1RSVlV?=
- =?utf-8?B?NHkvSndYczZ2SDFYTVoralpyVFdUaG12b0NiSkdpYzZqVGhqaWJLZmxHb1py?=
- =?utf-8?B?dUJyVmdDMElnVm1SMnFCZ00xbkdmOXQ4a1g3L2N1R0VqOEhGcExpWHpKK1Zn?=
- =?utf-8?B?SGx3M2ltWG5mNFpnaVdIKzgzdjU1UlhaWlp5eUkvcUV6L2FTMUtJeGNsMktZ?=
- =?utf-8?B?cWw3MVBmWHRadkJlVkYrOEtXaWdCcnU1MXdkNTRnRmJCdVp3Ym45RkUwNzRk?=
- =?utf-8?B?WklTeVhncWo1T0w2a1NxMWp2bUxVVXViQlNWVU1MN0l0aEMremp5TldLczlr?=
- =?utf-8?B?TnVsV25sVklEeGFObG5qVzYyVmlNY1VkMmFOTDErU1BrZmUzZjc5bTROREtF?=
- =?utf-8?B?NzhrQmNDTnhjVW1Fa2pycHh1azQ5L2M1OHhRbldKbnU3WE1LdEZ3ZWc5WHlT?=
- =?utf-8?B?azdBOHNtOTF5bHpYYnJ5aDArUlVTOVl2L1pvZHQvZVNJcXZQbTgybnV6aFh0?=
- =?utf-8?B?TStmKzdzN01VT0JnSmFoYThEbDdhU1RlYXNPV0g4dldZV0lwVDBKREhULy9M?=
- =?utf-8?B?cldiT2pia29vbVVuUU1lQm5Panp2R3FwY1pNRnM2dURETTlsOWVuNGU3cldo?=
- =?utf-8?B?ZGJveTQ1clh0bGVaSyt3Smgvc1d6MlVHR3U5UitvaFdLYzBJVThMSFE2VlEv?=
- =?utf-8?B?dWtpZEF1cU1xc29HTHhYeUROL3NjWm9yb1NkZVJrMEZ4a0lKbFFkeEpKc1pG?=
- =?utf-8?B?SUliYlJ4TS9JWTVHOWVkSitWMjZsVVo0aGZLTDBIUWFES1JybHgrTG1MT1I4?=
- =?utf-8?B?eEhrODBSRmRNeU9sLzQ0UFZIb0NJSDgwNjFUKzdQV0RzNU9NREY4eEVSM255?=
- =?utf-8?B?Q2ZlZkE1TFd2NWNtVlBHZVpwL2JITVVQRGc0QjZKRzNXL2F5OFhXb212N2FT?=
- =?utf-8?B?b2FsbTNTVWVSK0x6R0hWaWlCZW9NOTFMa0llU0dKbUg0WGpqVzFxZTMxeXUx?=
- =?utf-8?B?VUlBUEcvNmhUekp6NzhVNC91OFNDSHd6TEhJaTFobEJiOEpDellXNzg0SW5o?=
- =?utf-8?B?VG1Ka1dYaStxUnI2SVRtd2FlVHI2dzJtcXdNek9CelA1cnBuN2FoaEhQS0Ur?=
- =?utf-8?B?MXk1U0YwNkV1S3lQYTFHUktDRXhodERuZ25TM1BmSUxVN1VPRkFQclZUZTFT?=
- =?utf-8?B?djRyWE1NbXgwRjk5RzhkYmhFZmprRTRwUWR6TlQvYmROaFYvaFY4SXlSUEZ0?=
- =?utf-8?B?L1hPRG5wZlJyL3ZkUFgzOEtnMVYzT1EzcHdvYlNjNzc4a3IvOFB0bU9YU2ll?=
- =?utf-8?B?dm5nd0dJU1c0blZaeEtMRHJrWEtJaVJOd0Vxbnh2WDhacENRQTJTaTFnVlY1?=
- =?utf-8?B?RlZMN0FyTGVHaVBnVnBpdjNTUG1BQVU4V29yRWJuNzR6b1hzbk01NGhURTk0?=
- =?utf-8?B?RGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <44FCC495D5E8F2499AF1C33EDBDA5C86@GBRP265.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20221208; t=1688659436; x=1691251436;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kP3pF+XOxlc4Qv9/UJTQvZ314wf1LITEQ/lD6q6M3cs=;
+        b=gf7JwHUDdQKlrqMaznOBPRjtILjUVDkaFMzAsovbd6ohVdpY6MbEtFQWKIRWoXCNKk
+         T7PsTZ+oU5EETlfYxSm1t39vfALhQjOhfQXc8mTo7BPkxSNr6xL815JSq6zeCvkRNcrK
+         Y7r+2ptw+2E1kophi1fPakut7byn6u7zbVgDEZMvI+bVCzJRbYFhk30j3HL2ID1RO0xX
+         bbdl8n2ct/G3IXphx99hhYXH19VSkqaRLvLBlNAc0T++ZSESJn3bHrUFhnFHK4O8Ghfi
+         oNzdsF3oSI2IDq/ESRAcjEvCm34Z2+7ssOnX9JZgL908OMjEPazKeIbH7c4Jjcf/z06I
+         nc4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688659436; x=1691251436;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kP3pF+XOxlc4Qv9/UJTQvZ314wf1LITEQ/lD6q6M3cs=;
+        b=IDCMvcq9UCTkaMYTzkVY4fy8YqUnszCXZePm5FQbqLgp49m6+QwGF3Mbsorcfedffu
+         jDfASSVpsBlx4dECZw52cJQjrv3gX4ok9tsFwX+zobwPkeX999nNwNhlDgdRblhGeAmH
+         ddxse6YdpY6Ew/ksqCHRPiFfYpEFhbxrpF/3Xd1pmoY1xlfGRrWGcihQkG3S+vfsbR5H
+         xbYPp1ydHjSkS+pz9RFNS6JInmpWzCH4XB+7l2e7218aGNFpNaYiZveQA+9YHtFG3Yx8
+         Jx07FIalkj+U/YzMz4oLAme/4jnBLfV30PusWi5jMaBiDPFDrGBQO1b2YhdFizRFMnqw
+         aY3A==
+X-Gm-Message-State: ABy/qLY7t5Rn2K1gQxJvb3H19UrtKbSb6H0aAenpcHGcXEuhoRHD1MMS
+        6Ql0sV6a4bshN2lQ9adm7C0=
+X-Google-Smtp-Source: APBJJlG9MixangRIjPWmQQkjG9G3S//NVdJuf0043UPQkU4lQWM7HhHi5ksGYofdZ3BzvyDm46DfaA==
+X-Received: by 2002:a25:aa28:0:b0:c10:7a9f:a96a with SMTP id s37-20020a25aa28000000b00c107a9fa96amr2266065ybi.16.1688659436153;
+        Thu, 06 Jul 2023 09:03:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c12-20020a5b014c000000b00c624de0d9absm393124ybp.5.2023.07.06.09.03.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 09:03:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <876f6a08-1850-21cd-83d1-b309e7e1e912@roeck-us.net>
+Date:   Thu, 6 Jul 2023 09:03:53 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fba4e03-a841-4e00-64ab-08db7e37f839
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 15:45:05.5597
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d5fd8bb-e8c2-4e0a-8dd5-2c264f7140fe
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UoMDqqbDpDehv1T0bCOcy9HoxHxU1a/3iodj/UV1UvmlyySdfYreQYLqZ+ouOH2roMzNwbPHSxv/LwbMpWir2Av3jT/5wgsjgiZxla3GyOA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB5650
-X-OriginatorOrg: imgtec.com
-X-EXCLAIMER-MD-CONFIG: 15a78312-3e47-46eb-9010-2e54d84a9631
-X-Proofpoint-ORIG-GUID: Tt50dFvZAKIj1sP-Nm-zF4LTJHHMSvX9
-X-Proofpoint-GUID: Tt50dFvZAKIj1sP-Nm-zF4LTJHHMSvX9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] watchdog: simatic-ipc-wdt: make IO region access of
+ one model muxed
+Content-Language: en-US
+To:     Henning Schild <henning.schild@siemens.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+References: <20230706154831.19100-1-henning.schild@siemens.com>
+ <20230706154831.19100-2-henning.schild@siemens.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230706154831.19100-2-henning.schild@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTA2LTMwIGF0IDAwOjI1ICswMjAwLCBEYW5pbG8gS3J1bW1yaWNoIHdyb3Rl
-Og0KPiANCj4gKyNpZmRlZiBDT05GSUdfTE9DS0RFUA0KPiArdHlwZWRlZiBzdHJ1Y3QgbG9ja2Rl
-cF9tYXAgKmxvY2tkZXBfbWFwX3A7DQo+ICsjZGVmaW5lIGRybV9ncHV2YV9tYW5hZ2VyX2V4dF9h
-c3NlcnRfaGVsZChtZ3IpCQlcDQo+ICsJbG9ja2RlcF9hc3NlcnQobG9ja19pc19oZWxkKChtZ3Ip
-LT5leHRfbG9jaykgIT0gTE9DS19TVEFURV9OT1RfSEVMRCkNCj4gKy8qKg0KPiArICogZHJtX2dw
-dXZhX21hbmFnZXJfc2V0X2V4dF9sb2NrIC0gc2V0IHRoZSBleHRlcm5hbCBsb2NrIGFjY29yZGlu
-ZyB0bw0KPiArICogQERSTV9HUFVWQV9NQU5BR0VSX0xPQ0tfRVhURVJODQo+ICsgKiBAbWdyOiB0
-aGUgJmRybV9ncHV2YV9tYW5hZ2VyIHRvIHNldCB0aGUgbG9jayBmb3INCj4gKyAqIEBsb2NrOiB0
-aGUgbG9jayB0byBzZXQNCj4gKyAqDQo+ICsgKiBJZiBARFJNX0dQVVZBX01BTkFHRVJfTE9DS19F
-WFRFUk4gaXMgc2V0LCBkcml2ZXJzIG5lZWQgdG8gY2FsbCB0aGlzIGZ1bmN0aW9uDQo+ICsgKiB0
-byBwcm92aWRlIHRoZSBsb2NrIHVzZWQgdG8gbG9jayBsaW5raW5nIGFuZCB1bmxpbmtpbmcgb2Yg
-JmRybV9ncHV2YXMgdG8gdGhlDQo+ICsgKiAmZHJtX2dlbV9vYmplY3RzIEdQVVZBIGxpc3QuDQo+
-ICsgKi8NCj4gKyNkZWZpbmUgZHJtX2dwdXZhX21hbmFnZXJfc2V0X2V4dF9sb2NrKG1nciwgbG9j
-aykJXA0KPiArCShtZ3IpLT5leHRfbG9jayA9ICYobG9jayktPmRlcF9tYXANCj4gKyNlbHNlDQo+
-ICt0eXBlZGVmIHN0cnVjdCB7IC8qIG5vdGhpbmcgKi8gfSBsb2NrZGVwX21hcF9wOw0KDQpsb2Nr
-ZGVwX21hcF9wIGNvbmZsaWN0cyB3aXRoIGFuIGlkZW50aWNhbCB0eXBlZGVmIGluIG1hcGxlX3Ry
-ZWUuaCB3aGVuIENPTkZJR19MT0NLREVQIGlzDQpub3Qgc2V0IChpdCdzIGJlaW5nIHB1bGxlZCBp
-biBieSBtbS5oIGluIGRybV92bWFfbWFuYWdlci5oKS4gSSdsbCBqdXN0IGNvbW1lbnQgdGhlIGxp
-bmUNCm91dCBmb3Igbm93Lg0KDQo+ICsjZGVmaW5lIGRybV9ncHV2YV9tYW5hZ2VyX2V4dF9hc3Nl
-cnRfaGVsZChtZ3IpCQlkbyB7ICh2b2lkKShtZ3IpOyB9IHdoaWxlICgwKQ0KPiArI2RlZmluZSBk
-cm1fZ3B1dmFfbWFuYWdlcl9zZXRfZXh0X2xvY2sobWdyLCBsb2NrKQlkbyB7IH0gd2hpbGUgKDAp
-DQo+ICsjZW5kaWYNCj4gKw0K
+On 7/6/23 08:48, Henning Schild wrote:
+> The IO region used for the watchdog also hold CMOS battery monitoring
+> information. Make the access muxed so that a hwmon driver can use the
+> region as well.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/watchdog/simatic-ipc-wdt.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
+> index 6599695dc672..cdc1a2e15180 100644
+> --- a/drivers/watchdog/simatic-ipc-wdt.c
+> +++ b/drivers/watchdog/simatic-ipc-wdt.c
+> @@ -155,9 +155,8 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+>   
+>   	switch (plat->devmode) {
+>   	case SIMATIC_IPC_DEVICE_227E:
+> -		if (!devm_request_region(dev, gp_status_reg_227e_res.start,
+> -					 resource_size(&gp_status_reg_227e_res),
+> -					 KBUILD_MODNAME)) {
+> +		res = &gp_status_reg_227e_res;
+> +		if (!request_muxed_region(res->start, resource_size(res), res->name)) {
+>   			dev_err(dev,
+>   				"Unable to register IO resource at %pR\n",
+>   				&gp_status_reg_227e_res);
+> @@ -210,6 +209,10 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+>   	if (wdd_data.bootstatus)
+>   		dev_warn(dev, "last reboot caused by watchdog reset\n");
+>   
+> +	if (plat->devmode == SIMATIC_IPC_DEVICE_227E)
+> +		release_region(gp_status_reg_227e_res.start,
+> +			       resource_size(&gp_status_reg_227e_res));
+> +
+>   	watchdog_set_nowayout(&wdd_data, nowayout);
+>   	watchdog_stop_on_reboot(&wdd_data);
+>   	return devm_watchdog_register_device(dev, &wdd_data);
+
