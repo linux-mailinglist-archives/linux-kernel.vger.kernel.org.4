@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EF9749DCC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FFE749DCA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjGFNdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S230036AbjGFNcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjGFNcy (ORCPT
+        with ESMTP id S229555AbjGFNcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:32:54 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B348219B2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688650372; x=1720186372;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A0ITg5p0s9I1F/WCN2U7WmRQJ4A2utSLS9UEHI39G98=;
-  b=hZwDf+yYOOx4vW0seZ0I3AAjfspUOo8e2DcrdpK9/s/sTfvUkFXPmHB9
-   ldrHmgtC/90RIXWzAOL9j/DhdsOCjVeLbrQdg7BkhXHAUwe5I//QluVAq
-   bsTXS1371UX6xS8+RqarDtammD8ryULo4lL/b/vlNMwC7WvjHiACKhY4+
-   R6J9X4zM2whTkiDcnEF2nLE8ahwtTEGYZnqOz93UxaXkSC7zRgSQhZLS7
-   suvJzJV4y1ceQ/X8bTv6HNSeD21WGj3ZeRzre+H2VChiq94U5lR5vglFR
-   T1XvTeON1tpAPn6wZ23BawJHSimIAcDVNXLgr4hoecBtqPH9/OIcOkPS/
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="asc'?scan'208";a="222382636"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2023 06:32:51 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 6 Jul 2023 06:32:48 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 6 Jul 2023 06:32:46 -0700
-Date:   Thu, 6 Jul 2023 14:32:16 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Ortiz <sameo@rivosinc.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Subject: Re: [PATCH v2 2/3] RISC-V: hwprobe: Expose Zbc and the scalar crypto
- extensions
-Message-ID: <20230706-overeater-dodgy-666f80dc473d@wendy>
-References: <20230628131442.3022772-1-sameo@rivosinc.com>
- <20230628131442.3022772-3-sameo@rivosinc.com>
+        Thu, 6 Jul 2023 09:32:39 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11F9102;
+        Thu,  6 Jul 2023 06:32:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 857781F747;
+        Thu,  6 Jul 2023 13:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688650357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v1zWkPjxofyirwLSy8PmvRVarB3Zj4LFxqS3FuAbPPw=;
+        b=1ipBpFBOq0aPU0rsyblmSshjEeebB4NAWFrllg7xAw8PIKhFpmFRepBjoGxG2oxDny1Xsj
+        K1yxYI4OwtrkDn3fxztds3Ss4LuV++qNeJIIiEOVkbv9U7ZRhFaCtl58b1+079Qs/9LLU3
+        HGgNQgVeuVypcECWHVp2HacPYIqZj/g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688650357;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v1zWkPjxofyirwLSy8PmvRVarB3Zj4LFxqS3FuAbPPw=;
+        b=noYF8E+dszLjdAOqfsj1nzPL7JB3CbwXD0sgZcC3JRQllkLQroorWW+yLlCuJb47plAI5I
+        OdoFcIiTpTzQZ7Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 74B76138EE;
+        Thu,  6 Jul 2023 13:32:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NyZ1HHXCpmRHWQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 13:32:37 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id F0042A0707; Thu,  6 Jul 2023 15:32:36 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 15:32:36 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 56/92] kernfs: convert to ctime accessor functions
+Message-ID: <20230706133236.vwvm4utsgnhty3mk@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-54-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QpzfrTlSAhHgCxB4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628131442.3022772-3-sameo@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230705190309.579783-54-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---QpzfrTlSAhHgCxB4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed 05-07-23 15:01:21, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+> 
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-On Wed, Jun 28, 2023 at 03:14:34PM +0200, Samuel Ortiz wrote:
-> Zbc was missing from a previous Bit-Manipulation extension hwprobe
-> patch.
->=20
-> Add all scalar crypto extensions bits, and define a macro for setting
-> the hwprobe key/pair in a more readable way.
->=20
-> Reviewed-by: Evan Green <evan@rivosinc.com>
-> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+It looks like there are like three commits squashed into this patch -
+kernfs, libfs, minix.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+kernfs and libfs parts look good to me - feel free to add:
 
-Cheers,
-Conor.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
---QpzfrTlSAhHgCxB4
-Content-Type: application/pgp-signature; name="signature.asc"
+to them. For the minix part I have one nit:
 
------BEGIN PGP SIGNATURE-----
+> diff --git a/fs/minix/inode.c b/fs/minix/inode.c
+> index e9fbb5303a22..3715a3940bd4 100644
+> --- a/fs/minix/inode.c
+> +++ b/fs/minix/inode.c
+> @@ -501,10 +501,11 @@ static struct inode *V1_minix_iget(struct inode *inode)
+>  	i_gid_write(inode, raw_inode->i_gid);
+>  	set_nlink(inode, raw_inode->i_nlinks);
+>  	inode->i_size = raw_inode->i_size;
+> -	inode->i_mtime.tv_sec = inode->i_atime.tv_sec = inode->i_ctime.tv_sec = raw_inode->i_time;
+> +	inode->i_mtime.tv_sec = inode->i_atime.tv_sec = inode_set_ctime(inode,
+> +									raw_inode->i_time,
+> +									0).tv_sec;
+>  	inode->i_mtime.tv_nsec = 0;
+>  	inode->i_atime.tv_nsec = 0;
+> -	inode->i_ctime.tv_nsec = 0;
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKbCYAAKCRB4tDGHoIJi
-0tbXAQCIxfRmR+GN+J8R+D7XmU0NWeOqMMdJrYWW6TnKKys34wD/ShnmOs1Onsju
-BlFI6gGbwYUXJ5X+igIw1MVZKKiGOQ8=
-=Wil8
------END PGP SIGNATURE-----
+The usual simplification:
+	inode->i_mtime = inode->i_atime = inode_set_ctime(inode,
+							  raw_inode->i_time, 0);
 
---QpzfrTlSAhHgCxB4--
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
