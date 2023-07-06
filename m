@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDF6749A94
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61FC749A98
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbjGFL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S232111AbjGFL3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjGFL2H (ORCPT
+        with ESMTP id S229515AbjGFL3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:28:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7254BAA;
-        Thu,  6 Jul 2023 04:28:05 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QxZ1n323HzMqQD;
-        Thu,  6 Jul 2023 19:24:45 +0800 (CST)
-Received: from huawei.com (10.174.151.185) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 6 Jul
- 2023 19:27:59 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
-        <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
-        <shakeelb@google.com>
-CC:     <muchun.song@linux.dev>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] mm/memcg: remove definition of MEM_CGROUP_ID_MAX when !CONFIG_MEMCG
-Date:   Thu, 6 Jul 2023 19:28:20 +0800
-Message-ID: <20230706112820.2393447-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 6 Jul 2023 07:29:11 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74092AA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 04:29:10 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1688642946; bh=GaIzuleTk6y38BlblyBELaBaO29snXMMzVOcoUWhQB4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rHMszqHJJ2HjHHIIpVXxCP2sMiXiodRgTi5O9QNUiYqBggvFDx5dP4oaL9fieR4xj
+         HjvUKGtxVSMO6NMRfcZHy5c/Mi7FPv7HvFODM11dimmTsllTbjQ3gcpoMZnOiuQUIF
+         /uQMn5o9PNhuSn23S9hBJPFIlyD/8GJBXfTgClSf/VB8GqwpOtZm8ZTDZQ7ohWL/VM
+         yb5ua48TFu/Q9hirG6opW4kXRQtfe8dmmF83SYmldi5TNUvM57ZfX3w1GFFeOumxSc
+         5IAemCe1k/HLmSVCBoZO2sOwkAGyOWOMV3ZhMqXz5oDXohXx3g/CF5C63xGB9Mr0A0
+         NUBIEbkTu1rUw==
+To:     Dongliang Mu <dzm91@hust.edu.cn>, Kalle Valo <kvalo@kernel.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] wifi: ath9k: fix printk specifier
+In-Reply-To: <20230706111700.14305-1-dzm91@hust.edu.cn>
+References: <20230706111700.14305-1-dzm91@hust.edu.cn>
+Date:   Thu, 06 Jul 2023 13:29:04 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87cz15s2gv.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MEM_CGROUP_ID_MAX is only used when CONFIG_MEMCG is configured. Remove
-unneeded !CONFIG_MEMCG variant.
+Dongliang Mu <dzm91@hust.edu.cn> writes:
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- include/linux/memcontrol.h | 1 -
- 1 file changed, 1 deletion(-)
+> Smatch reports:
+>
+> ath_pci_probe() warn: argument 4 to %lx specifier is cast from pointer
+> ath_ahb_probe() warn: argument 4 to %lx specifier is cast from pointer
+>
+> Fix it by modifying %lx to %p in printk.
+>
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 5818af8eca5a..634a282099bf 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1158,7 +1158,6 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
- #else /* CONFIG_MEMCG */
- 
- #define MEM_CGROUP_ID_SHIFT	0
--#define MEM_CGROUP_ID_MAX	0
- 
- static inline struct mem_cgroup *folio_memcg(struct folio *folio)
- {
--- 
-2.33.0
+Third time is the charm! :)
 
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
