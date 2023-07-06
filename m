@@ -2,222 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE91674A147
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C12974A149
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbjGFPj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S229692AbjGFPkI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 11:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbjGFPjL (ORCPT
+        with ESMTP id S229538AbjGFPkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:39:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E14D210A;
-        Thu,  6 Jul 2023 08:39:00 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E8B946606FDA;
-        Thu,  6 Jul 2023 16:38:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688657938;
-        bh=WacfIUeNdJeJtcPmPNQ0pSKzVDsf6GpImx7+e+30RJY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZrMy6VaNchQUjyePXEdWQzMsIuLy+SfLkOCIthGiVNDP1xLwjn+UIiCMxs/VFTvsB
-         rJ5oyhu+0aCalg8JeiKTfxk3agGNLR6lO6HSEPsUfy2O0dkAT4Fbja3WofOn9MRV1G
-         uKcosfLTm4NHDw+9fP1vzSKeGSHoJl4RkwpQq4xrO7eEiVgKdwkmSluC7FMGdXjpwc
-         9w3tRfrkIRd/4yOCfZzhHksvVuKrgR0ovL8alTWAt5YyipNAAXq0/KLO2wpy9HZoHj
-         OciRd9hLfSkxu6/0VMBcQh3U1wbVw26nuFiyMymbj674IJ3FJZSpsFjNQZ4l5oYxzG
-         ApizDTG9DFuSg==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH v3 6/6] thermal/drivers/mediatek/lvts_thermal: Manage threshold between sensors
-Date:   Thu,  6 Jul 2023 11:37:37 -0400
-Message-ID: <20230706153823.201943-7-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230706153823.201943-1-nfraprado@collabora.com>
-References: <20230706153823.201943-1-nfraprado@collabora.com>
+        Thu, 6 Jul 2023 11:40:04 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2604D1FD2;
+        Thu,  6 Jul 2023 08:39:40 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-57722942374so10923627b3.1;
+        Thu, 06 Jul 2023 08:39:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688657976; x=1691249976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j3DiZE9JB6ColP1aIV7E9G0pPGJNewraAmq4lD+0Ir4=;
+        b=d0GSVQiUzPYJ/Qf9h4+29ktP7gJaxqg6FnXp4dEv7i97j9T/UctC02scgNnzUFA2F8
+         OrgnuAQw7Yb1EBOamYLCKcqT2kUeiw9mN0sVi9YokfsC9Zue6BIP8nSqW+Fq/9ebYatl
+         ZZ09/3fe0SpfRVX1QnMmpxU+ho2S5mO9yzATFkPc6jgXAxzCTB7rfbkI9S8fFAMcsPSf
+         QVaQMYfihQnUQCHPfwuOnN2TmtDiY4dVZ3AVYcYEG7aSG7MWgebdqSveBvgiV8yFP7nP
+         UCM5KTfqe20UhhE+Ypd99gayxyI1tV8MkfAXvm6msFEz4XyuBSBAIeqnNiRoj5xKH97T
+         MKHQ==
+X-Gm-Message-State: ABy/qLa9xfiOAjpxrd4Y+021mLyYdOEu4A0maISuHmQjjHh/SrpDpq7p
+        YvV5L5zPWzo5I+Tt4lPzTiLvkmM2bEYkOw==
+X-Google-Smtp-Source: APBJJlGRyJMnRqZebmp9ZEnoqbz5EMFdTHaqJgenZpIOiNelblR/Xq2fbsp3gNyaQMG5UHYRN0xUIQ==
+X-Received: by 2002:a0d:e8c8:0:b0:576:896a:dbc5 with SMTP id r191-20020a0de8c8000000b00576896adbc5mr2232985ywe.48.1688657975973;
+        Thu, 06 Jul 2023 08:39:35 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id v126-20020a0dd384000000b0057a02887d4esm409974ywd.100.2023.07.06.08.39.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 08:39:35 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-c4e4c258ba9so901758276.1;
+        Thu, 06 Jul 2023 08:39:35 -0700 (PDT)
+X-Received: by 2002:a25:a4c1:0:b0:c18:4f16:aaf6 with SMTP id
+ g59-20020a25a4c1000000b00c184f16aaf6mr1782557ybi.58.1688657975503; Thu, 06
+ Jul 2023 08:39:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+In-Reply-To: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 6 Jul 2023 17:39:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+Message-ID: <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each LVTS thermal controller can have up to four sensors, each capable
-of triggering its own interrupt when its measured temperature crosses
-the configured threshold. The threshold for each sensor is handled
-separately by the thermal framework, since each one is registered with
-its own thermal zone and trips. However, the temperature thresholds are
-configured on the controller, and therefore are shared between all
-sensors on that controller.
+Hi Günter,
 
-When the temperature measured by the sensors is different enough to
-cause the thermal framework to configure different thresholds for each
-one, interrupts start triggering on sensors outside the last threshold
-configured.
+On Thu, Jul 6, 2023 at 4:03 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On Thu, Jun 01, 2023 at 11:22:17PM +0300, Sergey Shtylyov wrote:
+> > IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
+> > return -EINVAL instead.  However, the kernel code supporting SH3/4-based
+> > SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
+> > IRQ #s from 16 instead.
+> >
+> > The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+> > indeed are using IRQ0 for the SMSC911x compatible Ethernet chip.
+> >
+>
+> Unfortunately it also affects all sh4 emulations in qemu, and results in
+> boot stalls with those. There isn't a relevant log to attach because there
+> is no error message - booting just stalls until the emulation is aborted.
 
-To address the issue, track the thresholds required by each sensor and
-only actually set the highest one in the hardware, and disable
-interrupts for all sensors outside the current configured range.
+Which sh4 platforms in particular?
 
-Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
+(physical) two days ago.
 
----
+Gr{oetje,eeting}s,
 
-(no changes since v2)
+                        Geert
 
-Changes in v2:
-- Added this commit
-
- drivers/thermal/mediatek/lvts_thermal.c | 69 +++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
-
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 7552e1d59dc9..a2dc33697371 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -67,6 +67,11 @@
- #define LVTS_CALSCALE_CONF			0x300
- #define LVTS_MONINT_CONF			0x8300318C
- 
-+#define LVTS_MONINT_OFFSET_SENSOR0		0xC
-+#define LVTS_MONINT_OFFSET_SENSOR1		0x180
-+#define LVTS_MONINT_OFFSET_SENSOR2		0x3000
-+#define LVTS_MONINT_OFFSET_SENSOR3		0x3000000
-+
- #define LVTS_INT_SENSOR0			0x0009001F
- #define LVTS_INT_SENSOR1			0x001203E0
- #define LVTS_INT_SENSOR2			0x00247C00
-@@ -112,6 +117,8 @@ struct lvts_sensor {
- 	void __iomem *base;
- 	int id;
- 	int dt_id;
-+	int low_thresh;
-+	int high_thresh;
- };
- 
- struct lvts_ctrl {
-@@ -121,6 +128,8 @@ struct lvts_ctrl {
- 	int num_lvts_sensor;
- 	int mode;
- 	void __iomem *base;
-+	int low_thresh;
-+	int high_thresh;
- };
- 
- struct lvts_domain {
-@@ -292,12 +301,66 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
- 	return 0;
- }
- 
-+static void lvts_update_irq_mask(struct lvts_ctrl *lvts_ctrl)
-+{
-+	u32 masks[] = {
-+		LVTS_MONINT_OFFSET_SENSOR0,
-+		LVTS_MONINT_OFFSET_SENSOR1,
-+		LVTS_MONINT_OFFSET_SENSOR2,
-+		LVTS_MONINT_OFFSET_SENSOR3,
-+	};
-+	u32 value = 0;
-+	int i;
-+
-+	value = readl(LVTS_MONINT(lvts_ctrl->base));
-+
-+	for (i = 0; i < ARRAY_SIZE(masks); i++) {
-+		if (lvts_ctrl->sensors[i].high_thresh == lvts_ctrl->high_thresh
-+		    && lvts_ctrl->sensors[i].low_thresh == lvts_ctrl->low_thresh)
-+			value |= masks[i];
-+		else
-+			value &= ~masks[i];
-+	}
-+
-+	writel(value, LVTS_MONINT(lvts_ctrl->base));
-+}
-+
-+static bool lvts_should_update_thresh(struct lvts_ctrl *lvts_ctrl, int high)
-+{
-+	int i;
-+
-+	if (high > lvts_ctrl->high_thresh)
-+		return true;
-+
-+	for (i = 0; i < lvts_ctrl->num_lvts_sensor; i++)
-+		if (lvts_ctrl->sensors[i].high_thresh == lvts_ctrl->high_thresh
-+		    && lvts_ctrl->sensors[i].low_thresh == lvts_ctrl->low_thresh)
-+			return false;
-+
-+	return true;
-+}
-+
- static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
- {
- 	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
-+	struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl, sensors[lvts_sensor->id]);
- 	void __iomem *base = lvts_sensor->base;
- 	u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : LVTS_MINIMUM_THRESHOLD);
- 	u32 raw_high = lvts_temp_to_raw(high);
-+	bool should_update_thresh;
-+
-+	lvts_sensor->low_thresh = low;
-+	lvts_sensor->high_thresh = high;
-+
-+	should_update_thresh = lvts_should_update_thresh(lvts_ctrl, high);
-+	if (should_update_thresh) {
-+		lvts_ctrl->high_thresh = high;
-+		lvts_ctrl->low_thresh = low;
-+	}
-+	lvts_update_irq_mask(lvts_ctrl);
-+
-+	if (!should_update_thresh)
-+		return 0;
- 
- 	/*
- 	 * Low offset temperature threshold
-@@ -521,6 +584,9 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
- 		 */
- 		lvts_sensor[i].msr = lvts_ctrl_data->mode == LVTS_MSR_IMMEDIATE_MODE ?
- 			imm_regs[i] : msr_regs[i];
-+
-+		lvts_sensor[i].low_thresh = INT_MIN;
-+		lvts_sensor[i].high_thresh = INT_MIN;
- 	};
- 
- 	lvts_ctrl->num_lvts_sensor = lvts_ctrl_data->num_lvts_sensor;
-@@ -688,6 +754,9 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
- 		 */
- 		lvts_ctrl[i].hw_tshut_raw_temp =
- 			lvts_temp_to_raw(lvts_data->lvts_ctrl[i].hw_tshut_temp);
-+
-+		lvts_ctrl[i].low_thresh = INT_MIN;
-+		lvts_ctrl[i].high_thresh = INT_MIN;
- 	}
- 
- 	/*
 -- 
-2.41.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
