@@ -2,138 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03342749FF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5073D749FEB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbjGFOy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S233461AbjGFOxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbjGFOxK (ORCPT
+        with ESMTP id S233719AbjGFOxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:53:10 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB691FC7;
-        Thu,  6 Jul 2023 07:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688655174; x=1720191174;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7TWDTrZhqpzH7WQViyzB8gJRad/lUc15Zt3pA8KbCZI=;
-  b=NOsBcAXWHEPGB6y1Dtgg7QVx9K+nPaoNJbMwiEX8DH3l3Wgaj8yJMVui
-   9QYKrFTM2mDkESEyU2v+Yx7mLO3TS0g9uze/mZiHZaczkcvVYvxPJ1bh/
-   cLfqOTlygiup5BMQqikimzp5kcaVzagSF+lEr8GIzVb4gxRXpDX0q86h9
-   ZpdNkv3i8s3y9WmkVw8JTDvOqrfRdlFFFMpdMYjshGCbwUyiliMdf+gdC
-   IaPHeekFlzNVSScHfP3RD/bA+OaedZ1jQ82tjjGgTUvygPrw0qDPai2BE
-   BLuJajr9YvWcQn6rWsE2qJDT4+Qe/ViBpWKt/ruha5N1PCJvy9Eluvg5/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="394380265"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="394380265"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 07:52:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="669777985"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="669777985"
-Received: from hegang-mobl.ccr.corp.intel.com (HELO localhost) ([10.255.31.139])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 07:52:50 -0700
-Date:   Thu, 6 Jul 2023 22:52:47 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
-Message-ID: <20230706145247.ddjqsvmfdeimzva6@linux.intel.com>
-References: <20230704075054.3344915-1-stevensd@google.com>
- <20230704075054.3344915-3-stevensd@google.com>
- <20230705031002.xrxk42hli6oavtlt@linux.intel.com>
- <CAD=HUj6-VbznOOtn5WJee7Of_nh33ygg7_ph2G=hgnvNk_Cbsw@mail.gmail.com>
- <20230705105343.iounmlflfued7lco@linux.intel.com>
- <CAD=HUj5ezWt7rLAv2qOpFsMHyFU87Hqtw_p8pWNF5+oxbLhxDg@mail.gmail.com>
+        Thu, 6 Jul 2023 10:53:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E6A1FEB;
+        Thu,  6 Jul 2023 07:53:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 928F51FD65;
+        Thu,  6 Jul 2023 14:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688655179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nDUsetCkqpDQUJVYGRErgZCuLwEHAuc+qzd91AAjCtc=;
+        b=1+8rm95/EcbL2B8vzMHoMtMkfs790e2J3JpHpOixMenmgWsb/gcgn+sUZnVAZ0JW7aWVIO
+        9l8YE+DNR25F2CMefU4DgtkaImwWAV1f0M/phU8ScD6WejtiZmZPAINIXubqfig8DVcpGj
+        tkIqH4B6D3wewtC4ruk8kEe7lISDVYU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688655179;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nDUsetCkqpDQUJVYGRErgZCuLwEHAuc+qzd91AAjCtc=;
+        b=BC9KEnqupiXOSykkXXP6u+dxL3w9LYMrN+PTifNhZB4fjuRyeGWxgLCwJk9o47MD45RrJU
+        6W2p6myuHGB6urCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84BDE138FC;
+        Thu,  6 Jul 2023 14:52:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /vRnIEvVpmR9AwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 14:52:59 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 07FE3A0707; Thu,  6 Jul 2023 16:52:59 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 16:52:59 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 83/92] zonefs: convert to ctime accessor functions
+Message-ID: <20230706145259.mnvliyi3s6nmgyvr@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-81-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=HUj5ezWt7rLAv2qOpFsMHyFU87Hqtw_p8pWNF5+oxbLhxDg@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230705190309.579783-81-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 02:29:24PM +0900, David Stevens wrote:
-> On Wed, Jul 5, 2023 at 7:53 PM Yu Zhang <yu.c.zhang@linux.intel.com> wrote:
-> >
-> > On Wed, Jul 05, 2023 at 06:22:59PM +0900, David Stevens wrote:
-> > > On Wed, Jul 5, 2023 at 12:10 PM Yu Zhang <yu.c.zhang@linux.intel.com> wrote:
-> > > >
-> > > > > @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
-> > > > >   * The slow path to get the pfn of the specified host virtual address,
-> > > > >   * 1 indicates success, -errno is returned if error is detected.
-> > > > >   */
-> > > > > -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
-> > > > > -                        bool interruptible, bool *writable, kvm_pfn_t *pfn)
-> > > > > +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t *pfn)
-> > > > >  {
-> > > > > -     unsigned int flags = FOLL_HWPOISON;
-> > > > > +     unsigned int flags = FOLL_HWPOISON | FOLL_GET | foll->flags;
-> > > > >       struct page *page;
-> > > > >       int npages;
-> > > > >
-> > > > >       might_sleep();
-> > > > >
-> > > > > -     if (writable)
-> > > > > -             *writable = write_fault;
-> > > > > -
-> > > > > -     if (write_fault)
-> > > > > -             flags |= FOLL_WRITE;
-> > > > > -     if (async)
-> > > > > -             flags |= FOLL_NOWAIT;
-> > > > > -     if (interruptible)
-> > > > > -             flags |= FOLL_INTERRUPTIBLE;
-> > > > > -
-> > > > > -     npages = get_user_pages_unlocked(addr, 1, &page, flags);
-> > > > > +     npages = get_user_pages_unlocked(foll->hva, 1, &page, flags);
-> > > > >       if (npages != 1)
-> > > > >               return npages;
-> > > > >
-> > > > > +     foll->writable = (foll->flags & FOLL_WRITE) && foll->allow_write_mapping;
-> > > > > +
-> > > > >       /* map read fault as writable if possible */
-> > > > > -     if (unlikely(!write_fault) && writable) {
-> > > > > +     if (unlikely(!foll->writable) && foll->allow_write_mapping) {
-> > > >
-> > > > I guess !foll->writable should be !(foll->flags & FOLL_WRITE) here.
-> > >
-> > > The two statements are logically equivalent, although I guess using
-> > > !(foll->flags & FOLL_WRITE) may be a little clearer, if a little more
-> > > verbose.
-> >
-> > Well, as the comment says, we wanna try to map the read fault as writable
-> > whenever possible. And __gfn_to_pfn_memslot() will only set the FOLL_WRITE
-> > for write faults. So I guess using !foll->writable will not allow this.
-> > Did I miss anything?
+On Wed 05-07-23 15:01:48, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> We just set the foll->writable out parameter to be equal to
-> ((foll->flags & FOLL_WRITE) && foll->allow_write_mapping). Taking a =
-> foll->flags & FOLL_WRITE and b = foll->allow_write_mapping, we have
-> !(a && b) && b -> (!a || !b) && b -> (!a && b) || (!b && b) -> !a &&
-> b.
+> Acked-by: Damien Le Moal <dlemoal@kernel.org>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Ouch, my bad again... I typed "!foll->writable", but missed the "!" in
-my head while calculating... Thanks! :)
+Looks good. Feel free to add:
 
-B.R.
-Yu
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/zonefs/super.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/zonefs/super.c b/fs/zonefs/super.c
+> index bbe44a26a8e5..eaaa23cf6d93 100644
+> --- a/fs/zonefs/super.c
+> +++ b/fs/zonefs/super.c
+> @@ -658,7 +658,8 @@ static struct inode *zonefs_get_file_inode(struct inode *dir,
+>  
+>  	inode->i_ino = ino;
+>  	inode->i_mode = z->z_mode;
+> -	inode->i_ctime = inode->i_mtime = inode->i_atime = dir->i_ctime;
+> +	inode->i_mtime = inode->i_atime = inode_set_ctime_to_ts(inode,
+> +								inode_get_ctime(dir));
+>  	inode->i_uid = z->z_uid;
+>  	inode->i_gid = z->z_gid;
+>  	inode->i_size = z->z_wpoffset;
+> @@ -694,7 +695,8 @@ static struct inode *zonefs_get_zgroup_inode(struct super_block *sb,
+>  	inode->i_ino = ino;
+>  	inode_init_owner(&nop_mnt_idmap, inode, root, S_IFDIR | 0555);
+>  	inode->i_size = sbi->s_zgroup[ztype].g_nr_zones;
+> -	inode->i_ctime = inode->i_mtime = inode->i_atime = root->i_ctime;
+> +	inode->i_mtime = inode->i_atime = inode_set_ctime_to_ts(inode,
+> +								inode_get_ctime(root));
+>  	inode->i_private = &sbi->s_zgroup[ztype];
+>  	set_nlink(inode, 2);
+>  
+> @@ -1317,7 +1319,7 @@ static int zonefs_fill_super(struct super_block *sb, void *data, int silent)
+>  
+>  	inode->i_ino = bdev_nr_zones(sb->s_bdev);
+>  	inode->i_mode = S_IFDIR | 0555;
+> -	inode->i_ctime = inode->i_mtime = inode->i_atime = current_time(inode);
+> +	inode->i_mtime = inode->i_atime = inode_set_ctime_current(inode);
+>  	inode->i_op = &zonefs_dir_inode_operations;
+>  	inode->i_fop = &zonefs_dir_operations;
+>  	inode->i_size = 2;
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
