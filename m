@@ -2,316 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8829174A331
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D255074A334
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjGFRi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        id S232238AbjGFRio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjGFRiX (ORCPT
+        with ESMTP id S231463AbjGFRii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:38:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADE9119;
-        Thu,  6 Jul 2023 10:38:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70A560B9E;
-        Thu,  6 Jul 2023 17:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B1DC433C7;
-        Thu,  6 Jul 2023 17:38:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688665101;
-        bh=Q9uAKJpEAuOc+uNAeFdgPlPrKXJ8f+DWHbbFUYtYJ4c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s66akyFbUfrjq/wGF+sJ/4HLjHe3p6ERLHafSiVYe4DeBGpE18QJZQEWJrDbIHI0d
-         9zdh1KBVSIktTaBGoUhXMDc5OZZ9+wlWpoYAmB6BiTwCw04IfIsYZp0uXduEvHQrcx
-         6gQrnh+TDf9FSNVwBf53cowmUg5Qw950UGRHQ9Jxiz5py1EJUTY7Hrkgr5KkTZDNRg
-         tN7zih2PP8sufd549gak71JkK0/zPoc9WqzgA6xOdHbTZhnFezGRlMNtsn4xQoJcdd
-         Nav89VibgJc1Ysh+kNNbk9jxdlMJwVcBe4GswSiivhfkXCF0fM7pw35wETXxmEoOo+
-         1goRgua907fIg==
-Date:   Thu, 6 Jul 2023 18:38:17 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>, evan@rivosinc.com,
-        heiko@sntech.de, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/3] RISC-V: Add T-Head 0.7.1 vector extension to hwprobe
-Message-ID: <20230706-unwed-aeration-d8c7b71eac5e@spud>
-References: <20230705-thead_vendor_extensions-v1-0-ad6915349c4d@rivosinc.com>
- <20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com>
+        Thu, 6 Jul 2023 13:38:38 -0400
+Received: from out-51.mta1.migadu.com (out-51.mta1.migadu.com [IPv6:2001:41d0:203:375::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295751732;
+        Thu,  6 Jul 2023 10:38:27 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 13:38:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688665105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YPOKcZwXrZbw7hcE8OABRQeVGx3tlFUEMhTgtxl1zww=;
+        b=PRkVlUje55bqODzIVgfQeS/9G5yvL6GJDElbJjHLC919HcwjlzfeEpGTTHmvpOzK1ekEDS
+        rBUQ9cZiygK9bizbo46Lhp29YC4c5BfGOFst+sv5hG76L1ckgvMRGLsrZbeMqtwdg3H8z0
+        AcD48bA7myiP7KI+k9KDgEiSokHuS+Q=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Josef Bacik <josef@toxicpanda.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        djwong@kernel.org, dchinner@redhat.com, sandeen@redhat.com,
+        willy@infradead.org, tytso@mit.edu, bfoster@redhat.com,
+        jack@suse.cz, andreas.gruenbacher@gmail.com, brauner@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+ <20230706164055.GA2306489@perftesting>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/1/P1zz9w9UpMZlo"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230706164055.GA2306489@perftesting>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 06, 2023 at 12:40:55PM -0400, Josef Bacik wrote:
+> I've been watching this from the sidelines sort of busy with other things, but I
+> realize that comments I made at LSFMMBPF have been sort of taken as the gospel
+> truth and I want to clear some of that up.
+> 
+> I said this at LSFMMBPF, and I haven't said it on list before so I'll repeat it
+> here.
+> 
+> I'm of the opinion that me and any other outsider reviewing the bcachefs code in
+> bulk is largely useless.  I could probably do things like check for locking
+> stuff and other generic things.
 
---/1/P1zz9w9UpMZlo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, agreed. And the generic things - that's what we've got automated
+testing for; there's a reason I've been putting so much effort into
+automated testing over (especially) the past year.
 
-Hey,
+> You have patches that are outside of fs/bcachefs.  Get those merged and then do
+> a pull with just fs/bcachefs, because again posting 90k loc is going to be
+> unwieldy and the quality of review just simply will not make a difference.
+>
+> Alternatively rework your code to not have any dependencies outside of
+> fs/bcachefs.  This is what btrfs did.  That merge didn't touch anything outside
+> of fs/btrfs.
 
-On Wed, Jul 05, 2023 at 08:30:18PM -0700, Charlie Jenkins wrote:
-> Using vendor extensions in hwprobe, add the ability to query if the
-> 0.7.1 vector extension is available. It is determined to be available
-> only if the kernel is compiled with vector support,
+We've had other people saying, at multiple times in the past, that
+patches that are only needed for bcachefs should be part of the initial
+pull instead of going in separately.
 
-> and the user is
-> using the c906.
+I've already cut down the non-bcachefs pull quite a bit, even to the
+point of making non-ideal engineering choices, and if I have to cut it
+down more it's going to mean more ugly choices.
 
-Heh, unfortunately your patch doesn't apply this limitation.
+> This merge attempt has gone off the rails, for what appears to be a few common
+> things.
+> 
+> 1) The external dependencies.  There's a reason I was really specific about what
+> I said at LSFMMBPF, both this year and in 2022.  Get these patches merged first,
+> the rest will be easier.  You are burning a lot of good will being combative
+> with people over these dependencies.  This is not the hill to die on.  You want
+> bcachefs in the kernel and to get back to bcachefs things.  Make the changes you
+> need to make to get these dependencies in, or simply drop the need for them and
+> come back to it later after bcachefs is merged.
 
-I'm not really sure where this series is intended to sit in relation to
-Heiko's series that adds support for the actual T-Head vector stuff:
-https://lore.kernel.org/linux-riscv/20230622231305.631331-1-heiko@sntech.de/
+Look, I'm not at all trying to be combative, I'm just trying to push
+things forward.
 
-Is this intended to complement that? If so, these patches don't really
-seem to integrate with it (and have some of the same flaws unfortunately
-as that series does).
+The one trainwreck-y thread was regarding vmalloc_exec(), and posting
+that patch needed to happen in order to figure out what was even going
+to happen regarding the dynamic codegen going forward. It's been dropped
+from the initial pull, and dynamic codegen is going to wait on a better
+executable memory allocation API.
 
-Firstly, to my knowledge, all T-Head cpu cores report 0 for impid &
-archid. Stefan pointed out:
-	C906 supports t-head/0.7.1 vectors as a configuration option.  The C906 in
-	the D1 and BL808 has vectors, the recently announced CV1800B has one C906
-	with vectors and one without, and I vaguely remember seeing a chip with on=
-ly
-	a non-vector C906.
-=09
-	C908 (announced, no manual yet) claims V 1.0 support.  Presumably it will
-	not support 0.7.1.
-=09
-	C910 (exists on evaluation boards) lacks vector support.
-=09
-	C920 (TH1520, SG2042, etc) has 0.7.1 support, at least superficially
-	compatible with C906-with-vectors.  Hopefully we can share errata.
-=09
-	This probably needs to be handled as an orthogonal "xtheadv" or "v0p7p1"
-	extension in whatever replaces riscv,isa.
+(and yes, that thread _was_ a trainwreck; it's not good when you have
+maintainers claiming endlessly that something is broken and making
+arguments to authority but _not able to explain why_. The thread on the
+new executable memory allocator still needs something more concrete on
+the issues with speculative execution from Andy or someone else).
 
-This makes an approach that does anything w/ their vector implementation
-not discernible based on the m*id CSRs. IMO, the only way to make this
-stuff work properly is to detect based on a DT or ACPI property whether
-this stuff is supported on a given core.
+Let me just lay out the non-bcachefs dependencies:
 
-Since the approach just cannot work, I don't have any detailed comments
-to make, just a few small ones below.
+ - two lockdep patches: these could technically be dropped from the
+   series, but that would mean dropping lockdep support entirely for
+   btree node locks, and even Linus has said we need to get rid of
+   lockdep_no_validate_class so I'm hoping to avoid that.
 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  arch/riscv/Kconfig.vendor                       | 11 +++++++++++
->  arch/riscv/include/asm/extensions.h             | 16 ++++++++++++++++
->  arch/riscv/kernel/sys_riscv.c                   | 20 ++++++++++++++++++++
->  arch/riscv/vendor_extensions/Makefile           |  2 ++
->  arch/riscv/vendor_extensions/thead/Makefile     |  8 ++++++++
->  arch/riscv/vendor_extensions/thead/extensions.c | 24 +++++++++++++++++++=
-+++++
->  6 files changed, 81 insertions(+)
->=20
-> diff --git a/arch/riscv/Kconfig.vendor b/arch/riscv/Kconfig.vendor
-> index 213ac3e6fed5..b8b9d15153eb 100644
-> --- a/arch/riscv/Kconfig.vendor
-> +++ b/arch/riscv/Kconfig.vendor
-> @@ -1,3 +1,14 @@
->  menu "Vendor extensions selection"
-> =20
-> +config VENDOR_EXTENSIONS_THEAD
-> +	bool "T-HEAD vendor extensions"
+ - six locks: this shouldn't be blocking, we can move them to
+   fs/bcachefs/ if Linus still feels they need more review - but Dave
+   Chinner was wanting them and the locking people disliked exporting
+   osq_lock so that's why I have them in kernel/locking.
 
-> +	depends on RISCV_ALTERNATIVE
+ - mean_and_variance: this is some statistics library code that computes
+   mean and standard deviation for time samples, both standard and
+   exponentially weighted. Again, bcachefs is the first user so this
+   pull request is the proper place for this code, and I'm intending to
+   convert bcache to this code as well as use it for other kernel wide
+   latency tracking (which I demod at LSF awhile back; I'll be posting
+   it again once code tagging is upstreamed as part of the memory
+   allocation work Suren and I are doing).
 
-Why do you need this?
+ - task_struct->faults_disabled_mapping: this adds a task_struct member
+   that makes it possible to do strict page cache coherency.
 
-> +	default n
-> +	help
-> +	  All T-HEAD vendor extensions Kconfig depend on this Kconfig. Disabling
-> +	  this Kconfig will disable all T-HEAD vendor extensions. Please say "Y"
-> +	  here if your platform uses T-HEAD vendor extensions.
+   This is something I intend to push into the VFS, but it's going to be
+   a big project - it needs a new type of lock (the one in bcachefs is
+   good enough for an initial implementation, but the real version
+   probably needs priority inheritence and other things). In the
+   meantime, I've thoroughly documented what's going on and what the
+   plan is in the commit message.
 
-I don't really like this Kconfig entry. We should just use the one in
-Kconfig.errata that enables the actual vector stuff.
+ - d_mark_tmpfile(): trivial new helper, from pulling out part of
+   d_tmpfile(). We need this because bcachefs handles the nlink count
+   for tmpfiles earlier, in the btree transaction.
 
-> +
-> +	  Otherwise, please say "N" here to avoid unnecessary overhead.
-> +
->  endmenu # "Vendor extensions selection"
-> diff --git a/arch/riscv/include/asm/extensions.h b/arch/riscv/include/asm=
-/extensions.h
-> new file mode 100644
-> index 000000000000..27ce294a3d65
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/extensions.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023 by Rivos Inc.
-> + */
-> +#ifndef __ASM_EXTENSIONS_H
-> +#define __ASM_EXTENSIONS_H
-> +
-> +#include <asm/hwprobe.h>
-> +#include <linux/cpumask.h>
-> +
-> +#define THEAD_ISA_EXT0 (RISCV_HWPROBE_VENDOR_EXTENSION_SPACE)
-> +#define THEAD_ISA_EXT0_V0_7_1 (1 << 0)
-> +
-> +int hwprobe_thead(__u64 marchid, __u64 mimpid, struct riscv_hwprobe *pai=
-r,
-> +		  const struct cpumask *cpus);
-> +#endif
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 2351a5f7b8b1..58b12eaeaf46 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -13,6 +13,7 @@
->  #include <asm/vector.h>
->  #include <asm/switch_to.h>
->  #include <asm/uaccess.h>
-> +#include <asm/extensions.h>
->  #include <asm/unistd.h>
->  #include <asm-generic/mman-common.h>
->  #include <vdso/vsyscall.h>
-> @@ -192,6 +193,25 @@ static int hwprobe_vendor(__u64 mvendorid, struct ri=
-scv_hwprobe *pair,
->  			 const struct cpumask *cpus)
->  {
->  	switch (mvendorid) {
-> +#ifdef CONFIG_VENDOR_EXTENSIONS_THEAD
+ - copy_folio_from_iter_atomic(): obvious new helper, other filesystems
+   will want this at some point as part of the ongoing folio conversion
 
-Please use IS_ENABLED() in code where possible, so that we get compile
-time coverage of the code it disables. IMO, this kinda overcomplicates
-the switch anyway, and it should be as simple as:
-case THEAD_VENDOR_ID:
-	return hwprobe_thead(pair, cpus);
+ - block layer patches: we have
 
-and deal with the specific stuff (like impid etc) inside that function.
+   - new exports: primarily because bcachefs has its own dio path and
+     does not use iomap, also blk_status_to_str() for better error
+     messages
 
-> +	case THEAD_VENDOR_ID:
-> +		struct riscv_hwprobe marchid =3D {
-> +			.key =3D RISCV_HWPROBE_KEY_MARCHID,
-> +			.value =3D 0
-> +		};
-> +		struct riscv_hwprobe mimpid =3D {
-> +			.key =3D RISCV_HWPROBE_KEY_MIMPID,
-> +			.value =3D 0
-> +		};
-> +
-> +		hwprobe_arch_id(&marchid, cpus);
-> +		hwprobe_arch_id(&mimpid, cpus);
-> +		if (marchid.value !=3D -1ULL && mimpid.value !=3D -1ULL)
-> +			hwprobe_thead(marchid.value, mimpid.value, pair, cpus);
-> +		else
-> +			return -1;
-> +		break;
-> +#endif
->  	default:
->  		return -1;
->  	}
-> diff --git a/arch/riscv/vendor_extensions/Makefile b/arch/riscv/vendor_ex=
-tensions/Makefile
-> index e815895e9372..38c3e80469fd 100644
-> --- a/arch/riscv/vendor_extensions/Makefile
-> +++ b/arch/riscv/vendor_extensions/Makefile
-> @@ -1,3 +1,5 @@
->  ifdef CONFIG_RELOCATABLE
->  KBUILD_CFLAGS +=3D -fno-pie
->  endif
+   - bio_iov_iter_get_pages() with bio->bi_bdev unset: bcachefs builds
+     up bios before we know which block device those bios will be
+     issued to.
 
-Again, why do you need this, or...
+     There was something thrown out about "bi_bdev being required" - but
+     that doesn't make a lot of sense here. The direction in the block
+     layer back when I made it sane for stacking block drivers - i.e.
+     enabling efficient splitting/cloning of bios - was towards bios
+     being more just simple iterators over a scatter/gather list, and
+     now we've got iov_iter which can point at a bio/bvec array - moving
+     even more in that direction.
 
-> +
-> +obj-$(CONFIG_VENDOR_EXTENSIONS_THEAD) +=3D thead/
-> diff --git a/arch/riscv/vendor_extensions/thead/Makefile b/arch/riscv/ven=
-dor_extensions/thead/Makefile
-> new file mode 100644
-> index 000000000000..7cf43c629b66
-> --- /dev/null
-> +++ b/arch/riscv/vendor_extensions/thead/Makefile
-> @@ -0,0 +1,8 @@
-> +ifdef CONFIG_FTRACE
-> +CFLAGS_REMOVE_extensions.o =3D $(CC_FLAGS_FTRACE)
-> +endif
-> +ifdef CONFIG_KASAN
-> +KASAN_SANITIZE_extensions.o :=3D n
-> +endif
+     Regardless, this patch is pretty trivial, it's not something that
+     commits us to one particular approach. bio_iov_iter_get_pages() is
+     here trying to return bios that are aligned to the block device's
+     blocksize, but in our case we just want it aligned to the
+     filesystem's blocksize.
 
-=2E..any of this? Not saying you don't, but I think it should be explained.
+   - bring back zero_fill_bio_iter() - I originally wrote this,
+     Christoph deleted it without checking. It's just a more general
+     version of zero_fill_bio().
+ 
+   - Don't block on s_umount from __invalidate_super: this is a bugfix
+     for a deadlock in generic/042 because of how we use sget(), the
+     commit message goes into more detail.
 
-> +
-> +obj-y +=3D extensions.o
-> diff --git a/arch/riscv/vendor_extensions/thead/extensions.c b/arch/riscv=
-/vendor_extensions/thead/extensions.c
-> new file mode 100644
-> index 000000000000..a177501bc99c
-> --- /dev/null
-> +++ b/arch/riscv/vendor_extensions/thead/extensions.c
-> @@ -0,0 +1,24 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 by Rivos Inc.
-> + */
-> +
-> +#include <asm/extensions.h>
-> +
-> +int hwprobe_thead(__u64 marchid, __u64 mimpid, struct riscv_hwprobe *pai=
-r,
-> +		  const struct cpumask *cpus)
-> +{
-> +	pair->value =3D 0;
-> +	switch (pair->key) {
-> +	case THEAD_ISA_EXT0:
-> +#ifdef CONFIG_RISCV_ISA_V
+     bcachefs doesn't use sget() for mutual exclusion because a) sget()
+     is insane, what we really want is the _block device_ to be opened
+     exclusively (which we do), and we have our own block device opening
+     path - which we need to, as we're a multi device filesystem.
 
-As pointed out by Remi, this doesn't work either.
-You should not claim this is supported, just because V is, you also need
-the support for their vector "flavour" from Heiko's series.
+ - generic radix tree fixes: this is just fixes for code I already wrote
+   for bcachefs and upstreamed previously, after converting existing
+   users of flex-array.
 
-Plus, it should be IS_ENABLED() too.
+ - move closures to lib/ - this is also code I wrote, now needs to be
+   shared with bcache
 
-Cheers,
-Conor.
+ - small stuff:
+   - export stack_trace_save_stack() - this is used for displaying stack
+     traces in debugfs
+   - export errname() - better error messages
+   - string_get_size() - change it to return number of characters written
+   - compiler attributes - add __flatten
 
-> +		if (marchid =3D=3D 0 && mimpid =3D=3D 0)
-> +			pair->value |=3D THEAD_ISA_EXT0_V0_7_1;
-> +#endif
-> +		break;
-> +	default:
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
->=20
-> --=20
-> 2.41.0
->=20
+If there are objections to any of these patches, please _be specific_.
+Please remember that I am also incorporating feedback previous
+discussions, and a generic "these patches need to go in separately" is
+not something I can do anything with, as explained previously.
 
---/1/P1zz9w9UpMZlo
-Content-Type: application/pgp-signature; name="signature.asc"
+> 2) We already have recent examples of merge and disappear.  Yes of course you've
+> been around for a long time, you aren't the NTFS developers.  But as you point
+> out it's 90k of code.  When btrfs was merged there were 3 large contributors,
+> Chris, myself, and Yanzheng.  If Chris got hit by a bus we could still drive the
+> project forward.  Can the same be said for bachefs?  I know others have chimed
+> in and done some stuff, but as it's been stated elsewhere it would be good to
+> have somebody else in the MAINTAINERS file with you.
 
------BEGIN PGP SIGNATURE-----
+Yes, the bcachefs project needs to grow in terms of developers. The
+unfortunate reality is that right now is a _hard_ time to growing teams
+and budgets in this area; it's been an uphill battle.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKb8CAAKCRB4tDGHoIJi
-0o1TAP4opDQGSf+1vplQTfo89CtVO17cBP755V6EMPFrQbWQdAEAjaYJPW5ns/M9
-6DgOIqGECBG+ipMRikyB8E3HsdHL5g8=
-=YAT+
------END PGP SIGNATURE-----
+You, the btrfs developers, got started when Linux filesystem teams were
+quite a bit bigger than they are now: I was at Google when Google had a
+bunch of people working on ext4, and that was when ZFS had recently come
+out and there was recognition that Linux needed an answer to ZFS and you
+were able to ride that excitement. It's been a bit harder for me to get
+something equally ambitions going, to be honest.
 
---/1/P1zz9w9UpMZlo--
+But years ago when I realized I was onto something, I decided this
+project was only going to fail if I let it fail - so I'm in it for the
+long haul.
+
+Right now what I'm hearing, in particular from Redhat, is that they want
+it upstream in order to commit more resources. Which, I know, is not
+what kernel people want to hear, but it's the chicken-and-the-egg
+situation I'm in.
+
+> I am really, really wanting you to succeed here Kent.  If the general consensus
+> is you need to have some idiot review fs/bcachefs I will happily carve out some
+> time and dig in.
+
+That would be much appreciated - I'll owe you some beers next time I see
+you. But before jumping in, let's see if we can get people who have
+already worked with the code to say something.
+
+Something I've done in the past that might be helpful - instead (or in
+addition to) having people read code in isolation, perhaps we could do a
+group call/meeting where people can ask questions about the code, bring
+up design issues they've seen in other filesystems, etc. - I've also
+found that kind of setup great for identifying places in the code where
+additional documentation would be useful.
