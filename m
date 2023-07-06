@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C5D7498E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4667498EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjGFKBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S231393AbjGFKCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjGFKBp (ORCPT
+        with ESMTP id S230159AbjGFKCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:01:45 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717F619A7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:01:43 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso632781e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688637702; x=1691229702;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XT60ydGbek1AFjPkAEjevV8MYxSepx4EylzL/gQ0j8Q=;
-        b=teFm+rkwOF4Fscx6FU5McwhsHg+3oRElnEWE9vJpbTvsJ92FFxKspLKWyi3SnfdOyn
-         Q77e4UPLlwWG95SIw0plNmt/BGzuYK5MKz3mLAGUnODGEvu7xhULrbzoeA9eF/5cLAqs
-         LWvIGAVwI+C0wG5w0SruZQ7MavLr6QszRrzLlgAnKfnAzO1GP718EIK602Rjhm9D+tgC
-         I2pinO5tdVG7BX0tBYR+q/7Dbd9oEYQJ3QrAL6urFjqP+S05NzKckDgD9a0h1F8nSp7V
-         1vYaHT6kkSEFWuvPHAAkC/gGZLot4KOpth2/XZRS0YjWgGcWvOLXdX4c08n3eAEdFWVv
-         HNAQ==
+        Thu, 6 Jul 2023 06:02:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725F9199E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688637711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PFB/bHaV+5S4HNAEYX/AEdRm3PBRbuuOs/N7fpLg5iE=;
+        b=hKw1k4X7OtdOsb8IlPWp/krUxNJCPDcMl2THTnD/JQDIDIqEe4jSI/J7Yz18cmLYiPKypi
+        EDb7CnWlLlPCgDjAAtJ5IMW1e6q3sKSGMMt8J+WE4t0IN2A4Y3XQ98j3zEsUCezK0tN6Kr
+        G01gBm5htE8Ppf44EOCIk38faQUsR30=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-264-BD_Yae-hOVqnySsQN8OXUw-1; Thu, 06 Jul 2023 06:01:50 -0400
+X-MC-Unique: BD_Yae-hOVqnySsQN8OXUw-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-56942442eb0so6132007b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:01:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688637702; x=1691229702;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XT60ydGbek1AFjPkAEjevV8MYxSepx4EylzL/gQ0j8Q=;
-        b=ZgZrtt7kEkpmHI/ccyX6eVtCotfbEsout0fG97fvS3BV2J4LMFylDCed8t96nc3U7Z
-         f4BemfSP5TzgCa46v/w3zpU81JJjwc44V36hxHKNP5XZ+iPvofFHSvA2qQ1FWh5smvoj
-         1glOw5azDfSpyD18qlhn+Aru58It+Bhz2+q6o4kFbu9FPA4H7Mln2PxoohCcU49CBo9E
-         48C5+Vzxk/s9cSJJ8UrYvQCAWCr3kpO6UDGcf3ntxPN9zuwvWPNDNNYva8P4Ivz0PqX+
-         lMW0TExClb4+TSwaiGmnDMvT6PchIsqo7COro76ntRzZ1B2C6RhFOmnBgih6kaVOkeMz
-         vIIA==
-X-Gm-Message-State: ABy/qLYcS/Dz/4B7ahrVz8gLuOmVH1kUURbGFn1eq+blrp6Qwho5EFB8
-        LTJIan0wesg6wA655zPOWuQhBQ==
-X-Google-Smtp-Source: APBJJlHtbIbK40+kpbF5561nZK98zdUI+BAnFKMpIjZfYgqBtLSrABL4QxB7dMwedNHt3vfsOGhFsA==
-X-Received: by 2002:a19:2d4e:0:b0:4f8:7734:8dd0 with SMTP id t14-20020a192d4e000000b004f877348dd0mr1058895lft.2.1688637701624;
-        Thu, 06 Jul 2023 03:01:41 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id y2-20020ac255a2000000b004fb88fffd19sm188136lfg.146.2023.07.06.03.01.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 03:01:41 -0700 (PDT)
-Message-ID: <e31564e1-31cf-2cda-df6f-6210e6a1c1fc@linaro.org>
-Date:   Thu, 6 Jul 2023 12:01:37 +0200
+        d=1e100.net; s=20221208; t=1688637709; x=1691229709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PFB/bHaV+5S4HNAEYX/AEdRm3PBRbuuOs/N7fpLg5iE=;
+        b=Lt+wZBPyAWe26FwJUOdicHkRrayjEhpzy4GRVztd8qh/zV7IjDkpIN+wqnsoOdLI2B
+         DuLcHysCzE1+BENWIOkRaHc8RJVaN1UT2EDWr9e6xkFJSwK/b9YyKHmQo8xF8BL8W9+M
+         fBBlmqt+sOJpCr3qFEieujxLybw+xgvkWTgV54C7/7q9Ee7NPaTuCalpKVMnFEFwTm77
+         AMkQtdd7IL3bMvu/Bx18fcc7GQoaU1D4RVPT3Rdqf27h3STcFKiw82rGCUv0wXTIqq0b
+         KJ3Ypync6nLXixIem/xoprJySFe4Sb1RJ1/TiwWWf16dh4iOW+oyuN4RfPbGY5qlk1vX
+         WlYg==
+X-Gm-Message-State: ABy/qLacSE5cHyG5ObdbaQH5Y1JhUnyvIFKX13/UQdn9L6uyeqazkIA+
+        mYZPEfZQRQ5cSBH2wcwKUb717zLrJ4o/6P25iEwL3eI9E3r2iHt36v5ul3or4UWqh8Ne3rvzvxo
+        iagc+Sevey/aoy8LJPDx8wNtJxOq6DtoZbHMOiXqb
+X-Received: by 2002:a81:8384:0:b0:56d:c97:39f4 with SMTP id t126-20020a818384000000b0056d0c9739f4mr1424682ywf.8.1688637709729;
+        Thu, 06 Jul 2023 03:01:49 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHnS8DTGuBigSC1cOUEhrHGP3AjZEn+XIDZR976mIx9TGjJA3wYtGsoU6qHdLxp+gcwyMWCUHKwipRzaY/ylEo=
+X-Received: by 2002:a81:8384:0:b0:56d:c97:39f4 with SMTP id
+ t126-20020a818384000000b0056d0c9739f4mr1424668ywf.8.1688637709450; Thu, 06
+ Jul 2023 03:01:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 5/6] arm64: dts: qcom: sa8775p: Add pcie0 and pcie1
- nodes
-Content-Language: en-US
-To:     Mrinmay Sarkar <quic_msarkar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, mani@kernel.org
-Cc:     quic_shazhuss@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_ramkri@quicinc.com, quic_nayiluri@quicinc.com,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
- <1688545032-17748-6-git-send-email-quic_msarkar@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1688545032-17748-6-git-send-email-quic_msarkar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230704234532.532c8ee7.gary@garyguo.net>
+In-Reply-To: <20230704234532.532c8ee7.gary@garyguo.net>
+From:   Stefano Garzarella <sgarzare@redhat.com>
+Date:   Thu, 6 Jul 2023 12:01:38 +0200
+Message-ID: <CAGxU2F4_br6e3hEELXP_wpQSZTs5FYhQ-iahiZKzMMRYWpFXdA@mail.gmail.com>
+Subject: Re: Hyper-V vsock streams do not fill the supplied buffer in full
+To:     Gary Guo <gary@garyguo.net>, Dexuan Cui <decui@microsoft.com>
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5.07.2023 10:17, Mrinmay Sarkar wrote:
-> Add pcie dtsi nodes for two controllers found on sa8775p platform.
-> 
-> Signed-off-by: Mrinmay Sarkar <quic_msarkar@quicinc.com>
-> ---[...]
+Hi Gary,
 
-> +	pcie1_phy: phy@1c14000 {
-> +		compatible = "qcom,sa8775p-qmp-gen4x4-pcie-phy";
-> +		reg = <0x0 0x1c14000 0x0 0x4000>;
-> +
-> +		clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
-> +			 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-> +			 <&gcc GCC_PCIE_CLKREF_EN>,
-> +			 <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>,
-> +			 <&gcc GCC_PCIE_1_PHY_AUX_CLK>,
-> +			 <&gcc GCC_PCIE_1_PIPE_CLK>,
-> +			 <&gcc GCC_PCIE_1_PIPEDIV2_CLK>;
-> +
-> +		clock-names = "aux", "cfg_ahb", "ref", "rchng", "phy_aux",
-> +						"pipe", "pipediv2";
-> +
-> +		assigned-clocks = <&gcc GCC_PCIE_1_PHY_RCHNG_CLK>;
-> +		assigned-clock-rates = <100000000>;
-> +
-> +		power-domains = <&gcc PCIE_1_GDSC>;
-Please check if it's the correct power domain. I've heard that the PCIe PHY
-may be hooked up to something else but have no way of confirming myself.
+On Wed, Jul 5, 2023 at 12:45=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
+>
+> When a vsock stream is called with recvmsg with a buffer, it only fills
+> the buffer with data from the first single VM packet. Even if there are
+> more VM packets at the time and the buffer is still not completely
+> filled, it will just leave the buffer partially filled.
+>
+> This causes some issues when in WSLD which uses the vsock in
+> non-blocking mode and uses epoll.
+>
+> For stream-oriented sockets, the epoll man page [1] says that
+>
+> > For stream-oriented files (e.g., pipe, FIFO, stream socket),
+> > the condition that the read/write I/O space is exhausted can
+> > also be detected by checking the amount of data read from /
+> > written to the target file descriptor.  For example, if you
+> > call read(2) by asking to read a certain amount of data and
+> > read(2) returns a lower number of bytes, you can be sure of
+> > having exhausted the read I/O space for the file descriptor.
+>
+> This has been used as an optimisation in the wild for reducing number
+> of syscalls required for stream sockets (by asserting that the socket
+> will not have to polled to EAGAIN in edge-trigger mode, if the buffer
+> given to recvmsg is not filled completely). An example is Tokio, which
+> starting in v1.21.0 [2].
+>
+> When this optimisation combines with the behaviour of Hyper-V vsock, it
+> causes issue in this scenario:
+> * the VM host send data to the guest, and it's splitted into multiple
+>   VM packets
+> * sk_data_ready is called and epoll returns, notifying the userspace
+>   that the socket is ready
+> * userspace call recvmsg with a buffer, and it's partially filled
+> * userspace assumes that the stream socket is depleted, and if new data
+>   arrives epoll will notify it again.
+> * kernel always considers the socket to be ready, and since it's in
+>   edge-trigger mode, the epoll instance will never be notified again.
+>
+> This different realisation of the readiness causes the userspace to
+> block forever.
 
-Konrad
-> +
-> +		resets = <&gcc GCC_PCIE_1_PHY_BCR>;
-> +		reset-names = "phy";
-> +
-> +		#clock-cells = <0>;
-> +		clock-output-names = "pcie_1_pipe_clk";
-> +
-> +		#phy-cells = <0>;
-> +
-> +		status = "disabled";
-> +
-> +	};
->  };
+Thanks for the detailed description of the problem.
+
+I think we should fix the hvs_stream_dequeue() in
+net/vmw_vsock/hyperv_transport.c.
+We can do something similar to what we do in
+virtio_transport_stream_do_dequeue() in
+net/vmw_vsock/virtio_transport_common.c
+
+@Dexuan WDYT?
+
+Thanks,
+Stefano
+
