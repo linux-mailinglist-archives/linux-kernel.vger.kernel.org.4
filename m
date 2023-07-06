@@ -2,208 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81698749BCD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A91749BD8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjGFMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
+        id S229640AbjGFMdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjGFMap (ORCPT
+        with ESMTP id S230437AbjGFMdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:30:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E081BF1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:30:39 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1FD96606FC5;
-        Thu,  6 Jul 2023 13:30:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688646638;
-        bh=9O3oPbgNu2Rdb7yDbhzv2dqxXHdNKO6uVeeOVLaab60=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S9fh0zEBn+hmDuKxNXcSQGYU3PiJv74boIpg00AXRaYaeGZxP4Ni8Ny2Amkx7qdl/
-         rGvdeaW6uqLFXPrlClXwRCWRp7wGTGV/jOzY/WKQjUXUhoohNueTEHC9IJSUul86UE
-         DxSrEtVL2Z0LtEl86xJictTt3SMgb3bUIQFBa7+bu7Rc9RcXvcLqwKKC7kG3Pl/Bxq
-         QYVMmO2xtndAaQnwDPrOKR+0Zb/dYTiZRAMmaRDmKKmBenFto8KbTOFVe62QqVh6/A
-         1ptYi6/AAxC95PB9pW359bQlxj1cOZehIjH6WmcwllwetLsr9HJEFrNbqz5kro2fUK
-         ttYiWsPLR7dxg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org, nfraprado@collabora.com
-Subject: [PATCH v4 9/9] drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
-Date:   Thu,  6 Jul 2023 14:30:25 +0200
-Message-Id: <20230706123025.208408-10-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230706123025.208408-1-angelogioacchino.delregno@collabora.com>
-References: <20230706123025.208408-1-angelogioacchino.delregno@collabora.com>
+        Thu, 6 Jul 2023 08:33:25 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAC91BF0;
+        Thu,  6 Jul 2023 05:33:10 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 99EAF67373; Thu,  6 Jul 2023 14:33:06 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 14:33:06 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     syzbot <syzbot+dfe2fbeb4e710bbaddf9@syzkaller.appspotmail.com>
+Cc:     axboe@kernel.dk, brauner@kernel.org, davem@davemloft.net,
+        edumazet@google.com, hare@suse.de, hch@lst.de,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [wireless?] WARNING in restore_regulatory_settings (2)
+Message-ID: <20230706123306.GA12417@lst.de>
+References: <0000000000001432c105ffcae455@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001432c105ffcae455@google.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the eDP case we can support using aux-bus on MediaTek DP: this
-gives us the possibility to declare our panel as generic "panel-edp"
-which will automatically configure the timings and available modes
-via the EDID that we read from it.
+On Wed, Jul 05, 2023 at 10:35:58PM -0700, syzbot wrote:
+> The issue was bisected to:
 
-To do this, move the panel parsing at the end of the probe function
-so that the hardware is initialized beforehand and also initialize
-the DPTX AUX block and power both on as, when we populate the
-aux-bus, the panel driver will trigger an EDID read to perform
-panel detection.
-
-Last but not least, since now the AUX transfers can happen in the
-separated aux-bus, it was necessary to add an exclusion for the
-cable_plugged_in check in `mtk_dp_aux_transfer()` and the easiest
-way to do this is to simply ignore checking that when the bridge
-type is eDP.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 72 ++++++++++++++++++++++++++-----
- 1 file changed, 62 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 2ad836fbb7c4..16109d5ca5ae 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2022 BayLibre
-  */
- 
-+#include <drm/display/drm_dp_aux_bus.h>
- #include <drm/display/drm_dp.h>
- #include <drm/display/drm_dp_helper.h>
- #include <drm/drm_atomic_helper.h>
-@@ -2042,7 +2043,8 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
- 
- 	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
- 
--	if (!mtk_dp->train_info.cable_plugged_in) {
-+	if (mtk_dp->bridge.type != DRM_MODE_CONNECTOR_eDP &&
-+	    !mtk_dp->train_info.cable_plugged_in) {
- 		ret = -EAGAIN;
- 		goto err;
- 	}
-@@ -2153,6 +2155,11 @@ static int mtk_dp_bridge_attach(struct drm_bridge *bridge,
- 	enable_irq(mtk_dp->irq);
- 	mtk_dp_hwirq_enable(mtk_dp, true);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-+		mtk_dp->train_info.cable_plugged_in = true;
-+		drm_helper_hpd_irq_event(mtk_dp->drm_dev);
-+	}
-+
- 	return 0;
- 
- err_bridge_attach:
-@@ -2482,6 +2489,25 @@ static int mtk_dp_register_audio_driver(struct device *dev)
- 	return PTR_ERR_OR_ZERO(mtk_dp->audio_pdev);
- }
- 
-+static int mtk_dp_edp_link_panel(struct drm_dp_aux *mtk_aux)
-+{
-+	struct mtk_dp *mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-+	struct device *dev = mtk_aux->dev;
-+	struct drm_bridge *panel_aux_bridge;
-+
-+	panel_aux_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
-+
-+	/* Power off the DP: either detection is done, or no panel present */
-+	mtk_dp_aux_panel_poweron(mtk_dp, false);
-+	mtk_dp_power_disable(mtk_dp);
-+
-+	if (IS_ERR(panel_aux_bridge))
-+		return PTR_ERR(panel_aux_bridge);
-+
-+	mtk_dp->next_bridge = panel_aux_bridge;
-+	return 0;
-+}
-+
- static int mtk_dp_probe(struct platform_device *pdev)
- {
- 	struct mtk_dp *mtk_dp;
-@@ -2500,21 +2526,14 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, mtk_dp->irq,
- 				     "failed to request dp irq resource\n");
- 
--	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
--	if (IS_ERR(mtk_dp->next_bridge) &&
--	    PTR_ERR(mtk_dp->next_bridge) == -ENODEV)
--		mtk_dp->next_bridge = NULL;
--	else if (IS_ERR(mtk_dp->next_bridge))
--		return dev_err_probe(dev, PTR_ERR(mtk_dp->next_bridge),
--				     "Failed to get bridge\n");
--
- 	ret = mtk_dp_dt_parse(mtk_dp, pdev);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to parse dt\n");
- 
--	drm_dp_aux_init(&mtk_dp->aux);
- 	mtk_dp->aux.name = "aux_mtk_dp";
-+	mtk_dp->aux.dev = dev;
- 	mtk_dp->aux.transfer = mtk_dp_aux_transfer;
-+	drm_dp_aux_init(&mtk_dp->aux);
- 
- 	spin_lock_init(&mtk_dp->irq_thread_lock);
- 
-@@ -2570,6 +2589,39 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 	mtk_dp->need_debounce = true;
- 	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-+		/*
-+		 * Set the data lanes to idle in case the bootloader didn't
-+		 * properly close the eDP port to avoid stalls and then
-+		 * reinitialize, reset and power on the AUX block.
-+		 */
-+		mtk_dp_set_idle_pattern(mtk_dp, true);
-+		mtk_dp_initialize_aux_settings(mtk_dp);
-+		mtk_dp_power_enable(mtk_dp);
-+
-+		/*
-+		 * Power on the panel to allow reading the EDID from aux-bus:
-+		 * please note that it is necessary to call power off in the
-+		 * .done_probing() callback (mtk_dp_edp_link_panel), as only
-+		 * there we can safely assume that we finished reading EDID.
-+		 */
-+		mtk_dp_aux_panel_poweron(mtk_dp, true);
-+
-+		ret = devm_of_dp_aux_populate_bus(&mtk_dp->aux, mtk_dp_edp_link_panel);
-+		if (ret) {
-+			/* -ENODEV this means that the panel is not on the aux-bus */
-+			if (ret == -ENODEV) {
-+				ret = mtk_dp_edp_link_panel(&mtk_dp->aux);
-+				if (ret)
-+					return ret;
-+			} else {
-+				mtk_dp_aux_panel_poweron(mtk_dp, false);
-+				mtk_dp_power_disable(mtk_dp);
-+				return ret;
-+			}
-+		}
-+	}
-+
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--- 
-2.40.1
+I suspect this bisection would benefit from a re-run, as thecode is
+entirely unrelated.
 
