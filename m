@@ -2,69 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1117498B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B107498B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjGFJq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 05:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
+        id S231833AbjGFJqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 05:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGFJq0 (ORCPT
+        with ESMTP id S231915AbjGFJqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:46:26 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50A41727
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 02:46:24 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-51e2295e74eso469035a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 02:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688636783; x=1691228783;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0eYCSqQxSlAR3RibXXnHPvPQ1h6TQ1/VygEPnbsiTbg=;
-        b=H1tRYgNOzaDextngjG1i4fRJhAypNqzhecp294gztutf6ZBH1wl5Ew+HgbKmFp8cM9
-         x6SvTCcxQ3ARUDbkgO/lWmwyIk6zK8U6l9/EXSp6Pi7+RjegS4lD39Uf8idzxr80pqPF
-         bjpeA2CTI28mosSlpzVDMkmYsCn+17IqyL7lEehCKl+q4VXuk3LnppdTUfeWEeTp5ido
-         yzRwFow3HTTW9PPWHVl8yK6GZ32aKCMQcHis/NPnknLNfOJE+1eXSrZ9nla31dgoiFeI
-         nIzqkLiUsAiSvzA+B8L6TQbz2R07iW5IsTtfvloT0jIXgZUvk/aFUBmVqyl0jCVxGGL7
-         6bfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688636783; x=1691228783;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0eYCSqQxSlAR3RibXXnHPvPQ1h6TQ1/VygEPnbsiTbg=;
-        b=iR6MWB8YhHuCjTGHzwW0Kl1EUYmx4SHNuFnzIKUOm1lw2BEteW3gboJkD/WKSk0eCB
-         YOjttKt46iqq40T8hUwX8sbMlbbEX1wrGiODPaEW6d1Yweo6I8dorRoypER2lO16A5gz
-         ViRHh68wkcBZvcVcioUKdXqo8sRuKJQ4fihulU+JO+Rblo7l4n8Mdu0POXyhrIBOlGQM
-         WA3By1QYAzsL0n/GRuSdee2/LL/9n9Im5Oe5n9bIkR17Pj7KTroPIhprn5E9ZzV8DoAG
-         jQI4Anlor8pKwIOvYM71DfLg2YIiiBN3HZaK+gHKpOA8jaOiYrMJDZRMyLIg2aYWpe+7
-         voog==
-X-Gm-Message-State: ABy/qLYCYBI2zgzAK5qSNO4ySpXJH64S8F90MwZ53pI0a/WgHS7u0Tio
-        U50c/Jw+dFXiiLJ+NzNWwuH8/RLzPMP85xU=
-X-Google-Smtp-Source: APBJJlGlXnXSogXQMZLv1m0sa+cO8bIZhhr+Phsktwd5wancAgiLZxSk5gVA7y7E4iW379DNToZn7e9HT6WW0/g=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a50:9345:0:b0:51d:9659:4dae with SMTP id
- n5-20020a509345000000b0051d96594daemr7394eda.5.1688636783141; Thu, 06 Jul
- 2023 02:46:23 -0700 (PDT)
-Date:   Thu,  6 Jul 2023 09:46:15 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230706094615.3080784-1-aliceryhl@google.com>
-Subject: [PATCH] rust: delete `ForeignOwnable::borrow_mut`
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     rust-for-linux@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Thu, 6 Jul 2023 05:46:53 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2138.outbound.protection.outlook.com [40.107.117.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1233E1998;
+        Thu,  6 Jul 2023 02:46:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RVyHdxtcG7AkrPMQQIhmgmjl8QNp6G8nO72wDrUFeR8pA9TenCagqjCNn8sFVJl4JLT/UU2vQbaHHyEKvVRu4PLv108UzDcFy66PkfMjJfBejY+NTk/fZGgu8oZWYwLpnd75IEoVPL3l0chM4zhm/JbBf83X3nJwYmNaUGoRYJdd9loZBx6+w/ABAWhh/Rbusj83lyVF+wZsQNka6trMtF/99rZqbiEuqrQlpyIfh5LpcWuH7zgVZqe6wvSU+OX28rWwkp9m9BXZelAIHSCvQlKsJVEOVl+OeXNCB0bDQ5IEadYWasm/TClhZ0fkJtQIJYRL/mzzsOI4xyQIfhqcCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BiiEpQ+cMYPLgqjF3mPFq23LQsFlRsPDqCNv/OAPmGU=;
+ b=i+A7LyHt3kIVVCdKbMzCHLN35SOOl9HRZBfoIHKVrWgiJVrBs1s000ZFohtk5ZGvc8IgEBAjFyr59vkdjllj3xhnsdKO62LMc5NkTcWUjgMCO6GKQLiNXLMv2BNsjzMBa1Rg410yYcJjkt5kb3vX6fcM2uRmFtWG6iMW1Uz31IOKtPwBa/Z7ziTkv9MdyGO+wMAeynKnbJAr1YtayNQPQMcVEuVUNZkgM70e2iBR9Cq3eHvRemmiTfsbNAfV74Vz2kxpfchGYO0rsdjkcSZNu9kzPD5sf7P0wxi+yCQsJXooL4kgFpoACjHKZru0Pz7lRSRijeWD0TMx/ippPjP4qA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BiiEpQ+cMYPLgqjF3mPFq23LQsFlRsPDqCNv/OAPmGU=;
+ b=I6WwLkktiq04EHeqPhBVD6gnrSFlSyyp/zoTscmbjSd6mH/XHxu303bD0+Od1tXfdDgkSFMHfzhAj+Ev0xDD3Fq882ADxpXqhuJllI7AlCI6YgRA61caY33w2cw8p9C0R7z+V3AoFOg+jJT/J/JTsGA+e8XXsxVQt5F6mb2xEIgIPCgkwdqNrNOQmkOiZT6TqinQhQ/EkYGjiwWMdFBljCPgEF9LTUaU0zRujRjk0xuYZMSZ6v6fM3rJHkfmDmxr0L3TOjEcyHqzMXEI8leas/eT+vDuTo1pTj7ZpMYXA6RK9wJwdMsnMw32bFDabuiyViewjhzP/IZ9fq8gN0iKag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by TYZPR06MB5147.apcprd06.prod.outlook.com (2603:1096:400:1c1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 09:46:46 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::8586:be41:eaad:7c03]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::8586:be41:eaad:7c03%7]) with mapi id 15.20.6544.024; Thu, 6 Jul 2023
+ 09:46:46 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] tools: perf: Two typos have been corrected
+Date:   Thu,  6 Jul 2023 17:46:34 +0800
+Message-Id: <20230706094635.1553-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0052.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::21)
+ To TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB5147:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a77f569-358a-4c53-e2ea-08db7e05e99f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /V5zAP8PolwMd9NqgX2N01OZYVaezG8utiRztgmXrYfTom/Ncv5zFyj6M5P8Q1zwQkdxAXVZJLx1vSDCZApdx7Da3rEuXDCVrLfYzs2hNTO495vM2N4+uPbRo5uVN++NEjkM8Xtj/1Vmp1mT1jqFw41dWEl3wF59k9qNfqKIy6gaxvevXYRJmtGoZGTWUi+jp4Q9t8BxdjvWLNArmQ4oOasxgB3XjUymDH4EGECoEuQWXYeJMu7eSHsj7KdpE6vLfPdTMAOeHIk4KdK3CeM3WvGGmMcJag+IxRBFLcwiAyadMuGUsD3BYmJO1W9/LxHK/UcN13Q+TaZv/AdD4c8PkCLaIRTxaP1ncs5gIwgJGaTlA22yl8zJGyRZpxcmMmIblmojFlVlLujwXFjbIPT1ya8wjn+RyWIyCaVWh6h0lncbBzrqqAirxDsBWNsPJObVBsTRO2oGPVLmDD8pbCrcjuSjdQ3ZaAw9KlkBdXJSzySDirxfvumEaezzhWYzvouzhJm5v/sq+TvMCNsBtUBTxy6mZ9AitgydRxc40GlI1OUjIUmz9aJnWR8jZrXh90G6pj3NpwOC4YNGBLoliPX1xIqoxLtHAa62SIx1C5G0kX8NgqT1l2FuyyWKgddzTR47qAinpX4eRAtXxJxEOHdS7w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199021)(38100700002)(38350700002)(921005)(36756003)(86362001)(6512007)(6666004)(6486002)(478600001)(52116002)(186003)(107886003)(6506007)(1076003)(26005)(8676002)(8936002)(7416002)(5660300002)(110136005)(41300700001)(4744005)(66946007)(66556008)(66476007)(4326008)(2906002)(316002)(2616005)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QhVZX7yFvr1k4kb05JSlVFyoNuN5q/XR6NDfurCg7pvByIUnKMEK0Lu4yZON?=
+ =?us-ascii?Q?8HR3GyRt8fggDEI2A5hZuHwzR37s8k5ysMLUKWWccZs9hoWZfeYYomx/zvei?=
+ =?us-ascii?Q?waQvmWTnh1xHvzs1XeIHGApaiyjJNQAcheDuqpnu/dJMo5SyFQF3n2dh34vx?=
+ =?us-ascii?Q?Cictq96FkBCTltHV+4XhDoIihJAgnfi79LUOKuTHV0wZoGFD9G/sWPsyh89E?=
+ =?us-ascii?Q?cgWfo3TvY6BKP9yqT2BQg8gONvywWA6j5IUWTQvf8w/YjzJ0koE7/DESs8X8?=
+ =?us-ascii?Q?GysVnMkOVRYWnSGU4S9HAq1Jvittl/91R1Lz2Ksp30k2O5Axtts/UPNBpWJt?=
+ =?us-ascii?Q?3W04/KzVefW6x8pqKKaNWk6ikiuO00k0/ZX0dcILYp/01lEnC0GCq6+O7oTG?=
+ =?us-ascii?Q?odCuFHtHyuWDjwItp283DVt7ZBsCEERFLkcRc3voPRWLHuOHBV+xrAJ4jI9u?=
+ =?us-ascii?Q?D+EexZ7BcJOp2MUCH3rY1nr0ygWY1Xojx3lOMGdM0LTOz93xnJONU4QFIw0D?=
+ =?us-ascii?Q?j5tVTo+4nRyDAKL2NAKqR+ec8AXr33z3ApcbBdQOvxKNNiyvFI8GZRa+N2gm?=
+ =?us-ascii?Q?seAnfoOGdY6B9WxQ92lUCHLSv8lq4hET3CPhHG5f+2sJv8gPuRdmPYarPNst?=
+ =?us-ascii?Q?N+JqbD06GR9KTTmIDRyRWSgtLSXwG2Rkq4RiIlBAQUFSsCrmSOfWV5xxsNw7?=
+ =?us-ascii?Q?eORyfYoiWrQPma1l2X40mr2eakZdbx9GoGhxADRwnENJy3bOSXtP3sxb6Mnz?=
+ =?us-ascii?Q?+0/f2B3G02UZtFTHbqWNyo6q0oTKs0bjHk6qLTN2jAHuTAn5gWnhnLeItcTO?=
+ =?us-ascii?Q?IVrqRzOD7goa1t0r6VQuliJKC/g8zsh0jkctDaqYGnkLbkV04TT/PiHSD+ZK?=
+ =?us-ascii?Q?EZBsHhaP/hOHZ1lE1fIRwRmflAH4p4QPQcQDMO6qYfkxb8Ozzu4HtO+CCffh?=
+ =?us-ascii?Q?n88v2+vCnTs39zL5G4JX2zdPIF157hiM53W9/Yn8m0yUTYyLEA7f1+2cv8Z5?=
+ =?us-ascii?Q?KRivNGgJi1p3If5BT/eTjM2Y9xF96iP6VbkDA2gzHKwt9GsYFiXaa2oRq1/D?=
+ =?us-ascii?Q?ezGf4D6eJZ0WzTgn2yxbc9eYewFHmN7QgYBmJKigjQzB8qLjMs6Vr25YNrpg?=
+ =?us-ascii?Q?/MhaNw5hcvX2s6Cltfb6Ju8twtqrk49hNh7Y/d1FIU1iEwyc7gsnEUzF3FeN?=
+ =?us-ascii?Q?2VHMBNrxAOEr1PfUtWWF/XipTq0CPu9+QyFZHlR6utlBAWJujnBcL1yzxfha?=
+ =?us-ascii?Q?wYmSkwtWKYJf036NErJQd0WkzmGh5fzeOjkxe1lCOnghK410G4XgQh0YVTSB?=
+ =?us-ascii?Q?HURGmgRGrXDsZZriz50VQyNC7wihwowZg3Vf6GwiBoZzziJKn6IUxURVZL9c?=
+ =?us-ascii?Q?jhYTg9GF7NpXv5ROACADg/P/kOxXdA2UdcUkAJ1Ccm1x3TUQvzzcyT3dcGrC?=
+ =?us-ascii?Q?xu6YmO+BUlig8wltAb/6Dgq/i/BMaOwg8TpBnG6m8LpAyRXPNiUyt8EpacOr?=
+ =?us-ascii?Q?bULAUlcpheMVKV824xKCtY3ws0e15L0qvpG9p25bb4VPbNGHpcUxHPR2V6IR?=
+ =?us-ascii?Q?1qoLO429NtfBDNApovhA/Lq15Q4XDhQ6rsSTne57?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a77f569-358a-4c53-e2ea-08db7e05e99f
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 09:46:46.4823
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gf60h34RsvDydg9DzGaTjezQvvIQ5du74n1OybZ920I3qokCkxD9jD2HSFP5Nq7bdjup7628XnN5xL8GywIVvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5147
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,77 +118,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We discovered that the current design of `borrow_mut` is problematic.
-This patch removes it until a better solution can be found.
+When wrapping code, use ';' better than using ',' which is more
+in line with the coding habits of most engineers.
 
-Specifically, the current design gives you access to a `&mut T`, which
-lets you change where the `ForeignOwnable` points (e.g., with
-`core::mem::swap`). No upcoming user of this API intended to make that
-possible, making all of them unsound.
-
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
 ---
- rust/kernel/sync/arc.rs |  3 +--
- rust/kernel/types.rs    | 22 ++--------------------
- 2 files changed, 3 insertions(+), 22 deletions(-)
+ tools/perf/builtin-diff.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index a89843cacaad..172f563976a9 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -243,8 +243,7 @@ unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> ArcBorrow<'a, T> {
-         let inner = NonNull::new(ptr as *mut ArcInner<T>).unwrap();
+diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
+index e8a1b16aa5f8..57d300d8e570 100644
+--- a/tools/perf/builtin-diff.c
++++ b/tools/perf/builtin-diff.c
+@@ -1915,8 +1915,8 @@ static int data_init(int argc, const char **argv)
+ 		struct perf_data *data = &d->data;
  
-         // SAFETY: The safety requirements of `from_foreign` ensure that the object remains alive
--        // for the lifetime of the returned value. Additionally, the safety requirements of
--        // `ForeignOwnable::borrow_mut` ensure that no new mutable references are created.
-+        // for the lifetime of the returned value.
-         unsafe { ArcBorrow::new(inner) }
-     }
+ 		data->path  = use_default ? defaults[i] : argv[i];
+-		data->mode  = PERF_DATA_MODE_READ,
+-		data->force = force,
++		data->mode  = PERF_DATA_MODE_READ;
++		data->force = force;
  
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index 1e5380b16ed5..d479f8da8f38 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -35,34 +35,16 @@ pub trait ForeignOwnable: Sized {
-     ///
-     /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-     /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
--    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow_mut`]
--    /// for this object must have been dropped.
-     unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowed<'a>;
- 
--    /// Mutably borrows a foreign-owned object.
--    ///
--    /// # Safety
--    ///
--    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
--    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
--    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
--    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
--    unsafe fn borrow_mut(ptr: *const core::ffi::c_void) -> ScopeGuard<Self, fn(Self)> {
--        // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
--        // `into_foreign`.
--        ScopeGuard::new_with_data(unsafe { Self::from_foreign(ptr) }, |d| {
--            d.into_foreign();
--        })
--    }
--
-     /// Converts a foreign-owned object back to a Rust-owned one.
-     ///
-     /// # Safety
-     ///
-     /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-     /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
--    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
--    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-+    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] for
-+    /// this object must have been dropped.
-     unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
- }
- 
-
-base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+ 		d->idx  = i;
+ 	}
 -- 
-2.41.0.255.g8b1d071c50-goog
+2.39.0
 
