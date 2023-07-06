@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BE97498F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4551B7498F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjGFKDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S231576AbjGFKEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjGFKDf (ORCPT
+        with ESMTP id S229508AbjGFKEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:03:35 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69C0E3;
-        Thu,  6 Jul 2023 03:03:33 -0700 (PDT)
-Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QxX9V0bgpzPjtb;
-        Thu,  6 Jul 2023 18:01:18 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 6 Jul
- 2023 18:03:30 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <hsinweih@uci.edu>,
-        <jakub@cloudflare.com>, <john.fastabend@gmail.com>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liuxin350@huawei.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>,
-        <syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>, <yanan@huawei.com>,
-        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
-        <kongweibin2@huawei.com>, <zhangmingyi5@huawei.com>
-Subject: [PATCH bpf-next] bpf, sockops: Enhance the return capability of sockops
-Date:   Thu, 6 Jul 2023 18:02:43 +0800
-Message-ID: <20230706100243.318109-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 6 Jul 2023 06:04:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC61DDD;
+        Thu,  6 Jul 2023 03:04:43 -0700 (PDT)
+X-UUID: 844ca40e1be411ee9cb5633481061a41-20230706
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TS+0nfycyMyZboLtN8mtKKdv0Ar+eMXmyw7XCZMA2LM=;
+        b=fJiHurZXnnY+Lx6TfYtKU5N9yAVtg4kPU60MYMbHE+FqvFav2JzXuC7wRap1ytOAmVhpZigstnjRiFDC3Cer7+mgJ559SiDzZ0nVlIrMax4is+kLdeUeW2zgmjBxVRHIQM/mGQOTUeyGIAcD+XbpzQARdMJ44N1/w67IVy8cVJ0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:dc2f369f-25e0-4dda-b1cc-f807240d32cb,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.27,REQID:dc2f369f-25e0-4dda-b1cc-f807240d32cb,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:01c9525,CLOUDID:4396ee0d-c22b-45ab-8a43-3004e9216b56,B
+        ulkID:230706180438HVKI64YI,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+        L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
+        TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
+X-UUID: 844ca40e1be411ee9cb5633481061a41-20230706
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <shuijing.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 986363233; Thu, 06 Jul 2023 18:04:38 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 6 Jul 2023 18:04:36 +0800
+Received: from mszsdhlt06.gcn.mediatek.inc (10.16.6.206) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 6 Jul 2023 18:04:36 +0800
+From:   Shuijing Li <shuijing.li@mediatek.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>
+CC:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <jitao.shi@mediatek.com>, Shuijing Li <shuijing.li@mediatek.com>
+Subject: [PATCH] pwm: mtk_disp: fix disp_pwm coverity issue
+Date:   Thu, 6 Jul 2023 18:04:54 +0800
+Message-ID: <20230706100454.28998-1-shuijing.li@mediatek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,51 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 2585cd62f098 ("bpf: Only reply field should be writeable"),
-sockops is not allowd to modify the replylong field except replylong[0].
-The reason is that the replylong[1] to replylong[3] field is not used
-at that time.
+There is a coverity issue in the original mtk_disp_pwm_get_state()
+function. In function call DIV64_U64_ROUND_UP, division by expression
+Which may be zero has undefined behavior.
+Fix this accordingly.
 
-But in actual use, we can call `BPF_CGROUP_RUN_PROG_SOCK_OPS` in the
-kernel modules and expect sockops to return some useful data.
-
-The design comment about bpf_sock_ops::replylong in 
-include/uapi/linux/bpf.h is described as follows:
-
-```
-  struct bpf_sock_ops {
-	__u32 op;
-	union {
-		__u32 args[4];		/* Optionally passed to bpf program */
-		__u32 reply;		/* Returned by bpf program	    */
-		__u32 replylong[4];	/* Optioznally returned by bpf prog  */
-	};
-  ...
-```
-
-It seems to contradict the purpose for which the field was originally
-designed. Let's remove this restriction.
-
-Fixes: 2585cd62f098 ("bpf: Only reply field should be writeable")
-
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
+Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
 ---
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pwm/pwm-mtk-disp.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 06ba0e56e369..4662d2d3a0af 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9063,7 +9063,7 @@ static bool sock_ops_is_valid_access(int off, int size,
+diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+index 79e321e96f56..ca00058a6ef4 100644
+--- a/drivers/pwm/pwm-mtk-disp.c
++++ b/drivers/pwm/pwm-mtk-disp.c
+@@ -196,6 +196,14 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+ 		return err;
+ 	}
  
- 	if (type == BPF_WRITE) {
- 		switch (off) {
--		case offsetof(struct bpf_sock_ops, reply):
-+		case bpf_ctx_range_till(struct bpf_sock_ops, reply, replylong[3]):
- 		case offsetof(struct bpf_sock_ops, sk_txhash):
- 			if (size != size_default)
- 				return false;
++	rate = clk_get_rate(mdp->clk_main);
++	if (rate <= 0) {
++		dev_err(chip->dev, "Can't get rate: %pe\n", ERR_PTR(rate));
++		clk_disable_unprepare(mdp->clk_mm);
++		clk_disable_unprepare(mdp->clk_main);
++		return err;
++	}
++
+ 	/*
+ 	 * Apply DISP_PWM_DEBUG settings to choose whether to enable or disable
+ 	 * registers double buffer and manual commit to working register before
+@@ -206,7 +214,6 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+ 					 mdp->data->bls_debug_mask,
+ 					 mdp->data->bls_debug_mask);
+ 
+-	rate = clk_get_rate(mdp->clk_main);
+ 	con0 = readl(mdp->base + mdp->data->con0);
+ 	con1 = readl(mdp->base + mdp->data->con1);
+ 	pwm_en = readl(mdp->base + DISP_PWM_EN);
 -- 
-2.33.0
+2.40.1
 
