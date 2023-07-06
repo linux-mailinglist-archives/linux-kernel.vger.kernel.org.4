@@ -2,300 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E122B749634
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288DE74962F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbjGFHUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S233714AbjGFHR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbjGFHUJ (ORCPT
+        with ESMTP id S233401AbjGFHRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:20:09 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357981BEB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:20:02 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6f0508f54so4440461fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688628000; x=1691220000;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=cMM/JKhymf2QTww3ufNFI5eYv4LI0VojyRQq8UqQbR0=;
-        b=TCngYVh5UCe5aCujjz8cVO6NfM+vf4AaK153X9x8q1taYuWwF2V2S748W9YntSs0Vs
-         /Ce6vCDiIO8VxO8WnoCOzoFt4lE5jQ91NqmQ2ILCSA6VfjoJmRNPRN/CIfMgwTawXNt1
-         YGsjfKWsphZP0ryythXMVprouE2vn7FKLJQ2gug32NOG5HMcG9SmkNVtpvW32OfT6xwR
-         h2xBoTyQa4o5BkajN+RrqkRN2xBTCSmKyD+IzxxKZnB2hIjuT9+9emA7x2oAJbPNPK7x
-         GpjHBTGiAln/vqjmjm4L+hafxgMq6rMPP3X89torWeIUob/ImptdOujse03LWkreJ+e+
-         J6rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688628000; x=1691220000;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cMM/JKhymf2QTww3ufNFI5eYv4LI0VojyRQq8UqQbR0=;
-        b=Jz+tAcKgFCAXcFwggMLr9qG/ettbrHYDIJ0p5ihWzVI40UTjdV+4cBNI1e7wN5icWa
-         tQzV76HF+ttzV5yCOXg+6tfnX9Zmx5tZHqJJbvzeMo+wbyRblBRkNmRypHPdxNzDaee3
-         L4XHuo3QucyAmwNA98y7C+U5bP7BtGRFxnQLx52zuQa6c26wt2XGdR4VkFMIdBpDMKdj
-         Jrg4Arqo20XtUpDVF8C2Q8OEVucxdYqsXS+T5hZbZt/UgAub34cPZQAUpXGrVHfdXZwq
-         GJxr+02u58ogwyVJ77AXqVh6tcTlAq/TPrd0QMI0NPaEqqkbzHm3I9exmZSOJLNNNM6k
-         kL/Q==
-X-Gm-Message-State: ABy/qLZKMeUpPjCi9lhIytHb3s9rY0GQMZ1MI0iJmUwpzJekBjUl9vov
-        Fxvqx1JQC0nHimH0BjdsqvAfLA==
-X-Google-Smtp-Source: APBJJlEOfmx5Lxbc0GW0fcG8wpIqHoQsATTy4OBvCxJoECYIzBSWj41jCXVmvIRvuEdF+uNWBta9jg==
-X-Received: by 2002:a2e:8908:0:b0:2b6:ee1c:216a with SMTP id d8-20020a2e8908000000b002b6ee1c216amr669843lji.34.1688628000429;
-        Thu, 06 Jul 2023 00:20:00 -0700 (PDT)
-Received: from localhost ([2a01:e0a:3c5:5fb0:4a33:b29e:11b3:752b])
-        by smtp.gmail.com with ESMTPSA id l6-20020adfe586000000b003112f836d4esm1033839wrm.85.2023.07.06.00.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 00:20:00 -0700 (PDT)
-References: <20230705-b4-amlogic-bindings-convert-take2-v2-0-22be915ddc3b@linaro.org>
- <20230705-b4-amlogic-bindings-convert-take2-v2-2-22be915ddc3b@linaro.org>
- <20230705195631.GA1732680-robh@kernel.org>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Rob Herring <robh@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: clock: amlogic: convert
- amlogic,gxbb-aoclkc.txt to dt-schema
-Date:   Thu, 06 Jul 2023 09:15:26 +0200
-In-reply-to: <20230705195631.GA1732680-robh@kernel.org>
-Message-ID: <1jttuh5www.fsf@starbuckisacylon.baylibre.com>
+        Thu, 6 Jul 2023 03:17:49 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55BF198E;
+        Thu,  6 Jul 2023 00:17:47 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QxSXk5z2sz4f3mW0;
+        Thu,  6 Jul 2023 15:17:42 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7OVaqZkZ3pMNQ--.43123S4;
+        Thu, 06 Jul 2023 15:17:43 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        song@kernel.org, heinzm@redhat.com, neilb@suse.de,
+        jbrassow@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next 0/3] dm-raid: minor fixes
+Date:   Thu,  6 Jul 2023 15:16:19 +0800
+Message-Id: <20230706071622.563073-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCnD7OVaqZkZ3pMNQ--.43123S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYc7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yu Kuai <yukuai3@huawei.com>
 
-On Wed 05 Jul 2023 at 13:56, Rob Herring <robh@kernel.org> wrote:
+This patchset fix two straightforward and easy problems that is found by
+code review, please consider it for the next merge window.
 
-> On Wed, Jul 05, 2023 at 01:41:52PM +0200, Neil Armstrong wrote:
->> Convert the Amlogic Always-On Clock Controller bindings to dt-schema.
->> 
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>  .../bindings/clock/amlogic,gxbb-aoclkc.txt         |  64 -------------
->>  .../bindings/clock/amlogic,gxbb-aoclkc.yaml        | 101 +++++++++++++++++++++
->>  2 files changed, 101 insertions(+), 64 deletions(-)
->> 
->> diff --git
->> a/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.txt
->> b/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.txt
->> deleted file mode 100644
->> index c41f0be5d438..000000000000
->> --- a/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.txt
->> +++ /dev/null
->> @@ -1,64 +0,0 @@
->> -* Amlogic GXBB AO Clock and Reset Unit
->> -
->> -The Amlogic GXBB AO clock controller generates and supplies clock to various
->> -controllers within the Always-On part of the SoC.
->> -
->> -Required Properties:
->> -
->> -- compatible: value should be different for each SoC family as :
->> -	- GXBB (S905) : "amlogic,meson-gxbb-aoclkc"
->> -	- GXL (S905X, S905D) : "amlogic,meson-gxl-aoclkc"
->> -	- GXM (S912) : "amlogic,meson-gxm-aoclkc"
->> -	- AXG (A113D, A113X) : "amlogic,meson-axg-aoclkc"
->> -	- G12A (S905X2, S905D2, S905Y2) : "amlogic,meson-g12a-aoclkc"
->> -	followed by the common "amlogic,meson-gx-aoclkc"
->> -- clocks: list of clock phandle, one for each entry clock-names.
->> -- clock-names: should contain the following:
->> -  * "xtal"     : the platform xtal
->> -  * "mpeg-clk" : the main clock controller mother clock (aka clk81)
->> -  * "ext-32k-0"  : external 32kHz reference #0 if any (optional)
->> -  * "ext-32k-1"  : external 32kHz reference #1 if any (optional - gx only)
->> -  * "ext-32k-2"  : external 32kHz reference #2 if any (optional - gx only)
->> -
->> -- #clock-cells: should be 1.
->> -
->> -Each clock is assigned an identifier and client nodes can use this identifier
->> -to specify the clock which they consume. All available clocks are defined as
->> -preprocessor macros in the dt-bindings/clock/gxbb-aoclkc.h header and can be
->> -used in device tree sources.
->> -
->> -- #reset-cells: should be 1.
->> -
->> -Each reset is assigned an identifier and client nodes can use this identifier
->> -to specify the reset which they consume. All available resets are defined as
->> -preprocessor macros in the dt-bindings/reset/gxbb-aoclkc.h header and can be
->> -used in device tree sources.
->> -
->> -Parent node should have the following properties :
->> -- compatible: "amlogic,meson-gx-ao-sysctrl", "syscon", "simple-mfd"
->> -- reg: base address and size of the AO system control register space.
->> -
->> -Example: AO Clock controller node:
->> -
->> -ao_sysctrl: sys-ctrl@0 {
->> -	compatible = "amlogic,meson-gx-ao-sysctrl", "syscon", "simple-mfd";
->> -	reg =  <0x0 0x0 0x0 0x100>;
->> -
->> -	clkc_AO: clock-controller {
->> -		compatible = "amlogic,meson-gxbb-aoclkc", "amlogic,meson-gx-aoclkc";
->> -		#clock-cells = <1>;
->> -		#reset-cells = <1>;
->> -		clocks = <&xtal>, <&clkc CLKID_CLK81>;
->> -		clock-names = "xtal", "mpeg-clk";
->> -	};
->> -
->> -Example: UART controller node that consumes the clock and reset generated
->> -  by the clock controller:
->> -
->> -	uart_AO: serial@4c0 {
->> -		compatible = "amlogic,meson-uart";
->> -		reg = <0x4c0 0x14>;
->> -		interrupts = <0 90 1>;
->> -		clocks = <&clkc_AO CLKID_AO_UART1>;
->> -		resets = <&clkc_AO RESET_AO_UART1>;
->> -	};
->> diff --git
->> a/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.yaml
->> b/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.yaml
->> new file mode 100644
->> index 000000000000..0adcfbcf5c85
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.yaml
->> @@ -0,0 +1,101 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/amlogic,gxbb-aoclkc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Amlogic Always-On Clock Controller
->> +
->> +maintainers:
->> +  - Neil Armstrong <neil.armstrong@linaro.org>
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - amlogic,meson-gxbb-aoclkc
->> +              - amlogic,meson-gxl-aoclkc
->> +              - amlogic,meson-gxm-aoclkc
->> +              - amlogic,meson-axg-aoclkc
->> +          - const: amlogic,meson-gx-aoclkc
->> +      - enum:
->> +          - amlogic,meson-axg-aoclkc
->> +          - amlogic,meson-g12a-aoclkc
->> +
->> +  clocks:
->> +    minItems: 2
->> +    maxItems: 5
->> +
->> +  clock-names:
->> +    minItems: 2
->> +    maxItems: 5
->> +
->> +  '#clock-cells':
->> +    const: 1
->> +
->> +  '#reset-cells':
->> +    const: 1
->> +
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +  - '#clock-cells'
->> +  - '#reset-cells'
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - amlogic,meson-gxbb-aoclkc
->> +
->> +    then:
->> +      properties:
->> +        clock-names:
->> +          minItems: 2
->> +          items:
->> +            - const: xtal 
->> +            - const: mpeg-clk
->> +            - const: ext-32k-0
->> +            - const: ext-32k-1
->> +            - const: ext-32k-2
->
-> As the names are always the same, move this to top-level and just set 
-> the length here (except the constraints are the same as top-level, so 
-> you can just drop this if/then).
+Yu Kuai (3):
+  md/dm-raid: fix that 'reconfig_mutex' is not released from error path
+    in raid_ctr()
+  md/dm-raid: cleanup multiple equivalent goto tags from raid_ctr()
+  md/dm-raid: protect md_stop() with 'reconfig_mutex'
 
-If this is done, aren't we losing information ?
+ drivers/md/dm-raid.c | 20 +++++++++-----------
+ drivers/md/md.c      |  2 ++
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-For example, "ext-32k-1" would become valid with a g12a as long as the
-number of clocks is alright, which it is not.
-
-I'm not concerned by the automated verification, more the information
-provided to the users, which we used to have in the txt format.
-
->
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - amlogic,meson-g12a-aoclkc
->> +
->> +    then:
->> +      properties:
->> +        clocks:
->> +          maxItems: 3
->> +
->> +        clock-names:
->> +          minItems: 2
->> +          items:
->> +            - const: xtal 
->> +            - const: mpeg-clk
->> +            - const: ext-32k-0
->
-> Just 'maxItems: 3'
->
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - amlogic,meson-gxl-aoclkc
->> +            - amlogic,meson-gxm-aoclkc
->> +            - amlogic,meson-axg-aoclkc
->> +
->> +    then:
->> +      properties:
->> +        clocks:
->> +          maxItems: 2
->> +
->> +        clock-names:
->> +          items:
->> +            - const: xtal 
->> +            - const: mpeg-clk
->
-> maxItems: 2
->
->> +
->> +additionalProperties: false
->> 
->> -- 
->> 2.34.1
->> 
+-- 
+2.39.2
 
