@@ -2,73 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8E87494AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2794D7494BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjGFE1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 00:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S232604AbjGFEe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 00:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjGFE1d (ORCPT
+        with ESMTP id S229498AbjGFEe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 00:27:33 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829F31BD0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 21:27:32 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-400aaafa491so2955811cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 21:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688617651; x=1691209651;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lWn3ZmGsuOlmAkmehfw3AOignGBknyVRUgruIj3HTDY=;
-        b=I6/AatYJtVquephqTGfDOLAZ095BICv1inuNDwxYqUoGQKd4Ks7xN8Sj7VthJgJHID
-         UioKpjBih4zSIG+3rqBLMokxxAreB5IfSFfjYDxNI//YE1D18mFhFX26jzKS/13ZHqiS
-         V5dEYnpIeaq1CRYhuYQpLXP82SQwXqaer6ASfNl70LxkzepwrQn3cZLB8J9fZy6PlchU
-         +H+Q5DBGHPlD0xzalmC9UlzaNiza6/vuK+hN88nYgnWhTSTjInHvNqCM2b9+4iKn+EuL
-         DSeYNSk8IsaK3DZc6ghlTZjWtLnE7oOz35A+eDgXuaEEW1/SuHifeFp608bBpOARYpEe
-         bA7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688617651; x=1691209651;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lWn3ZmGsuOlmAkmehfw3AOignGBknyVRUgruIj3HTDY=;
-        b=VyhJt7bs87wgdR0+fkkQX/8CQc2dJCeNjGmUc3mk397tfjAQnGsxkaxXj2a33Az1no
-         1k8/vvUrYEywfDYP+3Zvnm+C7B1al2FI34/eA9n/8FzjSGFMwph+oyae+feVnHDW8ldP
-         MCRmrLyJNbb6155FNIUIip8+1jqvcJ3UC6B0bVBtco0PcV2E2qxpf4wCt4Q9bCLhEq9l
-         tjRehGAZRcI7bFJ3mXd2pNQ55I5vyfdcfuiUTBZtQjOFa5pUvI/MD6Y4VSaaG7S6oVpm
-         UuZbvoQjSFu5mo+7GkQ9qwhthdaKejL7T2LNA7HI87zos33rtmg/oLppyI0XA6be4CT5
-         aSeA==
-X-Gm-Message-State: ABy/qLZjLXTNhXGq/lU9xPo2ZiwLNzqWWRQDb2dTa3JBhpAap9ddUsYd
-        yHU1usSl0QBq45QxuYg2He7qWw==
-X-Google-Smtp-Source: APBJJlHBTMfw8j9NVv45cPqnaVRJE9Hz2jtigI6TMIiJsXSTrNrAd9L/9DAMRmi2JyXZPsLJ+H+JoQ==
-X-Received: by 2002:a05:622a:c:b0:403:4fa6:a5d5 with SMTP id x12-20020a05622a000c00b004034fa6a5d5mr821207qtw.64.1688617651177;
-        Wed, 05 Jul 2023 21:27:31 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id s2-20020a639242000000b00553c09cc795sm361895pgn.50.2023.07.05.21.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 21:27:30 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 09:57:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Conghui Chen <conghui.chen@intel.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 22/23] i2c: virtio: Remove #ifdef guards for PM related
- functions
-Message-ID: <20230706042728.htavo5bgeygjyfau@vireshk-i7>
-References: <20230705204314.89800-1-paul@crapouillou.net>
- <20230705204521.90050-1-paul@crapouillou.net>
- <20230705204521.90050-4-paul@crapouillou.net>
+        Thu, 6 Jul 2023 00:34:56 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0DF1BD0;
+        Wed,  5 Jul 2023 21:34:53 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3664YemF011160;
+        Wed, 5 Jul 2023 23:34:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688618080;
+        bh=/7cX9tOZWVlh0hZDtrY+9qt2WdQ1rRynHG3OqkhVaQ8=;
+        h=From:To:CC:Subject:Date;
+        b=QxxF7N9XbQ8nL2PCfO4CIQdYm2fhsZcaCQg7fIKMA2Iocq/EOGYBohrgtjlWUIDpE
+         a+0CKh8b1yqAaIo5nkchaaMsIJjrHZxHbBgCpQCGkIQwOmPuEzsA907Xw+cee98Inz
+         IRX+uvUTZE7MEUUh/y4gOZPu7mAc2xjUVxTzrDKc=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3664YdL0111329
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 5 Jul 2023 23:34:40 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 5
+ Jul 2023 23:34:39 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 5 Jul 2023 23:34:39 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3664Yc6j061311;
+        Wed, 5 Jul 2023 23:34:39 -0500
+From:   Achal Verma <a-verma1@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-omap@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
+Subject: [PATCH v2] PCI: j721e: Delay 100ms T_PVPERL from power stable to PERST# inactive
+Date:   Thu, 6 Jul 2023 10:04:38 +0530
+Message-ID: <20230706043438.407600-1-a-verma1@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705204521.90050-4-paul@crapouillou.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,60 +67,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-07-23, 22:45, Paul Cercueil wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
-> 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> ---
-> Cc: Conghui Chen <conghui.chen@intel.com>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: virtualization@lists.linux-foundation.org
-> ---
->  drivers/i2c/busses/i2c-virtio.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-> index 4b9536f50800..c60ae531ba57 100644
-> --- a/drivers/i2c/busses/i2c-virtio.c
-> +++ b/drivers/i2c/busses/i2c-virtio.c
-> @@ -243,7 +243,6 @@ static struct virtio_device_id id_table[] = {
->  };
->  MODULE_DEVICE_TABLE(virtio, id_table);
->  
-> -#ifdef CONFIG_PM_SLEEP
->  static int virtio_i2c_freeze(struct virtio_device *vdev)
->  {
->  	virtio_i2c_del_vqs(vdev);
-> @@ -254,7 +253,6 @@ static int virtio_i2c_restore(struct virtio_device *vdev)
->  {
->  	return virtio_i2c_setup_vqs(vdev->priv);
->  }
-> -#endif
->  
->  static const unsigned int features[] = {
->  	VIRTIO_I2C_F_ZERO_LENGTH_REQUEST,
-> @@ -269,10 +267,8 @@ static struct virtio_driver virtio_i2c_driver = {
->  	.driver			= {
->  		.name	= "i2c_virtio",
->  	},
-> -#ifdef CONFIG_PM_SLEEP
-> -	.freeze = virtio_i2c_freeze,
-> -	.restore = virtio_i2c_restore,
-> -#endif
-> +	.freeze			= pm_sleep_ptr(virtio_i2c_freeze),
-> +	.restore		= pm_sleep_ptr(virtio_i2c_restore),
->  };
->  module_virtio_driver(virtio_i2c_driver);
->  
+As per the PCIe Card Electromechanical specification REV. 5.0, PERST#
+signal should be de-asserted after minimum 100ms from the time power-rails
+become stable.
+So, to ensure 100ms delay to give sufficient time for power-rails and
+refclk to become stable, change delay from 100us to 100ms.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+From PCIe Card Electromechanical specification REV. 5.0 section 2.9.2:
+TPVPERL: Power stable to PERST# inactive - 100ms
+T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
 
+Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
+Signed-off-by: Achal Verma <a-verma1@ti.com>
+---
+ drivers/pci/controller/cadence/pci-j721e.c | 11 +++++------
+ drivers/pci/pci.h                          |  2 ++
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+index e70213c9060a..a3c8273b7320 100644
+--- a/drivers/pci/controller/cadence/pci-j721e.c
++++ b/drivers/pci/controller/cadence/pci-j721e.c
+@@ -498,14 +498,13 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+ 
+ 		/*
+ 		 * "Power Sequencing and Reset Signal Timings" table in
+-		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
+-		 * indicates PERST# should be deasserted after minimum of 100us
+-		 * once REFCLK is stable. The REFCLK to the connector in RC
+-		 * mode is selected while enabling the PHY. So deassert PERST#
+-		 * after 100 us.
++		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 5.0
++		 * indicates PERST# should be deasserted after minimum of 100ms
++		 * after power rails achieve specified operating limits and
++		 * within this period reference clock should also become stable.
+ 		 */
+ 		if (gpiod) {
+-			usleep_range(100, 200);
++			msleep(PCI_TPVPERL_DELAY);
+ 			gpiod_set_value_cansleep(gpiod, 1);
+ 		}
+ 
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index a4c397434057..7482cff16fef 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -13,6 +13,8 @@
+ 
+ #define PCIE_LINK_RETRAIN_TIMEOUT_MS	1000
+ 
++#define PCI_TPVPERL_DELAY	100	/* msec; see PCIe r5.0, sec 2.9.2 */
++
+ extern const unsigned char pcie_link_speed[];
+ extern bool pci_early_dump;
+ 
 -- 
-viresh
+2.25.1
+
