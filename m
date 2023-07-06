@@ -2,126 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EBB74A088
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A3A74A08C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbjGFPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S232634AbjGFPMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjGFPL4 (ORCPT
+        with ESMTP id S229641AbjGFPMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:11:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B424B2;
-        Thu,  6 Jul 2023 08:11:55 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366Dal9L019446;
-        Thu, 6 Jul 2023 15:11:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jN0iR259ckPJdoT6y2gSZBDtuULZgboI5+8qTA0VQZc=;
- b=hBmsU/quEiwrRVA+ofRLBz14TPbSZWFK0tPyjTuf5ZCegjqOSSJtIApjAeqNGjJbyeHQ
- AZJhYm2PBltowgYEv9ZWDWwJxQb/W4HouSXK+bzsSVLIdGCBCY3cYivo+4uscKV4IWAa
- XdLUakTX1su2o6Tqp1TMQZNz0//VftkmlQOFzw/LRFkFYLo1N1wwCESIdBQ7FhGmgtWM
- R7ZTVOXhzivGRNColioZy2k+OSWhrSyp71T3O0m6lldqrAYTPxAWNjyhjBm7vvoUprPd
- 8L985ljxlfWeqXnGSn4Xxv4rBWf27SWXA6ntPlqJF2DJ82FLYF/EPiOjLrWxcTMzBbkl iQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnvaa8hya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 15:11:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366FBo7f025870
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 15:11:50 GMT
-Received: from [10.216.13.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
- 2023 08:11:45 -0700
-Message-ID: <a50921ca-c858-dacc-6849-4898fdf7683c@quicinc.com>
-Date:   Thu, 6 Jul 2023 20:41:40 +0530
+        Thu, 6 Jul 2023 11:12:48 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3D7FC;
+        Thu,  6 Jul 2023 08:12:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vml4Kei_1688656357;
+Received: from 192.168.3.2(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vml4Kei_1688656357)
+          by smtp.aliyun-inc.com;
+          Thu, 06 Jul 2023 23:12:39 +0800
+Message-ID: <4949c20e-177f-7952-7870-41f3b3fd791f@linux.alibaba.com>
+Date:   Thu, 6 Jul 2023 23:12:37 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm7550ba
- support
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-References: <1688650209-25119-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688650209-25119-2-git-send-email-quic_rohiagar@quicinc.com>
- <4042fa22-8948-49c9-6e5c-dc8926ed5f99@linaro.org>
- <6d067262-d8af-f6f3-4ef7-870eafa15f46@quicinc.com>
- <8b04d830-4710-7f26-09e8-326b69d72396@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <8b04d830-4710-7f26-09e8-326b69d72396@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lzasmjBCY-PX2tD0BY71I3rVHJCCIeEI
-X-Proofpoint-ORIG-GUID: lzasmjBCY-PX2tD0BY71I3rVHJCCIeEI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_10,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=917 impostorscore=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 mlxscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060136
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v2 39/92] erofs: convert to ctime accessor functions
+To:     Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-37-jlayton@kernel.org>
+ <20230706110007.dc4tpyt5e6wxi5pt@quack3>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230706110007.dc4tpyt5e6wxi5pt@quack3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jan,
 
-On 7/6/2023 8:34 PM, Konrad Dybcio wrote:
-> On 6.07.2023 16:45, Rohit Agarwal wrote:
->> On 7/6/2023 8:05 PM, Krzysztof Kozlowski wrote:
->>> On 06/07/2023 15:30, Rohit Agarwal wrote:
->>>> Add support for the pm7550ba GPIO support to the Qualcomm PMIC GPIO
->>>> binding.
->>>>
->>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>>> ---
->>>>    Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 3 +++
->>> I doubt that all your patches here and other patchsets are v1. Otherwise
->>> how did you get my Acks and Rbs? Please use proper versioning and
->>> provide changelog.
->>>
->>> What changed here?
->> Actually this is part of the original bigger series [1] that as per Bjorn's suggestion need to be broken
->> down according to the subsystem/maintainer.
->> Since it got broken down into multiple smaller series, I didnt include the versioning.
-> All of that information should be included in the cover letter, to
-> limit confusion both for maintainers and patch workflow tools.
->
-> Since these patches all come from a separate series, it would be
-> good for you to version this one as v(BIG_SERIES_REVISION)+1 because
-> they've already been on LKML at least once. That would especially hold
-> true if this revision included any changes.
-Understood. Will send all the smaller series again with v2 as version 
-with changelog.
+On 2023/7/6 19:00, Jan Kara wrote:
+> On Wed 05-07-23 15:01:04, Jeff Layton wrote:
+>> In later patches, we're going to change how the inode's ctime field is
+>> used. Switch to using accessor functions instead of raw accesses of
+>> inode->i_ctime.
+>>
+>> Acked-by: Gao Xiang <xiang@kernel.org>
+>> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> 
+> Just one nit below:
+> 
+>> @@ -176,10 +175,10 @@ static void *erofs_read_inode(struct erofs_buf *buf,
+>>   		vi->chunkbits = sb->s_blocksize_bits +
+>>   			(vi->chunkformat & EROFS_CHUNK_FORMAT_BLKBITS_MASK);
+>>   	}
+>> -	inode->i_mtime.tv_sec = inode->i_ctime.tv_sec;
+>> -	inode->i_atime.tv_sec = inode->i_ctime.tv_sec;
+>> -	inode->i_mtime.tv_nsec = inode->i_ctime.tv_nsec;
+>> -	inode->i_atime.tv_nsec = inode->i_ctime.tv_nsec;
+>> +	inode->i_mtime.tv_sec = inode_get_ctime(inode).tv_sec;
+>> +	inode->i_atime.tv_sec = inode_get_ctime(inode).tv_sec;
+>> +	inode->i_mtime.tv_nsec = inode_get_ctime(inode).tv_nsec;
+>> +	inode->i_atime.tv_nsec = inode_get_ctime(inode).tv_nsec;
+> 
+> Isn't this just longer way to write:
+> 
+> 	inode->i_atime = inode->i_mtime = inode_get_ctime(inode);
+
+I'm fine with this.  I think we could use this (although I'm not sure
+if checkpatch will complain but personally I'm fine.)
 
 Thanks,
-Rohit.
-> Konrad
->> [1] https://lore.kernel.org/all/9de424ca-271a-8ed2-5550-658a828c4ea5@quicinc.com/
->>
->>> Best regards,
->>> Krzysztof
->>>
+Gao Xiang
+
+> 
+> ?
+> 
+> 								Honza
