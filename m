@@ -2,184 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3077499A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871BE7499A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjGFKov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S231921AbjGFKpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGFKot (ORCPT
+        with ESMTP id S231721AbjGFKpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:44:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA5B1BC2;
-        Thu,  6 Jul 2023 03:44:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id ED999229E6;
-        Thu,  6 Jul 2023 10:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688640286; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B9t1yX8QtWH+Q8UoCt6rkOESZQWw8jliHIlvo7XWN7Q=;
-        b=JjaoaPL3qffj88F1KesDyv91xqs+6qLDjhr515N9rL+h7IU0C0zmjbOFTOn0hAC8ltH4OJ
-        OsevYl8nqhEE2AuWTCZX42mbdJS2BBzcFL8YifbJqD93FIxzg68gVNbfZFWXSLHUaWNuJx
-        ab0XV8dh/mSXzFVpyw2iV8QokTkWf2w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688640286;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B9t1yX8QtWH+Q8UoCt6rkOESZQWw8jliHIlvo7XWN7Q=;
-        b=6wnvT5/J5ovpk4p4zs560RCATS2EtWTQxu9QZ8KS308olyPVEJ/1piFaIid07SV+2B9lKt
-        SqVe4Mv2MXtJnwCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DDBF2138EE;
-        Thu,  6 Jul 2023 10:44:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FgQWNh6bpmT1fQAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 10:44:46 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 73C55A0707; Thu,  6 Jul 2023 12:44:46 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 12:44:46 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 28/92] bfs: convert to ctime accessor functions
-Message-ID: <20230706104446.gyx4d7msxoi5v377@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-26-jlayton@kernel.org>
+        Thu, 6 Jul 2023 06:45:10 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727501BE2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:45:05 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so3241169a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688640303; x=1691232303;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pD6hZ44MFbYt/UszAkJfIYSV5b+f9zyLL4y7Cfkx3Ak=;
+        b=CWWaS3ZTaVXEJM660tBgvPnZ+4k4euGT2xUzWummv7IyL9vXhsKkmB7ue+fU8ZnJC/
+         dYV3dDC2AkZJnT4Cgy7x05GjRiKFGxzuydT8DQu55WTzIC5etUxaV8/ofWRTF8YeNeoJ
+         zPNb2/yY9xgmRJ9/7KK9FTUAEGGzysWktq2E4abOid6QrFlaxV/QfZFl7LWIWmZ1ZJaV
+         0EP7Dv8B5pARaGz01OhWnQ9WFFwhIAXtle145P1pYAej0PVGq5BXF1KROGduDPOUwJWy
+         kDL+FNT+UyzBlPkdZ+F6o6Hre2G4d/eoDYSnvG2RBunB0MlI7m4fNCZPiS2khvLc2NFX
+         cGfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688640303; x=1691232303;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pD6hZ44MFbYt/UszAkJfIYSV5b+f9zyLL4y7Cfkx3Ak=;
+        b=Fica1K4cfNQLoEsJ2VYGGcYYmcRgNlCFC92YdfSMNutD/s710QINKIqqElpUCODv0K
+         GAcQUphqTbDH6uPneIh7FCbyAMsR0pykwDSjBA/ZfqdaWCF/tCLpR6LygfvSHt0HHxXK
+         7D01KHOWjsSuGobeGcVV7a0idQI1U5e9uVykF4KgmPIWmZ3aJq8xkTph7a3WzDd7DJlz
+         SH9T3/4w80gtAh7I+gm8vtPi9iXNlbINTgx7GCFxRSVVYrKRoCTxYWjyiUWBfg6bB7iX
+         wfiTPPXVtPqYMeF1AtcEOS1NMZT1wVE0zcXxSrY/mbMpXYPFNLEqoGRoNEKsFjUyzsaJ
+         dNQQ==
+X-Gm-Message-State: ABy/qLZnFXtdDURDL+aZ4Q7kGVIISob+kwHiM0yYstwwK5+eeaW4+td6
+        eIS6zz/QPZHjGz9oyUclAIBjZA==
+X-Google-Smtp-Source: APBJJlG++mgKMQOJPcz/Iqpz4Kiz/jgPDOca3K9+Z53sqFbFwbHXoXykLAyHbLnxyojCXVAQQP5H9Q==
+X-Received: by 2002:a17:907:6e07:b0:98e:1c4b:10e2 with SMTP id sd7-20020a1709076e0700b0098e1c4b10e2mr4822166ejc.20.1688640303548;
+        Thu, 06 Jul 2023 03:45:03 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id o26-20020a17090608da00b00992f1a3b9bfsm648074eje.170.2023.07.06.03.45.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 03:45:03 -0700 (PDT)
+Message-ID: <318ab229-f29f-e6aa-16b8-79fa09013794@linaro.org>
+Date:   Thu, 6 Jul 2023 12:45:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705190309.579783-26-jlayton@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: power: rpmpd: Remove the SoC specific
+ entries
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <1688635218-23779-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1688635218-23779-2-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1688635218-23779-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 05-07-23 15:00:53, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On 06/07/2023 11:20, Rohit Agarwal wrote:
+> Remove the SoC specific entries and add a generic set of defines
+> that can be used by all the SoCs. This will remove the duplicate
+> entries among SoCs.
+> The arrangement of the defines is done according to the frequency
+> used in SoC specific entries in the driver to avoid wastage of
+> memory.
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Looks good. Feel free to add:
+Please compile kernel with this commit and tell us what is wrong... Even
+if bindings were not an ABI, but they are, this would not work.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Best regards,
+Krzysztof
 
-								Honza
-
-> ---
->  fs/bfs/dir.c   | 16 ++++++++--------
->  fs/bfs/inode.c |  5 ++---
->  2 files changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/fs/bfs/dir.c b/fs/bfs/dir.c
-> index d2e8a2a56b05..12b8af04dcb3 100644
-> --- a/fs/bfs/dir.c
-> +++ b/fs/bfs/dir.c
-> @@ -97,7 +97,7 @@ static int bfs_create(struct mnt_idmap *idmap, struct inode *dir,
->  	set_bit(ino, info->si_imap);
->  	info->si_freei--;
->  	inode_init_owner(&nop_mnt_idmap, inode, dir, mode);
-> -	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-> +	inode->i_mtime = inode->i_atime = inode_set_ctime_current(inode);
->  	inode->i_blocks = 0;
->  	inode->i_op = &bfs_file_inops;
->  	inode->i_fop = &bfs_file_operations;
-> @@ -158,7 +158,7 @@ static int bfs_link(struct dentry *old, struct inode *dir,
->  		return err;
->  	}
->  	inc_nlink(inode);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_set_ctime_current(inode);
->  	mark_inode_dirty(inode);
->  	ihold(inode);
->  	d_instantiate(new, inode);
-> @@ -187,9 +187,9 @@ static int bfs_unlink(struct inode *dir, struct dentry *dentry)
->  	}
->  	de->ino = 0;
->  	mark_buffer_dirty_inode(bh, dir);
-> -	dir->i_ctime = dir->i_mtime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
-> -	inode->i_ctime = dir->i_ctime;
-> +	inode_set_ctime_to_ts(inode, inode_get_ctime(dir));
->  	inode_dec_link_count(inode);
->  	error = 0;
->  
-> @@ -240,10 +240,10 @@ static int bfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
->  			goto end_rename;
->  	}
->  	old_de->ino = 0;
-> -	old_dir->i_ctime = old_dir->i_mtime = current_time(old_dir);
-> +	old_dir->i_mtime = inode_set_ctime_current(old_dir);
->  	mark_inode_dirty(old_dir);
->  	if (new_inode) {
-> -		new_inode->i_ctime = current_time(new_inode);
-> +		inode_set_ctime_current(new_inode);
->  		inode_dec_link_count(new_inode);
->  	}
->  	mark_buffer_dirty_inode(old_bh, old_dir);
-> @@ -292,9 +292,9 @@ static int bfs_add_entry(struct inode *dir, const struct qstr *child, int ino)
->  				pos = (block - sblock) * BFS_BSIZE + off;
->  				if (pos >= dir->i_size) {
->  					dir->i_size += BFS_DIRENT_SIZE;
-> -					dir->i_ctime = current_time(dir);
-> +					inode_set_ctime_current(dir);
->  				}
-> -				dir->i_mtime = dir->i_ctime = current_time(dir);
-> +				dir->i_mtime = inode_set_ctime_current(dir);
->  				mark_inode_dirty(dir);
->  				de->ino = cpu_to_le16((u16)ino);
->  				for (i = 0; i < BFS_NAMELEN; i++)
-> diff --git a/fs/bfs/inode.c b/fs/bfs/inode.c
-> index 1926bec2c850..e6a76ae9eb44 100644
-> --- a/fs/bfs/inode.c
-> +++ b/fs/bfs/inode.c
-> @@ -82,10 +82,9 @@ struct inode *bfs_iget(struct super_block *sb, unsigned long ino)
->  	inode->i_blocks = BFS_FILEBLOCKS(di);
->  	inode->i_atime.tv_sec =  le32_to_cpu(di->i_atime);
->  	inode->i_mtime.tv_sec =  le32_to_cpu(di->i_mtime);
-> -	inode->i_ctime.tv_sec =  le32_to_cpu(di->i_ctime);
-> +	inode_set_ctime(inode, le32_to_cpu(di->i_ctime), 0);
->  	inode->i_atime.tv_nsec = 0;
->  	inode->i_mtime.tv_nsec = 0;
-> -	inode->i_ctime.tv_nsec = 0;
->  
->  	brelse(bh);
->  	unlock_new_inode(inode);
-> @@ -143,7 +142,7 @@ static int bfs_write_inode(struct inode *inode, struct writeback_control *wbc)
->  	di->i_nlink = cpu_to_le32(inode->i_nlink);
->  	di->i_atime = cpu_to_le32(inode->i_atime.tv_sec);
->  	di->i_mtime = cpu_to_le32(inode->i_mtime.tv_sec);
-> -	di->i_ctime = cpu_to_le32(inode->i_ctime.tv_sec);
-> +	di->i_ctime = cpu_to_le32(inode_get_ctime(inode).tv_sec);
->  	i_sblock = BFS_I(inode)->i_sblock;
->  	di->i_sblock = cpu_to_le32(i_sblock);
->  	di->i_eblock = cpu_to_le32(BFS_I(inode)->i_eblock);
-> -- 
-> 2.41.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
