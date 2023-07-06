@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD57499C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD067499D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjGFKvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S231937AbjGFKvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjGFKuu (ORCPT
+        with ESMTP id S229945AbjGFKvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:50:50 -0400
-Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5231F1FED;
-        Thu,  6 Jul 2023 03:50:47 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="103028920"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684767600"; 
-   d="scan'208";a="103028920"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 19:50:44 +0900
-Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
-        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id DC349D29E1;
-        Thu,  6 Jul 2023 19:50:42 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 1A1D0D9482;
-        Thu,  6 Jul 2023 19:50:42 +0900 (JST)
-Received: from [10.167.215.54] (unknown [10.167.215.54])
-        by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id BEBCC70BD9;
-        Thu,  6 Jul 2023 19:50:39 +0900 (JST)
-Message-ID: <7816e721-d0be-a146-4ab3-981a0619311e@fujitsu.com>
-Date:   Thu, 6 Jul 2023 18:50:38 +0800
+        Thu, 6 Jul 2023 06:51:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713871BC2;
+        Thu,  6 Jul 2023 03:51:40 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36670SRo006415;
+        Thu, 6 Jul 2023 10:51:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=0VfJCKUdOpIvVhewtbdCMSF2XmOCnStBUAa4TCfb2+Q=;
+ b=Xaq47u7cZaLgrHrtIEQiYu+N5OX9ecokFVZmGWu42/FwY2Os0v/1Jxbqma3gsdSmdK8I
+ 1gHCxV66CwEJji5QimffVhn9zeoT+JdwXMp3rM08nSTKBMMJQiES4HBPUplO2neoHW5a
+ VXg6mk8V715xFxAecDCTAZJaArHmxw//CTG5dMQVJx6hFs0ciLBWtLLpGIGZEF8nbY4d
+ IefPpqi/iPqSdNR4F1ZKI8ZjORfLFz/7Z9SRwjONWWoC+1YMawoniYWd17WApTLdAFAO
+ fdwwh4mnTIDEMeVyuChkyH+10J6URDxtJ3EK7HTS3DpD/87254+Qk5gMTOJGUmMeBPIC nA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rmxy93ghj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 10:51:36 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366ApZbT014692
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 10:51:35 GMT
+Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 03:51:30 -0700
+From:   Imran Shaik <quic_imrashai@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        "Melody Olvera" <quic_molvera@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+Subject: [PATCH V3 0/6] Update GCC clocks for QDU1000 and QRU1000 SoCs
+Date:   Thu, 6 Jul 2023 16:20:39 +0530
+Message-ID: <20230706105045.633076-1-quic_imrashai@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] cxl: fix CONFIG_FW_LOADER dependency
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230703112928.332321-1-arnd@kernel.org>
-From:   Xiao Yang <yangx.jy@fujitsu.com>
-In-Reply-To: <20230703112928.332321-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-27734.005
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-27734.005
-X-TMASE-Result: 10-0.799300-10.000000
-X-TMASE-MatchedRID: hwtUKlde9zGPvrMjLFD6eK5i3jK3KDOoC/ExpXrHizwzOk0/RiyBuak4
-        lLAFOnmC/Pc8drndASe+tYGi9QLNmq5eIDD1ppIU0QlBRwJqtSMbbhhV65kaY9uEAkFobdWZo8W
-        MkQWv6iUD0yuKrQIMCCAtDqHg/4Qmv79FIUygvZzZs3HUcS/scCq2rl3dzGQ1+hga1eR27pK58k
-        oA2iD482k6ZMp6CQdf0mnT/JDrtEpKDrTZjLnbCY2I6ly/IS1oILTEvFaCkR4CqAzD4rdFIwZjb
-        HmFoHt/5KURsc/QZz6F2JJaIjBHcl5/kgk8Ja9wMsqIZ2nIuPT3Bu44zcQFvQ==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JN7bSz4MR6787VV2N0KZNMN5A_Vub4sX
+X-Proofpoint-ORIG-GUID: JN7bSz4MR6787VV2N0KZNMN5A_Vub4sX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_07,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 suspectscore=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ adultscore=0 phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307060096
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/3 19:29, Arnd Bergmann wrote:
-> From: Arnd Bergmann<arnd@arndb.de>
-> 
-> When FW_LOADER is disabled, cxl fails to link:
-> 
-> arm-linux-gnueabi-ld: drivers/cxl/core/memdev.o: in function `cxl_memdev_setup_fw_upload':
-> memdev.c:(.text+0x90e): undefined reference to `firmware_upload_register'
-> memdev.c:(.text+0x93c): undefined reference to `firmware_upload_unregister'
-> 
-> In order to use the firmware_upload_register() function, both FW_LOADER
-> and FW_UPLOAD have to be enabled, which is a bit confusing. In addition,
-> the dependency is on the wrong symbol, as the caller is part of the
-> cxl_core.ko module, not the cxl_mem.ko module.
-> 
-> Fixes: 9521875bbe005 ("cxl: add a firmware update mechanism using the sysfs firmware loader")
-> Signed-off-by: Arnd Bergmann<arnd@arndb.de>
+Update GCC clocks and add support for GDSCs for QDU1000 and QRU1000 SoCs.
 
-Hi Arnd,
+Changes since v2:
+ - Split the gcc clkref clock changes as per the review comments
 
-It makes sense.
+Changes since v1:
+ - Dropped the v2 variant compatible changes
+ - Update tha maintainers list
+ - Split the GCC driver patch as per the review comments
 
-Reviewed-by: Xiao Yang <yangx.jy@fujitsu.com>
+Previous series:
+v2 - https://patchwork.kernel.org/project/linux-arm-msm/list/?series=760862
+v1 - https://patchwork.kernel.org/project/linux-arm-msm/list/?series=757828
 
-Best Regards,
-Xiao Yang
+Imran Shaik (6):
+  dt-bindings: clock: Update GCC clocks for QDU1000 and QRU1000 SoCs
+  clk: qcom: gcc-qdu1000: Fix gcc_pcie_0_pipe_clk_src clock handling
+  clk: qcom: gcc-qdu1000: Fix clkref clocks handling
+  clk: qcom: gcc-qdu1000: Update GCC clocks as per the latest hw version
+  clk: qcom: gcc-qdu1000: Add support for GDSCs
+  clk: qcom: gcc-qdu1000: Update the RCGs ops
+
+ .../bindings/clock/qcom,qdu1000-gcc.yaml      |   3 +-
+ drivers/clk/qcom/gcc-qdu1000.c                | 159 ++++++++++++------
+ include/dt-bindings/clock/qcom,qdu1000-gcc.h  |   4 +-
+ 3 files changed, 110 insertions(+), 56 deletions(-)
+
+-- 
+2.25.1
+
