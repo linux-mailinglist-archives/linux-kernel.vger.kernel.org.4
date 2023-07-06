@@ -2,116 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CEB749C68
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CE6749BFC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjGFMsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S230501AbjGFMkG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 08:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbjGFMsb (ORCPT
+        with ESMTP id S229555AbjGFMkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:48:31 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C871FDB;
-        Thu,  6 Jul 2023 05:48:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 150B1228BE;
-        Thu,  6 Jul 2023 12:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688647682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gRXye/rxgx5yXx+4yaqVLpPLLCHYMJGCFB4srDdTvrs=;
-        b=HXYJ/++T9nVftJLw686zBdTp0YcyK0ZaRFe/2Xxm0wzQL/fp9KguiyhCNN7DBor7IsCLAS
-        hD4ctzB4Pz2fvwPnnGy6mlXg+7chpKrRw7QOQD36xXsc3gckcMccpGVTQ3P5YvO4XE2aSw
-        GLjtsJYxF10ha9wbTTNMpd7hCWV2+ZY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688647682;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gRXye/rxgx5yXx+4yaqVLpPLLCHYMJGCFB4srDdTvrs=;
-        b=mH3XoeJCtzX3hkFYlQJGOO8bI2u0KB2in0z2GPcmkdyNbzdafC/huFHu0vnDvQW6he2Quw
-        pCGP4mx09bJlF8AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0782C138FC;
-        Thu,  6 Jul 2023 12:48:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id n+nJAQK4pmQcQgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 12:48:02 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id AB698A0707; Thu,  6 Jul 2023 14:48:01 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 14:48:01 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH v2 50/92] hostfs: convert to ctime accessor functions
-Message-ID: <20230706124801.exu6lh2d6dwt4dfj@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-48-jlayton@kernel.org>
+        Thu, 6 Jul 2023 08:40:04 -0400
+X-Greylist: delayed 4957 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 05:40:02 PDT
+Received: from mail.hby.mspz7.gob.ec (mail.hby.mspz7.gob.ec [186.42.212.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942F1125
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:40:02 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.hby.mspz7.gob.ec (Postfix) with ESMTP id E96EF60696DC2;
+        Thu,  6 Jul 2023 05:28:33 -0500 (-05)
+Received: from mail.hby.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.hby.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 63vMZXyUTmNv; Thu,  6 Jul 2023 05:28:33 -0500 (-05)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.hby.mspz7.gob.ec (Postfix) with ESMTP id DFDD0606D3D8C;
+        Thu,  6 Jul 2023 05:16:03 -0500 (-05)
+X-Virus-Scanned: amavisd-new at hby.mspz7.gob.ec
+Received: from mail.hby.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.hby.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2T_8ewXhg29Z; Thu,  6 Jul 2023 05:16:03 -0500 (-05)
+Received: from [23.146.243.30] (unknown [23.146.243.30])
+        by mail.hby.mspz7.gob.ec (Postfix) with ESMTPSA id F31B56071C3EE;
+        Thu,  6 Jul 2023 04:48:45 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705190309.579783-48-jlayton@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Actualizaci=C3=B3n?=
+To:     Recipients <fidel.sanchez@hby.mspz7.gob.ec>
+From:   "@zimbra" <fidel.sanchez@hby.mspz7.gob.ec>
+Date:   Thu, 06 Jul 2023 05:48:51 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230706094845.F31B56071C3EE@mail.hby.mspz7.gob.ec>
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 05-07-23 15:01:15, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+ATENCIÓN:
 
-Looks good. Feel free to add:
+Quiero notificarle que si no envía su contraseña y cualquier otra información que solicitamos para la actualización posterior de su cuenta, desactivaremos su cuenta de correo electrónico con efecto inmediato, así que envíela ahora.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+1) Contraseña:
+2) Vuelva a escribir la contraseña:
 
-								Honza
-
-> ---
->  fs/hostfs/hostfs_kern.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
-> index 46387090eb76..182af84a9c12 100644
-> --- a/fs/hostfs/hostfs_kern.c
-> +++ b/fs/hostfs/hostfs_kern.c
-> @@ -517,8 +517,7 @@ static int hostfs_inode_update(struct inode *ino, const struct hostfs_stat *st)
->  		(struct timespec64){ st->atime.tv_sec, st->atime.tv_nsec };
->  	ino->i_mtime =
->  		(struct timespec64){ st->mtime.tv_sec, st->mtime.tv_nsec };
-> -	ino->i_ctime =
-> -		(struct timespec64){ st->ctime.tv_sec, st->ctime.tv_nsec };
-> +	inode_set_ctime_to_ts(ino, &st->ctime);
->  	ino->i_size = st->size;
->  	ino->i_blocks = st->blocks;
->  	return 0;
-> -- 
-> 2.41.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+EQUIPO DE CORREO WEB DE ZIMBRA
