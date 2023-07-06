@@ -2,173 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04148749E18
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D36749E05
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjGFNqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S232515AbjGFNmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjGFNqx (ORCPT
+        with ESMTP id S231981AbjGFNmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:46:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344D31995;
-        Thu,  6 Jul 2023 06:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688651212; x=1720187212;
-  h=from:to:cc:subject:date:message-id;
-  bh=6EkHj8Bw4Z3C5EBn0opLRl9Jl1oeMCrRcvJqQmW0exk=;
-  b=btCJIlDjuW5j+ACuy8qcs301rJvkK1jWHuWiLX3ESKfw+YcEVqkQbIhk
-   Az3xXMA6wh7T5DkS3XcbwgT+FGFLi6J2263eNp7OJlWEEU3178uD2jVl+
-   Rc8jYd2mJjuSw6NiQRLymopeE7AHQZ9ve5M5s3wAfm9DgIS2wbzhwOHq3
-   AEs901QzGC8Uj7BHJbXNqHA2OpVgj9kGF9CZk+FNUcEh1Ht0X3G4jOYMV
-   XYKOqFhrsjv1hNPrdqa0gamqWSgtfgbO8OXEFoOmx9vT8ES/0KQf47BTj
-   MJAzbIFoaBaaonmFZT8EYLzAhN7JJD15WwvB1j/HM+X1c1BHWihSJt80O
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="362474720"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="362474720"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 06:46:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="832950424"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="832950424"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 06:46:48 -0700
-From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Koba Ko <koba.ko@canonical.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] EDAC/i10nm: Skip the absent memory controllers
-Date:   Thu,  6 Jul 2023 21:42:16 +0800
-Message-Id: <20230706134216.37044-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 09:42:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565131995;
+        Thu,  6 Jul 2023 06:42:32 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366DbsjB022795;
+        Thu, 6 Jul 2023 13:42:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=VhlngHdT+bLaZHNgtfZLx3ixUVJbx6zfQPz/4GVmbzc=;
+ b=A7JFVfaInb8n8+TgUkfs20EIpu+zIURaOlsjalpolz1vIqe1Ba4TsQ+B7x4UrjgRxznt
+ wtiOvyzyb9J/YOyobrelHj7VGeaV0bPq60MRveMRl15APmNxjovevlVIx6WIB3Ep+YNS
+ VgcLukxhtRZa/Qh5y6k1Tb5YXd/oNeJPmO+bvBkKvBxLsm8LoDKvkXpQVwLErwCjUKrm
+ xAscAXHguWfAYIKgYABKa6h/geDIz7VOwhcMkQHN97f3j1F2khke7jgztHcy8fCe3eNa
+ aZ6ojXAgc3v6a0eAtkAchppDV8Za9RbCgpxzbtT3ZllXE/X99x7J+5U8VAI/YyPlqJSG 8Q== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn152kpa2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 13:42:28 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 366DgNhv011396;
+        Thu, 6 Jul 2023 13:42:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3rjd7m053v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 06 Jul 2023 13:42:23 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 366DgNwR011144;
+        Thu, 6 Jul 2023 13:42:23 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 366DgN9e011034;
+        Thu, 06 Jul 2023 13:42:23 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 924DD4E6C; Thu,  6 Jul 2023 19:12:22 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        sboyd@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH 0/2] Add compatibles to support pmic chips
+Date:   Thu,  6 Jul 2023 19:12:18 +0530
+Message-Id: <1688650940-31388-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QDE9phH9pBCEsElJ-UiNrOXug-j-YdXN
+X-Proofpoint-ORIG-GUID: QDE9phH9pBCEsElJ-UiNrOXug-j-YdXN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_09,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 clxscore=1015 mlxlogscore=575
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060122
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some Sapphire Rapids workstations' absent memory controllers
-still appear as PCIe devices that fool the i10nm_edac driver
-and result in "shift exponet -66 is negative" call traces
-from skx_get_dimm_info().
+Hi,
 
-Skip the absent memory controllers to avoid the call traces.
+This series add compatible strings for pmic chip pm7550ba and
+pmx75.
 
-Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Closes: https://lore.kernel.org/linux-edac/CAAd53p41Ku1m1rapeqb1xtD+kKuk+BaUW=dumuoF0ZO3GhFjFA@mail.gmail.com/T/#m5de16dce60a8c836ec235868c7c16e3fefad0cc2
-Reported-by: Koba Ko <koba.ko@canonical.com>
-Closes: https://lore.kernel.org/linux-edac/SA1PR11MB71305B71CCCC3D9305835202892AA@SA1PR11MB7130.namprd11.prod.outlook.com/T/#t
-Fixes: d4dc89d069aa ("EDAC, i10nm: Add a driver for Intel 10nm server processors")
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/i10nm_base.c | 54 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 49 insertions(+), 5 deletions(-)
+Thanks,
+Rohit.
 
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index a897b6aff368..349ff6cfb379 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -658,13 +658,49 @@ static struct pci_dev *get_ddr_munit(struct skx_dev *d, int i, u32 *offset, unsi
- 	return mdev;
- }
- 
-+/**
-+ * i10nm_imc_absent() - Check whether the memory controller @imc is absent
-+ *
-+ * @imc    : The pointer to the structure of memory controller EDAC device.
-+ *
-+ * RETURNS : true if the memory controller EDAC device is absent, false otherwise.
-+ */
-+static bool i10nm_imc_absent(struct skx_imc *imc)
-+{
-+	u32 mcmtr;
-+	int i;
-+
-+	switch (res_cfg->type) {
-+	case SPR:
-+		for (i = 0; i < res_cfg->ddr_chan_num; i++) {
-+			mcmtr = I10NM_GET_MCMTR(imc, i);
-+			edac_dbg(1, "ch%d mcmtr reg %x\n", i, mcmtr);
-+			if (mcmtr != ~0)
-+				return false;
-+		}
-+
-+		/*
-+		 * Some workstations' absent memory controllers still
-+		 * appear as PCIe devices, misleading the EDAC driver.
-+		 * By observing that the MMIO registers of these absent
-+		 * memory controllers consistently hold the value of ~0.
-+		 *
-+		 * We identify a memory controller as absent by checking
-+		 * if its MMIO register "mcmtr" == ~0 in all its channels.
-+		 */
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static int i10nm_get_ddr_munits(void)
- {
- 	struct pci_dev *mdev;
- 	void __iomem *mbase;
- 	unsigned long size;
- 	struct skx_dev *d;
--	int i, j = 0;
-+	int i, lmc, j = 0;
- 	u32 reg, off;
- 	u64 base;
- 
-@@ -690,7 +726,7 @@ static int i10nm_get_ddr_munits(void)
- 		edac_dbg(2, "socket%d mmio base 0x%llx (reg 0x%x)\n",
- 			 j++, base, reg);
- 
--		for (i = 0; i < res_cfg->ddr_imc_num; i++) {
-+		for (lmc = 0, i = 0; i < res_cfg->ddr_imc_num; i++) {
- 			mdev = get_ddr_munit(d, i, &off, &size);
- 
- 			if (i == 0 && !mdev) {
-@@ -700,8 +736,6 @@ static int i10nm_get_ddr_munits(void)
- 			if (!mdev)
- 				continue;
- 
--			d->imc[i].mdev = mdev;
--
- 			edac_dbg(2, "mc%d mmio base 0x%llx size 0x%lx (reg 0x%x)\n",
- 				 i, base + off, size, reg);
- 
-@@ -712,7 +746,17 @@ static int i10nm_get_ddr_munits(void)
- 				return -ENODEV;
- 			}
- 
--			d->imc[i].mbase = mbase;
-+			d->imc[lmc].mbase = mbase;
-+			if (i10nm_imc_absent(&d->imc[lmc])) {
-+				pci_dev_put(mdev);
-+				iounmap(mbase);
-+				d->imc[lmc].mbase = NULL;
-+				edac_dbg(2, "Skip absent mc%d\n", i);
-+				continue;
-+			} else {
-+				d->imc[lmc].mdev = mdev;
-+				lmc++;
-+			}
- 		}
- 	}
- 
+Rohit Agarwal (2):
+  dt-bindings: mfd: Add compatible for pm7550ba
+  dt-bindings: mfd: Add compatible for pmx75
+
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
 -- 
-2.17.1
+2.7.4
 
