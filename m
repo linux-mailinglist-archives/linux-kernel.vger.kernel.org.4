@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E08E74A272
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BB374A23D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjGFQss convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 12:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S230466AbjGFQdJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 12:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjGFQsp (ORCPT
+        with ESMTP id S229610AbjGFQdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:48:45 -0400
-X-Greylist: delayed 962 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 09:48:43 PDT
-Received: from 3.mo560.mail-out.ovh.net (3.mo560.mail-out.ovh.net [46.105.58.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3761BD4
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 09:48:42 -0700 (PDT)
-Received: from director3.ghost.mail-out.ovh.net (unknown [10.109.146.82])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 6EF3727632
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 16:32:38 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-mhm5w (unknown [10.110.115.91])
-        by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 113E41FD37;
-        Thu,  6 Jul 2023 16:32:37 +0000 (UTC)
-Received: from courmont.net ([37.59.142.99])
-        by ghost-submission-6684bf9d7b-mhm5w with ESMTPSA
-        id dOCbN6XspmRRAB0Aw1bibA
-        (envelope-from <remi@remlab.net>); Thu, 06 Jul 2023 16:32:37 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-99G00385d7860f-b553-4727-8c2e-c4777a99cb92,
-                    8891399453053EE55EDFED6858B7B4D362CEA829) smtp.auth=postmaster@courmont.net
-X-OVh-ClientIp: 87.92.194.88
-From:   =?ISO-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] RISC-V: Add T-Head 0.7.1 vector extension to hwprobe
-Date:   Thu, 06 Jul 2023 19:32:36 +0300
-Message-ID: <2286282.ElGaqSPkdT@basile.remlab.net>
-Organization: Remlab
-In-Reply-To: <20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com>
-References: <20230705-thead_vendor_extensions-v1-0-ad6915349c4d@rivosinc.com>
- <20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com>
+        Thu, 6 Jul 2023 12:33:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA5183;
+        Thu,  6 Jul 2023 09:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E07260F16;
+        Thu,  6 Jul 2023 16:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4518EC433C7;
+        Thu,  6 Jul 2023 16:33:03 +0000 (UTC)
+Date:   Thu, 6 Jul 2023 12:33:00 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vivek Anand <vivekanand754@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "J. Avila" <elavila@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
+        Netfilter Core Developers <coreteam@netfilter.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        x86@kernel.org
+Subject: Re: High cpu usage caused by kernel process when upgraded to linux
+ 5.19.17 or later
+Message-ID: <20230706123300.55d6450b@gandalf.local.home>
+In-Reply-To: <CAJnqnX5dHiXe3smKhj6JT9+6FNdgrAR=5_Hm8BSRpVF3uARYUg@mail.gmail.com>
+References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
+        <ZJpJkL3dPXxgw6RK@debian.me>
+        <20230627073035.GV4253@hirez.programming.kicks-ass.net>
+        <99b64dfd-be4a-2248-5c42-8eb9197824e1@gmail.com>
+        <20230627101939.GZ4253@hirez.programming.kicks-ass.net>
+        <CAJnqnX5rYn65zVQ+SLN4m4ZzM_jOa_RjGhazWO=Fh8ZvdOCadg@mail.gmail.com>
+        <878rc22vxq.ffs@tglx>
+        <CAJnqnX5dHiXe3smKhj6JT9+6FNdgrAR=5_Hm8BSRpVF3uARYUg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Ovh-Tracer-Id: 17052317042732636635
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudelgddutdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvffufffkohgjfhgggfgtsehtqhertddttdejnecuhfhrohhmpeftrohmihcuffgvnhhishdqvehouhhrmhhonhhtuceorhgvmhhisehrvghmlhgrsgdrnhgvtheqnecuggftrfgrthhtvghrnhepffegtdfhgeevfefhhfffhedvtddvtefgleevueeukeekteevgfdtgfffvdfhgeevnecuffhomhgrihhnpehrvghmlhgrsgdrnhgvthenucfkphepuddvjedrtddrtddruddpkeejrdelvddrudelgedrkeekpdefjedrheelrddugedvrdelleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrvghmihesrhgvmhhlrggsrdhnvghtqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,176 +75,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le torstaina 6. heinäkuuta 2023, 6.30.18 EEST Charlie Jenkins a écrit :
-> Using vendor extensions in hwprobe, add the ability to query if the
-> 0.7.1 vector extension is available. It is determined to be available
-> only if the kernel is compiled with vector support, and the user is
-> using the c906.
+On Mon, 3 Jul 2023 18:23:25 +0530
+Vivek Anand <vivekanand754@gmail.com> wrote:
+
+> Hi Thomas,
 > 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  arch/riscv/Kconfig.vendor                       | 11 +++++++++++
->  arch/riscv/include/asm/extensions.h             | 16 ++++++++++++++++
->  arch/riscv/kernel/sys_riscv.c                   | 20 ++++++++++++++++++++
->  arch/riscv/vendor_extensions/Makefile           |  2 ++
->  arch/riscv/vendor_extensions/thead/Makefile     |  8 ++++++++
->  arch/riscv/vendor_extensions/thead/extensions.c | 24
-> ++++++++++++++++++++++++ 6 files changed, 81 insertions(+)
+> Further analyzing, I found that I did set
+> "CONFIG_NETFILTER_XT_MATCH_LIMIT=m" in my kernel config earlier which was
+> causing high CPU consumption.
+> Setting it to "CONFIG_NETFILTER_XT_MATCH_LIMIT=n" resolved the high CPU
+> issue.
 > 
-> diff --git a/arch/riscv/Kconfig.vendor b/arch/riscv/Kconfig.vendor
-> index 213ac3e6fed5..b8b9d15153eb 100644
-> --- a/arch/riscv/Kconfig.vendor
-> +++ b/arch/riscv/Kconfig.vendor
-> @@ -1,3 +1,14 @@
->  menu "Vendor extensions selection"
+> Is there any suggestion regarding the use of this config
+> "CONFIG_NETFILTER_XT_MATCH_LIMIT" as I'm getting high CPU by setting it to
+> "m" ?
+
+That config enables the compiling of: net/netfilter/xt_limit.c
+
+The htable_gc that you reported is defined in: net/netfilter/xt_hashlimit.c
+
+It has:
+
+static void htable_gc(struct work_struct *work)
+{
+        struct xt_hashlimit_htable *ht;
+
+        ht = container_of(work, struct xt_hashlimit_htable, gc_work.work);
+
+        htable_selective_cleanup(ht, false);
+
+        queue_delayed_work(system_power_efficient_wq,
+                           &ht->gc_work, msecs_to_jiffies(ht->cfg.gc_interval));
+}
+
+So it queues itself every ht->cfg.gc_interval msecs. That variable seems to
+come from some configuration of netfilter, and I think you can see these in:
+
+ find /proc/sys/net -name 'gc_interval'
+
+Perhaps you have it set off to go too much?
+
+-- Steve
+
+
 > 
-> +config VENDOR_EXTENSIONS_THEAD
-> +	bool "T-HEAD vendor extensions"
-> +	depends on RISCV_ALTERNATIVE
-> +	default n
-> +	help
-> +	  All T-HEAD vendor extensions Kconfig depend on this Kconfig. 
-Disabling
-> +	  this Kconfig will disable all T-HEAD vendor extensions. Please say 
-"Y"
-> +	  here if your platform uses T-HEAD vendor extensions.
-> +
-> +	  Otherwise, please say "N" here to avoid unnecessary overhead.
-> +
->  endmenu # "Vendor extensions selection"
-> diff --git a/arch/riscv/include/asm/extensions.h
-> b/arch/riscv/include/asm/extensions.h new file mode 100644
-> index 000000000000..27ce294a3d65
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/extensions.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023 by Rivos Inc.
-> + */
-> +#ifndef __ASM_EXTENSIONS_H
-> +#define __ASM_EXTENSIONS_H
-> +
-> +#include <asm/hwprobe.h>
-> +#include <linux/cpumask.h>
-> +
-> +#define THEAD_ISA_EXT0 (RISCV_HWPROBE_VENDOR_EXTENSION_SPACE)
-> +#define THEAD_ISA_EXT0_V0_7_1 (1 << 0)
-> +
-> +int hwprobe_thead(__u64 marchid, __u64 mimpid, struct riscv_hwprobe *pair,
-> +		  const struct cpumask *cpus);
-> +#endif
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 2351a5f7b8b1..58b12eaeaf46 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -13,6 +13,7 @@
->  #include <asm/vector.h>
->  #include <asm/switch_to.h>
->  #include <asm/uaccess.h>
-> +#include <asm/extensions.h>
->  #include <asm/unistd.h>
->  #include <asm-generic/mman-common.h>
->  #include <vdso/vsyscall.h>
-> @@ -192,6 +193,25 @@ static int hwprobe_vendor(__u64 mvendorid, struct
-> riscv_hwprobe *pair, const struct cpumask *cpus)
->  {
->  	switch (mvendorid) {
-> +#ifdef CONFIG_VENDOR_EXTENSIONS_THEAD
-> +	case THEAD_VENDOR_ID:
-> +		struct riscv_hwprobe marchid = {
-> +			.key = RISCV_HWPROBE_KEY_MARCHID,
-> +			.value = 0
-> +		};
-> +		struct riscv_hwprobe mimpid = {
-> +			.key = RISCV_HWPROBE_KEY_MIMPID,
-> +			.value = 0
-> +		};
-> +
-> +		hwprobe_arch_id(&marchid, cpus);
-> +		hwprobe_arch_id(&mimpid, cpus);
-> +		if (marchid.value != -1ULL && mimpid.value != -1ULL)
-> +			hwprobe_thead(marchid.value, mimpid.value, 
-pair, cpus);
-> +		else
-> +			return -1;
-> +		break;
-> +#endif
->  	default:
->  		return -1;
->  	}
-> diff --git a/arch/riscv/vendor_extensions/Makefile
-> b/arch/riscv/vendor_extensions/Makefile index e815895e9372..38c3e80469fd
-> 100644
-> --- a/arch/riscv/vendor_extensions/Makefile
-> +++ b/arch/riscv/vendor_extensions/Makefile
-> @@ -1,3 +1,5 @@
->  ifdef CONFIG_RELOCATABLE
->  KBUILD_CFLAGS += -fno-pie
->  endif
-> +
-> +obj-$(CONFIG_VENDOR_EXTENSIONS_THEAD) += thead/
-> diff --git a/arch/riscv/vendor_extensions/thead/Makefile
-> b/arch/riscv/vendor_extensions/thead/Makefile new file mode 100644
-> index 000000000000..7cf43c629b66
-> --- /dev/null
-> +++ b/arch/riscv/vendor_extensions/thead/Makefile
-> @@ -0,0 +1,8 @@
-> +ifdef CONFIG_FTRACE
-> +CFLAGS_REMOVE_extensions.o = $(CC_FLAGS_FTRACE)
-> +endif
-> +ifdef CONFIG_KASAN
-> +KASAN_SANITIZE_extensions.o := n
-> +endif
-> +
-> +obj-y += extensions.o
-> diff --git a/arch/riscv/vendor_extensions/thead/extensions.c
-> b/arch/riscv/vendor_extensions/thead/extensions.c new file mode 100644
-> index 000000000000..a177501bc99c
-> --- /dev/null
-> +++ b/arch/riscv/vendor_extensions/thead/extensions.c
-> @@ -0,0 +1,24 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 by Rivos Inc.
-> + */
-> +
-> +#include <asm/extensions.h>
-> +
-> +int hwprobe_thead(__u64 marchid, __u64 mimpid, struct riscv_hwprobe *pair,
-> +		  const struct cpumask *cpus)
-> +{
-> +	pair->value = 0;
-> +	switch (pair->key) {
-> +	case THEAD_ISA_EXT0:
-> +#ifdef CONFIG_RISCV_ISA_V
-> +		if (marchid == 0 && mimpid == 0)
-> +			pair->value |= THEAD_ISA_EXT0_V0_7_1;
-
-I'm not sure I follow the code, but exposing an extension to userspace that 
-the kernel does not handle is a bad idea. AFAIK, the initialisation and 
-context switching code must be in place first.
-
-And I don't suppose that this can *simply* piggy-back on the existing RVV 
-1.0.0 support, because user-space  assumes 1.0.0-compliant behaviour if the 
-existing vector flag is set in hwprobe().
-
-Indeed, I recall somebody else posted a recent patchset ostensibly with the 
-same goal that was a lot more involved than this.
-
-> +#endif
-> +		break;
-> +	default:
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-
-
--- 
-雷米‧德尼-库尔蒙
-http://www.remlab.net/
-
-
+> Thanks,
+> Vivek
+> 
+> On Thu, Jun 29, 2023 at 7:48 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> > On Thu, Jun 29 2023 at 12:05, Vivek Anand wrote:
+> > > I've tried booting with "spectre_v2=retpoline retbleed=off".
+> > > This change didn't work. Still CPU is 100%
+> >
+> > This does not make sense.
+> >
+> > retbleed=off has the same effect as CONFIG_X86_IBRS_ENTRY=n.
+> >
+> > The only difference is that with CONFIG_X86_IBRS_ENTRY=y and
+> > retbleed=off there is one extra jump in the low level entry code
+> > (syscall, interrupts, exceptions) and one extra jump on the exit side.
+> >
+> > But those extra jumps are completely irrelevant for the kworker threads.
+> >
+> > Can you please provide dmesg and the content of the files in
+> >
+> >  /sys/devices/system/cpu/vulnerabilities/
+> >
+> > on a kernel booted with "spectre_v2=retpoline retbleed=off" ?
+> >
+> > Thanks,
+> >
+> >         tglx
+> >
 
