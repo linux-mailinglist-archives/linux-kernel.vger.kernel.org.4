@@ -2,182 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D594C749DE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7983749DE7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjGFNiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S232432AbjGFNiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbjGFNht (ORCPT
+        with ESMTP id S232543AbjGFNh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:37:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA4C129;
-        Thu,  6 Jul 2023 06:37:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 649191F85D;
-        Thu,  6 Jul 2023 13:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688650666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SvjJMU2RLsCedQ3MvPejpvvnZCxXu+NaMD2t/+cpPw0=;
-        b=FxtLh5kGIwVmCXz1GbBaL0cMrf4GLWoq2HllPiQNXbeDV4mZRYAJZA5Y4ErReOwl9lLf/m
-        funLejrrr9NbBC4riU8y4bpQnxWFlC6I1rbevdYHiDJ81fxclMQwxLx7jtY8zgRbQgI1F7
-        k3gqUIiNC8hyLZieCGpWOFV788ZrjwY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688650666;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SvjJMU2RLsCedQ3MvPejpvvnZCxXu+NaMD2t/+cpPw0=;
-        b=Zkz5zzbeCIY1rjiLSW6rwwxZbsRzf8b9k7HZEt80avbP8w7Lh9ua78xp1qIUJl7WE/Ue9g
-        fSO71Q3lTo2AUZAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5671D138EE;
-        Thu,  6 Jul 2023 13:37:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id R40WFarDpmSlWwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 13:37:46 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C973AA0707; Thu,  6 Jul 2023 15:37:45 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 15:37:45 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net
-Subject: Re: [PATCH v2 60/92] ntfs: convert to ctime accessor functions
-Message-ID: <20230706133745.rmijt7wmwn5rivwh@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-58-jlayton@kernel.org>
+        Thu, 6 Jul 2023 09:37:57 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AF7E3;
+        Thu,  6 Jul 2023 06:37:56 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso1007181e87.2;
+        Thu, 06 Jul 2023 06:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1688650674; x=1691242674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xuEiPXjKjwUIdKAreCBVtaU25Eh4PG9V/Wqte4w7hxk=;
+        b=YuAJBBuM7cxzYQ36GGql0ThppA9e4sGKzf6fDSyHcZCr7enEw22UlwOVsWf+IV+MqB
+         lajNMNsEPkfbXfO1rIRsOfcI/01Q6rNHKqHyppcYh5XQfIHVoJ5oXXiNL1AQPt1anJJt
+         N9R0j9pxl9/Oix201l5iJBhZArCTeyRS3Udc9tQYoMjzLzbBzTXlEfC5zJcM4tqN1Qls
+         cHWboQEmL75DcjulTQHDJhhk0Wg9fixniRVG7VC6HmgigPH5bxPI3aOt/vwKP7g7pFtq
+         74JcbjK1addLP4FIaWER5YQ5gvNbgXHYC7rXACoCmHO2wZikB7zAbE5re1usRvc6Oy5p
+         hn9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688650674; x=1691242674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xuEiPXjKjwUIdKAreCBVtaU25Eh4PG9V/Wqte4w7hxk=;
+        b=dPajtKjFdPhilJ0KtFDPImxq9gwQN6IVoz+oBo8NrqkGA5TyXP8yLqTWJ4kg2d41rb
+         6sUVHGf/aAzIVwEu02odovQO1uQpHr8VZ74WN27Ov5OLqvHUP7E2t21jeBAZ9DJ/dyd9
+         KrsJFgft34/JatcWjreGx48ppwXWjoXEB3y2D/e712k+5hi0IdZzehpds2/K5H6vZIvg
+         Tx1PFFGAxEgjOkthGOs1w8Kvf7G4kaVY9+P0mapSJKoF6/XFltnVziOxMkOz4vDYF/xz
+         b0XanYFDPseJYNpJpfZkfxlRZonvj+86SzchzM4ztVNw/89m/RNEhujLLHDInMQGiDnX
+         2/sg==
+X-Gm-Message-State: ABy/qLZRdk+mDz7aVVXlY4a5U0CuHmhH/3fmnweH1udkFJ8wo6x386HX
+        +fJSSK8G7DpkhcsnwphVEbqU1FbALnzok5EJ
+X-Google-Smtp-Source: APBJJlGZ3am9zOfeBgWijBLbuF/tNDpOUBY57m2T6CWy3qGzqO/mdo5xjJCO2vtzAg3Vue0vh5ZSIQ==
+X-Received: by 2002:a05:6512:1045:b0:4fb:ca59:50ff with SMTP id c5-20020a056512104500b004fbca5950ffmr1705108lfb.13.1688650674256;
+        Thu, 06 Jul 2023 06:37:54 -0700 (PDT)
+Received: from debian_development.DebianHome (dynamic-077-008-088-179.77.8.pool.telefonica.de. [77.8.88.179])
+        by smtp.gmail.com with ESMTPSA id w23-20020aa7da57000000b0051debcb1fa2sm786198eds.69.2023.07.06.06.37.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 06:37:53 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] selinux: disable debug functions by default
+Date:   Thu,  6 Jul 2023 15:37:49 +0200
+Message-Id: <20230706133751.38149-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705190309.579783-58-jlayton@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 05-07-23 15:01:25, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+avtab_hash_eval() and hashtab_stat() are only used in policydb.c when
+the debug macro DEBUG_HASHES is defined.
 
-Looks good. Feel free to add:
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ security/selinux/ss/avtab.c   | 2 ++
+ security/selinux/ss/avtab.h   | 3 +++
+ security/selinux/ss/hashtab.c | 3 ++-
+ security/selinux/ss/hashtab.h | 2 ++
+ 4 files changed, 9 insertions(+), 1 deletion(-)
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ntfs/inode.c | 15 ++++++++-------
->  fs/ntfs/mft.c   |  3 +--
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/ntfs/inode.c b/fs/ntfs/inode.c
-> index 6c3f38d66579..99ac6ea277c4 100644
-> --- a/fs/ntfs/inode.c
-> +++ b/fs/ntfs/inode.c
-> @@ -654,7 +654,7 @@ static int ntfs_read_locked_inode(struct inode *vi)
->  	 * always changes, when mtime is changed. ctime can be changed on its
->  	 * own, mtime is then not changed, e.g. when a file is renamed.
->  	 */
-> -	vi->i_ctime = ntfs2utc(si->last_mft_change_time);
-> +	inode_set_ctime_to_ts(vi, ntfs2utc(si->last_mft_change_time));
->  	/*
->  	 * Last access to the data within the file. Not changed during a rename
->  	 * for example but changed whenever the file is written to.
-> @@ -1218,7 +1218,7 @@ static int ntfs_read_locked_attr_inode(struct inode *base_vi, struct inode *vi)
->  	vi->i_gid	= base_vi->i_gid;
->  	set_nlink(vi, base_vi->i_nlink);
->  	vi->i_mtime	= base_vi->i_mtime;
-> -	vi->i_ctime	= base_vi->i_ctime;
-> +	inode_set_ctime_to_ts(vi, inode_get_ctime(base_vi));
->  	vi->i_atime	= base_vi->i_atime;
->  	vi->i_generation = ni->seq_no = base_ni->seq_no;
->  
-> @@ -1484,7 +1484,7 @@ static int ntfs_read_locked_index_inode(struct inode *base_vi, struct inode *vi)
->  	vi->i_gid	= base_vi->i_gid;
->  	set_nlink(vi, base_vi->i_nlink);
->  	vi->i_mtime	= base_vi->i_mtime;
-> -	vi->i_ctime	= base_vi->i_ctime;
-> +	inode_set_ctime_to_ts(vi, inode_get_ctime(base_vi));
->  	vi->i_atime	= base_vi->i_atime;
->  	vi->i_generation = ni->seq_no = base_ni->seq_no;
->  	/* Set inode type to zero but preserve permissions. */
-> @@ -2804,13 +2804,14 @@ int ntfs_truncate(struct inode *vi)
->  	 */
->  	if (!IS_NOCMTIME(VFS_I(base_ni)) && !IS_RDONLY(VFS_I(base_ni))) {
->  		struct timespec64 now = current_time(VFS_I(base_ni));
-> +		struct timespec64 ctime = inode_get_ctime(VFS_I(base_ni));
->  		int sync_it = 0;
->  
->  		if (!timespec64_equal(&VFS_I(base_ni)->i_mtime, &now) ||
-> -		    !timespec64_equal(&VFS_I(base_ni)->i_ctime, &now))
-> +		    !timespec64_equal(&ctime, &now))
->  			sync_it = 1;
-> +		inode_set_ctime_to_ts(VFS_I(base_ni), now);
->  		VFS_I(base_ni)->i_mtime = now;
-> -		VFS_I(base_ni)->i_ctime = now;
->  
->  		if (sync_it)
->  			mark_inode_dirty_sync(VFS_I(base_ni));
-> @@ -2928,7 +2929,7 @@ int ntfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->  	if (ia_valid & ATTR_MTIME)
->  		vi->i_mtime = attr->ia_mtime;
->  	if (ia_valid & ATTR_CTIME)
-> -		vi->i_ctime = attr->ia_ctime;
-> +		inode_set_ctime_to_ts(vi, attr->ia_ctime);
->  	mark_inode_dirty(vi);
->  out:
->  	return err;
-> @@ -3004,7 +3005,7 @@ int __ntfs_write_inode(struct inode *vi, int sync)
->  		si->last_data_change_time = nt;
->  		modified = true;
->  	}
-> -	nt = utc2ntfs(vi->i_ctime);
-> +	nt = utc2ntfs(inode_get_ctime(vi));
->  	if (si->last_mft_change_time != nt) {
->  		ntfs_debug("Updating ctime for inode 0x%lx: old = 0x%llx, "
->  				"new = 0x%llx", vi->i_ino, (long long)
-> diff --git a/fs/ntfs/mft.c b/fs/ntfs/mft.c
-> index 0155f106ec34..ad1a8f72da22 100644
-> --- a/fs/ntfs/mft.c
-> +++ b/fs/ntfs/mft.c
-> @@ -2682,8 +2682,7 @@ ntfs_inode *ntfs_mft_record_alloc(ntfs_volume *vol, const int mode,
->  			vi->i_mode &= ~S_IWUGO;
->  
->  		/* Set the inode times to the current time. */
-> -		vi->i_atime = vi->i_mtime = vi->i_ctime =
-> -			current_time(vi);
-> +		vi->i_atime = vi->i_mtime = inode_set_ctime_current(vi);
->  		/*
->  		 * Set the file size to 0, the ntfs inode sizes are set to 0 by
->  		 * the call to ntfs_init_big_inode() below.
-> -- 
-> 2.41.0
-> 
+diff --git a/security/selinux/ss/avtab.c b/security/selinux/ss/avtab.c
+index 6766edc0fe68..2fd1a21b4428 100644
+--- a/security/selinux/ss/avtab.c
++++ b/security/selinux/ss/avtab.c
+@@ -354,6 +354,7 @@ int avtab_alloc_dup(struct avtab *new, const struct avtab *orig)
+ 	return avtab_alloc_common(new, orig->nslot);
+ }
+ 
++#ifdef DEBUG_HASHES
+ void avtab_hash_eval(struct avtab *h, const char *tag)
+ {
+ 	int i, chain_len, slots_used, max_chain_len;
+@@ -384,6 +385,7 @@ void avtab_hash_eval(struct avtab *h, const char *tag)
+ 	       tag, h->nel, slots_used, h->nslot, max_chain_len,
+ 	       chain2_len_sum);
+ }
++#endif
+ 
+ static const uint16_t spec_order[] = {
+ 	AVTAB_ALLOWED,
+diff --git a/security/selinux/ss/avtab.h b/security/selinux/ss/avtab.h
+index d6742fd9c560..66c9077b7098 100644
+--- a/security/selinux/ss/avtab.h
++++ b/security/selinux/ss/avtab.h
+@@ -92,7 +92,10 @@ int avtab_alloc(struct avtab *, u32);
+ int avtab_alloc_dup(struct avtab *new, const struct avtab *orig);
+ struct avtab_datum *avtab_search(struct avtab *h, const struct avtab_key *k);
+ void avtab_destroy(struct avtab *h);
++
++#ifdef DEBUG_HASHES
+ void avtab_hash_eval(struct avtab *h, const char *tag);
++#endif
+ 
+ struct policydb;
+ int avtab_read_item(struct avtab *a, void *fp, struct policydb *pol,
+diff --git a/security/selinux/ss/hashtab.c b/security/selinux/ss/hashtab.c
+index 3fb8f9026e9b..672ea20ad1bb 100644
+--- a/security/selinux/ss/hashtab.c
++++ b/security/selinux/ss/hashtab.c
+@@ -103,7 +103,7 @@ int hashtab_map(struct hashtab *h,
+ 	return 0;
+ }
+ 
+-
++#ifdef DEBUG_HASHES
+ void hashtab_stat(struct hashtab *h, struct hashtab_info *info)
+ {
+ 	u32 i, chain_len, slots_used, max_chain_len;
+@@ -129,6 +129,7 @@ void hashtab_stat(struct hashtab *h, struct hashtab_info *info)
+ 	info->slots_used = slots_used;
+ 	info->max_chain_len = max_chain_len;
+ }
++#endif
+ 
+ int hashtab_duplicate(struct hashtab *new, struct hashtab *orig,
+ 		int (*copy)(struct hashtab_node *new,
+diff --git a/security/selinux/ss/hashtab.h b/security/selinux/ss/hashtab.h
+index 043a773bf0b7..64010a7f01a1 100644
+--- a/security/selinux/ss/hashtab.h
++++ b/security/selinux/ss/hashtab.h
+@@ -143,6 +143,8 @@ int hashtab_duplicate(struct hashtab *new, struct hashtab *orig,
+ 		void *args);
+ 
+ /* Fill info with some hash table statistics */
++#ifdef DEBUG_HASHES
+ void hashtab_stat(struct hashtab *h, struct hashtab_info *info);
++#endif
+ 
+ #endif	/* _SS_HASHTAB_H */
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.40.1
+
