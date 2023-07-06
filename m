@@ -2,87 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E2474A38C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD9C74A390
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjGFSEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S230079AbjGFSGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjGFSEb (ORCPT
+        with ESMTP id S230434AbjGFSGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:04:31 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C4E1995
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:04:30 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-c5e67d75e0cso1081944276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688666669; x=1691258669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=03zWiNhc9KZR5mojhUw0OzSctNW+ygol8R6PJI8fFSA=;
-        b=LPWrPnWBjnVZuB8ZKEDFEFAgd7NSY/Xg9NV0TC7+p7q9g+rn38PDdoN7zeor36BAXq
-         RGLkzu9NalkerfqTje8drzJjdLWo73gcapkFCuyfPW/gV8z+jytqPCwsfTB3lwL4cK7G
-         HCPHGopuwww0WaDqr7N7NJj57fdP2igJt9url2wmIUB8/HobU8CYOoIm4q8Z2ya2MJwZ
-         6SjI/3v16m2VflK4CQrt0YinzL7D3FWMQBmvH849chZtrZ9AkqEqnlUIAhGSoXhNyZo4
-         cL9nebS1uZ99eTEX3hBc1LMCKb5MVRmPW6nuacHb75u0kWT7OooFM7BCuR6tmJjwibNZ
-         7v1w==
+        Thu, 6 Jul 2023 14:06:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C691995
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688666726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mt4cbGq9d8jKpC8J/+jZJ74qgft1NY860RzeCaYTTAU=;
+        b=Xbx9k6wsBCW6d/cNDU3L2sRfZ3uTuxbTeu53m2RyZg86DMdYdv8yHnfENl0GxXAkQ4/N73
+        DQSep05BvJItRkFGcjQgu+9tKe1YnRTPn/IExO/1BL/l7L65QNKj0GH3zWd/oUzt/GuMEO
+        PojAEJSSMWZoRBA6WQ163MlV5b0QvmM=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-112-bO3qMpBoPFCjLkDEKG_gvA-1; Thu, 06 Jul 2023 14:05:25 -0400
+X-MC-Unique: bO3qMpBoPFCjLkDEKG_gvA-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-634dacfa27bso11570626d6.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:05:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688666669; x=1691258669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=03zWiNhc9KZR5mojhUw0OzSctNW+ygol8R6PJI8fFSA=;
-        b=DMgVDZq6UPr/xbFLnk0ogBYZ8Mj4FSY7kYT2o+AboA+Uonu99GpSSCP9KVQAGgc21n
-         7EvkYkASPSd/26bbwOaGh3SesfSgD5USlMVktQaqksPY7p+4/zPuG8E1sRMxaQ5dxmzL
-         dUS9H+6eSRwRusWFpr6ajBm0GSsZkRhZGcZtX81WKSB6tARPGL0h2gUkn60cp9mNRfqB
-         BSUSYj4k4uKRfjQjCrj7u9c60hWjqPsZ972HFO6dkZtVKun9hLUQI+WM5cU4FW2KqFsC
-         HwK/w1SunKoqWZzQodKDh1ciS/DJ01KvJhxyAnDKTStBpgsGyjp5zUE0d/5B8tMgYTfp
-         90SQ==
-X-Gm-Message-State: ABy/qLYird1qR4WyTGf6mAvLdZSDAGQMq3pYdLztFZUtjpIju/vE5LtT
-        6ake7jgyvWNUbg3r5YNV3V0liWVcpinO9Slv4lB3UQ==
-X-Google-Smtp-Source: APBJJlEDnLFb8GjPXbPTzAh6YLjvoLoSbHPMcSzc7vgkUeFYmxn8dGyrtRBzBWOd8r8yQvlH53H1Oujxft0ruwTyl30=
-X-Received: by 2002:a25:b499:0:b0:c4c:fee5:428 with SMTP id
- o25-20020a25b499000000b00c4cfee50428mr2052442ybj.24.1688666669701; Thu, 06
- Jul 2023 11:04:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688666724; x=1691258724;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mt4cbGq9d8jKpC8J/+jZJ74qgft1NY860RzeCaYTTAU=;
+        b=FZcvGiqPONTKXxTNJGQTJu+AwEk9GvP0X0ascki5N1pFlWAZdy+dqlNIeJrCdw3c5u
+         0ovLlLJxJx2hpgErfzo3yVS67VWM4aWp1bBiTtKsB+W56ZkXiiyHco9aXdMV1+VgeTck
+         R8y1cn4ltPIltZWB+YEr/HIzT0YkT3agiam/B4X36aW7x/HW54B3Zm84qgZYW/IXijAO
+         j2BLV82GKb4wQ0i1K5DJMgUBdNZUt3Hdwy2QCUPF1Q777eIFcNbzy1AX1JujblyI/K5C
+         HRzghlnuY4G2uu85GZ7zt68Myqqk0C3MLJ9KRUH1CHPG91Dw4o87s+WAaLEOmLDpdUEW
+         oTEA==
+X-Gm-Message-State: ABy/qLawd5O7J+MXSOojXRVepSPqaSoaOYcG/7WzZU0m7LMF6goFUiOF
+        h5NnNdcXYR/StUEU15GBh6uFJk4WrtMnRe5pYS58EYOmSv7s9+55KXBHa9GQlfb4d8ez7LVuihW
+        CzlTVTR2aX6stdHrPrNqHOzZw
+X-Received: by 2002:a0c:de07:0:b0:632:1da6:986a with SMTP id t7-20020a0cde07000000b006321da6986amr2462917qvk.17.1688666724510;
+        Thu, 06 Jul 2023 11:05:24 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFmb0Wl2yHupEnJvTRYWB02b+IYD3YW7L4gL7H6IsZmD2crA+l9iItFZbkC9he8nK0QEubsug==
+X-Received: by 2002:a0c:de07:0:b0:632:1da6:986a with SMTP id t7-20020a0cde07000000b006321da6986amr2462887qvk.17.1688666724257;
+        Thu, 06 Jul 2023 11:05:24 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id c12-20020a0ce14c000000b006260c683bf2sm1135942qvl.53.2023.07.06.11.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 11:05:23 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     paulmck@kernel.org, Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
+ infrastructure
+In-Reply-To: <4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop>
+References: <20230705181256.3539027-1-vschneid@redhat.com>
+ <20230705181256.3539027-12-vschneid@redhat.com>
+ <ZKXtfWZiM66dK5xC@localhost.localdomain>
+ <xhsmhttuhuvix.mognet@vschneid.remote.csb> <ZKaoHrm0Fejb7kAl@lothringen>
+ <4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop>
+Date:   Thu, 06 Jul 2023 19:05:17 +0100
+Message-ID: <xhsmhlefsvrtu.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20230706092047.18599-1-frank.li@vivo.com> <20230706092047.18599-3-frank.li@vivo.com>
-In-Reply-To: <20230706092047.18599-3-frank.li@vivo.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 6 Jul 2023 20:04:18 +0200
-Message-ID: <CACRpkdaixG5bOpXLjveLz98w3DEEYCGr6HTz98EGopZD=02nig@mail.gmail.com>
-Subject: Re: [PATCH 3/4] PCI: v3-semi: Use devm_platform_get_and_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 11:21=E2=80=AFAM Yangtao Li <frank.li@vivo.com> wrot=
-e:
-
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On 06/07/23 09:39, Paul E. McKenney wrote:
+> On Thu, Jul 06, 2023 at 01:40:14PM +0200, Frederic Weisbecker wrote:
+>> On Thu, Jul 06, 2023 at 12:30:46PM +0100, Valentin Schneider wrote:
+>> > I'm trying to grok how this impacts RCU, IIUC most of RCU mostly cares about the
+>> > even/odd-ness of the thing, and rcu_gp_fqs() cares about the actual value
+>> > but only to check if it has changed over time (rcu_dynticks_in_eqs_since()
+>> > only does a !=).
+>> >
+>> > I'm rephrasing here to make sure I get it - is it then that the worst case
+>> > here is 2^(dynticks_counter_size) transitions happen between saving the
+>> > dynticks snapshot and checking it again, so RCU waits some more?
+>>
+>> That's my understanding as well but I have to defer on Paul to make sure I'm
+>> not overlooking something.
 >
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> That does look plausible to me.
+>
+> And yes, RCU really cares about whether its part of this counter has
+> been a multiple of two during a given interval of time, because this
+> indicates that the CPU has no pre-existing RCU readers still active.
+> One way that this can happen is for that value to be a multiple of two
+> at some point in time.  The other way that this can happen is for the
+> value to have changed.  No matter what the start and end values, if they
+> are different, the counter must necessarily have at least passed through
+> multiple of two in the meantime, again guaranteeing that any RCU readers
+> that around when the count was first fetched have now finished.
+>
 
-Looks correct.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thank you for the demystification!
 
-Yours,
-Linus Walleij
+> But we should take the machine's opinions much more seriously than we
+> take any of our own opinions.
+
+Heh :-)
+
+> Why not adjust RCU_DYNTICKS_IDX so as
+> to crank RCU's portion of this counter down to (say) two or three bits
+> and let rcutorture have at it on TREE04 or TREE07, both of which have
+> nohz_full CPUs?
+>
+> Maybe also adjust mkinitrd.sh to make the user/kernel transitions more
+> frequent?
+>
+> Please note that I do -not- recommend production use of a three-bit
+> (let alone a two-bit) RCU portion because this has a high probability
+> of excessively extending grace periods.  But it might be good to keep
+> a tiny counter as a debug option so that we regularly rcutorture it.
+>
+
+Sounds sensible, I'll add that to my v2 todolist.
+
+Thanks!
+
+>                                                       Thanx, Paul
+
