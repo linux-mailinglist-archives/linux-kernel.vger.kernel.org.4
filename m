@@ -2,104 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081C174A3BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CA474A3C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjGFS2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S231688AbjGFS21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjGFS2P (ORCPT
+        with ESMTP id S229490AbjGFS2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:28:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839A71BC3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:28:14 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366ID4LW022096;
-        Thu, 6 Jul 2023 18:28:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=uC9lIJHCOOldEmNMSWaPvJCJ3FW/F8uLoL3pWDa3K8M=;
- b=DwCbp/EblslmW0qKBUSibsK6WT/VPUTfZJ03FJMF0E4x20c4mlaC9ShDkW+TDFi3Egmx
- yj/YRfpK7IoqOn/Z7Xx8t/Pgn3MFzs8UbOCveBbO9tXezCv7qnqb9juTYMQaFztXUTjx
- uKvqa89UFpnJMLFngpt/mG7Jfi7ImGkBRZsdBrid8EL53yvu+nWp6y0rFDOBJhcxNn+K
- dhGmIw5hvdYHgZtk/DSoJ6AWUpOJsjK8wUIkstL1uaOh+fxO3nvwxauBpcNwQV6alFao
- 3CNb0tKkyvf4x0hJG0af3uOC0hncHHP6TzxILSbBxeW5E0OaK44w8LJcIKPG3UoFne8D iA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnx4x0qtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 18:28:08 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366IS7Zm018031
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 18:28:07 GMT
-Received: from blr-ubuntu-498.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 11:28:05 -0700
-From:   Pintu Kumar <quic_pintu@quicinc.com>
-To:     <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>
-CC:     <quic_pintu@quicinc.com>, <pintu.ping@gmail.com>
-Subject: [PATCH] mm: cma: print cma name as well in cma_alloc debug
-Date:   Thu, 6 Jul 2023 23:57:50 +0530
-Message-ID: <1688668070-8408-1-git-send-email-quic_pintu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 6 Jul 2023 14:28:25 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B31FC1;
+        Thu,  6 Jul 2023 11:28:23 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2190141FE2;
+        Thu,  6 Jul 2023 18:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688668100;
+        bh=8NFL9we8Y8MHZ5EOLhjaIYmRvFfm/t1AXz0LAFwiLEE=;
+        h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type;
+        b=JVG74TzNws+vAkajJR/u+ElIXuGZ5sIoYbCYQZlnskJhB0/9oO5DTp5cvznk0TR5n
+         3fgqol2JqsVAY69cjcBKhXTHNLT0lZUQpqLih6a8vzmA5EO6PNhLJce3QBrlf0M/Bd
+         IaIg6I7OEmn8my9O5m/wcS7Ww8a+dIE0VOUrqh0FNKWLfWAIVUuZhxtNJolg5RFiny
+         UGtSKB7q3vd1flIQ1KLN1AzyEaK3DzeTvyKnLow7yHIeIGISRvUG3x4idj+t2TZ6pK
+         8klGUBAsFobSU/mXMtDtx+zXYcPUiG9d0gXWrAG/3XPBnZnLR0y8v18y2A1B9BRi8F
+         Rrqa+3wOKPHYg==
+Message-ID: <b68ad9e0-2ce1-50d5-4856-e4d8fe97fc82@canonical.com>
+Date:   Thu, 6 Jul 2023 11:28:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: V6Hzbj6Z9y9Fx6pzsJ_TC9_gHDnHu2OJ
-X-Proofpoint-GUID: V6Hzbj6Z9y9Fx6pzsJ_TC9_gHDnHu2OJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_13,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0 malwarescore=0
- suspectscore=0 clxscore=1011 spamscore=0 mlxlogscore=713 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060165
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   John Johansen <john.johansen@canonical.com>
+Subject: [GIT PULL] apparmor bug fixes for 6.5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Content-Language: en-US
+Organization: Canonical
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CMA allocation can happen either from global cma or from
-dedicated cma region.
+Hi Linus,
 
-Thus it is helpful to print cma name as well during initial
-debugging to confirm cma regions were getting initialized or not.
+Please pull the following set bug fixes to apparmor for 6.5 or 6.5-rc1
 
-Signed-off-by: Pintu Kumar <quic_pintu@quicinc.com>
-Signed-off-by: Pintu Agarwal <pintu.ping@gmail.com>
----
- mm/cma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
++ Bug Fixes
+   - fix missing error check for rhashtable_insert_fast
+   - add missing failure check in compute_xmatch_perms
+   - fix policy_compat permission remap with extended permissions
+   - fix profile verification and enable it
+   - fix: kzalloc perms tables for shared dfas
+   - Fix kernel-doc header for verify_dfa_accept_index
+   - aa_buffer: Convert 1-element array to flexible array
+   - Return directly after a failed kzalloc() in two functions
+   - fix use of strcpy in policy_unpack_test
+   - fix kernel-doc complaints
+   - Fix some kernel-doc comments
 
-diff --git a/mm/cma.c b/mm/cma.c
-index a4cfe99..96718b53 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -436,8 +436,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 	if (!cma || !cma->count || !cma->bitmap)
- 		goto out;
- 
--	pr_debug("%s(cma %p, count %lu, align %d)\n", __func__, (void *)cma,
--		 count, align);
-+	pr_info("%s(cma %p, name: %s, count %lu, align %d)\n", __func__,
-+		(void *)cma, cma->name, count, align);
- 
- 	if (!count)
- 		goto out;
--- 
-2.7.4
+thanks
+- john
 
+
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2023-07-06
+
+for you to fetch changes up to 3f069c4c643225f2b96b4b3f8c30e4445f079d2e:
+
+   apparmor: Fix kernel-doc header for verify_dfa_accept_index (2023-07-06 11:12:10 -0700)
+
+----------------------------------------------------------------
++ Bug Fixes
+       apparmor: fix missing error check for rhashtable_insert_fast
+       apparmor: add missing failure check in compute_xmatch_perms
+       apparmor: fix policy_compat permission remap with extended permissions
+       apparmor: fix profile verification and enable it
+       apparmor: fix: kzalloc perms tables for shared dfas
+       apparmor: Fix kernel-doc header for verify_dfa_accept_index
+       apparmor: aa_buffer: Convert 1-element array to flexible array
+       apparmor: Return directly after a failed kzalloc() in two functions
+       apparmor: fix use of strcpy in policy_unpack_test
+       apparmor: fix kernel-doc complaints
+       AppArmor: Fix some kernel-doc comments
+
+----------------------------------------------------------------
+Danila Chernetsov (1):
+       apparmor: fix missing error check for rhashtable_insert_fast
+
+John Johansen (5):
+       apparmor: add missing failure check in compute_xmatch_perms
+       apparmor: fix policy_compat permission remap with extended permissions
+       apparmor: fix profile verification and enable it
+       apparmor: fix: kzalloc perms tables for shared dfas
+       apparmor: Fix kernel-doc header for verify_dfa_accept_index
+
+Kees Cook (1):
+       apparmor: aa_buffer: Convert 1-element array to flexible array
+
+Markus Elfring (1):
+       apparmor: Return directly after a failed kzalloc() in two functions
+
+Rae Moar (1):
+       apparmor: fix use of strcpy in policy_unpack_test
+
+Randy Dunlap (1):
+       apparmor: fix kernel-doc complaints
+
+Yang Li (1):
+       AppArmor: Fix some kernel-doc comments
+
+  security/apparmor/crypto.c             |  10 ++--
+  security/apparmor/file.c               |   2 +-
+  security/apparmor/lsm.c                |   8 +--
+  security/apparmor/policy.c             |  20 +++++--
+  security/apparmor/policy_compat.c      |  20 +++++--
+  security/apparmor/policy_unpack.c      | 102 +++++++++++++++++++++------------
+  security/apparmor/policy_unpack_test.c |  13 ++---
+  security/apparmor/secid.c              |   3 +-
+  8 files changed, 110 insertions(+), 68 deletions(-)
