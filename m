@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7455F749DEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE41749DF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjGFNit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S231654AbjGFNkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbjGFNiq (ORCPT
+        with ESMTP id S229693AbjGFNkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:38:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE991BC8;
-        Thu,  6 Jul 2023 06:38:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D71B6194B;
-        Thu,  6 Jul 2023 13:38:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BB2C433C7;
-        Thu,  6 Jul 2023 13:38:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688650708;
-        bh=PEkRhv1COHtz8x54hPw4xiGamOn/+BE55P4s5TpOgcI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MsNYZj5TEZvgLuORchg6awRz5nUDhNVxV8lGOGDJQ8mulpC8STRLln6uNidO8mloy
-         ULu0ghqNjLQ/d1IRyj59RMPEUvVTwMgBS4Yn9E0B6oXh2opVsod626QQtjaNG1YoTB
-         O+8Q9kDc033DBa0Oi76NnY4dZx7DI9dd+jci0szZwb82Y0L8lPduoVjXmZvkT4GP2w
-         JOgkrjSf0p1DpT+1UYiBbHkpNBMO7YQCuRay+bV0qdnySCopIl49yntKAQajorxW7m
-         UyDcRcB/DoRRlNoIH9T9LHwii1trLNDerdKWEJn5k37Zjd8rTyU0Nb3aEU7T9aVA+B
-         fG+baaxsdsGxw==
-Date:   Thu, 6 Jul 2023 22:38:24 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Li zeming <zeming@nfschina.com>
-Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Remove unnecessary =?UTF-8?B?4oCYTlVMTA==?=
- =?UTF-8?B?4oCZ?= values from correct_ret_addr
-Message-Id: <20230706223824.f1eee3b3e5448dc3555c275d@kernel.org>
-In-Reply-To: <20230704194359.3124-1-zeming@nfschina.com>
-References: <20230704194359.3124-1-zeming@nfschina.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 09:40:08 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6466131
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:40:05 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Axjus0xKZkGfgAAA--.1104S3;
+        Thu, 06 Jul 2023 21:40:04 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx5swyxKZkoPYeAA--.5921S2;
+        Thu, 06 Jul 2023 21:40:02 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        CK Hu <ck.hu@mediatek.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH v2] drm/mediatek: Fix potential memory leak if vmap() fail
+Date:   Thu,  6 Jul 2023 21:40:00 +0800
+Message-Id: <20230706134000.130098-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx5swyxKZkoPYeAA--.5921S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWruryruF4ktw18JFWUKr1fKrX_yoWkWwcEka
+        n2vr17Wrs7Gr98Aa12kw1avFWSyFWruF48Ja95K34ft3yUGr1UXry29rn8WFnxJ3Z29FyD
+        twn8XF95ZFnrZosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4cdbUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  5 Jul 2023 03:43:59 +0800
-Li zeming <zeming@nfschina.com> wrote:
+Also return -ENOMEM if such a failure happens, the implement should take
+responsibility for the error handling.
 
-> The 'correct_ret_addr' pointer is always set in the later code, no need
-> to initialize it at definition time.
+Fixes: 3df64d7b0a4f ("drm/mediatek: Implement gem prime vmap/vunmap function")
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_gem.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Indeed. Thanks!
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-> 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->  kernel/kprobes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index db8a3aa53cf6..ec50f9f380c1 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -2007,9 +2007,9 @@ void __weak arch_kretprobe_fixup_return(struct pt_regs *regs,
->  unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
->  					     void *frame_pointer)
->  {
-> -	kprobe_opcode_t *correct_ret_addr = NULL;
->  	struct kretprobe_instance *ri = NULL;
->  	struct llist_node *first, *node = NULL;
-> +	kprobe_opcode_t *correct_ret_addr;
->  	struct kretprobe *rp;
->  
->  	/* Find correct address and all nodes for this frame. */
-> -- 
-> 2.18.2
-> 
-
-
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+index a25b28d3ee90..9f364df52478 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+@@ -247,7 +247,11 @@ int mtk_drm_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map)
+ 
+ 	mtk_gem->kvaddr = vmap(mtk_gem->pages, npages, VM_MAP,
+ 			       pgprot_writecombine(PAGE_KERNEL));
+-
++	if (!mtk_gem->kvaddr) {
++		kfree(sgt);
++		kfree(mtk_gem->pages);
++		return -ENOMEM;
++	}
+ out:
+ 	kfree(sgt);
+ 	iosys_map_set_vaddr(map, mtk_gem->kvaddr);
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.1
+
