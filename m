@@ -2,185 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7638749EFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D180F749F03
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbjGFOap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S233146AbjGFObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGFOal (ORCPT
+        with ESMTP id S232203AbjGFObB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:30:41 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDA61725;
-        Thu,  6 Jul 2023 07:30:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eLt/DoI6cz2fF0gyyulx75CghzNzfKrNpD5hBfQwYXNFuE56d8VX4wjzw13ANXtzjf7oqALmWftvOK3l/CJkB48EN1ucokiC8iVqC6yVB0Rz0EqLka36+XtTX/t15wASP5ilkI/FsnXh942P06NZbh4IOOS8TmBlblJfOlKB8AHT/vVeX7uoK+MaHVwD6CZUGG8kD1zGuGRmaYekGPqjDE+JVK8aTn6tJbN0oJwGKEY+fssH4i1Aobrj7RLLVSxoxmj88ODsJnbOt6swQvrk3u0yfwy9JpHvFAuEY53ie27khbW4/TUAZndWBhBNHoijHVEXU2fP84vgwE5OR50lGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ei3ZH348uF17sZtE9osBettIs3oL6ViwCruJ4v0DziQ=;
- b=W9J/7ZFWspePLcNI3hnFvO+OQQ9sVeU1/YIl9ND9PYoWr6XmOGIYNMmHls+AFb1H81P5/I3EqIRxNZXb6yUiGYsb9I6OY+N9/jvWXbHKe5Te9K8zIwErTcnILWJ9Rskpi6sl/GMn7GpKojOkivQouptxDDJbXMMqE/FZLCqtYWgQikyCAP1dyANnIR8hLJ1FEsr+IxTqMit245zVquWFhf+Xs6i6BPv4mvdgHMatZSCPIs6U/z0wuKmE3cwNmQOOB3PFeeTPHWRoBf6Rj4fFSP5tibMd5MBgcFERrfcF7MJ5N365N2+9gqClb5n3A9DA6mY8qwp1srR6Q2g/+t0rPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ei3ZH348uF17sZtE9osBettIs3oL6ViwCruJ4v0DziQ=;
- b=fiu3fh1b5y54fTtEg9OKfzJrFqY8Hcw3dbPY3VhYiF/Lrkb1T/9gJWJW32sFFYto+TrZdul3aWt/owvKDMpqr4Fo5+vOWWxStX7HG7P41PE4YAhqCnySLCEN/ZoctV5C+ZnMpo1ZGuX9tlc/TkeTcA26eebckY+p9M4hELBKBMk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH0PR12MB8463.namprd12.prod.outlook.com (2603:10b6:610:187::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.24; Thu, 6 Jul
- 2023 14:30:38 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 14:30:37 +0000
-Message-ID: <653767a7-aa27-9a5c-b37d-e017cf5b12f3@amd.com>
-Date:   Thu, 6 Jul 2023 09:30:35 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/4] pinctrl: amd: Use amd_pinconf_set() for all config
- options
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        linus.walleij@linaro.org, npliashechnikov@gmail.com,
-        nmschulte@gmail.com, friedrich.vock@gmx.de, dridri85@gmail.com,
-        Hans de Goede <hdegoede@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        open list <linux-gpio@vger.kernel.org>
-References: <20230705133005.577-1-mario.limonciello@amd.com>
- <20230705133005.577-3-mario.limonciello@amd.com>
- <ZKaGaVYOouPgZTSj@smile.fi.intel.com>
-Content-Language: en-US
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <ZKaGaVYOouPgZTSj@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1PR04CA0002.namprd04.prod.outlook.com
- (2603:10b6:806:2ce::10) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Thu, 6 Jul 2023 10:31:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8249610F5;
+        Thu,  6 Jul 2023 07:30:55 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366DNfe8000580;
+        Thu, 6 Jul 2023 14:30:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=qPlggLFjPS2QVZzKlIOuh1K7ebzfqUoiDssBg+C2niY=;
+ b=GEQO1IrzY2mlcPEMnP7aL6bm8VNRvV6Ja6dvnU7uzEKeWZ1q8f1vDuB2EAJUhy1AR5gy
+ uZApI4Lju6yM9OV2ZAJ6n8tTU2uu1cyowFu/w9W8OA+9IOVePcKk5mkIZnR79Z0lmGGT
+ wQmLeBYSI+yIwLkUw65wmTkGrcz/fFZ11H4VUukpwjoKI024UZcdeJQHhjsqrb7VSYR1
+ mEY/jcmtbKNe/V+V5qFQ5BdjlTvuF1Za8PuEWZxKFK6Yj+aE5rp0t953TCcdApHAE3Jh
+ EnU9Ah+7mepn3ivSRYY9Vwt/uxsbWCVZtlKZQbD2UO8dqETAwHIQbDI5sbf6zmybLk9x Ag== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnvaa8ct1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 14:30:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366EUoiM003707
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 14:30:50 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 07:30:46 -0700
+Date:   Thu, 6 Jul 2023 20:00:42 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: power: rpmpd: Add Generic RPM(h) PD
+ indexes
+Message-ID: <35b6b086-9b03-49df-b80d-863218b42fae@quicinc.com>
+References: <1688647793-20950-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1688647793-20950-2-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH0PR12MB8463:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19107b29-e653-49e2-7001-08db7e2d9107
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ujv/0xAE8G9Opokva+0ERnXf4T9jm+UaBCr0AmgGrE2nHJAaYAipTuuSVJhIFD09bCK/1xp78yfBICvdGprgmHYCuajeQ2Sw3L7y2e2D86sbpiiZ372p+DVupbaGK+wKf4BeiLVJE0feE83vR/48J2BwrnjiBP2f0aIBSdmNVmJ6FSoVWvVHCz8RwtPlGIsvquzBUkHRmF6/VSV8LHVyHInPGQfvjQ4i0Rw0Wd4Hp7tRVLrz6Gc6CQva3dBQHbPVvJyesjTkpWvieXRrUJSK2rQIpTFbakB8PNF7qzX0oEm9Vpeb6TVBFtOuFYCVPvMKMW5gjNDGb64zhNzj9lKDMnRCbPJAB0y6xl000gQcv9d+FHQ19moajjebG8am82x9auW7pmR4TbUESepvxVDEmCiyAQcb8eHWr99K0XY6zi0q0diFcYLrOOXHtZRxrIRpr4bPtOjuIdyIxXTvI0H/o4tvcywis1l91W/xwVFch4LhN3UApDzvQyDCckhqEPEzI029Wxj+vzzKH6fR1isD9dltAAA3SNYJg6SvW2FSAw03xLOlvHhtOUq35jl3hBDl4ulRSbDHQXtazXQKzTOnbacInRd10VNuQumZ2WsX/aW2kawcbSFr5qnKo1aCXTBHrOpuuMrlpvFe/wz09aCLnQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(39860400002)(376002)(136003)(451199021)(31696002)(86362001)(36756003)(38100700002)(478600001)(54906003)(6512007)(6486002)(8676002)(5660300002)(8936002)(316002)(41300700001)(2906002)(6916009)(4326008)(66946007)(66556008)(66476007)(31686004)(186003)(53546011)(2616005)(6506007)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGptZi9JZytiMXBXYjNjR00vT3VOTXR5UXhMQ0xTYnRLWkMrdU1VTU52VWdK?=
- =?utf-8?B?a2x2cEJsK0hHdEdhWVVJRlNyaGRxKzY0WGFaVERFRlpVWjhjTERNTWI4QzRG?=
- =?utf-8?B?SnBQb2lLV28zelJZay85RVRhYm9DY2Q0bDNQVnZWVDY1UU54SkN1TkhXYnNX?=
- =?utf-8?B?V09rY0JsS2JWOXpEeVRvOUovdTEyZkdZaGg4ZFZDQk1BRkJIWjlXYUxneXZz?=
- =?utf-8?B?bitzWDliakNlTUw1U2l3Njl5VHNmNHZabm42WEg5VlI0cVhxd0loNEVSbWwr?=
- =?utf-8?B?RFJSKzRUeHFmUmVUaHJvYkp4Sy93RHZCMW9NNkRLWENscmxtZTFmck1sck1z?=
- =?utf-8?B?cExlRmFscHlzbm16WnZPOU5jM0V6UGlRYXhCa1Y0VGRMWjlYSEFzb01sQTNW?=
- =?utf-8?B?Q2NxYUo5NzVBelVLQmZhK0JtZ3g2bmpFN0xoYjczYVovQVhzVmlJYTFHQXk5?=
- =?utf-8?B?OUtIQlIveGVCWUorekZmYlAvYXFQOTV6S2srQXk2Sms5TWRwR2oySm1PYUJD?=
- =?utf-8?B?S1dyMHpNSDg0dmRuWDJOdE4rNlNOZjBPS3plc1gwU3QwV3doUTNXSVVabWhH?=
- =?utf-8?B?YTRKSWRyQmpickhXdTlDSWZLekRpODFZWlFRZUZTWlF2Y1dhTWRLSDBXQmpo?=
- =?utf-8?B?SDhIWE45UkdQR1J1UkhEd0pBYnZSdzIvdE9UQ0JiaWVvUkdzK1VlM3ZzZmx3?=
- =?utf-8?B?VlJia2t5NDZ2K3Z5Vk1IZ0hXbU5PSUFHUTZNaG5sb2NIR3FMVlNzb0tscTZF?=
- =?utf-8?B?TENnZEhMVFRLWnlyOFBWR3E1dXBSc1p5TlRtRC9lV3RQZHFrNjdUUkJmNUJN?=
- =?utf-8?B?ODUvRWxjQ1pqcGoyRzFXQ29zYUFwa0ZkZUFZS0tRNXZCS2J6VlJMZ3JhdjN1?=
- =?utf-8?B?UWtEQkIxRHBOL2F4cUIxZDBFY2dzTk5xT3Jnc3NkNVZoemdUSkk3a3RmVW00?=
- =?utf-8?B?Wm1TT3UzUWZsMm9sSG1GZW5xSUZBVitVcGZSRUhiTS93U1BLUndOeTIxVDBF?=
- =?utf-8?B?RDVrODVDTjFxNi8wOWp5OTB5RGlTWlJIb2h5UXRXL1pUV0ErTC9yaVMvNWE4?=
- =?utf-8?B?UTV2QUk1SUxyVU1xVldodmwyZFNreXdnQXZRQ05XMEh3MysrcURrSWt6R1Uv?=
- =?utf-8?B?QzBDQmQrc0dTYTVYb3BMeStNOGZxanJma2hEL2N0WlhVZmpxbzBHbVJ5Qkcz?=
- =?utf-8?B?K05KUXpUYnJvbkcwOEt0dTkvd0xFM3A0a1VXbll6TnpaSTFDTnVNUS9PRUJX?=
- =?utf-8?B?L2RQQ0RxbWJHRFZoc0lGam9LamZZc3BiRFBWb0RPNFNOWXZ3bnFlZzY0R2pw?=
- =?utf-8?B?NW9PVE1EcGFJSWd4aHFHRm9CdEY4aWZ3enh6WEJXb1NLMno3ZmRUaDAxR2dH?=
- =?utf-8?B?dWdKbzZSYzZqUE4vZzNicE5VYTdVODF5eVJOSVBVenVObWQvUDhDV1ljUlVI?=
- =?utf-8?B?RDJma1F4Wm50Mk5JU3FXYTlKSUVobHA0R2RDWFFBbnJ2bUJ0RVdRSEZHckRZ?=
- =?utf-8?B?emkvamwrUXVBdU9xUXVjUkVRb2Zidkw0RVJacVo4eG9XdXNHM0FqdFIxRy82?=
- =?utf-8?B?SGRFSlpiZDVxN1BVMk5qMUxlcGFLa0JKNVpReGZtcG5sRmQ5Rm15aFZVQStQ?=
- =?utf-8?B?dVlHeHB6OUpIZmlLeFB4ZHIvK2k3SURHL0R3YXd4b08yUVQ4ZDBMaEYrTGJt?=
- =?utf-8?B?Z2NQRXYwZlEwUGduaHppTjVuR2daQWlwUk5LNjYwWHp0RGZzNnhiUy8wUDgr?=
- =?utf-8?B?QVhLS0pHb0JGNFNqM2V6Z3UwaFhjYlp6V2JGN3pjQ0FrY3VMdTU2ZFRJRDkz?=
- =?utf-8?B?M2Zpc3pMTER5N0trU2JhREtjdXhueE1DRGJpSGZyeFN6M1gxSEFiU1VmUjRQ?=
- =?utf-8?B?dzh0K2pMNGdaUTZNSHZFTFRGODhtZCtHaXBEdkh6QVRUNVhncWNtUUo0allS?=
- =?utf-8?B?U1lxbWtNQkZBcU1NaDZDN1QraDBuS3k4eW9xdTBGRlF5UkhhdXYxSjhSeWVa?=
- =?utf-8?B?UU9MTkxNRHA2elZiUVQvMEpVY3VxNEpMQVJubVgycnI4Z3VjZlJTVGQrSit2?=
- =?utf-8?B?M1ltSGNJb3pEMms3bkVxTjdzMVpaZGhSSnBOaW5pUk5yd2I2dGk3T1FoSVQ5?=
- =?utf-8?Q?Qzn3d/Ej/oDmLMC9kpq1PcC6x?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19107b29-e653-49e2-7001-08db7e2d9107
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 14:30:37.6470
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CxyUJNtOWS7HQn+C33X9f9NYeEnYj8SRe7n8BVtd0pZHs4lPtECVNCL1ntfUrxTEwifcARfieLUzUQwVOKRVtQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8463
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1688647793-20950-2-git-send-email-quic_rohiagar@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JRt-xBy429ft693H7D6XFz8B0GNOxvGL
+X-Proofpoint-ORIG-GUID: JRt-xBy429ft693H7D6XFz8B0GNOxvGL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=546 impostorscore=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060129
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/2023 04:16, Andy Shevchenko wrote:
-> On Wed, Jul 05, 2023 at 08:30:03AM -0500, Mario Limonciello wrote:
->> On ASUS TUF A16 it is reported that the ITE5570 ACPI device connected to
->> GPIO 7 is causing an interrupt storm.  This issue doesn't happen on
->> Windows.
->>
->> Comparing the GPIO register configuration between Windows and Linux
->> bit 20 has been configured as a pull up on Windows, but not on Linux.
->> Checking GPIO declaration from the firmware it is clear it *should* have
->> been a pull up on Linux as well.
->>
->> ```
->> GpioInt (Level, ActiveLow, Exclusive, PullUp, 0x0000,
->> 	 "\\_SB.GPIO", 0x00, ResourceConsumer, ,)
->> {   // Pin list
->> 0x0007
->> }
->> ```
->>
->> On Linux amd_gpio_set_config() is currently only used for programming
->> the debounce. Actually the GPIO core calls it with all the arguments
->> that are supported by a GPIO, pinctrl-amd just responds `-ENOTSUPP`.
->>
->> To solve this issue expand amd_gpio_set_config() to support the other
->> arguments amd_pinconf_set() supports, namely `PIN_CONFIG_BIAS_PULL_DOWN`,
->> `PIN_CONFIG_BIAS_PULL_UP`, and `PIN_CONFIG_DRIVE_STRENGTH`.
+On Thu, Jul 06, 2023 at 06:19:51PM +0530, Rohit Agarwal wrote:
+> Add Generic RPM(h) Power Domain indexes that can be used
+> for all the Qualcomm SoC henceforth.
 > 
-> ...
-> 
->> @@ -782,7 +770,7 @@ static int amd_pinconf_get(struct pinctrl_dev *pctldev,
->>   }
->>   
->>   static int amd_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
->> -				unsigned long *configs, unsigned num_configs)
->> +			   unsigned long *configs, unsigned int num_configs)
-> 
-> Seems like a stray change.
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Right; if necessary I'll pull this into it's own patch instead of 
-s,unsigned,unsigned long, in this one.  It just seemed sensible while 
-calling this function.
+Does it make sense to give this link [1] so that we know what is
+Konrad's suggestion and the discussion around it?
 
+[1]
+https://lore.kernel.org/all/0d468d08-6410-e424-b4f3-5245cdb0334a@linaro.org/
+> ---
+>  include/dt-bindings/power/qcom-rpmpd.h | 49 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
 > 
->>   {
->>   	int i;
->>   	u32 arg;
-> 
-> Otherwise entire series looks good to me,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
+> index 83be996..6498251 100644
+> --- a/include/dt-bindings/power/qcom-rpmpd.h
+> +++ b/include/dt-bindings/power/qcom-rpmpd.h
+> @@ -4,6 +4,55 @@
+>  #ifndef _DT_BINDINGS_POWER_QCOM_RPMPD_H
+>  #define _DT_BINDINGS_POWER_QCOM_RPMPD_H
+>  
+> +/* Generic RPMH Power Domain Indexes */
+> +#define RPMHPD_CX		0
+> +#define RPMHPD_MX		1
+> +#define RPMHPD_CX_AO		2
+> +#define RPMHPD_MX_AO		3
+> +#define RPMHPD_GFX		4
+> +#define RPMHPD_MSS		5
+> +#define RPMHPD_EBI		6
+> +#define RPMHPD_LCX		7
+> +#define RPMHPD_LMX		8
+> +#define RPMHPD_MMCX		9
+> +#define RPMHPD_MMCX_AO		10
+> +#define RPMHPD_MXC		11
+> +#define RPMHPD_MXC_AO		12
+> +#define RPMHPD_NSP		13
+> +#define RPMHPD_NSP0		14
+> +#define RPMHPD_NSP1		15
+> +#define RPMHPD_QPHY		16
+> +#define RPMHPD_DDR		17
+> +#define RPMHPD_XO		18
+> +
+> +/* Generic RPM Power Domain Indexes */
+> +#define RPMPD_VDDCX		0
+> +#define RPMPD_VDDCX_AO		1
+> +#define RPMPD_VDDMX		2
+> +#define RPMPD_VDDMX_AO		3
+> +#define RPMPD_VDDCX_VFL		4
+> +#define RPMPD_VDDMX_VFL		5
+> +#define RPMPD_VDDCX_VFC		6
+> +#define RPMPD_LPI_CX		7
+> +#define RPMPD_LPI_MX		8
+> +#define RPMPD_SSCCX		9
+> +#define RPMPD_SSCCX_VFL		10
+> +#define RPMPD_SSCMX		11
+> +#define RPMPD_SSCMX_VFL		12
+> +#define RPMPD_VDDSSCX		13
+> +#define RPMPD_VDDSSCX_VFC	14
+> +#define RPMPD_VDDGFX		15
+> +#define RPMPD_VDDGFX_VFC	16
+> +#define RPMPD_VDDGX		17
+> +#define RPMPD_VDDGX_AO		18
+> +#define RPMPD_VDDMDCX		19
+> +#define RPMPD_VDDMDCX_AO	20
+> +#define RPMPD_VDDMDCX_VFC	21
+> +#define RPMPD_VDDMD		22
+> +#define RPMPD_VDDMD_AO		23
+> +#define RPMPD_LPICX_VFL		24
+> +#define RPMPD_LPIMX_VFL		25
+> +
+
+How did you come up with this list? A union of all SoCs supported by
+RPMh driver?
+
+>  /* SA8775P Power Domain Indexes */
+>  #define SA8775P_CX	0
+>  #define SA8775P_CX_AO	1
+> -- 
+> 2.7.4
 > 
 
-Thanks!
+Thanks,
+Pavan
