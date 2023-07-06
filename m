@@ -2,142 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81613749E07
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04148749E18
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbjGFNm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
+        id S231576AbjGFNqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjGFNmy (ORCPT
+        with ESMTP id S229691AbjGFNqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:42:54 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2110.outbound.protection.outlook.com [40.107.255.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F82C1BEA;
-        Thu,  6 Jul 2023 06:42:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JdcifmXfOnR4oQymq81DCUyc9UB0NBb9zL0+BXZHvKYq+jUhIvVyFjgivi3o0F0gsVn3vw+pb6fgCKewzCG/9h56SzpCHoXl8Yp/iGmd6tzDi70PQd6y2cupPZfHGLztTPduWiBPf08rOQbBSPJSACzupSTkLJwbbzLvMQDWHVbmT2T2Hs0CV7rjGeluBKiJWjhX4FBwdhiAvcm1L6aAtqhGK1/PdfhizkTF93zRBENk8YjQ32TNPXVXEjNg3CJ9/s1QeGM4uznXUQkGHywDrBDIm8maMQIw48aeuxznqveHbe7+RMrF5A81cCa0UwcpWbVCSF18DwuxdOA+l0TqQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=paqiVsqv+bRJKbz3EnAjIaVHjiCcamW576aIKSFLeQ4=;
- b=cSgRK7HYwjOFPV3awxwvNxOyEmVFtfbEc3VHjY648k26ofy6Q7HhV03OCBrKAJAgBDM055o1MFqyi35Er6hJIP0k/nTBDKjyaiUBVNBi/2wKGanOluAPr8Ih2n4wzy0EtRgrgynz/DoKzXWA46N0VpguXJ2b+smTk9sw4ab/5YwUT6hGtzb77rZ47+5/YQDop1tm+rxz+Vil5AH09XyWK0LpvfTAAO5fs2xYirYauBva7g9+Kia0hogBTrcTaypzK0Ny79vbCQbEC9avjA70UMgtH9Xl60xPVqlwlCdaeZQbiH5yNcFYtvDzAg+J+yQ4P1pd6SczCX6i3XgGA1bDhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=paqiVsqv+bRJKbz3EnAjIaVHjiCcamW576aIKSFLeQ4=;
- b=dvyfJFs5rMwnXhCv0VMvX+kv96LkAwJ7aPviSbR+7bVpSoyQrn9hKYwlQRd8Cekcey+vL5/fntLGDVI6/9fiHSeRlodcjQmf0QMGHsq7KipXAoznoY6LwEYuss1VyXGk3VRWSUDfNZB5LH8BW11/p5ewcviWJu1Rh/btBjfFhZlpmIj6AIPWFMMyPnsFuN3g8NDUOmlIo0cts3wfool0I8c4/Tgq2jp3o8aiP4EmtdqTyuabqJ210ONhh7HLC1FXYLQyidyff0YCkALpcVrmzt8vdvooBuVEMeK64JIrVtvKYYEv1YBMeA+/39MLKfzVMK3c0BJd1znXrHNQzzM9lA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
- TY0PR06MB4981.apcprd06.prod.outlook.com (2603:1096:400:1af::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.17; Thu, 6 Jul 2023 13:42:40 +0000
-Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c]) by SG2PR06MB3743.apcprd06.prod.outlook.com
- ([fe80::2a86:a42:b60a:470c%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 13:42:40 +0000
-From:   Wang Ming <machel@vivo.com>
-To:     Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com, Wang Ming <machel@vivo.com>
-Subject: [PATCH v1] net:tipc:Remove repeated initialization
-Date:   Thu,  6 Jul 2023 21:42:09 +0800
-Message-Id: <20230706134226.9119-1-machel@vivo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYWPR01CA0036.jpnprd01.prod.outlook.com
- (2603:1096:400:aa::23) To SG2PR06MB3743.apcprd06.prod.outlook.com
- (2603:1096:4:d0::18)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|TY0PR06MB4981:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd6b4d26-5061-4157-3776-08db7e26ddd8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z5jiFSyaFE/z3+cc1oLYUZm0aAZUa/fhZAuyDJSlNZpjqRcuD2mk86US8AwumkyISCEX6k6OfLnbGGQ5KeBmQmqY0TXOSippJaNTtiYS9ctr9mSIzQ0jnkOrT9Olay2Rd80lXwUHq/m3aLS2OSI8fEkRZQpuanya/HTP+tZg+FuLMNyTZMmSoDWiaV7Uc4JPSrmLB2jcMrJHjYiNTebJ79JNSUJYxKO0uuaKcJhH6nS7gp0O/lQ+2N4elIp4KKO5wxTxO1Fkhf6pmnavbhSxRo1Dm2i8UisgD8d09zrnUqPVQQyJ12G7pPPHNtX9Os19E7vcFccNU5XuofI4emKZz7feCZ1yZJ8R3rYjwmxFX1FoQk92stEMZR3lpsv07kzz4GPveZctMXU8Jcb5zC4msfNQpBUWIpN2HnNFi31YZkcPhbeF9PpjLd2GeGla3c8EVFRkhJyowSiqJqm4rfWzLk2E0CjOCQZlFVjMjh9X03C9mCiaLwHwAK5a5GdA+Pjzp+OTlecpfNzH8OsqprLLGKqNNYZFvK7obj8ri28/3+EyaNgiUOfdXeClXEGycaVj+g43n88wlMkldc8G1y0JRU0eGEwv7GiLHWFCqGhzWxA3JveBcSFTgAE/8oKoekhn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(136003)(346002)(39860400002)(451199021)(4326008)(38350700002)(110136005)(66556008)(6486002)(52116002)(6666004)(41300700001)(8936002)(8676002)(38100700002)(2616005)(66946007)(316002)(66476007)(83380400001)(186003)(478600001)(6512007)(6506007)(107886003)(1076003)(26005)(86362001)(5660300002)(2906002)(4744005)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MhnkSB8MmiSCW7I5O774ShNcNWFlt9dK/0oT5iH7hRkOPw4ABDP6mabIQF2Y?=
- =?us-ascii?Q?06ivo/fI1tiDnan1k+Hu/aV6lHx/mDc0wJ8HX6Aajrg2G5mQRSj9IsN/ZvmM?=
- =?us-ascii?Q?SGVTiQolDtNOs4m1F7m8HdUNvPxR1zlUdQJ5t7pC4rAXvUm678HZMc7cjrxt?=
- =?us-ascii?Q?JtRdyomq06MoDE/HFncE4Hs24VyHWj8XDXfdgbGjN0Ln7WxQMpNe1nJFLLym?=
- =?us-ascii?Q?CFRKpnVbMUFwNe6umIjaIN8sSbNtbExMIiFD/lhU4so3U8C57VLHkTCP2Oc4?=
- =?us-ascii?Q?BweVHFpz64zAnMLZQQMEXPqhW2fl7NXbKJobXm1FBJsOiZJm0LAy3URO7MxF?=
- =?us-ascii?Q?B69pYrXJ0C+Xpptd1ng006cKeMbbvmwjIzm5w0LeQtk9YWZYOFRvYadj15Ey?=
- =?us-ascii?Q?I8Dv0snXQjBYrxVrvwGCihthRiD5eXFdILa5xCdijGvIrY6skcGI5hJKEbzq?=
- =?us-ascii?Q?icLQBUhukTR9g+Ql9S3VaN0tPrzGh2LaxEXWgITJzIFdfIu6khIuT5RMojSi?=
- =?us-ascii?Q?PaIWRPFlpyF4WliBrbzoktzfab3hqKRuYRuXhQPAnv4XBqVfIG5vIfmjwXr2?=
- =?us-ascii?Q?Z2RdY21DU1h+sSd/TMa8Q50vI89scQhYfrBC0HO7GLPjMuOKo2Lh3KzLWw+F?=
- =?us-ascii?Q?cxWuARu0+r5A03FiQ5fR3V4MhPUGqLGwZ4tZ4klQJKEtoxxDvn28PvH7lH2U?=
- =?us-ascii?Q?Kz+mfnG8TOqVQ+/jmK5HIHF8UfIGO//oK6Zfyt9U95ORGELo9CE2n8CD0pPK?=
- =?us-ascii?Q?eJCZ2Hz+G+ve0vSy361Zi4NIcddgDTk4mDs8NS99bkZpAuBOOFkKclMcEgoZ?=
- =?us-ascii?Q?Z1Yg0F3vMI6pZBIPef8vUWX8DbTNXTJl37TEhtErbS+r/jMxbHPR9poz9gd2?=
- =?us-ascii?Q?tz7n9xJwwg9J0DH9JAUizfuWYhzk6AAIcw0NdqrVZyVsCaUUp/UYR0QA9qwh?=
- =?us-ascii?Q?SvdAm1ZFrlkaS7nWbQ4vir0mB8Kveni+g1syux3b+Kn4+8csejTBr7clotcC?=
- =?us-ascii?Q?JPaw8QkXPF6IkN6PC4b0znU0r/rmt5AEJdgT76nuPE44iQS/0clKG7TGF4g/?=
- =?us-ascii?Q?NBqpvBY/P5Q+4yq0P1SdMu2oTa37+aa3G3nh/HVrqAIV48XZNTKXFXK5sEEi?=
- =?us-ascii?Q?ihyYTmBFHxIbIYinjDJADHYNzBAycuz3Rp/vVJ3jOrAnmRH1lt6zLXHZ1nFa?=
- =?us-ascii?Q?7HkuglZ0X0wWXeSavU4THKiL7mmNxQTlbDiQeAGxpt8jylub54QAES01ble2?=
- =?us-ascii?Q?ezi2+pSRVlq0VuZ0bxyni1eUYeTbQSffxiS7IC6oHo9P+XkGoVeIfVFJJ+/1?=
- =?us-ascii?Q?N5hkqmhaskPHS++WFmcnwxpEdd0hAvgGImomglp7mqJhJFSHB59/uGKNr2hT?=
- =?us-ascii?Q?mr1xHTeJRmoLCdXLvmK2kZFj7JA0NqXPjcd6MQZuPtbPc69Nle7G5iE5eGJu?=
- =?us-ascii?Q?akWOKf7PGATk3l1GZVjjtwXWV658uhptQFMEJpoTVUMcxY0C5BxkqSh0LmSj?=
- =?us-ascii?Q?M48/2PDM1VrUNvRTFAtzVZRjz7/iCw2LaF4N9w4lz2ffqsDKOTllFFuNX7od?=
- =?us-ascii?Q?t//poiZtr+ST6T0zjRqLLnOWjyQOYHn9j5xZc8BD?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd6b4d26-5061-4157-3776-08db7e26ddd8
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 13:42:40.1214
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RSve4jzRBiaXL3HKfZsERN6WFGahVUcVQUwcSsTJY7c0J2+llU2K3g5JRsQqkSU4LbvuLJCJcfiJqYC2KLfg2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB4981
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 09:46:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344D31995;
+        Thu,  6 Jul 2023 06:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688651212; x=1720187212;
+  h=from:to:cc:subject:date:message-id;
+  bh=6EkHj8Bw4Z3C5EBn0opLRl9Jl1oeMCrRcvJqQmW0exk=;
+  b=btCJIlDjuW5j+ACuy8qcs301rJvkK1jWHuWiLX3ESKfw+YcEVqkQbIhk
+   Az3xXMA6wh7T5DkS3XcbwgT+FGFLi6J2263eNp7OJlWEEU3178uD2jVl+
+   Rc8jYd2mJjuSw6NiQRLymopeE7AHQZ9ve5M5s3wAfm9DgIS2wbzhwOHq3
+   AEs901QzGC8Uj7BHJbXNqHA2OpVgj9kGF9CZk+FNUcEh1Ht0X3G4jOYMV
+   XYKOqFhrsjv1hNPrdqa0gamqWSgtfgbO8OXEFoOmx9vT8ES/0KQf47BTj
+   MJAzbIFoaBaaonmFZT8EYLzAhN7JJD15WwvB1j/HM+X1c1BHWihSJt80O
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="362474720"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="362474720"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 06:46:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="832950424"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="832950424"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 06:46:48 -0700
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Aristeu Rozanski <aris@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Koba Ko <koba.ko@canonical.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] EDAC/i10nm: Skip the absent memory controllers
+Date:   Thu,  6 Jul 2023 21:42:16 +0800
+Message-Id: <20230706134216.37044-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The original code initializes 'tmp' twice,
-which causes duplicate initialization issue.
-To fix this, we remove the second initialization
-of 'tmp' and use 'parent' directly forsubsequent
-operations.
+Some Sapphire Rapids workstations' absent memory controllers
+still appear as PCIe devices that fool the i10nm_edac driver
+and result in "shift exponet -66 is negative" call traces
+from skx_get_dimm_info().
 
-Signed-off-by: Wang Ming <machel@vivo.com>
+Skip the absent memory controllers to avoid the call traces.
+
+Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Closes: https://lore.kernel.org/linux-edac/CAAd53p41Ku1m1rapeqb1xtD+kKuk+BaUW=dumuoF0ZO3GhFjFA@mail.gmail.com/T/#m5de16dce60a8c836ec235868c7c16e3fefad0cc2
+Reported-by: Koba Ko <koba.ko@canonical.com>
+Closes: https://lore.kernel.org/linux-edac/SA1PR11MB71305B71CCCC3D9305835202892AA@SA1PR11MB7130.namprd11.prod.outlook.com/T/#t
+Fixes: d4dc89d069aa ("EDAC, i10nm: Add a driver for Intel 10nm server processors")
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- net/tipc/group.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/edac/i10nm_base.c | 54 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 49 insertions(+), 5 deletions(-)
 
-diff --git a/net/tipc/group.c b/net/tipc/group.c
-index 3e137d8c9d2f..b2f964f62c36 100644
---- a/net/tipc/group.c
-+++ b/net/tipc/group.c
-@@ -284,8 +284,6 @@ static int tipc_group_add_to_tree(struct tipc_group *grp,
- 	n = &grp->members.rb_node;
- 	while (*n) {
- 		tmp = container_of(*n, struct tipc_member, tree_node);
--		parent = *n;
--		tmp = container_of(parent, struct tipc_member, tree_node);
- 		nkey = (u64)tmp->node << 32 | tmp->port;
- 		if (key < nkey)
- 			n = &(*n)->rb_left;
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index a897b6aff368..349ff6cfb379 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -658,13 +658,49 @@ static struct pci_dev *get_ddr_munit(struct skx_dev *d, int i, u32 *offset, unsi
+ 	return mdev;
+ }
+ 
++/**
++ * i10nm_imc_absent() - Check whether the memory controller @imc is absent
++ *
++ * @imc    : The pointer to the structure of memory controller EDAC device.
++ *
++ * RETURNS : true if the memory controller EDAC device is absent, false otherwise.
++ */
++static bool i10nm_imc_absent(struct skx_imc *imc)
++{
++	u32 mcmtr;
++	int i;
++
++	switch (res_cfg->type) {
++	case SPR:
++		for (i = 0; i < res_cfg->ddr_chan_num; i++) {
++			mcmtr = I10NM_GET_MCMTR(imc, i);
++			edac_dbg(1, "ch%d mcmtr reg %x\n", i, mcmtr);
++			if (mcmtr != ~0)
++				return false;
++		}
++
++		/*
++		 * Some workstations' absent memory controllers still
++		 * appear as PCIe devices, misleading the EDAC driver.
++		 * By observing that the MMIO registers of these absent
++		 * memory controllers consistently hold the value of ~0.
++		 *
++		 * We identify a memory controller as absent by checking
++		 * if its MMIO register "mcmtr" == ~0 in all its channels.
++		 */
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static int i10nm_get_ddr_munits(void)
+ {
+ 	struct pci_dev *mdev;
+ 	void __iomem *mbase;
+ 	unsigned long size;
+ 	struct skx_dev *d;
+-	int i, j = 0;
++	int i, lmc, j = 0;
+ 	u32 reg, off;
+ 	u64 base;
+ 
+@@ -690,7 +726,7 @@ static int i10nm_get_ddr_munits(void)
+ 		edac_dbg(2, "socket%d mmio base 0x%llx (reg 0x%x)\n",
+ 			 j++, base, reg);
+ 
+-		for (i = 0; i < res_cfg->ddr_imc_num; i++) {
++		for (lmc = 0, i = 0; i < res_cfg->ddr_imc_num; i++) {
+ 			mdev = get_ddr_munit(d, i, &off, &size);
+ 
+ 			if (i == 0 && !mdev) {
+@@ -700,8 +736,6 @@ static int i10nm_get_ddr_munits(void)
+ 			if (!mdev)
+ 				continue;
+ 
+-			d->imc[i].mdev = mdev;
+-
+ 			edac_dbg(2, "mc%d mmio base 0x%llx size 0x%lx (reg 0x%x)\n",
+ 				 i, base + off, size, reg);
+ 
+@@ -712,7 +746,17 @@ static int i10nm_get_ddr_munits(void)
+ 				return -ENODEV;
+ 			}
+ 
+-			d->imc[i].mbase = mbase;
++			d->imc[lmc].mbase = mbase;
++			if (i10nm_imc_absent(&d->imc[lmc])) {
++				pci_dev_put(mdev);
++				iounmap(mbase);
++				d->imc[lmc].mbase = NULL;
++				edac_dbg(2, "Skip absent mc%d\n", i);
++				continue;
++			} else {
++				d->imc[lmc].mdev = mdev;
++				lmc++;
++			}
+ 		}
+ 	}
+ 
 -- 
-2.25.1
+2.17.1
 
