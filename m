@@ -2,205 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B84749E76
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA180749E77
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjGFOD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S232796AbjGFODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbjGFODY (ORCPT
+        with ESMTP id S231566AbjGFOD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:03:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21CE123
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688652155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0GE7k8I9982HVE9TTWbDiwrZOKfvdOMPK3S9DyegjXE=;
-        b=GnnYYBVJmo2uCLfifojLwx7c1N2vfd+WiWg5I0CwGIFS3b7oaf2+1uhgoTlh4SsnMmVwrH
-        XKqOr2EmNhnjSB2O8HWL3Lsf/Pa6SHEfkVW+8KfHNHQCLghB8bgiaK/UUswePm7P4goJNp
-        YkiBnMxmtL4SekcydNwcBzSbnJb3YBc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-372-U9jCQa7JO5u0lm6YUCGx5w-1; Thu, 06 Jul 2023 10:02:25 -0400
-X-MC-Unique: U9jCQa7JO5u0lm6YUCGx5w-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-314394a798dso423160f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 07:02:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688652140; x=1691244140;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GE7k8I9982HVE9TTWbDiwrZOKfvdOMPK3S9DyegjXE=;
-        b=PdrcfUbZu/IK9hJJ8w+cBNmnJDyAo7mWULcUt6b4eH2Wenyu8gMLpnz+CqY8/ZfRyX
-         jGmoubJUuGRc2A+jfqV/mpWU/50lQAA9wQl3+7LkwpaTvr3Ll7JmxEzxthHB8ek/wt4w
-         CKoS5oYv8SomGTFPK4zmif6DvV3fZ76V1ErpAV2GvO5kSl48UibqN88mvtoIHT6UoSU/
-         rVZHz5jeACVWsxRl7wvgXl97rbqQtOymhpxmq3/kIr1GHQ1VquJSYk13AFQiqb5USEZz
-         2T++6ajv2pOeBMnpgZlyFN6BZdzMlKMJRnofDKpZclE/QJevq6n02OpMBXod/p4S6YbD
-         SBUg==
-X-Gm-Message-State: ABy/qLb5xAHZxtPdy2qtOJQL5JAOQX6qczzkj9wo+JexdGDiKUZJTqTz
-        rrUzA3pgAENpF+Wo1RcG7VyFyCbjAzIFSUxgkme7G+asJFJVd21FTHZ3nO9jvaohQhLqfrvcGrl
-        vaGe3N0K2IZkrQ80br7AbvsCJ
-X-Received: by 2002:a5d:4e12:0:b0:313:e2c8:bed1 with SMTP id p18-20020a5d4e12000000b00313e2c8bed1mr2235664wrt.34.1688652140611;
-        Thu, 06 Jul 2023 07:02:20 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHcrZAK048UNMfdOsb+IYlPvPsKZoDto6N+0HK8CkttE8tg+x61xjZ/Drujf9ZKOumGT2ngEg==
-X-Received: by 2002:a5d:4e12:0:b0:313:e2c8:bed1 with SMTP id p18-20020a5d4e12000000b00313e2c8bed1mr2235624wrt.34.1688652140228;
-        Thu, 06 Jul 2023 07:02:20 -0700 (PDT)
-Received: from redhat.com ([2.52.13.33])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d4742000000b0031434936f0dsm1960350wrs.68.2023.07.06.07.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 07:02:19 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 10:02:13 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yang Rong <yangrong@vivo.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Max Tseng <Max.Tseng@amd.com>,
-        Josip Pavic <Josip.Pavic@amd.com>,
-        Cruise Hung <cruise.hung@amd.com>,
-        "open list:AMD DISPLAY CORE" <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: Re: [PATCH] Fix max/min warnings in virtio_net, amd/display, and
- io_uring
-Message-ID: <20230706100133-mutt-send-email-mst@kernel.org>
-References: <20230706021102.2066-1-yangrong@vivo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 6 Jul 2023 10:03:28 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2118.outbound.protection.outlook.com [40.107.215.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7B419A0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:03:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GvODhhXKqXLgMFCtIm2O7ZibEdPwRDjeEBAciZ2BBOFzILZmHIFVxHErecIQkCHpTlLw7UZyxP6OwKiOGSQDhP6kd0tVsppD1u8GH79KYA6FKixGopNCZ1BfHBX2zj+2xHiizhJ/SATq/0gZ7NVp4Q7w/6O6ZczE6HW9DPCAoxXJCgE2kXE9J78QwH2jVWQguVaxSMIgqh92VFizs2RJhBADR8ykeLnXhrNU5kilyMq5mnMDodLMCqEA3BiCb+DhyIPyHNfKwsW/sOukpYwHCYwcCxNzr/tcOzgAqRNp5wr0vU0rHHRuUz0Nbd1ylJj+FHhq7MM26AkJmqtjelmWhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aPMlWVyU7kH0M6HLSeyhEe6t7d+ACyNcNHb3sH95h5c=;
+ b=dZRwLfO6vX+q5aLaztv+7dGP5+0e47STBU1lFk2OZovw/w+lH2c3zKIx5KoCsU6m1TR5wH1M2YlnGkkxvWblab0qMJfn8x/xbYHKBeu2WqEjI8TweRHBzgZve/UPJPSAq+o9S94GrDxSaLHgRFrmmOO1aNX6fMqtUP6ZUnyjla5SCEpXsjRrqelYR706mm6Du007EgmG1lFomR5QKHIxx1sF3RpkmuYXgvcNr/+MxOUMvG1qMVcAgkwgIAzb7sOnZtNYBcDYS8XfFZjlhHuQvnjO+QEz8rJt484rRPr9hQm1zc1MLhwOkznL4uXZGyv4QgeGtt40SJN2eTgIfylEyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aPMlWVyU7kH0M6HLSeyhEe6t7d+ACyNcNHb3sH95h5c=;
+ b=ZjV8NbNGO8FspPWKQZGYqY7N2pb2NGtoWUz+XOSP2H0xnGjO5M2+RhntaqTHmfkIb7zT4DCQupkpXDX7FsN56BTgruvQpNb5Kj2LCazdeHPSVh4TwlO+yd6vtN/QS3zFlpuEGpaKjHVweZliTBnshIEL5p9/USQNCo2bwMNKxzAwF72tbtJBe/zCnb640pgkV0yWyIYufaRw5uGT8516IMB9m68SleBT17fNpaz1KQ0TyxsGOddOb1ERpcL0R4eg3AwQNlSDCpaGx6/GCOm3LNo+e8ofSQe/fUyah5eDDGxd0wvjKMJK8CrGe9AhoXBoq2ld3UorlgFpk3YcaPjhWw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
+ SEYPR06MB6453.apcprd06.prod.outlook.com (2603:1096:101:178::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 14:03:23 +0000
+Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
+ ([fe80::2a86:a42:b60a:470c]) by SG2PR06MB3743.apcprd06.prod.outlook.com
+ ([fe80::2a86:a42:b60a:470c%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 14:03:23 +0000
+From:   Wang Ming <machel@vivo.com>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com, Wang Ming <machel@vivo.com>
+Subject: [PATCH v1] lib:Remove repeated initialization
+Date:   Thu,  6 Jul 2023 22:03:01 +0800
+Message-Id: <20230706140314.9999-1-machel@vivo.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230706021102.2066-1-yangrong@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0252.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::36) To SG2PR06MB3743.apcprd06.prod.outlook.com
+ (2603:1096:4:d0::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|SEYPR06MB6453:EE_
+X-MS-Office365-Filtering-Correlation-Id: e48b4a03-55c6-42f4-00b7-08db7e29c2ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZxrzWG5MrsMxT2zT2WIdCgQCMwek03Nf6DKWcRptBJzdh2dwquNQbtKdRZsrQ+284l7OWXxy0mVStSrnYhY6pZ5l/iSGvHcMD268fzY0fyyT4edlJPpI1cmg8cQbAg1t65UqGvjQEYDEHviiDVt//NBd4NjSC1bGhDxIAkdR+axQ72oMNOhnhSY4RiApgWvf5wwucY9Ltmpb/Hl9bC3b5r9KLJFMkhP6AUyn5DbMUWHoH6RSrUvSOHNPcFwAtO04LITI3r37lo6jb6v8SJkX9100z4qv6X7EuQfPGHxCyt1YHyqMYr80Y04Cad+Q/y8V8+H2HQ7TXZhILSFeHhGHcUrJu/xv1t+7eCeGzffZvBPJPcVHMjvOCqD8KA3tsll/2OjRvl1/CXMlNUc/wcEHNFmrJadbdattyneGt5+dXdR+QZ2e8S2k5L0bu9N7MEQ9K8PW748mTiQXRtEZcV0MGd6gpc1aqH/bmHJiAY3Svvg7zpLmIOSU0T29NhND2eWPPke9c0gOE8ejZ3S2W6AhNy/A5pQOEqNtCjJUmaNkJ/TOKAxsvnRKzm8tjwbkwLSAOpMlRHwNm773/k4nSaBWiaFGUWBg7hl/SXrtY9B8tDerTByPp1vPUU8rXPjs6RAr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(451199021)(52116002)(6666004)(478600001)(6486002)(2616005)(83380400001)(86362001)(36756003)(4744005)(2906002)(186003)(1076003)(26005)(107886003)(6512007)(6506007)(41300700001)(38350700002)(38100700002)(66946007)(66556008)(4326008)(316002)(8936002)(8676002)(5660300002)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lg0XXpajDBvQQIQ+5xacODrzu/jaRzp8a786ex6TG3/F5J6OLTVi0yo9KSYP?=
+ =?us-ascii?Q?vkJHdusXUq7mXUU9nDjHk26EGc2Cl/ZcTO4dkePKQk8IY47aEjYLJ+cBsbBk?=
+ =?us-ascii?Q?3np8JprZX6M8TOSd3CJRUeLD6RHmykE/BwrEb7zf2pAB7S9u2lzhCEItJKzD?=
+ =?us-ascii?Q?BzZSP9JaWjojLRHk+qTSmAmU2WilB91r3SYDP2yPukZrTWM64m5Kr0SV5jGy?=
+ =?us-ascii?Q?9zmEt3UkPULCW4wSgYsvS7+LAhhfOuo51frfq6W4MWEJSXFQ3x92BvPaqxZM?=
+ =?us-ascii?Q?GuwB5EEPntB89RZ3mnCCJnyP0p/4h25gFPtQ4uNJOI1Kel6HWAbRNZ7XxFCW?=
+ =?us-ascii?Q?vmcBeT1t0YzTvPpEmRBcd4YIJC3xSXQ5L0OJ6g+YpNwfH+Es9xgKR2KcuXMc?=
+ =?us-ascii?Q?SQFMbmRnoPzh8uZjnyiQ0dftXU3T8A7lHacZHFCCeWB3XQUDUNUYj1McWJqP?=
+ =?us-ascii?Q?XrjGAg/uaxFNJ/PhM30heYriZU4J64iWSyak+vWbOYHkqqZjHKKx1OoBfPE9?=
+ =?us-ascii?Q?XC/526SEr3sqOhb+pqX7OqBMx3k34V6Uh0hjo4ApyeTHb76bbsQPTqXzM2e1?=
+ =?us-ascii?Q?SxYltts1uTqd4fckn1JtCbugyM3UuDlmzcj3JFhmHQyHxxSEem4VhJdS7Iux?=
+ =?us-ascii?Q?vE1tvy2LcFOK2u++4x6iNZZJ5eVyaEwePmm9W3zi5vxDNbzl+ULjCCrx29vq?=
+ =?us-ascii?Q?jqL++ln8ptm86341wIdUTblp2bmDul7CCAbghOYLkakdbwaj+IhC7vZAOJKS?=
+ =?us-ascii?Q?k7gZ7/ELPGBCPdTIeVi+bVTeHVf7obww9lMxSElTFB5kZVhEbq7E0xTzEWCw?=
+ =?us-ascii?Q?jDx+HNwpQ6q33Ybjftk66GyaHG4GRxP6/77tX6+ep0XYacPH/x6eUgo5hSli?=
+ =?us-ascii?Q?KM+mthgvb/5Nj7ZkLqNYcVGWXv7UbXa2cIoRon2mBGSznP3n4b3+bns0Od45?=
+ =?us-ascii?Q?ERrVnJ+A67U5L1tUVowdupwRuT5bzOg0ECep1rGiJ3VndFyrG+Vuh2duLYYg?=
+ =?us-ascii?Q?TIZY5/6McRDJZWxSaRRnou9jkFTjQUmjGyzavvC1myemQ/3PKGXOBUBiOBWG?=
+ =?us-ascii?Q?vVgL+OQaPQlPQ+G0yHt3sKnpKK8PHoAW6ITitYqAh2mV3RHNTd00uuSuXzWL?=
+ =?us-ascii?Q?/k4P4T7JbBIFVGfDmrGJIS3OVPGqs4KtQLGqsmS1/6LELr09RvWJ9v8ipUr9?=
+ =?us-ascii?Q?VmCIdbTlsgcg9Vy1RWgJ1Vu2ladihR/mY7vUMmL8lWnUGZts7hTW6Xlxh7qt?=
+ =?us-ascii?Q?17Vlf2GAzQzDMQL/MQle7q5BdxK+Zl8Ko/8XXevpD/Zm/x/Ead6KuQwmS9Hm?=
+ =?us-ascii?Q?uDkXtxiI2wtRlCToKzv8rir56nCeiTjbqRXq9cO3aJJrXvO6zYCaVssuF4Yv?=
+ =?us-ascii?Q?3LqUy1XBBHTuqSNS5eTdh/mXJMjrLZsW7RzkTSwKBTABG8UeCwtFndrdpSw+?=
+ =?us-ascii?Q?iyir9x2CoNT95J/SWLWWcXHmQTpWrtpYnIMnFLzW07pn9i8V0g8eqV1HP0w8?=
+ =?us-ascii?Q?TO5m/6Apoqxs/6YLqBAPrjr89/v2kMxEBso5kTEpTL/dEhLxUkKB99Kevl7z?=
+ =?us-ascii?Q?K/qwGG8ytql0Df5cPD+twQHZuBTINUbYP55QgNTB?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e48b4a03-55c6-42f4-00b7-08db7e29c2ab
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 14:03:22.9527
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ha5bJRfK0VU5Wsu/TtGNx9tQAQq9A1uwfBrdfUbDXqSWatGNJFUzLhChmGJXsh/qpeluTYl3RnnWJVtrCvzwIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6453
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 10:06:16AM +0800, Yang Rong wrote:
-> The files drivers/net/virtio_net.c, drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c, and io_uring/io_uring.c were modified to fix warnings.
+The original code initializes 'entry' 
+twice in line 3229 and 3232, which 
+causes duplicate initialization issue.
+To fix this, we remove the initialization
+of 'entry' in line 3229.
 
-what warnings? the point of the warning is to analyze it not "fix" it
-blindly.
+Signed-off-by: Wang Ming <machel@vivo.com>
+---
+ lib/test_maple_tree.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> Specifically, the opportunities for max() and min() were utilized to address the warnings.
-> 
-> Signed-off-by: Yang Rong <yangrong@vivo.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 6 +++---
->  drivers/net/virtio_net.c                     | 3 ++-
->  io_uring/io_uring.c                          | 3 ++-
->  3 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> index c753c6f30dd7..df79aea49a3c 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> @@ -22,7 +22,7 @@
->   * Authors: AMD
->   *
->   */
-> -
-> +#include <linux/minmax.h>
->  #include "dc.h"
->  #include "dc_dmub_srv.h"
->  #include "../dmub/dmub_srv.h"
-> @@ -481,7 +481,7 @@ static void populate_subvp_cmd_drr_info(struct dc *dc,
->         max_drr_vblank_us = div64_u64((subvp_active_us - prefetch_us -
->                         dc->caps.subvp_fw_processing_delay_us - drr_active_us), 2) + drr_active_us;
->         max_drr_mallregion_us = subvp_active_us - prefetch_us - mall_region_us - dc->caps.subvp_fw_processing_delay_us;
-> -       max_drr_supported_us = max_drr_vblank_us > max_drr_mallregion_us ? max_drr_vblank_us : max_drr_mallregion_us;
-> +       max_drr_supported_us = max(max_drr_vblank_us, max_drr_mallregion_us);
->         max_vtotal_supported = div64_u64(((uint64_t)drr_timing->pix_clk_100hz * 100 * max_drr_supported_us),
->                         (((uint64_t)drr_timing->h_total * 1000000)));
-> 
-> @@ -771,7 +771,7 @@ void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
->                 wm_val_refclk = context->bw_ctx.bw.dcn.watermarks.a.cstate_pstate.pstate_change_ns *
->                                 (dc->res_pool->ref_clocks.dchub_ref_clock_inKhz / 1000) / 1000;
-> 
-> -               cmd.fw_assisted_mclk_switch_v2.config_data.watermark_a_cache = wm_val_refclk < 0xFFFF ? wm_val_refclk : 0xFFFF;
-> +               cmd.fw_assisted_mclk_switch_v2.config_data.watermark_a_cache = min(wm_val_refclk, 0xFFFF);
->         }
-> 
->         dm_execute_dmub_cmd(dc->ctx, &cmd, DM_DMUB_WAIT_TYPE_WAIT);
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 9b3721424e71..5bb7da885f00 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -22,6 +22,7 @@
->  #include <net/route.h>
->  #include <net/xdp.h>
->  #include <net/net_failover.h>
-> +#include <linux/minmax.h>
-> 
->  static int napi_weight = NAPI_POLL_WEIGHT;
->  module_param(napi_weight, int, 0444);
-> @@ -1291,7 +1292,7 @@ static struct sk_buff *build_skb_from_xdp_buff(struct net_device *dev,
->         __skb_put(skb, data_len);
-> 
->         metasize = xdp->data - xdp->data_meta;
-> -       metasize = metasize > 0 ? metasize : 0;
-> +       metasize = max(metasize, 0);
->         if (metasize)
->                 skb_metadata_set(skb, metasize);
-> 
-> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-> index e8096d502a7c..875ca657227d 100644
-> --- a/io_uring/io_uring.c
-> +++ b/io_uring/io_uring.c
-> @@ -47,6 +47,7 @@
->  #include <linux/refcount.h>
->  #include <linux/uio.h>
->  #include <linux/bits.h>
-> +#include <linux/minmax.h>
-> 
->  #include <linux/sched/signal.h>
->  #include <linux/fs.h>
-> @@ -2660,7 +2661,7 @@ static void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
->                                         page_array);
->         if (ret != nr_pages) {
->  err:
-> -               io_pages_free(&page_array, ret > 0 ? ret : 0);
-> +               io_pages_free(&page_array, max(ret, 0));
->                 return ret < 0 ? ERR_PTR(ret) : ERR_PTR(-EFAULT);
->         }
->         /*
-> --
-> 2.35.3
-> 
-> 
-> ________________________________
-> 本邮件及其附件内容可能含有机密和/或隐私信息，仅供指定个人或机构使用。若您非发件人指定收件人或其代理人，请勿使用、传播、复制或存储此邮件之任何内容或其附件。如您误收本邮件，请即以回复或电话方式通知发件人，并将原始邮件、附件及其所有复本删除。谢谢。
-> The contents of this message and any attachments may contain confidential and/or privileged information and are intended exclusively for the addressee(s). If you are not the intended recipient of this message or their agent, please note that any use, dissemination, copying, or storage of this message or its attachments is not allowed. If you receive this message in error, please notify the sender by reply the message or phone and delete this message, any attachments and any copies immediately.
-> Thank you
+diff --git a/lib/test_maple_tree.c b/lib/test_maple_tree.c
+index 9f60e0c4cc8c..2ec14c310dad 100644
+--- a/lib/test_maple_tree.c
++++ b/lib/test_maple_tree.c
+@@ -3226,7 +3226,6 @@ static noinline void __init check_state_handling(struct maple_tree *mt)
+ 
+ 	/* next: none -> active, skip value at location */
+ 	mas_set(&mas, 0);
+-	entry = mas_next(&mas, ULONG_MAX);
+ 	mas.node = MAS_NONE;
+ 	mas.offset = 0;
+ 	entry = mas_next(&mas, ULONG_MAX);
+-- 
+2.25.1
 
