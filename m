@@ -2,232 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BF77499FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524F37499F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbjGFKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S232387AbjGFKyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbjGFKys (ORCPT
+        with ESMTP id S231655AbjGFKyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:54:48 -0400
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E4E51FD2;
-        Thu,  6 Jul 2023 03:54:36 -0700 (PDT)
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 366Ar6jE026309;
-        Thu, 6 Jul 2023 05:53:06 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 366Ar4Ro026307;
-        Thu, 6 Jul 2023 05:53:04 -0500
-Date:   Thu, 6 Jul 2023 05:53:04 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Petr Tesarik <petr.tesarik.ext@huawei.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        LuisChamberlain <mcgrof@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [QUESTION] Full user space process isolation?
-Message-ID: <20230706105304.GA26175@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com> <CAG48ez2oRPBdbfoNxGcV85CXFx1Su+dmhoWXE6rWsXui6_OTPg@mail.gmail.com> <ab8e68962feba9f16ed0a715d46ed003da61cfe8.camel@huaweicloud.com> <17702e7f-479a-22b8-70d9-56e418c8120b@huawei.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Thu, 6 Jul 2023 06:54:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1051BFD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688640839; x=1720176839;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o50z9Dt6f6niYBZzkVylMnavHJWjV/lG6IzZydHxJ9M=;
+  b=1IXfUo7TWsCrbHOgUYQu8Fr1B5k8nxfIRedeCZI+FYOUy1L7cKNMEbFp
+   nU9lHRbGaRLpSzhAo8zLSz3khJ8axPEDF9oyTGUeJ8Nwkh6EQtRfpwYQN
+   JmjeCxd27RBSuDYlrnOCQ6Vu7RQNWX+VxnORgHsOa9KEuwI6Yx8PsK1ov
+   pd5bNBtA+6zVwLC8TcNEoGtASvzmVe6I0yV41DzuD9Xea5bGqhuS+kgWb
+   qToCWqOThGXxYLT50iXLCznx6WHTNokI9KioZvTmxkkmdOr7LhdjY96Yw
+   QhKmrptaRb2CN66F1hEWoTIaS7oigp904YRRq+lJfDuuPVbBwoib4DQaP
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="asc'?scan'208";a="160126353"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2023 03:53:53 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Jul 2023 03:53:44 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 6 Jul 2023 03:53:42 -0700
+Date:   Thu, 6 Jul 2023 11:53:12 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Evan Green <evan@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Message-ID: <20230706-murkiness-oven-444f25924546@wendy>
+References: <20230705172931.1099183-1-evan@rivosinc.com>
+ <20230706-dbdee6eba0c4a16084587b10@orel>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0qpcjaRKI05o/cBU"
 Content-Disposition: inline
-In-Reply-To: <17702e7f-479a-22b8-70d9-56e418c8120b@huawei.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 06 Jul 2023 05:53:06 -0500 (CDT)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230706-dbdee6eba0c4a16084587b10@orel>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 05:18:43PM +0200, Petr Tesarik wrote:
+--0qpcjaRKI05o/cBU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Good morning, I hope the week is going well for everyone.
+On Thu, Jul 06, 2023 at 10:01:31AM +0200, Andrew Jones wrote:
+> On Wed, Jul 05, 2023 at 10:29:31AM -0700, Evan Green wrote:
+> > In /proc/cpuinfo, most of the information we show for each processor is
+> > specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+> > compatible, and the mmu size. But the ISA string gets filtered through a
+> > lowest common denominator mask, so that if one CPU is missing an ISA
+> > extension, no CPUs will show it.
+> >=20
+> > Now that we track the ISA extensions for each hart, let's report ISA
+> > extension info accurately per-hart in /proc/cpuinfo. We cannot change
+> > the "isa:" line, as usermode may be relying on that line to show only
+> > the common set of extensions supported across all harts. Add a new "hart
+> > isa" line instead, which reports the true set of extensions for that
+> > hart. This matches what is returned in riscv_hwprobe() when querying a
+> > given hart.
+> >=20
+> > Signed-off-by: Evan Green <evan@rivosinc.com>
+> >=20
+> > ---
+> >=20
+> > Changes in v2:
+> >  - Added new "hart isa" line rather than altering behavior of existing
+> >    "isa" line (Conor, Palmer)
+> >=20
+> >=20
+> > I based this series on top of Conor's riscv-extensions-strings branch
+> > from July 3rd, since otherwise this change gets hopelessly entangled
+> > with that series.
+> >=20
+> > I was unsure if I could snuggle the new "hart isa" line in just below
+> > "isa". Aesthetically it would be quite pleasing, but it runs the risk of
+> > breaking brittle usermode parsers that are assuming a specific line
+> > order. So I put it at the end.
+>=20
+> Actually, they're probably only aesthetically pleasing when they match. If
+> there are differences, then I'd guess having them side by side, almost the
+> same, but different, would make them even harder to look at then they
+> already are. So I think I'll be happier with them separated by a few lines
+> anyway.
 
-> On 7/3/2023 5:28 PM, Roberto Sassu wrote:
-> > On Mon, 2023-07-03 at 17:06 +0200, Jann Horn wrote:
-> >> On Thu, Jun 22, 2023 at 4:45???PM Roberto Sassu
-> >> <roberto.sassu@huaweicloud.com> wrote:
-> >>> I wanted to execute some kernel workloads in a fully isolated user
-> >>> space process, started from a binary statically linked with klibc,
-> >>> connected to the kernel only through a pipe.
-> >>
-> >> FWIW, the kernel has some infrastructure for this already, see
-> >> CONFIG_USERMODE_DRIVER and kernel/usermode_driver.c, with a usage
-> >> example in net/bpfilter/.
-> > 
-> > Thanks, I actually took that code to make a generic UMD management
-> > library, that can be used by all use cases:
-> > 
-> > https://lore.kernel.org/linux-kernel/20230317145240.363908-1-roberto.sassu@huaweicloud.com/
-> > 
-> >>> I also wanted that, for the root user, tampering with that process is
-> >>> as hard as if the same code runs in kernel space.
-> >>
-> >> I believe that actually making it that hard would probably mean that
-> >> you'd have to ensure that the process doesn't use swap (in other
-> >> words, it would have to run with all memory locked), because root can
-> >> choose where swapped pages are stored. Other than that, if you mark it
-> >> as a kthread so that no ptrace access is allowed, you can probably get
-> >> pretty close. But if you do anything like that, please leave some way
-> >> (like a kernel build config option or such) to enable debugging for
-> >> these processes.
-> > 
-> > I didn't think about the swapping part... thanks!
-> > 
-> > Ok to enable debugging with a config option.
-> > 
-> >> But I'm not convinced that it makes sense to try to draw a security
-> >> boundary between fully-privileged root (with the ability to mount
-> >> things and configure swap and so on) and the kernel - my understanding
-> >> is that some kernel subsystems don't treat root-to-kernel privilege
-> >> escalation issues as security bugs that have to be fixed.
-> > 
-> > Yes, that is unfortunately true, and in that case the trustworthy UMD
-> > would not make things worse. On the other hand, on systems where that
-> > separation is defined, the advantage would be to run more exploitable
-> > code in user space, leaving the kernel safe.
-> > 
-> > I'm thinking about all the cases where the code had to be included in
-> > the kernel to run at the same privilege level, but would not use any of
-> > the kernel facilities (e.g. parsers).
-> 
-> Thanks for reminding me of kexec-tools. The complete image for booting a
-> new kernel was originally prepared in user space. With kernel lockdown,
-> all this code had to move into the kernel, adding a new syscall and lots
-> of complexity to build purgatory code, etc. Yet, this new implementation
-> in the kernel does not offer all features of kexec-tools, so both code
-> bases continue to exist and are happily diverging...
-> 
-> > If the boundary is extended to user space, some of these components
-> > could be moved away from the kernel, and the functionality would be the
-> > same without decreasing the security.
+This list is eventually going to be so big that I don't think doing
+by-eye anything is going to be useful, so aesthetics be damned.
+That said, a parser that relies on the order of individual lines like
+that might deserve to be broken ;)
 
-> All right, AFAICS your idea is limited to relatively simple cases
-> for now. I mean, allowing kexec-tools to run in user space is not
-> easily possible when UID 0 is not trusted, because kexec needs to
-> open various files and make various other syscalls, which would
-> require a complex LSM policy. It looks technically possible to write
-> one, but then the big question is if it would be simpler to review
-> and maintain than adding more kexec-tools features to the kernel.
+Anyway, change looks good to me:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-You either need to develop and maintain a complex system-wide LSM
-policy or you need a security model that is specifically tuned and
-then scoped to the needs of the workload running on behalf of the
-kernel as a UID=0 userspace process.
+I was thinking the uabi doc might need an update - should we add to it
+that "isa" means the common set & "hart isa"?
 
-As I noted in my e-mail to Roberto, our TSEM LSM brings forward the
-ability to do both, as a useful side effect of the need to limit model
-complexity when the objective is to have a single functional
-description of the security state of a system.
+Cheers,
+Conor.
 
-> Anyway, I can sense a general desire to run less code in the most
-> privileged system environment. Robert's proposal is one of few that
-> go in this direction. What are the alternatives?
+> > ---
+> >  arch/riscv/kernel/cpu.c | 22 ++++++++++++++++++----
+> >  1 file changed, 18 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > index 1acf3679600d..6264b7b94945 100644
+> > --- a/arch/riscv/kernel/cpu.c
+> > +++ b/arch/riscv/kernel/cpu.c
+> > @@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
+> > =20
+> >  #ifdef CONFIG_PROC_FS
+> > =20
+> > -static void print_isa(struct seq_file *f)
+> > +static void print_isa(struct seq_file *f, const unsigned long *isa_bit=
+map)
+> >  {
+> > -	seq_puts(f, "isa\t\t: ");
+> > =20
+> >  	if (IS_ENABLED(CONFIG_32BIT))
+> >  		seq_write(f, "rv32", 4);
+> > @@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
+> >  		seq_write(f, "rv64", 4);
+> > =20
+> >  	for (int i =3D 0; i < riscv_isa_ext_count; i++) {
+> > -		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
+> > +		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id=
+))
+> >  			continue;
+> > =20
+> >  		/* Only multi-letter extensions are split by underscores */
+> > @@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
+> > =20
+> >  	seq_printf(m, "processor\t: %lu\n", cpu_id);
+> >  	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
+> > -	print_isa(m);
+> > +
+> > +	/*
+> > +	 * For historical raisins, the isa: line is limited to the lowest com=
+mon
+> > +	 * denominator of extensions supported across all harts. A true list =
+of
+> > +	 * extensions supported on this hart is printed later in the hart_isa:
+> > +	 * line.
+> > +	 */
+> > +	seq_puts(m, "isa\t\t: ");
+> > +	print_isa(m, NULL);
+> >  	print_mmu(m);
+> > =20
+> >  	if (acpi_disabled) {
+> > @@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
+> >  	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
+> >  	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
+> >  	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
+> > +
+> > +	/*
+> > +	 * Print the ISA extensions specific to this hart, which may show
+> > +	 * additional extensions not present across all harts.
+> > +	 */
+> > +	seq_puts(m, "hart isa\t: ");
+> > +	print_isa(m, hart_isa[cpu_id].isa);
+> >  	seq_puts(m, "\n");
+> > =20
+> >  	return 0;
+> > --=20
+> > 2.34.1
+> >
 
-As I noted above, TSEM brings the ability to provide highly specific
-and narrowly scoped security policy to a process heirarchy
-ie. workload.
 
-However, regardless of the technology applied, in order to pursue
-Roberto's UMD model of having a uid=0 process run tasks on behalf of
-the kernel, there would seem to be a need to define what the security
-objectives are.
+--0qpcjaRKI05o/cBU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-From the outside looking in, there would seem to be a need to address
-two primary issues:
+-----BEGIN PGP SIGNATURE-----
 
-1: Trust/constrain what the UMD process can do.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKadGAAKCRB4tDGHoIJi
+0pK8AQCYZpuP+ABbmojkwmSlqKPYl+thQSqwUqrJsDOgD51+aAEAvyq/zo3OaIWj
+saOw+IqxHnyBVjVvUCz1KNx9ABaCBQ4=
+=UJ59
+-----END PGP SIGNATURE-----
 
-2: Constrain what the system at large can do to the UMD process.
-
-As we have seen before, requirement 1 implies a definition of what it
-means for a process to be 'trusted'.
-
-In the absence of formal verification, which appears to be a
-non-starter in practice, this would seem to imply defining a standard
-for the allowed security behavior of the UMD workload.
-
-From our perspective, with TSEM, we define 'trusted' for a workload to
-mean that it has not requested a security behavior inconsistent with
-what the workload has been unit tested to.  If a process does this, its
-ability to execute additional security behaviors is curtailed.
-
-With respect to requirement two.
-
-Here is the ASCII art diagram of Roberto's proposed system:
-
-     r/w  ^                             kernel space
-----------|-----------------------------------------
-          v (pipe)                        user space
- +-----------------+       +-----------------------+
- | trustworthy UMD |---X---| rest of the processes |
- +-----------------+       +-----------------------+
-
-Casey noted that he believed the Linux LSM had sufficient coverage to
-provide the necessary security controls for this model.  He
-specifically mentioned that it had support for network traffic
-controls and labeling.
-
-I haven't seen a reply from Roberto to my e-mail questioning what the
-following means:
-
----X---
-
-But I get the sense that it means that any other process in userspace
-couldn't have any impact, or I assume visibility, into what the UID=0
-process is doing on behalf of the kernel.  I don't think it means that
-there is supposed to be some type of highly controlled traffic between
-the UMD and other processes.
-
-We will see what comments Roberto has on this.
-
-This arguably may be the most difficult requirement to meet if our
-interpretation of this requirement is correct, particularly so if this
-involves a confidentiality requirement, perhaps a bit less so if there
-is only a requirement of integrity of execution.
-
-As I mentioned in a previous e-mail, depending on the requirements,
-issue 2 starts to look a lot like protected enclave technologies such
-as SGX.  As history has shown, providing a protected execution
-environment, against the rest of the system, is a somewhat formidable
-undertaking, with probably a requirement for hardware support if SGX
-and/or TDX are any examples.
-
-So, I believe that TSEM brings useful technology to the table, but
-regardless of technology, it would seem there is a need to
-specifically define the security requirements for the UMD model.
-
-> Petr T
-
-Have a good day.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
+--0qpcjaRKI05o/cBU--
