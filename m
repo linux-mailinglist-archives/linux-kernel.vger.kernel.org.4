@@ -2,175 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC47749B9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31727749B97
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjGFMTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S232731AbjGFMS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjGFMTB (ORCPT
+        with ESMTP id S230445AbjGFMS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:19:01 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B31BC9;
-        Thu,  6 Jul 2023 05:19:00 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id E8A865C02FA;
-        Thu,  6 Jul 2023 08:18:58 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 06 Jul 2023 08:18:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688645938; x=1688732338; bh=pm
-        sCsD6NfrkTosVBZWjph1ykYGb9O3Dg+fhXVNC3Rvk=; b=DYU9YRbrNhTzBJuXfZ
-        xZ+Y1O2XI7KfQRyTQF1V8a0rVq8MYc2l4H0B6U1/rBwlwbNvVvTCBUCgruY6Pxoc
-        VaYF1h3LDB2oPT+5yxaP3YTkLrgAaErAuxO/cxKMd7pHGKSppM0I++Q5lIWr9nzw
-        bxdZIxAaU+xs/SLqpbCdozn2UEGm5TT6M5c3WNNmobtsyNNvBu6KcsHLTywYQsSR
-        HtmKZFhQxqax14K0B8DsN6GQIZQck5yQSMFP6o4GM2GDC2jn0q3rPBVQqtylth+I
-        ISX60SEJu5ruEE8cuZmgIMGJq3+lbX3zaRBPrORf/LsaMI4hGMUkAx+lAYjUt2zg
-        o7Ng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688645938; x=1688732338; bh=pmsCsD6NfrkTo
-        sVBZWjph1ykYGb9O3Dg+fhXVNC3Rvk=; b=TfDw4vxXnxU9vNA6hgCsyajS/OCts
-        wQszxsaApShKlVvMRQdDbyNtIWQ+FkjIpzybYwnCBdjxcaVoWSCXr3brSE996vlG
-        1PKuiTvK/Eri8Cf5hnKLtqQy7v1D4Lrf+WDqzYrF2UBnOYiJw7iDiRnBmDhmYUyP
-        yR48T+Z9lKy0yu8WGApPh8AMbRFKyjIagsFjtaFjxi31mrREHRRtg9G+fJ35WLER
-        RTm5PTA/LfOkjDr0eolviLd3yvayhNR0dgWpj/KjK8FNFM6KUmlR6EChEssKMFxK
-        vPabKnTuSWQ0naxSVR4eWja+X3+iE1xWMOlFN7AHnoLKi74y/DdDnk2ug==
-X-ME-Sender: <xms:MbGmZCnXRz8rvIIm-02xlguovFCy3cCMiGr6P8JkTytqrGFEIwkBXg>
-    <xme:MbGmZJ2Op6wwSngvS53MLCr6dcHZ91rJIsWui0mJbwQRHkh8Mm2a0SzG137XXoPI5
-    B0vrIBwLhW2ykG5mdk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelgdehtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:MbGmZAoflaPhHqipkdsi5mRnq0UbEnAE7k1e13rOugyz-CK1O69kqA>
-    <xmx:MbGmZGmffC6G5IeDL4PkqNLjcETC6c9EAQF_I979pIoiYgbQnbq4DQ>
-    <xmx:MbGmZA36VwFVduytTatUjarqPPwSpX4vSvCVpKuq7oPx5XBXNbHlZw>
-    <xmx:MrGmZI5pH4RZaybwhVCry2F9J71hviXYyMNQoff1YN9MX9L3C13eWQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3EF87B60086; Thu,  6 Jul 2023 08:18:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <c057ba7a-3cc2-44ac-a961-fa062b909876@app.fastmail.com>
-In-Reply-To: <20230705142004.3605799-2-eric.devolder@oracle.com>
-References: <20230705142004.3605799-1-eric.devolder@oracle.com>
- <20230705142004.3605799-2-eric.devolder@oracle.com>
-Date:   Thu, 06 Jul 2023 14:18:36 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Eric DeVolder" <eric.devolder@oracle.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Cc:     "WANG Xuerui" <kernel@xen0n.name>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Frederic Weisbecker" <frederic@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Sami Tolvanen" <samitolvanen@google.com>,
-        "Juerg Haefliger" <juerg.haefliger@canonical.com>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Sebastian Reichel" <sebastian.reichel@collabora.com>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        "Zi Yan" <ziy@nvidia.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Zhen Lei" <thunder.leizhen@huawei.com>,
-        "Xin Li" <xin3.li@intel.com>, "Tejun Heo" <tj@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, tsi@tuyoix.net,
-        "Baoquan He" <bhe@redhat.com>, hbathini@linux.ibm.com,
-        sourabhjain@linux.ibm.com,
-        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
-        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v4 01/13] kexec: consolidate kexec and crash options into
- kernel/Kconfig.kexec
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 08:18:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E696AE70
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:18:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 822C661921
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9556FC433C8;
+        Thu,  6 Jul 2023 12:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688645934;
+        bh=ozExOu5XO3lfJATKOxCayWXQFV4jBV+bqUwjfldZCR0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZJX6jVtMI7epnjU7mVdYEesEmctou3qq7gFSxsYGdDaW5xvvWHg5vLRugFljQAAoj
+         fwyfoUTZZZfS5+P8/4YrXyMcNkaVhrVFIKTtGxRKYInF3pgGJqzpy5CqizwkYMSiSY
+         6HE5nOmLDCmIw1es79aLMSIFHKKxUSdezM62m0OlLTTGQ+vmmpL0CHitXZQD5m2BVS
+         88WieJqJuvdFCYwGxoCOm3nbBg/x2645WGG/OrsS+//GaTLYGXX592AM+Scg7/CD4r
+         yZTTP+ubVvBLYKklaIBzBgluEkbRm5jGV8Xkry33QeDpz7TNGu5qVtGSXmacEaytAi
+         gLtGihTlJVz+A==
+Date:   Thu, 6 Jul 2023 13:18:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Benjamin Gray <bgray@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] ASoC: codecs: SND_SOC_WCD934X should select
+ REGMAP_IRQ
+Message-ID: <f4bde99b-ac53-4ec6-98ea-e56a4c125a89@sirena.org.uk>
+References: <cover.1688643442.git.geert@linux-m68k.org>
+ <cafd878747e7951914a7d9fea33788a4a230d1f0.1688643442.git.geert@linux-m68k.org>
+ <bd265a83-ca5e-4196-936e-0f753ea47a25@sirena.org.uk>
+ <CAMuHMdUc-6ga7G5xuXXcKXU0ya3XBBM-tEJ3tZ-BY-oa+wozsQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ecJqEW6WQ4xj01qT"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUc-6ga7G5xuXXcKXU0ya3XBBM-tEJ3tZ-BY-oa+wozsQ@mail.gmail.com>
+X-Cookie: Don't read everything you believe.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023, at 16:19, Eric DeVolder wrote:
-> +
-> +config CRASH_DUMP
-> +	bool "kernel crash dumps"
-> +	depends on ARCH_SUPPORTS_CRASH_DUMP
-> +	select CRASH_CORE
-> +	select KEXEC
 
-Today's linux-next now runs into a warning on arm64 and
-presumably others, with the same problem as on arm earlier:
+--ecJqEW6WQ4xj01qT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-WARNING: unmet direct dependencies detected for KEXEC
-  Depends on [n]: ARCH_SUPPORTS_KEXEC [=n]
-  Selected by [y]:
-  - CRASH_DUMP [=y] && ARCH_SUPPORTS_CRASH_DUMP [=y]
+On Thu, Jul 06, 2023 at 02:15:57PM +0200, Geert Uytterhoeven wrote:
 
-I think the easiest way to make this reliable would be
-this fixup:
+> Well, unless you have CONFIG_REGMAP=y due to some other reason, you
+> won't reach the mentioned link error without applying [PATCH 2/3] first.
 
-diff --git a/kernel/Kconfig.kexec b/kernel/Kconfig.kexec
-index d82a7ce59c051..e58ca6128d6ee 100644
---- a/kernel/Kconfig.kexec
-+++ b/kernel/Kconfig.kexec
-@@ -91,6 +91,7 @@ config KEXEC_JUMP
- config CRASH_DUMP
-        bool "kernel crash dumps"
-        depends on ARCH_SUPPORTS_CRASH_DUMP
-+       depends on ARCH_SUPPORTS_KEXEC
-        select CRASH_CORE
-        select KEXEC
-        help
+> It doesn't hurt to apply this patch independently, though.
+> Do you want me to resend it (to your sound-persona) as a separate patch?
 
-   Arnd
+I've already split it out.
+
+--ecJqEW6WQ4xj01qT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSmsSgACgkQJNaLcl1U
+h9DiZwf+LRghgiXe8yXcuq0vH3jgiskjra/u/Op609XR6YiFf7mt8xQZvNoZa8/W
+H5ypiOqFY+3UMoHkk2liYMaTTXZ3BQFJa/PmhmW+TGW8oG99S4l84OS0ZKwpMDN3
+HxBHROB1V1UCdnbKNR7cGxRmuTVKZH7P8beTr4YbH3qJD+sNRqb9fcCbiBOuGPvL
+9sMHKYOXPhccChhBOjLlJSESzz0WO8TLxsAHE75pPceweqZD37VDnErV0YQQkyPq
+mIcM/uUC5GMVTcqidYv+o6JdwYqK1rvcLrmjjS3LVc5swE1yvX6aOBizPjYId0zu
+E30bTGDZ8CBhjKgjPjuriDgAe0Kvqw==
+=ZBDx
+-----END PGP SIGNATURE-----
+
+--ecJqEW6WQ4xj01qT--
