@@ -2,190 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125B5749492
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596BF7494A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjGFEIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 00:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S233005AbjGFEP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 00:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbjGFEID (ORCPT
+        with ESMTP id S229632AbjGFEPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 00:08:03 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on20611.outbound.protection.outlook.com [IPv6:2a01:111:f400:7ea9::611])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CF01BF9;
-        Wed,  5 Jul 2023 21:07:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aGHrWvq8aPGRUzcJFnSXC+G7iNpAYW8lBTrMzTDt/m72arz7U4XkjvHNCp2kGRCxSIFdfBo8kgmA8RF1OsXGuTR9B+WZOYIbAvl/Xy1uZ4Pff2LbaFebQbJfF4z03Xi4ASnBFwG438sq4Jy+aHrWs8Z/jEHgKYd7qlk1rYqTAEmjzGAGaydaP/9cP/JCeY8zbL4jasg2zWThZVES48QgCStF2L7EQud2vv3+GdiB6PkBRrntEzzIrnp9W/ThCLr/wP9gmuTlmeBq8pnXUc74OlwF81N/GuSBa2tVJEnXILWIaGHZHyGzj0HrfntyAejs73aKjcWuRgtxebwDgB9Mtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u0R2E490+xKStoDJwSlE3D4mz3glKGtLmX86yAt7dDI=;
- b=nEuA0m5cAz7ddkL3CG3/7NwrSKJh6HLutQuXb7S7pvp0lohurqInDPh/eHPxhN7uwQoeC3bb1M2mmGLAnv9q5olkxucarEQyerOinRL4fKytsZt8TTTphkqb+XQ86gS6LKzhrB+PkheXzGNe1Te+ENtvCkg/6KNJhSGkb7liwkf+FKugRhUfl4UHi8/m9eZ3aWn71mlQkvhFT/VqMeF2YHrG/UoaFm/KAd7sKSX46k+WCG4XkAdQTqo99usW9QZMjuEsWYUCk5NmgYIpMQ7KAt8VeH17GYzLmgOytdBNYajmRuDTevc72fUHll+NXwhB3vM5WiCJodoDHWI6lvLLGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u0R2E490+xKStoDJwSlE3D4mz3glKGtLmX86yAt7dDI=;
- b=b0krs4+iIKWh5W/ybFONOUH60HdUVkENi4qZ7WTZZtaRatUIAQnS23HvBKYzOt5fcT4z+iotgxIS2DMnxAHw8IYB1i+lRhvYTRoUmgUmCiRWu8ZsxJpMTA2VsENxFS0zO9Nq0Vh0WgvxQmeckQvEg1b9CIWqTPHF8IdOT4/fA70=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS7PR12MB6045.namprd12.prod.outlook.com (2603:10b6:8:86::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
- 2023 04:07:37 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 04:07:36 +0000
-Message-ID: <9d1095ab-23e5-3df3-58d6-b2974f87ee72@amd.com>
-Date:   Wed, 5 Jul 2023 23:07:34 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [Intel-wired-lan] [PATCH] PCI/ASPM: Enable ASPM on external PCIe
- devices
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-pci@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        intel-wired-lan@osuosl.org, bhelgaas@google.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20230705200617.GA72825@bhelgaas>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20230705200617.GA72825@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA1P222CA0098.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:35e::8) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Thu, 6 Jul 2023 00:15:23 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408A31988;
+        Wed,  5 Jul 2023 21:15:22 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666e64e97e2so219394b3a.1;
+        Wed, 05 Jul 2023 21:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688616921; x=1691208921;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IIs1Ic3kA6qxFm0PBui1PCyprdvyTG+DQnNhEQH+f60=;
+        b=biJNVE7TnITK7Jn8jArQ6ai5UK/8sHSUU4C04rH/HSb//GFyfN+0zV2uGYAM1mNIpR
+         NqYQCMoo0xsYDswOeUa4TTHku6lXSv2DJ8It9gug6NNyUNBFO2pnC8qnxhn/AyaaG4bS
+         9QAeStpV+Q60mDniYwHKKEKqgfkJJ7jnTwQY9qqOCQQReHyd5jrRmS51Qb9KmpZ9Iuom
+         Uiy8GvWaf1S9BVQbctQuSJGW2q03mLaD49oST4zr31vnM6aeG4UoUsiJ/gbskg8eagI2
+         +/KAQr7Vpc3YP5irCnnwpFOZJthlJFKN7MB98giNzyC//vubSnXOw+0ZU17rTbqahvse
+         M2cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688616921; x=1691208921;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIs1Ic3kA6qxFm0PBui1PCyprdvyTG+DQnNhEQH+f60=;
+        b=h+I3qDcjFtEERC8u7lm6jhBlctnpXqANtiuhXYac931TEjvLhDMhBIYWCbws3MhfzC
+         bhF9NIgsbu39oiQwmdemH/jpz0tShVlJN+FNJ9jugZE0BvAsU30DT6FlCNIA3a24VtLb
+         UsfhznXG10tK8Hrf32QHZTmFzhZYl7U7NEQq9klAgo/JyF8wHi8YXTxyYt3gZfv/6qmh
+         S43NdVg0CmF9wHFGmnNqC97UI+9t8PVpKu4ko5lNkG0IKGKYbAQwepXa4cQGKkQzydrJ
+         +sR7F0RpAwfIjBgyyozF8z2u20nYpYIbgD8Gf8xWgjl0XAn1DDnB8rx3DHdjkTD2cv4y
+         BnoQ==
+X-Gm-Message-State: ABy/qLYx6FrFdVKjDQg53Ppl2qoFpgXPN7M5PZmJ6nCIZLozXGjiniA2
+        End5TYy5/JYhJO4wRMH0dIStfvXDQJYUow==
+X-Google-Smtp-Source: APBJJlGLdBFHS/nuBRHjP4lzjj/zANJe18hspko8zTFNvPvy0FVqup/zYik1d/W12JUvN8zTeOnP/A==
+X-Received: by 2002:a05:6a00:1acb:b0:66a:5466:25c6 with SMTP id f11-20020a056a001acb00b0066a546625c6mr543165pfv.18.1688616920834;
+        Wed, 05 Jul 2023 21:15:20 -0700 (PDT)
+Received: from localhost-live.default (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id g18-20020aa78752000000b0064d681c753csm302246pfo.40.2023.07.05.21.15.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 21:15:20 -0700 (PDT)
+Subject: Re: [PATCH] KVM: ppc64: Enable ring-based dirty memory tracking
+To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>, jpn@linux.vnet.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Thomas Huth <thuth@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20230608123448.71861-1-kconsul@linux.vnet.ibm.com>
+From:   Jordan Niethe <jniethe5@gmail.com>
+Message-ID: <266701ad-90df-e4c8-bbf7-c6411b759c5f@gmail.com>
+Date:   Thu, 6 Jul 2023 14:15:13 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB6045:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04d3ec36-339e-4267-accc-08db7dd6883d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rutKKdcTxq8eCw9ek2ZochNSjsuVbFUCJrJAmAT+2vmxnSRbHqY0K76xkUQqfCrBO19ZDPxzncwT3VkX0cXdyIz26YdMTLdRxbzeGpT3qro8JivO2groa7qUzgGd9ZjiJS7Z06vM4J3Fl2nNndhkUJCx8+PtL5GFXy4ht/VPl/k6nKpGzNnfzCQJ2XPbmTpCfU6JpfLe5AStpc73qMtdQXhBDSEHZd4lMSca0ipHZaPkEVD2BHD/+udbB/PxitU7uGiRWh5NSuXVUK7LaDdV9Q+71iWjK74uKn6iQgHSFbY83sPAA+vqnttaFqF2gQq5LQfb7Y0JtaDHFbT5O8PwgRug5qxG4UuLJd8oMCWSoysUKunfC10czrXaaEg7z6crz0f1sHVg9VNoC0f5WwUJucomHLZgh+FYkboUfd8HrIMJDfrDIXmCyqtYrMRzUFFb25jKH19KCNRcmRkaxH8PdXiz+/Dd2RaGoKWCEv+k2JK9MvHRhXocDlz9FzeMKmeeWZiC8TELkvhDTAswZTzBNU/x/dE7rkDDcXxjbCOWB/j5t9b1uTodHvFWTOeJ43V6o14bxQ2/6lIF9tAPXOpiL7l/8ic0LUfYzN24FEaA6bQsYoOAQITzfue9nTZi3CD5MZwtOcfvt+V/IUdrex4MJA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(366004)(396003)(39860400002)(451199021)(41300700001)(2906002)(7416002)(5660300002)(44832011)(8676002)(8936002)(36756003)(31696002)(86362001)(45080400002)(31686004)(2616005)(478600001)(186003)(6506007)(53546011)(6512007)(966005)(6486002)(66476007)(4326008)(66946007)(66556008)(110136005)(316002)(54906003)(38100700002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cm4xUnVhcExkN0xGZkl0ZTQzSCtzSDR5b1R4dFQ0S1JWZEJlRUtIVzMzeDYw?=
- =?utf-8?B?ZnVUZXU3d2FXMENNRWFIWnlmalJyTm1kdUlaNStGNU9iMnBsZWRZQnVveHJL?=
- =?utf-8?B?L1IyakI3UFJ6UHhEU0sxdUpFK3EwSDk3ZUVlZFpYc1UzTFo4L2t4b2p5VjB1?=
- =?utf-8?B?WEpIMWdia3RZSmlpcDlPVWZ0WXVnZ1RvTlAxYzdSOFBWb0J3M0pyREFDUXA1?=
- =?utf-8?B?WEwxMGJHTDBDcC90bk1YZTRkQlpua0I4dHM3dkZmWGZneDIrZms1T1FWVDk2?=
- =?utf-8?B?Qk5veU1iczhtTCtRRHY2NndaU3dvVXNnWlA0WTRBTFNSb0FDNy8zV3d0aitE?=
- =?utf-8?B?WkZjeUNtK2hTTlJ1SjErai81Q1JQaGJRQ2tLYnZZSDYwN29lZGJnZWhIQURw?=
- =?utf-8?B?UU0xcGE5dDk1WGJqM1NSdmU1WGNLa1Rlemk2bGExeWpJTm8zVTJTbkFRVEZi?=
- =?utf-8?B?dzRmMWdSYkE0a2kxYmNwaENBb2p0eUF3dURybzdyTm1PTjloZEVlK01nRnZp?=
- =?utf-8?B?ZDRIYzRkOHcvYTk1dThGSWZiRGJTaXE4MTcySGdXNE9pMnV6OVphVy9kZHhM?=
- =?utf-8?B?WFVqTWpUbGpDTWV6T0xrWXEza0ZUUWxCNCtvZldsbTFWcitKZ2ZwV1BUVkM1?=
- =?utf-8?B?WjFvTmNwWUUrUjFmbG9sT21VbkluaEVMWDEzTDVUNUNIQjdtcUJkY1YxZy8z?=
- =?utf-8?B?VDd3N0lpVGRza2VxZE1zakZITi9ZRzBleUhiOGpyZjR0M1ZkVzlCOXpsb1RP?=
- =?utf-8?B?czVzYTdFM2R3d09YbW4xcTlOVjAremJNWVYzZTNMcW1jM2RvL25kQkg3SnZw?=
- =?utf-8?B?SnlPRjB1V29mK3N1Rnkwb3MxNmZFSmc4QXBubEkxVGRwY0h2WGM5OU1uNC9n?=
- =?utf-8?B?TnkyQ1lpR0pPR2FtNjhUdTZUaDNDTFlDM3ZVOWtCY01ycjRmb0ZVUUNINExp?=
- =?utf-8?B?ODAxZFhtNjVvZlQzdjNEUXBaaGVYclpqOVhvVlJoVWgvVkEremNld2U5elZK?=
- =?utf-8?B?bEpHV25pbkx1NTF4UDJJcVdYNW4xcTBHZTdkeUY2cnRTemhUamU4cy94dU9k?=
- =?utf-8?B?TnNBdDltYXd2cTB3clE1dHVNbHlZbWhIdXc2Y2hNb0NFaW11L0JyK3BlMGFG?=
- =?utf-8?B?L0h2NlZjaklYV2QrUUNWVW9HV01BbXc0KzloUWZFbzh1a2VNNHdjSS8zWVRy?=
- =?utf-8?B?ZVFyYWNJNVBLTU51QTloN09Oa2d3VWkxcjJ4TGRtNHMvRnJ3OVJ6V0RwdnpO?=
- =?utf-8?B?cHRpUllkcGFZZDVNWFZkaWpuUEZJK2FubVh2MzRmYWxlUUlqQnFEQ1p2blpj?=
- =?utf-8?B?K3R1bHEwWHduakR2ZFI3NUQ5VmtSZFV0NWlDa2RWK0VkRTczUk1kY1RQREpt?=
- =?utf-8?B?VWhzVHo0MDdTVVh2Z3lsSG9CWE5sSk5FMFFadDBKblZYQTFYaWNiT1lKK2hu?=
- =?utf-8?B?UCtwb2NpcHdqdnR4WjIxS3ZmREZPbS9wRTF2c0t0dkFwQmlMTk9SZzlocEww?=
- =?utf-8?B?TXdMUFVTTlFRanFzZEs0RjNhT0IwOEZFQm1WZC8xMHNDT3ZqVUJ1Mnlnb3dh?=
- =?utf-8?B?QThTR1VQang0NWlBODc3QXltS0FDMFhjUkFHZG1zcDhKZjJTUGd0VnIvVFVN?=
- =?utf-8?B?Vy9kdE92ZENuN1Y5cGx3OFAxSGNWbURIMm1xNVhQelZKZVNNdEkvc21zQnZw?=
- =?utf-8?B?TklGRmVOelRTSEZNRTgzbmowTmtmam5yUncrdHFMT0FJVWVjWmZLTThIOXVq?=
- =?utf-8?B?ajRuNzMzQTloMUhqQ1VCUnQwYVZaR2NHbUJTeC96cDlMK1M5SXJjQ1lVekhx?=
- =?utf-8?B?b293Z2VyVjRmWnA4eENva09TUmwxY0VoWGFnZzBtYUVVRk5rdTc0NUUxK21x?=
- =?utf-8?B?L0w5Ym1wY28yQlptMFVaUER6cXUwL2F6TzlGTU5zZnUvR25NYWE2VzdyZjJU?=
- =?utf-8?B?ZVVyd3pjNERvNDg4eVpoZkxZUWxBVnI4WHFSS1A5d2g5S2Z4aWJLbXlZVDdr?=
- =?utf-8?B?NXo0RERVcWpLelJRMDdBVFZpd3JwZmxhZnl3T3RITS9GbXFleVBkWmh0ekFO?=
- =?utf-8?B?enRKMWJXeVJIMkIrWWpuellxMXFjMFhSMy9wNVRHR25XcUlnbVlHcWkvWWNu?=
- =?utf-8?B?YWUzdW9nU2s2ZlhGclRja2NEU3o5UktSTWRrdmZ3QjBhdVlPeUpNS0dQWGZL?=
- =?utf-8?B?TVE9PQ==?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04d3ec36-339e-4267-accc-08db7dd6883d
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 04:07:36.6923
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fWXceW1yqZs3t43jzJtUG6uA0LuCS+zztMP+q6Ex97oALaERmC8mz2w21N2G1Jss4PIf95bYK8qKNzwKpbicbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6045
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230608123448.71861-1-kconsul@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/23 15:06, Bjorn Helgaas wrote:
-> On Wed, Jun 28, 2023 at 01:09:49PM +0800, Kai-Heng Feng wrote:
->> On Wed, Jun 28, 2023 at 4:54 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>> On Tue, Jun 27, 2023 at 04:35:25PM +0800, Kai-Heng Feng wrote:
->>>> On Fri, Jun 23, 2023 at 7:06 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>>>> On Tue, Jun 20, 2023 at 01:36:59PM -0500, Limonciello, Mario wrote:
+
+
+On 8/6/23 10:34 pm, Kautuk Consul wrote:
+
+Need at least a little context in the commit message itself:
+
+"Enable ring-based dirty memory tracking on ppc64:"
+
+> - Enable CONFIG_HAVE_KVM_DIRTY_RING_ACQ_REL as ppc64 is weakly
+>    ordered.
+> - Enable CONFIG_NEED_KVM_DIRTY_RING_WITH_BITMAP because the
+>    kvmppc_xive_native_set_attr is called in the context of an ioctl
+>    syscall and will call kvmppc_xive_native_eq_sync for setting the
+>    KVM_DEV_XIVE_EQ_SYNC attribute which will call mark_dirty_page()
+>    when there isn't a running vcpu. Implemented the
+>    kvm_arch_allow_write_without_running_vcpu to always return true
+>    to allow mark_page_dirty_in_slot to mark the page dirty in the
+>    memslot->dirty_bitmap in this case.
+
+Should kvm_arch_allow_write_without_running_vcpu() only return true in 
+the context of kvmppc_xive_native_eq_sync()?
+
+> - Set KVM_DIRTY_LOG_PAGE_OFFSET for the ring buffer's physical page
+>    offset.
+> - Implement the kvm_arch_mmu_enable_log_dirty_pt_masked function required
+>    for the generic KVM code to call.
+> - Add a check to kvmppc_vcpu_run_hv for checking whether the dirty
+>    ring is soft full.
+> - Implement the kvm_arch_flush_remote_tlbs_memslot function to support
+>    the CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT config option.
 > 
->>> It's perfectly fine for the IP to support PCI features that are not
->>> and can not be enabled in a system design.  But I expect that
->>> strapping or firmware would disable those features so they are not
->>> advertised in config space.
->>>
->>> If BIOS leaves features disabled because they cannot work, but at the
->>> same time leaves them advertised in config space, I'd say that's a
->>> BIOS defect.  In that case, we should have a DMI quirk or something to
->>> work around the defect.
->>
->> That means most if not all BIOS are defected.
->> BIOS vendors and ODM never bothered (and probably will not) to change
->> the capabilities advertised by config space because "it already works
->> under Windows".
+> On testing with live migration it was found that there is around
+> 150-180 ms improvment in overall migration time with this
 > 
-> This is what seems strange to me.  Are you saying that Windows never
-> enables these power-saving features?  Or that Windows includes quirks
-> for all these broken BIOSes?  Neither idea seems very convincing.
+> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> ---
+>   Documentation/virt/kvm/api.rst      |  2 +-
+>   arch/powerpc/include/uapi/asm/kvm.h |  2 ++
+>   arch/powerpc/kvm/Kconfig            |  2 ++
+>   arch/powerpc/kvm/book3s_64_mmu_hv.c | 42 +++++++++++++++++++++++++++++
+>   arch/powerpc/kvm/book3s_hv.c        |  3 +++
+>   include/linux/kvm_dirty_ring.h      |  5 ++++
+>   6 files changed, 55 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index add067793b90..ce1ebc513bae 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8114,7 +8114,7 @@ regardless of what has actually been exposed through the CPUID leaf.
+>   8.29 KVM_CAP_DIRTY_LOG_RING/KVM_CAP_DIRTY_LOG_RING_ACQ_REL
+>   ----------------------------------------------------------
+>   
+> -:Architectures: x86, arm64
+> +:Architectures: x86, arm64, ppc64
+>   :Parameters: args[0] - size of the dirty log ring
+>   
+>   KVM is capable of tracking dirty memory using ring buffers that are
+> diff --git a/arch/powerpc/include/uapi/asm/kvm.h b/arch/powerpc/include/uapi/asm/kvm.h
+> index 9f18fa090f1f..f722309ed7fb 100644
+> --- a/arch/powerpc/include/uapi/asm/kvm.h
+> +++ b/arch/powerpc/include/uapi/asm/kvm.h
+> @@ -33,6 +33,8 @@
+>   /* Not always available, but if it is, this is the correct offset.  */
+>   #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
+>   
+> +#define KVM_DIRTY_LOG_PAGE_OFFSET 64
+> +
+>   struct kvm_regs {
+>   	__u64 pc;
+>   	__u64 cr;
+> diff --git a/arch/powerpc/kvm/Kconfig b/arch/powerpc/kvm/Kconfig
+> index 902611954200..c93354ec3bd5 100644
+> --- a/arch/powerpc/kvm/Kconfig
+> +++ b/arch/powerpc/kvm/Kconfig
+> @@ -26,6 +26,8 @@ config KVM
+>   	select IRQ_BYPASS_MANAGER
+>   	select HAVE_KVM_IRQ_BYPASS
+>   	select INTERVAL_TREE
+> +	select HAVE_KVM_DIRTY_RING_ACQ_REL
+> +	select NEED_KVM_DIRTY_RING_WITH_BITMAP
+>   
+>   config KVM_BOOK3S_HANDLER
+>   	bool
+> diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+> index 7f765d5ad436..c92e8022e017 100644
+> --- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
+> +++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+> @@ -2147,3 +2147,45 @@ void kvmppc_mmu_book3s_hv_init(struct kvm_vcpu *vcpu)
+>   
+>   	vcpu->arch.hflags |= BOOK3S_HFLAG_SLB;
+>   }
+> +
+> +/*
+> + * kvm_arch_mmu_enable_log_dirty_pt_masked - enable dirty logging for selected
+> + * dirty pages.
+> + *
+> + * It write protects selected pages to enable dirty logging for them.
+> + */
+> +void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
+> +					     struct kvm_memory_slot *slot,
+> +					     gfn_t gfn_offset,
+> +					     unsigned long mask)
+> +{
+> +	phys_addr_t base_gfn = slot->base_gfn + gfn_offset;
+> +	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
+> +	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
+> +
+> +	while (start < end) {
+> +		pte_t *ptep;
+> +		unsigned int shift;
+> +
+> +		ptep = find_kvm_secondary_pte(kvm, start, &shift);
+> +
+> +		*ptep = __pte(pte_val(*ptep) & ~(_PAGE_WRITE));
+On rpt I think you'd need to use kvmppc_radix_update_pte()?
 
-I see your point.  I was looking through Microsoft documentation for 
-hints and came across this:
-
-https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/pci-express-settings-link-state-power-management
-
-They have a policy knob to globally set L0 or L1 for PCIe links.
-
-They don't explicitly say it, but surely it's based on what the devices 
-advertise in the capabilities registers.
-
->>>> So the logic is to ignore the capability and trust the default set
->>>> by BIOS.
->>>
->>> I think limiting ASPM support to whatever BIOS configured at boot-time
->>> is problematic.  I don't think we can assume that all platforms have
->>> firmware that configures ASPM as aggressively as possible, and
->>> obviously firmware won't configure hot-added devices at all (in
->>> general; I know ACPI _HPX can do some of that).
->>
->> Totally agree. I was not suggesting to limiting the setting at all.
->> A boot-time parameter to flip ASPM setting is very useful. If none has
->> been set, default to BIOS setting.
+> +
+> +		start += PAGE_SIZE > +	}
+> +}
+> +
+> +#ifdef CONFIG_NEED_KVM_DIRTY_RING_WITH_BITMAP
+> +bool kvm_arch_allow_write_without_running_vcpu(struct kvm *kvm)
+> +{
+> +	return true;
+> +}
+> +#endif
+> +
+> +#ifdef CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT
+> +void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
+> +					const struct kvm_memory_slot *memslot)
+> +{
+> +	kvm_flush_remote_tlbs(kvm);
+> +}
+> +#endif
+> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+> index 130bafdb1430..1d1264ea72c4 100644
+> --- a/arch/powerpc/kvm/book3s_hv.c
+> +++ b/arch/powerpc/kvm/book3s_hv.c
+> @@ -4804,6 +4804,9 @@ static int kvmppc_vcpu_run_hv(struct kvm_vcpu *vcpu)
+>   		return -EINTR;
+>   	}
+>   
+> +	if (kvm_dirty_ring_check_request(vcpu))
+> +		return 0;
+> +
+>   #ifdef CONFIG_PPC_TRANSACTIONAL_MEM
+>   	/*
+>   	 * Don't allow entry with a suspended transaction, because
+> diff --git a/include/linux/kvm_dirty_ring.h b/include/linux/kvm_dirty_ring.h
+> index 4862c98d80d3..a00301059da5 100644
+> --- a/include/linux/kvm_dirty_ring.h
+> +++ b/include/linux/kvm_dirty_ring.h
+> @@ -69,6 +69,11 @@ static inline void kvm_dirty_ring_free(struct kvm_dirty_ring *ring)
+>   {
+>   }
+>   
+> +static inline bool kvm_dirty_ring_check_request(struct kvm_vcpu *vcpu)
+> +{
+> +	return false;
+> +}
+> + >   #else /* CONFIG_HAVE_KVM_DIRTY_RING */
+>   
+>   int kvm_cpu_dirty_log_size(void);
 > 
-> A boot-time parameter for debugging and workarounds is fine.  IMO,
-> needing a boot-time parameter in the course of normal operation is
-> not OK.
-> 
-> Bjorn
-
