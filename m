@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A63749A4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDFE749A55
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbjGFLLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S231835AbjGFLMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGFLLV (ORCPT
+        with ESMTP id S229519AbjGFLMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:11:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1762DC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 04:11:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7020F1480;
-        Thu,  6 Jul 2023 04:12:01 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 532253F663;
-        Thu,  6 Jul 2023 04:11:17 -0700 (PDT)
-Message-ID: <8a5eff5e-4184-958a-17d8-b551e7efc784@arm.com>
-Date:   Thu, 6 Jul 2023 13:11:15 +0200
+        Thu, 6 Jul 2023 07:12:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566DDC;
+        Thu,  6 Jul 2023 04:12:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7B0661909;
+        Thu,  6 Jul 2023 11:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDADC433C7;
+        Thu,  6 Jul 2023 11:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688641956;
+        bh=BOEale8M+9gWzJpHRuHXhPnvc4ZSy1w4GTYANy5u44s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kMxNh/3WZijIVGdc5yewDH3XOYZUJwECrYRcBFuLMNQ6IMO+jdsuY6d6UiK1oWhZx
+         vMdet9znENk+RtaQZfEztdHqN1uut3JpGzkFSI17xYpbcX9RGgw2PRiKI6uIpZzhiD
+         bfXQOzUbhI3UcUlU/v5fz+mIBTxc1EsVRivVIoHifcmzkQOKhmmSOCFTWXj2rErFBW
+         34/4SE/+Sre/Kam6uvCMHHDa4TYCH4ggFSZNAdXJGALxdDqTG1dYhsdXobgKbupeEz
+         GOJ/uscUFvn5ndcc75HnJ4G3BMHCYZETHEzWtfVBiu1RYhJbcrzcigPlpj37ufzAWg
+         PSSkAfs7Wg0PQ==
+Date:   Thu, 6 Jul 2023 16:42:18 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mrinmay Sarkar <quic_msarkar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, konrad.dybcio@linaro.org,
+        quic_shazhuss@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_ramkri@quicinc.com, quic_nayiluri@quicinc.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for PCIe
+Message-ID: <20230706111218.GA4808@thinkpad>
+References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
+ <20230705084606.GF11854@thinkpad>
+ <a450e2e8-307d-49e9-d76d-de397b801a96@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC 0/1] sched/fair: Consider asymmetric scheduler groups in
- load balancer
-Content-Language: en-US
-To:     Tobias Huschle <huschle@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, sshegde@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org
-References: <20230515114601.12737-1-huschle@linux.ibm.com>
- <26fe6dc1-33c5-b825-c019-b346e8bedc0a@arm.com>
- <4c28b46b59bcc083956757074d1fe059@linux.ibm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <4c28b46b59bcc083956757074d1fe059@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a450e2e8-307d-49e9-d76d-de397b801a96@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 11:11, Tobias Huschle wrote:
-> On 2023-05-16 18:35, Dietmar Eggemann wrote:
->> On 15/05/2023 13:46, Tobias Huschle wrote:
->>> The current load balancer implementation implies that scheduler groups,
->>> within the same scheduler domain, all host the same number of CPUs.
->>>
->>> This appears to be valid for non-s390 architectures. Nevertheless, s390
->>> can actually have scheduler groups of unequal size.
->>
->> Arm (classical) big.Little had this for years before we switched to flat
->> scheduling (only MC sched domain) over CPU capacity boundaries for Arm
->> DynamIQ.
->>
->> Arm64 Juno platform in mainline:
->>
->> root@juno:~# cat /sys/devices/system/cpu/cpu*/topology/cluster_cpus_list
->> 0,3-5
->> 1-2
->> 1-2
->> 0,3-5
->> 0,3-5
->> 0,3-5
->>
->> root@juno:~# cat /proc/schedstat | grep ^domain | awk '{print $1, $2}'
->>
->> domain0 39 <--
->> domain1 3f
->> domain0 06 <--
->> domain1 3f
->> domain0 06
->> domain1 3f
->> domain0 39
->> domain1 3f
->> domain0 39
->> domain1 3f
->> domain0 39
->> domain1 3f
->>
->> root@juno:~# cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
->> MC
->> DIE
->>
->> But we don't have SMT on the mobile processors.
->>
->> It looks like you are only interested to get group_weight dependency
->> into this 'prefer_sibling' condition of find_busiest_group()?
->>
-> Sorry, looks like your reply hit some bad filter of my mail program.
-> Let me answer, although it's a bit late.
+On Thu, Jul 06, 2023 at 08:39:54AM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2023 10:46, Manivannan Sadhasivam wrote:
+> > On Wed, Jul 05, 2023 at 01:47:05PM +0530, Mrinmay Sarkar wrote:
+> >> Update the relavent DT bindings for PCIe, add new config to the phy
+> >> driver add pcie and phy nodes to the .dtsi file and enable then in 
+> >> board .dts file for the sa8775p-ride platform.
+> >>
+> >> Mrinmay Sarkar (6):
+> >>   dt-bindings: PCI: qcom: Add sa8775p compatible
+> >>   dt-bindings: phy: qcom,qmp: Add sa8775p QMP PCIe PHY
+> >>   PCI: qcom: Add support for sa8775p SoC
+> >>   phy: qcom-qmp-pcie: add support for sa8775p
+> >>   arm64: dts: qcom: sa8775p: Add pcie0 and pcie1 nodes
+> >>   arm64: dts: qcom: sa8775p-ride: enable pcie nodes
+> > 
+> > Please note that the dts patches should come before driver patches.
+> >
 > 
-> Yes, I would like to get the group_weight into the prefer_sibling path.
-> Unfortunately, we cannot go for a flat hierarchy as the s390 hardware
-> allows to have CPUs to be pretty far apart (cache-wise), which means,
-> the load balancer should avoid to move tasks back and forth between
-> those CPUs if possible.
+> Why? DTS is always independent thus usually put at the end of patchset
+> or better separate. It is the first time I hear that DTS should be
+> before driver.
 > 
-> We can't remove SD_PREFER_SIBLING either, as this would cause the load
-> balancer to aim for having the same number of idle CPUs in all groups,
-> which is a problem as well in asymmetric groups, for example:
-> 
-> With SD_PREFER_SIBLING, aiming for same number of non-idle CPUs
-> 00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
->                 x     x     x     x      x  x  x  x
-> 
-> Without SD_PREFER_SIBLING, aiming for the same number of idle CPUs
-> 00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
->     x  x  x     x  x     x     x  x
-> 
-> 
-> Hence the idea to add the group_weight to the prefer_sibling path.
-> 
-> I was wondering if this would be the right place to address this issue
-> or if I should go down another route.
 
-Yes, it's the right place to fix it for you. IMHO, there is still some
-discussion needed about the correct condition and changes in
-calculate_imbalance() for your case if I read the comments on this
-thread correctly.
+This is what I was suggested by Rob during my initial days and I've been
+following this pattern since then. If that's not the case, I have no issues.
 
-Arm64 big.Little wouldn't be affected since we explicitly remove
-SD_PREFER_SIBLING on MC for our legacy MC,DIE setups to avoid spreading
-tasks across DIE sched groups holding CPUs with different capacities.
+- Mani
 
-[...]
+> Best regards,
+> Krzysztof
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
