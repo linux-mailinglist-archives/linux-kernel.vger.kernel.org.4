@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F707495A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05727495A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbjGFGdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S233641AbjGFGeQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 02:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjGFGdp (ORCPT
+        with ESMTP id S233626AbjGFGeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:33:45 -0400
-Received: from mail-pf1-f208.google.com (mail-pf1-f208.google.com [209.85.210.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905371B6
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:33:44 -0700 (PDT)
-Received: by mail-pf1-f208.google.com with SMTP id d2e1a72fcca58-666ec28a20dso523068b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:33:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688625224; x=1691217224;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQfgqYhN80cocuiZ4CtvhG1o5YWInCsGK0oXglBkVZQ=;
-        b=kviP4BWQVcBA1cYOEE3LZAqe1m38tZxfDdzqRxsppj3cvD3vY1JlhhpwAuBNCXy/z5
-         E/n4CsEBRkxHBwZfa8r9Vjp2dmqTzqrirXkEnndtcFXRYvzbj/69WqT8kR95X68/cyzw
-         LIv/54K2C5gxtGYQ94pqQK/9KqAToC3svN14+DVoegoyL1INPEi6r+rXmj1LQmuXhSWo
-         ZEiKdCS13CPaVASaakzqjfOaJdohCNmbOg2KxxK6o2F0CsYqJDNLzrOnOvaGi4gQqUXm
-         e9j43uDWNBdovIW7KCDuZXy0REaPVdRgq18QVau5auqx5WIbyHYabH3mWX7MzgRkB+20
-         HAlQ==
-X-Gm-Message-State: ABy/qLZFPECHnf6FgQB0LqN+IKTS6K5J4IMS5EBvF3OQ+OgeZlxNpKQH
-        6Z6oOoA8Jw7PPjTe1F+6Z7k/qz/vW/s9WDb9Uyi1WncSNnQZ
-X-Google-Smtp-Source: APBJJlHCvDebXUaazEvvRKiHgWMrvAJwTERHZkxu7vxis5raXolCfIJxGKP2pCC+Od2nQ3qJF5UTvPJThLwz78fvvXvwcefvkXK0
-MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:2d9b:b0:678:e0b1:7f28 with SMTP id
- fb27-20020a056a002d9b00b00678e0b17f28mr1181998pfb.6.1688625224084; Wed, 05
- Jul 2023 23:33:44 -0700 (PDT)
-Date:   Wed, 05 Jul 2023 23:33:43 -0700
-In-Reply-To: <0000000000007faf0005fe4f14b9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a3f45805ffcbb21f@google.com>
-Subject: Re: [syzbot] [ext4?] WARNING in ext4_file_write_iter
-From:   syzbot <syzbot+5050ad0fb47527b1808a@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+        Thu, 6 Jul 2023 02:34:13 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7F510F2;
+        Wed,  5 Jul 2023 23:34:11 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1qHIZ2-001Mec-CB; Thu, 06 Jul 2023 08:34:04 +0200
+Received: from p57bd990e.dip0.t-ipconnect.de ([87.189.153.14] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1qHIZ2-003DEm-4j; Thu, 06 Jul 2023 08:34:04 +0200
+Message-ID: <7da62314e5bd2fc1b0f2c95ff0a0f6a39d9ae447.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 0/2] SH7709 DMA fixes
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Artur Rojek <contact@artur-rojek.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Cc:     Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Jul 2023 08:34:03 +0200
+In-Reply-To: <20230506141703.65605-1-contact@artur-rojek.eu>
+References: <20230506141703.65605-1-contact@artur-rojek.eu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.3 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.153.14
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Artur!
 
-HEAD commit:    6843306689af Merge tag 'net-6.5-rc1' of git://git.kernel.o..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=114522aca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7ad417033279f15a
-dashboard link: https://syzkaller.appspot.com/bug?extid=5050ad0fb47527b1808a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=102cb190a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c49d90a80000
+On Sat, 2023-05-06 at 16:17 +0200, Artur Rojek wrote:
+> this series provides fixes to the SH7709 DMA controller, allowing the HP
+> Jornada 680 palmtop to boot Linux again. To my knowledge, this is the
+> first time in ~14 years someone tests upstream Linux on this device. And
+> with the included patches applied, I'm happy to announce that it still
+> works like a charm.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f6adc10dbd71/disk-68433066.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5c3fa1329201/vmlinux-68433066.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/84db3452bac5/bzImage-68433066.xz
+Your first batch of patches has been merged into Linus' tree now:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5050ad0fb47527b1808a@syzkaller.appspotmail.com
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c17414a273b81fe4e34e11d69fc30cc8b1431614
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5382 at fs/ext4/file.c:611 ext4_dio_write_iter fs/ext4/file.c:611 [inline]
-WARNING: CPU: 1 PID: 5382 at fs/ext4/file.c:611 ext4_file_write_iter+0x1470/0x1880 fs/ext4/file.c:720
-Modules linked in:
-CPU: 1 PID: 5382 Comm: syz-executor288 Not tainted 6.4.0-syzkaller-11989-g6843306689af #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:ext4_dio_write_iter fs/ext4/file.c:611 [inline]
-RIP: 0010:ext4_file_write_iter+0x1470/0x1880 fs/ext4/file.c:720
-Code: 84 03 00 00 48 8b 04 24 31 ff 8b 40 20 89 c3 89 44 24 10 83 e3 08 89 de e8 5d 5a 5b ff 85 db 0f 85 d5 fc ff ff e8 30 5e 5b ff <0f> 0b e9 c9 fc ff ff e8 24 5e 5b ff 48 8b 4c 24 40 4c 89 fa 4c 89
-RSP: 0018:ffffc9000522fc30 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880277a3b80 RSI: ffffffff82298140 RDI: 0000000000000005
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff8a832a60
-R13: 0000000000000000 R14: 0000000000000000 R15: fffffffffffffff5
-FS:  00007f154db95700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f154db74718 CR3: 000000006bcc7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- call_write_iter include/linux/fs.h:1871 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x981/0xda0 fs/read_write.c:584
- ksys_write+0x122/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f154dc094f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f154db952f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f154dc924f0 RCX: 00007f154dc094f9
-RDX: 0000000000248800 RSI: 0000000020000000 RDI: 0000000000000006
-RBP: 00007f154dc5f628 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 652e79726f6d656d
-R13: 656c6c616b7a7973 R14: 6465646165726874 R15: 00007f154dc924f8
- </TASK>
+> PS. What might be of interest to the sh-linux community, there's further
+> work towards this platform in my pipeline. E.g. I've added support for
+> the HD6446x PCMCIA controller, allowing Jornada 680 to use Ethernet and
+> Wi-Fi cards. However, what prevents proper upstream of such a driver is
+> the crude and antiquated code of the underlying platform base. For
+> example, the HD6446x bridge (`cchips/hd6446x/hd64461.c`) lacks the
+> concept of clocks, preventing the PCMCIA driver from hardware agnostic
+> clock gating. So what I'm looking into next is the cleanup of existing
+> platform code base, bringing it up-to-date with modern kernel APIs.
+> Hopefully it's not trying to bite more than I can chew, but eventually
+> ending up with Device Tree support would be really nice :)
 
+Feel free to start sending in more patches addressing the issues mentioned above.
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
