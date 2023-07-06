@@ -2,206 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD0C74A524
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A074E74A52C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjGFUtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 16:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S232729AbjGFUtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 16:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjGFUsy (ORCPT
+        with ESMTP id S232449AbjGFUtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 16:48:54 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA491BC2;
-        Thu,  6 Jul 2023 13:48:51 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366KgMT3011905;
-        Thu, 6 Jul 2023 20:48:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=C92CpaLMBxsIu1Vqu81H7JOvCBxUCRCAB1bx/1EdNVs=;
- b=FiMipGOqgguR7//NmDgVpWATZ49AlcIFIwA8MnilIUqii87WOujWRYAqudd1AT8eXSGm
- 3OGiAB05/eRg+dKKeI/w8p5CE0U82nIKEloAlgMX6yGJ4eZ7I0oCGbHnBbiW9FnMB21f
- fwXA3rsLK7WcZWWNng97NCU3gDhcZiimtlMBbZa4DqvMTx+gtQTIbjqIM4ubSQEpMzp5
- WSj6582oyYbdiQsfCwBI20v9MF8vg7DVUqGrv6ma/3HZer6ejy5nrOcYAE2OPcW7Uhr3
- koakN6cXEdsJuQPFTo8YB5RrTtvdGYU87nGVb/L/FKH5Mi3lwXX7eQmaosXFR1mLVs8x pg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn152mkyy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 20:48:45 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366Kmi0i006918
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 20:48:44 GMT
-Received: from hu-rmccann-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 13:48:43 -0700
-From:   Ryan McCann <quic_rmccann@quicinc.com>
-Date:   Thu, 6 Jul 2023 13:48:37 -0700
-Subject: [PATCH v4 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub-blocks
+        Thu, 6 Jul 2023 16:49:07 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E680A1992
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 13:49:00 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b70357ca12so2998671fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 13:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688676539; x=1691268539;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GThZ4Ggr15+pqAxnjvQ9kC8BtTk0gsdP1wNAHgEDJFo=;
+        b=HxuOF9aF7fpVGvklE/EfYzn18Uu4zZnT56MUJ8z9GLWccoq4ZAc5ltJjTUAMP9TEgz
+         cd9BcYsX/dTBgSXpACCHgcG/tNveEdwq3vOVG99ilif9Bzys5ubyj4mFecMkAIS4AD/9
+         kX33TgOh1chkHquSf+pi2frP6jScMJu9auR9AQKNHbtWQLe/g1VcXZaKLZjmtJq8YCi6
+         C/4RlHFSAFKQdi8lWRniNCtJ2Odk8IL8p5l8LY53yukgmc4rS8dfJRz/Lw0geTeZnoPL
+         LaP7GAub5mttCqfSwc7O2tdFueSmq12ZxN6oa5CB5lZLC7i7XvuzJxiWHc2zrtfV84zA
+         Lr9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688676539; x=1691268539;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GThZ4Ggr15+pqAxnjvQ9kC8BtTk0gsdP1wNAHgEDJFo=;
+        b=EMcdJcdbXJJBU6mmB5rl7vUI9FmOwJcdlJPrDBcSdiegVAZpCDI0zw8T/UKUEnEa5o
+         yQwg3K7FmLZCIs+RPWWUGFJrDlSCbG7aYK+RCD0+HXL1k4W+AlLpMSPDEhJg6gwFNaQH
+         cn5UR5wpJykkI/ns93ac+5Q5krfVOI3I9m0LrpwzLZM8Zk8D3uY+oWFepDhf1H/pa6nk
+         l7X3Yw2urQW4w4M0Zo14Wugph0W6hlqfJfvqk/03sgZI3iF6eFUuwfc3g9hRoAvnuA0g
+         2Gbd15PtWX9hL9TGulfi/HwOd4ss9M50ocpj9ygwJrKoIMjs2o2oriU+SUdpCgO94p9i
+         eoZA==
+X-Gm-Message-State: ABy/qLYnVTY+g7nJhSYNuTWluRxQxDt1rYQ6YWRoHquJEYrXbW1QAm9I
+        hRQawJm/MVDzP+kb4tF/UaEPs41QuiE=
+X-Google-Smtp-Source: APBJJlHH8LCapShEIup2bqszsjZ/kGTp0spSi0HkqSsEF4l8ErdI9N4ncbf5ZYHa8fsZfkFRbJE3ig==
+X-Received: by 2002:a2e:a10b:0:b0:2b6:9a47:c4bd with SMTP id s11-20020a2ea10b000000b002b69a47c4bdmr2288618ljl.1.1688676538550;
+        Thu, 06 Jul 2023 13:48:58 -0700 (PDT)
+Received: from [192.168.0.103] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
+        by smtp.gmail.com with ESMTPSA id s26-20020a170906355a00b00992b2c5598csm1249745eja.128.2023.07.06.13.48.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 13:48:57 -0700 (PDT)
+Message-ID: <6dee04ae-4129-cd7c-0d31-70d29b86c8ff@gmail.com>
+Date:   Thu, 6 Jul 2023 22:48:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] staging: rtl8192e: Rename variable bCurrentHTSupport
+Content-Language: en-US
+To:     Tree Davies <tdavies@darkphysics.net>, gregkh@linuxfoundation.org,
+        dan.carpenter@linaro.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <ZKYgH/BvkE9bdcPm@kimchi.darkphysics>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <ZKYgH/BvkE9bdcPm@kimchi.darkphysics>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-ID: <20230622-devcoredump_patch-v4-6-e304ddbe9648@quicinc.com>
-References: <20230622-devcoredump_patch-v4-0-e304ddbe9648@quicinc.com>
-In-Reply-To: <20230622-devcoredump_patch-v4-0-e304ddbe9648@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Rob Clark <robdclark@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jesszhan@quicinc.com>, Ryan McCann <quic_rmccann@quicinc.com>
-X-Mailer: b4 0.13-dev-8a804
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688676521; l=4752;
- i=quic_rmccann@quicinc.com; s=20230622; h=from:subject:message-id;
- bh=AT8Z1kDsBnEI1CH8VhV5WFsBJXsUk7u9tyfOM6NNPIs=;
- b=ArD61lIOSN9L5riubvhRRSqZdKLr3wcNWoKJQQRr1hUeWKFe+4kp2x9d9qNzO12IR4jOn9c0F
- 2lf6IMG6LacD2Dqd3btMjoQh+cWTCU0tYABkv8+QQgKd/YcDVG++Wfb
-X-Developer-Key: i=quic_rmccann@quicinc.com; a=ed25519;
- pk=d/uP3OwPGpj/bTtiHvV1RBZ2S6q4AL6j1+A5y+dmbTI=
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EGQtbjKugXdUTroUMzPeyvsSGSYFesbI
-X-Proofpoint-ORIG-GUID: EGQtbjKugXdUTroUMzPeyvsSGSYFesbI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_15,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 clxscore=1015 mlxlogscore=943
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060182
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the device core dump mechanism does not dump registers of
-sub-blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Edit
-dpu_kms_mdp_snapshot function to account for sub-blocks.
+On 7/6/23 03:59, Tree Davies wrote:
+> This patch renames variable bCurrentHTSupport to bcurrent_ht_support
+> to fix checkpatch warning Avoid CamelCase.
+> 
+> Signed-off-by: Tree Davies<tdavies@darkphysics.net>
+> ---
+>   drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  2 +-
+>   drivers/staging/rtl8192e/rtl8192e/rtl_wx.c   |  2 +-
+>   drivers/staging/rtl8192e/rtl819x_BAProc.c    | 12 ++++++------
+>   drivers/staging/rtl8192e/rtl819x_HT.h        |  2 +-
+>   drivers/staging/rtl8192e/rtl819x_HTProc.c    | 16 ++++++++--------
+>   drivers/staging/rtl8192e/rtllib_softmac.c    | 16 ++++++++--------
+>   drivers/staging/rtl8192e/rtllib_softmac_wx.c |  2 +-
+>   drivers/staging/rtl8192e/rtllib_tx.c         |  8 ++++----
+>   8 files changed, 30 insertions(+), 30 deletions(-)
 
-Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 66 ++++++++++++++++++++++++++++++---
- 1 file changed, 60 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 70dbb1204e6c..afc45d597d65 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -903,25 +903,58 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
- 					    cat->ctl[i].base, cat->ctl[i].name);
- 
- 	/* dump DSPP sub-blocks HW regs info */
--	for (i = 0; i < cat->dspp_count; i++)
-+	for (i = 0; i < cat->dspp_count; i++) {
- 		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len, dpu_kms->mmio +
- 					    cat->dspp[i].base, cat->dspp[i].name);
- 
-+		if (cat->dspp[i].sblk && cat->dspp[i].sblk->pcc.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->dspp[i].sblk->pcc.len,
-+						    dpu_kms->mmio + cat->dspp[i].base +
-+						    cat->dspp[i].sblk->pcc.base, "%s_%s",
-+						    cat->dspp[i].name,
-+						    cat->dspp[i].sblk->pcc.name);
-+	}
-+
- 	/* dump INTF sub-blocks HW regs info */
- 	for (i = 0; i < cat->intf_count; i++)
- 		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len, dpu_kms->mmio +
- 					    cat->intf[i].base, cat->intf[i].name);
- 
- 	/* dump PP sub-blocks HW regs info */
--	for (i = 0; i < cat->pingpong_count; i++)
-+	for (i = 0; i < cat->pingpong_count; i++) {
- 		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len, dpu_kms->mmio +
- 					    cat->pingpong[i].base, cat->pingpong[i].name);
- 
-+		/* TE2 block has length of 0, so will not print it */
-+
-+		if (cat->pingpong[i].sblk && cat->pingpong[i].sblk->dither.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].sblk->dither.len,
-+						    dpu_kms->mmio + cat->pingpong[i].base +
-+						    cat->pingpong[i].sblk->dither.base, "%s_%s",
-+						    cat->pingpong[i].name,
-+						    cat->pingpong[i].sblk->dither.name);
-+	}
-+
- 	/* dump SSPP sub-blocks HW regs info */
--	for (i = 0; i < cat->sspp_count; i++)
-+	for (i = 0; i < cat->sspp_count; i++) {
- 		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len, dpu_kms->mmio +
- 					    cat->sspp[i].base, cat->sspp[i].name);
- 
-+		if (cat->sspp[i].sblk && cat->sspp[i].sblk->scaler_blk.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->sspp[i].sblk->scaler_blk.len,
-+						    dpu_kms->mmio + cat->sspp[i].base +
-+						    cat->sspp[i].sblk->scaler_blk.base, "%s_%s",
-+						    cat->sspp[i].name,
-+						    cat->sspp[i].sblk->scaler_blk.name);
-+
-+		if (cat->sspp[i].sblk && cat->sspp[i].sblk->csc_blk.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->sspp[i].sblk->csc_blk.len,
-+						    dpu_kms->mmio + cat->sspp[i].base +
-+						    cat->sspp[i].sblk->csc_blk.base, "%s_%s",
-+						    cat->sspp[i].name,
-+						    cat->sspp[i].sblk->csc_blk.name);
-+	}
-+
- 	/* dump LM sub-blocks HW regs info */
- 	for (i = 0; i < cat->mixer_count; i++)
- 		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len, dpu_kms->mmio +
-@@ -943,9 +976,30 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
- 	}
- 
- 	/* dump DSC sub-blocks HW regs info */
--	for (i = 0; i < cat->dsc_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len, dpu_kms->mmio +
--					    cat->dsc[i].base, cat->dsc[i].name);
-+	for (i = 0; i < cat->dsc_count; i++) {
-+		if (cat->dsc[i].features & BIT(DPU_DSC_HW_REV_1_2)) {
-+			struct dpu_dsc_blk enc = cat->dsc[i].sblk->enc;
-+			struct dpu_dsc_blk ctl = cat->dsc[i].sblk->ctl;
-+
-+			/* For now, pass in a length of 0 because the DSC_BLK register space
-+			 * overlaps with the sblks' register space.
-+			 *
-+			 * TODO: Pass in a length of 0 to DSC_BLK_1_2 in the HW catalog where
-+			 * applicable.
-+			 */
-+			msm_disp_snapshot_add_block(disp_state, 0, dpu_kms->mmio +
-+						    cat->dsc[i].base, cat->dsc[i].name);
-+			msm_disp_snapshot_add_block(disp_state, enc.len, dpu_kms->mmio +
-+						    cat->dsc[i].base + enc.base, "%s_%s",
-+						    cat->dsc[i].name, enc.name);
-+			msm_disp_snapshot_add_block(disp_state, ctl.len, dpu_kms->mmio +
-+						    cat->dsc[i].base + ctl.base, "%s_%s",
-+						    cat->dsc[i].name, ctl.name);
-+		} else {
-+			msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len, dpu_kms->mmio +
-+						    cat->dsc[i].base, cat->dsc[i].name);
-+		}
-+	}
- 
- 	pm_runtime_put_sync(&dpu_kms->pdev->dev);
- }
+Hi Tree,
 
--- 
-2.25.1
+when I try to apply your patch on the top of all the other patches I get 
+the following error message:
+
+kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git apply -v 
+~/Downloads/20230706-\[PATCH\]\ staging_\ rtl8192e_\ Rename\ variable\ 
+bCurrentHTSupport-10002.txt
+Checking patch drivers/staging/rtl8192e/rtl8192e/rtl_core.c...
+Checking patch drivers/staging/rtl8192e/rtl8192e/rtl_wx.c...
+Checking patch drivers/staging/rtl8192e/rtl819x_BAProc.c...
+Checking patch drivers/staging/rtl8192e/rtl819x_HT.h...
+Checking patch drivers/staging/rtl8192e/rtl819x_HTProc.c...
+Checking patch drivers/staging/rtl8192e/rtllib_softmac.c...
+error: while searching for:
+	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
+	encrypt = ieee->host_encrypt && crypt && crypt->ops &&
+		((strcmp(crypt->ops->name, "R-WEP") == 0 || wpa_ie_len));
+	if (ieee->ht_info->bCurrentHTSupport) {
+		tmp_ht_cap_buf = (u8 *)&(ieee->ht_info->SelfHTCap);
+		tmp_ht_cap_len = sizeof(ieee->ht_info->SelfHTCap);
+		tmp_ht_info_buf = (u8 *)&(ieee->ht_info->SelfHTInfo);
+
+error: patch failed: drivers/staging/rtl8192e/rtllib_softmac.c:816
+error: drivers/staging/rtl8192e/rtllib_softmac.c: patch does not apply
+Checking patch drivers/staging/rtl8192e/rtllib_softmac_wx.c...
+Checking patch drivers/staging/rtl8192e/rtllib_tx.c...
+
+
+My be the previous send patches are not taken then your chance is better 
+that this one will fit. Will see what happens.
+
+
+You need to put your patches into a patch series.
+This reduces email traffic as the reviewer can just send one email and 
+does not need to send four.
+
+A possible command for a patch series is looking like this:
+git format-patch -o ~/Documents/kernel/patches/ --cover-letter -n 
+--thread=shallow --to="Greg Kroah-Hartman 
+<gregkh@linuxfoundation.org>,linux-staging@lists.linux.dev,linux-kernel@vger.kernel.org" 
+4bbbd60d84e15fdb7bffde98a687ed168a4dfbbd^..HEAD
+
+Use the git commit id of your first patch.
+
+Bye Philipp
+
+
+
+
+
+
+
+
+
+
+
 
