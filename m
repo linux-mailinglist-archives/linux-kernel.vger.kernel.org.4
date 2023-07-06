@@ -2,198 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4380D74A56B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D223F74A580
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbjGFVBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 17:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S232709AbjGFVDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 17:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjGFVBo (ORCPT
+        with ESMTP id S229510AbjGFVC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:01:44 -0400
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2127.outbound.protection.outlook.com [40.107.10.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3798319B7;
-        Thu,  6 Jul 2023 14:01:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cOMCbaSryTgKnYlyJflH4DyGPImseS9Lg8LELKYAAlCELyts0+x9+A8JodWc7MC32PLtjIk8gmIS1KpO3w+ZQu0DKSOcT5MxCz1OQ4TKWyq8SStFxpYDDYqM6eqTIftX5Q01ZpKtkz6Wc8nGm7uJgcSPO0EAALzEwcgevaG0ZvcNs+ptT2dPKglzb4fMxRL8xHFllongLLgAi5f587djsPrIDxA3ppHkedkNpF9Rx6Zk4EVXPfDTH5SYo8V+mmgfGa6vSbWg93U60ZlK8YdtEVW0fi8mh3qZI+q9nVjlvCnhCXM+5gl/n/Y39iya2Cn2PA3yyPm5/FFk7skfL6O/kg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YWcYkGk0n2MA8J5p9YPZcIwNcCm5lXgNpEKvF0ymqqs=;
- b=Zay5Cu9Fq+Om5bbNaTgYR2/i3m3hOfWxrmrAj+F5eh2Gt+SSiNArZibQAy500fGLwd2mwG/4o0PxK89JbgTMx/ZSdMVrKgiS14ysIfi9HYVXg8lr9MEq+eZ58EKos+yROxEwThCIi29WPOGdH+voWUoH8pPHA7y3Wti/AZhLNYYtKQ0XvpydISwW0dz6rDc+cqSCIiUcmHgvn94slnMOVxR0HnEXoMzEjMeFuuWQIqLTx1RPdMuB4p++fZ9YHSpOnaTVR2MP8RbjWp9oZGDdzUkf+W8aw9LHAm6IfXAxydJOS9BbQFKHHzt/7UIHDcNDXO3tjWdHK59jbh5eZR6oGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YWcYkGk0n2MA8J5p9YPZcIwNcCm5lXgNpEKvF0ymqqs=;
- b=UsBpEJtuYwOB8SuhPIrlPtnZ61KkIipvSc+nibtgPseXNeEu6jSErQ34PbVXUCWTFNvEDdPBzTk5Ttfa13n64FrC5ca62yVdRKWUzSZV61+KKZmy8OS5huJ0z8vL/s/UyV9txEz8pXOKEIoOpo9wyHSfZozsOhB9xoqOZ2bxk1Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO0P265MB6344.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2c9::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Thu, 6 Jul
- 2023 21:01:40 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::25e2:a08b:cd9c:c3c9]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::25e2:a08b:cd9c:c3c9%3]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 21:01:40 +0000
-Date:   Thu, 6 Jul 2023 22:01:31 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "=?UTF-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] rust: delete `ForeignOwnable::borrow_mut`
-Message-ID: <20230706220131.428276e4.gary@garyguo.net>
-In-Reply-To: <20230706094615.3080784-1-aliceryhl@google.com>
-References: <20230706094615.3080784-1-aliceryhl@google.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P302CA0020.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:2c1::9) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Thu, 6 Jul 2023 17:02:57 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A8619A7;
+        Thu,  6 Jul 2023 14:02:55 -0700 (PDT)
+Received: from localhost (2.general.sarnold.us.vpn [10.172.64.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EC65D3F31B;
+        Thu,  6 Jul 2023 21:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688677359;
+        bh=wL7I+1AkkXlsdAXc0IgIVs00VMlkDlPzLoO7HtCH8Yo=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=UigHgg1tEN+F2JYmBK+lUOcRBpRtdrNgGbqup1NnaXOwyODWf/TTOdnjSM3EJKV2r
+         nSVjFudDceCGObMlTU+uma1muY2uaIkS7sazvVomlUh2z4Cx6T6ypWSOKoKTLr1e7n
+         Ld2z62ONf1z9dg8T10Z72Jl2h0B3vIxrVCycmYrM1jOwV4H0NyvFgu4GNfgDT4ln1d
+         cD6OBnHOJHdcMdNwqptcYXDLv4IErHsYENHamhLEH+hxLeB02yXRDCQTTC0JuBjK6l
+         ZNgX1V/W8Fy+2Orhx/aZTqqWjx/zv/bYCRboXEZa1I0V5mrDoaohFkaxDrb57pylVz
+         OTISOPjT4Hs9A==
+Date:   Thu, 6 Jul 2023 21:02:36 +0000
+From:   Seth Arnold <seth.arnold@canonical.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Damien Le Moal <dlemoal@kernel.org>, jk@ozlabs.org, arnd@arndb.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        cmllamas@google.com, surenb@google.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        leon@kernel.org, bwarrum@linux.ibm.com, rituagar@linux.ibm.com,
+        ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, dsterba@suse.com, dhowells@redhat.com,
+        marc.dionne@auristor.com, viro@zeniv.linux.org.uk,
+        raven@themaw.net, luisbg@kernel.org, salah.triki@gmail.com,
+        aivazian.tigran@gmail.com, ebiederm@xmission.com,
+        keescook@chromium.org, clm@fb.com, josef@toxicpanda.com,
+        xiubli@redhat.com, idryomov@gmail.com, jaharkes@cs.cmu.edu,
+        coda@cs.cmu.edu, jlbec@evilplan.org, hch@lst.de, nico@fluxnic.net,
+        rafael@kernel.org, code@tyhicks.com, ardb@kernel.org,
+        xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, linkinjeon@kernel.org,
+        sj1557.seo@samsung.com, jack@suse.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jaegeuk@kernel.org,
+        hirofumi@mail.parknet.co.jp, miklos@szeredi.hu,
+        rpeterso@redhat.com, agruenba@redhat.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        mikulas@artax.karlin.mff.cuni.cz, mike.kravetz@oracle.com,
+        muchun.song@linux.dev, dwmw2@infradead.org, shaggy@kernel.org,
+        tj@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
+        chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com,
+        Dai.Ngo@oracle.com, tom@talpey.com, konishi.ryusuke@gmail.com,
+        anton@tuxera.com, almaz.alexandrovich@paragon-software.com,
+        mark@fasheh.com, joseph.qi@linux.alibaba.com, me@bobcopeland.com,
+        hubcap@omnibond.com, martin@omnibond.com, amir73il@gmail.com,
+        mcgrof@kernel.org, yzaikin@google.com, tony.luck@intel.com,
+        gpiccoli@igalia.com, al@alarsen.net, sfrench@samba.org,
+        pc@manguebit.com, lsahlber@redhat.com, sprasad@microsoft.com,
+        senozhatsky@chromium.org, phillip@squashfs.org.uk,
+        rostedt@goodmis.org, mhiramat@kernel.org, dushistov@mail.ru,
+        hdegoede@redhat.com, djwong@kernel.org, naohiro.aota@wdc.com,
+        jth@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        hughd@google.com, akpm@linux-foundation.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        jgross@suse.com, stern@rowland.harvard.edu, lrh2000@pku.edu.cn,
+        sebastian.reichel@collabora.com, wsa+renesas@sang-engineering.com,
+        quic_ugoswami@quicinc.com, quic_linyyuan@quicinc.com,
+        john@keeping.me.uk, error27@gmail.com, quic_uaggarwa@quicinc.com,
+        hayama@lineo.co.jp, jomajm@gmail.com, axboe@kernel.dk,
+        dhavale@google.com, dchinner@redhat.com, hannes@cmpxchg.org,
+        zhangpeng362@huawei.com, slava@dubeyko.com, gargaditya08@live.com,
+        penguin-kernel@I-love.SAKURA.ne.jp, yifeliu@cs.stonybrook.edu,
+        madkar@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
+        yuzhe@nfschina.com, willy@infradead.org, okanatov@gmail.com,
+        jeffxu@chromium.org, linux@treblig.org, mirimmad17@gmail.com,
+        yijiangshan@kylinos.cn, yang.yang29@zte.com.cn,
+        xu.xin16@zte.com.cn, chengzhihao1@huawei.com, shr@devkernel.io,
+        Liam.Howlett@Oracle.com, adobriyan@gmail.com,
+        chi.minghao@zte.com.cn, roberto.sassu@huawei.com,
+        linuszeng@tencent.com, bvanassche@acm.org, zohar@linux.ibm.com,
+        yi.zhang@huawei.com, trix@redhat.com, fmdefrancesco@gmail.com,
+        ebiggers@google.com, princekumarmaurya06@gmail.com,
+        chenzhongjin@huawei.com, riel@surriel.com,
+        shaozhengchao@huawei.com, jingyuwang_vip@163.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        autofs@vger.kernel.org, linux-mm@kvack.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-um@lists.infradead.org,
+        linux-mtd@lists.infradead.org,
+        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [apparmor] [PATCH v2 08/92] fs: new helper:
+ simple_rename_timestamp
+Message-ID: <20230706210236.GB3244704@millbarge>
+References: <20230705185812.579118-1-jlayton@kernel.org>
+ <20230705185812.579118-3-jlayton@kernel.org>
+ <3b403ef1-22e6-0220-6c9c-435e3444b4d3@kernel.org>
+ <7c783969641b67d6ffdfb10e509f382d083c5291.camel@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB6344:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a9ea341-e8b7-4fb7-2970-08db7e6431a5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0r4fhcfjaXGciP8ksg4oga2sflWgd1P5wdQsd7+zdRJi2SvtB0lERqT3tNoYpW4n4TnwpYLTVLDB25xA6/IKdqosQJsMlP4vkIsLZxmfjuL2tHKwjN8B1kSPFuRHOPh1PUqXy7kRd5AXmIp14V/P9sXRmV6+ikBbHZbN0uEnQQpLBtSb7dVpSRpHBdETj1Y2xPUdHITQCBjjBBXKwZ1uynXSBdCrHrXfhs9MiwYQud6wL1Cmfj5ePv6job/iBhfAqYgSjyVHgXFWc6orKYtWbFZdLLJUA9XTGgbnkyuYj1FACgxr469da0iqQf0u8+I59EOxNEcIirsLim2vqpG07qt8gQtZUssDb0Ae76yqSicAFQ71rm90eXbkJvnoY53Z5QYEL5CB8sX83Dbw793QNJRv3d7TVd27YJprkxCLr8PG41OC/CEHXr+KtXOsSF/u9Vl/CLwOR5hQUSxAL3RqMoKMtWKoSpeGSU5fL1EPmBs7tVbENABcKEAXMkd7iKeqAHqGJu0hZHnOZFDrqgRCjZhQDCikQdxYcz7FnRy76kstoR5x4vFwRW8ktPp/5+j5vVikHX7aOYUhfhzS6AUjfhatt8AO3DxZGd1ssmlXwRI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(376002)(366004)(136003)(39830400003)(451199021)(478600001)(6486002)(6666004)(54906003)(6506007)(1076003)(26005)(6512007)(186003)(2906002)(41300700001)(316002)(6916009)(4326008)(66946007)(66476007)(7416002)(5660300002)(8936002)(8676002)(66556008)(38100700002)(86362001)(36756003)(2616005)(83380400001)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hyzl4dVopu8vrfhQlbR0tBGtEIYCAY9FkWAwcly/FU9aM3AxcVDYxaLR7pMF?=
- =?us-ascii?Q?T/GRu65NhiRZklBFlkdWAdyU7UeMgOb8O109yCamJtfx9XvC5CKnXXq5mFMg?=
- =?us-ascii?Q?sQSBfyip3oT37ZNOhWqiFr8kYzFfCvE853kU6hZuoJ4o4DeSDJuN2Wv8uNG0?=
- =?us-ascii?Q?HCbA5Fv8T1mXgmIbU7XOXlpTtiTG7OJcc3KP68qd0JCmb2m63hL3M6LdW+I3?=
- =?us-ascii?Q?NxaRtMR7yDP6o1qK7vpL9UCamaAs56tOYojbj9Q7WgmTN3aV+11fxY1tZfwI?=
- =?us-ascii?Q?M9iBi3qwOHg77Ud2ZPysAj8Mi7j+FYroZPq1CvR+69OZjnO8MzqYzJXTJbvj?=
- =?us-ascii?Q?6HTP5itwwNPpK0TKd6DA55ae8pMZsnynXubOCBKD4l7Hc3ez4dDVLhjafUPw?=
- =?us-ascii?Q?5LoKQfNaY8Jvx0klaRD1ymzjUtRrg/YDQR0vYsYeqn27h2GdwlXAmWBlx87n?=
- =?us-ascii?Q?M60DEBRV2ErYt4Ralmh2N8ZyEdpcIBqlePJzCBva55NcBnAZ7ySfIHVFQUyM?=
- =?us-ascii?Q?F57cGw3t49aNyyxewm714UF/a59OpKxOuH0H8FTLdKEDUoAh93ev1pilD6kL?=
- =?us-ascii?Q?4W2T9Mx4g3YXvkSPVZGbcuKr2HbiL4WPHCMDf5hmPLeWBmuZ5q1SC0nVdeGw?=
- =?us-ascii?Q?zZ7CU02iHxitvaQceaKKa6OcAEg5kLc7ETTU/hVkqwkBSpAbHxNuCvtYmK/g?=
- =?us-ascii?Q?X2lutBYBHyy+Z13oRztCcorvfUicmASeHdj22z5k1sNIYWx7hBj2dn4K37+D?=
- =?us-ascii?Q?j4Y4ZJl2hnwFxGKCW0YoT4Q6EkqPJvS71ZdtYaxzM3Cp5b6r2ntx+JZ64BF5?=
- =?us-ascii?Q?Q0PTaKAVXyMGSg5T7mTZprzNWmqzPwjHtiu8GlNhpN7BMb68LzV4qIlo5b7a?=
- =?us-ascii?Q?X8CBrOLGR9W9I6brrZUH4xuzFNSJWo/uT6n0eOh0t3SJQ7nU4HdJOxycrmEL?=
- =?us-ascii?Q?qdCPaXjsdItu8oKUtxGlMUfgSYZZO9ZC68su0Bhn+/C9K5pCEDAD2GkfXljW?=
- =?us-ascii?Q?G0TEVpvKObd3Uw10gv1VOHBGvfR8d+3WqnLzG7pUQcCC8ew9Ocd+L6S8huWz?=
- =?us-ascii?Q?D4LmFhm+VHEbwQRle5Q6sBerV2QdOl7h9/4hf52i/nLfYDK6dNTI5xMY8jmy?=
- =?us-ascii?Q?R9G1nbXe0aDrUzLOQjRzUXYUF7QuxpXM13FHYXCbpMoCO9JewcaM/IewFdRf?=
- =?us-ascii?Q?WUxxgr/Tr9Uo7hGjuWrfaMUvJU18unJTrFNFjPCVxWm0kacbnblXbQE8stIW?=
- =?us-ascii?Q?syM01I296eXTFYt/eH7gXs8+rhVRims0VTqM6oT3f8oRq1o02TOB1u7o/Po9?=
- =?us-ascii?Q?LyeyA5Nj2kGF/AjdkDia8lTR6arAkJeN6A69W8CUGCERiAYDGM85rpjN0LO6?=
- =?us-ascii?Q?5gfP8w/LymkwElFKGLgBNP+v3CHDImFIVm9jH/3J1WSOFsH2acwgH+K6ls7V?=
- =?us-ascii?Q?G6etOxdR4TOqLGiAq3dHVKAYhLOEUbQPqgD/gKo4/GpIs0NRrsC77doDhH8J?=
- =?us-ascii?Q?ahgQI1mh5NBhwj8dV+3USF9uge/OxheokKoEY4Wai7jTi6/ifWbVSxI10umc?=
- =?us-ascii?Q?Ym42qrRAUOTPxRZl1SsHi68rokekkwYeeY6ASXOu?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a9ea341-e8b7-4fb7-2970-08db7e6431a5
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 21:01:39.9625
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c77BzqXyJtXztJURkX6WE0eOUxtuEC9mlmcF5oXVuSQUPu18QMKlgDUPFRv/VbljyVTsoHkOOfXg2wBlqIcftw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6344
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E39vaYmALEf/7YXx"
+Content-Disposition: inline
+In-Reply-To: <7c783969641b67d6ffdfb10e509f382d083c5291.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  6 Jul 2023 09:46:15 +0000
-Alice Ryhl <aliceryhl@google.com> wrote:
 
-> We discovered that the current design of `borrow_mut` is problematic.
-> This patch removes it until a better solution can be found.
-> 
-> Specifically, the current design gives you access to a `&mut T`, which
-> lets you change where the `ForeignOwnable` points (e.g., with
-> `core::mem::swap`). No upcoming user of this API intended to make that
-> possible, making all of them unsound.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+--E39vaYmALEf/7YXx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+On Wed, Jul 05, 2023 at 08:04:41PM -0400, Jeff Layton wrote:
+>=20
+> I don't believe it's an issue. I've seen nothing in the POSIX spec that
+> mandates that timestamp updates to different inodes involved in an
+> operation be set to the _same_ value. It just says they must be updated.
+>=20
+> It's also hard to believe that any software would depend on this either,
+> given that it's very inconsistent across filesystems today. AFAICT, this
+> was mostly done in the past just as a matter of convenience.
 
-> ---
->  rust/kernel/sync/arc.rs |  3 +--
->  rust/kernel/types.rs    | 22 ++--------------------
->  2 files changed, 3 insertions(+), 22 deletions(-)
-> 
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index a89843cacaad..172f563976a9 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -243,8 +243,7 @@ unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> ArcBorrow<'a, T> {
->          let inner = NonNull::new(ptr as *mut ArcInner<T>).unwrap();
->  
->          // SAFETY: The safety requirements of `from_foreign` ensure that the object remains alive
-> -        // for the lifetime of the returned value. Additionally, the safety requirements of
-> -        // `ForeignOwnable::borrow_mut` ensure that no new mutable references are created.
-> +        // for the lifetime of the returned value.
->          unsafe { ArcBorrow::new(inner) }
->      }
->  
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index 1e5380b16ed5..d479f8da8f38 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -35,34 +35,16 @@ pub trait ForeignOwnable: Sized {
->      ///
->      /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
->      /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> -    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow_mut`]
-> -    /// for this object must have been dropped.
->      unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowed<'a>;
->  
-> -    /// Mutably borrows a foreign-owned object.
-> -    ///
-> -    /// # Safety
-> -    ///
-> -    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> -    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> -    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
-> -    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-> -    unsafe fn borrow_mut(ptr: *const core::ffi::c_void) -> ScopeGuard<Self, fn(Self)> {
-> -        // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
-> -        // `into_foreign`.
-> -        ScopeGuard::new_with_data(unsafe { Self::from_foreign(ptr) }, |d| {
-> -            d.into_foreign();
-> -        })
-> -    }
-> -
->      /// Converts a foreign-owned object back to a Rust-owned one.
->      ///
->      /// # Safety
->      ///
->      /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
->      /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> -    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
-> -    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-> +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] for
-> +    /// this object must have been dropped.
->      unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
->  }
->  
-> 
-> base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+I've seen this assumption in several programs:
 
+mutt buffy.c
+https://sources.debian.org/src/mutt/2.2.9-1/buffy.c/?hl=3D625#L625
+
+  if (mailbox->newly_created &&
+      (sb->st_ctime !=3D sb->st_mtime || sb->st_ctime !=3D sb->st_atime))
+    mailbox->newly_created =3D 0;
+
+
+neomutt mbox/mbox.c
+https://sources.debian.org/src/neomutt/20220429+dfsg1-4.1/mbox/mbox.c/?hl=
+=3D1820#L1820
+
+  if (m->newly_created && ((st.st_ctime !=3D st.st_mtime) || (st.st_ctime !=
+=3D st.st_atime)))
+    m->newly_created =3D false;
+
+
+screen logfile.c
+https://sources.debian.org/src/screen/4.9.0-4/logfile.c/?hl=3D130#L130
+
+  if ((!s->st_dev && !s->st_ino) ||             /* stat failed, that's new!=
+ */
+      !s->st_nlink ||                           /* red alert: file unlinked=
+ */
+      (s->st_size < o.st_size) ||               /*           file truncated=
+ */
+      (s->st_mtime !=3D o.st_mtime) ||            /*            file modifi=
+ed */
+      ((s->st_ctime !=3D o.st_ctime) &&           /*     file changed (move=
+d) */
+       !(s->st_mtime =3D=3D s->st_ctime &&          /*  and it was not a ch=
+ange */
+         o.st_ctime < s->st_ctime)))            /* due to delayed nfs write=
+ */
+  {
+
+nemo libnemo-private/nemo-vfs-file.c
+https://sources.debian.org/src/nemo/5.6.5-1/libnemo-private/nemo-vfs-file.c=
+/?hl=3D344#L344
+
+		/* mtime is when the contents changed; ctime is when the
+		 * contents or the permissions (inc. owner/group) changed.
+		 * So we can only know when the permissions changed if mtime
+		 * and ctime are different.
+		 */
+		if (file->details->mtime =3D=3D file->details->ctime) {
+			return FALSE;
+		}
+
+
+While looking for more examples, I found a perl test that seems to suggest
+that at least Solaris, AFS, AmigaOS, DragonFly BSD do as you suggest:
+https://sources.debian.org/src/perl/5.36.0-7/t/op/stat.t/?hl=3D158#L140
+
+
+Thanks
+
+--E39vaYmALEf/7YXx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEQVAQ8bojyMcg37H18yFyWZ2NLpcFAmSnK+gACgkQ8yFyWZ2N
+Lpd3gQf6AtE8sBL09BSTvT1P5I8tCXnJ4U7VbzQxWTcKAQHRpyZn8IRSdWuxiPEU
+soaBmSx6jov+kkZYX5uP1LSM1INMYpJTJELGas9A7wenNppBGS07LjwAL40wouPm
+UfcVWQqOgM8eoseMKBKePv5TkTJFn/M3cPK9Wy31E+qF1IPMNtxz9JKz109YlDOO
+FxVTwBGGxxKvx3SsUl6hdaqBCK3omZlbWCzqSyqBzzvjgZ01VC5ktw5FuuTABbu8
+TScNnT5GtO5AE8RV0T3TKISm19xD69JHQt/etFeU2yKwiBsn89pY4Xut3CrxbSQm
+prQ7ssP3/fi41WxFFDQzO/oQok/b+A==
+=/KNl
+-----END PGP SIGNATURE-----
+
+--E39vaYmALEf/7YXx--
