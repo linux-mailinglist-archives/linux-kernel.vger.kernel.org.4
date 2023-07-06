@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9CA74A15C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F3974A160
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjGFPrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S232073AbjGFPre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbjGFPrQ (ORCPT
+        with ESMTP id S232238AbjGFPrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:47:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8521992
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:46:33 -0700 (PDT)
+        Thu, 6 Jul 2023 11:47:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AD91BD3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688658393;
+        s=mimecast20190719; t=1688658401;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w2IfnXMZqwx1Jn18is50whUi5yxeZ3Kn4EXboxrstks=;
-        b=IWo+BA70k7tVWmiXIm5ubXGXBcQNBGNnsQVYTIYzQeGlTR+2P8/hu/sTTxvY3OqIBzqtEE
-        37Jxrx4l/vqtnJju+GfOyDSxVoJc65XsSl+ZSBVMDGP0nrwppibOt+FQluEm4BP2nfEIdU
-        AFkJuNCCz0xZMgmYyqS5STAqZWNMg2w=
+        bh=lPVj8rhXKvQORbztn0NrK5wvOXfvzxv4+nZiwBKh1i0=;
+        b=HnVwWxKzG+9WpVjxqFhuIx+xp0MdaRrKiaRb9IwIyy5zrBB2Nbrrz9voyvpzGB9lOQj6bv
+        XARQL/opiyC6PjKm4PqAjC019fcnfsY/PczejMGJdtyLx7hgRiRiENpTIRPv8iUdhkVTzI
+        swiiiRvy9GMTinh8S0HewEAwZ2lggak=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-49-RU_tALYvP5a7WTS2Ws1CNg-1; Thu, 06 Jul 2023 11:46:27 -0400
-X-MC-Unique: RU_tALYvP5a7WTS2Ws1CNg-1
+ us-mta-164-CpM4hTDcNbKu62ox369UOA-1; Thu, 06 Jul 2023 11:46:38 -0400
+X-MC-Unique: CpM4hTDcNbKu62ox369UOA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAE023815EF8;
-        Thu,  6 Jul 2023 15:46:26 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38F081C06ECD;
+        Thu,  6 Jul 2023 15:46:37 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 47CFFF5CF0;
-        Thu,  6 Jul 2023 15:46:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AEA98F5CF0;
+        Thu,  6 Jul 2023 15:46:27 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org, arnd@arndb.de,
@@ -46,10 +46,11 @@ Cc:     akpm@linux-foundation.org, linux-mm@kvack.org, arnd@arndb.de,
         wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
         shorne@gmail.com, David.Laight@ACULAB.COM, deller@gmx.de,
         nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Baoquan He <bhe@redhat.com>
-Subject: [PATCH v8 06/19] mm/ioremap: add slab availability checking in ioremap_prot
-Date:   Thu,  6 Jul 2023 23:45:07 +0800
-Message-Id: <20230706154520.11257-7-bhe@redhat.com>
+        Baoquan He <bhe@redhat.com>, Vineet Gupta <vgupta@kernel.org>,
+        linux-snps-arc@lists.infradead.org
+Subject: [PATCH v8 07/19] arc: mm: Convert to GENERIC_IOREMAP
+Date:   Thu,  6 Jul 2023 23:45:08 +0800
+Message-Id: <20230706154520.11257-8-bhe@redhat.com>
 In-Reply-To: <20230706154520.11257-1-bhe@redhat.com>
 References: <20230706154520.11257-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -66,37 +67,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several architectures has done checking if slab if available in
-ioremap_prot(). In fact it should be done in generic ioremap_prot()
-since on any architecutre, slab allocator must be available before
-get_vm_area_caller() and vunmap() are used.
+By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
+generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
+and iounmap() are all visible and available to arch. Arch needs to
+provide wrapper functions to override the generic versions if there's
+arch specific handling in its ioremap_prot(), ioremap() or iounmap().
+This change will simplify implementation by removing duplicated code
+with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
+functioality as before.
 
-Add the checking into generic_ioremap_prot().
+Here, add wrapper functions ioremap_prot() and iounmap() for arc's
+special operation when ioremap_prot() and iounmap().
 
-Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Baoquan He <bhe@redhat.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Cc: Vineet Gupta <vgupta@kernel.org>
+Cc: linux-snps-arc@lists.infradead.org
 ---
- mm/ioremap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arc/Kconfig          |  1 +
+ arch/arc/include/asm/io.h |  7 +++---
+ arch/arc/mm/ioremap.c     | 49 ++++-----------------------------------
+ 3 files changed, 8 insertions(+), 49 deletions(-)
 
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index 9f34a8f90b58..86b82ec27d2b 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -18,6 +18,10 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
- 	phys_addr_t last_addr;
- 	struct vm_struct *area;
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index 96cf8720bb93..6f4995ad9873 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -26,6 +26,7 @@ config ARC
+ 	select GENERIC_PENDING_IRQ if SMP
+ 	select GENERIC_SCHED_CLOCK
+ 	select GENERIC_SMP_IDLE_THREAD
++	select GENERIC_IOREMAP
+ 	select HAVE_ARCH_KGDB
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if ARC_MMU_V4
+diff --git a/arch/arc/include/asm/io.h b/arch/arc/include/asm/io.h
+index 80347382a380..4fdb7350636c 100644
+--- a/arch/arc/include/asm/io.h
++++ b/arch/arc/include/asm/io.h
+@@ -21,8 +21,9 @@
+ #endif
  
-+	/* An early platform driver might end up here */
-+	if (WARN_ON_ONCE(!slab_is_available()))
-+		return NULL;
-+
- 	/* Disallow wrap-around or zero size */
- 	last_addr = phys_addr + size - 1;
- 	if (!size || last_addr < phys_addr)
+ extern void __iomem *ioremap(phys_addr_t paddr, unsigned long size);
+-extern void __iomem *ioremap_prot(phys_addr_t paddr, unsigned long size,
+-				  unsigned long flags);
++#define ioremap ioremap
++#define ioremap_prot ioremap_prot
++#define iounmap iounmap
+ static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
+ {
+ 	return (void __iomem *)port;
+@@ -32,8 +33,6 @@ static inline void ioport_unmap(void __iomem *addr)
+ {
+ }
+ 
+-extern void iounmap(const volatile void __iomem *addr);
+-
+ /*
+  * io{read,write}{16,32}be() macros
+  */
+diff --git a/arch/arc/mm/ioremap.c b/arch/arc/mm/ioremap.c
+index 712c2311daef..b07004d53267 100644
+--- a/arch/arc/mm/ioremap.c
++++ b/arch/arc/mm/ioremap.c
+@@ -8,7 +8,6 @@
+ #include <linux/module.h>
+ #include <linux/io.h>
+ #include <linux/mm.h>
+-#include <linux/slab.h>
+ #include <linux/cache.h>
+ 
+ static inline bool arc_uncached_addr_space(phys_addr_t paddr)
+@@ -25,13 +24,6 @@ static inline bool arc_uncached_addr_space(phys_addr_t paddr)
+ 
+ void __iomem *ioremap(phys_addr_t paddr, unsigned long size)
+ {
+-	phys_addr_t end;
+-
+-	/* Don't allow wraparound or zero size */
+-	end = paddr + size - 1;
+-	if (!size || (end < paddr))
+-		return NULL;
+-
+ 	/*
+ 	 * If the region is h/w uncached, MMU mapping can be elided as optim
+ 	 * The cast to u32 is fine as this region can only be inside 4GB
+@@ -51,55 +43,22 @@ EXPORT_SYMBOL(ioremap);
+  * ARC hardware uncached region, this one still goes thru the MMU as caller
+  * might need finer access control (R/W/X)
+  */
+-void __iomem *ioremap_prot(phys_addr_t paddr, unsigned long size,
++void __iomem *ioremap_prot(phys_addr_t paddr, size_t size,
+ 			   unsigned long flags)
+ {
+-	unsigned int off;
+-	unsigned long vaddr;
+-	struct vm_struct *area;
+-	phys_addr_t end;
+ 	pgprot_t prot = __pgprot(flags);
+ 
+-	/* Don't allow wraparound, zero size */
+-	end = paddr + size - 1;
+-	if ((!size) || (end < paddr))
+-		return NULL;
+-
+-	/* An early platform driver might end up here */
+-	if (!slab_is_available())
+-		return NULL;
+-
+ 	/* force uncached */
+-	prot = pgprot_noncached(prot);
+-
+-	/* Mappings have to be page-aligned */
+-	off = paddr & ~PAGE_MASK;
+-	paddr &= PAGE_MASK_PHYS;
+-	size = PAGE_ALIGN(end + 1) - paddr;
+-
+-	/*
+-	 * Ok, go for it..
+-	 */
+-	area = get_vm_area(size, VM_IOREMAP);
+-	if (!area)
+-		return NULL;
+-	area->phys_addr = paddr;
+-	vaddr = (unsigned long)area->addr;
+-	if (ioremap_page_range(vaddr, vaddr + size, paddr, prot)) {
+-		vunmap((void __force *)vaddr);
+-		return NULL;
+-	}
+-	return (void __iomem *)(off + (char __iomem *)vaddr);
++	return generic_ioremap_prot(paddr, size, pgprot_noncached(prot));
+ }
+ EXPORT_SYMBOL(ioremap_prot);
+ 
+-
+-void iounmap(const volatile void __iomem *addr)
++void iounmap(volatile void __iomem *addr)
+ {
+ 	/* weird double cast to handle phys_addr_t > 32 bits */
+ 	if (arc_uncached_addr_space((phys_addr_t)(u32)addr))
+ 		return;
+ 
+-	vfree((void *)(PAGE_MASK & (unsigned long __force)addr));
++	generic_iounmap(addr);
+ }
+ EXPORT_SYMBOL(iounmap);
 -- 
 2.34.1
 
