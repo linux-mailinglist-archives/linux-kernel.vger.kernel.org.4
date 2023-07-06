@@ -2,59 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A39B74A2F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A823374A304
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjGFRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S229919AbjGFRUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjGFRQE (ORCPT
+        with ESMTP id S229748AbjGFRUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:16:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A141BE8;
-        Thu,  6 Jul 2023 10:16:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E71D060F27;
-        Thu,  6 Jul 2023 17:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED65C433C7;
-        Thu,  6 Jul 2023 17:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688663762;
-        bh=K525Re3smqCn8xHm4THDIij+h4crszZpgCUGoxZhhUk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lFuWcgNAb/ds/zSAxxFst4Of6NVK+cdwSo+uyehJ0y59mKZNWHitYZQgI1BcoZijb
-         6FtCerlX2kfXkz7OJiDDFq+Ykoalf4x4nIE/KHzquTVTRXehCWAxXvJatGmEiQ4jVa
-         GxCwRTJW4JhuP9pjoVT3AmuaV7/6WQ6X9t0vs3AFzRpI7fqIZmtb9tjYf5Z856g/+H
-         FZqA5h3WcLge2ZsbMl8F49WwYaT/SozDrUeeuQE4k1Fs+T3BNZ1YlO+fjHVUw8sHED
-         YFw05t1TrPUt9KJAlNGtToCTonwBcJ+kJpAimi4L90ni6sgFMh2HL/N7WVYhwgNUNy
-         XpHhxzrImIlFQ==
-Date:   Thu, 6 Jul 2023 18:15:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>, evan@rivosinc.com,
-        heiko@sntech.de, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/3] RISC-V: Framework for vendor extensions
-Message-ID: <20230706-curly-swinging-afbf79a4cdb7@spud>
-References: <20230705-thead_vendor_extensions-v1-0-ad6915349c4d@rivosinc.com>
- <20230705-thead_vendor_extensions-v1-1-ad6915349c4d@rivosinc.com>
+        Thu, 6 Jul 2023 13:20:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E511BE8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:20:07 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366HGguZ018549;
+        Thu, 6 Jul 2023 17:19:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fpbgZAypLVutubvEgDeOpjatjldLvtjIaN/4OpbK9+I=;
+ b=psC8RYW6ioXS1IY7+GSiRTzwM3nOZ/ZrFdflPoKjzUJRK1Bz2Z3eHo2eIs4o4DYCIlW+
+ /4ViQc9okqDerplACGpEj2MDqSQqAyduVsxRP1WRt7SQhRiGkDlUkoxYn+YusNIA8Wr/
+ mM8yBMem/Jnef+/p7DaTDhgMH23Nw0JK2sNKxnwcvUwCdBk713uqsX0dgBLMJqDSmviX
+ aFeqvCqeraYwx0q+3nh9XBnJvA94lOjkeUQFE34jQzbnOe7OzVy3j7ln2NkITy+eAnMq
+ Wjq9x04vKCqSCPD0XqeVb9ybm2XSbMn/nl9e2DcAJDmDj02tjFrhVtzkMgS2S/GeVmV5 hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rp1v8030r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 17:19:45 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 366HGw13019423;
+        Thu, 6 Jul 2023 17:19:45 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rp1v80302-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 17:19:45 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 366Gdw4x017203;
+        Thu, 6 Jul 2023 17:19:43 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3rjbs61pd4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 17:19:43 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 366HJh8f60555728
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jul 2023 17:19:43 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B5A65805A;
+        Thu,  6 Jul 2023 17:19:43 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5358858060;
+        Thu,  6 Jul 2023 17:19:37 +0000 (GMT)
+Received: from [9.171.87.7] (unknown [9.171.87.7])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jul 2023 17:19:36 +0000 (GMT)
+Message-ID: <de856969-5d78-f771-96ff-4afce3a6e776@linux.vnet.ibm.com>
+Date:   Thu, 6 Jul 2023 22:49:35 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UI60rudIHsqNxMLP"
-Content-Disposition: inline
-In-Reply-To: <20230705-thead_vendor_extensions-v1-1-ad6915349c4d@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC 1/1] sched/fair: Consider asymmetric scheduler groups in
+ load balancer
+Content-Language: en-US
+To:     Tobias Huschle <huschle@linux.ibm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, srikar@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org,
+        shrikanth hegde <sshegde@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org
+References: <20230515114601.12737-1-huschle@linux.ibm.com>
+ <20230515114601.12737-2-huschle@linux.ibm.com>
+From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
+In-Reply-To: <20230515114601.12737-2-huschle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uLZjPBL35LtqkYbUlwG2RmZkr_hMskng
+X-Proofpoint-ORIG-GUID: tD11YAvJDu0KgpgeKfpmzGAsLInLz6vi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_12,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 clxscore=1011 spamscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060154
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,195 +102,161 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---UI60rudIHsqNxMLP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Charlie,
-
-On Wed, Jul 05, 2023 at 08:30:17PM -0700, Charlie Jenkins wrote:
-> Create Kconfig files, Makefiles, and functions to enable vendors to
-> provide information via the riscv_hwprobe syscall about which vendor
-> extensions are available.
-
-This is all apparently from reading the diff, you don't need to tell us
-what files you have created etc. Please just stick with explaining the
-rationale for your changes (especially anything that might make someone
-reading it go "huh").
-
->=20
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+On 5/15/23 5:16 PM, Tobias Huschle wrote:
+> The current load balancer implementation implies that scheduler groups,
+> within the same domain, all host the same number of CPUs. This is
+> reflected in the condition, that a scheduler group, which is load
+> balancing and classified as having spare capacity, should pull work
+> from the busiest group, if the local group runs less processes than
+> the busiest one. This implies that these two groups should run the
+> same number of processes, which is problematic if the groups are not 
+> of the same size.
+> 
+> The assumption that scheduler groups within the same scheduler domain
+> host the same number of CPUs appears to be true for non-s390 
+> architectures. Nevertheless, s390 can have scheduler groups of unequal 
+> size.
+> 
+> This introduces a performance degredation in the following scenario:
+> 
+> Consider a system with 8 CPUs, 6 CPUs are located on one CPU socket,
+> the remaining 2 are located on another socket:
+> 
+> Socket   -----1-----    -2-
+> CPU      1 2 3 4 5 6    7 8
+> 
+> Placing some workload ( x = one task ) yields the following
+> scenarios:
+> 
+> The first 5 tasks are distributed evenly across the two groups.
+> 
+> Socket   -----1-----    -2-
+> CPU      1 2 3 4 5 6    7 8
+>          x x x          x x
+> 
+> Adding a 6th task yields the following distribution:
+> 
+> Socket   -----1-----    -2-
+> CPU      1 2 3 4 5 6    7 8
+> SMT1     x x x          x x
+> SMT2                    x
+> 
+> The task is added to the 2nd scheduler group, as the scheduler has the
+> assumption that scheduler groups are of the same size, so they should
+> also host the same number of tasks. This makes CPU 7 run into SMT 
+> thread, which comes with a performance penalty. This means, that in 
+> the window of 6-8 tasks, load balancing is done suboptimally, because 
+> SMT is used although there is no reason to do so as fully idle CPUs 
+> are still available.
+> 
+> Taking the weight of the scheduler groups into account, ensures that
+> a load balancing CPU within a smaller group will not try to pull tasks
+> from a bigger group while the bigger group still has idle CPUs
+> available.
+> 
+> Signed-off-by: Tobias Huschle <huschle@linux.ibm.com>
 > ---
->  arch/riscv/Kbuild                     |  1 +
->  arch/riscv/Kconfig                    |  1 +
->  arch/riscv/Kconfig.vendor             |  3 +++
->  arch/riscv/include/asm/hwprobe.h      |  1 +
->  arch/riscv/kernel/sys_riscv.c         | 40 +++++++++++++++++++++++++++++=
-+++---
->  arch/riscv/vendor_extensions/Makefile |  3 +++
->  6 files changed, 46 insertions(+), 3 deletions(-)
-
-> diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
-> index afa83e307a2e..bea38010d9db 100644
-> --- a/arch/riscv/Kbuild
-> +++ b/arch/riscv/Kbuild
-> @@ -3,6 +3,7 @@
->  obj-y +=3D kernel/ mm/ net/
->  obj-$(CONFIG_BUILTIN_DTB) +=3D boot/dts/
->  obj-y +=3D errata/
-> +obj-y +=3D vendor_extensions/
->  obj-$(CONFIG_KVM) +=3D kvm/
-> =20
->  obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) +=3D purgatory/
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index c1505c7729ec..19404ede0ee3 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -276,6 +276,7 @@ config AS_HAS_OPTION_ARCH
-> =20
->  source "arch/riscv/Kconfig.socs"
->  source "arch/riscv/Kconfig.errata"
-> +source "arch/riscv/Kconfig.vendor"
-> =20
->  menu "Platform type"
-> =20
-> diff --git a/arch/riscv/Kconfig.vendor b/arch/riscv/Kconfig.vendor
-> new file mode 100644
-> index 000000000000..213ac3e6fed5
-> --- /dev/null
-> +++ b/arch/riscv/Kconfig.vendor
-> @@ -0,0 +1,3 @@
-> +menu "Vendor extensions selection"
-> +
-> +endmenu # "Vendor extensions selection"
-
-These files don't do anything, don't add them until you need to.
-
-> diff --git a/arch/riscv/include/asm/hwprobe.h b/arch/riscv/include/asm/hw=
-probe.h
-> index 78936f4ff513..fadb38b83243 100644
-> --- a/arch/riscv/include/asm/hwprobe.h
-> +++ b/arch/riscv/include/asm/hwprobe.h
-> @@ -9,5 +9,6 @@
->  #include <uapi/asm/hwprobe.h>
-> =20
->  #define RISCV_HWPROBE_MAX_KEY 5
-> +#define RISCV_HWPROBE_VENDOR_EXTENSION_SPACE (UL(1)<<63)
-
-Should this not be BIT_ULL(63)? Although I am not sure that we can
-actually do this, more on that front later.
-
-> =20
->  #endif
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 26ef5526bfb4..2351a5f7b8b1 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -188,9 +188,35 @@ static u64 hwprobe_misaligned(const struct cpumask *=
-cpus)
->  	return perf;
->  }
-> =20
-> +static int hwprobe_vendor(__u64 mvendorid, struct riscv_hwprobe *pair,
-> +			 const struct cpumask *cpus)
-> +{
-> +	switch (mvendorid) {
-> +	default:
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static void hwprobe_one_pair(struct riscv_hwprobe *pair,
->  			     const struct cpumask *cpus)
->  {
-> +	int err;
-> +
-> +	if (((unsigned long) pair->key) >=3D RISCV_HWPROBE_VENDOR_EXTENSION_SPA=
-CE) {
-
-Hopefully Bjorn or someone that actually knows a thing or two about uapi
-stuff can chime in here, but I think what you are doing here (where the
-vendor space sets the MSB) really muddies the api. These keys are defined
-as signed 64 bit numbers & -1 is the value set when a key is not valid.
-I'd much rather we kept the negative space off-limits, and used the 62nd
-bit instead, avoiding using negative numbers for valid keys.
-
-> +		struct riscv_hwprobe mvendorid =3D {
-> +			.key =3D RISCV_HWPROBE_KEY_MVENDORID,
-> +			.value =3D 0
-> +		};
-> +
-> +		hwprobe_arch_id(&mvendorid, cpus);
-
-I think this needs a comment explaining why you do this hwprobe call,=20
-> +		if (mvendorid.value !=3D -1ULL)
-> +			err =3D hwprobe_vendor(mvendorid.value, pair, cpus);
-> +		else
-> +			err =3D -1;
-> +	}
-
-I don't really understand the control flow here. Why are you continuing
-on to the switch statement, if you have either a) already ran
-hwprobe_vendor() or b) noticed that mvendorid.value is not valid?
-
->  	switch (pair->key) {
->  	case RISCV_HWPROBE_KEY_MVENDORID:
->  	case RISCV_HWPROBE_KEY_MARCHID:
-> @@ -217,13 +243,21 @@ static void hwprobe_one_pair(struct riscv_hwprobe *=
-pair,
-> =20
->  	/*
->  	 * For forward compatibility, unknown keys don't fail the whole
-> -	 * call, but get their element key set to -1 and value set to 0
-> -	 * indicating they're unrecognized.
-> +	 * call, instead an error is raised to indicate the element key
-> +	 * is unrecognized.
+>  kernel/sched/fair.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 48b6f0ca13ac..b1307d7e4065 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -10426,7 +10426,8 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+>  	 * group's child domain.
 >  	 */
->  	default:
-> +		err =3D -1;
-> +		break;
-> +	}
-> +
-> +	/*
-> +	 * Setting the element key to -1 and value to 0 indicates that
-> +	 * hwprobe was unable to find the requested key.
-> +	 */
-> +	if (err !=3D 0) {
->  		pair->key =3D -1;
->  		pair->value =3D 0;
-> -		break;
->  	}
->  }
-> =20
-> diff --git a/arch/riscv/vendor_extensions/Makefile b/arch/riscv/vendor_ex=
-tensions/Makefile
-> new file mode 100644
-> index 000000000000..e815895e9372
-> --- /dev/null
-> +++ b/arch/riscv/vendor_extensions/Makefile
-> @@ -0,0 +1,3 @@
-> +ifdef CONFIG_RELOCATABLE
-> +KBUILD_CFLAGS +=3D -fno-pie
-> +endif
+>  	if (sds.prefer_sibling && local->group_type == group_has_spare &&
+> -	    busiest->sum_nr_running > local->sum_nr_running + 1)
+> +	    busiest->sum_nr_running * local->group_weight >
+> +			local->sum_nr_running * busiest->group_weight + 1)
+>  		goto force_balance;
+> 
 
-There are no files in this directory, why do you need to do a dance
-about relocatable kernels?
 
-Cheers,
-Conor.
+I assume its SMT2 here. sched group is enclosed in [busy_cpus/idle_cpus/weight] 
 
---UI60rudIHsqNxMLP
-Content-Type: application/pgp-signature; name="signature.asc"
+Lets take an example:  we will begin the with the said imbalance.
+[3/9/12] -- local group 
+[3/1/4] -- busy group. 
+we will evaluate 3*12 > (4*(3+1)) is true and proceeds further to balance. 
+but calculate_imbalance will lead to zero as the imbalance no? in case of prefer sibling 
+case it find the difference of sum_nr_running of the two groups. It will be 3-3 = 0
 
------BEGIN PGP SIGNATURE-----
+this would need modifications to calculate_imbalance. 
+Maybe something like this will help? NOT TESTED AT ALL. 
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKb2zQAKCRB4tDGHoIJi
-0hTDAP0c/L2QKrlqwK8Vy+oQbp9A2yhfsGsSd2Vo7S6Cc6UFvAD/VxwxL+ezSwJP
-YptVnUsgEYOqE3Z7eZ2B14kRhmnkOQ8=
-=knz0
------END PGP SIGNATURE-----
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a80a73909dc2..e027d4086edc 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10296,7 +10296,9 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+                        return;
+                }
 
---UI60rudIHsqNxMLP--
+-               if (busiest->group_weight == 1 || sds->prefer_sibling) {
++               if (busiest->group_weight == 1 ||
++                       (sds->prefer_sibling &&
++                        busiest->group_weight == local->group_weight)) {
+                        unsigned int nr_diff = busiest->sum_nr_running;
+                        /*
+                         * When prefer sibling, evenly spread running tasks on
+@@ -10305,6 +10307,11 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+                        env->migration_type = migrate_task;
+                        lsub_positive(&nr_diff, local->sum_nr_running);
+                        env->imbalance = nr_diff;
++               }
++               if (sds->prefer_sibling &&
++                   busiest->group_weight != local->group_weight) {
++                       env->migration_type = migrate_task;
++                       env->imbalance = 1;
+                } else {
+
+
+---------------------------------------------------------------------------------------------------
+On a tangential dimension.
+
+
+Since prefer_siblings make inherent assumption that all groups have equal weight, 
+it will cause  complications when group_weights are different. I think that becomes very
+tricky when there are more than two groups. Depending on which cpu is doing 
+load_balance there can be unnecessary migrations. 
+
+
+Currently even in NUMA this can be similar case right? There will be unequal number of CPU's right? 
+If we fix that case and remove prefer siblings in your arch, will that work? 
+
+Maybe something like this? NOT TESTED AT ALL.
+
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a80a73909dc2..fc6377f48ced 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10514,6 +10514,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+                        goto out_balanced;
+ 
+                if (busiest->group_weight > 1 &&
++                   busiest->group_weight == local->group_weight &&
+                    local->idle_cpus <= (busiest->idle_cpus + 1))
+                        /*
+                         * If the busiest group is not overloaded
+@@ -10526,6 +10527,11 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+                         */
+                        goto out_balanced;
+ 
++               if ((busiest->group_weight != local->group_weight) &&
++                     (local->idle_cpus * busiest->group_weight <=
++                              local->group_weight * (busiest->idle_cpus + 1)))
++                       goto out_balanced;
++
+                if (busiest->sum_h_nr_running == 1)
+                        /*
+                         * busiest doesn't have any tasks waiting to run
+
+
+
+
+
+>  	if (busiest->group_type != group_overloaded) {
