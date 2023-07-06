@@ -2,223 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6BB74A271
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F9074A26F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjGFQsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 12:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S231976AbjGFQsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjGFQsn (ORCPT
+        with ESMTP id S229692AbjGFQsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:48:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CBC1996
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 09:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688662076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CIjV3nrO4jNdql8yp29S+96UpDACpGjeOguVgyJZq6o=;
-        b=fKK2bspkT+qVUAjRgYONxhA206wLU1mbjz1ZATdpQPUvPDEOE4fXIpEbExhjffcjUinaLe
-        zN0670lagnnwN2GYNyR3h742CJ1dA7hZSI6zvZPK09qxKozCPREvmA1cZUCkqsRvm64nOy
-        3lpJ6rVR2vxvjXsi8RgHB+hFF+h1QKY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-180-koDzpWbwN9CJah0f5dkcpQ-1; Thu, 06 Jul 2023 12:47:55 -0400
-X-MC-Unique: koDzpWbwN9CJah0f5dkcpQ-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5187cc1768dso619232a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 09:47:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688662074; x=1691254074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CIjV3nrO4jNdql8yp29S+96UpDACpGjeOguVgyJZq6o=;
-        b=H4E7ApCUMt3NC8P+dFpU55dMEN7aEreGl5ecgnBot9cmMsjp87BpYyyeAsurw9GzUz
-         4VD2VcfOQxr50jEN8bENsCxGJfZxas+lqeR/ftq4x0+HDZatE1A1RF6n8r9pZSmS14t8
-         Z9TK5jovUAPTXWOeIXBcc6boXYrHziz58X5kusG2eGdO019NuHXeTCtLtFpZg8/GKTw+
-         s8WRWDWCzEDSL/gV7M/M4ireKl7ry1t/8r/6hBbLnZY9FsBUVJ2x5IPf3bhEdwDNs3D2
-         7/4IqZQ0WPyxiiSSZR+9/M6IKf4/p2M6uAG25ZC2g8ej6Qq6IbqFS+IhtLih/Zisw4Md
-         9mwg==
-X-Gm-Message-State: ABy/qLaqg8QsAMdXZLeOxvSkqw/sHSJicQ4l5VTAfyKuafJfE+l4olkg
-        9vzXqex1k85xiVDdtgqVw+nszHizYPFZbIpdPb24t2G6niddiDYpKdKdh4RshKOdBEIxoKInXp8
-        6hKfC00Orqoe9Ye2uF0eS7O7l
-X-Received: by 2002:a50:ec99:0:b0:51d:f74c:1d44 with SMTP id e25-20020a50ec99000000b0051df74c1d44mr2453336edr.31.1688662074128;
-        Thu, 06 Jul 2023 09:47:54 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFsgBZKktKUKDnMD4AGXhJM/rSYMTYzoTBTMz/PUfXFIbgHcwyix502QSKdumliEmlDeazbpg==
-X-Received: by 2002:a50:ec99:0:b0:51d:f74c:1d44 with SMTP id e25-20020a50ec99000000b0051df74c1d44mr2453315edr.31.1688662073762;
-        Thu, 06 Jul 2023 09:47:53 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-163.retail.telecomitalia.it. [79.46.200.163])
-        by smtp.gmail.com with ESMTPSA id i22-20020aa7c716000000b0051df13f1d8fsm973950edq.71.2023.07.06.09.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 09:47:53 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 18:47:50 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v5 01/17] vsock/virtio: read data from non-linear skb
-Message-ID: <xz2elkpzzgn6zfm2e7lpognwgwm3leexyjm65qn54xwxlvbxmb@l5mhnorcbuez>
-References: <20230701063947.3422088-1-AVKrasnov@sberdevices.ru>
- <20230701063947.3422088-2-AVKrasnov@sberdevices.ru>
+        Thu, 6 Jul 2023 12:48:37 -0400
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020017.outbound.protection.outlook.com [52.101.56.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299D51BD3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 09:48:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cAmm+DNMD8PbkpNQF8+eM0jRZvJhL+t4nE30SF9XyQGmBhTrrjFqGEu+tymgEWhOSLuxme7ZberjR1Kymffwy2KbeS32hsxHP41Svy8AYIh0n5E2uhBqbX/G3VN3bazPOET1Q98lmyqTFlEetWjXzkGMaA+7hbszzQ6/JPA9OYX3YnaHfhaNZ5+co8L+yQ0Fyi5ejH+WsTM1qG8cj0cUeSf7llqOa9UJdmEjecA+dHJbhevOmf8WnolsQ7453LiGb/UmXaO21rChTlzBcC0Sie9ikrAgyEfoJ9URDTCmwRAepvxnq0GoNXsUdLO8Xe7Q11X2y7wIebBzGbEyZxRIEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2QMUZZhnlywvb/2LLjIF0Dl3McYde8CTl84ZksRNIus=;
+ b=ipK94dzd/UHGtqmhVCPLjzZ43vwZaLCJpE8NxPQkLiyvmtG8J2z8IhEkNgcwt/fWITgAwtWlzDJcpmBBksFIJW59ecxkKtz80kxiMone5jvC7IAXAd3o+ysWicBHk8gUQ/Tby4h1qbFm11f7bH45q7Mn5QMJm41rARLEUHxMniNpVC6DtxcnmyoMciN/iWm5EOuUFkuJlIV6oIMnl/RU+gd7B4zZ8Yz6te5A+wjW38MIrmAv3vve5COdB+RdcWmekaQnlHmR9nWETMzNwJhHjbqnWQp1u2b2IBGIxtakdEOYqXpcp2Oj4fS3Yk268j02jc6D8+kzUav4nESkle18ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2QMUZZhnlywvb/2LLjIF0Dl3McYde8CTl84ZksRNIus=;
+ b=DMz8+RFCNURsMLKh9fCFjZ5xfji6/vVPIsxNPy+9jtRN5+B9mobcq4NXzOePUUBxUxjCO1Y8LDc2t00JPuJbOETRcX2GyPqCR4OrIgACIPGMDH38crEPgjMwtPOEYB5ip8dbrXazR3r7OiBO8EkuBXJcFUFiPmkxrM8Cf7VvdDE=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by PH7PR21MB3878.namprd21.prod.outlook.com (2603:10b6:510:243::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.10; Thu, 6 Jul
+ 2023 16:48:33 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::733d:6263:4482:ba25]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::733d:6263:4482:ba25%4]) with mapi id 15.20.6588.010; Thu, 6 Jul 2023
+ 16:48:32 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>
+CC:     Dexuan Cui <decui@microsoft.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCHv3 0/3] x86/tdx: Fix one more load_unaligned_zeropad()
+ issue
+Thread-Topic: [PATCHv3 0/3] x86/tdx: Fix one more load_unaligned_zeropad()
+ issue
+Thread-Index: AQHZmF1U2k/rcGuWwEuDTjMXS84AEa+qcB1g
+Date:   Thu, 6 Jul 2023 16:48:32 +0000
+Message-ID: <BYAPR21MB168846628450D6089242D3EAD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ad31c59d-51f4-4fd6-b617-852225f671c0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-07-04T23:36:57Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH7PR21MB3878:EE_
+x-ms-office365-filtering-correlation-id: c6ed7d11-a73c-4596-eded-08db7e40d581
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1Kh9o0vT+GWIP/mk/sLT87jEKDfDU+i3DHhPEAZGnt4dmgT8fBqvuwjDC+k5KBL122GMDVzQ1FcLGPo0+FwKpyfGbwqO4/xAT7LOihCyRzC2soG9ms7TUBMIgp/bU/xHfoYTiPptb5xszDXV1g53FpEoqyZqRuKMT8Z/tkmBetwCFpfbhlaQ0qmfQ86vDWmba3jft3CgB6qySHHNfO/9LzKbZx5GWJHwKiwLPWr0/jGQweOx4PCFikIkup4kXnpIxa8LwMDK6+1s4D/QXpROkvU0IJm+Y3HQesXmfnER7ibDkSZHTmL7b5uGaES+eUdT6cSv+oy9leyio6rektilwBtwb7Cwx5PcqNJIU+7rY2PNOVcjh0WVsCfyt20z9L2hvz8Snn5tTfKaW2G09U24eZ8YaB4yV/PrXkA7+SFhChNFTJx9Fz6gdUTewWunZ1i9xwpF0TMzRTAlFQxbfkDb7BayWnAqC8vS+o74+PviOP0sw3+T6bBHHJJD7Np2VGMNWYw+Y3prPK3ynq2dIIRmrBYoiZGThcPSlba8T5Lx1rePOj2fsPyHYrlqQ5BdV6TfAIhb9ubgbyo0Lio+hfxhuiW3lKQ+dzAHgfztWZMW4rXBYStq/RHW9Wge4x/hc7NPPzMi5eGQHa1/NI9hQguHmw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(366004)(346002)(376002)(451199021)(66476007)(316002)(66946007)(76116006)(66446008)(64756008)(66556008)(38070700005)(4326008)(82950400001)(8990500004)(55016003)(6506007)(122000001)(82960400001)(9686003)(186003)(38100700002)(26005)(478600001)(966005)(71200400001)(7696005)(10290500003)(110136005)(54906003)(83380400001)(7416002)(8936002)(33656002)(5660300002)(2906002)(52536014)(86362001)(8676002)(41300700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vd2QbI9DJXJjjgWsgn+AZwe4GscyCU1b4ylgvLpumREsl08I4K2f/o7RwGEg?=
+ =?us-ascii?Q?G8reVEqWdIn2GHuJIH+jxjTy1/68VVYlCxLpO3vjBxUqmP2YcaEO7yEcHiMX?=
+ =?us-ascii?Q?+P0VHYiHIdihjMciifU41jrzhCZPpYyvVyHKGehbir9foq1gtbASRcDJ8sgV?=
+ =?us-ascii?Q?F2dkZ67STw1WbAgG8sbCWBMabkIMK+vJJZWW1jp4Sm0ESTBspbeX2iTPRJWU?=
+ =?us-ascii?Q?iPyqiXCAnbIyAIgLMLrU8rLcSPardvRvEB2XUCN5fec8IcwsCvAcyxsdfkgU?=
+ =?us-ascii?Q?8maMi7sy2Q2QcZ4+2JCld3lswuWAIg78N0CRgUbpBVam4bvlTZE8eQsmGhns?=
+ =?us-ascii?Q?fZy34iVqlVtGrQ3mLxsyXZKXIkv15zyhO1fFpAW6xpCJoJ7DEcVsXfn9AjSj?=
+ =?us-ascii?Q?TFw4DMsuT35Z8CUK3g7/GvrJ4xVBnk6cIFjW7mpFJSRh/JyxNQWgwyMxAfaX?=
+ =?us-ascii?Q?NciorIMmKzIocgf3mya6pkX8MoMVuXDcMyji+sVMgLZ7KSYorYyhkqj29rbL?=
+ =?us-ascii?Q?qLhK4Q8alykM0O1sMxIibIqaYBExlS1t9h+LnWgQJANdLCli2LQtPO22uss5?=
+ =?us-ascii?Q?kNiJT6nxUxHYtnJv9kn3X+1qxFvWbZrI6+WyWTH1tcdb4KmbfILQx96IOPA4?=
+ =?us-ascii?Q?morzXOZRjh6qGMIsD4mdbh+EKr14AZhGIy0OOd8yP0MkLtXihfQZiQ+3qQjX?=
+ =?us-ascii?Q?gYsrVSNISMUd2XKUolPXQQ993dPDJ7tDDFoNomC9adBobfVkFfCr5/COnKKe?=
+ =?us-ascii?Q?GJqWKDDFofl6vUBabU3okyEMmzEB5xJR9ntCE4X/zqP+/P8+SKVA4YA+h9EN?=
+ =?us-ascii?Q?r7jmnip646dY1bFEdlOmgKjXWUToxM91MzFq4tRFOEk58qofw4cpfYC+O8SI?=
+ =?us-ascii?Q?7hy0j6Dt98gRwQPRZxicqju7ijzWLtMaDeZTyDgf57Wswy7DsVpIhHDWcPKX?=
+ =?us-ascii?Q?vvd+qFhCuM8M/l/LUuETtN14JLnQeHJKoK28RGOCWVz/lGcxAVrhhwXQzMqt?=
+ =?us-ascii?Q?rYSTD3ydWFPzxLwwZr9oSq2/EGYHgcsutBjINw1aLPvVBzyAwcu1w04KnZBy?=
+ =?us-ascii?Q?8FBBNKbXk/scPYRu+k+POg2jUN5Y/XzV/30+gxrE6RkKYkasKaImb0u6/TBo?=
+ =?us-ascii?Q?Vk1OwPOBTSB2lHM4NPNwWEX3QCHL+6dG15NwCCX/LayCPd7SuLM0+ZDnDATx?=
+ =?us-ascii?Q?RIW7G2BUre8hAjAtA6fHnsabJmC5DNFGLVMJX0IXw2QY1p0gLRoeOJPowxvc?=
+ =?us-ascii?Q?IMlP7vzFSAt59P4K9x/Ji2IU5+0Lx4T4NugUIrCpUlgkKwn1yGHNEE/h9QDk?=
+ =?us-ascii?Q?ykHey5UEs9XwVoVPXPwyfqjeOn7Uw7Ei+u36JFPO6G4BgEvMe18BO5azSe3B?=
+ =?us-ascii?Q?BIf3nsn4EJEsHf6TQbjFWLgrQIhBoa+czzPaShnZ0iYuKmo4Zuzg77zCqmEt?=
+ =?us-ascii?Q?4bkogFW2sYijbw6z9yIopx0uLdb8I3OVNoBHN+xgjOoi0In/yTENMKiEBkAX?=
+ =?us-ascii?Q?EzOXh4HyYyd4/5OdTh4dvBGzM1YGvKPXcbF+w3XVUFGZxbRogQasEmdI0rBF?=
+ =?us-ascii?Q?PitIfdc4XLGWPnnd4rWwJ1XFTXAlAVMSG7TVPoGkAG8IOhkkGif4UV+X1QCz?=
+ =?us-ascii?Q?Ag=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230701063947.3422088-2-AVKrasnov@sberdevices.ru>
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6ed7d11-a73c-4596-eded-08db7e40d581
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 16:48:32.7524
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HFUqi0q0TYHYofOzAW7q+UBG41N5ImZ6UCbjRS0CGrScXNPN+RGrPpGp/XtDXBX55rTP3SwevkTKlqMlfPd4rNTAisJ548HSNrm8m0jtITA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3878
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 01, 2023 at 09:39:31AM +0300, Arseniy Krasnov wrote:
->This is preparation patch for non-linear skbuff handling. It replaces
->direct calls of 'memcpy_to_msg()' with 'skb_copy_datagram_iter()'. Main
->advantage of the second one is that is can handle paged part of the skb
+From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com> Sent: Tuesday, J=
+une 6, 2023 2:56 AM
+>=20
+> During review of TDX guests on Hyper-V patchset Dave pointed to the
+> potential race between changing page private/shared status and
+> load_unaligned_zeropad().
+>=20
+> Fix the issue.
+>=20
+> v3:
+>  - Fix grammar;
+>  - Add Sathya's Reviewed-bys;
+> v2:
+>  - Add more info in commit message of the first patch.
+>  - Move enc_status_change_finish_noop() into a separate patch.
+>  - Fix typo in commit message and comment.
+>=20
+> Kirill A. Shutemov (3):
+>   x86/mm: Allow guest.enc_status_change_prepare() to fail
+>   x86/tdx: Fix race between set_memory_encrypted() and
+>     load_unaligned_zeropad()
+>   x86/mm: Fix enc_status_change_finish_noop()
+>=20
+>  arch/x86/coco/tdx/tdx.c         | 64 +++++++++++++++++++++++++++++++--
+>  arch/x86/include/asm/x86_init.h |  2 +-
+>  arch/x86/kernel/x86_init.c      |  4 +--
+>  arch/x86/mm/mem_encrypt_amd.c   |  4 ++-
+>  arch/x86/mm/pat/set_memory.c    |  3 +-
+>  5 files changed, 69 insertions(+), 8 deletions(-)
+>=20
+> --
+> 2.39.3
 
-s/is that is/is that it/
+These fixes notwithstanding, load_unaligned_zeropad() is not handled
+properly in a TDX VM.  The problem was introduced with commit
+c4e34dd99f2e, which moved the fixup code to function
+ex_handler_zeropad().  This new function does a verification against
+fault_addr, and the verification always fails because fault_addr is zero.
+The call sequence is:
 
->by using 'kmap()' on each page, but if there are no pages in the skb,
->it behaves like simple copying to iov iterator. This patch also adds
->new field to the control block of skb - this value shows current offset
->in the skb to read next portion of data (it doesn't matter linear it or
->not). Idea is that 'skb_copy_datagram_iter()' handles both types of
->skb internally - it just needs an offset from which to copy data from
->the given skb. This offset is incremented on each read from skb. This
->approach allows to avoid special handling of non-linear skbs:
->1) We can't call 'skb_pull()' on it, because it updates 'data' pointer.
->2) We need to update 'data_len' also on each read from this skb.
+exc_virtualization_exception()
+ve_raise_fault()
+gp_try_fixup_and_notify()  <-- always passes 0 as fault_addr
+fixup_exception()
+ex_handler_zeropad()
 
-I would mention that this change is in preparation of zero-copy support.
+The validation of fault_addr could probably be removed since
+such validation wasn't there prior to c4e34dd99f2e.  But before
+going down that path, I want to propose a different top-level
+solution to the interaction between load_unaligned_zeropad()
+and CoCo VM page transitions between private and shared.
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> Changelog:
-> v4 -> v5:
->  * Use local variable for 'frag_off' in stream dequeue calback.
->  * R-b from Bobby Eshleman removed due to patch update.
->
-> include/linux/virtio_vsock.h            |  1 +
-> net/vmw_vsock/virtio_transport_common.c | 30 ++++++++++++++++++-------
-> 2 files changed, 23 insertions(+), 8 deletions(-)
->
->diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
->index c58453699ee9..17dbb7176e37 100644
->--- a/include/linux/virtio_vsock.h
->+++ b/include/linux/virtio_vsock.h
->@@ -12,6 +12,7 @@
-> struct virtio_vsock_skb_cb {
-> 	bool reply;
-> 	bool tap_delivered;
->+	u32 frag_off;
-> };
->
-> #define VIRTIO_VSOCK_SKB_CB(skb) ((struct virtio_vsock_skb_cb *)((skb)->cb))
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index b769fc258931..e5683af23e60 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -355,7 +355,7 @@ virtio_transport_stream_do_peek(struct vsock_sock *vsk,
-> 	spin_lock_bh(&vvs->rx_lock);
->
-> 	skb_queue_walk_safe(&vvs->rx_queue, skb,  tmp) {
->-		off = 0;
->+		off = VIRTIO_VSOCK_SKB_CB(skb)->frag_off;
->
-> 		if (total == len)
-> 			break;
->@@ -370,7 +370,10 @@ virtio_transport_stream_do_peek(struct vsock_sock *vsk,
-> 			 */
-> 			spin_unlock_bh(&vvs->rx_lock);
->
->-			err = memcpy_to_msg(msg, skb->data + off, bytes);
->+			err = skb_copy_datagram_iter(skb, off,
->+						     &msg->msg_iter,
->+						     bytes);
->+
-> 			if (err)
-> 				goto out;
->
->@@ -411,27 +414,35 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
-> 	}
->
-> 	while (total < len && !skb_queue_empty(&vvs->rx_queue)) {
->+		u32 skb_rest_len;
->+
-> 		skb = skb_peek(&vvs->rx_queue);
->
-> 		bytes = len - total;
->-		if (bytes > skb->len)
->-			bytes = skb->len;
->+		skb_rest_len = skb->len - VIRTIO_VSOCK_SKB_CB(skb)->frag_off;
->+
->+		if (bytes > skb_rest_len)
->+			bytes = skb_rest_len;
+When a page is transitioning, the caller can and should ensure
+that it is not being accessed during the transition.  But we have
+the load_unaligned_zeropad() wildcard.   So do the following for
+the transition sequence in __set_memory_enc_pgtable():
 
-What about just:
-		bytes = min_t(size_t, len - total,
-			      skb->len - VIRTIO_VSOCK_SKB_CB(skb)->frag_off);
+1.  Remove aliasing mappings
+2.  Remove the PRESENT bit from the PTEs of all transitioning pages
+3.  Flush the TLB globally
+4.  Flush the data cache if needed
+5.  Set/clear the encryption attribute as appropriate
+6.  Notify the hypervisor of the page status change
+7.  Add back the PRESENT bit
 
-The rest LGTM!
+With this approach, load_unaligned_zeropad() just takes the
+normal page-fault-based fixup path if it touches a page that is
+transitioning.  As a result, load_unaligned_zeropad() and CoCo
+VM page transitioning are completely decoupled.  We don't
+need to handle architecture-specific CoCo VM exceptions and
+fix things up.
 
-Stefano
+I've posted an RFC PATCH that implements this approach [1],
+and tested on TDX VMs and SEV-SNP VMs in vTOM mode.
+The RFC PATCH has more details on the benefits and
+implications.  Follow-up discussion should probably be done
+on that email thread.
 
->
-> 		/* sk_lock is held by caller so no one else can dequeue.
-> 		 * Unlock rx_lock since memcpy_to_msg() may sleep.
-> 		 */
-> 		spin_unlock_bh(&vvs->rx_lock);
->
->-		err = memcpy_to_msg(msg, skb->data, bytes);
->+		err = skb_copy_datagram_iter(skb,
->+					     VIRTIO_VSOCK_SKB_CB(skb)->frag_off,
->+					     &msg->msg_iter, bytes);
->+
-> 		if (err)
-> 			goto out;
->
-> 		spin_lock_bh(&vvs->rx_lock);
->
-> 		total += bytes;
->-		skb_pull(skb, bytes);
->
->-		if (skb->len == 0) {
->+		VIRTIO_VSOCK_SKB_CB(skb)->frag_off += bytes;
->+
->+		if (skb->len == VIRTIO_VSOCK_SKB_CB(skb)->frag_off) {
-> 			u32 pkt_len = le32_to_cpu(virtio_vsock_hdr(skb)->len);
->
-> 			virtio_transport_dec_rx_pkt(vvs, pkt_len);
->@@ -503,7 +514,10 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
-> 				 */
-> 				spin_unlock_bh(&vvs->rx_lock);
->
->-				err = memcpy_to_msg(msg, skb->data, bytes_to_copy);
->+				err = skb_copy_datagram_iter(skb, 0,
->+							     &msg->msg_iter,
->+							     bytes_to_copy);
->+
-> 				if (err) {
-> 					/* Copy of message failed. Rest of
-> 					 * fragments will be freed without copy.
->-- 
->2.25.1
->
+Michael
 
+[1] https://lore.kernel.org/lkml/1688661719-60329-1-git-send-email-mikelley=
+@microsoft.com/T/#u
