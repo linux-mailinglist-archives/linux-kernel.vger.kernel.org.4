@@ -2,111 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FA1749E41
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4C1749E45
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjGFNzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S232694AbjGFNzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbjGFNy5 (ORCPT
+        with ESMTP id S231366AbjGFNzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:54:57 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4E1BEC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:54:54 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51d93425853so1011887a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 06:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688651692; x=1691243692;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dJZIZaXi9+UMAV6SzKJCfkOpgDP4Lodb3brLJpgo+E0=;
-        b=bg5odx8aK40mX3j9+IoldO8bOk7Q6UJ80I6WYOnvN3cvqQ/NzVPYbisFdH42EBncGu
-         wRn20470gK3yyXuzRe/PhfrLkGmUP1UBapt+tarplzaNZ4+b7ec2CDJ9ov1KOmn1/UJO
-         XqDDKKwMmQ8C735pGjpBTQhOMae4rvglBoJhGZaUcGlIPWTmDA7IKW4Gr/G5rl54UFyG
-         Jz8dAdgt5JfmlgKExw7j4Zn87m5S2b6us59580RL7le9ryo9u9C1XfXLquv0yL2slt8V
-         jCREiTNvj681GBwkeAaBUw7z3ZqoTJKW9jYyars66wQZ9Rf50fcDWLYAfZSTWgk+Gtlm
-         iVSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688651692; x=1691243692;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dJZIZaXi9+UMAV6SzKJCfkOpgDP4Lodb3brLJpgo+E0=;
-        b=idfXY0B9nU1HYVEEHAwO6R9Dy8fUB95EjQhtPz9I65eqyM3JCOh+SnI8Df9tgsu4eJ
-         bwPWmf/KJoWGeTdU8MepGdfU+X32M4mZJqrF5MxIWpQRKLm2zpklz5XsNSk7IH2GiJpl
-         AC3dYlYFI3tffnItwKUilG8hmoXnHOlFJGtmdsd5BJi6CFVew3Y9PO5D8MhyP6DVqrDN
-         J+fDRBIZipqrhnbRvwqex0MdWDfMDAiQeN5lKkm40v4UISpdcskhoOj2SSuUbE5rXuFc
-         nOnUvQoQ+i+LYjZad4vklJfJyDcPcGr3ZMWDL7UBlAELKQBAStFXBo/EqZweXKCcvS90
-         TQGw==
-X-Gm-Message-State: ABy/qLaZJPtw8FiyoAwLqmIZnGHf2B+ZvQ3KEHC4LEW5Exuei1LqngQZ
-        9SoPTb1vtP2fqxxiXzMJIkBHNg==
-X-Google-Smtp-Source: APBJJlE+2vHvI4Z4KJIJhk8YVlZZPb330YMaIGshIPS5z/4VS8YZ4GrDE6Mi7v6oZzC4po8QkYlzCQ==
-X-Received: by 2002:aa7:c610:0:b0:51a:2013:583 with SMTP id h16-20020aa7c610000000b0051a20130583mr1758445edq.13.1688651692535;
-        Thu, 06 Jul 2023 06:54:52 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id h13-20020a50ed8d000000b0051e362db186sm123271edr.60.2023.07.06.06.54.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 06:54:52 -0700 (PDT)
-Message-ID: <941ead9e-9e46-b5cb-0a8b-345df6606484@linaro.org>
-Date:   Thu, 6 Jul 2023 15:54:51 +0200
+        Thu, 6 Jul 2023 09:55:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F851BE3;
+        Thu,  6 Jul 2023 06:55:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C5F022277F;
+        Thu,  6 Jul 2023 13:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688651718; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XwvMPHSu7xNFjpf/tkeHJ2SIRv1M+NRRDyqHqUcYkIo=;
+        b=b8SqHJVH9ALTskCt9O4rsNLoxpn3giYYrUMszctCcLJzKuGK9qE6uTm/tMYNWgjUAHjQhi
+        x7VCChMaj+XVwZeae7io/NSGjoxG2PUDDTC8NAr0dKTW6Nit5G0/tBlBMyhBMaYBVorEdH
+        R6Ft4HK5XXzEuj+9b6ZnGkRDv+EbHIg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688651718;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XwvMPHSu7xNFjpf/tkeHJ2SIRv1M+NRRDyqHqUcYkIo=;
+        b=513F7K7OruLAfUOTXjNW+VYK3b+OMtcbnip4h6ypWcVNegk2gI7J34PZjwGK72GjQ8lJWp
+        71MH2jekxP2yh4BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B66C7138EE;
+        Thu,  6 Jul 2023 13:55:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rAOlLMbHpmTHZAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 13:55:18 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 54CC3A0707; Thu,  6 Jul 2023 15:55:18 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 15:55:18 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@lists.orangefs.org
+Subject: Re: [PATCH v2 65/92] orangefs: convert to ctime accessor functions
+Message-ID: <20230706135518.xjfzcvf224wfypeg@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-63-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFT PATCH 1/3] arm64: dts: rockchip: correct audio-codec
- interrupt flag in eaidk-610
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230705064823.9210-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230705064823.9210-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705190309.579783-63-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 08:48, Krzysztof Kozlowski wrote:
-> GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
-> These are simple defines so they could be used in DTS but they will not
-> have the same meaning: GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE.
+On Wed 05-07-23 15:01:30, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> Correct the interrupt flags, assuming the author of the code wanted same
-> logical behavior behind the name "ACTIVE_xxx", this is:
->   ACTIVE_LOW  => IRQ_TYPE_LEVEL_LOW
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-This should be HIGH in both cases. I will send a v2.
+Looks good. Feel free to add:
 
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  fs/orangefs/namei.c          | 2 +-
+>  fs/orangefs/orangefs-utils.c | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts b/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
-> index d1f343345f67..6464ef4d113d 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
-> @@ -773,7 +773,7 @@ brcmf: wifi@1 {
->  		compatible = "brcm,bcm4329-fmac";
->  		reg = <1>;
->  		interrupt-parent = <&gpio0>;
-> -		interrupts = <RK_PA3 GPIO_ACTIVE_HIGH>;
-> +		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_HIGH>;
-
-Best regards,
-Krzysztof
-
+> diff --git a/fs/orangefs/namei.c b/fs/orangefs/namei.c
+> index 77518e248cf7..c9dfd5c6a097 100644
+> --- a/fs/orangefs/namei.c
+> +++ b/fs/orangefs/namei.c
+> @@ -421,7 +421,7 @@ static int orangefs_rename(struct mnt_idmap *idmap,
+>  		     ret);
+>  
+>  	if (new_dentry->d_inode)
+> -		new_dentry->d_inode->i_ctime = current_time(new_dentry->d_inode);
+> +		inode_set_ctime_current(d_inode(new_dentry));
+>  
+>  	op_release(new_op);
+>  	return ret;
+> diff --git a/fs/orangefs/orangefs-utils.c b/fs/orangefs/orangefs-utils.c
+> index 46b7dcff18ac..0a9fcfdf552f 100644
+> --- a/fs/orangefs/orangefs-utils.c
+> +++ b/fs/orangefs/orangefs-utils.c
+> @@ -361,11 +361,11 @@ int orangefs_inode_getattr(struct inode *inode, int flags)
+>  	    downcall.resp.getattr.attributes.atime;
+>  	inode->i_mtime.tv_sec = (time64_t)new_op->
+>  	    downcall.resp.getattr.attributes.mtime;
+> -	inode->i_ctime.tv_sec = (time64_t)new_op->
+> -	    downcall.resp.getattr.attributes.ctime;
+> +	inode_set_ctime(inode,
+> +			(time64_t)new_op->downcall.resp.getattr.attributes.ctime,
+> +			0);
+>  	inode->i_atime.tv_nsec = 0;
+>  	inode->i_mtime.tv_nsec = 0;
+> -	inode->i_ctime.tv_nsec = 0;
+>  
+>  	/* special case: mark the root inode as sticky */
+>  	inode->i_mode = type | (is_root_handle(inode) ? S_ISVTX : 0) |
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
