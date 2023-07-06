@@ -2,99 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38FC74A1A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64C074A1A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjGFP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S232682AbjGFP4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbjGFP4Z (ORCPT
+        with ESMTP id S232593AbjGFP4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:56:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4E61997
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688658938;
+        Thu, 6 Jul 2023 11:56:14 -0400
+Received: from out-50.mta1.migadu.com (out-50.mta1.migadu.com [95.215.58.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26331BC2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:56:11 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 11:56:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688658969;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ui06ZFcdz1qWSBPR+h//NKg4GSrZKXagBPNy6hALhkE=;
-        b=JkdmxKEB19rrZaUtLDGv1tAoHGeTjZffhJ+I+m5UJLtPJ89w+tL3E4wKo+GS8mA0Ps12zM
-        dKgKnH7vhZ8ZQvDaioT97LIcfSmWBTFo2gQKvEHy6xzyHZ1MviHv8/iFW81qALddqX0oTY
-        31U4iEIWOI0W/hpACcjFpaSm+87pZGM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-umXMLVFUPOSZJu0jyKXHNA-1; Thu, 06 Jul 2023 11:55:35 -0400
-X-MC-Unique: umXMLVFUPOSZJu0jyKXHNA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0DBE185A791;
-        Thu,  6 Jul 2023 15:55:33 +0000 (UTC)
-Received: from localhost (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3345492C13;
-        Thu,  6 Jul 2023 15:55:32 +0000 (UTC)
-Date:   Thu, 6 Jul 2023 23:55:29 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        hch@lst.de, christophe.leroy@csgroup.eu, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
-        nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZKbj8Tr15cQtjEy5@MiWiFi-R3L-srv>
-References: <20230620131356.25440-11-bhe@redhat.com>
- <202306211329.ticOJCSv-lkp@intel.com>
+         in-reply-to:in-reply-to; bh=JBjGDA7ydfKolArFlHyoGbaegXA0bjZVgRz3VNxz/Xk=;
+        b=SCusYgRdj8dOs7PArJU2khmgLtU2z17xdTbwxRXF9bWGvdXsJMxXrIvr71ama0A7shFwLo
+        ml/tQuW0nEFdOhQQCvzUJO60SoqXDXllAq7szN03L05GNwuj6gqVlTT8a5YGg+VjfCQmnp
+        RuS9XJc36Nupr2F3e4xmwZ5GXrtaAUg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, djwong@kernel.org,
+        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
+        josef@toxicpanda.com, tytso@mit.edu, bfoster@redhat.com,
+        jack@suse.cz, andreas.gruenbacher@gmail.com, brauner@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230706155602.mnhsylo3pnief2of@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306211329.ticOJCSv-lkp@intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 06/21/23 at 01:43pm, kernel test robot wrote:
-> Hi Baoquan,
+On Mon, Jun 26, 2023 at 05:47:01PM -0400, Kent Overstreet wrote:
+> Hi Linus,
 > 
-> kernel test robot noticed the following build errors:
+> Here it is, the bcachefs pull request. For brevity the list of patches
+> below is only the initial part of the series, the non-bcachefs prep
+> patches and the first bcachefs patch, but the diffstat is for the entire
+> series.
 > 
-> [auto build test ERROR on akpm-mm/mm-everything]
+> Six locks has all the changes you suggested, text size went down
+> significantly. If you'd still like this to see more review from the
+> locking people, I'm not against them living in fs/bcachefs/ as an
+> interim; perhaps Dave could move them back to kernel/locking when he
+> starts using them or when locking people have had time to look at them -
+> I'm just hoping for this to not block the merge.
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
-> patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
+> Recently some people have expressed concerns about "not wanting a repeat
+> of ntfs3" - from what I understand the issue there was just severe
+> buggyness, so perhaps showing the bcachefs automated test results will
+> help with that:
+> 
+>   https://evilpiepirate.org/~testdashboard/ci
+> 
+> The main bcachefs branch runs fstests and my own test suite in several
+> varations, including lockdep+kasan, preempt, and gcov (we're at 82% line
+> coverage); I'm not currently seeing any lockdep or kasan splats (or
+> panics/oopses, for that matter).
+> 
+> (Worth noting the bug causing the most test failures by a wide margin is
+> actually an io_uring bug that causes random umount failures in shutdown
+> tests. Would be great to get that looked at, it doesn't just affect
+> bcachefs).
+> 
+> Regarding feature status - most features are considered stable and ready
+> for use, snapshots and erasure coding are both nearly there. But a
+> filesystem on this scale is a massive project, adequately conveying the
+> status of every feature would take at least a page or two.
+> 
+> We may want to mark it as EXPERIMENTAL for a few releases, I haven't
+> done that as yet. (I wouldn't consider single device without snapshots
+> to be experimental, but - given that the number of users and bug reports
+> is about to shoot up, perhaps I should...).
 
-I can confirm these reproted errors have nothing to do with my patch. I
-got a s390 system and build the latest kernel from linus's master branch
-with above config, all these failures have been existing there. I have
-made patches to fix them by adding dependency on HAS_IOMEM for drivers.
+Restarting the discussion after the holiday weekend, hoping to get
+something more substantive going:
 
-I would suggest lkp adjusts script to test the base firstly so that a
-reliable base is provided to avoid confusion.
+Hoping to get:
+ - Thoughts from people who have been following bcachefs development,
+   and people who have looked at the code
+ - Continuation of the LSF discussion - maybe some people could repeat
+   here what they said there (re: code review, iomap, etc.)
+ - Any concerns about how this might impact the rest of the kernel, or
+   discussion about what impact merging a new filesystem is likely to
+   have on other people's work
 
-Thanks
-Baoquan
+AFAIK the only big ask that hasn't happened yet is better documentation:
+David Howells wanted (better) a man page, which is definitely something
+that needs to happen but it'll be some months before I'm back to working
+on documentation - I'm happy to share my current list of priorities if
+that would be helpful.
 
+In the meantime, the Latex principles of operation is reasonably up to
+date (and I intend to greatly expand the sections on on disk data
+structures, I think that'll be great reference documentation for
+developers getting up to speed on the code)
+
+https://bcachefs.org/bcachefs-principles-of-operation.pdf
+
+I feel that bcachefs is in a pretty mature state at this point, but it's
+also _huge_, which is a bit different than e.g. the btrfs merger; it's
+hard to know where to start to get a meaninful discussion/review process
+going.
+
+Patch bombing the mailing list with 90k loc is clearly not going to be
+productive, which is why I've been trying to talk more about development
+process and status - but all suggestions and feedback are welcome.
+
+Cheers,
+Kent
