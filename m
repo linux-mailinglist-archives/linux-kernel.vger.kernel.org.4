@@ -2,353 +2,411 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C6F749FBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19F0749F3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbjGFOt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S233260AbjGFOmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbjGFOtc (ORCPT
+        with ESMTP id S232997AbjGFOmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:49:32 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9DC1FD2;
-        Thu,  6 Jul 2023 07:48:58 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QxfGZ6Lg9z9xFmp;
-        Thu,  6 Jul 2023 22:36:06 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHQg0y06ZkPxkwBA--.58122S14;
-        Thu, 06 Jul 2023 15:48:07 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jarkko@kernel.org, song@kernel.org, jolsa@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        rostedt@goodmis.org, mhiramat@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbrobinson@gmail.com,
-        zbyszek@in.waw.pl, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org, wiktor@metacode.biz,
-        devel@lists.sequoia-pgp.org, gnupg-devel@gnupg.org,
-        ebiggers@kernel.org, Jason@zx2c4.com, mail@maciej.szmigiero.name,
-        antony@vennard.ch, konstantin@linuxfoundation.org,
-        James.Bottomley@HansenPartnership.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][GNUPG][PATCH 2/2] Convert PGP signatures to the user asymmetric key signatures format
-Date:   Thu,  6 Jul 2023 16:42:25 +0200
-Message-Id: <20230706144225.1046544-13-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
-References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
+        Thu, 6 Jul 2023 10:42:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A508D199F;
+        Thu,  6 Jul 2023 07:42:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50B14D75;
+        Thu,  6 Jul 2023 07:43:20 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF7333F762;
+        Thu,  6 Jul 2023 07:42:36 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 15:42:34 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v3 2/4] firmware: arm_scmi: Add SCMI v3.2 pincontrol
+ protocol basic support
+Message-ID: <ZKbS2jkl0R0Ul1a4@e120937-lin>
+References: <cover.1686063941.git.oleksii_moisieiev@epam.com>
+ <d388c7af3f72fd47baffe0de8c6fec8074cb483c.1686063941.git.oleksii_moisieiev@epam.com>
+ <ZKKgD1QxF085kE+c@e120937-lin>
+ <20230706140937.GA821831@EPUAKYIW0A6A>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwAHQg0y06ZkPxkwBA--.58122S14
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFWUur13Wr4fKFyDAw48Crg_yoW3Gr45pa
-        4SkF1SvrW5ZFn7KF47Gw4Fqr13JwnYg3WDKFW3C3WS9wnIqrWqqF1jvryIgryrGFZ7KF18
-        AF4DXFZ7Wr4kAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-        kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXV
-        W8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Cr1j6rxdMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuY
-        vjxUI-eODUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4-V7gAAsK
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706140937.GA821831@EPUAKYIW0A6A>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Jul 06, 2023 at 02:09:38PM +0000, Oleksii Moisieiev wrote:
+> Hi Cristian,
+> 
 
-Enhance the gpg command --conv-kernel to also support converting PGP
-signatures to the user asymmetric key signatures format.
+Hi Oleksii,
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- g10/conv-packet.c | 200 ++++++++++++++++++++++++++++++++++++++++++++++
- g10/conv-packet.h |   7 ++
- g10/mainproc.c    |   1 +
- 3 files changed, 208 insertions(+)
+> Sorry for late answer.
+> Please see below.
+> 
 
-diff --git a/g10/conv-packet.c b/g10/conv-packet.c
-index 360db30eb8d..d85d5a35002 100644
---- a/g10/conv-packet.c
-+++ b/g10/conv-packet.c
-@@ -31,6 +31,8 @@
- #include <linux/byteorder/little_endian.h>
- #endif
- #include <linux/pub_key_info.h>
-+#include <linux/sig_enc_info.h>
-+#include <linux/hash_info.h>
- 
- #include "gpg.h"
- #include "../common/util.h"
-@@ -41,6 +43,16 @@
- 
- static estream_t listfp;
- 
-+static const enum hash_algo pgp_hash_algorithms[DIGEST_ALGO_SHA224 + 1] = {
-+  [DIGEST_ALGO_MD5]                = HASH_ALGO_MD5,
-+  [DIGEST_ALGO_SHA1]               = HASH_ALGO_SHA1,
-+  [DIGEST_ALGO_RMD160]             = HASH_ALGO_RIPE_MD_160,
-+  [DIGEST_ALGO_SHA256]             = HASH_ALGO_SHA256,
-+  [DIGEST_ALGO_SHA384]             = HASH_ALGO_SHA384,
-+  [DIGEST_ALGO_SHA512]             = HASH_ALGO_SHA512,
-+  [DIGEST_ALGO_SHA224]             = HASH_ALGO_SHA224,
-+};
-+
- static void init_output(void)
- {
-   if (!listfp)
-@@ -285,3 +297,191 @@ out:
-   xfree(buffer);
-   return 0;
- }
-+
-+/* Taken from sig_check.c */
-+static int get_sig_data(PKT_signature * sig, __u8 **buf, __u32 *buf_len)
-+{
-+  __u8 *buf_ptr;
-+
-+  *buf = xmalloc_clear(4 + 2 + sig->hashed->len + 6);
-+  if (!*buf)
-+    return -ENOMEM;
-+
-+  buf_ptr = *buf;
-+
-+  if (sig->version >= 4)
-+    *buf_ptr++ = sig->version;
-+
-+  *buf_ptr++ = sig->sig_class;
-+  if (sig->version < 4)
-+    {
-+      u32 a = sig->timestamp;
-+      *buf_ptr++ = ((a >> 24) & 0xff);
-+      *buf_ptr++ = ((a >> 16) & 0xff);
-+      *buf_ptr++ = ((a >>  8) & 0xff);
-+      *buf_ptr++ = (a & 0xff);
-+    }
-+  else
-+    {
-+      size_t n;
-+      *buf_ptr++ = sig->pubkey_algo;
-+      *buf_ptr++ = sig->digest_algo;
-+      if (sig->hashed)
-+        {
-+          n = sig->hashed->len;
-+          *buf_ptr++ = n >> 8;
-+          *buf_ptr++ = n;
-+          memcpy(buf_ptr, sig->hashed->data, n);
-+          buf_ptr += n;
-+          n += 6;
-+	}
-+      else
-+        {
-+	  /* Two octets for the (empty) length of the hashed
-+           * section. */
-+          *buf_ptr++ = 0;
-+	  *buf_ptr++ = 0;
-+	  n = 6;
-+	}
-+      /* Add some magic per Section 5.2.4 of RFC 4880.  */
-+      *buf_ptr++ = sig->version;
-+      *buf_ptr++ = 0xff;
-+      *buf_ptr++ = n >> 24;
-+      *buf_ptr++ = n >> 16;
-+      *buf_ptr++ = n >>  8;
-+      *buf_ptr++ = n;
-+    }
-+
-+    *buf_len = buf_ptr - *buf;
-+    return 0;
-+}
-+
-+int write_kernel_signature(PKT_signature *sig)
-+{
-+  unsigned char *buffer = NULL;
-+  size_t buffer_len = 0, buffer_len_padded = 0;
-+  struct uasym_hdr hdr = { 0 };
-+  struct uasym_entry e_key_algo = { 0 };
-+  struct uasym_entry e_hash_algo = { 0 };
-+  struct uasym_entry e_sig_encoding = { 0 };
-+  struct uasym_entry e_sig_kid0 = { 0 };
-+  struct uasym_entry e_sig_pub = { 0 };
-+  struct uasym_entry e_sig_data = { 0 };
-+  __u8 pkey_algo;
-+  __u8 hash_algo;
-+  __u8 sig_encoding = SIG_ENC_PKCS1;
-+  __u8 *sig_data = NULL;
-+  __u32 _keyid, sig_data_len;
-+  __u64 total_len = 0;
-+  gpg_error_t err;
-+  int ret = 0;
-+
-+  init_output();
-+
-+  ret = pgp_to_kernel_algo(sig->pubkey_algo, NULL, &pkey_algo);
-+  if (ret < 0)
-+    return ret;
-+
-+  if (pkey_algo == PKEY_ALGO_ECDSA)
-+    sig_encoding = SIG_ENC_X962;
-+
-+  hash_algo = pgp_hash_algorithms[sig->digest_algo];
-+
-+  /* sig key algo */
-+  e_key_algo.field = __cpu_to_be16(SIG_KEY_ALGO);
-+  e_key_algo.length = __cpu_to_be32(sizeof(pkey_algo));
-+  total_len += sizeof(e_key_algo) + sizeof(pkey_algo);
-+
-+  /* sig hash algo */
-+  e_hash_algo.field = __cpu_to_be16(SIG_HASH_ALGO);
-+  e_hash_algo.length = __cpu_to_be32(sizeof(hash_algo));
-+  total_len += sizeof(e_hash_algo) + sizeof(hash_algo);
-+
-+  /* sig encoding */
-+  e_sig_encoding.field = __cpu_to_be16(SIG_ENC);
-+  e_sig_encoding.length = __cpu_to_be32(sizeof(sig_encoding));
-+  total_len += sizeof(e_sig_encoding) + sizeof(sig_encoding);
-+
-+  /* sig kid0 */
-+  e_sig_kid0.field = __cpu_to_be16(SIG_KID0);
-+  e_sig_kid0.length = __cpu_to_be32(2 * sizeof(*sig->keyid));
-+  total_len += sizeof(e_sig_kid0) + 2 * sizeof(*sig->keyid);
-+
-+  /* sig data */
-+  e_sig_data.field = __cpu_to_be16(SIG_DATA_END);
-+  ret = get_sig_data(sig, &sig_data, &sig_data_len);
-+  if (ret < 0)
-+    goto out;
-+
-+  e_sig_data.length = __cpu_to_be32(sig_data_len);
-+  total_len += sizeof(e_sig_data) + sig_data_len;
-+
-+  switch (sig->pubkey_algo) {
-+  case PUBKEY_ALGO_ECDSA:
-+    ret = mpis_to_asn1_sequence(sig->data, 2, &buffer, &buffer_len_padded);
-+    break;
-+  case PUBKEY_ALGO_RSA:
-+    err = gcry_mpi_print(GCRYMPI_FMT_USG, NULL, 0, &buffer_len, sig->data[0]);
-+    if (err) {
-+      ret = -EINVAL;
-+      break;
-+    }
-+
-+    buffer_len_padded = ((buffer_len + 7) / 8) * 8;
-+    buffer = xmalloc_clear(buffer_len_padded);
-+    if (!buffer) {
-+      ret = -ENOMEM;
-+      break;
-+    }
-+
-+    err = gcry_mpi_print(GCRYMPI_FMT_USG,
-+                         buffer + buffer_len_padded - buffer_len, buffer_len,
-+                         &buffer_len, sig->data[0]);
-+    if (err)
-+      ret = -EINVAL;
-+    break;
-+  default:
-+    ret = -EOPNOTSUPP;
-+    break;
-+  }
-+
-+  if (ret < 0)
-+    goto out;
-+
-+  /* key blob */
-+  e_sig_pub.field = __cpu_to_be16(SIG_S);
-+  e_sig_pub.length = __cpu_to_be32(buffer_len_padded);
-+  total_len += sizeof(e_sig_pub) + buffer_len_padded;
-+
-+  hdr.data_type = TYPE_SIG;
-+  hdr.num_fields = __cpu_to_be16(6);
-+  hdr.total_len = __cpu_to_be64(total_len);
-+
-+  es_write(listfp, &hdr, sizeof(hdr), NULL);
-+
-+  es_write(listfp, &e_key_algo, sizeof(e_key_algo), NULL);
-+  es_write(listfp, &pkey_algo, sizeof(pkey_algo), NULL);
-+
-+  es_write(listfp, &e_hash_algo, sizeof(e_hash_algo), NULL);
-+  es_write(listfp, &hash_algo, sizeof(hash_algo), NULL);
-+
-+  es_write(listfp, &e_sig_encoding, sizeof(e_sig_encoding), NULL);
-+  es_write(listfp, &sig_encoding, sizeof(sig_encoding), NULL);
-+
-+  es_write(listfp, &e_sig_kid0, sizeof(e_sig_kid0), NULL);
-+  _keyid = __cpu_to_be32(sig->keyid[0]);
-+  es_write(listfp, &_keyid, sizeof(_keyid), NULL);
-+  _keyid = __cpu_to_be32(sig->keyid[1]);
-+  es_write(listfp, &_keyid, sizeof(_keyid), NULL);
-+
-+  es_write(listfp, &e_sig_pub, sizeof(e_sig_pub), NULL);
-+  es_write(listfp, buffer, buffer_len_padded, NULL);
-+
-+  es_write(listfp, &e_sig_data, sizeof(e_sig_data), NULL);
-+  es_write(listfp, sig_data, sig_data_len, NULL);
-+
-+out:
-+  xfree(sig_data);
-+  xfree(buffer);
-+  return 0;
-+}
-diff --git a/g10/conv-packet.h b/g10/conv-packet.h
-index d35acb985fc..ef718de0a7a 100644
---- a/g10/conv-packet.h
-+++ b/g10/conv-packet.h
-@@ -26,6 +26,7 @@
- 
- #ifdef UASYM_KEYS_SIGS
- int write_kernel_key(PKT_public_key *pk);
-+int write_kernel_signature(PKT_signature *sig);
- #else
- static inline int write_kernel_key(PKT_public_key *pk)
- {
-@@ -33,5 +34,11 @@ static inline int write_kernel_key(PKT_public_key *pk)
-    return 0;
- }
- 
-+static inline int write_kernel_signature(PKT_signature *sig)
-+{
-+   (void)sig;
-+   return 0;
-+}
-+
- #endif /* UASYM_KEYS_SIGS */
- #endif /*G10_CONV_PACKET_H*/
-diff --git a/g10/mainproc.c b/g10/mainproc.c
-index edef9907127..1cb08d82000 100644
---- a/g10/mainproc.c
-+++ b/g10/mainproc.c
-@@ -502,6 +502,7 @@ proc_conv (PACKET *pkt)
-   switch (pkt->pkttype)
-     {
-     case PKT_PUBLIC_KEY: write_kernel_key(pkt->pkt.public_key); break;
-+    case PKT_SIGNATURE: write_kernel_signature(pkt->pkt.signature); break;
-     default: break;
-     }
-   free_packet(pkt, NULL);
--- 
-2.34.1
+No worries, not late at all.
+
+> On Mon, Jul 03, 2023 at 11:16:47AM +0100, Cristian Marussi wrote:
+> > On Tue, Jun 06, 2023 at 04:22:27PM +0000, Oleksii Moisieiev wrote:
+> > > scmi: Introduce pinctrl SCMI protocol driver
+> > >
+> > 
+> > Hi Oleksii,
+> > 
+> > spurios line above.
+> 
+> Yep thanks, I will remove.
+> 
+> > 
+> > > Add basic implementation of the SCMI v3.2 pincontrol protocol
+> > > excluding GPIO support. All pinctrl related callbacks and operations
+> > > are exposed in the include/linux/scmi_protocol.h
+> > > 
+> > 
+> > As Andy said already, you can drop the second sentence here, but I would
+> > ALSO drop the GPIO part in the first sentence, since there is nothing
+> > specific to GPIO in the SCMI spec and this patch is about the SCMI protocol
+> > not the pinctrl driver.
+> >
+> 
+> I've added few words about GPIO because in v2 series Michal Simek asked
+> about it: https://lore.kernel.org/linux-arm-kernel/5bf0e975-d314-171f-b6a8-c1c1c7198cd3@amd.com/
+> So I've decided to mention that there is still no GPIO support in the
+> commit message to avoid this type of questions in future. But I agree
+> that the commit message looks weird and will try to rephrase it.
+>
+
+Yes I remember that and I understand why you want to mention this, what
+I am saying is that anyway is NOT something related to the SCMI Pinctrl
+spec AFAIU (I may be wrong): I mean GPIO support is something you can
+build on top of Pinctrl SCMI spec and driver NOT something that has
+still to be added to the spec right ? and this patch is about supporting
+the new SCMI protocol, so I certainly agree that can be fine to point
+out that GPIO support is missing, just maybe this is a comment more
+appropriate to be added to the Pinctrl SCMI driver than to the Pinctrl
+SCMI protocol layer...(but maybe the Pinctrl subsys maintainer will
+disagree on this :P)
+
+> > > Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> > > ---
+> > >  MAINTAINERS                           |   6 +
+> > >  drivers/firmware/arm_scmi/Makefile    |   2 +-
+> > >  drivers/firmware/arm_scmi/driver.c    |   2 +
+> > >  drivers/firmware/arm_scmi/pinctrl.c   | 836 ++++++++++++++++++++++++++
+> > >  drivers/firmware/arm_scmi/protocols.h |   1 +
+> > >  include/linux/scmi_protocol.h         |  47 ++
+> > >  6 files changed, 893 insertions(+), 1 deletion(-)
+> > >  create mode 100644 drivers/firmware/arm_scmi/pinctrl.c
+> > > 
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 0dab9737ec16..297b2512963d 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -20522,6 +20522,12 @@ F:	include/linux/sc[mp]i_protocol.h
+> > >  F:	include/trace/events/scmi.h
+> > >  F:	include/uapi/linux/virtio_scmi.h
+> > >  
+> > > +PINCTRL DRIVER FOR SYSTEM CONTROL & POWER/MANAGEMENT INTERFACE (SCPI/SCMI)
+> > 
+> > SCPI is a leftover here I suppose...
+> > 
+> 
+> Thanks. I'll fix it.
+> 
+> > > +M:	Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> > > +L:	linux-arm-kernel@lists.infradead.org
+> > > +S:	Maintained
+> > > +F:	drivers/firmware/arm_scmi/pinctrl.c
+> > > +
+> > >  SYSTEM RESET/SHUTDOWN DRIVERS
+> > >  M:	Sebastian Reichel <sre@kernel.org>
+> > >  L:	linux-pm@vger.kernel.org
+> > > diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
+> > > index b31d78fa66cc..603430ec0bfe 100644
+> > > --- a/drivers/firmware/arm_scmi/Makefile
+> > > +++ b/drivers/firmware/arm_scmi/Makefile
+> > > @@ -10,7 +10,7 @@ scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_SMC) += smc.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_HAVE_MSG) += msg.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_VIRTIO) += virtio.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_OPTEE) += optee.o
+> > > -scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o
+> > > +scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o pinctrl.o
+> > >  scmi-module-objs := $(scmi-driver-y) $(scmi-protocols-y) $(scmi-transport-y)
+> > >  
+> > >  obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-core.o
+> > > diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+> > > index 5be931a07c84..a9fd337b9596 100644
+> > > --- a/drivers/firmware/arm_scmi/driver.c
+> > > +++ b/drivers/firmware/arm_scmi/driver.c
+> > > @@ -3025,6 +3025,7 @@ static int __init scmi_driver_init(void)
+> > >  	scmi_voltage_register();
+> > >  	scmi_system_register();
+> > >  	scmi_powercap_register();
+> > > +	scmi_pinctrl_register();
+> > >  
+> > >  	return platform_driver_register(&scmi_driver);
+> > >  }
+> > > @@ -3042,6 +3043,7 @@ static void __exit scmi_driver_exit(void)
+> > >  	scmi_voltage_unregister();
+> > >  	scmi_system_unregister();
+> > >  	scmi_powercap_unregister();
+> > > +	scmi_pinctrl_unregister();
+> > >  
+> > >  	scmi_transports_exit();
+> > >  
+> > > diff --git a/drivers/firmware/arm_scmi/pinctrl.c b/drivers/firmware/arm_scmi/pinctrl.c
+> > > new file mode 100644
+> > > index 000000000000..fc0fcc26dfb6
+> > > --- /dev/null
+> > > +++ b/drivers/firmware/arm_scmi/pinctrl.c
+> > > @@ -0,0 +1,836 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * System Control and Management Interface (SCMI) Pinctrl Protocol
+> > > + *
+> > > + * Copyright (C) 2023 EPAM
+> > > + */
+> > > +
+> > > +#include <linux/module.h>
+> > > +#include <linux/scmi_protocol.h>
+> > > +#include <linux/slab.h>
+> > > +
+> > > +#include "protocols.h"
+> > > +
+> > > +#define REG_TYPE_BITS GENMASK(9, 8)
+> > > +#define REG_CONFIG GENMASK(7, 0)
+> > > +
+> > > +#define GET_GROUPS_NR(x)	le32_get_bits((x), GENMASK(31, 16))
+> > > +#define GET_PINS_NR(x)		le32_get_bits((x), GENMASK(15, 0))
+> > > +#define GET_FUNCTIONS_NR(x)	le32_get_bits((x), GENMASK(15, 0))
+> > > +
+> > > +#define EXT_NAME_FLAG(x)	le32_get_bits((x), BIT(31))
+> > > +#define NUM_ELEMS(x)		le32_get_bits((x), GENMASK(15, 0))
+> > > +
+> > > +#define REMAINING(x)		le32_get_bits((x), GENMASK(31, 16))
+> > > +#define RETURNED(x)		le32_get_bits((x), GENMASK(11, 0))
+> > > +
+> > > +enum scmi_pinctrl_protocol_cmd {
+> > > +	PINCTRL_ATTRIBUTES = 0x3,
+> > > +	PINCTRL_LIST_ASSOCIATIONS = 0x4,
+> > > +	PINCTRL_CONFIG_GET = 0x5,
+> > > +	PINCTRL_CONFIG_SET = 0x6,
+> > > +	PINCTRL_FUNCTION_SELECT = 0x7,
+> > > +	PINCTRL_REQUEST = 0x8,
+> > > +	PINCTRL_RELEASE = 0x9,
+> > > +	PINCTRL_NAME_GET = 0xa,
+> > > +	PINCTRL_SET_PERMISSIONS = 0xb
+> > > +};
+> > > +
+> > > +struct scmi_msg_conf_set {
+> > > +	__le32 identifier;
+> > > +	__le32 attributes;
+> > > +	__le32 config_value;
+> > > +};
+> > > +
+> > > +struct scmi_msg_conf_get {
+> > > +	__le32 identifier;
+> > > +	__le32 attributes;
+> > > +};
+> > > +
+> > > +struct scmi_msg_pinctrl_protocol_attributes {
+> > > +	__le32 attributes_low;
+> > > +	__le32 attributes_high;
+> > > +};
+> > > +
+> > > +struct scmi_msg_pinctrl_attributes {
+> > > +	__le32 identifier;
+> > > +	__le32 flags;
+> > > +};
+> > > +
+> > > +struct scmi_resp_pinctrl_attributes {
+> > > +	__le32 attributes;
+> > > +	u8 name[SCMI_SHORT_NAME_MAX_SIZE];
+> > > +};
+> > > +
+> > > +struct scmi_msg_pinctrl_list_assoc {
+> > > +	__le32 identifier;
+> > > +	__le32 flags;
+> > > +	__le32 index;
+> > > +};
+> > > +
+> > > +struct scmi_resp_pinctrl_list_assoc {
+> > > +	__le32 flags;
+> > > +	__le16 array[];
+> > > +};
+> > > +
+> > > +struct scmi_msg_func_set {
+> > > +	__le32 identifier;
+> > > +	__le32 function_id;
+> > > +	__le32 flags;
+> > > +};
+> > > +
+> > > +struct scmi_msg_request {
+> > > +	__le32 identifier;
+> > > +	__le32 flags;
+> > > +};
+> > > +
+> > > +struct scmi_group_info {
+> > > +	bool present;
+> > > +	char name[SCMI_MAX_STR_SIZE];
+> > > +	unsigned int *group_pins;
+> > > +	unsigned int nr_pins;
+> > > +};
+> > > +
+> > > +struct scmi_function_info {
+> > > +	bool present;
+> > > +	char name[SCMI_MAX_STR_SIZE];
+> > > +	unsigned int *groups;
+> > > +	unsigned int nr_groups;
+> > > +};
+> > > +
+> > 
+> > A small note related to Andy remarks about directly embedding here pinctrl
+> > subsystem structures (like pingroup / pinfucntion) that I forgot to say
+> > in my reply to him.
+> > 
+> > These structs above indeed are very similar to the Pinctrl ones but this is
+> > the protocol layer inside SCMI, I would not mix here stuff from the Pinctrl
+> > subsystem which is, at the end the, one of the possible users of this layer
+> > (via the SCMI pinctrl driver) but not necessarily the only one in the
+> > future; moreover Pinctrl subsystem is not even needed at all if you think
+> > about a testing scenario, so I would not build up a dependency here between
+> > SCMI and Pinctrl by using Pinctrl structures...what if these latter change
+> > in the future ?
+> > 
+> > All of this to just say this is fine for me as it is now :D
+> > 
+> I agree with you.
+> What we currently have is that scmi pinctrl protocol is not bound to
+> pinctrl-subsystem so in case of some changes in the pinctrl - no need to
+> change the protocol implementation.
+> Also, as I mentioned in v2: I can't use pincfunction it has the following groups
+> definition:
+> const char * const *groups;
+> 
+> Which is meant to be constantly allocated.
+> So I when I try to gather list of groups in
+> pinctrl_scmi_get_function_groups I will receive compilation error.
+> 
+> Pinctrl subsystem was designed to use statically defined
+> pins/groups/functions so we can't use those structures on lazy
+> allocations.
+> 
+
+Indeed, I forgot that additional reason.
+
+> 
+> > > +struct scmi_pin_info {
+> > > +	bool present;
+> > > +	char name[SCMI_MAX_STR_SIZE];
+> > > +};
+> > > +
+> > > +struct scmi_pinctrl_info {
+> > > +	u32 version;
+> > > +	int nr_groups;
+> > > +	int nr_functions;
+> > > +	int nr_pins;
+> > > +	struct scmi_group_info *groups;
+> > > +	struct scmi_function_info *functions;
+> > > +	struct scmi_pin_info *pins;
+> > > +};
+> > > +
+> > > +static int scmi_pinctrl_attributes_get(const struct scmi_protocol_handle *ph,
+> > > +				       struct scmi_pinctrl_info *pi)
+> > > +{
+> > > +	int ret;
+> > > +	struct scmi_xfer *t;
+> > > +	struct scmi_msg_pinctrl_protocol_attributes *attr;
+> > > +
+> > > +	if (!pi)
+> > > +		return -EINVAL;
+> > 
+> > You can drop this, cannot happen given the code paths.
+> >
+> 
+> Ok. thanks.
+> 
+> > > +
+> > > +	ret = ph->xops->xfer_get_init(ph, PROTOCOL_ATTRIBUTES,
+> > > +				      0, sizeof(*attr), &t);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	attr = t->rx.buf;
+> > > +
+> > > +	ret = ph->xops->do_xfer(ph, t);
+> > > +	if (!ret) {
+> > > +		pi->nr_functions = GET_FUNCTIONS_NR(attr->attributes_high);
+> > > +		pi->nr_groups = GET_GROUPS_NR(attr->attributes_low);
+> > > +		pi->nr_pins = GET_PINS_NR(attr->attributes_low);
+> > > +	}
+> > > +
+> > > +	ph->xops->xfer_put(ph, t);
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static int scmi_pinctrl_get_count(const struct scmi_protocol_handle *ph,
+> > > +				  enum scmi_pinctrl_selector_type type)
+> > > +{
+> > > +	struct scmi_pinctrl_info *pi;
+> > > +
+> > > +	pi = ph->get_priv(ph);
+> > > +	if (!pi)
+> > > +		return -ENODEV;
+> > 
+> > You dont need to check for NULL here and nowhere else.
+> > You set protocol private data with set_priv at the end of protocol init
+> > which is called as soon as a user tries to use this protocol operations,
+> > so it cannot ever be NULL in any of these following ops.
+> > 
+> 
+> And what if I call set_priv(ph, NULL) on init stage?
+> As I can see there is no check for NULL in scmi_set_protocol_priv. So
+> theoretically I'm able to set ph->priv = NULL. Or did I missed some check in
+> SCMI driver? Or maybe priv = NULL is expected scenario and I shouldn't
+> return error here?
+
+Well, you are right that you could set periv to NULL, but the whole
+point of set_priv/get_priv helpers are to help you protocol-writer to
+store your private data at init for future usage while processing the
+protocol operations that you, protocol-writer, are implementing; the
+idea of all of this 'dancing' around protocol_handle was to ease the
+developement of protocols by exposing a limited, common and well
+controlled interface to use to build/send messages (ph->xops) while
+hiding some internals related to protocol stack init that are handled
+by the core for you.
+
+The priv data are only set and get optionally by You depending on the
+need of the protocol, so unless you can dynamically set, at runtime, priv
+to NULL or not-NULL depending on the outcome of the init, you should very
+well know at coding time if your priv could possibly be ever NULL or it
+cannot be NULL at all (like in this case it seems to me): so the check
+seemed to me redundant...
+
+...clearly, beside trying to help the protocol devel, the SCMI core
+protocol 'framework' cannot prevent you from shooting yourself in the
+foot if you want :P
+
+Thanks,
+Cristian
 
