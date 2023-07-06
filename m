@@ -2,154 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BAB749631
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFDA74963D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbjGFHTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S233300AbjGFHVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjGFHTg (ORCPT
+        with ESMTP id S229508AbjGFHVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:19:36 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B051989;
-        Thu,  6 Jul 2023 00:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688627975; x=1720163975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2g1bfmb7JvyQO85ZXkV2EeVN1io1hktM1VBz/kom3ng=;
-  b=O4kEhY8o19tVgYcLZUToDCznW+quQpWsCCCjWMyDrSZ8iihaqJ8mNRF/
-   BpDS+fEjoz6Xuo5dXWsD+GxoVchv0TI9C28zsW5U+I3CmwK6eyRMv/wYa
-   DI1SlhnI+D1vJCwhh3xdwcfIMqzL9qI/yez8gKCzOluPHDdFLNuElB0O2
-   GOMxYuZQ9GVlx3vpMxoeTBI+1s8WAQE7P0P+LKoEO4mkNg6ZOKB3MIYzy
-   7M8qi8cA7mQ/uGlCOqmgIXDJom/FVKEW34yGxByRP0UkstIy/mPoTmOR+
-   mzWIXQoLcQ1QqTMKEeScfc1zVRWMZwZNqDudZ0SxrRmsWhk2Q7FS2/R1u
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="367015570"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="367015570"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:19:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="784818848"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="784818848"
-Received: from hegang-mobl.ccr.corp.intel.com (HELO localhost) ([10.255.31.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:19:30 -0700
-Date:   Thu, 6 Jul 2023 15:19:28 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v7 5/8] KVM: x86/mmu: Don't pass FOLL_GET to
- __kvm_follow_pfn
-Message-ID: <20230706071927.o7gwmryonr3v3dpp@linux.intel.com>
-References: <20230704075054.3344915-1-stevensd@google.com>
- <20230704075054.3344915-6-stevensd@google.com>
- <20230705101800.ut4c6topn6ylwczs@linux.intel.com>
- <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 6 Jul 2023 03:21:01 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on20701.outbound.protection.outlook.com [IPv6:2a01:111:f403:704b::701])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B642DA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:21:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UaTfZTNBrlhyY2jslFUHmsuhxnwbJfWocI7H3JJs/8mdrSCiZQPawcya83B0SMo9kxFh8MRY2+QWK+PdEbN92zm4NB7CNXIhgEMy+nLO/O2WbqTT3EpEERRg1rREwEmBWTZAEf9Pn/J4aDz2iosW5lFtBdrCcY51ynuq6Nn/Xqq/bY2XnecG72wmCGF+q5a9jxmLDCJhqIaqQQyNbYRp1fs11Wh30zu9f/MjTDi8KIR4WFvinY/KBIttDDEOROGJR0R8IhC1RpEuO3tOL6g+hGsfLoGallof2wA2oNBXV6p0XF6s7/oLcHm2k7cve54k0NwJqJ7OmRkM4YNs82x2SQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w5bn7ncMehRBS1ZQydPUbDvazY3QY3oKMgwsfUyfqk4=;
+ b=fD3M+br951bk/K8mnHzSGLPE/72XPIxM/0QHA0+jE1W1NUYnb1gseoUesW1AnX5pLVVb6tlhFB+650G/BKtJynz8Q13dkLNG3XA0Edh5G7feors8sYNVMPIyl1Ir7IxTjbKA0G3tufri3+BajGn7Gy1J6M1VC3mIwlB6Fx+uZodDidBAkVm5n+peWHqtrDYoNY7St6yGp2ttj0pc1URnnvMKuqcttcJOAB7wgwdRzpZpOz3PAtDNg6jXiEgQXkor4DJjo7moSXBn09n06cnUeRRlo73+KvTMv211ObYjg11FzgFfyuLAV7A/ZcpxZCENbC/fcwk3IVc8PqqEUbTYBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w5bn7ncMehRBS1ZQydPUbDvazY3QY3oKMgwsfUyfqk4=;
+ b=XXrNyarQChU9agEo3R2VAysa1Fj7NyQ1FEmW3RgDJpzCy/l8jHv7fW57KFOzOPOuWzpEg+gXoQPwy1/5fvGDIZhiQ3+Tx8N73pJ1IxkAh0Q11jiBb9jTrZQHSo6pxjn/QWo5pUSQYf9rr4NtuYWxPej0T4N4Yjg8AhTr1rTKqsS3fxlDs+cTldHQ1WB57H4Mnv4HxAosPKhdfgJOoKlt4e4DoI3lJH7vzPObx+uSbgGdiIVoP/bRnuDvKHTFv3gqG5UjTqUPkyc2qEhpDzur1rOX3ZFPagXq6qgLvhjwR00FY3F3JZqMRnCHFyjpMPUr1SotZkn9DCcziXPUbDRpXg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SEYPR06MB6081.apcprd06.prod.outlook.com (2603:1096:101:d6::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 07:20:55 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 07:20:54 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/7] bus: sunxi-rsb: Convert to devm_platform_ioremap_resource()
+Date:   Thu,  6 Jul 2023 15:20:36 +0800
+Message-Id: <20230706072042.31296-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0129.apcprd02.prod.outlook.com
+ (2603:1096:4:188::19) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB6081:EE_
+X-MS-Office365-Filtering-Correlation-Id: 388946c9-9a33-4ad2-125e-08db7df188d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w17lgeIe9rsh+SIuHw6j70guCQ3nIjbs/pEhd6c30zyOZc4Eadgx19TZqHHkZGFOzP8D5YVYq16X6skfcwgd6SPvdOqeJfkVNVHWxxLz9eDuHzoPC/lPLpiuolgWZb7nc93bNAnCYLptJwa/7MH/PYJTcFoHvXRx5oivO7dcoYGg9shBUVnhHrFkzAukj/1JVpg2kkyvDVtAHrtOtcxQ+mGxsYsdABIqgYq+GgwqcYTw92puMViekuTp/SEltSX1AOY7JRFxgrddvUtaW1kk9rfDEbvMXpFgkkM2A+gUbot0twIhba/g+UfLr6MHSYQpiTX7ukTDrs0kqlCOtFwC5tRGiRspl0R90t4iF2s1PBwCaVIkeWZx7B5Kw9G7bQJiiyU8WS6oQa/IgE05p2G5i4qVq0B4xZlUBlmNngIgMM1OhTlFSfbcXochiEHiNGIchJa8/W6ZuTuC+xfwqmR/ip9jV65JJ4y4/wEd4nD29Ba6IKOttC9G84I+ojE6cB8pcI2awIzAWDD7LG5kRzIeeLdZiAxWF4oojPgDPqIs49W4BI9HMjv5DDB+U8m8YC6w0TD1zJo1LIjUjwWS2zzFc0dBkiJBPAeCl7ejgJT5JKBzTan77ECKMQlKU1yTmB0g
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39860400002)(346002)(136003)(451199021)(38100700002)(478600001)(66476007)(66946007)(110136005)(52116002)(6486002)(2616005)(6666004)(66556008)(41300700001)(8676002)(8936002)(38350700002)(316002)(4326008)(186003)(83380400001)(6512007)(6506007)(1076003)(26005)(4744005)(86362001)(5660300002)(2906002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i7ZDv3ZGFXH+T/JzlxzHvJCx4k8okAy83MtKpIkhPjxTAxLpCmgMcRQjujdL?=
+ =?us-ascii?Q?QJo21zT44+8kfo657FOmhA8DaFzWPnRRizs4friQx512FqzPpMkK+9X69c3s?=
+ =?us-ascii?Q?he3HhWesBQdQ1bVGbIsl+erDQRetZXnhzqql6/THyFIKWwxcUdZYkTWsxyiR?=
+ =?us-ascii?Q?helEVQmK5b1MIj8pOMEtnnf9GhUtWXmzzkOmq+2xd6FB3jvZ3il8EsaVa6u3?=
+ =?us-ascii?Q?eEvd/LVZ8oxJSKhkxOLi3XB+ENH+DiKByig8qyaXb0LXNcU+TmjAdjd9Fl+6?=
+ =?us-ascii?Q?at+0136TTs78xm+gdN5dU+N1ydQoDetKhLwUSLZGYiQLpV7+5gYuLFgMZPKZ?=
+ =?us-ascii?Q?wB+Igfi+wgdZr2glrXUPaO3DygI0d3ry8Y1aW5A5RsXvNZONgtdNEZMtedpU?=
+ =?us-ascii?Q?KVYUDSj7K5uGVcrcPDnmsId3b0gJpKvtspNYxS2sA0oiE8RlE9oKi+gXioEt?=
+ =?us-ascii?Q?vIrw+eB4gz06NmsoYIy5eBeMnY9+mQ86GUZAZk+4FvJmWWxGiYlez9SEEH6k?=
+ =?us-ascii?Q?dVKem1fsbsFbG+JfmXcdqntvKB9myCyWiaqukzeazySO1B6ba+QQmUlYn1+b?=
+ =?us-ascii?Q?MSWF7Va+nJaanFMq/awBygZ2m6xMOTB3LDeSK3yMIC+MwJfhH6e4C0Eyhvyt?=
+ =?us-ascii?Q?PeDtVqrdCCH42thpfvNfCHuXBxuV4Zdkn5JyeXR2Z/f91fjDilOv3w7FYzZv?=
+ =?us-ascii?Q?HjWfF7kgY+X9zVFT0k/JVTUGUTCd/V1q/A7g6rW09Vld5LVooWmCEC4TVtjO?=
+ =?us-ascii?Q?rkElMGN7Er5qcaCGd3B29iL4Cbb9y/gmd6Qp1m4qFAuZHXaxxh6u/7TyymIR?=
+ =?us-ascii?Q?p5Tmhv7M2L5FMJ8kezmUzG11jz33j4Z0xgArruhNii8WNXmeQIzVzMBQYlvp?=
+ =?us-ascii?Q?lA+k0eXCoi11EKOqEQBWeCOwIqeEvr/wC4PivgGi16jACeh5U98fQkCX3fH4?=
+ =?us-ascii?Q?4ig18GrDvyUO+0thEXIf+FZgyk/R+U0zWOfcm+WhYDKc+DZgUfZkRbW8Ml89?=
+ =?us-ascii?Q?xaUjcdACpQnGE/z+mdeJ+sJ2dkeRWd5IeiEhSGYP40PDEVudHaHdUUSfLrk0?=
+ =?us-ascii?Q?ATrENx6o/4cqlmaQZCRf6cVJ5Foop/xJ7KiEkGjl/+I7WzH0fbODshJsR526?=
+ =?us-ascii?Q?As1/69gV0T+ZlMaK1O1Y9IT++FqMJB3ibym6zXA/BtPwLICvTwELykb5AhrS?=
+ =?us-ascii?Q?NMwguWhkbGvOSGmySLV4n5VPkz6QTh4i+Vze+mPQvXmP4/5j9qlJDyLm/qn4?=
+ =?us-ascii?Q?smZj3V2d/7zh2F+RUz9Onfgzu/Gs11sHCxXCqGammvjjueRTQCj9m7KAEBU3?=
+ =?us-ascii?Q?cmoXF7UA0tz995eNDBY5a64H205qBc24rMXmvnY4/pV6Q+DHlrRzeSBWbRW/?=
+ =?us-ascii?Q?3dGBtH7KMVUfG5Dfp+At9DJBMa+Hqv4aWydFlzNLBOts2yWCqHu1w3jQPjgU?=
+ =?us-ascii?Q?pLSxTrJ0cyYX4rDMxX3Z2+PznmIWhj9Vln1TAmCq9n5UupNlUaJSmnU55vz6?=
+ =?us-ascii?Q?Yu/8oaO+CR/RpgqVzrofo8K2lxr6xiYXqvG364u3Y+79n0et2wx7uiiVW5jV?=
+ =?us-ascii?Q?RBghFk7PvOrlLxaDQvzNQTNULPLlrDOQraZaiaft?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 388946c9-9a33-4ad2-125e-08db7df188d5
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 07:20:54.2977
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EcLVnFra98bzDKDwA/WPKRC6Dif1jMdLF+OUSFeFG0i3tQjRy7CI/ibADlcgUqgtJvBxfiYdE7NobTw460W1AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6081
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 01:52:08PM +0900, David Stevens wrote:
-> On Wed, Jul 5, 2023 at 7:17 PM Yu Zhang <yu.c.zhang@linux.intel.com> wrote:
-> >
-> > On Tue, Jul 04, 2023 at 04:50:50PM +0900, David Stevens wrote:
-> > > From: David Stevens <stevensd@chromium.org>
-> > >
-> > > Stop passing FOLL_GET to __kvm_follow_pfn. This allows the host to map
-> > > memory into the guest that is backed by un-refcounted struct pages - for
-> > > example, higher order non-compound pages allocated by the amdgpu driver
-> > > via ttm_pool_alloc_page.
-> >
-> > I guess you mean the tail pages of the higher order non-compound pages?
-> > And as to the head page, it is said to be set to one coincidentally[*],
-> > and shall not be considered as refcounted.  IIUC, refcount of this head
-> > page will be increased and decreased soon in hva_to_pfn_remapped(), so
-> > this may not be a problem(?). But treating this head page differently,
-> > as a refcounted one(e.g., to set the A/D flags), is weired.
-> >
-> > Or maybe I missed some context, e.g., can the head page be allocted to
-> > guest at all?
-> 
-> Yes, this is to allow mapping the tail pages of higher order
-> non-compound pages - I should have been more precise in my wording.
-> The head pages can already be mapped into the guest.
-> 
-> Treating the head and tail pages would require changing how KVM
-> behaves in a situation it supports today (rather than just adding
-> support for an unsupported situation). Currently, without this series,
-> KVM can map VM_PFNMAP|VM_IO memory backed by refcounted pages into the
-> guest. When that happens, KVM sets the A/D flags. I'm not sure whether
-> that's actually valid behavior, nor do I know whether anyone actually
-> cares about it. But it's what KVM does today, and I would shy away
-> from modifying that behavior without good reason.
+Use devm_platform_ioremap_resource() to simplify code.
 
-I know the A/D status of the refcounted, VM_PFNMAP|VM_IO backed pages
-will be recorded. And I have no idea if this is a necessary requirement
-either.
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ drivers/bus/sunxi-rsb.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-But it feels awkward to see the head and the tail ones of non-compound
-pages be treated inconsistently. After all, the head page just happens
-to have its refcount being 1, it is not a real refcounted page.
+diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
+index 696c0aefb0ca..2aefd5dde3c9 100644
+--- a/drivers/bus/sunxi-rsb.c
++++ b/drivers/bus/sunxi-rsb.c
+@@ -746,7 +746,6 @@ static int sunxi_rsb_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np = dev->of_node;
+-	struct resource *r;
+ 	struct sunxi_rsb *rsb;
+ 	u32 clk_freq = 3000000;
+ 	int irq, ret;
+@@ -766,8 +765,7 @@ static int sunxi_rsb_probe(struct platform_device *pdev)
+ 	rsb->dev = dev;
+ 	rsb->clk_freq = clk_freq;
+ 	platform_set_drvdata(pdev, rsb);
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	rsb->regs = devm_ioremap_resource(dev, r);
++	rsb->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rsb->regs))
+ 		return PTR_ERR(rsb->regs);
+ 
+-- 
+2.39.0
 
-So I would suggest to mention such different behehavior in the commit
-message at least. :)
-
-> > >
-> > > @@ -883,7 +884,7 @@ static gpa_t FNAME(gva_to_gpa)(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> > >   */
-> > >  static int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
-> > >  {
-> > > -     bool host_writable;
-> > > +     bool host_writable, is_refcounted;
-> > >       gpa_t first_pte_gpa;
-> > >       u64 *sptep, spte;
-> > >       struct kvm_memory_slot *slot;
-> > > @@ -940,10 +941,12 @@ static int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int
-> > >       sptep = &sp->spt[i];
-> > >       spte = *sptep;
-> > >       host_writable = spte & shadow_host_writable_mask;
-> > > +     // TODO: is this correct?
-> > > +     is_refcounted = spte & SPTE_MMU_PAGE_REFCOUNTED;
-> > >       slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
-> > >       make_spte(vcpu, sp, slot, pte_access, gfn,
-> > >                 spte_to_pfn(spte), spte, true, false,
-> > > -               host_writable, &spte);
-> > > +               host_writable, is_refcounted, &spte);
-> >
-> > Could we restrict that a non-refcounted page shall not be used as shadow page?
-> 
-> I'm not very familiar with the shadow mmu, so my response might not
-> make sense. But do you mean not allowing non-refcoutned pages as the
-> guest page tables shadowed by a kvm_mmu_page? It would probably be
-> possible to do that, and I doubt anyone would care about the
-> restriction. But as far as I can tell, the guest page table is only
-> accessed via kvm_vcpu_read_guest_atomic, which handles non-refcounted
-> pages just fine.
-
-Sorry, my brain just got baked... Pls just ignore this question :)
-
-B.R.
-Yu
