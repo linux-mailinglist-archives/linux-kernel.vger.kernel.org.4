@@ -2,254 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213F374955E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B0274955A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjGFGKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S233487AbjGFGJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbjGFGKH (ORCPT
+        with ESMTP id S233391AbjGFGJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:10:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F92F1FEA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688623649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QO+V26UGI/WBMUGqFJ+p6LZkGHrVbYJRVlupGwNTzEQ=;
-        b=buNxfgs8ip+r3uo6+8hH4Wdimhnq+ObdnKW+qlsjHccBpCQqw7q2eYcSpxFUVal08Lv4Xj
-        cu7UdpVs2aRcJPMKZWtOQo0ChQL6qgbyhKgBNx1Ynj8EGamFQvajquxKetw8oa11LuCRi3
-        njp8IDFW8D+rJ1/hJwRbXlK/kdjfdlQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-297-Njxmt9BMM7SFWqHMp0VinA-1; Thu, 06 Jul 2023 02:07:27 -0400
-X-MC-Unique: Njxmt9BMM7SFWqHMp0VinA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3143ac4a562so145721f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:07:27 -0700 (PDT)
+        Thu, 6 Jul 2023 02:09:27 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B961BF2
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:08:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51d885b0256so504279a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688623684; x=1691215684;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I7nLQR/B3UQbt+9uJMAZJaX6K0uXW7cxqOcVTi+nmsg=;
+        b=ZUKbME848xiV2hktdav+CO31kzq1MxpYSRjHlbmGTy7PBC9j30cY//SQZEm5FrXI0P
+         xSRk50aUQ0CnfXXy6O6S6z6T2LNIVIYwb2I4iwwZmHZbtgZFXpD2N9QOfSqDp/GbI2Hk
+         YAQdq+vjLAG9dz/oC21JBMx80qUiw9KBedwJK/rer/IlPSBLsiAliLQjKSGfgTh5lO7z
+         tA1DNyXmETftvdu9kmXKLPIDEyBJ5/NFBtVOKsYS6iDzG+0n/aNQ2Gi5YVDEIN652OVQ
+         hyPP9aRVTJpByJt5QExCPE6KYnaHGV3Dp/KsnsNAuhDeoQ/tmZStlWx3/nPA8drurazx
+         03lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688623646; x=1691215646;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1688623684; x=1691215684;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QO+V26UGI/WBMUGqFJ+p6LZkGHrVbYJRVlupGwNTzEQ=;
-        b=gkW0EVNIctgTIGxFwJSGgzXckERg5c+00UvK/3CWmLhWri5uGf9nDQe4UdhyttcGtf
-         w0jiJq4fZqQBM475hz8hWrs8U4E2J0t6DJnXfO7d9/9CwznsaRph6/oHpys8nIluVQAz
-         L2jJipZsCmPnibGAfpn4dNO1UtmJ32ZNxiubIMu2lwouFZP2NgHmZSPlPUgt+c3U7Rsc
-         aYNPG//9XxwMhl2P9pTUCaeKmEV0k7b94fXgTTcdzcHOcXFc9YMzVafpWAMt8Pzp7rXB
-         qNUVO3SsE1i8Q0R89V15a87dfdIbQ8Ie5x/GaRtVHcc4DNyaCDJJD2i53ZMTMiGVUwSk
-         bgoA==
-X-Gm-Message-State: ABy/qLYN+LUt1GPF9RoifpZrSSZyW4TD9PvoNfCskNJJx9EiJkvWsGrt
-        nuLdoJVLz29Ti8UQa1+oJOrqix0prbSdIOpzgMAkjKOYiEnQ+TDLggYRPzw3ERC5N5P99RhEuhz
-        XkfWHQ5v/VnMSbJL7pex2hur2
-X-Received: by 2002:a5d:4a92:0:b0:314:1230:29b0 with SMTP id o18-20020a5d4a92000000b00314123029b0mr590418wrq.52.1688623646690;
-        Wed, 05 Jul 2023 23:07:26 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHrDUg7w0Am2K8eApMnGUTNaSK+AtEqMa/Nhk+0S8Dvv6TeSL3nnknCHe+T2JWv5yai8Yzccg==
-X-Received: by 2002:a5d:4a92:0:b0:314:1230:29b0 with SMTP id o18-20020a5d4a92000000b00314123029b0mr590400wrq.52.1688623646344;
-        Wed, 05 Jul 2023 23:07:26 -0700 (PDT)
-Received: from redhat.com ([2a06:c701:73e5:9a00:6cb0:ad0c:4846:6126])
-        by smtp.gmail.com with ESMTPSA id q9-20020adff789000000b00313e2abfb8dsm873455wrp.92.2023.07.05.23.07.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 23:07:25 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 02:07:23 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Shannon Nelson <shannon.nelson@amd.com>
-Cc:     Eugenio Perez Martin <eperezma@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does
- not support it
-Message-ID: <20230706020603-mutt-send-email-mst@kernel.org>
-References: <20230703142218.362549-1-eperezma@redhat.com>
- <20230703105022-mutt-send-email-mst@kernel.org>
- <CAJaqyWf2F_yBLBjj1RiPeJ92_zfq8BSMz8Pak2Vg6QinN8jS1Q@mail.gmail.com>
- <20230704063646-mutt-send-email-mst@kernel.org>
- <CAJaqyWfdPpkD5pY4tfzQdOscLBcrDBhBqzWjMbY_ZKsoyiqGdA@mail.gmail.com>
- <20230704114159-mutt-send-email-mst@kernel.org>
- <CACGkMEtWjOMtsbgQ2sx=e1BkuRSyDmVfXDccCm-QSiSbacQyCA@mail.gmail.com>
- <CAJaqyWd0QC6x9WHBT0x9beZyC8ZrF2y=d9HvmT0+05RtGc8_og@mail.gmail.com>
- <eff34828-545b-956b-f400-89b585706fe4@amd.com>
+        bh=I7nLQR/B3UQbt+9uJMAZJaX6K0uXW7cxqOcVTi+nmsg=;
+        b=azoBIdC+1RTiH1Vou5Lmymo00jvManBBj+L1dDWZYOKdj0fMYSVTxENWMGUSXg+t82
+         YQkqASlHp5U5zM5hXyn0WD4Fx6YvD/k1IgJnu0QVCClRju0ZsT5oIf3L8hMeGHUe/+3Z
+         RUeGcg3QVPdEqchUeAw8dazFfhMojlzvS9JxTZuJf5qTIRr7lI0dDFfeOPthhQtmwq0c
+         +/BiX6skZO+bSJ910xozdMWalYRxgTZ9476E9dmwJYDKKwu7CXXED5NRbAwyvmSmvW6z
+         WDkkv34sf5CSREayyoCVcORT1NvOwp2nqf4IAjdVPhabb9MAjDx/Y9S19IZmhmTle7Q6
+         cWRQ==
+X-Gm-Message-State: ABy/qLbgTdqTBo/NW3li+4YCcCL7+J1svq5NBKTyQPxhhZ2QO91I6mZt
+        l3SZcGFo9k2A1FhxMWOEBEAF/w==
+X-Google-Smtp-Source: APBJJlFDMJFx306FrGg5ohS3BhEzDqr0yb6OoJZbHqbX+RnUydpRx11+NP5dFtOybSs3/zqB/5U5Cw==
+X-Received: by 2002:a17:906:212:b0:992:a31f:f584 with SMTP id 18-20020a170906021200b00992a31ff584mr670671ejd.31.1688623684073;
+        Wed, 05 Jul 2023 23:08:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id x11-20020a1709064a8b00b00992dcae806bsm368577eju.5.2023.07.05.23.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 23:08:03 -0700 (PDT)
+Message-ID: <7a08dcf4-e6d4-ef60-48d2-81275a7d7a6e@linaro.org>
+Date:   Thu, 6 Jul 2023 08:08:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <eff34828-545b-956b-f400-89b585706fe4@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi
+ compatible
+Content-Language: en-US
+To:     Valentin CARON <valentin.caron@foss.st.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230627123906.147029-1-valentin.caron@foss.st.com>
+ <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
+ <c232e3f1-b703-d8d2-7e2d-19ed3f5fc3ad@foss.st.com>
+ <79505e19-c5ee-36ee-c8ae-344c15f8b108@linaro.org>
+ <ec4f025e-680f-2145-7ca8-1ee6b38baa43@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ec4f025e-680f-2145-7ca8-1ee6b38baa43@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 05:07:11PM -0700, Shannon Nelson wrote:
-> On 7/5/23 11:27 AM, Eugenio Perez Martin wrote:
-> >
-> > On Wed, Jul 5, 2023 at 9:50 AM Jason Wang <jasowang@redhat.com> wrote:
-> > > 
-> > > On Tue, Jul 4, 2023 at 11:45 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > 
-> > > > On Tue, Jul 04, 2023 at 01:36:11PM +0200, Eugenio Perez Martin wrote:
-> > > > > On Tue, Jul 4, 2023 at 12:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > 
-> > > > > > On Tue, Jul 04, 2023 at 12:25:32PM +0200, Eugenio Perez Martin wrote:
-> > > > > > > On Mon, Jul 3, 2023 at 4:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > > 
-> > > > > > > > On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio Pérez wrote:
-> > > > > > > > > With the current code it is accepted as long as userland send it.
-> > > > > > > > > 
-> > > > > > > > > Although userland should not set a feature flag that has not been
-> > > > > > > > > offered to it with VHOST_GET_BACKEND_FEATURES, the current code will not
-> > > > > > > > > complain for it.
-> > > > > > > > > 
-> > > > > > > > > Since there is no specific reason for any parent to reject that backend
-> > > > > > > > > feature bit when it has been proposed, let's control it at vdpa frontend
-> > > > > > > > > level. Future patches may move this control to the parent driver.
-> > > > > > > > > 
-> > > > > > > > > Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK backend feature")
-> > > > > > > > > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> > > > > > > > 
-> > > > > > > > Please do send v3. And again, I don't want to send "after driver ok" hack
-> > > > > > > > upstream at all, I merged it in next just to give it some testing.
-> > > > > > > > We want RING_ACCESS_AFTER_KICK or some such.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Current devices do not support that semantic.
-> > > > > > 
-> > > > > > Which devices specifically access the ring after DRIVER_OK but before
-> > > > > > a kick?
+On 05/07/2023 19:16, Valentin CARON wrote:
+> Hi, Krzysztof
 > 
-> The PDS vdpa device can deal with a call to .set_vq_ready after DRIVER_OK is
-> set.  And I'm told that our VQ activity should start without a kick.
-> 
-> Our vdpa device FW doesn't currently have support for VIRTIO_F_RING_RESET,
-> but I believe it could be added without too much trouble.
-> 
-> sln
-> 
+> On 7/1/23 10:09, Krzysztof Kozlowski wrote:
+>> On 28/06/2023 18:21, Valentin CARON wrote:
+>>> Hi,
+>>>
+>>> On 6/27/23 15:39, Krzysztof Kozlowski wrote:
+>>>> On 27/06/2023 14:39, Valentin Caron wrote:
+>>>>> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
+>>>>> Stop probing if this case happens, and print an error with involved
+>>>>> compatible.
+>>>>>
+>>>> ...
+>>>>
+>>>>>    
+>>>>>    static const struct of_device_id stm32_spi_of_match[] = {
+>>>>> @@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
+>>>>>    	struct device_node *np = pdev->dev.of_node;
+>>>>>    	bool device_mode;
+>>>>>    	int ret;
+>>>>> +	const char *compatible =
+>>>>> +		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
+>>>> The goal was to replace it, so drop it.
+>>> Is is still needed for dev_err, so I can't
+>> Why do you need it for dev_err? Isn't it entirely redundant?
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> Only to have a clearer error message. To let know to user that spi 
+> device is not available on this device.
 
-OK it seems clear at least in the current version pds needs
-VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK.
-However can we also code up the RING_RESET path as the default?
-Then down the road vendors can choose what to do.
+It's obvious from the probe error.
 
+> Right now, there is only one compatible where spi device can't be 
+> enable. So I could use a static message. But this is not the best if a 
+> new compatible is added.
 
+It does not make sense. Compatible changes here nothing. It does not
+matter whether your driver supports one or two devices. Not mentioning
+that errors are printed with device ID.
 
+Drop this code, it's entirely useless.
 
-
-> > > > > > 
-> > > > > 
-> > > > > Previous versions of the QEMU LM series did a spurious kick to start
-> > > > > traffic at the LM destination [1]. When it was proposed, that spurious
-> > > > > kick was removed from the series because to check for descriptors
-> > > > > after driver_ok, even without a kick, was considered work of the
-> > > > > parent driver.
-> > > > > 
-> > > > > I'm ok to go back to this spurious kick, but I'm not sure if the hw
-> > > > > will read the ring before the kick actually. I can ask.
-> > > > > 
-> > > > > Thanks!
-> > > > > 
-> > > > > [1] https://lists.nongnu.org/archive/html/qemu-devel/2023-01/msg02775.html
-> > > > 
-> > > > Let's find out. We need to check for ENABLE_AFTER_DRIVER_OK too, no?
-> > > 
-> > > My understanding is [1] assuming ACCESS_AFTER_KICK. This seems
-> > > sub-optimal than assuming ENABLE_AFTER_DRIVER_OK.
-> > > 
-> > > But this reminds me one thing, as the thread is going too long, I
-> > > wonder if we simply assume ENABLE_AFTER_DRIVER_OK if RING_RESET is
-> > > supported?
-> > > 
-> > 
-> > The problem with that is that the device needs to support all
-> > RING_RESET, like to be able to change vq address etc after DRIVER_OK.
-> > Not all HW support it.
-> > 
-> > We just need the subset of having the dataplane freezed until all CVQ
-> > commands have been consumed. I'm sure current vDPA code already
-> > supports it in some devices, like MLX and PSD.
-> > 
-> > Thanks!
-> > 
-> > > Thanks
-> > > 
-> > > > 
-> > > > 
-> > > > 
-> > > > > > > My plan was to convert
-> > > > > > > it in vp_vdpa if needed, and reuse the current vdpa ops. Sorry if I
-> > > > > > > was not explicit enough.
-> > > > > > > 
-> > > > > > > The only solution I can see to that is to trap & emulate in the vdpa
-> > > > > > > (parent?) driver, as talked in virtio-comment. But that complicates
-> > > > > > > the architecture:
-> > > > > > > * Offer VHOST_BACKEND_F_RING_ACCESS_AFTER_KICK
-> > > > > > > * Store vq enable state separately, at
-> > > > > > > vdpa->config->set_vq_ready(true), but not transmit that enable to hw
-> > > > > > > * Store the doorbell state separately, but do not configure it to the
-> > > > > > > device directly.
-> > > > > > > 
-> > > > > > > But how to recover if the device cannot configure them at kick time,
-> > > > > > > for example?
-> > > > > > > 
-> > > > > > > Maybe we can just fail if the parent driver does not support enabling
-> > > > > > > the vq after DRIVER_OK? That way no new feature flag is needed.
-> > > > > > > 
-> > > > > > > Thanks!
-> > > > > > > 
-> > > > > > > > 
-> > > > > > > > > ---
-> > > > > > > > > Sent with Fixes: tag pointing to git.kernel.org/pub/scm/linux/kernel/git/mst
-> > > > > > > > > commit. Please let me know if I should send a v3 of [1] instead.
-> > > > > > > > > 
-> > > > > > > > > [1] https://lore.kernel.org/lkml/20230609121244-mutt-send-email-mst@kernel.org/T/
-> > > > > > > > > ---
-> > > > > > > > >   drivers/vhost/vdpa.c | 7 +++++--
-> > > > > > > > >   1 file changed, 5 insertions(+), 2 deletions(-)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > > > > > > > index e1abf29fed5b..a7e554352351 100644
-> > > > > > > > > --- a/drivers/vhost/vdpa.c
-> > > > > > > > > +++ b/drivers/vhost/vdpa.c
-> > > > > > > > > @@ -681,18 +681,21 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-> > > > > > > > >   {
-> > > > > > > > >        struct vhost_vdpa *v = filep->private_data;
-> > > > > > > > >        struct vhost_dev *d = &v->vdev;
-> > > > > > > > > +     const struct vdpa_config_ops *ops = v->vdpa->config;
-> > > > > > > > >        void __user *argp = (void __user *)arg;
-> > > > > > > > >        u64 __user *featurep = argp;
-> > > > > > > > > -     u64 features;
-> > > > > > > > > +     u64 features, parent_features = 0;
-> > > > > > > > >        long r = 0;
-> > > > > > > > > 
-> > > > > > > > >        if (cmd == VHOST_SET_BACKEND_FEATURES) {
-> > > > > > > > >                if (copy_from_user(&features, featurep, sizeof(features)))
-> > > > > > > > >                        return -EFAULT;
-> > > > > > > > > +             if (ops->get_backend_features)
-> > > > > > > > > +                     parent_features = ops->get_backend_features(v->vdpa);
-> > > > > > > > >                if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
-> > > > > > > > >                                 BIT_ULL(VHOST_BACKEND_F_SUSPEND) |
-> > > > > > > > >                                 BIT_ULL(VHOST_BACKEND_F_RESUME) |
-> > > > > > > > > -                              BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK)))
-> > > > > > > > > +                              parent_features))
-> > > > > > > > >                        return -EOPNOTSUPP;
-> > > > > > > > >                if ((features & BIT_ULL(VHOST_BACKEND_F_SUSPEND)) &&
-> > > > > > > > >                     !vhost_vdpa_can_suspend(v))
-> > > > > > > > > --
-> > > > > > > > > 2.39.3
-> > > > > > > > 
-> > > > > > 
-> > > > 
-> > > 
-> > 
+Best regards,
+Krzysztof
 
