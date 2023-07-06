@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F0774994E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6006374994F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjGFKVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S231745AbjGFKWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjGFKVE (ORCPT
+        with ESMTP id S231254AbjGFKWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:21:04 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on20707.outbound.protection.outlook.com [IPv6:2a01:111:f403:700c::707])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D209410B;
-        Thu,  6 Jul 2023 03:21:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nWuRpTzFota7mzB2MtP3nrScqLewfGwAD2aUUidhp++VKF5GJe7R9rE4dPjSSsXNLVQ79VkPTl6PtpLegda5tj2w3VTu8xZ5e5f5Z/sSqOoEFBdFJJwZqOXd/YFsB8ozSLpHY4Fj4qUhjZ7luX6irGwpQAYRq65juZ9Ea/U7ZH4S3hICmNk4XS1qeU13yrwTVFpBlF15wBCDU1v4fBxalLr8RlwJ79UEfiKd6+X4hSyfZqdIa6bd/2XOH7ohQlDu0RUOIRWvgs/1SBMaC+DICRGn78uRuugIJIuMJkuFvKtDy1iLNa/BlgpJWTdKNsqi/vICrz9jfNDi5I9cQMuC2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xfj/tPh8ifwO+foo+46Fts0kLcej8KU9+mcryhXoe0w=;
- b=la1zGlMq246ZQrH0kJ5St4/SFNl2IBbDRzHcsIlQlR66KGi2ygfWezk5fgUsnzXeAOuJOC0Bi6lRbEB3FRKkT2+Hz7orJDN4VeQtQsHCGrUJNYVDuBgPaEYMvzh/uZJV5w8WpMw5O7m3kzl/39ebZLN1B12iHimMMGvyVakJ4V8lg8qKuHojqposD2fGix4Npav69a0gRxZz4xoIHIrK6jfFcNRzjT7uA0CL2v9VCwMjCPI3l1K3Bs89ewlrWCGCoH4eNlhD69oGiwoLz7CIrhtVJDpW9TTHvSwfcL7zISH1U2maCtHdrADtyYSj1PQvecV+d5ENkFopX7J0BEMYnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xfj/tPh8ifwO+foo+46Fts0kLcej8KU9+mcryhXoe0w=;
- b=BTnCMEQFfV1c/4dfRu65a4VyB9KgoMfSM/POA4e8VgOiNqIcEqEEtFFiSkZ+YuV7tmuy3b8ESJNmT8/+7ExQXDkxjKFKc+YB+vkT1+dcJsff0SxKbI1hbgTR7HULtNSDUPsLVET37d56P3V15yEQ/CRw6U3wdz3yi8ILIz7+mz8=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by OS0PR01MB5747.jpnprd01.prod.outlook.com (2603:1096:604:b9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.24; Thu, 6 Jul
- 2023 10:20:57 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 10:20:57 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>,
-        "conor@kernel.org" <conor@kernel.org>
-Subject: RE: [PATCH 6.3 00/14] 6.3.12-rc2 review
-Thread-Topic: [PATCH 6.3 00/14] 6.3.12-rc2 review
-Thread-Index: AQHZrlSQHrZUS0BVqUq9PCHrr65k16+sihwA
-Date:   Thu, 6 Jul 2023 10:20:57 +0000
-Message-ID: <TY2PR01MB378829FD870D146DC2DD1E63B72CA@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230704084611.028211988@linuxfoundation.org>
-In-Reply-To: <20230704084611.028211988@linuxfoundation.org>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|OS0PR01MB5747:EE_
-x-ms-office365-filtering-correlation-id: 391e7923-2938-4369-29ba-08db7e0ab064
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RDs+KOOn6rd7h6EguXsvVGqpLdKxqqHiSxG7pEWag4Yz1vSuSwIG/3YX31Ft6PXXkItU2ck//WDIdrbkSJ7OPnYFMmaVxEa3HOexq/5vifP1sJA4Iog26ZfOepDc8rnC3vaH392dROaE/DGrKAjDhILl9kkPxXtXeCaWawACNVTM107AqEmVugDKD7fFf9LkGITsxPYZL2HE/m0nIakK96EOgbTorN2VSrNdNxCjiTIWl9C7Z0wu93II9o1o51vvIub4efD9ULh52E7PgbSdRQQW7pkSslusfGKpwCwGhNeTpIqYxcpXaNx1J03kij7qz3IHj/MlESwy6dLvLllQ0XTa8/+vdxtnVGK3h3DevGcNXzSJ+OdjWbTJe8gBD07h55TMvb8Ea0+6EKTWB/JWRZJWG6XJGsFNXRFhBdEIzx+ElBw56IJVgpZ73v9sF4ZNnpCSaLSJBcuS1QYhi6hIsOboDYro9E2jcNH+YSMWdNTgQvH7+5XCPL0IRL/CBEXgTWcCerIPVy2GunWp7fILx8zNHYrU+Z4y0TYbYoas8tbBZ8f+28KWhYYr/KvNcQFtAvzGxAaspn6F9xhwo/PDGw1nWYAobRJQKpSV+OcswFGJ6/gx2zIvZk0Uss/5RvzUdOIGR1u5nJPrkU2FZlrFdQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(451199021)(38100700002)(122000001)(33656002)(55016003)(86362001)(38070700005)(71200400001)(966005)(9686003)(7696005)(6506007)(186003)(26005)(5660300002)(52536014)(41300700001)(8676002)(7416002)(8936002)(2906002)(4744005)(54906003)(478600001)(110136005)(66556008)(66476007)(66446008)(64756008)(4326008)(316002)(66946007)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?KFmYQDhZMT38nPYkhrmkEbhSOAN1REPFkxUaR2T8/V3iOe9vLZDQsCZ9?=
- =?Windows-1252?Q?RtLGOGtCtHbsw0ntSQqGi8ysMB4QbuDBzmoLqh6oVVe1zflPxqboXYLx?=
- =?Windows-1252?Q?w1gtKnbEWZ411PxrXxb0/EX7yF1AYTa6bloldxgsY0d8EWnKF5r5Rs8A?=
- =?Windows-1252?Q?zZ3od/6OKxCELSUTtM7JfLU5ifLUfHT0KjSl94iynj6fxibAe6dS6CKu?=
- =?Windows-1252?Q?jR1Zd/yCPY/DdO3b6bJjy3ZzoIT3t87mzfU8LTTI2kNAn2uRF5+2eAyV?=
- =?Windows-1252?Q?doriqsvsInm5rm9kJVsk6xYIJu7QTy0BTzSSpBGSwgVkJGClEC6zJBiI?=
- =?Windows-1252?Q?yuVS1iGFSrMj3IiZ8FipaoSpf0H6eU2eDwir29vnHd/cqxwbBauTRh+U?=
- =?Windows-1252?Q?Rs1cuD95tvndfKv/IK4l8G6utyHFXUVTUtpbyqB/aoJgr7fau/tKPqk1?=
- =?Windows-1252?Q?U2ritzqiDTC5FUHXYOUgXCZkv8dhT5IYqn2+F/8vLLIHmfiUOIgkSUrQ?=
- =?Windows-1252?Q?vcfOq/eIUrPJpqhY5iBQKEL55n84SL1mhOMV+4KwjW3bUfIEEJlkLQh9?=
- =?Windows-1252?Q?mhAhGhD//l6EH6cXgJjlpFlSmz4zBs19ZwksfffGrTTtrBM+uTnQw6cE?=
- =?Windows-1252?Q?VlmCZ3qPTEkQ8OmMykNU7CX8HhKzipSlYVegjsaJCOTe9FVDdNB12Ahh?=
- =?Windows-1252?Q?UevOuMsiyQAL+gxRnLsIAUptOn7qGfb0w2Ruh9huWUzHEz3L0fug9nZt?=
- =?Windows-1252?Q?CDcQogzNIfKHUvhtyUQy6QfYBK8OBVkcBX0sSb5TCEPTlxUnt9w+dMzP?=
- =?Windows-1252?Q?dK/7XyWAbuBP7hRTz0ZVxsfmUK40yx8lFoJGZ9wXL8QhpbaUpEscYSBc?=
- =?Windows-1252?Q?Q5LaDPbfLya9KzBUG8Zdqbnj1vkp2qcWBRynD+Kd6dKxL73LXAN5/3B1?=
- =?Windows-1252?Q?uN0ew3Ml0v4Y8eKkbLROmQ8Rq56bkeJL80igQVDYQpWgbjFH0r6XlACI?=
- =?Windows-1252?Q?YEfwnL1y2sVz8tcdIjBnq9M1bzQHvMGzHqhKByRnAGOJE27K2KyGwFyw?=
- =?Windows-1252?Q?XFmB6z43mLxC8j5OwPFVNJ4UfQXDUuKk8rkLCkLXGPD50dQkgx21Pkzg?=
- =?Windows-1252?Q?c6pUtuLSnF+TRBQoc+ozYYiIbXkLVt8wg4GAlVopabaDv/h6A1piX/qm?=
- =?Windows-1252?Q?tk2fTend6vPgwI0YJjhPSsZXHKnyU5tUmXaXxUhRpMiQ8XIpOY5dsi76?=
- =?Windows-1252?Q?ZYoVU09AirIM2Vufzcs6xSdIxqu7jLUiSidazS/Lv8EHAX2N92P1Z24I?=
- =?Windows-1252?Q?+JyGOVcICPhsPaxuPSzIgOOtm0DquTq2Qa/LqiZ1px6phM+bnO40djFS?=
- =?Windows-1252?Q?uITFRgm89z3W6WDKkozjAvoN7KjnjOWR4CyGaPT+QlobhNhk4N1XeHUS?=
- =?Windows-1252?Q?v1mLWkkS/ajfkCgF10qoI7Y3//B0+AIeAQDWOE/YOj/rekayzuzFqhTk?=
- =?Windows-1252?Q?vDQaAHujIfvZ+tcGxrb+9uKljZ/S0pvQvx8n1U4yn4jLxIesZE+LlaUs?=
- =?Windows-1252?Q?RTQFmh8lMCM6EIqFPpdS11T7XvkI9dCBZmxTeR6qmiFT6mBcwAvGV7Yn?=
- =?Windows-1252?Q?fBkkjuCBK/oe4rDFiEKVCLjU4HpZ8Ysy0mEQ9Twkw1FlcO3o2vGV+m9/?=
- =?Windows-1252?Q?q/329dQEGX7sFmPEMCxk8nzYFFAN8iFwkmHMH2Jbq5uTEGoQNbt2Wg?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 6 Jul 2023 06:22:16 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9CF170C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:22:15 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-40371070eb7so202921cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 03:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688638934; x=1691230934;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OGs0tpi7zPzzVBpu0OnSiGHBmw3uywhwHgZKPt6GtMU=;
+        b=j/Fd8bwiN2OJvTSE9y8ItzfxFPucsZhJNNKBzfHRm56zo8RxEGHChOibH5b9Hwg9TL
+         Z2fewvooDkdM6QcysOiSuv0wOSnz+km69K8+iYqWFCSjXVMJ915poEa1Zirh52BHxoPn
+         kDBo6lwLPEUb5PcWFuab4k3GxvmD8j/IiVAqaqNLmWCqeMN8WGLefUUP7O7GgO7YTgiT
+         wSQ50aGKDIfOhDTyBHViBwMafjQsfeBhE9O/mAKHVH5ZH71F90A1K+gQu4id8PWr0Kid
+         Iml/pPj2YY+UpzEkshgh4SgyVj5DDXyk8SemiR7WT8GqZ5XSmwSjMuqi5Ae/tEtbGsAO
+         IUJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688638934; x=1691230934;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OGs0tpi7zPzzVBpu0OnSiGHBmw3uywhwHgZKPt6GtMU=;
+        b=flJm7CnxNPb5ABKP4MoMDp/O5FwM1KVfi/O/mOJQ+Q/4HvvMIMJTZs6X/nbp51Vifq
+         pC8URL/OThntJZ/OdgB2yAg1vxMThaFoSz6jh+QWntTDTI5JZ/Hysj54pm9Ow9Vxu3HT
+         ubU5u+wN/myAawwPUz7No8ddnmy6kH0xAzyJQPs2HhItGB0sa4WP8qNWNLWRpaFmOnah
+         keFp3cEMm5QBySTwdFR5vttWfS+66+DL5+axJ94nPmPqSLj5U96GG4CnQzE2PMWCBTD0
+         gWzcmg0hqt1rvgyeEF+V4AEc/+eOH9lpOM5VIRs0pgaicCeFW12BxaMfKcOzC97ivdO0
+         4nTA==
+X-Gm-Message-State: ABy/qLazFird/w86WOwDzUqOeY1mB1cDXxQjorMzfUzGgcBYuyFf/IFi
+        YrnaPwH3pTm3LhDiZLp/ZPE+cZ7rn7wzspwvkmxkrg==
+X-Google-Smtp-Source: APBJJlEVOdg6eZQzG0QonU1SAA7DT7uin5vQEUKHUXEKQOQdzZDBgBr/2XNPUSjX+2XQSiS3YPpYmgVQD0fLsshplwM=
+X-Received: by 2002:a05:622a:54b:b0:3f8:5b2:aef0 with SMTP id
+ m11-20020a05622a054b00b003f805b2aef0mr140320qtx.24.1688638934232; Thu, 06 Jul
+ 2023 03:22:14 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 391e7923-2938-4369-29ba-08db7e0ab064
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 10:20:57.7151
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VgXW/au4hur8zuo7fao4EuNZL/rcHvQrC26n72LrdBcCTTTsDU+S56KiLjPHilD0c+wvmavrx2l4EzgmZOf9i+UB1ksve2XNFn9NHjeyWTs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5747
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230620033702.33344-1-tony.luck@intel.com> <20230620033702.33344-3-tony.luck@intel.com>
+ <CALPaoChdFLTfA5g=vawTuOLk5T6dEkG79XXqm27shh-VeqNCOw@mail.gmail.com> <SJ1PR11MB6083FF68838400D053C884B0FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB6083FF68838400D053C884B0FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Thu, 6 Jul 2023 12:22:03 +0200
+Message-ID: <CALPaoCic3zYLxwUET5WCMUCwN8dk-B9JJvuOeUQ2o3hsgNZdQg@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] resctrl2: Arch x86 modules for most of the legacy
+ control/monitor functions
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     James Morse <james.morse@arm.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
+        "lcherian@marvell.com" <lcherian@marvell.com>,
+        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
+        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        "Pitre, Nicolas" <npitre@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "aricciardi@baylibre.com" <aricciardi@baylibre.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+Hi Tony,
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Tuesday, July 4, 2023 9:49 AM
->=20
-> This is the start of the stable review cycle for the 6.3.12 release.
-> There are 14 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Thu, 06 Jul 2023 08:46:01 +0000.
-> Anything received after that time might be too late.
+On Wed, Jul 5, 2023 at 6:46=E2=80=AFAM Luck, Tony <tony.luck@intel.com> wro=
+te:
+> The mbm_poll() code that makes sure that counters don't wrap is
+> doing all the expensive wrmsr(QM_EVTSEL);rdmsr(QM_COUNT)
+> once per second to give you the data you want.
 
-Thank you for the release!
+I was doing that in the soft RMID series I posted earlier because it
+simplified things, but then I had some realizations about how much
+error +/- 1 second on the sampling point could result in[1]. We
+usually measure the bandwidth rate with a 5-second window, so a
+reading that's up to one second old would mean a 20% error in the
+bandwidth calculation.
 
-CIP configurations built and booted okay with Linux 6.3.12-rc2 (c5daff36a0c=
-e):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/9=
-20271055
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-6.3.y
+> But existing resctrl
+> filesystem doesn't let you do a bulk read. I have some ideas on how
+> to provide something better. One question: do you really need that
+> snapshot to be system-wide? Or can you live with separate L3-scoped
+> snapshots that aren't tightly synchronized with each other?
 
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+The most demanding use case is responding to a bandwidth saturation
+emergency, where the admin wants a snapshot of all jobs' bandwidth
+rates to identify which one(s) to kill. Jobs aren't confined to L3
+domains, so I expect it's more important to get a tight snapshot for
+an RMID-at-a-time. Going domain-at-a-time could create more races
+where a high-bandwidth job migrates at the right time and avoids
+detection.
 
-Kind regards, Chris
+One workaround we've been using to cut down on IPIs is providing a
+usermode threshold knob for limiting how old a reported event count
+can be, but this is more useful for soft RMIDs where reading a single
+CPU's counters makes all RMIDs stored counts current, and IPIs
+resulting from userspace reads of different groups in the same domain
+are all redundant.
+
+We could probably work with second-old event counts if we knew the
+exact time they were recorded so we'd know the exact time delta for
+the bandwidth count delta, but that seems like it would be awkward in
+the current interface.
+
+-Peter
+
+[1] https://lore.kernel.org/lkml/CALPaoCi_N8JHbP4zFD=3DijBh5-=3D4Q0Ec-LrspY=
+NGGnj4G6A6U0g@mail.gmail.com/
