@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5548D74A5F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DFB74A5F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjGFVfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 17:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S231921AbjGFVgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 17:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjGFVfE (ORCPT
+        with ESMTP id S229552AbjGFVgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:35:04 -0400
+        Thu, 6 Jul 2023 17:36:08 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEE9FF;
-        Thu,  6 Jul 2023 14:35:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6571CDD;
+        Thu,  6 Jul 2023 14:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=apsCx/EFeWwzyiurRwGIOaRvS2oRweRFYfEbIucCThs=; b=0ZyvmHn+DDaqx7mvnrogE4Cr/w
-        SAtw+zEGo/6Tha7aickmvvUzoJGLHMXWwrjp4IIWaYxV4W/f4vrbaOYIJ44L71v8f41cHr+66oxBP
-        64uFad5GiPzj3G+HhteUbp8XHP8YYANrdI5aeFIwFIfpnDg+z2YbXVLjpF/MLfws0ypPJ78F8ekgg
-        erK90oEN3Tj3oeijHKc7aXzh5UC9q/CBympsQ9zEKYiDHw/pKDACsHANCd2ZJyC2MjEugDXdN66Ci
-        OHEWqyvaG9vbTLDsE39XkcrcFf8DCLnLgCFdRgxJ5Wf+7uwm+7EY3KyEk9YnAicfjMvlS/nLXM5xN
-        AV+Kjjnw==;
+        bh=6VTQEgefufGygnJ8bChGWaxuJEA6DRUc4kN6fIJ6UPg=; b=CiSHve47NNhLbViFFM/79e7BtG
+        Eip/wWw1jIlg+gyBZvYqMtgqK5LcLhwqMOzCVlVXoI7VZnKCGfYNb2u+fh5I/y6LndZE3tUwfg2tF
+        dQ10slzhPduQuMe2gm6QPSIX2ld2oE757JVwAkyBtNbkF3tY+Ar5RjuqanNO49R6lgd1DZYvdWZOE
+        IEtUOD5uJFNSCsqahjOpq0WUkebkO60oB+fsEhMdXh1xQCZxeZ0zjIHJ3LDXk7gyLln+sgyuPuFJU
+        FG6kudMD5aU3lykn+3znYK0WWg2579oxqcFMY295ZFHYQCO8AyHpg0KDgglVtQ+fj+QwTL6kZa63u
+        U0b14oVQ==;
 Received: from [2601:1c2:980:9ec0::2764]
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHWcu-002k0y-2E;
-        Thu, 06 Jul 2023 21:35:00 +0000
-Message-ID: <a3da8412-2e13-6b25-346b-da53414f5dba@infradead.org>
-Date:   Thu, 6 Jul 2023 14:35:00 -0700
+        id 1qHWdy-002kAr-11;
+        Thu, 06 Jul 2023 21:36:06 +0000
+Message-ID: <62e993a5-0bb4-40dc-6399-f60525300a6c@infradead.org>
+Date:   Thu, 6 Jul 2023 14:36:05 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 2/2] fpga: bridge: fix kernel-doc
+Subject: Re: linux-next: Tree for Jul 6 (arch/riscv/)
 Content-Language: en-US
-To:     Marco Pagani <marpagan@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20230706142755.124879-1-marpagan@redhat.com>
- <20230706142755.124879-3-marpagan@redhat.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Conor Dooley <conor@kernel.org>
+References: <mhng-a4ed8be3-1e00-4604-ac93-29d893829988@palmer-ri-x1c9a>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230706142755.124879-3-marpagan@redhat.com>
+In-Reply-To: <mhng-a4ed8be3-1e00-4604-ac93-29d893829988@palmer-ri-x1c9a>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,98 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI--
 
-On 7/6/23 07:27, Marco Pagani wrote:
-> Fix the following warnings issued by the kernel-doc script:
+
+On 7/6/23 14:32, Palmer Dabbelt wrote:
+> On Thu, 06 Jul 2023 14:27:53 PDT (-0700), rdunlap@infradead.org wrote:
+>>
+>>
+>> On 7/5/23 18:57, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Please do *not* add any v6.6 related stuff to your linux-next included
+>>> branches until after v6.5-rc1 has been released.
+>>>
+>>> Changes since 20230705:
+>>>
+>>
+>> on riscv64:
+>>
+>> WARNING: modpost: vmlinux: section mismatch in reference: $xrv64i2p1_m2p0_a2p1_zicsr2p0_zifencei2p0_zihintpause2p0_zmmul1p0+0x14 (section: .text.unlikely.set_bit.constprop.0) -> numa_nodes_parsed (section: .init.data)
+>>
+>>
+>> Full randconfig file is attached.
 > 
-> drivers/fpga/fpga-bridge.c:99: warning: No description found for return value of 'of_fpga_bridge_get'
-> drivers/fpga/fpga-bridge.c:163: warning: No description found for return value of 'fpga_bridges_enable'
-> drivers/fpga/fpga-bridge.c:187: warning: No description found for return value of 'fpga_bridges_disable'
-> drivers/fpga/fpga-bridge.c:238: warning: No description found for return value of 'of_fpga_bridge_get_to_list'
-> drivers/fpga/fpga-bridge.c:268: warning: No description found for return value of 'fpga_bridge_get_to_list'
-> 
-> - Extend the return description of of_fpga_bridge_get() to include the
->   case when try_module_get() fails.
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/fpga-bridge.c | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-> index a6c25dee9cc1..0b76c67c50e5 100644
-> --- a/drivers/fpga/fpga-bridge.c
-> +++ b/drivers/fpga/fpga-bridge.c
-> @@ -87,12 +87,13 @@ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
->  /**
->   * of_fpga_bridge_get - get an exclusive reference to an fpga bridge
->   *
-> - * @np: node pointer of an FPGA bridge
-> - * @info: fpga image specific information
-> + * @np: node pointer of an FPGA bridge.
-> + * @info: fpga image specific information.
+> Thanks, I'm giving it a look.  Do you happen to also have your toolchain version easily availiable?  The mapping symbols are new and we've seen some odd stuff happen, something is likely broken somewhere...
 
-Those are not sentences. There is no reason that a period ('.') is needed
-to end those lines. OTOH, the maintainers can do as they like with it.
-
-The rest looks good. Thanks.
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
->   *
-> - * Return fpga_bridge struct if successful.
-> - * Return -EBUSY if someone already has a reference to the bridge.
-> - * Return -ENODEV if @np is not an FPGA Bridge.
-> + * Return:
-> + * * fpga_bridge struct pointer if successful.
-> + * * -EBUSY if someone already has a reference to the bridge.
-> + * * -ENODEV if @np is not an FPGA Bridge or can't take parent driver refcount.
->   */
->  struct fpga_bridge *of_fpga_bridge_get(struct device_node *np,
->  				       struct fpga_image_info *info)
-> @@ -155,9 +156,9 @@ EXPORT_SYMBOL_GPL(fpga_bridge_put);
->   * fpga_bridges_enable - enable bridges in a list
->   * @bridge_list: list of FPGA bridges
->   *
-> - * Enable each bridge in the list.  If list is empty, do nothing.
-> + * Enable each bridge in the list. If list is empty, do nothing.
->   *
-> - * Return 0 for success or empty bridge list; return error code otherwise.
-> + * Return: 0 for success or empty bridge list or an error code otherwise.
->   */
->  int fpga_bridges_enable(struct list_head *bridge_list)
->  {
-> @@ -179,9 +180,9 @@ EXPORT_SYMBOL_GPL(fpga_bridges_enable);
->   *
->   * @bridge_list: list of FPGA bridges
->   *
-> - * Disable each bridge in the list.  If list is empty, do nothing.
-> + * Disable each bridge in the list. If list is empty, do nothing.
->   *
-> - * Return 0 for success or empty bridge list; return error code otherwise.
-> + * Return: 0 for success or empty bridge list or an error code otherwise.
->   */
->  int fpga_bridges_disable(struct list_head *bridge_list)
->  {
-> @@ -230,7 +231,7 @@ EXPORT_SYMBOL_GPL(fpga_bridges_put);
->   *
->   * Get an exclusive reference to the bridge and it to the list.
->   *
-> - * Return 0 for success, error code from of_fpga_bridge_get() otherwise.
-> + * Return: 0 for success, error code from of_fpga_bridge_get() otherwise.
->   */
->  int of_fpga_bridge_get_to_list(struct device_node *np,
->  			       struct fpga_image_info *info,
-> @@ -260,7 +261,7 @@ EXPORT_SYMBOL_GPL(of_fpga_bridge_get_to_list);
->   *
->   * Get an exclusive reference to the bridge and it to the list.
->   *
-> - * Return 0 for success, error code from fpga_bridge_get() otherwise.
-> + * Return: 0 for success, error code from fpga_bridge_get() otherwise.
->   */
->  int fpga_bridge_get_to_list(struct device *dev,
->  			    struct fpga_image_info *info,
+I'm using gcc-13.1.0 from  https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
 -- 
 ~Randy
