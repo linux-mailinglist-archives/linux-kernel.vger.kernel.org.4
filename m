@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C607496F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C046B7496F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233973AbjGFIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S232711AbjGFIBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbjGFIA1 (ORCPT
+        with ESMTP id S229956AbjGFIBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:00:27 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B025121
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:00:26 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742eso3960775e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:00:26 -0700 (PDT)
+        Thu, 6 Jul 2023 04:01:36 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A1F121
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:01:35 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b703d7ed3aso5276731fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688630425; x=1691222425;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zWpH1FvGpiFFPL3Zk5MB4gar3abtPZq+nswg1l+SqSg=;
-        b=z8CF+23V8/iN9B9tos0KT/eKSlOJXhZaFRjqcobvmHkTtx8IIGPAXZqNO0Z9d5RUAe
-         I6VfUzkrptGnMATJX60aX79fNdHW7RtIOvR/Ktt5vyHPW0VL00Oo1REG76SAh9/Q29mZ
-         cVGp1op86QVIvT+UNPCJZ6U9N4SrHcVWr2boReW1ClXDHtVN0okuoYSl2zB5qt7eSTo7
-         glKl3IFrKPRHpy/fO4n8RGqkoKt1ZWQIOs5/FZ00nriX4a5K4whqhR0iIYny/vBKzb5l
-         KDURPEwtW6UiZzhAysSDh+dseroQYX3fi/P7BiGJ9kyP2l3J8D4XE5NG0XNBPhlHroTL
-         LcuQ==
+        d=ventanamicro.com; s=google; t=1688630493; x=1691222493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kaFjBU+FK87dE3Nkl8hJelSCzFk/bwmTuo6H5JxWaSw=;
+        b=XJIS+J//13JWpWX5+okHKNkckCGJs65XoE/HohINr8Z/M7othnH7UMhoj/P/h4gtgS
+         IDSH47zYoqsddwdX3OtFzYi6Bg/RbkPwZZECsRJHbGoKTVUaH0X8Q/98rOe8soZtKF0j
+         jydNo+NlludS7VgHgLvPdNK3mU5LCGuur804EEMJQlXmPvSbx7KSm4uIB8UX6b/BtoPS
+         myzo5jmaXeMwxsrP0u/pnwIWflY/Q4h7dnU09tHv14TfwHJFUPW0tfEu4BG98SMEYD30
+         BQNce2rbn/RLIjLO896U2EKHKVVspnv4Sd3I7sDM/E78BGAvngP50Wzs0nneQm1RQyo4
+         WBhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688630425; x=1691222425;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zWpH1FvGpiFFPL3Zk5MB4gar3abtPZq+nswg1l+SqSg=;
-        b=g0FHNh/9KQWOy/7nfq0EDg10U4l2nVOj9l0VDtisrymjFOnFRPdtjXxq90TlCvKNmG
-         kLxOt8qOBOtvDMomMIRluWiB+aMo1fuV2B/7LdtqsTpKoQjGvc9fTA745dPis1pvKsxV
-         L6A9e8Ts/NBc7EYLBsLAIwKe3ndU/YDf1TY5JYKmWTJ5kA6Tr0J4Rfr2/S1UY/hjKZ5I
-         E089gD/O/GAW6KBUZDU3SPDwopfM01ws1Way2V7l9ME0QQsa4cY5hPQ2f0K76sOlhPo0
-         9D5Ec7baUto70DyF4pArQ4tp+LvmgkIw5rcT9kB0LQF4jph5TU/M9RYs+Dr6I2sOQVMC
-         sHDA==
-X-Gm-Message-State: ABy/qLYX3vSREV/afhbPJ7Y6nAwaUCZ4G+/D3xcH1RRdtEk2nsjkdpH7
-        PAMWvH2/bDPWeJMQiIDkaeQpmw==
-X-Google-Smtp-Source: APBJJlE4gWjcP7W0gh/5EZLG8ViE/6K0tZw10eioLU/v1QWdFBHHFFTEa7t0sYd/ac1rM8ha9/xDWQ==
-X-Received: by 2002:a05:600c:293:b0:3fb:e2af:49f6 with SMTP id 19-20020a05600c029300b003fbe2af49f6mr678506wmk.39.1688630424904;
-        Thu, 06 Jul 2023 01:00:24 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003fbb1ce274fsm5587375wmn.0.2023.07.06.01.00.24
+        d=1e100.net; s=20221208; t=1688630493; x=1691222493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kaFjBU+FK87dE3Nkl8hJelSCzFk/bwmTuo6H5JxWaSw=;
+        b=Rzzy+tfJLFY7++1x30Q6BVKpKcItE3ka7ZJHvUg4+y/W7UEr7/RZeXMulXxAkh6Z65
+         eBgXlO1GcVCJ2uwLix4Wia9NjTphVm9lcU+fQCcdmhTFnYT43pd0QXq88iNRSIL4VR9y
+         HJ55OYRyXLpBB2rl/BS+szc1+mbZM/Gr1OTvrcLDdEWVKQW19RTdx0cKuD2NEBZLr/sk
+         9F8kL3ay12OY0VXeCP3FPNLX+rDs1lRa/VMAvJDR0vqY+YvEK91hg0ZTREKxA4BPNJ/5
+         vV49e39UlEyhVqLxmqdx/Cfh7xD7M5zGPhgJOZTO+q0V78qlOIcBnpop/v2VABvKkc5H
+         nnFg==
+X-Gm-Message-State: ABy/qLbzoYZFAPkSmJ9maQ0PaY3d1PzCuPUmq5fmYSIP736etKGQWNtS
+        NaGCVbO0f3BMrb3HnAUL/EVnYQ==
+X-Google-Smtp-Source: APBJJlG6l78SQJr2Fxy7TUN+dHYhJNbqZlVWp8lu+cbnc+Q52JCX3+YMXSDU9PCc1X7fmBGE7ARfUQ==
+X-Received: by 2002:a2e:a309:0:b0:2b6:bf9c:d025 with SMTP id l9-20020a2ea309000000b002b6bf9cd025mr747386lje.8.1688630493148;
+        Thu, 06 Jul 2023 01:01:33 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id mb8-20020a170906eb0800b009737b8d47b6sm462856ejb.203.2023.07.06.01.01.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 01:00:24 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 06 Jul 2023 10:00:21 +0200
-Subject: [PATCH 3/3] arm64: dts: amlogic: drop cooling-[min|max]-state from
- pwm-fan
+        Thu, 06 Jul 2023 01:01:32 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 10:01:31 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Evan Green <evan@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Message-ID: <20230706-dbdee6eba0c4a16084587b10@orel>
+References: <20230705172931.1099183-1-evan@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-3-63ed070eeab2@linaro.org>
-References: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-0-63ed070eeab2@linaro.org>
-In-Reply-To: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-0-63ed070eeab2@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1423;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=mTxrGBgcrLVvxfWXqT39OrtK8xzaQJmrQf3lTHsiMu8=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkpnSVVlcqsYAlsspnNSpabIPV0CUsiTF7uT/6cBbG
- rIDdZdiJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKZ0lQAKCRB33NvayMhJ0dwuD/
- wPzwYHtKFu5wR0PYy9KwbUaetfp9VjtWrDRPP+zZV1/9ZYekIqbMITt+s7/+CILqWg+KgtIaoGieMl
- Tw9ewazOmGsAnNiJUgs3z9Ft6NpR2tPNHb3wPG+TFvnnM+HqmaKNkeTle2RH0UeBuwlsCv3rIhcOpd
- ZFesU/nPeW6vQW2EPtz4IjHH8gXplRzTPMUciWc9pNUEGm9lQOwThNFYXz2I08Ll1YFM+cRKF2tfaR
- jmM6nuqMzn/a3Txe560cr8iRb5H9NHTzslFtvUae4zif0wTpFMXhi3Fai/G2jsHzXMeeOBDEXz5XrC
- GMNRzEpl4zDrbXEmNihN7awahAGtKLL8gXgLqDwd1rKilzVnCjNvCI7Qe0VY2Mq0bQvA7/F9N0k1tF
- cVH4Ntph2LWpLZiJclHPElVe3rE75bI3uC0vZLmIXL2CpoccQYJPxIQEPNChMQBnIVxOqIAicwzkab
- QsX8O/w3sdZm0O0lhU/qW0VegQcfkgEEgtriSg+wG5hl3s+jjWQkmWC6DG95YEa/fKhdIa/FuqwZIQ
- I2H7dq5h0rlQ/JjDehSYuW/4NDA1eLfx8NedH5F+4N5OKCg3qkruvgqLi0Z92OCG0lhb17iN1xSJa4
- 1lbTZiTTRvOoCRWODT6E/JDpp0eoK4xzgGP3B6W4CkAKz+3YJsTTsMZJoCYg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705172931.1099183-1-evan@rivosinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -96,42 +78,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the invalid cooling-min-state & cooling-max-state from the
-pwm-fan node defined in the bananapi dtsi and odroid-hc4 DT.
+On Wed, Jul 05, 2023 at 10:29:31AM -0700, Evan Green wrote:
+> In /proc/cpuinfo, most of the information we show for each processor is
+> specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+> compatible, and the mmu size. But the ISA string gets filtered through a
+> lowest common denominator mask, so that if one CPU is missing an ISA
+> extension, no CPUs will show it.
+> 
+> Now that we track the ISA extensions for each hart, let's report ISA
+> extension info accurately per-hart in /proc/cpuinfo. We cannot change
+> the "isa:" line, as usermode may be relying on that line to show only
+> the common set of extensions supported across all harts. Add a new "hart
+> isa" line instead, which reports the true set of extensions for that
+> hart. This matches what is returned in riscv_hwprobe() when querying a
+> given hart.
+> 
+> Signed-off-by: Evan Green <evan@rivosinc.com>
+> 
+> ---
+> 
+> Changes in v2:
+>  - Added new "hart isa" line rather than altering behavior of existing
+>    "isa" line (Conor, Palmer)
+> 
+> 
+> I based this series on top of Conor's riscv-extensions-strings branch
+> from July 3rd, since otherwise this change gets hopelessly entangled
+> with that series.
+> 
+> I was unsure if I could snuggle the new "hart isa" line in just below
+> "isa". Aesthetically it would be quite pleasing, but it runs the risk of
+> breaking brittle usermode parsers that are assuming a specific line
+> order. So I put it at the end.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi | 2 --
- arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts | 2 --
- 2 files changed, 4 deletions(-)
+Actually, they're probably only aesthetically pleasing when they match. If
+there are differences, then I'd guess having them side by side, almost the
+same, but different, would make them even harder to look at then they
+already are. So I think I'll be happier with them separated by a few lines
+anyway.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
-index 83709787eb91..42f30112b56a 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
-@@ -47,8 +47,6 @@ emmc_pwrseq: emmc-pwrseq {
- 	fan0: pwm-fan {
- 		compatible = "pwm-fan";
- 		#cooling-cells = <2>;
--		cooling-min-state = <0>;
--		cooling-max-state = <3>;
- 		cooling-levels = <0 120 170 220>;
- 		pwms = <&pwm_cd 1 40000 0>;
- 	};
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts
-index 74088e7280fe..846a2d6c20e5 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts
-@@ -19,8 +19,6 @@ aliases {
- 	fan0: pwm-fan {
- 		compatible = "pwm-fan";
- 		#cooling-cells = <2>;
--		cooling-min-state = <0>;
--		cooling-max-state = <3>;
- 		cooling-levels = <0 120 170 220>;
- 		pwms = <&pwm_cd 1 40000 0>;
- 	};
+> 
+> ---
+>  arch/riscv/kernel/cpu.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index 1acf3679600d..6264b7b94945 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
+>  
+>  #ifdef CONFIG_PROC_FS
+>  
+> -static void print_isa(struct seq_file *f)
+> +static void print_isa(struct seq_file *f, const unsigned long *isa_bitmap)
+>  {
+> -	seq_puts(f, "isa\t\t: ");
+>  
+>  	if (IS_ENABLED(CONFIG_32BIT))
+>  		seq_write(f, "rv32", 4);
+> @@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
+>  		seq_write(f, "rv64", 4);
+>  
+>  	for (int i = 0; i < riscv_isa_ext_count; i++) {
+> -		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
+> +		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id))
+>  			continue;
+>  
+>  		/* Only multi-letter extensions are split by underscores */
+> @@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
+>  
+>  	seq_printf(m, "processor\t: %lu\n", cpu_id);
+>  	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
+> -	print_isa(m);
+> +
+> +	/*
+> +	 * For historical raisins, the isa: line is limited to the lowest common
+> +	 * denominator of extensions supported across all harts. A true list of
+> +	 * extensions supported on this hart is printed later in the hart_isa:
+> +	 * line.
+> +	 */
+> +	seq_puts(m, "isa\t\t: ");
+> +	print_isa(m, NULL);
+>  	print_mmu(m);
+>  
+>  	if (acpi_disabled) {
+> @@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
+>  	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
+>  	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
+>  	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
+> +
+> +	/*
+> +	 * Print the ISA extensions specific to this hart, which may show
+> +	 * additional extensions not present across all harts.
+> +	 */
+> +	seq_puts(m, "hart isa\t: ");
+> +	print_isa(m, hart_isa[cpu_id].isa);
+>  	seq_puts(m, "\n");
+>  
+>  	return 0;
+> -- 
+> 2.34.1
+>
 
--- 
-2.34.1
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
+Thanks,
+drew
