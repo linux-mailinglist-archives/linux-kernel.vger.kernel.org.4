@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E3A74A262
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82FF74A269
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjGFQnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 12:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
+        id S231962AbjGFQqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGFQnR (ORCPT
+        with ESMTP id S229692AbjGFQqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:43:17 -0400
-Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021019.outbound.protection.outlook.com [52.101.62.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFD91730;
-        Thu,  6 Jul 2023 09:43:15 -0700 (PDT)
+        Thu, 6 Jul 2023 12:46:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF381996;
+        Thu,  6 Jul 2023 09:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688662013; x=1720198013;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=rBl9tNo3qNH+B5XIZB9nQhocsqIFpuDKZ1B8LED6034=;
+  b=kIrAnEM2UrK/uL2p5SCiAt4dMoffj+/3+TT1UDCfoXZ72JjCG5nnCnI1
+   12Tn+hMLJCZNZDOD6w8Q7QJr9PYjnjx2BAYVXrvJ73mN9UD9W3hKp2qRM
+   mdx31jJM59/moc4BJy+3qMtmOTX8jN1HSBqDG4JFd9bhFEYyoxtaoSpMb
+   CH85cLaXHuWFw3Hb9l207a1rvLZ++bGdA+oKyhkcA+9s6Ifw6mz1MW18b
+   tMQK1czc78GZsWD2ooIpzqfExVNdZ7Lpkr1UsnkquAq+a8B1waPif0bT1
+   7hecx2xE02276cHih+WuZ0Dxzo9fKYXmnJcxA9IJQUJFP0bymIPS+abr8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="367147060"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="367147060"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 09:46:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="722860803"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="722860803"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Jul 2023 09:46:51 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 6 Jul 2023 09:46:51 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 6 Jul 2023 09:46:51 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 6 Jul 2023 09:46:50 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XPEj0fsUpECYWYq/x+w4Gxi32veJHGp3rEzwGU54fPJEeCEnHlim0h8q7oMaHptMMS3qShbINtenMdFWhrY2y+R9kkNgyH71xwihfB+zcc3yKtaeu4BFP31zd1OJUz4bwG1gtlS/o/B7UtrdBYSom2aNP4/N/egXmW2JCeoDdu+tSUUPYAaHuIkv+tgPE4MJkO/ql6GrsXJyKwICohLfcVn6ntoR+OvaJPJ8wlLHqhmMS0fRAsgNeX4i69lVNu/y/jTEITFdrTm8ZdR5WyGqW284IilQKwa9oFP9GE4M9qZsKGGnD64fzpu4TV1/uuHS4RAJV5tKUrHkn725iFMtHw==
+ b=E3AoPmplOAkJEfR92gdFNuEREn5qsiNsZoZUnolJluvZbjldLmbUXtNJP1Lx4qZmnU5+vQGX33tIVLZ2WFQ8xB6kfuWZFFgE4dh6aBWhJjdXZLG+WsqbUeA3pLqkNrqn0D4ydPsQ/i7H/IbAM9Kh8/76+OEIz6EWVeUQiY1IrBcRec6If7zFRIvkoqgQg7zyPR+8dJX/a+rIIx0jVQ3/nvZjCbvFeAm+gRXJm6W8pPRL2h+O9SkFN9k7otnxafr6Ui3oNo+Jv83q60Rr6r+oO9KtC5o8OtfOe0328Jrn9XtVwqizUAR2BdtxP8MVLlXzi1rUuvmJPgOzPY/yUVTpWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jk55deMuYMXwixChSW2guF9Pomb7HY0h1CG+ROjwO1U=;
- b=Jf5ygpaIEAEKCp7Ilx1tGC0BtlPzRttt/UUpNz3wovJs2cvVOGIfPDA0L+PAFmoJGH5hUtlJ18jWfrpH5MJYzokNfThpP0XP2Lq6ds2SniXMep/dGNly9xEFxvIF2mOs4ZmzW7culh9ibO/gOzMYrNDHExLWRQATLxPonquN/YBCYqnreLc1PsaYG7IG4mluo+XDvo073/xc2a57rqCify2/VkeW3VuX/aNxATM3kKRKeBjzTB6wWX+cHxYZkjTYwbWubqHsS/XjDE3xVJzSaNU9j4uNS+ioABUS6oI1FIXyKtM7xWpEosQdSuTEobJAEUkuvOz2E+5px7QHYmDFnQ==
+ bh=7/0twT6znIc4rN24iHfqPSzn32EBDHqEqgleBOVbUrQ=;
+ b=BsDR+qmVhex5CclAOwtg10oRMAc1ee0aPNnLfRcDxhphaNPi3CeULnJfyG+nEVmt6DGvkf8j4CtYnVEYTBJiSul4nt6kuRZbQaGbesoXshpf1xn+1srshgn49j5DjJ4I2ATRE1WV8HbTyyjk7yyRJ/oSeIWdWtfSL08P+iL9M+LRwJE38IHSBlClANjsrh+G34x6cpTzxLH+l4n60LfUS6+8f1S5TDG9O+X9yfAoY2K2ClAMvVvrYSF+lztBXeRypeRuC/amM5S8loHSGrFoKdp/A/fjqE2hgn0Fe8KS5vsh+eS9GDSGuhoDCY9rav+YoWwgKanXNzcRgbrlesqfyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jk55deMuYMXwixChSW2guF9Pomb7HY0h1CG+ROjwO1U=;
- b=ABnK8lqCETMLJZFzvvEfZBXB+vv5KX9ewcdH8AenIIaxy6116XbTulnccVX7U1UsOLrW+7dj4eW6dU6r/2jc2B04bMwbF0MxyvELYqQEQn5Mw0KYCA6hFq7/CDFJ/ulcXe0RSQRhuxSwzo7WQjDUypF9lQfnHcuXOKLENhoP9EM=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
- by SJ0PR21MB2055.namprd21.prod.outlook.com (2603:10b6:a03:399::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.12; Thu, 6 Jul
- 2023 16:43:12 +0000
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::5576:62f2:72d5:7cb]) by DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::5576:62f2:72d5:7cb%2]) with mapi id 15.20.6588.010; Thu, 6 Jul 2023
- 16:43:12 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        luto@kernel.org, peterz@infradead.org, thomas.lendacky@amd.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        kirill.shutemov@linux.intel.com, seanjc@google.com,
-        rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, x86@kernel.org
-Cc:     mikelley@microsoft.com
-Subject: [RFC PATCH 1/1] x86/mm: Mark CoCo VM pages invalid while moving between private and shared
-Date:   Thu,  6 Jul 2023 09:41:59 -0700
-Message-Id: <1688661719-60329-1-git-send-email-mikelley@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: CY5PR15CA0247.namprd15.prod.outlook.com
- (2603:10b6:930:66::22) To DM6PR21MB1370.namprd21.prod.outlook.com
- (2603:10b6:5:16b::28)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by DS7PR11MB7930.namprd11.prod.outlook.com (2603:10b6:8:da::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.17; Thu, 6 Jul 2023 16:46:44 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::1ecd:561c:902a:7130]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::1ecd:561c:902a:7130%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 16:46:44 +0000
+Message-ID: <6310c483-8c6e-8d34-763a-487157f6ff0c@intel.com>
+Date:   Thu, 6 Jul 2023 18:45:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [Intel-wired-lan] [PATCH RFC net-next v4 3/9] iavf: drop page
+ splitting and recycling
+Content-Language: en-US
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        <netdev@vger.kernel.org>, Alexander Duyck <alexanderduyck@fb.com>,
+        "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        <intel-wired-lan@lists.osuosl.org>,
+        "David Christensen" <drc@linux.vnet.ibm.com>
+References: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
+ <20230705155551.1317583-4-aleksander.lobakin@intel.com>
+ <CAKgT0Ue+VvnzNUuKiO1XFW6w3Ka9=SSfGBP_KpkbvR6uzqvg5A@mail.gmail.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <CAKgT0Ue+VvnzNUuKiO1XFW6w3Ka9=SSfGBP_KpkbvR6uzqvg5A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DB3PR08CA0021.eurprd08.prod.outlook.com (2603:10a6:8::34)
+ To DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR21MB1370:EE_|SJ0PR21MB2055:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5cea04e1-7d8b-45cb-7fd0-08db7e401632
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|DS7PR11MB7930:EE_
+X-MS-Office365-Filtering-Correlation-Id: aeb823cc-90f6-49b0-05fa-08db7e409475
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EMBj2ccQCeFsXXlIBCKtZy27NqXSNs9uNgbQln/LnTJHL6hTxR1UUcTvaXJULe1UZ+Knc5JgFnlT38PwS0ZjNoKazmYPsWX3ma51IUBPDOJfhFgk/z2R3R03QKCVmbAMnBdQZDc/CuQuoQec8xaqu8s8mgmpFlWpQGYsj04G59OH+ao4+GjKDWyYPIPS8tYC7/QRtS+khLU7zJA8J8qh4Jbyh50XTqfgeso7M+Um+h42SWYxYTu7Pr/Y6sN/kG8Vp9n1ECg5cPdqKoP5P8DQb+KDTbqiq+tFqHNmeteh+DLj/3PXvoZBOokCuL2PreZZxlFZaRkoUvhMOpss70Xfu4K0XU3OHc5nW5TL6ykhkSvZwsAC8EWczBVoDbspROGqqw5W4ELM7CyTny4noai33CHzpoqqhc5hlZbW7Xb5q1rqBvZZSqQXw7anVx/TY6eonRstGP63MMmCYmLSNcq0kISQbwxRs5dtyEMY1Uz4W65pm6v6CaROPz1sE2G0D0Zb+iDKYT7D8REIEJQEtbq3cyNUZZ2DeXaqiyOG3VAlFIDXizQKR9bpQrlVpyqJ0F+NW3+1OkYWkZTShZoE4juaNFVZ7D4tiq2FCnJOlDg8AxN6QWXgVhfKkGV+wzlz8+hWeFzWq2j34zFzHxwnnRlKhu+MHW7RiK/nX9wDgd74cPmmYTsY7y7DqvAR7qPVta5R
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(6029001)(4636009)(366004)(376002)(396003)(136003)(346002)(39860400002)(451199021)(52116002)(6486002)(6666004)(10290500003)(478600001)(83380400001)(2616005)(36756003)(86362001)(2906002)(186003)(6506007)(26005)(6512007)(107886003)(921005)(38350700002)(38100700002)(82960400001)(82950400001)(4326008)(66946007)(66476007)(66556008)(41300700001)(316002)(8936002)(8676002)(5660300002)(7416002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: j0CkSKAjNCVJpTcwclIso0PpdQrklsHVxfFvmodXjjPddF+xYsdttwwoF4GqpvI+Z3PErybIzhyQTbAHu1wXFTyLPbe3lryQ65FTGBDgztk6FN/JWkkm1KpCvaW2uQpCsRb8yTrKJYksgoRN46qtoV2u4VPg8lVBuVn2Q8O2zEadXcNLpwlo1AcTrzeNLqydzqOuhfZVWRryBqAcYinSuZkeM/jrITcEYefhuFqWbsC0eQ0pn5IBeNBK7Nb73cL3NMOqxnG1oKkmk6Tr/N9YGW9PKo/Y/8ddw/rgK9hWbJWizdNP+KzKQG9dUuGZxeZKWodEnVFHqxqMk/w4zCaxKuNL+7UFYd2BpVNbwEESwm4RbtPO2/CzHUBWJYaxk6mGSqZ2AnEsgiZq2rQPWwlS/b2prnNhBfjFoDObgBHk86jlqj6nBkbC5zNosaEEwskay4+3BcDjQYP/XLXA863FYs+ZOMefqGPX+LummOpt+zgtFKWTcGGjLBCaTud36FtoemaHNnClQnBojwAv3Ad6h2uczwVP8SUcoC8/c7UQQ2/1r2qmqWaXT+WsMHR0Aa8UeaBZ/wkZ/W4x8EfiTGQfbYi6MnEko7MnI/9VBIWTKmf8JDdhgWEzdO5amEwRiJos/kPEqkb03Kt+8qK/0b62sw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(376002)(366004)(346002)(396003)(451199021)(31686004)(478600001)(6486002)(6666004)(54906003)(2616005)(6506007)(36756003)(31696002)(86362001)(2906002)(66556008)(53546011)(66946007)(186003)(26005)(6512007)(82960400001)(38100700002)(83380400001)(316002)(66476007)(6916009)(4326008)(5660300002)(41300700001)(7416002)(8676002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mnbm/HNWsOGr6FLCGlTQP7UwffcxWffY5dvQetr8hXjScR/4AZU4o2AtFyeD?=
- =?us-ascii?Q?mduEV/hfpkS6GV38zztBvFMvNcscrfkjPOO054lSfJbGHwI+i6wEL/usIJHT?=
- =?us-ascii?Q?ROjQZzfStyBUCUrmlrcoeyBc28Th4G/6MF24XEjFjKU1cbBPGweHQwqpt6bs?=
- =?us-ascii?Q?wrk8Tx8LjW9D48ZVAQUyapnO42HgUKrLCkoxKbJYOGfPiEyzdrs0spY2zGsX?=
- =?us-ascii?Q?B1vvv2FDtCJ0TeKL+c+iOztA/9JHdNZUTMH8eu2iPXL+j6sadZuEdPTT5DlS?=
- =?us-ascii?Q?yOo6blOm2/r1PM6LD/63GXdQOtGy+dSIiB0SdOrKl+26hw8A5SHuMWhFBCMR?=
- =?us-ascii?Q?AduTylumAvoWavfIstaaGo0Cg2MvTAJbSfOb5zfT/iWOtBY1sTxBJRF29FvE?=
- =?us-ascii?Q?SLJdMekgqMchFAOotAkDrIppYDAhyqUX7POkNwb1cuho8eKLZqnRxgA3mWVo?=
- =?us-ascii?Q?7t1U367obCSOkyUIkZ7Dnnyry1BkLSCZuqiPqXkXfhmlPgOLNF+duLURmjD2?=
- =?us-ascii?Q?ywnA0YPdplP1O3SJvwGq9R8zP6tM//Cf+P0c33G+TYraOiSMQEi83rNVViDV?=
- =?us-ascii?Q?tfJRH/vIflA+j6zbPOgQe4wr15FmoBHeOv+wy+EkX+ukjFLMpwnPc4VVzwTk?=
- =?us-ascii?Q?/fGBu2h0Ufwmi4awtOMepKOJbXGjztnMx4DoGOtZRqLxr1V5/X/9tQgPG55d?=
- =?us-ascii?Q?2SOhTR+9IMrmOlcs4orXhYe2EiV6coNZzrY9bbtMxe0+O76xf5R04jREh6Hp?=
- =?us-ascii?Q?9m09lioA6mTTETssQQ39EIMRGfzSwcaD8BHfsNXFT3CTcg1uG6mfbMkg8uAq?=
- =?us-ascii?Q?0i/XwTE2MNS2wtL234FfCrNNfWS1pnII/gcYHiD8DbdPQ260Ku41eJK2RKV9?=
- =?us-ascii?Q?Is2QAHXToGBYcNno8GVNDDO3I5oGKmkDJu7UOAgqmFolLfQMZaCuy51yzLuX?=
- =?us-ascii?Q?TyWSwvYKJtJ7OJfFApwC1xFWeKBaHCPkoz1UIfzNWobu/xDq58xIQFb4RokW?=
- =?us-ascii?Q?NKZ63HVrSdXbvlTA6WF/mxExtxOFntAAk4K0GymUcIb3NEUWaORxNflYtU7i?=
- =?us-ascii?Q?05Uyv/boBFxoF4bdv335KVYv3A6eqNmMQBOc6jYTRWDOgCG9+dAMp6cS9spl?=
- =?us-ascii?Q?XHwVjzP3PGQ7BLDfDQ/KUVF+T/KQm2bETcscVOfyc4sb5tcWMCUtK2BxpDjw?=
- =?us-ascii?Q?AUqXNu5fmkqGKoFbop7fXASquempvD47Aqj+ij0fwekIXE+lEL+6q6wVy/g4?=
- =?us-ascii?Q?4epCPXeluum61LKGCSScsZ+LsEMLwPaRuBayqbJeI9aO0Q0nSQcCNfVDNEg0?=
- =?us-ascii?Q?x0Q3/e1d/sQ607XdWdiMruRIgkfm6ajC+E8HOMDy/97M4nNnEPPr+QsUJyT4?=
- =?us-ascii?Q?C9iY6/AVAM9NMkYoK3DgmWR0uKMmeqUepa20heRdu+LhVlHSEEAnMQ1wNzAz?=
- =?us-ascii?Q?0bQOshHJnbJMVTrFnuelcZSnaAeE6zRHyX40HAeEzK4zlaEZc67FZH2RbU2U?=
- =?us-ascii?Q?QJQr7L7OYSTx1XB4Pr4CweCltOOGZCKz40gXOl3fnsRIyBQr2TTzIRiOvvzB?=
- =?us-ascii?Q?KEBZrDVPoqFGfz55AGbMTUKW3hviQ6FKoZq3mnle?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5cea04e1-7d8b-45cb-7fd0-08db7e401632
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OHFURVkvazFxN1RwRHo4RGFPelFqWXZJdGg1a1d3MXh1VmlGVEliRE5FeSt0?=
+ =?utf-8?B?cS9WdUR1ZHliQlZnVFd6akNDeXpxMDUvclA3VW5iU3l1eU9mL2prTE9waUJz?=
+ =?utf-8?B?T0RDOVp1QllmcGt2aW9iYktUd0h2N3ZvTlp2ZXRDMFd0a1ZaZUtFaExDOWxK?=
+ =?utf-8?B?TEZCRzlodFBUUUdySk1tRkQ2SE9iV0VPVDZvbytURVhOV1p5R2NDQkRjTXhp?=
+ =?utf-8?B?MTRHQTdKanNNVGZLUWxzVlFUVHhnQnZjYW41VEtlYVNYQllUMW8xaUVCclNC?=
+ =?utf-8?B?WnI0VVRwT1FlcVoraFRxbnYvd3FaaVlXVzJsRE0xZkZXZ1pYdEEzbHFFeS9S?=
+ =?utf-8?B?Tk54NHc3TkxXaEw3QkNOM211dmJ2ZlBZTm5nckRsYThoR092RWZvL0FEVytZ?=
+ =?utf-8?B?WmZWMEpPUHZtS1ZDUWJxbTY3dW1NcitBSFpld1ZGNEp6b1pCSjlSclIrTDBt?=
+ =?utf-8?B?UmRRR2l4WE42bUNZb0Q1WGhmaXdMeVRMOGpHa0l0ZXROZzlodXI5YTFCSzlv?=
+ =?utf-8?B?TVpIR2UrTWZvWTM3VkloOGE0ZVcySG9sZS9UK1MzeWRXUGlVRHdkVW1IN3Ew?=
+ =?utf-8?B?WmVsdGh1ZlZKUzd6Tm5NeW1BeXRaR213SkIxNDBMWFVBcXRoYnF2QjhlOGt6?=
+ =?utf-8?B?anVYNDlZZFNsWmloWEh5NTNiRW5CYVpheVAvTjNCVkNWVGxkblBtdVJDaXJI?=
+ =?utf-8?B?OVJ4Yi85dnBlSU9BVUVnUUZ1Q2IzclVJL1NEQWNoS1drQm9WRkVhMkVvc1hU?=
+ =?utf-8?B?ZHBvU3l3TW5wRXhZRWFObUhQd1l2MkJWcWltY1ZhSzJJTW5meXJSckVhOEZJ?=
+ =?utf-8?B?UzV0ekJvTXozTStCS2J3Zi91b05WOGN1MEc1OUVvN0U4eW5oTFhLZ2V2d0ZK?=
+ =?utf-8?B?dmh4ZFk1UlVQRDVwczBKR3ZnQzJ1QmgxZzZ2U3BJVUs1cVpDR2F0Z3pkdzdH?=
+ =?utf-8?B?b1JwZGxpNGJlOWhZV0Q3MDV1NklFRnlodXJFd2dWOWR2Um9XWWpXS21TZmtR?=
+ =?utf-8?B?WEVzZnVqalpLekRnb28wamZVamhUZlU0ZFZRMkxoYkhWUjZMRkx4dEx1RnZI?=
+ =?utf-8?B?UnVsUS9BZnRKUUh6bkNRSlNrem0rZkJ6ZGNVcEpjNExKOUp5RzNIQmwrWG92?=
+ =?utf-8?B?MXdWOWhKdHdhcUVMZEtPdkRQc2hYQ21NbTF6SW04aTVwaTZaalJqRUg0T1dp?=
+ =?utf-8?B?YndVeHU5NXJXUHNOTnpmTVNlNEUwbDZzSmJ4eEhzb0xrcDkrbnJ3ME1XWnBQ?=
+ =?utf-8?B?MUlGcWNyc3NHSjFrMWtocmR0cWFJZGIrL3RHRTFiaDhUbnFzOWh2RDFPQzhZ?=
+ =?utf-8?B?NGsxcXVKdjNXR3U0ZlY4NDh6Mnc3TGpFbmlxVjRxaml3MTNpeXlHUkE5cmhH?=
+ =?utf-8?B?eTJZbFFwK1ZnYzY0T3pxajY5Z2g1dXRtRXpHWkFUMDRheG1xcGIvd3hJdm5E?=
+ =?utf-8?B?emk2blhWODBRTFlIUXlKUTc0YmFMSHF6WGp6Y2xYU1prY1VYQnVPd2tKckxa?=
+ =?utf-8?B?MnJvb0U0WHg0Q2xPRURGS29yYldxQmdWcjMxV0JiajI0T0hSZmhjbG1TZWxM?=
+ =?utf-8?B?WTZ3b2FJb01hbHgyM1NxS2hNMlZQazJBeHduekh0Rm5BaU04QXB5bEd6Lzdi?=
+ =?utf-8?B?YStINUNUWHBIU1ZPVnhvak5WSG85cy9LQXJVKzJ6KzM5Qm9WeU1OSG9FTi9Q?=
+ =?utf-8?B?Sjh4QVdoSVFQYkFFUk5mc3pGWWtsaHFUR0prKzMvUUlFMzRZSkdQRENrM3JR?=
+ =?utf-8?B?SEo5ZmpkNDdEQm56THZjSFF5bXRrVGgzN3ZoT3NmMFJ2Zy9SSFNoancxaS91?=
+ =?utf-8?B?SW9LUi81ZW05bU5xUXh0ZWYxNlVLTjR1UFh2Z3V6S2dBYXloUXkzU0VIMmRw?=
+ =?utf-8?B?QUpaU1hPeXpPeHBlN0g2MEtySDRhSXgwajBHMnF5Zk1jWWtuWTl3V0JCWlZ2?=
+ =?utf-8?B?Vlc3Tk5lODF4bFR6SVN6MGt3QVM4VTRZUHBiTW5wUXA3UnpTc1VrTEVKS1Ni?=
+ =?utf-8?B?RXErSGllZFU2c0xFcTE2UVNINm1qbTNwSkJvM2Zpb3ZtNU5UQUVRNlRKR1pa?=
+ =?utf-8?B?Snk3cmV3cVYvOEd6QlFsbEc1WUJZWFBMOWwzQWdhdGExM1RQRHY0NXJ5T0wv?=
+ =?utf-8?B?U0ZzTWJVOHBXYWdQTXljYTJtcHUrRFVKOVpTMnZyZTc4a2gxbVc1NnE2UGZH?=
+ =?utf-8?B?WXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: aeb823cc-90f6-49b0-05fa-08db7e409475
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 16:43:11.9626
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 16:46:44.0909
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I/TzrMC6sEuil+f97mGYL1gEm+v+DDj4+czavrVwhkAOkuthLCu4mBbY1Bl3unntpfeORJzlaa2AJpEej2R1MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB2055
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-UserPrincipalName: T85XFS/zc1T2fi1PIVHW1oiS047Bxilk3z/czMcr95RgwOc8HhD9VWZwvw3Wm0PKSDVjiu+ASR8ws+xALB6bja8KnuJ9/f0QfJtgvhXZ+N4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7930
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,190 +170,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a CoCo VM when a page transitions from private to shared, or vice
-versa, attributes in the PTE must be updated *and* the hypervisor must
-be notified of the change. Because there are two separate steps, there's
-a window where the settings are inconsistent.  Normally the code that
-initiates the transition (via set_memory_decrypted() or
-set_memory_encrypted()) ensures that the memory is not being accessed
-during a transition, so the window of inconsistency is not a problem.
-However, the load_unaligned_zeropad() function can read arbitrary memory
-pages at arbitrary times, which could access a transitioning page during
-the window.  In such a case, CoCo VM specific exceptions are taken
-(depending on the CoCo architecture in use).  Current code in those
-exception handlers recovers and does "fixup" on the result returned by
-load_unaligned_zeropad().  Unfortunately, this exception handling and
-fixup code is tricky and somewhat fragile.  At the moment, it is
-broken for both TDX and SEV-SNP.
+From: Alexander Duyck <alexander.duyck@gmail.com>
+Date: Thu, 6 Jul 2023 07:47:03 -0700
 
-There's also a problem with the current code in paravisor scenarios:
-TDX Partitioning and SEV-SNP in vTOM mode. The exceptions need
-to be forwarded from the paravisor to the Linux guest, but there
-are no architectural specs for how to do that.
+> On Wed, Jul 5, 2023 at 8:57 AM Alexander Lobakin
+> <aleksander.lobakin@intel.com> wrote:
+>>
+>> As an intermediate step, remove all page splitting/recyclig code. Just
+> 
+> Spelling issue: "recycling"
 
-To avoid these complexities of the CoCo exception handlers, change
-the core transition code in __set_memory_enc_pgtable() to do the
-following:
+checkpatch w/codespell didn't catch this one =\
 
-1.  Remove aliasing mappings
-2.  Remove the PRESENT bit from the PTEs of all transitioning pages
-3.  Flush the TLB globally
-4.  Flush the data cache if needed
-5.  Set/clear the encryption attribute as appropriate
-6.  Notify the hypervisor of the page status change
-7.  Add back the PRESENT bit
+> 
+>> always allocate a new page and don't touch its refcount, so that it gets
+>> freed by the core stack later.
+>> Same for the "in-place" recycling, i.e. when an unused buffer gets
+>> assigned to a first needs-refilling descriptor. In some cases, this
+>> was leading to moving up to 63 &iavf_rx_buf structures around the ring
+>> on a per-field basis -- not something wanted on hotpath.
+>> The change allows to greatly simplify certain parts of the code:
 
-With this approach, load_unaligned_zeropad() just takes its normal
-page-fault-based fixup path if it touches a page that is transitioning.
-As a result, load_unaligned_zeropad() and CoCo VM page transitioning
-are completely decoupled.  CoCo VM page transitions can proceed
-without needing to handle architecture-specific exceptions and fix
-things up. This decoupling reduces the complexity due to separate
-TDX and SEV-SNP fixup paths, and gives more freedom to revise and
-introduce new capabilities in future versions of the TDX and SEV-SNP
-architectures. Paravisor scenarios work properly without needing
-to forward exceptions.
+[...]
 
-This approach may make __set_memory_enc_pgtable() slightly slower
-because of touching the PTEs three times instead of just once. But
-the run time of this function is already dominated by the hypercall
-and the need to flush the TLB at least once and maybe twice. In any
-case, this function is only used for CoCo VM page transitions, and
-is already unsuitable for hot paths.
+>> @@ -1317,21 +1200,10 @@ static void iavf_put_rx_buffer(struct iavf_ring *rx_ring,
+>>         if (!rx_buffer)
+>>                 return;
+>>
+>> -       if (iavf_can_reuse_rx_page(rx_buffer)) {
+>> -               /* hand second half of page back to the ring */
+>> -               iavf_reuse_rx_page(rx_ring, rx_buffer);
+>> -               rx_ring->rx_stats.page_reuse_count++;
+>> -       } else {
+>> -               /* we are not reusing the buffer so unmap it */
+>> -               dma_unmap_page_attrs(rx_ring->dev, rx_buffer->dma,
+>> -                                    iavf_rx_pg_size(rx_ring),
+>> -                                    DMA_FROM_DEVICE, IAVF_RX_DMA_ATTR);
+>> -               __page_frag_cache_drain(rx_buffer->page,
+>> -                                       rx_buffer->pagecnt_bias);
+>> -       }
+>> -
+>> -       /* clear contents of buffer_info */
+>> -       rx_buffer->page = NULL;
+>> +       /* we are not reusing the buffer so unmap it */
+>> +       dma_unmap_page_attrs(rx_ring->dev, rx_buffer->dma,
+>> +                            iavf_rx_pg_size(rx_ring),
+>> +                            DMA_FROM_DEVICE, IAVF_RX_DMA_ATTR);
+> 
+> Rather than reorder all this I would just do the dma_unmap_page_attrs
+> and then leave the assignment of NULL to rx_buffer->page. It should
+> make this a bit easier to clean up the code below.
+> 
+>>  }
+>>
+>>  /**
+>> @@ -1431,15 +1303,18 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
+>>                 else
+>>                         skb = iavf_build_skb(rx_ring, rx_buffer, size);
+>>
+>> +               iavf_put_rx_buffer(rx_ring, rx_buffer);
+>> +
+> 
+> This should stay below where it was.
 
-The architecture specific callback function for notifying the
-hypervisor typically must translate guest kernel virtual addresses
-into guest physical addresses to pass to the hypervisor.  Because
-the PTEs are invalid at the time of callback, the code for doing the
-translation needs updating.  virt_to_phys() or equivalent continues
-to work for direct map addresses.  But vmalloc addresses cannot use
-vmalloc_to_page() because that function requires the leaf PTE to be
-valid. Instead, slow_virt_to_phys() must be used. Both functions
-manually walk the page table hierarchy, so performance is the same.
+Wait-wait-wait.
 
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
----
+if (!skb) break breaks the loop. put_rx_buffer() unmaps the page.
+So in order to do the first, you need to do the second to avoid leaks.
+Or you meant "why unmapping and freeing if we fail, just leave it in
+place"? To make it easier to switch to Page Pool.
 
-I'm assuming the TDX handling of the data cache flushing is the
-same with this new approach, and that it doesn't need to be paired
-with a TLB flush as in the current code.  If that's not a correct
-assumption, let me know.
+> 
+>>                 /* exit if we failed to retrieve a buffer */
+>>                 if (!skb) {
+>>                         rx_ring->rx_stats.alloc_buff_failed++;
+>> -                       if (rx_buffer && size)
+>> -                               rx_buffer->pagecnt_bias++;
+>> +                       __free_pages(rx_buffer->page,
+>> +                                    iavf_rx_pg_order(rx_ring));
+>> +                       rx_buffer->page = NULL;
+>>                         break;
+>>                 }
+> 
+> This code was undoing the iavf_get_rx_buffer decrement of pagecnt_bias
+> and then bailing since we have halted forward progress due to an skb
+> allocation failure. As such we should just be removing the if
+> statement and the increment of pagecnt_bias.
+> 
+>>
+>> -               iavf_put_rx_buffer(rx_ring, rx_buffer);
+>> +               rx_buffer->page = NULL;
+>>                 cleaned_count++;
+>>
+>>                 if (iavf_is_non_eop(rx_ring, rx_desc, skb))
+> 
+> If iavf_put_rx_buffer just does the unmap and assignment of NULL then
+> it could just be left here as is.
 
-I've left the two hypervisor callbacks, before and after Step 5
-above. If the PTEs are invalid, it seems like the order of Step 5
-and Step 6 shouldn't matter, so perhaps one of the callback could
-be dropped.  Let me know if there are reasons to do otherwise.
+I guess those two are tied with the one above.
 
-It may well be possible to optimize the new implementation of
-__set_memory_enc_pgtable(). The existing set_memory_np() and
-set_memory_p() functions do all the right things in a very clear
-fashion, but perhaps not as optimally as having all three PTE
-manipulations directly in the same function. It doesn't appear
-that optimizing the performance really matters here, but I'm open
-to suggestions.
+[...]
 
-I've tested this on TDX VMs and SEV-SNP + vTOM VMs.  I can also
-test on SEV-SNP VMs without vTOM. But I'll probably need help
-covering SEV and SEV-ES VMs.
-
-This RFC patch does *not* remove code that would no longer be
-needed. If there's agreement to take this new approach, I'll
-add patches to remove the unneeded code.
-
-This patch is built against linux-next20230704.
-
- arch/x86/hyperv/ivm.c        |  3 ++-
- arch/x86/kernel/sev.c        |  2 +-
- arch/x86/mm/pat/set_memory.c | 32 ++++++++++++--------------------
- 3 files changed, 15 insertions(+), 22 deletions(-)
-
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index 28be6df..2859ec3 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -308,7 +308,8 @@ static bool hv_vtom_set_host_visibility(unsigned long kbuffer, int pagecount, bo
- 		return false;
- 
- 	for (i = 0, pfn = 0; i < pagecount; i++) {
--		pfn_array[pfn] = virt_to_hvpfn((void *)kbuffer + i * HV_HYP_PAGE_SIZE);
-+		pfn_array[pfn] = slow_virt_to_phys((void *)kbuffer +
-+					i * HV_HYP_PAGE_SIZE) >> HV_HYP_PAGE_SHIFT;
- 		pfn++;
- 
- 		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 1ee7bed..59db55e 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -784,7 +784,7 @@ static unsigned long __set_pages_state(struct snp_psc_desc *data, unsigned long
- 		hdr->end_entry = i;
- 
- 		if (is_vmalloc_addr((void *)vaddr)) {
--			pfn = vmalloc_to_pfn((void *)vaddr);
-+			pfn = slow_virt_to_phys((void *)vaddr) >> PAGE_SHIFT;
- 			use_large_entry = false;
- 		} else {
- 			pfn = __pa(vaddr) >> PAGE_SHIFT;
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index bda9f12..8a194c7 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2136,6 +2136,11 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
- 	if (WARN_ONCE(addr & ~PAGE_MASK, "misaligned address: %#lx\n", addr))
- 		addr &= PAGE_MASK;
- 
-+	/* set_memory_np() removes aliasing mappings and flushes the TLB */
-+	ret = set_memory_np(addr, numpages);
-+	if (ret)
-+		return ret;
-+
- 	memset(&cpa, 0, sizeof(cpa));
- 	cpa.vaddr = &addr;
- 	cpa.numpages = numpages;
-@@ -2143,36 +2148,23 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
- 	cpa.mask_clr = enc ? pgprot_decrypted(empty) : pgprot_encrypted(empty);
- 	cpa.pgd = init_mm.pgd;
- 
--	/* Must avoid aliasing mappings in the highmem code */
--	kmap_flush_unused();
--	vm_unmap_aliases();
--
- 	/* Flush the caches as needed before changing the encryption attribute. */
--	if (x86_platform.guest.enc_tlb_flush_required(enc))
--		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
-+	if (x86_platform.guest.enc_cache_flush_required())
-+		cpa_flush(&cpa, 1);
- 
- 	/* Notify hypervisor that we are about to set/clr encryption attribute. */
- 	if (!x86_platform.guest.enc_status_change_prepare(addr, numpages, enc))
- 		return -EIO;
- 
- 	ret = __change_page_attr_set_clr(&cpa, 1);
--
--	/*
--	 * After changing the encryption attribute, we need to flush TLBs again
--	 * in case any speculative TLB caching occurred (but no need to flush
--	 * caches again).  We could just use cpa_flush_all(), but in case TLB
--	 * flushing gets optimized in the cpa_flush() path use the same logic
--	 * as above.
--	 */
--	cpa_flush(&cpa, 0);
-+	if (ret)
-+		return ret;
- 
- 	/* Notify hypervisor that we have successfully set/clr encryption attribute. */
--	if (!ret) {
--		if (!x86_platform.guest.enc_status_change_finish(addr, numpages, enc))
--			ret = -EIO;
--	}
-+	if (!x86_platform.guest.enc_status_change_finish(addr, numpages, enc))
-+		return -EIO;
- 
--	return ret;
-+	return set_memory_p(&addr, numpages);
- }
- 
- static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
--- 
-1.8.3.1
-
+Thanks,
+Olek
