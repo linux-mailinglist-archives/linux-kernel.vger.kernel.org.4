@@ -2,197 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE0D7495FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92380749607
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbjGFHAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S233511AbjGFHHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 03:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjGFG77 (ORCPT
+        with ESMTP id S233558AbjGFHHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:59:59 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB0D171A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:59:57 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so354227e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688626796; x=1691218796;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ekCygdP574MvHjOEcOXc7gCddg3fyvdxIoCepPcTFCQ=;
-        b=giQdojI1VDIYHQKpiPkPYNZPgbveNNf5P9cKjKO3yo4PktUIwPs5/nySuYYV7lqkeL
-         5A4ELiPNYIuY/z6vW9ihSmwxniYQ9qphy9TOALeAmDxe8AtjXHZwmhnAoJfrVSCgqd9d
-         9HSkPSUdNvWugDG/EqJpsigc7QUgS6XAewvnsuf+WqxAr+adB8J3QSPl0LzytcH0k5TR
-         fYvSMaMxKb+7LVjCrcKxPBy04zlviMztD4PnmBs5firNH+o6u8bKiW7e4l+tzt7Oh0V5
-         R7NyO2S879cNjJJ2CMe1RexDpHj9hpTt9Au8tbVXwWqXZaoErLEKcNFsXJMSa13Dx20Q
-         yyyg==
+        Thu, 6 Jul 2023 03:07:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220EC1989
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688627195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=POrI2HrupnKR3vfjjFVb4RJeA3XrZk3xd7QFOuOo4BE=;
+        b=elQIAT3COjA7bpRtQJTHHOyBzOsmN8rZRzWDx7i/yF4e27AxkCVpW70Ux/jXPWfjgM4P3h
+        v1HsPY16aAYyukpFd5UP/lTX7VHeTrSmd+nRoEgKAs/fpZk0SnfkjamumJpMx2zDiVptBu
+        UlyeCGDbmV0GJvrBA+/QecIMBNKvdfw=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-668-ewV86vy4MXiFLYxCB_sWCQ-1; Thu, 06 Jul 2023 03:06:34 -0400
+X-MC-Unique: ewV86vy4MXiFLYxCB_sWCQ-1
+Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-c5cea5773e8so523313276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:06:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688626796; x=1691218796;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ekCygdP574MvHjOEcOXc7gCddg3fyvdxIoCepPcTFCQ=;
-        b=gNUET6Otxypw8IqtFtg9bR6Q14Tdf+5/lLBLmgHKKpxLNlQwrsBZ/uN/nt1cV7Tlia
-         LeNpHvn2xdD4kRgfn9RIE5xSEQH8U5xElbeqCkCXXhDCD0BBkSSqiYNbANrXqJP79OIf
-         0doeJmlrNjVFlSX2UucJ12QrlUj/KZJu4U306Z0omUcMT2NvMOvLJuErHWChF+jKy3cG
-         KQqKTAoqwg1sXA8YxK+58CTXkCebncJBJ7JucqwJx1EVRrYxjqkSqaVOQDE1AB3HIsYF
-         aXGC3CPZ86V6/zkxbOFP9iUjWw610qIPVqP144gNsCPcYr6OjPPGJlWdfohwT5N9tWXX
-         5haA==
-X-Gm-Message-State: ABy/qLZqSqWNS8QiNHl5IWNDEh6eNcZbRj0EJgvj3uFGIm0qWQWCJBme
-        iRT9y7JlkkvHd0MVF74nzC2h3w==
-X-Google-Smtp-Source: APBJJlEsz6Fhpg12b102ApIe1RIyCXh4cNJ1O9HJo8CHhGB8sIkBqYMirtS3Gcv3aAz1DsYthrYKkw==
-X-Received: by 2002:a05:6512:3703:b0:4f8:7697:5207 with SMTP id z3-20020a056512370300b004f876975207mr641642lfr.23.1688626795843;
-        Wed, 05 Jul 2023 23:59:55 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:15d1:2748:ead4:bdff? ([2a01:e0a:982:cbb0:15d1:2748:ead4:bdff])
-        by smtp.gmail.com with ESMTPSA id f12-20020a7bcd0c000000b003fbd9e390e1sm4147027wmj.47.2023.07.05.23.59.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 23:59:55 -0700 (PDT)
-Message-ID: <60927fc6-2819-a01a-6ea8-f1af301b1bad@linaro.org>
-Date:   Thu, 6 Jul 2023 08:59:54 +0200
+        d=1e100.net; s=20221208; t=1688627194; x=1691219194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=POrI2HrupnKR3vfjjFVb4RJeA3XrZk3xd7QFOuOo4BE=;
+        b=Wk5kFfU6DMZAkmH6wpBwUozZnR3CWI3D9Zu0nQYLHQyj1dLok4xQowNTS4yuEB0OrS
+         LTu5d7zUymDGxQ+xI+CyzUxToipDMpiFmVaSGRsUQsZG+an45NRm0meIMrfYP0i1pv7O
+         VZAzdc4ImeRwMamzq4K2DfoySgzs1R9Tpp2HAV7YX60dpvyzaGL7Jk/oZLkGYoWk2UM3
+         iirb6AZwo21/Q9TiaAwLYiM30dtjc0wnxDVypdDxNeJozrlRLK63jZcNaFBYlKsIm9bE
+         vniie+CpuYcwsvtNymcZf+CowL8LJcRqN24ye+x/gOz2tWlmfI0cjkoSKKrJLWa3BZ4b
+         VTdw==
+X-Gm-Message-State: ABy/qLbSWHbuDqZeXKhWphGs5WVx1F8gnqmSbFBIVDVPbTWmPDLgjUdG
+        Q6yYWsVM78y4Z7prWQmU37MUxtbCMWkyr43dTwxEV2qoLMGd+fXMDwN47MdzVfvhNZlbt+F9Kxn
+        NCon/6OB3NiFaN2XMHmJTkImIaWlaZU1U4tE4NuvS
+X-Received: by 2002:a25:b944:0:b0:c4d:96a2:5d96 with SMTP id s4-20020a25b944000000b00c4d96a25d96mr2165151ybm.34.1688627193146;
+        Thu, 06 Jul 2023 00:06:33 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHx7qsljWMwc5b+pAqOOzRL+zpISDZYM3lQSEoxYQUnDdgCGQcufSPdW0EttuPM5MBdQ9P2dGHiqiplFW64hl8=
+X-Received: by 2002:a25:b944:0:b0:c4d:96a2:5d96 with SMTP id
+ s4-20020a25b944000000b00c4d96a25d96mr2165135ybm.34.1688627192836; Thu, 06 Jul
+ 2023 00:06:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/7] tty: serial: meson: redesign the module to
- platform_driver
-Content-Language: en-US
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jbrunet@baylibre.com, jirislaby@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     kelvin.zhang@amlogic.com, xianwei.zhao@amlogic.com,
-        kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230705181833.16137-1-ddrokosov@sberdevices.ru>
- <20230705181833.16137-3-ddrokosov@sberdevices.ru>
-Organization: Linaro Developer Services
-In-Reply-To: <20230705181833.16137-3-ddrokosov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230703142218.362549-1-eperezma@redhat.com> <20230703105022-mutt-send-email-mst@kernel.org>
+ <CAJaqyWf2F_yBLBjj1RiPeJ92_zfq8BSMz8Pak2Vg6QinN8jS1Q@mail.gmail.com>
+ <20230704063646-mutt-send-email-mst@kernel.org> <CAJaqyWfdPpkD5pY4tfzQdOscLBcrDBhBqzWjMbY_ZKsoyiqGdA@mail.gmail.com>
+ <20230704114159-mutt-send-email-mst@kernel.org> <CACGkMEtWjOMtsbgQ2sx=e1BkuRSyDmVfXDccCm-QSiSbacQyCA@mail.gmail.com>
+ <20230705043940-mutt-send-email-mst@kernel.org> <CACGkMEufNZGvWMN9Shh6NPOZOe-vf0RomfS1DX6DtxJjvO7fNA@mail.gmail.com>
+In-Reply-To: <CACGkMEufNZGvWMN9Shh6NPOZOe-vf0RomfS1DX6DtxJjvO7fNA@mail.gmail.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 6 Jul 2023 09:05:56 +0200
+Message-ID: <CAJaqyWcqNkzJXxsoz_Lk_X0CvNW24Ay2Ki6q02EB8iR=qpwsfg@mail.gmail.com>
+Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does not
+ support it
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 20:18, Dmitry Rokosov wrote:
-> Actually, the meson_uart module is already a platform_driver, but it is
-> currently registered manually and the uart core registration is run
-> outside the probe() scope, which results in some restrictions. For
-> instance, it is not possible to communicate with the OF subsystem
-> because it requires an initialized device object.
-> 
-> To address this issue, apply module_platform_driver() instead of direct
-> module init/exit routines. Additionally, move uart_register_driver() to
-> the driver probe(), and destroy manual console registration because it's
-> already run in the uart_register_driver() flow.
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->   drivers/tty/serial/meson_uart.c | 51 ++++++++++-----------------------
->   1 file changed, 15 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index bca54f3d92a1..dcf994a11a21 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -621,12 +621,6 @@ static struct console meson_serial_console = {
->   	.data		= &meson_uart_driver,
->   };
->   
-> -static int __init meson_serial_console_init(void)
-> -{
-> -	register_console(&meson_serial_console);
-> -	return 0;
-> -}
-> -
->   static void meson_serial_early_console_write(struct console *co,
->   					     const char *s,
->   					     u_int count)
-> @@ -652,9 +646,6 @@ OF_EARLYCON_DECLARE(meson, "amlogic,meson-ao-uart",
->   
->   #define MESON_SERIAL_CONSOLE	(&meson_serial_console)
->   #else
-> -static int __init meson_serial_console_init(void) {
-> -	return 0;
-> -}
->   #define MESON_SERIAL_CONSOLE	NULL
->   #endif
->   
-> @@ -738,6 +729,13 @@ static int meson_uart_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> +	if (!meson_uart_driver.state) {
-> +		ret = uart_register_driver(&meson_uart_driver);
-> +		if (ret)
-> +			return dev_err_probe(&pdev->dev, ret,
-> +					     "can't register uart driver\n");
-> +	}
-> +
->   	port->iotype = UPIO_MEM;
->   	port->mapbase = res_mem->start;
->   	port->mapsize = resource_size(res_mem);
-> @@ -776,6 +774,13 @@ static int meson_uart_remove(struct platform_device *pdev)
->   	uart_remove_one_port(&meson_uart_driver, port);
->   	meson_ports[pdev->id] = NULL;
->   
-> +	for (int id = 0; id < AML_UART_PORT_NUM; id++)
-> +		if (meson_ports[id])
-> +			return 0;
-> +
-> +	/* No more available uart ports, unregister uart driver */
-> +	uart_unregister_driver(&meson_uart_driver);
-> +
->   	return 0;
->   }
->   
-> @@ -809,33 +814,7 @@ static  struct platform_driver meson_uart_platform_driver = {
->   	},
->   };
->   
-> -static int __init meson_uart_init(void)
-> -{
-> -	int ret;
-> -
-> -	ret = meson_serial_console_init();
-> -	if (ret)
-> -		return ret;
-> -	
-> -	ret = uart_register_driver(&meson_uart_driver);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = platform_driver_register(&meson_uart_platform_driver);
-> -	if (ret)
-> -		uart_unregister_driver(&meson_uart_driver);
-> -
-> -	return ret;
-> -}
-> -
-> -static void __exit meson_uart_exit(void)
-> -{
-> -	platform_driver_unregister(&meson_uart_platform_driver);
-> -	uart_unregister_driver(&meson_uart_driver);
-> -}
-> -
-> -module_init(meson_uart_init);
-> -module_exit(meson_uart_exit);
-> +module_platform_driver(meson_uart_platform_driver);
->   
->   MODULE_AUTHOR("Carlo Caione <carlo@caione.org>");
->   MODULE_DESCRIPTION("Amlogic Meson serial port driver");
+On Thu, Jul 6, 2023 at 3:55=E2=80=AFAM Jason Wang <jasowang@redhat.com> wro=
+te:
+>
+> On Wed, Jul 5, 2023 at 4:41=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com=
+> wrote:
+> >
+> > On Wed, Jul 05, 2023 at 03:49:58PM +0800, Jason Wang wrote:
+> > > On Tue, Jul 4, 2023 at 11:45=E2=80=AFPM Michael S. Tsirkin <mst@redha=
+t.com> wrote:
+> > > >
+> > > > On Tue, Jul 04, 2023 at 01:36:11PM +0200, Eugenio Perez Martin wrot=
+e:
+> > > > > On Tue, Jul 4, 2023 at 12:38=E2=80=AFPM Michael S. Tsirkin <mst@r=
+edhat.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jul 04, 2023 at 12:25:32PM +0200, Eugenio Perez Martin =
+wrote:
+> > > > > > > On Mon, Jul 3, 2023 at 4:52=E2=80=AFPM Michael S. Tsirkin <ms=
+t@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio P=C3=A9re=
+z wrote:
+> > > > > > > > > With the current code it is accepted as long as userland =
+send it.
+> > > > > > > > >
+> > > > > > > > > Although userland should not set a feature flag that has =
+not been
+> > > > > > > > > offered to it with VHOST_GET_BACKEND_FEATURES, the curren=
+t code will not
+> > > > > > > > > complain for it.
+> > > > > > > > >
+> > > > > > > > > Since there is no specific reason for any parent to rejec=
+t that backend
+> > > > > > > > > feature bit when it has been proposed, let's control it a=
+t vdpa frontend
+> > > > > > > > > level. Future patches may move this control to the parent=
+ driver.
+> > > > > > > > >
+> > > > > > > > > Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_ENABLE=
+_AFTER_DRIVER_OK backend feature")
+> > > > > > > > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > > > > > > >
+> > > > > > > > Please do send v3. And again, I don't want to send "after d=
+river ok" hack
+> > > > > > > > upstream at all, I merged it in next just to give it some t=
+esting.
+> > > > > > > > We want RING_ACCESS_AFTER_KICK or some such.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Current devices do not support that semantic.
+> > > > > >
+> > > > > > Which devices specifically access the ring after DRIVER_OK but =
+before
+> > > > > > a kick?
+> > > > > >
+> > > > >
+> > > > > Previous versions of the QEMU LM series did a spurious kick to st=
+art
+> > > > > traffic at the LM destination [1]. When it was proposed, that spu=
+rious
+> > > > > kick was removed from the series because to check for descriptors
+> > > > > after driver_ok, even without a kick, was considered work of the
+> > > > > parent driver.
+> > > > >
+> > > > > I'm ok to go back to this spurious kick, but I'm not sure if the =
+hw
+> > > > > will read the ring before the kick actually. I can ask.
+> > > > >
+> > > > > Thanks!
+> > > > >
+> > > > > [1] https://lists.nongnu.org/archive/html/qemu-devel/2023-01/msg0=
+2775.html
+> > > >
+> > > > Let's find out. We need to check for ENABLE_AFTER_DRIVER_OK too, no=
+?
+> > >
+> > > My understanding is [1] assuming ACCESS_AFTER_KICK. This seems
+> > > sub-optimal than assuming ENABLE_AFTER_DRIVER_OK.
+> > >
+> > > But this reminds me one thing, as the thread is going too long, I
+> > > wonder if we simply assume ENABLE_AFTER_DRIVER_OK if RING_RESET is
+> > > supported?
+> > >
+> > > Thanks
+> >
+> > I don't see what does one have to do with another ...
+> >
+> > I think with RING_RESET we had another solution, enable rings
+> > mapping them to a zero page, then reset and re-enable later.
+>
+> As discussed before, this seems to have some problems:
+>
+> 1) The behaviour is not clarified in the document
+> 2) zero is a valid IOVA
+>
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+I think we're not on the same page here.
+
+As I understood, rings mapped to a zero page means essentially an
+avail ring whose avail_idx is always 0, offered to the device instead
+of the guest's ring. Once all CVQ commands are processed, we use
+RING_RESET to switch to the right ring, being guest's or SVQ vring.
+
+
+
+> Thanks
+>
+> >
+> > > >
+> > > >
+> > > >
+> > > > > > > My plan was to convert
+> > > > > > > it in vp_vdpa if needed, and reuse the current vdpa ops. Sorr=
+y if I
+> > > > > > > was not explicit enough.
+> > > > > > >
+> > > > > > > The only solution I can see to that is to trap & emulate in t=
+he vdpa
+> > > > > > > (parent?) driver, as talked in virtio-comment. But that compl=
+icates
+> > > > > > > the architecture:
+> > > > > > > * Offer VHOST_BACKEND_F_RING_ACCESS_AFTER_KICK
+> > > > > > > * Store vq enable state separately, at
+> > > > > > > vdpa->config->set_vq_ready(true), but not transmit that enabl=
+e to hw
+> > > > > > > * Store the doorbell state separately, but do not configure i=
+t to the
+> > > > > > > device directly.
+> > > > > > >
+> > > > > > > But how to recover if the device cannot configure them at kic=
+k time,
+> > > > > > > for example?
+> > > > > > >
+> > > > > > > Maybe we can just fail if the parent driver does not support =
+enabling
+> > > > > > > the vq after DRIVER_OK? That way no new feature flag is neede=
+d.
+> > > > > > >
+> > > > > > > Thanks!
+> > > > > > >
+> > > > > > > >
+> > > > > > > > > ---
+> > > > > > > > > Sent with Fixes: tag pointing to git.kernel.org/pub/scm/l=
+inux/kernel/git/mst
+> > > > > > > > > commit. Please let me know if I should send a v3 of [1] i=
+nstead.
+> > > > > > > > >
+> > > > > > > > > [1] https://lore.kernel.org/lkml/20230609121244-mutt-send=
+-email-mst@kernel.org/T/
+> > > > > > > > > ---
+> > > > > > > > >  drivers/vhost/vdpa.c | 7 +++++--
+> > > > > > > > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > > > > > > > > index e1abf29fed5b..a7e554352351 100644
+> > > > > > > > > --- a/drivers/vhost/vdpa.c
+> > > > > > > > > +++ b/drivers/vhost/vdpa.c
+> > > > > > > > > @@ -681,18 +681,21 @@ static long vhost_vdpa_unlocked_ioc=
+tl(struct file *filep,
+> > > > > > > > >  {
+> > > > > > > > >       struct vhost_vdpa *v =3D filep->private_data;
+> > > > > > > > >       struct vhost_dev *d =3D &v->vdev;
+> > > > > > > > > +     const struct vdpa_config_ops *ops =3D v->vdpa->conf=
+ig;
+> > > > > > > > >       void __user *argp =3D (void __user *)arg;
+> > > > > > > > >       u64 __user *featurep =3D argp;
+> > > > > > > > > -     u64 features;
+> > > > > > > > > +     u64 features, parent_features =3D 0;
+> > > > > > > > >       long r =3D 0;
+> > > > > > > > >
+> > > > > > > > >       if (cmd =3D=3D VHOST_SET_BACKEND_FEATURES) {
+> > > > > > > > >               if (copy_from_user(&features, featurep, siz=
+eof(features)))
+> > > > > > > > >                       return -EFAULT;
+> > > > > > > > > +             if (ops->get_backend_features)
+> > > > > > > > > +                     parent_features =3D ops->get_backen=
+d_features(v->vdpa);
+> > > > > > > > >               if (features & ~(VHOST_VDPA_BACKEND_FEATURE=
+S |
+> > > > > > > > >                                BIT_ULL(VHOST_BACKEND_F_SU=
+SPEND) |
+> > > > > > > > >                                BIT_ULL(VHOST_BACKEND_F_RE=
+SUME) |
+> > > > > > > > > -                              BIT_ULL(VHOST_BACKEND_F_EN=
+ABLE_AFTER_DRIVER_OK)))
+> > > > > > > > > +                              parent_features))
+> > > > > > > > >                       return -EOPNOTSUPP;
+> > > > > > > > >               if ((features & BIT_ULL(VHOST_BACKEND_F_SUS=
+PEND)) &&
+> > > > > > > > >                    !vhost_vdpa_can_suspend(v))
+> > > > > > > > > --
+> > > > > > > > > 2.39.3
+> > > > > > > >
+> > > > > >
+> > > >
+> >
+>
+
