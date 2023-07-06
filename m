@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C80749E13
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CEB749C68
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjGFNn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S232408AbjGFMsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjGFNnz (ORCPT
+        with ESMTP id S232493AbjGFMsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:43:55 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 370C91FCA;
-        Thu,  6 Jul 2023 06:43:47 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qHPGr-0001Tf-00; Thu, 06 Jul 2023 15:43:45 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1E314C01CC; Thu,  6 Jul 2023 14:47:58 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 14:47:58 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: dts: add missing space before {
-Message-ID: <ZKa3/r1GtOW36aoW@alpha.franken.de>
-References: <20230705145724.292793-1-krzysztof.kozlowski@linaro.org>
+        Thu, 6 Jul 2023 08:48:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C871FDB;
+        Thu,  6 Jul 2023 05:48:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 150B1228BE;
+        Thu,  6 Jul 2023 12:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688647682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gRXye/rxgx5yXx+4yaqVLpPLLCHYMJGCFB4srDdTvrs=;
+        b=HXYJ/++T9nVftJLw686zBdTp0YcyK0ZaRFe/2Xxm0wzQL/fp9KguiyhCNN7DBor7IsCLAS
+        hD4ctzB4Pz2fvwPnnGy6mlXg+7chpKrRw7QOQD36xXsc3gckcMccpGVTQ3P5YvO4XE2aSw
+        GLjtsJYxF10ha9wbTTNMpd7hCWV2+ZY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688647682;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gRXye/rxgx5yXx+4yaqVLpPLLCHYMJGCFB4srDdTvrs=;
+        b=mH3XoeJCtzX3hkFYlQJGOO8bI2u0KB2in0z2GPcmkdyNbzdafC/huFHu0vnDvQW6he2Quw
+        pCGP4mx09bJlF8AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0782C138FC;
+        Thu,  6 Jul 2023 12:48:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n+nJAQK4pmQcQgAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 12:48:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id AB698A0707; Thu,  6 Jul 2023 14:48:01 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 14:48:01 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH v2 50/92] hostfs: convert to ctime accessor functions
+Message-ID: <20230706124801.exu6lh2d6dwt4dfj@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-48-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705145724.292793-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230705190309.579783-48-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 04:57:24PM +0200, Krzysztof Kozlowski wrote:
-> Add missing whitespace between node name/label and opening {.
+On Wed 05-07-23 15:01:15, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+
+Looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  arch/mips/boot/dts/mscc/serval_common.dtsi | 2 +-
->  arch/mips/boot/dts/pic32/pic32mzda.dtsi    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  fs/hostfs/hostfs_kern.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/arch/mips/boot/dts/mscc/serval_common.dtsi b/arch/mips/boot/dts/mscc/serval_common.dtsi
-> index 0893de420e27..5dc1eac49e50 100644
-> --- a/arch/mips/boot/dts/mscc/serval_common.dtsi
-> +++ b/arch/mips/boot/dts/mscc/serval_common.dtsi
-> @@ -20,7 +20,7 @@ chosen {
->  		stdout-path = "serial0:115200n8";
->  	};
->  
-> -	i2c0_imux: i2c0-imux{
-> +	i2c0_imux: i2c0-imux {
->  		compatible = "i2c-mux-pinctrl";
->  		#address-cells = <1>;
->  		#size-cells = <0>;
-> diff --git a/arch/mips/boot/dts/pic32/pic32mzda.dtsi b/arch/mips/boot/dts/pic32/pic32mzda.dtsi
-> index f1e3dad6bead..fdc721b414a8 100644
-> --- a/arch/mips/boot/dts/pic32/pic32mzda.dtsi
-> +++ b/arch/mips/boot/dts/pic32/pic32mzda.dtsi
-> @@ -75,7 +75,7 @@ evic: interrupt-controller@1f810000 {
->  		microchip,external-irqs = <3 8 13 18 23>;
->  	};
->  
-> -	pic32_pinctrl: pinctrl@1f801400{
-> +	pic32_pinctrl: pinctrl@1f801400 {
->  		#address-cells = <1>;
->  		#size-cells = <1>;
->  		compatible = "microchip,pic32mzda-pinctrl";
+> diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+> index 46387090eb76..182af84a9c12 100644
+> --- a/fs/hostfs/hostfs_kern.c
+> +++ b/fs/hostfs/hostfs_kern.c
+> @@ -517,8 +517,7 @@ static int hostfs_inode_update(struct inode *ino, const struct hostfs_stat *st)
+>  		(struct timespec64){ st->atime.tv_sec, st->atime.tv_nsec };
+>  	ino->i_mtime =
+>  		(struct timespec64){ st->mtime.tv_sec, st->mtime.tv_nsec };
+> -	ino->i_ctime =
+> -		(struct timespec64){ st->ctime.tv_sec, st->ctime.tv_nsec };
+> +	inode_set_ctime_to_ts(ino, &st->ctime);
+>  	ino->i_size = st->size;
+>  	ino->i_blocks = st->blocks;
+>  	return 0;
 > -- 
-> 2.34.1
-
-applied to mips-next.
-
-Thomas.
-
+> 2.41.0
+> 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
