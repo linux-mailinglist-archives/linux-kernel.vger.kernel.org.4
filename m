@@ -2,207 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D959B74A4DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320B074A4EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbjGFU2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 16:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S232741AbjGFU3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 16:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjGFU2A (ORCPT
+        with ESMTP id S232620AbjGFU2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 16:28:00 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E801996;
-        Thu,  6 Jul 2023 13:27:58 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3664Woqn026436;
-        Thu, 6 Jul 2023 20:27:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=C92CpaLMBxsIu1Vqu81H7JOvCBxUCRCAB1bx/1EdNVs=;
- b=hNBQGUiEY0zAaV6AAIPaUxuVHfwYifRkh4kaHFn+9mNFFOGf55ppJUazDkir+avwf5vb
- eZY/X8ePEZVl8fooGf1VFGZXI5Nlrtd1I/eYZtBbV+AlTe+YP2diL+JlgWfOZdcq4dgd
- RPt8SFwv5m8Ls3xFvE/XWKwUTvv2qnfH0DtleRMp4dcBHUgDbb4S9Jn0C8w3RPQfHjhz
- Vnskhf4UiDs8whvrOOT3ClSAbVfpVMhVOwel2/pN3s89Qw15PDUbZBzZb1YBlxbiNQly
- Cq5BScQLv5WNET+bkA9SLS/LDU5VpVBJnJvuNh73YBDYwzqFAECpExlCrAfRUvKRHkPF gg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnfm4jgkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 20:27:48 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366KRmRI026341
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 20:27:48 GMT
-Received: from hu-rmccann-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 13:27:47 -0700
-From:   Ryan McCann <quic_rmccann@quicinc.com>
-Date:   Thu, 6 Jul 2023 13:26:52 -0700
-Subject: [PATCH v3 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub-blocks
+        Thu, 6 Jul 2023 16:28:47 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B22680
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 13:28:21 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57764a6bf8cso14565457b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 13:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688675301; x=1691267301;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s4yBoBqkuHHLErDtkRA95ZESYPLO0uJaqPBtH9i1rZ8=;
+        b=5ymwnM/O8Ja1dLTg3DB062DnzPPpFoyt0ETRRP2xJ7Fv+9QGvqvLsD8oMR3Jv+odcj
+         dXylo65QtsPONwBTRY77rZ/45p59Ycft2Hy3vL+EiipUT333yaWi50IzEtuVMcbA7mB+
+         B3W6yW9Y5YTZgtMZQSHwc+rg3uWfF1RFPcmcSGXWGCNGyNiV38pIiQMmOcS9j2y1WQJn
+         5t7l+9/flq1Towc0bgq1dKQr5R1GN3uy+5g/84Gz+H1xPs3TIxzC6FpmZCLG79WyrmiC
+         45ogGOAkSVGyp5YPwbPqbwB8fg2AMUPJKjyufVLUi56aZs1q//oGUiZru9mtYtBc46ej
+         e/yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688675301; x=1691267301;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s4yBoBqkuHHLErDtkRA95ZESYPLO0uJaqPBtH9i1rZ8=;
+        b=AVRb0vUHO4Un7qLouR0WJpLrtJFq2NP/fqp3otcaCXiUhbCbcFSMJTMb0nbVj9K9rF
+         CWvOfO/Ju+YafUgmAvo8WvIz4PG4ZoG8nL2P4ghL/jd72hokI+3rbIjJ4qoLIBtzvxfc
+         450Fy6OJgjh2QNQ1Rn91wTqvRDZpHRTfbS12A+6vAhMxM2HH0quqp/9D3br5IXKbg7bd
+         TBAHV+y7EvAZqwk0b/CzS3IgDNhcSV6isMZfEYlvC8a6qXSsAdwAx/cMkx/CmZ7wg0LL
+         IDDWemEjj86blIpY/WJgBAYFWiOYa5hjhk7n7PDqjMEN/vsmXhxetCQx8vFEO5/0LMDk
+         YNQg==
+X-Gm-Message-State: ABy/qLZxEithCRBrsuNU0bmeyQrb4Vp9H+gVbUO2y3bj5K0woCFfoRQ0
+        tfB/IJ2nv1DtpwQUJPctSxVekg==
+X-Google-Smtp-Source: APBJJlFYWTPmoomrRYBZTGe6IkWvWfcCi39lnF7K7Ssrn0V1d0QzPO/j1s5dDp99TeiVzb79QC3MTA==
+X-Received: by 2002:a0d:e6c6:0:b0:56f:f40f:9414 with SMTP id p189-20020a0de6c6000000b0056ff40f9414mr3238504ywe.38.1688675300749;
+        Thu, 06 Jul 2023 13:28:20 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id s4-20020a817704000000b0057a5302e2fesm373645ywc.5.2023.07.06.13.28.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 13:28:20 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 13:28:11 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     Hugh Dickins <hughd@google.com>, linux-m68k@lists.linux-m68k.org,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: arch/m68k/include/asm/mmu_context.h:164 load_ksp_mmu() warn:
+ unsigned 'mmuar' is never less than zero.
+In-Reply-To: <202307061849.rJKwVbXb-lkp@intel.com>
+Message-ID: <11ff8d26-8dbb-6d3a-c488-fd357098414@google.com>
+References: <202307061849.rJKwVbXb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20230622-devcoredump_patch-v3-6-83601b72eb67@quicinc.com>
-References: <20230622-devcoredump_patch-v3-0-83601b72eb67@quicinc.com>
-In-Reply-To: <20230622-devcoredump_patch-v3-0-83601b72eb67@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Rob Clark <robdclark@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jesszhan@quicinc.com>, Ryan McCann <quic_rmccann@quicinc.com>
-X-Mailer: b4 0.13-dev-8a804
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688675265; l=4752;
- i=quic_rmccann@quicinc.com; s=20230622; h=from:subject:message-id;
- bh=AT8Z1kDsBnEI1CH8VhV5WFsBJXsUk7u9tyfOM6NNPIs=;
- b=nbF8MCTVqNy7JLwkw9JQSN3crxXvoSm2XIi3IKiPXWQgUGe1MbJ+V7k9hF2NU/W6gJ/mD3Jwa
- bkLA2k2USvkBNf7fBFykZ213qPeIoRfDcZAQeSpSE/W7xO+Xw1dZ38g
-X-Developer-Key: i=quic_rmccann@quicinc.com; a=ed25519;
- pk=d/uP3OwPGpj/bTtiHvV1RBZ2S6q4AL6j1+A5y+dmbTI=
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: V3upiz-mS1qP6IWE6wQcDmT5MH74r967
-X-Proofpoint-ORIG-GUID: V3upiz-mS1qP6IWE6wQcDmT5MH74r967
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_15,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxlogscore=943 mlxscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060179
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the device core dump mechanism does not dump registers of
-sub-blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Edit
-dpu_kms_mdp_snapshot function to account for sub-blocks.
+Hi Geert,
 
-Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 66 ++++++++++++++++++++++++++++++---
- 1 file changed, 60 insertions(+), 6 deletions(-)
+On Thu, 6 Jul 2023, kernel test robot wrote:
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 70dbb1204e6c..afc45d597d65 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -903,25 +903,58 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
- 					    cat->ctl[i].base, cat->ctl[i].name);
- 
- 	/* dump DSPP sub-blocks HW regs info */
--	for (i = 0; i < cat->dspp_count; i++)
-+	for (i = 0; i < cat->dspp_count; i++) {
- 		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len, dpu_kms->mmio +
- 					    cat->dspp[i].base, cat->dspp[i].name);
- 
-+		if (cat->dspp[i].sblk && cat->dspp[i].sblk->pcc.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->dspp[i].sblk->pcc.len,
-+						    dpu_kms->mmio + cat->dspp[i].base +
-+						    cat->dspp[i].sblk->pcc.base, "%s_%s",
-+						    cat->dspp[i].name,
-+						    cat->dspp[i].sblk->pcc.name);
-+	}
-+
- 	/* dump INTF sub-blocks HW regs info */
- 	for (i = 0; i < cat->intf_count; i++)
- 		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len, dpu_kms->mmio +
- 					    cat->intf[i].base, cat->intf[i].name);
- 
- 	/* dump PP sub-blocks HW regs info */
--	for (i = 0; i < cat->pingpong_count; i++)
-+	for (i = 0; i < cat->pingpong_count; i++) {
- 		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len, dpu_kms->mmio +
- 					    cat->pingpong[i].base, cat->pingpong[i].name);
- 
-+		/* TE2 block has length of 0, so will not print it */
-+
-+		if (cat->pingpong[i].sblk && cat->pingpong[i].sblk->dither.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].sblk->dither.len,
-+						    dpu_kms->mmio + cat->pingpong[i].base +
-+						    cat->pingpong[i].sblk->dither.base, "%s_%s",
-+						    cat->pingpong[i].name,
-+						    cat->pingpong[i].sblk->dither.name);
-+	}
-+
- 	/* dump SSPP sub-blocks HW regs info */
--	for (i = 0; i < cat->sspp_count; i++)
-+	for (i = 0; i < cat->sspp_count; i++) {
- 		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len, dpu_kms->mmio +
- 					    cat->sspp[i].base, cat->sspp[i].name);
- 
-+		if (cat->sspp[i].sblk && cat->sspp[i].sblk->scaler_blk.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->sspp[i].sblk->scaler_blk.len,
-+						    dpu_kms->mmio + cat->sspp[i].base +
-+						    cat->sspp[i].sblk->scaler_blk.base, "%s_%s",
-+						    cat->sspp[i].name,
-+						    cat->sspp[i].sblk->scaler_blk.name);
-+
-+		if (cat->sspp[i].sblk && cat->sspp[i].sblk->csc_blk.len > 0)
-+			msm_disp_snapshot_add_block(disp_state, cat->sspp[i].sblk->csc_blk.len,
-+						    dpu_kms->mmio + cat->sspp[i].base +
-+						    cat->sspp[i].sblk->csc_blk.base, "%s_%s",
-+						    cat->sspp[i].name,
-+						    cat->sspp[i].sblk->csc_blk.name);
-+	}
-+
- 	/* dump LM sub-blocks HW regs info */
- 	for (i = 0; i < cat->mixer_count; i++)
- 		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len, dpu_kms->mmio +
-@@ -943,9 +976,30 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
- 	}
- 
- 	/* dump DSC sub-blocks HW regs info */
--	for (i = 0; i < cat->dsc_count; i++)
--		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len, dpu_kms->mmio +
--					    cat->dsc[i].base, cat->dsc[i].name);
-+	for (i = 0; i < cat->dsc_count; i++) {
-+		if (cat->dsc[i].features & BIT(DPU_DSC_HW_REV_1_2)) {
-+			struct dpu_dsc_blk enc = cat->dsc[i].sblk->enc;
-+			struct dpu_dsc_blk ctl = cat->dsc[i].sblk->ctl;
-+
-+			/* For now, pass in a length of 0 because the DSC_BLK register space
-+			 * overlaps with the sblks' register space.
-+			 *
-+			 * TODO: Pass in a length of 0 to DSC_BLK_1_2 in the HW catalog where
-+			 * applicable.
-+			 */
-+			msm_disp_snapshot_add_block(disp_state, 0, dpu_kms->mmio +
-+						    cat->dsc[i].base, cat->dsc[i].name);
-+			msm_disp_snapshot_add_block(disp_state, enc.len, dpu_kms->mmio +
-+						    cat->dsc[i].base + enc.base, "%s_%s",
-+						    cat->dsc[i].name, enc.name);
-+			msm_disp_snapshot_add_block(disp_state, ctl.len, dpu_kms->mmio +
-+						    cat->dsc[i].base + ctl.base, "%s_%s",
-+						    cat->dsc[i].name, ctl.name);
-+		} else {
-+			msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len, dpu_kms->mmio +
-+						    cat->dsc[i].base, cat->dsc[i].name);
-+		}
-+	}
- 
- 	pm_runtime_put_sync(&dpu_kms->pdev->dev);
- }
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   c17414a273b81fe4e34e11d69fc30cc8b1431614
+> commit: e67b37c368b7cc24b8c0fe5ab6c44422312eab37 m68k: allow pte_offset_map[_lock]() to fail
+> date:   2 weeks ago
+> config: m68k-randconfig-m031-20230706 (https://download.01.org/0day-ci/archive/20230706/202307061849.rJKwVbXb-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 12.3.0
+> reproduce: (https://download.01.org/0day-ci/archive/20230706/202307061849.rJKwVbXb-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307061849.rJKwVbXb-lkp@intel.com/
+> 
+> New smatch warnings:
+> arch/m68k/include/asm/mmu_context.h:164 load_ksp_mmu() warn: unsigned 'mmuar' is never less than zero.
+> 
+> Old smatch warnings:
+> arch/m68k/include/asm/mmu_context.h:114 load_ksp_mmu() warn: always true condition '(mmuar >= (0)) => (0-u32max >= 0)'
+> arch/m68k/include/asm/mmu_context.h:140 load_ksp_mmu() warn: always true condition '(mmuar >= (0)) => (0-u32max >= 0)'
+> 
+> vim +/mmuar +164 arch/m68k/include/asm/mmu_context.h
+> 
+>     92	
+>     93	static inline void load_ksp_mmu(struct task_struct *task)
+>     94	{
+>     95		unsigned long flags;
+>     96		struct mm_struct *mm;
+>     97		int asid;
+>     98		pgd_t *pgd;
+>     99		p4d_t *p4d;
+>    100		pud_t *pud;
+>    101		pmd_t *pmd;
+>    102		pte_t *pte = NULL;
+>    103		unsigned long mmuar;
+>    104	
+>    105		local_irq_save(flags);
+>    106		mmuar = task->thread.ksp;
+>    107	
+>    108		/* Search for a valid TLB entry, if one is found, don't remap */
+>    109		mmu_write(MMUAR, mmuar);
+>    110		mmu_write(MMUOR, MMUOR_STLB | MMUOR_ADR);
+>    111		if (mmu_read(MMUSR) & MMUSR_HIT)
+>    112			goto end;
+>    113	
+>    114		if (mmuar >= PAGE_OFFSET) {
+>    115			mm = &init_mm;
+>    116		} else {
+>    117			pr_info("load_ksp_mmu: non-kernel mm found: 0x%p\n", task->mm);
+>    118			mm = task->mm;
+>    119		}
+>    120	
+>    121		if (!mm)
+>    122			goto bug;
+>    123	
+>    124		pgd = pgd_offset(mm, mmuar);
+>    125		if (pgd_none(*pgd))
+>    126			goto bug;
+>    127	
+>    128		p4d = p4d_offset(pgd, mmuar);
+>    129		if (p4d_none(*p4d))
+>    130			goto bug;
+>    131	
+>    132		pud = pud_offset(p4d, mmuar);
+>    133		if (pud_none(*pud))
+>    134			goto bug;
+>    135	
+>    136		pmd = pmd_offset(pud, mmuar);
+>    137		if (pmd_none(*pmd))
+>    138			goto bug;
+>    139	
+>    140		pte = (mmuar >= PAGE_OFFSET) ? pte_offset_kernel(pmd, mmuar)
+>    141					     : pte_offset_map(pmd, mmuar);
+>    142		if (!pte || pte_none(*pte) || !pte_present(*pte))
+>    143			goto bug;
+>    144	
+>    145		set_pte(pte, pte_mkyoung(*pte));
+>    146		asid = mm->context & 0xff;
+>    147		if (!pte_dirty(*pte) && mmuar <= PAGE_OFFSET)
+>    148			set_pte(pte, pte_wrprotect(*pte));
+>    149	
+>    150		mmu_write(MMUTR, (mmuar & PAGE_MASK) | (asid << MMUTR_IDN) |
+>    151			(((int)(pte->pte) & (int)CF_PAGE_MMUTR_MASK)
+>    152			>> CF_PAGE_MMUTR_SHIFT) | MMUTR_V);
+>    153	
+>    154		mmu_write(MMUDR, (pte_val(*pte) & PAGE_MASK) |
+>    155			((pte->pte) & CF_PAGE_MMUDR_MASK) | MMUDR_SZ_8KB | MMUDR_X);
+>    156	
+>    157		mmu_write(MMUOR, MMUOR_ACC | MMUOR_UAA);
+>    158	
+>    159		goto end;
+>    160	
+>    161	bug:
+>    162		pr_info("ksp load failed: mm=0x%p ksp=0x08%lx\n", mm, mmuar);
+>    163	end:
+>  > 164		if (pte && mmuar < PAGE_OFFSET)
+>    165			pte_unmap(pte);
+>    166		local_irq_restore(flags);
+>    167	}
+>    168	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
--- 
-2.25.1
+I'm sorry, it appears that I've increased the number of smatch warnings on
+m68k: but since it was already complaining about "mmuar >= PAGE_OFFSET"s
+there, I'm not going to feel very guilty about my "mmuar < PAGE_OFFSET";
+and I've no idea of the significance of PAGE_OFFSET 0 on m68k.  Over to
+you - but I expect ignoring this will continue to be the right answer :)
 
+Thanks,
+Hugh
