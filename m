@@ -2,214 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5864C749CAF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A411C749CB3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjGFMvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S232129AbjGFMwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjGFMvJ (ORCPT
+        with ESMTP id S231796AbjGFMwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:51:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14411BDC;
-        Thu,  6 Jul 2023 05:50:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 805101FE6D;
-        Thu,  6 Jul 2023 12:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688647845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m0tmldPz0+dDTJ2s0T/DzEzZUGUbqrRg9hgSmSJ6FUs=;
-        b=t/K5CbfjbtMsIk0e2qX/C9kdtDTiaTsp6pSw/9TNgEllEgBlWL+vK6JKTb0yWMjD0riYgJ
-        9MaHIHPgD+UXb4bxvDDrTEqVHZ+bUxxvOYQ3+CShw6Eb5n4u1xetjmrlvR1QwhC0gCxB+l
-        vnjE0qS2eIV5HBceEmYUwqs4jY4Gkmo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688647845;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m0tmldPz0+dDTJ2s0T/DzEzZUGUbqrRg9hgSmSJ6FUs=;
-        b=+uUJJQHKLUNtq0CM9IqsZNdKDm3jMq+Vqoau3+T9Lf8zrg4rAf7woCOYryWSkhKgj0s5dP
-        ve+ojBv9a2EDUxAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A0EB138FC;
-        Thu,  6 Jul 2023 12:50:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9Wj/FaW4pmTBQwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 12:50:45 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DAF8BA0707; Thu,  6 Jul 2023 14:50:44 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 14:50:44 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 48/92] hfs: convert to ctime accessor functions
-Message-ID: <20230706125044.yuder555eqh3acjx@quack3>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-46-jlayton@kernel.org>
+        Thu, 6 Jul 2023 08:52:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755621FC3;
+        Thu,  6 Jul 2023 05:52:12 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366BqHia017619;
+        Thu, 6 Jul 2023 12:51:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=rl4qgmzdzUpkt+gryXJrNNSFG+X/Mq/aKu6DBvXjUkU=;
+ b=c/6AR+eHnXpcVS41pczBkj/SrRW6lajvEjotkhscw/JLmceKVqm8WNIFGKm5OUeC8OXC
+ BiF2qD8BmrhPW/NAjYkWQQ4O7t3P3S+2FxL7rlB/m7WJ3YncNf0Nl0oYgB/7TBDiNkN4
+ o90kLRl+FXcUKzKmRSx45F6bZB+qM2IUGqVM9hfPw1JSHeZFrywvQ8y7+mPWY3r2X19I
+ pRouJ5O5gkX5k1EexxcPOy8UqR7um34okpBuZjxbFOtZe9K9FejV0euRrSpOL+XgwLma
+ QYzJtLVsyQEjQ/TjhYgQWPOgFgHqhi67hrCNw0OA1BVKvcnMvy3TFDbdfENZt2iutFCs fg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnvaa8650-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 12:51:57 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366Cpuqs003181
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 12:51:56 GMT
+Received: from hu-kbajaj-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 05:51:53 -0700
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Komal Bajaj <quic_kbajaj@quicinc.com>
+Subject: [PATCH v3 0/2] arm64: dts: qcom: qdu1000: Update reserved memory region
+Date:   Thu, 6 Jul 2023 18:21:27 +0530
+Message-ID: <20230706125129.20969-1-quic_kbajaj@quicinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705190309.579783-46-jlayton@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3dD9ntr0FQQ61j5HwbE9lkjfG27AHCCO
+X-Proofpoint-ORIG-GUID: 3dD9ntr0FQQ61j5HwbE9lkjfG27AHCCO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_09,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=412 impostorscore=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060115
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 05-07-23 15:01:13, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Update reserved memory region for QDU1000 and QRU1000 SoCs.
 
-Looks good. Feel free to add:
+Changes in v3:
+ - Changes the node name as names should reflect the purpose of node.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Changes in v2:
+ - Changed the node name.
+ - Dropped unnecessary properties.
 
-								Honza
+Komal Bajaj (2):
+  arm64: dts: qcom: qdu1000-idp: Update reserved memory region
+  arm64: dts: qcom: qru1000-idp: Update reserved memory region
 
-> ---
->  fs/hfs/catalog.c |  8 ++++----
->  fs/hfs/dir.c     |  2 +-
->  fs/hfs/inode.c   | 13 ++++++-------
->  fs/hfs/sysdep.c  |  4 +++-
->  4 files changed, 14 insertions(+), 13 deletions(-)
-> 
-> diff --git a/fs/hfs/catalog.c b/fs/hfs/catalog.c
-> index d365bf0b8c77..632c226a3972 100644
-> --- a/fs/hfs/catalog.c
-> +++ b/fs/hfs/catalog.c
-> @@ -133,7 +133,7 @@ int hfs_cat_create(u32 cnid, struct inode *dir, const struct qstr *str, struct i
->  		goto err1;
->  
->  	dir->i_size++;
-> -	dir->i_mtime = dir->i_ctime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
->  	hfs_find_exit(&fd);
->  	return 0;
-> @@ -269,7 +269,7 @@ int hfs_cat_delete(u32 cnid, struct inode *dir, const struct qstr *str)
->  	}
->  
->  	dir->i_size--;
-> -	dir->i_mtime = dir->i_ctime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	mark_inode_dirty(dir);
->  	res = 0;
->  out:
-> @@ -337,7 +337,7 @@ int hfs_cat_move(u32 cnid, struct inode *src_dir, const struct qstr *src_name,
->  	if (err)
->  		goto out;
->  	dst_dir->i_size++;
-> -	dst_dir->i_mtime = dst_dir->i_ctime = current_time(dst_dir);
-> +	dst_dir->i_mtime = inode_set_ctime_current(dst_dir);
->  	mark_inode_dirty(dst_dir);
->  
->  	/* finally remove the old entry */
-> @@ -349,7 +349,7 @@ int hfs_cat_move(u32 cnid, struct inode *src_dir, const struct qstr *src_name,
->  	if (err)
->  		goto out;
->  	src_dir->i_size--;
-> -	src_dir->i_mtime = src_dir->i_ctime = current_time(src_dir);
-> +	src_dir->i_mtime = inode_set_ctime_current(src_dir);
->  	mark_inode_dirty(src_dir);
->  
->  	type = entry.type;
-> diff --git a/fs/hfs/dir.c b/fs/hfs/dir.c
-> index 3e1e3dcf0b48..b75c26045df4 100644
-> --- a/fs/hfs/dir.c
-> +++ b/fs/hfs/dir.c
-> @@ -263,7 +263,7 @@ static int hfs_remove(struct inode *dir, struct dentry *dentry)
->  	if (res)
->  		return res;
->  	clear_nlink(inode);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_set_ctime_current(inode);
->  	hfs_delete_inode(inode);
->  	mark_inode_dirty(inode);
->  	return 0;
-> diff --git a/fs/hfs/inode.c b/fs/hfs/inode.c
-> index 441d7fc952e3..ee349b72cfb3 100644
-> --- a/fs/hfs/inode.c
-> +++ b/fs/hfs/inode.c
-> @@ -200,7 +200,7 @@ struct inode *hfs_new_inode(struct inode *dir, const struct qstr *name, umode_t
->  	inode->i_uid = current_fsuid();
->  	inode->i_gid = current_fsgid();
->  	set_nlink(inode, 1);
-> -	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-> +	inode->i_mtime = inode->i_atime = inode_set_ctime_current(inode);
->  	HFS_I(inode)->flags = 0;
->  	HFS_I(inode)->rsrc_inode = NULL;
->  	HFS_I(inode)->fs_blocks = 0;
-> @@ -355,8 +355,8 @@ static int hfs_read_inode(struct inode *inode, void *data)
->  			inode->i_mode |= S_IWUGO;
->  		inode->i_mode &= ~hsb->s_file_umask;
->  		inode->i_mode |= S_IFREG;
-> -		inode->i_ctime = inode->i_atime = inode->i_mtime =
-> -				hfs_m_to_utime(rec->file.MdDat);
-> +		inode->i_atime = inode->i_mtime = inode_set_ctime_to_ts(inode,
-> +									hfs_m_to_utime(rec->file.MdDat));
->  		inode->i_op = &hfs_file_inode_operations;
->  		inode->i_fop = &hfs_file_operations;
->  		inode->i_mapping->a_ops = &hfs_aops;
-> @@ -366,8 +366,8 @@ static int hfs_read_inode(struct inode *inode, void *data)
->  		inode->i_size = be16_to_cpu(rec->dir.Val) + 2;
->  		HFS_I(inode)->fs_blocks = 0;
->  		inode->i_mode = S_IFDIR | (S_IRWXUGO & ~hsb->s_dir_umask);
-> -		inode->i_ctime = inode->i_atime = inode->i_mtime =
-> -				hfs_m_to_utime(rec->dir.MdDat);
-> +		inode->i_atime = inode->i_mtime = inode_set_ctime_to_ts(inode,
-> +									hfs_m_to_utime(rec->dir.MdDat));
->  		inode->i_op = &hfs_dir_inode_operations;
->  		inode->i_fop = &hfs_dir_operations;
->  		break;
-> @@ -654,8 +654,7 @@ int hfs_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->  
->  		truncate_setsize(inode, attr->ia_size);
->  		hfs_file_truncate(inode);
-> -		inode->i_atime = inode->i_mtime = inode->i_ctime =
-> -						  current_time(inode);
-> +		inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
->  	}
->  
->  	setattr_copy(&nop_mnt_idmap, inode, attr);
-> diff --git a/fs/hfs/sysdep.c b/fs/hfs/sysdep.c
-> index 2875961fdc10..dc27d418fbcd 100644
-> --- a/fs/hfs/sysdep.c
-> +++ b/fs/hfs/sysdep.c
-> @@ -28,7 +28,9 @@ static int hfs_revalidate_dentry(struct dentry *dentry, unsigned int flags)
->  	/* fix up inode on a timezone change */
->  	diff = sys_tz.tz_minuteswest * 60 - HFS_I(inode)->tz_secondswest;
->  	if (diff) {
-> -		inode->i_ctime.tv_sec += diff;
-> +		struct timespec64 ctime = inode_get_ctime(inode);
-> +
-> +		inode_set_ctime(inode, ctime.tv_sec + diff, ctime.tv_nsec);
->  		inode->i_atime.tv_sec += diff;
->  		inode->i_mtime.tv_sec += diff;
->  		HFS_I(inode)->tz_secondswest += diff;
-> -- 
-> 2.41.0
-> 
+ arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 22 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qru1000-idp.dts | 12 ++++++++++++
+ 2 files changed, 34 insertions(+)
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.40.1
+
