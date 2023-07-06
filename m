@@ -2,219 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEDB74989C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA8F7498AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 11:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjGFJgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 05:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        id S231675AbjGFJkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 05:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjGFJgk (ORCPT
+        with ESMTP id S229587AbjGFJkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:36:40 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D639171D;
-        Thu,  6 Jul 2023 02:36:39 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-56352146799so307102eaf.3;
-        Thu, 06 Jul 2023 02:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688636198; x=1691228198;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0TR7CywRQO+aq8xLN85+i2ij1DCchNy9h8cDmr7LMVY=;
-        b=n958nsaYsRJ0cV+cDdTPfS/mR4DvFnNL2P6duh7QjfojO67n8rowyY9+n+M3k+MlwT
-         M+n8HlwVBM+aRezimBkj8akqMv+a2kxsTZE2hih2hyv6tryc9vDzVXM9FaxnmgnGJRx2
-         oOhRt+ZFBXYSLKC8Clv9BCAQNo5J2RyiUbuqNGLPyy/ooB2ue6ARmvmc9+USvXvi4a9X
-         3Mpd/uvbDB/VwRiqlIXc4jXb1eqjxjHAY423OUCZUmIVhi2ecbDpm1RKXDfgkTwj6uBX
-         p0M0Nrws7XMO83LhU3u9+BADCgk9cIXyZsW+IwttpzLgxQjBBgbvsRFiG9izSkzjoc09
-         h6qg==
+        Thu, 6 Jul 2023 05:40:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5749B10C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 02:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688636353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j4dnnxZ1wSmFozKRBQ7ttfuc4yJgvWqhe2F7b5ZZXtc=;
+        b=GuzFCH/VIzhpPOTyzq1KeOWf/Cdx+m/BBgNogDLToYxOZjahRT8qTTVA/y9/rEmLjjlqix
+        iaBTGCdPtsUUB5OpJCf6jvIAbR7y90o/XCuXxlxNMFIEbuAo9Npy+0BAd5fdcFBU0yVP2m
+        u6i69TKzP96If6aV6ux2durk6Jrq1+k=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-404-1aKgXVR7OhWuq-SDEXssHw-1; Thu, 06 Jul 2023 05:39:12 -0400
+X-MC-Unique: 1aKgXVR7OhWuq-SDEXssHw-1
+Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-c5e3d2c339aso486291276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 02:39:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688636198; x=1691228198;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0TR7CywRQO+aq8xLN85+i2ij1DCchNy9h8cDmr7LMVY=;
-        b=WJJkH/fmptXN5zt6UGrRl+NDoU9yKkEHKgMov/+qL2w4JY2zvn1BIdmXa4tKKkOb4g
-         rEVO47XbNHuQA0PKRcvYMgNQwB8xCwacoh1nvlkz1yZCTN1KUrA+ZN2aF9g17tQer+Sz
-         PShOdUOqMdGmks7B4yIs4/gN0k1/LuyA7ogu63epqTjHNkI8sVUy8aBlTbY/0zRw42hf
-         Xm3uLjG8OgpuHvS35gCADfJ6cqI4HtubgOqbra9TlbgINdeWgvFPX8jujseErZSIxP2n
-         oufNoebszPFDmy3oT1WpP18EYRi2uKWqCX03q4CEvoNbHkYWBV3mkdKab5vFi6lfTHGI
-         m+TQ==
-X-Gm-Message-State: ABy/qLYn7yDyMhDSkcMFO5jmIMKRjny/8qOY8ER7S8kkZZtvRaGGzFbk
-        5Djqtvay3iix3stERtv17YA=
-X-Google-Smtp-Source: APBJJlFgz9v5xjO3Kl70Hs+b7oagVUEpBIbdNA7dz/sx1WFquCj68yhoXxMCn21eqHwderVZZfJ6IA==
-X-Received: by 2002:a05:6358:705:b0:134:f070:d6b8 with SMTP id e5-20020a056358070500b00134f070d6b8mr2261223rwj.4.1688636198238;
-        Thu, 06 Jul 2023 02:36:38 -0700 (PDT)
-Received: from [10.22.68.96] ([122.11.166.8])
-        by smtp.gmail.com with ESMTPSA id j14-20020aa7800e000000b0066875f17266sm893454pfi.135.2023.07.06.02.36.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 02:36:37 -0700 (PDT)
-Message-ID: <a945ff6e-1cd7-ef03-9ab4-3e5ab2a3bfa8@gmail.com>
-Date:   Thu, 6 Jul 2023 17:36:32 +0800
+        d=1e100.net; s=20221208; t=1688636352; x=1691228352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j4dnnxZ1wSmFozKRBQ7ttfuc4yJgvWqhe2F7b5ZZXtc=;
+        b=F+GRvHUseqHsryl7Tce8CI5axHV6itqEXLYcDxyS07bThZ+ZEYQZ+OS7ZgS6O/Mf32
+         pfZe94h5An+zV7khyFAuJZ1o64+symVXAyC6RRDI5u4sMCNqKJELUmAO7vLE/W7+o7D0
+         hFN20XDRyY92lAaYACIvgPt2PO7y8gmz+eElp5EsOpQQEFpoT99XfgabeGP3xdp3i31p
+         /riYL8y1TqlBITL8j7uT4I39qY2CG7cnKsXsaGk2a2E0/7wzBq9jios1zMNepvN//+Oo
+         JrRNBnRA2t7Tcrb5scuvqQHNvhELVt7iELUf1WYTwFcZQ+3XbdCvfxYesFeEp9UbtSE2
+         afVw==
+X-Gm-Message-State: ABy/qLb2qtIlqf9oM5J2w/MnYbfEcFewZQFqhCF0K+XDh/oMh/SS1GQM
+        hX+q3GPcv6f48Nplnb7RCcHUaT8aIUVUgt5LCwj+JjdwkojscZko1C7VaFmMt7UhcBYjZNHuqZH
+        5BeHZDROm8fzTJnO1NP8CiypnkrqELmlmWPH6zJvSwyCovNmz
+X-Received: by 2002:a25:188a:0:b0:c12:29ac:1d36 with SMTP id 132-20020a25188a000000b00c1229ac1d36mr1239714yby.7.1688636351761;
+        Thu, 06 Jul 2023 02:39:11 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFLmSB+47+YgPFGZvl3utGSzBgIYnM3OoeQdVfI97xUZpVcffiQ8VZrTdjYJj0NYJSVjYHab0HWtwwnXx6rFx0=
+X-Received: by 2002:a25:188a:0:b0:c12:29ac:1d36 with SMTP id
+ 132-20020a25188a000000b00c1229ac1d36mr1239701yby.7.1688636351465; Thu, 06 Jul
+ 2023 02:39:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH bpf-next] bpf: Introduce bpf generic log
-To:     Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
-Cc:     john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        hawk@kernel.org, tangyeechou@gmail.com, kernel-patches-bot@fb.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230705132058.46194-1-hffilwlqm@gmail.com>
- <1a205a85-ebf2-6d90-468d-4fd63ce3dd0f@iogearbox.net>
- <a42c246a-01e1-9e7e-8260-57835c6351ae@gmail.com>
- <688cbc7b-b23e-7edd-4603-b5734eaa9bd7@iogearbox.net>
-Content-Language: en-US
-From:   Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <688cbc7b-b23e-7edd-4603-b5734eaa9bd7@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230703142218.362549-1-eperezma@redhat.com> <20230703105022-mutt-send-email-mst@kernel.org>
+ <CAJaqyWf2F_yBLBjj1RiPeJ92_zfq8BSMz8Pak2Vg6QinN8jS1Q@mail.gmail.com>
+ <20230704063646-mutt-send-email-mst@kernel.org> <CAJaqyWfdPpkD5pY4tfzQdOscLBcrDBhBqzWjMbY_ZKsoyiqGdA@mail.gmail.com>
+ <20230704114159-mutt-send-email-mst@kernel.org> <CACGkMEtWjOMtsbgQ2sx=e1BkuRSyDmVfXDccCm-QSiSbacQyCA@mail.gmail.com>
+ <20230705043940-mutt-send-email-mst@kernel.org> <CACGkMEufNZGvWMN9Shh6NPOZOe-vf0RomfS1DX6DtxJjvO7fNA@mail.gmail.com>
+ <CAJaqyWcqNkzJXxsoz_Lk_X0CvNW24Ay2Ki6q02EB8iR=qpwsfg@mail.gmail.com>
+ <CACGkMEvDsZcyTDBhS8ekXHyv-kiipyHizewpM2+=0XgSYMsmbw@mail.gmail.com> <CACGkMEuKNXCSWWqDTZQpogHqT1K=rsQMFAYxL6OC8OL=XeU3-g@mail.gmail.com>
+In-Reply-To: <CACGkMEuKNXCSWWqDTZQpogHqT1K=rsQMFAYxL6OC8OL=XeU3-g@mail.gmail.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 6 Jul 2023 11:38:35 +0200
+Message-ID: <CAJaqyWdv_DFdxghHQPoUE4KZ7pqmaR__=JyHFONRuard3KBtSQ@mail.gmail.com>
+Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does not
+ support it
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/7/23 00:54, Daniel Borkmann wrote:
-> On 7/5/23 6:20 PM, Leon Hwang wrote:
->> On 2023/7/5 22:39, Daniel Borkmann wrote:
->>> On 7/5/23 3:20 PM, Leon Hwang wrote:
->>>> Currently, excluding verifier, users are unable to obtain detailed 
->>>> error
->>>> information when issues occur in BPF syscall.
->>>>
->>>> To overcome this limitation, bpf generic log is introduced to provide
->>>> error details similar to the verifier. This enhancement will enable 
->>>> the
->>>> reporting of error details along with the corresponding errno in BPF
->>>> syscall.
->>>>
->>>> Essentially, bpf generic log functions as a mechanism similar to 
->>>> netlink,
->>>> enabling the transmission of error messages to user space. This
->>>> mechanism greatly enhances the usability of BPF syscall by allowing
->>>> users to access comprehensive error messages instead of relying solely
->>>> on errno.
->>>>
->>>> This patch specifically addresses the error reporting in 
->>>> dev_xdp_attach()
->>>> . With this patch, the error messages will be transferred to user 
->>>> space
->>>> like the netlink approach. Hence, users will be able to check the 
->>>> error
->>>> message along with the errno.
->>>>
->>>> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
->>>> ---
->>>>   include/linux/bpf.h            | 30 ++++++++++++++++++++++++++++++
->>>>   include/uapi/linux/bpf.h       |  6 ++++++
->>>>   kernel/bpf/log.c               | 33 
->>>> +++++++++++++++++++++++++++++++++
->>>>   net/core/dev.c                 | 11 ++++++++++-
->>>>   tools/include/uapi/linux/bpf.h |  6 ++++++
->>>>   5 files changed, 85 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->>>> index f58895830..fd63f4a76 100644
->>>> --- a/include/linux/bpf.h
->>>> +++ b/include/linux/bpf.h
->>>> @@ -3077,4 +3077,34 @@ static inline gfp_t bpf_memcg_flags(gfp_t 
->>>> flags)
->>>>       return flags;
->>>>   }
->>>>   +#define BPF_GENERIC_TMP_LOG_SIZE    256
->>>> +
->>>> +struct bpf_generic_log {
->>>> +    char        kbuf[BPF_GENERIC_TMP_LOG_SIZE];
->>>> +    char __user    *ubuf;
->>>> +    u32        len_used;
->>>> +    u32        len_total;
->>>> +};
->>>> +
->>>> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log 
->>>> *log,
->>>> +            const char *fmt, ...);
->>>> +static inline void bpf_generic_log_init(struct bpf_generic_log *log,
->>>> +            const struct bpf_generic_user_log *ulog)
->>>> +{
->>>> +    log->ubuf = (char __user *) (unsigned long) ulog->log_buf;
->>>> +    log->len_total = ulog->log_size;
->>>> +    log->len_used = 0;
->>>> +}
->>>> +
->>>> +#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)    do {    \
->>>> +    const char *____fmt = (fmt);                \
->>>> +    bpf_generic_log_init(log, ulog);            \
->>>> +    bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__); \
->>>> +} while (0)
->>>> +
->>>> +#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...)    do {            \
->>>> +    struct bpf_generic_log ____log;                    \
->>>> +    BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);    \
->>>> +} while (0)
->>>> +
->>>
->>> Could we generalize the bpf_verifier_log infra and reuse bpf_log() 
->>> helper
->>> instead of adding something new?
->>
->>
->> Yes. It's possible to reuse the bpf_verifier_log infra and reuse 
->> bpf_log()
->> helper. I'll try this way:
->>
->> #define BPF_LOG_USER  BPF_LOG_LEVEL1     /* user log flag */
->>
->> #define BPF_ULOG_WRITE(log_buf, log_size, fmt, ...) do {               \
->>         const char *____fmt = 
->> (fmt);                                    \
->>         struct bpf_verifier_log 
->> ____vlog;                               \
->>         bpf_vlog_init(&____vlog, BPF_LOG_USER, log_buf, 
->> log_size);      \
->>         bpf_log(&____vlog, ____fmt, 
->> ##__VA_ARGS__);                         \
->> } while (0)
+On Thu, Jul 6, 2023 at 10:03=E2=80=AFAM Jason Wang <jasowang@redhat.com> wr=
+ote:
 >
-> Could we hide all of this inside bpf_log() or better create a new 
-> bpf_log_once() wrapper,
-> passing in attr so we only need to use the latter w/o the extra macros?
+> On Thu, Jul 6, 2023 at 3:55=E2=80=AFPM Jason Wang <jasowang@redhat.com> w=
+rote:
+> >
+> > On Thu, Jul 6, 2023 at 3:06=E2=80=AFPM Eugenio Perez Martin <eperezma@r=
+edhat.com> wrote:
+> > >
+> > > On Thu, Jul 6, 2023 at 3:55=E2=80=AFAM Jason Wang <jasowang@redhat.co=
+m> wrote:
+> > > >
+> > > > On Wed, Jul 5, 2023 at 4:41=E2=80=AFPM Michael S. Tsirkin <mst@redh=
+at.com> wrote:
+> > > > >
+> > > > > On Wed, Jul 05, 2023 at 03:49:58PM +0800, Jason Wang wrote:
+> > > > > > On Tue, Jul 4, 2023 at 11:45=E2=80=AFPM Michael S. Tsirkin <mst=
+@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Tue, Jul 04, 2023 at 01:36:11PM +0200, Eugenio Perez Marti=
+n wrote:
+> > > > > > > > On Tue, Jul 4, 2023 at 12:38=E2=80=AFPM Michael S. Tsirkin =
+<mst@redhat.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Tue, Jul 04, 2023 at 12:25:32PM +0200, Eugenio Perez M=
+artin wrote:
+> > > > > > > > > > On Mon, Jul 3, 2023 at 4:52=E2=80=AFPM Michael S. Tsirk=
+in <mst@redhat.com> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio P=
+=C3=A9rez wrote:
+> > > > > > > > > > > > With the current code it is accepted as long as use=
+rland send it.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Although userland should not set a feature flag tha=
+t has not been
+> > > > > > > > > > > > offered to it with VHOST_GET_BACKEND_FEATURES, the =
+current code will not
+> > > > > > > > > > > > complain for it.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Since there is no specific reason for any parent to=
+ reject that backend
+> > > > > > > > > > > > feature bit when it has been proposed, let's contro=
+l it at vdpa frontend
+> > > > > > > > > > > > level. Future patches may move this control to the =
+parent driver.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_=
+ENABLE_AFTER_DRIVER_OK backend feature")
+> > > > > > > > > > > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.=
+com>
+> > > > > > > > > > >
+> > > > > > > > > > > Please do send v3. And again, I don't want to send "a=
+fter driver ok" hack
+> > > > > > > > > > > upstream at all, I merged it in next just to give it =
+some testing.
+> > > > > > > > > > > We want RING_ACCESS_AFTER_KICK or some such.
+> > > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > Current devices do not support that semantic.
+> > > > > > > > >
+> > > > > > > > > Which devices specifically access the ring after DRIVER_O=
+K but before
+> > > > > > > > > a kick?
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > Previous versions of the QEMU LM series did a spurious kick=
+ to start
+> > > > > > > > traffic at the LM destination [1]. When it was proposed, th=
+at spurious
+> > > > > > > > kick was removed from the series because to check for descr=
+iptors
+> > > > > > > > after driver_ok, even without a kick, was considered work o=
+f the
+> > > > > > > > parent driver.
+> > > > > > > >
+> > > > > > > > I'm ok to go back to this spurious kick, but I'm not sure i=
+f the hw
+> > > > > > > > will read the ring before the kick actually. I can ask.
+> > > > > > > >
+> > > > > > > > Thanks!
+> > > > > > > >
+> > > > > > > > [1] https://lists.nongnu.org/archive/html/qemu-devel/2023-0=
+1/msg02775.html
+> > > > > > >
+> > > > > > > Let's find out. We need to check for ENABLE_AFTER_DRIVER_OK t=
+oo, no?
+> > > > > >
+> > > > > > My understanding is [1] assuming ACCESS_AFTER_KICK. This seems
+> > > > > > sub-optimal than assuming ENABLE_AFTER_DRIVER_OK.
+> > > > > >
+> > > > > > But this reminds me one thing, as the thread is going too long,=
+ I
+> > > > > > wonder if we simply assume ENABLE_AFTER_DRIVER_OK if RING_RESET=
+ is
+> > > > > > supported?
+> > > > > >
+> > > > > > Thanks
+> > > > >
+> > > > > I don't see what does one have to do with another ...
+> > > > >
+> > > > > I think with RING_RESET we had another solution, enable rings
+> > > > > mapping them to a zero page, then reset and re-enable later.
+> > > >
+> > > > As discussed before, this seems to have some problems:
+> > > >
+> > > > 1) The behaviour is not clarified in the document
+> > > > 2) zero is a valid IOVA
+> > > >
+> > >
+> > > I think we're not on the same page here.
+> > >
+> > > As I understood, rings mapped to a zero page means essentially an
+> > > avail ring whose avail_idx is always 0, offered to the device instead
+> > > of the guest's ring. Once all CVQ commands are processed, we use
+> > > RING_RESET to switch to the right ring, being guest's or SVQ vring.
+> >
+> > I get this. This seems more complicated in the destination: shadow vq +=
+ ASID?
 >
-> Essentially what your bpf_xdp_link_log() is doing, just that 
-> bpf_log_once(attr, extack._msg)
-> would be generic and sufficient.
+> So it's something like:
 >
-> Thanks,
-> Daniel
+> 1) set all vq ASID to shadow virtqueue
+> 2) do not add any bufs to data qp (stick 0 as avail index)
+> 3) start to restore states via cvq
+> 4) ring_rest for dataqp
+> 5) set_vq_state for dataqp
+> 6) re-initialize dataqp address etc
+> 7) set data QP ASID to guest
+> 8) set queue_enable
+>
+> ?
+>
 
-I try to use BPF_ULOG_WRITE() successfully, but with a warning:
+I think the change of ASID is not needed, as the guest cannot access
+the device in that timeframe anyway. Moreover, it may require HW
+support. So steps 1 and 7 are not needed.
+
+Apart from that, the process is right.
 
 
-net/core/dev.c: In function 'bpf_xdp_link_log.isra.0':
-net/core/dev.c:9093:1: warning: the frame size of 1056 bytes is larger 
-than 1024 bytes [-Wframe-larger-than=]
-  9093 | }
-       |
-
-
-How should we generalize the bpf_verifier_log infra with a smaller
-
-BPF_VERIFIER_TMP_LOG_SIZE (1024 currently) ?
-
-
-If to use bpf_log_once(attr, extack._msg), I think 
-bpf_ulog_once(&attr->link_create.xdp.log, extack._msg)
-
-is better. attr->link_create.xdp.log is struct bpf_generic_user_log.
-
-Or bpf_xdp_link_log() is better to wrap log details.
+> Thanks
+>
+> >
+> > Thanks
+> >
+> > >
+> > >
+> > >
+> > > > Thanks
+> > > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > > > My plan was to convert
+> > > > > > > > > > it in vp_vdpa if needed, and reuse the current vdpa ops=
+. Sorry if I
+> > > > > > > > > > was not explicit enough.
+> > > > > > > > > >
+> > > > > > > > > > The only solution I can see to that is to trap & emulat=
+e in the vdpa
+> > > > > > > > > > (parent?) driver, as talked in virtio-comment. But that=
+ complicates
+> > > > > > > > > > the architecture:
+> > > > > > > > > > * Offer VHOST_BACKEND_F_RING_ACCESS_AFTER_KICK
+> > > > > > > > > > * Store vq enable state separately, at
+> > > > > > > > > > vdpa->config->set_vq_ready(true), but not transmit that=
+ enable to hw
+> > > > > > > > > > * Store the doorbell state separately, but do not confi=
+gure it to the
+> > > > > > > > > > device directly.
+> > > > > > > > > >
+> > > > > > > > > > But how to recover if the device cannot configure them =
+at kick time,
+> > > > > > > > > > for example?
+> > > > > > > > > >
+> > > > > > > > > > Maybe we can just fail if the parent driver does not su=
+pport enabling
+> > > > > > > > > > the vq after DRIVER_OK? That way no new feature flag is=
+ needed.
+> > > > > > > > > >
+> > > > > > > > > > Thanks!
+> > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > > ---
+> > > > > > > > > > > > Sent with Fixes: tag pointing to git.kernel.org/pub=
+/scm/linux/kernel/git/mst
+> > > > > > > > > > > > commit. Please let me know if I should send a v3 of=
+ [1] instead.
+> > > > > > > > > > > >
+> > > > > > > > > > > > [1] https://lore.kernel.org/lkml/20230609121244-mut=
+t-send-email-mst@kernel.org/T/
+> > > > > > > > > > > > ---
+> > > > > > > > > > > >  drivers/vhost/vdpa.c | 7 +++++--
+> > > > > > > > > > > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > > > > > > > > > >
+> > > > > > > > > > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/v=
+dpa.c
+> > > > > > > > > > > > index e1abf29fed5b..a7e554352351 100644
+> > > > > > > > > > > > --- a/drivers/vhost/vdpa.c
+> > > > > > > > > > > > +++ b/drivers/vhost/vdpa.c
+> > > > > > > > > > > > @@ -681,18 +681,21 @@ static long vhost_vdpa_unlock=
+ed_ioctl(struct file *filep,
+> > > > > > > > > > > >  {
+> > > > > > > > > > > >       struct vhost_vdpa *v =3D filep->private_data;
+> > > > > > > > > > > >       struct vhost_dev *d =3D &v->vdev;
+> > > > > > > > > > > > +     const struct vdpa_config_ops *ops =3D v->vdpa=
+->config;
+> > > > > > > > > > > >       void __user *argp =3D (void __user *)arg;
+> > > > > > > > > > > >       u64 __user *featurep =3D argp;
+> > > > > > > > > > > > -     u64 features;
+> > > > > > > > > > > > +     u64 features, parent_features =3D 0;
+> > > > > > > > > > > >       long r =3D 0;
+> > > > > > > > > > > >
+> > > > > > > > > > > >       if (cmd =3D=3D VHOST_SET_BACKEND_FEATURES) {
+> > > > > > > > > > > >               if (copy_from_user(&features, feature=
+p, sizeof(features)))
+> > > > > > > > > > > >                       return -EFAULT;
+> > > > > > > > > > > > +             if (ops->get_backend_features)
+> > > > > > > > > > > > +                     parent_features =3D ops->get_=
+backend_features(v->vdpa);
+> > > > > > > > > > > >               if (features & ~(VHOST_VDPA_BACKEND_F=
+EATURES |
+> > > > > > > > > > > >                                BIT_ULL(VHOST_BACKEN=
+D_F_SUSPEND) |
+> > > > > > > > > > > >                                BIT_ULL(VHOST_BACKEN=
+D_F_RESUME) |
+> > > > > > > > > > > > -                              BIT_ULL(VHOST_BACKEN=
+D_F_ENABLE_AFTER_DRIVER_OK)))
+> > > > > > > > > > > > +                              parent_features))
+> > > > > > > > > > > >                       return -EOPNOTSUPP;
+> > > > > > > > > > > >               if ((features & BIT_ULL(VHOST_BACKEND=
+_F_SUSPEND)) &&
+> > > > > > > > > > > >                    !vhost_vdpa_can_suspend(v))
+> > > > > > > > > > > > --
+> > > > > > > > > > > > 2.39.3
+> > > > > > > > > > >
+> > > > > > > > >
+> > > > > > >
+> > > > >
+> > > >
+> > >
+>
 
