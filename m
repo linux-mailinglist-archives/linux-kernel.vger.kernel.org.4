@@ -2,134 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F32D74A724
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8527A74A728
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjGFWle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 18:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S231688AbjGFWnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 18:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjGFWlb (ORCPT
+        with ESMTP id S229650AbjGFWnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 18:41:31 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1C21723;
-        Thu,  6 Jul 2023 15:41:29 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-440b54708f2so516692137.0;
-        Thu, 06 Jul 2023 15:41:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688683289; x=1691275289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aTdMw3U8BFFOt8MvAKiw/gzh8jNiphNZNfXymWqvTuk=;
-        b=ILPQtduyeC9q2XK3+eksLVJDW/FwkgBS06MwLrr02VqB+BM4pm1jrcYvFASCd84UrV
-         xbHm7SkMPgt35Vm6Z/OBsTK/NwM0reX6XJKIRIJjqrQy/E2ysBCzBto4EN62gUi+QnzV
-         Sk9DeMslwnoIOMy3DNGnxd6LezTrF7QrJWTn3I0w6guIowqJ7yeDjMJra6gwTK9Lwzl0
-         XkoWcL5BFZiOkcmnvUigP45I29zcDJhJ7MznVHuJL8TOJshTeJLhsg8IhSd6VCTNoC2I
-         4aJy5vP6gbHp4KDzcuqlUm2zbv4S77xD275RicrabKMThqly8DlHafbdD458yiJu/LRT
-         VrUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688683289; x=1691275289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aTdMw3U8BFFOt8MvAKiw/gzh8jNiphNZNfXymWqvTuk=;
-        b=ZTi07JslytGQvwtyTBu0kDjXyfRlG8aiE1sVFRau9ZoRfJQS3sGpRunHVgkkEbrFW7
-         NUiN2a3gKsMzTE71Gjvsgq2H5xKOxXLm6rMf/8Hg9Ryx/p6wvngzobyz4oQnANUYxDTT
-         MBY23IYdx85RJxsaFc/rRCP1AuA05kTy3o7l/qnKZNDXMFkLTuxS9YffidpUXYSyArzy
-         1RKf17OFTsbTGX8L1KpH6GBOTDcPKlYD5OOpWXPVkRfcAoGT43YHV05xTFa0CPJkLAM4
-         b7ht1euDHWsvVR+fyBQgLMFSmFXP8q4VwPxi06JmuET6h7lm5BUf0X/E0TUeO62sd/fo
-         bS0w==
-X-Gm-Message-State: ABy/qLYDnw0ElnLmidUrnJw3IC/Bqsf7hHdUouLULgQ15BA6FMtLfDoS
-        l1QdQn3yQYI3uBSjj7NrcHbDzGlqZF+kRLmBB/w=
-X-Google-Smtp-Source: APBJJlFWJdnvIGxW1yz69F4Wz6zWB/6GqSmKeTa56imfQj63pHpVZUTVNV+VjYTOZq/SMs6YSRSQpB/Z68pv8seWOwI=
-X-Received: by 2002:a67:e21a:0:b0:440:ab90:7c95 with SMTP id
- g26-20020a67e21a000000b00440ab907c95mr2813497vsa.9.1688683288738; Thu, 06 Jul
- 2023 15:41:28 -0700 (PDT)
+        Thu, 6 Jul 2023 18:43:24 -0400
+Received: from out-3.mta0.migadu.com (out-3.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA791723
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:43:22 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 18:43:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688683399;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RN9DhyE9hPilrdQzGYbv7H2UYstr1uDyg6AicBcRmHs=;
+        b=NI7RxJ/Wjt0r++lVNTpW/4oQxDjn/+R5hOuM1i1Rry5M79vsUj7ch60FYlhy766cI0Sxcs
+        fwTBrI300jaJVFWFGfS5P2WTcVfqV0yy5WZRwXT5cwRj4/XSh44MxmCTQ2b8bRmM++4FPF
+        LT4P5GlpUgwDx5fPb4TD8Q423NPqBHY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, dchinner@redhat.com,
+        sandeen@redhat.com, willy@infradead.org, tytso@mit.edu,
+        bfoster@redhat.com, jack@suse.cz, andreas.gruenbacher@gmail.com,
+        brauner@kernel.org, peterz@infradead.org,
+        akpm@linux-foundation.org, dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230706224314.u5zbeld23uqur2ct@moria.home.lan>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+ <20230706164055.GA2306489@perftesting>
+ <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+ <20230706211914.GB11476@frogsfrogsfrogs>
 MIME-Version: 1.0
-References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
- <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
- <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
- <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com> <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
- <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
- <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
- <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
- <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
- <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
- <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
- <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
- <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
- <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
- <CAA85sZsJEZK0g0fGfH+toiHm_o4pdN+Wo0Wq9fgsUjHXGxgxQA@mail.gmail.com>
- <CAA85sZs4KkfVojx=vxbDaWhWRpxiHc-RCc2OLD2c+VefRjpTfw@mail.gmail.com>
- <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com>
- <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
- <CAA85sZs2biYueZsbDqdrMyYfaqH6hnSMpymgbsk=b3W1B7TNRA@mail.gmail.com>
- <CAA85sZs_H3Dc-mYnj8J5VBEwUJwbHUupP+U-4eG20nfAHBtv4w@mail.gmail.com>
- <92a4d42491a2c219192ae86fa04b579ea3676d8c.camel@redhat.com>
- <CAA85sZvtspqfep+6rH8re98-A6rHNNWECvwqVaM=r=0NSSsGzA@mail.gmail.com>
- <dfbbe91a9c0abe8aba2c00afd3b7f7d6af801d8e.camel@redhat.com>
- <CAA85sZuQh0FMoGDFVyOad6G1UB9keodd3OCZ4d4r+xgXDArcVA@mail.gmail.com>
- <062061fc4d4d3476e3b0255803b726956686eb19.camel@redhat.com>
- <CAA85sZv9KCmw8mAzK4T-ORXB48wuLF+YXTYSWxkBhv3k_-wzcA@mail.gmail.com>
- <CAA85sZt6ssXRaZyq4awM0yTLFk62Gxbgw-0+bTKWsHwQvVzZXQ@mail.gmail.com>
- <d9bf21296a4691ac5aca11ccd832765b262f7088.camel@redhat.com>
- <CAA85sZsidN4ig=RaQ34PYFjnZGU-=zqR=r-5za=G4oeAtxDA7g@mail.gmail.com>
- <14cd6a50bd5de13825017b75c98cb3115e84acc1.camel@redhat.com>
- <CAA85sZuZLg+L7Sr51PPaOkPKbbiywXbbKzhTyjaw12_S6CsZHQ@mail.gmail.com>
- <c6cf7b4c0a561700d2015c970d52fc9d92b114c7.camel@redhat.com>
- <CAA85sZvZ_X=TqCXaPui0PDLq2pp5dw_uhga+wcXgBqudrLP9bQ@mail.gmail.com>
- <67ff0f7901e66d1c0d418c48c9a071068b32a77d.camel@redhat.com>
- <CANn89i+F=R71refT8K_8hPaP+uWn15GeHz+FTMYU=VPTG24WFA@mail.gmail.com>
- <c4e40b45b41d0476afd8989d31e6bab74c51a72a.camel@redhat.com>
- <CAA85sZs_R3W42m8YmXO-k08bPow7zKj_eOxceEB_3MJveGMZ7A@mail.gmail.com>
- <a46bb3de011002c2446a6d836aaddc9f6bce71bc.camel@redhat.com> <CAA85sZsHKb3Wtsa5ktSAPJsjLrcmahtgaemPhN5dTeTxEBWaqw@mail.gmail.com>
-In-Reply-To: <CAA85sZsHKb3Wtsa5ktSAPJsjLrcmahtgaemPhN5dTeTxEBWaqw@mail.gmail.com>
-From:   Ian Kumlien <ian.kumlien@gmail.com>
-Date:   Fri, 7 Jul 2023 00:41:17 +0200
-Message-ID: <CAA85sZtAixvRQnzs5+nad_pFsN9VZ67a2_CLCPFrHfieijn18A@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706211914.GB11476@frogsfrogsfrogs>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 12:32=E2=80=AFAM Ian Kumlien <ian.kumlien@gmail.com>=
- wrote:
-> On Thu, Jul 6, 2023 at 7:10=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wr=
-ote:
-> > Let me try to clarify: I hope/think that this chunk alone:
-> >
-> > +       /* later code will clear the gso area in the shared info */
-> > +       err =3D skb_header_unclone(skb, GFP_ATOMIC);
-> > +       if (err)
-> > +               goto err_linearize;
-> > +
-> >         skb_shinfo(skb)->frag_list =3D NULL;
-> >
-> >         while (list_skb) {
-> >
-> > does the magic/avoids the skb corruptions -> it everything goes well,
-> > you should not see any warnings at all. Running 'nstat' in the DUT
-> > should give some hints about reaching the relevant code paths.
+On Thu, Jul 06, 2023 at 02:19:14PM -0700, Darrick J. Wong wrote:
+> TBH, so long as bcachefs is the only user of sixlocks and mean/variance,
+> I don't really care what's in them, though they probably ought to live
+> in fs/bcachefs/ until a second user arises.
 
-Ah yeah... I'm a bit tired atm - I see your point -  with moving it up a bi=
-t.
+I've been waiting for Linus to weigh in on those (and the rest of the
+merge) since he had opinions a few weeks ago, but I have no real
+objection there. I'd need to add an export for osq_lock, that's all.
 
-So anyway, Tested-by: ian.kumlien@gmail.com etc =3D)
+> >  - d_mark_tmpfile(): trivial new helper, from pulling out part of
+> >    d_tmpfile(). We need this because bcachefs handles the nlink count
+> >    for tmpfiles earlier, in the btree transaction.
+> 
+> XFS might want this too, we also handle the nlink count for tmpfiles
+> earlier, in a transaction, and end up playing stupid games with the
+> refcount to fit the vfs function:
+> 
+> 	if (tmpfile) {
+> 		/*
+> 		 * The VFS requires that any inode fed to d_tmpfile must
+> 		 * have nlink == 1 so that it can decrement the nlink in
+> 		 * d_tmpfile.  However, we created the temp file with
+> 		 * nlink == 0 because we're not allowed to put an inode
+> 		 * with nlink > 0 on the unlinked list.  Therefore we
+> 		 * have to set nlink to 1 so that d_tmpfile can
+> 		 * immediately set it back to zero.
+> 		 */
+> 		set_nlink(inode, 1);
+> 		d_tmpfile(tmpfile, inode);
+> 	}
+
+Yeah, that same game would technically work for bcachefs - but I'm
+hoping we can just do the right thing here :)
+
+> >    - Don't block on s_umount from __invalidate_super: this is a bugfix
+> >      for a deadlock in generic/042 because of how we use sget(), the
+> >      commit message goes into more detail.
+> 
+> If this is in reference to the earlier subthread about some io_uring
+> thing causing unmount to hang -- my impressions of that were that yes,
+> it's a bug, but no, it's not a bug in bcachefs itself.  I also wondered
+> why (a) that hadn't split out as its own thread; and (b) is this really
+> a bcachefs blocker?
+
+No, this is completely unrelated. The io_uring thing hits on
+generic/388 (and others) and just causes umount to fail with -EBUSY.
+This one is an actual deadlock and it hits every time in generic/042.
+It's specific to the loopback device and when it emits certain events,
+and it hits every time so I really do need this fix included.
+
+> /me shrugs, been on vacation and in hospitals for the last month or so.
+> 
+> >      bcachefs doesn't use sget() for mutual exclusion because a) sget()
+> >      is insane, what we really want is the _block device_ to be opened
+> >      exclusively (which we do), and we have our own block device opening
+> >      path - which we need to, as we're a multi device filesystem.
+> 
+> ...and isn't jan kara already messing with this anyway?
+
+The blkdev_get_handle() patchset? I like that, but I don't think that's
+related - if there's something more related to sget() I haven't seen it
+yet
+
+> OTOH there's so many layers of tiny helper functions and macros that I
+> have a really hard time making sense of all those pre-bcachefs changes.
+> That's why I haven't weighed in.  Given all the weird problems we've had
+> recently with new code colliding badly with under-documented optimized
+> core code, I'm fearful of touching anything.
+
+??? not sure what you're referring to here, are there specific patches
+or recent issues you're thinking of?
+
+I don't think any of the non-fs/bcachefs/ patches are remotely tricky
+enough for any of this to be a concern.
+
+> > You, the btrfs developers, got started when Linux filesystem teams were
+> > quite a bit bigger than they are now: I was at Google when Google had a
+> > bunch of people working on ext4, and that was when ZFS had recently come
+> > out and there was recognition that Linux needed an answer to ZFS and you
+> > were able to ride that excitement. It's been a bit harder for me to get
+> > something equally ambitions going, to be honest.
+> > 
+> > But years ago when I realized I was onto something, I decided this
+> > project was only going to fail if I let it fail - so I'm in it for the
+> > long haul.
+> > 
+> > Right now what I'm hearing, in particular from Redhat, is that they want
+> > it upstream in order to commit more resources. Which, I know, is not
+> > what kernel people want to hear, but it's the chicken-and-the-egg
+> > situation I'm in.
+> 
+> /me suspects mainline merging is necessary but not sufficient -- few
+> non-developers want to deal with merging an out of tree filesystem, but
+> that still doesn't mean anyone will commit real engineering resources.
+
+Yeah, no doubt it will continue to be an uphill battle. But it's a
+necessary step in the right direction, for sure.
+
+> > > I am really, really wanting you to succeed here Kent.  If the general consensus
+> > > is you need to have some idiot review fs/bcachefs I will happily carve out some
+> > > time and dig in.
+> > 
+> > That would be much appreciated - I'll owe you some beers next time I see
+> > you. But before jumping in, let's see if we can get people who have
+> > already worked with the code to say something.
+> > 
+> > Something I've done in the past that might be helpful - instead (or in
+> > addition to) having people read code in isolation, perhaps we could do a
+> > group call/meeting where people can ask questions about the code, bring
+> > up design issues they've seen in other filesystems, etc. - I've also
+> > found that kind of setup great for identifying places in the code where
+> > additional documentation would be useful.
+> 
+> "At this point I think Kent's QA efforts are at least as good as XFS's,
+> just merge it and let's move on to the next thing."
+
+high praise :)
