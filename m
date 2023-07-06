@@ -2,122 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96E3749E4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15090749E55
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjGFN5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S232552AbjGFN6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbjGFN5H (ORCPT
+        with ESMTP id S231906AbjGFN6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:57:07 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A891BE2;
-        Thu,  6 Jul 2023 06:57:04 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-579d5d89b41so8933667b3.2;
-        Thu, 06 Jul 2023 06:57:04 -0700 (PDT)
+        Thu, 6 Jul 2023 09:58:39 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F51219A0;
+        Thu,  6 Jul 2023 06:58:38 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3a3b7fafd61so751370b6e.2;
+        Thu, 06 Jul 2023 06:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688651824; x=1691243824;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZEJ43d+NAMmIrTo551RtzDddBeER6NhBfPjdNhrCGk=;
-        b=ZK2545S8+cayJ/SkROlmQsz7hJCI4UZfi3iTrzJ8b2zSaNCVIqcd2GzY5gMizcNpi6
-         YdN2Dt1VSJ0CIwXWVXZKUm1HlXMd5M0hVRWCWpwzNxOHiM0n7HjVCPQTRUfc543Rpd6e
-         a0XRTrx+eD5D4PZcp1nLcI7Tp6d2ibsWP16HiPesUmu74BLmQYsvf3L5pbk5RThI247Y
-         1Awm2Q+zVRXv4WIgYr17AA8CYXuHcazeV92Cre90gvpR1LWkvioSl1x2tF13oXrOKAP0
-         +/DhzQjca6Yeif6qTQOZdpywhjarM4anZxFhH2JVE6WeFsDhg3p5bLiAOXKHGq3CrNzn
-         0ydQ==
+        d=gmail.com; s=20221208; t=1688651917; x=1691243917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Hp8tU9cWu6R6f3sn+8A1XNNoAmV3ki5dbuL76Q7q/g=;
+        b=jW8fZyoU3DO00/VknLBRC1h6kBMu8XI1LsUcKUKbG7uS5K1zHOZBpp0CDxgpvDTFKw
+         +5FkbPG7Q9BwXmE1ZYHxTwB7BM4JadMfceYFtCn07I0gnGEOHbDw3Y4g3euxTJn17A6G
+         NmkXaQsNHQ20wcd9dWE9ayH70yxcuwfl3TonKln0gWcCqgO3A7voL187FesbmfRYIg1b
+         WIQvbCmy5b2Lo2HrqAjcbhWboCl225wSoQ+oL8U5+yMAKgb5dagv5oGgo7zCR0T9aWKy
+         jRrdwXUITSOIUq9BgJvgnuKEX8bW1agbSp6/6Og0vPnJD79JI5iigu9n5yVyvcg3sRv9
+         BPOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688651824; x=1691243824;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pZEJ43d+NAMmIrTo551RtzDddBeER6NhBfPjdNhrCGk=;
-        b=BEA4csXlTkPtGshl3NmFGB+HAEpxO8qs9cyeNVP9H1D3bwuSxl3ucVbV8jJxVFXCpS
-         BYe35tZ61ScigmlH9+aPs/BziuN+VAPFoWIRmlGJBpr97s5NcZdXt0ATSN6S3wP9v19o
-         4OIK5IIct0ebx8yAi/G8b5mHd3PTpovqmEgUa154/n4yZX5JOk8TZP5w3G1lE2BCdTyX
-         ImgRbs1AtjhUxVimyOFxK7qB7TSmNxzdFWimGe1b3kgwS/BKEK3pscrk3KEQqXi6ehdb
-         5L/Pa/8Er2cx/C0qZqF0PKjGlGkicZXSAuJkeR9q6TgCuMbnUcq8AhLbIwqw8GYAriTO
-         5jQw==
-X-Gm-Message-State: ABy/qLamJRalXfEt194Z4OpIXNHJAurN2dn4M7kfbZDzSgHozX85lc16
-        nNhIhsXZxqm3TbV+n5Cft2s=
-X-Google-Smtp-Source: APBJJlFtMueb3U/FE2QuaSoGLA84VH6d80bL0vcD7tWNpYBm1eqI9OlMiLIE8un9/QkQO/fPnUJjCQ==
-X-Received: by 2002:a0d:e241:0:b0:573:d710:6f88 with SMTP id l62-20020a0de241000000b00573d7106f88mr1885685ywe.36.1688651823857;
-        Thu, 06 Jul 2023 06:57:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l195-20020a0de2cc000000b00565d056a74bsm354915ywe.139.2023.07.06.06.57.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 06:57:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 6 Jul 2023 06:57:01 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-Message-ID: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+        d=1e100.net; s=20221208; t=1688651917; x=1691243917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5Hp8tU9cWu6R6f3sn+8A1XNNoAmV3ki5dbuL76Q7q/g=;
+        b=WwJlLRH4b5DOpdnarwMiQki5B5/LlfdLLhIeHYQ+vFmqOUV/cVwI+4OLssoyUT8x3S
+         B2i0SJ/qGAGpC39641l8t+Tb399ZYXSpIVON1h8Bnct3cYcac9+AvybeoUi+nt9PSV4h
+         l8NRsnVtaK/sy08ry6VoGOaHV3UqmYLwdl3M16cT3AGdI9Ga12+GXlCqJTYXZ3AoXMb5
+         w8ygIOiUjvuf78GxZ4oBcI2ch/OcJOoQPBr6z2Y93oO63Jr22he8b0oE0Ls+/c9ZeK+R
+         8iPDEKKoXKIMM0wYHVTxp9VhY+uWXOwH5bTZJV+G9H4ykbQzAIrkLFqgWaDYlgCKIFm6
+         8zMQ==
+X-Gm-Message-State: ABy/qLb8Wgcx/s7ckV/YbdyxSZinxaMaIOjRHNdsQ1lEtLKJZMue3YQh
+        nHdD29JAD7um9hYRI1qFKa4yjHNE67+YlswDfGo=
+X-Google-Smtp-Source: APBJJlHwWrHIAzdFBa636bFDMNRZF9RFGE1HyH/tDHgJxsmdjuaeJ2kJEJRRwYbbDY70pb0vxaKHA7rj0kFXbVJUIRU=
+X-Received: by 2002:a05:6808:1d6:b0:3a0:4dc3:25ff with SMTP id
+ x22-20020a05680801d600b003a04dc325ffmr2199089oic.7.1688651917567; Thu, 06 Jul
+ 2023 06:58:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+References: <20230706021102.2066-1-yangrong@vivo.com>
+In-Reply-To: <20230706021102.2066-1-yangrong@vivo.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 6 Jul 2023 09:58:26 -0400
+Message-ID: <CADnq5_MSkJf=-QMPYNQp03=6mbb+OEHnPFW0=WKiS0VMc6ricQ@mail.gmail.com>
+Subject: Re: [PATCH] Fix max/min warnings in virtio_net, amd/display, and io_uring
+To:     Yang Rong <yangrong@vivo.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Alvin Lee <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Max Tseng <Max.Tseng@amd.com>,
+        Josip Pavic <Josip.Pavic@amd.com>,
+        Cruise Hung <cruise.hung@amd.com>,
+        "open list:AMD DISPLAY CORE" <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        opensource.kernel@vivo.com, luhongfei@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jul 6, 2023 at 3:37=E2=80=AFAM Yang Rong <yangrong@vivo.com> wrote:
+>
+> The files drivers/net/virtio_net.c, drivers/gpu/drm/amd/display/dc/dc_dmu=
+b_srv.c, and io_uring/io_uring.c were modified to fix warnings.
+> Specifically, the opportunities for max() and min() were utilized to addr=
+ess the warnings.
 
-On Thu, Jun 01, 2023 at 11:22:17PM +0300, Sergey Shtylyov wrote:
-> IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
-> return -EINVAL instead.  However, the kernel code supporting SH3/4-based
-> SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
-> IRQ #s from 16 instead.
-> 
-> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-> indeed are using IRQ0 for the SMSC911x compatible Ethernet chip.
-> 
+Please split this into 3 patches, one for each component.
 
-Unfortunately it also affects all sh4 emulations in qemu, and results in
-boot stalls with those. There isn't a relevant log to attach because there
-is no error message - booting just stalls until the emulation is aborted.
+Alex
 
-Reverting this patch fixes the problem.
-
-Bisect log is attached for reference. Note that bisect requires applying
-commit 7497840d462c ("sh: Provide unxlate_dev_mem_ptr() in asm/io.h"),
-which is also the reason why the problem was not observed earlier since
-it was hiding behind a build failure.
-
-Guenter
-
----
-# bad: [c17414a273b81fe4e34e11d69fc30cc8b1431614] Merge tag 'sh-for-v6.5-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux
-# good: [b5641a5d8b8b14643bfe3d017d64da90a5c55479] mm: don't do validate_mm() unnecessarily and without mmap locking
-git bisect start 'HEAD' 'b5641a5d8b8b'
-# good: [15ac468614e5e4fee82e1eb32568f427b0e51adc] Merge tag 'media/v6.5-1' of git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media
-git bisect good 15ac468614e5e4fee82e1eb32568f427b0e51adc
-# good: [73a3fcdaa73200e38e38f7e8a32c9b901c5b95b5] Merge tag 'f2fs-for-6.5-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs
-git bisect good 73a3fcdaa73200e38e38f7e8a32c9b901c5b95b5
-# good: [6843306689aff3aea608e4d2630b2a5a0137f827] Merge tag 'net-6.5-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-git bisect good 6843306689aff3aea608e4d2630b2a5a0137f827
-# good: [afa92949124abc25ddab1789dd654214e2e1b040] dt-bindings: phy: cdns,salvo: add property cdns,usb2-disconnect-threshold-microvolt
-git bisect good afa92949124abc25ddab1789dd654214e2e1b040
-# good: [37bd215fc48ef2a399f836d62d2e4a166efb31be] phy: qualcomm: fix indentation in Makefile
-git bisect good 37bd215fc48ef2a399f836d62d2e4a166efb31be
-# bad: [7497840d462c8f54c4888c22ab3726a8cde4b9a2] sh: Provide unxlate_dev_mem_ptr() in asm/io.h
-git bisect bad 7497840d462c8f54c4888c22ab3726a8cde4b9a2
-# bad: [01658fe3d6c02992846a038c8111e70ace169295] sh: Refactor header include path addition
-git bisect bad 01658fe3d6c02992846a038c8111e70ace169295
-# bad: [a8ac2961148e8c720dc760f2e06627cd5c55a154] sh: Avoid using IRQ0 on SH3 and SH4
-git bisect bad a8ac2961148e8c720dc760f2e06627cd5c55a154
-# good: [bc9d1f0cecd2407cfb2364a7d4be2f52d1d46a9d] sh: j2: Use ioremap() to translate device tree address into kernel memory
-git bisect good bc9d1f0cecd2407cfb2364a7d4be2f52d1d46a9d
-# first bad commit: [a8ac2961148e8c720dc760f2e06627cd5c55a154] sh: Avoid using IRQ0 on SH3 and SH4
+>
+> Signed-off-by: Yang Rong <yangrong@vivo.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 6 +++---
+>  drivers/net/virtio_net.c                     | 3 ++-
+>  io_uring/io_uring.c                          | 3 ++-
+>  3 files changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/d=
+rm/amd/display/dc/dc_dmub_srv.c
+> index c753c6f30dd7..df79aea49a3c 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> @@ -22,7 +22,7 @@
+>   * Authors: AMD
+>   *
+>   */
+> -
+> +#include <linux/minmax.h>
+>  #include "dc.h"
+>  #include "dc_dmub_srv.h"
+>  #include "../dmub/dmub_srv.h"
+> @@ -481,7 +481,7 @@ static void populate_subvp_cmd_drr_info(struct dc *dc=
+,
+>         max_drr_vblank_us =3D div64_u64((subvp_active_us - prefetch_us -
+>                         dc->caps.subvp_fw_processing_delay_us - drr_activ=
+e_us), 2) + drr_active_us;
+>         max_drr_mallregion_us =3D subvp_active_us - prefetch_us - mall_re=
+gion_us - dc->caps.subvp_fw_processing_delay_us;
+> -       max_drr_supported_us =3D max_drr_vblank_us > max_drr_mallregion_u=
+s ? max_drr_vblank_us : max_drr_mallregion_us;
+> +       max_drr_supported_us =3D max(max_drr_vblank_us, max_drr_mallregio=
+n_us);
+>         max_vtotal_supported =3D div64_u64(((uint64_t)drr_timing->pix_clk=
+_100hz * 100 * max_drr_supported_us),
+>                         (((uint64_t)drr_timing->h_total * 1000000)));
+>
+> @@ -771,7 +771,7 @@ void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
+>                 wm_val_refclk =3D context->bw_ctx.bw.dcn.watermarks.a.cst=
+ate_pstate.pstate_change_ns *
+>                                 (dc->res_pool->ref_clocks.dchub_ref_clock=
+_inKhz / 1000) / 1000;
+>
+> -               cmd.fw_assisted_mclk_switch_v2.config_data.watermark_a_ca=
+che =3D wm_val_refclk < 0xFFFF ? wm_val_refclk : 0xFFFF;
+> +               cmd.fw_assisted_mclk_switch_v2.config_data.watermark_a_ca=
+che =3D min(wm_val_refclk, 0xFFFF);
+>         }
+>
+>         dm_execute_dmub_cmd(dc->ctx, &cmd, DM_DMUB_WAIT_TYPE_WAIT);
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 9b3721424e71..5bb7da885f00 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -22,6 +22,7 @@
+>  #include <net/route.h>
+>  #include <net/xdp.h>
+>  #include <net/net_failover.h>
+> +#include <linux/minmax.h>
+>
+>  static int napi_weight =3D NAPI_POLL_WEIGHT;
+>  module_param(napi_weight, int, 0444);
+> @@ -1291,7 +1292,7 @@ static struct sk_buff *build_skb_from_xdp_buff(stru=
+ct net_device *dev,
+>         __skb_put(skb, data_len);
+>
+>         metasize =3D xdp->data - xdp->data_meta;
+> -       metasize =3D metasize > 0 ? metasize : 0;
+> +       metasize =3D max(metasize, 0);
+>         if (metasize)
+>                 skb_metadata_set(skb, metasize);
+>
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index e8096d502a7c..875ca657227d 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -47,6 +47,7 @@
+>  #include <linux/refcount.h>
+>  #include <linux/uio.h>
+>  #include <linux/bits.h>
+> +#include <linux/minmax.h>
+>
+>  #include <linux/sched/signal.h>
+>  #include <linux/fs.h>
+> @@ -2660,7 +2661,7 @@ static void *__io_uaddr_map(struct page ***pages, u=
+nsigned short *npages,
+>                                         page_array);
+>         if (ret !=3D nr_pages) {
+>  err:
+> -               io_pages_free(&page_array, ret > 0 ? ret : 0);
+> +               io_pages_free(&page_array, max(ret, 0));
+>                 return ret < 0 ? ERR_PTR(ret) : ERR_PTR(-EFAULT);
+>         }
+>         /*
+> --
+> 2.35.3
+>
+>
+> ________________________________
+> =E6=9C=AC=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E5=86=85=
+=E5=AE=B9=E5=8F=AF=E8=83=BD=E5=90=AB=E6=9C=89=E6=9C=BA=E5=AF=86=E5=92=8C/=
+=E6=88=96=E9=9A=90=E7=A7=81=E4=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E4=BE=9B=E6=
+=8C=87=E5=AE=9A=E4=B8=AA=E4=BA=BA=E6=88=96=E6=9C=BA=E6=9E=84=E4=BD=BF=E7=94=
+=A8=E3=80=82=E8=8B=A5=E6=82=A8=E9=9D=9E=E5=8F=91=E4=BB=B6=E4=BA=BA=E6=8C=87=
+=E5=AE=9A=E6=94=B6=E4=BB=B6=E4=BA=BA=E6=88=96=E5=85=B6=E4=BB=A3=E7=90=86=E4=
+=BA=BA=EF=BC=8C=E8=AF=B7=E5=8B=BF=E4=BD=BF=E7=94=A8=E3=80=81=E4=BC=A0=E6=92=
+=AD=E3=80=81=E5=A4=8D=E5=88=B6=E6=88=96=E5=AD=98=E5=82=A8=E6=AD=A4=E9=82=AE=
+=E4=BB=B6=E4=B9=8B=E4=BB=BB=E4=BD=95=E5=86=85=E5=AE=B9=E6=88=96=E5=85=B6=E9=
+=99=84=E4=BB=B6=E3=80=82=E5=A6=82=E6=82=A8=E8=AF=AF=E6=94=B6=E6=9C=AC=E9=82=
+=AE=E4=BB=B6=EF=BC=8C=E8=AF=B7=E5=8D=B3=E4=BB=A5=E5=9B=9E=E5=A4=8D=E6=88=96=
+=E7=94=B5=E8=AF=9D=E6=96=B9=E5=BC=8F=E9=80=9A=E7=9F=A5=E5=8F=91=E4=BB=B6=E4=
+=BA=BA=EF=BC=8C=E5=B9=B6=E5=B0=86=E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6=E3=80=
+=81=E9=99=84=E4=BB=B6=E5=8F=8A=E5=85=B6=E6=89=80=E6=9C=89=E5=A4=8D=E6=9C=AC=
+=E5=88=A0=E9=99=A4=E3=80=82=E8=B0=A2=E8=B0=A2=E3=80=82
+> The contents of this message and any attachments may contain confidential=
+ and/or privileged information and are intended exclusively for the address=
+ee(s). If you are not the intended recipient of this message or their agent=
+, please note that any use, dissemination, copying, or storage of this mess=
+age or its attachments is not allowed. If you receive this message in error=
+, please notify the sender by reply the message or phone and delete this me=
+ssage, any attachments and any copies immediately.
+> Thank you
