@@ -2,261 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A823374A304
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07B974A305
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjGFRUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S232073AbjGFRUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjGFRUI (ORCPT
+        with ESMTP id S231666AbjGFRUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:20:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E511BE8
+        Thu, 6 Jul 2023 13:20:09 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2CB1BE9
         for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:20:07 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366HGguZ018549;
-        Thu, 6 Jul 2023 17:19:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=fpbgZAypLVutubvEgDeOpjatjldLvtjIaN/4OpbK9+I=;
- b=psC8RYW6ioXS1IY7+GSiRTzwM3nOZ/ZrFdflPoKjzUJRK1Bz2Z3eHo2eIs4o4DYCIlW+
- /4ViQc9okqDerplACGpEj2MDqSQqAyduVsxRP1WRt7SQhRiGkDlUkoxYn+YusNIA8Wr/
- mM8yBMem/Jnef+/p7DaTDhgMH23Nw0JK2sNKxnwcvUwCdBk713uqsX0dgBLMJqDSmviX
- aFeqvCqeraYwx0q+3nh9XBnJvA94lOjkeUQFE34jQzbnOe7OzVy3j7ln2NkITy+eAnMq
- Wjq9x04vKCqSCPD0XqeVb9ybm2XSbMn/nl9e2DcAJDmDj02tjFrhVtzkMgS2S/GeVmV5 hQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rp1v8030r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 17:19:45 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 366HGw13019423;
-        Thu, 6 Jul 2023 17:19:45 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rp1v80302-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 17:19:45 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 366Gdw4x017203;
-        Thu, 6 Jul 2023 17:19:43 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3rjbs61pd4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 17:19:43 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 366HJh8f60555728
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jul 2023 17:19:43 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B5A65805A;
-        Thu,  6 Jul 2023 17:19:43 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5358858060;
-        Thu,  6 Jul 2023 17:19:37 +0000 (GMT)
-Received: from [9.171.87.7] (unknown [9.171.87.7])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Jul 2023 17:19:36 +0000 (GMT)
-Message-ID: <de856969-5d78-f771-96ff-4afce3a6e776@linux.vnet.ibm.com>
-Date:   Thu, 6 Jul 2023 22:49:35 +0530
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55bc29a909dso561593a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 10:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688664007; x=1691256007;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k9ea0Od7Ss8KSCo0Ba6GtQFVksMPHnFvx3hnoqe8eeY=;
+        b=fQQ7hzusqcO2Mb5AQ960t54PR7FMZocWeAtbfCtyJZAV8i6B9OQAivVlHoDnpsFN2k
+         Qm1kdgueLRMJUOcbbfNh5RyCkx+scTiJF9FIL0O7an83YsYxsSTrbLNqkX+zGQom84FX
+         /cojomOG2sUxoe2p0zFMkAJIPsHSCKdsdkithdcPNeURi7RxIJBkg79qbywfJVZiuyNA
+         gNhKkyPv5XnliYrKT9IpuCN0GOj2XzFFZVpkj/kqWfUObmt7Y2qSlZNGLazWfyhr7Puk
+         1JsD4mwjtElm4HEK4vJ/PS3VV2CPQtjdj0Tui/QqCQS8H3gOGSjqnXec+bQZHK6nBCUw
+         ytPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688664007; x=1691256007;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k9ea0Od7Ss8KSCo0Ba6GtQFVksMPHnFvx3hnoqe8eeY=;
+        b=JkA/HZ04PgpvlkJ8g7V5eHutOjs2M9gzSH3uK/NP772E3pKbQcksWhjlNYI+sgNiii
+         nyOYTsT4OVn4uJQ713EpJMjWwld3cLF5G5s6lnKW+8+FAgN/wtNLwLmT/I50FDZnJnWp
+         vIX2SSjPJBh7AJq9jeM2eMJch9t58CXFEvM+0Hxm16ZhRkEyeh7YFnDejd5mdEP2sOuN
+         ZRmUCt01uUEsna3f2yOLE+C6nLa+FDsuxgwwkN6NaT8UPqapjEc1tX7vwT1DhyEVruvY
+         RmAcDqutxVO94OHRmYDCLa5JOYgYgFz8dpgSHcf6kUO/ZjuegG1+y/KOolS3ovbVKU2N
+         7icg==
+X-Gm-Message-State: ABy/qLYbGADcIG2tFrILpLP19Q2mvdRY2J9H8MX00o4QuNqND6uJEf3o
+        309nPtCcBZkG772bA6AEZFkhRQ==
+X-Google-Smtp-Source: APBJJlGIzD3wgfXmLqpF5j/wbpDQeS0eCZKqUWowt+GLYOi3W+0iK2Ooqw2rQRyVOs7PEhn81abgMw==
+X-Received: by 2002:a17:90a:c690:b0:262:c974:6057 with SMTP id n16-20020a17090ac69000b00262c9746057mr1931210pjt.32.1688664007220;
+        Thu, 06 Jul 2023 10:20:07 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:b0a5:7a22:4bcf:c911])
+        by smtp.gmail.com with ESMTPSA id az9-20020a056a02004900b00519c3475f21sm1431884pgb.46.2023.07.06.10.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 10:20:06 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 11:20:03 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Trilok Soni <quic_tsoni@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>, corbet@lwn.net,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
+        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Alex Elder <elder@linaro.org>
+Subject: Re: [PATCH v4 00/21] Add Qualcomm Minidump kernel driver related
+ support
+Message-ID: <ZKb3wz2eXS6h1yIW@p14s>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <2023062814-chance-flounder-f002@gregkh>
+ <CAL_JsqLO9yey2-4FcWsaGxijiS6hGL0SH9VoMuiyei-u9=Cv=w@mail.gmail.com>
+ <cc30660f-dd72-aade-6346-a93c6ad4b695@quicinc.com>
+ <29af84dc-7db8-0c43-07b6-eb743cf25e57@linaro.org>
+ <957a3cdb-6091-8679-ddb0-296db2347291@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC 1/1] sched/fair: Consider asymmetric scheduler groups in
- load balancer
-Content-Language: en-US
-To:     Tobias Huschle <huschle@linux.ibm.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, srikar@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org,
-        shrikanth hegde <sshegde@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-References: <20230515114601.12737-1-huschle@linux.ibm.com>
- <20230515114601.12737-2-huschle@linux.ibm.com>
-From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-In-Reply-To: <20230515114601.12737-2-huschle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uLZjPBL35LtqkYbUlwG2RmZkr_hMskng
-X-Proofpoint-ORIG-GUID: tD11YAvJDu0KgpgeKfpmzGAsLInLz6vi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_12,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 clxscore=1011 spamscore=0 mlxlogscore=999 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060154
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <957a3cdb-6091-8679-ddb0-296db2347291@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/15/23 5:16 PM, Tobias Huschle wrote:
-> The current load balancer implementation implies that scheduler groups,
-> within the same domain, all host the same number of CPUs. This is
-> reflected in the condition, that a scheduler group, which is load
-> balancing and classified as having spare capacity, should pull work
-> from the busiest group, if the local group runs less processes than
-> the busiest one. This implies that these two groups should run the
-> same number of processes, which is problematic if the groups are not 
-> of the same size.
+On Mon, Jul 03, 2023 at 02:05:58PM -0700, Trilok Soni wrote:
+> On 7/2/2023 1:29 AM, Krzysztof Kozlowski wrote:
+> > On 30/06/2023 18:04, Mukesh Ojha wrote:
+> > > > 
+> > > > > We don't add layers when they are not needed, and never when there is no
+> > > > > actual user.  If you need the extra "complexity" later, then add it
+> > > > > later when it is needed as who knows when that will ever be.
+> > > > > 
+> > > > > Please redo this series based on that, thanks.
+> > > > 
+> > > > My bigger issue with this whole series is what would this all look
+> > > > like if every SoC vendor upstreamed their own custom dumping
+> > > > mechanism. That would be a mess. (I have similar opinions on the
+> > > > $soc-vendor hypervisors.)
+> > 
+> > Mukesh,
+> > 
+> > LPC CFP is still open. There will be also Android and Kernel Debugging
+> > LPC microconference tracks. Coming with a unified solution could be a
+> > great topic for LPC. Solutions targeting only one user are quite often
+> > frowned upon.
 > 
-> The assumption that scheduler groups within the same scheduler domain
-> host the same number of CPUs appears to be true for non-s390 
-> architectures. Nevertheless, s390 can have scheduler groups of unequal 
-> size.
+> LPC is far out and in November. Can we not have others speak up if they have
+> the similar solution now? We can expand this to linux-kernel and ask for the
+> other SOC vendors to chime in. I am sure that we may have existing solutions
+> which came in for the one user first like Intel RDT if I remember. I am sure
+> ARM MPAM usecase was present at that time but Intel RDT based solution which
+> was x86 specific but accepted.
+
+I am not familiar with Intel RDT and Arm MPAM but the community is always
+improving on the way it does things.
+
+LPC is indeed far out in November but it is an opportunity to cover the
+groundwork needed to have this discussion.  It is always best to improve on
+something then introduce something new.  Even better if something specific such
+as Intel RDT and Arm MPAM can be made more generic.  A perfect example is
+hwtracing Linus referred to.  The perf framework wasn't a perfect fit but it was
+enhanced to accommodate our requirements.  I suggest to look at what is currently
+available and come up with a strategy to be presented at LPC - event better if
+you have a prototype.  If you can't find anything or the drawbacks inherent to
+each avenue outweigh the benefits then we can have that conversation at LPC.
+
 > 
-> This introduces a performance degredation in the following scenario:
-> 
-> Consider a system with 8 CPUs, 6 CPUs are located on one CPU socket,
-> the remaining 2 are located on another socket:
-> 
-> Socket   -----1-----    -2-
-> CPU      1 2 3 4 5 6    7 8
-> 
-> Placing some workload ( x = one task ) yields the following
-> scenarios:
-> 
-> The first 5 tasks are distributed evenly across the two groups.
-> 
-> Socket   -----1-----    -2-
-> CPU      1 2 3 4 5 6    7 8
->          x x x          x x
-> 
-> Adding a 6th task yields the following distribution:
-> 
-> Socket   -----1-----    -2-
-> CPU      1 2 3 4 5 6    7 8
-> SMT1     x x x          x x
-> SMT2                    x
-> 
-> The task is added to the 2nd scheduler group, as the scheduler has the
-> assumption that scheduler groups are of the same size, so they should
-> also host the same number of tasks. This makes CPU 7 run into SMT 
-> thread, which comes with a performance penalty. This means, that in 
-> the window of 6-8 tasks, load balancing is done suboptimally, because 
-> SMT is used although there is no reason to do so as fully idle CPUs 
-> are still available.
-> 
-> Taking the weight of the scheduler groups into account, ensures that
-> a load balancing CPU within a smaller group will not try to pull tasks
-> from a bigger group while the bigger group still has idle CPUs
-> available.
-> 
-> Signed-off-by: Tobias Huschle <huschle@linux.ibm.com>
-> ---
->  kernel/sched/fair.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 48b6f0ca13ac..b1307d7e4065 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -10426,7 +10426,8 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
->  	 * group's child domain.
->  	 */
->  	if (sds.prefer_sibling && local->group_type == group_has_spare &&
-> -	    busiest->sum_nr_running > local->sum_nr_running + 1)
-> +	    busiest->sum_nr_running * local->group_weight >
-> +			local->sum_nr_running * busiest->group_weight + 1)
->  		goto force_balance;
-> 
-
-
-I assume its SMT2 here. sched group is enclosed in [busy_cpus/idle_cpus/weight] 
-
-Lets take an example:  we will begin the with the said imbalance.
-[3/9/12] -- local group 
-[3/1/4] -- busy group. 
-we will evaluate 3*12 > (4*(3+1)) is true and proceeds further to balance. 
-but calculate_imbalance will lead to zero as the imbalance no? in case of prefer sibling 
-case it find the difference of sum_nr_running of the two groups. It will be 3-3 = 0
-
-this would need modifications to calculate_imbalance. 
-Maybe something like this will help? NOT TESTED AT ALL. 
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a80a73909dc2..e027d4086edc 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10296,7 +10296,9 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
-                        return;
-                }
-
--               if (busiest->group_weight == 1 || sds->prefer_sibling) {
-+               if (busiest->group_weight == 1 ||
-+                       (sds->prefer_sibling &&
-+                        busiest->group_weight == local->group_weight)) {
-                        unsigned int nr_diff = busiest->sum_nr_running;
-                        /*
-                         * When prefer sibling, evenly spread running tasks on
-@@ -10305,6 +10307,11 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
-                        env->migration_type = migrate_task;
-                        lsub_positive(&nr_diff, local->sum_nr_running);
-                        env->imbalance = nr_diff;
-+               }
-+               if (sds->prefer_sibling &&
-+                   busiest->group_weight != local->group_weight) {
-+                       env->migration_type = migrate_task;
-+                       env->imbalance = 1;
-                } else {
-
-
----------------------------------------------------------------------------------------------------
-On a tangential dimension.
-
-
-Since prefer_siblings make inherent assumption that all groups have equal weight, 
-it will cause  complications when group_weights are different. I think that becomes very
-tricky when there are more than two groups. Depending on which cpu is doing 
-load_balance there can be unnecessary migrations. 
-
-
-Currently even in NUMA this can be similar case right? There will be unequal number of CPU's right? 
-If we fix that case and remove prefer siblings in your arch, will that work? 
-
-Maybe something like this? NOT TESTED AT ALL.
-
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a80a73909dc2..fc6377f48ced 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10514,6 +10514,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
-                        goto out_balanced;
- 
-                if (busiest->group_weight > 1 &&
-+                   busiest->group_weight == local->group_weight &&
-                    local->idle_cpus <= (busiest->idle_cpus + 1))
-                        /*
-                         * If the busiest group is not overloaded
-@@ -10526,6 +10527,11 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
-                         */
-                        goto out_balanced;
- 
-+               if ((busiest->group_weight != local->group_weight) &&
-+                     (local->idle_cpus * busiest->group_weight <=
-+                              local->group_weight * (busiest->idle_cpus + 1)))
-+                       goto out_balanced;
-+
-                if (busiest->sum_h_nr_running == 1)
-                        /*
-                         * busiest doesn't have any tasks waiting to run
-
-
-
-
-
->  	if (busiest->group_type != group_overloaded) {
+> ---Trilok Soni
