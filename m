@@ -2,188 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5553374946F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 05:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BB5749472
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 05:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbjGFDog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 23:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S231281AbjGFDqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 23:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjGFDoe (ORCPT
+        with ESMTP id S233002AbjGFDqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 23:44:34 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3431BCF
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 20:44:08 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbdfda88f4so2191415e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 20:44:08 -0700 (PDT)
+        Wed, 5 Jul 2023 23:46:16 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8E019A9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 20:46:15 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-4036bd4fff1so190941cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 20:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688615047; x=1691207047;
+        d=google.com; s=20221208; t=1688615174; x=1691207174;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jpdCKCp+dEsXjUfnxgC7qSAJV2eBz4qj2jsssqk1txs=;
-        b=iXDH/ghPLGc9raD3qKetKj/KUpmZePX4PNAORCoaQYBdMqKXKCtW+TZPJcAOk1rTdP
-         IMbnwpoopc+i6RQjurWxU6VrAHS5NHNETEIVvcpDgwgx6haEvQm3f0TippJsoFEqHGDJ
-         U0IZLzlFg0hsymvDvlzb7UPmM4EnnN/bBfCOVyWncse42TgvyXSe75LL0DKn2bB+0WXa
-         Bt1mRQJ4UVbaCZpyIQx+FNpuSXh9xFFQmjEPoUzQIjzZR50g+r1hTHedz/ejAr4Znn4U
-         8z9HU/kunrrK0MZ+synCMg9CKp0+SMKz5l29beFS2JK6ifjnmeVpDw24dWb7pP++BTdG
-         nwzQ==
+        bh=0+6/Ewb8CW5UwEFhxq3+XjTdI8H69MzsvTdOeTrNFoc=;
+        b=mN6rfKgpcNjak7Axni12ZY6Wk8AwXxOEoZcKwn3D6Sa5SW8IY24aEKK1mVTR429Lfp
+         ItRJBvIY02HblatSRe2TZJIrobFqPVZqallzFmZVUXYDCbVBmMXzYDVy/he4OXA63AVP
+         U4ePOEC6p+4hlvrx9HsJ/eQZ8ET4e9P6IeqbMghhkANlznyKoIt40kKZVBSPIJvKt1/Z
+         WTv+lXEGTlP8i0SwC6qof5B0tzZjjWY6+7daVwz/YG4UYp9YY2Wd6xhbkHZrggk6JNQ4
+         X+tbMUbuB5btk/A6eumcLsHJLe66PwljLnwb2zsxQ4Z8fLORqFH0/6UfloZqBoTY5zVe
+         cE8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688615047; x=1691207047;
+        d=1e100.net; s=20221208; t=1688615174; x=1691207174;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jpdCKCp+dEsXjUfnxgC7qSAJV2eBz4qj2jsssqk1txs=;
-        b=V9CawRabR4XW0fa/eE4ypz5IpclLwTGbcpR2H2+V77YwHfIeQWIAdjX+qGx90fI16m
-         OPZ4699HT1Scs8I1UtlD5Czx909BsaOAICR+6uVbdYusFfdEHkkDRH2KVrjlhGC9xWVO
-         86jEcFl8HkXRGHT+r13cRsg2g2eZCfkqhfaPG0wlBzHBnZP4kwqQkQouzBaxDoBbG6m0
-         udibPNepAJATH57PzicUwiKR/Bq7fWCKM+3kCfUO9GWYd8HtsxIIrs7/ExrAzPi9k+PC
-         4AtW8mGUovwcHjqZd2k+tUnBCbh6ANhymPatF+4PYuZTuql+1Y4hiqR6r2hHXZVJzIa8
-         vrlA==
-X-Gm-Message-State: ABy/qLbSTJIw9Mlj+dsaLwvcLlf4+TpLbJjn2IpC+vXXzKfUw5nYLiBA
-        WkFOohoUL5NDWXKodz4HHq2/mOGKkuAhv4VmnVIqrQ==
-X-Google-Smtp-Source: APBJJlG8oJJ/0Lw6qO1wtxj2L3BYTTBuF2LIPDKZd3AA7ZMseFgpU0K2z+5nLIryFaJlkLROHdg8KF/EMX8q/u/r47c=
-X-Received: by 2002:adf:e34c:0:b0:314:3b17:d7c5 with SMTP id
- n12-20020adfe34c000000b003143b17d7c5mr382795wrj.43.1688615046885; Wed, 05 Jul
- 2023 20:44:06 -0700 (PDT)
+        bh=0+6/Ewb8CW5UwEFhxq3+XjTdI8H69MzsvTdOeTrNFoc=;
+        b=JiqLFpNQsW3Rim6yeo6VrF7/VRgseWlr6qUmCFhsjKFKsRfAxzPL1Xpy399zIhOXe5
+         il2Yjmleth2L9mVcBCx2TCTo2zww5yQ6oYyrDo3RskRG0du1zsnXZjRJ0E1qjOx8o8js
+         F8R8AUBVpkq03sduuYMKNETvzJ42zwMybErfxhYSwHeh1GFjn1ABUrcSg74cQM7FJ2CK
+         xSVKqxFvnO9wADzzkAffeC/ipblrKeBN+UJuA5OHZRIOtFN0tZQqJqvfpaoqGbl7vTMG
+         03S+RtBaGwUu2elwyPHJ03Z/ak+3U0sMGC/4HEN/zu1KUCERZM6guCp/7YioGrB+316g
+         TEzg==
+X-Gm-Message-State: ABy/qLYYJzrDhGG3hU8GxoO/QFJCBECRXtPFcVF5MruVbxeUEztYuYdC
+        +asBvDtSKWVvUqJaPXZ7kbaUbYKrmv9WQWpeaWud
+X-Google-Smtp-Source: APBJJlHsHH6nzDsCx7a1NDkE/ars8TnxZry/kitdXKktcG8vaHSCWznkTEwnZR+TihSb631/t793e7pJUlf2ghaX/Jg=
+X-Received: by 2002:a05:622a:1999:b0:3ef:3361:75d5 with SMTP id
+ u25-20020a05622a199900b003ef336175d5mr35107qtc.11.1688615174355; Wed, 05 Jul
+ 2023 20:46:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230705114251.661-1-cuiyunhui@bytedance.com> <20230705114251.661-5-cuiyunhui@bytedance.com>
- <20230705-oblivious-unstuffed-8e028a5b243c@spud>
-In-Reply-To: <20230705-oblivious-unstuffed-8e028a5b243c@spud>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Thu, 6 Jul 2023 11:43:55 +0800
-Message-ID: <CAEEQ3wmG1OiE3GFqQp9SP+oKUbTfuTPx=rNGd-sjKsW7vv3bew@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v3 4/4] dt-bindings: firmware: Document
- ffitbl binding
-To:     Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org
-Cc:     sunilvl@ventanamicro.com, ardb@kernel.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, rminnich@gmail.com,
-        mark.rutland@arm.com, lpieralisi@kernel.org, rafael@kernel.org,
-        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com
+References: <20230706032257.1662-1-duminjie@vivo.com>
+In-Reply-To: <20230706032257.1662-1-duminjie@vivo.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 5 Jul 2023 20:46:03 -0700
+Message-ID: <CANDhNCoJ2ZjGCY3yZ3K4XZF8-bNTExOUWNkqWtJ2FZW=bYFwzw@mail.gmail.com>
+Subject: Re: [PATCH v1] tools: timers: fix freq average calculation
+To:     Minjie Du <duminjie@vivo.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "open list:TIMEKEEPING, CLOCKSOURCE CORE, NTP, ALARMTIMER" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, opensource.kernel@vivo.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On Wed, Jul 5, 2023 at 8:23=E2=80=AFPM Minjie Du <duminjie@vivo.com> wrote:
+>
+> Delete a duplicate assignment from this function implementation.
+> The note means ppm is average of the two actual freq samples.
+> But ppm have a duplicate assignment.
+>
+> Signed-off-by: Minjie Du <duminjie@vivo.com>
+> ---
+>  tools/testing/selftests/timers/raw_skew.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/se=
+lftests/timers/raw_skew.c
+> index 5beceeed0..6eba203f9 100644
+> --- a/tools/testing/selftests/timers/raw_skew.c
+> +++ b/tools/testing/selftests/timers/raw_skew.c
+> @@ -129,8 +129,7 @@ int main(int argc, char **argv)
+>         printf("%lld.%i(est)", eppm/1000, abs((int)(eppm%1000)));
+>
+>         /* Avg the two actual freq samples adjtimex gave us */
+> -       ppm =3D (tx1.freq + tx2.freq) * 1000 / 2;
+> -       ppm =3D (long long)tx1.freq * 1000;
+> +       ppm =3D (long long)(tx1.freq + tx2.freq) * 1000 / 2;
 
-Added dts Maintainers,
+Huh. So yeah, I looked back in my own history and this has been there
+forever. I'm guessing I was intending to average the two samples and
+then due to reasons I can't remember decided to just use the first in
+the short-term for some debugging (with the second assignment) and
+committed both.
 
-On Wed, Jul 5, 2023 at 11:07=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> Hey,
->
-> On Wed, Jul 05, 2023 at 07:42:51PM +0800, Yunhui Cui wrote:
-> > Add the description for ffitbl subnode.
-> >
-> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> > ---
-> >  .../devicetree/bindings/firmware/ffitbl.txt   | 27 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 28 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/firmware/ffitbl.t=
-xt
-> >
-> > diff --git a/Documentation/devicetree/bindings/firmware/ffitbl.txt b/Do=
-cumentation/devicetree/bindings/firmware/ffitbl.txt
-> > new file mode 100644
-> > index 000000000000..c42368626199
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/firmware/ffitbl.txt
->
-> Firstly, new dt-bindings need to be done in yaml, not in text form.
-> Secondly, you didn't re-run get_maintainer.pl after adding this binding,
-> so you have not CCed any of the other dt-binding maintainers nor the
-> devicetree mailing list.
+I think it should be safe, because if the freq values are not the same
+the test will return SKIP, so it's unlikely changing this would cause
+new test failures.
 
-Re-run get_maintainer.pl and added maintainers into the maillist.
-emm.. There is some *txt in
-Documentation/devicetree/bindings/firmware/, isn't it?
+Acked-by: John Stultz <jstultz@google.com>
 
->
-> > @@ -0,0 +1,27 @@
->
-> > +FFI(FDT FIRMWARE INTERFACE) driver
-> > +
-> > +Required properties:
-> > + - entry             : acpi or smbios root pointer, u64
-> > + - reg                       : acpi or smbios version, u32
->
-> Please go look at any other dt-binding (or the example schema) as to how
-> these properties should be used. A "reg" certainly should not be being
-> used to store the revision...
-
-Okay, If so=EF=BC=8CI'll add a property "version" into the dts instead of
-"reg", just like, WDYT?
-ffitbl {
-    smbios {
-        entry =3D "";
-        version =3D < 0x02 >;
-    }
-   acpi {
-         entry =3D "";
-         version =3D < 0x06 >;
-  }
-}
-
->
-> Cheers,
-> Conor.
->
-> > +
-> > +Some bootloaders, such as Coreboot do not support EFI,
-> > +only devicetree and some arches do not have a reserved
-> > +address segment. Add "ffitbl" subnode to obtain ACPI RSDP
-> > +and SMBIOS entry.
-> > +This feature is known as FDT Firmware Interface (FFI).
-> > +
-> > +Example:
-> > +     ffitbl {
-> > +
-> > +             smbios {
-> > +                             entry =3D "";
-> > +                             reg =3D < 0x03 >;
-> > +
-> > +             }
-> > +             acpi {
-> > +                             entry =3D "";
-> > +                             reg =3D < 0x06 >;
-> > +
-> > +             }
-> > +     }
-> > +
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 9b886ef36587..008257e55062 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -7874,6 +7874,7 @@ F:      include/linux/efi*.h
-> >  FDT FIRMWARE INTERFACE (FFI)
-> >  M:   Yunhui Cui cuiyunhui@bytedance.com
-> >  S:   Maintained
-> > +F:   Documentation/devicetree/bindings/firmware/ffitbl.txt
-> >  F:   drivers/firmware/ffi.c
-> >  F:   include/linux/ffi.h
-> >
-> > --
-> > 2.20.1
-> >
-
-Thanks,
-Yunhui
+Thanks for noticing this and sending this out!
+-john
