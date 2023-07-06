@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE77B74A7D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 01:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F7574A7E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 01:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjGFXiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 19:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S232068AbjGFXlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 19:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjGFXiT (ORCPT
+        with ESMTP id S229522AbjGFXlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 19:38:19 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D81BE9;
-        Thu,  6 Jul 2023 16:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688686698; x=1720222698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0JKvud1PQdDP/vY9wglSJ4Q5ihblqLm8EVHVndBkp7Y=;
-  b=d1jzLILO73L2R7BUXqAgjMhI0WKZe4bZ11FS102lu4ZwtmcYwTAEZ0wu
-   uJ+7x54sesy4Wv+wTcNONGg5n8j9rvdrotcZBURS934ehcMzfR67TDLsS
-   kPHmAjRza8/MKeSDELl3Opjy5nw+qjzVwCeXeV0aCJejOHRbuEac71dr4
-   1nYgMHX/DP4SbMTNDsNG/wqOJLKFPx4DF6faMUrIqmCT4hI37BfGdMJsM
-   RfUNP+7Pi4tOoSqMpQHOHL3LUb1KLYz1VgR/mdAgvIn9pdEX7s0u94cqx
-   yHSIoCaqV/hEqZfI+tnXiBq61fHR6wKVGTJ0x7QFQkfg7zjUaeCADDN8d
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="348550714"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="348550714"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 16:38:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="754927658"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="754927658"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga001.jf.intel.com with ESMTP; 06 Jul 2023 16:38:15 -0700
-Date:   Thu, 6 Jul 2023 16:40:59 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
- IPC classes
-Message-ID: <20230706234058.GC12259@ranerica-svr.sc.intel.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
- <ZJQN/KIwCUmzYoiN@arm.com>
- <20230624000121.GA32639@ranerica-svr.sc.intel.com>
- <d211d4dedd79330412e71a8b9b4b599cfe0fc80c.camel@linux.intel.com>
+        Thu, 6 Jul 2023 19:41:15 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312B61BE8;
+        Thu,  6 Jul 2023 16:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1688686869;
+        bh=+DVSaSUi5APaXwzw07vQzluUGo109C77HYV67pR+4E8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nFM9kTLOQ88vZSo8rFMkcFGMt0izYxBZH2kpODy0UyJ9Qw0amJ3zK/9cEMHoDAPyF
+         f6CoYJpL7fXjOi4O2ioaGiiS1yR+ql3u2xCGQNY8np8z3X4rcIgBvH5447uJSbiuI0
+         dXhYjw8aCrYMOJD/2NIBIh782DOQws2Zgmt3xcIjeiNCPUNMcqmTyPZGIiol//tu6N
+         iKjFEEj8SDHdCATZs77A31F0utp/mMP/wD2oW3n5HpJP+M1jgJM2afc9Nxvj9WE9J9
+         DAWI+wKMtLs2oe0J/RXN+ZsK1z1yYZnppr5Bj5pSUgyYr3rv5jpTf43pXf2wrM/0iA
+         8Ew3JS5q3WSNQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QxtMS6W4Kz4wZs;
+        Fri,  7 Jul 2023 09:41:08 +1000 (AEST)
+Date:   Fri, 7 Jul 2023 09:41:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+Message-ID: <20230707094107.4964f91f@canb.auug.org.au>
+In-Reply-To: <20230616083237.421dff9d@canb.auug.org.au>
+References: <20230613130258.73be7f1b@canb.auug.org.au>
+        <20230616083237.421dff9d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d211d4dedd79330412e71a8b9b4b599cfe0fc80c.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; boundary="Sig_/=QcSNFvGjY/Vs0OrMlznfMh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,29 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 12:52:59PM -0700, Tim Chen wrote:
-> 
-> > > 
-> > > nit: the comment is unnecessary, and a bit misleading, IMO.
-> > > 
-> > > The comment says "This group will not be selected." but the only way to
-> > > guarantee that here is to reset the sum_score to 0 when you find an
-> > > invalid score, which I don't believe is your intention.
-> > 
-> > You raise an interesting point. We will call this function for each rq
-> > in the sched group. Thus, if we encounter an error, the scores would be
-> > incomplete. Therefore, I think that the scores should be discarded and
-> > reset to 0 so that they are not used, IMO.
-> 
-> Since we still have other rqs to loop through, reset to 0 here does
-> not guarantee that it will stay that way at the end of the loop when
-> the sum could still be added to.
+--Sig_/=QcSNFvGjY/Vs0OrMlznfMh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That is true, to discard the would need an indication that we should not
-keep iterating on the runqueues of this group.
+Hi all,
 
-> May need a special value like -EINVAL
-> and make the score a "long" to mark such case.
+On Fri, 16 Jun 2023 08:32:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> On Tue, 13 Jun 2023 13:02:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> > =20
+>  After merging the bluetooth tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> >=20
+> > ERROR: modpost: "pidfd_prepare" [net/bluetooth/bluetooth.ko] undefined!
+> >=20
+> > Caused by commit
+> >=20
+> >   817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
+> >=20
+> > I have reverted that commit for today. =20
+>=20
+> I am still reverting that commit.
 
-IIUC, unsigned longs allow to handle negative errors if you use
-IS_ERR_VALUE(); but yes, it looks odd.
+Ditto
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=QcSNFvGjY/Vs0OrMlznfMh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSnURMACgkQAVBC80lX
+0GwNuggAn0YP9h2AaXGQFN/iKx+y4/PZz8YvBKrm1lf3G6UWuww1OtC5XSw1CQ+h
+S0JJPzcmZI1cNgfPHs9hvCSiqh+3oT9ITpfm80PUahvnJLxM4xVEKpyaSiYwADQx
+ajhI2kkLgEux2qezOjUalD3OnahWvGw9ukEorLnS6rAbSZOu+0HVFk6rUMLDl2Si
+OougKKbZN3fi6DO1oXDuFcoU5ncfai19YMR87tbNEwmVCE6vZxNzxSj3ZLURSBsL
+qnc+QyswA+iiIY9MaZ54n7LhS+nc4ZYox7Vsush33+GtT5/u1rOKIUjUSiUqzmzi
+sZg3J7bY5SSXtT2hGTVpLpXfMYqKpQ==
+=dX1G
+-----END PGP SIGNATURE-----
+
+--Sig_/=QcSNFvGjY/Vs0OrMlznfMh--
