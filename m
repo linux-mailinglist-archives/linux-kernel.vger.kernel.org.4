@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A318474A18A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D2274A18C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbjGFPv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
+        id S229996AbjGFPwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjGFPvG (ORCPT
+        with ESMTP id S232655AbjGFPv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:51:06 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F5E269F
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:50:31 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9939fbb7191so164572466b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 08:50:31 -0700 (PDT)
+        Thu, 6 Jul 2023 11:51:58 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4E42680;
+        Thu,  6 Jul 2023 08:51:27 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-579ef51428eso12121657b3.2;
+        Thu, 06 Jul 2023 08:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688658622; x=1691250622;
+        d=gmail.com; s=20221208; t=1688658686; x=1691250686;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XUhfDmggsn5eqK33qgGT6h59DblDFC/G1j0z4SZy8Ck=;
-        b=zxr7ERCrDF1RetXZAxvNWoKt4JCwmRD+F7+ab+4uaw9SW9WaCbko3t5b8Ew7vhHlKF
-         y/ypmKf9yxgOoqMRvZWTDUcidgZC6ywWzLBF5Itq1qzq0MfVeoDV2jc5TQVpQNjOQjPV
-         R+JI78aOEH2PwA5NbGzI1XRtIUFMMeP/GQjkDpiIpnHi0UlmHqFCtk/DOX5L0jZjZPVA
-         gL83rWs36sX9zj9hLZf0mWgDY7NGjPg88Wvfbp2ArAI8/+CI+wb5vTuBGUQwFKNSTxad
-         bYWlNr2BjvrJaCoq6bbaPvb1cGdjbiZabUizqX5DSuLO4XyxXGmU04fBtwwpDXv4zwRy
-         n6bg==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=uz+lgUHN9yYqQiHqcQxc47Z3ej05yzddV+WOmdJaJJA=;
+        b=kzad0wqarRBIT+cz6ocHFO/4Lw8Zbe2MSUJeC5ljZ+foGYCd2yUpyWJRuq4YZ79yQB
+         vKHECusDfAjF/3a41FhBD43W1xRGt/FhhzYgo2lBD5gdABkvBaJiRO+CSPa+jN9Okff/
+         G2cw6Cjv9AXwDGWcsQD6YE9cB1ULy55Z6wHwftBtEQ0bv4wkcN9fn49YhGo55C604h6f
+         manMTif6SVbIjtAcf3Mbr7Nfx1CLlf6tQDDcbrqyJpcf1S4ui4MfVEXplk06ndhNOrGD
+         itmhxMi/bO1KJXDY9yJERACL15ol57chA8C2HU+rxHc2u8jfSKLLx9oPQI3miQtlqF1n
+         PlwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688658622; x=1691250622;
+        d=1e100.net; s=20221208; t=1688658686; x=1691250686;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XUhfDmggsn5eqK33qgGT6h59DblDFC/G1j0z4SZy8Ck=;
-        b=ZGyRWH/YkdI7+wA4zR2EGCSC6s9zXdNfjKMaTmDpNiPM+X96ix163kZblMS1EUc4SZ
-         LYWGfpN3Vf5fRFY/eE9tQYwPBShsE0+I0JmwndWE9udShwRKAdaO3RrQH9M7u1b6l+oa
-         sf+28EjPG4W/uEs9TwFg5Crb0av+Vg25Bar+OBlNt93utElwDUNYXGFZtfnGhiclOohW
-         FhhxKQ/wyzPCUeYH8ogE/D/wjYmG5ZwAPJ6lwhxUYqyKrDyQ8o21taY/bkPTfpXUDLwH
-         WMlM+kFFnWGVHcQt4yFgB55ihbz8Cr772gDFPGoKZuUtHI8X4iv7HNlSksgOariTJpnG
-         U+jQ==
-X-Gm-Message-State: ABy/qLZoDdDsxSX4Og/KQ3/INbRCAqYLMItttsDgX+uohVBZ1j0+2j78
-        nlUxYjJUZAtalFUqon9cwC5ZDA==
-X-Google-Smtp-Source: APBJJlHaa8zI+ZK8HBkcP1KU9kxKBZritHwYfobLjVsnf/vocePla9ck7Sg9U8FFsnEDpg6QnVoX9w==
-X-Received: by 2002:a17:907:1b1d:b0:98e:1729:aeee with SMTP id mp29-20020a1709071b1d00b0098e1729aeeemr5637800ejc.2.1688658622587;
-        Thu, 06 Jul 2023 08:50:22 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o26-20020a17090608da00b00992f1a3b9bfsm979463eje.170.2023.07.06.08.50.20
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uz+lgUHN9yYqQiHqcQxc47Z3ej05yzddV+WOmdJaJJA=;
+        b=DMymva5LlphA18l+EW6r2rB7oRkC1Z3pN9NXQt4hiw/HXpClad5/lX5jTKmxaFXU7a
+         FAo03po9N+Oy/VOgbWEEz7ZhGyblZqckQJx/pAfIRTJWQXldHGn2PqJRIJslKP9ILZea
+         kkDO0A7ZmIz0WgZCkO/2w0DGC1V+1zL5ETEhn5cO8Lw8yNUru5+CG3iuUZ2uCeqw8g9n
+         Oag6pAQ7J4HnaF4pBLXpJvIz5IgoRYyQGVJvMMUWr6giDsfIGZONE8JYIz9XJSpeoAtp
+         MqQblI+0ISvpZIXQj7EgsNMHS8C52LTCxC1snxkj9Ev4rh6oBBetMhZ7DX8vMyJJ5ga1
+         T5iw==
+X-Gm-Message-State: ABy/qLZoVKHV4epbmVYCqowT0E/RlQRKqN8Lsb7o8sAcBsBhum687zYc
+        4npf+CY5g8Mc9/V0ZpzL21U=
+X-Google-Smtp-Source: APBJJlFzmWHcCUPCF7aOn7Rh555EMJB85fsUa7sv6IU5KwgJTr0E7gsaOFErxcyU7x0QKvSTCaPL9A==
+X-Received: by 2002:a0d:ef07:0:b0:577:616e:2d72 with SMTP id y7-20020a0def07000000b00577616e2d72mr4171716ywe.5.1688658686158;
+        Thu, 06 Jul 2023 08:51:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s7-20020a815e07000000b0056d443372f0sm420401ywb.119.2023.07.06.08.51.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 08:50:22 -0700 (PDT)
-Message-ID: <fc6c219d-1ef2-f59f-ebb1-0a749fbbbc81@linaro.org>
-Date:   Thu, 6 Jul 2023 17:50:19 +0200
+        Thu, 06 Jul 2023 08:51:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <01df12bd-2872-b9d4-50e7-14a1cfabf4ec@roeck-us.net>
+Date:   Thu, 6 Jul 2023 08:51:22 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/7] dt-bindings: crypto: add new compatible for
- stm32-hash
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
 Content-Language: en-US
-To:     Thomas BOURGOIN <thomas.bourgoin@foss.st.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230706073719.1156288-1-thomas.bourgoin@foss.st.com>
- <20230706073719.1156288-2-thomas.bourgoin@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230706073719.1156288-2-thomas.bourgoin@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+ <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2023 09:37, Thomas BOURGOIN wrote:
-> From: Lionel Debieve <lionel.debieve@foss.st.com>
+On 7/6/23 08:39, Geert Uytterhoeven wrote:
+> Hi Günter,
 > 
-> Add a new compatible for stm32mp13 support.
+> On Thu, Jul 6, 2023 at 4:03 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On Thu, Jun 01, 2023 at 11:22:17PM +0300, Sergey Shtylyov wrote:
+>>> IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
+>>> return -EINVAL instead.  However, the kernel code supporting SH3/4-based
+>>> SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
+>>> IRQ #s from 16 instead.
+>>>
+>>> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+>>> indeed are using IRQ0 for the SMSC911x compatible Ethernet chip.
+>>>
+>>
+>> Unfortunately it also affects all sh4 emulations in qemu, and results in
+>> boot stalls with those. There isn't a relevant log to attach because there
+>> is no error message - booting just stalls until the emulation is aborted.
 > 
-> Signed-off-by: Lionel Debieve <lionel.debieve@foss.st.com>
+> Which sh4 platforms in particular?
+> 
+> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
+> (physical) two days ago.
+> 
 
-Your SoB is missing.
+It is r2d. Example qemu command line:
 
-Best regards,
-Krzysztof
+qemu-system-sh4 -M r2d -kernel arch/sh/boot/zImage -no-reboot \
+	-initrd rootfs.cpio -device rtl8139,netdev=net0 -netdev user,id=net0 \
+	-append "rdinit=/sbin/init console=ttySC1,115200 earlycon=scif,mmio16,0xffe80000 noiotrap" \
+	-serial null -serial stdio -nographic -monitor null
+
+Example set of logs:
+
+https://kerneltests.org/builders/qemu-sh-master/builds/5/steps/qemubuildcommand/logs/stdio
+
+Guenter
 
