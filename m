@@ -2,151 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14215749E1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10822749E21
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjGFNtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S232313AbjGFNtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGFNtF (ORCPT
+        with ESMTP id S229613AbjGFNtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:49:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F321990;
-        Thu,  6 Jul 2023 06:49:04 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366AsPaY018900;
-        Thu, 6 Jul 2023 13:49:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7Cpj3QvckdCcnQmh8EzvGDtgP4bc9V7BUNFPKA7zVAc=;
- b=GUvdzncr+OZa9sf36nOmclVLOESNju8e7TMD9KVXXXhyFBgjVcru8xly5UtYNAWfCF58
- V4zaCXcAI9RlR+vFhBCJU5KwLW3LKyXlkwUv1JYXIfXfxzuVJ7Y1D2Yef8/abiFodj8O
- ya220LaMdiOyjqzvjNUKTaCa/+mHLUHg3RuvNPtxLAvitxtcbuK0F2aoJxJEXXVjKlJP
- c3VUJ1qvzjpxeHyjFhbjPVsWciTsVX/0M3ddCv6is7PHIeO15XAG/OwLLmYQukhC4wls
- k+iRl+JJuFoIUE7UZJuScdH80auOtTFxi310TqKZp1DDJptFtnzPmmtjWLyeHnNrRATe EQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn5ht393u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 13:49:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366Dn0GK014191
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 13:49:00 GMT
-Received: from [10.216.57.11] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
- 2023 06:48:57 -0700
-Message-ID: <fb973659-c645-a4f2-e0fe-a40536e8b9fc@quicinc.com>
-Date:   Thu, 6 Jul 2023 19:18:53 +0530
+        Thu, 6 Jul 2023 09:49:43 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615D81997
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:49:42 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-401f4408955so246581cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 06:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688651381; x=1691243381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qjrs9y1+GJUuPnn18k+vb9OkRR0jNttB2jc3w3xRULQ=;
+        b=5wUT4ToI98Qy4bdev4umtuVDFIUEPoTE+oSuKc/mLtcojiO2BHtIjQXC4F6xzk5Sji
+         aDxsP5IUh+5Nm5lNfZz3cfStZmqY36KL5bChjDdkfqjN/S6PO8DXqMRaYz2ahtskGXbY
+         fm2HHIhp+1DzTihITsv8g8GHjXQvoMpnyCf3W/Cu8qWkYzBrflk5DnQiwg9sVuQr0kVn
+         Ghh1mOmRFrUPsfXBe5SLBJec1cuLu2sNMNjZ93xYC1MHSZVqAmPIK1rgFSvm6QOSLv8g
+         Ngi1racyE2IWKuZjo57dkCcxvdKxDINepAxSCFyV2ad7XANbyFZY0r7L7KhoFZvlljZh
+         2njQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688651381; x=1691243381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qjrs9y1+GJUuPnn18k+vb9OkRR0jNttB2jc3w3xRULQ=;
+        b=i1Zu1SnnblIU5AOfRRFFuwjkCpLpqptEzgXKHOFZ07JKx9QbVnMYH8Utrq6JAficH5
+         ZYbZK9JO11/iHlcJ8XCuY9Pz8RUwv6myCs6Zll0Fu2YGyp/hpc2gOkO3WXnpU8zzAj9U
+         24+MpdTSx/n0gwWZXYN/mbe9jsvwIW+V2RGWoiKdhNXfc2Jk7UvI2p2AmPCzzQXgIVF+
+         myYI3OAC2hg2Rmt3wTtxvCIPChrzEapKTeJmNPFLqoLHo3I40//pcgLM/sdZB3b4HiKn
+         YWX80zBjvDcoB0tMQVL+ZYRqAtFk64JHLifQ8fhSC8SsAtqiJv/o84Ii+EY+O4XR84S8
+         vQ9w==
+X-Gm-Message-State: ABy/qLas3lNeMIqn4Jd3UgGBMu7PTQL8KNxzxe3ENduuExzZ3YJhDX4G
+        H8obQV/Exu55i1rylzDcDJosJ6DnwiIlM6w/6IPPpQ==
+X-Google-Smtp-Source: APBJJlH977fTwY4ekritFy0dCZ7iWDMdIA/nBhEdFTp+WSE+WFPNMHbU07a9N6mpwG5Wo+f8+BSUUKO/5YLOrnb9CA8=
+X-Received: by 2002:ac8:5b05:0:b0:3ef:2f55:2204 with SMTP id
+ m5-20020ac85b05000000b003ef2f552204mr239850qtw.6.1688651381265; Thu, 06 Jul
+ 2023 06:49:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v2] usb: dwc3: core: set force_gen1 bit in USB31 devices
- if max speed is SS
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
-References: <20230514145118.20973-1-quic_kriskura@quicinc.com>
- <20230517001105.v74dyo6asqtcrpii@synopsys.com>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230517001105.v74dyo6asqtcrpii@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: aBITCC__nrX_cAoYpbSYUKDUwnHNMCyz
-X-Proofpoint-GUID: aBITCC__nrX_cAoYpbSYUKDUwnHNMCyz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_10,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0 bulkscore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060123
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230706063440.54189-1-sandipan.das@amd.com>
+In-Reply-To: <20230706063440.54189-1-sandipan.das@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 6 Jul 2023 06:49:29 -0700
+Message-ID: <CAP-5=fVdVSL4H1qWLZMiU3H2-bOJ0RkFOfq4Jxz1qw0-8EoYFw@mail.gmail.com>
+Subject: Re: [PATCH v2] perf vendor events amd: Fix large metrics
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
+        ayush.jain3@amd.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 5, 2023 at 11:34=E2=80=AFPM Sandipan Das <sandipan.das@amd.com>=
+ wrote:
+>
+> There are cases where a metric requires more events than the number of
+> available counters. E.g. AMD Zen, Zen 2 and Zen 3 processors have four
+> data fabric counters but the "nps1_die_to_dram" metric has eight events.
+> By default, the constituent events are placed in a group and since the
+> events cannot be scheduled at the same time, the metric is not computed.
+> The "all metrics" test also fails because of this.
+>
+> Use the NO_GROUP_EVENTS constraint for such metrics which anyway expect
+> the user to run perf with "--metric-no-group".
+>
+> E.g.
+>
+>   $ sudo perf test -v 101
+>
+> Before:
+>
+>   101: perf all metrics test                                           :
+>   --- start ---
+>   test child forked, pid 37131
+>   Testing branch_misprediction_ratio
+>   Testing all_remote_links_outbound
+>   Testing nps1_die_to_dram
+>   Metric 'nps1_die_to_dram' not printed in:
+>   Error:
+>   Invalid event (dram_channel_data_controller_4) in per-thread mode, enab=
+le system wide with '-a'.
+>   Testing macro_ops_dispatched
+>   Testing all_l2_cache_accesses
+>   Testing all_l2_cache_hits
+>   Testing all_l2_cache_misses
+>   Testing ic_fetch_miss_ratio
+>   Testing l2_cache_accesses_from_l2_hwpf
+>   Testing l2_cache_misses_from_l2_hwpf
+>   Testing op_cache_fetch_miss_ratio
+>   Testing l3_read_miss_latency
+>   Testing l1_itlb_misses
+>   test child finished with -1
+>   ---- end ----
+>   perf all metrics test: FAILED!
+>
+> After:
+>
+>   101: perf all metrics test                                           :
+>   --- start ---
+>   test child forked, pid 43766
+>   Testing branch_misprediction_ratio
+>   Testing all_remote_links_outbound
+>   Testing nps1_die_to_dram
+>   Testing macro_ops_dispatched
+>   Testing all_l2_cache_accesses
+>   Testing all_l2_cache_hits
+>   Testing all_l2_cache_misses
+>   Testing ic_fetch_miss_ratio
+>   Testing l2_cache_accesses_from_l2_hwpf
+>   Testing l2_cache_misses_from_l2_hwpf
+>   Testing op_cache_fetch_miss_ratio
+>   Testing l3_read_miss_latency
+>   Testing l1_itlb_misses
+>   test child finished with 0
+>   ---- end ----
+>   perf all metrics test: Ok
+>
+> Reported-by: Ayush Jain <ayush.jain3@amd.com>
+> Suggested-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 
+Acked-by: Ian Rogers <irogers@google.com>
 
-On 5/17/2023 5:41 AM, Thinh Nguyen wrote:
-> On Sun, May 14, 2023, Krishna Kurapati wrote:
->> Currently for dwc3_usb31 controller, if maximum_speed is limited to
->> super-speed in DT, then device mode is limited to SS, but host mode
->> still works in SSP.
->>
->> The documentation for max-speed property is as follows:
->>
->> "Tells USB controllers we want to work up to a certain speed.
->> Incase  this isn't passed via DT, USB controllers should default to
->> their maximum HW capability."
->>
->> It doesn't specify that the property is only for device mode.
->> There are cases where we need to limit the host's maximum speed to
->> SuperSpeed only. Use this property for host mode to contrain host's
->> speed to SuperSpeed.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->> Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/all/20230512170107.18821-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!dCg_3WK2oNXNb6d0a_VuyjkeeZJTU1aY4dik6g35XB7mtG7EJeR1uPMfxFja49OfXp7Yhsg1yqjnylCYYEg7YCAhqfAZ0Q$
->>
->> Discussion regarding the same at:
->> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!dCg_3WK2oNXNb6d0a_VuyjkeeZJTU1aY4dik6g35XB7mtG7EJeR1uPMfxFja49OfXp7Yhsg1yqjnylCYYEg7YCDRLUrJWg$
->>
->>   drivers/usb/dwc3/core.c | 8 ++++++++
->>   drivers/usb/dwc3/core.h | 5 +++++
->>   2 files changed, 13 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 278cd1c33841..33bc72595e74 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1262,6 +1262,14 @@ static int dwc3_core_init(struct dwc3 *dwc)
->>   		}
->>   	}
->>   
->> +	if ((hw_mode != DWC3_GHWPARAMS0_MODE_GADGET) &&
->> +	    (DWC3_IP_IS(DWC31)) &&
->> +	    (dwc->maximum_speed == USB_SPEED_SUPER)) {
->> +		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
->> +		reg |= DWC3_LLUCTL_FORCE_GEN1;
->> +		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
->> +	}
->> +
-> 
-> Perhaps this should be done for every usb3 port rather than just the
-> port_0. This patch can go after your multi-port series is added to
-> Greg's branch where you can check for number of usb3 ports.
-> 
-> Thanks,
-> Thinh
-> 
+Will there be a PMU driver fix so that the perf_event_open fails for
+the group? That way the weak group would work.
 
-Hi Thinh,
+Thanks,
+Ian
 
-   Seems like multiport would take little more time and I need this 
-patch to be ported to ACK for fixing customer issue. Would it be 
-possible to take this patch as is ? Once multiport is done, I will send 
-another patch to include the changes for mutliport as well.
-
-Regards,
-Krishna,
+> ---
+>
+> Previous versions can be found at:
+> v1: https://lore.kernel.org/all/20230614090710.680330-1-sandipan.das@amd.=
+com/
+>
+> Changes in v2:
+> - As suggested by Ian, use the NO_GROUP_EVENTS constraint instead of
+>   retrying the test scenario with --metric-no-group.
+> - Change the commit message accordingly.
+>
+>  tools/perf/pmu-events/arch/x86/amdzen1/recommended.json | 3 ++-
+>  tools/perf/pmu-events/arch/x86/amdzen2/recommended.json | 3 ++-
+>  tools/perf/pmu-events/arch/x86/amdzen3/recommended.json | 3 ++-
+>  3 files changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json b/to=
+ols/perf/pmu-events/arch/x86/amdzen1/recommended.json
+> index bf5083c1c260..4d28177325a0 100644
+> --- a/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json
+> +++ b/tools/perf/pmu-events/arch/x86/amdzen1/recommended.json
+> @@ -169,8 +169,9 @@
+>    },
+>    {
+>      "MetricName": "nps1_die_to_dram",
+> -    "BriefDescription": "Approximate: Combined DRAM B/bytes of all chann=
+els on a NPS1 node (die) (may need --metric-no-group)",
+> +    "BriefDescription": "Approximate: Combined DRAM B/bytes of all chann=
+els on a NPS1 node (die)",
+>      "MetricExpr": "dram_channel_data_controller_0 + dram_channel_data_co=
+ntroller_1 + dram_channel_data_controller_2 + dram_channel_data_controller_=
+3 + dram_channel_data_controller_4 + dram_channel_data_controller_5 + dram_=
+channel_data_controller_6 + dram_channel_data_controller_7",
+> +    "MetricConstraint": "NO_GROUP_EVENTS",
+>      "MetricGroup": "data_fabric",
+>      "PerPkg": "1",
+>      "ScaleUnit": "6.1e-5MiB"
+> diff --git a/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json b/to=
+ols/perf/pmu-events/arch/x86/amdzen2/recommended.json
+> index a71694a043ba..60e19456d4c8 100644
+> --- a/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json
+> +++ b/tools/perf/pmu-events/arch/x86/amdzen2/recommended.json
+> @@ -169,8 +169,9 @@
+>    },
+>    {
+>      "MetricName": "nps1_die_to_dram",
+> -    "BriefDescription": "Approximate: Combined DRAM B/bytes of all chann=
+els on a NPS1 node (die) (may need --metric-no-group)",
+> +    "BriefDescription": "Approximate: Combined DRAM B/bytes of all chann=
+els on a NPS1 node (die)",
+>      "MetricExpr": "dram_channel_data_controller_0 + dram_channel_data_co=
+ntroller_1 + dram_channel_data_controller_2 + dram_channel_data_controller_=
+3 + dram_channel_data_controller_4 + dram_channel_data_controller_5 + dram_=
+channel_data_controller_6 + dram_channel_data_controller_7",
+> +    "MetricConstraint": "NO_GROUP_EVENTS",
+>      "MetricGroup": "data_fabric",
+>      "PerPkg": "1",
+>      "ScaleUnit": "6.1e-5MiB"
+> diff --git a/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json b/to=
+ols/perf/pmu-events/arch/x86/amdzen3/recommended.json
+> index 988cf68ae825..3e9e1781812e 100644
+> --- a/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json
+> +++ b/tools/perf/pmu-events/arch/x86/amdzen3/recommended.json
+> @@ -205,10 +205,11 @@
+>    },
+>    {
+>      "MetricName": "nps1_die_to_dram",
+> -    "BriefDescription": "Approximate: Combined DRAM B/bytes of all chann=
+els on a NPS1 node (die) (may need --metric-no-group)",
+> +    "BriefDescription": "Approximate: Combined DRAM B/bytes of all chann=
+els on a NPS1 node (die)",
+>      "MetricExpr": "dram_channel_data_controller_0 + dram_channel_data_co=
+ntroller_1 + dram_channel_data_controller_2 + dram_channel_data_controller_=
+3 + dram_channel_data_controller_4 + dram_channel_data_controller_5 + dram_=
+channel_data_controller_6 + dram_channel_data_controller_7",
+>      "MetricGroup": "data_fabric",
+>      "PerPkg": "1",
+> +    "MetricConstraint": "NO_GROUP_EVENTS",
+>      "ScaleUnit": "6.1e-5MiB"
+>    }
+>  ]
+> --
+> 2.34.1
+>
