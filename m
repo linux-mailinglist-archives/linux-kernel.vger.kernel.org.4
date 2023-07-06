@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9C074A467
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F3074A46B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjGFTcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S232506AbjGFTcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjGFTcA (ORCPT
+        with ESMTP id S229538AbjGFTcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:32:00 -0400
-Received: from out-27.mta0.migadu.com (out-27.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E8D1BD3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:31:55 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 15:31:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688671913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PGCCHwwA0cqXeEKD4KLulUCgMqGwkQRRxiEeo6W/m4I=;
-        b=uLSIk5UJnWZnWg1Sh4p4US2Xr0/a9bs9JhQ9SV/5kZaoyMtIMdu/mExFa/MPGbqDQack9r
-        2/zSEQha87UaghKVQv2E9fW4Mzs9erE734Q2T8cjrYVRcWjpQmj6/HUq8rGWDH8EQ5dMzc
-        ULREbxOP4mTmET86ulXYaWEv7X9uxwo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Eric Sandeen <sandeen@sandeen.net>
-Cc:     Josef Bacik <josef@toxicpanda.com>, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, djwong@kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
-        tytso@mit.edu, bfoster@redhat.com, jack@suse.cz,
-        andreas.gruenbacher@gmail.com, brauner@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        dhowells@redhat.com
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230706193146.f2ktfnsxhrfokasp@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
- <d2a06111-c8c6-cdb6-c8ac-ae7148742786@sandeen.net>
+        Thu, 6 Jul 2023 15:32:41 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0063D1BD3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:32:39 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so25295e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 12:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688671958; x=1691263958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NUuKYRwlFUzABWSf5+6iBwx53UilJyfRZ0D3hmTP1sA=;
+        b=wwjvOn7ZtmjHXgig4UwagIJ2tdWzskYb8d3pwKOsLO3XQC2hMvKfVEbHlAxbQquyfg
+         XTssqv0UZAgHXIlofBZLjxpvJPK0bsuBxSZbBJ2gsTnopXsodSdtrgDiHJNDvUSH17SG
+         fhSEn9sWYW4GtB4xe1P1MDS8PcSbCpTBgPMaBI8b1qZjY5XuLSoFLNVuEdgrzhV32NeM
+         Q3QOE/jbOZoA2oHTEwJzlOczHylD6fav6AkRWAbveqGF7qOGfsyz9aKvn4D9sCc1CTuN
+         fhtkgTIbrHC20wj4UnstqCYgbTu9x2V8YFQ2FyZsZlJ34A3ee9MoHh2iUxpsfzitgXlm
+         qYJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688671958; x=1691263958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NUuKYRwlFUzABWSf5+6iBwx53UilJyfRZ0D3hmTP1sA=;
+        b=GRJEE/+jPupEFGpyPC0QfSkQqWIIXMJul+kSeGsVs3FtqoRcJ+etg8eyE5Yz4KJj5u
+         zvL7uc5/IiwhmceHPeWKO++nXN0U3iNcLR3+PHG6Z7/joWDpWt92Ln0b6MR4I/EPJGJq
+         E9h89Wl6Qc5ByroNd1oG7Bi2JEuNTWHQsS734TU6bhkSbKUyuHO+SbJrxp/zhpvMMVBo
+         sV+U7sHyr7q7U7VvjYnCrh7WZdoNjWvAISF308RDH3INUtZpeG+WhEELkuWvacWF3Y+C
+         +R1EnOeQZCpJVJptfE5yHFH65QAKGsgDVOEGqODzcXPbJFowgADVUNubmhZpzbfEQDuB
+         8pHQ==
+X-Gm-Message-State: ABy/qLY6o2G66fRLFdZDwZPUZh2DEPEKqlbiZUyKcrJoiw1/VDWVsJCL
+        yBx9Prv6UYCBvfzji0bCIs9K8vsujpcUw3aLIupudg==
+X-Google-Smtp-Source: APBJJlHL9PYr9dSGpbA5exBVajFz1DtuA0DPX5OnGxYtitt5MLyRP/w2oVbM0cmmOZJi3LU8MBO8oJvWu1d71aomjrk=
+X-Received: by 2002:a05:600c:5204:b0:3f1:73b8:b5fe with SMTP id
+ fb4-20020a05600c520400b003f173b8b5femr16756wmb.3.1688671958285; Thu, 06 Jul
+ 2023 12:32:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2a06111-c8c6-cdb6-c8ac-ae7148742786@sandeen.net>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230704050744.1196293-1-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230704050744.1196293-1-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Thu, 6 Jul 2023 12:32:26 -0700
+Message-ID: <CAD=FV=WNLcw2JbMf7tfob2KgjB8eXTC0p1J4OYnQL4k3Mz3mgA@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: Add avdd/avee delay for Starry-himax83102-j02
+ and Starry-ili9882t panel
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     sam@ravnborg.org, neil.armstrong@linaro.org, daniel@ffwll.ch,
+        airlied@gmail.com, hsinyi@google.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 02:17:29PM -0500, Eric Sandeen wrote:
-> On 7/6/23 12:38 PM, Kent Overstreet wrote:
-> > Right now what I'm hearing, in particular from Redhat, is that they want
-> > it upstream in order to commit more resources. Which, I know, is not
-> > what kernel people want to hear, but it's the chicken-and-the-egg
-> > situation I'm in.
-> 
-> I need to temper that a little. Folks in and around filesystems and storage
-> at Red Hat find bcachefs to be quite compelling and interesting, and we've
-> spent some resources in the past several months to investigate, test,
-> benchmark, and even do some bugfixing.
-> 
-> Upstream acceptance is going to be a necessary condition for almost any
-> distro to consider shipping or investing significantly in bcachefs. But it's
-> not a given that once it's upstream we'll immediately commit more resources
-> - I just wanted to clarify that.
+Hi,
 
-Yeah, I should probably have worder that a bit better. But in the
-conversations I've had with people at other companies it does sound like
-the interest is there, it's just that filesystem/storage teams are not
-so big these days as to support investing in something that is not yet
-mainlined.
+On Mon, Jul 3, 2023 at 10:07=E2=80=AFPM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> From power on/off sequence for panel data sheet[1], T2 timing VSP to VSN
+> needs 1ms delay when power on, and VSN to VSP also needs 1ms delay when
+> power off. Some pmic may not be able to adjust the delay internally, so
+> let's add a delay between avdd/avee regulator gpio to meet the timing of
+> panel.
 
-> It is a tough chicken and egg problem to be sure. That said, I think you're
-> right Kent - landing it upstream will quite likely encourage more interest,
-> users, and hopefully developers.
+Unless I'm mistaken, all of this is best handled via regulator
+constraints in the device tree. See the file:
 
-Gotta start somewhere :)
- 
-> Maybe it'd be reasonable to mark bcachefs as EXPERIMENTAL or similar in
-> Kconfig, documentation, and printks - it'd give us options in case it
-> doesn't attract developers and Kent does get hit by a bus or decide to go
-> start a goat farm instead (i.e. in the worst case, it could be yanked,
-> having set expectations.)
+Documentation/devicetree/bindings/regulator/regulator.yaml
 
-Yeah, it does need to be marked EXPERIMENTAL initially, regardless -
-staged rollout please, not everyone all at once :)
+Specifically, any delays related to actually ramping up / down the
+regulator can be specified in the device tree. Nominally, you could
+argue that the 1 ms delay actually _does_ belong in the driver, but
+IMO the 1 ms number there is really just there because someone thought
+it was weird to specify a delay of 0 ms. Given that you already need
+remp delays in the device tree, it feels OK to me to just include the
+1 ms there.
+
+-Doug
