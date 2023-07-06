@@ -2,231 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3DD74A481
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B07A74A485
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjGFToN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S232560AbjGFTpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjGFToL (ORCPT
+        with ESMTP id S229527AbjGFTpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:44:11 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8986A1BD3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:44:10 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1b441dd19eeso512210fac.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 12:44:10 -0700 (PDT)
+        Thu, 6 Jul 2023 15:45:30 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01791BFF
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:45:27 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-577637de4beso14083837b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 12:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688672650; x=1691264650;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SGElb+Cjoak0I4zPNzDjmpmoeqnFLgwOuefnbY+DcUM=;
-        b=GYbfjK/dBOzfrC3LdokX6emCTCUITzUzD4IwxQihJPxLHlNZIx7FQNvubq/lXTUwv4
-         v5OZlsEUUzdw3/pgshLWaK1d4+c9YRGBkPzWp5VORq5G1UIIYY+CNSAYXzPi7Qj4Efnk
-         6qOOuY//c+/1iVlLzoydR4oBi34zZDwTNNxkvfKP6vEYWjxyiaySnzn3fVYsAizhXd4a
-         gZlwa+SHTIznp1aHB4o/0LDxHW80/WI0EMVJPc4wGKxVjCdoPR65mlmSGwsSWSvHUSBW
-         iFuBO9sdHQyPDSC+2J8qKePdcjbEaMwcH6Nqodj29kOSAnFZcAhJ8WlTttmkrETRfFiA
-         CJpQ==
+        d=google.com; s=20221208; t=1688672727; x=1691264727;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jn2A84TyxlB9E6QwhZ/S3+QyShJtUiEedaODmn36QLU=;
+        b=lNzL+MZHVE5Tf5jrUoH6qartx9zzmTGqRlIdWHCjVAbfYsp6CttNZlOBa0hRzJvZTL
+         SocW3GJytbAfu6mxKOaeSgPA2iF9rnWdCYXvkrsIK9bHpmO7W6jRojvsd0W+wS+1M4ey
+         Cy0yHMaRcD9qOOww9osMC+/qv3AnBllJOa6CwnAgkMCGCbzwsgDwWZB/A/DaH1aXsVkX
+         GCRoPuBLf5rOxEvwKQVFZvVP2+nwXsMRUU4gYs9i3BpzNT/+y660I6oddp/GqxuJdZ4c
+         ZEiHuDoHp93DRZmouI1YYfnuJreSUTCXVkXN8Tu0HBsepWhWGMKQWmvcj8W8/LXjSWTi
+         jHsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688672650; x=1691264650;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SGElb+Cjoak0I4zPNzDjmpmoeqnFLgwOuefnbY+DcUM=;
-        b=T+CnWZL9q3JW1CusEl4yZwzBKSppwyZmmT/dbSvE8+gfgqsQy9awbP3ECShqc0pv3H
-         Jty5Q/PuP5prhPVO0XQpXvCGxg91Wmp0dXyOc90BzyVQUsgz2omslUsWR8c30CU957S7
-         V7cpslQhknJI4sqCtdfI7BaQ9IFR73dzKLJg1z4q+Bd/dVaPtu/TwBATvjtcqmkYQNw2
-         P96FB9jT2ZUVD00ZiJvrWovbsXX2uFAAJAoNND0UFjy47tZjVrw+sTNY5QWRc9iptFrO
-         bqvuI3s6Y7bFgUPGvIzpKMt7Ne1VBZ4J5TKCFStcpbD3Q6pL99QmhXfJzggY0pJ0cZUL
-         Tphw==
-X-Gm-Message-State: ABy/qLaFSyKgj3daVySKTI1tepuhUnJFnBUqwWwyQqB/K1SlT/hGrZLD
-        QPE3rb2n1O3viwVTqPbjt2D7Nw==
-X-Google-Smtp-Source: APBJJlHZ0k/cH2+H+rv2it2rZ5NOkvziEyhzyL8dFDU6pYzvsoXjPCmJMZqqpsc2XlTAyPXLtP2Kzg==
-X-Received: by 2002:a05:6870:40cb:b0:1b3:f8b7:55b4 with SMTP id l11-20020a05687040cb00b001b3f8b755b4mr3666684oal.35.1688672649796;
-        Thu, 06 Jul 2023 12:44:09 -0700 (PDT)
-Received: from ghost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id nh8-20020a17090b364800b00256bbfbabcfsm150364pjb.48.2023.07.06.12.44.09
+        d=1e100.net; s=20221208; t=1688672727; x=1691264727;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jn2A84TyxlB9E6QwhZ/S3+QyShJtUiEedaODmn36QLU=;
+        b=XRnI7wBs7+tna6eqSSf8YKFdjHaBYaZ8XFuWmrLap/ZYIidNxHk7EEx724yJlZU8S8
+         EMRNX5773nsaC2CB6eJhiYJmjCzkTDsmM0mPYKIOeZ13zh+VaHwMHqn4Kpb58rayCgeK
+         EfSPLeFvkmA7uHo7StLgL8pLK02qOsoPNCq5IFlQBFc3qMt8FsJ3RS3MTmm7NJDhPHTn
+         bCUMwi7Npn7GqD5w9G42J2IFhvsxA5jEbMiq7gc6lQnwhDSrG58daUq+CCvLTuLA0Fau
+         zLX/w4Yf1P56r0ft8HdVZM5QY35mUyGiHhZcguYa0EJCMvgDFTVB8WIwWwYusulste/0
+         zfDQ==
+X-Gm-Message-State: ABy/qLZlYTXuvMk1NcdcFjl4XPQz3SLMlZw24sXsNr4PrYkjtL0VZS5e
+        l0wmsDA4F0K4Kxw1PAjXGIdGlQ==
+X-Google-Smtp-Source: APBJJlHqKtby+pVoLzti7droMN1zKJuKs2lBA2W3Af+OZJMud2WnSKOd+NI5VCViV+RTettlilf/TQ==
+X-Received: by 2002:a81:5f09:0:b0:570:6667:1cfa with SMTP id t9-20020a815f09000000b0057066671cfamr3295624ywb.47.1688672726798;
+        Thu, 06 Jul 2023 12:45:26 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id z7-20020a81c207000000b005703cfc23c1sm539958ywc.104.2023.07.06.12.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 12:44:09 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 12:44:07 -0700
-From:   Charlie Jenkins <charlie@rivosinc.com>
-To:     =?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] RISC-V: Framework for vendor extensions
-Message-ID: <ZKcZhz7rPd41Z2DK@ghost>
-References: <20230705-thead_vendor_extensions-v1-0-ad6915349c4d@rivosinc.com>
- <20230705-thead_vendor_extensions-v1-1-ad6915349c4d@rivosinc.com>
- <5947209.lOV4Wx5bFT@basile.remlab.net>
+        Thu, 06 Jul 2023 12:45:26 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 12:45:14 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+cc:     Hugh Dickins <hughd@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
+ page
+In-Reply-To: <20230706170213.2ea63606@thinkpad-T15>
+Message-ID: <b454cfb1-85dc-743f-8f0-30d7e3d4376@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com> <20230628211624.531cdc58@thinkpad-T15> <cd7c2851-1440-7220-6c53-16b343b1474@google.com> <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca> <20230629175645.7654d0a8@thinkpad-T15>
+ <edaa96f-80c1-1252-acbb-71c4f045b035@google.com> <7bef5695-fa4a-7215-7e9d-d4a83161c7ab@google.com> <20230704171905.1263478f@thinkpad-T15> <e678affb-5eee-a055-7af1-1d29a965663b@google.com> <20230705145516.7d9d554d@thinkpad-T15> <1014735-ecc4-b4bc-3ae7-48a4328ed149@google.com>
+ <20230706170213.2ea63606@thinkpad-T15>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5947209.lOV4Wx5bFT@basile.remlab.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 07:29:37PM +0300, Rémi Denis-Courmont wrote:
-> Le torstaina 6. heinäkuuta 2023, 6.30.17 EEST Charlie Jenkins a écrit :
-> > Create Kconfig files, Makefiles, and functions to enable vendors to
-> > provide information via the riscv_hwprobe syscall about which vendor
-> > extensions are available.
-> > 
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> >  arch/riscv/Kbuild                     |  1 +
-> >  arch/riscv/Kconfig                    |  1 +
-> >  arch/riscv/Kconfig.vendor             |  3 +++
-> >  arch/riscv/include/asm/hwprobe.h      |  1 +
-> >  arch/riscv/kernel/sys_riscv.c         | 40
-> > ++++++++++++++++++++++++++++++++--- arch/riscv/vendor_extensions/Makefile |
-> >  3 +++
-> >  6 files changed, 46 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
-> > index afa83e307a2e..bea38010d9db 100644
-> > --- a/arch/riscv/Kbuild
-> > +++ b/arch/riscv/Kbuild
-> > @@ -3,6 +3,7 @@
-> >  obj-y += kernel/ mm/ net/
-> >  obj-$(CONFIG_BUILTIN_DTB) += boot/dts/
-> >  obj-y += errata/
-> > +obj-y += vendor_extensions/
-> >  obj-$(CONFIG_KVM) += kvm/
-> > 
-> >  obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index c1505c7729ec..19404ede0ee3 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -276,6 +276,7 @@ config AS_HAS_OPTION_ARCH
-> > 
-> >  source "arch/riscv/Kconfig.socs"
-> >  source "arch/riscv/Kconfig.errata"
-> > +source "arch/riscv/Kconfig.vendor"
-> > 
-> >  menu "Platform type"
-> > 
-> > diff --git a/arch/riscv/Kconfig.vendor b/arch/riscv/Kconfig.vendor
-> > new file mode 100644
-> > index 000000000000..213ac3e6fed5
-> > --- /dev/null
-> > +++ b/arch/riscv/Kconfig.vendor
-> > @@ -0,0 +1,3 @@
-> > +menu "Vendor extensions selection"
-> > +
-> > +endmenu # "Vendor extensions selection"
-> > diff --git a/arch/riscv/include/asm/hwprobe.h
-> > b/arch/riscv/include/asm/hwprobe.h index 78936f4ff513..fadb38b83243 100644
-> > --- a/arch/riscv/include/asm/hwprobe.h
-> > +++ b/arch/riscv/include/asm/hwprobe.h
-> > @@ -9,5 +9,6 @@
-> >  #include <uapi/asm/hwprobe.h>
-> > 
-> >  #define RISCV_HWPROBE_MAX_KEY 5
-> > +#define RISCV_HWPROBE_VENDOR_EXTENSION_SPACE (UL(1)<<63)
+On Thu, 6 Jul 2023, Gerald Schaefer wrote:
 > 
-> Isn't this UB on 32-bit RISC-V ?
-Hmm, yeah it would be, but the hwprobe syscall is based on a 64 bit key
-using the __s64 type. There could be an alternative vendor space at the
-top of 32-bits for those machines.
+> Since none of my remarks on the comments seem valid or strictly necessary
+> any more, and I also could not find functional issues, I think you can add
+> this patch as new version for 07/12. And I can now give you this:
 > 
-> > 
-> >  #endif
-> > diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> > index 26ef5526bfb4..2351a5f7b8b1 100644
-> > --- a/arch/riscv/kernel/sys_riscv.c
-> > +++ b/arch/riscv/kernel/sys_riscv.c
-> > @@ -188,9 +188,35 @@ static u64 hwprobe_misaligned(const struct cpumask
-> > *cpus) return perf;
-> >  }
-> > 
-> > +static int hwprobe_vendor(__u64 mvendorid, struct riscv_hwprobe *pair,
-> > +			 const struct cpumask *cpus)
-> > +{
-> > +	switch (mvendorid) {
-> > +	default:
-> > +		return -1;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static void hwprobe_one_pair(struct riscv_hwprobe *pair,
-> >  			     const struct cpumask *cpus)
-> >  {
-> > +	int err;
-> > +
-> > +	if (((unsigned long) pair->key) >= 
-> RISCV_HWPROBE_VENDOR_EXTENSION_SPACE) {
-> > +		struct riscv_hwprobe mvendorid = {
-> > +			.key = RISCV_HWPROBE_KEY_MVENDORID,
-> > +			.value = 0
-> > +		};
-> > +
-> > +		hwprobe_arch_id(&mvendorid, cpus);
-> > +		if (mvendorid.value != -1ULL)
-> > +			err = hwprobe_vendor(mvendorid.value, pair, 
-> cpus);
-> > +		else
-> > +			err = -1;
-> > +	}
-> > +
-> >  	switch (pair->key) {
-> >  	case RISCV_HWPROBE_KEY_MVENDORID:
-> >  	case RISCV_HWPROBE_KEY_MARCHID:
-> > @@ -217,13 +243,21 @@ static void hwprobe_one_pair(struct riscv_hwprobe
-> > *pair,
-> > 
-> >  	/*
-> >  	 * For forward compatibility, unknown keys don't fail the whole
-> > -	 * call, but get their element key set to -1 and value set to 0
-> > -	 * indicating they're unrecognized.
-> > +	 * call, instead an error is raised to indicate the element key
-> > +	 * is unrecognized.
-> >  	 */
-> >  	default:
-> > +		err = -1;
-> > +		break;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Setting the element key to -1 and value to 0 indicates that
-> > +	 * hwprobe was unable to find the requested key.
-> > +	 */
-> > +	if (err != 0) {
-> >  		pair->key = -1;
-> >  		pair->value = 0;
-> > -		break;
-> >  	}
-> >  }
-> > 
-> > diff --git a/arch/riscv/vendor_extensions/Makefile
-> > b/arch/riscv/vendor_extensions/Makefile new file mode 100644
-> > index 000000000000..e815895e9372
-> > --- /dev/null
-> > +++ b/arch/riscv/vendor_extensions/Makefile
-> > @@ -0,0 +1,3 @@
-> > +ifdef CONFIG_RELOCATABLE
-> > +KBUILD_CFLAGS += -fno-pie
-> > +endif
-> 
-> 
-> -- 
-> レミ・デニ-クールモン
-> http://www.remlab.net/
-> 
-> 
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+
+Great, thanks a lot Gerald.
+The one change I'm making to it is then this merged in:
+
+--- a/arch/s390/mm/pgalloc.c
++++ b/arch/s390/mm/pgalloc.c
+@@ -455,6 +455,11 @@ void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
+ 	page = virt_to_page(pgtable);
+ 	SetPageActive(page);
+ 	page_table_free(mm, (unsigned long *)pgtable);
++	/*
++	 * page_table_free() does not do the pgste gmap_unlink() which
++	 * page_table_free_rcu() does: warn us if pgste ever reaches here.
++	 */
++	WARN_ON_ONCE(mm_alloc_pgste(mm));
+ }
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
