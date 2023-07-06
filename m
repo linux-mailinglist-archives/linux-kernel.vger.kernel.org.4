@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC3D74A46D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FD074A46E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjGFTdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
+        id S232566AbjGFTdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbjGFTdJ (ORCPT
+        with ESMTP id S229538AbjGFTdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:33:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6384919B7;
-        Thu,  6 Jul 2023 12:33:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE6ED61208;
-        Thu,  6 Jul 2023 19:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890C9C433C7;
-        Thu,  6 Jul 2023 19:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688671987;
-        bh=CsnSC10RfjKdYlfvukRrKP9eKP+HKwk939lx6aN6Jgg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dL9GpivXua1v5uWI99SysNTnNW4AmQXeElqgdamMMWH+BFB+U4MJ4KswDe4vWhbCY
-         x/eOENNXfhGvfO7fu60lAnsBA9IzyxYa6SXOi1fXgIneN/8bbx1SKonepGxAG9A5Xi
-         F+SmfLD6FrDWd6R7yHdru/qSou339rajf/gI0hJ+id33C7HXQHVuvPPHa6fX5opwP/
-         c2qRsITI3tuVSHrD+BMEDFiKKKQ6W4I7q9nJcShigZVoUfM4oV2vjBD5JipIxws/JP
-         4NE7LoAwEsXE+wLp8FfDFckuVNDDOP2lKgXQnZMhuzc3bJkvjHGU8Ow4tBhwZ3gbVO
-         T0OFqTv2/wqnw==
-Date:   Thu, 6 Jul 2023 21:33:03 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Robert Hancock <robert.hancock@calian.com>
-Cc:     Michal Simek <michal.simek@amd.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        Marek Vasut <marex@denx.de>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: xiic: Don't try to handle more interrupt events
- after error
-Message-ID: <ZKcW7yh4gGKUCRvS@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        Marek Vasut <marex@denx.de>, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230606182558.1301413-1-robert.hancock@calian.com>
+        Thu, 6 Jul 2023 15:33:18 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AE519B7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:33:17 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c5ffb6cda23so1245757276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 12:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688671997; x=1691263997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/HxHbXLNJv+lS+LCsj1UjFihNTm7/vbMz1wj09lZS0=;
+        b=TROPnefO4+gDrwvBfvPMatWedD7GsJrtpxi99yvQgsB6s9yRQkohIt7ny5ZPQJD8Kr
+         TOAqGMJx8rnezjhfIkyv7CNJLPZExKtiqtfGblsFkR2PhTb38CpXBsQjJKzyrbeH53v2
+         fDj4xNhS1jSYBC2O4yM49vZvuxkfzesOv0XdIzJC9mGTq/t0V8KsuGcHYjb6mVX161pJ
+         Tlq9upDEOtv1Urxd860KNjgT7yjAXJ/Hi0+WyEJrh0oPNlNJ0NNxQt/0iYl+sexXyCVv
+         cqRFxNKlmPVjCCJtDdMnk1CsabdYdlAVRosUUOfsvuVqggsirWHaAqYHMXMar2iywveH
+         v4oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688671997; x=1691263997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e/HxHbXLNJv+lS+LCsj1UjFihNTm7/vbMz1wj09lZS0=;
+        b=hkjzaqWj/jM++EHto6Y8/OhLP6xGqsb2WcPPVP5wq49xgOoVnYm9LBIt6kc5RXDDdb
+         cUspSe5ePrxsA+Enb9q8f+2pzFQqKrtTjSDalxpwm6FCTS0iU1t3aKh3jyjDAJmcL+JP
+         pf1ATulXXhnhLqPHWMRrHEuz3s+inUh5YMgtM1KioSdPHdITsxvPiX4esIzfMdduoXWj
+         TEuTLbqyancPLM2r8dfPEZLs7F/kKvSOzxf4C6cII5OvLhbjJpiEkvp8QOLY/vOExKQe
+         xn/2WfEluxmcPPfobSvfQnWerqKzcmKFmbjbxpLBex79Stc3DK5jeZCuitDLt5EhK6lv
+         W67Q==
+X-Gm-Message-State: ABy/qLb1tou7xNlBDjBI0dsOxfuQpMA9wqIqptqTn+8jUFhKxvaNKAxl
+        jBU969KzcLjxIPOaqg8Wkszu4ZaL563UYKV+Keu/IJNQ37Q=
+X-Google-Smtp-Source: APBJJlHgcvi6ghDvVIx2BKPyrE7PPMq00pH1YnkPcuZQJ6pCA053HlYmKDQhFGvKMxmiaODhbJP5Ng4gETCtTLs10fg=
+X-Received: by 2002:a81:49c9:0:b0:56d:4d7:4a45 with SMTP id
+ w192-20020a8149c9000000b0056d04d74a45mr2535462ywa.52.1688671996769; Thu, 06
+ Jul 2023 12:33:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BSnkPnJjlpCTHXsL"
-Content-Disposition: inline
-In-Reply-To: <20230606182558.1301413-1-robert.hancock@calian.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230706185100.84322-1-hugo@hugovil.com>
+In-Reply-To: <20230706185100.84322-1-hugo@hugovil.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 6 Jul 2023 21:33:05 +0200
+Message-ID: <CANiq72kZ0cHxCKkm_781G__9tJxYCw3tpJarqvLOFB4Jw6ZONw@mail.gmail.com>
+Subject: Re: [PATCH] auxdisplay: hd44780: move cursor home after clear display command
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-kernel@vger.kernel.org, Lars Poeschel <poeschel@lemonage.de>,
+        geert@linux-m68k.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 6, 2023 at 8:51=E2=80=AFPM Hugo Villeneuve <hugo@hugovil.com> w=
+rote:
+>
+> The "clear display" command on the NewHaven NHD-0220DZW-AG5 display
+> does NOT change the DDRAM address to 00h (home position) like the
+> standard Hitachi HD44780 controller. As a consequence, the starting
+> position of the initial string LCD_INIT_TEXT is not guaranteed to be
+> at 0,0 depending on where the cursor was before the clear display
+> command.
+>
+> Extract of CLEAR_DISPLAY command from datasheets of:
+>
+>     Hitachi HD44780:
+>         ... It then sets DDRAM address 0 into the address counter...
+>
+>     NewHaven NHD-0220DZW-AG5 datasheet:
+>         ... This instruction does not change the DDRAM Address
+>
+> Move the cursor home after sending clear display command to support
+> non-standard LCDs.
+>
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
---BSnkPnJjlpCTHXsL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks! Sounds good to me, as long the extra command does not
+introduce some issue with the actual HD44780 -- can we double-check
+the HD44780 still works as expected?
 
-On Tue, Jun 06, 2023 at 12:25:58PM -0600, Robert Hancock wrote:
-> In xiic_process, it is possible that error events such as arbitration
-> lost or TX error can be raised in conjunction with other interrupt flags
-> such as TX FIFO empty or bus not busy. Error events result in the
-> controller being reset and the error returned to the calling request,
-> but the function could potentially try to keep handling the other
-> events, such as by writing more messages into the TX FIFO. Since the
-> transaction has already failed, this is not helpful and will just cause
-> issues.
->=20
-> This problem has been present ever since:
->=20
-> commit 7f9906bd7f72 ("i2c: xiic: Service all interrupts in isr")
->=20
-> which allowed non-error events to be handled after errors, but became
-> more obvious after:
->=20
-> commit 743e227a8959 ("i2c: xiic: Defer xiic_wakeup() and
-> __xiic_start_xfer() in xiic_process()")
->=20
-> which reworked the code to add a WARN_ON which triggers if both the
-> xfer_more and wakeup_req flags were set, since this combination is
-> not supposed to happen, but was occurring in this scenario.
->=20
-> Skip further interrupt handling after error flags are detected to avoid
-> this problem.
->=20
-> Fixes: 7f9906bd7f72 ("i2c: xiic: Service all interrupts in isr")
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Cc'ing Lars and Geert since they may be able to give it a quick test.
 
-Applied to for-current, thanks!
+> +       /*
+> +        * Some LCDs (ex: NewHaven) do not reset the DDRAM address when
+> +        * executing the CLEAR_DISPLAY command. Explicitely move cursor
+> +        * to home position to account for these non-standard LCDs:
+> +        */
+> +       return hd44780_common_home(lcd);
 
+Few nits:
 
---BSnkPnJjlpCTHXsL
-Content-Type: application/pgp-signature; name="signature.asc"
+  - Explicitely -> Explicitly.
+  - Isn't the command `DISPLAY_CLEAR` instead of `CLEAR_DISPLAY`? (at
+least the identifier above is `LCD_CMD_DISPLAY_CLEAR`).
+  - `:` -> `.`.
 
------BEGIN PGP SIGNATURE-----
+What about something like:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSnFu8ACgkQFA3kzBSg
-Kba2xQ/+Pcz6zeU2cFQLSMQdjPWm8UwIcw3uONyWvVmSjN9pLX4T3iHkIYrmb/1W
-3VGeySIlKSc1YVNOIf/qKjsyVjfuWeCRTtNoV5rU/MOrNbrFWFE9OOWYmp5oHmNm
-5LKq933bX/WGvAPg5CZ+uBp9O/yHTnvcEDKjJYR/1MIel/9maAedsEVksLGlN6zW
-zQPdCbrK58Q78JwhD+fWN4ts+uEnzOuGJYLz7id0E+WpXn/jB+5mNEtP3//eqbDs
-C/RUXgfO3B33TgplWlFnedvF6Mskmt0pgrKIp42CgNw2WkYQmebouZDndy01ySih
-dHgJoAUpX8tLgt04D1R0WFAeH3bxmnh9WWHnJo+9etBFENDTj30OEiGlUq9OLMkx
-/OhltH48LGqeV5MCYSA0ZNIgyE8HvfEUhlMg9H2yEL1d5GhZF7p5jnknrRGgV4s7
-3iH7l49GSsVUUcDjCOTV8zCeOcDSxtQQw+1RiN8k40bv+flmF8IN1olJIruiggX8
-J01z48dMY/dvpqkweqSoJlKEOwMLTmgTz0zCw0rwqrrp5JId422ZcyKVGGms38AM
-JQQ8ep7aUGQHL+T2UuRE2Xa+kMAgB8FJebt09NWDE+s+YRk0mqMX6nX/aNSJy6ry
-XRmRQqJW9kmkigTDDdGFp4421m7AZUzC/mB8nP3TVCJGShwz4gE=
-=QO/L
------END PGP SIGNATURE-----
+    The Hitachi HD44780 controller (and compatible ones) reset the
+DDRAM address when executing the `DISPLAY_CLEAR` command, thus the
+following call is not required. However, other controllers do not
+(e.g. NewHaven NHD-0220DZW-AG5), thus move the cursor to home
+unconditionally to support both.
 
---BSnkPnJjlpCTHXsL--
+Cheers,
+Miguel
