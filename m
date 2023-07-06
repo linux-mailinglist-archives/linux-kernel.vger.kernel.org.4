@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8A27493F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 05:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992B47493FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 05:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbjGFDCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 23:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S232638AbjGFDGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 23:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjGFDCc (ORCPT
+        with ESMTP id S229476AbjGFDGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 23:02:32 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C58E1BCE;
-        Wed,  5 Jul 2023 20:02:29 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b703cbfaf5so2159621fa.1;
-        Wed, 05 Jul 2023 20:02:29 -0700 (PDT)
+        Wed, 5 Jul 2023 23:06:06 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA531BCB;
+        Wed,  5 Jul 2023 20:06:04 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso161015e87.3;
+        Wed, 05 Jul 2023 20:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688612547; x=1691204547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tTKKIJCHTCVFOUWI8yzjuH8jTs7YZY25eKcjmR6z40c=;
-        b=WpSlm28dW2EP+fXT1NWDEEGuPxj6Lg1rau7KoRhKFcCbmGfKsLXr9+Iu8Tv4xQGhvE
-         Gbow9Crh1C/i/MVAo1uoQLnlMS5GbCz6a7hoPgYYO5Pa5URJjJuJYolO1veiZLKo7YM5
-         GqQoEYFaePDqqBYE/I/f+/U3HKsChgVCdsNCbEdkaS7GLhH0vIctk1Mn5WDE0/gzcVVO
-         kO6qzOWTux0GOQLtHTq1cQHB0qdY0xpfeBzIGjNIFuJlVAyt8rA6lUWSAvqMyJhmdJhQ
-         IZ1MesyS6RtFVeHQ5l+XthklYFZFs99rIMWSbzMkLG37OwD8JH0Rs/NjpLPk5Ubqoly6
-         DIKg==
+        d=gmail.com; s=20221208; t=1688612763; x=1691204763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6uf0a0v+B7/AzrXQVXoSrla0s6BwfseyAsTwf2297VQ=;
+        b=NeslzOUhlgf8xCyuIZDKe6UcSUaJOEMWsDS/C5VR4NlfgcVx1ycYdBUJUGeUIXwJTD
+         4QwQFZxSFF2Z3ymdkqIms8N9+vlwZkTUjgYiRatceQGSgasXiQL/1w+9bDI3MOjnAiJ0
+         wJPDx7K5t0V9Zey+hJnvQleLedU3odv43Y+oFUE2BJWcKW5BSL2WNm4mmzPJBwDPZFwC
+         iCkJ5KtgwM591+WHTv0L6OHVCUIKKL+8z4Q4/qQ8GVXfxpuk35w6CID8NJn5f/qJrbki
+         +OgncJXgsy92HQ9pN8tgcVTPra1YmPH/535izMuQsIqueYsRTxqRmq5NZnm3pHW9lwBJ
+         y6uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688612547; x=1691204547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tTKKIJCHTCVFOUWI8yzjuH8jTs7YZY25eKcjmR6z40c=;
-        b=PzeGrDU6yYn8Ohw8uDqx9mYwYd5upTG2TEdKgfjvWZnrpuVq4xXy2L39BVwmBL4/tf
-         Vzpji7ESg7OSC9RRrXYAn5VGBj4Clt8HK0yYoB98FNaAUvPNUsUdTZptDYn3PLziXy/F
-         2pjgt/NaAio+DXlwoB6BcWMg4cEHim4RzE3Kej6xQD4Ub9Mh5uJ51cxFVpiTloycX4sd
-         0fQ9zOW9xv30LDNwQ69u3UonjDaPIZ0z53lHd+yq6g6CtUxquO/AXKSQua9XPqQ+lnoD
-         WsPMwRsfiJxe68PiaVOgqLDYULSMlRIhJ1XRbAWH4AMqWDhdZ0V48vyEBuKYl0ClBqwD
-         F0sQ==
-X-Gm-Message-State: ABy/qLZ8tp4JVqDqedI0tH1LNOqVYBOQCUWFERwLOs+SBZH1RbdYtYXA
-        F6ZwScytzaBTucQs9YW2jHbR2VfiRe6junsQeU0=
-X-Google-Smtp-Source: APBJJlE/n7LATDpB0GrHw/lFuQ3+lX4DrPgLSokVCx2bDHiganLZureDsLNHp3F9TQSoIyVj782cIBtmePWUC8VcXWk=
-X-Received: by 2002:a2e:a40f:0:b0:2b6:efcf:1463 with SMTP id
- p15-20020a2ea40f000000b002b6efcf1463mr345677ljn.6.1688612547169; Wed, 05 Jul
- 2023 20:02:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688612763; x=1691204763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6uf0a0v+B7/AzrXQVXoSrla0s6BwfseyAsTwf2297VQ=;
+        b=MFBjQGbCcEW3NN73euDMFJaNKtHmSDAXwm9Z3Qh2T3yBi0wCUyS/fOHGbnlcvuC4Ez
+         p+CiWOpFaIsHOP+wsxSke5XtxO85P6qSqUh7tVwBn6kAyIc/BeWcnwNOnq+w0f5m6GK9
+         exYuxmexBawH4kYQwPkMwzzI0KBwCDrElJCfIxl4GZtA/AX4veENhfEWmUCfT4MvbnhE
+         yWAqpQ9FXlQxAryGRg2l7fAmyzgELWy7NZFGY8+UkmD1vqjbafD91HrOwpthqygGH0Wy
+         S4Pfjapkq8zi1qcvb9Fn7el9c9Z02zeJH8d2MgAKlkTcQVSZFbm3XoCK7vqwiUguwj+O
+         53cw==
+X-Gm-Message-State: ABy/qLZ0WtoR2bdnnOM5KnRrBSk7F41F0hS9GUJIa0OWZMgSvII+Z6Gk
+        dy2UkPwf86Jnw9bw9mK7zF1+nNMq6/+EsQ==
+X-Google-Smtp-Source: APBJJlElI/zQmqLeUgKM70+/XBOsqSJyNGUPgllSD7TbIo9WlakmfYQHvhRV1nnYVY+xyEgeal7gog==
+X-Received: by 2002:a05:6512:32b7:b0:4f8:7897:55e6 with SMTP id q23-20020a05651232b700b004f8789755e6mr387278lfe.45.1688612762809;
+        Wed, 05 Jul 2023 20:06:02 -0700 (PDT)
+Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
+        by smtp.gmail.com with ESMTPSA id f19-20020a1c6a13000000b003f733c1129fsm679324wmc.33.2023.07.05.20.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 20:06:02 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 04:06:01 +0100
+From:   Stafford Horne <shorne@gmail.com>
+To:     Rich Felker <dalias@libc.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Szabolcs Nagy <nsz@port70.net>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        linux-openrisc@vger.kernel.org
+Subject: Re: [RFC PATCH v2] openrisc: Union fpcsr and oldmask in sigcontext
+ to unbreak userspace ABI
+Message-ID: <ZKYvme8zl731L9R0@antec>
+References: <20230705212646.3618706-1-shorne@gmail.com>
+ <20230706005916.GW20050@brightrain.aerifal.cx>
 MIME-Version: 1.0
-References: <20230703105745.1314475-1-tero.kristo@linux.intel.com> <20230703105745.1314475-2-tero.kristo@linux.intel.com>
-In-Reply-To: <20230703105745.1314475-2-tero.kristo@linux.intel.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 5 Jul 2023 20:02:16 -0700
-Message-ID: <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706005916.GW20050@brightrain.aerifal.cx>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,86 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 3:58=E2=80=AFAM Tero Kristo <tero.kristo@linux.intel=
-.com> wrote:
->
-> Currently the raw TSC counter can be read within kernel via rdtsc_ordered=
-()
-> and friends, and additionally even userspace has access to it via the
-> RDTSC assembly instruction. BPF programs on the other hand don't have
-> direct access to the TSC counter, but alternatively must go through the
-> performance subsystem (bpf_perf_event_read), which only provides relative
-> value compared to the start point of the program, and is also much slower
-> than the direct read. Add a new BPF helper definition for bpf_rdtsc() whi=
-ch
-> can be used for any accurate profiling needs.
->
-> A use-case for the new API is for example wakeup latency tracing via
-> eBPF on Intel architecture, where it is extremely beneficial to be able
-> to get raw TSC timestamps and compare these directly to the value
-> programmed to the MSR_IA32_TSC_DEADLINE register. This way a direct
-> latency value from the hardware interrupt to the execution of the
-> interrupt handler can be calculated. Having the functionality within
-> eBPF also has added benefits of allowing to filter any other relevant
-> data like C-state residency values, and also to drop any irrelevant
-> data points directly in the kernel context, without passing all the
-> data to userspace for post-processing.
->
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> ---
->  arch/x86/include/asm/msr.h |  1 +
->  arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-> index 65ec1965cd28..3dde673cb563 100644
-> --- a/arch/x86/include/asm/msr.h
-> +++ b/arch/x86/include/asm/msr.h
-> @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
->  void msrs_free(struct msr *msrs);
->  int msr_set_bit(u32 msr, u8 bit);
->  int msr_clear_bit(u32 msr, u8 bit);
-> +u64 bpf_rdtsc(void);
->
->  #ifdef CONFIG_SMP
->  int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
-> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> index 344698852146..ded857abef81 100644
-> --- a/arch/x86/kernel/tsc.c
-> +++ b/arch/x86/kernel/tsc.c
-> @@ -15,6 +15,8 @@
->  #include <linux/timex.h>
->  #include <linux/static_key.h>
->  #include <linux/static_call.h>
-> +#include <linux/btf.h>
-> +#include <linux/btf_ids.h>
->
->  #include <asm/hpet.h>
->  #include <asm/timer.h>
-> @@ -29,6 +31,7 @@
->  #include <asm/intel-family.h>
->  #include <asm/i8259.h>
->  #include <asm/uv/uv.h>
-> +#include <asm/tlbflush.h>
->
->  unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, not used he=
-re */
->  EXPORT_SYMBOL(cpu_khz);
-> @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
->         tsc_enable_sched_clock();
->  }
->
-> +u64 bpf_rdtsc(void)
-> +{
-> +       /* Check if Time Stamp is enabled only in ring 0 */
-> +       if (cr4_read_shadow() & X86_CR4_TSD)
-> +               return 0;
+On Wed, Jul 05, 2023 at 08:59:16PM -0400, Rich Felker wrote:
+> On Wed, Jul 05, 2023 at 10:26:45PM +0100, Stafford Horne wrote:
+> > With commit 27267655c531 ("openrisc: Support floating point user api") I
+> > inproperly added an entry to the struct sigcontext which caused an
+> > unwanted to chagne to the userspace ABI.
+> > 
+> > Since oldmask was never used in OpenRISC we now use it's space for the
+> > floating point fpcsr state.  We do this with a union to restore the ABI
+> > back to the pre kernel v6.4 ABI and keep API compatibility.
+> > 
+> > This does mean if there is some code somewhere that is setting oldmask
+> > in a userspace sighandler it would end up setting the floating point
+> > register status, but I think it's unlikely as oldmask was never used
+> > before.
+> > 
+> > Fixes: 27267655c531 ("openrisc: Support floating point user api")
+> > Reported-by: Szabolcs Nagy <nsz@port70.net>
+> > Closes: https://lore.kernel.org/openrisc/20230626213840.GA1236108@port70.net/
+> > Signed-off-by: Stafford Horne <shorne@gmail.com>
+> > ---
+> > Changes since v1:
+> >  - Rather than revert the change, just use the oldmask slot for fpu state.
+> > 
+> >  arch/openrisc/include/uapi/asm/sigcontext.h | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/openrisc/include/uapi/asm/sigcontext.h b/arch/openrisc/include/uapi/asm/sigcontext.h
+> > index ca585e4af6b8..93817d7051aa 100644
+> > --- a/arch/openrisc/include/uapi/asm/sigcontext.h
+> > +++ b/arch/openrisc/include/uapi/asm/sigcontext.h
+> > @@ -28,8 +28,10 @@
+> >  
+> >  struct sigcontext {
+> >  	struct user_regs_struct regs;  /* needs to be first */
+> > -	struct __or1k_fpu_state fpu;
+> > -	unsigned long oldmask;
+> > +	union {
+> > +		struct __or1k_fpu_state fpu;
+> > +		unsigned long oldmask;	/* unused */
+> > +	};
+> >  };
+> >  
+> >  #endif /* __ASM_OPENRISC_SIGCONTEXT_H */
+> > -- 
+> > 2.39.1
+> 
+> Correctness/ABI-safety of this patch depends on struct
+> __or1k_fpu_state being just a single unsigned long and never changing.
+> Is this something it's possible to commit to? Otherwise, a much better
+> idea would be making the union contain a struct __or1k_fpu_state *
+> or some more general pointer type that points to an out-of-band,
+> expandable data structure past the end of the ucontext_t.
 
-Why check this? It's always enabled in the kernel, no?
+Thank you for reviewing.
 
-> +
-> +       return rdtsc_ordered();
+Yes, __or1k_fpu_state I intend to always contain just the single unsigned long.
 
-Why _ordered? Why not just rdtsc ?
-Especially since you want to trace latency. Extra lfence will ruin
-the measurements.
+Thinking about it, I should just change sigcontext from using struct
+__or1k_fpu_state to simply 'unsigned long fpcsr' to make this more clear. I will
+do this for v3.
+
+If further expansion is needed we can add more structs after ucontext_t as you
+mention.  I was considering doing that but found the unused space in oldmask.
+
+-Stafford
