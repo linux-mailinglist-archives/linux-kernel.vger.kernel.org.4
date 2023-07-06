@@ -2,130 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3B37496B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA767496B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 09:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbjGFHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 03:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S233522AbjGFHn0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 03:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbjGFHmh (ORCPT
+        with ESMTP id S233637AbjGFHnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 03:42:37 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E082D1BDC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:42:32 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31438512cafso286698f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688629351; x=1691221351;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WbxOrjdHKbXhlnZ+lfNH9KC2jI6IqoLPXw3l3BYO8wY=;
-        b=LV5oFIVWpwFHAtWyQEF9vh5vXnXRpyYR6xiAOOJ8SbAYbIHjPP7epD4KgcUrI2PEPb
-         mTJz27Bs9ZLYP4Qa/Klt3kmsPjDGMilSlAz3D0colMBTei4UxUgRArdK84Y3fAxzuXPw
-         G0tE/y94iFQH9z+Gxc2YvLWST9mL/AvDpEJYj07I0Q8rrCGkovGxqqXMo42fW+JfK0zv
-         Wgzwg9idZAKKNq+rQ5zyBA7C1GzU4Rh18U+n7huD+7GNR/fkc9e665vJkv7gXVaaryNl
-         OrHF9/CM6pMQ/hNINnQHAboEovs9o65JsbFnwQmi+mn+jhDPuaCEFRYv7rnKfPYkagly
-         3E+w==
+        Thu, 6 Jul 2023 03:43:23 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589121BE8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 00:43:16 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-579de633419so5351957b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:43:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688629351; x=1691221351;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688629395; x=1691221395;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WbxOrjdHKbXhlnZ+lfNH9KC2jI6IqoLPXw3l3BYO8wY=;
-        b=FAOqqULTxzoPvp9rZFmWa/XxVf4Lik+2ZKd3saMfQifYZKw7JmvCy7Q9M+lWnCJtAb
-         F9x1peP1PAvDeHTHR4LCaYZ1Ts5NbQdFDi6ZU8fLzlqxpPIXl/lceKzwveQ6ZOCafcsO
-         cMf0NAdrqj2mkRLK1sglRwLK/ROi7YshNa0dam96C9LX5t8EGDRg3Znc+2NIlQLVgj7C
-         wjOrRUc875E/LI85JgLM/fDaI07Bo/DNA8E1rwVABTKH11rLF0HAZBYTxmRpiYcWKNPS
-         A7PzaWdIPDt7AJlLTAPOdc2a9Ync9UZEV4QMMpnsOwQ/PZEesnO3LPdMKdIL+Fuf99Wv
-         KhOQ==
-X-Gm-Message-State: ABy/qLY8dPlfCuyUjCvib12kP0YpBL74y6RNPR2qYB3nbqWcYE2odbvt
-        8M2c9JatZlFrjkKS1XdRECb/xw==
-X-Google-Smtp-Source: APBJJlE78Dpcot4yN05l8xxI9dJuyq1KKsR5IHRaiwqI/bl8PWsDff2pYf38Ywa82zxVmsHAVbKHPw==
-X-Received: by 2002:adf:e505:0:b0:314:1ce8:a0a1 with SMTP id j5-20020adfe505000000b003141ce8a0a1mr692157wrm.17.1688629351386;
-        Thu, 06 Jul 2023 00:42:31 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id h5-20020adffd45000000b00313f07ccca4sm1076798wrs.117.2023.07.06.00.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 00:42:31 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 06 Jul 2023 09:42:27 +0200
-Subject: [PATCH 2/2] dt-bindings: pinctrl: amlogic,meson-pinctrl-common:
- allow gpio hogs
+        bh=YU7wIuB8pzU5mgZRjLNHZb0xDTBNcfDXYxTP1tuxTqw=;
+        b=WdrBz+PZBZIf02MvjOo+OpJOa9pT97eQc5IQ9y1j4ruDxfrBeUo6tTdM6NUn+yJ88s
+         z12WfgLUQwgrW70DhX41gTERqmCwkkKzTPy9Osjd0pPJQmIQLK8thTkhEdAgHaGkHD9Y
+         5b7vBrGw3e3xdFVwUJS1kCmO1/impmGlJJ7FHPdQ3AGj4p0byA0NvQZlJ7LF9yzUosZp
+         WpFWdO3TDpI7EQcrsZDqigyvVvbGrAYg0BdJjx5HtOHnmnX0g2njyqbeNeVH57pfZ8Ov
+         EqhbdqTphv3fM4BG3c4syMLcgpD4kLPZQHTgrnn9tuA2Fjkwg5OFvLZKvDBpWAY2FytB
+         Wkng==
+X-Gm-Message-State: ABy/qLblfQ+BgPQhRNGQaFYfd9Pg6WQTYBOe/7lTOUtOsFJUMXbvb8uK
+        NMTVtzP+mryaV0nHz+1Br5aMzVL+0R5Zbw==
+X-Google-Smtp-Source: APBJJlE7h6x1Gk7i9MpWhPoX9IRCPJWfA64Ah5PiPPmzceF9ltE1eK2wtCr+9IiAefwce9AqNNw1TA==
+X-Received: by 2002:a0d:d345:0:b0:579:5bbe:b022 with SMTP id v66-20020a0dd345000000b005795bbeb022mr1145588ywd.30.1688629395309;
+        Thu, 06 Jul 2023 00:43:15 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id v76-20020a81484f000000b0054fba955474sm193506ywa.17.2023.07.06.00.43.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 00:43:14 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57a4a476bbfso4525437b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 00:43:14 -0700 (PDT)
+X-Received: by 2002:a25:d0b:0:b0:c62:9810:db27 with SMTP id
+ 11-20020a250d0b000000b00c629810db27mr1001959ybn.60.1688629394538; Thu, 06 Jul
+ 2023 00:43:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230706-topic-amlogic-upstream-pinctrl-fix-bindings-v1-2-fa442d5aae91@linaro.org>
-References: <20230706-topic-amlogic-upstream-pinctrl-fix-bindings-v1-0-fa442d5aae91@linaro.org>
-In-Reply-To: <20230706-topic-amlogic-upstream-pinctrl-fix-bindings-v1-0-fa442d5aae91@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=954;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=W+4PTPflVuY/VTPXicH0ipZFRZr1GRfAPhtre5st8GA=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkpnBkxZQgeadpyhxnLHE7dGXL/a2+0lVvPpA4BWOU
- JGKwGOCJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKZwZAAKCRB33NvayMhJ0ZA+D/
- 0S0mjbLMqRomWDtTETONTeNmMXhWFdiOqk2iujAavuJhICbhbBSGXgUhXEH5oOGRmzKySeDSLjBZEI
- JX4vq5OcTI19LQzLFG274URpzZXfXwE4gctZTORzPebDLjd/E3l99I5jFVZGxU8L924zd8PhLI3xei
- VbrhEuOIQupf1teWOzlgilrKUeTNipmnDiuhqlOCak7iHoM2nFN4aM5K7t0S57qk7ZIyorEJhcDVml
- ZfHdbxo81p/pl7vPP+1LxQO6YkMchSAdlAOAELBVYppuuy+udGbSwwqJkQquyRL3t5kYfng4EWVx8S
- XjZo+6E+3P3kQdrqVPGjyiygaOWB6iaARlNFhFSuog854zEPLpyk3pqALyRSHGz1TBFJIQn1tyzs/E
- X7gplFT75ytW1PyWh/tOp3x0Gw1tfVvlk/akmhUitpfCZnxTZDNxRkfc7kd1LlDrgloPiW3JTd0XFe
- wdCN8OcychuGSg8dxvKJmNl6puE0zHHENdHC2p02G2i+Bm3aPey5gZJruMdr6kpyQ0yRxRvHG7I9i6
- kXT6HRG0Wgk3jHr52ym/3H62Bh0zfVYovOp6ZSDUPitWyNCFfS/oqH1hMvbCB+1kwUN1AagsdzHN7d
- cpjd0ays2SRMU3hRJskBX/h3yd+6/g9GW9fFHNP+gpw+fmOSUkVB4lElK+PA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230706071310.38388-1-luhongfei@vivo.com>
+In-Reply-To: <20230706071310.38388-1-luhongfei@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 6 Jul 2023 09:43:02 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV1TTKYMQfnZ_6H1Vee9NcYtN1TK0wNesqsjiKwBHZz=A@mail.gmail.com>
+Message-ID: <CAMuHMdV1TTKYMQfnZ_6H1Vee9NcYtN1TK0wNesqsjiKwBHZz=A@mail.gmail.com>
+Subject: Re: [PATCH] drivers: bus: Fix resource leaks in for_each_available_child_of_node
+ loop
+To:     Lu Hongfei <luhongfei@vivo.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow gpio hog subnodes to the gpio subnode.
+Hi Lu,
 
-Fixes: 94df03a45276 ("dt-bindings: pinctrl: Convert Amlogic Meson pinctrl binding")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- .../devicetree/bindings/pinctrl/amlogic,meson-pinctrl-common.yaml  | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks for your patch!
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-common.yaml b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-common.yaml
-index 28659f0389a5..d9a8e12bfb7f 100644
---- a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-common.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-common.yaml
-@@ -42,6 +42,13 @@ $defs:
-       gpio-ranges:
-         maxItems: 1
- 
-+    patternProperties:
-+      "^.+-hog(-[0-9]+)?$":
-+        type: object
-+
-+        required:
-+          - gpio-hog
-+
-     required:
-       - reg
-       - reg-names
+On Thu, Jul 6, 2023 at 9:13 AM Lu Hongfei <luhongfei@vivo.com> wrote:
+> Ensure child node references are decremented properly in
+> the error path.
+
+Which error path?
+
+>
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> ---
+>  drivers/bus/imx-weim.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 52a5d0447390..d05472f7c20f 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -251,6 +251,7 @@ static int weim_parse_dt(struct platform_device *pdev)
+>                 else
+>                         have_child = 1;
+>         }
+> +       of_node_put(child);
+
+This is not an error path.
+
+for_each_available_child_of_node() walks a list, getting a reference
+to each child, and releasing the reference afterwards.
+
+Have you tested this patch?
+I expect the of_node_put() to trigger a refcount underflow error
+message on the console.
+
+>
+>         if (have_child)
+>                 ret = of_platform_default_populate(pdev->dev.of_node,
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
