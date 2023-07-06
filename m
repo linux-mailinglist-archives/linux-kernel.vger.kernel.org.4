@@ -2,225 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43B574A2BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7C374A2C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjGFRBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S232373AbjGFRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGFRBx (ORCPT
+        with ESMTP id S232077AbjGFRER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:01:53 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6781996
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:01:51 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso723787a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 10:01:51 -0700 (PDT)
+        Thu, 6 Jul 2023 13:04:17 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82412171D;
+        Thu,  6 Jul 2023 10:04:16 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c581c758ad8so992274276.1;
+        Thu, 06 Jul 2023 10:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688662911; x=1691254911;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0HEsmZbnwNcW/Ta9IdSducOUIPnfUTcBGC0aHnNg1sU=;
-        b=ZvrGUj+pF5PU1ZzHz2crgSMPOLo1xbvpS9QsVW8Mw981O8payTTHyQXb3AsLZMeyGY
-         noiBvQP5Qq4KSBbxvOHYd2FuXOA+/EHql6C/+d2k6LAAn3ylTD3icOCK1ZLk4fK7WsDU
-         2exT7ENPXB3AzrZ5+toWm+eyM5Biwu7nq/ku4=
+        d=gmail.com; s=20221208; t=1688663055; x=1691255055;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OyVK+HWFyHpDagzJPlL/j2QN2G1znQeN5v1WZlWzVvg=;
+        b=Z7qoNlsSOsWG4m1MYqTqgktbR3t6YnplSRjSNkqD054KQ3Pxi1xjbE7FtSVf51L+C5
+         rLvW629zKPt+oDCZQeXyaqOO4xIaeirSVbvv7uhFwvGERU5ENL3hG4JErF6WCIhEMMEx
+         /7Yi6TEXYwREnrZbnasmZf3yZF+Oh/iozdJkdhm4TzbU6seadZqgzPN3YvzwHQqqlrKs
+         M7TTRKiwKSVL7v8kemqz2s8YMnL5x5jff0WivxYOfGpYTlnt5jhT/C7CHrv6UMo8FxxZ
+         DcKzWvA8Qr27ezMlVknpLxLbSHDUQ6oO5t+qjo4+DCrkigB/kwkWwmc1+ONfS86G71MD
+         zzlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688662911; x=1691254911;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0HEsmZbnwNcW/Ta9IdSducOUIPnfUTcBGC0aHnNg1sU=;
-        b=E3XXarb9HXoIqjtzHTBWQ3gDlU0IoyJTJn1lPk4767gMFZkxRednJoQOBmS3MGhcjn
-         OCzw4OxD34U60jNRbtnNGxoDVDphXxDqrSDJX/NcsqBDjhtN/YDKdeV4lg1sZY8J2ERR
-         SpEAxAZX2f+fnWkgj4ipne76Xn2aAP1SpatL53SZhfy0CmguTLVedwpGMeA7q/3OWssl
-         KEaiZ10I9Uj6C4Glw0gagF5Q/qVYPqwE3vO8PuBkrvXps5ftLgQgdJjtLwdFhSwhfsrb
-         uGMS04NZBc9nVj+EXTOFQ91y3pAWXXSayKN90ABVBh4Id/M7IO4d25NNZ31fiBS6+g0i
-         NE1A==
-X-Gm-Message-State: ABy/qLZoN8Xqx4G9jmaUiSpjryXdAUZ4bqZRxbtXk8v/e+mvbK/K2Mq/
-        7A7/OxuJal5Trrg5CKFTuSBwrw==
-X-Google-Smtp-Source: APBJJlFpXlhqm0J63QH79N3z+G8fMY+FnLHKhBfw3be+w9MLmSp71eQRvYTvqMOZVOFPPBnJXkaXOA==
-X-Received: by 2002:a05:6a20:1394:b0:122:4a16:dfa4 with SMTP id hn20-20020a056a20139400b001224a16dfa4mr2249991pzc.10.1688662910377;
-        Thu, 06 Jul 2023 10:01:50 -0700 (PDT)
-Received: from [10.136.64.163] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id jw9-20020a170903278900b001a6f7744a27sm1680223plb.87.2023.07.06.10.01.48
+        d=1e100.net; s=20221208; t=1688663055; x=1691255055;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OyVK+HWFyHpDagzJPlL/j2QN2G1znQeN5v1WZlWzVvg=;
+        b=EOML57RDeBL5Li7v3HdTmM55XI0ESxs33DQGk2algfWok08Qw8WRNtxvKPFgQCwnL6
+         0vl1O3BLyknVirHD7qwWYvQCPtTFtyWpacK6xEZGifTiUhK7qnur3zuwav9ixvla+Y5M
+         TdGX5diAOtNHTuhBAGKD2ZdHWukE7FEAyitCdJ2ZATvHSFWOlD46WomekPkAGySWq6tm
+         FdRSHtYPYnrfJHBj7Qvlsq55wZ0FdYTUrjRKHkVVbmE7EYyiaXGjx1uk1M+hmZ3w1F+k
+         AAWjRgiAP2LQYTB3xZNa1iKghxmJ43zS5YRTebIAri/RtLYeJkS2SXAMQIcxadDU7qmW
+         Np2Q==
+X-Gm-Message-State: ABy/qLY5lgoHfaemUttrYGCfobGXp/BTGSPkA9WKxAp6VuTtlFZFCPfW
+        zI+aeuUoA+A21ply/xST+w3RHvSRy6s=
+X-Google-Smtp-Source: APBJJlGEGvpI+T34xGTcgc7yjlZ4W3KEV7jG9db5Aj3Cmq9+/eRPLD5kpBZqRQ2ImbEgEgWOK6F0Jg==
+X-Received: by 2002:a5b:c85:0:b0:c61:e44d:c08e with SMTP id i5-20020a5b0c85000000b00c61e44dc08emr2267273ybq.19.1688663055550;
+        Thu, 06 Jul 2023 10:04:15 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 132-20020a25048a000000b00bef51467958sm434274ybe.38.2023.07.06.10.04.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 10:01:48 -0700 (PDT)
-Message-ID: <45516ded-9964-5536-a211-3a58c4249b59@broadcom.com>
-Date:   Thu, 6 Jul 2023 10:01:46 -0700
+        Thu, 06 Jul 2023 10:04:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c63b387a-e670-fed1-86df-83bff46789a1@roeck-us.net>
+Date:   Thu, 6 Jul 2023 10:04:13 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 03/23] i2c: iproc: Remove #ifdef guards for PM related
- functions
-To:     Paul Cercueil <paul@crapouillou.net>, Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230705204314.89800-1-paul@crapouillou.net>
- <20230705204314.89800-4-paul@crapouillou.net>
-From:   Ray Jui <ray.jui@broadcom.com>
-In-Reply-To: <20230705204314.89800-4-paul@crapouillou.net>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f4960b05ffd4785c"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+ <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+ <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
+In-Reply-To: <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f4960b05ffd4785c
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-
-
-On 7/5/2023 1:42 PM, Paul Cercueil wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+On 7/6/23 09:38, John Paul Adrian Glaubitz wrote:
+> Hi Geert!
 > 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
+> On Thu, 2023-07-06 at 17:39 +0200, Geert Uytterhoeven wrote:
+>> Which sh4 platforms in particular?
+>>
+>> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
+>> (physical) two days ago.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> I gave it a try with the command line Guenter suggested and indeed the kernel locks
+> up right here with the patch applied and boots fine without it:
 > 
-> ---
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
->  drivers/i2c/busses/i2c-bcm-iproc.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+> Creating 4 MTD partitions on "physmap-flash":
+> 0x000000000000-0x000000040000 : "U-Boot"
+> 0x000000040000-0x000000080000 : "Environment"
+> 0x000000080000-0x000000240000 : "Kernel"
+> 0x000000240000-0x000001000000 : "Flash_FS"
+> 8139too: 8139too Fast Ethernet driver 0.9.28
+> 8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
+> sm501-usb sm501-usb: SM501 OHCI
+> sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
+> sm501-usb sm501-usb: irq 116, io mem 0x13e40000
+> usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.04
+> usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+> usb usb1: Product: SM501 OHCI
+> usb usb1: Manufacturer: Linux 6.4.0-12069-gc17414a273b8 ohci_hcd
+> usb usb1: SerialNumber: sm501-usb
+> hub 1-0:1.0: USB hub found
+> hub 1-0:1.0: 2 ports detected
+> usbcore: registered new interface driver usb-storage
+> rtc-r9701 spi0.0: cannot read RTC register
+> usbcore: registered new interface driver usbhid
+> usbhid: USB HID core driver
+> NET: Registered PF_PACKET protocol family
+> heartbeat: version 0.1.2 loaded
+> ata1: found unknown device (class 0)
+> (stops here)
 > 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index 2d8342fdc25d..8a3e2208475c 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -1125,8 +1125,6 @@ static void bcm_iproc_i2c_remove(struct platform_device *pdev)
->  	bcm_iproc_i2c_enable_disable(iproc_i2c, false);
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
-> -
->  static int bcm_iproc_i2c_suspend(struct device *dev)
->  {
->  	struct bcm_iproc_i2c_dev *iproc_i2c = dev_get_drvdata(dev);
-> @@ -1177,12 +1175,6 @@ static const struct dev_pm_ops bcm_iproc_i2c_pm_ops = {
->  	.resume_early = &bcm_iproc_i2c_resume
->  };
->  
-> -#define BCM_IPROC_I2C_PM_OPS (&bcm_iproc_i2c_pm_ops)
-> -#else
-> -#define BCM_IPROC_I2C_PM_OPS NULL
-> -#endif /* CONFIG_PM_SLEEP */
-> -
-> -
->  static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave)
->  {
->  	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(slave->adapter);
-> @@ -1255,7 +1247,7 @@ static struct platform_driver bcm_iproc_i2c_driver = {
->  	.driver = {
->  		.name = "bcm-iproc-i2c",
->  		.of_match_table = bcm_iproc_i2c_of_match,
-> -		.pm = BCM_IPROC_I2C_PM_OPS,
-> +		.pm = pm_sleep_ptr(&bcm_iproc_i2c_pm_ops),
->  	},
->  	.probe = bcm_iproc_i2c_probe,
->  	.remove_new = bcm_iproc_i2c_remove,
+> Using rts7751r2dplus_defconfig and the following command line:
+> 
+> qemu-system-sh4 -M r2d -kernel vmlinuz-6.5-rc1 -hda debian_sid_sh4_standard.qcow2 -no-reboot -device rtl8139,netdev=net0 -netdev user,id=net0 -append "root=/dev/sda1 console=ttySC1,115200
+> earlycon=scif,mmio16,0xffe80000 noiotrap" -serial null -serial stdio -nographic -monitor null
+> 
+> And using this old qcow2 image:
+> 
+>> https://people.debian.org/~aurel32/qemu/sh4/debian_sid_sh4_standard.qcow2
+> 
+> Maybe it's a configuration issue if it works for you?
+> 
 
-Thanks.
+I tried rts7751r2dplus_defconfig with no modifications and the following minimized
+qemu command line.
 
-Acked-by: Ray Jui <ray.jui@broadcom.com>
+qemu-system-sh4 -M r2d -kernel arch/sh/boot/zImage -serial null -serial stdio -nographic -monitor null
 
---000000000000f4960b05ffd4785c
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+This hangs after "heartbeat: version 0.1.2 loaded", so it doesn't
+even get to the point where it would try to load a root file system.
+After reverting this patch, I get
+---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
+as expected.
 
-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
-YVhHgdTTB3aAzFyz4UFRLwxCzIG7d7GIiB9MoLImssS08R5WQ5EJCd1fAF6iefLupAn/plPmn2w0
-GF8bLF/FhwOn8jObLW5pQiKhjQSv3QIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
-BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
-YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
-b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
-MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
-cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
-bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
-anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
-NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIScG7uNJuCYBQieQC+eonQS9tdkwDQYJKoZIhvcNAQEL
-BQADggEBAGLwq/sDtwLmkAa5/UpIG4o5HA9EH7SaYi05EUlzrDdIeZsJnXDkxmG9144wNZBbndHx
-nKXRnpJjCX4jhZeNQFyY4m5c9c8bMytO4zb8XUJIxCjqkhtukJtqHieEogwGsmZlpOxt6Ucc2JXg
-6oTTbyITD4Bvn7cFb7EI2FBcT7K8bf8AvwtNLl/dKYtUA/nEvVhjqp0wsDL3t//Q3GTwGWZB41gf
-LC04V6gD9TVFl7i/N48Gu8PzTt4Kt0SZvBr7kQ9PKi7DVyXe23Ou89QVflaja3bPjt2UZCyq0JxJ
-Nu5SjFDWjKlBCzbLDGkCBlM4DpjAb0y4MyKOsiVv7vIxNlYxggJtMIICaQIBATBrMFsxCzAJBgNV
-BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
-QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwcAgHcg4j27cIp1UUwDQYJYIZIAWUDBAIBBQCg
-gdQwLwYJKoZIhvcNAQkEMSIEIPcyTFCJKpokM2M7YfqnANwWWbBUtPriWfZT+rSjzt/IMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcwNjE3MDE1MFowaQYJKoZI
-hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
-AASCAQBehjrZq3QQa0ONZxa50dZgK2zP08KrOWFE0EnVe3JAl2kEhigjO8/8Hii4ZSMMoAUD5DWT
-TCcJGPe7FoUjJQb40AVLcotCfRJxVm9VI9nI1yQO+qsIncF+mYGFLi05Ai34ysS+fFCqaYT3ZSkw
-rtcY33TdWyba6XS89g8XfBFN3smjVZdrZeT3Df93x/pyJIFfo9mmaZRR/tM1YzhFwB3dh4ykc0Yk
-1U4CiHpdDTR8xFdyWCeCAWOvTJ/zrAPdFPH+US3SmnzTpJ+3ydYlxaFI4C9U4YuUGYGk9erPZ2ap
-yJurVjOEp7RLNothTPdc2JMENT7Vxp8GZ3/i2GrCI9Ui
---000000000000f4960b05ffd4785c--
+I tried with qemu version 6.2, 7.1, 7.2, and 8.0.
+
+Guenter
+
+
+
