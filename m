@@ -2,404 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097B3749EC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7C5749ECF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbjGFOQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S233066AbjGFORl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjGFOQ0 (ORCPT
+        with ESMTP id S230108AbjGFORk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:16:26 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4E0DD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:16:24 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso1069199e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 07:16:24 -0700 (PDT)
+        Thu, 6 Jul 2023 10:17:40 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2B112A;
+        Thu,  6 Jul 2023 07:17:36 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-992dcae74e0so93768866b.3;
+        Thu, 06 Jul 2023 07:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688652983; x=1691244983;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BOmBdv1lisamBbLJHrniasmRKbwrJaoeYKdJ/js6zGw=;
-        b=qoJ+BiuLAEr+THrq00w1nuQRO/6hl0kYTaOSz6E+F67Xkza2gLZgCX+TZ1JXwfSge9
-         NjI7L3LvkAyeX1WxMT2sLLbicVlfI7UeqvTRawAYZygM4WBzsC5ZcJ9b4H+G5HcGLuUq
-         2kuVLkFvpssUXvqsxo/qDLbrNWt3fEGw3JLxfzKCfVcpYf6SHPCp1WMNfbCj48CTGp7Q
-         cs0OaZ5+iYO4ARu5cdvFjp0hqJHCnQjsjck4gVQXgDgAzO0KtvJhTVlskA34tXdaB2q6
-         mgpi5elvmvZv6dxlsp45OPuQ0L4MKhsVlwDWOc92kS0JZJ8n89beQFwhf8v/X6ydAsx5
-         r5/A==
+        d=gmail.com; s=20221208; t=1688653055; x=1691245055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xFf3EXInF/vw5mSDkGlm1RQPsDdmQJ8ogfM9wRRcu68=;
+        b=HmvPfKDxPhT7mqDTOq0bYJevpex30h3Nups50JviKXsXX9OOh3F0c0IBfRfoJ26qfm
+         yFdfsVND+HlqqAbz7KqDznyWW3o2rNmdFVX7I76bvkk1TGahvUuxukTvoFOjNVhrJhQk
+         qwOhDeppaXsNNJWgpAjJWJup/jfb9052XrQPJrAPR0fcVTrHsM0AJZ0b536YbBlyq/2G
+         a359e0ZaRrZz1ugx6UFybE8DGomTe+wsMjRPSKsJiAL2PMMSH3/+jxBuznOLr5MsMapz
+         dhKk51p59x+FLquQx6tT5Ab0Y3Hrhf6nmCpibcaSDtY/fJmJWwxgC8ls+/R6pogdtPVG
+         GveA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688652983; x=1691244983;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BOmBdv1lisamBbLJHrniasmRKbwrJaoeYKdJ/js6zGw=;
-        b=W7xBm8Hsr56mbLCKKy0VW4PZp0bYB4yM24yT0AFMjYo/doQ5uiqdOLmF3X0X1Vzo3T
-         uohHUPLFS8D3uPbD67mnbbcN3jsUu9mqU+3VfNggEqXbITD6o59zaLydWBFPq/bYl1bh
-         rVl7jSQ1ahW99DvilBv2doJfen9jVUhc1p20LidX3PcaiAVvlP7uOSBebWcvYG4j67fD
-         AO1CuSY+Svq1Up0BiR+f5tuTyQYQM+HCxAkE4b60HHaPc7qqYjFwbz0UkuGXVsFK44CQ
-         l6FX1pvziB+DZjPVmvjxAq16tgWOJjswCb7/+tzngk/n2OVwuzS4j6Vb1/FWgmnMtxGH
-         KHCg==
-X-Gm-Message-State: ABy/qLbOOtSz21274iA/iYQ0YpZId9QvTn/1f9SAQYritCqfdhNfnW5i
-        4xke8rvtVyvKpIjkRSPKljvXcg==
-X-Google-Smtp-Source: APBJJlFEVg1DpCWI/hHXDk/E1hXYnplyNAfaA59N7XB/XOaPbW8JTMvQVSDX2RK/vy4stv/I+nhuLw==
-X-Received: by 2002:a19:7b0d:0:b0:4f8:64f5:f591 with SMTP id w13-20020a197b0d000000b004f864f5f591mr1665324lfc.12.1688652982626;
-        Thu, 06 Jul 2023 07:16:22 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id u18-20020ac243d2000000b004fba785d549sm269775lfl.263.2023.07.06.07.16.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 07:16:22 -0700 (PDT)
-Message-ID: <fa24eaa0-c363-0694-76be-c14eba6999a1@linaro.org>
-Date:   Thu, 6 Jul 2023 17:16:21 +0300
+        d=1e100.net; s=20221208; t=1688653055; x=1691245055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xFf3EXInF/vw5mSDkGlm1RQPsDdmQJ8ogfM9wRRcu68=;
+        b=F9vy59pmGYl2ogMFuiivmNLFx/WyTUU/yn0szWNlQlNTEfPIXdLm0mTzgq/XXGacH/
+         Yyd4TXiZKW0sgbEQvCiENESmk2nxKxkAgg+/4iR8cSQ2MBtGhvpqopGqwwIKopMaAWDI
+         tMlHABm00roFtgqGh+YkLNFXCdpqyQkkTN/fYrWCa7Z56PHFX9rYKdf4Z7SAfHoBlOP5
+         9ustY1n7cLrHPACIYSK8KPflWl35UAg2ZNiL+KkSeRCL2SEq9V+8ArcF1e/eSb4NP+eA
+         uAhM1bzC7bBLDAI5GcU3LhaE6Rb8g362FDtbWMfVlUJwEVheq82FDowSCaTLOUMZtSp8
+         1W7w==
+X-Gm-Message-State: ABy/qLYuMdA+9x48gC+bpRkJrg7iJKePILg2E1QlQL+wXI2YyJPIU7sD
+        BEoUWrfn0XENJVCSOgd+FpI=
+X-Google-Smtp-Source: APBJJlH3Fj7e5qYXpje+jUyv6IsICJPf10+3Je55O2fvk4vxVCN2reICwTZwT9lsrVfY5XHCGBUxZw==
+X-Received: by 2002:a17:906:1013:b0:961:a67:28d with SMTP id 19-20020a170906101300b009610a67028dmr1602283ejm.22.1688653055169;
+        Thu, 06 Jul 2023 07:17:35 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id kj4-20020a170907764400b009929d998ab6sm872432ejc.131.2023.07.06.07.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 07:17:34 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH] perf/x86: Use local64_try_cmpxchg
+Date:   Thu,  6 Jul 2023 16:16:48 +0200
+Message-ID: <20230706141720.2672-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V3 6/6] clk: qcom: gcc-qdu1000: Update the RCGs ops
-Content-Language: en-GB
-To:     Imran Shaik <quic_imrashai@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230706105045.633076-1-quic_imrashai@quicinc.com>
- <20230706105045.633076-7-quic_imrashai@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230706105045.633076-7-quic_imrashai@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2023 13:50, Imran Shaik wrote:
-> Update the SDCC clock RCG ops to floor_ops to avoid overclocking issues
+Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old.
+x86 CMPXCHG instruction returns success in ZF flag, so this change saves a
+compare after cmpxchg (and related move instruction in front of cmpxchg).
 
-Split, please.
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+fails. There is no need to re-read the value in the loop.
 
-> and remaining RCGs to shared_ops to park them at safe clock(XO) during
-> disable.
+No functional change intended.
 
-Why are you doing this, is there any issue? Previously we had only a 
-several clocks implemented this way, which were really shared with other 
-subsystems (this is the where name _shared_ops comes from).
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc. "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/x86/events/amd/ibs.c      |  4 ++--
+ arch/x86/events/core.c         | 10 ++++------
+ arch/x86/events/intel/cstate.c | 10 ++++------
+ arch/x86/events/msr.c          |  8 +++-----
+ 4 files changed, 13 insertions(+), 19 deletions(-)
 
-> 
-> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Changes since v2:
->   - None
-> Changes since v1:
->   - Newly added
-> 
->   drivers/clk/qcom/gcc-qdu1000.c | 62 +++++++++++++++++-----------------
->   1 file changed, 31 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-qdu1000.c b/drivers/clk/qcom/gcc-qdu1000.c
-> index 718c34dca6e8..de35cdc93732 100644
-> --- a/drivers/clk/qcom/gcc-qdu1000.c
-> +++ b/drivers/clk/qcom/gcc-qdu1000.c
-> @@ -475,7 +475,7 @@ static struct clk_rcg2 gcc_aggre_noc_ecpri_dma_clk_src = {
->   		.name = "gcc_aggre_noc_ecpri_dma_clk_src",
->   		.parent_data = gcc_parent_data_4,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_4),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -495,7 +495,7 @@ static struct clk_rcg2 gcc_aggre_noc_ecpri_gsi_clk_src = {
->   		.name = "gcc_aggre_noc_ecpri_gsi_clk_src",
->   		.parent_data = gcc_parent_data_5,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_5),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -514,7 +514,7 @@ static struct clk_rcg2 gcc_gp1_clk_src = {
->   		.name = "gcc_gp1_clk_src",
->   		.parent_data = gcc_parent_data_1,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -528,7 +528,7 @@ static struct clk_rcg2 gcc_gp2_clk_src = {
->   		.name = "gcc_gp2_clk_src",
->   		.parent_data = gcc_parent_data_1,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -542,7 +542,7 @@ static struct clk_rcg2 gcc_gp3_clk_src = {
->   		.name = "gcc_gp3_clk_src",
->   		.parent_data = gcc_parent_data_1,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -561,7 +561,7 @@ static struct clk_rcg2 gcc_pcie_0_aux_clk_src = {
->   		.name = "gcc_pcie_0_aux_clk_src",
->   		.parent_data = gcc_parent_data_3,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_3),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -581,7 +581,7 @@ static struct clk_rcg2 gcc_pcie_0_phy_rchng_clk_src = {
->   		.name = "gcc_pcie_0_phy_rchng_clk_src",
->   		.parent_data = gcc_parent_data_0,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -600,7 +600,7 @@ static struct clk_rcg2 gcc_pdm2_clk_src = {
->   		.name = "gcc_pdm2_clk_src",
->   		.parent_data = gcc_parent_data_0,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -622,7 +622,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s0_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s0_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s0_clk_src = {
-> @@ -638,7 +638,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s1_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s1_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s1_clk_src = {
-> @@ -654,7 +654,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s2_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s2_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s2_clk_src = {
-> @@ -670,7 +670,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s3_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s3_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s3_clk_src = {
-> @@ -686,7 +686,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s4_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s4_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s4_clk_src = {
-> @@ -707,7 +707,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s5_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s5_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s5_clk_src = {
-> @@ -723,7 +723,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s6_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s6_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s6_clk_src = {
-> @@ -739,7 +739,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s7_clk_src_init = {
->   	.name = "gcc_qupv3_wrap0_s7_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap0_s7_clk_src = {
-> @@ -755,7 +755,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s0_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s0_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s0_clk_src = {
-> @@ -771,7 +771,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s1_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s1_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s1_clk_src = {
-> @@ -787,7 +787,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s2_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s2_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s2_clk_src = {
-> @@ -803,7 +803,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s3_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s3_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s3_clk_src = {
-> @@ -819,7 +819,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s4_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s4_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s4_clk_src = {
-> @@ -835,7 +835,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s5_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s5_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s5_clk_src = {
-> @@ -851,7 +851,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s6_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s6_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s6_clk_src = {
-> @@ -867,7 +867,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s7_clk_src_init = {
->   	.name = "gcc_qupv3_wrap1_s7_clk_src",
->   	.parent_data = gcc_parent_data_0,
->   	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -	.ops = &clk_rcg2_ops,
-> +	.ops = &clk_rcg2_shared_ops,
->   };
->   
->   static struct clk_rcg2 gcc_qupv3_wrap1_s7_clk_src = {
-> @@ -903,7 +903,7 @@ static struct clk_rcg2 gcc_sdcc5_apps_clk_src = {
->   		.name = "gcc_sdcc5_apps_clk_src",
->   		.parent_data = gcc_parent_data_8,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_8),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_floor_ops,
->   	},
->   };
->   
-> @@ -922,7 +922,7 @@ static struct clk_rcg2 gcc_sdcc5_ice_core_clk_src = {
->   		.name = "gcc_sdcc5_ice_core_clk_src",
->   		.parent_data = gcc_parent_data_2,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_2),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_floor_ops,
->   	},
->   };
->   
-> @@ -936,7 +936,7 @@ static struct clk_rcg2 gcc_sm_bus_xo_clk_src = {
->   		.name = "gcc_sm_bus_xo_clk_src",
->   		.parent_data = gcc_parent_data_2,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_2),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -955,7 +955,7 @@ static struct clk_rcg2 gcc_tsc_clk_src = {
->   		.name = "gcc_tsc_clk_src",
->   		.parent_data = gcc_parent_data_9,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_9),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -975,7 +975,7 @@ static struct clk_rcg2 gcc_usb30_prim_master_clk_src = {
->   		.name = "gcc_usb30_prim_master_clk_src",
->   		.parent_data = gcc_parent_data_0,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -989,7 +989,7 @@ static struct clk_rcg2 gcc_usb30_prim_mock_utmi_clk_src = {
->   		.name = "gcc_usb30_prim_mock_utmi_clk_src",
->   		.parent_data = gcc_parent_data_0,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-> @@ -1003,7 +1003,7 @@ static struct clk_rcg2 gcc_usb3_prim_phy_aux_clk_src = {
->   		.name = "gcc_usb3_prim_phy_aux_clk_src",
->   		.parent_data = gcc_parent_data_3,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_3),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_shared_ops,
->   	},
->   };
->   
-
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 371014802191..b54db2138c16 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -156,8 +156,8 @@ perf_event_try_update(struct perf_event *event, u64 new_raw_count, int width)
+ 	 * count to the generic event atomically:
+ 	 */
+ 	prev_raw_count = local64_read(&hwc->prev_count);
+-	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+-					new_raw_count) != prev_raw_count)
++	if (!local64_try_cmpxchg(&hwc->prev_count,
++				 &prev_raw_count, new_raw_count))
+ 		return 0;
+ 
+ 	/*
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index 9d248703cbdd..23c96420dea1 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -129,13 +129,11 @@ u64 x86_perf_event_update(struct perf_event *event)
+ 	 * exchange a new raw count - then add that new-prev delta
+ 	 * count to the generic event atomically:
+ 	 */
+-again:
+ 	prev_raw_count = local64_read(&hwc->prev_count);
+-	rdpmcl(hwc->event_base_rdpmc, new_raw_count);
+-
+-	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+-					new_raw_count) != prev_raw_count)
+-		goto again;
++	do {
++		rdpmcl(hwc->event_base_rdpmc, new_raw_count);
++	} while (!local64_try_cmpxchg(&hwc->prev_count,
++				      &prev_raw_count, new_raw_count));
+ 
+ 	/*
+ 	 * Now we have the new raw value and have updated the prev
+diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
+index 835862c548cc..97035db68df2 100644
+--- a/arch/x86/events/intel/cstate.c
++++ b/arch/x86/events/intel/cstate.c
+@@ -365,13 +365,11 @@ static void cstate_pmu_event_update(struct perf_event *event)
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	u64 prev_raw_count, new_raw_count;
+ 
+-again:
+ 	prev_raw_count = local64_read(&hwc->prev_count);
+-	new_raw_count = cstate_pmu_read_counter(event);
+-
+-	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+-			    new_raw_count) != prev_raw_count)
+-		goto again;
++	do {
++		new_raw_count = cstate_pmu_read_counter(event);
++	} while (!local64_try_cmpxchg(&hwc->prev_count,
++				      &prev_raw_count, new_raw_count));
+ 
+ 	local64_add(new_raw_count - prev_raw_count, &event->count);
+ }
+diff --git a/arch/x86/events/msr.c b/arch/x86/events/msr.c
+index 0feaaa571303..61c59e0627d4 100644
+--- a/arch/x86/events/msr.c
++++ b/arch/x86/events/msr.c
+@@ -244,12 +244,10 @@ static void msr_event_update(struct perf_event *event)
+ 	s64 delta;
+ 
+ 	/* Careful, an NMI might modify the previous event value: */
+-again:
+ 	prev = local64_read(&event->hw.prev_count);
+-	now = msr_read_counter(event);
+-
+-	if (local64_cmpxchg(&event->hw.prev_count, prev, now) != prev)
+-		goto again;
++	do {
++		now = msr_read_counter(event);
++	} while (!local64_try_cmpxchg(&event->hw.prev_count, &prev, now));
+ 
+ 	delta = now - prev;
+ 	if (unlikely(event->hw.event_base == MSR_SMI_COUNT)) {
 -- 
-With best wishes
-Dmitry
+2.41.0
 
