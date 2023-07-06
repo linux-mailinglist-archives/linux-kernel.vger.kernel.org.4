@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAFE74A412
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D43474A41B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbjGFTDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
+        id S232135AbjGFTF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjGFTDh (ORCPT
+        with ESMTP id S231213AbjGFTF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:03:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF31FC6;
-        Thu,  6 Jul 2023 12:03:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A35861195;
-        Thu,  6 Jul 2023 19:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544ECC433C8;
-        Thu,  6 Jul 2023 19:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688670214;
-        bh=zcBaqYahXAhcJ/QGg28GedoZoIVRedEm6esUTbPIAu0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l49iNd/Eq8MI5J5iGM4+8yyNRvSI7FDdHtcqmzr+ZqirbMTsIw7q3Q5ls0sGRQ1yg
-         z12VRI0ksavt/91yuHf0jyduqbFage5sdzXAiUCfc8JooCD+FT8ZrR2fw8/+jIig98
-         xd8nda7Xkyt7AKcS/hSVbzvjQxrKe8VVfP1cKqTmILol4DBbfnnJ7UFvCYEZ7E5laC
-         qlPdgNIB8qOVEOwzDR9a83fNXrlEFe4WNgZhRGiYa2tbLy+64yYabP1ekBXbKoOa15
-         tdj8edsHQRhdln8WejySsXzZQZSp+iGneoUFwGeXn98WHx1IhiyBrFyDzHYtL9S/M3
-         z6TIB6xsj2z4w==
-Date:   Thu, 6 Jul 2023 20:03:22 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
+        Thu, 6 Jul 2023 15:05:27 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAE61BE9;
+        Thu,  6 Jul 2023 12:05:26 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3461053677eso2487005ab.0;
+        Thu, 06 Jul 2023 12:05:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688670326; x=1691262326;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=INiY27iokPzj3Y1hOMTtz8s7AtrmF9FaFbozx7zoZLU=;
+        b=W1c723sDPJ2oAiZR+yMJ9083t92gMcyW7hoKzk4V1xIogizAq3Ilr1I6X8kOI//oYP
+         zC3ICMq3N/qrqiMHQ7lhfUni4rEYNnK9DobgCq9ATSFT4Pk0FXTP4FSbGNA7ZLX9pneS
+         W+YqN5/OCkiHIDQjQsc8K+oJf0yl42pIzcN8/qfP+fdGnWsSBUIsaxNlC/KsyaGrO4Du
+         CoUOBtnTFdqG8mtZfBAW8xrCRB6qQ/XbpoEBibE59BygvFisElaJcehWVHRCduAc3yKM
+         ZGdGDq7wnF+qeccOnWyPPaxQetfwy8/X0YMPSFkLP150eSejyB5S1imec49yroFWOBWS
+         XdOQ==
+X-Gm-Message-State: ABy/qLZGrRXYYDwJuhMYnbRqZ+Gk19NPnfHBiYYOIZsM4M1fy9/StGaC
+        pw4OehahkwqtxEEcvHBYM8zBcb/MbA==
+X-Google-Smtp-Source: APBJJlGq+znRNSnBSPJIa8qV/04lud2M3uRgd+NToHUyy9pq7rIwA8yfqAo9o7Op8Ys7KfdCPel/7Q==
+X-Received: by 2002:a92:bd0c:0:b0:343:ef5e:8286 with SMTP id c12-20020a92bd0c000000b00343ef5e8286mr3482247ile.7.1688670325885;
+        Thu, 06 Jul 2023 12:05:25 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id a5-20020a92d345000000b0034248a56432sm698327ilh.32.2023.07.06.12.05.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 12:05:24 -0700 (PDT)
+Received: (nullmailer pid 159125 invoked by uid 1000);
+        Thu, 06 Jul 2023 19:05:23 -0000
+Date:   Thu, 6 Jul 2023 13:05:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <352b0dfa-9da1-4996-8086-b45950f023ff@sirena.org.uk>
-References: <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
- <2a30ac58-d970-45c3-87d2-55396c0a83f9@sirena.org.uk>
- <0a9ade13b989ea881fd43fabbe5de1d248cf4218.camel@intel.com>
- <ccce9d4a-90fe-465a-88ae-ea1416770c77@sirena.org.uk>
- <ZKa+QFKHSyqMlriG@arm.com>
- <e9a377ce-7ce4-47b0-b30e-56a5aae18544@sirena.org.uk>
- <a7f312b1e712b87f4932d6295e6f6d28f41afd8f.camel@intel.com>
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v5 1/5] dt-bindings: gpio: Add HPE GXP GPIO
+Message-ID: <20230706190523.GA155073-robh@kernel.org>
+References: <20230705194544.100370-1-nick.hawkins@hpe.com>
+ <20230705194544.100370-2-nick.hawkins@hpe.com>
+ <046d4744-9521-7b5d-759c-6dedbafd9205@linaro.org>
+ <31F41D4F-D386-48B5-B941-D5B7C691280A@hpe.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sGlMqBUxl5KKZAGa"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a7f312b1e712b87f4932d6295e6f6d28f41afd8f.camel@intel.com>
-X-Cookie: Don't read everything you believe.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <31F41D4F-D386-48B5-B941-D5B7C691280A@hpe.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,60 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 06, 2023 at 02:12:12PM +0000, Hawkins, Nick wrote:
+> Greetings Krzysztof,
+> 
+> Thank you for the feedback. I see that due to a patch conflict I
+> reintroduced some of the alignment issues you had me fix in
+> a previous version. This was a mistake and I will correct this.
+> 
+> > > v5:
+> > > *Removed use of gpio-gxp in favor of just supporting
+> > > hpe,gxp-gpio-pl for now as the full gpio-gxp will
+> > > require a much larger patchset
+> 
+> > Bindings describe hardware, not drivers, and should be rather complete.
+> 
+> This patch is intended to still cover the hardware interface between our
+> BMC and our CPLD which gathers GPIO for us. The part of the binding I
+> removed was a completely separate interface with different mechanisms
+> for reading GPIOs. With that said I could keep these two interfaces
+> separate in yaml files: Having a yaml for hpe,gxp-gpio and another for
+> hpe,gxp-gpio-pl. Would this be a better approach?
 
---sGlMqBUxl5KKZAGa
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If they are independent (and it sounds like they are), then yes.
 
-On Thu, Jul 06, 2023 at 04:59:45PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2023-07-06 at 15:24 +0100, Mark Brown wrote:
-> > szabolcs.nagy@arm.com=A0wrote:
-> > > The 07/05/2023 20:29, Mark Brown wrote:
-
-> > > gcspopm is always available (esentially *ssp++, this is used
-> > > for longjmp).
-
-> > Ah, sorry - I misremembered there.=A0 You're right, it's only push that
-> > we
-> > have control over.
-
-FWIW the confusion there was some of the hypervisor features which do
-tie some of the push and pop instructions together.
-
-> Ah, ok! So if you are not planning to enable the push mode then the
-> features are pretty well aligned, except:
->  - On x86 it is possible to switch stacks without leaving a token=A0
->    behind.
->  - The GCSPOPM/INCSSP looping may require longer loops on ARM=A0
->    because it only pops one at at time.
-
-> If you are not going to use GCSPUSHM by default, then I think we
-> *should* be able to have some unified set of rules for developers for
-> glibc behaviors at least.
-
-Yes, the only case where I am aware of conciously diverging in any
-substantial way is that we do not free the GCS when GCS is disabled by
-userspace, we just disable the updates and checks, and reenabling after
-disabling is not supported.  We have demand for disabling at runtime so
-we want to keep the stack around for things like a running unwinder but
-we don't see a practical use for reenabling so didn't worry about
-figuring out what would make sense for userspace.  glibc isn't going to
-be using that though.
-
---sGlMqBUxl5KKZAGa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSnD/kACgkQJNaLcl1U
-h9BAuQf/ZlxwHanBD/TEBQkEI5Myy6kEtI1p6LWXwsCmree4AOmHNPxc7m9HqdSD
-d+N1YrfV4XPVTnR5xnknnbKZ1QGdOvKAhv0UbDFFRJn/TY3d8miPOMqgpAF35K6C
-Urpa0SPngTHYCZ32LKoHyy1G9zG4nH5FgXcN0bmOzU8+orrnvzjXAUbroEbgUxQR
-Af3rlLZN1E1qKzBIU7LC3+InmYpYeWOU3K7B/XP6c/OQMJrJr4k4gWN+DW7bQMsF
-SkmwVwADaxUidhKpXFWwvQ4bsBo3x1Es7j7wjU8uFOwX+gxAwTqgWkZBjg8D79Om
-pXGXRkbF+a5wHjTTpEGJRnqCBBqQxw==
-=cL31
------END PGP SIGNATURE-----
-
---sGlMqBUxl5KKZAGa--
+Rob
