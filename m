@@ -2,187 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CD3749CEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354C6749CF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjGFNDA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 09:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S231465AbjGFNGG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 09:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjGFNCz (ORCPT
+        with ESMTP id S229640AbjGFNGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:02:55 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADB519A0;
-        Thu,  6 Jul 2023 06:02:53 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-991f9148334so17618266b.1;
-        Thu, 06 Jul 2023 06:02:53 -0700 (PDT)
+        Thu, 6 Jul 2023 09:06:05 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5141C1986;
+        Thu,  6 Jul 2023 06:06:04 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5703d12ab9aso8506387b3.2;
+        Thu, 06 Jul 2023 06:06:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688648572; x=1691240572;
+        d=1e100.net; s=20221208; t=1688648763; x=1691240763;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ROZzyOO666TNx7fzn6G8xyIEzZlf0t0j8YuwaFtdhGc=;
-        b=Ph7Rszqd2EDhxR593VDge3r516fzw2g0AHgyoQ98SzoaqR4So5PLwtUTfqQpKF6kx6
-         KDGx+ibt/UMYi7xQSGoMmvAO1jvp9383+JOsV8kjCSXDkgDctcwZBSJCDuU5KZbAEIdO
-         GMqxrBVOThm6wwQVNIvcwIZ5kRYcLD/21nu1Cumu32meF+ctxN6lUwCNX1/hV01a7+mG
-         A8n1ma/T31JrP/kdpXNenqMyEnifeOHKGiwNdQQSJdru+6isD5yjj8N+5pshW0Lxecjx
-         EHzGKihPafgJrWtqyC5zB27JPXzkfyF6saGLjBIZnvR558v0flGhm2wWb7AbjNNPSAT4
-         52Mw==
-X-Gm-Message-State: ABy/qLbMHClUcG8cH18htYRK3maLJm/GulcFWLlWcuHCtqONUwywZj83
-        x4g3x8Hor+7RNfwuUvMIiUu4blVOjTICVfvL5Wc=
-X-Google-Smtp-Source: APBJJlHWKb0rwWuDcDKo8RnYWexZr9+5UJpK+NbIEawG7Ru2BqBGWOyUIZPi1pxsg2+NzV4iq/IYUHpNhfJYlw5P+K8=
-X-Received: by 2002:a17:906:51cc:b0:98e:32d:c390 with SMTP id
- v12-20020a17090651cc00b0098e032dc390mr1249327ejk.5.1688648571414; Thu, 06 Jul
- 2023 06:02:51 -0700 (PDT)
+        bh=I/qcFDS70fG1QEtJD3Cn4gIevcgGB6/3BFVjpZF24XE=;
+        b=cbjyem1IPvUdqrNPnrLwGCW6TzXC26CkOhJgBPiqcGYlOGbnBON+G8dCoJbHq3Wovw
+         iBHrFEezI+gjexeOM8uY2RUL9xpAygtyCfP7fKm25522x2IPWcFkHseyFxDqILgwzMAS
+         s3EuvYzFzLKQtNtT8bUfm9DcOKWdAXJldG+B2BRa80hB/KGq5QZa+bAogwHcvpRoBiTK
+         VyyBssDPKSEsZtZ4QGTyrhWYQECKKlCZAy7qHXB5IKrqkCYF5RKXpL2pfrGDqBPgnZmO
+         Z0mpNWilgVWmwto08O+sPUHVo/JNs2/H8M7Mp9dfPekmqB62Q5F8xR1S41BzT7/9UybP
+         XJNQ==
+X-Gm-Message-State: ABy/qLbmTNmAQSbn1GE/uMbxXkfkH1HFLhR8uDp77zBNdaI+U2IcKshX
+        Vo9g4SeA1LOcQ4UwzOgbY1FtxTXFZylpkQ==
+X-Google-Smtp-Source: APBJJlGld0cUqmhd0R7V1Rs4rchGALteKCZSv16kqXBafSepV/bjt26MKtKt+w5Dsr3BNawTKk0tgw==
+X-Received: by 2002:a81:bf50:0:b0:577:2f3f:c712 with SMTP id s16-20020a81bf50000000b005772f3fc712mr2038913ywk.40.1688648763389;
+        Thu, 06 Jul 2023 06:06:03 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id x5-20020a818705000000b0056d31a089e9sm323261ywf.126.2023.07.06.06.06.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 06:06:02 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-c11e2b31b95so682246276.3;
+        Thu, 06 Jul 2023 06:06:02 -0700 (PDT)
+X-Received: by 2002:a25:ad4b:0:b0:c68:c71e:cdb1 with SMTP id
+ l11-20020a25ad4b000000b00c68c71ecdb1mr1170563ybe.26.1688648762741; Thu, 06
+ Jul 2023 06:06:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
- <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org> <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
- <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org> <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
- <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org> <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
-In-Reply-To: <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jul 2023 15:02:38 +0200
-Message-ID: <CAJZ5v0ix1T1V5B78MA=ut56K6G=KbZb_41BHwgGmcFrV9EpKFg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
+References: <20230706124239.23366-1-frank.li@vivo.com> <20230706124239.23366-5-frank.li@vivo.com>
+In-Reply-To: <20230706124239.23366-5-frank.li@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 6 Jul 2023 15:05:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWz=gyH_c1bq435Wtu53yG6MJgNodRa7_0T2q6BLppmSw@mail.gmail.com>
+Message-ID: <CAMuHMdWz=gyH_c1bq435Wtu53yG6MJgNodRa7_0T2q6BLppmSw@mail.gmail.com>
+Subject: Re: [PATCH 5/8] ata: sata_rcar: Convert to devm_platform_ioremap_resource()
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        linux-ide@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 3:37 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> On Fri, Jun 30, 2023 at 10:16:38AM +0200, Rafael J. Wysocki wrote:
-> >
-> >
-> >
-> > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
-> > >
-> > > On Fri, Jun 23, 2023 at 07:31:43PM +0200, Rafael J. Wysocki wrote:
-> > > >
-> >
-> > [cut]
-> >
-> > > >
-> > > > Regardless of where the problem is etc, if my understanding of the
-> > > > patch is correct, it is proposing to change the behavior of a
-> > > > well-known sysfs interface in a way that is likely to be incompatible
-> > > > with at least some of its users.  This is an obvious no-go in kernel
-> > > > development and I would expect you to be well aware of it.
-> > >
-> > > yeah I get it.
-> > >
-> > > >
-> > > > IOW, if you want the cached value to be returned, a new interface (eg.
-> > > > a new sysfs attribute) is needed.
-> > >
-> > > Yeah, I am fine with either a new sysfs entry to return the cached value,
-> > > or a new sysfs entry to change the behavior of the existing /temp, as I
-> > > mentioned before, either way works for me, if changing the existing one
-> > > is too intrusive.
-> > >
-> > > >
-> > > > And I think that the use case is not really i2c sensors in general,
-> > >
-> > > I2C was just the factual example I had, but you are right, the use case
-> > > is not isolated to I2C sensor. Rather, to be clear I am not blaming I2C,
-> > > the actual issue just happen to be easier to see when I2C devices, slower
-> > > than typical MMIO devices, are being used as input for the control.
-> > >
-> > > > because at least in some cases they work just fine AFAICS, but a
-> > > > platform with a control loop running in the kernel that depends on
-> > > > sensor reads carried out at a specific, approximately constant, rate
-> > > > that can be disturbed by user space checking the sensor temperature
-> > > > via sysfs at "wrong" times.  If at the same time the user space
-> > > > program in question doesn't care about the most recent values reported
-> > > > by the sensor, it may very well use the values cached by the in-kernel
-> > > > control loop.
-> > >
-> > > That is right, the balance between supporting user space reads and
-> > > running the control timely is the actual original concern. The problem
-> > > fades out a bit when you have device reads in the us / ns time scale
-> > > and control update is in 100s of ms. But becomes more apparent on slower
-> > > devices, when reads are in ms and policy update is in the 100s ms, that is
-> > > why the I2C case was quoted. But nothing wrong with I2C, or supporting
-> > > I2C on the thermal subsystem as we do today via the hwmon interface REGISTER_TZ,
-> > > the problem is on having to support the control in kernel and a read in
-> > > userspace that can create jitter to the control.
-> > >
-> > > And as you properly stated, for this use case, the userspace does not care
-> > > about the most recent value of the device, so that is why the change
-> > > proposes to give cached values.
-> > >
-> > > On the flip side though, there may be user space based policies that
-> > > require the most recent device value. But in this case, the expectation
-> > > is to disable the in kernel policy and switch the thermal zone to
-> > > mode == disabled. And that is also why this patch will go the path
-> > > to request the most recent device value when the /temp sysfs entry
-> > > is read and the mode is disabled.
-> > >
-> > > I would suggest to have an addition sysfs entry that sets the
-> > > thermal zone into cached mode or not, let's say for the sake of the
-> > > discussion, we call it 'cached_values', with default to 'not cached'.
-> > > This way, we could support:
-> > >
-> > > a) Default, current situation, where all reads in /temp are always backed up
-> > > with an actual device .get_temp(). Nothing changes here, keeps reading
-> > > under /temp, and so long system designer is satisfied with jittering,
-> > > no need to change anything.
-> > >
-> > > b) When one has control in kernel, and frequent userspace reads on /temp
-> > > but system designer wants to protect the control in kernel to avoid jittering.
-> > > Just keep reading from /temp but set the new sysfs property 'cached_values' to 'cached'.
-> > > Then userspace will get updated values as frequent as the kernel control has
-> > > and the kernel control will not be disturbed by frequent device reads.
-> > >
-> > > c) When one has control in userspace, and wants to have the most frequent
-> > > device read. Here, one can simply disable the in kernel control by
-> > > setting the 'mode' sysfs entry to 'disabled', and making sure the new sysfs property is set
-> > > to 'not cached'. Well in fact, the way I thought this originally in this patch
-> > > was to simply always read the device when /temp is read is 'mode' is 'disabled'.
-> > >
-> > > I believe you proposed to have another sysfs entry  sysfs entry for reading cached temperature.
-> > > Something like 'temp_cached'. Thinking of it, as I mentioned before, it will work.
-> > > The only possible downside is to have two entries to read temperature.
-> > >
-> > > Strong opinions on any of the above?
-> >
-> > So what about adding a new zone attribute that can be used to specify
-> > the preferred caching time for the temperature?
-> >
-> > That is, if the time interval between two consecutive updates of the
-> > cached temperature value is less than the value of the new attribute,
-> > the cached temperature value will be returned by "temp".  Otherwise,
-> > it will cause the sensor to be read and the value obtained from it
-> > will be returned to user space and cached.
-> >
-> > If the value of the new attribute is 0, everything will work as it
-> > does now (which will also need to be the default behavior).
->
-> Yeah, that makes sense to me. I can cook something up in the next version.
+Hi Yangtao,
 
-Yes, please.
+On Thu, Jul 6, 2023 at 2:44 PM Yangtao Li <frank.li@vivo.com> wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
+>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Also I think that the $subject patch was inspired by observations made
-on a specific system in practice.  It would be good to say what the
-system is and include some numbers illustrating how severe the problem
-is (that is, what is expected and what is observed and why the
-discrepancy is attributed to the effect of direct sensor accesses from
-user space via sysfs).
+Thanks for your patch!
+
+> --- a/drivers/ata/sata_rcar.c
+> +++ b/drivers/ata/sata_rcar.c
+> @@ -861,15 +861,11 @@ static int sata_rcar_probe(struct platform_device *pdev)
+>         struct device *dev = &pdev->dev;
+>         struct ata_host *host;
+>         struct sata_rcar_priv *priv;
+> -       struct resource *mem;
+> -       int irq;
+> -       int ret = 0;
+> +       int irq, ret;
+>
+>         irq = platform_get_irq(pdev, 0);
+>         if (irq < 0)
+>                 return irq;
+> -       if (!irq)
+> -               return -EINVAL;
+
+Why this change?
+It is not documented in the patch description.
+
+>
+>         priv = devm_kzalloc(dev, sizeof(struct sata_rcar_priv), GFP_KERNEL);
+>         if (!priv)
+> @@ -890,8 +886,7 @@ static int sata_rcar_probe(struct platform_device *pdev)
+>
+>         host->private_data = priv;
+>
+> -       mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       priv->base = devm_ioremap_resource(dev, mem);
+> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
+>         if (IS_ERR(priv->base)) {
+>                 ret = PTR_ERR(priv->base);
+>                 goto err_pm_put;
+
+The rest LGTM.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
