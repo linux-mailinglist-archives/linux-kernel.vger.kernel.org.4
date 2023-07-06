@@ -2,154 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F3F749AB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26057749ABA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 13:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjGFLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 07:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        id S232265AbjGFLet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 07:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjGFLe0 (ORCPT
+        with ESMTP id S229774AbjGFLer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 07:34:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952511727;
-        Thu,  6 Jul 2023 04:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eKY/Uo90bROTMojvs7v+DqKoFW8MQafmKj7nGaM0SMo=; b=DS4GEvci5dv0oamCOC8VOMsYPA
-        0qb9WGqNf7NESEYk7b1y7Osv20dwQHcCS9hxAUM9a0Kg3EyoKgjr3KtTEK6G00Kzk0Q0vpTsLFyu3
-        BnqDv6OmsoMjZezdt6+ARvuS8VWFYBy8hhY99/TqjRsBxVAPKXyxw5QrYt+f/Gh8aVePQFIEaJwYm
-        xQ7nHlpRYUm6VaGEyIMHBKNrUQiulWEXU6mPfZ/wG79dlNH3MHz92m0TJ45Q+8VYc4yfYhD5jeT50
-        vIyQPrxKgLiEk3tehEFDobHnfRFfJG6uorDiESVx8yce88JpLJkQpC4iv7kKFZPYabjgX1GjwuDSK
-        A4/bxYsg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHNFN-00DZN3-24;
-        Thu, 06 Jul 2023 11:34:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 936FC300095;
-        Thu,  6 Jul 2023 13:34:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7C085200BDD20; Thu,  6 Jul 2023 13:34:03 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 13:34:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/retpoline,kprobes: Avoid treating rethunk as an
- indirect jump
-Message-ID: <20230706113403.GI2833176@hirez.programming.kicks-ass.net>
-References: <20230705081547.25130-1-petr.pavlu@suse.com>
- <20230705081547.25130-3-petr.pavlu@suse.com>
- <20230705085857.GG462772@hirez.programming.kicks-ass.net>
- <20230705232038.3a6d03e18f7bafb14cdfed42@kernel.org>
- <20230705145017.GC4253@hirez.programming.kicks-ass.net>
- <20230706094723.6934105e03f652923796bf7e@kernel.org>
- <20230706071705.GD2833176@hirez.programming.kicks-ass.net>
- <20230706180014.06705096a594b71250ff3c94@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706180014.06705096a594b71250ff3c94@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 6 Jul 2023 07:34:47 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1549A19A7;
+        Thu,  6 Jul 2023 04:34:40 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D2AC55C01E1;
+        Thu,  6 Jul 2023 07:34:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Jul 2023 07:34:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688643276; x=1688729676; bh=t3
+        /q+Yg2MyaI0HLj5wcLnTMw97EVKZ397JoVjZFMbmI=; b=FMSfz4UQudPJeTt9bj
+        WC9eVWhSdkVZVDDe4+xKy3kYSFTgGEykX2Saeokzx5CVACfuq6cFbtKj5pBKp7aq
+        F/xJtdQOttoIte0kGTl1wfYUgTPX8hdSnJdItsbruqQwXuHXNwdyBYaseuNoJpAQ
+        K09nzc/6amwj+3rXNfoIaRhXcZz9QKq1p5xARst0pgRqMhCcLFHIbdZlpHm7WU9m
+        /quk8LhxCJATG9ZATEWRl2z84T15Ok7GtYUDhxt5xyXZ66x1UkJDBBPRQpbH97RG
+        3TDvcHzvPcem5tT0fg6bgXxkw65dYVUO+1DFbSUPSad7KniZOWa38t6WWDtCLGaY
+        +nGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688643276; x=1688729676; bh=t3/q+Yg2MyaI0
+        HLj5wcLnTMw97EVKZ397JoVjZFMbmI=; b=JgusLVIE1tEWMeIDMDlUKz/L/HNXh
+        WXLIYgGG/genxnLVqGgWHfri8GC3338hUWyrRsmaZzEpoSAuawo9wjH+qV1jby1L
+        rMYDEhvb36rY1+bXYFweeoK0Bmgn1bsKOuMb3hOeibrHckvbdP0aw6A3qfO4oJwf
+        OIkXT8SxOY659OVarF1c7oF3PTZtfypadg/Chxg2pG/J5KdizSQcLMBihbjhLYam
+        Kz/Fci301n1SVB1AjhY7Jbs6o204WBTMaJw5Bb0bqnblrqiI2tXzDn62Xg2UR6qp
+        RSLAo+1nioogftKm0GIfICM/oTUe26WDgHRmqv5KxXLaukUSlEr/LnIxg==
+X-ME-Sender: <xms:zKamZIifhhh3cYphtKnXVUusVqjfk00NZB2K_CNVbkOYM2FBMQUhRw>
+    <xme:zKamZBA5_K2Gr9r8TtB-5Ufvukb6BjCDR4KNkk24bEjQRpZCWRQiuS1Q4YHboNyW0
+    KCB16KGd12wYkY4mkM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelgdegudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:zKamZAEEySEYPRJfw1a14xVz8ITg-mjZqe9RFccGbPDIv7eA60XvcA>
+    <xmx:zKamZJQG_89fAhk6cYr31JaZ3cLILRBYK104hLs2RTFFToUMqDwUlA>
+    <xmx:zKamZFyJMlS-NV6ps_X_UlaEMQ80rlShTub9ZW0Ek9VNEO8IcmGD0g>
+    <xmx:zKamZMnuNI4Jd8k_yPJ4lV2CB2z-4QO_Rn2Dg5d55ubI4NHcmwdxyg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1B6EBB60086; Thu,  6 Jul 2023 07:34:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <73b584cb-ceff-4e16-bac2-02de9903b973@app.fastmail.com>
+In-Reply-To: <20230705190309.579783-13-jlayton@kernel.org>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-13-jlayton@kernel.org>
+Date:   Thu, 06 Jul 2023 13:34:14 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jeff Layton" <jlayton@kernel.org>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Jeremy Kerr" <jk@ozlabs.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        "Jan Kara" <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 15/92] spufs: convert to ctime accessor functions
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 06:00:14PM +0900, Masami Hiramatsu wrote:
-> On Thu, 6 Jul 2023 09:17:05 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Thu, Jul 06, 2023 at 09:47:23AM +0900, Masami Hiramatsu wrote:
-> > 
-> > > > > If I understand correctly, all indirect jump will be replaced with JMP_NOSPEC.
-> > > > > If you read the insn_jump_into_range, I onlu jecks the jump code, not call.
-> > > > > So the functions only have indirect call still allow optprobe.
-> > > > 
-> > > > With the introduction of kCFI JMP_NOSPEC is no longer an equivalent to a
-> > > > C indirect jump.
-> > > 
-> > > If I understand correctly, kCFI is enabled by CFI_CLANG, and clang is not
-> > > using jump-tables by default, so we can focus on gcc. In that case
-> > > current check still work, correct?
-> > 
-> > IIRC clang can use jump tables, but like GCC needs RETPOLINE=n and
-> > IBT=n, so effectively nobody has them.
-> 
-> So if it requires RETPOLINE=n, current __indirect_thunk_start/end checking
-> is not required, right? (that code is embraced with "#ifdef CONFIG_RETPOLINE")
+On Wed, Jul 5, 2023, at 21:00, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+>
+> Acked-by: Jeremy Kerr <jk@ozlabs.org>
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Correct.
-
-> > 
-> > The reason I did mention kCFI though is that kCFI has a larger 'indirect
-> > jump' sequence, and I'm not sure we've thought about what can go
-> > sideways if that's optprobed.
-> 
-> If I understand correctly, kCFI checks only indirect function call (check
-> pointer), so no jump tables. Or does it use indirect 'jump' ?
-
-Yes, it's indirect function calls only.
-
-Imagine our function (bar) doing an indirect call, it will (as clang
-always does) have the function pointer in r11:
-
-bar:
-	...
-	movl	$(-0x12345678),%r10d
-	addl	-15(%r11), %r10d
-	je	1f
-	ud2
-1:	call	__x86_indirect_thunk_r11
-
-
-
-And then the function it calls (foo) looks like:
-
-__cfi_foo:
-	movl	$0x12345678, %eax
-	.skip	11, 0x90
-foo:
-	endbr
-	....
-
-
-
-So if the caller (in bar) and the callee (foo) have the same hash value
-(0x12345678 in this case) then it will be equal and we continue on our
-merry way.
-
-However, if they do not match, we'll trip that #UD and the
-handle_cfi_failure() will try and match the address to
-__{start,stop}__kcfi_traps[]. Additinoally decode_cfi_insn() will try
-and decode that whole call sequence in order to obtain the target
-address and typeid (hash).
-
-optprobes might disturb this code.
-
-> > I suspect the UD2 that's in there will go 'funny' if it's relocated into
-> > an optprobe, as in, it'll not be recognised as a CFI fail.
-> 
-> UD2 can't be optprobed (kprobe neither) because it can change the dumped
-> BUG address...
-
-Right, same problem here. But could the movl/addl be opt-probed? That
-would wreck decode_cfi_insn(). Then again, if decode_cfi_insn() fails,
-we'll get report_cfi_failure_noaddr(), which is less informative.
-
-So it looks like nothing too horrible happens...
-
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
