@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5F774A7DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 01:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA49074A7DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 01:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjGFXjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 19:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S232029AbjGFXk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 19:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjGFXjo (ORCPT
+        with ESMTP id S229522AbjGFXk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 19:39:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DD11BE1;
-        Thu,  6 Jul 2023 16:39:44 -0700 (PDT)
+        Thu, 6 Jul 2023 19:40:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C4A1BE1;
+        Thu,  6 Jul 2023 16:40:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 932DB614B6;
-        Thu,  6 Jul 2023 23:39:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9048FC433C8;
-        Thu,  6 Jul 2023 23:39:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B3E761208;
+        Thu,  6 Jul 2023 23:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6654C433C8;
+        Thu,  6 Jul 2023 23:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688686783;
-        bh=6fqr7wPLjBY8t1IgVsprpFsOLLCGzV/ls+G57rzir5A=;
+        s=k20201202; t=1688686824;
+        bh=Tujvzn4Wxs028ODcLbjT4SKTlIH3KZy7BkIxU9xPyp8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Tz4XQhfNsIUmBAsCL1mmqkVauhFRPTdgKHM18RFN3YOmBOvUHdn9O0cvdFzFe9XJT
-         tLpRtD9j5gk4rZTdTbi2m7m4VFbmwA5fP+5NHwVoXQfEzgKbm2PDbo7a0BTx7nmGQb
-         XE8kozVVoBETZPJP818ZRYLuH6c5daCJJuHYetypvocAtwI81vOKL9wcAh4lCI+7na
-         46waolNCzPQWccNB/p+GTCXz78fv1t4jirSsjk6MpjbcgmxuwQOo+waJySurbIUHR+
-         3VW77ac1yagVEPPvB0JsE6t8n7BKXPa1OxXVgsa0TMBOKeArRUXP9kSr7amVvHwnWS
-         7QE0odqQkiQIw==
-Message-ID: <9549562b-e6ce-15df-571a-bdb6a84bdb03@kernel.org>
-Date:   Fri, 7 Jul 2023 08:39:41 +0900
+        b=ZmnHvkE1y8KWQonwoLUVtPX/jP7vLElmepVmMo1LqXmPyXJsykYgIWcZ4ckeGmhz6
+         uNm1pYWbpaiId70z2dbr9es/ll7Bsc0BTkQjngUyYZbrJmfBtjJIPBrBlJ/kProc5W
+         UTSH0EI5Ovxa1RZPwbO6jmWjWoUV99aQg2HI/fRRpDg6lmADspB8+r1NZBIT4GaODj
+         SonPJKxpT0HKAeSW0uvKlX/OM53pQhLXXiwXbmriD+JYlVYjN/77+h9m073XxwBH0+
+         bpXeVNTw+VD3k1ui7DXoFNUMencOhOUCfFY31yMtdX+Ttc9Mi7IXAWYGTTbgk5UZkf
+         HQRIe9fjeP8Aw==
+Message-ID: <3f279fcf-5fbc-d0bb-ec94-39d35acd2d81@kernel.org>
+Date:   Fri, 7 Jul 2023 08:40:22 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 6/8] pata: ixp4xx: Use
+Subject: Re: [PATCH 8/8] pata: imx: Use
  devm_platform_get_and_ioremap_resource()
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Yangtao Li <frank.li@vivo.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-ide@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 References: <20230706124239.23366-1-frank.li@vivo.com>
- <20230706124239.23366-6-frank.li@vivo.com>
+ <20230706124239.23366-8-frank.li@vivo.com>
 From:   Damien Le Moal <dlemoal@kernel.org>
 Organization: Western Digital Research
-In-Reply-To: <20230706124239.23366-6-frank.li@vivo.com>
+In-Reply-To: <20230706124239.23366-8-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,62 +74,28 @@ On 7/6/23 21:42, Yangtao Li wrote:
 
 Patch title:
 
-ata: pata_ixp4xx: ...
+ata: pata_imx: ...
 
 > 
 > Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->  drivers/ata/pata_ixp4xx_cf.c | 24 +++++++++---------------
->  1 file changed, 9 insertions(+), 15 deletions(-)
+>  drivers/ata/pata_imx.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/ata/pata_ixp4xx_cf.c b/drivers/ata/pata_ixp4xx_cf.c
-> index b1daa4d3fcd9..246bb4f8f1f7 100644
-> --- a/drivers/ata/pata_ixp4xx_cf.c
-> +++ b/drivers/ata/pata_ixp4xx_cf.c
-> @@ -242,12 +242,6 @@ static int ixp4xx_pata_probe(struct platform_device *pdev)
->  	int ret;
->  	int irq;
+> diff --git a/drivers/ata/pata_imx.c b/drivers/ata/pata_imx.c
+> index 4013f28679a9..65d09ec94c12 100644
+> --- a/drivers/ata/pata_imx.c
+> +++ b/drivers/ata/pata_imx.c
+> @@ -164,8 +164,7 @@ static int pata_imx_probe(struct platform_device *pdev)
+>  	ap->pio_mask = ATA_PIO4;
+>  	ap->flags |= ATA_FLAG_SLAVE_POSS;
 >  
-> -	cmd = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	ctl = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> -
-> -	if (!cmd || !ctl)
-> -		return -EINVAL;
-> -
->  	ixpp = devm_kzalloc(dev, sizeof(*ixpp), GFP_KERNEL);
->  	if (!ixpp)
->  		return -ENOMEM;
-> @@ -271,18 +265,18 @@ static int ixp4xx_pata_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	ixpp->cmd = devm_ioremap_resource(dev, cmd);
-> -	ixpp->ctl = devm_ioremap_resource(dev, ctl);
-> -	if (IS_ERR(ixpp->cmd) || IS_ERR(ixpp->ctl))
-> -		return -ENOMEM;
-> +	ixpp->cmd = devm_platform_get_and_ioremap_resource(pdev, 0, &cmd);
-> +	if (IS_ERR(ixpp->cmd))
-> +		return PTR_ERR(ixpp->cmd);
-> +
-> +	ixpp->ctl = devm_platform_get_and_ioremap_resource(pdev, 1, &ctl);
-> +	if (IS_ERR(ixpp->ctl))
-> +		return PTR_ERR(ixpp->ctl);
->  
->  	irq = platform_get_irq(pdev, 0);
-> -	if (irq > 0)
-> -		irq_set_irq_type(irq, IRQ_TYPE_EDGE_RISING);
-> -	else if (irq < 0)
-> +	if (irq < 0)
->  		return irq;
-> -	else
-> -		return -EINVAL;
-> +	irq_set_irq_type(irq, IRQ_TYPE_EDGE_RISING);
-
-This change is OK but this should be a different patch.
-
->  
->  	/* Just one port to set up */
->  	ixp4xx_setup_port(ixpp->host->ports[0], ixpp, cmd->start, ctl->start);
+> -	io_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	priv->host_regs = devm_ioremap_resource(&pdev->dev, io_res);
+> +	priv->host_regs = devm_platform_get_and_ioremap_resource(pdev, 0, &io_res);
+>  	if (IS_ERR(priv->host_regs)) {
+>  		ret = PTR_ERR(priv->host_regs);
+>  		goto err;
 
 -- 
 Damien Le Moal
