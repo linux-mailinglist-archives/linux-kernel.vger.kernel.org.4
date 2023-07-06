@@ -2,70 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA7574A04F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BABD74A050
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjGFPDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S233135AbjGFPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbjGFPDj (ORCPT
+        with ESMTP id S232785AbjGFPDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:03:39 -0400
+        Thu, 6 Jul 2023 11:03:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C23E8F
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:03:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03268F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:03:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD48360765
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F93C433C7;
-        Thu,  6 Jul 2023 15:03:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D315608C3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A539CC433C8;
+        Thu,  6 Jul 2023 15:03:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688655818;
-        bh=7W0Zc0obW7lVdF8yJjG8mkqdwOmhHn5kTGN3n9Oy3jA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lHXmqoE7i8vNkIDAYulkLSGN5lOOpmSFT8A6pnNGSSiNmYise8xxdlJnsVYSqh6V9
-         zwQ5l1fYgI2HYdlJYzMf31Ey0rYl5Al61HcSBNyEq11dwj05AE4TRJpEA5mG7Afwhh
-         /F720KUNPATt6SWoGIHX//t+P54njN3VXcwMlbqk7tKmgNcO5cdVbkYTCOsalWb5wC
-         Ukc5Y+veRfvbIYd7l4rE+wgo/rk548ZTYND50qCVVfUPg+CMcRgHWq11Kp7Hofm4kB
-         uB6/QJTxBZbFBOoIwzIPSSvVOjKUr4524u/VyBjb8PX2SCeRBNNIKM3dJ0UPt1kl4m
-         9OXvZuRqltlvw==
-Message-ID: <1a74c6c8-d921-6a43-c6ec-4e42760d1523@kernel.org>
-Date:   Thu, 6 Jul 2023 10:03:35 -0500
+        s=k20201202; t=1688655826;
+        bh=a3v2wGBajJZF0CvLHigKspo+k63gSagvdfIpaZ/IkOc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=fQDVSwz0rwZEIcbaL/N2Nf4vurD/ORJ0ov2jommSOnKZLwV6S+Ye/oPs5ixonH9Z9
+         bWQrbkjQ7M5n7chGlgHqpULe/OXXszzpWAIECJpitEfFBASzVMypwjuvlZqj+OZEid
+         y0VNCl5Zu6lmbOcPOujV6zT7uz6qYq7YbXNRCIq1hkhb5I43J1gqtnLBOimRCdXa0u
+         3gCqKjlrt7CNhsCrJhjPh/WZ84HfEufniV9b6mSD2ZudjpPGF3aWkM859chBkySE55
+         D4oli166hf2zWGLOA8NwQsywqlSEOQEMps69Ji+gqbiBPznU5Bdz4BjTrqHzVBISFW
+         skop5VwxvNpTw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, Amit Pundir <amit.pundir@linaro.org>
+In-Reply-To: <20230705124850.40069-1-srinivas.kandagatla@linaro.org>
+References: <20230705124850.40069-1-srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH] ASoC: qcom: q6afe-dai: fix Display Port Playback
+ stream name
+Message-Id: <168865582438.36989.3459774757107985233.b4-ty@kernel.org>
+Date:   Thu, 06 Jul 2023 16:03:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] firmware: stratix10-svc: Generic Mailbox Command
-Content-Language: en-US
-To:     kah.jing.lee@intel.com
-Cc:     linux-kernel@vger.kernel.org, tien.sung.ang@intel.com,
-        wen.ping.teh@intel.com
-References: <20220908020350.2745506-1-kah.jing.lee@intel.com>
- <20230703034449.1334571-1-kah.jing.lee@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230703034449.1334571-1-kah.jing.lee@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/2/23 22:44, kah.jing.lee@intel.com wrote:
-> Hi Dinh,
-> Any feedback on this patch?
+On Wed, 05 Jul 2023 13:48:50 +0100, Srinivas Kandagatla wrote:
+> With recent changes to add more display ports did not change the Stream
+> name in q6afe-dai. This results in below error
+> "ASoC: Failed to add route DISPLAY_PORT_RX -> Display Port Playback(*)"
+> and sound card fails to probe.
 > 
+> Fix this by adding correct stream name.
+> 
+> [...]
 
-What patch? I don't see anything here. Please resend.
+Applied to
 
-Dinh
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: qcom: q6afe-dai: fix Display Port Playback stream name
+      commit: 4f3fcf5f6dc8ab561e152c8747fd7e502b32266c
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
