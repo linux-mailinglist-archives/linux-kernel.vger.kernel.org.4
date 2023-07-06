@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D22674979A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D3F74979C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjGFIi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S231465AbjGFIjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjGFIiy (ORCPT
+        with ESMTP id S229718AbjGFIiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Jul 2023 04:38:54 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BDB19BE;
-        Thu,  6 Jul 2023 01:38:52 -0700 (PDT)
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E851BC3;
+        Thu,  6 Jul 2023 01:38:53 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QxVLJ223vz4f3pHX;
-        Thu,  6 Jul 2023 16:38:48 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QxVLH2QXhz4f3jY4;
+        Thu,  6 Jul 2023 16:38:47 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgA34qWWfaZkk+xQNQ--.47999S5;
+        by APP4 (Coremail) with SMTP id gCh0CgA34qWWfaZkk+xQNQ--.47999S6;
         Thu, 06 Jul 2023 16:38:49 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     song@kernel.org, guoqing.jiang@linux.dev, neilb@suse.com
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH -next 1/2] md/md-bitmap: remove unnecessary local variable in backlog_store()
-Date:   Thu,  6 Jul 2023 16:37:26 +0800
-Message-Id: <20230706083727.608914-2-yukuai1@huaweicloud.com>
+Subject: [PATCH -next 2/2] md/md-bitmap: hold 'reconfig_mutex' in backlog_store()
+Date:   Thu,  6 Jul 2023 16:37:27 +0800
+Message-Id: <20230706083727.608914-3-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230706083727.608914-1-yukuai1@huaweicloud.com>
 References: <20230706083727.608914-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgA34qWWfaZkk+xQNQ--.47999S5
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4DWrWktFW5tr1DXw13urg_yoWfCFc_ua
-        9YvF97Gry2yr1jyr13Zr1fZr90kw1DZ3WkWFySgFWSvFy5Ka4kArWFvr9rt3yYvayrCFy5
-        ZryxWr47XrWkKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-kFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
-        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU==
+X-CM-TRANSID: gCh0CgA34qWWfaZkk+xQNQ--.47999S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1kWFW7Xw48ZF1fArW3trb_yoW8Xw13pr
+        s7KFy5Grn5tFy3tr1DXF4DWFy5XanrXr9rtrW3W3W5uFy0vr9xKFyrWa4Yyryxta4fGF15
+        Xr45WFykAayrJrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUc6pPUUUUU=
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -64,28 +64,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-Local variable is definied first in the beginning of backlog_store(),
-there is no need to define it again.
+Several reasons why 'reconfig_mutex' should be held:
 
-Fixes: 8c13ab115b57 ("md/bitmap: don't set max_write_behind if there is no write mostly device")
+1) rdev_for_each() is not safe to be called without the lock, because
+   rdev can be removed concurrently.
+2) mddev_destroy_serial_pool() and mddev_create_serial_pool() should not
+   be called concurrently.
+3) mddev_suspend() from mddev_destroy/create_serial_pool() should be
+   protected by the lock.
+
+Fixes: 10c92fca636e ("md-bitmap: create and destroy wb_info_pool with the change of backlog")
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/md-bitmap.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/md/md-bitmap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index a58a4c30265e..1f3339961159 100644
+index 1f3339961159..6f9ff14971f9 100644
 --- a/drivers/md/md-bitmap.c
 +++ b/drivers/md/md-bitmap.c
-@@ -2569,8 +2569,6 @@ backlog_store(struct mddev *mddev, const char *buf, size_t len)
- 			mddev_destroy_serial_pool(mddev, NULL, false);
- 	} else if (backlog && !mddev->serial_info_pool) {
- 		/* serial_info_pool is needed since backlog is not zero */
--		struct md_rdev *rdev;
--
- 		rdev_for_each(rdev, mddev)
- 			mddev_create_serial_pool(mddev, rdev, false);
+@@ -2546,6 +2546,10 @@ backlog_store(struct mddev *mddev, const char *buf, size_t len)
+ 	if (backlog > COUNTER_MAX)
+ 		return -EINVAL;
+ 
++	rv = mddev_lock(mddev);
++	if (rv)
++		return rv;
++
+ 	/*
+ 	 * Without write mostly device, it doesn't make sense to set
+ 	 * backlog for max_write_behind.
+@@ -2559,6 +2563,7 @@ backlog_store(struct mddev *mddev, const char *buf, size_t len)
+ 	if (!has_write_mostly) {
+ 		pr_warn_ratelimited("%s: can't set backlog, no write mostly device available\n",
+ 				    mdname(mddev));
++		mddev_unlock(mddev);
+ 		return -EINVAL;
  	}
+ 
+@@ -2574,6 +2579,8 @@ backlog_store(struct mddev *mddev, const char *buf, size_t len)
+ 	}
+ 	if (old_mwb != backlog)
+ 		md_bitmap_update_sb(mddev->bitmap);
++
++	mddev_unlock(mddev);
+ 	return len;
+ }
+ 
 -- 
 2.39.2
 
