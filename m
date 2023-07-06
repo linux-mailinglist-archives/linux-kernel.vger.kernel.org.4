@@ -2,117 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEED74939D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50ABB7493A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbjGFCQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 22:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S233212AbjGFCSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 22:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjGFCQt (ORCPT
+        with ESMTP id S232108AbjGFCSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 22:16:49 -0400
-Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3C4FC
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 19:16:48 -0700 (PDT)
-Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
-        by pb-smtp21.pobox.com (Postfix) with ESMTP id DF69D19C07;
-        Wed,  5 Jul 2023 22:16:47 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-        :to:cc:subject:message-id:mime-version:content-type; s=sasl; bh=
-        fQRURmtGU9+VkKlIsI3Hm+nfj5STTvRmot52VrL0YUQ=; b=hnKFr1ieuENSMhAc
-        F0VMd8F/kHo+CZQ/TSPS/CPgAeQabXMKlDWZV8p3suL+em2+ViOGixoYj2Z8Ez88
-        xOFRsgIwGQHm/89kEGentVt8/eFhk4F9MMv3G9U5lMaWsRrKCGWGt/h+THQ8u4nz
-        CKOMUjCpFHgBnW2/skl2wrGY6Ts=
-Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp21.pobox.com (Postfix) with ESMTP id D687619C06;
-        Wed,  5 Jul 2023 22:16:47 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
- h=date:from:to:cc:subject:message-id:mime-version:content-type;
- s=2019-09.pbsmtp; bh=fQRURmtGU9+VkKlIsI3Hm+nfj5STTvRmot52VrL0YUQ=;
- b=j6xrx9aL4Z97iylqOFSGe5VwFVyCTFNba3/x/ADAqqAfDYRDKYS1zzKwtE9CKdFDETFyaxKHWb+A9vTenteLCUce7saYYeL9X2NMT30AbrjiZHhlZ/GtIi+C8xtkuljq/Je6xafFu1NVRc7hmLM8UzoDBl1S/uS7x7j/MaZe1fs=
-Received: from kimchi.darkphysics (unknown [76.146.178.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 63C7319C04;
-        Wed,  5 Jul 2023 22:16:44 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-Date:   Wed, 5 Jul 2023 19:16:38 -0700
-From:   Tree Davies <tdavies@darkphysics.net>
-To:     gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com,
-        dan.carpenter@linaro.org
-Cc:     tdavies@darkphysics.net, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192e: Rename variable bRegShortGI40MHz
-Message-ID: <ZKYkBlqcydh26zSo@kimchi.darkphysics>
+        Wed, 5 Jul 2023 22:18:07 -0400
+Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4C512A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 19:18:06 -0700 (PDT)
+Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b8b30f781cso939735ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 19:18:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688609886; x=1691201886;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s3HkeJQHl4QsBqigrw2AyOZVstwcjef6Y+Q4cyGlEL0=;
+        b=XtmZFhkevBoBoao3Ad3b8TJIlTsRp6Xcu62oQVDxQpvhbwxD4vfZGdf4bU4zKG+ZPO
+         LCMqPN6ZmbbdPBed2TpCdAvaL5SCOU46DPVT0bwcERUKHXxJT85FlAb5yvON1/C2iwul
+         oVEJwEyl8qDQMsV+AL1/M0//S2YkOmbbxncUFCOSwYkkoH/b05UzyYk83i5OG6+5Q7P3
+         XXM2WwooCmbEPuiPr2PmzIh/AwKMxjirRoKIye4cGyOv4u3GOU7ftE2FJdM1dKkkYFpT
+         fjfNMg9wbSr55ubwu43JYc+r6Kk4kYuORiSV3mAz1IavmYdI0bQfCWQ+mKRhwLLf7mGe
+         c2rQ==
+X-Gm-Message-State: ABy/qLarAo2Wc24jUzwT9sEsqE1Hde8jaU+HEn/oJuadlRIqU23LxAtE
+        lPgyjWefxq4UZp6Um8npcfFwTTdWmTDP76KT7mVc1MEmWLYZ
+X-Google-Smtp-Source: APBJJlFKzvbEhwVHAQ31CCemK89sHRJfQnkA1kIRiIRAL0FUmCUZsbtrteTYgL7IgsCwwU4+WyWVV0vmdGWZNJdfjTaiqQOo5+YU
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Pobox-Relay-ID: 271BBBDA-1BA3-11EE-BDD1-B31D44D1D7AA-45285927!pb-smtp21.pobox.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:902:8f96:b0:1ac:3f51:fa64 with SMTP id
+ z22-20020a1709028f9600b001ac3f51fa64mr619291plo.13.1688609886159; Wed, 05 Jul
+ 2023 19:18:06 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 19:18:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006dca4d05ffc82098@google.com>
+Subject: [syzbot] [gfs2?] memory leak in gfs2_quota_init
+From:   syzbot <syzbot+4ee56df41d0cc0f0783a@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch renames variable bRegShortGI40MHz to breg_short_gi_40MHz
-to fix checkpatch warning Avoid CamelCase.
+Hello,
 
-Signed-off-by: Tree Davies <tdavies@darkphysics.net>
+syzbot found the following issue on:
+
+HEAD commit:    f8566aa4f176 Merge tag 'x86-urgent-2023-07-01' of git://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10443370a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=87bd445ea3f7a661
+dashboard link: https://syzkaller.appspot.com/bug?extid=4ee56df41d0cc0f0783a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172d3d14a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143b6648a80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9c2c2ab2bd05/disk-f8566aa4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/0af022babece/vmlinux-f8566aa4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e335287813f6/bzImage-f8566aa4.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/2f0686bcdcb4/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4ee56df41d0cc0f0783a@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810aa24000 (size 8192):
+  comm "syz-executor334", pid 5004, jiffies 4294954804 (age 12.830s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8154c55a>] __do_kmalloc_node mm/slab_common.c:984 [inline]
+    [<ffffffff8154c55a>] __kmalloc+0x4a/0x120 mm/slab_common.c:998
+    [<ffffffff821964d9>] kmalloc include/linux/slab.h:583 [inline]
+    [<ffffffff821964d9>] kzalloc include/linux/slab.h:700 [inline]
+    [<ffffffff821964d9>] gfs2_quota_init+0xd9/0x770 fs/gfs2/quota.c:1373
+    [<ffffffff821a1aef>] gfs2_make_fs_rw+0x11f/0x200 fs/gfs2/super.c:155
+    [<ffffffff8218a1cf>] gfs2_reconfigure+0x3cf/0x530 fs/gfs2/ops_fstype.c:1602
+    [<ffffffff81665d5c>] reconfigure_super+0x14c/0x3e0 fs/super.c:961
+    [<ffffffff816cd5cb>] vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+    [<ffffffff816cd5cb>] __do_sys_fsconfig+0x80b/0x8d0 fs/fsopen.c:439
+    [<ffffffff84a6bff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a6bff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810f360000 (size 8192):
+  comm "syz-executor334", pid 5007, jiffies 4294955349 (age 7.380s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8154c55a>] __do_kmalloc_node mm/slab_common.c:984 [inline]
+    [<ffffffff8154c55a>] __kmalloc+0x4a/0x120 mm/slab_common.c:998
+    [<ffffffff821964d9>] kmalloc include/linux/slab.h:583 [inline]
+    [<ffffffff821964d9>] kzalloc include/linux/slab.h:700 [inline]
+    [<ffffffff821964d9>] gfs2_quota_init+0xd9/0x770 fs/gfs2/quota.c:1373
+    [<ffffffff821a1aef>] gfs2_make_fs_rw+0x11f/0x200 fs/gfs2/super.c:155
+    [<ffffffff8218a1cf>] gfs2_reconfigure+0x3cf/0x530 fs/gfs2/ops_fstype.c:1602
+    [<ffffffff81665d5c>] reconfigure_super+0x14c/0x3e0 fs/super.c:961
+    [<ffffffff816cd5cb>] vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+    [<ffffffff816cd5cb>] __do_sys_fsconfig+0x80b/0x8d0 fs/fsopen.c:439
+    [<ffffffff84a6bff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a6bff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+
+
 ---
- drivers/staging/rtl8192e/rtl819x_HT.h     | 2 +-
- drivers/staging/rtl8192e/rtl819x_HTProc.c | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
-index 2bbd01048561..07102ce5ef5d 100644
---- a/drivers/staging/rtl8192e/rtl819x_HT.h
-+++ b/drivers/staging/rtl8192e/rtl819x_HT.h
-@@ -96,7 +96,7 @@ struct rt_hi_throughput {
- 	u8 bCurrentHTSupport;
- 	u8 bRegBW40MHz;
- 	u8 bCurBW40MHz;
--	u8 bRegShortGI40MHz;
-+	u8 breg_short_gi_40MHz;
- 	u8 bCurShortGI40MHz;
- 	u8 bRegShortGI20MHz;
- 	u8 bCurShortGI20MHz;
-diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-index f9fa3f2bb728..1844098a4308 100644
---- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-@@ -72,7 +72,7 @@ void HTUpdateDefaultSetting(struct rtllib_device *ieee)
- 	struct rt_hi_throughput *ht_info = ieee->ht_info;
- 
- 	ht_info->bRegShortGI20MHz = 1;
--	ht_info->bRegShortGI40MHz = 1;
-+	ht_info->breg_short_gi_40MHz = 1;
- 
- 	ht_info->bRegBW40MHz = 1;
- 
-@@ -545,7 +545,7 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
- 	ht_info->bCurShortGI20MHz = ((ht_info->bRegShortGI20MHz) ?
- 				    ((pPeerHTCap->ShortGI20Mhz == 1) ?
- 				    true : false) : false);
--	ht_info->bCurShortGI40MHz = ((ht_info->bRegShortGI40MHz) ?
-+	ht_info->bCurShortGI40MHz = ((ht_info->breg_short_gi_40MHz) ?
- 				     ((pPeerHTCap->ShortGI40Mhz == 1) ?
- 				     true : false) : false);
- 
-@@ -781,7 +781,7 @@ void HTUseDefaultSetting(struct rtllib_device *ieee)
- 		ht_info->bCurBW40MHz = ht_info->bRegBW40MHz;
- 		ht_info->bCurShortGI20MHz = ht_info->bRegShortGI20MHz;
- 
--		ht_info->bCurShortGI40MHz = ht_info->bRegShortGI40MHz;
-+		ht_info->bCurShortGI40MHz = ht_info->breg_short_gi_40MHz;
- 
- 		if (ieee->iw_mode == IW_MODE_ADHOC)
- 			ieee->current_network.qos_data.active =
--- 
-2.30.2
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
