@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726F1749E8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93294749E90
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjGFOFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S232906AbjGFOFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjGFOFN (ORCPT
+        with ESMTP id S232805AbjGFOFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:05:13 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AFC1FC3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:05:10 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b7dfb95761so794375ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 07:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688652310; x=1691244310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IxQkqfWZadf4e7ZXMTgD092G9UqtDRhpq1Uw7mcccPU=;
-        b=JTE3J7vEtroDjkz0J0YJUxxGfAHynnIxKHpjaVXx2tz3n+EjmGpoAwgKy8R+WRRkM+
-         k3W+5qv1YTlCAP+UcB2ArjJE4oYq6lo4PdCKDpis97xigZlEhYbsl+wADl7kiov7SE51
-         uONKqWk8WLeXviTouiOV8nPGg5p/8qhWtLX046dcmjqBGTa6bBPYqpMrhXHOaC+32/p8
-         vU0q6jpv+a6clYR3MEHTLQ7PXHDaJFRHD1ZYPHlxTSJa6vWz+O7pF8b7OC9ajvVwCXaF
-         iwVe+Bs3u0D8yOOXmHfA3jACZKS7DrFRjzqe3YrsDUc4cQI7/xPvHL9x1/ZiwFcsFVh/
-         96pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688652310; x=1691244310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IxQkqfWZadf4e7ZXMTgD092G9UqtDRhpq1Uw7mcccPU=;
-        b=Vl/CQ9RNwW8cmTErna713gv7PbJ289pyTpnAMi57d1tXIsekTjOr/0w98eIL5L7iti
-         1G+JZ4lZdgXdTQyOnjR2i9fw/tJ2gdHaAs2Bl/uarcKFiRvpNAmJLuatmyoGv4maQNrp
-         EClaUDc69DOHhEOqMSWJT4HWYG2hKSGMlhgWlZ3Irwfs7N5C7LgBTlcoPiPOfQfyKcnA
-         5I9polZEyI6cH7eBFT9nAhVWuu38Kh8MlzTReLJWBLobFZIzJST5iyNJvPrsoH90Q2Mv
-         RyXfMqZMn1Fqb7ehVRLv10dfBCIpk3YdN6tHkAwxuOz00Q5A8o4c9Kdu24U4NOYG7dsZ
-         /NCg==
-X-Gm-Message-State: ABy/qLaR7CeYMyUYH3vTVmX8zVbom+3gXNbkH0H9h661gmYYQYF0q8dH
-        f8kkaoS6dKWmsZetwXUhrOvxzw==
-X-Google-Smtp-Source: APBJJlF0ctEzgA1/zFlM8pxVZNhDqmweSCoYq6B7d7aHZfUBpY1EEJJpP33cMEIK5KwxycIElxNZUg==
-X-Received: by 2002:a17:903:41c7:b0:1b8:b55d:4cff with SMTP id u7-20020a17090341c700b001b8b55d4cffmr2486422ple.2.1688652309827;
-        Thu, 06 Jul 2023 07:05:09 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v3-20020a170902b7c300b001b80d399730sm1468406plz.242.2023.07.06.07.05.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 07:05:09 -0700 (PDT)
-Message-ID: <c77cf93f-c27e-63aa-c2d4-c494bd9e3bee@kernel.dk>
-Date:   Thu, 6 Jul 2023 08:05:07 -0600
+        Thu, 6 Jul 2023 10:05:46 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4A51BC2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:05:36 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:44850)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qHPbv-00FFkD-Ij; Thu, 06 Jul 2023 08:05:31 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:42136 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qHPbu-007MP1-At; Thu, 06 Jul 2023 08:05:31 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, brgerst@gmail.com
+References: <20230706052231.2183-1-xin3.li@intel.com>
+Date:   Thu, 06 Jul 2023 09:05:22 -0500
+In-Reply-To: <20230706052231.2183-1-xin3.li@intel.com> (Xin Li's message of
+        "Wed, 5 Jul 2023 22:22:31 -0700")
+Message-ID: <87v8exgmot.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: =?UTF-8?B?UmU6IOWbnuWkjTogW1BBVENIXSBibG9jazogbXEtZGVhZGxpbmU6IHJl?=
- =?UTF-8?Q?name_sort=5flist_to_sort=5frb?=
-Content-Language: en-US
-To:     =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20230704040626.24899-1-lipeifeng@oppo.com>
- <32dad510-1508-f0dc-ab49-60d56ed2c2d6@acm.org>
- <TYZPR02MB55955F57A8CCC819054338BFC62FA@TYZPR02MB5595.apcprd02.prod.outlook.com>
- <TYZPR02MB55950B363465E43DB0044ACEC62CA@TYZPR02MB5595.apcprd02.prod.outlook.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <TYZPR02MB55950B363465E43DB0044ACEC62CA@TYZPR02MB5595.apcprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1qHPbu-007MP1-At;;;mid=<87v8exgmot.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1/GHU/enSRgZM3J+lB0AWqM08S41uJozwc=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Xin Li <xin3.li@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 663 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (1.6%), b_tie_ro: 9 (1.4%), parse: 0.86 (0.1%),
+         extract_message_metadata: 11 (1.7%), get_uri_detail_list: 1.49 (0.2%),
+         tests_pri_-2000: 4.6 (0.7%), tests_pri_-1000: 2.4 (0.4%),
+        tests_pri_-950: 1.21 (0.2%), tests_pri_-900: 0.96 (0.1%),
+        tests_pri_-200: 0.78 (0.1%), tests_pri_-100: 4.6 (0.7%),
+        tests_pri_-90: 284 (42.9%), check_bayes: 274 (41.3%), b_tokenize: 6
+        (1.0%), b_tok_get_all: 7 (1.1%), b_comp_prob: 2.1 (0.3%),
+        b_tok_touch_all: 254 (38.3%), b_finish: 1.18 (0.2%), tests_pri_0: 280
+        (42.3%), check_dkim_signature: 0.74 (0.1%), check_dkim_adsp: 9 (1.4%),
+        poll_dns_idle: 48 (7.2%), tests_pri_10: 2.1 (0.3%), tests_pri_500: 55
+        (8.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] x86/ia32: Do not modify the DPL bits for a null selector
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/23 3:27?AM, ???(wink) wrote:
->>>> Mq-deadline would store request in list:fifo_list and 
->>>> rb_tree:sort_list, and sort_list should be renamed to sort_rb which 
->>>> is beneficial for understanding.
-> 
->>> Huh? I think this patch makes the code less readable instead of more readable ...
-> 
->> Huh? Maybe we had different opinions about it, I thinks the essence of this word is 'sort'
->> So that reader can get the meaning of it easily. And in my mind, *_rb is more reasonable for rb_root ratherthan *_list for reader.
-> 
-> Hi Sir?
-> Should it be merged for the above reason? Hope for your reply, thanks.
+Xin Li <xin3.li@intel.com> writes:
 
-No, the patch makes no sense. I agree with Bart that it doesn't make it
-any more readable, in fact it's worse. We have a sort and fifo list, the
-backing data structure isn't that exciting by itself.
+> When a null selector is to be loaded into a segment register,
+> reload_segments() sets its DPL bits to 3. Later when an IRET
+> instruction loads it, it zeros the segment register. The two
+> operations offset each other to actually effect a nop.
+>
+> Fix it by not modifying the DPL bits for a null selector.
 
--- 
-Jens Axboe
+Maybe this is the right thing but this needs some serious comments
+about what is going on.
 
+In particular how does sel <= 3 equate to a null selector?  Is that
+defined somewhere?  At a minimum you should have static asserts to make
+certain no one redefines the first 4 segment selectors as anything else,
+if you want to refer to them by number instead of testing for specific
+properties.
+
+As written this looks like it requires an enormous amount of knowledge
+about how other parts of the code works, to be comprehensible or to
+change safely.  That level of non-local knowledge should be unnecessary.
+
+Eric
+
+
+> Signed-off-by: Xin Li <xin3.li@intel.com>
+> ---
+>  arch/x86/kernel/signal_32.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
+> index 9027fc088f97..7796cf84fca2 100644
+> --- a/arch/x86/kernel/signal_32.c
+> +++ b/arch/x86/kernel/signal_32.c
+> @@ -36,22 +36,27 @@
+>  #ifdef CONFIG_IA32_EMULATION
+>  #include <asm/ia32_unistd.h>
+>  
+> +static inline u16 usrseg(u16 sel)
+> +{
+> +	return sel <= 3 ? sel : sel | 3;
+> +}
+> +
+>  static inline void reload_segments(struct sigcontext_32 *sc)
+>  {
+>  	unsigned int cur;
+>  
+>  	savesegment(gs, cur);
+> -	if ((sc->gs | 0x03) != cur)
+> -		load_gs_index(sc->gs | 0x03);
+> +	if (usrseg(sc->gs) != cur)
+> +		load_gs_index(usrseg(sc->gs));
+>  	savesegment(fs, cur);
+> -	if ((sc->fs | 0x03) != cur)
+> -		loadsegment(fs, sc->fs | 0x03);
+> +	if (usrseg(sc->fs) != cur)
+> +		loadsegment(fs, usrseg(sc->fs));
+>  	savesegment(ds, cur);
+> -	if ((sc->ds | 0x03) != cur)
+> -		loadsegment(ds, sc->ds | 0x03);
+> +	if (usrseg(sc->ds) != cur)
+> +		loadsegment(ds, usrseg(sc->ds));
+>  	savesegment(es, cur);
+> -	if ((sc->es | 0x03) != cur)
+> -		loadsegment(es, sc->es | 0x03);
+> +	if (usrseg(sc->es) != cur)
+> +		loadsegment(es, usrseg(sc->es));
+>  }
+>  
+>  #define sigset32_t			compat_sigset_t
