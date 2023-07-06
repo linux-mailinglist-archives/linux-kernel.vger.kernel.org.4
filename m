@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F8074A5E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D60274A5E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 23:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjGFVam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 17:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S231833AbjGFVbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 17:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjGFVak (ORCPT
+        with ESMTP id S229507AbjGFVbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:30:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07116DD;
-        Thu,  6 Jul 2023 14:30:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=P3Xuz8GELhidqUWZPKJGYu1EEf8xRrAUuqFDiYa20Q8=; b=sGzArAHOcn5houvQZ2a+lrpen4
-        0HGYVnjMLS5ao9ND1Sjj7pKfwOrEV9CrHKVrbdozHgjxcBmjnbmcABaYGnZGEhZuwKk3MAE9pGB/D
-        lssWql6M6JuK4YsIhfWhXHtaTi8lnjtjq7VPqIL7TIblYv9RBRC7xT0T3XP78mInyCud4Aa9yj9Vk
-        Zyql8PpxbZkXftg95KLpqS4lERtnQhUcfjJSZ3/Prwun4IFDsDLuMEVO7QOeI+ewKjQc1D4iD1ra2
-        RYc3G9GekKWqdsMAczUvAP8rXF0t+uf/La+96SNomP73JjMPZxuthE0zdV8zZwvsV5m1lYwVkmrNy
-        EaELAxqQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHWYc-002jaa-2e;
-        Thu, 06 Jul 2023 21:30:34 +0000
-Message-ID: <e5dae9f1-8492-3046-f694-80d13c9927e9@infradead.org>
-Date:   Thu, 6 Jul 2023 14:30:34 -0700
+        Thu, 6 Jul 2023 17:31:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D09DD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 14:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688679048;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J7jc5Xt5OwHj0jB9aQC+Uq3PbScwoHTvSP8Bz1i/QuU=;
+        b=UKjBqyEfqNaILtNw1IvjtMnn+F3LbHq3Vw1ABM+cE/oCqiwH3BzFDxDZpfXQUuh48CbbAr
+        LUYRLgTh4UDqcCWb7Svz8GuHraLERoVi6AvV2gGBGgK9gcHmf5p6W9mtAZ9UJ5kcbmDFZO
+        +ADTkMOh077tRCfw2g87EMzdh01cjJ0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-146--_gepZ5EPkOtWmARcootgQ-1; Thu, 06 Jul 2023 17:30:47 -0400
+X-MC-Unique: -_gepZ5EPkOtWmARcootgQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-765a44ce88aso88804085a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 14:30:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688679046; x=1691271046;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:reply-to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J7jc5Xt5OwHj0jB9aQC+Uq3PbScwoHTvSP8Bz1i/QuU=;
+        b=VLlySSfD9uJ0SIEa4KCan6+GyeTYa/b55PCV9eNnJerFA+LncxELUshEsZh84O5BB/
+         nwobo9HfIXu/QpTXzgQqiS/JxQWnpNNcdI9KJrYeIlRaWREfDRagri8ZPCroZ7nrlE81
+         ZkaN4y1W8ieRKgSO7uR+maISSRHHI677NJ98gfrLqIDPyeAUfrGDM0k6TDZXx5oDfpr2
+         k3Hq7pJNPDXwkZi2/oeVqChSrJ52SDEzERsOTnmOq6JiPdWjvXeN/1JxDEcRbrCzFBnQ
+         8I4Padcjk3jJNum7Aw8aiipf5uEMz2/49s99AFYUdeFbR5VOg54NXtfXJfk4peFDhSCZ
+         NBhg==
+X-Gm-Message-State: ABy/qLY/2tIluhGiGEJNDzOIbyf+Hgf4Q3wtNoWAWSGUxcE9z+qU/Iy/
+        PjhBwD1qqzp2l09+/X+0bDLSl3LSzmySEc9ycP7YcR7jX+0s+u+RDF5FNOvy1tLughruiv+ibNm
+        N2vQuzHLp/0ESwQ7h4lFFV27X
+X-Received: by 2002:a05:620a:2493:b0:767:6cd5:ec8b with SMTP id i19-20020a05620a249300b007676cd5ec8bmr8376330qkn.27.1688679046723;
+        Thu, 06 Jul 2023 14:30:46 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHgvJsIbhCSjhTrZoP7QXnDNAQZfTuhcVK1JVsu6+bJKK8QySVPVB5tWG6oX59lKUJk0aCmyA==
+X-Received: by 2002:a05:620a:2493:b0:767:6cd5:ec8b with SMTP id i19-20020a05620a249300b007676cd5ec8bmr8376305qkn.27.1688679046478;
+        Thu, 06 Jul 2023 14:30:46 -0700 (PDT)
+Received: from [192.168.2.56] ([46.175.183.46])
+        by smtp.gmail.com with ESMTPSA id m14-20020a05620a13ae00b00765ac1335c2sm1150488qki.75.2023.07.06.14.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 14:30:45 -0700 (PDT)
+Message-ID: <eda7b84e56123bce167a64133572440e6806ef1e.camel@redhat.com>
+Subject: Re: [Intel-wired-lan] [PATCH net v2] ice: Unregister netdev and
+ devlink_port only once
+From:   Petr Oros <poros@redhat.com>
+Reply-To: poros@redhat.com
+To:     netdev@vger.kernel.org
+Cc:     pmenzel@molgen.mpg.de, intel-wired-lan@lists.osuosl.org,
+        jesse.brandeburg@intel.com, linux-kernel@vger.kernel.org,
+        edumazet@google.com, anthony.l.nguyen@intel.com, kuba@kernel.org,
+        pabeni@redhat.com, davem@davemloft.net
+Date:   Thu, 06 Jul 2023 23:30:41 +0200
+In-Reply-To: <20230619105813.369912-1-poros@redhat.com>
+References: <20230619105813.369912-1-poros@redhat.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 1/2] fpga: region: fix kernel-doc
-Content-Language: en-US
-To:     Marco Pagani <marpagan@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20230706142755.124879-1-marpagan@redhat.com>
- <20230706142755.124879-2-marpagan@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230706142755.124879-2-marpagan@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Petr Oros p=C3=AD=C5=A1e v Po 19. 06. 2023 v 12:58 +0200:
+> Since commit 6624e780a577fc ("ice: split ice_vsi_setup into smaller
+> functions") ice_vsi_release does things twice. There is unregister
+> netdev which is unregistered in ice_deinit_eth also.
+>=20
+> It also unregisters the devlink_port twice which is also unregistered
+> in ice_deinit_eth(). This double deregistration is hidden because
+> devl_port_unregister ignores the return value of xa_erase.
+>=20
+Hi,
 
-On 7/6/23 07:27, Marco Pagani wrote:
-> - Fix the following warnings issued by the kernel-doc script:
-> 
-> drivers/fpga/fpga-region.c:46: warning: No description found for return value of 'fpga_region_get'
-> drivers/fpga/fpga-region.c:97: warning: No description found for return value of 'fpga_region_program_fpga'
-> drivers/fpga/fpga-region.c:295: warning: No description found for return value of 'fpga_region_init'
-> 
-> - Remove the "and registers a reconfig notifier" part from the description
->   of fpga_region_init() since it does not register an of_overlay notifier
->   anymore.
-> 
-> - Remove the outdated "if @np is not an FPGA Region" case from the return
->   description of fpga_region_get() and replace it with the case when
->   try_module_get() fails.
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+Is it possible to push this patch forward? I think the questions have
+been answered. Or is something still unclear?
 
-Looks good. Thanks.
+Regards,
+Petr
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-> ---
->  drivers/fpga/fpga-region.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-> index ccf6fdab1360..c9d065a6961b 100644
-> --- a/drivers/fpga/fpga-region.c
-> +++ b/drivers/fpga/fpga-region.c
-> @@ -38,9 +38,10 @@ EXPORT_SYMBOL_GPL(fpga_region_class_find);
->   *
->   * Caller should call fpga_region_put() when done with region.
->   *
-> - * Return fpga_region struct if successful.
-> - * Return -EBUSY if someone already has a reference to the region.
-> - * Return -ENODEV if @np is not an FPGA Region.
-> + * Return:
-> + * * fpga_region struct if successful.
-> + * * -EBUSY if someone already has a reference to the region.
-> + * * -ENODEV if can't take parent driver module refcount.
->   */
->  static struct fpga_region *fpga_region_get(struct fpga_region *region)
->  {
-> @@ -91,7 +92,7 @@ static void fpga_region_put(struct fpga_region *region)
->   * The caller will need to call fpga_bridges_put() before attempting to
->   * reprogram the region.
->   *
-> - * Return 0 for success or negative error code.
-> + * Return: 0 for success or negative error code.
->   */
->  int fpga_region_program_fpga(struct fpga_region *region)
->  {
-> @@ -288,8 +289,9 @@ static void fpga_region_dev_release(struct device *dev)
->  }
->  
->  /**
-> - * fpga_region_init - init function for fpga_region class
-> - * Creates the fpga_region class and registers a reconfig notifier.
-> + * fpga_region_init - creates the fpga_region class.
-> + *
-> + * Return: 0 on success or ERR_PTR() on error.
->   */
->  static int __init fpga_region_init(void)
->  {
-
--- 
-~Randy
