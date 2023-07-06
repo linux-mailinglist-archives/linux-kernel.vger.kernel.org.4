@@ -2,132 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDAF74A414
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAFE74A412
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 21:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjGFTDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 15:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S232077AbjGFTDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 15:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjGFTDU (ORCPT
+        with ESMTP id S231956AbjGFTDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 15:03:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F721BFF
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 12:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688670147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xrVOfhoIMemGGmfQntaPU0HXJfwvQLEazh/5eyulSkk=;
-        b=hmQ3XMdhaWWftg8yPQU+ffe46w61wnxOGOyXnH4y/HuIBATfUtJmeY7Fa83B0XttydLVEz
-        1GokC2yZYjPvk16JzcIkEE8lQnuVg4eBqDkOPFy8lEKR8MCDHLXiU5TE5dPQhOWJQ2GGKc
-        OwY3rhFHuHrKK7boqUcST5EGWPTvce0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-8siB-6IjN5arBNq_acKDHA-1; Thu, 06 Jul 2023 15:02:23 -0400
-X-MC-Unique: 8siB-6IjN5arBNq_acKDHA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 6 Jul 2023 15:03:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF31FC6;
+        Thu,  6 Jul 2023 12:03:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C35F238008A2;
-        Thu,  6 Jul 2023 19:02:22 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.192.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D27DA492B01;
-        Thu,  6 Jul 2023 19:02:19 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] x86: Remove the arch_calc_vm_prot_bits() macro from the uapi
-Date:   Thu,  6 Jul 2023 21:02:17 +0200
-Message-Id: <20230706190217.371721-1-thuth@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A35861195;
+        Thu,  6 Jul 2023 19:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544ECC433C8;
+        Thu,  6 Jul 2023 19:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688670214;
+        bh=zcBaqYahXAhcJ/QGg28GedoZoIVRedEm6esUTbPIAu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l49iNd/Eq8MI5J5iGM4+8yyNRvSI7FDdHtcqmzr+ZqirbMTsIw7q3Q5ls0sGRQ1yg
+         z12VRI0ksavt/91yuHf0jyduqbFage5sdzXAiUCfc8JooCD+FT8ZrR2fw8/+jIig98
+         xd8nda7Xkyt7AKcS/hSVbzvjQxrKe8VVfP1cKqTmILol4DBbfnnJ7UFvCYEZ7E5laC
+         qlPdgNIB8qOVEOwzDR9a83fNXrlEFe4WNgZhRGiYa2tbLy+64yYabP1ekBXbKoOa15
+         tdj8edsHQRhdln8WejySsXzZQZSp+iGneoUFwGeXn98WHx1IhiyBrFyDzHYtL9S/M3
+         z6TIB6xsj2z4w==
+Date:   Thu, 6 Jul 2023 20:03:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <352b0dfa-9da1-4996-8086-b45950f023ff@sirena.org.uk>
+References: <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
+ <2a30ac58-d970-45c3-87d2-55396c0a83f9@sirena.org.uk>
+ <0a9ade13b989ea881fd43fabbe5de1d248cf4218.camel@intel.com>
+ <ccce9d4a-90fe-465a-88ae-ea1416770c77@sirena.org.uk>
+ <ZKa+QFKHSyqMlriG@arm.com>
+ <e9a377ce-7ce4-47b0-b30e-56a5aae18544@sirena.org.uk>
+ <a7f312b1e712b87f4932d6295e6f6d28f41afd8f.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sGlMqBUxl5KKZAGa"
+Content-Disposition: inline
+In-Reply-To: <a7f312b1e712b87f4932d6295e6f6d28f41afd8f.camel@intel.com>
+X-Cookie: Don't read everything you believe.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arch_calc_vm_prot_bits() macro uses VM_PKEY_BIT0 etc. which are
-not part of the uapi, so the macro is completely useless for userspace.
-It is also hidden behind the CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
-config switch which we shouldn't expose to userspace. Thus let's move
-this macro into a new internal header instead.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- arch/x86/include/asm/mman.h      | 15 +++++++++++++++
- arch/x86/include/uapi/asm/mman.h |  8 --------
- scripts/headers_install.sh       |  1 -
- 3 files changed, 15 insertions(+), 9 deletions(-)
- create mode 100644 arch/x86/include/asm/mman.h
+--sGlMqBUxl5KKZAGa
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
-new file mode 100644
-index 0000000000000..12b820259b9f3
---- /dev/null
-+++ b/arch/x86/include/asm/mman.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_MMAN_H__
-+#define __ASM_MMAN_H__
-+
-+#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
-+#define arch_calc_vm_prot_bits(prot, key) (		\
-+		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
-+		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
-+		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
-+		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
-+#endif
-+
-+#include <uapi/asm/mman.h>
-+
-+#endif /* __ASM_MMAN_H__ */
-diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-index 775dbd3aff736..a72e4f3e13b17 100644
---- a/arch/x86/include/uapi/asm/mman.h
-+++ b/arch/x86/include/uapi/asm/mman.h
-@@ -4,14 +4,6 @@
- 
- #define MAP_32BIT	0x40		/* only give out 32bit addresses */
- 
--#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
--#define arch_calc_vm_prot_bits(prot, key) (		\
--		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
--		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
--		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
--		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
--#endif
--
- #include <asm-generic/mman.h>
- 
- #endif /* _ASM_X86_MMAN_H */
-diff --git a/scripts/headers_install.sh b/scripts/headers_install.sh
-index afdddc82f02b3..56d3c338d91d7 100755
---- a/scripts/headers_install.sh
-+++ b/scripts/headers_install.sh
-@@ -81,7 +81,6 @@ arch/nios2/include/uapi/asm/swab.h:CONFIG_NIOS2_CI_SWAB_NO
- arch/nios2/include/uapi/asm/swab.h:CONFIG_NIOS2_CI_SWAB_SUPPORT
- arch/x86/include/uapi/asm/auxvec.h:CONFIG_IA32_EMULATION
- arch/x86/include/uapi/asm/auxvec.h:CONFIG_X86_64
--arch/x86/include/uapi/asm/mman.h:CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
- "
- 
- for c in $configs
--- 
-2.39.3
+On Thu, Jul 06, 2023 at 04:59:45PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2023-07-06 at 15:24 +0100, Mark Brown wrote:
+> > szabolcs.nagy@arm.com=A0wrote:
+> > > The 07/05/2023 20:29, Mark Brown wrote:
 
+> > > gcspopm is always available (esentially *ssp++, this is used
+> > > for longjmp).
+
+> > Ah, sorry - I misremembered there.=A0 You're right, it's only push that
+> > we
+> > have control over.
+
+FWIW the confusion there was some of the hypervisor features which do
+tie some of the push and pop instructions together.
+
+> Ah, ok! So if you are not planning to enable the push mode then the
+> features are pretty well aligned, except:
+>  - On x86 it is possible to switch stacks without leaving a token=A0
+>    behind.
+>  - The GCSPOPM/INCSSP looping may require longer loops on ARM=A0
+>    because it only pops one at at time.
+
+> If you are not going to use GCSPUSHM by default, then I think we
+> *should* be able to have some unified set of rules for developers for
+> glibc behaviors at least.
+
+Yes, the only case where I am aware of conciously diverging in any
+substantial way is that we do not free the GCS when GCS is disabled by
+userspace, we just disable the updates and checks, and reenabling after
+disabling is not supported.  We have demand for disabling at runtime so
+we want to keep the stack around for things like a running unwinder but
+we don't see a practical use for reenabling so didn't worry about
+figuring out what would make sense for userspace.  glibc isn't going to
+be using that though.
+
+--sGlMqBUxl5KKZAGa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSnD/kACgkQJNaLcl1U
+h9BAuQf/ZlxwHanBD/TEBQkEI5Myy6kEtI1p6LWXwsCmree4AOmHNPxc7m9HqdSD
+d+N1YrfV4XPVTnR5xnknnbKZ1QGdOvKAhv0UbDFFRJn/TY3d8miPOMqgpAF35K6C
+Urpa0SPngTHYCZ32LKoHyy1G9zG4nH5FgXcN0bmOzU8+orrnvzjXAUbroEbgUxQR
+Af3rlLZN1E1qKzBIU7LC3+InmYpYeWOU3K7B/XP6c/OQMJrJr4k4gWN+DW7bQMsF
+SkmwVwADaxUidhKpXFWwvQ4bsBo3x1Es7j7wjU8uFOwX+gxAwTqgWkZBjg8D79Om
+pXGXRkbF+a5wHjTTpEGJRnqCBBqQxw==
+=cL31
+-----END PGP SIGNATURE-----
+
+--sGlMqBUxl5KKZAGa--
