@@ -2,168 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161D97499ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BF77499FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 12:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjGFKxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 06:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S232468AbjGFKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 06:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbjGFKwy (ORCPT
+        with ESMTP id S231981AbjGFKys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 06:52:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0576A1BC2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 03:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688640746; x=1720176746;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WgNfcFmgoHg7Ejpd1gRA+ku2/6OzM5A50weImTBhw0o=;
-  b=G7I0DgvIgnZRCAn8ru4jr1IIRGt9r+KsPwZTaVIwV8LfLgp1QzQ5kzwC
-   FDcerRnOlYC+ifLb+4LmU9GsZ+PSbGPIgnZ1afFgb8pH52yWbdYRf1Rc4
-   YZKnVJiakoGeBQzA25lia8vUf3OWyrG6I+sm4X9TqsmIb8s74j2lusChz
-   /UTXsldbVRW3nrE6VpcKzw2k0Gw+8iENwqHUAu+o6oupnJshIBRSxie5x
-   V705PRsQH5vkGn3bY/179xgUsaqEMui2JYET4iR//x9pOkFArNuWM18Sw
-   /fnWbWR4HhMYuJM9nT2Ix1w2EVBYkRfPOZ3AjjMtuMgKGZKK3NuHpTeyW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="361045366"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="361045366"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 03:52:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="789503755"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="789503755"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jul 2023 03:52:22 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qHMb0-0001G8-0v;
-        Thu, 06 Jul 2023 10:52:22 +0000
-Date:   Thu, 6 Jul 2023 18:52:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Thu, 6 Jul 2023 06:54:48 -0400
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E4E51FD2;
+        Thu,  6 Jul 2023 03:54:36 -0700 (PDT)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 366Ar6jE026309;
+        Thu, 6 Jul 2023 05:53:06 -0500
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 366Ar4Ro026307;
+        Thu, 6 Jul 2023 05:53:04 -0500
+Date:   Thu, 6 Jul 2023 05:53:04 -0500
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     Petr Tesarik <petr.tesarik.ext@huawei.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: arch/m68k/include/asm/mmu_context.h:164 load_ksp_mmu() warn:
- unsigned 'mmuar' is never less than zero.
-Message-ID: <202307061849.rJKwVbXb-lkp@intel.com>
-MIME-Version: 1.0
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        LuisChamberlain <mcgrof@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [QUESTION] Full user space process isolation?
+Message-ID: <20230706105304.GA26175@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com> <CAG48ez2oRPBdbfoNxGcV85CXFx1Su+dmhoWXE6rWsXui6_OTPg@mail.gmail.com> <ab8e68962feba9f16ed0a715d46ed003da61cfe8.camel@huaweicloud.com> <17702e7f-479a-22b8-70d9-56e418c8120b@huawei.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <17702e7f-479a-22b8-70d9-56e418c8120b@huawei.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 06 Jul 2023 05:53:06 -0500 (CDT)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c17414a273b81fe4e34e11d69fc30cc8b1431614
-commit: e67b37c368b7cc24b8c0fe5ab6c44422312eab37 m68k: allow pte_offset_map[_lock]() to fail
-date:   2 weeks ago
-config: m68k-randconfig-m031-20230706 (https://download.01.org/0day-ci/archive/20230706/202307061849.rJKwVbXb-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230706/202307061849.rJKwVbXb-lkp@intel.com/reproduce)
+On Tue, Jul 04, 2023 at 05:18:43PM +0200, Petr Tesarik wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307061849.rJKwVbXb-lkp@intel.com/
+Good morning, I hope the week is going well for everyone.
 
-New smatch warnings:
-arch/m68k/include/asm/mmu_context.h:164 load_ksp_mmu() warn: unsigned 'mmuar' is never less than zero.
+> On 7/3/2023 5:28 PM, Roberto Sassu wrote:
+> > On Mon, 2023-07-03 at 17:06 +0200, Jann Horn wrote:
+> >> On Thu, Jun 22, 2023 at 4:45???PM Roberto Sassu
+> >> <roberto.sassu@huaweicloud.com> wrote:
+> >>> I wanted to execute some kernel workloads in a fully isolated user
+> >>> space process, started from a binary statically linked with klibc,
+> >>> connected to the kernel only through a pipe.
+> >>
+> >> FWIW, the kernel has some infrastructure for this already, see
+> >> CONFIG_USERMODE_DRIVER and kernel/usermode_driver.c, with a usage
+> >> example in net/bpfilter/.
+> > 
+> > Thanks, I actually took that code to make a generic UMD management
+> > library, that can be used by all use cases:
+> > 
+> > https://lore.kernel.org/linux-kernel/20230317145240.363908-1-roberto.sassu@huaweicloud.com/
+> > 
+> >>> I also wanted that, for the root user, tampering with that process is
+> >>> as hard as if the same code runs in kernel space.
+> >>
+> >> I believe that actually making it that hard would probably mean that
+> >> you'd have to ensure that the process doesn't use swap (in other
+> >> words, it would have to run with all memory locked), because root can
+> >> choose where swapped pages are stored. Other than that, if you mark it
+> >> as a kthread so that no ptrace access is allowed, you can probably get
+> >> pretty close. But if you do anything like that, please leave some way
+> >> (like a kernel build config option or such) to enable debugging for
+> >> these processes.
+> > 
+> > I didn't think about the swapping part... thanks!
+> > 
+> > Ok to enable debugging with a config option.
+> > 
+> >> But I'm not convinced that it makes sense to try to draw a security
+> >> boundary between fully-privileged root (with the ability to mount
+> >> things and configure swap and so on) and the kernel - my understanding
+> >> is that some kernel subsystems don't treat root-to-kernel privilege
+> >> escalation issues as security bugs that have to be fixed.
+> > 
+> > Yes, that is unfortunately true, and in that case the trustworthy UMD
+> > would not make things worse. On the other hand, on systems where that
+> > separation is defined, the advantage would be to run more exploitable
+> > code in user space, leaving the kernel safe.
+> > 
+> > I'm thinking about all the cases where the code had to be included in
+> > the kernel to run at the same privilege level, but would not use any of
+> > the kernel facilities (e.g. parsers).
+> 
+> Thanks for reminding me of kexec-tools. The complete image for booting a
+> new kernel was originally prepared in user space. With kernel lockdown,
+> all this code had to move into the kernel, adding a new syscall and lots
+> of complexity to build purgatory code, etc. Yet, this new implementation
+> in the kernel does not offer all features of kexec-tools, so both code
+> bases continue to exist and are happily diverging...
+> 
+> > If the boundary is extended to user space, some of these components
+> > could be moved away from the kernel, and the functionality would be the
+> > same without decreasing the security.
 
-Old smatch warnings:
-arch/m68k/include/asm/mmu_context.h:114 load_ksp_mmu() warn: always true condition '(mmuar >= (0)) => (0-u32max >= 0)'
-arch/m68k/include/asm/mmu_context.h:140 load_ksp_mmu() warn: always true condition '(mmuar >= (0)) => (0-u32max >= 0)'
+> All right, AFAICS your idea is limited to relatively simple cases
+> for now. I mean, allowing kexec-tools to run in user space is not
+> easily possible when UID 0 is not trusted, because kexec needs to
+> open various files and make various other syscalls, which would
+> require a complex LSM policy. It looks technically possible to write
+> one, but then the big question is if it would be simpler to review
+> and maintain than adding more kexec-tools features to the kernel.
 
-vim +/mmuar +164 arch/m68k/include/asm/mmu_context.h
+You either need to develop and maintain a complex system-wide LSM
+policy or you need a security model that is specifically tuned and
+then scoped to the needs of the workload running on behalf of the
+kernel as a UID=0 userspace process.
 
-    92	
-    93	static inline void load_ksp_mmu(struct task_struct *task)
-    94	{
-    95		unsigned long flags;
-    96		struct mm_struct *mm;
-    97		int asid;
-    98		pgd_t *pgd;
-    99		p4d_t *p4d;
-   100		pud_t *pud;
-   101		pmd_t *pmd;
-   102		pte_t *pte = NULL;
-   103		unsigned long mmuar;
-   104	
-   105		local_irq_save(flags);
-   106		mmuar = task->thread.ksp;
-   107	
-   108		/* Search for a valid TLB entry, if one is found, don't remap */
-   109		mmu_write(MMUAR, mmuar);
-   110		mmu_write(MMUOR, MMUOR_STLB | MMUOR_ADR);
-   111		if (mmu_read(MMUSR) & MMUSR_HIT)
-   112			goto end;
-   113	
-   114		if (mmuar >= PAGE_OFFSET) {
-   115			mm = &init_mm;
-   116		} else {
-   117			pr_info("load_ksp_mmu: non-kernel mm found: 0x%p\n", task->mm);
-   118			mm = task->mm;
-   119		}
-   120	
-   121		if (!mm)
-   122			goto bug;
-   123	
-   124		pgd = pgd_offset(mm, mmuar);
-   125		if (pgd_none(*pgd))
-   126			goto bug;
-   127	
-   128		p4d = p4d_offset(pgd, mmuar);
-   129		if (p4d_none(*p4d))
-   130			goto bug;
-   131	
-   132		pud = pud_offset(p4d, mmuar);
-   133		if (pud_none(*pud))
-   134			goto bug;
-   135	
-   136		pmd = pmd_offset(pud, mmuar);
-   137		if (pmd_none(*pmd))
-   138			goto bug;
-   139	
-   140		pte = (mmuar >= PAGE_OFFSET) ? pte_offset_kernel(pmd, mmuar)
-   141					     : pte_offset_map(pmd, mmuar);
-   142		if (!pte || pte_none(*pte) || !pte_present(*pte))
-   143			goto bug;
-   144	
-   145		set_pte(pte, pte_mkyoung(*pte));
-   146		asid = mm->context & 0xff;
-   147		if (!pte_dirty(*pte) && mmuar <= PAGE_OFFSET)
-   148			set_pte(pte, pte_wrprotect(*pte));
-   149	
-   150		mmu_write(MMUTR, (mmuar & PAGE_MASK) | (asid << MMUTR_IDN) |
-   151			(((int)(pte->pte) & (int)CF_PAGE_MMUTR_MASK)
-   152			>> CF_PAGE_MMUTR_SHIFT) | MMUTR_V);
-   153	
-   154		mmu_write(MMUDR, (pte_val(*pte) & PAGE_MASK) |
-   155			((pte->pte) & CF_PAGE_MMUDR_MASK) | MMUDR_SZ_8KB | MMUDR_X);
-   156	
-   157		mmu_write(MMUOR, MMUOR_ACC | MMUOR_UAA);
-   158	
-   159		goto end;
-   160	
-   161	bug:
-   162		pr_info("ksp load failed: mm=0x%p ksp=0x08%lx\n", mm, mmuar);
-   163	end:
- > 164		if (pte && mmuar < PAGE_OFFSET)
-   165			pte_unmap(pte);
-   166		local_irq_restore(flags);
-   167	}
-   168	
+As I noted in my e-mail to Roberto, our TSEM LSM brings forward the
+ability to do both, as a useful side effect of the need to limit model
+complexity when the objective is to have a single functional
+description of the security state of a system.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Anyway, I can sense a general desire to run less code in the most
+> privileged system environment. Robert's proposal is one of few that
+> go in this direction. What are the alternatives?
+
+As I noted above, TSEM brings the ability to provide highly specific
+and narrowly scoped security policy to a process heirarchy
+ie. workload.
+
+However, regardless of the technology applied, in order to pursue
+Roberto's UMD model of having a uid=0 process run tasks on behalf of
+the kernel, there would seem to be a need to define what the security
+objectives are.
+
+From the outside looking in, there would seem to be a need to address
+two primary issues:
+
+1: Trust/constrain what the UMD process can do.
+
+2: Constrain what the system at large can do to the UMD process.
+
+As we have seen before, requirement 1 implies a definition of what it
+means for a process to be 'trusted'.
+
+In the absence of formal verification, which appears to be a
+non-starter in practice, this would seem to imply defining a standard
+for the allowed security behavior of the UMD workload.
+
+From our perspective, with TSEM, we define 'trusted' for a workload to
+mean that it has not requested a security behavior inconsistent with
+what the workload has been unit tested to.  If a process does this, its
+ability to execute additional security behaviors is curtailed.
+
+With respect to requirement two.
+
+Here is the ASCII art diagram of Roberto's proposed system:
+
+     r/w  ^                             kernel space
+----------|-----------------------------------------
+          v (pipe)                        user space
+ +-----------------+       +-----------------------+
+ | trustworthy UMD |---X---| rest of the processes |
+ +-----------------+       +-----------------------+
+
+Casey noted that he believed the Linux LSM had sufficient coverage to
+provide the necessary security controls for this model.  He
+specifically mentioned that it had support for network traffic
+controls and labeling.
+
+I haven't seen a reply from Roberto to my e-mail questioning what the
+following means:
+
+---X---
+
+But I get the sense that it means that any other process in userspace
+couldn't have any impact, or I assume visibility, into what the UID=0
+process is doing on behalf of the kernel.  I don't think it means that
+there is supposed to be some type of highly controlled traffic between
+the UMD and other processes.
+
+We will see what comments Roberto has on this.
+
+This arguably may be the most difficult requirement to meet if our
+interpretation of this requirement is correct, particularly so if this
+involves a confidentiality requirement, perhaps a bit less so if there
+is only a requirement of integrity of execution.
+
+As I mentioned in a previous e-mail, depending on the requirements,
+issue 2 starts to look a lot like protected enclave technologies such
+as SGX.  As history has shown, providing a protected execution
+environment, against the rest of the system, is a somewhat formidable
+undertaking, with probably a requirement for hardware support if SGX
+and/or TDX are any examples.
+
+So, I believe that TSEM brings useful technology to the table, but
+regardless of technology, it would seem there is a need to
+specifically define the security requirements for the UMD model.
+
+> Petr T
+
+Have a good day.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
