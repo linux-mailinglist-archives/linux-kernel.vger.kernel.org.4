@@ -2,209 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FCF7493A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6FD7493A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 04:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbjGFCXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 22:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S233230AbjGFCZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 22:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbjGFCXe (ORCPT
+        with ESMTP id S229632AbjGFCY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 22:23:34 -0400
-Received: from pb-smtp2.pobox.com (pb-smtp2.pobox.com [64.147.108.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1D71730
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 19:23:33 -0700 (PDT)
-Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
-        by pb-smtp2.pobox.com (Postfix) with ESMTP id 9B0841A64EA;
-        Wed,  5 Jul 2023 22:23:29 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-        :to:cc:subject:message-id:mime-version:content-type; s=sasl; bh=
-        /NVXDdfY8UM9GKXKRR9vkGmJTmSHNnysR/wQRuQoyGQ=; b=CvTMm/aw9FSyiZJP
-        1E2YrRILpes53hhoaSzqWPF4j/HeOtPmkaTDGDIPQ2baA505v7iUQ/31+SqXC6uT
-        iq3G/fA1vPMYAbgPl4EFqXFn2Bz1wtwdVqk0sEGz39pR3w1UKnE6837qDwWPoo3+
-        KnWPukcsb1mcsKq+cc2ErRHbU7I=
-Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp2.pobox.com (Postfix) with ESMTP id 91F171A64E9;
-        Wed,  5 Jul 2023 22:23:29 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
- h=date:from:to:cc:subject:message-id:mime-version:content-type;
- s=2019-09.pbsmtp; bh=/NVXDdfY8UM9GKXKRR9vkGmJTmSHNnysR/wQRuQoyGQ=;
- b=uN1khaU5mAnetUva9eBxc7qYj+K2JglfmP1SaCRyHylasCZtPMWTAJk+6+A/H0nm+5A+qAtBLpCWb1iuWVjo9u5Guk2nm0rExa731P1ogrHQHq+nr557smp6edJRNRE7HXSOdEi90IHpGUkf0oS2DcrPNuHmcIjcQtqqUAOUq6g=
-Received: from kimchi.darkphysics (unknown [76.146.178.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp2.pobox.com (Postfix) with ESMTPSA id 6F7F71A64E6;
-        Wed,  5 Jul 2023 22:23:28 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-Date:   Wed, 5 Jul 2023 19:23:22 -0700
-From:   Tree Davies <tdavies@darkphysics.net>
-To:     gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com,
-        dan.carpenter@linaro.org
-Cc:     tdavies@darkphysics.net, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192e: Rename variable bCurBW40MHz
-Message-ID: <ZKYlmrHHALEdyxS+@kimchi.darkphysics>
+        Wed, 5 Jul 2023 22:24:59 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185861737
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 19:24:58 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3143b88faebso104168f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 19:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688610296; x=1691202296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1048vqlXkYGyF+XcnTYa3P+GBqsNCgfDORbZIMSrGAk=;
+        b=DhyUYoEM+lzL9QbERr02EhFFYHChXal8YDSzaYHUSk2Ze4dGQn7daxWPR8mVzEhTPw
+         bqUAHq0nr9lozZZud75z0XJFitgtT8VeNRHP2MrFWyCIJnLlR4MgYuRxLk23gRD2QHl+
+         6SMVGkEa1Q0/7DKUnQkPV27I0CnY13vJI/H3GdzDTUR4S244CJQ4Yo/skMG6F+wCEkvE
+         kHugkL4HqAfhJ/R/bOQIrUki9lzCmpCfHQa4dsdLYGADc03tbh3r/JKR6SlMGMT8O8Cc
+         LvVXIJGkKJJHXZIquYwvLD4uK4+EMyocJbcaNZMTMVwuQ8fRdi2CtVtryOMUDsGcXdgR
+         3abg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688610296; x=1691202296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1048vqlXkYGyF+XcnTYa3P+GBqsNCgfDORbZIMSrGAk=;
+        b=UWbxR0ND7Rvdb4dTalogPwuBZW3IAdZmWZKgNlLt8fSlBV8blPj0Yad7pA26RiBxRf
+         O/BFCznKS6JyVSK4LhQ+zu3jqvsJKLEPFULMhQrGlRIicCFO9pszO1jaUkk3mJpwznHx
+         5oBBpsVli7HW+YOxf//rWSiP1M5G3ZL6s0LlNN0eXm60pLZhleAXhWm3Q+BzmXmmCDub
+         H5mr1yOJzdmqIa+8HCh8N66bNfMlvhch8/G3vVeIOXGQ0g0a4g8p/rJCenRS6bYRObAE
+         p+s/wfqsLel0nYNPOBljZcNxbSQhumFl8H+56Gpjm+2nBN022SaXVAP2Q0SElweHqJB5
+         imMw==
+X-Gm-Message-State: ABy/qLYRythgs7wI2v47aXvYQbObMiQKa3v9IWTgFjm/GL8Z6oJcQoK4
+        VMogErhQC0165csat2Ykn+SDqetgq3tRtMpGAWeQIA==
+X-Google-Smtp-Source: APBJJlEbQjDa7zV4kzY1QMr+RRPhlGD3O00R3/Q/5tLRT9VcuuHuuAQy1kfD+qZkasgWlox4owNuD+y+UUZXFlhGpwY=
+X-Received: by 2002:adf:e310:0:b0:313:f371:aede with SMTP id
+ b16-20020adfe310000000b00313f371aedemr450746wrj.1.1688610296508; Wed, 05 Jul
+ 2023 19:24:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Pobox-Relay-ID: 182E672A-1BA4-11EE-84E1-307A8E0A682E-45285927!pb-smtp2.pobox.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230703-71f67eb66a037f5c0fb825c6@orel>
+ <CAEEQ3w=7tBHyG=CvuktPN5cvfpY6ayamnbry6eOYxMDrPN+oZg@mail.gmail.com>
+ <CANBLGcwcvK55dZ1__wvWCtcw=XoKt=qki8g6C_QYo+TBqqJ=TA@mail.gmail.com>
+ <50F3BD62-78F1-456E-A44A-0C7D9A2D4113@jrtc27.com> <87bkgql8rq.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87bkgql8rq.fsf@all.your.base.are.belong.to.us>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Thu, 6 Jul 2023 10:24:45 +0800
+Message-ID: <CAEEQ3wnaaMvJ3=7udvAjiP3q36nvqAwb8sh34f+nO8Ua_83yFw@mail.gmail.com>
+Subject: Re: [External] [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
+        Emil Renner Berthing <emil.renner.berthing@gmail.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        rminnich@gmail.com, Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
+        weidong.wd@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch renames variable bCurBW40MHz to bcur_bw_40MHz
-to fix checkpatch warning Avoid CamelCase.
+Hi Bj=C3=B6rn,
 
-Signed-off-by: Tree Davies <tdavies@darkphysics.net>
----
- drivers/staging/rtl8192e/rtl819x_HT.h        |  2 +-
- drivers/staging/rtl8192e/rtl819x_HTProc.c    | 20 ++++++++++----------
- drivers/staging/rtl8192e/rtllib_softmac_wx.c |  4 ++--
- drivers/staging/rtl8192e/rtllib_tx.c         | 10 +++++-----
- 4 files changed, 18 insertions(+), 18 deletions(-)
+On Wed, Jul 5, 2023 at 10:43=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
+.org> wrote:
+>
+> Jessica Clarke <jrtc27@jrtc27.com> writes:
+>
+> > On 3 Jul 2023, at 19:58, Emil Renner Berthing <emil.renner.berthing@gma=
+il.com> wrote:
+> >>
+> >> On Mon, 3 Jul 2023 at 15:33, =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@by=
+tedance.com> wrote:
+> >>>
+> >>> Hi drew,
+> >>>
+> >>> On Mon, Jul 3, 2023 at 9:01=E2=80=AFPM Andrew Jones <ajones@ventanami=
+cro.com> wrote:
+> >>>>
+> >>>>
+> >>>> (This is a reply to a non-existent cover letter.)
+> >>>
+> >>> This has been discussed many times with Ard, Please refer to :
+> >>> https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16=
+-1-cuiyunhui@bytedance.com/
+> >>
+> >> Hi Yunhui,
+> >>
+> >> From that discussion it was mentioned that that arm supports 3 methods
+> >> of booting:
+> >>  direct + devicetree
+> >>  EFI + devicetree
+> >>  EFI + ACPI
+> >> ..but not
+> >>  direct + ACPI
+> >>
+> >> To me it isn't obvious from that or this thread, and since arm seems
+> >> to be doing fine without the 4th option I'm curious why that's
+> >> necessary on riscv?
+> >
+> > If anything we should be removing option 1, because that=E2=80=99s not =
+a
+> > cross-OS standard (though RISC-V=E2=80=99s SBI direct booting is at lea=
+st not
+> > tied to the OS). Any application-class platform spec is going to
+> > mandate EFI, because, whatever your thoughts of EFI are, that is *the*
+> > standard. And if you=E2=80=99re willing to pick up all the complexity o=
+f ACPI,
+> > what=E2=80=99s a bit of EFI (especially if you only go for a minimal on=
+e a la
+> > U-Boot)?
+>
+> Well said!
+>
+> Yunhui, why not simply add a minimal UEFI stub to Coreboot (like Jess
+> points out above)?
 
-diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
-index 2bbd01048561..3bfb87bdb3fc 100644
---- a/drivers/staging/rtl8192e/rtl819x_HT.h
-+++ b/drivers/staging/rtl8192e/rtl819x_HT.h
-@@ -95,7 +95,7 @@ struct rt_hi_throughput {
- 	u8 enable_ht;
- 	u8 bCurrentHTSupport;
- 	u8 bRegBW40MHz;
--	u8 bCurBW40MHz;
-+	u8 bcur_bw_40MHz;
- 	u8 bRegShortGI40MHz;
- 	u8 bCurShortGI40MHz;
- 	u8 bRegShortGI20MHz;
-diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-index f9fa3f2bb728..99b65b5b9ed9 100644
---- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-@@ -107,8 +107,8 @@ static u16 HTMcsToDataRate(struct rtllib_device *ieee, u8 nMcsRate)
- {
- 	struct rt_hi_throughput *ht_info = ieee->ht_info;
- 
--	u8	is40MHz = (ht_info->bCurBW40MHz) ? 1 : 0;
--	u8	isShortGI = (ht_info->bCurBW40MHz) ?
-+	u8	is40MHz = (ht_info->bcur_bw_40MHz) ? 1 : 0;
-+	u8	isShortGI = (ht_info->bcur_bw_40MHz) ?
- 			    ((ht_info->bCurShortGI40MHz) ? 1 : 0) :
- 			    ((ht_info->bCurShortGI20MHz) ? 1 : 0);
- 	return MCS_DATA_RATE[is40MHz][isShortGI][(nMcsRate & 0x7f)];
-@@ -623,7 +623,7 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
- 
- 	ht_info->bCurrentHTSupport = false;
- 
--	ht_info->bCurBW40MHz = false;
-+	ht_info->bcur_bw_40MHz = false;
- 	ht_info->cur_tx_bw40mhz = false;
- 
- 	ht_info->bCurShortGI20MHz = false;
-@@ -778,7 +778,7 @@ void HTUseDefaultSetting(struct rtllib_device *ieee)
- 		ht_info->bCurrentHTSupport = true;
- 		ht_info->bCurSuppCCK = ht_info->bRegSuppCCK;
- 
--		ht_info->bCurBW40MHz = ht_info->bRegBW40MHz;
-+		ht_info->bcur_bw_40MHz = ht_info->bRegBW40MHz;
- 		ht_info->bCurShortGI20MHz = ht_info->bRegShortGI20MHz;
- 
- 		ht_info->bCurShortGI40MHz = ht_info->bRegShortGI40MHz;
-@@ -821,7 +821,7 @@ static void HTSetConnectBwModeCallback(struct rtllib_device *ieee)
- {
- 	struct rt_hi_throughput *ht_info = ieee->ht_info;
- 
--	if (ht_info->bCurBW40MHz) {
-+	if (ht_info->bcur_bw_40MHz) {
- 		if (ht_info->CurSTAExtChnlOffset == HT_EXTCHNL_OFFSET_UPPER)
- 			ieee->set_chan(ieee->dev,
- 				       ieee->current_network.channel + 2);
-@@ -866,19 +866,19 @@ void HTSetConnectBwMode(struct rtllib_device *ieee,
- 			Offset = HT_EXTCHNL_OFFSET_NO_EXT;
- 		if (Offset == HT_EXTCHNL_OFFSET_UPPER ||
- 		    Offset == HT_EXTCHNL_OFFSET_LOWER) {
--			ht_info->bCurBW40MHz = true;
-+			ht_info->bcur_bw_40MHz = true;
- 			ht_info->CurSTAExtChnlOffset = Offset;
- 		} else {
--			ht_info->bCurBW40MHz = false;
-+			ht_info->bcur_bw_40MHz = false;
- 			ht_info->CurSTAExtChnlOffset = HT_EXTCHNL_OFFSET_NO_EXT;
- 		}
- 	} else {
--		ht_info->bCurBW40MHz = false;
-+		ht_info->bcur_bw_40MHz = false;
- 		ht_info->CurSTAExtChnlOffset = HT_EXTCHNL_OFFSET_NO_EXT;
- 	}
- 
--	netdev_dbg(ieee->dev, "%s():ht_info->bCurBW40MHz:%x\n", __func__,
--		   ht_info->bCurBW40MHz);
-+	netdev_dbg(ieee->dev, "%s():ht_info->bcur_bw_40MHz:%x\n", __func__,
-+		   ht_info->bcur_bw_40MHz);
- 
- 	ht_info->sw_bw_in_progress = true;
- 
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-index 2de63d1f2009..59ea210e8bb1 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-@@ -331,10 +331,10 @@ void rtllib_wx_sync_scan_wq(void *data)
- 	ieee->ScanOperationBackupHandler(ieee->dev, SCAN_OPT_BACKUP);
- 
- 	if (ieee->ht_info->bCurrentHTSupport && ieee->ht_info->enable_ht &&
--	    ieee->ht_info->bCurBW40MHz) {
-+	    ieee->ht_info->bcur_bw_40MHz) {
- 		b40M = 1;
- 		chan_offset = ieee->ht_info->CurSTAExtChnlOffset;
--		bandwidth = (enum ht_channel_width)ieee->ht_info->bCurBW40MHz;
-+		bandwidth = (enum ht_channel_width)ieee->ht_info->bcur_bw_40MHz;
- 		ieee->set_bw_mode_handler(ieee->dev, HT_CHANNEL_WIDTH_20,
- 				       HT_EXTCHNL_OFFSET_NO_EXT);
- 	}
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index ec038ef806c3..c9bb350d8881 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -362,9 +362,9 @@ static void rtllib_query_HTCapShortGI(struct rtllib_device *ieee,
- 		return;
- 	}
- 
--	if (ht_info->bCurBW40MHz && ht_info->bCurShortGI40MHz)
-+	if (ht_info->bcur_bw_40MHz && ht_info->bCurShortGI40MHz)
- 		tcb_desc->bUseShortGI = true;
--	else if (!ht_info->bCurBW40MHz && ht_info->bCurShortGI20MHz)
-+	else if (!ht_info->bcur_bw_40MHz && ht_info->bCurShortGI20MHz)
- 		tcb_desc->bUseShortGI = true;
- }
- 
-@@ -383,7 +383,7 @@ static void rtllib_query_BandwidthMode(struct rtllib_device *ieee,
- 
- 	if ((tcb_desc->data_rate & 0x80) == 0)
- 		return;
--	if (ht_info->bCurBW40MHz && ht_info->cur_tx_bw40mhz &&
-+	if (ht_info->bcur_bw_40MHz && ht_info->cur_tx_bw40mhz &&
- 	    !ieee->bandwidth_auto_switch.bforced_tx20Mhz)
- 		tcb_desc->bPacketBW = true;
- }
-@@ -441,9 +441,9 @@ static void rtllib_query_protectionmode(struct rtllib_device *ieee,
- 		if (ht_info->bCurrentHTSupport  && ht_info->enable_ht) {
- 			u8 HTOpMode = ht_info->current_op_mode;
- 
--			if ((ht_info->bCurBW40MHz && (HTOpMode == 2 ||
-+			if ((ht_info->bcur_bw_40MHz && (HTOpMode == 2 ||
- 						      HTOpMode == 3)) ||
--			     (!ht_info->bCurBW40MHz && HTOpMode == 3)) {
-+			     (!ht_info->bcur_bw_40MHz && HTOpMode == 3)) {
- 				tcb_desc->rts_rate = MGN_24M;
- 				tcb_desc->bRTSEnable = true;
- 				break;
--- 
-2.30.2
+In fact, in the v1 email, Coreboot's maintainer Ron has made it clear
+that Coreboot does not support EFI, and it is necessary to transmit
+firmware information through DTS on RISC-V.
+@Ron, can you help explain it to them?
 
+> IMO what U-boot (or
+> https://github.com/cloud-hypervisor/rust-hypervisor-firmware if you're
+> into Rust ;-)) is doing, and just having a small UEFI shim is the way to
+> go.
+
+Thanks,
+Yunhui
