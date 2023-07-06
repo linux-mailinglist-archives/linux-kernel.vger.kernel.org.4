@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2515B749722
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A86749725
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjGFILb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S233879AbjGFINQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGFIL3 (ORCPT
+        with ESMTP id S232731AbjGFINO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:11:29 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DA819B2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:11:27 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-991c786369cso48633866b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:11:27 -0700 (PDT)
+        Thu, 6 Jul 2023 04:13:14 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5464110
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:13:13 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3a1c162cdfeso440509b6e.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1688631085; x=1691223085;
+        d=gmail.com; s=20221208; t=1688631193; x=1691223193;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IR6/NdGhfGVRMDtpOrjbuplZoyHhi/ChIQZtoi6zZTM=;
-        b=STeCHpX3+OlrnWY3WHP0ldhz/3Dei+0SvJf+VJ/vKyNlNYR5mxb/jzlfqnh3YOI8l2
-         lvS4yjOBUsAiv4JLee7tYzvnDKwPF7y4daVoRvzsV25v1QHwnBBYrCyLRQHTYCdNUVv8
-         ahUTnrUITZOQBmkvHNfOl8N44YhyARcyNJebNEOux9U7ELzZcfNaTBNAqUHGn7laHYwX
-         BV1yqj2GH/9kkU7yqj874NhbwmMHza3f2n3RZyXrLpMO8eeOGqnFbfDV1DOTAQ91T5Io
-         6eQ/Hcubz+xwtI9dIMWlhGyfbd5u4qsP5vFL6pjSCZYexwnl+f4VOYG78uqcFH3spGCA
-         v+jQ==
+        bh=pgG4Ij8rmZfqMBm2oqM6Ju2PS6yYhcktMwLW4JNMQGU=;
+        b=ebgLCz/pKdH6r29bkq3wNtiOBu92/5gohz0mqsiCkHyMfi9lqkaYS6l2h2dj3IY8IG
+         uqi1S0meqlthR7q73+9Ph6hHlgauiN6eAQ7kzDWh+t9MlC8bm1LhP4UMaktOWBF5Nhp0
+         B6rmppTNSLgqixTmuTcHUmerHy57ZJxJj7JtHA8Rp31qItNVGXrDkXwBLezXO6QA2Ym+
+         c7Y0NNz4pfUqtskpVYMeY1xLimF7Vw6ukLPyzNIptcaF2r4EQKe7/n+A7fi1bfCoB7GA
+         2QBjmjOo2mNeLd8ez3jgLlo7e7sV+9Ru+jOwHQMZvl0b2zDagYmSbWa1RfG8C2Ite883
+         4pmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688631085; x=1691223085;
+        d=1e100.net; s=20221208; t=1688631193; x=1691223193;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IR6/NdGhfGVRMDtpOrjbuplZoyHhi/ChIQZtoi6zZTM=;
-        b=i+lTyUUhg7ACfgl4fowcE+tccO8XF/9pbD0F16CsvHrXMAiOC0byUZ/ioAoi+y2ZXQ
-         9jW416T2ec2sk3+EY5xkMAqrj+ZI57cWbxO3Gv7y78NativU+RXaYfQG8FwajBEUuTph
-         gVk2RxfDzmgG0cdiZIljP1n07W1MvNcOlB9vpBS0l/nveswaPFIQ4hPMTzKLAGOaVxea
-         gdel3Co2hoabvbRmPrYG3SQNk7tlQCPx5JrH4F8URBPxVPc54SxNYTi+M9uvol3zX6bw
-         fnfXLXe25SGK7VTY/BKBUC4ITx3pT7K7J7dlZIdr8nEwLVaTe76CWgF1Qw0jyWMzEv+l
-         yz6g==
-X-Gm-Message-State: ABy/qLaiNjuPQwBnW2G8WciTBFW80zIPY3/0slZEK5qaWlUyyoZJFYMs
-        JdGdGp2O55MYIMaUCE4HL8RvYDqqdgYGwfm4ZuUaMQ==
-X-Google-Smtp-Source: APBJJlE7PccGGrOEgGPylmn7X0xxlAVv/W3p/wr9Xc8JG/2oayfRgYAidUKjr1Mm+9mxFiTLT3YLDAVus5yzbeLzFqM=
-X-Received: by 2002:a17:906:9e13:b0:992:b928:adb3 with SMTP id
- fp19-20020a1709069e1300b00992b928adb3mr756365ejc.54.1688631085659; Thu, 06
- Jul 2023 01:11:25 -0700 (PDT)
+        bh=pgG4Ij8rmZfqMBm2oqM6Ju2PS6yYhcktMwLW4JNMQGU=;
+        b=j3c/2f6pCvHhGBIRtu8W9SFz7HWXCWNKS/hEtJDUk4uEFc7yCkwQ/Z9ePcq7psje1D
+         p/mco/H9Cg9aYb5HgUDs9IqDi4j0A+elMFl2kQ2/+3mcyZuHibDnLuTTpYefuBwvfTMG
+         yz/h1jqrFppKDzoHh4cZmddBCyDU18q25jq4vFpTbPyUxL6rN5re0bzVOEiZR2LIdpsG
+         RhnQphOHnzGbfSt5nxy6OrxTq/qzyQWCaIMunsaVvxdqnXipKbZPnnDINsRDoBWvuh/U
+         ptf+qsDFM89ny3fz6tpjOsxCnbeyjLzjEXNJuZFt8QpS9ItfINfo69mUEwDQ7NTM5BBv
+         8/Rg==
+X-Gm-Message-State: ABy/qLald9KT5NEBHjMshdDcQI4N16pdpo36aWNKnmDimmISGjLmYIoH
+        kIZPzc1m6/OuzNdtdlVPXwlVJ4Wc/RUQ4JXw4eaxb0bvz9Q=
+X-Google-Smtp-Source: APBJJlEAKaFoLQ8q7jFdrQL2wgxZy73QnBJRgt25CMlyiYgd/cJg7/tYNqZpKrm9uEMQbnYiLrnmzqj57EhTmxYtRCM=
+X-Received: by 2002:aca:2b04:0:b0:3a3:6ae3:bd9 with SMTP id
+ i4-20020aca2b04000000b003a36ae30bd9mr923814oik.55.1688631192886; Thu, 06 Jul
+ 2023 01:13:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
- <20230706004044.79850-1-kuniyu@amazon.com>
-In-Reply-To: <20230706004044.79850-1-kuniyu@amazon.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Thu, 6 Jul 2023 09:11:15 +0100
-Message-ID: <CAN+4W8iRH6kpDmmY8i5r1nKbckaYghmOCqRXe+4bDHE7vzVMMA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets
- with bpf_sk_assign
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, haoluo@google.com, hemanthmalla@gmail.com,
-        joe@cilium.io, joe@wand.net.nz, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        martin.lau@linux.dev, mykolal@fb.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, willemdebruijn.kernel@gmail.com, yhs@fb.com
+References: <20221121035140.118651-1-zhouzhouyi@gmail.com> <efd3ac99-d406-fc45-60e1-73eb8bce4c67@csgroup.eu>
+In-Reply-To: <efd3ac99-d406-fc45-60e1-73eb8bce4c67@csgroup.eu>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Thu, 6 Jul 2023 16:13:01 +0800
+Message-ID: <CAABZP2x5H3VQXe3o+Q-ar-o2VO=yLap0WGA0JFWK+U2=rdH53A@mail.gmail.com>
+Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "fweisbec@gmail.com" <fweisbec@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 1:41=E2=80=AFAM Kuniyuki Iwashima <kuniyu@amazon.com=
-> wrote:
+On Thu, Jul 6, 2023 at 3:09=E2=80=AFPM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
 >
-> Sorry for late reply.
 >
-> What we know about sk before inet6?_lookup_reuseport() are
 >
->   (1) sk was full socket in bpf_sk_assign()
->   (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
->   (3) sk was TCP_LISTEN here if TCP
+> Le 21/11/2022 =C3=A0 04:51, Zhouyi Zhou a =C3=A9crit :
+> > During CPU-hotplug torture (CONFIG_NO_HZ_FULL=3Dy), if we try to
+> > offline tick_do_timer_cpu, the operation will fail because in
+> > function tick_nohz_cpu_down:
+> > ```
+> > if (tick_nohz_full_running && tick_do_timer_cpu =3D=3D cpu)
+> >        return -EBUSY;
+> > ```
+> > Above bug was first discovered in torture tests performed in PPC VM
+> > of Open Source Lab of Oregon State University, and reproducable in RISC=
+-V
+> > and X86-64 (with additional kernel commandline cpu0_hotplug).
+> >
+> > In this patch, we avoid offline tick_do_timer_cpu by distribute
+> > the offlining cpu among remaining cpus.
+> >
+> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > ---
+> >   include/linux/tick.h        |  1 +
+> >   kernel/time/tick-common.c   |  1 +
+> >   kernel/time/tick-internal.h |  1 -
+> >   kernel/torture.c            | 10 ++++++++++
+> >   4 files changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/tick.h b/include/linux/tick.h
+> > index bfd571f18cfd..23cc0b205853 100644
+> > --- a/include/linux/tick.h
+> > +++ b/include/linux/tick.h
+> > @@ -14,6 +14,7 @@
+> >   #include <linux/rcupdate.h>
+> >
+> >   #ifdef CONFIG_GENERIC_CLOCKEVENTS
+> > +extern int tick_do_timer_cpu __read_mostly;
+> >   extern void __init tick_init(void);
+> >   /* Should be core only, but ARM BL switcher requires it */
+> >   extern void tick_suspend_local(void);
+> > diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+> > index 46789356f856..87b9b9afa320 100644
+> > --- a/kernel/time/tick-common.c
+> > +++ b/kernel/time/tick-common.c
+> > @@ -48,6 +48,7 @@ ktime_t tick_next_period;
+> >    *    procedure also covers cpu hotplug.
+> >    */
+> >   int tick_do_timer_cpu __read_mostly =3D TICK_DO_TIMER_BOOT;
+> > +EXPORT_SYMBOL_GPL(tick_do_timer_cpu);
+> >   #ifdef CONFIG_NO_HZ_FULL
+> >   /*
+> >    * tick_do_timer_boot_cpu indicates the boot CPU temporarily owns
+> > diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
+> > index 649f2b48e8f0..8953dca10fdd 100644
+> > --- a/kernel/time/tick-internal.h
+> > +++ b/kernel/time/tick-internal.h
+> > @@ -15,7 +15,6 @@
+> >
+> >   DECLARE_PER_CPU(struct tick_device, tick_cpu_device);
+> >   extern ktime_t tick_next_period;
+> > -extern int tick_do_timer_cpu __read_mostly;
+> >
+> >   extern void tick_setup_periodic(struct clock_event_device *dev, int b=
+roadcast);
+> >   extern void tick_handle_periodic(struct clock_event_device *dev);
+> > diff --git a/kernel/torture.c b/kernel/torture.c
+> > index 789aeb0e1159..bccbdd33dda2 100644
+> > --- a/kernel/torture.c
+> > +++ b/kernel/torture.c
+> > @@ -33,6 +33,7 @@
+> >   #include <linux/delay.h>
+> >   #include <linux/stat.h>
+> >   #include <linux/slab.h>
+> > +#include <linux/tick.h>
+> >   #include <linux/trace_clock.h>
+> >   #include <linux/ktime.h>
+> >   #include <asm/byteorder.h>
+> > @@ -358,7 +359,16 @@ torture_onoff(void *arg)
+> >                       schedule_timeout_interruptible(HZ / 10);
+> >                       continue;
+> >               }
+> > +#ifdef CONFIG_NO_HZ_FULL
+> > +             /* do not offline tick do timer cpu */
+> > +             if (tick_nohz_full_running) {
+>
+> Can you use fonction tick_nohz_full_enabled() instead and avoid the #ifde=
+f ?
+Thank Christophe for your wonderful advice, I will follow your advice
+next time I prepare a patch.
+For this false positive report, 58d766824264 ("tick/nohz: Fix
+cpu_is_hotpluggable() by checking with nohz subsystem") has beaten me
+in mainline.
 
-Are we looking at the same bpf_sk_assign? Confusingly there are two
-very similarly named functions. The one we care about is:
-
-BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, fl=
-ags)
-{
-    if (!sk || flags !=3D 0)
-        return -EINVAL;
-    if (!skb_at_tc_ingress(skb))
-        return -EOPNOTSUPP;
-    if (unlikely(dev_net(skb->dev) !=3D sock_net(sk)))
-        return -ENETUNREACH;
-    if (sk_is_refcounted(sk) &&
-        unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
-        return -ENOENT;
-
-    skb_orphan(skb);
-    skb->sk =3D sk;
-    skb->destructor =3D sock_pfree;
-
-    return 0;
-}
-
-From this we can't tell what state the socket is in or whether it is
-RCU freed or not.
-
-Thanks
-Lorenz
+Thanks again
+Zhouyi
+>
+> > +                     cpu =3D (torture_random(&rand) >> 4) % maxcpu;
+> > +                     if (cpu >=3D tick_do_timer_cpu)
+> > +                             cpu =3D (cpu + 1) % (maxcpu + 1);
+> > +             } else
+> > +#else
+> >               cpu =3D (torture_random(&rand) >> 4) % (maxcpu + 1);
+> > +#endif
+> >               if (!torture_offline(cpu,
+> >                                    &n_offline_attempts, &n_offline_succ=
+esses,
+> >                                    &sum_offline, &min_offline, &max_off=
+line))
