@@ -2,107 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628FB749E29
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF090749E2B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 15:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjGFNvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 09:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S230434AbjGFNwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 09:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjGFNvt (ORCPT
+        with ESMTP id S231756AbjGFNwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:51:49 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A915D1995
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 06:51:48 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-314172bb818so655593f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 06:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688651507; x=1691243507;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9Wtp7GAQLlCzMIbELA47/ReR5Ash9IIBcZpTnUw0Po=;
-        b=iv8tS7TrXbH666aYwVrLb+kZWTnPHQ1XIkv7whFD3SeRiVO9/n1fAcw0KZLQnhHf8w
-         P1fRKDdhZ8K6PHzfbYKB7yABaV6LSZEQNFINl9RXhp3PyThmXtGt7Ip/QsJLG0oIdTsN
-         +WyUwE8pI6KVQYj8It0EW1s15mR+fVm3Bw5ObyyaSJ6uQtHdxDNgUeiX484jydlPr7m1
-         yGkFijf+bax/VjUjfOOs5eFeaF2cJXGXCqDEjlz319kJrjTWMSlDwGxyekTfzevTRBUB
-         1vpCXVr3s2Zr3UEjGJsHb2sLQiiowyKArrEoA/Uvg170NfmujkqZFxqkFaGg3cb5I1Un
-         K70g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688651507; x=1691243507;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T9Wtp7GAQLlCzMIbELA47/ReR5Ash9IIBcZpTnUw0Po=;
-        b=PrO8XQALbohpID2zl9eLplX+hJ+S1y4+hE7a314qTiQdAxSQTuSonLR2tacHqaVK5d
-         CxWnr+zdQee2IJT7ZrO+9RHAA1avMDm6vW/zBnRKrRKFhqCO0qSiZhfiDLbpDq1XnH8B
-         T1choNgIx7XLTt6XEPHHj19jlTTVtxDI0yqJ+O8CAz200Vgmj8kxlBxmghWB/sCHCCaK
-         IpD7w1nZLH/xCsTT7P+rWg721vSdMsfOe1atjr47Adwgkr3Jk0Ut+cQ4v3lO6xNwu9XZ
-         gjvL3Sn56bNMcWQbvMyEULkPlPgh6q7T7xGOcc7Wkd4oWVxMtgEBz64a0ps/kSBWEpGk
-         QiSQ==
-X-Gm-Message-State: ABy/qLYDCZPmMc5rPfxjMIC8mQYucp9d0DXoEplLcE9sBqBrkQQNFXp6
-        90yZRVpLiGuXE9zJqbpnEeTTCA==
-X-Google-Smtp-Source: APBJJlEqwGX25FFDFwvXmCDm9yuHdw5jMseWx4u/AL9JQyx3KSE67c7ASPYtBYhrI60TJVLMZ2BxIQ==
-X-Received: by 2002:a5d:6e86:0:b0:314:f18:bc65 with SMTP id k6-20020a5d6e86000000b003140f18bc65mr1649419wrz.66.1688651507171;
-        Thu, 06 Jul 2023 06:51:47 -0700 (PDT)
-Received: from vingu-book.. ([2a01:e0a:f:6020:fd1d:a4f4:6cc:dcc])
-        by smtp.gmail.com with ESMTPSA id b18-20020adfe312000000b0031455482d1fsm698033wrj.47.2023.07.06.06.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 06:51:46 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     qyousef@layalina.io, Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] sched/fair: remove util_est boosting
-Date:   Thu,  6 Jul 2023 15:51:44 +0200
-Message-Id: <20230706135144.324311-1-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jul 2023 09:52:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F75419B2;
+        Thu,  6 Jul 2023 06:52:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5C9A41FDD8;
+        Thu,  6 Jul 2023 13:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688651526; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oQ1RlVHox01/rgjSoYSm03xJTT4dNPjyRy/SW3c06/I=;
+        b=P6/roGV8ofwgwQOqyOcPm2T2lwFAhk1iACl50Z7OB/oGbSRtd9Gf6h6fnxNj9LTQbebFHo
+        z76QgjEcuRDjH90SZWvkgd365O30hUZIzmsdZlAnVgrl9U5rHpb4kVQpH6RZoQWYU6o+Qe
+        uCPrm8a0ZhTa93YCB4/T2Rl2CEPC7N0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688651526;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oQ1RlVHox01/rgjSoYSm03xJTT4dNPjyRy/SW3c06/I=;
+        b=wu+9VobU0JAe09HZ/DliYN87fD85tZ4uXmH3Oiz9QYEPnqTsoNIic2/7a9cDhNkXHSHiHn
+        0LPp7rh0bPq35oDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4FBAF138EE;
+        Thu,  6 Jul 2023 13:52:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 80FREwbHpmQ1YwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 06 Jul 2023 13:52:06 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C158CA0707; Thu,  6 Jul 2023 15:52:05 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 15:52:05 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Bob Copeland <me@bobcopeland.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-karma-devel@lists.sourceforge.net
+Subject: Re: [PATCH v2 63/92] omfs: convert to ctime accessor functions
+Message-ID: <20230706135205.jrxfi6d2555ct7cg@quack3>
+References: <20230705185755.579053-1-jlayton@kernel.org>
+ <20230705190309.579783-1-jlayton@kernel.org>
+ <20230705190309.579783-61-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705190309.579783-61-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to use runnable_avg when estimating util_est and that
-even generates wrong behavior because one includes blocked tasks whereas
-the other one doesn't. This can lead to accounting twice the waking task p,
-once with the blocked runnable_avg and another one when adding its
-util_est.
+On Wed 05-07-23 15:01:28, Jeff Layton wrote:
+> In later patches, we're going to change how the inode's ctime field is
+> used. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+> 
+> Acked-by: Bob Copeland <me@bobcopeland.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-cpu's runnable_avg is already used when computing util_avg which is then
-compared with util_est.
+Looks good. Feel free to add:
 
-In some situation, feec will not select prev_cpu but another one on the
-same performance domain because of higher max_util
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Fixes: 7d0583cf9ec7 ("sched/fair, cpufreq: Introduce 'runnable boosting'")
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- kernel/sched/fair.c | 3 ---
- 1 file changed, 3 deletions(-)
+								Honza
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a80a73909dc2..77c9f5816c31 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7289,9 +7289,6 @@ cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
- 
- 		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
- 
--		if (boost)
--			util_est = max(util_est, runnable);
--
- 		/*
- 		 * During wake-up @p isn't enqueued yet and doesn't contribute
- 		 * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
+> ---
+>  fs/omfs/dir.c   | 4 ++--
+>  fs/omfs/inode.c | 9 ++++-----
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/omfs/dir.c b/fs/omfs/dir.c
+> index 82cf7e9a665f..6bda275826d6 100644
+> --- a/fs/omfs/dir.c
+> +++ b/fs/omfs/dir.c
+> @@ -143,7 +143,7 @@ static int omfs_add_link(struct dentry *dentry, struct inode *inode)
+>  	mark_buffer_dirty(bh);
+>  	brelse(bh);
+>  
+> -	dir->i_ctime = current_time(dir);
+> +	inode_set_ctime_current(dir);
+>  
+>  	/* mark affected inodes dirty to rebuild checksums */
+>  	mark_inode_dirty(dir);
+> @@ -399,7 +399,7 @@ static int omfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  	if (err)
+>  		goto out;
+>  
+> -	old_inode->i_ctime = current_time(old_inode);
+> +	inode_set_ctime_current(old_inode);
+>  	mark_inode_dirty(old_inode);
+>  out:
+>  	return err;
+> diff --git a/fs/omfs/inode.c b/fs/omfs/inode.c
+> index c4c79e07efc7..2f8c1882f45c 100644
+> --- a/fs/omfs/inode.c
+> +++ b/fs/omfs/inode.c
+> @@ -51,7 +51,7 @@ struct inode *omfs_new_inode(struct inode *dir, umode_t mode)
+>  	inode_init_owner(&nop_mnt_idmap, inode, NULL, mode);
+>  	inode->i_mapping->a_ops = &omfs_aops;
+>  
+> -	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
+> +	inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
+>  	switch (mode & S_IFMT) {
+>  	case S_IFDIR:
+>  		inode->i_op = &omfs_dir_inops;
+> @@ -134,8 +134,8 @@ static int __omfs_write_inode(struct inode *inode, int wait)
+>  	oi->i_head.h_magic = OMFS_IMAGIC;
+>  	oi->i_size = cpu_to_be64(inode->i_size);
+>  
+> -	ctime = inode->i_ctime.tv_sec * 1000LL +
+> -		((inode->i_ctime.tv_nsec + 999)/1000);
+> +	ctime = inode_get_ctime(inode).tv_sec * 1000LL +
+> +		((inode_get_ctime(inode).tv_nsec + 999)/1000);
+>  	oi->i_ctime = cpu_to_be64(ctime);
+>  
+>  	omfs_update_checksums(oi);
+> @@ -232,10 +232,9 @@ struct inode *omfs_iget(struct super_block *sb, ino_t ino)
+>  
+>  	inode->i_atime.tv_sec = ctime;
+>  	inode->i_mtime.tv_sec = ctime;
+> -	inode->i_ctime.tv_sec = ctime;
+> +	inode_set_ctime(inode, ctime, nsecs);
+>  	inode->i_atime.tv_nsec = nsecs;
+>  	inode->i_mtime.tv_nsec = nsecs;
+> -	inode->i_ctime.tv_nsec = nsecs;
+>  
+>  	inode->i_mapping->a_ops = &omfs_aops;
+>  
+> -- 
+> 2.41.0
+> 
 -- 
-2.34.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
