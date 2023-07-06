@@ -2,107 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A15474A4B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9683D74A4B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 22:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjGFUOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 16:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S232637AbjGFUPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 16:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjGFUOW (ORCPT
+        with ESMTP id S229650AbjGFUPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 16:14:22 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59F1BF8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 13:14:20 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id HVMmqW6WO8cFBHVMmqGNyt; Thu, 06 Jul 2023 22:14:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1688674459;
-        bh=goTJCh2BuleVgu8hJNaBlgxPFcS6fDBL6v0oOW8Rpas=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=kaWHGjB1nftlx5hiWASp9S35FQy/7g7gZh1qa5VHSEcUyfZx2tCDAqZfPI86IU2Su
-         SUIJ+BHF5JgDlBkDl6kA47sAHWs0/LknqKP0SHgVhipzovfSCq12fdFMx/w2aZN4MA
-         /jaPBNDlAjDWPgnv+0/sZ5qK3kzAjY5YbaA4UTlEXz7wADyG6uUfxB15zk04OZxs1B
-         n2NeGsNsBR9yZJh6rJ9q41jSyFUPIXEG0P3p+DeoYoSNxFn+Od6wmENQUZDICQm+3T
-         6fcZsF4ygz6vkZ6YmzIECfK245eIL3Osm07BCi+L1nm6qWT7jcs0eBaumruz77BQNt
-         LlsuxQAD8YAAw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 06 Jul 2023 22:14:19 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <e83f6b8d-eb50-3fb7-1993-fcc03604c016@wanadoo.fr>
-Date:   Thu, 6 Jul 2023 22:14:16 +0200
+        Thu, 6 Jul 2023 16:15:17 -0400
+Received: from out-52.mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A3C173F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 13:15:15 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 16:15:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688674514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xg4a3bKTtPaDruKIY+OrNPd5TyNn8inVhCSohpZyrtg=;
+        b=tvOEyJ5uncEH0GYVNP2UIVx+eSBBbVrlfcxAJsSTaxcX62Kj1lH72b0QePxu5OUOYI49qC
+        Z/4UmDO95izQaJdJhuHlCMfmPXivu2tEq81CYTJes61DollcTv1FOJQRcAWz/25wXEgBJZ
+        n29M9QDUI/mWek3/u3i16kJNGu8blME=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230706201510.sh5ukzfsf5vdxvrf@moria.home.lan>
+References: <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+ <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+ <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+ <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
+ <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
+ <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] scsi: bnx2fc: Remove a duplicate assignment in two
- functions
-Content-Language: fr
-To:     Minjie Du <duminjie@vivo.com>, Markus.Elfring@web.de,
-        Saurav Kashyap <skashyap@marvell.com>,
-        Javed Hasan <jhasan@marvell.com>,
-        "supporter:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" 
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "open list:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" 
-        <linux-scsi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Laurence Oberman <loberman@redhat.com>
-Cc:     opensource.kernel@vivo.com
-References: <20230705115236.16571-1-duminjie@vivo.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230705115236.16571-1-duminjie@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 05/07/2023 à 13:52, Minjie Du a écrit :
-> Delete a duplicate statement from these function implementations.
+On Wed, Jun 28, 2023 at 03:17:43PM -0600, Jens Axboe wrote:
+> On 6/28/23 2:44?PM, Jens Axboe wrote:
+> > On 6/28/23 11:52?AM, Kent Overstreet wrote:
+> >> On Wed, Jun 28, 2023 at 10:57:02AM -0600, Jens Axboe wrote:
+> >>> I discussed this with Christian offline. I have a patch that is pretty
+> >>> simple, but it does mean that you'd wait for delayed fput flush off
+> >>> umount. Which seems kind of iffy.
+> >>>
+> >>> I think we need to back up a bit and consider if the kill && umount
+> >>> really is sane. If you kill a task that has open files, then any fput
+> >>> from that task will end up being delayed. This means that the umount may
+> >>> very well fail.
+> >>>
+> >>> It'd be handy if we could have umount wait for that to finish, but I'm
+> >>> not at all confident this is a sane solution for all cases. And as
+> >>> discussed, we have no way to even identify which files we'd need to
+> >>> flush out of the delayed list.
+> >>>
+> >>> Maybe the test case just needs fixing? Christian suggested lazy/detach
+> >>> umount and wait for sb release. There's an fsnotify hook for that,
+> >>> fsnotify_sb_delete(). Obviously this is a bit more involved, but seems
+> >>> to me that this would be the way to make it more reliable when killing
+> >>> of tasks with open files are involved.
+> >>
+> >> No, this is a real breakage. Any time we introduce unexpected
+> >> asynchrony there's the potential for breakage: case in point, there was
+> >> a filesystem that made rm asynchronous, then there were scripts out
+> >> there that deleted until df showed under some threshold.. whoops...
+> > 
+> > This is nothing new - any fput done from an exiting task will end up
+> > being deferred. The window may be a bit wider now or a bit different,
+> > but it's the same window. If an application assumes it can kill && wait
+> > on a task and be guaranteed that the files are released as soon as wait
+> > returns, it is mistaken. That is NOT the case.
 > 
-> Signed-off-by: Minjie Du <duminjie@vivo.com>
-> ---
->   drivers/scsi/bnx2fc/bnx2fc_hwi.c | 3 ---
->   1 file changed, 3 deletions(-)
+> Case in point, just changed my reproducer to use aio instead of
+> io_uring. Here's the full script:
 > 
-> diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
-> index 776544385..0474fe88a 100644
-> --- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
-> +++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
-> @@ -1521,8 +1521,6 @@ void bnx2fc_init_seq_cleanup_task(struct bnx2fc_cmd *seq_clnp_req,
->   				FCOE_TCE_TX_WR_RX_RD_CONST_CLASS_TYPE_SHIFT;
->   	task->rxwr_txrd.const_ctx.init_flags = context_id <<
->   				FCOE_TCE_RX_WR_TX_RD_CONST_CID_SHIFT;
-> -	task->rxwr_txrd.const_ctx.init_flags = context_id <<
-> -				FCOE_TCE_RX_WR_TX_RD_CONST_CID_SHIFT;
->   
->   	task->txwr_rxrd.union_ctx.cleanup.ctx.cleaned_task_id = orig_xid;
->   
-> @@ -1763,7 +1761,6 @@ void bnx2fc_init_task(struct bnx2fc_cmd *io_req,
->   				FCOE_TASK_DEV_TYPE_TAPE <<
->   				FCOE_TCE_TX_WR_RX_RD_CONST_DEV_TYPE_SHIFT;
->   		io_req->rec_retry = 0;
-> -		io_req->rec_retry = 0;
+> #!/bin/bash
+> 
+> DEV=/dev/nvme1n1
+> MNT=/data
+> ITER=0
+> 
+> while true; do
+> 	echo loop $ITER
+> 	sudo mount $DEV $MNT
+> 	fio --name=test --ioengine=aio --iodepth=2 --filename=$MNT/foo --size=1g --buffered=1 --overwrite=0 --numjobs=12 --minimal --rw=randread --output=/dev/null &
+> 	Y=$(($RANDOM % 3))
+> 	X=$(($RANDOM % 10))
+> 	VAL="$Y.$X"
+> 	sleep $VAL
+> 	ps -e | grep fio > /dev/null 2>&1
+> 	while [ $? -eq 0 ]; do
+> 		killall -9 fio > /dev/null 2>&1
+> 		echo will wait
+> 		wait > /dev/null 2>&1
+> 		echo done waiting
+> 		ps -e | grep "fio " > /dev/null 2>&1
+> 	done
+> 	sudo umount /data
+> 	if [ $? -ne 0 ]; then
+> 		break
+> 	fi
+> 	((ITER++))
+> done
+> 
+> and if I run that, fails on the first umount attempt in that loop:
+> 
+> axboe@m1max-kvm ~> bash test2.sh
+> loop 0
+> will wait
+> done waiting
+> umount: /data: target is busy.
 
-Hi,
+Your test fails because fio by default spawns off multiple processes,
+and just calling wait does not wait for the subprocesses.
 
-just a blind guess:
-    io_req->srr_retry = 0;
-            ~~~
+When I pass --thread to fio, your test passes.
 
-?
+I have a patch to avoid use of the delayed_fput list in the aio path,
+but curiously it seems not to be needed - perhaps there's some other
+synchronization I haven't found yet. I'm including the patch below in
+case the technique is useful for io_uring:
 
->   	} else
->   		task->txwr_rxrd.const_ctx.init_flags |=
->   				FCOE_TASK_DEV_TYPE_DISK <<
-
+diff --git a/fs/aio.c b/fs/aio.c
+index b3e14a9fe3..00cb953efa 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -211,6 +211,7 @@ struct aio_kiocb {
+ 						 * for cancellation */
+ 	refcount_t		ki_refcnt;
+ 
++	struct task_struct	*ki_task;
+ 	/*
+ 	 * If the aio_resfd field of the userspace iocb is not zero,
+ 	 * this is the underlying eventfd context to deliver events to.
+@@ -321,7 +322,7 @@ static void put_aio_ring_file(struct kioctx *ctx)
+ 		ctx->aio_ring_file = NULL;
+ 		spin_unlock(&i_mapping->private_lock);
+ 
+-		fput(aio_ring_file);
++		__fput_sync(aio_ring_file);
+ 	}
+ }
+ 
+@@ -1068,6 +1069,7 @@ static inline struct aio_kiocb *aio_get_req(struct kioctx *ctx)
+ 	INIT_LIST_HEAD(&req->ki_list);
+ 	refcount_set(&req->ki_refcnt, 2);
+ 	req->ki_eventfd = NULL;
++	req->ki_task = get_task_struct(current);
+ 	return req;
+ }
+ 
+@@ -1104,8 +1106,9 @@ static inline void iocb_destroy(struct aio_kiocb *iocb)
+ 	if (iocb->ki_eventfd)
+ 		eventfd_ctx_put(iocb->ki_eventfd);
+ 	if (iocb->ki_filp)
+-		fput(iocb->ki_filp);
++		fput_for_task(iocb->ki_filp, iocb->ki_task);
+ 	percpu_ref_put(&iocb->ki_ctx->reqs);
++	put_task_struct(iocb->ki_task);
+ 	kmem_cache_free(kiocb_cachep, iocb);
+ }
+ 
+diff --git a/fs/file_table.c b/fs/file_table.c
+index 372653b926..137f87f55e 100644
+--- a/fs/file_table.c
++++ b/fs/file_table.c
+@@ -367,12 +367,13 @@ EXPORT_SYMBOL_GPL(flush_delayed_fput);
+ 
+ static DECLARE_DELAYED_WORK(delayed_fput_work, delayed_fput);
+ 
+-void fput(struct file *file)
++void fput_for_task(struct file *file, struct task_struct *task)
+ {
+ 	if (atomic_long_dec_and_test(&file->f_count)) {
+-		struct task_struct *task = current;
++		if (!task && likely(!in_interrupt() && !(current->flags & PF_KTHREAD)))
++			task = current;
+ 
+-		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
++		if (task) {
+ 			init_task_work(&file->f_rcuhead, ____fput);
+ 			if (!task_work_add(task, &file->f_rcuhead, TWA_RESUME))
+ 				return;
+@@ -388,6 +389,11 @@ void fput(struct file *file)
+ 	}
+ }
+ 
++void fput(struct file *file)
++{
++	fput_for_task(file, NULL);
++}
++
+ /*
+  * synchronous analog of fput(); for kernel threads that might be needed
+  * in some umount() (and thus can't use flush_delayed_fput() without
+@@ -405,6 +411,7 @@ void __fput_sync(struct file *file)
+ 	}
+ }
+ 
++EXPORT_SYMBOL(fput_for_task);
+ EXPORT_SYMBOL(fput);
+ EXPORT_SYMBOL(__fput_sync);
+ 
+diff --git a/include/linux/file.h b/include/linux/file.h
+index 39704eae83..667a68f477 100644
+--- a/include/linux/file.h
++++ b/include/linux/file.h
+@@ -12,7 +12,9 @@
+ #include <linux/errno.h>
+ 
+ struct file;
++struct task_struct;
+ 
++extern void fput_for_task(struct file *, struct task_struct *);
+ extern void fput(struct file *);
+ 
+ struct file_operations;
