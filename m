@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B28749BDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D985E749BE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjGFMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S229916AbjGFMfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjGFMeK (ORCPT
+        with ESMTP id S229501AbjGFMfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:34:10 -0400
-Received: from pi.fatal.se (andreasfatal-1-pt.tunnel.tserv3.fmt2.ipv6.he.net [IPv6:2001:470:1f04:f16::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27DDC1BE3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:34:03 -0700 (PDT)
-Received: by pi.fatal.se (Postfix, from userid 1000)
-        id E76412A8E0; Thu,  6 Jul 2023 14:34:01 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 14:34:01 +0200
-From:   Andreas Henriksson <andreas@fatal.se>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hans =?iso-8859-1?Q?S=F6derlund?= <hans.soderlund@realbit.se>
-Subject: Re: [PATCH] ASoC: fsl_sai: Enable MCTL_MCLK_EN bit for master mode
-Message-ID: <20230706123401.kctossjho26bry7e@fatal.se>
-References: <1652963808-14515-1-git-send-email-shengjiu.wang@nxp.com>
- <CAOMZO5DtpoH0dLDX3=Sv4UUpX_=66VEZPsJUWQNnYviApfMLKQ@mail.gmail.com>
- <20230706084706.bzwsbi3zisx5m5rl@fatal.se>
- <CAOMZO5CCdaodWQrHUQgMizoES=jfEtw-sNJZG-DJMpRD8tZW9g@mail.gmail.com>
- <CAA+D8ANAg7bs0A35c7Af3_-5sLaqvT1RoKfCbzYi=z=t_q9LUw@mail.gmail.com>
- <CAOMZO5BtrKwrMwrjVDbYn3ivt2uV9rzbSDxd8qfiYjOBMvKBgg@mail.gmail.com>
+        Thu, 6 Jul 2023 08:35:07 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DE51990
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:35:06 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc59de009so6593155e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688646905; x=1691238905;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2lGRta1DFJWgP2Ka3XUK1qfLkVKYTy4OhAMOsxkgoyQ=;
+        b=t9T2EPPp9hbOjIHqqad9elRw73dzrHEK2qBF+VJuC8f9Y3/9oMFx31mNw37w8ibwcy
+         52cdAg0Y7/Ozjn2LCoU9JJLD0kixWVjLFoeQwcSOWnSOGDJyiaHna6kf1NGSlP6EIHNB
+         AWQQ573f791IbjtZMj4Pfai38KjablEBnkRW3fTVKJ9tmjDz+St1xrbdQjmcLwdKig/H
+         wOIWU+6EHF/+4IvIFfRhyvcFdIwTfhJ5gK2gYQ4JfTH8N8yWiflC09nqE4vx2xuNmfLA
+         W3KxngHtkuQWfYwyJN78GH7JZ3H3mggVoHkYCrGMzYmf0lEXaPqioQaGUnzRQqm6kN+g
+         3I5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688646905; x=1691238905;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2lGRta1DFJWgP2Ka3XUK1qfLkVKYTy4OhAMOsxkgoyQ=;
+        b=h5qqs8r3QVlehmoeY/z/eGV6GQXVa2QGiWZoxfS0CXbLblAncbTr8TjfHw/6vMnxlv
+         +EsFYjIq1wEmdOyhKIISZ5kBIB3jygC3J67w1gdrlZfxg23ofQyvQU/8VmoSVOSnKq8w
+         A/gQG09KQQgUFLxaRbT+/x7NGhkTbifXBPkpRRUdsxO269417SnJZ3JWKavIm5iGqe1m
+         dEJlhxz6RboEULP8vKjcXPyaZ+xLM5/82nyDg0uNhcYKV48YhugTLj4Q6UYAdsGvqkoB
+         +WRYxOB8nWcOYI255Kk4U3VkP9au/ylYChqbiKKZRuyJJsvBCPPEVee30R5pvOEHBRG6
+         DV0g==
+X-Gm-Message-State: ABy/qLY9/78b2YdHvZqYNLKO8cPoL8FC31HQcwY2HSbdo/WNY9x2aWgt
+        VqgVFH3723sFwxPQ4O1KJo5IGQ==
+X-Google-Smtp-Source: APBJJlFztCovuW8wVvfjzKQVaVRs6Fs31fNA/tQYgjyyw5T1md8AvL7PKf82FqXbSOSfVivrPPxFsQ==
+X-Received: by 2002:a5d:618d:0:b0:30f:c7e4:d207 with SMTP id j13-20020a5d618d000000b0030fc7e4d207mr1293596wru.61.1688646904933;
+        Thu, 06 Jul 2023 05:35:04 -0700 (PDT)
+Received: from [192.168.1.172] ([93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id j14-20020a056000124e00b0031274a184d5sm1764357wrx.109.2023.07.06.05.35.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 05:35:04 -0700 (PDT)
+Message-ID: <67e02d84-3b51-9973-225a-cf11fcd1aaf2@baylibre.com>
+Date:   Thu, 6 Jul 2023 14:35:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOMZO5BtrKwrMwrjVDbYn3ivt2uV9rzbSDxd8qfiYjOBMvKBgg@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8195: Fix PM suspend/resume with
+ venc clocks
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, yong.wu@mediatek.com,
+        tinghan.shen@mediatek.com, weiyi.lu@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230706095841.109315-1-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230706095841.109315-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Fabio,
 
-Maybe I shouldn't comment as I'm already on deep water, but...
 
-On Thu, Jul 06, 2023 at 08:32:57AM -0300, Fabio Estevam wrote:
-> On Thu, Jul 6, 2023 at 8:19 AM Shengjiu Wang <shengjiu.wang@gmail.com> wrote:
+On 06/07/2023 11:58, AngeloGioacchino Del Regno wrote:
+> Before suspending the LARBs we're making sure that any operation is
+> done: this never happens because we are unexpectedly unclocking the
+> LARB20 before executing the suspend handler for the MediaTek Smart
+> Multimedia Interface (SMI) and the cause of this is incorrect clocks
+> on this LARB.
 > 
-> > No, this is the code in probe().
-> > The code with the issue is in fsl_sai_set_bclk().
-> 
-> Yes, I put it in the wrong place.
-> 
-> > The clean way for fixing is to remove the code in fsl_sai_set_bclk()
-> > and add "fsl,sai-mclk-direction-output;" property in dts for some
-> > node.
-> 
-> Yes, what about this?
-> 
-> --- a/sound/soc/fsl/fsl_sai.c
-> +++ b/sound/soc/fsl/fsl_sai.c
-> @@ -507,7 +507,7 @@ static int fsl_sai_set_bclk(struct snd_soc_dai
-> *dai, bool tx, u32 freq)
->                                    savediv / 2 - 1);
->         }
-> 
-> -       if (sai->soc_data->max_register >= FSL_SAI_MCTL) {
-> +       if (sai->soc_data->max_register >= FSL_SAI_MCTL  &&
-> sai->mclk_direction_output) {
->                 /* SAI is in master mode at this point, so enable MCLK */
->                 regmap_update_bits(sai->regmap, FSL_SAI_MCTL,
->                                    FSL_SAI_MCTL_MCLK_EN, FSL_SAI_MCTL_MCLK_EN);
+> Fix this issue by changing the Local Arbiter 20 (used by the video
+> encoder secondary core) apb clock to CLK_VENC_CORE1_VENC;
+> furthermore, in order to make sure that both the PM resume and video
+> encoder operation is stable, add the CLK_VENC(_CORE1)_LARB clock to
+> the VENC (main core) and VENC_CORE1 power domains, as this IP cannot
+> communicate with the rest of the system (the AP) without local
+> arbiter clocks being operational.
 
-This is exactly the same as and thus redundant to the code already in
-the probe function?!
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-If I understood it correctly, the problem Shengjiu was trying to adress
-was that apparently on i.MX8MM (and only imx8mm?!), even when using MCLK
-in *input*, you still need to enable it because otherwise BCLK will not
-be generated. (I personally don't know anything about this or the imx8mm
-variant though.)
-
-The problem could probably equally well be worked around by always setting the
-fsl,sai-mclk-direction-output; devicetree property on imx8mm, even when
-using MCLK in input..... But I'm just guessing here to be honest. This
-is just as I understood what purpose the initial patch that was merged
-had.
-
-The current state affects more devices than imx8mm though, making MCLK
-in input mode not possible.
-
-I think your initial review comment was spot on Fabio. There probably
-needs to be a(n imx8mm) specific flag that says when this workaround
-should be applied and gate the code in bclk function on that.
-Atleast that's the only thing I can think of if my interpretation of the
-problem for imx8mm is correct.
-
+-- 
 Regards,
-Andreas Henriksson
-
+Alexandre
