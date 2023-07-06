@@ -2,140 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B616A74957F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B434C749589
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbjGFGVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S233571AbjGFGYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbjGFGVI (ORCPT
+        with ESMTP id S233121AbjGFGX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:21:08 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38D71990
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:20:48 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-55b2ab496ecso380322a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:20:48 -0700 (PDT)
+        Thu, 6 Jul 2023 02:23:57 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7060D1FED
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:22:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98df3dea907so35480766b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:22:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688624448; x=1691216448;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=054dwjt9BZCou3BvPjMRnfFzZ2wjHCy2lrA2F8To2Yk=;
-        b=a/gZc1hvT7JRiiUYzG1SPVOHiHFMZ5cv81dBONAX0K6rQb/SqodZ/lLZoD6G628ExP
-         YAd7fHKCO8Uce6GfN3NdeaykplGQ29jTP1s1duFpDpYznOqIoHbToAyL5+/e4rjop4px
-         RnYjO1Dq2V76xE62yjTCc5gppCq4Ilyvg6B+wC/at9D5beVGj/dSGIKww8CivxZHgMPs
-         xUAr63iI0RUxB/1CrizQ0kDz4z+hUrxNojnH+C506j0HK6jQWpTT4OiCsEUo2etb1Qaj
-         qq9nOEvhORD0DyWKW/sSLHCUa79qo5POjO0faDZksJV99qlPER3hM1mrmWsqRtzP1voK
-         kuCg==
+        d=linaro.org; s=google; t=1688624576; x=1691216576;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9HBGNjA/AFaYPQtAfARvvX4VPrQmoZY1RYa/BV2PKyw=;
+        b=jQUEjdB/XzCIlnlw7mfxPpowKF/8Bb9UIhtQIfj2jkkVohOJQjHMYFFLaYw0RwNGl8
+         YaZoUjjpOwP4Ra8Ps8aR88ZtTjrKo+MEvrzM/XFa4UmJ37FpKwEMqxXcK8BTzXoHX5pU
+         URxfLiqjCXREHmhij11331U6N8byRxOJxrCt07BNrOfMxe4wN2R0cvBlZAO5G0PXtyGj
+         XKsmm5yH1YE6sq54M1Y0hOS29fOmS9yxQ3Ajvc/vcSt29N2YzoDwskCj/bGgYBZ7zFgd
+         Omavvkai6NfdVaeB8JuH3fqquUL62S/RuyFoa2GjBroz+vkDVYWr3odccgU1nTIRdzH/
+         tUfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688624448; x=1691216448;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=054dwjt9BZCou3BvPjMRnfFzZ2wjHCy2lrA2F8To2Yk=;
-        b=FT22kvh+BNz3D13tbNlV9xbkrRMQn86tK/PY5NNMKzvtzGFUWiVyXHmvhC8bUE2SjD
-         LtJ4ENWd52DZIZNq2zNv3UHE/WgZnRPJf76u9axLue4iOk+UbAsBfXc6UtZwB7oqyuDw
-         rKm+4TIGWEJTrxkTWrtNIWQuMg9Gr93d5uVGK2zRknLbyZirsVmC6JedYHvrAJG9id3N
-         hif+pEFBFqlpo/S8T5s7toNyAZvXueBzU8HjT14kGwCKVlov9lmM+wpeT1dNDkEpRuYZ
-         /PDg95XygCLKTrDk+Mn/15FjOm7mootMJE8u4zOuOWFoabWmjwcbcG08ee/gTzO2i9aA
-         laRg==
-X-Gm-Message-State: ABy/qLZPfi/4U7z5lddFHShUhE/QxcNwWFfUCQtLEaDEHq0mbtHAZ2iy
-        gN6OvD2i3UDzEb5gsMuY5NmxOg+HA54qDQ==
-X-Google-Smtp-Source: APBJJlFzXEYN6IPpBFkmO+8r0LKe3KxYt8mAuNjzTYJLriYpEm63md407jdKnq12s3zBrfw6dE9T/SconNIdSw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a63:751d:0:b0:553:8668:dc40 with SMTP id
- q29-20020a63751d000000b005538668dc40mr509175pgc.6.1688624448157; Wed, 05 Jul
- 2023 23:20:48 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 06:20:45 +0000
-In-Reply-To: <CABWYdi0c6__rh-K7dcM_pkf9BJdTRtAU08M43KO9ME4-dsgfoQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <CABWYdi0c6__rh-K7dcM_pkf9BJdTRtAU08M43KO9ME4-dsgfoQ@mail.gmail.com>
-Message-ID: <20230706062045.xwmwns7cm4fxd7iu@google.com>
-Subject: Re: Expensive memory.stat + cpu.stat reads
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     cgroups@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688624576; x=1691216576;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9HBGNjA/AFaYPQtAfARvvX4VPrQmoZY1RYa/BV2PKyw=;
+        b=MuUp8kCFAzGnm5bhw88ZGj9Ax3KtplPzAE9DuA/aRT6fP3eSmUK+85Y2oioHwqp0nA
+         odvaebtwHqjs8i5GtqRFpV7+sG0EUVXrtMTzkJ915Ue+tMoPKsDayCLk3s5Zh+wyI7lq
+         MuTIDHXBJlGUYYjAFuTca+vJxxeNXR8P9miuX/c4kb6J/8EQD2AhtE3KnR5NbgLmUKDz
+         6eJICsSb6xpccQ0idIAjgXSNN8TbTPauxunFGn/o6Gyc83c1q3utLgDAmUbLDlRTavh8
+         q8Y9m5VwW/EWGRFkoKeehFdorPQk7CvkEyuMycwCjXV44yw6OafxxHveS+EgagRcDXB5
+         SWwg==
+X-Gm-Message-State: ABy/qLb4EQD2FDGNhaMu8fq97Ngp5J6RTQP7wqdqKWxxZakJIEYLZjBw
+        u7REs0KqT0qCXUstphYuEkzhnA==
+X-Google-Smtp-Source: APBJJlECTV1XySP1t2wRIGpWXPZNKDpC1/U0MAaYZTvZDI1ciIxeA5aoBkBeICCqVtb8gSTOtE3wLw==
+X-Received: by 2002:a17:907:8184:b0:992:6656:4043 with SMTP id iy4-20020a170907818400b0099266564043mr540927ejc.53.1688624576526;
+        Wed, 05 Jul 2023 23:22:56 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id c24-20020a170906171800b009933eccf46fsm381745eje.6.2023.07.05.23.22.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 23:22:55 -0700 (PDT)
+Message-ID: <046d4744-9521-7b5d-759c-6dedbafd9205@linaro.org>
+Date:   Thu, 6 Jul 2023 08:22:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 1/5] dt-bindings: gpio: Add HPE GXP GPIO
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, andy.shevchenko@gmail.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20230705194544.100370-1-nick.hawkins@hpe.com>
+ <20230705194544.100370-2-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230705194544.100370-2-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 04:22:28PM -0700, Ivan Babrou wrote:
-> Hello,
+On 05/07/2023 21:45, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> We're seeing CPU load issues with cgroup stats retrieval. I made a
-> public gist with all the details, including the repro code (which
-> unfortunately requires heavily loaded hardware) and some flamegraphs:
+> Provide access to the register regions and interrupt for GPIO. The
+> driver under the hpe,gxp-gpio-pl will provide GPIO information from the
+> CPLD interface. The CPLD interface represents all physical GPIOs. The
+> GPIO interface with the CPLD allows use of interrupts.
 > 
-> * https://gist.github.com/bobrik/5ba58fb75a48620a1965026ad30a0a13
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> I'll repeat the gist of that gist here. Our repro has the following
-> output after a warm-up run:
+> ---
 > 
-> completed:  5.17s [manual / mem-stat + cpu-stat]
-> completed:  5.59s [manual / cpu-stat + mem-stat]
-> completed:  0.52s [manual / mem-stat]
-> completed:  0.04s [manual / cpu-stat]
-> 
-> The first two lines do effectively the following:
-> 
-> for _ in $(seq 1 1000); do cat /sys/fs/cgroup/system.slice/memory.stat
-> /sys/fs/cgroup/system.slice/cpu.stat > /dev/null
-> 
-> The latter two are the same thing, but via two loops:
-> 
-> for _ in $(seq 1 1000); do cat /sys/fs/cgroup/system.slice/cpu.stat >
-> /dev/null; done
-> for _ in $(seq 1 1000); do cat /sys/fs/cgroup/system.slice/memory.stat
-> > /dev/null; done
-> 
-> As you might've noticed from the output, splitting the loop into two
-> makes the code run 10x faster. This isn't great, because most
-> monitoring software likes to get all stats for one service before
-> reading the stats for the next one, which maps to the slow and
-> expensive way of doing this.
-> 
-> We're running Linux v6.1 (the output is from v6.1.25) with no patches
-> that touch the cgroup or mm subsystems, so you can assume vanilla
-> kernel.
-> 
-> From the flamegraph it just looks like rstat flushing takes longer. I
-> used the following flags on an AMD EPYC 7642 system (our usual pick
-> cpu-clock was blaming spinlock irqrestore, which was questionable):
-> 
-> perf -e cycles -g --call-graph fp -F 999 -- /tmp/repro
-> 
-> Naturally, there are two questions that arise:
-> 
-> * Is this expected (I guess not, but good to be sure)?
-> * What can we do to make this better?
-> 
-> I am happy to try out patches or to do some tracing to help understand
-> this better.
+> v5:
+>  *Removed use of gpio-gxp in favor of just supporting
+>   hpe,gxp-gpio-pl for now as the full gpio-gxp will
+>   require a much larger patchset
 
-Hi Ivan,
+Bindings describe hardware, not drivers, and should be rather complete.
 
-Thanks a lot, as always, for reporting this. This is not expected and
-should be fixed. Is the issue easy to repro or some specific workload or
-high load/traffic is required? Can you repro this with the latest linus
-tree? Also do you see any difference of root's cgroup.stat where this
-issue happens vs good state?
 
-BTW I am away for next month with very limited connectivity, so expect
-slow response.
+>  *Modified commit description to reflect removal of
+>   hpe,gxp-gpio
+> v4:
+>  *Fix min and max values for regs
+> v3:
+>  *Remove extra example in examples
+>  *Actually fixed indentation on example - Aligned
+>   GPIO line names with " above.
+> v2:
+>  *Put binding patch before the driver in the series
+>  *Improved patch description
+>  *Removed oneOf and items in compatible definition
+>  *Moved additionalProperties definition to correct spot in file
+>  *Fixed indentation on example
+>  *Improved description in .yaml
+> ---
+>  .../bindings/gpio/hpe,gxp-gpio.yaml           | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> new file mode 100644
+> index 000000000000..799643c1a0c2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/hpe,gxp-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP gpio controllers
 
-thanks,
-Shakeel
+GPIO
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +description:
+> +  Interruptable GPIO drivers for the HPE GXP that covers multiple interfaces
+
+"drivers" as Linux drivers? If so, then drop and rephrase to describe
+hardware.
+
+> +  of both physical and virtual GPIO pins.
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-gpio-pl> +
+> +  reg:
+> +    items:
+> +      - description: pl base gpio
+> +      - description: pl interrupt gpio
+> +
+> +  reg-names:
+> +    items:
+> +      - const: base
+> +      - const: interrupt
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-line-names:
+> +    maxItems: 80
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - gpio-controller
+> +  - "#gpio-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +        gpio@51000300 {
+
+Wrong indentation. Use 2 or 4 (preferred) spaces, not 8.
+
+> +          compatible = "hpe,gxp-gpio-pl";
+> +          reg = <0x51000300 0x7f>, <0x51000380 0x20>;
+> +          reg-names = "base", "interrupt";
+> +          gpio-controller;
+> +          #gpio-cells = <2>;
+> +          interrupt-parent = <&vic0>;
+> +          interrupts = <24>;
+> +          gpio-line-names =
+> +          "IOP_LED1", "IOP_LED2", "IOP_LED3", "IOP_LED4", "IOP_LED5", "IOP_LED6", "IOP_LED7", "IOP_LED8",
+
+And this is even worse.
+
+> +          "FAN1_INST", "FAN2_INST", "FAN3_INST", "FAN4_INST", "FAN5_INST", "FAN6_INST", "FAN7_INST",
+> +          "FAN8_INST", "FAN1_FAIL", "FAN2_FAIL", "FAN3_FAIL", "FAN4_FAIL", "FAN5_FAIL", "FAN6_FAIL",
+> +          "FAN7_FAIL", "FAN8_FAIL", "FAN1_ID", "FAN2_ID", "FAN3_ID", "FAN4_ID", "FAN5_ID", "FAN6_ID",
+> +          "FAN7_ID", "FAN8_ID", "IDENTIFY", "HEALTH_RED", "HEALTH_AMBER", "POWER_BUTTON", "UID_PRESS",
+> +          "SLP", "NMI_BUTTON", "RESET_BUTTON", "SIO_S5", "SO_ON_CONTROL", "PSU1_INST", "PSU2_INST",
+> +          "PSU3_INST", "PSU4_INST", "PSU5_INST", "PSU6_INST", "PSU7_INST", "PSU8_INST", "PSU1_AC",
+> +          "PSU2_AC", "PSU3_AC", "PSU4_AC", "PSU5_AC", "PSU6_AC", "PSU7_AC", "PSU8_AC", "PSU1_DC",
+> +          "PSU2_DC", "PSU3_DC", "PSU4_DC", "PSU5_DC", "PSU6_DC", "PSU7_DC", "PSU8_DC", "", "", "", "",
+> +          "", "", "", "", "", "", "", "", "", "";
+> +        };
+
+Best regards,
+Krzysztof
+
