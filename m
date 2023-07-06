@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC297496F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C607496F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbjGFIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S233973AbjGFIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbjGFIA0 (ORCPT
+        with ESMTP id S231592AbjGFIA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:00:26 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7F71BE1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:00:25 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbea14700bso3718235e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:00:25 -0700 (PDT)
+        Thu, 6 Jul 2023 04:00:27 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B025121
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:00:26 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742eso3960775e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688630424; x=1691222424;
+        d=linaro.org; s=google; t=1688630425; x=1691222425;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=93L8BkPgEfdpngtMZOT+90bXoBGPqeAdqsv/Z4sCp6I=;
-        b=vU150XI9RDT22VBPIwT5mYMka69+Kv9fzSDZpO62LhYUTzg6WLSHtDoGe/gcfFQGR/
-         UhrYqb5fDziNFbOSypz2z78fKWyyjVV6hV20yMOVXczDmP1878TWgV9xq7atIZzXrteB
-         BOrjtLs/APd41gYW0q6Odz0YgZW4anlVDfY9rzq+hJu38UNCoeEahZQispC4MwreCLe1
-         rrn7KQT8G2knMYzx51bwSOxpZCibwWYfYtgtLkkgZ1aGfFYTa59BHl86Q88Hqs4zzqKz
-         YK3aJ5LcBctCXPdEhCpV/q7yxUr/TjOwZ1JuJNUsSHEfy+efMU5UfUkEue+fGsrnveax
-         RkzA==
+        bh=zWpH1FvGpiFFPL3Zk5MB4gar3abtPZq+nswg1l+SqSg=;
+        b=z8CF+23V8/iN9B9tos0KT/eKSlOJXhZaFRjqcobvmHkTtx8IIGPAXZqNO0Z9d5RUAe
+         I6VfUzkrptGnMATJX60aX79fNdHW7RtIOvR/Ktt5vyHPW0VL00Oo1REG76SAh9/Q29mZ
+         cVGp1op86QVIvT+UNPCJZ6U9N4SrHcVWr2boReW1ClXDHtVN0okuoYSl2zB5qt7eSTo7
+         glKl3IFrKPRHpy/fO4n8RGqkoKt1ZWQIOs5/FZ00nriX4a5K4whqhR0iIYny/vBKzb5l
+         KDURPEwtW6UiZzhAysSDh+dseroQYX3fi/P7BiGJ9kyP2l3J8D4XE5NG0XNBPhlHroTL
+         LcuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688630424; x=1691222424;
+        d=1e100.net; s=20221208; t=1688630425; x=1691222425;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=93L8BkPgEfdpngtMZOT+90bXoBGPqeAdqsv/Z4sCp6I=;
-        b=JNM8L+xxH87wsZfuYtRN0YGMbEEHx1GtYQOb7b6HG0DozRTcWete68q5KaZTl1aWyG
-         sGPthv7LXtrtSduHP3tcf2CDT+JTqGSuS+1r0S6MzzJn83KOdMbQvMlxWFItLgysU+We
-         lP5eMV04jOdqB9OGjVyAdVkmTRzO8+WZub7JJDe8OuShkB8kSyJ8XbCIJY6pBJDaQkoC
-         ufR7DUZrnBKaES4wO97ZJbeFGcKy46gE5CPeBOoiv7SfCtxKSm9i/qpsv/F15vLL9mg+
-         Ly/1Gr4wYzntZq1WaOyFdwkzUHeHKbvV0BfAyjYX+LINgPD4ksgQCJyHL/BehAi3r94c
-         CFeg==
-X-Gm-Message-State: ABy/qLYOjUQINEFRgwT1hO7e20+/t87Vp+XoEU5D2UkERkpD7vWTB8c0
-        7dujSt9A/ZzVFD6mMFyMgby4WQ==
-X-Google-Smtp-Source: APBJJlH0UmwL97d4yl5LZFrPLIyAm9frS5cCiPHFs9ODvBbOTYDidw/cS4bYqCerJ4g5RTh7W0WAmQ==
-X-Received: by 2002:a1c:ed0d:0:b0:3fa:934c:8350 with SMTP id l13-20020a1ced0d000000b003fa934c8350mr712696wmh.27.1688630424030;
+        bh=zWpH1FvGpiFFPL3Zk5MB4gar3abtPZq+nswg1l+SqSg=;
+        b=g0FHNh/9KQWOy/7nfq0EDg10U4l2nVOj9l0VDtisrymjFOnFRPdtjXxq90TlCvKNmG
+         kLxOt8qOBOtvDMomMIRluWiB+aMo1fuV2B/7LdtqsTpKoQjGvc9fTA745dPis1pvKsxV
+         L6A9e8Ts/NBc7EYLBsLAIwKe3ndU/YDf1TY5JYKmWTJ5kA6Tr0J4Rfr2/S1UY/hjKZ5I
+         E089gD/O/GAW6KBUZDU3SPDwopfM01ws1Way2V7l9ME0QQsa4cY5hPQ2f0K76sOlhPo0
+         9D5Ec7baUto70DyF4pArQ4tp+LvmgkIw5rcT9kB0LQF4jph5TU/M9RYs+Dr6I2sOQVMC
+         sHDA==
+X-Gm-Message-State: ABy/qLYX3vSREV/afhbPJ7Y6nAwaUCZ4G+/D3xcH1RRdtEk2nsjkdpH7
+        PAMWvH2/bDPWeJMQiIDkaeQpmw==
+X-Google-Smtp-Source: APBJJlE4gWjcP7W0gh/5EZLG8ViE/6K0tZw10eioLU/v1QWdFBHHFFTEa7t0sYd/ac1rM8ha9/xDWQ==
+X-Received: by 2002:a05:600c:293:b0:3fb:e2af:49f6 with SMTP id 19-20020a05600c029300b003fbe2af49f6mr678506wmk.39.1688630424904;
         Thu, 06 Jul 2023 01:00:24 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003fbb1ce274fsm5587375wmn.0.2023.07.06.01.00.23
+        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003fbb1ce274fsm5587375wmn.0.2023.07.06.01.00.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 01:00:23 -0700 (PDT)
+        Thu, 06 Jul 2023 01:00:24 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 06 Jul 2023 10:00:20 +0200
-Subject: [PATCH 2/3] arm64: dtb: amlogic: meson-g12-common: change
- aobus-pinctrl node name
+Date:   Thu, 06 Jul 2023 10:00:21 +0200
+Subject: [PATCH 3/3] arm64: dts: amlogic: drop cooling-[min|max]-state from
+ pwm-fan
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-2-63ed070eeab2@linaro.org>
+Message-Id: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-3-63ed070eeab2@linaro.org>
 References: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-0-63ed070eeab2@linaro.org>
 In-Reply-To: <20230706-topic-amlogic-upstream-dt-fixes-take3-v1-0-63ed070eeab2@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -70,20 +70,20 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=783;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1423;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=j0QAC12CtwfrA2b91cLW5DK1eWrkH7AjxGLlYCOHUHQ=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkpnSUU9xjNbx3BwIiYJT5nPcv/ge5kWU6GfeJ0s8k
- hFc3PyeJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKZ0lAAKCRB33NvayMhJ0UHQD/
- 4xq6D1Guxs5dlH6ct0+eIOmFXYCUrg+J/IQlW6wT6+ghlC3C6MNL4cKteErw41khgrHPUGMTj7tEkc
- y0e7CELHvDwEZE+Geo0j74JxjrjVhCXLoEJkSff2jdR4cWCx9FTQKmjhLKOsgjP3rv/5cKoQd16luY
- alwYX41SnyHIzKjJsrxXHcERxx6cgoDzVsFz/FoIIpUzBOkVVjJ5nJ/L1ZhdmNQmGLKJMAhs3fwbqW
- 1pTCh1BQdfGBqWNFxY0eRgHwRWLo9qTGXnMlaNRX9tSaRLwxxR+9yRuccPgSChBnFqgMXRoRvZVduV
- ZeIVP+VxHUJ1nyOt1I/PCuRvMRjh7sARFMAxjJpnkarG5bKKe9G7yVVlJXNe88amcIgl0qo0IZ/Edr
- 4iqMfdKBuBmUJWD3wxZohrarpybgCuxvvOZczrF74ZaAHsR2B3GtkpOLY9RdZ2gKzrDhpTmY+ZOFSn
- JQqBJEIVzpV1fnrw4Ptz644zqrCh24KiujitJvDh2Mp9oQoSQJJC49fReigZq/EgpjQoR/+nHliXlF
- w3tFhI4ngmyUTHe+Vqw6tGGBmtBmHswKXfRfOzFsZsORERL7gn/6bEXsbWHpZdM6e9lQlOyVnNu+EX
- 8MytTF78aJJqmimWcjZtzbsbPkgdXZsgNDwlKjAt2etYgD1nqQoIpWFqQsiw==
+ bh=mTxrGBgcrLVvxfWXqT39OrtK8xzaQJmrQf3lTHsiMu8=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkpnSVVlcqsYAlsspnNSpabIPV0CUsiTF7uT/6cBbG
+ rIDdZdiJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKZ0lQAKCRB33NvayMhJ0dwuD/
+ wPzwYHtKFu5wR0PYy9KwbUaetfp9VjtWrDRPP+zZV1/9ZYekIqbMITt+s7/+CILqWg+KgtIaoGieMl
+ Tw9ewazOmGsAnNiJUgs3z9Ft6NpR2tPNHb3wPG+TFvnnM+HqmaKNkeTle2RH0UeBuwlsCv3rIhcOpd
+ ZFesU/nPeW6vQW2EPtz4IjHH8gXplRzTPMUciWc9pNUEGm9lQOwThNFYXz2I08Ll1YFM+cRKF2tfaR
+ jmM6nuqMzn/a3Txe560cr8iRb5H9NHTzslFtvUae4zif0wTpFMXhi3Fai/G2jsHzXMeeOBDEXz5XrC
+ GMNRzEpl4zDrbXEmNihN7awahAGtKLL8gXgLqDwd1rKilzVnCjNvCI7Qe0VY2Mq0bQvA7/F9N0k1tF
+ cVH4Ntph2LWpLZiJclHPElVe3rE75bI3uC0vZLmIXL2CpoccQYJPxIQEPNChMQBnIVxOqIAicwzkab
+ QsX8O/w3sdZm0O0lhU/qW0VegQcfkgEEgtriSg+wG5hl3s+jjWQkmWC6DG95YEa/fKhdIa/FuqwZIQ
+ I2H7dq5h0rlQ/JjDehSYuW/4NDA1eLfx8NedH5F+4N5OKCg3qkruvgqLi0Z92OCG0lhb17iN1xSJa4
+ 1lbTZiTTRvOoCRWODT6E/JDpp0eoK4xzgGP3B6W4CkAKz+3YJsTTsMZJoCYg==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,26 +96,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings expects name to be "pinctrl", fix it.
+Drop the invalid cooling-min-state & cooling-max-state from the
+pwm-fan node defined in the bananapi dtsi and odroid-hc4 DT.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi | 2 --
+ arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts | 2 --
+ 2 files changed, 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-index 0c49655cc90c..6d39faba7c3f 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-@@ -1733,7 +1733,7 @@ clkc_AO: clock-controller {
- 					clock-names = "xtal", "mpeg-clk";
- 				};
- 
--				ao_pinctrl: pinctrl@14 {
-+				ao_pinctrl: pinctrl {
- 					compatible = "amlogic,meson-g12a-aobus-pinctrl";
- 					#address-cells = <2>;
- 					#size-cells = <2>;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+index 83709787eb91..42f30112b56a 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+@@ -47,8 +47,6 @@ emmc_pwrseq: emmc-pwrseq {
+ 	fan0: pwm-fan {
+ 		compatible = "pwm-fan";
+ 		#cooling-cells = <2>;
+-		cooling-min-state = <0>;
+-		cooling-max-state = <3>;
+ 		cooling-levels = <0 120 170 220>;
+ 		pwms = <&pwm_cd 1 40000 0>;
+ 	};
+diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts
+index 74088e7280fe..846a2d6c20e5 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts
+@@ -19,8 +19,6 @@ aliases {
+ 	fan0: pwm-fan {
+ 		compatible = "pwm-fan";
+ 		#cooling-cells = <2>;
+-		cooling-min-state = <0>;
+-		cooling-max-state = <3>;
+ 		cooling-levels = <0 120 170 220>;
+ 		pwms = <&pwm_cd 1 40000 0>;
+ 	};
 
 -- 
 2.34.1
