@@ -2,246 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596BF7494A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3355C7494B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjGFEP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 00:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S233055AbjGFE2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 00:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjGFEPX (ORCPT
+        with ESMTP id S229498AbjGFE2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 00:15:23 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408A31988;
-        Wed,  5 Jul 2023 21:15:22 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666e64e97e2so219394b3a.1;
-        Wed, 05 Jul 2023 21:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688616921; x=1691208921;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IIs1Ic3kA6qxFm0PBui1PCyprdvyTG+DQnNhEQH+f60=;
-        b=biJNVE7TnITK7Jn8jArQ6ai5UK/8sHSUU4C04rH/HSb//GFyfN+0zV2uGYAM1mNIpR
-         NqYQCMoo0xsYDswOeUa4TTHku6lXSv2DJ8It9gug6NNyUNBFO2pnC8qnxhn/AyaaG4bS
-         9QAeStpV+Q60mDniYwHKKEKqgfkJJ7jnTwQY9qqOCQQReHyd5jrRmS51Qb9KmpZ9Iuom
-         Uiy8GvWaf1S9BVQbctQuSJGW2q03mLaD49oST4zr31vnM6aeG4UoUsiJ/gbskg8eagI2
-         +/KAQr7Vpc3YP5irCnnwpFOZJthlJFKN7MB98giNzyC//vubSnXOw+0ZU17rTbqahvse
-         M2cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688616921; x=1691208921;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IIs1Ic3kA6qxFm0PBui1PCyprdvyTG+DQnNhEQH+f60=;
-        b=h+I3qDcjFtEERC8u7lm6jhBlctnpXqANtiuhXYac931TEjvLhDMhBIYWCbws3MhfzC
-         bhF9NIgsbu39oiQwmdemH/jpz0tShVlJN+FNJ9jugZE0BvAsU30DT6FlCNIA3a24VtLb
-         UsfhznXG10tK8Hrf32QHZTmFzhZYl7U7NEQq9klAgo/JyF8wHi8YXTxyYt3gZfv/6qmh
-         S43NdVg0CmF9wHFGmnNqC97UI+9t8PVpKu4ko5lNkG0IKGKYbAQwepXa4cQGKkQzydrJ
-         +sR7F0RpAwfIjBgyyozF8z2u20nYpYIbgD8Gf8xWgjl0XAn1DDnB8rx3DHdjkTD2cv4y
-         BnoQ==
-X-Gm-Message-State: ABy/qLYx6FrFdVKjDQg53Ppl2qoFpgXPN7M5PZmJ6nCIZLozXGjiniA2
-        End5TYy5/JYhJO4wRMH0dIStfvXDQJYUow==
-X-Google-Smtp-Source: APBJJlGLdBFHS/nuBRHjP4lzjj/zANJe18hspko8zTFNvPvy0FVqup/zYik1d/W12JUvN8zTeOnP/A==
-X-Received: by 2002:a05:6a00:1acb:b0:66a:5466:25c6 with SMTP id f11-20020a056a001acb00b0066a546625c6mr543165pfv.18.1688616920834;
-        Wed, 05 Jul 2023 21:15:20 -0700 (PDT)
-Received: from localhost-live.default (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
-        by smtp.gmail.com with ESMTPSA id g18-20020aa78752000000b0064d681c753csm302246pfo.40.2023.07.05.21.15.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 21:15:20 -0700 (PDT)
-Subject: Re: [PATCH] KVM: ppc64: Enable ring-based dirty memory tracking
-To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>, jpn@linux.vnet.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Thomas Huth <thuth@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20230608123448.71861-1-kconsul@linux.vnet.ibm.com>
-From:   Jordan Niethe <jniethe5@gmail.com>
-Message-ID: <266701ad-90df-e4c8-bbf7-c6411b759c5f@gmail.com>
-Date:   Thu, 6 Jul 2023 14:15:13 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 6 Jul 2023 00:28:02 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6846E1BD0;
+        Wed,  5 Jul 2023 21:28:01 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365I3AWP030200;
+        Wed, 5 Jul 2023 21:27:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=HP4LiQ6LuTG/JSI25L4E4+XjHbPHi/cDQHv1hFi3YAU=;
+ b=WSBOo5hmIc6GgoSEodAS8UxtiSpWOb6+wEHCPs0eF1/myhBrdHWPnWIEAMAb8ALXWlcK
+ Rw+nRIBrj7IWNQSS6ocPfDoeajN7nUshUBAzPJERPKsW18SzAuOpJiYgd9wRfzoknZX5
+ tJUHC/5xghGx2oUQEtIbdsqhXQQcU96OUpa93HPCp384Y6/i8nT/YoNXLWT0vkfQeiT+
+ hCTHVw5UKqftLeWA2JSKYpzH8gqJnJspC9SSlE+4kuM0KOKPjECd1iHfTNircmu/qwTn
+ oLgIyiszzyMBSRVmSwpg5TFnjSFZ8L0k0fI7tqS1QCpnu1IzkSUms3T39wD/MZCzeaBX kg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3rn3v93w7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 21:27:53 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 5 Jul
+ 2023 21:27:51 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 5 Jul 2023 21:27:51 -0700
+Received: from marvell-OptiPlex-7090.marvell.com (unknown [10.28.36.165])
+        by maili.marvell.com (Postfix) with ESMTP id D02B83F7066;
+        Wed,  5 Jul 2023 21:27:47 -0700 (PDT)
+From:   Ratheesh Kannoth <rkannoth@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <michal.kubiak@intel.com>, <sgoutham@marvell.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <sbhatta@marvell.com>, <gakula@marvell.com>,
+        <schalla@marvell.com>, <hkelam@marvell.com>,
+        Ratheesh Kannoth <rkannoth@marvell.com>
+Subject: [PATCH net v1] octeontx2-af: Promisc enable/disable through mbox
+Date:   Thu, 6 Jul 2023 09:57:05 +0530
+Message-ID: <20230706042705.3235990-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20230608123448.71861-1-kconsul@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: wGFvuWNvoBlT3iqbu_ehh_3DD9p9PiNw
+X-Proofpoint-ORIG-GUID: wGFvuWNvoBlT3iqbu_ehh_3DD9p9PiNw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_02,2023-07-05_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In legacy silicon, promiscuous mode is only modified
+through CGX mbox messages. In CN10KB silicon, it is modified
+from CGX mbox and NIX. This breaks legacy application
+behaviour. Fix this by removing call from NIX.
 
+Fixes: d6c9784baf59 ("octeontx2-af: Invoke exact match functions if supported")
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
 
-On 8/6/23 10:34 pm, Kautuk Consul wrote:
+---
+ChangeLog
 
-Need at least a little context in the commit message itself:
+v0 -> v1: Fix 80 lines checkpatch warnings
+---
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   | 11 ++-------
+ .../marvell/octeontx2/af/rvu_npc_hash.c       | 23 +++++++++++++++++--
+ 2 files changed, 23 insertions(+), 11 deletions(-)
 
-"Enable ring-based dirty memory tracking on ppc64:"
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+index 0d745ae1cc9a..04b0e885f9d2 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+@@ -4069,21 +4069,14 @@ int rvu_mbox_handler_nix_set_rx_mode(struct rvu *rvu, struct nix_rx_mode *req,
+ 	}
+ 
+ 	/* install/uninstall promisc entry */
+-	if (promisc) {
++	if (promisc)
+ 		rvu_npc_install_promisc_entry(rvu, pcifunc, nixlf,
+ 					      pfvf->rx_chan_base,
+ 					      pfvf->rx_chan_cnt);
+-
+-		if (rvu_npc_exact_has_match_table(rvu))
+-			rvu_npc_exact_promisc_enable(rvu, pcifunc);
+-	} else {
++	else
+ 		if (!nix_rx_multicast)
+ 			rvu_npc_enable_promisc_entry(rvu, pcifunc, nixlf, false);
+ 
+-		if (rvu_npc_exact_has_match_table(rvu))
+-			rvu_npc_exact_promisc_disable(rvu, pcifunc);
+-	}
+-
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+index 9f11c1e40737..6fe67f3a7f6f 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+@@ -1164,8 +1164,10 @@ static u16 __rvu_npc_exact_cmd_rules_cnt_update(struct rvu *rvu, int drop_mcam_i
+ {
+ 	struct npc_exact_table *table;
+ 	u16 *cnt, old_cnt;
++	bool promisc;
+ 
+ 	table = rvu->hw->table;
++	promisc = table->promisc_mode[drop_mcam_idx];
+ 
+ 	cnt = &table->cnt_cmd_rules[drop_mcam_idx];
+ 	old_cnt = *cnt;
+@@ -1177,13 +1179,18 @@ static u16 __rvu_npc_exact_cmd_rules_cnt_update(struct rvu *rvu, int drop_mcam_i
+ 
+ 	*enable_or_disable_cam = false;
+ 
+-	/* If all rules are deleted, disable cam */
++	if (promisc)
++		goto done;
++
++	/* If all rules are deleted and not already in promisc mode;
++	 * disable cam
++	 */
+ 	if (!*cnt && val < 0) {
+ 		*enable_or_disable_cam = true;
+ 		goto done;
+ 	}
+ 
+-	/* If rule got added, enable cam */
++	/* If rule got added and not already in promisc mode; enable cam */
+ 	if (!old_cnt && val > 0) {
+ 		*enable_or_disable_cam = true;
+ 		goto done;
+@@ -1462,6 +1469,12 @@ int rvu_npc_exact_promisc_disable(struct rvu *rvu, u16 pcifunc)
+ 	*promisc = false;
+ 	mutex_unlock(&table->lock);
+ 
++	/* Enable drop rule */
++	rvu_npc_enable_mcam_by_entry_index(rvu, drop_mcam_idx, NIX_INTF_RX,
++					   true);
++
++	dev_dbg(rvu->dev, "%s: disabled  promisc mode (cgx=%d lmac=%d)\n",
++		__func__, cgx_id, lmac_id);
+ 	return 0;
+ }
+ 
+@@ -1503,6 +1516,12 @@ int rvu_npc_exact_promisc_enable(struct rvu *rvu, u16 pcifunc)
+ 	*promisc = true;
+ 	mutex_unlock(&table->lock);
+ 
++	/*  disable drop rule */
++	rvu_npc_enable_mcam_by_entry_index(rvu, drop_mcam_idx, NIX_INTF_RX,
++					   false);
++
++	dev_dbg(rvu->dev, "%s: Enabled promisc mode (cgx=%d lmac=%d)\n",
++		__func__, cgx_id, lmac_id);
+ 	return 0;
+ }
+ 
+-- 
+2.25.1
 
-> - Enable CONFIG_HAVE_KVM_DIRTY_RING_ACQ_REL as ppc64 is weakly
->    ordered.
-> - Enable CONFIG_NEED_KVM_DIRTY_RING_WITH_BITMAP because the
->    kvmppc_xive_native_set_attr is called in the context of an ioctl
->    syscall and will call kvmppc_xive_native_eq_sync for setting the
->    KVM_DEV_XIVE_EQ_SYNC attribute which will call mark_dirty_page()
->    when there isn't a running vcpu. Implemented the
->    kvm_arch_allow_write_without_running_vcpu to always return true
->    to allow mark_page_dirty_in_slot to mark the page dirty in the
->    memslot->dirty_bitmap in this case.
-
-Should kvm_arch_allow_write_without_running_vcpu() only return true in 
-the context of kvmppc_xive_native_eq_sync()?
-
-> - Set KVM_DIRTY_LOG_PAGE_OFFSET for the ring buffer's physical page
->    offset.
-> - Implement the kvm_arch_mmu_enable_log_dirty_pt_masked function required
->    for the generic KVM code to call.
-> - Add a check to kvmppc_vcpu_run_hv for checking whether the dirty
->    ring is soft full.
-> - Implement the kvm_arch_flush_remote_tlbs_memslot function to support
->    the CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT config option.
-> 
-> On testing with live migration it was found that there is around
-> 150-180 ms improvment in overall migration time with this
-> 
-> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
-> ---
->   Documentation/virt/kvm/api.rst      |  2 +-
->   arch/powerpc/include/uapi/asm/kvm.h |  2 ++
->   arch/powerpc/kvm/Kconfig            |  2 ++
->   arch/powerpc/kvm/book3s_64_mmu_hv.c | 42 +++++++++++++++++++++++++++++
->   arch/powerpc/kvm/book3s_hv.c        |  3 +++
->   include/linux/kvm_dirty_ring.h      |  5 ++++
->   6 files changed, 55 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index add067793b90..ce1ebc513bae 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -8114,7 +8114,7 @@ regardless of what has actually been exposed through the CPUID leaf.
->   8.29 KVM_CAP_DIRTY_LOG_RING/KVM_CAP_DIRTY_LOG_RING_ACQ_REL
->   ----------------------------------------------------------
->   
-> -:Architectures: x86, arm64
-> +:Architectures: x86, arm64, ppc64
->   :Parameters: args[0] - size of the dirty log ring
->   
->   KVM is capable of tracking dirty memory using ring buffers that are
-> diff --git a/arch/powerpc/include/uapi/asm/kvm.h b/arch/powerpc/include/uapi/asm/kvm.h
-> index 9f18fa090f1f..f722309ed7fb 100644
-> --- a/arch/powerpc/include/uapi/asm/kvm.h
-> +++ b/arch/powerpc/include/uapi/asm/kvm.h
-> @@ -33,6 +33,8 @@
->   /* Not always available, but if it is, this is the correct offset.  */
->   #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
->   
-> +#define KVM_DIRTY_LOG_PAGE_OFFSET 64
-> +
->   struct kvm_regs {
->   	__u64 pc;
->   	__u64 cr;
-> diff --git a/arch/powerpc/kvm/Kconfig b/arch/powerpc/kvm/Kconfig
-> index 902611954200..c93354ec3bd5 100644
-> --- a/arch/powerpc/kvm/Kconfig
-> +++ b/arch/powerpc/kvm/Kconfig
-> @@ -26,6 +26,8 @@ config KVM
->   	select IRQ_BYPASS_MANAGER
->   	select HAVE_KVM_IRQ_BYPASS
->   	select INTERVAL_TREE
-> +	select HAVE_KVM_DIRTY_RING_ACQ_REL
-> +	select NEED_KVM_DIRTY_RING_WITH_BITMAP
->   
->   config KVM_BOOK3S_HANDLER
->   	bool
-> diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> index 7f765d5ad436..c92e8022e017 100644
-> --- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> +++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> @@ -2147,3 +2147,45 @@ void kvmppc_mmu_book3s_hv_init(struct kvm_vcpu *vcpu)
->   
->   	vcpu->arch.hflags |= BOOK3S_HFLAG_SLB;
->   }
-> +
-> +/*
-> + * kvm_arch_mmu_enable_log_dirty_pt_masked - enable dirty logging for selected
-> + * dirty pages.
-> + *
-> + * It write protects selected pages to enable dirty logging for them.
-> + */
-> +void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
-> +					     struct kvm_memory_slot *slot,
-> +					     gfn_t gfn_offset,
-> +					     unsigned long mask)
-> +{
-> +	phys_addr_t base_gfn = slot->base_gfn + gfn_offset;
-> +	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
-> +	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
-> +
-> +	while (start < end) {
-> +		pte_t *ptep;
-> +		unsigned int shift;
-> +
-> +		ptep = find_kvm_secondary_pte(kvm, start, &shift);
-> +
-> +		*ptep = __pte(pte_val(*ptep) & ~(_PAGE_WRITE));
-On rpt I think you'd need to use kvmppc_radix_update_pte()?
-
-> +
-> +		start += PAGE_SIZE > +	}
-> +}
-> +
-> +#ifdef CONFIG_NEED_KVM_DIRTY_RING_WITH_BITMAP
-> +bool kvm_arch_allow_write_without_running_vcpu(struct kvm *kvm)
-> +{
-> +	return true;
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> +void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
-> +					const struct kvm_memory_slot *memslot)
-> +{
-> +	kvm_flush_remote_tlbs(kvm);
-> +}
-> +#endif
-> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-> index 130bafdb1430..1d1264ea72c4 100644
-> --- a/arch/powerpc/kvm/book3s_hv.c
-> +++ b/arch/powerpc/kvm/book3s_hv.c
-> @@ -4804,6 +4804,9 @@ static int kvmppc_vcpu_run_hv(struct kvm_vcpu *vcpu)
->   		return -EINTR;
->   	}
->   
-> +	if (kvm_dirty_ring_check_request(vcpu))
-> +		return 0;
-> +
->   #ifdef CONFIG_PPC_TRANSACTIONAL_MEM
->   	/*
->   	 * Don't allow entry with a suspended transaction, because
-> diff --git a/include/linux/kvm_dirty_ring.h b/include/linux/kvm_dirty_ring.h
-> index 4862c98d80d3..a00301059da5 100644
-> --- a/include/linux/kvm_dirty_ring.h
-> +++ b/include/linux/kvm_dirty_ring.h
-> @@ -69,6 +69,11 @@ static inline void kvm_dirty_ring_free(struct kvm_dirty_ring *ring)
->   {
->   }
->   
-> +static inline bool kvm_dirty_ring_check_request(struct kvm_vcpu *vcpu)
-> +{
-> +	return false;
-> +}
-> + >   #else /* CONFIG_HAVE_KVM_DIRTY_RING */
->   
->   int kvm_cpu_dirty_log_size(void);
-> 
