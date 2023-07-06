@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5DB749ECD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57667749ED1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 16:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbjGFOQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 10:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S233081AbjGFOSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 10:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbjGFOQp (ORCPT
+        with ESMTP id S233109AbjGFORz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 10:16:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6D3DB;
-        Thu,  6 Jul 2023 07:16:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F0BB6197C;
-        Thu,  6 Jul 2023 14:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F76C433C7;
-        Thu,  6 Jul 2023 14:16:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688653002;
-        bh=lraYQAJXhHpy9MSMrp5qu/kbYkDxLEvcUxrU86TfB1w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mFAa304XjGxl6aLh/YKat/QN9Nfw1HuZqYPxZJtONiB69fd7YPwgTj869obxilMeQ
-         mksioec18Y7PJiZvV0fBdNbl2OOslDsfV6rn6v7l6AeQ/5d4UCy/vZGsEs4DrYmYGa
-         i64gvXQWqyLH1Nr6QLilpmTwSezE36tMog2T0GLT1hsm7g5GnolHvfSc9dT3hHXo9e
-         EsRzInKIukhETa8jy/pCJ1Ygosqzh3L3LXnGbfmc+8fKXHFGLTl/Yag6aJpW1/Umce
-         MvMqnOyqzsZp3jYU1RB2PdIaPeWGMcmgis2mF0evR+iSEcnIsA1FBVHjIFoTBmKSIS
-         JKJDoNrGm0NXg==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qHPn8-0006hZ-1j;
-        Thu, 06 Jul 2023 16:17:06 +0200
-Date:   Thu, 6 Jul 2023 16:17:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        konrad.dybcio@linaro.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: qcom: gcc-sc8280xp: Allow PCIe GDSCs to enter
- retention state
-Message-ID: <ZKbM4vLpk_T3cGWC@hovoldconsulting.com>
-References: <20230706140842.18059-1-manivannan.sadhasivam@linaro.org>
+        Thu, 6 Jul 2023 10:17:55 -0400
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77131BFE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 07:17:49 -0700 (PDT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5343c1d114cso1185478a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 07:17:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688653069; x=1691245069;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EWHU7qQSpq7jEJZ7piv+O344Wp3pDTZ25crNyt0IquE=;
+        b=ixDwqA+VfxRrfUysorAu9kkP83ZWir0mxJs1qNlNF7QNjSWKPLrngGVo5m/qUeMAsl
+         c+YGwi2ER5h48VHrjIy5aTVkRDbXnEfWv8r0dawqBhZKGaUO7QTXPIfKtpMk78Hnyskc
+         7MffSYgYJicWRZmceF9CYdIKyKml+kXR0UTGogWDNeJdoHVazaHgophjZsfDDLjEGyDx
+         otPnXUsMHnjNQbEGCG9XH5BpV+8Z7rbwqgih0cCOhVFaZK6uiU2galCmseRABu1p/snH
+         nuWG8lIoDvtYFGob6U7rIrynmw1C4X/7tyvubWsc622kYBAH32GWUyx53CUsnJkxMZ8R
+         NAsQ==
+X-Gm-Message-State: ABy/qLZwH/HZJQPkNdvC0OiiKt83qdIbmUBReZ3MLpzZrCrnPv/a2Kw/
+        6MQiyiTsI5wpqmWTQ5DKA3Szw0HgzoPNFaSaiMubK8vMoef8
+X-Google-Smtp-Source: APBJJlFnQOv8pcKufgaBpnQIaZTboCZmV5Y7/rYQg0qpVvW3Yd/t1EywnTS6PCcSG+zIswYld+6jwe3nSErbdENbkN9gDmuS96PN
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706140842.18059-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a63:36c8:0:b0:55a:e875:36be with SMTP id
+ d191-20020a6336c8000000b0055ae87536bemr1030831pga.8.1688653068977; Thu, 06
+ Jul 2023 07:17:48 -0700 (PDT)
+Date:   Thu, 06 Jul 2023 07:17:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000053502e05ffd22edb@google.com>
+Subject: [syzbot] Monthly block report (Jul 2023)
+From:   syzbot <syzbot+list131e433296c0242f0025@syzkaller.appspotmail.com>
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 07:38:42PM +0530, Manivannan Sadhasivam wrote:
-> With the minimal system suspend support in place for the PCIe driver that
-> keeps the interconnect path voted, the ALWAYS_ON flag can now be dropped.
-> 
-> Also, the PWRSTS_RET_ON flag should be used to allow the GDSCs to enter the
-> retention state when the parent domain get's turned off during system
-> suspend.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
-> 
-> Changes in v2:
-> 
-> * Changed the patch from simple revert to changing the ALWAYS_ON flag to
->   PWRSTS_RET_ON.
-> 
->  drivers/clk/qcom/gcc-sc8280xp.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-> index 04a99dbaa57e..c59b0f91c87d 100644
-> --- a/drivers/clk/qcom/gcc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -6786,7 +6786,7 @@ static struct gdsc pcie_2a_gdsc = {
->  		.name = "pcie_2a_gdsc",
->  	},
->  	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = VOTABLE | ALWAYS_ON,
-> +	.flags = VOTABLE | PWRSTS_RET_ON,
->  };
+Hello block maintainers/developers,
 
-This is not correct either. PWRSTS_RET_ON is a pwrsts mask...
+This is a 31-day syzbot report for the block subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/block
 
-Johan
+During the period, 3 new issues were detected and 2 were fixed.
+In total, 30 issues are still open and 84 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  976     Yes   WARNING in copy_page_from_iter
+                   https://syzkaller.appspot.com/bug?extid=63dec323ac56c28e644f
+<2>  386     Yes   INFO: task hung in blkdev_put (4)
+                   https://syzkaller.appspot.com/bug?extid=9a29d5e745bd7523c851
+<3>  179     Yes   INFO: task hung in do_read_cache_folio
+                   https://syzkaller.appspot.com/bug?extid=be946efe33b2d9664348
+<4>  111     Yes   INFO: task hung in __filemap_get_folio
+                   https://syzkaller.appspot.com/bug?extid=0e9dc403e57033a74b1d
+<5>  87      Yes   INFO: task hung in blkdev_fallocate
+                   https://syzkaller.appspot.com/bug?extid=39b75c02b8be0a061bfc
+<6>  33      Yes   INFO: task hung in nbd_add_socket (2)
+                   https://syzkaller.appspot.com/bug?extid=cbb4b1ebc70d0c5a8c29
+<7>  32      Yes   KASAN: use-after-free Read in __dev_queue_xmit (5)
+                   https://syzkaller.appspot.com/bug?extid=b7be9429f37d15205470
+<8>  32      No    KMSAN: kernel-infoleak in copy_page_to_iter (4)
+                   https://syzkaller.appspot.com/bug?extid=17a061f6132066e9fb95
+<9>  21      Yes   INFO: task hung in blkdev_get_by_dev (5)
+                   https://syzkaller.appspot.com/bug?extid=6229476844294775319e
+<10> 10      Yes   WARNING in wait_til_done (2)
+                   https://syzkaller.appspot.com/bug?extid=9bc4da690ee5334f5d15
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
