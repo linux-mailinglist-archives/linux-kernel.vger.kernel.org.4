@@ -2,164 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C4B74A721
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D6174A727
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjGFWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 18:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S229735AbjGFWlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 18:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjGFWf2 (ORCPT
+        with ESMTP id S229650AbjGFWlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 18:35:28 -0400
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241CD1703;
-        Thu,  6 Jul 2023 15:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
- s=s29768273; t=1688682924; x=1689287724; i=spasswolf@web.de;
- bh=lDm9BYjHliSWNZlmoI0mXu6rvzYWfFi612qvmED6Dl8=;
- h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
- b=r6vYt3ZWxwTrR0Cjd81z/+CG+IPDLKBqQUAVyXhqtJi9juzQxkAAJV1AsCkxLb6Gd6pYihu
- Gk8RB27X75u9xXZVEglAapn17C5tY4ZPmX2DQEUvjIPrxzoUVBm5UwQPdh8CqJp3lBcGlEPuj
- Kymk0ynOXV2mjVSZuCZ2HMKelqV8PFQvxuuy6x60f6WKedG9Lm8ENrD32SDTNuYQOuxV/444Q
- 7iFqJUHMkB4HLFlIYBh5mOfoXbm44pUoIyZu643eUn5y5xrGCMPwsrrBZwItng6nD7d3SdYPz
- k/bLc94GQO/kfn8n1GiosDMWnTbPE6Nd8cMzZe9iQXZ7p6Bovhkw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MDMzC-1q78EU2mpS-00Ay3U; Fri, 07
- Jul 2023 00:35:24 +0200
-Message-ID: <1098fdd1d33248817907b7caacb6a783c4f0a538.camel@web.de>
-Subject: Re: drm_bridges on fairphone-fp3 are enabled in the wrong order
-From:   Bert Karwatzki <spasswolf@web.de>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Date:   Fri, 07 Jul 2023 00:35:23 +0200
-In-Reply-To: <CAD=FV=W_WMo4NGMQMYeLGUc_jBM3X4hZAOe-YQw6exBioEtadw@mail.gmail.com>
-References: <c27953274997a56f8e0522f9331e733ae92bf25b.camel@web.de>
-         <CAD=FV=W_WMo4NGMQMYeLGUc_jBM3X4hZAOe-YQw6exBioEtadw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.46.4-2 
+        Thu, 6 Jul 2023 18:41:50 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0211725;
+        Thu,  6 Jul 2023 15:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688683307; x=1720219307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MmBONzz0UGwupZUADPdDtq/xMA194kD1MSnmPwBWgOo=;
+  b=YCbrhDxj786MtQoF+HzRKJrDT0t07zk4hEI+zoVJixY/v0EjAoSv5V0u
+   7euoZ2VKY2U1eYKY5/OUIJigQHHK6Kjo0Iqsnm2+OM0cuPJa78eup888g
+   yE1tpv7GyPNmuI0eUwR2BC7drqy/INnqHL+sJiYgUWLEg7rCbcQZzwxIn
+   85HX9V0QiZPfgT9vL+lHaJ1xVXUIrh0fkg7hW98qpKkKlOJ7/spO21sOE
+   sQ1qLh1VqsHWCtsB4Az5fhzcloumN8W3KQNBUgePTV/OoA+c9G2HLSSkq
+   KB34v5ezfkZef3Oas5OZ0OOFglXD2MkOzhaQlAISwGLJgDCVQcIDasxFF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="362611030"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="362611030"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 15:41:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="809818570"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="809818570"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jul 2023 15:41:44 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qHXfT-0001am-2J;
+        Thu, 06 Jul 2023 22:41:43 +0000
+Date:   Fri, 7 Jul 2023 06:40:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1:
+ warning: the frame size of 1112 bytes is larger than 1024 bytes
+Message-ID: <202307070653.xxncAC2W-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:cNHpgmWoTzJpug6NgqELcGhatJ30fsV5g6Jk/iwXCqIAduHV+FF
- 9kRtgWFdoxRyulRuoGW47ytZJVzGf20UTbVyBqO429PZVWAa7GsUEdjjOD5cHGcEoqpmgZh
- FvYf55K1YZmon9LmZk17UrJvyEORtiIuoY5V06Z2lwo7LlXacPhf9nN9Vhu3Shy59nsNFUB
- D9pmCcik2km4jd+jjdH4g==
-UI-OutboundReport: notjunk:1;M01:P0:107Lf3KkzTc=;KGG1KrtZgcr1yBCBBOZa32xgulo
- WLua+kddpCRQpL0zrtInhmpiBb/F29DREpB1hdsx84muYbYtOJV8Fpk2bG1UJa63bMFvHPp7y
- lx7DX2oAxcfqOk+mz2JtiMRq5duOAQk7a1RJz/U8SHcGb5anQISR3Bw+HFZzxaq6HX6r2TqUY
- dlIJREbCoAP3+e/hke+3fLaf/jaDiZpHWhkvkdiygrpfIJjHYHsp1G65t0v8SPu3v2PeB+94i
- /hU5haJH44wHMPKmT3n7M9viE1OioxLEHTcMG8CA+bE+N8WHkNu+3jmQgoTtNcVlWwm4VsyGU
- wfPq52nzIIhBSpNp8pHn07kT1witZririFhuW1I8kBjD2DUDjnvJHVjR+hK0meSbNTZZO230C
- 8sUPWcvkdxbwsgbObQeWix5hptVAe1GrrmYPxNRrMFwtZfPKlDWkVidFcw2gEbwu7o4DT992x
- pe+ENsGl2/UbFxy+/E8si2dgkE6jXoIM2quNQaQXAUsos5/cKoINbzYAFtW03EyZu+eDqB/lD
- xZVA3PylRlRY+vJN0k72veP4Zi/bTSLMv9HwNZ9eO0MmGN7SJ7haUhSMu1Ygct/MuXhOqjWBo
- /qMTUNfJQNs2SgxGjhTfBXu8a9F3qznmN7k9ReHStmwdos3Ta4mpys9svNX9HpMcO9ETkfuCJ
- D0VcUESqM6XYXEBAhAC4pAqqJCRVHHi7nCI6UwpE4yRspOKIjo60aRGDOHFTmhqvpis5lk72f
- e1F/5JfnZ12wJIm0ZL8/v+X7EsBDf9C/pkmT5CmVCF9X57IVQTHxv1KsZ01uvvbIaOqXxoYPC
- PQt7WcaHCcZ1PkUiYk1TfkHwQts8mIB/KrI5vFol8vJwEZUT8mHjru/ts9NZ4EHvLS2zdoR1i
- 7jUXs2gyqael8LEXtM1F8OSuJ3buHTW7tR041/0LhRHDtRmlRFulv8HwCBdYilZdOkNxTgwDS
- DEqkkRxAigbZP0EglAymcfgM6NY=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 06.07.2023 um 09:22 -0700 schrieb Doug Anderson:
-> Hi,
->
-> On Wed, Jul 5, 2023 at 12:51=E2=80=AFAM Bert Karwatzki <spasswolf@web.de=
-> wrote:
-> >
-> > The fairphone-fp3 has a drm_panel attached to a dsi bridge. This are a=
-dded
-> > to
-> > the bridge_chain in struct drm_encoder in the order dsi, panel. When t=
-he
-> > drm_atomic_bridge_chain_pre_enable these get enabled in the order pane=
-l, dsi
-> > because of the list_for_each_entry_reverse. But the drm_panel of the
-> > fairphone-
-> > fp3 is enabled using mipi_dsi_dcs_write_buffer which only works if the=
- dsi
-> > is
-> > enabled before the panel.
-> > =C2=A0To work around this one can revert
-> >
-> > commit 9e15123eca7942caa8a3e1f58ec0df7d088df149
-> > Author: Douglas Anderson <dianders@chromium.org>
-> > Date:=C2=A0=C2=A0 Tue Jan 31 14:18:25 2023 -0800
-> >
-> > =C2=A0=C2=A0=C2=A0 drm/msm/dsi: Stop unconditionally powering up DSI h=
-osts at modeset
-> >
-> > This leads to a working panel on startup. But when suspending one runs=
- again
-> > into a similar problem. When the bridges are disabled the dsi is disab=
-led
-> > first
-> > which leads to a failure in disabling the panel again because
-> > mipi_dsi_dcs_write_buffer fails when the dsi is already switched of.
-> > =C2=A0As a simple workarund for both problems I have found it works to=
- exchange
-> > the
-> > order of the bridge chain in drm_endcoder:
-> >
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > index 28b8012a21f2..990f7c68a27c 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > @@ -550,6 +555,8 @@ int msm_dsi_manager_ext_bridge_init(u8 id)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 if (ret < 0)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
-rn ret;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* swap bridges in list */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 list_swap(&encoder->bridge_chain=
-, encoder->bridge_chain.next);
-> >
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The pipeline is ready, p=
-ing encoders if necessary */
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 msm_dsi_manager_set_split_d=
-isplay(id);
-> >
-> > But this does not look like a portable solution so I wonder if there i=
-s a
-> > better
-> > way to do this.
-> >
-> > The linux kernel used here is a linux-next-20220630, with several out-=
-of-
-> > tree
-> > patches which are needed for the msm8953 gpu and the display used in t=
-he
-> > fairphone-fp3 located here:
-> > https://github.com/spasswolf/msm8953-linux.git=C2=A0in
-> > branch msm8953_iommu_rebase_v2_wlan_modem_ipa_cpufreq_display_debug.
->
-> Any chance that "pre_enable_prev_first" works for you? For the best
-> summary I'm aware of this issue, see:
->
-> https://lore.kernel.org/r/CAD=3DFV=3DX_xonf1Dz0BsNTKm4-zBm+ccKvPO+wEWFVM=
-UVY_2=3Dh3Q@mail.gmail.com
->
-> -Doug
+Hi Benjamin,
 
-Yes, this is exactly what I needed. To enable pre_enable_prev_first for th=
-e
-bridge one simply can set panel.prepare_prev_first=3Dtrue in the probe fun=
-ction of
-the panel driver.
+FYI, the error/warning still remains.
 
-Bert Karwatzki
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a452483508d7b70b0f6c69e249ec0b3ea2330b5c
+commit: 727a400686a2c0d25015c9e44916a59b72882f83 media: verisilicon: Add Rockchip AV1 decoder
+date:   4 weeks ago
+config: arm-randconfig-r023-20230707 (https://download.01.org/0day-ci/archive/20230707/202307070653.xxncAC2W-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230707/202307070653.xxncAC2W-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307070653.xxncAC2W-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c: In function 'rockchip_vpu981_av1_dec_set_segmentation':
+>> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    1022 | }
+         | ^
+
+
+vim +1022 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
+
+   776	
+   777	static void rockchip_vpu981_av1_dec_set_segmentation(struct hantro_ctx *ctx)
+   778	{
+   779		struct hantro_av1_dec_hw_ctx *av1_dec = &ctx->av1_dec;
+   780		struct hantro_av1_dec_ctrls *ctrls = &av1_dec->ctrls;
+   781		const struct v4l2_ctrl_av1_frame *frame = ctrls->frame;
+   782		const struct v4l2_av1_segmentation *seg = &frame->segmentation;
+   783		u32 segval[V4L2_AV1_MAX_SEGMENTS][V4L2_AV1_SEG_LVL_MAX] = { 0 };
+   784		struct hantro_dev *vpu = ctx->dev;
+   785		u8 segsign = 0, preskip_segid = 0, last_active_seg = 0, i, j;
+   786	
+   787		if (!!(seg->flags & V4L2_AV1_SEGMENTATION_FLAG_ENABLED) &&
+   788		    frame->primary_ref_frame < V4L2_AV1_REFS_PER_FRAME) {
+   789			int idx = rockchip_vpu981_get_frame_index(ctx, frame->primary_ref_frame);
+   790	
+   791			if (idx >= 0) {
+   792				dma_addr_t luma_addr, mv_addr = 0;
+   793				struct hantro_decoded_buffer *seg;
+   794				size_t mv_offset = rockchip_vpu981_av1_dec_chroma_size(ctx);
+   795	
+   796				seg = vb2_to_hantro_decoded_buf(&av1_dec->frame_refs[idx].vb2_ref->vb2_buf);
+   797				luma_addr = hantro_get_dec_buf_addr(ctx, &seg->base.vb.vb2_buf);
+   798				mv_addr = luma_addr + mv_offset;
+   799	
+   800				hantro_write_addr(vpu, AV1_SEGMENTATION, mv_addr);
+   801				hantro_reg_write(vpu, &av1_use_temporal3_mvs, 1);
+   802			}
+   803		}
+   804	
+   805		hantro_reg_write(vpu, &av1_segment_temp_upd_e,
+   806				 !!(seg->flags & V4L2_AV1_SEGMENTATION_FLAG_TEMPORAL_UPDATE));
+   807		hantro_reg_write(vpu, &av1_segment_upd_e,
+   808				 !!(seg->flags & V4L2_AV1_SEGMENTATION_FLAG_UPDATE_MAP));
+   809		hantro_reg_write(vpu, &av1_segment_e,
+   810				 !!(seg->flags & V4L2_AV1_SEGMENTATION_FLAG_ENABLED));
+   811	
+   812		hantro_reg_write(vpu, &av1_error_resilient,
+   813				 !!(frame->flags & V4L2_AV1_FRAME_FLAG_ERROR_RESILIENT_MODE));
+   814	
+   815		if (IS_INTRA(frame->frame_type) ||
+   816		    !!(frame->flags & V4L2_AV1_FRAME_FLAG_ERROR_RESILIENT_MODE)) {
+   817			hantro_reg_write(vpu, &av1_use_temporal3_mvs, 0);
+   818		}
+   819	
+   820		if (seg->flags & V4L2_AV1_SEGMENTATION_FLAG_ENABLED) {
+   821			int s;
+   822	
+   823			for (s = 0; s < V4L2_AV1_MAX_SEGMENTS; s++) {
+   824				if (seg->feature_enabled[s] &
+   825				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_ALT_Q)) {
+   826					segval[s][V4L2_AV1_SEG_LVL_ALT_Q] =
+   827					    clamp(abs(seg->feature_data[s][V4L2_AV1_SEG_LVL_ALT_Q]),
+   828						  0, 255);
+   829					segsign |=
+   830						(seg->feature_data[s][V4L2_AV1_SEG_LVL_ALT_Q] < 0) << s;
+   831				}
+   832	
+   833				if (seg->feature_enabled[s] &
+   834				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_ALT_LF_Y_V))
+   835					segval[s][V4L2_AV1_SEG_LVL_ALT_LF_Y_V] =
+   836						clamp(abs(seg->feature_data[s][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]),
+   837						      -63, 63);
+   838	
+   839				if (seg->feature_enabled[s] &
+   840				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_ALT_LF_Y_H))
+   841					segval[s][V4L2_AV1_SEG_LVL_ALT_LF_Y_H] =
+   842					    clamp(abs(seg->feature_data[s][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]),
+   843						  -63, 63);
+   844	
+   845				if (seg->feature_enabled[s] &
+   846				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_ALT_LF_U))
+   847					segval[s][V4L2_AV1_SEG_LVL_ALT_LF_U] =
+   848					    clamp(abs(seg->feature_data[s][V4L2_AV1_SEG_LVL_ALT_LF_U]),
+   849						  -63, 63);
+   850	
+   851				if (seg->feature_enabled[s] &
+   852				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_ALT_LF_V))
+   853					segval[s][V4L2_AV1_SEG_LVL_ALT_LF_V] =
+   854					    clamp(abs(seg->feature_data[s][V4L2_AV1_SEG_LVL_ALT_LF_V]),
+   855						  -63, 63);
+   856	
+   857				if (frame->frame_type && seg->feature_enabled[s] &
+   858				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_REF_FRAME))
+   859					segval[s][V4L2_AV1_SEG_LVL_REF_FRAME]++;
+   860	
+   861				if (seg->feature_enabled[s] &
+   862				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_REF_SKIP))
+   863					segval[s][V4L2_AV1_SEG_LVL_REF_SKIP] = 1;
+   864	
+   865				if (seg->feature_enabled[s] &
+   866				    V4L2_AV1_SEGMENT_FEATURE_ENABLED(V4L2_AV1_SEG_LVL_REF_GLOBALMV))
+   867					segval[s][V4L2_AV1_SEG_LVL_REF_GLOBALMV] = 1;
+   868			}
+   869		}
+   870	
+   871		for (i = 0; i < V4L2_AV1_MAX_SEGMENTS; i++) {
+   872			for (j = 0; j < V4L2_AV1_SEG_LVL_MAX; j++) {
+   873				if (seg->feature_enabled[i]
+   874				    & V4L2_AV1_SEGMENT_FEATURE_ENABLED(j)) {
+   875					preskip_segid |= (j >= V4L2_AV1_SEG_LVL_REF_FRAME);
+   876					last_active_seg = max(i, last_active_seg);
+   877				}
+   878			}
+   879		}
+   880	
+   881		hantro_reg_write(vpu, &av1_last_active_seg, last_active_seg);
+   882		hantro_reg_write(vpu, &av1_preskip_segid, preskip_segid);
+   883	
+   884		hantro_reg_write(vpu, &av1_seg_quant_sign, segsign);
+   885	
+   886		/* Write QP, filter level, ref frame and skip for every segment */
+   887		hantro_reg_write(vpu, &av1_quant_seg0,
+   888				 segval[0][V4L2_AV1_SEG_LVL_ALT_Q]);
+   889		hantro_reg_write(vpu, &av1_filt_level_delta0_seg0,
+   890				 segval[0][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   891		hantro_reg_write(vpu, &av1_filt_level_delta1_seg0,
+   892				 segval[0][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   893		hantro_reg_write(vpu, &av1_filt_level_delta2_seg0,
+   894				 segval[0][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   895		hantro_reg_write(vpu, &av1_filt_level_delta3_seg0,
+   896				 segval[0][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   897		hantro_reg_write(vpu, &av1_refpic_seg0,
+   898				 segval[0][V4L2_AV1_SEG_LVL_REF_FRAME]);
+   899		hantro_reg_write(vpu, &av1_skip_seg0,
+   900				 segval[0][V4L2_AV1_SEG_LVL_REF_SKIP]);
+   901		hantro_reg_write(vpu, &av1_global_mv_seg0,
+   902				 segval[0][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+   903	
+   904		hantro_reg_write(vpu, &av1_quant_seg1,
+   905				 segval[1][V4L2_AV1_SEG_LVL_ALT_Q]);
+   906		hantro_reg_write(vpu, &av1_filt_level_delta0_seg1,
+   907				 segval[1][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   908		hantro_reg_write(vpu, &av1_filt_level_delta1_seg1,
+   909				 segval[1][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   910		hantro_reg_write(vpu, &av1_filt_level_delta2_seg1,
+   911				 segval[1][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   912		hantro_reg_write(vpu, &av1_filt_level_delta3_seg1,
+   913				 segval[1][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   914		hantro_reg_write(vpu, &av1_refpic_seg1,
+   915				 segval[1][V4L2_AV1_SEG_LVL_REF_FRAME]);
+   916		hantro_reg_write(vpu, &av1_skip_seg1,
+   917				 segval[1][V4L2_AV1_SEG_LVL_REF_SKIP]);
+   918		hantro_reg_write(vpu, &av1_global_mv_seg1,
+   919				 segval[1][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+   920	
+   921		hantro_reg_write(vpu, &av1_quant_seg2,
+   922				 segval[2][V4L2_AV1_SEG_LVL_ALT_Q]);
+   923		hantro_reg_write(vpu, &av1_filt_level_delta0_seg2,
+   924				 segval[2][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   925		hantro_reg_write(vpu, &av1_filt_level_delta1_seg2,
+   926				 segval[2][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   927		hantro_reg_write(vpu, &av1_filt_level_delta2_seg2,
+   928				 segval[2][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   929		hantro_reg_write(vpu, &av1_filt_level_delta3_seg2,
+   930				 segval[2][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   931		hantro_reg_write(vpu, &av1_refpic_seg2,
+   932				 segval[2][V4L2_AV1_SEG_LVL_REF_FRAME]);
+   933		hantro_reg_write(vpu, &av1_skip_seg2,
+   934				 segval[2][V4L2_AV1_SEG_LVL_REF_SKIP]);
+   935		hantro_reg_write(vpu, &av1_global_mv_seg2,
+   936				 segval[2][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+   937	
+   938		hantro_reg_write(vpu, &av1_quant_seg3,
+   939				 segval[3][V4L2_AV1_SEG_LVL_ALT_Q]);
+   940		hantro_reg_write(vpu, &av1_filt_level_delta0_seg3,
+   941				 segval[3][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   942		hantro_reg_write(vpu, &av1_filt_level_delta1_seg3,
+   943				 segval[3][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   944		hantro_reg_write(vpu, &av1_filt_level_delta2_seg3,
+   945				 segval[3][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   946		hantro_reg_write(vpu, &av1_filt_level_delta3_seg3,
+   947				 segval[3][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   948		hantro_reg_write(vpu, &av1_refpic_seg3,
+   949				 segval[3][V4L2_AV1_SEG_LVL_REF_FRAME]);
+   950		hantro_reg_write(vpu, &av1_skip_seg3,
+   951				 segval[3][V4L2_AV1_SEG_LVL_REF_SKIP]);
+   952		hantro_reg_write(vpu, &av1_global_mv_seg3,
+   953				 segval[3][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+   954	
+   955		hantro_reg_write(vpu, &av1_quant_seg4,
+   956				 segval[4][V4L2_AV1_SEG_LVL_ALT_Q]);
+   957		hantro_reg_write(vpu, &av1_filt_level_delta0_seg4,
+   958				 segval[4][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   959		hantro_reg_write(vpu, &av1_filt_level_delta1_seg4,
+   960				 segval[4][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   961		hantro_reg_write(vpu, &av1_filt_level_delta2_seg4,
+   962				 segval[4][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   963		hantro_reg_write(vpu, &av1_filt_level_delta3_seg4,
+   964				 segval[4][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   965		hantro_reg_write(vpu, &av1_refpic_seg4,
+   966				 segval[4][V4L2_AV1_SEG_LVL_REF_FRAME]);
+   967		hantro_reg_write(vpu, &av1_skip_seg4,
+   968				 segval[4][V4L2_AV1_SEG_LVL_REF_SKIP]);
+   969		hantro_reg_write(vpu, &av1_global_mv_seg4,
+   970				 segval[4][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+   971	
+   972		hantro_reg_write(vpu, &av1_quant_seg5,
+   973				 segval[5][V4L2_AV1_SEG_LVL_ALT_Q]);
+   974		hantro_reg_write(vpu, &av1_filt_level_delta0_seg5,
+   975				 segval[5][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   976		hantro_reg_write(vpu, &av1_filt_level_delta1_seg5,
+   977				 segval[5][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   978		hantro_reg_write(vpu, &av1_filt_level_delta2_seg5,
+   979				 segval[5][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   980		hantro_reg_write(vpu, &av1_filt_level_delta3_seg5,
+   981				 segval[5][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   982		hantro_reg_write(vpu, &av1_refpic_seg5,
+   983				 segval[5][V4L2_AV1_SEG_LVL_REF_FRAME]);
+   984		hantro_reg_write(vpu, &av1_skip_seg5,
+   985				 segval[5][V4L2_AV1_SEG_LVL_REF_SKIP]);
+   986		hantro_reg_write(vpu, &av1_global_mv_seg5,
+   987				 segval[5][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+   988	
+   989		hantro_reg_write(vpu, &av1_quant_seg6,
+   990				 segval[6][V4L2_AV1_SEG_LVL_ALT_Q]);
+   991		hantro_reg_write(vpu, &av1_filt_level_delta0_seg6,
+   992				 segval[6][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+   993		hantro_reg_write(vpu, &av1_filt_level_delta1_seg6,
+   994				 segval[6][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+   995		hantro_reg_write(vpu, &av1_filt_level_delta2_seg6,
+   996				 segval[6][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+   997		hantro_reg_write(vpu, &av1_filt_level_delta3_seg6,
+   998				 segval[6][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+   999		hantro_reg_write(vpu, &av1_refpic_seg6,
+  1000				 segval[6][V4L2_AV1_SEG_LVL_REF_FRAME]);
+  1001		hantro_reg_write(vpu, &av1_skip_seg6,
+  1002				 segval[6][V4L2_AV1_SEG_LVL_REF_SKIP]);
+  1003		hantro_reg_write(vpu, &av1_global_mv_seg6,
+  1004				 segval[6][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+  1005	
+  1006		hantro_reg_write(vpu, &av1_quant_seg7,
+  1007				 segval[7][V4L2_AV1_SEG_LVL_ALT_Q]);
+  1008		hantro_reg_write(vpu, &av1_filt_level_delta0_seg7,
+  1009				 segval[7][V4L2_AV1_SEG_LVL_ALT_LF_Y_V]);
+  1010		hantro_reg_write(vpu, &av1_filt_level_delta1_seg7,
+  1011				 segval[7][V4L2_AV1_SEG_LVL_ALT_LF_Y_H]);
+  1012		hantro_reg_write(vpu, &av1_filt_level_delta2_seg7,
+  1013				 segval[7][V4L2_AV1_SEG_LVL_ALT_LF_U]);
+  1014		hantro_reg_write(vpu, &av1_filt_level_delta3_seg7,
+  1015				 segval[7][V4L2_AV1_SEG_LVL_ALT_LF_V]);
+  1016		hantro_reg_write(vpu, &av1_refpic_seg7,
+  1017				 segval[7][V4L2_AV1_SEG_LVL_REF_FRAME]);
+  1018		hantro_reg_write(vpu, &av1_skip_seg7,
+  1019				 segval[7][V4L2_AV1_SEG_LVL_REF_SKIP]);
+  1020		hantro_reg_write(vpu, &av1_global_mv_seg7,
+  1021				 segval[7][V4L2_AV1_SEG_LVL_REF_GLOBALMV]);
+> 1022	}
+  1023	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
