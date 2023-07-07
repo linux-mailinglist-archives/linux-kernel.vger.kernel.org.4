@@ -2,260 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AED774AC77
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC14374AC80
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjGGIFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        id S232679AbjGGIHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjGGIFH (ORCPT
+        with ESMTP id S231281AbjGGIHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:05:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6194E1BD2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688717104; x=1720253104;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cwyIneQDYmXvAFfgDqQkbLNXcw1T1FsKuFKsibrJ0v0=;
-  b=kCCIGBeKtP4KE9P+hB/tJIjN4sdZGhTbv50MIZEKMl2cZ3wBDTk5lWXP
-   KDXD08lJ5IjH225EqqNDXTfaEcM8hrWMIcrf52nfebltWHKsEweh6/+g9
-   2E1z+TL4ePQDI0icYX0enM1imqIKCqop5LFKWWvIvNPpXTg7NI5HqB1bS
-   NK5TRN2MmfYUhTP65Ex4R9OugKdjN35zxVoyYU7EjgKziIDddM2dstYmX
-   YXud+T+zxmNQiGuVK096uQK2wb6mASrHOl62OZeG+YCZgnzEVmnsqN0CG
-   tWqnQagDiEgxxNdPCyQv5EUftP8n7LuS6p1I4ThpWLtHMJBsJq/H2frzt
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="362700392"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="362700392"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 01:05:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="713923393"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="713923393"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by orsmga007.jf.intel.com with ESMTP; 07 Jul 2023 01:05:01 -0700
-From:   kah.jing.lee@intel.com
-To:     dinguyen@kernel.org
-Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
-        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>
-Subject: [PATCH 2/2 RESEND] firmware: stratix10-rsu: query spt addresses
-Date:   Fri,  7 Jul 2023 16:03:50 +0800
-Message-Id: <20230707080349.1723083-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230707080112.1722827-1-kah.jing.lee@intel.com>
-References: <20230707080112.1722827-1-kah.jing.lee@intel.com>
+        Fri, 7 Jul 2023 04:07:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9ADD1991
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688717221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aT1O9BlEBxtT7uHpuo6KAf/C4BqVJdHsv1uVQtgiXH4=;
+        b=KEnB3AyUaF8N03SyXjCm/3lSHrSSLG5zTMnPJO5HtzcufGbBhRKwdMd/iNX244U/nu79Qs
+        3Ac5JUpoARLM9yOTMCxP/qnRBlk90vejhN9ds1BBOAM47zigD8FfJRVjxc43oKWkOOHAm7
+        CLZCsnYYzdr9f6sAUrc/hhqQmOML2MI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-395-awU6C2hJPu-5QVduIKa6ZA-1; Fri, 07 Jul 2023 04:06:57 -0400
+X-MC-Unique: awU6C2hJPu-5QVduIKa6ZA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2D46A10504AA;
+        Fri,  7 Jul 2023 08:06:57 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 257FE1121330;
+        Fri,  7 Jul 2023 08:06:55 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000554b8205ffdea64e@google.com>
+References: <000000000000554b8205ffdea64e@google.com>
+To:     syzbot <syzbot+689ec3afb1ef07b766b2@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, adilger.kernel@dilger.ca,
+        boqun.feng@gmail.com, herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, longman@redhat.com, mingo@redhat.com,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu, will@kernel.org
+Subject: Re: [syzbot] [ext4?] general protection fault in ext4_finish_bio
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2224783.1688717214.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 07 Jul 2023 09:06:54 +0100
+Message-ID: <2224784.1688717214@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Radu Bacrau <radu.bacrau@intel.com>
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t main
 
-Extend Intel Remote System Update (RSU) driver to get SPT
-(Sub-Partition Table) addresses. The query SPT address can be used
-to determine if the RSU QSPI layout is 32kB or 64kB aligned.
-The alignment can be determined by minus the upper with the lower of
-the SPT addresses.
+    crypto: algif/hash: Fix race between MORE and non-MORE sends
+    =
 
-This patch depends on patch:
-firmware: stratix10-svc: Generic Mailbox Command
+    The 'MSG_MORE' state of the previous sendmsg() is fetched without the
+    socket lock held, so two sendmsg calls can race.  This can be seen wit=
+h a
+    large sendfile() as that now does a series of sendmsg() calls, and if =
+a
+    write() comes in on the same socket at an inopportune time, it can fli=
+p the
+    state.
+    =
 
-Signed-off-by: Radu Bacrau <radu.bacrau@intel.com>
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
----
- drivers/firmware/stratix10-rsu.c | 100 ++++++++++++++++++++++++++++++-
- 1 file changed, 99 insertions(+), 1 deletion(-)
+    Fix this by moving the fetch of ctx->more inside the socket lock.
+    =
 
-diff --git a/drivers/firmware/stratix10-rsu.c b/drivers/firmware/stratix10-rsu.c
-index e51c95f8d445..9f82d5147890 100644
---- a/drivers/firmware/stratix10-rsu.c
-+++ b/drivers/firmware/stratix10-rsu.c
-@@ -34,6 +34,10 @@
- #define INVALID_RETRY_COUNTER		0xFF
- #define INVALID_DCMF_VERSION		0xFF
- #define INVALID_DCMF_STATUS		0xFFFFFFFF
-+#define INVALID_SPT_ADDRESS		0x0
+    Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+    Reported-by: syzbot+689ec3afb1ef07b766b2@syzkaller.appspotmail.com
+    Link: https://lore.kernel.org/r/000000000000554b8205ffdea64e@google.co=
+m/
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: Herbert Xu <herbert@gondor.apana.org.au>
+    cc: Paolo Abeni <pabeni@redhat.com>
+    cc: "David S. Miller" <davem@davemloft.net>
+    cc: Eric Dumazet <edumazet@google.com>
+    cc: Jakub Kicinski <kuba@kernel.org>
+    cc: linux-crypto@vger.kernel.org
+    cc: netdev@vger.kernel.org
+
+diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
+index 0ab43e149f0e..82c44d4899b9 100644
+--- a/crypto/algif_hash.c
++++ b/crypto/algif_hash.c
+@@ -68,13 +68,15 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ 	struct hash_ctx *ctx =3D ask->private;
+ 	ssize_t copied =3D 0;
+ 	size_t len, max_pages, npages;
+-	bool continuing =3D ctx->more, need_init =3D false;
++	bool continuing, need_init =3D false;
+ 	int err;
+ =
+
+ 	max_pages =3D min_t(size_t, ALG_MAX_PAGES,
+ 			  DIV_ROUND_UP(sk->sk_sndbuf, PAGE_SIZE));
+ =
+
+ 	lock_sock(sk);
++	continuing =3D ctx->more;
 +
-+#define RSU_GET_SPT_CMD			0x5A
-+#define RSU_GET_SPT_RESP_LEN		(4 * sizeof(unsigned int))
- 
- typedef void (*rsu_callback)(struct stratix10_svc_client *client,
- 			     struct stratix10_svc_cb_data *data);
-@@ -59,6 +63,9 @@ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
-  * @dcmf_status.dcmf3: dcmf3 status
-  * @retry_counter: the current image's retry counter
-  * @max_retry: the preset max retry value
-+ * @spt0_address: address of spt0
-+ * @spt1_address: address of spt1
-+ * @get_spt_response_buf: response from sdm for get_spt command
-  */
- struct stratix10_rsu_priv {
- 	struct stratix10_svc_chan *chan;
-@@ -90,6 +97,11 @@ struct stratix10_rsu_priv {
- 
- 	unsigned int retry_counter;
- 	unsigned int max_retry;
-+
-+	unsigned long spt0_address;
-+	unsigned long spt1_address;
-+
-+	unsigned int *get_spt_response_buf;
- };
- 
- /**
-@@ -259,6 +271,36 @@ static void rsu_dcmf_status_callback(struct stratix10_svc_client *client,
- 	complete(&priv->completion);
- }
- 
-+static void rsu_get_spt_callback(struct stratix10_svc_client *client,
-+				     struct stratix10_svc_cb_data *data)
-+{
-+	struct stratix10_rsu_priv *priv = client->priv;
-+	unsigned long *mbox_err = (unsigned long *)data->kaddr1;
-+	unsigned long *resp_len = (unsigned long *)data->kaddr2;
-+
-+	if ((data->status != BIT(SVC_STATUS_OK)) || (*mbox_err) ||
-+	    (*resp_len != RSU_GET_SPT_RESP_LEN))
-+		goto error;
-+
-+	priv->spt0_address = priv->get_spt_response_buf[0];
-+	priv->spt0_address <<= 32;
-+	priv->spt0_address |= priv->get_spt_response_buf[1];
-+
-+	priv->spt1_address = priv->get_spt_response_buf[2];
-+	priv->spt1_address <<= 32;
-+	priv->spt1_address |= priv->get_spt_response_buf[3];
-+
-+	goto complete;
-+
-+error:
-+	dev_err(client->dev, "failed to get SPTs\n");
-+
-+complete:
-+	stratix10_svc_free_memory(priv->chan, priv->get_spt_response_buf);
-+	priv->get_spt_response_buf = NULL;
-+	complete(&priv->completion);
-+}
-+
- /**
-  * rsu_send_msg() - send a message to Intel service layer
-  * @priv: pointer to rsu private data
-@@ -288,6 +330,14 @@ static int rsu_send_msg(struct stratix10_rsu_priv *priv,
- 	if (arg)
- 		msg.arg[0] = arg;
- 
-+	if (command == COMMAND_MBOX_SEND_CMD) {
-+		msg.arg[1] = 0;
-+		msg.payload = NULL;
-+		msg.payload_length = 0;
-+		msg.payload_output = priv->get_spt_response_buf;
-+		msg.payload_length_output = RSU_GET_SPT_RESP_LEN;
-+	}
-+
- 	ret = stratix10_svc_send(priv->chan, &msg);
- 	if (ret < 0)
- 		goto status_done;
-@@ -572,6 +622,34 @@ static ssize_t notify_store(struct device *dev,
- 	return count;
- }
- 
-+static ssize_t spt0_address_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->spt0_address == INVALID_SPT_ADDRESS)
-+		return -EIO;
-+
-+	return scnprintf(buf, PAGE_SIZE, "0x%08lx\n", priv->spt0_address);
-+}
-+
-+static ssize_t spt1_address_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->spt1_address == INVALID_SPT_ADDRESS)
-+		return -EIO;
-+
-+	return scnprintf(buf, PAGE_SIZE, "0x%08lx\n", priv->spt1_address);
-+}
-+
- static DEVICE_ATTR_RO(current_image);
- static DEVICE_ATTR_RO(fail_image);
- static DEVICE_ATTR_RO(state);
-@@ -590,6 +668,8 @@ static DEVICE_ATTR_RO(dcmf2_status);
- static DEVICE_ATTR_RO(dcmf3_status);
- static DEVICE_ATTR_WO(reboot_image);
- static DEVICE_ATTR_WO(notify);
-+static DEVICE_ATTR_RO(spt0_address);
-+static DEVICE_ATTR_RO(spt1_address);
- 
- static struct attribute *rsu_attrs[] = {
- 	&dev_attr_current_image.attr,
-@@ -610,6 +690,8 @@ static struct attribute *rsu_attrs[] = {
- 	&dev_attr_dcmf3_status.attr,
- 	&dev_attr_reboot_image.attr,
- 	&dev_attr_notify.attr,
-+	&dev_attr_spt0_address.attr,
-+	&dev_attr_spt1_address.attr,
- 	NULL
- };
- 
-@@ -639,11 +721,13 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 	priv->dcmf_version.dcmf1 = INVALID_DCMF_VERSION;
- 	priv->dcmf_version.dcmf2 = INVALID_DCMF_VERSION;
- 	priv->dcmf_version.dcmf3 = INVALID_DCMF_VERSION;
--	priv->max_retry = INVALID_RETRY_COUNTER;
- 	priv->dcmf_status.dcmf0 = INVALID_DCMF_STATUS;
- 	priv->dcmf_status.dcmf1 = INVALID_DCMF_STATUS;
- 	priv->dcmf_status.dcmf2 = INVALID_DCMF_STATUS;
- 	priv->dcmf_status.dcmf3 = INVALID_DCMF_STATUS;
-+	priv->max_retry = INVALID_RETRY_COUNTER;
-+	priv->spt0_address = INVALID_SPT_ADDRESS;
-+	priv->spt1_address = INVALID_SPT_ADDRESS;
- 
- 	mutex_init(&priv->lock);
- 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
-@@ -693,6 +777,20 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 		stratix10_svc_free_channel(priv->chan);
- 	}
- 
-+	priv->get_spt_response_buf =
-+		stratix10_svc_allocate_memory(priv->chan, RSU_GET_SPT_RESP_LEN);
-+
-+	if (!priv->get_spt_response_buf) {
-+		dev_err(dev, "failed to allocate get spt buffer\n");
-+	} else {
-+		int ret_val = rsu_send_msg(priv, COMMAND_MBOX_SEND_CMD,
-+				   RSU_GET_SPT_CMD, rsu_get_spt_callback);
-+		if (ret_val) {
-+			dev_err(dev, "Error, getting SPT table %i\n", ret_val);
-+			stratix10_svc_free_channel(priv->chan);
-+		}
-+	}
-+
- 	return ret;
- }
- 
--- 
-2.25.1
+ 	if (!continuing) {
+ 		/* Discard a previous request that wasn't marked MSG_MORE. */
+ 		hash_free_result(sk, ctx);
 
