@@ -2,76 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B1F74B39D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D353174B39E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbjGGPG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S233311AbjGGPGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjGGPG0 (ORCPT
+        with ESMTP id S231745AbjGGPGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:06:26 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F8BAA;
-        Fri,  7 Jul 2023 08:06:24 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1688742370t5qefwef
-Received: from linux-lab-host.localdomain ( [116.30.131.119])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 07 Jul 2023 23:06:09 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 3M0okmaRx3hzmnpwX7/mep5Hi+aL1BsPnbLb2Ne734KOZ+87748VonTMKdRIp
-        EFDKQ10JOaI9H1K/u2Yfwm8Ia6Dla25b2yBF2VOfTaGbJ/qyULz0sUU/SWH5h85TZzJwQ+a
-        ztzbh/G5rkZFJYZ4liyhe7BpLWnr+cG4Cso4RfBaWwkjZAKRX31UJCpxkIJvbOU/LUOgxD5
-        Qgl3up7OJ42WsGe4o8iGLxOPxd9rbypRPLBrFdawoixcB5WOgHOgR4cSe7KnQuCPj8OcVdY
-        +ZeJXUx7dr7R+2CsEhy7RZm+kHa23A8+dd3hyEJ1r0fouvYK1X4bs88rqWmwsePtF9ARtvj
-        XfrFvCXbpGEVTpwnrQq6gBVuH6ZDkORFuY53Ge7nNia4nbM0CqdRjoa1eF15Q==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12075169014602729724
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: [PATCH v6 13/15] selftests/nolibc: add mmap_bad test case
-Date:   Fri,  7 Jul 2023 23:05:49 +0800
-Message-Id: <fdc400ae881aa3819978d43cea7004df7b276551.1688739493.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688739492.git.falcon@tinylab.org>
-References: <cover.1688739492.git.falcon@tinylab.org>
+        Fri, 7 Jul 2023 11:06:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA3A1FE1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:06:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AF57619F1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:06:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF02C433C8;
+        Fri,  7 Jul 2023 15:06:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688742389;
+        bh=jYK2XSaPacxc90UzntYFLS4o3hAYHTTOBwjoUw67gLs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLiNirxRPGt4FJN/EmPkQBS31EKNSC6ucw1VG9g8eNXGm03GQALTl590WVSJqccGE
+         brHu0jZLSnV9msktPZC5L9jDtfe0hcVPEMzrFf1cSw/kZ69CVITgK03A4KPKTBlpZS
+         0dUXWdoEvYIMrLgFPiPyjLlwSyMqYV2Mdf5N7zMmYz0i7x7bvJWc68eMVNI8tV5rVN
+         O8+XlyKy1dqVkJx1Wj8yJYHDsJPB4Fr/Ir92Y0TkrLURTsvcIuC0gNtrcsc0NPWMSD
+         48sMklM2Scgkvdykxj+1SZFsUBV+NKnpJ6u81Hx4jJnSSmr/Zpf8NkpHlqnevugnO9
+         Z86E3TDdAKsJg==
+Date:   Fri, 7 Jul 2023 16:06:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Johan Hovold <johan@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
+Message-ID: <56aecc8d-2f6c-42c0-a13a-89c84cf53773@sirena.org.uk>
+References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
+ <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+ <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
+ <87y1jrkgdx.wl-tiwai@suse.de>
+ <3450ef1e-cb20-4242-b482-41d3d34c4564@sirena.org.uk>
+ <87wmzbkfw7.wl-tiwai@suse.de>
+ <f1041542-bd97-41d9-96b9-c6e5fef6b096@sirena.org.uk>
+ <87v8evkf3w.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tlUa9QKqH2IYfFLy"
+Content-Disposition: inline
+In-Reply-To: <87v8evkf3w.wl-tiwai@suse.de>
+X-Cookie: Victory or defeat!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The length argument of mmap() must be greater than 0, passing a zero
-length argument expects failure with -EINVAL.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 1 +
- 1 file changed, 1 insertion(+)
+--tlUa9QKqH2IYfFLy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index fde1b3c51a4a..4026772ed4c5 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -669,6 +669,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
- 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
- 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
-+		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
- 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
--- 
-2.25.1
+On Fri, Jul 07, 2023 at 03:47:47PM +0200, Takashi Iwai wrote:
+> Mark Brown wrote:
 
+> > The ASoC generic control stuff supports inverting the value prior to
+> > presentation to userspace so it's masked there (instead of writing the
+> > number userspace sees to the register we subtract the number from the
+> > maximum value and write that to the register), pulling that up further
+> > to the ALSA core might be nice I guess?
+
+> I believe yes.  Though, I'm still not sure how we can improve the
+> mismatch of dB min/max.  The dB values of those inverted controls
+> reflect the result of subtraction, no?
+
+Yes, the dB scale presented to userspace is reversed relative to the
+ordering in the registers.
+
+--tlUa9QKqH2IYfFLy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSoKe8ACgkQJNaLcl1U
+h9Ctegf/U3PWgeDMZsd7FXUxx85bNLwdSWlDpYEqHFFJypwv/2YdY32iDhvNH6OR
+9DmBkJN5P2e/DDad4QDRL7/Gwwhn4p6xl++jxf7oVpGoQDf1uh/ehNIitkwgOn6Y
+fHT5J83riAClR+lA2ZwPbe96qGARhRnO4kTCoKywefe6iQozLG/8vdEqnHx9J1rz
+1Kf1CNXM01rVA900X8vU+iKWTwnWBQszjDJH/GVlm6ymQ+TJT9i4z2e4beGJJNGR
+bR7iMU002qW3Q2z1ZPEtESHw/6bGqna8UdRx71Nmrl7KB9nHuMGqOYYYSjwoPGld
+ZgsBB4NGUfGWHbiJVbBwYwWZ42HuWw==
+=cnPV
+-----END PGP SIGNATURE-----
+
+--tlUa9QKqH2IYfFLy--
