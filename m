@@ -2,147 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A246674B881
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF50274B883
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjGGVHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S229887AbjGGVJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGGVHd (ORCPT
+        with ESMTP id S229471AbjGGVJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:07:33 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECBB2701;
-        Fri,  7 Jul 2023 14:07:15 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7869bcee569so86365439f.0;
-        Fri, 07 Jul 2023 14:07:15 -0700 (PDT)
+        Fri, 7 Jul 2023 17:09:54 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56CC1BD2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:09:52 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c5cea5773e8so2626574276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688764192; x=1691356192;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZTrWAIUayaBHwDRCQHgGm0qH9ucv7JkIRMB8GVQtyc8=;
+        b=pmsOikxbpPPKi6SHT/ZT9CcQCmKqH1TPbAL1YPRN+/EvfSYqZWCf7863xGKzcQw3sc
+         nGY1ZvpN6V73iMT5yLIJSRHdqLgxPw7aJYWkMGrfhzlOyvibq/HcsR9w/z4z/VyaZgfp
+         n91L4Uj89hsFLFnir4XCaN/Z43f4e72guBYeLJrmAbIU1n4ebxgu/frUIpm4/JM2GMSR
+         ac/7WzQi4sFjz0Kq6KC8XUhUlg+jcGnjcx5QuqG/cGR+5WgczLyULdXlRnx//5JSW+Hl
+         ZEmlEvSZcKJg4Loxr8JjWRoh0Iz1sAtEdqzc6s3cCGH4jMGc1xAdc2VL8/SEYbnBCp8K
+         Rppw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688764035; x=1691356035;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w5ZfCjJKzY2MaRBcREgAL2YyH2jMaEbxPu3Qk3ZLyVc=;
-        b=EFwgBUqQM7RBuMaXTfRgmh/vGuKHwkGtb1KebsTftRFyCfXd9i06zzEwHtEF55T4bL
-         Il7nN2Woe1421sG0bppQusf2m4Va5/JESAWJn1ioy02TXdzQF3oXeHsmneqH/qZiW3gy
-         7fU/zaGLyfyhSrwUhIQzaKmHZIj+tk74EOCOFQy5Id/4HOF3jxYI+Z1EfwY2w4knn/4i
-         mQDrMWQhjWEo/f5d497m4of1dJgCfHsVlYLaTfII6EwEeNM5rz8IUc2+4uzeFbcDnLHD
-         Vi79yJsMCXkVtuAe2c4trnspST2IuvQFqQxoJQTwUfjEgNerdWi918vGN3JjbffFfK1U
-         vbvQ==
-X-Gm-Message-State: ABy/qLaNgDy4DK1eIY/FO7I/0sM5mDhooQBvu3PJF2Wt4b/UlOueEI47
-        tJeOGqZvfbX7BeJuwmU0LUtsy6vzUA==
-X-Google-Smtp-Source: APBJJlF50Cr959QZ4ozRIJVi+JUKZGlsU73N95mY4+UI42bbpOzuIeWVBuq8MTn014rQxidfp6PYaQ==
-X-Received: by 2002:a5d:9451:0:b0:783:72b9:ed67 with SMTP id x17-20020a5d9451000000b0078372b9ed67mr6278929ior.10.1688764034964;
-        Fri, 07 Jul 2023 14:07:14 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w24-20020a6bf018000000b0076c7a2f0f41sm1571577ioc.46.2023.07.07.14.07.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 14:07:14 -0700 (PDT)
-Received: (nullmailer pid 869315 invoked by uid 1000);
-        Fri, 07 Jul 2023 21:07:12 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Wei Xu <xuwei5@hisilicon.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH] dt-bindings: arm: hisilicon,cpuctrl: Merge "hisilicon,hix5hd2-clock" into parent binding
-Date:   Fri,  7 Jul 2023 15:07:00 -0600
-Message-Id: <20230707210700.869060-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688764192; x=1691356192;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTrWAIUayaBHwDRCQHgGm0qH9ucv7JkIRMB8GVQtyc8=;
+        b=XqP0tKXqsv0OxO9eMcAXjbcdyXodipkLGnIjQ9YkNmeCZw3+1Ax+SyaltWEXAxjU+u
+         KG64ocAufdYFJurPmYt6omHtIWmPXR8i/69J7vW5bkaBP89ZRZTlhXNkLxn82p3ubv5u
+         kqwEsceUVxW59XL1b7TLJyQWoeX7Bx0u4sPOIXtO1G99TTpL6jPSwc0ZkjZ6SzlsvS0R
+         cDwYpWBlfVn94/mY8p76d0J3RV+bHG58iz91C+R5Smmxg0LFb/ypuzfHhG0y5cfWWi1P
+         2S8+v0uyAWZrnYGTwhZH/wE/FK7BSpGulwjQPLqW7oktN2C9vPduEzPG82zCmysjv/DP
+         zZ1w==
+X-Gm-Message-State: ABy/qLbsQcJg4Ml/BWdvHsMOiSCAs2TL/h5eR63Y6mOiaxN8PFM6RKVL
+        oDySo8H3yIhwygqebsUc2m1zKOzwHg==
+X-Google-Smtp-Source: APBJJlEPnJyZGvM2uGKYUD1nOk5qT6VODaXbHCvI2N2eVZ52/OvsSLtf0T7C4cYLKR9etuF/AgRHl9cpLA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a25:ae8a:0:b0:c5f:85f5:a0e5 with SMTP id
+ b10-20020a25ae8a000000b00c5f85f5a0e5mr56453ybj.5.1688764192066; Fri, 07 Jul
+ 2023 14:09:52 -0700 (PDT)
+Date:   Fri,  7 Jul 2023 21:09:38 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230707210947.1208717-1-rmoar@google.com>
+Subject: [RFC v2 0/9] kunit: Add test attributes API
+From:   Rae Moar <rmoar@google.com>
+To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        brendan.higgins@linux.dev
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "hisilicon,hix5hd2-clock" is simple enough to just add it into its
-parent node binding, "hisilicon,cpuctrl".
+Hello everyone,
 
-This fixes a warning that "hisilicon,hix5hd2-clock" is missing a schema.
+This is an RFC patch series to propose the addition of a test attributes
+framework to KUnit.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../arm/hisilicon/controller/cpuctrl.yaml     | 20 +++++++++++++
- .../bindings/clock/hix5hd2-clock.txt          | 30 -------------------
- 2 files changed, 20 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/hix5hd2-clock.txt
+There has been interest in filtering out "slow" KUnit tests. Most notably,
+a new config, CONFIG_MEMCPY_SLOW_KUNIT_TEST, has been added to exclude a
+particularly slow memcpy test
+(https://lore.kernel.org/all/20230118200653.give.574-kees@kernel.org/).
 
-diff --git a/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml b/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml
-index 528dad4cde3c..4fc208d3995e 100644
---- a/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml
-+++ b/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml
-@@ -29,6 +29,26 @@ properties:
- 
-   ranges: true
- 
-+patternProperties:
-+  "^clock@[0-9a-f]+$":
-+    type: object
-+    additionalProperties: false
-+
-+    properties:
-+      compatible:
-+        const: hisilicon,hix5hd2-clock
-+
-+      reg:
-+        maxItems: 1
-+
-+      "#clock-cells":
-+        const: 1
-+
-+    required:
-+      - compatible
-+      - reg
-+      - "#clock-cells"
-+
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/clock/hix5hd2-clock.txt b/Documentation/devicetree/bindings/clock/hix5hd2-clock.txt
-deleted file mode 100644
-index 4733e58e491b..000000000000
---- a/Documentation/devicetree/bindings/clock/hix5hd2-clock.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--* Hisilicon Hix5hd2 Clock Controller
--
--The hix5hd2 clock controller generates and supplies clock to various
--controllers within the hix5hd2 SoC.
--
--Required Properties:
--
--- compatible: should be "hisilicon,hix5hd2-clock"
--- reg: Address and length of the register set
--- #clock-cells: Should be <1>
--
--Each clock is assigned an identifier and client nodes use this identifier
--to specify the clock which they consume.
--
--All these identifier could be found in <dt-bindings/clock/hix5hd2-clock.h>.
--
--Examples:
--	clock: clock@f8a22000 {
--		compatible = "hisilicon,hix5hd2-clock";
--		reg = <0xf8a22000 0x1000>;
--		#clock-cells = <1>;
--	};
--
--	uart0: uart@f8b00000 {
--		compatible = "arm,pl011", "arm,primecell";
--		reg = <0xf8b00000 0x1000>;
--		interrupts = <0 49 4>;
--		clocks = <&clock HIX5HD2_FIXED_83M>;
--		clock-names = "apb_pclk";
--	};
+This proposed attributes framework would be used to save and access test
+associated data, including whether a test is slow. These attributes would
+be reportable (via KTAP and command line output) and some will be
+filterable.
+
+This framework is designed to allow for the addition of other attributes in
+the future. These attributes could include whether the test is flaky,
+associated test files, etc.
+
+This is the second version of the RFC I have added a few big changes:
+- Change method for inputting filters to allow for spaces in filtering
+  values
+- Add option to skip filtered tests instead of not run or show them with
+  the --filter_skip flag
+- Separate the new feature to list tests and their attributes into both
+  --list_tests (lists just tests) and --list_tests_attr (lists all)
+- Add new attribute to store module name associated with test
+- Add Tests to executor_test.c
+- Add Documentation
+- A few small changes to code commented on previously
+
+I would love to hear about the new features. If the series seems overall
+good I will send out the next version as an official patch series.
+
+Thanks!
+Rae
+
+Rae Moar (9):
+  kunit: Add test attributes API structure
+  kunit: Add speed attribute
+  kunit: Add module attribute
+  kunit: Add ability to filter attributes
+  kunit: tool: Add command line interface to filter and report
+    attributes
+  kunit: memcpy: Mark tests as slow using test attributes
+  kunit: time: Mark test as slow using test attributes
+  kunit: add tests for filtering attributes
+  kunit: Add documentation of KUnit test attributes
+
+ .../dev-tools/kunit/running_tips.rst          | 163 +++++++
+ include/kunit/attributes.h                    |  50 +++
+ include/kunit/test.h                          |  68 ++-
+ kernel/time/time_test.c                       |   2 +-
+ lib/Kconfig.debug                             |   3 +
+ lib/kunit/Makefile                            |   3 +-
+ lib/kunit/attributes.c                        | 406 ++++++++++++++++++
+ lib/kunit/executor.c                          | 115 ++++-
+ lib/kunit/executor_test.c                     | 119 ++++-
+ lib/kunit/kunit-example-test.c                |   9 +
+ lib/kunit/test.c                              |  27 +-
+ lib/memcpy_kunit.c                            |   8 +-
+ tools/testing/kunit/kunit.py                  |  80 +++-
+ tools/testing/kunit/kunit_kernel.py           |   6 +-
+ tools/testing/kunit/kunit_tool_test.py        |  39 +-
+ 15 files changed, 1022 insertions(+), 76 deletions(-)
+ create mode 100644 include/kunit/attributes.h
+ create mode 100644 lib/kunit/attributes.c
+
+
+base-commit: 2e66833579ed759d7b7da1a8f07eb727ec6e80db
 -- 
-2.40.1
+2.41.0.255.g8b1d071c50-goog
 
