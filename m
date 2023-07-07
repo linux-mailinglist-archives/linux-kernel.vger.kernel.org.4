@@ -2,217 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81F974B146
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC5674B0C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjGGMrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S232566AbjGGM20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjGGMrk (ORCPT
+        with ESMTP id S231492AbjGGM2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:47:40 -0400
-X-Greylist: delayed 1149 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Jul 2023 05:47:25 PDT
-Received: from exhmta09.bpe.bigpond.com (exhmta09.bpe.bigpond.com [203.42.40.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0A311B;
-        Fri,  7 Jul 2023 05:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=bigpond.com
-        ; s=202303; h=Content-Type:MIME-Version:Date:Message-ID:From:To:Subject;
-        bh=vzhRXbz2UpgobFDiFaVPq9YFwfbsEXh4XG75B7YpJXc=; b=qTv3AgblbGiUrJdMGQ8MOG0c6b
-        EhUB3ISV1ZC4ytcVyJuawAcbHzlrbOBco+B9TwHa4XOAUS4ExfOAO3JC8lqXGkx9MgOxDxJ+G6H0i
-        teztreZRKnIvIUUx0Qo+7QTIHCDyxt7LbZUCrewfILxmZzJ9343bybxayeeD1dTpOjEqgen59OTrt
-        Z5BdzY3b/1apJ5KKP44EUDArYXr6FxftPCYHBzOXQCps5hajpSCY6kKPsLOgJrwqSy8gDIj3FtaPi
-        SJDNJqRyPp+RogcmYj2l1IIFBNfpA1uXe1Jg6HirCQHNdiwz3yN0YevAk25DHQ6e5wkgYeoyNjybe
-        5c9aJtsw==;
-Received: from exhprdcmr02
-         by exhprdomr09 with esmtp
-         (envelope-from <bids.7405@bigpond.com>)
-         id 1qHkZK-0003Kj-1l
-         for ;
-        Fri, 07 Jul 2023 22:28:14 +1000
-Received: from [101.191.138.223] (helo=[10.0.0.38])
-         by exhprdcmr02 with esmtpa
-        (envelope-from <bids.7405@bigpond.com>)
-        id 1qHkZL-000H1k-2K;
-        Fri, 07 Jul 2023 22:28:14 +1000
-Subject: Re: Fwd: 3 more broken Zaurii - SL-5600, A300, C700
-To:     Dave Jones <davej@codemonkey.org.uk>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
- <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
- <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
- <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
-From:   Ross Maynard <bids.7405@bigpond.com>
-Message-ID: <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
-Date:   Fri, 7 Jul 2023 22:28:11 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Fri, 7 Jul 2023 08:28:24 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6282172B;
+        Fri,  7 Jul 2023 05:28:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3143b88faebso1966859f8f.3;
+        Fri, 07 Jul 2023 05:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688732902; x=1691324902;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rJA6+/g6hyQtclq9OA+60uWzgmpTlAiLIyqyQBByGJo=;
+        b=atGuYPEU5d8ttk2i/U9gnbpEE4VH7IYHznzcHE2YFGDaXUSXZPbWWiSKJo9smMCcm9
+         QanNiFXqWkMHtvwoAfquB56dS1SLhkBJKXkysGit8pu6kdhw4mjeHwiAXcJVl2QYJFwV
+         LuktSzppQnRXpfSO5jS8t3NyAoq6icvGiVhaDm0ctYXpo9hbjdLmh5HbKdF1dymTrvkA
+         Vm0KsP1KGwPj0cSDGV/ByLnhp4L+Iim8Ikw8AB2cAXZYwDqNvqiaHGEycjlRMT+eqo1a
+         D+R/iITQVozvANPIy+r/1c6juSWDHwhOAJRSdXD3z4dVtyftbiOrC6GdpT1JIwz6dZuS
+         UEvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688732902; x=1691324902;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rJA6+/g6hyQtclq9OA+60uWzgmpTlAiLIyqyQBByGJo=;
+        b=d2gSoD3JUf9vsVrU4sq4traiJviX3fP4akWeaerMiuvJXu6HCOFlRGRF3h5pCpvrc5
+         4nWuaWQMjQRthGj3Gdw2XXCVmMYfsPmLRBecSGRCaHJTfLCYpwLjD+EUAi0SE6Fz7MUT
+         +k+78wiGuApWR/NFinXGjB/SmiRuV8aZS0I0TGwNG20q0WhGa88uPvF4Bfy8dpc9X/K9
+         G0LFl+EL4sVDwvvNoeSa8QDUQxRoxnss7Pw77lxYS8s9tAR2t7mJLPLCZ6DsUS0kKODe
+         QKtCCSrKPoUrTDmcbJ26MrS5tIePNw1/AR3akgAJKo5wJYDTjNGzXBgFsa6OUKI7EqgA
+         9dBQ==
+X-Gm-Message-State: ABy/qLaVpG7MYHW5v6Q3pwhveX2oYuWUvAWHM71lAHgGIAxNMxIOynLv
+        0nc0PK/XRnGqezpvw2bLbvc=
+X-Google-Smtp-Source: APBJJlEAIrjPu2Q1b2mUmPFXZHE/mktSLFqXqOh8lDPkDerFqD9Tl2Il12cwVSatuF8JIu+Q+UpnBg==
+X-Received: by 2002:a5d:460c:0:b0:314:41e9:9a92 with SMTP id t12-20020a5d460c000000b0031441e99a92mr4294457wrq.24.1688732901438;
+        Fri, 07 Jul 2023 05:28:21 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id i14-20020adffdce000000b003141f96ed36sm4418753wrs.0.2023.07.07.05.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 05:28:21 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:28:19 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 12/18] drm/tegra: dpaux: Convert to
+ devm_platform_ioremap_resource()
+Message-ID: <ZKgE407-trIp_7HV@orome>
+References: <20230707072034.48977-1-frank.li@vivo.com>
+ <20230707072034.48977-12-frank.li@vivo.com>
 MIME-Version: 1.0
-In-Reply-To: <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
-Content-Type: multipart/mixed;
- boundary="------------8628B942F2195D19390C676E"
-Content-Language: en-US
-X-tce-id: bids.7405@bigpond.com
-X-tce-ares-id: e{4a9eb6c6-2d9a-4e3c-8cca-a779deb79200}1
-X-tce-spam-action: no action
-X-tce-spam-score: 0.0
-X-Cm-Analysis: v=2.4 cv=Cvt5MF0D c=1 sm=1 tr=0 ts=64a804de a=I+ymoOSk5yzZBOYXmf4WnA==:117 a=I+ymoOSk5yzZBOYXmf4WnA==:17 a=ws7JD89P4LkA:10 a=r77TgQKjGQsHNAKrUKIA:9 a=gj2XTu5y7l5qDgVZD0wA:9 a=QEXdDO2ut3YA:10 a=TILydWMaAdQ53EHaNYoA:9 a=B2y7HmGcmWMA:10
-X-Cm-Envelope: MS4xfIoILScwK33rbupbBpEtbV4ZzqANKCuQY393vXbD0WiKc6WXcEatxhUr19gldVyCIEfV2DKcKRv2Z7ovSbONdF4nJBhsrNEgtMrgj2J1dXVInPA/Hpo7 Q57QrzVo5S4Nu+gvGM7E12lHSLJySTo4GYPCPEoucFsk3tuFV3a8iUq/bpOTsQPJUGF4cWeZV0jyNA==
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qEQdviPueCKP2hNt"
+Content-Disposition: inline
+In-Reply-To: <20230707072034.48977-12-frank.li@vivo.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------8628B942F2195D19390C676E
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi,
+--qEQdviPueCKP2hNt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am not a kernel developer, but I think the attached patch would work.
+On Fri, Jul 07, 2023 at 03:20:28PM +0800, Yangtao Li wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
+>=20
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  drivers/gpu/drm/tegra/dpaux.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/tegra/dpaux.c b/drivers/gpu/drm/tegra/dpaux.c
+> index 4d2677dcd831..f120897ce4b3 100644
+> --- a/drivers/gpu/drm/tegra/dpaux.c
+> +++ b/drivers/gpu/drm/tegra/dpaux.c
+> @@ -447,7 +447,6 @@ static const struct pinmux_ops tegra_dpaux_pinmux_ops=
+ =3D {
+>  static int tegra_dpaux_probe(struct platform_device *pdev)
+>  {
+>  	struct tegra_dpaux *dpaux;
+> -	struct resource *regs;
+>  	u32 value;
+>  	int err;
+> =20
+> @@ -461,14 +460,13 @@ static int tegra_dpaux_probe(struct platform_device=
+ *pdev)
+>  	INIT_LIST_HEAD(&dpaux->list);
+>  	dpaux->dev =3D &pdev->dev;
+> =20
+> -	regs =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	dpaux->regs =3D devm_ioremap_resource(&pdev->dev, regs);
+> +	dpaux->regs =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(dpaux->regs))
+>  		return PTR_ERR(dpaux->regs);
+> =20
+>  	dpaux->irq =3D platform_get_irq(pdev, 0);
+>  	if (dpaux->irq < 0)
+> -		return -ENXIO;
+> +		return dpaux->irq;
 
-Ross
+This change has nothing to do with what the commit message says. It
+looks correct, but it should be a separate patch.
 
-On 7/7/23 2:41 am, Dave Jones wrote:
-> On Thu, Jul 06, 2023 at 01:45:57PM +0200, Thorsten Leemhuis wrote:
->   > On 06.07.23 05:08, Bagas Sanjaya wrote:
->   > >>
->   > >> I notice a regression report on Bugzilla [1]. Quoting from it:
->   > >>
->   > >>> The following patch broke support of 3 more Zaurus models: SL-5600, A300 and C700
->   > >>>
->   > >>> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad module alias from zaurus
->   >
->   > ...
->   > He sometimes shows up on Linux kernel lists, but I doubt he cares about
->   > that change after all these years. And I would not blame him at all.
->
-> That's about the size of it.  This is pretty near the bottom of my ever-shrinking
-> list of kernel drivers I care about.
->
->   > Yes, we have the "no regressions" rule, but contributing a change to the
->   > kernel OTOH should not mean that you are responsible for all regressions
->   > it causes for your whole life. :-)
->
-> That said, 12 years later, 16adf5d07987d93675945f3cecf0e33706566005
-> is still the right thing to do. Adding actual matches for the devices
-> rather than matching by class will prevent this getting loaded where it
-> doesn't need to be.
->
-> If someone actually cares to get this working, cargo-culting Oliver's
-> change to add the extra id is likely the way forward.
->
-> 	Dave
->
+Thierry
 
---------------8628B942F2195D19390C676E
-Content-Type: text/x-patch; charset=UTF-8;
- name="3-zaurii-patch.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="3-zaurii-patch.patch"
+--qEQdviPueCKP2hNt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff -urpN a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
---- a/drivers/net/usb/cdc_ether.c	2023-07-07 17:48:27.991833366 +1000
-+++ b/drivers/net/usb/cdc_ether.c	2023-07-07 21:53:11.556198087 +1000
-@@ -616,6 +616,13 @@ static const struct usb_device_id	produc
- }, {
- 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
- 			  | USB_DEVICE_ID_MATCH_DEVICE,
-+    .idVendor		= 0x04DD,
-+    .idProduct		= 0x8005,   /* A-300 */
-+    ZAURUS_FAKE_INTERFACE,
-+    .driver_info        = 0,
-+}, {
-+    .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
- 	ZAURUS_MASTER_INTERFACE,
-@@ -623,12 +630,26 @@ static const struct usb_device_id	produc
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 			  | USB_DEVICE_ID_MATCH_DEVICE,
-+    .idVendor		= 0x04DD,
-+    .idProduct		= 0x8006,   /* B-500/SL-5600 */
-+    ZAURUS_FAKE_INTERFACE,
-+    .driver_info        = 0,
-+}, {
-+    .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8007,	/* C-700 */
- 	ZAURUS_MASTER_INTERFACE,
- 	.driver_info		= 0,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+    .idVendor		= 0x04DD,
-+    .idProduct		= 0x8007,   /* C-700 */
-+    ZAURUS_FAKE_INTERFACE,
-+    .driver_info        = 0,
-+}, {
-+    .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 		 | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor               = 0x04DD,
- 	.idProduct              = 0x9031,	/* C-750 C-760 */
-Binary files a/drivers/net/usb/.cdc_ether.c.swp and b/drivers/net/usb/.cdc_ether.c.swp differ
-diff -urpN a/drivers/net/usb/zaurus.c b/drivers/net/usb/zaurus.c
---- a/drivers/net/usb/zaurus.c	2023-07-07 17:48:28.043849110 +1000
-+++ b/drivers/net/usb/zaurus.c	2023-07-07 22:06:49.267699853 +1000
-@@ -289,11 +289,25 @@ static const struct usb_device_id	produc
- 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
- 			  | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8005,	/* A-300 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long) &bogus_mdlm_info,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
- 	ZAURUS_MASTER_INTERFACE,
- 	.driver_info = ZAURUS_PXA_INFO,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8006,	/* B-500/SL-5600 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long) &bogus_mdlm_info,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 	          | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8007,	/* C-700 */
-@@ -301,6 +315,13 @@ static const struct usb_device_id	produc
- 	.driver_info = ZAURUS_PXA_INFO,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8007,	/* C-700 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long) &bogus_mdlm_info,
-+}, {
-+        .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 		 | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor               = 0x04DD,
- 	.idProduct              = 0x9031,	/* C-750 C-760 */
+-----BEGIN PGP SIGNATURE-----
 
---------------8628B942F2195D19390C676E--
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSoBOMACgkQ3SOs138+
+s6E1Cg/7BwHVxlGOZc5s4JgJCBnTWhzOzzu19uGD50cxCUqf+eWXsgMq60G9QhLU
+1AlrpwVh8W+1+Iig9hcMUPM365j5a4PmiLcxTp1FFKkQKQB0DdKk2mAWFgbD4RXt
+WlmMXFbelc5qw1YNF3nNYZtuGE8lLzCGI0LV4hOs24KmXJBx0sRSuKkwVB7rGb86
+pjVGv8XMLCtr0Ij8p8Zp1q3rne4F5WUOhS5BP/+p4HP4eNlXD31mwHsRhZkirNUC
+ncsT+vGmle/FjBiyEFxOFnaii2O4bkvV8b9KbUVHjV3kDDPCqVMvUidKkXVY8Vjw
+8S3Agm8dz6dLcWqeqpQhg9pCcMs+m+6wkAAYgIb2H9vZXmyg/UXH+oLceF/MyYnR
+tKGzr4AutYFm3aar7bVwfy9taSkcFScfP3yJauZSEkLFc9/4rsY+FbBsZwYmarq6
++rME9qUjwapHEyppQXiAV9FOA2GVVAc5X19RCmG9Da/LA/lDPrinhkE2/ngZZsQH
+nf5cN25ravD+qKcDgYtJlda72nSwo4H2zXbPE4q1poLr7B7Mye8Qvuups0Ninsem
+IqlqueYQXfgprwTG3WyQbpXJ3cSV8CaGqW6svI4MtcQiRVKfLWMrFj+HJ/1MRI46
+QlC0mhvtb015qqQuDdB9nqy04Xm88lmiPXxFSnA+CiQWbT1M+6M=
+=k0Vf
+-----END PGP SIGNATURE-----
+
+--qEQdviPueCKP2hNt--
