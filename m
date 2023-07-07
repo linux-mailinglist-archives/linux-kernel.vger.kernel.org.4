@@ -2,83 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C087374B474
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6B874B489
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjGGPkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S232707AbjGGPpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGPkB (ORCPT
+        with ESMTP id S229458AbjGGPpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:40:01 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F6EB2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688744379; x=1689349179; i=efault@gmx.de;
- bh=ylP9+ZNDPQYbfTTId9obf9+rw4X1x3mXi09x7g9dYNs=;
- h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
- b=WCnxCyh96RU6pF7u97rwFX4JGKeRa0E5DfXpWoQZcFdXtRWaiA0Bb8Qj1CdGSLqfPqv3z3a
- JBa6g7Luz9IwiLBrCwLNyjyPgi5yeAp0Lp14sri1Db0zmqaw33Oa4n9PVA2g+34+B67CXhBKj
- jLng0AOzpzESV3hE93GecizGjK5aoIBneY/TxijCOfLlgaEWbSey1bk49yV+bn9rZwYaOZoxd
- g5bxmieK8rmG0cg1JqQrzlSu7yit9gra+YnIa757FDQAxUP2rjUifh+RuEtnTa885l89ZBh/o
- Wpafe4aB5orypm7KJPwV5s10vYgHEDtBBq1G8H0F52aaAC8aY3UQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([212.114.172.125]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Ml6qM-1pYogZ2Clg-00lVFm; Fri, 07
- Jul 2023 17:39:39 +0200
-Message-ID: <f4e839ac5ecb285b8a9d666f1a73e0a39b698864.camel@gmx.de>
-Subject: Re: Fwd: Possible race in rt_mutex_adjust_prio_chain
-From:   Mike Galbraith <efault@gmx.de>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Henry Wu <triangletrap12@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Date:   Fri, 07 Jul 2023 17:39:38 +0200
-In-Reply-To: <20230707125942.GB2883469@hirez.programming.kicks-ass.net>
-References: <CAG-UpRQsdL_Fs9HSEv2pDYXehJC+YXcYjiZKFLvkGBTZkkaTcg@mail.gmail.com>
-         <20230706120103.GJ2833176@hirez.programming.kicks-ass.net>
-         <CAG-UpRTQ-ovVO02HRd5z-9oZGCPvZ0vODJse8oyuA9L-3NV_pQ@mail.gmail.com>
-         <CAG-UpRRLFTHg64b0hG4=FbuzhhqNQEU8jGt6TygCVAK1BaT2kQ@mail.gmail.com>
-         <20230707125942.GB2883469@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Fri, 7 Jul 2023 11:45:08 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3859F173B;
+        Fri,  7 Jul 2023 08:45:07 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367CH9mW027393;
+        Fri, 7 Jul 2023 17:44:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=UirHfJWJ0M0c3P66CSNWUmzBZIs0e0lzSHowOTIQOxY=;
+ b=R077onV69jpX15gfnwED6gCxOl6yExQaqxA53M7kAUStTuqI6BK8nT5z07EXtUEmHolY
+ riyqdNY+iqw2vdORFsm8Ff3OR9V6cs5mzg/rbN1iDNyCpDtaXAmAKIeIylrkc1PkUjmO
+ hchsdwamHlynmEL1RY40fiFNk47LZKTBA5P1Qhnz+JMV18+Ew+dTtXCkzH1eRGffvA8x
+ wlSz5XaqZE2Y2se0KTE7WNPLGB6T8d3cDevC2/gA7JAHKnptpGkPK72PlMBcPaae7E88
+ vBYPyaIvZL1KHTdsxqUau3JWVd60dpGsiUNHy8ji7tFOVFiy85DSPwi1zOkp0W8r83d2 SA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rpjjtsepn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 17:44:37 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 39181100050;
+        Fri,  7 Jul 2023 17:44:36 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0FC1C22A6F1;
+        Fri,  7 Jul 2023 17:44:36 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 7 Jul
+ 2023 17:44:34 +0200
+Message-ID: <c6533f17-6100-5901-7281-256bff5db773@foss.st.com>
+Date:   Fri, 7 Jul 2023 17:44:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:eCtcbb9DASdA4l/kL+LDKIXXOpXcWwsb7tG7BoHQQEREjyn0op9
- CRXUUt5MidEqkmYjBtW8ZmOTfDOC5b0bMsbqqx1zFhywCZOoJNcd+P7YwdUr4V5HNC4cqAM
- eAR6ZzL0QnKShfYBexOVXmkcQdJ4HbZaPJxa9Uwpj5rMOpBTrhxP21ztD5N8pyupg2WTqSZ
- IAnRaIA3+tVnRUMp2svPg==
-UI-OutboundReport: notjunk:1;M01:P0:FkJjkHtWmEY=;CW4UgzIDZvlNmuHjsCWn9qNbm/c
- n43YHQL2ytga9NRIVzxIzz+YhNgsN+xiN954qUC2pA1CI+XphSUTwj6nM96mrf/yCIGtDWmUR
- Jyc5BJqw/VhlSB8KeCG9qd1oDFi5qrT3RV/RG9lWXWnHE+CjMci9J/S/fLwl3RjfiLngwk7Vh
- XB35lFBX+dwKWcBe0+6sm7as9BxzSUY5RVniA2ZenRUiUY6aKAtsgBgN0yFPWuh5GYZ+sf2Wj
- 3jwzaLX38mgL4jVfLnBbMPZyYzT1USoGRKYAdkxHPt/yu00IGJPzOv4NuZaKplWa1m/W6i/2G
- Ja6YW/lPAS7jVtc481pQFpiGibmS5xuCpwqNY5s1454G0UJQ9mhYjLS9wb8RUZaJWA9ckUUij
- Y6x8xAN6i7dSeSsBceWVzxFGcjflqNX+wYQl9VGg9KOyvexDYXB3zDG4oqEAv0WnVs5zxaJRz
- k4iA5hDJUG97QG39q5YaTA3IFDR9aLgfgnvkYS9+uqY73x5w/1sPP07Tuqs5g6hSYQkNaQ4c8
- EV+MYHpKrpGshxnFffDpbt2AFRtra4j0wVQvtwVyAZdBiu34u1O6MFN5XQOufo5V1AXP12iZy
- B4Sv+zkKJfLfuA4CoTimk8C3rmmyE4j2kw56iRrsvTgGDRzfRGfQSsPs5N11Szf0D+MOCUCkE
- m49MxdBpKDwIVx36aCitbROze+4cU6lV6PDm4HkRD4+IoZJqP/QA3K2/a5krcM8Cu/IzF2WPS
- OEgfQytbBgPgeDR3MhhtLONtHnppVLL6RY08aYFcmKRjaXT45nw6AMMwMqMDMi9SOUTJ5B4s1
- Iqii9nAs8PesGH0GdB6z3dXyQQYAwRQtmCzH+BRt/MvNAUIUauuOz9RV6t0LB4LMvA6KYxCE/
- Qt+QpXVGfOV2LY06Hq1nZvVtaMysjwoVI6lQRNciAmbZUcwrWYoKmqn3WLFCd+TTuz3KAstSS
- SV1VsXUkxBbO5wBNHss7I5foFU0=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <Oleksii_Moisieiev@epam.com>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
+        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
+        <arnd@kernel.org>, <richardcochran@gmail.com>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
+ <2023070748-false-enroll-e5dc@gregkh>
+ <febd65e1-68c7-f9d8-c8a4-3c3e88f15f3e@foss.st.com>
+ <2023070744-superjet-slum-1772@gregkh>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <2023070744-superjet-slum-1772@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_10,2023-07-06_02,2023-05-22_02
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-07-07 at 14:59 +0200, Peter Zijlstra wrote:
->
-> The below implements this duplication and seems to not insta-crash.
 
-RT bits of ww_mutex.h needed tree_entry -> tree.entry.  Modulo that, RT
-seems content.
 
-	-Mike
+On 7/7/23 17:10, Greg KH wrote:
+> On Fri, Jul 07, 2023 at 04:00:23PM +0200, Gatien CHEVALLIER wrote:
+>> I'll change to (GPL-2.0-only OR BSD-3-Clause) :)
+> 
+> If you do that, I'll require a lawyer to sign off on it to verify that
+> you all know EXACTLY the work involved in dealing with dual-licensed
+> kernel code.  Sorry, licenses aren't jokes.
+
+I was worried about the interactions with software running on BSD
+license, hence my (poorly written) proposal. Looking back at it
+there's no good reason to use a dual-license here.
+GPL-2.0-only is fine.
+
+> 
+> thanks,
+> 
+> greg k-h
