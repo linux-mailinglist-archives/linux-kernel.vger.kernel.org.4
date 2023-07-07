@@ -2,133 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D08774A92D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD89174A930
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjGGC5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
+        id S231866AbjGGDAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 23:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjGGC5B (ORCPT
+        with ESMTP id S229781AbjGGDAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:57:01 -0400
-Received: from pb-smtp20.pobox.com (pb-smtp20.pobox.com [173.228.157.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882C11990
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:56:57 -0700 (PDT)
-Received: from pb-smtp20.pobox.com (unknown [127.0.0.1])
-        by pb-smtp20.pobox.com (Postfix) with ESMTP id EE0991EE98;
-        Thu,  6 Jul 2023 22:56:56 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-        :to:cc:subject:message-id:references:mime-version:content-type
-        :in-reply-to; s=sasl; bh=cgjU9i8w9xVOWqY/GY+HGWDhllAo0BsBJwnJhyP
-        v1nI=; b=wYeK/Yfh4JlKq4ehry//EuT4y4hLygrRxGaB7H/r9YdXA34Q44wev+d
-        Ja4//Hr/Zqr0V5G+HqQ2ox4b3ABoBPd0Y5nPElXmEdaWunQus/pBFDW+2SbeZwAM
-        MLCjB93130CZNPxg7McVjIsfv0aek/Qi2tdSIEYtcyb48MhDh8rw=
-Received: from pb-smtp20.sea.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp20.pobox.com (Postfix) with ESMTP id DA8A91EE97;
-        Thu,  6 Jul 2023 22:56:56 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
- h=date:from:to:cc:subject:message-id:references:mime-version:content-type:in-reply-to; s=2019-09.pbsmtp; bh=cgjU9i8w9xVOWqY/GY+HGWDhllAo0BsBJwnJhyPv1nI=; b=i8MzwwVW3+e16fyVvyC0ABmrwg/pwVjbwD2wr17o57NBnoiKEJ3FPwWegSMfXCKe0xS6JfZkqDfheQf4otBnjkAxkhHrXrMDGCCnW/a2nQW06Ol/ljfWGnII51qtJacvOxYohNu2xpGYUFNoAeFSe0zoe1pdHj8FJsGC8utJtww=
-Received: from kimchi.darkphysics (unknown [76.146.178.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp20.pobox.com (Postfix) with ESMTPSA id 568161EE96;
-        Thu,  6 Jul 2023 22:56:53 -0400 (EDT)
-        (envelope-from tdavies@darkphysics.net)
-Date:   Thu, 6 Jul 2023 19:56:47 -0700
-From:   Tree Davies <tdavies@darkphysics.net>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     gregkh@linuxfoundation.org, dan.carpenter@linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192e: Rename variable bCurrentHTSupport
-Message-ID: <ZKd+7zVCoxrNYpaI@kimchi.darkphysics>
-References: <ZKYgH/BvkE9bdcPm@kimchi.darkphysics>
- <6dee04ae-4129-cd7c-0d31-70d29b86c8ff@gmail.com>
+        Thu, 6 Jul 2023 23:00:04 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF4719B7;
+        Thu,  6 Jul 2023 19:59:56 -0700 (PDT)
+X-UUID: 568104321c7211eeb20a276fd37b9834-20230707
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=5wIDkF+DF83frU64JX7grQ+f+w9BnLpDjKoN62SicY0=;
+        b=iGEap/1/L4Dvzy//p9X+9W+cMYLAX1NM2o4OioxcTkvkr5PnaA5opL3wy3SptW7s18ICaDeNUoHZt3HSoPktwr40TpBvsrT9d2UDnZOnq6oAc4W0C91OuWRf6HqJkT2tH2bABZQ96UPToLxz7FS4i9hF2J+Z7gB8/jgUNyuyzsU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:6f1989fd-93b4-4c85-96ec-856d132e9000,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:7c08a90d-26a8-467f-b838-f99719a9c083,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 568104321c7211eeb20a276fd37b9834-20230707
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <chris.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 24413503; Fri, 07 Jul 2023 10:59:49 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 7 Jul 2023 10:59:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 7 Jul 2023 10:59:48 +0800
+From:   Chris Lu <chris.lu@mediatek.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Von Dentz <luiz.dentz@gmail.com>
+CC:     Sean Wang <sean.wang@mediatek.com>,
+        Aaron Hou <aaron.hou@mediatek.com>,
+        Steve Lee <steve.lee@mediatek.com>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Chris Lu <chris.lu@mediatek.com>
+Subject: [PATCH 2/2] Bluetooth: btusb:  Add VID 04ca & PID 3804 for MediaTek MT7922 USB Bluetooth chip
+Date:   Fri, 7 Jul 2023 10:59:32 +0800
+Message-ID: <20230707025932.25083-2-chris.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6dee04ae-4129-cd7c-0d31-70d29b86c8ff@gmail.com>
-X-Pobox-Relay-ID: ED5C24BE-1C71-11EE-ABD9-C2DA088D43B2-45285927!pb-smtp20.pobox.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 10:48:56PM +0200, Philipp Hortmann wrote:
-> On 7/6/23 03:59, Tree Davies wrote:
-> > This patch renames variable bCurrentHTSupport to bcurrent_ht_support
-> > to fix checkpatch warning Avoid CamelCase.
-> > 
-> > Signed-off-by: Tree Davies<tdavies@darkphysics.net>
-> > ---
-> >   drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  2 +-
-> >   drivers/staging/rtl8192e/rtl8192e/rtl_wx.c   |  2 +-
-> >   drivers/staging/rtl8192e/rtl819x_BAProc.c    | 12 ++++++------
-> >   drivers/staging/rtl8192e/rtl819x_HT.h        |  2 +-
-> >   drivers/staging/rtl8192e/rtl819x_HTProc.c    | 16 ++++++++--------
-> >   drivers/staging/rtl8192e/rtllib_softmac.c    | 16 ++++++++--------
-> >   drivers/staging/rtl8192e/rtllib_softmac_wx.c |  2 +-
-> >   drivers/staging/rtl8192e/rtllib_tx.c         |  8 ++++----
-> >   8 files changed, 30 insertions(+), 30 deletions(-)
-> 
-> 
-> Hi Tree,
-> 
-> when I try to apply your patch on the top of all the other patches I get the
-> following error message:
-> 
-> kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$ git apply -v
-> ~/Downloads/20230706-\[PATCH\]\ staging_\ rtl8192e_\ Rename\ variable\
-> bCurrentHTSupport-10002.txt
-> Checking patch drivers/staging/rtl8192e/rtl8192e/rtl_core.c...
-> Checking patch drivers/staging/rtl8192e/rtl8192e/rtl_wx.c...
-> Checking patch drivers/staging/rtl8192e/rtl819x_BAProc.c...
-> Checking patch drivers/staging/rtl8192e/rtl819x_HT.h...
-> Checking patch drivers/staging/rtl8192e/rtl819x_HTProc.c...
-> Checking patch drivers/staging/rtl8192e/rtllib_softmac.c...
-> error: while searching for:
-> 	crypt = ieee->crypt_info.crypt[ieee->crypt_info.tx_keyidx];
-> 	encrypt = ieee->host_encrypt && crypt && crypt->ops &&
-> 		((strcmp(crypt->ops->name, "R-WEP") == 0 || wpa_ie_len));
-> 	if (ieee->ht_info->bCurrentHTSupport) {
-> 		tmp_ht_cap_buf = (u8 *)&(ieee->ht_info->SelfHTCap);
-> 		tmp_ht_cap_len = sizeof(ieee->ht_info->SelfHTCap);
-> 		tmp_ht_info_buf = (u8 *)&(ieee->ht_info->SelfHTInfo);
-> 
-> error: patch failed: drivers/staging/rtl8192e/rtllib_softmac.c:816
-> error: drivers/staging/rtl8192e/rtllib_softmac.c: patch does not apply
-> Checking patch drivers/staging/rtl8192e/rtllib_softmac_wx.c...
-> Checking patch drivers/staging/rtl8192e/rtllib_tx.c...
-> 
-> 
-> My be the previous send patches are not taken then your chance is better
-> that this one will fit. Will see what happens.
-> 
-> 
-> You need to put your patches into a patch series.
-> This reduces email traffic as the reviewer can just send one email and does
-> not need to send four.
-> 
-> A possible command for a patch series is looking like this:
-> git format-patch -o ~/Documents/kernel/patches/ --cover-letter -n
-> --thread=shallow --to="Greg Kroah-Hartman <gregkh@linuxfoundation.org>,linux-staging@lists.linux.dev,linux-kernel@vger.kernel.org"
-> 4bbbd60d84e15fdb7bffde98a687ed168a4dfbbd^..HEAD
-> 
-> Use the git commit id of your first patch.
-> 
-> Bye Philipp
-> 
+The information in /sys/kernel/debug/usb/devices about the Bluetooth
+device is listed as the below.
 
-Thanks Philipp,
-I am happy to send a v2 if needed. Let me know...
-Cheers!
-Tree
+T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=04ca ProdID=3804 Rev= 1.00
+S:  Manufacturer=MediaTek Inc.
+S:  Product=Wireless_Device
+S:  SerialNumber=000000000
+C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
+A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
+I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
+E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
 
+Signed-off-by: Chris Lu <chris.lu@mediatek.com>
+---
+ drivers/bluetooth/btusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 9c886c9cce64..323ca92539eb 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -638,6 +638,9 @@ static const struct usb_device_id blacklist_table[] = {
+ 	{ USB_DEVICE(0x0489, 0xe102), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x04ca, 0x3804), .driver_info = BTUSB_MEDIATEK |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
+ 
+ 	/* Additional Realtek 8723AE Bluetooth devices */
+ 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
+-- 
+2.18.0
 
