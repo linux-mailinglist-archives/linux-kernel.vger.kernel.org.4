@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569D774AEBD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD2374AEBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbjGGKaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S232199AbjGGKaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 06:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGKaR (ORCPT
+        with ESMTP id S232693AbjGGKaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:30:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0434810B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 03:30:15 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qy8j33ZWBztR3k;
-        Fri,  7 Jul 2023 18:27:19 +0800 (CST)
+        Fri, 7 Jul 2023 06:30:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C5B128
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 03:30:19 -0700 (PDT)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qy8lD186KzTmCC;
+        Fri,  7 Jul 2023 18:29:12 +0800 (CST)
 Received: from [10.174.179.160] (10.174.179.160) by
  kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 7 Jul 2023 18:30:12 +0800
-Message-ID: <a8b9ffbd-87a6-97c1-5ee6-8f8130d8baf4@huawei.com>
-Date:   Fri, 7 Jul 2023 18:30:12 +0800
+ 15.1.2507.27; Fri, 7 Jul 2023 18:30:17 +0800
+Message-ID: <2dff8694-22b1-7566-105f-a3785cc6690f@huawei.com>
+Date:   Fri, 7 Jul 2023 18:30:16 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v3 1/4] mm/memory: convert do_page_mkwrite() to use folios
+Subject: Re: [PATCH v3 2/4] mm/memory: convert wp_page_shared() to use folios
 Content-Language: en-US
 To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
         <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
 CC:     <akpm@linux-foundation.org>, <willy@infradead.org>
 References: <20230706163847.403202-1-sidhartha.kumar@oracle.com>
+ <20230706163847.403202-2-sidhartha.kumar@oracle.com>
 From:   "zhangpeng (AS)" <zhangpeng362@huawei.com>
-In-Reply-To: <20230706163847.403202-1-sidhartha.kumar@oracle.com>
+In-Reply-To: <20230706163847.403202-2-sidhartha.kumar@oracle.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.174.179.160]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemm600020.china.huawei.com (7.193.23.147)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -53,10 +54,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 2023/7/7 0:38, Sidhartha Kumar wrote:
 
-> Saves one implicit call to compound_head();
+> Saves six implicit calls to compound_head().
 >
 > Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
 Reviewed-by: ZhangPeng<zhangpeng362@huawei.com>
 
