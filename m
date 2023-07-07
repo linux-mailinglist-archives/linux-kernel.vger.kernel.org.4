@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB2974B224
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD4E74B226
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232483AbjGGNrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S232600AbjGGNsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjGGNrd (ORCPT
+        with ESMTP id S232736AbjGGNrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:47:33 -0400
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE7B102
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:47:32 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 4094818640EF;
-        Fri,  7 Jul 2023 16:47:28 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Rlu8Olt3ypUm; Fri,  7 Jul 2023 16:47:28 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id E7C5A1864A12;
-        Fri,  7 Jul 2023 16:47:27 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CVYtIonFtxSs; Fri,  7 Jul 2023 16:47:27 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.23])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id B75FD18640EF;
-        Fri,  7 Jul 2023 16:47:26 +0300 (MSK)
-From:   Anastasia Belova <abelova@astralinux.ru>
-To:     Rob Springer <rspringer@google.com>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Todd Poynor <toddpoynor@google.com>,
-        Ben Chan <benchan@chromium.org>, Richard Yeh <rcy@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Joseph <jnjoseph@google.com>,
-        Simon Que <sque@chromium.org>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH 5.10] gasket: make interrupt_data NULL after free
-Date:   Fri,  7 Jul 2023 16:47:12 +0300
-Message-Id: <20230707134712.7019-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 7 Jul 2023 09:47:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E611FE8
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:47:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8783D1FDB4;
+        Fri,  7 Jul 2023 13:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688737668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ETpM6o6K3HAUc8/fEUMdngpEDYf73Gw3CZHJcQEwIE=;
+        b=1Rvu2ZI3LCC2U75nKNYFIbH1685AZPBZgMhIhXg1JsXZ5hchph7KyuRJLwu10H514uE4cS
+        Fw84dJMAjDd450a7CdXDUeoBg/7zi7CHxKLvJGTo3tHoq/2DxJ/wk5abn7M8hIQUfTmX41
+        Go9UkGZ7M8IUuFfDZjdqTcEDc8zyuXY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688737668;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ETpM6o6K3HAUc8/fEUMdngpEDYf73Gw3CZHJcQEwIE=;
+        b=rbbizk1mlChErDAs5iKWukmT8SiygTtVQyL5+BgIc4oLm0xvCKpa/BGmfIBYLCwjfRFReM
+        Pznr7h+BGhzALjAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 443501346D;
+        Fri,  7 Jul 2023 13:47:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LrDjD4QXqGQGYgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 07 Jul 2023 13:47:48 +0000
+Date:   Fri, 07 Jul 2023 15:47:47 +0200
+Message-ID: <87v8evkf3w.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Johan Hovold <johan@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
+In-Reply-To: <f1041542-bd97-41d9-96b9-c6e5fef6b096@sirena.org.uk>
+References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
+        <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+        <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
+        <87y1jrkgdx.wl-tiwai@suse.de>
+        <3450ef1e-cb20-4242-b482-41d3d34c4564@sirena.org.uk>
+        <87wmzbkfw7.wl-tiwai@suse.de>
+        <f1041542-bd97-41d9-96b9-c6e5fef6b096@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gasket common interrupt module was deleted in version 5.13,=20
-but there is possible double free in versions 4.19-5.12.
+On Fri, 07 Jul 2023 15:35:29 +0200,
+Mark Brown wrote:
+> 
+> On Fri, Jul 07, 2023 at 03:30:48PM +0200, Takashi Iwai wrote:
+> > Mark Brown wrote:
+> 
+> > > It's moderately common - typically in these cases the control is
+> > > described in the datasheet as an attenuation control rather than a gain,
+> > > and this usually corresponds to the physical implementation being only
+> > > able to make signals smaller relative to the reference.
+> 
+> > Yeah, I see the use case.  The problem is, however, that we're using
+> > the very same dB info for both gain and attenuation.  That means,
+> > application has no idea how to interpret those dB values -- to be
+> > added or to be subtracted.
+> 
+> > We should have defined a new TLV type for attenuation to
+> > differentiate, and define the TLV macro to give proper min/max.
+> 
+> The ASoC generic control stuff supports inverting the value prior to
+> presentation to userspace so it's masked there (instead of writing the
+> number userspace sees to the register we subtract the number from the
+> maximum value and write that to the register), pulling that up further
+> to the ALSA core might be nice I guess?
 
-gasket_dev->interrupt_data should be NULL when
-gasket_interrupt_init returns error. For example,
-it is necessary in gasket_enable_device to avoid
-double free.
+I believe yes.  Though, I'm still not sure how we can improve the
+mismatch of dB min/max.  The dB values of those inverted controls
+reflect the result of subtraction, no?
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Fixes: 9a69f5087ccc ("drivers/staging: Gasket driver framework + Apex dri=
-ver")
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- drivers/staging/gasket/gasket_interrupt.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/staging/gasket/gasket_interrupt.c b/drivers/staging/=
-gasket/gasket_interrupt.c
-index 864342acfd86..24fa5df0628b 100644
---- a/drivers/staging/gasket/gasket_interrupt.c
-+++ b/drivers/staging/gasket/gasket_interrupt.c
-@@ -337,6 +337,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_d=
-ev)
- 			sizeof(*interrupt_data->eventfd_ctxs), GFP_KERNEL);
- 	if (!interrupt_data->eventfd_ctxs) {
- 		kfree(interrupt_data);
-+		gasket_dev->interrupt_data =3D NULL;
- 		return -ENOMEM;
- 	}
-=20
-@@ -346,6 +347,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_d=
-ev)
- 	if (!interrupt_data->interrupt_counts) {
- 		kfree(interrupt_data->eventfd_ctxs);
- 		kfree(interrupt_data);
-+		gasket_dev->interrupt_data =3D NULL;
- 		return -ENOMEM;
- 	}
-=20
---=20
-2.30.2
-
+Takashi
