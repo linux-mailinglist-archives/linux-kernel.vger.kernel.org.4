@@ -2,223 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45F774B566
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CFE74B56D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbjGGQxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 12:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S233046AbjGGQyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 12:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbjGGQxO (ORCPT
+        with ESMTP id S232745AbjGGQx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:53:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EB5170C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688748785; x=1720284785;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LCsBu7dWqfVmLSb5jMD4R7baYuKbw8fnATRe6XbxLRw=;
-  b=nZ29caYEJWijKG7lMoGUS+iyKtJZ3Sti+0oCGDOMnfiKD2bMVlYERpFQ
-   avGQDM50/gt4XwvoWFzmtoQDESmO8tl/Drh+aIiPztCWdrCqpFlkpY6xW
-   lfCrlzzr/5E+dWJ0FlkKxVpjMEOPANz7nZLyZsOm9m3COG/IisSyWYjDh
-   ItPCCn3Xe8MHeGdZ5pqSUC03oX8kska4p/bsRGokfOKH5inQ/duNTJdWA
-   gseykZPa/BnbZCrUXk4D8cT3QSt1CPknEXgOp3JwJYvPpi1Ru+Ph0+2qs
-   1PmiB9wpaLOPJmHCwg/RUOBgsLt9ejDZq+oWfaVY6skE3QHStdITYW365
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="427619015"
-X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="427619015"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 09:53:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="966700777"
-X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="966700777"
-Received: from fyin-dev.sh.intel.com ([10.239.159.32])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2023 09:52:59 -0700
-From:   Yin Fengwei <fengwei.yin@intel.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        yuzhao@google.com, ryan.roberts@arm.com, shy828301@gmail.com,
-        akpm@linux-foundation.org, willy@infradead.org, david@redhat.com
-Cc:     fengwei.yin@intel.com
-Subject: [RFC PATCH 3/3] mm: mlock: update mlock_pte_range to handle large folio
-Date:   Sat,  8 Jul 2023 00:52:21 +0800
-Message-Id: <20230707165221.4076590-4-fengwei.yin@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230707165221.4076590-1-fengwei.yin@intel.com>
-References: <20230707165221.4076590-1-fengwei.yin@intel.com>
+        Fri, 7 Jul 2023 12:53:59 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA32D42
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:53:32 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so1609589a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 09:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688748808; x=1691340808;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ganOcRrGX9gVkXMthOtdXTKyr3DXfFEecMxDKDYPHpQ=;
+        b=J8Wr9p6qLani+dIxIJoalPJzoHhWv6PxfhP1BbAYAxKziU/IrMQWCVvaFDv92GEGaq
+         pSkaoPtc3SY90nN8qv+dNCn6Zcj7KfohQoKKSW6JAUn31F9tG8GEfOXIW3U3uNBVbuDV
+         WVZ8i/WlYex/Yz5F5I9fozzKO7sd36Iogex03SkJw/wWV+025xFGK9y6V5+6Bv+eIAbj
+         t/0k7pSgVZX9SOYj0+EL6Ht8pMAKb6vWIim6Exw3tiZgfLv36fE3OS7FRKmw1Scm+MQd
+         VP2BW6t0hWSSjjwrGrW4aK4PFcrH5SN0o2+9PsPCpbigXe4Pj3BPbUVb7MWCmNmdU0CQ
+         WiCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688748808; x=1691340808;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ganOcRrGX9gVkXMthOtdXTKyr3DXfFEecMxDKDYPHpQ=;
+        b=Ce1Sf1Q9O56z/ia420bXXDxn5oCm06c4sGpVdc5aN/XzrRgriGvYDejd3KZtWwPYse
+         I7tPF+L8DZOzztDJBlbyKks/E50hTrJ3dZJ4IhUEKQV+uNHLG7yvS3MmfhJzO89u9CSE
+         74/9f6vcx8vhfnpbyYwH9fkiCqQgwU1MHWhXFwDfoZDEZ8bheWfOaUEMMi34062uNq58
+         n/wmnro/gnZAd/oXM49MNWKwpj/DM/zvoPOgqyPs0mOLfdD2HGrT2mX6gVv0AfNGeDd7
+         WhyldAJIUwfhR8Z6VSSVE6BDvdIrwy00qN6cZuy84nIqP+/tDsgl2eu3vzqcrWnwHWIh
+         Xs4Q==
+X-Gm-Message-State: ABy/qLY4oYtkKoZOMheFYXyYWxUJpt+4mcUPPObPOSps3rbg2HNcvwOa
+        6RPv/bYSqVzjGoVGs7xnzC8WgO6opIwsJr4D850=
+X-Google-Smtp-Source: APBJJlGum+21E74xOHmurd3BznTUzbDzbh02qxja4NdlWrkKY0qPGktO+vX87VjpJ0ZpPOz2kKqw5zlIBr+4nwsHTJE=
+X-Received: by 2002:a17:90a:d484:b0:256:2efc:270e with SMTP id
+ s4-20020a17090ad48400b002562efc270emr4702991pju.5.1688748807659; Fri, 07 Jul
+ 2023 09:53:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230319125524.58803-1-aford173@gmail.com> <CAMSo37Whxvp82i9hr-L-O4Qo9Pxkh5L+hFXqw9hNQ+asrD6oyA@mail.gmail.com>
+In-Reply-To: <CAMSo37Whxvp82i9hr-L-O4Qo9Pxkh5L+hFXqw9hNQ+asrD6oyA@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 7 Jul 2023 11:53:15 -0500
+Message-ID: <CAHCN7xK+AQmzwc+_o7Y=vNX7CKamQMrfGnrmZ4TsHR8ifSprcw@mail.gmail.com>
+Subject: Re: [PATCH V2] drm/bridge: adv7533: Fix adv7533_mode_valid for
+ adv7533 and adv7535
+To:     Yongqin Liu <yongqin.liu@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, dmitry.baryshkov@linaro.org,
+        aford@beaconembedded.com, Robert Foss <rfoss@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-kernel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current kernel only lock base size folio during mlock syscall.
-Add large folio support with following rules:
-  - Only mlock large folio when it's in VM_LOCKED VMA range
+On Tue, Jul 4, 2023 at 11:05=E2=80=AFAM Yongqin Liu <yongqin.liu@linaro.org=
+> wrote:
+>
+> Hi, Adam, All
+>
+> On Sun, 19 Mar 2023 at 20:55, Adam Ford <aford173@gmail.com> wrote:
+> >
+> > When dynamically switching lanes was removed, the intent of the code
+> > was to check to make sure that higher speed items used 4 lanes, but
+> > it had the unintended consequence of removing the slower speeds for
+> > 4-lane users.
+> >
+> > This attempts to remedy this by doing a check to see that the
+> > max frequency doesn't exceed the chip limit, and a second
+> > check to make sure that the max bit-rate doesn't exceed the
+> > number of lanes * max bit rate / lane.
+> >
+> > Fixes: 9a0cdcd6649b ("drm/bridge: adv7533: remove dynamic lane switchin=
+g from adv7533 bridge")
+> > Reviewed-by: Robert Foss <rfoss@kernel.org>
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> >
+> > V2:  Fix whitespace in comment
+> >      Remove TODO comment
+> >      Add R-B from Robert.
+>
+> With this change, the ACK android-mainline based hikey960 build failed
+> to show UI on the HDMI
+> monitor connected, but it works if I revert this change.
+> Here is the serial console output: http://ix.io/4zK8
+>
+> Not sure if you have any idea what the problem is there,
+> and how to have it fixed.
+>
+> Please let me know if you need any other information.
 
-  - If there is cow folio, mlock the cow folio as cow folio
-    is also in VM_LOCKED VMA range.
+I'd be curious to know the desired clock rate and the number of lanes
+you're trying to use.
 
-  - munlock will apply to the large folio which is in VMA range
-    or cross the VMA boundary.
-
-The last rule is used to handle the case that the large folio is
-mlocked, later the VMA is split in the middle of large folio
-and this large folio become cross VMA boundary.
-
-Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
----
- mm/mlock.c | 103 ++++++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 95 insertions(+), 8 deletions(-)
-
-diff --git a/mm/mlock.c b/mm/mlock.c
-index d7db94519884d..e09a481062ef5 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -305,6 +305,64 @@ void munlock_folio(struct folio *folio)
- 	local_unlock(&mlock_fbatch.lock);
- }
- 
-+void mlock_folio_range(struct folio *folio, struct vm_area_struct *vma,
-+		pte_t *pte, unsigned long addr, unsigned int nr)
-+{
-+	struct folio *cow_folio;
-+	unsigned int step = 1;
-+
-+	mlock_folio(folio);
-+	if (nr == 1)
-+		return;
-+
-+	for (; nr > 0; pte += step, addr += (step << PAGE_SHIFT), nr -= step) {
-+		pte_t ptent;
-+
-+		step = 1;
-+		ptent = ptep_get(pte);
-+
-+		if (!pte_present(ptent))
-+			continue;
-+
-+		cow_folio = vm_normal_folio(vma, addr, ptent);
-+		if (!cow_folio || cow_folio == folio) {
-+			continue;
-+		}
-+
-+		mlock_folio(cow_folio);
-+		step = min_t(unsigned int, nr, folio_nr_pages(cow_folio));
-+	}
-+}
-+
-+void munlock_folio_range(struct folio *folio, struct vm_area_struct *vma,
-+		pte_t *pte, unsigned long addr, unsigned int nr)
-+{
-+	struct folio *cow_folio;
-+	unsigned int step = 1;
-+
-+	munlock_folio(folio);
-+	if (nr == 1)
-+		return;
-+
-+	for (; nr > 0; pte += step, addr += (step << PAGE_SHIFT), nr -= step) {
-+		pte_t ptent;
-+
-+		step = 1;
-+		ptent = ptep_get(pte);
-+
-+		if (!pte_present(ptent))
-+			continue;
-+
-+		cow_folio = vm_normal_folio(vma, addr, ptent);
-+		if (!cow_folio || cow_folio == folio) {
-+			continue;
-+		}
-+
-+		munlock_folio(cow_folio);
-+		step = min_t(unsigned int, nr, folio_nr_pages(cow_folio));
-+	}
-+}
-+
- static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
- 			   unsigned long end, struct mm_walk *walk)
- 
-@@ -314,6 +372,7 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
- 	pte_t *start_pte, *pte;
- 	pte_t ptent;
- 	struct folio *folio;
-+	unsigned int step = 1, nr;
- 
- 	ptl = pmd_trans_huge_lock(pmd, vma);
- 	if (ptl) {
-@@ -329,24 +388,52 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
- 		goto out;
- 	}
- 
--	start_pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-+	pte = start_pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	if (!start_pte) {
- 		walk->action = ACTION_AGAIN;
- 		return 0;
- 	}
--	for (pte = start_pte; addr != end; pte++, addr += PAGE_SIZE) {
-+
-+	for (; addr != end; pte += step, addr += (step << PAGE_SHIFT)) {
-+		step = 1;
- 		ptent = ptep_get(pte);
- 		if (!pte_present(ptent))
- 			continue;
- 		folio = vm_normal_folio(vma, addr, ptent);
- 		if (!folio || folio_is_zone_device(folio))
- 			continue;
--		if (folio_test_large(folio))
--			continue;
--		if (vma->vm_flags & VM_LOCKED)
--			mlock_folio(folio);
--		else
--			munlock_folio(folio);
-+
-+		folio_get(folio);
-+		nr = folio_nr_pages(folio) + folio_pfn(folio) - pte_pfn(ptent);
-+		nr = min_t(unsigned int, nr, (end - addr) >> PAGE_SHIFT);
-+
-+		if (vma->vm_flags & VM_LOCKED) {
-+			/*
-+			 * Only mlock the 4K folio or large folio
-+			 * in VMA range
-+			 */
-+			if (folio_test_large(folio) &&
-+			    !folio_in_range(folio, vma,
-+					vma->vm_start, vma->vm_end)) {
-+				folio_put(folio);
-+				continue;
-+			}
-+			mlock_folio_range(folio, vma, pte, addr, nr);
-+		} else {
-+			/*
-+			 * Allow munlock large folio which is partially mapped
-+			 * to VMA. As it's possible that large folio is mlocked
-+			 * and VMA is split later.
-+			 *
-+			 * During memory pressure, such kind of large folio can
-+			 * be split. And the pages are not in VM_LOCKed VMA
-+			 * can be reclaimed.
-+			 */
-+			munlock_folio_range(folio, vma, pte, addr, nr);
-+		}
-+
-+		step = nr;
-+		folio_put(folio);
- 	}
- 	pte_unmap(start_pte);
- out:
--- 
-2.39.2
-
+adam
+>
+> Thanks,
+> Yongqin Liu
+>
+> > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm=
+/bridge/adv7511/adv7533.c
+> > index fdfeadcefe80..7e3e56441aed 100644
+> > --- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> > +++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> > @@ -103,22 +103,19 @@ void adv7533_dsi_power_off(struct adv7511 *adv)
+> >  enum drm_mode_status adv7533_mode_valid(struct adv7511 *adv,
+> >                                         const struct drm_display_mode *=
+mode)
+> >  {
+> > -       int lanes;
+> > +       unsigned long max_lane_freq;
+> >         struct mipi_dsi_device *dsi =3D adv->dsi;
+> > +       u8 bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
+> >
+> > -       if (mode->clock > 80000)
+> > -               lanes =3D 4;
+> > -       else
+> > -               lanes =3D 3;
+> > -
+> > -       /*
+> > -        * TODO: add support for dynamic switching of lanes
+> > -        * by using the bridge pre_enable() op . Till then filter
+> > -        * out the modes which shall need different number of lanes
+> > -        * than what was configured in the device tree.
+> > -        */
+> > -       if (lanes !=3D dsi->lanes)
+> > -               return MODE_BAD;
+> > +       /* Check max clock for either 7533 or 7535 */
+> > +       if (mode->clock > (adv->type =3D=3D ADV7533 ? 80000 : 148500))
+> > +               return MODE_CLOCK_HIGH;
+> > +
+> > +       /* Check max clock for each lane */
+> > +       max_lane_freq =3D (adv->type =3D=3D ADV7533 ? 800000 : 891000);
+> > +
+> > +       if (mode->clock * bpp > max_lane_freq * adv->num_dsi_lanes)
+> > +               return MODE_CLOCK_HIGH;
+> >
+> >         return MODE_OK;
+> >  }
+> > --
+> > 2.34.1
+> >
+>
+>
+> --
+> Best Regards,
+> Yongqin Liu
+> ---------------------------------------------------------------
+> #mailing list
+> linaro-android@lists.linaro.org
+> http://lists.linaro.org/mailman/listinfo/linaro-android
