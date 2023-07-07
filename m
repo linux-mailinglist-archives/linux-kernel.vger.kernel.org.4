@@ -2,146 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5E374AB1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B009274AB1F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjGGGaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 02:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
+        id S231706AbjGGGbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 02:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjGGGaM (ORCPT
+        with ESMTP id S229775AbjGGGbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 02:30:12 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F4F9D;
-        Thu,  6 Jul 2023 23:30:07 -0700 (PDT)
-X-UUID: b45e3c101c8f11ee9cb5633481061a41-20230707
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UAziGWEIBjQI0wuqlkRiC4ex2AoxNSXCmO21CSvsE4E=;
-        b=XGlbXCueM09dKinvQhK629iKAwF5q3eDwKHjJvmc6dH5xDlHs9JwDknkRWUw1kznO8oL5kqjJ7rwQMnXz86dee7FqD4sfLQabC2INWJxXwzB6Ok2AAS85ijjRP/Sgx8cSoYyFViPeeRHxqVMj65DDP/6DlbRHp5bXtTwhL4VVac=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:e0c0e52b-c14b-45e1-aaaf-fef34f5cb335,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.27,REQID:e0c0e52b-c14b-45e1-aaaf-fef34f5cb335,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:01c9525,CLOUDID:b619ab0d-26a8-467f-b838-f99719a9c083,B
-        ulkID:230707143004Z89Y8BRV,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
-X-UUID: b45e3c101c8f11ee9cb5633481061a41-20230707
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chris.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1891374206; Fri, 07 Jul 2023 14:30:02 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 7 Jul 2023 14:30:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 7 Jul 2023 14:30:02 +0800
-From:   Chris Lu <chris.lu@mediatek.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Von Dentz <luiz.dentz@gmail.com>
-CC:     Sean Wang <sean.wang@mediatek.com>,
-        Aaron Hou <aaron.hou@mediatek.com>,
-        Steve Lee <steve.lee@mediatek.com>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Chris Lu <chris.lu@mediatek.com>
-Subject: [PATCH v3 2/2] Bluetooth: btusb: Add new VID/PID 04ca/3804 for MT7922
-Date:   Fri, 7 Jul 2023 14:29:59 +0800
-Message-ID: <20230707062959.30371-2-chris.lu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230707062959.30371-1-chris.lu@mediatek.com>
-References: <20230707062959.30371-1-chris.lu@mediatek.com>
+        Fri, 7 Jul 2023 02:31:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF08A1FF9;
+        Thu,  6 Jul 2023 23:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1688711413; x=1689316213; i=deller@gmx.de;
+ bh=DdPZOtZVNsdAm2tHjUakaoi2IjUtD9GANS/45KrMaYA=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=YWqKVDhJ/5QrBSx4epjdd9S6wn4+H9LF7ZRZrFZaHPs+sg8z/piT+ulqT9TqaGi8p7fxz/8
+ dk1JlCbT0HHWtQ5jYQOl0pQYuRkSfkCDv5D7IHILsnvJ34BBZ5A9BkYU+DVNNqTC06LB34U6c
+ uP4pkMmY7f1Azz0k7SW6J5hCwlV7Pxy7z7wlAIHY1eM7Ta/34HRiWDdTffjaKs8cMWTI1IVFa
+ WLo9U7W12qaQOnCuEzymnlqxYwwAJF6FNPz0X/fVRYJAkz3GoyErWjTnjQFqqvv+dn9g6F3xm
+ FnV+l+f6skv24bD1BmXpoWxkwOTUeo9oz24PpZBDfYO2ypf3c6Vg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.153.180]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mw9UE-1pytbk3ese-00s5Aw; Fri, 07
+ Jul 2023 08:30:13 +0200
+Message-ID: <7b51c68e-c716-e510-48a4-5da697e33d05@gmx.de>
+Date:   Fri, 7 Jul 2023 08:30:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] fbdev: imxfb: Convert to devm_platform_ioremap_resource()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230704093652.18191-1-frank.li@vivo.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230704093652.18191-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:z7uLkJkCXWtZ3ZEnT389CW1h6m97XY9J80PvCGh+RRpnGXxKGvy
+ Y5Uok2CnRSlO3JhCNIEYMLnAUH8uCfMsIIlgifMJrQfJrprG0Ck4qu8Yz8aSx+wJE4NW7Aa
+ X0VZyjUDqgf4+qifqtbwDK44NHFAaf9dLLDNt6pnxaYXk/sIaSXLz4OYSpAKzLuypbWWsDP
+ exbh59sYUWBTE2JhTjbhQ==
+UI-OutboundReport: notjunk:1;M01:P0:isxEHFQiltc=;bgO/0Xo+1wUaV+mwEQBP8hnhwPl
+ 4tAxG+7Fhb9ubKHwsgewihLJ6Rmv/J0S7NS+znhlxaQ9SbIBHC8jHiBX/MDB2bfideesnxGxZ
+ N71wdqIOZDp1TKCQ3tpj3NzLuK4/frkOQO88IbAz+mcw4pkfiRycVTBGpeOpxXStge7b0bnuZ
+ 69EP4IaPi5eELdNROeBxRb9gZoAJ44zKtuPn6evtqrukfxJDM5J1fqGM3+9kmzjd/txjIBjxl
+ AAgP+eVOpj6X4qxI8XVBMngDAr975gzUZoqugZu2q/XlbU1cdMAtdH9gZ7tHeboFuigYqF8te
+ YhsI3Ed9sSJuvQWAwKn+Ayxu/fzkrHX4i+CNPKos9lsgZa85dtOHA8wfab9UPC3qQlanipxWG
+ wlNjUHu50EXBDiFHxpuBxRs6OcD54r0l2RwW/MVnuVgF+UFSErnjTitpdjBBiQClufQxG0M4j
+ 9S8NzLXoZAaKwWqDV/3V68s/fc/Q4DUmKc++rBbOGQSYHD01yMDxDvB6C6Mufnvsr2cl1ZDZx
+ oay2RZ2bJoQMx0F20llLMVugs3DCI5iylh5Q4uZye2W5lahiCNAVXmFnWFqne4nIQbqqdRoLd
+ y7Wnvhgit7cYGSVBihyh0qCb1Bm1IqCXzOAM4+OxI5JTAlUKXZMPBk7Oji7whun927DGw01Qt
+ rK0Yuxfjra1+qAZtciQMUolLHY+E9ge3B1n7yXTXi9CGl2MO00Wl5AzVqDCyqSKx+1KvA97QI
+ qJoE4E+LTmgQ8TMKUHV9TzupjT8eo6k6wVU70zobxL7Xp4PV6BsaDc30Q+eimHqYKFN1tvQTn
+ f5RQ7mrmMl9RzZJYdsTHZrRZZFRDgzs1/6gVqw+5PH+Zl/V9W5kxavf5zVNrXuIGWEMc8yy+Y
+ OgUwzGv1PCQqvUdBeyM1GIl/HtENoXA7DqN+HjEBXuvqaCoHqj4VdJpoHsoWBlbELv/3c3nnq
+ +i+msg==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add VID 04ca & PID 3804 for MediaTek MT7922 USB Bluetooth chip.
+On 7/4/23 11:36, Yangtao Li wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
+>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-The information in /sys/kernel/debug/usb/devices about the Bluetooth
-device is listed as the below.
+applied.
 
-T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04ca ProdID=3804 Rev= 1.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=000000000
-C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
+Thanks!
+Helge
 
-Signed-off-by: Chris Lu <chris.lu@mediatek.com>
----
-v2: update commit message
-v3: fix bot checking error, change title
----
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 9c886c9cce64..323ca92539eb 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -638,6 +638,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x0489, 0xe102), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x04ca, 0x3804), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
- 
- 	/* Additional Realtek 8723AE Bluetooth devices */
- 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
--- 
-2.18.0
+> ---
+>   drivers/video/fbdev/imxfb.c | 8 +-------
+>   1 file changed, 1 insertion(+), 7 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
+> index adf36690c342..517eb65bbaa6 100644
+> --- a/drivers/video/fbdev/imxfb.c
+> +++ b/drivers/video/fbdev/imxfb.c
+> @@ -868,7 +868,6 @@ static int imxfb_probe(struct platform_device *pdev)
+>   	struct imxfb_info *fbi;
+>   	struct lcd_device *lcd;
+>   	struct fb_info *info;
+> -	struct resource *res;
+>   	struct imx_fb_videomode *m;
+>   	const struct of_device_id *of_id;
+>   	struct device_node *display_np;
+> @@ -885,10 +884,6 @@ static int imxfb_probe(struct platform_device *pdev=
+)
+>   	if (of_id)
+>   		pdev->id_entry =3D of_id->data;
+>
+> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!res)
+> -		return -ENODEV;
+> -
+>   	info =3D framebuffer_alloc(sizeof(struct imxfb_info), &pdev->dev);
+>   	if (!info)
+>   		return -ENOMEM;
+> @@ -970,7 +965,7 @@ static int imxfb_probe(struct platform_device *pdev)
+>   		goto failed_getclock;
+>   	}
+>
+> -	fbi->regs =3D devm_ioremap_resource(&pdev->dev, res);
+> +	fbi->regs =3D devm_platform_ioremap_resource(pdev, 0);
+>   	if (IS_ERR(fbi->regs)) {
+>   		ret =3D PTR_ERR(fbi->regs);
+>   		goto failed_ioremap;
+> @@ -1043,7 +1038,6 @@ static int imxfb_probe(struct platform_device *pde=
+v)
+>   failed_map:
+>   failed_ioremap:
+>   failed_getclock:
+> -	release_mem_region(res->start, resource_size(res));
+>   failed_of_parse:
+>   	kfree(info->pseudo_palette);
+>   failed_init:
 
