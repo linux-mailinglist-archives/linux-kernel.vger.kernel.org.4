@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AD274ADB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF88674ADB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjGGJRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S232682AbjGGJRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbjGGJRp (ORCPT
+        with ESMTP id S229910AbjGGJRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:17:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE71FED;
-        Fri,  7 Jul 2023 02:17:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D974618EE;
-        Fri,  7 Jul 2023 09:17:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D88DC433CC;
-        Fri,  7 Jul 2023 09:17:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688721463;
-        bh=y9q2qXbwompfnqc3ko09F3B4CHKaOegjl3Lb2/TKMQg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CWJW6nfV1LLHdqEpf3qlp9YaZJ0AZSsErl6uz34df51iUBbBTIWxBYBMDOyLtGBaC
-         UuYrpUPoialz+UxcbsdL0X1WYnwnx3sMf0uAZXrvYGrX6FNbvJGrhDQj6ZfCOCdpby
-         M6XC9z5VuJ9Ov8NYy4/9b4nJk6j3FLhdWvUjk9Bo3K6/cS7f3ef37fCzQT8YBMLVFo
-         OAsQgHOMTArtJo9WcSzJwNk8wMYhFrFMf+gM7llQDFF0+Q2mdrYDt3GSigYMUFh1gi
-         muGprjg4OPbJkhwSdQno66o/B6IQiFVbv/Do0jTW11EIExCtWdj5R+AjJKJqoc7VYY
-         K/mdsGk2/NhSA==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b6ef64342aso25632271fa.3;
-        Fri, 07 Jul 2023 02:17:43 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZPDHye3mMNLGdc0urAU46kqCc6/Hv0rCOFCNHiC7IdOVBxwySM
-        SCzUeKHXt33SzkIi/IztAJt35+bWeSnyzH5iUGE=
-X-Google-Smtp-Source: APBJJlE87ltranMk+CAh0mG2TM1pdUHhZ3aMI3em6uPeDshWbQDvhk1ixsXNMSET75hla1kfWvJp4TEpy52dKYrm+cI=
-X-Received: by 2002:a2e:3312:0:b0:2b6:a05a:c5c with SMTP id
- d18-20020a2e3312000000b002b6a05a0c5cmr3369555ljc.1.1688721461492; Fri, 07 Jul
- 2023 02:17:41 -0700 (PDT)
+        Fri, 7 Jul 2023 05:17:40 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7E61991;
+        Fri,  7 Jul 2023 02:17:38 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qy7831GrKzqVbv;
+        Fri,  7 Jul 2023 17:17:07 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 17:17:35 +0800
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Corrected two typos
+To:     Lu Hongfei <luhongfei@vivo.com>
+CC:     <opensource.kernel@vivo.com>, Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Anton Protopopov <aspsk@isovalent.com>,
+        Wang Yufen <wangyufen@huawei.com>,
+        YiFei Zhu <zhuyifei@google.com>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230707081253.34638-1-luhongfei@vivo.com>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <b438d804-f73e-a5e4-0473-f21fa22a4486@huawei.com>
+Date:   Fri, 7 Jul 2023 17:17:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20230706083727.608914-1-yukuai1@huaweicloud.com>
-In-Reply-To: <20230706083727.608914-1-yukuai1@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 7 Jul 2023 17:17:29 +0800
-X-Gmail-Original-Message-ID: <CAPhsuW5OpiFoMupDOpxns3ZwC-MXwYk6P5McKXWbaHPD8TVJJA@mail.gmail.com>
-Message-ID: <CAPhsuW5OpiFoMupDOpxns3ZwC-MXwYk6P5McKXWbaHPD8TVJJA@mail.gmail.com>
-Subject: Re: [PATCH -next 0/2] md/md-bimap: hold 'reconfig_mutex' in backlog_store()
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     guoqing.jiang@linux.dev, neilb@suse.com,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230707081253.34638-1-luhongfei@vivo.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 4:38=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> wr=
-ote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> Yu Kuai (2):
->   md/md-bitmap: remove unnecessary local variable in backlog_store()
->   md/md-bitmap: hold 'reconfig_mutex' in backlog_store()
->
->  drivers/md/md-bitmap.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
 
-Applied to md-next. Thanks!
 
-Song
+On 7/7/2023 4:12 PM, Lu Hongfei wrote:
+> When wrapping code, use ';' better than using ',' which is more
+> in line with the coding habits of most engineers.
+>
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> ---
+> Compared to the previous version, the modifications made are:
+> 1. Modified the subject to make it clearer and more accurate
+> 2. Newly optimized typo in tcp_hdr_options.c
+>
+>  tools/testing/selftests/bpf/benchs/bench_ringbufs.c      | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+
+Acked-by: Hou Tao <houtao1@huawei.com>
