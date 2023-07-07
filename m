@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0A974AC6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4827C74AC12
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjGGICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S232467AbjGGHjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232624AbjGGICR (ORCPT
+        with ESMTP id S229815AbjGGHjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:02:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9DA1B6;
-        Fri,  7 Jul 2023 01:02:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9910D617C5;
-        Fri,  7 Jul 2023 08:02:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011DFC433C8;
-        Fri,  7 Jul 2023 08:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688716935;
-        bh=XbeilgU8Ic2ceNjEbWhib7f0IugPG6YZI+tOX8MQnMw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TJ3D1PGrl8gxvouFNW7jXtCYUmSkxMheFtdm3PHfjozbf2S0D0+fMn+lLvrmwc4Tb
-         nAtwMwEs2UTAVX7/3qDnEfR4S+btxOwryQJtfpOKRJEddpkGa9ItWTA5p3SpjnY21Y
-         tBAlFi0vFFgzNgpN+Xmk5LfkWGBUHTYII4k91FBgkR9C0iBNodESRdZR2gFYxd35WH
-         oiIumACWachmH7jYAtEUOdstWn6o9uyVZq6GYNlykeq9l7vFZx6D7OdrgCqL1W6i0Z
-         0sFiv7DsOxJrsflJ2HtghCXPsOsr8G64KflgKn9ErhrUtO8rR2W2Rr/DvFb1a955z/
-         UWf8uKeLCeVOQ==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b70404a5a0so24001091fa.2;
-        Fri, 07 Jul 2023 01:02:14 -0700 (PDT)
-X-Gm-Message-State: ABy/qLa4vIkUAN8NCoeD+moem8Il8x6nOdmv3s34dgjEy2f9S5G66/iS
-        ouea8RyMIwd1RA+N8K+roORodWJDc0sX9ocsHtM=
-X-Google-Smtp-Source: APBJJlG457VU/NsI9QcteOdHwIAM4v4Gfzi0F6Q6DGjEs80P1F7aLcEogNYB1k8ba8WZoUAxZjpR3lcCpTE4jLyM21M=
-X-Received: by 2002:a2e:9011:0:b0:2b6:e0b5:b76d with SMTP id
- h17-20020a2e9011000000b002b6e0b5b76dmr3791293ljg.45.1688716932998; Fri, 07
- Jul 2023 01:02:12 -0700 (PDT)
+        Fri, 7 Jul 2023 03:39:11 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2420A19B2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:39:10 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qy4yt6fgcz4f3jMc
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:39:02 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgDXsc8XwadktcpJNQ--.23358S2;
+        Fri, 07 Jul 2023 15:39:05 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: correct stale comment of function check_pte
+Date:   Fri,  7 Jul 2023 23:39:53 +0800
+Message-Id: <20230707153953.1380615-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20230627014332.3810102-1-linan666@huaweicloud.com>
-In-Reply-To: <20230627014332.3810102-1-linan666@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 7 Jul 2023 16:01:59 +0800
-X-Gmail-Original-Message-ID: <CAPhsuW5cO4q+XZm=XwKzG6Npot5m5T5ECtWaXuOLU-d5st3boA@mail.gmail.com>
-Message-ID: <CAPhsuW5cO4q+XZm=XwKzG6Npot5m5T5ECtWaXuOLU-d5st3boA@mail.gmail.com>
-Subject: Re: [PATCH v2] md/raid1: prioritize adding disk to 'removed' mirror
-To:     linan666@huaweicloud.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
-        houtao1@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDXsc8XwadktcpJNQ--.23358S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF4DJw1UZF15JF4kuFyUZFb_yoW8AFyxp3
+        Z3G3Z5XrykK3s0kw12yFZI9r45twnxXrWFyr4rCw1fAws8Gw4kWFy5JFW8Zr40qayxJ3sr
+        J3y2yr43Aa48tFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_
+        tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
+        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z2
+        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j-6pPUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,77 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 9:44=E2=80=AFAM <linan666@huaweicloud.com> wrote:
->
-> From: Li Nan <linan122@huawei.com>
->
-> New disk should be added to "removed" position first instead of to be a
-> replacement. Commit 6090368abcb4 ("md/raid10: prioritize adding disk to
-> 'removed' mirror") has fixed this issue for raid10. Fix it for raid1 now.
->
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+Commit 2aff7a4755bed ("mm: Convert page_vma_mapped_walk to work on PFNs")
+replaced page with pfns in page_vma_mapped_walk structure and updated
+"@pvmw->page" to "@pvmw->pfn" in comment of function page_vma_mapped_walk.
 
-Applied to md-next. Thanks!
+This patch update stale "page" to "pfn" in comment of check_pte.
 
-Song
+Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+---
+ mm/page_vma_mapped.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-> ---
-> Changes in v2:
->  - improve commit log.
->
->  drivers/md/raid1.c | 26 +++++++++++++++-----------
->  1 file changed, 15 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-> index 68a9e2d9985b..320bede4bfab 100644
-> --- a/drivers/md/raid1.c
-> +++ b/drivers/md/raid1.c
-> @@ -1782,7 +1782,7 @@ static int raid1_add_disk(struct mddev *mddev, stru=
-ct md_rdev *rdev)
->  {
->         struct r1conf *conf =3D mddev->private;
->         int err =3D -EEXIST;
-> -       int mirror =3D 0;
-> +       int mirror =3D 0, repl_slot =3D -1;
->         struct raid1_info *p;
->         int first =3D 0;
->         int last =3D conf->raid_disks - 1;
-> @@ -1825,17 +1825,21 @@ static int raid1_add_disk(struct mddev *mddev, st=
-ruct md_rdev *rdev)
->                         break;
->                 }
->                 if (test_bit(WantReplacement, &p->rdev->flags) &&
-> -                   p[conf->raid_disks].rdev =3D=3D NULL) {
-> -                       /* Add this device as a replacement */
-> -                       clear_bit(In_sync, &rdev->flags);
-> -                       set_bit(Replacement, &rdev->flags);
-> -                       rdev->raid_disk =3D mirror;
-> -                       err =3D 0;
-> -                       conf->fullsync =3D 1;
-> -                       rcu_assign_pointer(p[conf->raid_disks].rdev, rdev=
-);
-> -                       break;
-> -               }
-> +                   p[conf->raid_disks].rdev =3D=3D NULL && repl_slot < 0=
-)
-> +                       repl_slot =3D mirror;
->         }
-> +
-> +       if (err && repl_slot >=3D 0) {
-> +               /* Add this device as a replacement */
-> +               p =3D conf->mirrors + repl_slot;
-> +               clear_bit(In_sync, &rdev->flags);
-> +               set_bit(Replacement, &rdev->flags);
-> +               rdev->raid_disk =3D repl_slot;
-> +               err =3D 0;
-> +               conf->fullsync =3D 1;
-> +               rcu_assign_pointer(p[conf->raid_disks].rdev, rdev);
-> +       }
-> +
->         print_conf(conf);
->         return err;
->  }
-> --
-> 2.39.2
->
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index 6ac795a87279..dbe2418b44e5 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -73,20 +73,22 @@ static bool map_pte(struct page_vma_mapped_walk *pvmw, spinlock_t **ptlp)
+ }
+ 
+ /**
+- * check_pte - check if @pvmw->page is mapped at the @pvmw->pte
+- * @pvmw: page_vma_mapped_walk struct, includes a pair pte and page for checking
++ * check_pte - check if [pvmw->pfn, @pvmw->pfn + @pvmw->nr_pages) is
++ * mapped at the @pvmw->pte
++ * @pvmw: page_vma_mapped_walk struct, includes a pair pte and pfn range
++ * for checking
+  *
+- * page_vma_mapped_walk() found a place where @pvmw->page is *potentially*
++ * page_vma_mapped_walk() found a place where pfn range is *potentially*
+  * mapped. check_pte() has to validate this.
+  *
+  * pvmw->pte may point to empty PTE, swap PTE or PTE pointing to
+  * arbitrary page.
+  *
+  * If PVMW_MIGRATION flag is set, returns true if @pvmw->pte contains migration
+- * entry that points to @pvmw->page or any subpage in case of THP.
++ * entry that points to [pvmw->pfn, @pvmw->pfn + @pvmw->nr_pages)
+  *
+  * If PVMW_MIGRATION flag is not set, returns true if pvmw->pte points to
+- * pvmw->page or any subpage in case of THP.
++ * [pvmw->pfn, @pvmw->pfn + @pvmw->nr_pages)
+  *
+  * Otherwise, return false.
+  *
+-- 
+2.30.0
+
