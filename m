@@ -2,83 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF1774B6EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80B574B6EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjGGTJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S232963AbjGGTKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjGGTJr (ORCPT
+        with ESMTP id S229611AbjGGTK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:09:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39AE2107
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:09:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 792BA61A3E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:09:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13E0C433C7;
-        Fri,  7 Jul 2023 19:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1688756972;
-        bh=bsWOwWbAgPkBn7wNRZCfCwO7B5F2fdglS9wNNhs6Ktc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=huiLJISGDK/hYqE/5V6ivNupwqho4dWwXwAxA4slsqQghRydE5umU/1VEXpS+hnZp
-         kKkKcWIoD9DesPxWBno1uPce5ZjpSWgMl7AgxENL0G2HcM6kCy7J8FiKUs1tCwurqB
-         3xEBo1GUeY/gqR3rA8aaVSAZopgleBUSXs+fGs14=
-Date:   Fri, 7 Jul 2023 12:09:31 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Efly Young <yangyifei03@kuaishou.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH] mm:vmscan: fix inaccurate reclaim during proactive
- reclaim
-Message-Id: <20230707120931.f2ec7f5c53c5dd2788afda11@linux-foundation.org>
-In-Reply-To: <20230707103226.38496-1-yangyifei03@kuaishou.com>
-References: <20230707103226.38496-1-yangyifei03@kuaishou.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 7 Jul 2023 15:10:28 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A9E118;
+        Fri,  7 Jul 2023 12:10:27 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.86.230) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 7 Jul 2023
+ 22:10:25 +0300
+Subject: Re: [PATCH v2 07/11] ata: sata_rcar: Convert to
+ devm_platform_ioremap_resource()
+To:     Yangtao Li <frank.li@vivo.com>, Damien Le Moal <dlemoal@kernel.org>
+CC:     <linux-ide@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230707095513.64224-1-frank.li@vivo.com>
+ <20230707095513.64224-7-frank.li@vivo.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <8c74bd12-121f-eb56-9e6a-d09cb0dd1fcf@omp.ru>
+Date:   Fri, 7 Jul 2023 22:10:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20230707095513.64224-7-frank.li@vivo.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [31.173.86.230]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/07/2023 18:41:49
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 178491 [Jul 07 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.86.230
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/07/2023 18:48:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/7/2023 3:11:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc hannes)
+On 7/7/23 12:55 PM, Yangtao Li wrote:
 
-On Fri, 7 Jul 2023 18:32:26 +0800 Efly Young <yangyifei03@kuaishou.com> wrote:
-
-> With commit f53af4285d77 ("mm: vmscan: fix extreme overreclaim
-> and swap floods"), proactive reclaim still seems inaccurate.
+> Use devm_platform_ioremap_resource() to simplify code.
 > 
-> Our problematic scene also are almost anon pages. Request 1G
-> by writing memory.reclaim will reclaim 1.7G or other values
-> more than 1G by swapping.
-> 
-> This try to fix the inaccurate reclaim problem.
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-It would be helpful to have some additional explanation of why you
-believe the current code is incorrect?
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -6208,7 +6208,7 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
->  	unsigned long nr_to_scan;
->  	enum lru_list lru;
->  	unsigned long nr_reclaimed = 0;
-> -	unsigned long nr_to_reclaim = sc->nr_to_reclaim;
-> +	unsigned long nr_to_reclaim = (sc->nr_to_reclaim - sc->nr_reclaimed);
->  	bool proportional_reclaim;
->  	struct blk_plug plug;
->  
+[...]
 
+MBR, Sergey
