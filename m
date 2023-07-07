@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DD374AD67
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845FC74AD6B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjGGIyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S232446AbjGGIy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjGGIyf (ORCPT
+        with ESMTP id S232404AbjGGIyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:54:35 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B711B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:54:33 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9923833737eso184396566b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1688720072; x=1691312072;
-        h=in-reply-to:references:message-id:from:subject:cc:to:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FNP67nB8w4qAe9aasBZpn4WM7fGgxJQjgNj1BNpGYpk=;
-        b=hm5jlRhf90It3b7MxYzK9CxhkXtifZWEuoSDJil5qOn8bvfVKI+Zn+ozr6ggX1sn3C
-         2Ex8oq6zDb1bJduGSgQzfa3kbTcpyBHORIUodPQE5fWioLUyuExfrKC/9JTI4gWjQA7h
-         PJgDdtgaF44JSQ9s8OlG5DcTq3y8k6niUCW48jL7xWRQZKiCgfzQ7L7a633mdynmeZ9G
-         BYmsl7zMi8p0qv93Gixrg0IxflBQklDc0QvV82vgz59xMk1Od6g5X2E4+U9jWYIp8F2O
-         r/iYsYXv8Xc5WZi9IfmAXoJ6X8PjUljRLOEkrJZZHMz8IkwuZZVm08k0SYaBQzIqKqUd
-         zEtw==
+        Fri, 7 Jul 2023 04:54:54 -0400
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEAF1FF1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:54:53 -0700 (PDT)
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-263fd992ab2so3124421a91.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:54:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688720072; x=1691312072;
-        h=in-reply-to:references:message-id:from:subject:cc:to:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FNP67nB8w4qAe9aasBZpn4WM7fGgxJQjgNj1BNpGYpk=;
-        b=MurCW63t6In5o7Aa51NVVq2ltXMHEBA34WhDgdzijkCVNyjNh2WFkv8Aok0/2bV2Yy
-         aZxgveAuEVUqNEkAUuNx7KW2PaqkwBi8vRaQ5NRCaggznIz8fLl9kSFwFiL6tIHn+RZY
-         ibLormalFNrxuVSrkW3bouisOfNwNFMMnvrOHYsF4GNLy4f3zGiLnhPaZVTMRbHrWiwf
-         h5NfQLw7gCHHSZX2oHo19HJRGnG22eoOPkUqSqu+jfvsmGLEOUsK9fkCOkMGfeHNh2Ii
-         wzrxA99i8RP1Z/q8IAP0ebhZVnl0t3oWLtfL8d5G3zpZUI+2TMlRnVtNelrSUCgcDd32
-         lB/w==
-X-Gm-Message-State: ABy/qLZ6ivZIKZ3Oc5TO0UQCUbZVecnjDn0ZjOdOMbZF7xVOwuG7edcp
-        83+ZPKr7vKG8f31ZTdD6T2d5Ug==
-X-Google-Smtp-Source: APBJJlH2Il6moenVUvYLNNLTyQ7wfbK7qH483vc4iXpIumSLrG8TYsoHy5nczH3bWWUgBs7L8H0e8Q==
-X-Received: by 2002:a17:906:7c93:b0:992:5135:4106 with SMTP id w19-20020a1709067c9300b0099251354106mr3291168ejo.29.1688720072293;
-        Fri, 07 Jul 2023 01:54:32 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id n7-20020a1709065e0700b009937dbabbdasm1884181eju.217.2023.07.07.01.54.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 01:54:32 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 07 Jul 2023 10:54:31 +0200
-To:     "Luca Weiss" <luca.weiss@fairphone.com>,
-        "Satya Priya" <quic_c_skakit@quicinc.com>,
-        "Satya Priya Kakitapalli (Temp)" <quic_skakitap@quicinc.com>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>
-Cc:     "Lee Jones" <lee.jones@linaro.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        "Mark Brown" <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-Subject: Re: [PATCH V15 0/9] Add Qualcomm Technologies, Inc. PM8008
- regulator driver
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-Message-Id: <CTVTA3OZJKG4.2ZSJ5I59AVRHO@otso>
-X-Mailer: aerc 0.15.1
-References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
- <CR8I57ZATTO2.232WHNST3N2YG@otso>
-In-Reply-To: <CR8I57ZATTO2.232WHNST3N2YG@otso>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688720093; x=1691312093;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=torgUPAhXS1H2G3DGUbQjuzvoRVARhYShNxl4DjsIiY=;
+        b=jste7sxgh3O3uibmHPCCRAk4Mi/oBIYGjV/+f8E2Nohg1CCQHzqRv2xYSvc9nwL3qn
+         Yfqclh8b/c3edEzcj+/FX2JIY0PezMV94Byva75/gBNDYkXhgvvR8jaiDSFS5YWeR2bk
+         J5JbFvXV4vJSQOWkoQv7M1NvXOuDEh7N9o0j1iqv6dzixCjGTwMHIudPeT4eAJjttMhx
+         zW+TKrA3Jj4bSOmT4PZsVZvpe1a6El6yOR4+tVIVKtazwI2rr7R+rHbYPslGNeVoan89
+         EyaA0udh8q3MTIDnzljQmyWhYL8zipym6m0+TZ39A2TlIfBgfB+J6dbo5XE5eBX3o+FT
+         aD+Q==
+X-Gm-Message-State: ABy/qLaFV5joi/cX/fSzVn0Z+yROYBlhzsh+6/0d8lp6/+c+rak6uTWf
+        mBkx+uzWMFtVJMyXXqGMo1TIDjH/13rpl2VALnDVyH1GNsUH
+X-Google-Smtp-Source: APBJJlEj0qsc1paNuAYlGMumGyfVNkMx6Ck/As9XIIOsGAYkXhB68q9QBrRGARXmfN9NeynZzeP9VWb6TT+J1nzVydHRrxv0obmn
+MIME-Version: 1.0
+X-Received: by 2002:a17:90a:4302:b0:263:3727:6045 with SMTP id
+ q2-20020a17090a430200b0026337276045mr3483863pjg.4.1688720093144; Fri, 07 Jul
+ 2023 01:54:53 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 01:54:52 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000046ef4805ffe1c9b4@google.com>
+Subject: [syzbot] Monthly input report (Jul 2023)
+From:   syzbot <syzbot+list1a4115131c3a1defb044@syzkaller.appspotmail.com>
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Mar 17, 2023 at 9:06 AM CET, Luca Weiss wrote:
-> Hi Satya,
->
-> On Tue Jun 14, 2022 at 11:48 AM CEST, Satya Priya wrote:
-> > Satya Priya (9):
-> >   dt-bindings: mfd: pm8008: Add reset-gpios
-> >   dt-bindings: mfd: pm8008: Change the address cells
-> >   dt-bindings: mfd: pm8008: Add regulators for pm8008
-> >   mfd: pm8008: Add reset-gpios
-> >   mfd: pm8008: Remove the regmap member from pm8008_data struct
-> >   mfd: pm8008: Use i2c_new_dummy_device() API
-> >   regulator: Add a regulator driver for the PM8008 PMIC
-> >   arm64: dts: qcom: pm8008: Add base dts file
-> >   arm64: dts: qcom: sc7280: Add pm8008 support for sc7280-idp
->
-> Is there any activity on this patch series? It's been a few months since
-> this revision. Would be interested in this for the pm8008 found on
-> sm7225-fairphone-fp4.
+Hello input maintainers/developers,
 
-Hi all,
+This is a 31-day syzbot report for the input subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/input
 
-Quick ping again, I'd really like to see this PM8008 series land.
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 11 issues are still open and 48 have been fixed so far.
 
-Regards
-Luca
+Some of the still happening issues:
 
->
-> Regards
-> Luca
->
-> >
-> >  .../devicetree/bindings/mfd/qcom,pm8008.yaml       |  69 +++++-
-> >  arch/arm64/boot/dts/qcom/pm8008.dtsi               |  54 +++++
-> >  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  66 ++++++
-> >  drivers/mfd/qcom-pm8008.c                          |  60 ++++-
-> >  drivers/regulator/Kconfig                          |   9 +
-> >  drivers/regulator/Makefile                         |   1 +
-> >  drivers/regulator/qcom-pm8008-regulator.c          | 242 +++++++++++++=
-++++++++
-> >  include/linux/mfd/qcom_pm8008.h                    |   9 +
-> >  8 files changed, 492 insertions(+), 18 deletions(-)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/pm8008.dtsi
-> >  create mode 100644 drivers/regulator/qcom-pm8008-regulator.c
-> >  create mode 100644 include/linux/mfd/qcom_pm8008.h
-> >
-> > --=20
-> > 2.7.4
+Ref Crashes Repro Title
+<1> 2737    Yes   WARNING in input_mt_init_slots
+                  https://syzkaller.appspot.com/bug?extid=0122fa359a69694395d5
+<2> 936     Yes   WARNING in implement
+                  https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
+<3> 102     Yes   general protection fault in hidraw_release
+                  https://syzkaller.appspot.com/bug?extid=953a33deaf38c66a915e
+<4> 5       Yes   INFO: task hung in uhid_char_release
+                  https://syzkaller.appspot.com/bug?extid=8fe2d362af0e1cba8735
+<5> 3       No    KASAN: slab-use-after-free Read in remove_wait_queue
+                  https://syzkaller.appspot.com/bug?extid=e0b9084463edf54b83c4
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
