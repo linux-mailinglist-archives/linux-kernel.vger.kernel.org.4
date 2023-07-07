@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7E574A7FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 02:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7272F74A7FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 02:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjGGAHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 20:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S232025AbjGGAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 20:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjGGAHu (ORCPT
+        with ESMTP id S229802AbjGGAKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 20:07:50 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAE619A5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 17:07:48 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso20576811fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 17:07:48 -0700 (PDT)
+        Thu, 6 Jul 2023 20:10:20 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD8919A5;
+        Thu,  6 Jul 2023 17:10:19 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b3f281c4e1so1310015fac.3;
+        Thu, 06 Jul 2023 17:10:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688688467; x=1691280467;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F28CkGKtrRq/JphfDh7W7gy1EaRmjF7asRrwFDHSU+M=;
-        b=u//N4ir1xng6mEM/eKQJ5eJvg5rAqP+U1AmMbhXJH4tsBRdMVb7BN7YcA9luS/TNWx
-         HtcugFRngOELojkyPok/BOpic45TluwMwoOSDVH1KeA0DMoqDHe0PqGJAbr9J/+0K4jV
-         Qj7ubBVTxCkM73QLP3xTWnaVR7TNHR2TJg82MIUl5DaU3XasRdVRmohd1okQ+TNBv8MI
-         iOBAxjlup+FJ/pS0DC5YQq3j4fe5iy6EuQ8MjHNCuQ8fTXRIh5Py31nTWZHFjnK2OO3d
-         sa3kfiDlSv9Fq7sLQhp+/OqyjhQsBLk0hF6A6GSh199HMIm3aul+2tb6rjRJRKwCR+3A
-         IIcg==
+        d=gmail.com; s=20221208; t=1688688618; x=1691280618;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yZ/b7E/Eh4nowMWl8PSAsvQtiy/LoU/GQYU3Xwct544=;
+        b=JJmZToypqZzTtO/blXqEWK10w3yc7b2ehHkB2kHousQTH84aVUdfS6QaoxW0+rIlLC
+         2UaulKOXvoiw2i2CHwQd6Hthsk6zNwaaqBK5UGPg8doG9IBoR40LeAxecgz/BL1cfpjh
+         QAqbkDOKSv6rCbns5FfnD9+GJKLKbRwpuITNGSbo0qnGc7SFrvjboxgzmdr/PxH/01Dj
+         L9e15hSNLWBq6THL0NdLub+OXldAavgXql3GJgQkBlO4vHuUV06D4duRlEJn3Ygr6RDD
+         JkYwRZZHaRkTcPAqpbzXzJbOWXCxPz/AQsy2vTl9ARW8EbQDfFr0M6M7SkMs+89k5c2L
+         bmuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688688467; x=1691280467;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F28CkGKtrRq/JphfDh7W7gy1EaRmjF7asRrwFDHSU+M=;
-        b=UjmnGzRAizWNhNS4J2h1wpSxt/zBtUjmtYOAk1k03YdVgKs0Bl9iYNRUVZLzPTGUJv
-         YHquvN2dZPO5f24WDMjOzpWsLXSPH4WppRZHemdmtdqiyZmX8Ltb3gvrGVhZKcHdw+bB
-         myjJwlR0TCkmFQBd2gRVtDZ7S4em6Diurn2FcZ9XdJxOfQmz8Cy7OfKEutpVtd/u81Be
-         Qh28Cvbt9WtYxYOOxuXRlOX1aWREZaafavr4Z8f+ImCS2Bngh91NPtGp/CV15nxtTNWi
-         /+n5t8X3z9ELiBWux2naCtU5+CIwlFxwBh+nh9/3avMvnq1fmc7cKHfzGrmkUIVHn0Nz
-         qwyw==
-X-Gm-Message-State: ABy/qLaFFAj65F65P8wkiLiXNWoFQTsH5GtPCfkx5RzKP+jQrLiMOY6g
-        L8USp2zZfKh5tZEH97JkOTC4yg==
-X-Google-Smtp-Source: APBJJlHXU91JXNbEGC9i57r6waY7jofkpsgKwMCjYlKv0bIz5bxi/IhwM6btGXEIQYBnwXvN56xuTA==
-X-Received: by 2002:a2e:2405:0:b0:2b6:ce35:2e9e with SMTP id k5-20020a2e2405000000b002b6ce352e9emr2408610ljk.44.1688688467134;
-        Thu, 06 Jul 2023 17:07:47 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id x22-20020a2e8396000000b002b700952298sm530462ljg.33.2023.07.06.17.07.46
+        d=1e100.net; s=20221208; t=1688688618; x=1691280618;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yZ/b7E/Eh4nowMWl8PSAsvQtiy/LoU/GQYU3Xwct544=;
+        b=AUMhPL6Z3TuQcdf2dY4IUybfFzuKd60oAq0yxESbChQXpIo1vGCa+hUO/zSL/mReaj
+         Nzp7IdMy8XeXB4WsQbBVwC3g4x2sD3GNJB4J+DQAjXPMxP/bgFAgMlwqsH65Z7WnDPjH
+         N7QttXUSf1luIY/7sAoBkfu8Ojmw8Vq3yashuF1KHQQfhEvOJQiKSJ2JExz/d+NN8l+L
+         rmLKhT3fPEfN44uQxedrhnVfBNR+kWjUepHHiYYzt1LjgWVR/9UqMhWaLPOapN7f9A4d
+         ESMzfl/pq7yD5fm0WnxYWpd1H9JMO6emYHQ6LNqwdqfi8SkZv7it3V76NPU8Rv/E3Td7
+         94Rg==
+X-Gm-Message-State: ABy/qLbLCjcy9a4/3ZpifmZ4LxgUEU1nIz6lfjyR1/Xt2rxpNlAw3KAg
+        CDguA5jsk++WHJs/37wo6a4cY5gA9XQa9lED
+X-Google-Smtp-Source: APBJJlHUXiOJ5FpbxwvaZwaSGcRELso1WXOC5qxHGKmWyzvWwBJL4NkcPa4GCMG5mk6IByuv3LhTyQ==
+X-Received: by 2002:a05:6870:e0d3:b0:1b0:2d25:f5a8 with SMTP id a19-20020a056870e0d300b001b02d25f5a8mr4329563oab.1.1688688618059;
+        Thu, 06 Jul 2023 17:10:18 -0700 (PDT)
+Received: from [192.168.0.103] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id 11-20020a17090a004b00b0026309d57724sm350443pjb.39.2023.07.06.17.10.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 17:07:46 -0700 (PDT)
-Message-ID: <deb38d54-bf7f-f42a-8b61-f6c8f46370b0@linaro.org>
-Date:   Fri, 7 Jul 2023 03:07:46 +0300
+        Thu, 06 Jul 2023 17:10:17 -0700 (PDT)
+Message-ID: <5eb57bfe-94a4-136b-497e-deeb31846db1@gmail.com>
+Date:   Fri, 7 Jul 2023 07:10:13 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v4 5/6] drm/msm/dpu: Refactor printing of main blocks in
- device core dump
-Content-Language: en-GB
-To:     Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
-References: <20230622-devcoredump_patch-v4-0-e304ddbe9648@quicinc.com>
- <20230622-devcoredump_patch-v4-5-e304ddbe9648@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230622-devcoredump_patch-v4-5-e304ddbe9648@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        primalmotion <primalmotion@pm.me>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux USB <linux-usb@vger.kernel.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: unable to boot when monitor is attached
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,94 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2023 23:48, Ryan McCann wrote:
-> Currently, the names of main blocks are hardcoded into the
-> msm_disp_snapshot_add_block function rather than using the name that
-> already exists in the catalog. Change this to take the name directly from
-> the catalog instead of hardcoding it.
-> 
-> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 32 ++++++++++++++++----------------
->   1 file changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index aa8499de1b9f..70dbb1204e6c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -899,38 +899,38 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
->   
->   	/* dump CTL sub-blocks HW regs info */
->   	for (i = 0; i < cat->ctl_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
-> -				dpu_kms->mmio + cat->ctl[i].base, "ctl_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len, dpu_kms->mmio +
-> +					    cat->ctl[i].base, cat->ctl[i].name);
+Hi,
 
-Splitting on the `+' sign is a bad idea. It makes it harder to read the 
-code. Please keep the first line as is, it is perfectly fine on its own, 
-and do just what you have stated in the commit message: change printed 
-block name.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
->   
->   	/* dump DSPP sub-blocks HW regs info */
->   	for (i = 0; i < cat->dspp_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len,
-> -				dpu_kms->mmio + cat->dspp[i].base, "dspp_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len, dpu_kms->mmio +
-> +					    cat->dspp[i].base, cat->dspp[i].name);
->   
->   	/* dump INTF sub-blocks HW regs info */
->   	for (i = 0; i < cat->intf_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len,
-> -				dpu_kms->mmio + cat->intf[i].base, "intf_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len, dpu_kms->mmio +
-> +					    cat->intf[i].base, cat->intf[i].name);
->   
->   	/* dump PP sub-blocks HW regs info */
->   	for (i = 0; i < cat->pingpong_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len,
-> -				dpu_kms->mmio + cat->pingpong[i].base, "pingpong_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len, dpu_kms->mmio +
-> +					    cat->pingpong[i].base, cat->pingpong[i].name);
->   
->   	/* dump SSPP sub-blocks HW regs info */
->   	for (i = 0; i < cat->sspp_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len,
-> -				dpu_kms->mmio + cat->sspp[i].base, "sspp_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len, dpu_kms->mmio +
-> +					    cat->sspp[i].base, cat->sspp[i].name);
->   
->   	/* dump LM sub-blocks HW regs info */
->   	for (i = 0; i < cat->mixer_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len,
-> -				dpu_kms->mmio + cat->mixer[i].base, "lm_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len, dpu_kms->mmio +
-> +					    cat->mixer[i].base, cat->mixer[i].name);
->   
->   	/* dump WB sub-blocks HW regs info */
->   	for (i = 0; i < cat->wb_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
-> -				dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len, dpu_kms->mmio +
-> +					    cat->wb[i].base, cat->wb[i].name);
->   
->   	if (cat->mdp[0].features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->   		msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
-> @@ -944,8 +944,8 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
->   
->   	/* dump DSC sub-blocks HW regs info */
->   	for (i = 0; i < cat->dsc_count; i++)
-> -		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
-> -				dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
-> +		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len, dpu_kms->mmio +
-> +					    cat->dsc[i].base, cat->dsc[i].name);
->   
->   	pm_runtime_put_sync(&dpu_kms->pdev->dev);
->   }
 > 
+> In the latest 6.3 and 6.4, it is impossible for me to boot my laptop if my DELL U2720Q monitor is plugged in (USB-C). I have to unplug it, then boot. As soon as the first second of boot went through, I can plug in my monitor and there is no issue afterward. There is no issue waking up after suspend. Only when it boots.
+> 
+> See the attached pictures of the trace. The trace itself seems random (at least to me :)). I tried several things, like removing any attached USB devices from the monitor built-in USB-hub, but that does not change anything. (there is a keyboard and trackpad attached).
+
+See Bugzilla for the full thread.
+
+Unfortunately, the reporter can only provide photos of kernel trace
+(as he doesn't have any other means to extract kernel logs, maybe
+connecting over serial helps; see Bugzilla for these attachments).
+
+Anyway, I'm adding it to regzbot so that it doesn't fall through
+cracks unnoticed:
+
+#regzbot introduced: v6.1..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217637
+#regzbot title: unable to boot with Dell U2720Q monitor attached
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217637
 
 -- 
-With best wishes
-Dmitry
-
+An old man doll... just what I always wanted! - Clara
