@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30D574AF9C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106774AF9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjGGLXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
+        id S232555AbjGGLXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjGGLXQ (ORCPT
+        with ESMTP id S232307AbjGGLXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:23:16 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB03210B;
-        Fri,  7 Jul 2023 04:23:10 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so2837824e87.0;
-        Fri, 07 Jul 2023 04:23:10 -0700 (PDT)
+        Fri, 7 Jul 2023 07:23:33 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29792116;
+        Fri,  7 Jul 2023 04:23:29 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso2823405e87.3;
+        Fri, 07 Jul 2023 04:23:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688728989; x=1691320989;
+        d=gmail.com; s=20221208; t=1688729008; x=1691321008;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bC76BhDwvxGXnn22R6GjRzYzl+h/Q/u01ff105/sBgQ=;
-        b=OvulJ2wp7kvjJsNqUZa5a4O8MHzJHoyIKMsRNRMVaUjWy17Vlw9NraoqlHX03+bvoi
-         0LRIzaOURtJfjEXQA9DVQqGLz+z79SCppdgLUs73SpCN4h21QIRDdJeXK5R6V3SV8R6A
-         LxhAm2bvZtSjN+Yrmi5Ar3hRVOXOk2EomC+94ShH8uyGA+X2NecLAQAfuOwZ+vtrL4qp
-         DAvL7MqfVEUOWYR2i17ycfREhSTLONz9JWLyk2pl4j98PXq52YrXag8cN/eBZrW9Qy5t
-         DQhozXF2qjX8mlprIqwF/3l5PRDRF8/9sd4S6IXZGwj8N/7jHfbC/ECERs7C0sSbVPvY
-         pMPA==
+        bh=un39hWLwcrkNJt4FRwfT/hbvXv35uSTSiw2O27u8OU0=;
+        b=mMKL7i17l++9/UTFaWw9WY4JEzgJHsAGD6qoxPsdapblgXs5mQ2xksBWusUOkA7KpS
+         rU1POATqS7IVgM07ho+0Ma8U4YYy+9Dmy9HCCx1juxfDQgOfp44QJd3rpZBbygtj5+Bi
+         75aosV8kakVnbIq4TumAuOqmeGtt5iB+MpFLXForlnlYT3gFjgvkzu6n/YCNP+KIi9B4
+         tWa+Ep+302N2k7DzBpt/KDz/wC42+VTfczgnEElnrb3rASslJPwuG6T//pCNhwP4u6lE
+         h0ke3L0LyoYDrfXRYDVQGQUm3z7aJ3K+Wufyl2aJejx424438ktFsKshW8UC6zR2D7gf
+         ZIFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688728989; x=1691320989;
+        d=1e100.net; s=20221208; t=1688729008; x=1691321008;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bC76BhDwvxGXnn22R6GjRzYzl+h/Q/u01ff105/sBgQ=;
-        b=Ta8S6o2oNxAn5RcU/rOnGa1GQsjzI36ku6KXTuGLmzNa4J0+SRFZ3A/pWB2QhUoLwH
-         UPkas0VTaSC1qVX41SIAtONM+6MDo6JQ6kfk06e3vKsdUnqH6uZ1Bd9kBoWqkPAVKwDG
-         i/VvqeM9nxLbivp3IAQeiiwDjPPDi4ZQQefuZxLcVSnaYxX/697VqB9CSqnMfRlc4mtg
-         cTS3Ayt1q0zqFsJKH9Od79zeyHqoy3Ww0+w8Ekzfk3ad5fOCv6VeQ5s/6n0Q4ALVbuP5
-         WuaDPx+uS3Ch1grRlk4WUVggh0+2iHCP/NKflUcPVMVdo+sZAwAT7iF5Tb9DrxaTyUYp
-         0BhQ==
-X-Gm-Message-State: ABy/qLbh7BXWilyh8z1tYiBAo1VMkTntAltg/VfD/nl0NFKDZR4c6gnC
-        Ph8SZfAuc8coY0nqYCOcJLc=
-X-Google-Smtp-Source: APBJJlEoDNEUdkTuiZsa4PG2xKEqULrUzoYCMVkzBXeymajyxcvxrgJk5wfVOPDKQ09Hzx29BGap1w==
-X-Received: by 2002:a05:6512:36cb:b0:4f8:6560:6436 with SMTP id e11-20020a05651236cb00b004f865606436mr3369596lfs.9.1688728988606;
-        Fri, 07 Jul 2023 04:23:08 -0700 (PDT)
+        bh=un39hWLwcrkNJt4FRwfT/hbvXv35uSTSiw2O27u8OU0=;
+        b=OIIHsq2jVy0nBjXG7yzaxFCDjy0evMj+Ks2qX+wQMK4i3qz1pGpPOJxSS7UzUXJGFJ
+         gGGJtYXu3YtiR5/4+n6uP2EK97/kQfKJyx23VfApkOKV7g0EjAx5V5Gy8HtlLEAsZ89R
+         y5UWwe+IZN1ELUxkXYxFsBP/9grt8w4ffWyfuJUbbl438WMYs5Cik2MkJb/KpaodAao1
+         qnDshGnwvUYxZKyhklex+/gOTJQVAJRJi2WVvZ7BSkOvF0qq7KWU1njjfADyEXeLAi/X
+         /ZHyRu3oRFMlwSAaB2GwB9PsFXkwGVdJNxINwsvcJ5nAZcM7zB7JjPnl031V/GjeKNqe
+         Vt3w==
+X-Gm-Message-State: ABy/qLY4ttVj7WKT3A2MBUsZgnlAf3RNjuDzJmLxDfM6dhS7hDa0ETc5
+        C088Fxeewh7k1JRfVlYpLkg=
+X-Google-Smtp-Source: APBJJlHtcL6omUtGHw7rWscrBG0U+P2l8MPFiCHC4xb5Qmw8SZ6cLR9IMKF+TsriovMvq1NLyJLanA==
+X-Received: by 2002:a05:6512:78a:b0:4fb:73d1:58e5 with SMTP id x10-20020a056512078a00b004fb73d158e5mr3195938lfr.53.1688729007799;
+        Fri, 07 Jul 2023 04:23:27 -0700 (PDT)
 Received: from dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id t21-20020ac24c15000000b004f858249931sm646040lfq.93.2023.07.07.04.23.07
+        by smtp.gmail.com with ESMTPSA id d9-20020ac24c89000000b004fb76438a83sm641602lfl.171.2023.07.07.04.23.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 04:23:07 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 14:23:03 +0300
+        Fri, 07 Jul 2023 04:23:27 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:23:23 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -61,18 +61,18 @@ Cc:     Jonathan Cameron <jic23@kernel.org>,
         Matti Vaittinen <mazziesaccount@gmail.com>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] iio: light: bu27008: add chip info
-Message-ID: <b4cdb81ef9522e94150673b3b78a4cbae5fa67f2.1688723839.git.mazziesaccount@gmail.com>
+Subject: [PATCH v2 3/3] iio: light: bd27008: Support BD27010 RGB
+Message-ID: <f6e2c7dae4de9978c53c46d9b2fade03033ce08e.1688723839.git.mazziesaccount@gmail.com>
 References: <cover.1688723839.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FOmLUoRwvszmiTLB"
+        protocol="application/pgp-signature"; boundary="eJa48a0eu45PbmvV"
 Content-Disposition: inline
 In-Reply-To: <cover.1688723839.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,544 +80,509 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---FOmLUoRwvszmiTLB
+--eJa48a0eu45PbmvV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The ROHM BU27010 RGB + flickering sensor is in many regards similar to
-the BU27008. Prepare for adding support for BU27010 by allowing
-chip-specific properties to be brought from the of_device_id data.
+The ROHM BU27010 is an RGBC sensor with a flickering detection FIFO. The
+RGBC+IR sensor functionality is largely similar to what the BU27008 has.
+There are some notable things though:
+  - gain setting is once again new and exotic. Now, there is 6bit gain
+    setting where 4 of the bits are common to all channels and 2 bits
+    can be configured separately for each channel. The BU27010 has
+    similar "1X on other channels vs 2X on IR when selector is 0x0"
+    gain design as BU27008 had. So, we use same gain setting policy for
+    BU27010 as we did for BU27008 - driver sets same gain selector for all
+    channels but shows the gains separately for all channels so users
+    can (at least in theory) detect this 1X vs 2X madness...
+  - BU27010 has suffled all the control register bitfields to new
+    addresses and bit positions while still keeping the register naming
+    same.
+  - Some more power/reset control is added.
+  - FIFO for "flickering detection" is added.
+
+The control register suffling made this slightly nasty. Still, it is
+easier for maintenance perspective to add the BU27010 support in BU27008
+driver because - even though the bit positions/addresses were changed -
+most of the driver structure can be re-used. Writing own driver for
+BU27010 would mean plenty of duplicate code albeit a tad more clarity.
+
+The flickering FIFO is not supported by the driver.
+
+Add BU27010 RGBC+IR support to rohm-bu27008 driver.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 ---
 Revision history:
 v1 =3D> v2:
- - Move all generic refactoring from next patch to this one so that the
-   next one will only contain the BU27010 specific additions.
- - reorder bu27008 chip-data assignments to match the struct member
-   placement
- - Cleanup
+ - refactor changes so that this patch only adds BU27010 functionality
+ - re-order bu27101 chip-data initialization
+
+This is my 4.th re-write. My first idea was to write separate drivers
+for the BU27008 and BU27010. I abandoned this as I ended up copying most
+of the functions and just changing some of the bit offsets / register
+addresses. This felt like a plenty of copy-paste.
+
+So, 2.nd attempt was to combine BU27008 and BU27010. I hit the wall
+as I tried to support setting RGBC / IR gains independently for BU27008
+and setting the gain independently for each channel on BU27010 when
+gains were such that the HW could support them independently. This went
+to complete madness.
+
+This is when I asked for a second opinion - which was to clear the mess
+by separating the BU27008 and BU27010 in own drivers. After a while it
+become obvious that supporting independet gains for the channels when HW
+supported it required decisions which could not predictably be done for
+all users. There is a comment explaining some of this in
+bu27008_write_gain_sel().
+
+After the complexity of shared gain bits was killed, the two separate
+drivers started to look like a copy-paste again - and all the bugs had
+to be fixed in two places... As a result I again pulled it all in one
+driver. As a result of this experimenting, I firmly believe supporting
+both ICs in the same driver is a correct design.
 ---
- drivers/iio/light/rohm-bu27008.c | 323 ++++++++++++++++++++-----------
- 1 file changed, 208 insertions(+), 115 deletions(-)
+ drivers/iio/light/rohm-bu27008.c | 303 ++++++++++++++++++++++++++++++-
+ 1 file changed, 301 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iio/light/rohm-bu27008.c b/drivers/iio/light/rohm-bu27=
 008.c
-index b50bf8973d9a..08e2b1194bf4 100644
+index 08e2b1194bf4..a88edc373d9b 100644
 --- a/drivers/iio/light/rohm-bu27008.c
 +++ b/drivers/iio/light/rohm-bu27008.c
-@@ -211,7 +211,35 @@ static const struct iio_chan_spec bu27008_channels[] =
-=3D {
- 	IIO_CHAN_SOFT_TIMESTAMP(BU27008_NUM_CHANS),
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * BU27008 ROHM Colour Sensor
++ * ROHM Colour Sensor driver for
++ * - BU27008 RGBC sensor
++ * - BU27010 RGBC + Flickering sensor
+  *
+  * Copyright (c) 2023, ROHM Semiconductor.
+  */
+@@ -22,6 +24,25 @@
+ #include <linux/iio/trigger_consumer.h>
+ #include <linux/iio/triggered_buffer.h>
+=20
++/*
++ * A word about register address and mask definitions.
++ *
++ * At a quick glance to the data-sheet register tables, the BU27010 has al=
+l the
++ * registers that the BU27008 has. On top of that the BU27010 adds couple =
+of new
++ * ones.
++ *
++ * So, all definitions BU27008_REG_* are there also for BU27010 but none o=
+f the
++ * BU27010_REG_* are present on BU27008. This makes sense as BU27010 just =
+adds
++ * some features (Flicker FIFO, more power control) on top of the BU27008.
++ *
++ * Unfortunately, some of the wheel has been re-invented. Even though the =
+names
++ * of the registers have stayed the same, pretty much all of the functiona=
+lity
++ * provided by the registers has changed place. Contents of all MODE_CONTR=
+OL
++ * registers on BU27008 and BU27010 are different.
++ *
++ * Chip-specific mapping from register addresses/bits to functionality is =
+done
++ * in bu27_chip_data structures.
++ */
+ #define BU27008_REG_SYSTEM_CONTROL	0x40
+ #define BU27008_MASK_SW_RESET		BIT(7)
+ #define BU27008_MASK_PART_ID		GENMASK(5, 0)
+@@ -52,6 +73,56 @@
+ #define BU27008_REG_MANUFACTURER_ID	0x92
+ #define BU27008_REG_MAX BU27008_REG_MANUFACTURER_ID
+=20
++/* BU27010 specific definitions */
++
++#define BU27010_MASK_SW_RESET		BIT(7)
++#define BU27010_ID			0x1b
++#define BU27010_REG_POWER		0x3e
++#define BU27010_MASK_POWER		BIT(0)
++
++#define BU27010_REG_RESET		0x3f
++#define BU27010_MASK_RESET		BIT(0)
++#define BU27010_RESET_RELEASE		BU27010_MASK_RESET
++
++#define BU27010_MASK_MEAS_EN		BIT(1)
++
++#define BU27010_MASK_CHAN_SEL		GENMASK(7, 6)
++#define BU27010_MASK_MEAS_MODE		GENMASK(5, 4)
++#define BU27010_MASK_RGBC_GAIN		GENMASK(3, 0)
++
++#define BU27010_MASK_DATA3_GAIN		GENMASK(7, 6)
++#define BU27010_MASK_DATA2_GAIN		GENMASK(5, 4)
++#define BU27010_MASK_DATA1_GAIN		GENMASK(3, 2)
++#define BU27010_MASK_DATA0_GAIN		GENMASK(1, 0)
++
++#define BU27010_MASK_FLC_MODE		BIT(7)
++#define BU27010_MASK_FLC_GAIN		GENMASK(4, 0)
++
++#define BU27010_REG_MODE_CONTROL4	0x44
++/* If flicker is ever to be supported the IRQ must be handled as a field */
++#define BU27010_IRQ_DIS_ALL		GENMASK(1, 0)
++#define BU27010_DRDY_EN			BIT(0)
++#define BU27010_MASK_INT_SEL		GENMASK(1, 0)
++
++#define BU27010_REG_MODE_CONTROL5	0x45
++#define BU27010_MASK_RGB_VALID		BIT(7)
++#define BU27010_MASK_FLC_VALID		BIT(6)
++#define BU27010_MASK_WAIT_EN		BIT(3)
++#define BU27010_MASK_FIFO_EN		BIT(2)
++#define BU27010_MASK_RGB_EN		BIT(1)
++#define BU27010_MASK_FLC_EN		BIT(0)
++
++#define BU27010_REG_DATA_FLICKER_LO	0x56
++#define BU27010_MASK_DATA_FLICKER_HI	GENMASK(2, 0)
++#define BU27010_REG_FLICKER_COUNT	0x5a
++#define BU27010_REG_FIFO_LEVEL_LO	0x5b
++#define BU27010_MASK_FIFO_LEVEL_HI	BIT(0)
++#define BU27010_REG_FIFO_DATA_LO	0x5d
++#define BU27010_REG_FIFO_DATA_HI	0x5e
++#define BU27010_MASK_FIFO_DATA_HI	GENMASK(2, 0)
++#define BU27010_REG_MANUFACTURER_ID	0x92
++#define BU27010_REG_MAX BU27010_REG_MANUFACTURER_ID
++
+ /**
+  * enum bu27008_chan_type - BU27008 channel types
+  * @BU27008_RED:	Red channel. Always via data0.
+@@ -117,6 +188,17 @@ static const unsigned long bu27008_scan_masks[] =3D {
+  */
+ #define BU27008_SCALE_1X 16
+=20
++/*
++ * On BU27010 available scales with gain 1x - 4096x,
++ * timings 55, 100, 200, 400 mS. Time impacts to gain: 1x, 2x, 4x, 8x.
++ *
++ * =3D> Max total gain is HWGAIN * gain by integration time (8 * 4096)
++ *
++ * Using NANO precision for scale we must use scale 64x corresponding gain=
+ 1x
++ * to avoid precision loss.
++ */
++#define BU27010_SCALE_1X 64
++
+ /* See the data sheet for the "Gain Setting" table */
+ #define BU27008_GSEL_1X		0x00
+ #define BU27008_GSEL_4X		0x08
+@@ -152,10 +234,44 @@ static const struct iio_gain_sel_pair bu27008_gains_i=
+r[] =3D {
+ 	GAIN_SCALE_GAIN(1024, BU27008_GSEL_1024X),
  };
 =20
-+struct bu27008_data;
++#define BU27010_GSEL_1X		0x00	/* 000000 */
++#define BU27010_GSEL_4X		0x08	/* 001000 */
++#define BU27010_GSEL_16X	0x09	/* 001001 */
++#define BU27010_GSEL_64X	0x0e	/* 001110 */
++#define BU27010_GSEL_256X	0x1e	/* 011110 */
++#define BU27010_GSEL_1024X	0x2e	/* 101110 */
++#define BU27010_GSEL_4096X	0x3f	/* 111111 */
 +
-+struct bu27_chip_data {
-+	const char *name;
-+	int (*chip_init)(struct bu27008_data *data);
-+	int (*get_gain_sel)(struct bu27008_data *data, int *sel);
-+	int (*write_gain_sel)(struct bu27008_data *data, int sel);
-+	const struct regmap_config *regmap_cfg;
-+	const struct iio_gain_sel_pair *gains;
-+	const struct iio_gain_sel_pair *gains_ir;
-+	const struct iio_itime_sel_mul *itimes;
-+	int num_gains;
-+	int num_gains_ir;
-+	int num_itimes;
-+	int scale1x;
-+
-+	int drdy_en_reg;
-+	int drdy_en_mask;
-+	int meas_en_reg;
-+	int meas_en_mask;
-+	int valid_reg;
-+	int chan_sel_reg;
-+	int chan_sel_mask;
-+	int int_time_mask;
-+	u8 part_id;
++static const struct iio_gain_sel_pair bu27010_gains[] =3D {
++	GAIN_SCALE_GAIN(1, BU27010_GSEL_1X),
++	GAIN_SCALE_GAIN(4, BU27010_GSEL_4X),
++	GAIN_SCALE_GAIN(16, BU27010_GSEL_16X),
++	GAIN_SCALE_GAIN(64, BU27010_GSEL_64X),
++	GAIN_SCALE_GAIN(256, BU27010_GSEL_256X),
++	GAIN_SCALE_GAIN(1024, BU27010_GSEL_1024X),
++	GAIN_SCALE_GAIN(4096, BU27010_GSEL_4096X),
 +};
 +
- struct bu27008_data {
-+	const struct bu27_chip_data *cd;
- 	struct regmap *regmap;
- 	struct iio_trigger *trig;
- 	struct device *dev;
-@@ -282,51 +310,6 @@ static const struct regmap_config bu27008_regmap =3D {
++static const struct iio_gain_sel_pair bu27010_gains_ir[] =3D {
++	GAIN_SCALE_GAIN(2, BU27010_GSEL_1X),
++	GAIN_SCALE_GAIN(4, BU27010_GSEL_4X),
++	GAIN_SCALE_GAIN(16, BU27010_GSEL_16X),
++	GAIN_SCALE_GAIN(64, BU27010_GSEL_64X),
++	GAIN_SCALE_GAIN(256, BU27010_GSEL_256X),
++	GAIN_SCALE_GAIN(1024, BU27010_GSEL_1024X),
++	GAIN_SCALE_GAIN(4096, BU27010_GSEL_4096X),
++};
++
+ #define BU27008_MEAS_MODE_100MS		0x00
+ #define BU27008_MEAS_MODE_55MS		0x01
+ #define BU27008_MEAS_MODE_200MS		0x02
+ #define BU27008_MEAS_MODE_400MS		0x04
++
++#define BU27010_MEAS_MODE_100MS		0x00
++#define BU27010_MEAS_MODE_55MS		0x03
++#define BU27010_MEAS_MODE_200MS		0x01
++#define BU27010_MEAS_MODE_400MS		0x02
++
+ #define BU27008_MEAS_TIME_MAX_MS	400
+=20
+ static const struct iio_itime_sel_mul bu27008_itimes[] =3D {
+@@ -165,6 +281,13 @@ static const struct iio_itime_sel_mul bu27008_itimes[]=
+ =3D {
+ 	GAIN_SCALE_ITIME_US(55000, BU27008_MEAS_MODE_55MS, 1),
+ };
+=20
++static const struct iio_itime_sel_mul bu27010_itimes[] =3D {
++	GAIN_SCALE_ITIME_US(400000, BU27010_MEAS_MODE_400MS, 8),
++	GAIN_SCALE_ITIME_US(200000, BU27010_MEAS_MODE_200MS, 4),
++	GAIN_SCALE_ITIME_US(100000, BU27010_MEAS_MODE_100MS, 2),
++	GAIN_SCALE_ITIME_US(55000, BU27010_MEAS_MODE_55MS, 1),
++};
++
+ /*
+  * All the RGBC channels share the same gain.
+  * IR gain can be fine-tuned from the gain set for the RGBC by 2 bit, but =
+this
+@@ -268,11 +391,29 @@ static const struct regmap_range bu27008_volatile_ran=
+ges[] =3D {
+ 	},
+ };
+=20
++static const struct regmap_range bu27010_volatile_ranges[] =3D {
++	{
++		.range_min =3D BU27010_REG_RESET,			/* RSTB */
++		.range_max =3D BU27008_REG_SYSTEM_CONTROL,	/* RESET */
++	}, {
++		.range_min =3D BU27010_REG_MODE_CONTROL5,		/* VALID bits */
++		.range_max =3D BU27010_REG_MODE_CONTROL5,
++	}, {
++		.range_min =3D BU27008_REG_DATA0_LO,
++		.range_max =3D BU27010_REG_FIFO_DATA_HI,
++	},
++};
++
+ static const struct regmap_access_table bu27008_volatile_regs =3D {
+ 	.yes_ranges =3D &bu27008_volatile_ranges[0],
+ 	.n_yes_ranges =3D ARRAY_SIZE(bu27008_volatile_ranges),
+ };
+=20
++static const struct regmap_access_table bu27010_volatile_regs =3D {
++	.yes_ranges =3D &bu27010_volatile_ranges[0],
++	.n_yes_ranges =3D ARRAY_SIZE(bu27010_volatile_ranges),
++};
++
+ static const struct regmap_range bu27008_read_only_ranges[] =3D {
+ 	{
+ 		.range_min =3D BU27008_REG_DATA0_LO,
+@@ -283,11 +424,26 @@ static const struct regmap_range bu27008_read_only_ra=
+nges[] =3D {
+ 	},
+ };
+=20
++static const struct regmap_range bu27010_read_only_ranges[] =3D {
++	{
++		.range_min =3D BU27008_REG_DATA0_LO,
++		.range_max =3D BU27010_REG_FIFO_DATA_HI,
++	}, {
++		.range_min =3D BU27010_REG_MANUFACTURER_ID,
++		.range_max =3D BU27010_REG_MANUFACTURER_ID,
++	}
++};
++
+ static const struct regmap_access_table bu27008_ro_regs =3D {
+ 	.no_ranges =3D &bu27008_read_only_ranges[0],
+ 	.n_no_ranges =3D ARRAY_SIZE(bu27008_read_only_ranges),
+ };
+=20
++static const struct regmap_access_table bu27010_ro_regs =3D {
++	.no_ranges =3D &bu27010_read_only_ranges[0],
++	.n_no_ranges =3D ARRAY_SIZE(bu27010_read_only_ranges),
++};
++
+ static const struct regmap_config bu27008_regmap =3D {
+ 	.reg_bits =3D 8,
+ 	.val_bits =3D 8,
+@@ -310,6 +466,17 @@ static const struct regmap_config bu27008_regmap =3D {
  	.disable_locking =3D true,
  };
 =20
--#define BU27008_MAX_VALID_RESULT_WAIT_US	50000
--#define BU27008_VALID_RESULT_WAIT_QUANTA_US	1000
--
--static int bu27008_chan_read_data(struct bu27008_data *data, int reg, int =
-*val)
--{
--	int ret, valid;
--	__le16 tmp;
--
--	ret =3D regmap_read_poll_timeout(data->regmap, BU27008_REG_MODE_CONTROL3,
--				       valid, (valid & BU27008_MASK_VALID),
--				       BU27008_VALID_RESULT_WAIT_QUANTA_US,
--				       BU27008_MAX_VALID_RESULT_WAIT_US);
--	if (ret)
--		return ret;
--
--	ret =3D regmap_bulk_read(data->regmap, reg, &tmp, sizeof(tmp));
--	if (ret)
--		dev_err(data->dev, "Reading channel data failed\n");
--
--	*val =3D le16_to_cpu(tmp);
--
--	return ret;
--}
--
--static int bu27008_get_gain(struct bu27008_data *data, struct iio_gts *gts=
-, int *gain)
--{
--	int ret, sel;
--
--	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL2, &sel);
--	if (ret)
--		return ret;
--
--	sel =3D FIELD_GET(BU27008_MASK_RGBC_GAIN, sel);
--
--	ret =3D iio_gts_find_gain_by_sel(gts, sel);
--	if (ret < 0) {
--		dev_err(data->dev, "unknown gain value 0x%x\n", sel);
--		return ret;
--	}
--
--	*gain =3D ret;
--
--	return 0;
--}
--
++static const struct regmap_config bu27010_regmap =3D {
++	.reg_bits	=3D 8,
++	.val_bits	=3D 8,
++
++	.max_register	=3D BU27010_REG_MAX,
++	.cache_type	=3D REGCACHE_RBTREE,
++	.volatile_table =3D &bu27010_volatile_regs,
++	.wr_table	=3D &bu27010_ro_regs,
++	.disable_locking =3D true,
++};
++
  static int bu27008_write_gain_sel(struct bu27008_data *data, int sel)
  {
  	int regval;
-@@ -368,6 +351,123 @@ static int bu27008_write_gain_sel(struct bu27008_data=
- *data, int sel)
+@@ -351,6 +518,41 @@ static int bu27008_write_gain_sel(struct bu27008_data =
+*data, int sel)
  				  BU27008_MASK_RGBC_GAIN, regval);
  }
 =20
-+static int bu27008_get_gain_sel(struct bu27008_data *data, int *sel)
++static int bu27010_write_gain_sel(struct bu27008_data *data, int sel)
 +{
-+	int ret;
++	unsigned int regval;
++	int ret, chan_selector;
 +
 +	/*
-+	 * If we always "lock" the gain selectors for all channels to prevent
-+	 * unsupported configs, then it does not matter which channel is used
-+	 * we can just return selector from any of them.
++	 * Gain 'selector' is composed of two registers. Selector is 6bit value,
++	 * 4 high bits being the RGBC gain fieild in MODE_CONTROL1 register and
++	 * two low bits being the channel specific gain in MODE_CONTROL2.
 +	 *
-+	 * This, however is not true if we decide to support only 4X and 16X
-+	 * and then individual gains for channels. Currently this is not the
-+	 * case.
-+	 *
-+	 * If we some day decide to support individual gains, then we need to
-+	 * have channel information here.
++	 * Let's take the 4 high bits of whole 6 bit selector, and prepare
++	 * the MODE_CONTROL1 value (RGBC gain part).
 +	 */
++	regval =3D FIELD_PREP(BU27010_MASK_RGBC_GAIN, (sel >> 2));
 +
++	ret =3D regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL1,
++				  BU27010_MASK_RGBC_GAIN, regval);
++	if (ret)
++		return ret;
++
++	/*
++	 * Two low two bits of the selector must be written for all 4
++	 * channels in the MODE_CONTROL2 register. Copy these two bits for
++	 * all channels.
++	 */
++	chan_selector =3D sel & GENMASK(1, 0);
++
++	regval =3D FIELD_PREP(BU27010_MASK_DATA0_GAIN, chan_selector);
++	regval |=3D FIELD_PREP(BU27010_MASK_DATA1_GAIN, chan_selector);
++	regval |=3D FIELD_PREP(BU27010_MASK_DATA2_GAIN, chan_selector);
++	regval |=3D FIELD_PREP(BU27010_MASK_DATA3_GAIN, chan_selector);
++
++	return regmap_write(data->regmap, BU27008_REG_MODE_CONTROL2, regval);
++}
++
+ static int bu27008_get_gain_sel(struct bu27008_data *data, int *sel)
+ {
+ 	int ret;
+@@ -377,6 +579,30 @@ static int bu27008_get_gain_sel(struct bu27008_data *d=
+ata, int *sel)
+ 	return 0;
+ }
+=20
++static int bu27010_get_gain_sel(struct bu27008_data *data, int *sel)
++{
++	int ret, tmp;
++
++	/*
++	 * We always "lock" the gain selectors for all channels to prevent
++	 * unsupported configs. It does not matter which channel is used
++	 * we can just return selector from any of them.
++	 */
 +	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL2, sel);
 +	if (ret)
 +		return ret;
 +
-+	*sel =3D FIELD_GET(BU27008_MASK_RGBC_GAIN, *sel);
++	*sel =3D FIELD_GET(BU27010_MASK_DATA0_GAIN, *sel);
 +
-+	return 0;
++	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL1, &tmp);
++	if (ret)
++		return ret;
++
++	*sel |=3D FIELD_GET(BU27010_MASK_RGBC_GAIN, tmp) << fls(BU27010_MASK_DATA=
+0_GAIN);
++
++	return ret;
 +}
 +
-+static int bu27008_chip_init(struct bu27008_data *data)
+ static int bu27008_chip_init(struct bu27008_data *data)
+ {
+ 	int ret;
+@@ -401,6 +627,78 @@ static int bu27008_chip_init(struct bu27008_data *data)
+ 	return ret;
+ }
+=20
++static int bu27010_chip_init(struct bu27008_data *data)
 +{
 +	int ret;
 +
 +	ret =3D regmap_write_bits(data->regmap, BU27008_REG_SYSTEM_CONTROL,
-+				BU27008_MASK_SW_RESET, BU27008_MASK_SW_RESET);
++				BU27010_MASK_SW_RESET, BU27010_MASK_SW_RESET);
 +	if (ret)
 +		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
 +
-+	/*
-+	 * The data-sheet does not tell how long performing the IC reset takes.
-+	 * However, the data-sheet says the minimum time it takes the IC to be
-+	 * able to take inputs after power is applied, is 100 uS. I'd assume
-+	 * > 1 mS is enough.
-+	 */
 +	msleep(1);
 +
-+	ret =3D regmap_reinit_cache(data->regmap, data->cd->regmap_cfg);
++	/* Power ON*/
++	ret =3D regmap_write_bits(data->regmap, BU27010_REG_POWER,
++				BU27010_MASK_POWER, BU27010_MASK_POWER);
 +	if (ret)
-+		dev_err(data->dev, "Failed to reinit reg cache\n");
++		return dev_err_probe(data->dev, ret, "Sensor power-on failed\n");
 +
-+	return ret;
++	msleep(1);
++
++	/* Release blocks from reset */
++	ret =3D regmap_write_bits(data->regmap, BU27010_REG_RESET,
++				BU27010_MASK_RESET, BU27010_RESET_RELEASE);
++	if (ret)
++		return dev_err_probe(data->dev, ret, "Sensor powering failed\n");
++
++	msleep(1);
++
++	/*
++	 * The IRQ enabling on BU27010 is done in a peculiar way. The IRQ
++	 * enabling is not a bit mask where individual IRQs could be enabled but
++	 * a field which values are:
++	 * 00 =3D> IRQs disabled
++	 * 01 =3D> Data-ready (RGBC/IR)
++	 * 10 =3D> Data-ready (flicker)
++	 * 11 =3D> Flicker FIFO
++	 *
++	 * So, only one IRQ can be enabled at a time and enabling for example
++	 * flicker FIFO would automagically disable data-ready IRQ.
++	 *
++	 * Currently the driver does not support the flicker. Hence, we can
++	 * just treat the RGBC data-ready as single bit which can be enabled /
++	 * disabled. This works for as long as the second bit in the field
++	 * stays zero. Here we ensure it gets zeroed.
++	 */
++	return regmap_clear_bits(data->regmap, BU27010_REG_MODE_CONTROL4,
++				 BU27010_IRQ_DIS_ALL);
 +}
 +
-+static const struct bu27_chip_data bu27008_chip =3D {
-+	.name =3D "bu27008",
-+	.chip_init =3D bu27008_chip_init,
-+	.get_gain_sel =3D bu27008_get_gain_sel,
-+	.write_gain_sel =3D bu27008_write_gain_sel,
-+	.regmap_cfg =3D &bu27008_regmap,
-+	.gains =3D &bu27008_gains[0],
-+	.gains_ir =3D &bu27008_gains_ir[0],
-+	.itimes =3D &bu27008_itimes[0],
-+	.num_gains =3D ARRAY_SIZE(bu27008_gains),
-+	.num_gains_ir =3D ARRAY_SIZE(bu27008_gains_ir),
-+	.num_itimes =3D ARRAY_SIZE(bu27008_itimes),
-+	.scale1x =3D BU27008_SCALE_1X,
-+	.drdy_en_reg =3D BU27008_REG_MODE_CONTROL3,
-+	.drdy_en_mask =3D BU27008_MASK_INT_EN,
-+	.valid_reg =3D BU27008_REG_MODE_CONTROL3,
-+	.meas_en_reg =3D BU27008_REG_MODE_CONTROL3,
-+	.meas_en_mask =3D BU27008_MASK_MEAS_EN,
-+	.chan_sel_reg =3D BU27008_REG_MODE_CONTROL3,
-+	.chan_sel_mask =3D BU27008_MASK_CHAN_SEL,
-+	.int_time_mask =3D BU27008_MASK_MEAS_MODE,
-+	.part_id =3D BU27008_ID,
++static const struct bu27_chip_data bu27010_chip =3D {
++	.name =3D "bu27010",
++	.chip_init =3D bu27010_chip_init,
++	.get_gain_sel =3D bu27010_get_gain_sel,
++	.write_gain_sel =3D bu27010_write_gain_sel,
++	.regmap_cfg =3D &bu27010_regmap,
++	.gains =3D &bu27010_gains[0],
++	.gains_ir =3D &bu27010_gains_ir[0],
++	.itimes =3D &bu27010_itimes[0],
++	.num_gains =3D ARRAY_SIZE(bu27010_gains),
++	.num_gains_ir =3D ARRAY_SIZE(bu27010_gains_ir),
++	.num_itimes =3D ARRAY_SIZE(bu27010_itimes),
++	.scale1x =3D BU27010_SCALE_1X,
++	.drdy_en_reg =3D BU27010_REG_MODE_CONTROL4,
++	.drdy_en_mask =3D BU27010_DRDY_EN,
++	.meas_en_reg =3D BU27010_REG_MODE_CONTROL5,
++	.meas_en_mask =3D BU27010_MASK_MEAS_EN,
++	.valid_reg =3D BU27010_REG_MODE_CONTROL5,
++	.chan_sel_reg =3D BU27008_REG_MODE_CONTROL1,
++	.chan_sel_mask =3D BU27010_MASK_CHAN_SEL,
++	.int_time_mask =3D BU27010_MASK_MEAS_MODE,
++	.part_id =3D BU27010_ID,
 +};
 +
-+#define BU27008_MAX_VALID_RESULT_WAIT_US	50000
-+#define BU27008_VALID_RESULT_WAIT_QUANTA_US	1000
-+
-+static int bu27008_chan_read_data(struct bu27008_data *data, int reg, int =
-*val)
-+{
-+	int ret, valid;
-+	__le16 tmp;
-+
-+	ret =3D regmap_read_poll_timeout(data->regmap, data->cd->valid_reg,
-+				       valid, (valid & BU27008_MASK_VALID),
-+				       BU27008_VALID_RESULT_WAIT_QUANTA_US,
-+				       BU27008_MAX_VALID_RESULT_WAIT_US);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D regmap_bulk_read(data->regmap, reg, &tmp, sizeof(tmp));
-+	if (ret)
-+		dev_err(data->dev, "Reading channel data failed\n");
-+
-+	*val =3D le16_to_cpu(tmp);
-+
-+	return ret;
-+}
-+
-+static int bu27008_get_gain(struct bu27008_data *data, struct iio_gts *gts=
-, int *gain)
-+{
-+	int ret, sel;
-+
-+	ret =3D data->cd->get_gain_sel(data, &sel);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D iio_gts_find_gain_by_sel(gts, sel);
-+	if (ret < 0) {
-+		dev_err(data->dev, "unknown gain value 0x%x\n", sel);
-+		return ret;
-+	}
-+
-+	*gain =3D ret;
-+
-+	return 0;
-+}
-+
- static int bu27008_set_gain(struct bu27008_data *data, int gain)
- {
- 	int ret;
-@@ -376,7 +476,7 @@ static int bu27008_set_gain(struct bu27008_data *data, =
-int gain)
- 	if (ret < 0)
- 		return ret;
-=20
--	return bu27008_write_gain_sel(data, ret);
-+	return data->cd->write_gain_sel(data, ret);
- }
-=20
- static int bu27008_get_int_time_sel(struct bu27008_data *data, int *sel)
-@@ -384,15 +484,23 @@ static int bu27008_get_int_time_sel(struct bu27008_da=
-ta *data, int *sel)
- 	int ret, val;
-=20
- 	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL1, &val);
--	*sel =3D FIELD_GET(BU27008_MASK_MEAS_MODE, val);
-+	if (ret)
-+		return ret;
-=20
--	return ret;
-+	val &=3D data->cd->int_time_mask;
-+	val >>=3D ffs(data->cd->int_time_mask) - 1;
-+
-+	*sel =3D val;
-+
-+	return 0;
- }
-=20
- static int bu27008_set_int_time_sel(struct bu27008_data *data, int sel)
- {
-+	sel <<=3D ffs(data->cd->int_time_mask) - 1;
-+
- 	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL1,
--				  BU27008_MASK_MEAS_MODE, sel);
-+				  data->cd->int_time_mask, sel);
- }
-=20
- static int bu27008_get_int_time_us(struct bu27008_data *data)
-@@ -448,8 +556,7 @@ static int bu27008_set_int_time(struct bu27008_data *da=
-ta, int time)
- 	if (ret < 0)
- 		return ret;
-=20
--	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL1,
--				  BU27008_MASK_MEAS_MODE, ret);
-+	return bu27008_set_int_time_sel(data, ret);
- }
-=20
- /* Try to change the time so that the scale is maintained */
-@@ -527,10 +634,13 @@ static int bu27008_try_set_int_time(struct bu27008_da=
-ta *data, int int_time_new)
- 	return ret;
- }
-=20
--static int bu27008_meas_set(struct bu27008_data *data, int state)
-+static int bu27008_meas_set(struct bu27008_data *data, bool enable)
- {
--	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
--				  BU27008_MASK_MEAS_EN, state);
-+	if (enable)
-+		return regmap_set_bits(data->regmap, data->cd->meas_en_reg,
-+				       data->cd->meas_en_mask);
-+	return regmap_clear_bits(data->regmap, data->cd->meas_en_reg,
-+				 data->cd->meas_en_mask);
- }
-=20
- static int bu27008_chan_cfg(struct bu27008_data *data,
-@@ -543,9 +653,15 @@ static int bu27008_chan_cfg(struct bu27008_data *data,
- 	else
- 		chan_sel =3D BU27008_CLEAR2_IR3;
-=20
--	chan_sel =3D FIELD_PREP(BU27008_MASK_CHAN_SEL, chan_sel);
-+	/*
-+	 * prepare bitfield for channel sel. The FIELD_PREP works only when
-+	 * mask is constant. In our case the mask is assigned based on the
-+	 * chip type. Hence the open-coded FIELD_PREP here. We don't bother
-+	 * zeroing the irrelevant bits though - update_bits takes care of that.
-+	 */
-+	chan_sel <<=3D ffs(data->cd->chan_sel_mask) - 1;
-=20
--	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
-+	return regmap_update_bits(data->regmap, data->cd->chan_sel_reg,
- 				  BU27008_MASK_CHAN_SEL, chan_sel);
- }
-=20
-@@ -558,7 +674,7 @@ static int bu27008_read_one(struct bu27008_data *data, =
-struct iio_dev *idev,
- 	if (ret)
- 		return ret;
-=20
--	ret =3D bu27008_meas_set(data, BU27008_MEAS_EN);
-+	ret =3D bu27008_meas_set(data, true);
- 	if (ret)
- 		return ret;
-=20
-@@ -574,7 +690,7 @@ static int bu27008_read_one(struct bu27008_data *data, =
-struct iio_dev *idev,
- 	if (!ret)
- 		ret =3D IIO_VAL_INT;
-=20
--	if (bu27008_meas_set(data, BU27008_MEAS_DIS))
-+	if (bu27008_meas_set(data, false))
- 		dev_warn(data->dev, "measurement disabling failed\n");
-=20
- 	return ret;
-@@ -669,7 +785,7 @@ static int bu27008_set_scale(struct bu27008_data *data,
- 			goto unlock_out;
-=20
- 	}
--	ret =3D bu27008_write_gain_sel(data, gain_sel);
-+	ret =3D data->cd->write_gain_sel(data, gain_sel);
-=20
- unlock_out:
- 	mutex_unlock(&data->mutex);
-@@ -762,10 +878,10 @@ static int bu27008_update_scan_mode(struct iio_dev *i=
-dev,
- 		chan_sel =3D BU27008_CLEAR2_IR3;
- 	}
-=20
--	chan_sel =3D FIELD_PREP(BU27008_MASK_CHAN_SEL, chan_sel);
-+	chan_sel <<=3D ffs(data->cd->chan_sel_mask) - 1;
-=20
--	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
--				 BU27008_MASK_CHAN_SEL, chan_sel);
-+	return regmap_update_bits(data->regmap, data->cd->chan_sel_reg,
-+				  data->cd->chan_sel_mask, chan_sel);
- }
-=20
- static const struct iio_info bu27008_info =3D {
-@@ -777,46 +893,18 @@ static const struct iio_info bu27008_info =3D {
- 	.validate_trigger =3D iio_validate_own_trigger,
- };
-=20
--static int bu27008_chip_init(struct bu27008_data *data)
--{
--	int ret;
--
--	ret =3D regmap_write_bits(data->regmap, BU27008_REG_SYSTEM_CONTROL,
--				BU27008_MASK_SW_RESET, BU27008_MASK_SW_RESET);
--	if (ret)
--		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
--
--	/*
--	 * The data-sheet does not tell how long performing the IC reset takes.
--	 * However, the data-sheet says the minimum time it takes the IC to be
--	 * able to take inputs after power is applied, is 100 uS. I'd assume
--	 * > 1 mS is enough.
--	 */
--	msleep(1);
--
--	ret =3D regmap_reinit_cache(data->regmap, &bu27008_regmap);
--	if (ret)
--		dev_err(data->dev, "Failed to reinit reg cache\n");
--
--	return ret;
--}
--
--static int bu27008_set_drdy_irq(struct bu27008_data *data, int state)
--{
--	return regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
--				 BU27008_MASK_INT_EN, state);
--}
--
--static int bu27008_trigger_set_state(struct iio_trigger *trig,
--				     bool state)
-+static int bu27008_trigger_set_state(struct iio_trigger *trig, bool state)
- {
- 	struct bu27008_data *data =3D iio_trigger_get_drvdata(trig);
- 	int ret;
-=20
-+
- 	if (state)
--		ret =3D bu27008_set_drdy_irq(data, BU27008_INT_EN);
-+		ret =3D regmap_set_bits(data->regmap, data->cd->drdy_en_reg,
-+				      data->cd->drdy_en_mask);
- 	else
--		ret =3D bu27008_set_drdy_irq(data, BU27008_INT_DIS);
-+		ret =3D regmap_clear_bits(data->regmap, data->cd->drdy_en_reg,
-+					data->cd->drdy_en_mask);
- 	if (ret)
- 		dev_err(data->dev, "Failed to set trigger state\n");
-=20
-@@ -852,7 +940,7 @@ static irqreturn_t bu27008_trigger_handler(int irq, voi=
-d *p)
- 	 * After some measurements, it seems reading the
- 	 * BU27008_REG_MODE_CONTROL3 debounces the IRQ line
- 	 */
--	ret =3D regmap_read(data->regmap, BU27008_REG_MODE_CONTROL3, &dummy);
-+	ret =3D regmap_read(data->regmap, data->cd->valid_reg, &dummy);
- 	if (ret < 0)
- 		goto err_read;
-=20
-@@ -872,14 +960,14 @@ static int bu27008_buffer_preenable(struct iio_dev *i=
-dev)
- {
- 	struct bu27008_data *data =3D iio_priv(idev);
-=20
--	return bu27008_meas_set(data, BU27008_MEAS_EN);
-+	return bu27008_meas_set(data, true);
- }
-=20
- static int bu27008_buffer_postdisable(struct iio_dev *idev)
- {
- 	struct bu27008_data *data =3D iio_priv(idev);
-=20
--	return bu27008_meas_set(data, BU27008_MEAS_DIS);
-+	return bu27008_meas_set(data, false);
- }
-=20
- static const struct iio_buffer_setup_ops bu27008_buffer_ops =3D {
-@@ -952,11 +1040,6 @@ static int bu27008_probe(struct i2c_client *i2c)
- 	struct iio_dev *idev;
- 	int ret;
-=20
--	regmap =3D devm_regmap_init_i2c(i2c, &bu27008_regmap);
--	if (IS_ERR(regmap))
--		return dev_err_probe(dev, PTR_ERR(regmap),
--				     "Failed to initialize Regmap\n");
--
- 	idev =3D devm_iio_device_alloc(dev, sizeof(*data));
- 	if (!idev)
- 		return -ENOMEM;
-@@ -967,24 +1050,34 @@ static int bu27008_probe(struct i2c_client *i2c)
-=20
- 	data =3D iio_priv(idev);
-=20
-+	data->cd =3D device_get_match_data(&i2c->dev);
-+	if (!data->cd)
-+		return -ENODEV;
-+
-+	regmap =3D devm_regmap_init_i2c(i2c, data->cd->regmap_cfg);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap),
-+				     "Failed to initialize Regmap\n");
-+
-+
- 	ret =3D regmap_read(regmap, BU27008_REG_SYSTEM_CONTROL, &reg);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to access sensor\n");
-=20
- 	part_id =3D FIELD_GET(BU27008_MASK_PART_ID, reg);
-=20
--	if (part_id !=3D BU27008_ID)
-+	if (part_id !=3D data->cd->part_id)
- 		dev_warn(dev, "unknown device 0x%x\n", part_id);
-=20
--	ret =3D devm_iio_init_iio_gts(dev, BU27008_SCALE_1X, 0, bu27008_gains,
--				    ARRAY_SIZE(bu27008_gains), bu27008_itimes,
--				    ARRAY_SIZE(bu27008_itimes), &data->gts);
-+	ret =3D devm_iio_init_iio_gts(dev, data->cd->scale1x, 0, data->cd->gains,
-+				    data->cd->num_gains, data->cd->itimes,
-+				    data->cd->num_itimes, &data->gts);
- 	if (ret)
- 		return ret;
-=20
--	ret =3D devm_iio_init_iio_gts(dev, BU27008_SCALE_1X, 0, bu27008_gains_ir,
--				    ARRAY_SIZE(bu27008_gains_ir), bu27008_itimes,
--				    ARRAY_SIZE(bu27008_itimes), &data->gts_ir);
-+	ret =3D devm_iio_init_iio_gts(dev, data->cd->scale1x, 0, data->cd->gains_=
-ir,
-+				    data->cd->num_gains_ir, data->cd->itimes,
-+				    data->cd->num_itimes, &data->gts_ir);
- 	if (ret)
- 		return ret;
-=20
-@@ -993,14 +1086,14 @@ static int bu27008_probe(struct i2c_client *i2c)
- 	data->dev =3D dev;
- 	data->irq =3D i2c->irq;
-=20
--	idev->channels =3D bu27008_channels;
-+	idev->channels =3D &bu27008_channels[0];
- 	idev->num_channels =3D ARRAY_SIZE(bu27008_channels);
--	idev->name =3D "bu27008";
-+	idev->name =3D data->cd->name;
- 	idev->info =3D &bu27008_info;
- 	idev->modes =3D INDIO_DIRECT_MODE;
- 	idev->available_scan_masks =3D bu27008_scan_masks;
-=20
--	ret =3D bu27008_chip_init(data);
-+	ret =3D data->cd->chip_init(data);
- 	if (ret)
- 		return ret;
-=20
-@@ -1021,7 +1114,7 @@ static int bu27008_probe(struct i2c_client *i2c)
- }
+ static const struct bu27_chip_data bu27008_chip =3D {
+ 	.name =3D "bu27008",
+ 	.chip_init =3D bu27008_chip_init,
+@@ -1115,6 +1413,7 @@ static int bu27008_probe(struct i2c_client *i2c)
 =20
  static const struct of_device_id bu27008_of_match[] =3D {
--	{ .compatible =3D "rohm,bu27008" },
-+	{ .compatible =3D "rohm,bu27008", .data =3D &bu27008_chip },
+ 	{ .compatible =3D "rohm,bu27008", .data =3D &bu27008_chip },
++	{ .compatible =3D "rohm,bu27010", .data =3D &bu27010_chip },
  	{ }
  };
  MODULE_DEVICE_TABLE(of, bu27008_of_match);
+@@ -1129,7 +1428,7 @@ static struct i2c_driver bu27008_i2c_driver =3D {
+ };
+ module_i2c_driver(bu27008_i2c_driver);
+=20
+-MODULE_DESCRIPTION("ROHM BU27008 colour sensor driver");
++MODULE_DESCRIPTION("ROHM BU27008 and BU27010 colour sensor driver");
+ MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+ MODULE_LICENSE("GPL");
+ MODULE_IMPORT_NS(IIO_GTS_HELPER);
 --=20
 2.40.1
 
@@ -634,19 +599,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---FOmLUoRwvszmiTLB
+--eJa48a0eu45PbmvV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSn9ZcACgkQeFA3/03a
-ocWLRAf/epOHDGahkFEdNvmNJ8ez+DMCGI7OFfhNHkUgOYdA2a9W9iLtOyiiIGFH
-WvTMKp+w7qfc4dmFOSp1f1Xyqy94KBBJ1/qiVtsnicZhuvZUBpaMJHFC5eNoKy4a
-1PnKCX6bobkn0HDcRZ8fdqiQ3CnzauJCfCecIdUnLaJTKA50OCMj3NYzcNb1D0dZ
-HHL1p1nqDNXs7HsOOLWR5tobDSa+02tacheW8fF6lsufwZOBW8Kl9rtArtdstFmR
-d+C9ZFKnU86Fi0TeGoguYEiVhtLzqvAT+of72I0KaP5X1q7otD2yndJ2hKcmVUXi
-3nGRdZZfm7LEAOhlZ5elAZA5BvMkow==
-=28xd
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSn9asACgkQeFA3/03a
+ocVZbQgAx19FUEvqh0RSyfaZcOceIhK59Gz23ql3HXvJ1gPGuQvha0YE0F7nTkzJ
+DiBth8PvZSXYxH36bN1CLEWcv/iHdPBAFv1lInmYOwltIjpIX+UiocpwZ8LakSTp
+y11CD53GAWRV2Z2kCrsT4qMjjC9Hv+FInrVw53OAIC87dqYD54YGzRcUsD+WE8io
+0lNw8qTTAeXPSv1L/qW4IDQbs0K67AavMjpJkSVrz9G9Wi7VtyLUY0vGNB5FC3up
+9bMxeWWDI7t8V62gLVthLOFhYzL/VUmeGocn7WoyGWd69Dg4ZZ+S28ofVouplbsx
+5HgBkmqVANp6fhYxcN4ZEAQo0UCCuw==
+=zii3
 -----END PGP SIGNATURE-----
 
---FOmLUoRwvszmiTLB--
+--eJa48a0eu45PbmvV--
