@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E3F74B25D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9067074B25F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbjGGOAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S232682AbjGGOBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbjGGOAr (ORCPT
+        with ESMTP id S232560AbjGGOA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:00:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FAC2108
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:59:57 -0700 (PDT)
+        Fri, 7 Jul 2023 10:00:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B093A2115
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:00:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688738397;
+        s=mimecast20190719; t=1688738412;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JY3wTP5/IT5Fuk6lBBENe/zUdzUPUkbX4RiZeJtGthU=;
-        b=JB2MwhYb3QC5hAHEFw6rugZGalAldUZIXQF/mBZxJQEbcwIDvpI++y5lE1I72ra4N9zp8n
-        MdZcWi1SoDUSMgfyuKW1V9f8MCPnnuYDPwXL9QoZSg/BzurPGu/vILJ8OP1nTAFs09idRf
-        DC8+fIlOoghoJljcUgsfdmszz/43f0M=
+        bh=HPZ+j/W/x+bTEIUCrpmryT6rAOoCFvsSsqkhgyHlcOs=;
+        b=DLzUHdthoOunr7DQLJbo1axZLKr+1dfnEDcNI29rNywV8FUAnGYqv3QBoDpXaU9yjilWmR
+        eKj97judUHCVF/4R+QKrWovZLuph7TIIsWarCaASGCcwDvBP2jz+YfjPD9SSK2uuFT54Zv
+        qyq5cmKUIWsEpbKDylgLz9Iw6kmodKk=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-sTmYJ2YlOgSgjm1LqC6m8A-1; Fri, 07 Jul 2023 09:59:54 -0400
-X-MC-Unique: sTmYJ2YlOgSgjm1LqC6m8A-1
+ us-mta-262-Y6FTdWTiNrKHrUZxO4Wg0w-1; Fri, 07 Jul 2023 10:00:09 -0400
+X-MC-Unique: Y6FTdWTiNrKHrUZxO4Wg0w-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B5BB856F66;
-        Fri,  7 Jul 2023 13:59:53 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2AEB101A528;
+        Fri,  7 Jul 2023 14:00:07 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 315AB2166B25;
-        Fri,  7 Jul 2023 13:59:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 34C782166B25;
+        Fri,  7 Jul 2023 13:59:54 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
@@ -51,9 +51,9 @@ Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         frowand.list@gmail.com, Baoquan He <bhe@redhat.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH 3/8] misc: open-dice: make OPEN_DICE depend on HAS_IOMEM
-Date:   Fri,  7 Jul 2023 21:58:47 +0800
-Message-Id: <20230707135852.24292-4-bhe@redhat.com>
+Subject: [PATCH 4/8] pcmcia : make PCMCIA depend on HAS_IOMEM
+Date:   Fri,  7 Jul 2023 21:58:48 +0800
+Message-Id: <20230707135852.24292-5-bhe@redhat.com>
 In-Reply-To: <20230707135852.24292-1-bhe@redhat.com>
 References: <20230707135852.24292-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -76,37 +76,65 @@ than PCI devices. Hence it could have a fully functional s390 kernel
 with CONFIG_PCI=n, then the relevant iomem mapping functions
 [including ioremap(), devm_ioremap(), etc.] are not available.
 
-Here let OPEN_DICE depend on HAS_IOMEM so that it won't be built
-to cause below compiling error if PCI is unset:
+Here let depend PCMCIA on HAS_IOMEM so that it won't be built to
+cause below compiling error if PCI is unset.
 
 ------
-ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
+ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+cistpl.c:(.text+0x1202): undefined reference to `ioremap'
+ld: cistpl.c:(.text+0x13b0): undefined reference to `iounmap'
+ld: cistpl.c:(.text+0x14a6): undefined reference to `iounmap'
+ld: cistpl.c:(.text+0x1544): undefined reference to `ioremap'
+ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+cistpl.c:(.text+0x3f14): undefined reference to `iounmap'
+------
+
+Besides, many other Kconfig option, e.g IPWIRELESS, PCMCIA_PCNET,
+PCMCIA_FMVJ18X, PCMCIA_SMC91C92 which depends on PCMCIA also will
+cause compiling error if enabled.
+
+------
+ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
+ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
+
+ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
+ERROR: modpost: "ioremap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
+ERROR: modpost: "iounmap" [drivers/net/ethernet/fujitsu/fmvj18x_cs.ko] undefined!
+ERROR: modpost: "ioremap" [drivers/net/ethernet/fujitsu/fmvj18x_cs.ko] undefined!
+ERROR: modpost: "iounmap" [drivers/net/ethernet/smsc/smc91c92_cs.ko] undefined!
+ERROR: modpost: "ioremap" [drivers/net/ethernet/smsc/smc91c92_cs.ko] undefined!
+ERROR: modpost: "iounmap" [drivers/net/ethernet/xircom/xirc2ps_cs.ko] undefined!
+ERROR: modpost: "ioremap" [drivers/net/ethernet/xircom/xirc2ps_cs.ko] undefined!
+ERROR: modpost: "devm_ioremap" [drivers/net/ethernet/altera/altera_tse.ko] undefined!
+ERROR: modpost: "iounmap" [drivers/net/arcnet/com90xx.ko] undefined!
 ------
 
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
 Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Derek Kiernan <derek.kiernan@amd.com>
-Cc: Dragan Cvetic <dragan.cvetic@amd.com>
+Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- drivers/misc/Kconfig | 1 +
+ drivers/pcmcia/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 75e427f124b2..cadd4a820c03 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -496,6 +496,7 @@ config HISI_HIKEY_USB
- config OPEN_DICE
- 	tristate "Open Profile for DICE driver"
- 	depends on OF_RESERVED_MEM
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index e72419d7e72e..dddb235dd020 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -19,6 +19,7 @@ if PCCARD
+ 
+ config PCMCIA
+ 	tristate "16-bit PCMCIA support"
 +	depends on HAS_IOMEM
+ 	select CRC32
+ 	default y
  	help
- 	  This driver exposes a DICE reserved memory region to userspace via
- 	  a character device. The memory region contains Compound Device
 -- 
 2.34.1
 
