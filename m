@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FCD74AD7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA3574AD81
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbjGGJF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S232572AbjGGJGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGGJFx (ORCPT
+        with ESMTP id S229866AbjGGJGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:05:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AFE1FEB;
-        Fri,  7 Jul 2023 02:05:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1423A618DE;
-        Fri,  7 Jul 2023 09:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679E0C433A9;
-        Fri,  7 Jul 2023 09:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688720751;
-        bh=H0Yt/QPOuhegMlQh9ZqHcbAamA4k9i0Srfd9+tbm1G8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W3+6rzO3gycmSMa5K3TChyvfuaC0n5xFNnj7DjdoU9ViG/22ZL+Yojxuas4bgKP6o
-         EPkcSm9//+O9jQHZdgvkwiBEag1ETGerQMB7WJCfzi/42ew5+bGtIepCE3F/a3xkD+
-         Fhptx1VxTbkuhn6LnydTeJ9pO6cZcwu8lqMj1EQDP+frOa2xZojMIG3hyXf9IQf9mH
-         dltH53R2Ne3DdtQa3tPlkCjDNPzIlKLbqI7P8AXTyQAmmRDXVurSmw6myBRn1YRSyV
-         +Ro4DLLY4uNM/Cxv6ZgH0hVKwTTr0Lba6LfAEHY1Aat8HjCZrFQaTB09uB0dVoJGhO
-         zJ5hwYEwQeJvw==
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-977e0fbd742so203205966b.2;
-        Fri, 07 Jul 2023 02:05:51 -0700 (PDT)
-X-Gm-Message-State: ABy/qLbtSEdTBDYa/JRMHJAWxTEk+aKhBOQMj95Q/7TfNp7Kr/LR/T02
-        mCYjGydmjjA7UPASCyw4/1gfkcgKF/gztrmruXI=
-X-Google-Smtp-Source: APBJJlEuZouujhN2y56xMmNiKy4pjpvqYoqlZXspGPUXtBJ0MuTM6vGwzHWe40UkOunICEVcugS+h9ary17Ji1pDclo=
-X-Received: by 2002:a17:906:224d:b0:982:84c9:96c4 with SMTP id
- 13-20020a170906224d00b0098284c996c4mr3557280ejr.10.1688720749510; Fri, 07 Jul
- 2023 02:05:49 -0700 (PDT)
+        Fri, 7 Jul 2023 05:06:17 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699E11FFF;
+        Fri,  7 Jul 2023 02:06:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qy6vN5XVwz4f3npx;
+        Fri,  7 Jul 2023 17:06:08 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbGB1adkSIigNQ--.60410S3;
+        Fri, 07 Jul 2023 17:06:10 +0800 (CST)
+Subject: Re: [PATCH -next v2 2/2] md/raid5-cache: fix null-ptr-deref in
+ r5l_reclaim_thread()
+To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     xni@redhat.com, logang@deltatee.com, hch@lst.de, shli@fb.com,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawwe.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230628010756.70649-1-yukuai1@huaweicloud.com>
+ <20230628010756.70649-3-yukuai1@huaweicloud.com>
+ <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <e5d746d0-1d42-3d60-450b-2450f24f0915@huaweicloud.com>
+Date:   Fri, 7 Jul 2023 17:06:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230703-71f67eb66a037f5c0fb825c6@orel>
- <CAEEQ3w=7tBHyG=CvuktPN5cvfpY6ayamnbry6eOYxMDrPN+oZg@mail.gmail.com>
- <CANBLGcwcvK55dZ1__wvWCtcw=XoKt=qki8g6C_QYo+TBqqJ=TA@mail.gmail.com>
- <50F3BD62-78F1-456E-A44A-0C7D9A2D4113@jrtc27.com> <87bkgql8rq.fsf@all.your.base.are.belong.to.us>
- <CAEEQ3wnaaMvJ3=7udvAjiP3q36nvqAwb8sh34f+nO8Ua_83yFw@mail.gmail.com>
- <87sfa1toap.fsf@all.your.base.are.belong.to.us> <CAP6exY+gTSxU95nDK14z-Y1suKeXPkLzZ_BZqr-vRVGO9qmcxg@mail.gmail.com>
-In-Reply-To: <CAP6exY+gTSxU95nDK14z-Y1suKeXPkLzZ_BZqr-vRVGO9qmcxg@mail.gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date:   Fri, 7 Jul 2023 11:05:37 +0200
-X-Gmail-Original-Message-ID: <CAJ+HfNjgS0XHzG5G_cCsyO-TKRA4Q=KFkwxMZ2httiRGRyuc+w@mail.gmail.com>
-Message-ID: <CAJ+HfNjgS0XHzG5G_cCsyO-TKRA4Q=KFkwxMZ2httiRGRyuc+w@mail.gmail.com>
-Subject: Re: [External] [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-To:     ron minnich <rminnich@gmail.com>
-Cc:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Emil Renner Berthing <emil.renner.berthing@gmail.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com, graf@amazon.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnHbGB1adkSIigNQ--.60410S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF4fuF4xGF1fGw1fWrWrGrg_yoWrArWfpF
+        s3tay3Ww4kZryfAFnFqr1DuF9Yvw4j9r97Gr45C3WIyr4qqryUJFy7C3yUur98AFWUCryf
+        Xr45tF93WrnrtrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,29 +68,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ron,
+Hi,
 
-On Thu, 6 Jul 2023 at 18:37, ron minnich <rminnich@gmail.com> wrote:
+在 2023/07/07 16:52, Song Liu 写道:
+> On Wed, Jun 28, 2023 at 9:08 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> r5l_reclaim_thread() already check that 'conf->log' is not NULL in the
+>> beginning, however, r5c_do_reclaim() and r5l_do_reclaim() will
+>> dereference 'conf->log' again, which will cause null-ptr-deref if
+>> 'conf->log' is set to NULL from r5l_exit_log() concurrently.
+> 
+> r5l_exit_log() will wait until reclaim_thread() finishes, and then set
+> conf->log to NULL. So this is not a problem, no?
 
-> I'm trying hard not to get sucked into this argument, but it is, at
-> least, impolite, to accuse us of engaging in hand-wavery. There's
-> probably more UEFI expertise in coreboot and oreboot than most
-> places, and that's precisely why we want a non-UEFI
-> option. Familiarity with UEFI did not breed respect.
+Patch one just revert this, wait until reclaim_thread() then set
+conf->log to NULL will cause deadlock, as I sescribled in patch 0.
 
-If my reply was interpreted as rude, please accept my apologies. That
-was not my intention.
+Thanks,
+Kuai
+> 
+> Thanks,
+> Song
+> 
+>>
+>> Fix this problem by don't dereference 'conf->log' again in
+>> r5c_do_reclaim() and r5c_do_reclaim().
+>>
+>> Fixes: a39f7afde358 ("md/r5cache: write-out phase and reclaim support")
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   drivers/md/raid5-cache.c | 20 ++++++++------------
+>>   1 file changed, 8 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+>> index 083288e36949..ba6fc146d265 100644
+>> --- a/drivers/md/raid5-cache.c
+>> +++ b/drivers/md/raid5-cache.c
+>> @@ -1148,10 +1148,9 @@ static void r5l_run_no_space_stripes(struct r5l_log *log)
+>>    * for write through mode, returns log->next_checkpoint
+>>    * for write back, returns log_start of first sh in stripe_in_journal_list
+>>    */
+>> -static sector_t r5c_calculate_new_cp(struct r5conf *conf)
+>> +static sector_t r5c_calculate_new_cp(struct r5l_log *log)
+>>   {
+>>          struct stripe_head *sh;
+>> -       struct r5l_log *log = conf->log;
+>>          sector_t new_cp;
+>>          unsigned long flags;
+>>
+>> @@ -1159,12 +1158,12 @@ static sector_t r5c_calculate_new_cp(struct r5conf *conf)
+>>                  return log->next_checkpoint;
+>>
+>>          spin_lock_irqsave(&log->stripe_in_journal_lock, flags);
+>> -       if (list_empty(&conf->log->stripe_in_journal_list)) {
+>> +       if (list_empty(&log->stripe_in_journal_list)) {
+>>                  /* all stripes flushed */
+>>                  spin_unlock_irqrestore(&log->stripe_in_journal_lock, flags);
+>>                  return log->next_checkpoint;
+>>          }
+>> -       sh = list_first_entry(&conf->log->stripe_in_journal_list,
+>> +       sh = list_first_entry(&log->stripe_in_journal_list,
+>>                                struct stripe_head, r5c);
+>>          new_cp = sh->log_start;
+>>          spin_unlock_irqrestore(&log->stripe_in_journal_lock, flags);
+>> @@ -1173,10 +1172,8 @@ static sector_t r5c_calculate_new_cp(struct r5conf *conf)
+>>
+>>   static sector_t r5l_reclaimable_space(struct r5l_log *log)
+>>   {
+>> -       struct r5conf *conf = log->rdev->mddev->private;
+>> -
+>>          return r5l_ring_distance(log, log->last_checkpoint,
+>> -                                r5c_calculate_new_cp(conf));
+>> +                                r5c_calculate_new_cp(log));
+>>   }
+>>
+>>   static void r5l_run_no_mem_stripe(struct r5l_log *log)
+>> @@ -1419,9 +1416,9 @@ void r5c_flush_cache(struct r5conf *conf, int num)
+>>          }
+>>   }
+>>
+>> -static void r5c_do_reclaim(struct r5conf *conf)
+>> +static void r5c_do_reclaim(struct r5l_log *log)
+>>   {
+>> -       struct r5l_log *log = conf->log;
+>> +       struct r5conf *conf = log->rdev->mddev->private;
+>>          struct stripe_head *sh;
+>>          int count = 0;
+>>          unsigned long flags;
+>> @@ -1496,7 +1493,6 @@ static void r5c_do_reclaim(struct r5conf *conf)
+>>
+>>   static void r5l_do_reclaim(struct r5l_log *log)
+>>   {
+>> -       struct r5conf *conf = log->rdev->mddev->private;
+>>          sector_t reclaim_target = xchg(&log->reclaim_target, 0);
+>>          sector_t reclaimable;
+>>          sector_t next_checkpoint;
+>> @@ -1525,7 +1521,7 @@ static void r5l_do_reclaim(struct r5l_log *log)
+>>                                      log->io_list_lock);
+>>          }
+>>
+>> -       next_checkpoint = r5c_calculate_new_cp(conf);
+>> +       next_checkpoint = r5c_calculate_new_cp(log);
+>>          spin_unlock_irq(&log->io_list_lock);
+>>
+>>          if (reclaimable == 0 || !write_super)
+>> @@ -1554,7 +1550,7 @@ static void r5l_reclaim_thread(struct md_thread *thread)
+>>
+>>          if (!log)
+>>                  return;
+>> -       r5c_do_reclaim(conf);
+>> +       r5c_do_reclaim(log);
+>>          r5l_do_reclaim(log);
+>>   }
+>>
+>> --
+>> 2.39.2
+>>
+> .
+> 
 
-> So can we get back to the business at hand? bytedance may be the
-> company proposing this change, but they are certainly not the only
-> company interested in seeing it happen. A project I'm involved in
-> needs this work to go through.
-
-I noted that the discussion continued from Ard's reply (which, no
-surprise, resonates with my worldview :-)):
-https://lore.kernel.org/linux-riscv/CAMj1kXFZren0Q19DimwQaETCLz64D4bZQC5B2N=
-=3Di3SAWHygkTQ@mail.gmail.com/
-Let's continue there.
-
-
-Bj=C3=B6rn
