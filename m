@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC6674B9B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F12574B9BA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjGGW44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 18:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
+        id S231972AbjGGW47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 18:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjGGW4y (ORCPT
+        with ESMTP id S230414AbjGGW4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 18:56:54 -0400
+        Fri, 7 Jul 2023 18:56:55 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB1F1997
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:56:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678721999
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688770613; x=1720306613;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HVXRmj/J734LlcosDZLbFzKEkqCUDWQNtSlrKyrH6kU=;
-  b=Xgp4Vyl6YBofjt40ZVb/CYm5b7MwqTLPj4V7qkUr7VctVNR9MAdONWwy
-   DiKj13rZ7ncD7cjmtRuOoqALIQvwShPg/DOgfC2qeB5Ol7a+yfF1hDppW
-   vQ93do6NZA3ombu/tmuLdM4MHxS5ZC9jm3Jix88ms6BW1MqQ5dY4hwvcu
-   tkAKL1q5sL3YBFkXT4Rgec2AT0gpMNw3awIUSo6cz8gKZkU67fO3ijGMq
-   jnrY3OFxhHiLp1RR/2hqODelTqiPkQmCLJohcajqcg/MICYtsN/5+fVYU
-   93e5e5YC7MMOphHStJDg6Gt3+RL/fCrG8fQsAgP9Wu84F+6TXKtlz/3NN
+  t=1688770614; x=1720306614;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6HBQc6gDrsn14hkdM0BGPFn3U8cheq47FEDyafZnmmY=;
+  b=JuKPwUkoPviVvlFnNkKNkLljKSj/CIDCkliHkHeT562IhDA5quZyZ227
+   fp7PIC0ZGh3H2r3Fmh5x+Ma1ACcXpMHby6GYOSs1GYztnH8nOq5B5ge+4
+   LHzp2GcfnWjanBRSLMzdr2Nbam1QifEtoek7IGBSqeURmAGs4OFTP06RT
+   uTH23aIX+69W6AvZqjBWDvDwhC2EdVxRiGuj0vQJrRPQyKI+BiL3BuiOt
+   ptLJwNq84gMhaLER9bkRJ7Xl7i3vQay4yHENo0ovc0NzCBdcNzQbk7rPT
+   QTWNUpSaS/32565GtWM4m8hxUnSusk/PoqjxJPht468PbjWk+eCDO+hca
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="427683425"
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="427683440"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="427683425"
+   d="scan'208";a="427683440"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 15:56:52 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 15:56:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="714176648"
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="714176657"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="714176648"
+   d="scan'208";a="714176657"
 Received: from b04f130c83f2.jf.intel.com ([10.165.154.98])
-  by orsmga007.jf.intel.com with ESMTP; 07 Jul 2023 15:56:52 -0700
+  by orsmga007.jf.intel.com with ESMTP; 07 Jul 2023 15:56:53 -0700
 From:   Tim Chen <tim.c.chen@linux.intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
+Cc:     Tim C Chen <tim.c.chen@linux.intel.com>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Ricardo Neri <ricardo.neri@intel.com>,
@@ -62,12 +62,13 @@ Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
         Yicong Yang <yangyicong@hisilicon.com>,
         Barry Song <v-songbaohua@oppo.com>,
         Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: [Patch v3 0/6] Enable Cluster Scheduling for x86 Hybrid CPUs
-Date:   Fri,  7 Jul 2023 15:56:59 -0700
-Message-Id: <cover.1688770494.git.tim.c.chen@linux.intel.com>
+Subject: [Patch v3 1/6] sched/fair: Determine active load balance for SMT sched groups
+Date:   Fri,  7 Jul 2023 15:57:00 -0700
+Message-Id: <e24f35d142308790f69be65930b82794ef6658a2.1688770494.git.tim.c.chen@linux.intel.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <cover.1688770494.git.tim.c.chen@linux.intel.com>
+References: <cover.1688770494.git.tim.c.chen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -79,84 +80,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the third version of patches to fix issues to allow cluster
-scheduling on x86 hybrid CPUs.  They address concerns raised by
-Peter on the second version.  Please refer to the cover letter in the
-first version for the motivation behind this patch series.
+From: Tim C Chen <tim.c.chen@linux.intel.com>
 
-Changes from v2:
-1. Peter pointed out that biasing asym packing in sibling imbalance
-computation is unnecessary.  We will negate extra turbo headroom
-advantage by concentrating tasks in the preferred group.  In v3, we
-simplify computing sibling imbalance only in proportion to the number
-of cores, and remove asym packing bias. We do not lose any performance
-and do a bit better than v2.
+On hybrid CPUs with scheduling cluster enabled, we will need to
+consider balancing between SMT CPU cluster, and Atom core cluster.
 
-2. Peter asked the question of whether it is better to round the
-sibling_imbalance() computation or floor the sibling_imbalanace()
-as in the v2 implementation.  I did find the rounding to be
-better in threaded tensor computation, hence v3 adopt rounding
-in sibling_imbalance().  The performance of both versions are
-listed in the performance data below.
+Below shows such a hybrid x86 CPU with 4 big cores and 8 atom cores.
+Each scheduling cluster span a L2 cache.
 
-3. Fix patch 1 to take SMT thread number more than 2 into consideration.  
+          --L2-- --L2-- --L2-- --L2-- ----L2---- -----L2------
+          [0, 1] [2, 3] [4, 5] [5, 6] [7 8 9 10] [11 12 13 14]
+          Big    Big    Big    Big    Atom       Atom
+          core   core   core   core   Module     Module
 
-4. Various style clean ups suggested by Peter.
+If the busiest group is a big core with both SMT CPUs busy, we should
+active load balance if destination group has idle CPU cores.  Such
+condition is considered by asym_active_balance() in load balancing but not
+considered when looking for busiest group and computing load imbalance.
+Add this consideration in find_busiest_group() and calculate_imbalance().
 
-Past Versions:
-[v1] https://lore.kernel.org/lkml/CAKfTPtD1W6vJQBsNKEt_4tn2EeAs=73CeH4LoCwENrh2JUDwnQ@mail.gmail.com/T/
-[v2] https://lore.kernel.org/all/cover.1686263351.git.tim.c.chen@linux.intel.com/ 
+In addition, update the logic determining the busier group when one group
+is SMT and the other group is non SMT but both groups are partially busy
+with idle CPU. The busier group should be the group with idle cores rather
+than the group with one busy SMT CPU.  We do not want to make the SMT group
+the busiest one to pull the only task off SMT CPU and causing the whole core to
+go empty.
 
-v3 Performance numbers:
+Otherwise suppose in the search for the busiest group, we first encounter
+an SMT group with 1 task and set it as the busiest.  The destination
+group is an atom cluster with 1 task and we next encounter an atom
+cluster group with 3 tasks, we will not pick this atom cluster over the
+SMT group, even though we should.  As a result, we do not load balance
+the busier Atom cluster (with 3 tasks) towards the local atom cluster
+(with 1 task).  And it doesn't make sense to pick the 1 task SMT group
+as the busier group as we also should not pull task off the SMT towards
+the 1 task atom cluster and make the SMT core completely empty.
 
-                                     This version                            
-Single Threaded	6.3-rc5              with cluster         Improvement     Alternative        Improvement    
-Benchmark 	Baseline             scheduling	          in Performance  implementation     in Performance 
-                                     (round imbalance)                    (floor imbalance)	          
-               (run-run deviation)   (run-run deviation)                  (run-run deviation)               
-------------------------------------------------------------------------------------------------------------
-tjbench		(+/- 0.08%)          (+/- 0.12%)           0.03%          (+/- 0.11%)         0.00%	  
-PhPbench	(+/- 0.31%)          (+/- 0.50%)          +0.19%          (+/- 0.87%)        +0.21%         
-flac		(+/- 0.58%)          (+/- 0.41%)          +0.48%          (+/- 0.41%)        +1.02%         
-pybench		(+/- 3.16%)          (+/- 2.87%)          +2.04%          (+/- 2.22%)        +4.25%         
-                                                                                                            
+Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
+---
+ kernel/sched/fair.c | 80 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 77 insertions(+), 3 deletions(-)
 
-                                     This version                         
-                                     with cluster         Improvement     Alternative        Improvement				  
-Multi Threaded	6.3-rc5              scheduling           in Performance  implementation     in Performance 
-Benchmark       Baseline             (round imbalance)                    (floor imbalance)
-(-#threads)     (run-run deviation)  (run-run deviation)                  (run-run deviation)               
-------------------------------------------------------------------------------------------------------------
-Kbuild-8	(+/- 2.90%)          (+/- 0.23%)          -1.10%          (+/- 0.40%)        -1.01%         
-Kbuild-10	(+/- 3.08%)          (+/- 0.51%)          -1.93%          (+/- 0.49%)        -1.57%
-Kbuild-12	(+/- 3.28%)          (+/- 0.39%)          -1.10%          (+/- 0.23%)        -0.98%
-Tensor Lite-8	(+/- 4.84%)          (+/- 0.86%)          -1.32%          (+/- 0.58%)        -0.78%
-Tensor Lite-10	(+/- 0.87%)          (+/- 0.30%)          +0.68%          (+/- 1.24%)        -0.13%
-Tensor Lite-12	(+/- 1.37%)          (+/- 0.82%)          +4.16%          (+/- 1.65%)        +1.19%         
-
-Tim
-
-
-Peter Zijlstra (Intel) (1):
-  sched/debug: Dump domains' sched group flags
-
-Ricardo Neri (1):
-  sched/fair: Consider the idle state of the whole core for load balance
-
-Tim C Chen (4):
-  sched/fair: Determine active load balance for SMT sched groups
-  sched/topology: Record number of cores in sched group
-  sched/fair: Implement prefer sibling imbalance calculation between
-    asymmetric groups
-  sched/x86: Add cluster topology to hybrid CPU
-
- arch/x86/kernel/smpboot.c |   3 +
- kernel/sched/debug.c      |   1 +
- kernel/sched/fair.c       | 137 +++++++++++++++++++++++++++++++++++---
- kernel/sched/sched.h      |   1 +
- kernel/sched/topology.c   |  10 ++-
- 5 files changed, 143 insertions(+), 9 deletions(-)
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 87317634fab2..f636d6c09dc6 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8279,6 +8279,11 @@ enum group_type {
+ 	 * more powerful CPU.
+ 	 */
+ 	group_misfit_task,
++	/*
++	 * Balance SMT group that's fully busy. Can benefit from migration
++	 * a task on SMT with busy sibling to another CPU on idle core.
++	 */
++	group_smt_balance,
+ 	/*
+ 	 * SD_ASYM_PACKING only: One local CPU with higher capacity is available,
+ 	 * and the task should be migrated to it instead of running on the
+@@ -8987,6 +8992,7 @@ struct sg_lb_stats {
+ 	unsigned int group_weight;
+ 	enum group_type group_type;
+ 	unsigned int group_asym_packing; /* Tasks should be moved to preferred CPU */
++	unsigned int group_smt_balance;  /* Task on busy SMT be moved */
+ 	unsigned long group_misfit_task_load; /* A CPU has a task too big for its capacity */
+ #ifdef CONFIG_NUMA_BALANCING
+ 	unsigned int nr_numa_running;
+@@ -9260,6 +9266,9 @@ group_type group_classify(unsigned int imbalance_pct,
+ 	if (sgs->group_asym_packing)
+ 		return group_asym_packing;
+ 
++	if (sgs->group_smt_balance)
++		return group_smt_balance;
++
+ 	if (sgs->group_misfit_task_load)
+ 		return group_misfit_task;
+ 
+@@ -9333,6 +9342,36 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
+ 	return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
+ }
+ 
++/* One group has more than one SMT CPU while the other group does not */
++static inline bool smt_vs_nonsmt_groups(struct sched_group *sg1,
++				    struct sched_group *sg2)
++{
++	if (!sg1 || !sg2)
++		return false;
++
++	return (sg1->flags & SD_SHARE_CPUCAPACITY) !=
++		(sg2->flags & SD_SHARE_CPUCAPACITY);
++}
++
++static inline bool smt_balance(struct lb_env *env, struct sg_lb_stats *sgs,
++			       struct sched_group *group)
++{
++	if (env->idle == CPU_NOT_IDLE)
++		return false;
++
++	/*
++	 * For SMT source group, it is better to move a task
++	 * to a CPU that doesn't have multiple tasks sharing its CPU capacity.
++	 * Note that if a group has a single SMT, SD_SHARE_CPUCAPACITY
++	 * will not be on.
++	 */
++	if (group->flags & SD_SHARE_CPUCAPACITY &&
++	    sgs->sum_h_nr_running > 1)
++		return true;
++
++	return false;
++}
++
+ static inline bool
+ sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
+ {
+@@ -9425,6 +9464,10 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+ 		sgs->group_asym_packing = 1;
+ 	}
+ 
++	/* Check for loaded SMT group to be balanced to dst CPU */
++	if (!local_group && smt_balance(env, sgs, group))
++		sgs->group_smt_balance = 1;
++
+ 	sgs->group_type = group_classify(env->sd->imbalance_pct, group, sgs);
+ 
+ 	/* Computing avg_load makes sense only when group is overloaded */
+@@ -9509,6 +9552,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 			return false;
+ 		break;
+ 
++	case group_smt_balance:
+ 	case group_fully_busy:
+ 		/*
+ 		 * Select the fully busy group with highest avg_load. In
+@@ -9537,6 +9581,18 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 		break;
+ 
+ 	case group_has_spare:
++		/*
++		 * Do not pick sg with SMT CPUs over sg with pure CPUs,
++		 * as we do not want to pull task off SMT core with one task
++		 * and make the core idle.
++		 */
++		if (smt_vs_nonsmt_groups(sds->busiest, sg)) {
++			if (sg->flags & SD_SHARE_CPUCAPACITY && sgs->sum_h_nr_running <= 1)
++				return false;
++			else
++				return true;
++		}
++
+ 		/*
+ 		 * Select not overloaded group with lowest number of idle cpus
+ 		 * and highest number of running tasks. We could also compare
+@@ -9733,6 +9789,7 @@ static bool update_pick_idlest(struct sched_group *idlest,
+ 
+ 	case group_imbalanced:
+ 	case group_asym_packing:
++	case group_smt_balance:
+ 		/* Those types are not used in the slow wakeup path */
+ 		return false;
+ 
+@@ -9864,6 +9921,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 
+ 	case group_imbalanced:
+ 	case group_asym_packing:
++	case group_smt_balance:
+ 		/* Those type are not used in the slow wakeup path */
+ 		return NULL;
+ 
+@@ -10118,6 +10176,13 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 		return;
+ 	}
+ 
++	if (busiest->group_type == group_smt_balance) {
++		/* Reduce number of tasks sharing CPU capacity */
++		env->migration_type = migrate_task;
++		env->imbalance = 1;
++		return;
++	}
++
+ 	if (busiest->group_type == group_imbalanced) {
+ 		/*
+ 		 * In the group_imb case we cannot rely on group-wide averages
+@@ -10363,16 +10428,23 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 		goto force_balance;
+ 
+ 	if (busiest->group_type != group_overloaded) {
+-		if (env->idle == CPU_NOT_IDLE)
++		if (env->idle == CPU_NOT_IDLE) {
+ 			/*
+ 			 * If the busiest group is not overloaded (and as a
+ 			 * result the local one too) but this CPU is already
+ 			 * busy, let another idle CPU try to pull task.
+ 			 */
+ 			goto out_balanced;
++		}
++
++		if (busiest->group_type == group_smt_balance &&
++		    smt_vs_nonsmt_groups(sds.local, sds.busiest)) {
++			/* Let non SMT CPU pull from SMT CPU sharing with sibling */
++			goto force_balance;
++		}
+ 
+ 		if (busiest->group_weight > 1 &&
+-		    local->idle_cpus <= (busiest->idle_cpus + 1))
++		    local->idle_cpus <= (busiest->idle_cpus + 1)) {
+ 			/*
+ 			 * If the busiest group is not overloaded
+ 			 * and there is no imbalance between this and busiest
+@@ -10383,12 +10455,14 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 			 * there is more than 1 CPU per group.
+ 			 */
+ 			goto out_balanced;
++		}
+ 
+-		if (busiest->sum_h_nr_running == 1)
++		if (busiest->sum_h_nr_running == 1) {
+ 			/*
+ 			 * busiest doesn't have any tasks waiting to run
+ 			 */
+ 			goto out_balanced;
++		}
+ 	}
+ 
+ force_balance:
 -- 
 2.32.0
 
