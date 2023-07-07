@@ -2,46 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB0D74A945
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6C074A95F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjGGDQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 23:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
+        id S231976AbjGGDee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 23:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjGGDQE (ORCPT
+        with ESMTP id S229811AbjGGDeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 23:16:04 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ACB19BD;
-        Thu,  6 Jul 2023 20:16:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vmml8tJ_1688699756;
-Received: from 30.221.129.118(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0Vmml8tJ_1688699756)
-          by smtp.aliyun-inc.com;
-          Fri, 07 Jul 2023 11:15:57 +0800
-Message-ID: <2033ce6a-761e-b891-42e0-2659506eb61d@linux.alibaba.com>
-Date:   Fri, 7 Jul 2023 11:15:56 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 62/92] ocfs2: convert to ctime accessor functions
+        Thu, 6 Jul 2023 23:34:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCBB1FD2;
+        Thu,  6 Jul 2023 20:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688700870; x=1720236870;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=X7R2/LjGDVwr2rg75JWTotzylBerxs0lUVdt9oeUBFQ=;
+  b=WFVYJ8NoWNnKdRrD9r0ZOsbDHLzbxiXN1/2BV6VirAarDrBrhiGt9B8i
+   W88uLoKleh3wPJJU6mI+7hQH1dnytF1Tpl+EjtsDWEBrlDDlOcgMIfY9L
+   Evx5XksuGQxH2BLOxEz5B+Sqcjf0sw7H1LRBi82SBpMrg9p4fLMwmRl24
+   yawE45p+N+zctavktteSHfnJhcZVJNiIboq34UXhsA1cTtycx3OeBO7du
+   UhlkDEMHT1hzlCfpBwbhVn6Zd9mOR9TFMlGl5/f4PiVZkKEgTuVWxMyhu
+   LGuNOXwnZy0MYa2FYrcfp7jh3NBPG7MK9sHZH1HM/ypRUrnFZ2GhDcdyl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="363830673"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="363830673"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 20:34:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="1050364989"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="1050364989"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Jul 2023 20:34:29 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 6 Jul 2023 20:34:29 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 6 Jul 2023 20:34:29 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 6 Jul 2023 20:34:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=baVYaZOhk/1ptY3LBCncpr6wE6CjhsHRvZ/ta2P5XfhgmRqVAPmY7p3Wdxin89fqT2xrZbvmnVoLAh/TiuzimV+KVP4gYdbHqcLz7b+pDc0kYgmxjH36gR/+0owZbgqBjsTrW3NPLNIAJqFNJr2E4DZMw6ahB5KxXfBXiT4CGkDB9+FCFOMHFaVqpAL0aRDyDwn+q1xDeJ9CXlbMhwVnMObzR2/NLLncK1bjC4fC+rIC0MUqF4YhCHgaVBKns1HdXsTirAFww7fQjA6OzEBZJkm/UFCmVAQqB3FMW28P9ESyQy4tQXGdOemBbU1acg9QwLgQxrLCsesgu10TVGWRnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X7R2/LjGDVwr2rg75JWTotzylBerxs0lUVdt9oeUBFQ=;
+ b=lqqczvlmGxxYLAJbdln2Gjyg6zW54dbJ8mYMJvB5yWhRpRNTBEBUvHqzFjmu6HLJ4oQyqGHjhgs214hTuzc53ZXOkM0suXYhECWh/xFXpJ2nH1hjlQrHOqrabXMkBUQ+yVdlp8QgXMZZnWvFIcX0gqZP5dsrhJJqDqnFZWxfmlhRpYKHm+vwzC9+1hcBx9Td3GigvxifSg6g7vBYJELfVSVI4MsfpHI4OfEM3XhTAWkxkqWcINrmvaJlxNjcwwJmIKUgsAsVCKJ1BY/YslJPHR/tdGHdB71jX9egivcry6YqXSpwbnHAHstz+QQFiTOiNkUmbza2n5UqNALj+gdzZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
+ by SA2PR11MB5051.namprd11.prod.outlook.com (2603:10b6:806:11f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.24; Fri, 7 Jul
+ 2023 03:34:27 +0000
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::221f:dbc7:48ea:7df3]) by CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::221f:dbc7:48ea:7df3%4]) with mapi id 15.20.6565.016; Fri, 7 Jul 2023
+ 03:34:26 +0000
+From:   "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To:     Koba Ko <koba.ko@canonical.com>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] EDAC/i10nm: shift exponent is negative
+Thread-Topic: [PATCH v2] EDAC/i10nm: shift exponent is negative
+Thread-Index: AQHZrfiT8S4St58DWkKECHZaJCTaP6+o1+WAgAG4woCAAE1ggIAAbuuAgAF4OeCAAEDZAIAApV2w
+Date:   Fri, 7 Jul 2023 03:34:26 +0000
+Message-ID: <CY8PR11MB71346D8945AAC57D3614CBE2892DA@CY8PR11MB7134.namprd11.prod.outlook.com>
+References: <20230703162509.77828-1-koba.ko@canonical.com>
+ <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
+ <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAJB-X+UB+eYoYOOVH2bqnnVEJcLrxaj5A7-zyfgBM7hOf4y8zw@mail.gmail.com>
+ <SJ1PR11MB608383A5841E4AE8D3A64B79FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAJB-X+VFYyTiQ7yhX=Z8-Q4QW-GMsGXMuEWxLjuoZ1aDB98qXg@mail.gmail.com>
+ <SJ1PR11MB60832C7FFEF98EE33F255B9DFC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CY8PR11MB713495A12DE47EDC3B7C5E20892CA@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <CAJB-X+X_KW=T4WOe2AS3SFFQKjt7VcQRFUCGYFcjipi5-aXdrw@mail.gmail.com>
+In-Reply-To: <CAJB-X+X_KW=T4WOe2AS3SFFQKjt7VcQRFUCGYFcjipi5-aXdrw@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ocfs2-devel@lists.linux.dev
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-60-jlayton@kernel.org>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20230705190309.579783-60-jlayton@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|SA2PR11MB5051:EE_
+x-ms-office365-filtering-correlation-id: 04c901d0-7b97-4f0b-8210-08db7e9b10c2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LGVh4tjSw4iyZYrq4rcnimMpzmfR7OGdZK08KFEzmmchSRQCpiOUCHfcxVGfYE3KMkfsygiu4hs+w9+QCNeXBav1dE/qjRI6P8KypqBYkML1tpRRj1W5584iNFtXEF2aLtJh2lKaCJ9x4DIs4203s3ezf5nx9T5aqzz6AGa8xynlM0vqmusGFO8RxFtTPenrsISYGWNtV9zbNHzfQZw3oDZ8VGiRAcXhMmgb+SM200LGEPXO4cOQGwxcRNC2j/GvcRyhbHmOzZPjTFFT7qV4RsGfXzQActfxji02fBmemAhoJSYBkX9C2smkCosgfziERXkHphnHaXRy9lBkfTLTUxWedfg2oNCw78dqcHnrW2r4Y9oF4AA2tr8UOfQDrwvWXZamMy8wQMHmfEEkK4jnlwnowbsdJLI+yBu97lHJbC4SlyYcJdg+chYXhhLxhBM9fXg9ZaPHioKBoa6xbh7YbrjF2zaFhxa6E4AHBaidVBHIdhUl0YqEyRP0+9yRjoqXeS2DOtvFJBl/x2QpaD7ynWThl+vcJ3166ma6iIoEcvIWIO7KYfAqPuW0bb80HK5xyDnpovJfWn0A7ujWOcFgIYspe5/mVgNj3YUtz8nqXWmbAlglTH2sXJR4B2srZ2t5OMArSz+lFNbbmK3NUR7E9Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(366004)(346002)(376002)(136003)(451199021)(478600001)(83380400001)(82960400001)(122000001)(33656002)(38070700005)(38100700002)(86362001)(55016003)(54906003)(966005)(84970400001)(7696005)(71200400001)(8676002)(8936002)(5660300002)(52536014)(7416002)(316002)(41300700001)(64756008)(4326008)(2906002)(66446008)(76116006)(66946007)(66476007)(66556008)(6916009)(4744005)(53546011)(186003)(6506007)(9686003)(5930299015)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TnQ5dDlFc1ZTV1FvdmFCdlowWkR5VmJjUWhicnFtZy9IQklSQ2VYZTZsS3hW?=
+ =?utf-8?B?SWo3OGxHS2VGL0ZKc1o3NzlINHFETU5neFBhQ1U1d0E3ejFGMUpNdTVsOUR2?=
+ =?utf-8?B?YVZMSng0OVBvN2ZuUjN2ZWZER05tdHJZRUViMDBrOUx3RUNobkVvM3B6RDR6?=
+ =?utf-8?B?U0FjZHIyb3ZIS0M4Y2dmOTFoSkRad28vTE16UG91MlRxbUhmRDdNcllYOWls?=
+ =?utf-8?B?VjRqb21xWHlxMVF4ZWEzay92UU9BZG9oUDhYck5ja2lsTjNuOUxCcithcXhT?=
+ =?utf-8?B?VlpKNFdkQzZUSlhweVRPYnhBaTUrN29nNGhUTFFKT0pTT2dxeTBMeHVrRHls?=
+ =?utf-8?B?UldXajBsbGVuOWpFY2xKbVpLcG5iTEpOcVNsODJqbi96NFlNUThaMG16OG5O?=
+ =?utf-8?B?dzV5RTRMWGZhOTkyV0NtR0tUY1BSTkxwdVdqcXVYRGl0L0tSc1E4NFlxNnhm?=
+ =?utf-8?B?UXJ6QnlBcFVLeDZoWWgzUjJHckM2SEIyOG9ML0hzTjNXZkxYM2JENzI1ZjEw?=
+ =?utf-8?B?eWdSbnJRY0IrVUR3ZEJ3OWN2NnUzZTFtZDBIampPNUtGZEJPUzYweEdCSXJQ?=
+ =?utf-8?B?cHhORWN3U3JWbitqQ0tJSm9BQzJQY1lxb1g0VDFGUmVqdHZDSVNySnhZWlI5?=
+ =?utf-8?B?RytOZ0ZHd3h5eWlmRlJVZk02K1BTanlqRW1SMEZWNzBuTWYwZk8zMXU2WWlB?=
+ =?utf-8?B?WTdPekRLWk10eTZiTGY1UFRJaU5ScGh2QnVMeHVEWWhJNjdqSTluTWh5cTZ6?=
+ =?utf-8?B?Y2lzMnMvNkVuL0FJSzZveUpqMDdIdUlIVkZ4Uld1cXBjMnY4R2pCYzhxUXBq?=
+ =?utf-8?B?Y1pMQTFqSmJ0ZW5BSDB5VmZoUEtPNkgrMzl2dG5WTnpPcHh2N29KemZsNEJr?=
+ =?utf-8?B?TE9QOE11TkQ5eE1Zd1ZZZkFXME5lOGZaYVoxeS9wTWpkbHhzSDVqSFcxak1C?=
+ =?utf-8?B?UytoeElzOFFXSFJ5R05hZWJJelc5ajhzQmpxbGY0dmtUWG4xNUNTdUlBRnZh?=
+ =?utf-8?B?L0QxWFRjUVowamViNnJaVUpHZ3piZzllMGRnMzE3emxnOFZ6MEUzcE1Fekh1?=
+ =?utf-8?B?dGc5WG5Yc3d2aXJmY3Q3ZWNCOGVvQlQ3SzRmb2dadmo5RkdSNmQvcm5MTGxj?=
+ =?utf-8?B?V1kzMzJyTVk4QThtNWxpVXhiTjBrWUZ4ZFVhNTkwOFhIWkoxWUtzampYSzkv?=
+ =?utf-8?B?bE5ZVjVoUis5RnEreEJvRzhiVUhFWkx5ZzdyQUNyOHRnWnlYTndFWGlQMWhD?=
+ =?utf-8?B?dkZtb2NQakhHV1ZOcVA0MnNoVFJ0aFBwYVlsSmJCaXc0K09QVlRmYklKNGpD?=
+ =?utf-8?B?enlkY1daaDEycGVudVZRT0RGOGpkZkJMdGtOdTlBeE5hTmJyRkFjdzFwcFB1?=
+ =?utf-8?B?cWFZQUY4byttVjlFSFlyRFBEZTNKc1lCd3NST1hzRGRKU1pSMVgrV0xleEw1?=
+ =?utf-8?B?MTNsY2NUZk1BYmJEN09SanpBY3RzK3ZZaDl4T3RVUE1FT09MVEsxM3JybVBY?=
+ =?utf-8?B?SUNPcnZ3R05WR0ZPTWNVTlh0WW9odXMrMWc5RVZYZzVOajZHc1RxTG1mU1RO?=
+ =?utf-8?B?M1VibmtLYzdyUzU5bU9wVlFtRkl3REtBcHlpU1FFcHR3SFpIVzE3WGJFNVVX?=
+ =?utf-8?B?dzdvL3psZ1A4WG0rdmxYTEZaZ21qSVlsSGtyZGNQd1NSWHp6em9CclhjTk9h?=
+ =?utf-8?B?Q1lVVEdjYmZ3OXQwSDhXVUVkRnVRMVBWWC9TUHoxZXNzRWc2YmtETzBvSng2?=
+ =?utf-8?B?UVVpQjN0QzB4eTBZeXV1a3VrRkVybTJEYWpvTDV3MzFPR3IwRit6bHJla1JO?=
+ =?utf-8?B?S05weWRrTlhHZnVFb090S0NwOTZ1Vm5JWCtYUFlvQkUveWFUNzBtL0NOcnFp?=
+ =?utf-8?B?QkR3dFVaUklyRDVDQUdoQkVJNDF3Sk5keVl5T3lzOTdpc2gxM29FNERHZlFy?=
+ =?utf-8?B?OElEQllwTlJOYnc1dlBWR2pWRHYwQnlSVTJQQzlubmM0dWhyVnhXNVFNUWh1?=
+ =?utf-8?B?NTAzSm51Ri9VckZwUm1HWVRhMmZ6KzdBUi81K2puTEFzWThGVGhJSTRFdEo2?=
+ =?utf-8?B?TFRIQVhuT0Q1VS9KSlFTS1ViR2NudHhCOFVuRjBGb3dRbG9WeFpHMkVkL3A1?=
+ =?utf-8?Q?xnAPF8e/neMxLi5LWVytB/xQ6?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04c901d0-7b97-4f0b-8210-08db7e9b10c2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2023 03:34:26.8669
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6mU08ZrI7VZDmTJcSWTocM882uDeXbI3kxCgLHql6VwiJc166d/L6hszYgb9v+fDx364LkQmsllOJRruI2yQ3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5051
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,410 +172,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/6/23 3:01 AM, Jeff Layton wrote:
-> In later patches, we're going to change how the inode's ctime field is
-> used. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/ocfs2/acl.c          |  6 +++---
->  fs/ocfs2/alloc.c        |  6 +++---
->  fs/ocfs2/aops.c         |  2 +-
->  fs/ocfs2/dir.c          |  8 ++++----
->  fs/ocfs2/dlmfs/dlmfs.c  |  4 ++--
->  fs/ocfs2/dlmglue.c      |  7 +++++--
->  fs/ocfs2/file.c         | 16 +++++++++-------
->  fs/ocfs2/inode.c        | 12 ++++++------
->  fs/ocfs2/move_extents.c |  6 +++---
->  fs/ocfs2/namei.c        | 21 +++++++++++----------
->  fs/ocfs2/refcounttree.c | 14 +++++++-------
->  fs/ocfs2/xattr.c        |  6 +++---
->  12 files changed, 57 insertions(+), 51 deletions(-)
-> 
-> diff --git a/fs/ocfs2/acl.c b/fs/ocfs2/acl.c
-> index 9fd03eaf15f8..e75137a8e7cb 100644
-> --- a/fs/ocfs2/acl.c
-> +++ b/fs/ocfs2/acl.c
-> @@ -191,10 +191,10 @@ static int ocfs2_acl_set_mode(struct inode *inode, struct buffer_head *di_bh,
->  	}
->  
->  	inode->i_mode = new_mode;
-> -	inode->i_ctime = current_time(inode);
-> +	inode_set_ctime_current(inode);
->  	di->i_mode = cpu_to_le16(inode->i_mode);
-> -	di->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	di->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	di->i_ctime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	di->i_ctime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  	ocfs2_update_inode_fsync_trans(handle, inode, 0);
->  
->  	ocfs2_journal_dirty(handle, di_bh);
-> diff --git a/fs/ocfs2/alloc.c b/fs/ocfs2/alloc.c
-> index 51c93929a146..aef58f1395c8 100644
-> --- a/fs/ocfs2/alloc.c
-> +++ b/fs/ocfs2/alloc.c
-> @@ -7436,10 +7436,10 @@ int ocfs2_truncate_inline(struct inode *inode, struct buffer_head *di_bh,
->  	}
->  
->  	inode->i_blocks = ocfs2_inode_sector_count(inode);
-> -	inode->i_ctime = inode->i_mtime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  
-> -	di->i_ctime = di->i_mtime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	di->i_ctime_nsec = di->i_mtime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	di->i_ctime = di->i_mtime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	di->i_ctime_nsec = di->i_mtime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  
->  	ocfs2_update_inode_fsync_trans(handle, inode, 1);
->  	ocfs2_journal_dirty(handle, di_bh);
-> diff --git a/fs/ocfs2/aops.c b/fs/ocfs2/aops.c
-> index 8dfc284e85f0..0fdba30740ab 100644
-> --- a/fs/ocfs2/aops.c
-> +++ b/fs/ocfs2/aops.c
-> @@ -2048,7 +2048,7 @@ int ocfs2_write_end_nolock(struct address_space *mapping,
->  		}
->  		inode->i_blocks = ocfs2_inode_sector_count(inode);
->  		di->i_size = cpu_to_le64((u64)i_size_read(inode));
-> -		inode->i_mtime = inode->i_ctime = current_time(inode);
-> +		inode->i_mtime = inode_set_ctime_current(inode);
->  		di->i_mtime = di->i_ctime = cpu_to_le64(inode->i_mtime.tv_sec);
->  		di->i_mtime_nsec = di->i_ctime_nsec = cpu_to_le32(inode->i_mtime.tv_nsec);
->  		if (handle)
-> diff --git a/fs/ocfs2/dir.c b/fs/ocfs2/dir.c
-> index 694471fc46b8..8b123d543e6e 100644
-> --- a/fs/ocfs2/dir.c
-> +++ b/fs/ocfs2/dir.c
-> @@ -1658,7 +1658,7 @@ int __ocfs2_add_entry(handle_t *handle,
->  				offset, ocfs2_dir_trailer_blk_off(dir->i_sb));
->  
->  		if (ocfs2_dirent_would_fit(de, rec_len)) {
-> -			dir->i_mtime = dir->i_ctime = current_time(dir);
-> +			dir->i_mtime = inode_set_ctime_current(dir);
->  			retval = ocfs2_mark_inode_dirty(handle, dir, parent_fe_bh);
->  			if (retval < 0) {
->  				mlog_errno(retval);
-> @@ -2962,11 +2962,11 @@ static int ocfs2_expand_inline_dir(struct inode *dir, struct buffer_head *di_bh,
->  	ocfs2_dinode_new_extent_list(dir, di);
->  
->  	i_size_write(dir, sb->s_blocksize);
-> -	dir->i_mtime = dir->i_ctime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  
->  	di->i_size = cpu_to_le64(sb->s_blocksize);
-> -	di->i_ctime = di->i_mtime = cpu_to_le64(dir->i_ctime.tv_sec);
-> -	di->i_ctime_nsec = di->i_mtime_nsec = cpu_to_le32(dir->i_ctime.tv_nsec);
-> +	di->i_ctime = di->i_mtime = cpu_to_le64(inode_get_ctime(dir).tv_sec);
-> +	di->i_ctime_nsec = di->i_mtime_nsec = cpu_to_le32(inode_get_ctime(dir).tv_nsec);
->  	ocfs2_update_inode_fsync_trans(handle, dir, 1);
->  
->  	/*
-> diff --git a/fs/ocfs2/dlmfs/dlmfs.c b/fs/ocfs2/dlmfs/dlmfs.c
-> index ba26c5567cff..81265123ce6c 100644
-> --- a/fs/ocfs2/dlmfs/dlmfs.c
-> +++ b/fs/ocfs2/dlmfs/dlmfs.c
-> @@ -337,7 +337,7 @@ static struct inode *dlmfs_get_root_inode(struct super_block *sb)
->  	if (inode) {
->  		inode->i_ino = get_next_ino();
->  		inode_init_owner(&nop_mnt_idmap, inode, NULL, mode);
-> -		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-> +		inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
->  		inc_nlink(inode);
->  
->  		inode->i_fop = &simple_dir_operations;
-> @@ -360,7 +360,7 @@ static struct inode *dlmfs_get_inode(struct inode *parent,
->  
->  	inode->i_ino = get_next_ino();
->  	inode_init_owner(&nop_mnt_idmap, inode, parent, mode);
-> -	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-> +	inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
->  
->  	ip = DLMFS_I(inode);
->  	ip->ip_conn = DLMFS_I(parent)->ip_conn;
-> diff --git a/fs/ocfs2/dlmglue.c b/fs/ocfs2/dlmglue.c
-> index c28bc983a7b1..c3e2961ee5db 100644
-> --- a/fs/ocfs2/dlmglue.c
-> +++ b/fs/ocfs2/dlmglue.c
-> @@ -2162,6 +2162,7 @@ static void __ocfs2_stuff_meta_lvb(struct inode *inode)
->  	struct ocfs2_inode_info *oi = OCFS2_I(inode);
->  	struct ocfs2_lock_res *lockres = &oi->ip_inode_lockres;
->  	struct ocfs2_meta_lvb *lvb;
-> +	struct timespec64 ctime = inode_get_ctime(inode);
->  
->  	lvb = ocfs2_dlm_lvb(&lockres->l_lksb);
->  
-> @@ -2185,7 +2186,7 @@ static void __ocfs2_stuff_meta_lvb(struct inode *inode)
->  	lvb->lvb_iatime_packed  =
->  		cpu_to_be64(ocfs2_pack_timespec(&inode->i_atime));
->  	lvb->lvb_ictime_packed =
-> -		cpu_to_be64(ocfs2_pack_timespec(&inode->i_ctime));
-> +		cpu_to_be64(ocfs2_pack_timespec(&ctime));
->  	lvb->lvb_imtime_packed =
->  		cpu_to_be64(ocfs2_pack_timespec(&inode->i_mtime));
->  	lvb->lvb_iattr    = cpu_to_be32(oi->ip_attr);
-> @@ -2208,6 +2209,7 @@ static int ocfs2_refresh_inode_from_lvb(struct inode *inode)
->  	struct ocfs2_inode_info *oi = OCFS2_I(inode);
->  	struct ocfs2_lock_res *lockres = &oi->ip_inode_lockres;
->  	struct ocfs2_meta_lvb *lvb;
-> +	struct timespec64 ctime;
->  
->  	mlog_meta_lvb(0, lockres);
->  
-> @@ -2238,8 +2240,9 @@ static int ocfs2_refresh_inode_from_lvb(struct inode *inode)
->  			      be64_to_cpu(lvb->lvb_iatime_packed));
->  	ocfs2_unpack_timespec(&inode->i_mtime,
->  			      be64_to_cpu(lvb->lvb_imtime_packed));
-> -	ocfs2_unpack_timespec(&inode->i_ctime,
-> +	ocfs2_unpack_timespec(&ctime,
->  			      be64_to_cpu(lvb->lvb_ictime_packed));
-> +	inode_set_ctime_to_ts(inode, ctime);
-
-A quick glance, it seems not an equivalent replace.
-
-Thanks,
-Joseph
-
->  	spin_unlock(&oi->ip_lock);
->  	return 0;
->  }
-> diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
-> index 9e417cd4fd16..e8c78d16e815 100644
-> --- a/fs/ocfs2/file.c
-> +++ b/fs/ocfs2/file.c
-> @@ -232,8 +232,10 @@ int ocfs2_should_update_atime(struct inode *inode,
->  		return 0;
->  
->  	if (vfsmnt->mnt_flags & MNT_RELATIME) {
-> +		struct timespec64 ctime = inode_get_ctime(inode);
-> +
->  		if ((timespec64_compare(&inode->i_atime, &inode->i_mtime) <= 0) ||
-> -		    (timespec64_compare(&inode->i_atime, &inode->i_ctime) <= 0))
-> +		    (timespec64_compare(&inode->i_atime, &ctime) <= 0))
->  			return 1;
->  
->  		return 0;
-> @@ -294,7 +296,7 @@ int ocfs2_set_inode_size(handle_t *handle,
->  
->  	i_size_write(inode, new_i_size);
->  	inode->i_blocks = ocfs2_inode_sector_count(inode);
-> -	inode->i_ctime = inode->i_mtime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  
->  	status = ocfs2_mark_inode_dirty(handle, inode, fe_bh);
->  	if (status < 0) {
-> @@ -415,12 +417,12 @@ static int ocfs2_orphan_for_truncate(struct ocfs2_super *osb,
->  	}
->  
->  	i_size_write(inode, new_i_size);
-> -	inode->i_ctime = inode->i_mtime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  
->  	di = (struct ocfs2_dinode *) fe_bh->b_data;
->  	di->i_size = cpu_to_le64(new_i_size);
-> -	di->i_ctime = di->i_mtime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	di->i_ctime_nsec = di->i_mtime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	di->i_ctime = di->i_mtime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	di->i_ctime_nsec = di->i_mtime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  	ocfs2_update_inode_fsync_trans(handle, inode, 0);
->  
->  	ocfs2_journal_dirty(handle, fe_bh);
-> @@ -819,7 +821,7 @@ static int ocfs2_write_zero_page(struct inode *inode, u64 abs_from,
->  	i_size_write(inode, abs_to);
->  	inode->i_blocks = ocfs2_inode_sector_count(inode);
->  	di->i_size = cpu_to_le64((u64)i_size_read(inode));
-> -	inode->i_mtime = inode->i_ctime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  	di->i_mtime = di->i_ctime = cpu_to_le64(inode->i_mtime.tv_sec);
->  	di->i_ctime_nsec = cpu_to_le32(inode->i_mtime.tv_nsec);
->  	di->i_mtime_nsec = di->i_ctime_nsec;
-> @@ -2038,7 +2040,7 @@ static int __ocfs2_change_file_space(struct file *file, struct inode *inode,
->  		goto out_inode_unlock;
->  	}
->  
-> -	inode->i_ctime = inode->i_mtime = current_time(inode);
-> +	inode->i_mtime = inode_set_ctime_current(inode);
->  	ret = ocfs2_mark_inode_dirty(handle, inode, di_bh);
->  	if (ret < 0)
->  		mlog_errno(ret);
-> diff --git a/fs/ocfs2/inode.c b/fs/ocfs2/inode.c
-> index bb116c39b581..e8771600b930 100644
-> --- a/fs/ocfs2/inode.c
-> +++ b/fs/ocfs2/inode.c
-> @@ -306,8 +306,8 @@ void ocfs2_populate_inode(struct inode *inode, struct ocfs2_dinode *fe,
->  	inode->i_atime.tv_nsec = le32_to_cpu(fe->i_atime_nsec);
->  	inode->i_mtime.tv_sec = le64_to_cpu(fe->i_mtime);
->  	inode->i_mtime.tv_nsec = le32_to_cpu(fe->i_mtime_nsec);
-> -	inode->i_ctime.tv_sec = le64_to_cpu(fe->i_ctime);
-> -	inode->i_ctime.tv_nsec = le32_to_cpu(fe->i_ctime_nsec);
-> +	inode_set_ctime(inode, le64_to_cpu(fe->i_ctime),
-> +		        le32_to_cpu(fe->i_ctime_nsec));
->  
->  	if (OCFS2_I(inode)->ip_blkno != le64_to_cpu(fe->i_blkno))
->  		mlog(ML_ERROR,
-> @@ -1314,8 +1314,8 @@ int ocfs2_mark_inode_dirty(handle_t *handle,
->  	fe->i_mode = cpu_to_le16(inode->i_mode);
->  	fe->i_atime = cpu_to_le64(inode->i_atime.tv_sec);
->  	fe->i_atime_nsec = cpu_to_le32(inode->i_atime.tv_nsec);
-> -	fe->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	fe->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	fe->i_ctime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	fe->i_ctime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  	fe->i_mtime = cpu_to_le64(inode->i_mtime.tv_sec);
->  	fe->i_mtime_nsec = cpu_to_le32(inode->i_mtime.tv_nsec);
->  
-> @@ -1352,8 +1352,8 @@ void ocfs2_refresh_inode(struct inode *inode,
->  	inode->i_atime.tv_nsec = le32_to_cpu(fe->i_atime_nsec);
->  	inode->i_mtime.tv_sec = le64_to_cpu(fe->i_mtime);
->  	inode->i_mtime.tv_nsec = le32_to_cpu(fe->i_mtime_nsec);
-> -	inode->i_ctime.tv_sec = le64_to_cpu(fe->i_ctime);
-> -	inode->i_ctime.tv_nsec = le32_to_cpu(fe->i_ctime_nsec);
-> +	inode_set_ctime(inode, le64_to_cpu(fe->i_ctime),
-> +			le32_to_cpu(fe->i_ctime_nsec));
->  
->  	spin_unlock(&OCFS2_I(inode)->ip_lock);
->  }
-> diff --git a/fs/ocfs2/move_extents.c b/fs/ocfs2/move_extents.c
-> index b1e32ec4a9d4..05d67968a3a9 100644
-> --- a/fs/ocfs2/move_extents.c
-> +++ b/fs/ocfs2/move_extents.c
-> @@ -950,9 +950,9 @@ static int ocfs2_move_extents(struct ocfs2_move_extents_context *context)
->  	}
->  
->  	di = (struct ocfs2_dinode *)di_bh->b_data;
-> -	inode->i_ctime = current_time(inode);
-> -	di->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	di->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	inode_set_ctime_current(inode);
-> +	di->i_ctime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	di->i_ctime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  	ocfs2_update_inode_fsync_trans(handle, inode, 0);
->  
->  	ocfs2_journal_dirty(handle, di_bh);
-> diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> index 17c52225b87d..e4a684d45308 100644
-> --- a/fs/ocfs2/namei.c
-> +++ b/fs/ocfs2/namei.c
-> @@ -793,10 +793,10 @@ static int ocfs2_link(struct dentry *old_dentry,
->  	}
->  
->  	inc_nlink(inode);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_set_ctime_current(inode);
->  	ocfs2_set_links_count(fe, inode->i_nlink);
-> -	fe->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	fe->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	fe->i_ctime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	fe->i_ctime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  	ocfs2_journal_dirty(handle, fe_bh);
->  
->  	err = ocfs2_add_entry(handle, dentry, inode,
-> @@ -995,7 +995,7 @@ static int ocfs2_unlink(struct inode *dir,
->  	ocfs2_set_links_count(fe, inode->i_nlink);
->  	ocfs2_journal_dirty(handle, fe_bh);
->  
-> -	dir->i_ctime = dir->i_mtime = current_time(dir);
-> +	dir->i_mtime = inode_set_ctime_current(dir);
->  	if (S_ISDIR(inode->i_mode))
->  		drop_nlink(dir);
->  
-> @@ -1537,7 +1537,7 @@ static int ocfs2_rename(struct mnt_idmap *idmap,
->  					 new_dir_bh, &target_insert);
->  	}
->  
-> -	old_inode->i_ctime = current_time(old_inode);
-> +	inode_set_ctime_current(old_inode);
->  	mark_inode_dirty(old_inode);
->  
->  	status = ocfs2_journal_access_di(handle, INODE_CACHE(old_inode),
-> @@ -1546,8 +1546,8 @@ static int ocfs2_rename(struct mnt_idmap *idmap,
->  	if (status >= 0) {
->  		old_di = (struct ocfs2_dinode *) old_inode_bh->b_data;
->  
-> -		old_di->i_ctime = cpu_to_le64(old_inode->i_ctime.tv_sec);
-> -		old_di->i_ctime_nsec = cpu_to_le32(old_inode->i_ctime.tv_nsec);
-> +		old_di->i_ctime = cpu_to_le64(inode_get_ctime(old_inode).tv_sec);
-> +		old_di->i_ctime_nsec = cpu_to_le32(inode_get_ctime(old_inode).tv_nsec);
->  		ocfs2_journal_dirty(handle, old_inode_bh);
->  	} else
->  		mlog_errno(status);
-> @@ -1586,9 +1586,9 @@ static int ocfs2_rename(struct mnt_idmap *idmap,
->  
->  	if (new_inode) {
->  		drop_nlink(new_inode);
-> -		new_inode->i_ctime = current_time(new_inode);
-> +		inode_set_ctime_current(new_inode);
->  	}
-> -	old_dir->i_ctime = old_dir->i_mtime = current_time(old_dir);
-> +	old_dir->i_mtime = inode_set_ctime_current(old_dir);
->  
->  	if (update_dot_dot) {
->  		status = ocfs2_update_entry(old_inode, handle,
-> @@ -1610,7 +1610,8 @@ static int ocfs2_rename(struct mnt_idmap *idmap,
->  
->  	if (old_dir != new_dir) {
->  		/* Keep the same times on both directories.*/
-> -		new_dir->i_ctime = new_dir->i_mtime = old_dir->i_ctime;
-> +		new_dir->i_mtime = inode_set_ctime_to_ts(new_dir,
-> +							 inode_get_ctime(old_dir));
->  
->  		/*
->  		 * This will also pick up the i_nlink change from the
-> diff --git a/fs/ocfs2/refcounttree.c b/fs/ocfs2/refcounttree.c
-> index 564ab48d03ef..25c8ec3c8c3a 100644
-> --- a/fs/ocfs2/refcounttree.c
-> +++ b/fs/ocfs2/refcounttree.c
-> @@ -3750,9 +3750,9 @@ static int ocfs2_change_ctime(struct inode *inode,
->  		goto out_commit;
->  	}
->  
-> -	inode->i_ctime = current_time(inode);
-> -	di->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -	di->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +	inode_set_ctime_current(inode);
-> +	di->i_ctime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +	di->i_ctime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  
->  	ocfs2_journal_dirty(handle, di_bh);
->  
-> @@ -4073,10 +4073,10 @@ static int ocfs2_complete_reflink(struct inode *s_inode,
->  		 * we want mtime to appear identical to the source and
->  		 * update ctime.
->  		 */
-> -		t_inode->i_ctime = current_time(t_inode);
-> +		inode_set_ctime_current(t_inode);
->  
-> -		di->i_ctime = cpu_to_le64(t_inode->i_ctime.tv_sec);
-> -		di->i_ctime_nsec = cpu_to_le32(t_inode->i_ctime.tv_nsec);
-> +		di->i_ctime = cpu_to_le64(inode_get_ctime(t_inode).tv_sec);
-> +		di->i_ctime_nsec = cpu_to_le32(inode_get_ctime(t_inode).tv_nsec);
->  
->  		t_inode->i_mtime = s_inode->i_mtime;
->  		di->i_mtime = s_di->i_mtime;
-> @@ -4456,7 +4456,7 @@ int ocfs2_reflink_update_dest(struct inode *dest,
->  	if (newlen > i_size_read(dest))
->  		i_size_write(dest, newlen);
->  	spin_unlock(&OCFS2_I(dest)->ip_lock);
-> -	dest->i_ctime = dest->i_mtime = current_time(dest);
-> +	dest->i_mtime = inode_set_ctime_current(dest);
->  
->  	ret = ocfs2_mark_inode_dirty(handle, dest, d_bh);
->  	if (ret) {
-> diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> index 4ac77ff6e676..6510ad783c91 100644
-> --- a/fs/ocfs2/xattr.c
-> +++ b/fs/ocfs2/xattr.c
-> @@ -3421,9 +3421,9 @@ static int __ocfs2_xattr_set_handle(struct inode *inode,
->  			goto out;
->  		}
->  
-> -		inode->i_ctime = current_time(inode);
-> -		di->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-> -		di->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-> +		inode_set_ctime_current(inode);
-> +		di->i_ctime = cpu_to_le64(inode_get_ctime(inode).tv_sec);
-> +		di->i_ctime_nsec = cpu_to_le32(inode_get_ctime(inode).tv_nsec);
->  		ocfs2_journal_dirty(ctxt->handle, xis->inode_bh);
->  	}
->  out:
+PiBGcm9tOiBLb2JhIEtvIDxrb2JhLmtvQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IEZyaWRheSwg
+SnVseSA3LCAyMDIzIDE6NDEgQU0NCj4gVG86IFpodW8sIFFpdXh1IDxxaXV4dS56aHVvQGludGVs
+LmNvbT4NCj4gLi4uDQo+ID4gSSBtYWRlIGEgcGF0Y2ggYmVsb3cgdG8gc2tpcCBhbGwgdGhlc2Ug
+YWJzZW50IG1lbW9yeSBjb250cm9sbGVycw0KPiA+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xp
+bnV4LWVkYWMvMjAyMzA3MDYxMzQyMTYuMzcwNDQtMS1xaXV4dS56aHVvQGkNCj4gPiBudGVsLmNv
+bS9ULyN1IEBLb2JhIEtvLCBjb3VsZCB5b3UgcGxlYXNlIHZlcmlmeSB0aGUgcGF0Y2ggZnJvbSB0
+aGUNCj4gPiBsaW5rIGFib3ZlIG9uIHlvdXIgd29ya3N0YXRpb24/IFRoYW5rcyENCj4gDQo+IEhl
+cmUncyBkbWVzZyBwYXRjaGVkKFJlZi4gMSkuIGRpZG4ndCBmaW5kIHRoZSBwcmV2aW91cyBtZXNz
+YWdlLCBgRURBQw0KPiBERUJVRzogc2t4X2dldF9kaW1tX2F0dHI6IGJhZCByYW5rcyA9IDMgKHJh
+dz0weGZmZmZmZmZmKWANCj4gDQo+IFJlZi4gMSwNCj4gaHR0cHM6Ly9kcml2ZS5nb29nbGUuY29t
+L2RyaXZlL2ZvbGRlcnMvMXh5bTlKZ1paZ2FKM0VxdFA0Y2NSY1ZlUVlvSkttVg0KPiBscD91c3A9
+c2hhcmluZw0KDQpUaGFua3MgZm9yIHRoZSB2ZXJpZmljYXRpb24uIA0KWW91ciBsb2cgc2hvd2Vk
+IHRoYXQgdGhlIHBhdGNoIHdvcmtlZCB3ZWxsLg0KDQotUWl1eHUNCg==
