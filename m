@@ -2,209 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE9E74AA91
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054CE74AA94
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjGGFa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 01:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S229661AbjGGFdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 01:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjGGFai (ORCPT
+        with ESMTP id S229529AbjGGFdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 01:30:38 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEC91BE8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 22:30:33 -0700 (PDT)
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0B9543F179
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688707832;
-        bh=Rcvw69QpLn6Gnwox1zY9qG81innFRLv6d+U/MX8p2CU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=dexyhdMBYGEj3rMqzJpB5jaDDyrZnxPEPIYTlas8SGLOemEhA6Dr+Ko2BJdRvBohy
-         y+GawsaEEZRAVOBsh+Vd3bPzkb9vWMGTe042jM9ScquBD51a0j4m3PjzZoUDoZMehX
-         4FmKWr9MDXhNT1S8XHj6kDmEgsucDBdf55uKM0YzpKcDEliXncaITMVHYKROzjbE/2
-         FoSxqcJMqSk2268tpIUVGTPNSO/IYJ7G90TzZ8UxXUcE5F5tVadYvebWj1K9eqLHgB
-         WCWsxcT/fSMxrWXyiScjKshxaWYY5q9J6jP0w7jWfdLURVtj8VhE28oLV9IVCVkHQL
-         XNnydn7diizOw==
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3a034580aafso1371403b6e.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 22:30:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688707831; x=1691299831;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rcvw69QpLn6Gnwox1zY9qG81innFRLv6d+U/MX8p2CU=;
-        b=a8NjqZHDh6uPJB+c1BeHZfHwjSZmCNVMTtHcwV52fqye/B8bo17LVAANBKlYN+fWIp
-         c+ZYq9QV3Ln9FCydf3vUdW0VWPQ6f5SNYo8Has5Z0CzWREfZscV3hD8nuoMaEJHfekwY
-         mZXjOUFQpCF3cf1pmWdjU4xaf8msdncuR4lauIrnz+25WjAlxU2Y215a1G1R8XLCugVi
-         wcDbiAOVJ21IyMTNMLXka7s0I68sgTcjt3loYSwIQy72L2BKkxql0HKA3pnCntLRYZXy
-         8Oy28wRbrqCnoXr92MEX9Ds1pEJ/3WjlOJCZm8eZqDexmMikLTJ0q4O2jTBxcy9Z0GD3
-         pGkw==
-X-Gm-Message-State: ABy/qLbFq3PlmAUplCQHNs+RR84u8pDb7qin0lW9OrBh7VQu4sUnB+8Q
-        QV0xXYdxe6WqRTOY97N2Eb09tHdjtzgPTV6ioc0MYR8XUDZAe5iVNu86Q1HGVSVK579VgFfsgxg
-        ZynInMYUcSrLzgYxaIcy78D3t0WqKn6vFBPBcl5ow/VxvnBVo5tGm96i0rQ==
-X-Received: by 2002:aca:2101:0:b0:3a1:c979:e6b6 with SMTP id 1-20020aca2101000000b003a1c979e6b6mr3778701oiz.34.1688707830898;
-        Thu, 06 Jul 2023 22:30:30 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGANcQ+6cwpZDQUzeDPnNHqyhUxe+A1xYrTFEwyXL6qko+HQGwi0lLef2baL2jjnyPJ35H6QR+Oh4fHfNk9bMQ=
-X-Received: by 2002:aca:2101:0:b0:3a1:c979:e6b6 with SMTP id
- 1-20020aca2101000000b003a1c979e6b6mr3778685oiz.34.1688707830664; Thu, 06 Jul
- 2023 22:30:30 -0700 (PDT)
+        Fri, 7 Jul 2023 01:33:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86EBA171D;
+        Thu,  6 Jul 2023 22:33:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE846D75;
+        Thu,  6 Jul 2023 22:34:25 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.48.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2B8CE3F740;
+        Thu,  6 Jul 2023 22:33:38 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [RFC 0/4] arm64/mm: Clean up pte_dirty() state management
+Date:   Fri,  7 Jul 2023 11:03:27 +0530
+Message-Id: <20230707053331.510041-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230706134216.37044-1-qiuxu.zhuo@intel.com>
-In-Reply-To: <20230706134216.37044-1-qiuxu.zhuo@intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 7 Jul 2023 13:30:19 +0800
-Message-ID: <CAAd53p6J8usSi+rHnd9+714mUqZ2zTdhFSEWUtiK7aNzcAZ8CA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] EDAC/i10nm: Skip the absent memory controllers
-To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Koba Ko <koba.ko@canonical.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 9:46=E2=80=AFPM Qiuxu Zhuo <qiuxu.zhuo@intel.com> wr=
-ote:
->
-> Some Sapphire Rapids workstations' absent memory controllers
-> still appear as PCIe devices that fool the i10nm_edac driver
-> and result in "shift exponet -66 is negative" call traces
-> from skx_get_dimm_info().
->
-> Skip the absent memory controllers to avoid the call traces.
->
-> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Closes: https://lore.kernel.org/linux-edac/CAAd53p41Ku1m1rapeqb1xtD+kKuk+=
-BaUW=3DdumuoF0ZO3GhFjFA@mail.gmail.com/T/#m5de16dce60a8c836ec235868c7c16e3f=
-efad0cc2
-> Reported-by: Koba Ko <koba.ko@canonical.com>
-> Closes: https://lore.kernel.org/linux-edac/SA1PR11MB71305B71CCCC3D9305835=
-202892AA@SA1PR11MB7130.namprd11.prod.outlook.com/T/#t
-> Fixes: d4dc89d069aa ("EDAC, i10nm: Add a driver for Intel 10nm server pro=
-cessors")
-> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+These pte_dirty() changes make things explicitly clear, while improving the
+code readability. This optimizes HW dirty state transfer into SW dirty bit.
+This also adds a new arm64 documentation explaining overall pte dirty state
+management in detail. This series applies on the latest mainline kernel.
 
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 
-> ---
->  drivers/edac/i10nm_base.c | 54 +++++++++++++++++++++++++++++++++++----
->  1 file changed, 49 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-> index a897b6aff368..349ff6cfb379 100644
-> --- a/drivers/edac/i10nm_base.c
-> +++ b/drivers/edac/i10nm_base.c
-> @@ -658,13 +658,49 @@ static struct pci_dev *get_ddr_munit(struct skx_dev=
- *d, int i, u32 *offset, unsi
->         return mdev;
->  }
->
-> +/**
-> + * i10nm_imc_absent() - Check whether the memory controller @imc is abse=
-nt
-> + *
-> + * @imc    : The pointer to the structure of memory controller EDAC devi=
-ce.
-> + *
-> + * RETURNS : true if the memory controller EDAC device is absent, false =
-otherwise.
-> + */
-> +static bool i10nm_imc_absent(struct skx_imc *imc)
-> +{
-> +       u32 mcmtr;
-> +       int i;
-> +
-> +       switch (res_cfg->type) {
-> +       case SPR:
-> +               for (i =3D 0; i < res_cfg->ddr_chan_num; i++) {
-> +                       mcmtr =3D I10NM_GET_MCMTR(imc, i);
-> +                       edac_dbg(1, "ch%d mcmtr reg %x\n", i, mcmtr);
-> +                       if (mcmtr !=3D ~0)
-> +                               return false;
-> +               }
-> +
-> +               /*
-> +                * Some workstations' absent memory controllers still
-> +                * appear as PCIe devices, misleading the EDAC driver.
-> +                * By observing that the MMIO registers of these absent
-> +                * memory controllers consistently hold the value of ~0.
-> +                *
-> +                * We identify a memory controller as absent by checking
-> +                * if its MMIO register "mcmtr" =3D=3D ~0 in all its chan=
-nels.
-> +                */
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
->  static int i10nm_get_ddr_munits(void)
->  {
->         struct pci_dev *mdev;
->         void __iomem *mbase;
->         unsigned long size;
->         struct skx_dev *d;
-> -       int i, j =3D 0;
-> +       int i, lmc, j =3D 0;
->         u32 reg, off;
->         u64 base;
->
-> @@ -690,7 +726,7 @@ static int i10nm_get_ddr_munits(void)
->                 edac_dbg(2, "socket%d mmio base 0x%llx (reg 0x%x)\n",
->                          j++, base, reg);
->
-> -               for (i =3D 0; i < res_cfg->ddr_imc_num; i++) {
-> +               for (lmc =3D 0, i =3D 0; i < res_cfg->ddr_imc_num; i++) {
->                         mdev =3D get_ddr_munit(d, i, &off, &size);
->
->                         if (i =3D=3D 0 && !mdev) {
-> @@ -700,8 +736,6 @@ static int i10nm_get_ddr_munits(void)
->                         if (!mdev)
->                                 continue;
->
-> -                       d->imc[i].mdev =3D mdev;
-> -
->                         edac_dbg(2, "mc%d mmio base 0x%llx size 0x%lx (re=
-g 0x%x)\n",
->                                  i, base + off, size, reg);
->
-> @@ -712,7 +746,17 @@ static int i10nm_get_ddr_munits(void)
->                                 return -ENODEV;
->                         }
->
-> -                       d->imc[i].mbase =3D mbase;
-> +                       d->imc[lmc].mbase =3D mbase;
-> +                       if (i10nm_imc_absent(&d->imc[lmc])) {
-> +                               pci_dev_put(mdev);
-> +                               iounmap(mbase);
-> +                               d->imc[lmc].mbase =3D NULL;
-> +                               edac_dbg(2, "Skip absent mc%d\n", i);
-> +                               continue;
-> +                       } else {
-> +                               d->imc[lmc].mdev =3D mdev;
-> +                               lmc++;
-> +                       }
->                 }
->         }
->
-> --
-> 2.17.1
->
+Anshuman Khandual (4):
+  arm64/mm: Add SW and HW dirty state helpers
+  arm64/mm: Call pte_sw_mkdirty() while preserving the HW dirty state
+  arm64/mm: Add pte_preserve_hw_dirty()
+  docs: arm64: Add help document for pte dirty state management
+
+ Documentation/arch/arm64/index.rst     |  1 +
+ Documentation/arch/arm64/pte-dirty.rst | 95 ++++++++++++++++++++++++++
+ arch/arm64/include/asm/pgtable.h       | 66 ++++++++++++++----
+ 3 files changed, 147 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/arch/arm64/pte-dirty.rst
+
+-- 
+2.30.2
+
