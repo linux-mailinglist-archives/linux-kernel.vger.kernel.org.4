@@ -2,176 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714F974ADC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B099874ADCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbjGGJ2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S231732AbjGGJ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjGGJ2n (ORCPT
+        with ESMTP id S229636AbjGGJ3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:28:43 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64031BE8;
-        Fri,  7 Jul 2023 02:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=198Ic8NzW8Fbs/Xun3gZbDNwGyTZWmBq6K6pN6bRECw=; b=TZnmsBMcarY8k2NGU0KOczzdYV
-        8xFOqEUDvCDpqmo3OAUwd+B5CZkQQZ7Zn/HdDFjlIzAyVGK5twrkwgDaSfpTFaFJpUlgyZQplLWw9
-        vjjbUZZKsIfex2ql0LQkfYI6iEs4aOudGlfirvuhk1Nzyd7F3Gf6wIMH//6K1KVhCcnhLNDNFlEHH
-        nk9N84duWmXUR4mJHKSQD5MOdeXeehFRcSfvcC7MoHGZd/8yGBTGJe2Fw5eESGlyDlXyfVod0Ri/n
-        AkGEFe1C1WomvH6z8myrhJkdmouT+oiJyHpMkZuEqwT1y60FpRKeUFanju/dpjEMNeSkOEV5ZdwOH
-        H11NsDyA==;
-Received: from [89.212.21.243] (port=43232 helo=[192.168.69.84])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1qHhlO-004Ydy-0v;
-        Fri, 07 Jul 2023 11:28:29 +0200
-Message-ID: <67f953cd-af17-2a5c-6a1f-ac902c1636ce@norik.com>
-Date:   Fri, 7 Jul 2023 11:28:28 +0200
+        Fri, 7 Jul 2023 05:29:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443D81FED;
+        Fri,  7 Jul 2023 02:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C992D618DF;
+        Fri,  7 Jul 2023 09:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469D0C433C7;
+        Fri,  7 Jul 2023 09:29:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688722151;
+        bh=TiVqgBQxOT3C3TBkmM/c7nKqqaoif0rl2+UYbMz3sqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LyuLd0FCJEQhqnrVpquSVLKc/9uI0i7rdMICm0QZElUzRmgl1WAypdZRf644WG5w6
+         wVwwOe7uTbd6a5um1d6z2qgLJrXKCpq1rXMHNpxh0jP21HzLgs6LU7p19zMbzFotb4
+         nJtjTSe2HVhiChBbqKoLsix3YSP7/IVd7wy0lWd4=
+Date:   Fri, 7 Jul 2023 10:29:00 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "petr@tesarici.cz" <petr@tesarici.cz>
+Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
+ transient memory pool
+Message-ID: <2023070706-humbling-starfish-c68f@gregkh>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+ <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
+ <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <2023070626-boxcar-bubbly-471d@gregkh>
+ <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] ARM: dts: imx6: pfla02: Fix SD card reboot problem
-Content-Language: en-GB
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Marco Felsch <m.felsch@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, conor+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
-        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux-imx@nxp.com, kernel@pengutronix.de,
-        shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org,
-        upstream@phytec.de
-References: <20230704080304.816942-1-andrej.picej@norik.com>
- <20230704080304.816942-3-andrej.picej@norik.com>
- <20230704081712.7dyj2mspj2m25rp7@pengutronix.de>
- <7ed6fde0-37a4-a667-2629-0a6b8a202a69@norik.com>
- <14cd16df-ef47-05b3-5266-ffff109a8326@pengutronix.de>
- <3c0de35f-915a-7ae9-c369-9545b55dd2e4@norik.com>
- <6a2e5b14-c5d3-b384-2539-033381768dca@norik.com>
- <e9a08364-c277-bfec-cb31-b01b39e17bed@pengutronix.de>
-From:   Andrej Picej <andrej.picej@norik.com>
-In-Reply-To: <e9a08364-c277-bfec-cb31-b01b39e17bed@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrote:
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, July 6, 2023 1:07 AM
+> > 
+> > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) wrote:
+> > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday, June 27, 2023
+> > 2:54 AM
+> > > >
+> > > > Try to allocate a transient memory pool if no suitable slots can be found,
+> > > > except when allocating from a restricted pool. The transient pool is just
+> > > > enough big for this one bounce buffer. It is inserted into a per-device
+> > > > list of transient memory pools, and it is freed again when the bounce
+> > > > buffer is unmapped.
+> > > >
+> > > > Transient memory pools are kept in an RCU list. A memory barrier is
+> > > > required after adding a new entry, because any address within a transient
+> > > > buffer must be immediately recognized as belonging to the SWIOTLB, even if
+> > > > it is passed to another CPU.
+> > > >
+> > > > Deletion does not require any synchronization beyond RCU ordering
+> > > > guarantees. After a buffer is unmapped, its physical addresses may no
+> > > > longer be passed to the DMA API, so the memory range of the corresponding
+> > > > stale entry in the RCU list never matches. If the memory range gets
+> > > > allocated again, then it happens only after a RCU quiescent state.
+> > > >
+> > > > Since bounce buffers can now be allocated from different pools, add a
+> > > > parameter to swiotlb_alloc_pool() to let the caller know which memory pool
+> > > > is used. Add swiotlb_find_pool() to find the memory pool corresponding to
+> > > > an address. This function is now also used by is_swiotlb_buffer(), because
+> > > > a simple boundary check is no longer sufficient.
+> > > >
+> > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_alloc_pages(),
+> > > > simplified and enhanced to use coherent memory pools if needed.
+> > > >
+> > > > Note that this is not the most efficient way to provide a bounce buffer,
+> > > > but when a DMA buffer can't be mapped, something may (and will) actually
+> > > > break. At that point it is better to make an allocation, even if it may be
+> > > > an expensive operation.
+> > >
+> > > I continue to think about swiotlb memory management from the standpoint
+> > > of CoCo VMs that may be quite large with high network and storage loads.
+> > > These VMs are often running mission-critical workloads that can't tolerate
+> > > a bounce buffer allocation failure.  To prevent such failures, the swiotlb
+> > > memory size must be overly large, which wastes memory.
+> > 
+> > If "mission critical workloads" are in a vm that allowes overcommit and
+> > no control over other vms in that same system, then you have worse
+> > problems, sorry.
+> > 
+> > Just don't do that.
+> > 
+> 
+> No, the cases I'm concerned about don't involve memory overcommit.
+> 
+> CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current swiotlb
+> code in the Linux guest allocates a configurable, but fixed, amount of guest
+> memory at boot time for this purpose.  But it's hard to know how much
+> swiotlb bounce buffer memory will be needed to handle peak I/O loads.
+> This patch set does dynamic allocation of swiotlb bounce buffer memory,
+> which can help avoid needing to configure an overly large fixed size at boot.
 
+But, as you point out, memory allocation can fail at runtime, so how can
+you "guarantee" that this will work properly anymore if you are going to
+make it dynamic?
 
-On 5. 07. 23 14:06, Ahmad Fatoum wrote:
-> On 05.07.23 12:39, Andrej Picej wrote:> On 5. 07. 23 10:40, Andrej Picej wrote:
->>> On 5. 07. 23 10:30, Ahmad Fatoum wrote:
->>>> On 05.07.23 10:28, Andrej Picej wrote:
->>>>> I think the main reason for a failed boot is that the PMIC doesn't get reset and that the bootloader doesn't specifically enable the SD card regulator.
->>>>>
->>>>> Could this patch still be applied or should we put the fix in reset routine/bootloader?
->>>>
->>>> Is SD-Card not main boot medium? From your description, I thought BootROM
->>>> will fail to boot before bootloader has a chance to do anything about it.
->>>>
->>>
->>> Yes sorry, you are absolutly right, the BootROM fails. It confused me because I could see the booloader booting, but it was from one of the fallback mediums. So I guess fixing the bootloader is not really an option.
->>> Sorry for the confusion.
->>>
->>
->> Ok, the main problem is well known, that's why PHYTEC disables the imx watchdog and uses a PMIC one for the reboot handler. This one resets the board completely. The SD card regulator problem is really just the manifestation of that bug. Unfortunately I didn't noticed that. :(
->>
->> I will create a v2 with a proper fix, where imx watchdog gets disabled.
-> 
-> I'd be wary about solving it this way at the DTSI level, because it can
-> break existing users:
-> 
->    - Boot flow depends on reading boot reason, but with PMIC reset, everything
->      is power-on reset
-> 
->    - Bootloader starts i.MX watchdog, but new kernel will service only
->      PMIC watchdog leading to system reset
-> 
->    - Even if updating bootloader and kernel together, fallback of kernel
->      may end up that bootloader uses PMIC watchdog, but kernel uses i.MX
->      watchdog
-> 
->    - There can be valid reasons to use both watchdogs and disabling
->      one at the SoM level breaks that
-> > I had a similar issue once (Board controller reset to be used instead 
-of SoC
-> reset) and settled on using the barebox watchdog-priority/restart-priority[1]
-> binding to select the "better" watchdog and then fixed up this choice into
-> the kernel command line (barebox CONFIG_SYSTEMD_OF_WATCHDOG).
-> 
-> If you decide to fix it for the evaluation kits, please add some text
-> into the commit message that this fix should not be backported to older kernels.
-> While it's ultimately the correct thing to do, changing this is IMO not stable
-> backport material.
-> 
-> [1]: FWIW, there was past discussion about adding restart priorities to Linux, e.g.
-> https://lore.kernel.org/all/20201006102949.dbw6b2mrgt2ltgpw@pengutronix.de/
+confused,
 
-Ok I see the problems this might raise. Nevertheless I think it would be 
-good to sync upstream and PHYTEC downstream dts with this fix. Since by 
-default imx watchdog reset is really a no-go with phyFLEX.
-We could add the aliases for the watchdogs, marking the PMIC watchdog as 
-watchdog0, and imx watchdog as watchdog1 which I think should tell the 
-kernel to use the PMIC reboot handler, but not really sure how is that 
-any better then disabling the imx watchdog.
-
-Why do you think this shouldn't be backported to older kernels? Because
-someone might use this with "not compatible" bootloader?
-
-Thanks for your help,
-Andrej
-
-> 
-> Cheers,
-> Ahmad
-> 
->>
->> Thanks for your help,
->> Andrej
->>
->>
->>>
->>>>>
->>>>> Best regards,
->>>>> Andrej
->>>>>
->>>>>>
->>>>>> Regards,
->>>>>>      Marco
->>>>>>
->>>>>>>                 };
->>>>>>>                   vdd_sd1_reg: ldo10 {
->>>>>>> -- 
->>>>>>> 2.25.1
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>
->>>>>
->>>>
->>
-> 
+greg k-h
