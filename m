@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7765B74BA0E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 01:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745D574BA24
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 01:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjGGXcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 19:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S230166AbjGGXxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 19:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGGXcF (ORCPT
+        with ESMTP id S229631AbjGGXxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 19:32:05 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E52107
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 16:32:04 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-401d1d967beso59601cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 16:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688772723; x=1691364723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EOBOLIBzFAwDLduiu2hU8oNdG8T1usGeYWckVLDVtBs=;
-        b=4i4wUDykCHdowjc9OVsnSLFOllYUiHjxg5q6fIHm8XPcl1ESUn4OD0Po/S8gqV3P55
-         3uzRsgUndAaikVwKtenhEO10w7v1I+8M/JOjUlWB8gPp3TQrg7f4RrVbxqUfJ4GrgILc
-         xeeY6qlWGFNu6dpKsBWNthRIKDx3bvVfqWswGpt6mxAoPdN/fNCqKuu7bxWOj19PUdPL
-         8pC0MsmZ5DVS0a4PNYIssubkbvaBgpowMaCKmcgBSrbZM/4pBA+V6fJknxkkSRBnOYux
-         m0CS+BbRDutKHE6ob+j5KgtkT9bClBBFDA+7rKDtpyjprmb/NCgRca+2eNOWzxO0Fnt6
-         eYOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688772723; x=1691364723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EOBOLIBzFAwDLduiu2hU8oNdG8T1usGeYWckVLDVtBs=;
-        b=f8FqG6FItDdAe6UJnXz8wtU9N3TbV/YIbTaXOySF7O6Dvh/IBreSXLFkSKQuQJAKYc
-         t1QR/NO0/h29QEBH+h30lvZoq3FXVwMZv0dl8tB6KKv+DPxkgNkvJFKfq8SNT71XKeHV
-         f6B3leTAZgjqwTNzkpVPUdgytGRG2+uZzyC0dF+ilY5BmvswV5sYS07xgJ+oiCcG83rB
-         nh5KT366BGIZtc4jw9AvG1V/b0DJ+eHtsk5fdChehXr7oSDmzQZoXGA8S6jPJX7IBINY
-         FZ3xbkceIVWlWFPp49AM6k05X+y8FrDfgKhkBpXF4R/IGlJtYstqvScrqLfnWB8NSa+9
-         4CPg==
-X-Gm-Message-State: ABy/qLaMnjXk3ZID1e6ag6S/Gp0HvJxZzZ0eqmyYUu5Q46tKCCIAwppX
-        ZMqyhwiBnK7LCC6PoqXdcohjTXQyyiV32Fim0c19vz42sN0orpd85Lv/
-X-Google-Smtp-Source: APBJJlHBIDPM/Hazl8urEzsyM0w+pYQOKQrGlLrgQOo2WVu0le20UkfTPQmGnWabubAw1j5Fp3JNmR66chwuF575ZfY=
-X-Received: by 2002:ac8:5b09:0:b0:3ed:6bde:9681 with SMTP id
- m9-20020ac85b09000000b003ed6bde9681mr94914qtw.0.1688772723281; Fri, 07 Jul
- 2023 16:32:03 -0700 (PDT)
+        Fri, 7 Jul 2023 19:53:03 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389532114;
+        Fri,  7 Jul 2023 16:53:00 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367MeErc011322;
+        Fri, 7 Jul 2023 23:52:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=wT7JOXu4/TRkDYOIYxOdT13I2xIXbbEmyVXkgsSeAfE=;
+ b=h3J+LHvLAn+J3uaESPCxuakue4h7ZqSePqCasgVuwFw+VyGeAvP3E4GZK04v6+vWym16
+ E2byva32jhYFrZCKEE8bI6fawYpt+Mjj7yY7yt6KATtlJ++1YATE1V3+os2c0chSx4Hq
+ 5yUlJI7xpC+SAoeBSlzozuFDYOk6iUPJE2iFPI1FTkfmZNZRcWoBo8L+3nOjtffb6dAw
+ HwTdTrjV1AAkoVjbNeLHlZn+ZKL4oKszYSexBqVAjzS8+/AoI8678p6KGsS5gDJF0253
+ s9PJihVqIRFyxAkVFw3gpuWXADrmejZQl1zVkM5QK4lwNmQCkHIfvMkRJ84CXLndlTgD 2w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpuas84eh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 23:52:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 367Nqjvx006326
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 7 Jul 2023 23:52:45 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 7 Jul 2023 16:52:45 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/5] incorporate pm runtime framework and eDP clean up
+Date:   Fri, 7 Jul 2023 16:52:18 -0700
+Message-ID: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20230630171052.985577-1-peter.hilber@opensynergy.com> <20230630171052.985577-4-peter.hilber@opensynergy.com>
-In-Reply-To: <20230630171052.985577-4-peter.hilber@opensynergy.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 7 Jul 2023 16:31:52 -0700
-Message-ID: <CANDhNCoi4OrtXdqs4UErhM0ofecdg94-Yew2NETxhpKkDojt4A@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/7] timekeeping: Fix cross-timestamp interpolation
- for non-x86
-To:     Peter Hilber <peter.hilber@opensynergy.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Christopher S. Hall" <christopher.s.hall@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: b6jjv-QejyjQMr9-8s8W3uE0GP8xBVvE
+X-Proofpoint-GUID: b6jjv-QejyjQMr9-8s8W3uE0GP8xBVvE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_14,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ clxscore=1011 malwarescore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307070217
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:12=E2=80=AFAM Peter Hilber
-<peter.hilber@opensynergy.com> wrote:
->
-> So far, get_device_system_crosststamp() unconditionally passes
-> system_counterval.cycles to timekeeping_cycles_to_ns(). But when
-> interpolating system time (do_interp =3D=3D true), system_counterval.cycl=
-es is
-> before tkr_mono.cycle_last, contrary to the timekeeping_cycles_to_ns()
-> expectations.
->
-> On x86, CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE will mitigate on
-> interpolating, setting delta to 0. With delta =3D=3D 0, xtstamp->sys_mono=
-raw
-> and xtstamp->sys_realtime are then set to the last update time, as
-> implicitly expected by adjust_historical_crosststamp(). On other
-> architectures, the resulting nonsense xtstamp->sys_monoraw and
-> xtstamp->sys_realtime corrupt the xtstamp (ts) adjustment in
-> adjust_historical_crosststamp().
->
-> Fix this by always setting the delta to 0 when interpolating.
->
-> Fixes: 2c756feb18d9 ("time: Add history to cross timestamp interface supp=
-orting slower devices")
-> Signed-off-by: Peter Hilber <peter.hilber@opensynergy.com>
-> ---
->  kernel/time/timekeeping.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index 7e86d5cd784d..7ccc2377c319 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -1259,10 +1259,15 @@ int get_device_system_crosststamp(int (*get_time_=
-fn)
->                                       tk_core.timekeeper.offs_real);
->                 base_raw =3D tk->tkr_raw.base;
->
-> -               nsec_real =3D timekeeping_cycles_to_ns(&tk->tkr_mono,
-> -                                                    system_counterval.cy=
-cles);
-> -               nsec_raw =3D timekeeping_cycles_to_ns(&tk->tkr_raw,
-> -                                                   system_counterval.cyc=
-les);
-> +               if (do_interp) {
-> +                       nsec_real =3D timekeeping_delta_to_ns(&tk->tkr_mo=
-no, 0);
-> +                       nsec_raw =3D timekeeping_delta_to_ns(&tk->tkr_raw=
-, 0);
-> +               } else {
-> +                       nsec_real =3D timekeeping_cycles_to_ns(
-> +                               &tk->tkr_mono, system_counterval.cycles);
-> +                       nsec_raw =3D timekeeping_cycles_to_ns(
-> +                               &tk->tkr_raw, system_counterval.cycles);
-> +               }
+Incorporate pm runtime framework into DP driver and clean up eDP
+by moving of_dp_aux_populate_bus() to probe()
 
-Rather than adding another conditional branch here to go through, why
-not just use "cycles" instead of system_counterval.cycles as it seems
-to be set properly already?
+Kuogee Hsieh (5):
+  drm/msm/dp: remove pm_runtime_xxx() from dp_power.c
+  drm/msm/dp: incorporate pm_runtime framework into DP driver
+  drm/msm/dp: delete EV_HPD_INIT_SETUP
+  drm/msm/dp: move relevant dp initialization code from bind() to
+    probe()
+  drm/msm/dp: move of_dp_aux_populate_bus() to probe for eDP
 
-thanks
--john
+ drivers/gpu/drm/msm/dp/dp_aux.c     |  28 +++++
+ drivers/gpu/drm/msm/dp/dp_display.c | 204 +++++++++++++++++++++---------------
+ drivers/gpu/drm/msm/dp/dp_display.h |   1 -
+ drivers/gpu/drm/msm/dp/dp_power.c   |   9 --
+ 4 files changed, 145 insertions(+), 97 deletions(-)
+
+-- 
+2.7.4
+
