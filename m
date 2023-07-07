@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A93774AA4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A24374AA58
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjGGFRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 01:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S232419AbjGGFUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 01:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbjGGFRc (ORCPT
+        with ESMTP id S229529AbjGGFUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 01:17:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490711FF5;
-        Thu,  6 Jul 2023 22:17:26 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367425Sj021861;
-        Fri, 7 Jul 2023 05:17:22 GMT
+        Fri, 7 Jul 2023 01:20:25 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5351171D;
+        Thu,  6 Jul 2023 22:20:23 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3673V1H1002161;
+        Fri, 7 Jul 2023 05:20:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=Q8cQRa/rgqutN38FfVOHsY0BTjw+Ml/nme9A3W3iGP4=;
- b=SICCtSMgbigGTzaKtH1ORfeGvM1wJUwwviAs5lLwnJbXxwabZ6UxD6Ab5UQQnYZ4+j1i
- LrMe201rM/38M+fDRSn2uLuJsSLR+JOqUaOh84ySRm1gpvqtTAJK2AR+nja3KEMt90Xa
- 0GuhAhVCyMgq7xxpma3VaAnQG0PnZ+TfqJ1PcQ8JBI/5sg0pZJqsXq1M7FhL00tKuMCq
- J3UQTdQJRJXqV24Cy9x9xVE/vriwIaNUPlIDg4iXz5tx5FOP4ehwStPLerWinmXDGLMd
- 229rSDR6Nf5d5lKNy3XC5YjdgfNoV4MRLlx3PzPuP5cFYn2Esw8OHz75pXCYSQI38/cK Cg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rntctt5n0-1
+ subject : date : message-id; s=qcppdkim1;
+ bh=Uk9qVLF1JBzwJ+a7KyImaFRK1wdkQWj32AIwwKSnDCA=;
+ b=OYCARzJz7+8aV+N28d3N4g9mtqgmo+Czk1lqWmy9vejj2SUClQGE3a7V8DngbITtT8Vo
+ 44h9eXNzGxip63jg5UCf1/t7GikS9uolErTaT69S0AWD8H0v3MMZOdbOqIbbLVMKcm4V
+ ddgwP72GWuf28U6HgsSCsKJReOTQM6pGKITZNuS09rGgBSJE3+oL0X0nFDGGaainwGkc
+ HJdOm3EYMQXN3HXymUj5pL95Caa+yPJbNQgEoxwKFLB+GEGUkTYJVIoq9U4Yv8nhVOA2
+ Bv75WgurNmxftQj89G29KsXij2tl2qPbAOPH4ZiQSfLD9ba2QCDkTmRC+62/O/UjsnJe gg== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnb5a3wck-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 05:17:22 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3675HLOE018053
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Jul 2023 05:17:21 GMT
-Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 22:17:18 -0700
-From:   Praveen Talari <quic_ptalari@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
-        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>,
-        Praveen Talari <quic_ptalari@quicinc.com>
-Subject: [PATCH v5 2/2] spi: spi-geni-qcom: Add SPI Device mode support for GENI based QuPv3
-Date:   Fri, 7 Jul 2023 10:46:36 +0530
-Message-ID: <20230707051636.5301-3-quic_ptalari@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230707051636.5301-1-quic_ptalari@quicinc.com>
-References: <20230707051636.5301-1-quic_ptalari@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+        Fri, 07 Jul 2023 05:20:19 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3675KG9s029553;
+        Fri, 7 Jul 2023 05:20:16 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rjd7kp6yq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 07 Jul 2023 05:20:16 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3675KF5v029547;
+        Fri, 7 Jul 2023 05:20:15 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3675KFtS029546;
+        Fri, 07 Jul 2023 05:20:15 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 138574EF7; Fri,  7 Jul 2023 10:50:15 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v3 0/4] Add pinctrl support for SDX75 PMICs
+Date:   Fri,  7 Jul 2023 10:50:05 +0530
+Message-Id: <1688707209-30151-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: k2JPrqspKqdxIPD3z6UEl4OJqYYDGf-n
-X-Proofpoint-ORIG-GUID: k2JPrqspKqdxIPD3z6UEl4OJqYYDGf-n
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -NwC9BIXU-lYHgKG_fpCYN8R4TAxpMAj
+X-Proofpoint-ORIG-GUID: -NwC9BIXU-lYHgKG_fpCYN8R4TAxpMAj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_17,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 spamscore=0 phishscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2023-07-07_02,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=822
+ malwarescore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2307070048
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,161 +80,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently spi geni driver supports only master mode operation.
+Hi,
 
-Add spi device mode support to GENI based QuPv3.
+Changes in v3:
+ - Corrected the versioing in this version of patch series.
+ - Keeping the Reviewed tag as there is no change in the patch.
+ - Updated the patch series subject.
 
-Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
----
-v4 -> v5:
-- added code comments
-- dropped get_spi_master api.
+Changes in v2:
+ - Link to v2 series [1] (Added because of versioning mismatch).
+ - Breaking the original series [2] into smaller series.
+ - Collected reviewed tag from Krzysztof.
 
-v3 -> v4:
-- Used existing property spi-slave.
+[1] https://lore.kernel.org/all/1688650209-25119-1-git-send-email-quic_rohiagar@quicinc.com/
+[2] https://lore.kernel.org/all/1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com/
 
-v2 -> v3:
-- modified commit message to use device mode instead of slave mode
+Thanks,
+Rohit.
 
-v1 -> v2
-- modified the commit message
-- added the code changes for code comments
----
- drivers/spi/spi-geni-qcom.c | 53 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 47 insertions(+), 6 deletions(-)
+Rohit Agarwal (4):
+  dt-bindings: pinctrl: qcom-pmic-gpio: Add pm7550ba support
+  dt-bindings: pinctrl: qcom-pmic-gpio: Add pmx75 support
+  pinctrl: qcom-pmic-gpio: Add support for pm7550ba
+  pinctrl: qcom-pmic-gpio: Add support for pmx75
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 206cc04bb1ed..06b114f3f21a 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -12,6 +12,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
- #include <linux/pm_runtime.h>
-+#include <linux/property.h>
- #include <linux/soc/qcom/geni-se.h>
- #include <linux/spi/spi.h>
- #include <linux/spinlock.h>
-@@ -52,6 +53,9 @@
- #define SPI_CS_CLK_DELAY_MSK		GENMASK(19, 10)
- #define SPI_CS_CLK_DELAY_SHFT		10
- 
-+#define SE_SPI_SLAVE_EN				(0x2BC)
-+#define SPI_SLAVE_EN				BIT(0)
-+
- /* M_CMD OP codes for SPI */
- #define SPI_TX_ONLY		1
- #define SPI_RX_ONLY		2
-@@ -99,6 +103,16 @@ struct spi_geni_master {
- 	int cur_xfer_mode;
- };
- 
-+static void spi_slv_setup(struct spi_geni_master *mas)
-+{
-+	struct geni_se *se = &mas->se;
-+
-+	writel(SPI_SLAVE_EN, se->base + SE_SPI_SLAVE_EN);
-+	writel(GENI_IO_MUX_0_EN, se->base + GENI_OUTPUT_CTRL);
-+	writel(START_TRIGGER, se->base + SE_GENI_CFG_SEQ_START);
-+	dev_dbg(mas->dev, "spi slave setup done\n");
-+}
-+
- static int get_spi_clk_cfg(unsigned int speed_hz,
- 			struct spi_geni_master *mas,
- 			unsigned int *clk_idx,
-@@ -140,12 +154,22 @@ static void handle_se_timeout(struct spi_master *spi,
- 	const struct spi_transfer *xfer;
- 
- 	spin_lock_irq(&mas->lock);
--	reinit_completion(&mas->cancel_done);
- 	if (mas->cur_xfer_mode == GENI_SE_FIFO)
- 		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
- 
- 	xfer = mas->cur_xfer;
- 	mas->cur_xfer = NULL;
-+
-+	if (spi->slave) {
-+		/*
-+		 * skip CMD Cancel sequnece since spi slave
-+		 * doesn`t support CMD Cancel sequnece
-+		 */
-+		spin_unlock_irq(&mas->lock);
-+		goto unmap_if_dma;
-+	}
-+
-+	reinit_completion(&mas->cancel_done);
- 	geni_se_cancel_m_cmd(se);
- 	spin_unlock_irq(&mas->lock);
- 
-@@ -542,6 +566,10 @@ static bool geni_can_dma(struct spi_controller *ctlr,
- 	if (mas->cur_xfer_mode == GENI_GPI_DMA)
- 		return true;
- 
-+	/* Set SE DMA mode for SPI slave. */
-+	if (ctlr->slave)
-+		return true;
-+
- 	len = get_xfer_len_in_words(xfer, mas);
- 	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
- 
-@@ -619,6 +647,7 @@ static void spi_geni_release_dma_chan(struct spi_geni_master *mas)
- 
- static int spi_geni_init(struct spi_geni_master *mas)
- {
-+	struct spi_master *spi = dev_get_drvdata(mas->dev);
- 	struct geni_se *se = &mas->se;
- 	unsigned int proto, major, minor, ver;
- 	u32 spi_tx_cfg, fifo_disable;
-@@ -627,7 +656,14 @@ static int spi_geni_init(struct spi_geni_master *mas)
- 	pm_runtime_get_sync(mas->dev);
- 
- 	proto = geni_se_read_proto(se);
--	if (proto != GENI_SE_SPI) {
-+
-+	if (spi->slave) {
-+		if (proto != GENI_SE_SPI_SLAVE) {
-+			dev_err(mas->dev, "Invalid proto %d\n", proto);
-+			goto out_pm;
-+		}
-+		spi_slv_setup(mas);
-+	} else if (proto != GENI_SE_SPI) {
- 		dev_err(mas->dev, "Invalid proto %d\n", proto);
- 		goto out_pm;
- 	}
-@@ -677,9 +713,11 @@ static int spi_geni_init(struct spi_geni_master *mas)
- 	}
- 
- 	/* We always control CS manually */
--	spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
--	spi_tx_cfg &= ~CS_TOGGLE;
--	writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
-+	if (!spi->slave) {
-+		spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
-+		spi_tx_cfg &= ~CS_TOGGLE;
-+		writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
-+	}
- 
- out_pm:
- 	pm_runtime_put(mas->dev);
-@@ -1072,6 +1110,9 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
- 	pm_runtime_enable(dev);
- 
-+	if (device_property_read_bool(&pdev->dev, "spi-slave"))
-+		spi->slave = true;
-+
- 	ret = geni_icc_get(&mas->se, NULL);
- 	if (ret)
- 		goto spi_geni_probe_runtime_disable;
-@@ -1092,7 +1133,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	 * for dma (gsi) mode, the gsi will set cs based on params passed in
- 	 * TRE
- 	 */
--	if (mas->cur_xfer_mode == GENI_SE_FIFO)
-+	if (!spi->slave && mas->cur_xfer_mode == GENI_SE_FIFO)
- 		spi->set_cs = spi_geni_set_cs;
- 
- 	ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(dev), spi);
+ Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 6 ++++++
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c                      | 2 ++
+ 2 files changed, 8 insertions(+)
+
 -- 
-2.17.1
+2.7.4
 
