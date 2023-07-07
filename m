@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D33F74A8FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF89974A91B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbjGGC1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        id S231756AbjGGCr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjGGC1d (ORCPT
+        with ESMTP id S229506AbjGGCr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:27:33 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F54F1997
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:27:32 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-579de633419so18264077b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 19:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688696851; x=1691288851;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AWl3GhDMdxfNKqj8LcWp9eBQx6bvP6uUrrwF+noDj3k=;
-        b=hSVymDbDY9U5fRX5KdhTaUEhOHxUVgHx9S+Ae0dJIaIQE9FXVr0gCV/K6nNsgiLGFw
-         HnPiHh4yqTpt3oWHiqieETmMM4nmK2prRGiwYTb8Ut2KmJzQY5TPQFifxarXVdY/2lPI
-         ftxKov5qeMwetNHzGCfw1RlRmCeyNFKxPMr+EyYsrKD308jzV1D5Lx5at7KEkfTVo37S
-         UAun91Tn2T1+aRzB2P0HIJxAXiytL5P1janHzfB1R+UoDSFsu669IJWszcuuhERvrh8D
-         f5pdC45doWCvGU7Bz/UqLvmKMpO1SsKCxgxprxc32ErYrzaaqTylWoAycJwurNzjtSLv
-         H0Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688696851; x=1691288851;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AWl3GhDMdxfNKqj8LcWp9eBQx6bvP6uUrrwF+noDj3k=;
-        b=Nmxzyg1HkzjXEo1IIutD95EnQxK88Vq1jhHlXgVUU582qBwo/keETMcnwz/JCtTHnx
-         2FFvki6PKivxNCWZ4/BuyL03ztw1iILAs2Fr9hKVXRBXqtQmOiCL8lsqE9Q8zzEW4zpN
-         0z8Uim2hwVIcK8TfZm6E5zqerSjBjywGcKl2dDJLQNY4O56tTBBCjr9yOLkaJmId6Q5K
-         4uEY5Etz3rOpLWtEjZbspR+78z4ObatUrEclFbILu+ZO4SsuL/d4LIRHNwYidzTxc8pm
-         10LDXHGMB0ie+ZcoHgW8H+q05Xj8v8kheTkv3GxMv7flq2jtuV9wpHzECuta4a7ZIjVq
-         Xf+A==
-X-Gm-Message-State: ABy/qLbg0YZqwMfocHaB+sNLhfBKmddtXrgE4joJiSnVsJPLI2Y2vZwp
-        WTlGrVPsEiT2U8pwliDSOHrpZXlbgm2sEMWejMI=
-X-Google-Smtp-Source: APBJJlGRaGYs+Qg01P15pbtVk0CpVTDTr1qxzFNZQlfsutXYYrb+QM38ct6lxrAlReP6H9IOD3I0StIqh5x4902t1DE=
-X-Received: by 2002:a0d:cd46:0:b0:564:e951:a7cc with SMTP id
- p67-20020a0dcd46000000b00564e951a7ccmr3519250ywd.45.1688696851135; Thu, 06
- Jul 2023 19:27:31 -0700 (PDT)
+        Thu, 6 Jul 2023 22:47:27 -0400
+X-Greylist: delayed 1189 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 19:47:25 PDT
+Received: from mta21.hihonor.com (mta21.hihonor.com [81.70.160.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840DA19B7;
+        Thu,  6 Jul 2023 19:47:25 -0700 (PDT)
+Received: from w012.hihonor.com (unknown [10.68.27.189])
+        by mta21.hihonor.com (SkyGuard) with ESMTPS id 4Qxy3P3mbszYkxqx;
+        Fri,  7 Jul 2023 10:27:29 +0800 (CST)
+Received: from a003.hihonor.com (10.68.18.8) by w012.hihonor.com
+ (10.68.27.189) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 7 Jul
+ 2023 10:27:33 +0800
+Received: from a001.hihonor.com (10.68.28.182) by a003.hihonor.com
+ (10.68.18.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 7 Jul
+ 2023 10:27:33 +0800
+Received: from a001.hihonor.com ([fe80::d540:a176:80f8:5fcf]) by
+ a001.hihonor.com ([fe80::d540:a176:80f8:5fcf%8]) with mapi id 15.02.1118.021;
+ Fri, 7 Jul 2023 10:27:33 +0800
+From:   gaoming <gaoming20@hihonor.com>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+CC:     Sungjong Seo <sj1557.seo@samsung.com>,
+        "open list:EXFAT FILE SYSTEM" <linux-fsdevel@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        fengbaopeng <fengbaopeng@hihonor.com>,
+        gaoxu <gaoxu2@hihonor.com>,
+        "wangfei 00014658" <wangfei66@hihonor.com>,
+        shenchen 00013118 <harry.shen@hihonor.com>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGV4ZmF0OiB1c2Uga3ZtYWxsb2NfYXJyYXkva3Zm?=
+ =?utf-8?Q?ree_instead_of_kmalloc=5Farray/kfree?=
+Thread-Topic: [PATCH] exfat: use kvmalloc_array/kvfree instead of
+ kmalloc_array/kfree
+Thread-Index: AdmvHl4gs76xLNH6Sd+soB17KujxsAA/YeqAABcLFgA=
+Date:   Fri, 7 Jul 2023 02:27:33 +0000
+Message-ID: <1e196b9bc884495fb43bbb0975d88226@hihonor.com>
+References: <4cec63dcd3c0443c928800ffeec9118c@hihonor.com>
+ <CAKYAXd89OqqqSPNBZjggexWCrnBD6V7rWE547iKejmeihHFAiw@mail.gmail.com>
+In-Reply-To: <CAKYAXd89OqqqSPNBZjggexWCrnBD6V7rWE547iKejmeihHFAiw@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.164.15.53]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAG-UpRQsdL_Fs9HSEv2pDYXehJC+YXcYjiZKFLvkGBTZkkaTcg@mail.gmail.com>
- <20230706120103.GJ2833176@hirez.programming.kicks-ass.net> <20230706195824.GA2862508@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230706195824.GA2862508@hirez.programming.kicks-ass.net>
-From:   Henry Wu <triangletrap12@gmail.com>
-Date:   Fri, 7 Jul 2023 10:27:20 +0800
-Message-ID: <CAG-UpRTJrs70+Wgi1MHzpDKvKq=kA-t74a7e-nVNScDAwKMNBA@mail.gmail.com>
-Subject: Re: Possible race in rt_mutex_adjust_prio_chain
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Peter.
-
-Peter Zijlstra <peterz@infradead.org> =E4=BA=8E2023=E5=B9=B47=E6=9C=887=E6=
-=97=A5=E5=91=A8=E4=BA=94 03:58=E5=86=99=E9=81=93=EF=BC=9A
->
-> Current notes...
->
-> We hold [L] from 5-13; we hold [P1] 1-8 and [P2] 10-13
->
->   P1 - blocked task
->   P2 - lock owner
->
->   7  holds [L]+[P1]
->      modifies the values, which, temporarily, messes up the pi_waiters tr=
-ee
->
->   11 holds [L]+[P2]
->      requeues the waiter on pi_waiter, restoring pi_waiters tree
->
-> pi_waiters is modified by:
->
->   - rt_mutex_{en,de}queue_pi(); which are used:
->
->    - [11] (holds [L]+[P2])
->    - try_to_wake_rt_mutex() [L]+[P3] ?!? (P3 will be owner,
->                                           but is not yet)
->    - task_blocks_on_rt_mutex() [L]+[P2]
->    - mark_wakeup_next_waiter() [L]+[P2] (current is owner,
->                                          gives up lock)
->    - remove_waiter() [L]+[P2]
->
-> pi_waiters is used by:
->
->   - task_top_pi_waiter(), asserts [P], this is used:
->
->     - rt_mutex_adjust_prio(), which asserts [P2] (*), is used:
->
->       - [11] (holds [L])
->       - task_blocks_on_rt_mutex() (holds [L])
->       - mark_wakeup_next_waiter() (holds [L])
->       - remove_waiter() (holds [L])
->
->       (*)(see patch below -- adding more assertions)
->
->     - [3] -- does *NOT* hold [L], does hold [P]
->
->
-> Now, [3] doesn't hold [L], but since 'all' modifications are done under
-> [L]+[P], just holding [P] should provide a stable read. Except [7], that
-> messes up the tree while not holding (the right!) [P].
->
-> It's late, I'll have to continue staring at this tomorrow!
->
-
-Your analysis is correct! I try to quote part of my previous reply
-with correct format:
-
-CPU0                              CPU1
-.........                         ..........
-                                  rt_mutex_adjust_prio_chain(C)
-rt_mutex_adjust_prio_chain(B)
-......
-[7] update waiter->prio
-(Now A's pi_waiters rbtree is
- corrupted temporarily)
-......                            [11] enqueue operation may select
-                                  insert position according to corrupted
-                                  waiter node CPU0 created.
-[11] Even though we fixed
-corrupted waiter now, we
-are not sure about pi_waiters's
-sanity because other cpu may
-create new invariant violation
-based on our violation.
+ZXhmYXRfZ2V0X2RlbnRyeV9zZXQgY291bGQgYmUgY2FsbGVkIGFmdGVyIHRoZSB1LWRpc2sgaGF2
+ZSBiZWVuIGluc2VydGVkLCANCnRocm91Z2ggZXhmYXRfZmluZCwgX19leGZhdF93cml0ZV9pbm9k
+ZSBmdW5jdGlvbnMuDQpUaGlzIGNvdWxkIGhhcHBlbiBhdCBhbnkgdGltZSwgd2hpY2ggc2NlbmFy
+aW8gY2FuIG5vdCBndWFyYW50ZWUgdGhlIA0KY29udGludWl0eSBvZiBwaHlzaWNhbCBtZW1vcnku
+DQpUaGlzIGJ1Z2ZpeCB3aWxsIGVuaGFuY2UgdGhlIHJvYnVzdG5lc3Mgb2YgZXhmYXQuDQoNClRo
+YW5rcy4NCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7tuS6ujogTmFtamFlIEplb24gPGxp
+bmtpbmplb25Aa2VybmVsLm9yZz4gDQrlj5HpgIHml7bpl7Q6IDIwMjPlubQ35pyIN+aXpSA3OjEw
+DQrmlLbku7bkuro6IGdhb21pbmcgPGdhb21pbmcyMEBoaWhvbm9yLmNvbT4NCuaKhOmAgTogU3Vu
+Z2pvbmcgU2VvIDxzajE1NTcuc2VvQHNhbXN1bmcuY29tPjsgb3BlbiBsaXN0OkVYRkFUIEZJTEUg
+U1lTVEVNIDxsaW51eC1mc2RldmVsQHZnZXIua2VybmVsLm9yZz47IG9wZW4gbGlzdCA8bGludXgt
+a2VybmVsQHZnZXIua2VybmVsLm9yZz47IGZlbmdiYW9wZW5nIDxmZW5nYmFvcGVuZ0BoaWhvbm9y
+LmNvbT47IGdhb3h1IDxnYW94dTJAaGlob25vci5jb20+OyB3YW5nZmVpIDAwMDE0NjU4IDx3YW5n
+ZmVpNjZAaGlob25vci5jb20+OyBzaGVuY2hlbiAwMDAxMzExOCA8aGFycnkuc2hlbkBoaWhvbm9y
+LmNvbT4NCuS4u+mimDogUmU6IFtQQVRDSF0gZXhmYXQ6IHVzZSBrdm1hbGxvY19hcnJheS9rdmZy
+ZWUgaW5zdGVhZCBvZiBrbWFsbG9jX2FycmF5L2tmcmVlDQoNCjIwMjMtMDctMDUgMTg6MTUgR01U
+KzA5OjAwLCBnYW9taW5nIDxnYW9taW5nMjBAaGlob25vci5jb20+Og0KPiBUaGUgY2FsbCBzdGFj
+ayBzaG93biBiZWxvdyBpcyBhIHNjZW5hcmlvIGluIHRoZSBMaW51eCA0LjE5IGtlcm5lbC4NCj4g
+QWxsb2NhdGluZyBtZW1vcnkgZmFpbGVkIHdoZXJlIGV4ZmF0IGZzIHVzZSBrbWFsbG9jX2FycmF5
+IGR1ZSB0byANCj4gc3lzdGVtIG1lbW9yeSBmcmFnbWVudGF0aW9uLCB3aGlsZSB0aGUgdS1kaXNr
+IHdhcyBpbnNlcnRlZCB3aXRob3V0IA0KPiByZWNvZ25pdGlvbi4NCj4gRGV2aWNlcyBzdWNoIGFz
+IHUtZGlzayB1c2luZyB0aGUgZXhmYXQgZmlsZSBzeXN0ZW0gYXJlIHBsdWdnYWJsZSBhbmQgDQo+
+IG1heSBiZSBpbnNlcnQgaW50byB0aGUgc3lzdGVtIGF0IGFueSB0aW1lLg0KPiBIb3dldmVyLCBs
+b25nLXRlcm0gcnVubmluZyBzeXN0ZW1zIGNhbm5vdCBndWFyYW50ZWUgdGhlIGNvbnRpbnVpdHkg
+b2YgDQo+IHBoeXNpY2FsIG1lbW9yeS4gVGhlcmVmb3JlLCBpdCdzIG5lY2Vzc2FyeSB0byBhZGRy
+ZXNzIHRoaXMgaXNzdWUuDQo+DQo+IEJpbmRlcjoyNjMyXzY6IHBhZ2UgYWxsb2NhdGlvbiBmYWls
+dXJlOiBvcmRlcjo0LCANCj4gbW9kZToweDYwNDBjMChHRlBfS0VSTkVMfF9fR0ZQX0NPTVApLCBu
+b2RlbWFzaz0obnVsbCkgQ2FsbCB0cmFjZToNCj4gWzI0MjE3OC4wOTc1ODJdICBkdW1wX2JhY2t0
+cmFjZSsweDAvMHg0IFsyNDIxNzguMDk3NTg5XSAgDQo+IGR1bXBfc3RhY2srMHhmNC8weDEzNCBb
+MjQyMTc4LjA5NzU5OF0gIHdhcm5fYWxsb2MrMHhkOC8weDE0NCANCj4gWzI0MjE3OC4wOTc2MDNd
+ICBfX2FsbG9jX3BhZ2VzX25vZGVtYXNrKzB4MTM2NC8weDEzODQNCj4gWzI0MjE3OC4wOTc2MDhd
+ICBrbWFsbG9jX29yZGVyKzB4MmMvMHg1MTAgWzI0MjE3OC4wOTc2MTJdICANCj4ga21hbGxvY19v
+cmRlcl90cmFjZSsweDQwLzB4MTZjIFsyNDIxNzguMDk3NjE4XSAgX19rbWFsbG9jKzB4MzYwLzB4
+NDA4IA0KPiBbMjQyMTc4LjA5NzYyNF0gIGxvYWRfYWxsb2NfYml0bWFwKzB4MTYwLzB4Mjg0IFsy
+NDIxNzguMDk3NjI4XSAgDQo+IGV4ZmF0X2ZpbGxfc3VwZXIrMHhhM2MvMHhlN2MgWzI0MjE3OC4w
+OTc2MzVdICBtb3VudF9iZGV2KzB4MmU4LzB4M2EwIA0KPiBbMjQyMTc4LjA5NzYzOF0gIGV4ZmF0
+X2ZzX21vdW50KzB4NDAvMHg1MCBbMjQyMTc4LjA5NzY0M10gIA0KPiBtb3VudF9mcysweDEzOC8w
+eDJlOCBbMjQyMTc4LjA5NzY0OV0gIHZmc19rZXJuX21vdW50KzB4OTAvMHgyNzAgDQo+IFsyNDIx
+NzguMDk3NjU1XSAgZG9fbW91bnQrMHg3OTgvMHgxNzNjIFsyNDIxNzguMDk3NjU5XSAgDQo+IGtz
+eXNfbW91bnQrMHgxMTQvMHgxYWMgWzI0MjE3OC4wOTc2NjVdICBfX2FybTY0X3N5c19tb3VudCsw
+eDI0LzB4MzQgDQo+IFsyNDIxNzguMDk3NjcxXSAgZWwwX3N2Y19jb21tb24rMHhiOC8weDFiOCBb
+MjQyMTc4LjA5NzY3Nl0gIA0KPiBlbDBfc3ZjX2hhbmRsZXIrMHg3NC8weDkwIFsyNDIxNzguMDk3
+NjgxXSAgZWwwX3N2YysweDgvMHgzNDANCj4NCj4gQnkgYW5hbHl6aW5nIHRoZSBleGZhdCBjb2Rl
+LHdlIGZvdW5kIHRoYXQgY29udGludW91cyBwaHlzaWNhbCBtZW1vcnkgDQo+IGlzIG5vdCByZXF1
+aXJlZCBoZXJlLHNvIGt2bWFsbG9jX2FycmF5IGlzIHVzZWQgY2FuIHNvbHZlIHRoaXMgcHJvYmxl
+bS4NCj4NCj4gU2lnbmVkLW9mZi1ieTogZ2FvbWluZyA8Z2FvbWluZzIwQGhpaG9ub3IuY29tPg0K
+PiAtLS0NCj4gIGZzL2V4ZmF0L2JhbGxvYy5jIHwgNCArKy0tDQo+ICBmcy9leGZhdC9kaXIuYyAg
+ICB8IDQgKystLQ0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
+b25zKC0pDQo+DQo+IGRpZmYgLS1naXQgYS9mcy9leGZhdC9iYWxsb2MuYyBiL2ZzL2V4ZmF0L2Jh
+bGxvYy5jIGluZGV4IA0KPiA5ZjQyZjI1ZmFiOTIuLmExODM1NThjYjdhMCAxMDA2NDQNCj4gLS0t
+IGEvZnMvZXhmYXQvYmFsbG9jLmMNCj4gKysrIGIvZnMvZXhmYXQvYmFsbG9jLmMNCj4gQEAgLTY5
+LDcgKzY5LDcgQEAgc3RhdGljIGludCBleGZhdF9hbGxvY2F0ZV9iaXRtYXAoc3RydWN0IHN1cGVy
+X2Jsb2NrICpzYiwNCj4gIAl9DQo+ICAJc2JpLT5tYXBfc2VjdG9ycyA9ICgobmVlZF9tYXBfc2l6
+ZSAtIDEpID4+DQo+ICAJCQkoc2ItPnNfYmxvY2tzaXplX2JpdHMpKSArIDE7DQo+IC0Jc2JpLT52
+b2xfYW1hcCA9IGttYWxsb2NfYXJyYXkoc2JpLT5tYXBfc2VjdG9ycywNCj4gKwlzYmktPnZvbF9h
+bWFwID0ga3ZtYWxsb2NfYXJyYXkoc2JpLT5tYXBfc2VjdG9ycywNCj4gIAkJCQlzaXplb2Yoc3Ry
+dWN0IGJ1ZmZlcl9oZWFkICopLCBHRlBfS0VSTkVMKTsNCj4gIAlpZiAoIXNiaS0+dm9sX2FtYXAp
+DQo+ICAJCXJldHVybiAtRU5PTUVNOw0KPiBAQCAtODQsNyArODQsNyBAQCBzdGF0aWMgaW50IGV4
+ZmF0X2FsbG9jYXRlX2JpdG1hcChzdHJ1Y3Qgc3VwZXJfYmxvY2sgKnNiLA0KPiAgCQkJd2hpbGUg
+KGogPCBpKQ0KPiAgCQkJCWJyZWxzZShzYmktPnZvbF9hbWFwW2orK10pOw0KPg0KPiAtCQkJa2Zy
+ZWUoc2JpLT52b2xfYW1hcCk7DQo+ICsJCQlrdmZyZWUoc2JpLT52b2xfYW1hcCk7DQo+ICAJCQlz
+YmktPnZvbF9hbWFwID0gTlVMTDsNCj4gIAkJCXJldHVybiAtRUlPOw0KPiAgCQl9DQo+IGRpZmYg
+LS1naXQgYS9mcy9leGZhdC9kaXIuYyBiL2ZzL2V4ZmF0L2Rpci5jIGluZGV4IA0KPiA5NTc1NzQx
+ODBhNWUuLjVjYmI3OGQwYTJhMiAxMDA2NDQNCj4gLS0tIGEvZnMvZXhmYXQvZGlyLmMNCj4gKysr
+IGIvZnMvZXhmYXQvZGlyLmMNCj4gQEAgLTY0OSw3ICs2NDksNyBAQCBpbnQgZXhmYXRfcHV0X2Rl
+bnRyeV9zZXQoc3RydWN0IA0KPiBleGZhdF9lbnRyeV9zZXRfY2FjaGUgKmVzLCBpbnQgc3luYykN
+Cj4gIAkJCWJyZWxzZShlcy0+YmhbaV0pOw0KPg0KPiAgCWlmIChJU19EWU5BTUlDX0VTKGVzKSkN
+Cj4gLQkJa2ZyZWUoZXMtPmJoKTsNCj4gKwkJa3ZmcmVlKGVzLT5iaCk7DQo+DQo+ICAJcmV0dXJu
+IGVycjsNCj4gIH0NCj4gQEAgLTg4OCw3ICs4ODgsNyBAQCBpbnQgZXhmYXRfZ2V0X2RlbnRyeV9z
+ZXQoc3RydWN0IA0KPiBleGZhdF9lbnRyeV9zZXRfY2FjaGUgKmVzLA0KPg0KPiAgCW51bV9iaCA9
+IEVYRkFUX0JfVE9fQkxLX1JPVU5EX1VQKG9mZiArIG51bV9lbnRyaWVzICogREVOVFJZX1NJWkUs
+IHNiKTsNCj4gIAlpZiAobnVtX2JoID4gQVJSQVlfU0laRShlcy0+X19iaCkpIHsNCj4gLQkJZXMt
+PmJoID0ga21hbGxvY19hcnJheShudW1fYmgsIHNpemVvZigqZXMtPmJoKSwgR0ZQX0tFUk5FTCk7
+DQo+ICsJCWVzLT5iaCA9IGt2bWFsbG9jX2FycmF5KG51bV9iaCwgc2l6ZW9mKCplcy0+YmgpLCBH
+RlBfS0VSTkVMKTsNCkNvdWxkIHlvdSBwbGVhc2UgZWxhYm9yYXRlIHdoeSB5b3UgY2hhbmdlIHRo
+aXMgdG8ga3ZtYWxsb2NfYXJyYXkgYWxzbz8NCg0KVGhhbmtzLg0KPiAgCQlpZiAoIWVzLT5iaCkg
+ew0KPiAgCQkJYnJlbHNlKGJoKTsNCj4gIAkJCXJldHVybiAtRU5PTUVNOw0KPiAtLQ0KPiAyLjE3
+LjENCj4NCj4NCg==
