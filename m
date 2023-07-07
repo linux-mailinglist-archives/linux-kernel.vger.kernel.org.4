@@ -2,196 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57AA74B0AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A41E74B0BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjGGMZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S232473AbjGGM0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjGGMZy (ORCPT
+        with ESMTP id S232010AbjGGM0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:25:54 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5B31FE6;
-        Fri,  7 Jul 2023 05:25:51 -0700 (PDT)
+        Fri, 7 Jul 2023 08:26:41 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25FC1FEA;
+        Fri,  7 Jul 2023 05:26:39 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso23014105e9.1;
+        Fri, 07 Jul 2023 05:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1688732752; x=1720268752;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fHVHlYyXVX/im36hgUnWjYzXHXB5AFCDep27NaHMXWM=;
-  b=beYPnHRJ6LKY9Vc0IQ+oKLuic53q8hblbBfJ7Xz0wFVVcE4e4VpFoNNV
-   Ce5q9PfSVCYwc95IqIAVJf2lZpAtbS2vee9SRRsT+G1/oMkzBk0THUnp0
-   xhvVGp7WBUBWGUSfzsWxWIchIoV4TxT4G/g/Kz/wnmFP0AATYejs2Yaxt
-   MqvcKbTyOr0geU5X37uW1DxdWzdPOb+2q4adAnag+fpvNlsZB80BkloYS
-   nC9MYl9a7HpZSzbws92PiGBxIDRqq1HpdvkXPURn5Mrnlx6hsB1A/1LU6
-   F+GeUjzIg6XzszGgy5suIa0xunNlJOhNQ1C/ClwtdRfoKrO9Dy5HTcYtL
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,187,1684792800"; 
-   d="scan'208";a="31813721"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 07 Jul 2023 14:25:49 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 97C4E280084;
-        Fri,  7 Jul 2023 14:25:49 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Frank Li <Frank.li@nxp.com>, Robin Murphy <robin.murphy@arm.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>, suzuki.poulose@arm.com,
-        coresight@lists.linaro.org, imx@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
-        Adam Ford <aford173@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] arm64: dts: imx8mp: remove arm, primecell-periphid at etm nodes
-Date:   Fri, 07 Jul 2023 14:25:49 +0200
-Message-ID: <6505804.Sb9uPGUboI@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <5cf23bfd-a3b7-3dde-146b-4892d75b3485@arm.com>
-References: <20230705205954.4159781-1-Frank.Li@nxp.com> <24260662.6Emhk5qWAg@steina-w> <5cf23bfd-a3b7-3dde-146b-4892d75b3485@arm.com>
+        d=gmail.com; s=20221208; t=1688732798; x=1691324798;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bklyYiP/IhxeYjsLbgb+f+L9NtgpRzAgyHR6T9K9BbM=;
+        b=sUEPF7CpHwBz6vjelHaHjXAqGKvaLXbaMuzOdBmX+LCOt2ExjEtZMW5dZSSRVnR8j9
+         xBTD7abRZljt5XD0reFOvz/nSQOiA0Yx3Fhz1h7qEDCC3AN5E9NlswMjkHbH1KpEc6tw
+         cQHMnbQNMJmZM0lufQnkKQyGERwt1ALNnlKCZW8/1V5hsdz5+vYfYfs3hhOiSKqBqVp/
+         9cMiF/LlXXVLEEUI8v8F684bPYkWV93YF1faBlwil1RJLFtd9KV25g8317jy7Cj0CI1k
+         6sAwvYEjWOh1syIKkmmwcz2k37kg24NrHznZVhYJeH6gEGyFNpwOd3e17D5kf9JSd7Uv
+         PIrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688732798; x=1691324798;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bklyYiP/IhxeYjsLbgb+f+L9NtgpRzAgyHR6T9K9BbM=;
+        b=AxBloCPUvi5lhkVy19Y+Bg52fQFW1p/0nAr82crsr6XZzO3XcndVCVVScgfJRjQ5EW
+         KB+5wVNSbT3lJC6dcTaNYdVLgkWg6nVVAyPHl1lnB5ZhCvs90EodjzlezpDoeUZCOf9O
+         Xfgtyldh88nXLzWvC7p3AXqUWWZS182bI8W8zuguUsKYOAlcZge9p+XbY9r5kn2CR4vx
+         dReXUUfdTP8mmYIaWD6GI/F6UdbtFm0arQZ6NyqGlr+SeKJW05OgGAKDX7LOGIHZNm57
+         1X93t/1dXhlFzLSCi6fP9RBD+ecIiM7O5MXNYI8bcJBhOet6GChvbiIo0R2M4H2W9YSk
+         JrZQ==
+X-Gm-Message-State: ABy/qLYWweabasKNVFb+J1AcPXl0RNdQKr6rTGi+sA0tEW4rw10tkMF6
+        L7Z9MulyTUF1EScw7xqq7l0U2dIQRbc=
+X-Google-Smtp-Source: APBJJlES8G4cbYSQkVhST6V2w2AQCskZzOoGPHOC21woukenHiDmLxsfKOsLGEDpiH8nNSHbs9T3HQ==
+X-Received: by 2002:a05:600c:247:b0:3fc:65:8dff with SMTP id 7-20020a05600c024700b003fc00658dffmr1502438wmj.4.1688732798311;
+        Fri, 07 Jul 2023 05:26:38 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id e4-20020a5d5004000000b0030fb4b55c13sm4307150wrt.96.2023.07.07.05.26.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 05:26:38 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:26:28 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
+        dsahern@kernel.org, tom@herbertland.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gal@nvidia.com
+Subject: [PATCH 1/1] net: gro: fix misuse of CB in udp socket lookup
+Message-ID: <20230707122627.GA17845@debian>
+References: <20230707121650.GA17677@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230707121650.GA17677@debian>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+This patch fixes a misuse of IP{6}CB(skb) in GRO, while calling to
+`udp6_lib_lookup2` when handling udp tunnels. `udp6_lib_lookup2` fetch the
+device from CB. The fix changes it to fetch the device from `skb->dev`.
+l3mdev case requires special attention since it has a master and a slave
+device.
 
-Am Freitag, 7. Juli 2023, 10:50:31 CEST schrieb Robin Murphy:
-> On 2023-07-07 06:34, Alexander Stein wrote:
-> > Hi Frank,
-> >=20
-> > Am Donnerstag, 6. Juli 2023, 16:39:07 CEST schrieb Frank Li:
-> >> On Thu, Jul 06, 2023 at 12:06:19PM +0100, Robin Murphy wrote:
-> >>>>> Am Mittwoch, 5. Juli 2023, 22:59:53 CEST schrieb Frank Li:
-> >>>>>> The reg size of etm nodes is incorrectly set to 64k instead of 4k.
-> >>>>>> This
-> >>>>>> leads to a crash when calling amba_read_periphid().  After correct=
-ed
-> >>>>>> reg
-> >>>>>> size, amba_read_periphid() retrieve the correct periphid.
-> >>>>>> arm,primecell-periphid were removed from the etm nodes.
-> >>>>>=20
-> >>>>> So this means the reference manual is wrong here? It clearly states
-> >>>>> the size is 64kiB. Reference Manual i.MX8MP Rev 1. 06/2021
-> >>>>> On a side note: Is imx8mq affected by this as well? The DAP memory
-> >>>>> table lists similar sizes in the RM .
-> >>>>=20
-> >>>> Note that the 64K MMIO space per device is really an alignment thing.
-> >>>> It's a recommendation from ARM to allow individual device MMIO regio=
-ns
-> >>>> to be mapped on kernels with 64K page size. Most of the time the real
-> >>>> MMIO space occupied by the device is actually much smaller than 64K.
-> >>>=20
-> >>> Indeed, it's quite common for TRM memory maps to be written in terms =
-of
-> >>> the
-> >>> interconnect configuration, i.e. from the point of view of the
-> >>> interconnect
-> >>> itself, that whole range of address space is assigned to that
-> >>> peripheral,
-> >>> and it may even be true that the entire range is routed to the port
-> >>> where
-> >>> that peripheral is connected. However what's of more interest for DT =
-is
-> >>> how
-> >>> much of that range the peripheral itself actually decodes.
-> >>=20
-> >> Yes, there are not problem by mapping bigger space in most case.
-> >>=20
-> >> amba bus's periphal use close to end of region to show device's identi=
-cal
-> >> information.
-> >=20
-> > Ah, thanks for the explanation. This make things more clear.
-> > But on the other is it sensible to assume the memory resource size to f=
-it
-> > the IP address space? It appears to me the size is fixed to 4kiB anyway.
-> > Would it make more sense to read the values from the address "base + 4K=
- -
-> > x" instead of "base + size - x"?
->=20
-> The size of PrimeCell components in general isn't necessarily 4KB
-> though, and the ID registers were defined relative to the *end* of the
-> register space. The old PrimeCell standards evolved into the CoreSight
-> spec, and from the oldest version of that I can easily link to[1]:
->=20
-> "Each component occupies one or more contiguous 4KB blocks of address
-> space. Where a component occupies more than one 4KB block, these
-> registers must appear in the highest 4KB block."
->=20
-> (FWIW the latest Coresight 3.0 spec relaxes this restriction, but we
-> tend to model newer stuff as platform drivers with explicit DT/ACPI
-> identifiers rather than amba drivers anyway)
+Fixes: a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+Reported-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+---
+ include/net/udp.h      |  2 ++
+ net/ipv4/udp.c         | 21 +++++++++++++++++++--
+ net/ipv4/udp_offload.c |  7 +++++--
+ net/ipv6/udp.c         | 21 +++++++++++++++++++--
+ net/ipv6/udp_offload.c |  7 +++++--
+ 5 files changed, 50 insertions(+), 8 deletions(-)
 
-Ah, I wasn't aware the register space for PrimeCells/CoreSight could be lar=
-ger=20
-than 4k. So the exact size must be known and used in DT. Thanks for=20
-explanation.
+diff --git a/include/net/udp.h b/include/net/udp.h
+index 4d13424f8f72..48af1479882f 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -299,6 +299,7 @@ int udp_lib_getsockopt(struct sock *sk, int level, int optname,
+ int udp_lib_setsockopt(struct sock *sk, int level, int optname,
+ 		       sockptr_t optval, unsigned int optlen,
+ 		       int (*push_pending_frames)(struct sock *));
++void udp4_get_iif_sdif(const struct sk_buff *skb, int *iif, int *sdif);
+ struct sock *udp4_lib_lookup(struct net *net, __be32 saddr, __be16 sport,
+ 			     __be32 daddr, __be16 dport, int dif);
+ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr, __be16 sport,
+@@ -310,6 +311,7 @@ struct sock *udp6_lib_lookup(struct net *net,
+ 			     const struct in6_addr *saddr, __be16 sport,
+ 			     const struct in6_addr *daddr, __be16 dport,
+ 			     int dif);
++void udp6_get_iif_sdif(const struct sk_buff *skb, int *iif, int *sdif);
+ struct sock *__udp6_lib_lookup(struct net *net,
+ 			       const struct in6_addr *saddr, __be16 sport,
+ 			       const struct in6_addr *daddr, __be16 dport,
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 42a96b3547c9..0581ab184afd 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -550,15 +550,32 @@ static inline struct sock *__udp4_lib_lookup_skb(struct sk_buff *skb,
+ 				 inet_sdif(skb), udptable, skb);
+ }
 
-Best regards,
-Alexander
++void udp4_get_iif_sdif(const struct sk_buff *skb, int *iif, int *sdif)
++{
++	*iif = inet_iif(skb) || skb->dev->ifindex;
++	*sdif = 0;
++
++#if IS_ENABLED(CONFIG_NET_L3_MASTER_DEV)
++	if (netif_is_l3_slave(skb->dev)) {
++		struct net_device *master = netdev_master_upper_dev_get_rcu(skb->dev);
++		*sdif = *iif;
++		*iif = master ? master->ifindex : 0;
++	}
++#endif
++}
++
+ struct sock *udp4_lib_lookup_skb(const struct sk_buff *skb,
+ 				 __be16 sport, __be16 dport)
+ {
+ 	const struct iphdr *iph = ip_hdr(skb);
+ 	struct net *net = dev_net(skb->dev);
++	int iif, sdif;
++
++	udp4_get_iif_sdif(skb, &iif, &sdif);
 
-> Thanks,
-> Robin.
->=20
-> [1] https://developer.arm.com/documentation/ihi0029/d/?lang=3Den
->=20
-> > Best regards,
-> > Alexander
-> >=20
-> >> In drivers/amba/bus.c,
-> >>=20
-> >> amba_read_periphid()
-> >> {
-> >>=20
-> >> 	...
-> >> 	size =3D resource_size(&dev->res);
-> >> 	...
-> >> 	for (pid =3D 0, i =3D 0; i < 4; i++)
-> >> =09
-> >> 		pid |=3D (readl(tmp + size - 0x20 + 4 * i) & 255) << (i *
-> >=20
-> > 8);
-> >=20
-> >> }
-> >>=20
-> >> So the range in DTS for arm,primecell should be actual IP address spac=
-e.
-> >>=20
-> >>> Robin.
-> >>>=20
-> >>>> _______________________________________________
-> >>>> linux-arm-kernel mailing list
-> >>>> linux-arm-kernel@lists.infradead.org
-> >>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ 	return __udp4_lib_lookup(net, iph->saddr, sport,
+-				 iph->daddr, dport, inet_iif(skb),
+-				 inet_sdif(skb), net->ipv4.udp_table, NULL);
++				 iph->daddr, dport, iif,
++				 sdif, net->ipv4.udp_table, NULL);
+ }
 
+ /* Must be called under rcu_read_lock().
+diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
+index 75aa4de5b731..70d760b271db 100644
+--- a/net/ipv4/udp_offload.c
++++ b/net/ipv4/udp_offload.c
+@@ -603,10 +603,13 @@ static struct sock *udp4_gro_lookup_skb(struct sk_buff *skb, __be16 sport,
+ {
+ 	const struct iphdr *iph = skb_gro_network_header(skb);
+ 	struct net *net = dev_net(skb->dev);
++	int iif, sdif;
++
++	udp4_get_iif_sdif(skb, &iif, &sdif);
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+ 	return __udp4_lib_lookup(net, iph->saddr, sport,
+-				 iph->daddr, dport, inet_iif(skb),
+-				 inet_sdif(skb), net->ipv4.udp_table, NULL);
++				 iph->daddr, dport, iif,
++				 sdif, net->ipv4.udp_table, NULL);
+ }
 
+ INDIRECT_CALLABLE_SCOPE
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 317b01c9bc39..aac9b20d67e4 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -294,15 +294,32 @@ static struct sock *__udp6_lib_lookup_skb(struct sk_buff *skb,
+ 				 inet6_sdif(skb), udptable, skb);
+ }
+
++void udp6_get_iif_sdif(const struct sk_buff *skb, int *iif, int *sdif)
++{
++	*iif = skb->dev->ifindex;
++	*sdif = 0;
++
++#if IS_ENABLED(CONFIG_NET_L3_MASTER_DEV)
++	if (netif_is_l3_slave(skb->dev)) {
++		struct net_device *master = netdev_master_upper_dev_get_rcu(skb->dev);
++		*sdif = *iif;
++		*iif = master ? master->ifindex : 0;
++	}
++#endif
++}
++
+ struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
+ 				 __be16 sport, __be16 dport)
+ {
+ 	const struct ipv6hdr *iph = ipv6_hdr(skb);
+ 	struct net *net = dev_net(skb->dev);
++	int iif, sdif;
++
++	udp6_get_iif_sdif(skb, &iif, &sdif);
+
+ 	return __udp6_lib_lookup(net, &iph->saddr, sport,
+-				 &iph->daddr, dport, inet6_iif(skb),
+-				 inet6_sdif(skb), net->ipv4.udp_table, NULL);
++				 &iph->daddr, dport, iif,
++				 sdif, net->ipv4.udp_table, NULL);
+ }
+
+ /* Must be called under rcu_read_lock().
+diff --git a/net/ipv6/udp_offload.c b/net/ipv6/udp_offload.c
+index ad3b8726873e..88191d79002e 100644
+--- a/net/ipv6/udp_offload.c
++++ b/net/ipv6/udp_offload.c
+@@ -119,10 +119,13 @@ static struct sock *udp6_gro_lookup_skb(struct sk_buff *skb, __be16 sport,
+ {
+ 	const struct ipv6hdr *iph = skb_gro_network_header(skb);
+ 	struct net *net = dev_net(skb->dev);
++	int iif, sdif;
++
++	udp6_get_iif_sdif(skb, &iif, &sdif);
+
+ 	return __udp6_lib_lookup(net, &iph->saddr, sport,
+-				 &iph->daddr, dport, inet6_iif(skb),
+-				 inet6_sdif(skb), net->ipv4.udp_table, NULL);
++				 &iph->daddr, dport, iif,
++				 sdif, net->ipv4.udp_table, NULL);
+ }
+
+ INDIRECT_CALLABLE_SCOPE
+--
+2.36.1
 
