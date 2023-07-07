@@ -2,153 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E0274B2C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C47374B2CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbjGGOJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S232856AbjGGOKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjGGOJe (ORCPT
+        with ESMTP id S232233AbjGGOKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:09:34 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294592724;
-        Fri,  7 Jul 2023 07:09:17 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367E5LO0030616;
-        Fri, 7 Jul 2023 14:09:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=WP+aDYQCMiQoLxOSTdmYncJ2HhDH6cvv4gluci3VNBY=;
- b=P4VC7ea8wugV4R+1oGl0tAgeFnwXNDwXB7q6cz7AcC5xkiFO1JtGNo65LRuISLFqBP9J
- PJFNj6sbyZYeQYUpZUBiBn5pBjRimNTE9iuGxRCBQf7c6Zq9SR94uchg2VFdhjaBWpNo
- jY2PhTzZfml3KYhj/xDw3OUuA9vjnwFX139qigYBe3av7ZxfwnhtrTBRNa+V1iHLgDBN
- mCJCKIL+WTANANvllQZsoYgw/qu0FB0ywSclfCz82MdDEGoPorJ+TRzjqaZPLZN2L36V
- cWVsR2pByG0RLtilHZI4WMT4KT9GnBnpRbnAD1xpTGRvCZ+24fv+OU/rzhDHFUZI3KPs 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpm5h03ch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 14:09:05 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367E6tD5004051;
-        Fri, 7 Jul 2023 14:09:04 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpm5h03bh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 14:09:04 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3677Rtuf000704;
-        Fri, 7 Jul 2023 14:09:02 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rjbs4v1t4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 14:09:02 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367E8x2w18088486
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jul 2023 14:08:59 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16AAE2004B;
-        Fri,  7 Jul 2023 14:08:59 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8653320040;
-        Fri,  7 Jul 2023 14:08:58 +0000 (GMT)
-Received: from [9.171.85.13] (unknown [9.171.85.13])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jul 2023 14:08:58 +0000 (GMT)
-Message-ID: <1f6e3432f8626d8f3d2de99e7f2f51c1fdf4e58c.camel@linux.ibm.com>
-Subject: Re: [PATCH net v2 1/3] s390/ism: Fix locking for forwarding of IRQs
- and events to clients
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Alexandra Winter <wintera@linux.ibm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Stefan Raspl <raspl@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 07 Jul 2023 16:08:58 +0200
-In-Reply-To: <8ec43fe6-218c-189f-4a90-73e482a0c5ff@linux.ibm.com>
-References: <20230707105622.3332261-1-schnelle@linux.ibm.com>
-         <20230707105622.3332261-2-schnelle@linux.ibm.com>
-         <8ec43fe6-218c-189f-4a90-73e482a0c5ff@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Fri, 7 Jul 2023 10:10:22 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1682708;
+        Fri,  7 Jul 2023 07:09:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TM2mQdHsL5dBHDq04G0JuTY3Eh6qWUU6ls257VSoE3nyAalLO3L2eFGCfDmyZYjummZjOoyr4q2Cbg5OvzN2CRV3B3Mt64nw49RHTFY+aahjBZCiQOLRTjc+Ts4xvpx/Ssy0kOl9M9WTutSqheCRI2kmUTxvUJ5TtM2yOBE9YR7cBcP7SRrgnb5nhGqfDRMVInO1Vd8Yv7Ipq40312DNjYdpkKnjC9FsdTi3IkpMPa5An3iCtMyOhyLeddz8uIzTCu59gzQ3vhfjg/zzERurqNlh/SWcP/VLMZ1MwQaaYGEfSGjKYk98x+bnmHn3rTWIaZwvK64oIoMQRWYJKkBeZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZCoO2EcZsuG+CY2iYG6H2iwpG/VhSLmXsSFZqEcJcEs=;
+ b=N+rB2gOx30bYItJqb8OEKJcDPbJx2QU5/UXIFpyR9F3u82LB7iXN5RhTaSCdUZGCkaBV6kazzsd0+LZXIBEbA+N0vwzCXulhJrVMb+edTNlBgQd7irNgjRcn3N0l6GGQTHrELJVRF6UELhWknKiVJL9FwCVw3aOjH98RPVx0WPwcbpUGaA43/TX+9kY5pMAilV1qFIFZWECJbX9PGEKfsGEXHdBbJVu7yrts9//vtwtHyzcr2ADUpHSQRnABEPP74C5PowoicMckb8W1Tn3YJy9e7x+HaalBqbxSG77ZAV3UdEslB11pyael5TkS+hKBvvKinjQRWS4QNGtMoeSAYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZCoO2EcZsuG+CY2iYG6H2iwpG/VhSLmXsSFZqEcJcEs=;
+ b=a4L+fFJgmO3abD9Gc424N/c2Dxq8xz6FDo2RO655rLouANN8ClsQXWVz7kH7wPvuB5UxmGs4lNaY71TFYAT4T4xisaWAA9EmfjRyTPFtJjAbhrA8BoHaIPrEjNW2pCDmE+nF2PUTFt+5BJB+uhHGPWN2thGGioJYsX4iOE/kiAM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS0PR12MB9448.namprd12.prod.outlook.com (2603:10b6:8:1bb::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
+ 2023 14:09:52 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::bce4:716a:8303:efcf]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::bce4:716a:8303:efcf%4]) with mapi id 15.20.6565.025; Fri, 7 Jul 2023
+ 14:09:52 +0000
+Message-ID: <994042dd-9532-0dfb-8f86-98c897db75fd@amd.com>
+Date:   Fri, 7 Jul 2023 09:09:50 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 0/4] Fix for interrupt storm on ASUS TUF A16
+Content-Language: en-US
+To:     dridri85@gmail.com, Friedrich Vock <friedrich.vock@gmx.de>,
+        nmschulte@gmail.com, npliashechnikov@gmail.com
+Cc:     Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        andriy.shevchenko@linux.intel.com,
+        Hans de Goede <hdegoede@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        open list <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20230705133005.577-1-mario.limonciello@amd.com>
+ <CACRpkdbrwg6wRbFKCfr0H766Z5bX5rANZ-YGAfM6P2q3Khk=bw@mail.gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <CACRpkdbrwg6wRbFKCfr0H766Z5bX5rANZ-YGAfM6P2q3Khk=bw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN6PR2101CA0013.namprd21.prod.outlook.com
+ (2603:10b6:805:106::23) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xWMWUQAhh9Zpub-YQrgtSRWEpABfv7YL
-X-Proofpoint-GUID: VUM-j-B8HsF6V94jRfKi7eRS1zEG34ns
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_09,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- phishscore=0 clxscore=1015 spamscore=0 suspectscore=0 mlxscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2307070130
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB9448:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64831334-0f9d-4134-f4f4-08db7ef3d4f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hTiSd6MfeFN5rmFpopdioE/j+G6GHb5xxuLxNi0Ez9IDBxJ4Plzq6/rdLE1qNWMnjxXNWL6j0KOW3s+oQbfErsT+2+VJqcDHSFG1drqP4weHsr9TIOQ6f3Iffjj9BSI0CwUSTFRhl/ozebrj9HIPW0SZXyd4FSyLJDZW4eutWknnGb3im4YGR4EU4MVhvyHBARDVtmTtKF2qgnr3g0qNmeY4AgQlShN/Qa7dutNLnUWoCiu26xj2lbxtFSp2YTT+3h5S2L2tLgyhUkMZsgJl7AocF0dtMzyfj/WKFKDxL8oKRxBm5ahJ2LlnuNhbUi6To+QzTuf0453eyw11IK1jeq+a4+6FcttIaSvin70CPcS3ow7Tfs0cMhNsOOK2Y8GKWPLJ7Z3CVoHoadH1+o5n/HDoqEHmCgYkgw8FdbtSvsqPo4gNnUiF3uhKl9tjVtanHY4W5u1GcePT5GBsugOPxxQrczeDLj+/hNxb0ehg5yjbOdrG00BX+v/X54AflW7ZTC1IP/0nAymQXt+ZmTzl9ztrcN5gYTgU571lsQIco3rfoeCDsgIeX0+5V3jnDIeUFPURbY2Wi4OjlsyrJIExukReyhoF0eRO/zR66svypY8oujDX8nwB+BaQ2yERg2xqCWKA30TI0riZA8mxUHHcSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199021)(38100700002)(31696002)(36756003)(86362001)(31686004)(41300700001)(8676002)(26005)(5660300002)(6512007)(53546011)(6506007)(186003)(966005)(8936002)(4744005)(2616005)(2906002)(83380400001)(316002)(66946007)(478600001)(6486002)(54906003)(4326008)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eEo5eXdYdG9ZbzJPbnc3dXRQZ0Ixc2NTVEZLSmRmdzJzL0NVN2FMMk15cHdZ?=
+ =?utf-8?B?MXBiR3h5SUsxRFR4R1FsVC8waU5zMWtuRXdTeHVFVmRxUW85U0QzVEczNFNm?=
+ =?utf-8?B?UkM4Z1FnNURwdGNYc01ZSXlxaFpFM0FWVi9IbU85eGY1aWNib1RwMWoxRjVL?=
+ =?utf-8?B?UXAwV2Y5TGdlZzlBZHNMbDVDU0xYNlkzM205Yk9HTVVYdGMyYzhVS0hrM1pw?=
+ =?utf-8?B?YkMvZXZKbVQ5RCtPM2I0aVBkQ3EwYjNjSTl1aG8zUnFOczJ3c21wRTdiZW04?=
+ =?utf-8?B?Vm12bVZSMGJZUENkaDdvaEMwYlNucnRGUzR0VXBQWjVFckxmZjJqbXJsSXcx?=
+ =?utf-8?B?QW54Q3dSc3JSMzZSRkRacG5DaDFCWndtT3dMTE4vR0xETEJiWkt5ZXpZZkpr?=
+ =?utf-8?B?K05hcG11cXVsSi80SDFrS0JrSlJqZVpCTWRkSzZqTkl2dlJ3Um1YTC90ODh6?=
+ =?utf-8?B?NlF2dXp5UG94MnhBWktsVEhWWmxNWVNQRTUzMnR6VFVtbDM1Vm5ESXExbkdm?=
+ =?utf-8?B?eVhkam83K1lmL0hObDFZMWNSeGVVdGEvRzIydWxBNHJMdkN4K0VvbWlSbW5L?=
+ =?utf-8?B?b0l0d2lCcExRMndkVjZoZkxwNDZyOEhiNTJQbEdaL0ZBUDNVM0QrTS9ubVZY?=
+ =?utf-8?B?T2Q2c0FHYkp5VHZ3SVBEY0lpZUMwVmJzdHNmd1VTSzg1am5hdVl5N01xOWNr?=
+ =?utf-8?B?RzdpYjFGeHJPZ3dNaG11REl0Vm82RHdFRHJENVhqczJONlc2MGgrQnZidFZR?=
+ =?utf-8?B?MmVzUjBKQW1BbGpxcUkvWFNMZ0tIWmw5L20zRkZzQy9LTWh0bU9CeGxMWU1j?=
+ =?utf-8?B?Q3ZMQndoWGJNaFVKODdHakV2Y0pIckgwNWdLWVVmOSt1WWNDWGpoalB1SkQ2?=
+ =?utf-8?B?UFA5NXBmeUo3ZTM2MFlrWERQV3N6TjFNZ0YxeFpJdFF1Qy9XWWIxc2RQaXRz?=
+ =?utf-8?B?c01ZY1BmRHRKSU5hcmc2bFc0NVI1bjlJTERlSWhXQ045WlRIemlWbDh4cTZv?=
+ =?utf-8?B?NHFyNzdxWURCN2lUbjE5clNEZmZ2VWpoQ3pvcVNxUCtaQ3R2VHBVTlpPcVJv?=
+ =?utf-8?B?a0JrN2t1MXJNS1ZDNWsrZS9JTTNuZUdFNit1TnFBRUdzSFUvakp5RUNsR3hw?=
+ =?utf-8?B?MncyKzVsYTliMnRubWJ5dHhBV3FaNG9SbkNwTndUa0RMOWR6SWFURlNMNGRp?=
+ =?utf-8?B?dXNGL3hUVXV3WXR0OUk3d0VwZ1ZaVGhuM0k0ajBRU0hta1FadUQ0ZlJtKzhU?=
+ =?utf-8?B?bWoxQnRwUlViYlN0NlJGVTNmOGgya0RIZDdkUUdnMmtCcWpQTW1kZXRvRzd5?=
+ =?utf-8?B?Y0Z1MW9VQVliUHMxU2NuM1hxUk41WVRvemcwdW1yU0ZmN1pBQkVERW51Rit3?=
+ =?utf-8?B?OVNkYU5rQUlYWFh4RzF2NG1mdmdsdkxUaU5EUlk2MUVIVjhtVXNHUEExc1J6?=
+ =?utf-8?B?Q1JhaE50T3VjeHdjOXl2QnJlR3BSWExxbzVQYWtYdUtBTDV5SWZ4cEdBSWJ2?=
+ =?utf-8?B?ck5FdVcxNXZtblpiZVFMZHUvSDhnbVM4MGxCdTJGQ1lOZlUvdlQwTjBBSS9U?=
+ =?utf-8?B?YjMyTzRVVGE5czJ1cUlTVXpPZnZSZTJIbzNpVmk5Q0E2NUFIbjFIK09pR3NQ?=
+ =?utf-8?B?bE03Z3hCenJLSzJGVy8xWXVIUEhXdml1Qzc0Z2k4clhwQlVFTTlYQXZGc3lp?=
+ =?utf-8?B?Y2F6UFlNTTV4UXRSQ2hXOHVxN0FtMWxKUmdCL0N5bkVpRGVkV25DWm9walRK?=
+ =?utf-8?B?QVRyNU4vNytRN0FQTkFHcUpFeTBVOHl4N0JUK3kveDBWSUFKVnJ5RmJNWFpi?=
+ =?utf-8?B?YnRYYVBjNzZHZVhubzRZWWhpNmtQd1BVcGVKMHdPSXoxY20wc3oyNWN6WW1G?=
+ =?utf-8?B?REFkT20ydXpPNDd6VGJRZzFrZWVNdGNraWwzRnFtbXJ6Z0s4VU5VeTJuY0l1?=
+ =?utf-8?B?QkpCT0tneVFmbEt4dGczMzQxdFFQaTdDRkhWU3plYlFiMjZYMzR1czQrbnZr?=
+ =?utf-8?B?TVN2YjhQQUxDcFlUZUhyb1dpSlRIU0JqOXptZUFXTm5UTWFwbTB3cjl3aklO?=
+ =?utf-8?B?ZElFZGxocnNjS05JcWd1WXM1ajF2eGtWQjROdnpWM0h5T1l4eWlmSUdGVmps?=
+ =?utf-8?Q?lB1mBARR0OOVJsjRvF+F32WJv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64831334-0f9d-4134-f4f4-08db7ef3d4f9
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 14:09:52.0398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HBZWMwwWu9HQ3/++C65eTnkyAF/4SWKmuEKsqe3F9Fzaj8NduBtMzlj9xr5O1ZcPuoDuBBSBIOOPitXkqUEZwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9448
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-07-07 at 15:37 +0200, Alexandra Winter wrote:
->=20
-> On 07.07.23 12:56, Niklas Schnelle wrote:
-> [...]
-> > Instead of expanding the use of the clients_lock further add a separate
-> > array in struct ism_dev which references clients subscribed to the
-> > device's events and IRQs. This array is protected by ism->lock which is
-> > already taken in ism_handle_irq() and can be taken outside the IRQ
-> > handler when adding/removing subscribers or the accessing
->=20
-> 				typo? s/the accessing/accessing the/g
->=20
-> > ism->sba_client_arr[]. This also means that the clients_lock is no
-> > longer taken in IRQ context.
-> >=20
->=20
-> [...]
->=20
-> > @@ -554,6 +577,7 @@ static void ism_dev_add_work_func(struct work_struc=
-t *work)
-> >  						 add_work);
-> > =20
-> >  	client->add(client->tgt_ism);
-> > +	ism_setup_forwarding(client, client->tgt_ism);
-> >  	atomic_dec(&client->tgt_ism->add_dev_cnt);
-> >  	wake_up(&client->tgt_ism->waitq);
-> >  }
-> > @@ -691,7 +715,11 @@ static void ism_dev_remove_work_func(struct work_s=
-truct *work)
-> >  {
-> >  	struct ism_client *client =3D container_of(work, struct ism_client,
-> >  						 remove_work);
-> > +	unsigned long flags;
-> > =20
-> > +	spin_lock_irqsave(&client->tgt_ism->lock, flags);
-> > +	client->tgt_ism->subs[client->id] =3D NULL;
-> > +	spin_unlock_irqrestore(&client->tgt_ism->lock, flags);
-> >  	client->remove(client->tgt_ism);
-> >  	atomic_dec(&client->tgt_ism->free_clients_cnt);
-> >  	wake_up(&client->tgt_ism->waitq);
->=20
-> I am not sure I like the new split. here you fix ism_dev_add_work_func() =
-and ism_dev_remove_work_func(),
-> that you remove in the next patch. But looks functionally ok to me.
->=20
->=20
-> Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
+On 7/7/2023 08:50, Linus Walleij wrote:
+> On Wed, Jul 5, 2023 at 3:30 PM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+> 
+>> An interrupt storm is reported for the GPIO controller on ASUS TUF A16
+>> but only on Linux.  In comparing the GPIO registers from Windows and
+>> Linux the configuration for several bits specified in _AEI() was never
+>> actually loaded into the hardware on Linux.
+> 
+> I queued this up for fixes as it looks pretty urgent, perhaps I will
+> even send it to Torvalds before -rc1 if there is positive feedback.
+> 
+> Yours,
+> Linus Walleij
 
-Thanks for your review. Yeah it's the price we pay for working
-intermediate states. I think if you hadn't already invested the time to
-look at the conmbined patch it might still be easier to review the
-split patches.
+Appreciated, thanks!
+
+To all those that reported this issue, the branch that has all the fixes 
+committed is:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=fixes
+
+If you can please check this out and confirm everything works as intended.
+It should - the patch was split up into 4 but the meat should be the same.
