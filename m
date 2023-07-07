@@ -2,111 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E5A74ABCF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF2B74ABE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbjGGHXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S231799AbjGGH0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbjGGHWu (ORCPT
+        with ESMTP id S229802AbjGGH0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:22:50 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2070c.outbound.protection.outlook.com [IPv6:2a01:111:f400:feae::70c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE92130
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:22:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kYz9VGMDLWxBZskdistyB+tllr/YoidQVivr+iRcQJqLpvzrmM3F9VT3HQVt6kn2Dg/VYLIo/EvwmEEXHyfOz4205/YChfuPA7cvd/9il2vLOob8FYJcn/DR2JIGVI9ZFIj4l8MlzIjU1eA7vsJDQWVC/IANTfSOekvJOBPUo4SrXWl6bBEcNTlztCpiP4cRmOZaAFHJK5nIkqDQEHbLQMvvNRuuG34NwlTBTljYCY5h2UNiofGtAR5Ikr+EuzNvxtyg6+XSdJ3dM4+tKuC2LJ5dXAdpnJfTsyF7ched/ZthBW+UqzbgiyLVopex8JSg3KkmUNi2f2Ig7AIlAMDcTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DGxx+VePSjXYlpTqopkI+y0GcumA4d+Xb8ZaUtaDV5s=;
- b=OIUlknIregq6vvkTMAv2S4wHVtcC8o9kBS2AUXDxOb71MDlt598/7cQWhPwf0yLQDhoVGSTp/aR+njv7QCAsNvo9M1AyEgKH7SSRGauFskh61t3PzUNqn0zV9ureEBj0LqZX5eURzQA0N/QLW90LDagAmZ+q/5qO2VfDp5ocHn6zsVt1OZkcCvv7y85wI5HlxBkhWZGVYlaUhhj0n5E2ZoNhPkCjML0gefYWDmiVR1TmdTncpHkYWWiIBg1n4HtAkgCG/XfIVrKYLuklH+aTa7F9b6Z6nWX7sKVpEmNcMGmybCNJOhynxOdyTCkECJD6RMjqwBc3qUThcpHLrxqtOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DGxx+VePSjXYlpTqopkI+y0GcumA4d+Xb8ZaUtaDV5s=;
- b=DQsdHnyIIGwp/Dxfi7ROvl8TIUIMcif3C4g/vfE7EXYOsTwaYYAtfUsJItYVQ8spnUsXYUWm2bxfHryvIg0d7f34NYs4+8SwY3vlgJZGhjDO8F705cZ5Zy+44P9zTlpOHoyi/Y/8MeeXkhB9TdDv5BhB++w67GwWBFDUb64luNWJwR7CTzyrOyvfGhQhFXRkxS9Vu1o3dyB0sa4lj+32WkR7nXJphhU8rIEeXjvAA9MnGTUAlSvx3p7uiXglItm3a+seDFO47pz7/od50YnUvGpsHXeh/ylpXo6/zGCPNdRoSM2FnvIYhFjW0xrc48Z+Kx+uSDB9iKETSzVkyodt8w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB6743.apcprd06.prod.outlook.com (2603:1096:101:17a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
- 2023 07:21:42 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.025; Fri, 7 Jul 2023
- 07:21:42 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Yangtao Li <frank.li@vivo.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 18/18] drm/fsl-dcu: Convert to devm_platform_ioremap_resource()
-Date:   Fri,  7 Jul 2023 15:20:34 +0800
-Message-Id: <20230707072034.48977-18-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230707072034.48977-1-frank.li@vivo.com>
-References: <20230707072034.48977-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0129.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::33) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Fri, 7 Jul 2023 03:26:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB618E;
+        Fri,  7 Jul 2023 00:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688714798; x=1720250798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vivwfOi/NInuAJlngLtz6NuTLaWVS6vlx0mOAJxqFoE=;
+  b=S8Vogvyp++NXsXP0f7pDtOQ04MgPi54GIck+uhYhXtgYIUobrF7ghQwn
+   PVvML6kyfgnpU4LfrkdNBDJlnTfPzYMrVfkeK71dr3Uvg+SHS13IvfrZv
+   59rVBtzic2DOwvFvT04mmWBahCaV6vdguhx8GjzLNhryPZLttTkr/lJeJ
+   5Dg0uWiUxE76YDhRkS34vB9it+i0lcdFSkh++UlMY6Gt7dExMb2ILnRzE
+   lY99xouEyCc+jbUdEthvbF1ECUZ44P1CwG4wZJSl13ZM5l6R2Q474SCS6
+   YER3+BYzq8nfezmIjUJWazigCbLvf0xZLWsWUaHHPAx7jt4LXZ06il1cg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="353671263"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="353671263"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 00:26:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="719857475"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="719857475"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga002.jf.intel.com with ESMTP; 07 Jul 2023 00:26:29 -0700
+Date:   Fri, 7 Jul 2023 15:26:28 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 21/22] x86/mce: Improve error log of kernel space TDX
+ #MC due to erratum
+Message-ID: <20230707072628.4otfm3tr6uxwevxe@yy-desk-7060>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <e8d62487d87409af4f0a760f36aeae56a492a79e.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB6743:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9152a4a4-2205-4fd8-06bd-08db7ebacfcb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4zJkFZ44bgDgJbkrb4Z/ufK9oKq90kjtCgwh1YeV9iVuWKAPqO7ePtbcRzUfq/u1TKgeCe9aR3JF1o85FCorxmxx+ZPLk3EH5e2JfnbFDQGYBgSMBhok3bgfNGi3RZY6iiHnnzB30e5FniIDi1LJOcI2zR2d+nkGxxhJXyvndWKq63N6WtKdJpFtLFnS8J9nPrpVrfjZTI0xUN1rSoJg5nMG4qbBeKF1Z/aRsaD8BA+92NRaduuhCfFnwfsgzUJG3YHD/7xaNz7CzNIf0ijxF2dwtxHYGaZr8Hj51wlLTYUrnWHKVJ+S86Di/xmb0Qx0aPVDIZCVq7oUybw1WaqQOd1Whll+Jc6jzz5xxecownO/Kb+YH8wid7VRe+3u1eeU5jOXaE74F1ST3RdnrRW5REeOBJ8t37ch6c/MDjeyFxKNETNEzOH2EobpQ2psQEePIgOiZBZQrdgE25MamHw/dFCahtxdtcaAG/ZhyrDlcqW3aShaQPnVANO8+MZoOCrndowCHeda9jbVKmmLdRF4YIHFBpghh351RWA5vZZiOGQnj2nRpjOb0VM5UiCLPP57YObdi6V9S0OgWD1rddlG8OEJzAHJ2I1//Aztm387pLQQSWMMVXF0dUMcEYCyYXTd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199021)(6512007)(6666004)(52116002)(6486002)(478600001)(110136005)(1076003)(186003)(26005)(6506007)(2906002)(66476007)(66946007)(4326008)(66556008)(8936002)(8676002)(5660300002)(41300700001)(38100700002)(38350700002)(36756003)(316002)(86362001)(83380400001)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/B1/Dvl+4ln7/XZI0SfZaYWz+xkfUusvIzFSPEX1JQ+PWimom5hlUiN+ZUvi?=
- =?us-ascii?Q?LeACaFRIdGgAvR8HTLSw6l1bt9ag2qc1mVrMznGwxl/f+/vbWl7Ngfm3lYrK?=
- =?us-ascii?Q?HK3ENQqWBA/nzS6E7BWvRv1pAWlqY6HulR4dtzIy/7jzK2L2OQD3Sozb2Anc?=
- =?us-ascii?Q?Ruc6GdY7ncz0PsX1PUMCQ/NUoMgAZfN+jGIoBbg5kBBhkBdYFGaXH3thmhup?=
- =?us-ascii?Q?TWVweZY8C9TKYCrXXcFDCJjCq4Rw+xCe9iMJ4LLZr1zz2LFPmWCR+J4sOKdi?=
- =?us-ascii?Q?riNWyULf9V+usuT5B4fSSGnqSI+JM7RYXMQmvApxLgLbfa1sw+XaI0dOjxAN?=
- =?us-ascii?Q?fz/2jvg4zuRQw6LuzKJvH4chXtrRHomp7i02ITpYCAIlG/xlIGGN2Dgqm4Hc?=
- =?us-ascii?Q?Oqv3XMHlhwtw+THHHhqIUeYGkFIn7NCmu/T7NEJDbYOezEbNREwlc0NYFAUI?=
- =?us-ascii?Q?3H+0HnG/4pVmx+RGghM1PyE9HNWILHMBcTCTzdix5oMEiCh1Lntzo6zxD4Op?=
- =?us-ascii?Q?xkp11nd+Bbum62Cm8tEQwtDYyN7AqraBXF0k+KtwoAvv3tmfZP6q4rilEpsn?=
- =?us-ascii?Q?wbt9t1U18YL7tLTjVwfluoX/RYY1jyyn+C+8UdY7NuJB6q/JaVoK+y/iJAVN?=
- =?us-ascii?Q?hRv5Qi4sVhZkPhTx006gjKbeeGZJ3VwtSDFe58GSxiKK9IRgiUqKad6Z9N6I?=
- =?us-ascii?Q?0M3us09pw+2zl8qbLiV8Q/e4H/EPQVRyhPmHzYYJY0aWqCoOGGvjkp+aQ+pB?=
- =?us-ascii?Q?bTmtEa61HtvXFKjhfbFkGuMtOxqWef6v7+uCJJqQwSOCnBhNEPVqJuy61sIi?=
- =?us-ascii?Q?d+ssAWDgM5D8HdqE8vPTHbbz/pO2Iv/eWDRP3q87L1d50C1+pfSyX4hGDY9S?=
- =?us-ascii?Q?BFBdsUN5qswaDnqHs/LvfPHZJVi1GG7fnIFygbSt8WHBmBbTAlFOkXT0yPH/?=
- =?us-ascii?Q?IkblwX4Gf8HWaOk2fg0rMulKTXcYW6W9uClRAY1cdmalbg4LMAhaB3Ln0Iqi?=
- =?us-ascii?Q?99oK03ThQYj18SCgAZocHMD6h05BINEMpNB04FVsrfdMU3bfDYzahAU/9h3D?=
- =?us-ascii?Q?TiA56fuegtyPQGhK4kcZZzM2RdRzddJgwqus1NkkDrPmlUmpsdEhUTuQ0bgI?=
- =?us-ascii?Q?fYRA+2AhoJEtbj2YLlW8dWdwaiSD9YK7GDGfW667oSyzLN+Jy7I5+I/a8wQk?=
- =?us-ascii?Q?CgN7gbOmOzwXH8MQm6wcKhc1vuZOTxP1voCVLYrfwwxo+haAhNvqcIexmJiG?=
- =?us-ascii?Q?Ia87SrZwqASrK+fQ+QQO+69CWJRjLyBd8hmnpT2Wesm7f4m5H3i+w8VAAPjV?=
- =?us-ascii?Q?kVw3wVo78I9Sh/O9kCJfCi2O7Qdeo1s+cIlQL6oET/SXKZJ0H+gxpujSomyH?=
- =?us-ascii?Q?++3jbQ+TTVHZ/guZ+5Q1r4lm++WqLwQQAiseNZ7v8iPNlYw4mlzLjatI/N1K?=
- =?us-ascii?Q?yjZyCPfoJNIzv6Ls3de9B3lAMMvhmzhy2/BIr071kEeU5oEJfbA1hycw3CGD?=
- =?us-ascii?Q?Tbt2mJ+JwMycVsd85rrZVH5RCWl7NWKhvoit/GG2n3aA0CX9wRyltB70OLTj?=
- =?us-ascii?Q?DP/LzsTd50iVWDbbS7vxYVeW4A2pW+uW7M8j15Iy?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9152a4a4-2205-4fd8-06bd-08db7ebacfcb
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 07:21:42.0492
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zYpnUZ8OH2EnMN6JjolYHsULkgY5jXC9nG8Lb44G/5ztF/y+leZCdA3VjZMw+4pIh6qzhLb87lDse/RVu28QBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6743
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8d62487d87409af4f0a760f36aeae56a492a79e.1687784645.git.kai.huang@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -115,35 +74,338 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify code.
+On Tue, Jun 27, 2023 at 02:12:51AM +1200, Kai Huang wrote:
+> The first few generations of TDX hardware have an erratum.  Triggering
+> it in Linux requires some kind of kernel bug involving relatively exotic
+> memory writes to TDX private memory and will manifest via
+> spurious-looking machine checks when reading the affected memory.
+>
+> == Background ==
+>
+> Virtually all kernel memory accesses operations happen in full
+> cachelines.  In practice, writing a "byte" of memory usually reads a 64
+> byte cacheline of memory, modifies it, then writes the whole line back.
+> Those operations do not trigger this problem.
+>
+> This problem is triggered by "partial" writes where a write transaction
+> of less than cacheline lands at the memory controller.  The CPU does
+> these via non-temporal write instructions (like MOVNTI), or through
+> UC/WC memory mappings.  The issue can also be triggered away from the
+> CPU by devices doing partial writes via DMA.
+>
+> == Problem ==
+>
+> A partial write to a TDX private memory cacheline will silently "poison"
+> the line.  Subsequent reads will consume the poison and generate a
+> machine check.  According to the TDX hardware spec, neither of these
+> things should have happened.
+>
+> To add insult to injury, the Linux machine code will present these as a
+> literal "Hardware error" when they were, in fact, a software-triggered
+> issue.
+>
+> == Solution ==
+>
+> In the end, this issue is hard to trigger.  Rather than do something
+> rash (and incomplete) like unmap TDX private memory from the direct map,
+> improve the machine check handler.
+>
+> Currently, the #MC handler doesn't distinguish whether the memory is
+> TDX private memory or not but just dump, for instance, below message:
+>
+>  [...] mce: [Hardware Error]: CPU 147: Machine Check Exception: f Bank 1: bd80000000100134
+>  [...] mce: [Hardware Error]: RIP 10:<ffffffffadb69870> {__tlb_remove_page_size+0x10/0xa0}
+>  	...
+>  [...] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
+>  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
+>  [...] Kernel panic - not syncing: Fatal local machine check
+>
+> Which says "Hardware Error" and "Data load in unrecoverable area of
+> kernel".
+>
+> Ideally, it's better for the log to say "software bug around TDX private
+> memory" instead of "Hardware Error".  But in reality the real hardware
+> memory error can happen, and sadly such software-triggered #MC cannot be
+> distinguished from the real hardware error.  Also, the error message is
+> used by userspace tool 'mcelog' to parse, so changing the output may
+> break userspace.
+>
+> So keep the "Hardware Error".  The "Data load in unrecoverable area of
+> kernel" is also helpful, so keep it too.
+>
+> Instead of modifying above error log, improve the error log by printing
+> additional TDX related message to make the log like:
+>
+>   ...
+>  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
+>  [...] mce: [Hardware Error]: Machine Check: TDX private memory error. Possible kernel bug.
+>
+> Adding this additional message requires determination of whether the
+> memory page is TDX private memory.  There is no existing infrastructure
+> to do that.  Add an interface to query the TDX module to fill this gap.
+>
+> == Impact ==
+>
+> This issue requires some kind of kernel bug to trigger.
+>
+> TDX private memory should never be mapped UC/WC.  A partial write
+> originating from these mappings would require *two* bugs, first mapping
+> the wrong page, then writing the wrong memory.  It would also be
+> detectable using traditional memory corruption techniques like
+> DEBUG_PAGEALLOC.
+>
+> MOVNTI (and friends) could cause this issue with something like a simple
+> buffer overrun or use-after-free on the direct map.  It should also be
+> detectable with normal debug techniques.
+>
+> The one place where this might get nasty would be if the CPU read data
+> then wrote back the same data.  That would trigger this problem but
+> would not, for instance, set off mechanisms like slab redzoning because
+> it doesn't actually corrupt data.
+>
+> With an IOMMU at least, the DMA exposure is similar to the UC/WC issue.
+> TDX private memory would first need to be incorrectly mapped into the
+> I/O space and then a later DMA to that mapping would actually cause the
+> poisoning event.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Reviewed-by: Yuan Yao <yuan.yao@intel.com>
 
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-index c09ba019ba5e..14661912e60f 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-@@ -246,7 +246,6 @@ static int fsl_dcu_drm_probe(struct platform_device *pdev)
- 	struct fsl_dcu_drm_device *fsl_dev;
- 	struct drm_device *drm;
- 	struct device *dev = &pdev->dev;
--	struct resource *res;
- 	void __iomem *base;
- 	struct clk *pix_clk_in;
- 	char pix_clk_name[32];
-@@ -264,8 +263,7 @@ static int fsl_dcu_drm_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	fsl_dev->soc = id->data;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(dev, res);
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base)) {
- 		ret = PTR_ERR(base);
- 		return ret;
--- 
-2.39.0
-
+>
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+>
+> v11 -> v12:
+>  - Simplified #MC message (Dave/Kirill)
+>  - Slightly improved some comments.
+>
+> v10 -> v11:
+>  - New patch
+>
+>
+> ---
+>  arch/x86/include/asm/tdx.h     |   2 +
+>  arch/x86/kernel/cpu/mce/core.c |  33 +++++++++++
+>  arch/x86/virt/vmx/tdx/tdx.c    | 102 +++++++++++++++++++++++++++++++++
+>  arch/x86/virt/vmx/tdx/tdx.h    |   5 ++
+>  4 files changed, 142 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 8d3f85bcccc1..a697b359d8c6 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -106,11 +106,13 @@ bool platform_tdx_enabled(void);
+>  int tdx_cpu_enable(void);
+>  int tdx_enable(void);
+>  void tdx_reset_memory(void);
+> +bool tdx_is_private_mem(unsigned long phys);
+>  #else	/* !CONFIG_INTEL_TDX_HOST */
+>  static inline bool platform_tdx_enabled(void) { return false; }
+>  static inline int tdx_cpu_enable(void) { return -ENODEV; }
+>  static inline int tdx_enable(void)  { return -ENODEV; }
+>  static inline void tdx_reset_memory(void) { }
+> +static inline bool tdx_is_private_mem(unsigned long phys) { return false; }
+>  #endif	/* CONFIG_INTEL_TDX_HOST */
+>
+>  #endif /* !__ASSEMBLY__ */
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 2eec60f50057..f71b649f4c82 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -52,6 +52,7 @@
+>  #include <asm/mce.h>
+>  #include <asm/msr.h>
+>  #include <asm/reboot.h>
+> +#include <asm/tdx.h>
+>
+>  #include "internal.h"
+>
+> @@ -228,11 +229,34 @@ static void wait_for_panic(void)
+>  	panic("Panicing machine check CPU died");
+>  }
+>
+> +static const char *mce_memory_info(struct mce *m)
+> +{
+> +	if (!m || !mce_is_memory_error(m) || !mce_usable_address(m))
+> +		return NULL;
+> +
+> +	/*
+> +	 * Certain initial generations of TDX-capable CPUs have an
+> +	 * erratum.  A kernel non-temporal partial write to TDX private
+> +	 * memory poisons that memory, and a subsequent read of that
+> +	 * memory triggers #MC.
+> +	 *
+> +	 * However such #MC caused by software cannot be distinguished
+> +	 * from the real hardware #MC.  Just print additional message
+> +	 * to show such #MC may be result of the CPU erratum.
+> +	 */
+> +	if (!boot_cpu_has_bug(X86_BUG_TDX_PW_MCE))
+> +		return NULL;
+> +
+> +	return !tdx_is_private_mem(m->addr) ? NULL :
+> +		"TDX private memory error. Possible kernel bug.";
+> +}
+> +
+>  static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+>  {
+>  	struct llist_node *pending;
+>  	struct mce_evt_llist *l;
+>  	int apei_err = 0;
+> +	const char *memmsg;
+>
+>  	/*
+>  	 * Allow instrumentation around external facilities usage. Not that it
+> @@ -283,6 +307,15 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+>  	}
+>  	if (exp)
+>  		pr_emerg(HW_ERR "Machine check: %s\n", exp);
+> +	/*
+> +	 * Confidential computing platforms such as TDX platforms
+> +	 * may occur MCE due to incorrect access to confidential
+> +	 * memory.  Print additional information for such error.
+> +	 */
+> +	memmsg = mce_memory_info(final);
+> +	if (memmsg)
+> +		pr_emerg(HW_ERR "Machine check: %s\n", memmsg);
+> +
+>  	if (!fake_panic) {
+>  		if (panic_timeout == 0)
+>  			panic_timeout = mca_cfg.panic_timeout;
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index eba7ff91206d..5f96c2d866e5 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -1315,6 +1315,108 @@ void tdx_reset_memory(void)
+>  	tdmrs_reset_pamt_all(&tdx_tdmr_list);
+>  }
+>
+> +static bool is_pamt_page(unsigned long phys)
+> +{
+> +	struct tdmr_info_list *tdmr_list = &tdx_tdmr_list;
+> +	int i;
+> +
+> +	/*
+> +	 * This function is called from #MC handler, and theoretically
+> +	 * it could run in parallel with the TDX module initialization
+> +	 * on other logical cpus.  But it's not OK to hold mutex here
+> +	 * so just blindly check module status to make sure PAMTs/TDMRs
+> +	 * are stable to access.
+> +	 *
+> +	 * This may return inaccurate result in rare cases, e.g., when
+> +	 * #MC happens on a PAMT page during module initialization, but
+> +	 * this is fine as #MC handler doesn't need a 100% accurate
+> +	 * result.
+> +	 */
+> +	if (tdx_module_status != TDX_MODULE_INITIALIZED)
+> +		return false;
+> +
+> +	for (i = 0; i < tdmr_list->nr_consumed_tdmrs; i++) {
+> +		unsigned long base, size;
+> +
+> +		tdmr_get_pamt(tdmr_entry(tdmr_list, i), &base, &size);
+> +
+> +		if (phys >= base && phys < (base + size))
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/*
+> + * Return whether the memory page at the given physical address is TDX
+> + * private memory or not.  Called from #MC handler do_machine_check().
+> + *
+> + * Note this function may not return an accurate result in rare cases.
+> + * This is fine as the #MC handler doesn't need a 100% accurate result,
+> + * because it cannot distinguish #MC between software bug and real
+> + * hardware error anyway.
+> + */
+> +bool tdx_is_private_mem(unsigned long phys)
+> +{
+> +	struct tdx_module_output out;
+> +	u64 sret;
+> +
+> +	if (!platform_tdx_enabled())
+> +		return false;
+> +
+> +	/* Get page type from the TDX module */
+> +	sret = __seamcall(TDH_PHYMEM_PAGE_RDMD, phys & PAGE_MASK,
+> +			0, 0, 0, &out);
+> +	/*
+> +	 * Handle the case that CPU isn't in VMX operation.
+> +	 *
+> +	 * KVM guarantees no VM is running (thus no TDX guest)
+> +	 * when there's any online CPU isn't in VMX operation.
+> +	 * This means there will be no TDX guest private memory
+> +	 * and Secure-EPT pages.  However the TDX module may have
+> +	 * been initialized and the memory page could be PAMT.
+> +	 */
+> +	if (sret == TDX_SEAMCALL_UD)
+> +		return is_pamt_page(phys);
+> +
+> +	/*
+> +	 * Any other failure means:
+> +	 *
+> +	 * 1) TDX module not loaded; or
+> +	 * 2) Memory page isn't managed by the TDX module.
+> +	 *
+> +	 * In either case, the memory page cannot be a TDX
+> +	 * private page.
+> +	 */
+> +	if (sret)
+> +		return false;
+> +
+> +	/*
+> +	 * SEAMCALL was successful -- read page type (via RCX):
+> +	 *
+> +	 *  - PT_NDA:	Page is not used by the TDX module
+> +	 *  - PT_RSVD:	Reserved for Non-TDX use
+> +	 *  - Others:	Page is used by the TDX module
+> +	 *
+> +	 * Note PAMT pages are marked as PT_RSVD but they are also TDX
+> +	 * private memory.
+> +	 *
+> +	 * Note: Even page type is PT_NDA, the memory page could still
+> +	 * be associated with TDX private KeyID if the kernel hasn't
+> +	 * explicitly used MOVDIR64B to clear the page.  Assume KVM
+> +	 * always does that after reclaiming any private page from TDX
+> +	 * gusets.
+> +	 */
+> +	switch (out.rcx) {
+> +	case PT_NDA:
+> +		return false;
+> +	case PT_RSVD:
+> +		return is_pamt_page(phys);
+> +	default:
+> +		return true;
+> +	}
+> +}
+> +
+>  static int __init record_keyid_partitioning(u32 *tdx_keyid_start,
+>  					    u32 *nr_tdx_keyids)
+>  {
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index f6b4e153890d..2fefd688924c 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -21,6 +21,7 @@
+>  /*
+>   * TDX module SEAMCALL leaf functions
+>   */
+> +#define TDH_PHYMEM_PAGE_RDMD	24
+>  #define TDH_SYS_KEY_CONFIG	31
+>  #define TDH_SYS_INFO		32
+>  #define TDH_SYS_INIT		33
+> @@ -28,6 +29,10 @@
+>  #define TDH_SYS_TDMR_INIT	36
+>  #define TDH_SYS_CONFIG		45
+>
+> +/* TDX page types */
+> +#define	PT_NDA		0x0
+> +#define	PT_RSVD		0x1
+> +
+>  struct cmr_info {
+>  	u64	base;
+>  	u64	size;
+> --
+> 2.40.1
+>
