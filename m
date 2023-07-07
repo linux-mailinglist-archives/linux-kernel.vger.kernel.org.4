@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845FC74AD6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF1A74AD6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbjGGIy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S232377AbjGGIy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbjGGIyy (ORCPT
+        with ESMTP id S232394AbjGGIyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Jul 2023 04:54:54 -0400
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEAF1FF1
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B222110
         for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:54:53 -0700 (PDT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-263fd992ab2so3124421a91.1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b9c60aa6e7so2396415ad.0
         for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:54:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688720093; x=1691312093;
+        d=1e100.net; s=20221208; t=1688720092; x=1691312092;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=torgUPAhXS1H2G3DGUbQjuzvoRVARhYShNxl4DjsIiY=;
-        b=jste7sxgh3O3uibmHPCCRAk4Mi/oBIYGjV/+f8E2Nohg1CCQHzqRv2xYSvc9nwL3qn
-         Yfqclh8b/c3edEzcj+/FX2JIY0PezMV94Byva75/gBNDYkXhgvvR8jaiDSFS5YWeR2bk
-         J5JbFvXV4vJSQOWkoQv7M1NvXOuDEh7N9o0j1iqv6dzixCjGTwMHIudPeT4eAJjttMhx
-         zW+TKrA3Jj4bSOmT4PZsVZvpe1a6El6yOR4+tVIVKtazwI2rr7R+rHbYPslGNeVoan89
-         EyaA0udh8q3MTIDnzljQmyWhYL8zipym6m0+TZ39A2TlIfBgfB+J6dbo5XE5eBX3o+FT
-         aD+Q==
-X-Gm-Message-State: ABy/qLaFV5joi/cX/fSzVn0Z+yROYBlhzsh+6/0d8lp6/+c+rak6uTWf
-        mBkx+uzWMFtVJMyXXqGMo1TIDjH/13rpl2VALnDVyH1GNsUH
-X-Google-Smtp-Source: APBJJlEj0qsc1paNuAYlGMumGyfVNkMx6Ck/As9XIIOsGAYkXhB68q9QBrRGARXmfN9NeynZzeP9VWb6TT+J1nzVydHRrxv0obmn
+        bh=MQ6fgIhDLVZg04LxsAC2t0anmvaYhwdWlDV+pQJ8Auc=;
+        b=D9CFWg19sCdXFd4mC7b7t9pbS0YuYNRd9Yk8l5ZyCNGthhqZECBWOJaXPM2/KxDRUQ
+         MuVfPknADtuf71P08To4BjbgLBJ77zT4riD0hwz+l/+f9OWmULx35B8qDeRucPAsHvm+
+         wp1wR9QrBEu97ZxmkCBI5KFYZANOaOpsKftgVZBH4I7V2WsVz9kAxHP/DGOmFO4oIarx
+         DgNe6nnOG1ph/MmSz/p5sDm5Zaz0glHvqDzAt7gj587ARCIXoOjyX25Icoupgw7nJBsa
+         xEqhOaHvibSYLlB666uW88y4Boy3WwADDd7lZIV1sYvL/e+PYfC1bPp0+qxREkyTReFd
+         Q0IQ==
+X-Gm-Message-State: ABy/qLY8C2Iwt2HKmRjX+cRPlAlWpsKfk4o6uXkoOZfwR2+4m2RErBdG
+        UYNjzG0hJQarIVFbZ39W6IsCcz0hz5jv/KDZh4vGdDmvwSdw
+X-Google-Smtp-Source: APBJJlH/6XUTd0vo2I6hYGqtjOXqugsdmlRs6OPKCWMF8oV9KCJpoI4Z+pjsIwuyh/eCQHgzTDqetM2K4JyPrJ5qEez8b5WEP5dr
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:4302:b0:263:3727:6045 with SMTP id
- q2-20020a17090a430200b0026337276045mr3483863pjg.4.1688720093144; Fri, 07 Jul
- 2023 01:54:53 -0700 (PDT)
+X-Received: by 2002:a17:902:e843:b0:1b8:a70e:dd00 with SMTP id
+ t3-20020a170902e84300b001b8a70edd00mr4150807plg.6.1688720092614; Fri, 07 Jul
+ 2023 01:54:52 -0700 (PDT)
 Date:   Fri, 07 Jul 2023 01:54:52 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000046ef4805ffe1c9b4@google.com>
-Subject: [syzbot] Monthly input report (Jul 2023)
-From:   syzbot <syzbot+list1a4115131c3a1defb044@syzkaller.appspotmail.com>
-To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-ID: <0000000000003ed80905ffe1c97e@google.com>
+Subject: [syzbot] Monthly f2fs report (Jul 2023)
+From:   syzbot <syzbot+listcf7fbb62c045af90dfd2@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -54,28 +56,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello input maintainers/developers,
+Hello f2fs maintainers/developers,
 
-This is a 31-day syzbot report for the input subsystem.
+This is a 31-day syzbot report for the f2fs subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/input
+https://syzkaller.appspot.com/upstream/s/f2fs
 
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 11 issues are still open and 48 have been fixed so far.
+During the period, 4 new issues were detected and 1 were fixed.
+In total, 11 issues are still open and 29 have been fixed so far.
 
 Some of the still happening issues:
 
 Ref Crashes Repro Title
-<1> 2737    Yes   WARNING in input_mt_init_slots
-                  https://syzkaller.appspot.com/bug?extid=0122fa359a69694395d5
-<2> 936     Yes   WARNING in implement
-                  https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
-<3> 102     Yes   general protection fault in hidraw_release
-                  https://syzkaller.appspot.com/bug?extid=953a33deaf38c66a915e
-<4> 5       Yes   INFO: task hung in uhid_char_release
-                  https://syzkaller.appspot.com/bug?extid=8fe2d362af0e1cba8735
-<5> 3       No    KASAN: slab-use-after-free Read in remove_wait_queue
-                  https://syzkaller.appspot.com/bug?extid=e0b9084463edf54b83c4
+<1> 212     Yes   INFO: task hung in f2fs_balance_fs
+                  https://syzkaller.appspot.com/bug?extid=8b85865808c8908a0d8c
+<2> 96      Yes   kernel BUG in f2fs_evict_inode
+                  https://syzkaller.appspot.com/bug?extid=e1246909d526a9d470fa
+<3> 49      Yes   possible deadlock in f2fs_file_mmap
+                  https://syzkaller.appspot.com/bug?extid=c0e3db4f9cd6e05cadd3
+<4> 4       Yes   WARNING: lock held when returning to user space in f2fs_write_single_data_page
+                  https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
+<5> 1       Yes   general protection fault in f2fs_drop_extent_tree
+                  https://syzkaller.appspot.com/bug?extid=f4649be1be739e030111
 
 ---
 This report is generated by a bot. It may contain errors.
