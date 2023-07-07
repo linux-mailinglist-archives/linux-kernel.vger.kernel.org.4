@@ -2,83 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8BD74B3D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9358D74B3E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbjGGPLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S233367AbjGGPMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjGGPK7 (ORCPT
+        with ESMTP id S229757AbjGGPMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:10:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D0DAA;
-        Fri,  7 Jul 2023 08:10:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Fri, 7 Jul 2023 11:12:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8199A212C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688742688;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/vpgghRxsUnXsE3t1IVpXcHF3Kir76KUPEpQodsytdc=;
+        b=c+nLXn4OZLR9JopyYhq/kLKcu5hVDcMJgVZSqqvUmMU9sSkNL6kfZhp26EcF8NDrZIe0wi
+        l0MWnOpFXfPNaOUuB2C1NUvJ3AZ1VW6xwfD6/Ztxvn7VL05I1e2pmxNXbXFZ9qB83+YAgF
+        sD5KsFJ5eqPjy9XcVtxU7Ied6RcbTIU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-huiRPxb7MyqWJbXufgI7Jw-1; Fri, 07 Jul 2023 11:11:27 -0400
+X-MC-Unique: huiRPxb7MyqWJbXufgI7Jw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46235619C4;
-        Fri,  7 Jul 2023 15:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AF9C433C8;
-        Fri,  7 Jul 2023 15:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688742657;
-        bh=c/6GsVA45vCVygJLHm9uSIuA4a9N3IEvCjiocGfjIdA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nsGQI8CW3xiUFF77osUHi1yahuZMl82hnPwImUllGETvW6ErXH1jsqgDeagGPootK
-         AZo7gQRG9yzKAEeBVyYov+MR0Xx2rH1Iakck7CKhRRLIiiFeqeQltV/pPgZkdroFLq
-         7ySLxAaahGG1UTwZEPHMqHuul77gWGMcYFzKkYQQ=
-Date:   Fri, 7 Jul 2023 17:10:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
-Message-ID: <2023070744-superjet-slum-1772@gregkh>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
- <2023070748-false-enroll-e5dc@gregkh>
- <febd65e1-68c7-f9d8-c8a4-3c3e88f15f3e@foss.st.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D28691C060C9;
+        Fri,  7 Jul 2023 15:11:26 +0000 (UTC)
+Received: from omen.home.shazbot.org (unknown [10.22.17.80])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 70FCAC09A09;
+        Fri,  7 Jul 2023 15:11:26 +0000 (UTC)
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     bhelgaas@google.com
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eric.auger@redhat.com
+Subject: [PATCH] PCI/VPD: Add runtime power management to sysfs interface
+Date:   Fri,  7 Jul 2023 09:10:44 -0600
+Message-Id: <20230707151044.1311544-1-alex.williamson@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <febd65e1-68c7-f9d8-c8a4-3c3e88f15f3e@foss.st.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 04:00:23PM +0200, Gatien CHEVALLIER wrote:
-> I'll change to (GPL-2.0-only OR BSD-3-Clause) :)
+Unlike default access to config space through sysfs, the vpd read and
+write function don't actively manage the runtime power management state
+of the device during access.  Since commit 7ab5e10eda02 ("vfio/pci: Move
+the unused device into low power state with runtime PM"), the vfio-pci
+driver will use runtime power management and release unused devices to
+make use of low power states.  Attempting to access VPD information in
+this low power state can result in incorrect information or kernel
+crashes depending on the system behavior.
 
-If you do that, I'll require a lawyer to sign off on it to verify that
-you all know EXACTLY the work involved in dealing with dual-licensed
-kernel code.  Sorry, licenses aren't jokes.
+Wrap the vpd read/write bin attribute handlers in runtime PM and take
+into account the potential quirk to select the correct device to wake.
 
-thanks,
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+---
+ drivers/pci/vpd.c | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/drivers/pci/vpd.c b/drivers/pci/vpd.c
+index a4fc4d0690fe..81217dd4789f 100644
+--- a/drivers/pci/vpd.c
++++ b/drivers/pci/vpd.c
+@@ -275,8 +275,23 @@ static ssize_t vpd_read(struct file *filp, struct kobject *kobj,
+ 			size_t count)
+ {
+ 	struct pci_dev *dev = to_pci_dev(kobj_to_dev(kobj));
++	struct pci_dev *vpd_dev = dev;
++	ssize_t ret;
++
++	if (dev->dev_flags & PCI_DEV_FLAGS_VPD_REF_F0) {
++		vpd_dev = pci_get_func0_dev(dev);
++		if (!vpd_dev)
++			return -ENODEV;
++	}
++
++	pci_config_pm_runtime_get(vpd_dev);
++	ret = pci_read_vpd(vpd_dev, off, count, buf);
++	pci_config_pm_runtime_put(vpd_dev);
++
++	if (dev != vpd_dev)
++		pci_dev_put(vpd_dev);
+ 
+-	return pci_read_vpd(dev, off, count, buf);
++	return ret;
+ }
+ 
+ static ssize_t vpd_write(struct file *filp, struct kobject *kobj,
+@@ -284,8 +299,23 @@ static ssize_t vpd_write(struct file *filp, struct kobject *kobj,
+ 			 size_t count)
+ {
+ 	struct pci_dev *dev = to_pci_dev(kobj_to_dev(kobj));
++	struct pci_dev *vpd_dev = dev;
++	ssize_t ret;
++
++	if (dev->dev_flags & PCI_DEV_FLAGS_VPD_REF_F0) {
++		vpd_dev = pci_get_func0_dev(dev);
++		if (!vpd_dev)
++			return -ENODEV;
++	}
++
++	pci_config_pm_runtime_get(vpd_dev);
++	ret = pci_write_vpd(vpd_dev, off, count, buf);
++	pci_config_pm_runtime_put(vpd_dev);
++
++	if (dev != vpd_dev)
++		pci_dev_put(vpd_dev);
+ 
+-	return pci_write_vpd(dev, off, count, buf);
++	return ret;
+ }
+ static BIN_ATTR(vpd, 0600, vpd_read, vpd_write, 0);
+ 
+-- 
+2.40.1
+
