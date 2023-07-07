@@ -2,261 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A64574B2ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D51874B2F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbjGGOQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S233045AbjGGORp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbjGGOQo (ORCPT
+        with ESMTP id S231249AbjGGORn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:16:44 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D1B10B;
-        Fri,  7 Jul 2023 07:16:40 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688739398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BzBJkXTDJKrU1/z9U4Pc1CCjnQpHhlKjMBAd1ZCx47k=;
-        b=G/dBPL71CVZm42FuZqmnDkEO4AJQtnS7JuhpF/zCtww1axUTRsnHzVj02MNqb9ik7azTEI
-        MYjKzwqzL2FQXFC0UHHDwQne/XnrroBgWZMqRXpw3R9WHRvIRLhCo6QoOUrFkk44VfhREQ
-        7daqaAY389A0WaVf0rHsTzeQfleetK3WJwmijJPNgplXH0MEj45YwpljcrzVnioUEnewdv
-        l7wdGiSk4bIGVvQtBf8vbk9g1hNxoKbxyRGkL3DSzklHapLzmHlucH+SqcuDWe2HD14Qxn
-        t2faT4fOk6y52MvWh19njwKEPW5nplUy1z7DiwhXyYFK+5cCH+l4bNJmzhiM/A==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 212264000A;
-        Fri,  7 Jul 2023 14:16:37 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 16:16:37 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
-Message-ID: <20230707141637e7364385@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
- <Y8rl452Xm1FrnFfF@mail.local>
- <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
- <20230621125945.1f10b66832d0d1c61e21f78d@hugovil.com>
- <20230621181441cd214f99@mail.local>
- <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
- <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 7 Jul 2023 10:17:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8DD125;
+        Fri,  7 Jul 2023 07:17:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EA77619D3;
+        Fri,  7 Jul 2023 14:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61B6C433C7;
+        Fri,  7 Jul 2023 14:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688739461;
+        bh=74TZJ8DeE44QYRS49fC72fWhJ1prqaoZEaYSRbQGNqs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=R/zk6E3JYbftUInhMFoZYTLJTS9Ver38FrAGJYGDLg48/1nqGS/SziwjqaI0uQ8mF
+         9uLLO7Cp94P6wOdloklj2Y/7wrSRJt7CEE0DXPQ2KSBBrbXG+mYq6wLslX/vTfI+1W
+         pgq6NN6xNIFIcguJ639U3T/ObwuslPK5zEjXdlTFPNrJMc+jdRCDoMCiT4GP4oMufr
+         x6Cim/0DLMaOFwwTK3vOt8fmQO3/TnbVISve1eyccMtkGCkMoKGsy5ufum64rvMcyu
+         0KyIrk7yPq+zWMhYfRTNEs5ovJGutkCRmo8w8bkGnE8D5Q8BUg4Vq2a/jG8QT6c535
+         LnQlVdhJcw2rA==
+Date:   Fri, 7 Jul 2023 23:17:30 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v11 02/11] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-Id: <20230707231730.7e2d176d729718a9ba51255a@kernel.org>
+In-Reply-To: <20230608165234.0c00c146@gandalf.local.home>
+References: <168432112492.1351929.9265172785506392923.stgit@mhiramat.roam.corp.google.com>
+        <168432114441.1351929.4695419422051966931.stgit@mhiramat.roam.corp.google.com>
+        <20230608165234.0c00c146@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 8 Jun 2023 16:52:34 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-On 05/07/2023 09:40:12-0400, Hugo Villeneuve wrote:
-> On Wed, 21 Jun 2023 14:28:52 -0400
-> Hugo Villeneuve <hugo@hugovil.com> wrote:
+> On Wed, 17 May 2023 19:59:04 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> > On Wed, 21 Jun 2023 20:14:41 +0200
-> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > Add fprobe events for tracing function entry and exit instead of kprobe
+> > events. With this change, we can continue to trace function entry/exit
+> > even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+> > CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+> > it is not available if the architecture only supports
+> > CONFIG_DYNAMIC_FTRACE_WITH_ARGS. And that means kprobe events can not
+> > probe function entry/exit effectively on such architecture.
+> > But this can be solved if the dynamic events supports fprobe events.
 > > 
-> > > On 21/06/2023 12:59:45-0400, Hugo Villeneuve wrote:
-> > > > On Wed, 21 Jun 2023 10:14:29 -0400
-> > > > Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > > > 
-> > > > > On Fri, 20 Jan 2023 20:05:07 +0100
-> > > > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > > > > 
-> > > > > > Hello,
-> > > > > > 
-> > > > > > I know I've been holding off on the review of this series for a while
-> > > > > > and I'm sorry for that.
-> > > > > > 
-> > > > > > One of the main issue that is remaining is that the driver ends up being
-> > > > > > 53% bigger and generaly less efficient for no added functionality for
-> > > > > > the existing RTCs.
-> > > > > > 
-> > > > > > I know performance is not a concern however, having more code in the
-> > > > > > set/read time and irq paths means that it is more difficult to set an
-> > > > > > get the time precisely.
-> > > > > 
-> > > > > Hi Alexandre,
-> > > > > one way to keep rtc_read_time() as efficient as before, and even more
-> > > > > efficient by reading 7 instead of 10 registers, would be to drop reading
-> > > > > the CTRL3 register, which is only used to detect and display an info
-> > > > > message for the low battery condition. This low battery check could be
-> > > > > moved to an ioctl call, like it is done in the PCF8523 driver.
-> > > > > 
-> > > > > Hugo.
-> > > > 
-> > > > Hi,
-> > > > in fact it is already part of the ioctl, so it is even simpler...
-> > > > 
-> > > 
-> > > Yes, the dev_info can be removed.
+> > The fprobe event is a new dynamic events which is only for the function
+> > (symbol) entry and exit. This event accepts non register fetch arguments
+> > so that user can trace the function arguments and return values.
 > > 
-> > Hi,
-> > great, I will integrate that patch to improve rtc_read_time()
-> > performance, and resubmit V4 soon with the requested changes mentioned
-> > during V3 review.
+> > The fprobe events syntax is here;
 > > 
-> > Thank you, Hugo.
+> >  f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+> >  f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
 > 
-> Hi Alexandre,
-> I submitted V4 a few days ago, please let me know if everything is
-> in order and all comments properly addressed.
+> I finally got around to look at these (I know you already queued them), but
+> looking at the above, the "%return" is redundant.
 > 
-> If all is good, any chance we can have that integrated into v6.5?
+> > 
+> > E.g.
+> > 
+> >  # echo 'f vfs_read $arg1'  >> dynamic_events
+> >  # echo 'f vfs_read%return $retval'  >> dynamic_events
+> >  # cat dynamic_events
+> >  f:fprobes/vfs_read__entry vfs_read arg1=$arg1
+> >  f:fprobes/vfs_read__exit vfs_read%return arg1=$retval
+> 
+> Can't we just have:
+> 
+>   f:fprobes/vfs_read__entry vfs_read arg1=$arg1
+>   f:fprobes/vfs_read__exit vfs_read arg1=$retval
+> 
+> Where if "$retval" is specified, it automatically becomes a return? If
+> anything else is specified, it errors out. That is, if $retval is
+> specified, it becomes a return probe, as a return probe can only have
+> $retval. If anything else is specified, it errors out if $retval is also
+> specified.
+
+Hmm, current implementation design doesn't allow that.
+It parses the 'place' and 'args' sequencially because what 'args' is
+available depends on the place.
+
+> 
+> Now if it's a void function, and you just want to make it a return then we
+> can have your:
+> 
+>   f:fprobes/vfs_read__exit vfs_read%return
+> 
+> Thoughts?
+
+But this sounds useful. Let me try to scan the argument to find $retval.
+
+Thank you,
+
+> 
+> -- Steve
+> 
+> 
 > 
 
-I've seen v4, I'll review more this week end but it looks good. However,
-I have to wait for 6.5-rc1 to apply it. This means it won't be in before v6.6.
-
-> Thank you, Hugo.
-> 
-> 
-> > > > > > I guess I'll take it as a merged driver but I took a different decision
-> > > > > > for other RTCs.
-> > > > > > 
-> > > > > > On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
-> > > > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > > > 
-> > > > > > > Hello,
-> > > > > > > this patch series adds the driver for the PCF2131 real-time clock.
-> > > > > > > 
-> > > > > > > This RTC is very similar in functionality to the PCF2127/29 with the
-> > > > > > > following differences:
-> > > > > > >   -supports two new control registers at offsets 4 and 5
-> > > > > > >   -supports a new reset register
-> > > > > > >   -supports 4 tamper detection functions instead of 1
-> > > > > > >   -has no nvmem (like the PCF2129)
-> > > > > > >   -has two output interrupt pins instead of one
-> > > > > > >   -has 1/100th seconds capabilities (not supported in this driver)
-> > > > > > >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
-> > > > > > >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
-> > > > > > >   -watchdog value register cannot be read after being set
-> > > > > > > 
-> > > > > > > Most of the register addresses are very different, although they still
-> > > > > > > follow the same layout. For example, the time/date and tamper registers
-> > > > > > > have a different base address, but the offsets are all the same.
-> > > > > > > Consequently, the source code of the PCF2127 driver can be easily adapted
-> > > > > > > to support this new device.
-> > > > > > > 
-> > > > > > > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
-> > > > > > > and able to support multiple variants, like the PCF2131. This is done
-> > > > > > > mostly by using offsets instead of absolute hardcoded register addresses.
-> > > > > > > 
-> > > > > > > Patch 7 add actual support for the PCF2131.
-> > > > > > > 
-> > > > > > > Patch 8 configures all interrupt sources to go through the INT A pin.
-> > > > > > > 
-> > > > > > > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
-> > > > > > >       are with the PCF2127/29 (different default values).
-> > > > > > > 
-> > > > > > > Patch 10 allow to confirm PCF2131 device presence by reading the reset
-> > > > > > >       register fixed pattern.
-> > > > > > > 
-> > > > > > > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
-> > > > > > >       CPR bits).
-> > > > > > > 
-> > > > > > > Patch 12 add support for generic watchdog timing configuration.
-> > > > > > > 
-> > > > > > > Patch 13 add a new flag to identify if device has read support for reading
-> > > > > > >       watchdog register value.
-> > > > > > >       Since the watchdog value register cannot be read on the PCF2131 after
-> > > > > > >       being set, it seems that we cannot detect if watchdog timer was
-> > > > > > >       started by bootloader. I am not sure what is the best way to handle
-> > > > > > >       this situation, suggestions are welcomed.
-> > > > > > > 
-> > > > > > > Patch 14 add the dt-bindings for the PCF2131.
-> > > > > > > 
-> > > > > > > I have tested the driver using a PCF2131-ARD evaluation board connected to
-> > > > > > > an NXP imx8mp evaluation board:
-> > > > > > >   - Time get/set ok;
-> > > > > > >   - Alarms get/set ok
-> > > > > > >   - Timestamp 1 to 4 ok
-> > > > > > >   - IRQ alarm ok
-> > > > > > >   - Watchdog ok
-> > > > > > >   - Also tested successfully with "RTC Driver Test Example" from
-> > > > > > >     Documentation/rtc.txt
-> > > > > > > 
-> > > > > > > I have also tested the driver on a custom PCF2129 adapter board connected to a
-> > > > > > > beaglebone black.
-> > > > > > > 
-> > > > > > > Thank you.
-> > > > > > > 
-> > > > > > > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
-> > > > > > > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
-> > > > > > > 
-> > > > > > > Changes for V3:
-> > > > > > > - Rebased for kernel v6.1
-> > > > > > > 
-> > > > > > > Changes for V2:
-> > > > > > > - In general, fix and improvements after I have tested on real hardware
-> > > > > > > - Fix alarm interrupt A/B mask setting for PCF2131:
-> > > > > > >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
-> > > > > > > - Remove low_reg validation: only check if TS interrupt flag is
-> > > > > > >   defined, as low_reg is defined at address 0 for PCF2127/29.
-> > > > > > > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
-> > > > > > > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
-> > > > > > > - Map all interrupt sources to INT A pin
-> > > > > > > - Read and validate PCF2131 device presence from RESET register
-> > > > > > > - Adapt watchdog configuration for PCF2131
-> > > > > > > 
-> > > > > > > Hugo Villeneuve (14):
-> > > > > > >   rtc: pcf2127: add variant-specific configuration structure
-> > > > > > >   rtc: pcf2127: adapt for time/date registers at any offset
-> > > > > > >   rtc: pcf2127: adapt for alarm registers at any offset
-> > > > > > >   rtc: pcf2127: adapt for WD registers at any offset
-> > > > > > >   rtc: pcf2127: adapt for CLKOUT register at any offset
-> > > > > > >   rtc: pcf2127: add support for multiple TS functions
-> > > > > > >   rtc: pcf2127: add support for PCF2131 RTC
-> > > > > > >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
-> > > > > > >   rtc: pcf2127: set PWRMNG value for PCF2131
-> > > > > > >   rtc: pcf2127: read and validate PCF2131 device signature
-> > > > > > >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
-> > > > > > >   rtc: pcf2127: support generic watchdog timing configuration
-> > > > > > >   rtc: pcf2127: add flag for watchdog register value read support
-> > > > > > >   dt-bindings: rtc: pcf2127: add PCF2131
-> > > > > > > 
-> > > > > > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
-> > > > > > >  drivers/rtc/Kconfig                           |   4 +-
-> > > > > > >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
-> > > > > > >  3 files changed, 752 insertions(+), 195 deletions(-)
-> > > > > > > 
-> > > > > > > -- 
-> > > > > > > 2.30.2
-> > > > > > > 
-> > > > > > 
-> > > > > > -- 
-> > > > > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > > > > Embedded Linux and Kernel engineering
-> > > > > > https://bootlin.com
-> > > > > > 
-> > > 
-> > > -- 
-> > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
-> > > 
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
