@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F3C74A939
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F65474A94D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjGGDGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 23:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S231616AbjGGDSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 23:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGGDGr (ORCPT
+        with ESMTP id S230126AbjGGDSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 23:06:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03C01BDB;
-        Thu,  6 Jul 2023 20:06:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5841560F0E;
-        Fri,  7 Jul 2023 03:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F98C433C8;
-        Fri,  7 Jul 2023 03:06:45 +0000 (UTC)
-Date:   Thu, 6 Jul 2023 23:06:42 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tracing/probes: Fix return value when "(fault)" is
- injected
-Message-ID: <20230706230642.3793a593@rorschach.local.home>
-In-Reply-To: <20230707115128.80b6acf06f4bfa996d9d0808@kernel.org>
-References: <168830922841.2278819.9165254236027770818.stgit@mhiramat.roam.corp.google.com>
-        <168830925534.2278819.7237772177111801959.stgit@mhiramat.roam.corp.google.com>
-        <20230705224956.1c5213e6@gandalf.local.home>
-        <20230706134036.5c074aa5fc6a55cdb5038660@kernel.org>
-        <20230706095039.1cb9c9d1@gandalf.local.home>
-        <20230707110210.06e81e182c775454ce86280d@kernel.org>
-        <20230706222020.6e5c8e89@rorschach.local.home>
-        <20230707115128.80b6acf06f4bfa996d9d0808@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 6 Jul 2023 23:18:13 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDB11BF3;
+        Thu,  6 Jul 2023 20:18:12 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qxz9r0m6hz4f43Kd;
+        Fri,  7 Jul 2023 11:18:08 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgD3mp7vg6dk0X+NNQ--.406S4;
+        Fri, 07 Jul 2023 11:18:08 +0800 (CST)
+From:   Zhong Jinghua <zhongjinghua@huaweicloud.com>
+To:     josef@toxicpanda.com, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org, zhongjinghua@huaweicloud.com,
+        yi.zhang@huawei.com, yukuai3@huawei.com
+Subject: [PATCH -next 0/3] nbd: fix null-ptr-dereference while accessing 'nbd->config'
+Date:   Fri,  7 Jul 2023 11:15:33 +0800
+Message-Id: <20230707031536.666482-1-zhongjinghua@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3mp7vg6dk0X+NNQ--.406S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrGr17Xw15KrWfXr18ur15Arb_yoWxWrc_uF
+        97CFyxtr4j9a48Ca40vF48JryDKa1UGFWjyF17J39xX3yxZFn7Jw1Dtr45Zr17Za1jyrWU
+        ZrW8Zan7Aw48KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbz8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: x2kr0wpmlqwxtxd6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 11:51:28 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+From: Zhong Jinghua <zhongjinghua@huawei.com>
 
-> Ah, I meant that your commit 2e9906f84fc7 ("tracing: Add "(fault)" name injection
->  to kernel probes") tries to make it '"(fault)"', So it makes 
-> 
->        trace-cmd-4688    [000] ...1. 466968.015879: myopen: (syscalls.sys_enter_openat) file="(fault)"
-> 
-> Keeping it current '(fault)' makes easy to identify which one is failed to fetch,
-> but it may require user to parse both "some string" and (fault). I thought that
-> was the reason why you added that commit.
+nbd->config = config and refcount_set(&nbd->config_refs, 1) in
+nbd_genl_connect may be out of order, causing config_refs to be set to 1
+first, and then nbd_open accessing nbd->config reports a null pointer
+reference.
 
-Hmm, That commit didn't explicitly add the double quotes. That may just
-have been a side effect of passing back the string?
+Zhong Jinghua (3):
+  nbd: fold nbd config initialization into nbd_alloc_config()
+  nbd: factor out a helper to get nbd_config without holding
+    'config_lock'
+  nbd: fix null-ptr-dereference while accessing 'nbd->config'
 
-But I agree, just (fault) instead of "(fault)" is more explicit that it
-faulted.
+ drivers/block/nbd.c | 82 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 53 insertions(+), 29 deletions(-)
 
--- Steve
+-- 
+2.31.1
+
