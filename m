@@ -2,223 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551C374B5CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435AE74B5D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjGGR11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S232662AbjGGR3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbjGGR1Z (ORCPT
+        with ESMTP id S229688AbjGGR3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:27:25 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9931FE1
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:27:21 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so3538889e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 10:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688750839; x=1691342839;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pie0TuI2jx2W3y8h1za0Cn+RvUBauG4amwyIpA5SmOA=;
-        b=X00vIOV2FhhbwPlMjuxAVk83Z8e87CvT7IDRoto1igGEGTSZaJBg5TB3DMOWz4T2X1
-         4EZBkAq4KAUjHG0Om2hDq/tLvQVMqVoTZfMSjxUA24acDg/cSryqGH4p5ZPLrI6r3L8t
-         aHbklzy7lv5HzWxFw430mKS59ecL5nwDtcB8U6A3tOhspdfp2aJNKctMhBNhHElYhYab
-         5eGUX2mY5PC6sE0ka6p2AMyulBmron46nNTFpzq3xlReyCApJe8cBFF+tOFN6lu4j1x1
-         avaLq+YkxNneDKt+5evi/84tRs10m3up9wpEk+RazkMXIVhzlITgeEGa5scAhaBERujF
-         jWRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688750839; x=1691342839;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pie0TuI2jx2W3y8h1za0Cn+RvUBauG4amwyIpA5SmOA=;
-        b=PkzmxbGFGpZW1Q4Vkf6QI3A87SeDIgCvAYA6lEo4NTb2j2AWxYuLj2YIZPKBeuiXyA
-         rQywbUidDi7o09PD8VXtnISkV+gD31V9KeidPxXF4IRWTVhb8y4IFH/Z0QOeHEW3WEKX
-         Lu0xLnnJKd+X4FW5uQEzEmU1ByzN9MQuHkpDpzKLBwiKPQXmdZWy0Of6FEMqG1/SXzNu
-         D0JYYC6xbJyDVt5ELWISHdP54l8GtW1QkmNVIhjyGq4hEP+j3zclIxsQeZL5aQqp9by8
-         hLWesVzg+4PNJlfUzmjkSOjuOIVH0qxVHkfHoFa8ivVdTdnmle81HPPKhBojyQxePgeS
-         8AIA==
-X-Gm-Message-State: ABy/qLY60zx+eJiBxHzzd3Wwiys5bi48/jSzjHo2C39XG4k+mm/ALARi
-        3roxjmk9WejXXFwnMt+OzG9Y3Q==
-X-Google-Smtp-Source: APBJJlGgQ0wGNjCEyJhkPBqPKGqZ6eZBMe0jQXs1JyNCnpqaoR0cmVPsWC8RXhGdVuEkMLwMVl+efg==
-X-Received: by 2002:ac2:5f92:0:b0:4fb:9075:4fca with SMTP id r18-20020ac25f92000000b004fb90754fcamr4290919lfe.11.1688750839465;
-        Fri, 07 Jul 2023 10:27:19 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id l15-20020a19c20f000000b004efae490c51sm752504lfc.240.2023.07.07.10.27.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 10:27:18 -0700 (PDT)
-Message-ID: <cc153fa9-b9e0-f714-ce5b-1a4a0cb55cc7@linaro.org>
-Date:   Fri, 7 Jul 2023 20:27:18 +0300
+        Fri, 7 Jul 2023 13:29:01 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121281FE0
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:28:59 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:56172)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qHpGK-00HIAl-AI; Fri, 07 Jul 2023 11:28:56 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:60874 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qHpGJ-00Ek6z-5y; Fri, 07 Jul 2023 11:28:55 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "brgerst@gmail.com" <brgerst@gmail.com>
+References: <20230706052231.2183-1-xin3.li@intel.com>
+        <87v8exgmot.fsf@email.froward.int.ebiederm.org>
+        <SA1PR11MB67348D11385F584354AB84C3A82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+        <SA1PR11MB6734F3F72095C4D6B9C12C9BA82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+Date:   Fri, 07 Jul 2023 12:28:13 -0500
+In-Reply-To: <SA1PR11MB6734F3F72095C4D6B9C12C9BA82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+        (Xin3 Li's message of "Fri, 7 Jul 2023 04:16:47 +0000")
+Message-ID: <87sf9zfx76.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [Freedreno] [PATCH] drm/msm: Check for the GPU IOMMU during bind
-Content-Language: en-GB
-To:     freedreno@lists.freedesktop.org,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Sean Paul <sean@poorly.run>, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        David Airlie <airlied@gmail.com>
-References: <20230309222049.4180579-1-jorcrous@amazon.com>
- <d73f6733-e605-0cf8-7909-8cced6e3b70d@linaro.org>
- <20230707150307.vb4otu5e6hwoadyf@amazon.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230707150307.vb4otu5e6hwoadyf@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1qHpGJ-00Ek6z-5y;;;mid=<87sf9zfx76.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19MFWwAxB9up/uPIKvfkqhggKcsdpx8Cdo=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;"Li, Xin3" <xin3.li@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 588 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (1.8%), b_tie_ro: 9 (1.6%), parse: 0.93 (0.2%),
+         extract_message_metadata: 12 (2.0%), get_uri_detail_list: 1.49 (0.3%),
+         tests_pri_-2000: 11 (1.8%), tests_pri_-1000: 2.5 (0.4%),
+        tests_pri_-950: 1.22 (0.2%), tests_pri_-900: 1.01 (0.2%),
+        tests_pri_-200: 0.85 (0.1%), tests_pri_-100: 4.2 (0.7%),
+        tests_pri_-90: 266 (45.3%), check_bayes: 261 (44.4%), b_tokenize: 7
+        (1.2%), b_tok_get_all: 171 (29.0%), b_comp_prob: 2.2 (0.4%),
+        b_tok_touch_all: 78 (13.2%), b_finish: 0.90 (0.2%), tests_pri_0: 263
+        (44.7%), check_dkim_signature: 0.50 (0.1%), check_dkim_adsp: 3.5
+        (0.6%), poll_dns_idle: 0.99 (0.2%), tests_pri_10: 2.0 (0.3%),
+        tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] x86/ia32: Do not modify the DPL bits for a null selector
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2023 18:03, Jordan Crouse wrote:
-> On Thu, Jul 06, 2023 at 09:55:13PM +0300, Dmitry Baryshkov wrote:
->>
->> On 10/03/2023 00:20, Jordan Crouse wrote:
->>> While booting with amd,imageon on a headless target the GPU probe was
->>> failing with -ENOSPC in get_pages() from msm_gem.c.
->>>
->>> Investigation showed that the driver was using the default 16MB VRAM
->>> carveout because msm_use_mmu() was returning false since headless devices
->>> use a dummy parent device. Avoid this by extending the existing is_a2xx
->>> priv member to check the GPU IOMMU state on all platforms and use that
->>> check in msm_use_mmu().
->>>
->>> This works for memory allocations but it doesn't prevent the VRAM carveout
->>> from being created because that happens before we have a chance to check
->>> the GPU IOMMU state in adreno_bind.
->>>
->>> There are a number of possible options to resolve this but none of them are
->>> very clean. The easiest way is to likely specify vram=0 as module parameter
->>> on headless devices so that the memory doesn't get wasted.
->>
->> This patch was on my plate for quite a while, please excuse me for
->> taking it so long.
-> 
-> No worries. I'm also chasing a bunch of other stuff too.
-> 
->> I see the following problem with the current code. We have two different
->> instances than can access memory: MDP/DPU and GPU. And each of them can
->> either have or miss the MMU.
->>
->> For some time I toyed with the idea of determining whether the allocated
->> BO is going to be used by display or by GPU, but then I abandoned it. We
->> can have display BOs being filled by GPU, so handling it this way would
->> complicate things a lot.
->>
->> This actually rings a tiny bell in my head with the idea of splitting
->> the display and GPU parts to two different drivers, but I'm not sure
->> what would be the overall impact.
-> 
-> As I now exclusively work on headless devices I would be 100% for this,
-> but I'm sure that our laptop friends might not agree :)
+"Li, Xin3" <xin3.li@intel.com> writes:
 
-I do not know here. This is probably a question to Rob, as he better 
-understands the interaction between GPU and display parts of the userspace.
+>> Thus 3 as a selector is the same as 0, and it doesn't matter to change it or not. But
+>> when IRET sees an invalid segment register in ES, FS, GS, and DS, it sets it to 0,
+>> making 0 a preferred null selector value.
+>
+> To clarify, an invalid segment register value includes NULL selector values.
 
-> 
->> More on the msm_use_mmu() below.
->>
->>>
->>> Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
->>> ---
->>>
->>>    drivers/gpu/drm/msm/adreno/adreno_device.c | 6 +++++-
->>>    drivers/gpu/drm/msm/msm_drv.c              | 7 +++----
->>>    drivers/gpu/drm/msm/msm_drv.h              | 2 +-
->>>    3 files changed, 9 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> index 36f062c7582f..4f19da28f80f 100644
->>> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> @@ -539,7 +539,11 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
->>>        DBG("Found GPU: %u.%u.%u.%u", config.rev.core, config.rev.major,
->>>                config.rev.minor, config.rev.patchid);
->>>
->>> -     priv->is_a2xx = config.rev.core == 2;
->>> +     /*
->>> +      * A2xx has a built in IOMMU and all other IOMMU enabled targets will
->>> +      * have an ARM IOMMU attached
->>> +      */
->>> +     priv->has_gpu_iommu = config.rev.core == 2 || device_iommu_mapped(dev);
->>>        priv->has_cached_coherent = config.rev.core >= 6;
->>>
->>>        gpu = info->init(drm);
->>> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
->>> index aca48c868c14..a125a351ec90 100644
->>> --- a/drivers/gpu/drm/msm/msm_drv.c
->>> +++ b/drivers/gpu/drm/msm/msm_drv.c
->>> @@ -318,11 +318,10 @@ bool msm_use_mmu(struct drm_device *dev)
->>>        struct msm_drm_private *priv = dev->dev_private;
->>>
->>>        /*
->>> -      * a2xx comes with its own MMU
->>> -      * On other platforms IOMMU can be declared specified either for the
->>> -      * MDP/DPU device or for its parent, MDSS device.
->>> +      * Return true if the GPU or the MDP/DPU or parent MDSS device has an
->>> +      * IOMMU
->>>         */
->>> -     return priv->is_a2xx ||
->>> +     return priv->has_gpu_iommu ||
->>>                device_iommu_mapped(dev->dev) ||
->>>                device_iommu_mapped(dev->dev->parent);
->>
->> I have a generic feeling that both old an new code is not fully correct.
->> Please correct me if I'm wrong:
->>
->> We should be using VRAM, if either of the blocks can not use remapped
->> memory. So this should have been:
->>
->> bool msm_use_mmu()
->> {
->>   if (!gpu_has_iommu)
->>     return false;
->>
->>   if (have_display_part && !display_has_mmu())
->>     return false;
->>
->>   return true;
->> }
->>
->> What do you think.
-> 
-> I would have to see (and try) the real code but that seems like it might
-> be reasonable.
+Perhaps something like patch below to make it clear that we are
+normalizing the segment values and forcing that normalization.
 
-Sure, let me craft it then.
+I am a bit confused why this code is not the same for ia32 and
+ia32_emulation.  I would think the normalization at least should apply
+to the 32bit case as well.
 
-> I would like to hear from some of the a2xx users too
-> because this mostly affects them. On 3xx and newer you've always had the
-> option of not having a MMU for GPU or display but I can't think of any
-> use cases where you wouldn't want it.
+Eric
 
-msm8974 doesn't have (working) IOMMU driver. I also think there was an 
-issue somewhere around sdm630/660. And the wonderful msm8992/4, IIRC, 
-also don't have one.
-
-Also the headless mode was quite useful for bringing up platforms, as it 
-allowed us to test GPU separately (and ofc. in some cases even w/o MMU).
-
-I have both a2xx (only iMX for now) and a3xx for the tests here, on my 
-desk.
-
--- 
-With best wishes
-Dmitry
-
+diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
+index 9027fc088f97..e5f3978388fd 100644
+--- a/arch/x86/kernel/signal_32.c
++++ b/arch/x86/kernel/signal_32.c
+@@ -36,22 +36,47 @@
+ #ifdef CONFIG_IA32_EMULATION
+ #include <asm/ia32_unistd.h>
+ 
++static inline unsigned int normalize_seg_index(unsigned int index)
++{
++	/*
++	 * Convert the segment index into normalized form.
++	 *
++	 * For the indexes 0,1,2,3 always use the value of 0, as IRET
++	 * forces this form for the nul segment.
++	 *
++	 * Otherwise set both DPL bits to force it to be a userspace
++	 * ring 3 segment index.
++	 */
++	return (index < 3) ? 0 : index | 3;
++}
++
+ static inline void reload_segments(struct sigcontext_32 *sc)
+ {
+-	unsigned int cur;
++	unsigned int new, cur;
+ 
++	new = normalize_seg_index(sc->gs);
+ 	savesegment(gs, cur);
+-	if ((sc->gs | 0x03) != cur)
+-		load_gs_index(sc->gs | 0x03);
++	cur = normalize_seg_index(cur);
++	if (new != cur)
++		load_gs_index(new);
++
++	new = normalize_seg_index(sc->fs);
+ 	savesegment(fs, cur);
+-	if ((sc->fs | 0x03) != cur)
+-		loadsegment(fs, sc->fs | 0x03);
++	cur = normalize_seg_index(cur);
++	if (new != cur)
++		loadsegment(fs, new);
++
++	new = normalize_seg_index(sc->ds);
+ 	savesegment(ds, cur);
+-	if ((sc->ds | 0x03) != cur)
+-		loadsegment(ds, sc->ds | 0x03);
++	cur = normalize_seg_index(cur);
++	if (new != cur)
++		loadsegment(ds, new);
++
++	new = normalize_seg_index(sc->es);
+ 	savesegment(es, cur);
+-	if ((sc->es | 0x03) != cur)
+-		loadsegment(es, sc->es | 0x03);
++	cur = normalize_seg_index(cur);
++	if (new != cur)
++		loadsegment(es, new);
+ }
+ 
+ #define sigset32_t			compat_sigset_t
