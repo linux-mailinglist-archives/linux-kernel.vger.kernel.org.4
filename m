@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40C674A932
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC3C74A938
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjGGDAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 23:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S231925AbjGGDFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 23:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjGGDAf (ORCPT
+        with ESMTP id S229891AbjGGDFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 23:00:35 -0400
+        Thu, 6 Jul 2023 23:05:12 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185921FDB;
-        Thu,  6 Jul 2023 20:00:30 -0700 (PDT)
-X-UUID: 629555e81c7211ee9cb5633481061a41-20230707
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168D21BF3;
+        Thu,  6 Jul 2023 20:05:01 -0700 (PDT)
+X-UUID: 0db86f501c7311ee9cb5633481061a41-20230707
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=sdsMKLe86AgB7Ww1jG/Pm8auw0bP5RdQtkXd2kIluH4=;
-        b=GHLCRsCwiQ1HQgS8HLjjrf7x1VoJZT3/e6AzRHz1lDLSfsoXKJXoFbTnX14dIhUbqGqTFyDW9IjbWm1CB+LOLRrgGnUEjGlCfdCY/SIhbs/skZiiOEjMOaBQi6gkP6gPmoFp4A9QMGdm5Bw2HdH2yNWkXFPc2LvrcX3xH+hQ/rI=;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=o9xHN/7oGZUtrbkUAsMveFVhyrPJog7Oa5wAANRKRqo=;
+        b=S3q2ySLhDnE7zuoM4rPJw+6K/NUWR7iMRCy8gYLBqOQu1GQQ+a0b0Jdgve5J33Oe+kgiViAEGbKnDXFvExxOCWbtathtqpq1zrMDHpQt1haYr6XIMA1bApZGzSsIdbYUR0IjDw2DU9qhrx1SyUT0q1onKGcpWVyfpEb5rNv7iS4=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:8dd58a6d-73d4-4483-8afa-df3b826bc850,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.27,REQID:8dd58a6d-73d4-4483-8afa-df3b826bc850,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:01c9525,CLOUDID:050aa90d-26a8-467f-b838-f99719a9c083,B
-        ulkID:2307071100130I8M34VG,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-O-INFO: VERSION:1.1.27,REQID:eac0c17c-cbe0-414e-8758-c78c395b2ebe,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:4019a90d-26a8-467f-b838-f99719a9c083,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
-X-UUID: 629555e81c7211ee9cb5633481061a41-20230707
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 0db86f501c7311ee9cb5633481061a41-20230707
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <chris.lu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 175947197; Fri, 07 Jul 2023 11:00:10 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+        with ESMTP id 960548561; Fri, 07 Jul 2023 11:04:57 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
  mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 7 Jul 2023 11:00:08 +0800
+ 15.2.1118.26; Fri, 7 Jul 2023 11:04:55 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 7 Jul 2023 11:00:08 +0800
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 7 Jul 2023 11:04:55 +0800
 From:   Chris Lu <chris.lu@mediatek.com>
 To:     Marcel Holtmann <marcel@holtmann.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
@@ -57,9 +53,9 @@ CC:     Sean Wang <sean.wang@mediatek.com>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-mediatek <linux-mediatek@lists.infradead.org>,
         Chris Lu <chris.lu@mediatek.com>
-Subject: [PATCH 1/2] Bluetooth: btusb:  Add VID 0489 & PID e102 for MediaTek MT7922 USB Bluetooth chip
-Date:   Fri, 7 Jul 2023 11:00:06 +0800
-Message-ID: <20230707030006.25144-1-chris.lu@mediatek.com>
+Subject: [PATCH v2 1/2] Bluetooth: btusb:  Add VID 0489 & PID e102 for MediaTek MT7922 USB Bluetooth chip
+Date:   Fri, 7 Jul 2023 11:04:41 +0800
+Message-ID: <20230707030442.25330-1-chris.lu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -119,6 +115,8 @@ E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
 E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
 
 Signed-off-by: Chris Lu <chris.lu@mediatek.com>
+---
+v2: update commit message
 ---
  drivers/bluetooth/btusb.c | 3 +++
  1 file changed, 3 insertions(+)
