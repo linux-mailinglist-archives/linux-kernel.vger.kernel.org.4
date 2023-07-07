@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C9174B142
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E481F74B14B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjGGMrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        id S230443AbjGGMtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjGGMre (ORCPT
+        with ESMTP id S230040AbjGGMtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:47:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7344124;
-        Fri,  7 Jul 2023 05:47:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 548AE61997;
-        Fri,  7 Jul 2023 12:47:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32AAC433C7;
-        Fri,  7 Jul 2023 12:47:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688734050;
-        bh=aIGBVnL4h550uklj+CUMoa+LNgGz6m/8MWw5loKY/Dk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U55sAdF24LuBpmMzrBY8PF4P+pcjfEHWJnDCWYRbE9X3jPFEbEmrw9/sTaHxQ4qnR
-         zTB8+hGehm2JZgcMQPW3zSkowkH5D6Ay1sslWMka9pHR03d6zYos/DzSv3uZOAQyx/
-         K8Bl9btbJeZWHrYpD8jWq1WMRMEXnZkIa6+P+SMvVLpn4u4x+VLYTfgoupbjOIR4E8
-         lvrFtJqLr4Ky/qCWFLxYUyJUw6FtFwoA+UnUqdGPGkY/lKl8VsKxTuXPy2rDfKJm9J
-         E+6wlHya/uA5YqLio50yZfe7vFB9hPCyQX691xl33ikT6AEbapNZzIM0zKGOxtT+5M
-         cH1eFd8j6Mbwg==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qHksO-0007lO-21;
-        Fri, 07 Jul 2023 14:47:56 +0200
-Date:   Fri, 7 Jul 2023 14:47:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Sajid Dalvi <sdalvi@google.com>,
-        Ajay Agarwal <ajayagarwal@google.com>
-Subject: Re: [PATCH] Revert "PCI: dwc: Wait for link up only if link is
- started"
-Message-ID: <ZKgJfG5Mi-e77LQT@hovoldconsulting.com>
-References: <20230706082610.26584-1-johan+linaro@kernel.org>
- <20230706125811.GD4808@thinkpad>
+        Fri, 7 Jul 2023 08:49:41 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F2010EA;
+        Fri,  7 Jul 2023 05:49:39 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso20291135e9.0;
+        Fri, 07 Jul 2023 05:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688734178; x=1691326178;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Va3gTS2j0Ri+TaCki30Zs9STlYulxibMuwQWnYz8AS4=;
+        b=hNgASXwoUU0YrmeQ5XA5ZVoVAPOUSHVsK0wt1UcYJlvur2vB/rG19e5gAntydXnkZO
+         w3uusptZWvnhBOL4ybghY12Oab3HcG/4SA9892eBpaNbOf2Uq/8hkq5AODWmtqb5/Gfh
+         D6DHk6FiWJ8LDACtqVemFfXqnmIjbNhZp/9QhsOnzQzg+RYtfgXihUg3kl1GlT09PXXi
+         o4fdkgdllMy58VTZhsp5BuaTJMaNXZgpkQv+i7DcvxBNWyX8F4GNyWDYECKhcmlrIsxy
+         1os01q/SiBxRb/SeTWXVM4IVXxmz3Zt2Rk/j+i4+Qi/jlTikn087lt88J8cjrctuWwLf
+         6FOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688734178; x=1691326178;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Va3gTS2j0Ri+TaCki30Zs9STlYulxibMuwQWnYz8AS4=;
+        b=k0EzlvxNsDvEIOYUJzv27Q0vRJEfQwNfFrxKXIMWUamF58hQeOh1uh+brg/MbIXRyz
+         nY3TiQy7FZgi+T0Ipnmvt/p55ZLkhNt8z3jM84tvZyilxS9IZu+JHA0vrriRnzk+kRX0
+         aQ2MZacs78+J0az/0U1migJmMPPRqSaZoQeXc8IpZhJTPemeCX/bLBS2RVP+gHe7yR38
+         ijFIjb93NQ1QQKA+7d1WM6bMizVBt3TdJLIoZOyQvMcikoa02kvql8rwv/Sf/+Xj+KKA
+         3r/KcNfCdOwtVdJdPdRBTnCBZxMF+J+oL6vT4XfWo91npPUSXf+bfR1dbJUl4TVhNEE6
+         NENQ==
+X-Gm-Message-State: ABy/qLa706Cn9O0GwwgVblGXdYInrM1Q0hyO+p8u4gW3LpkTN9eev95J
+        rDJg2RWyu/WaCqueJo+GRbo=
+X-Google-Smtp-Source: APBJJlFX5h/5Cp1ugMLiBnfzudJYd7a8Zbtz+ODTURxKx98aOWLCXSASNUlxrzpC+NPK6uiltearNQ==
+X-Received: by 2002:a7b:c445:0:b0:3fb:a46c:7eac with SMTP id l5-20020a7bc445000000b003fba46c7eacmr3684828wmi.7.1688734178223;
+        Fri, 07 Jul 2023 05:49:38 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id l20-20020a7bc354000000b003fbb8c7c799sm2387690wmj.30.2023.07.07.05.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 05:49:37 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:49:36 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Damien Le Moal <dlemoal@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] ata: ahci_tegra: Convert to
+ devm_platform_ioremap_resource()
+Message-ID: <ZKgJ4E9X_KcHj1WM@orome>
+References: <20230707095513.64224-1-frank.li@vivo.com>
+ <20230707095513.64224-4-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2ty/DDzd14/803Q9"
 Content-Disposition: inline
-In-Reply-To: <20230706125811.GD4808@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230707095513.64224-4-frank.li@vivo.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 06:28:11PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Jul 06, 2023 at 10:26:10AM +0200, Johan Hovold wrote:
 
-> > Finally, note that the intel-gw driver is the only driver currently not
-> > providing a start_link callback and instead starts the link in its
-> > host_init callback, and which may avoid an additional one-second timeout
-> > during probe by making the link-up wait conditional. If anyone cares,
-> > that can be done in a follow-up patch with a proper motivation.
+--2ty/DDzd14/803Q9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The offending commit is bogus since it makes the intel-gw _special_ w.r.t
-> waiting for the link up. Most of the drivers call dw_pcie_host_init() during the
-> probe time and they all have to wait for 1 sec if the slot is empty.
+On Fri, Jul 07, 2023 at 05:55:06PM +0800, Yangtao Li wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
+>=20
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  drivers/ata/ahci_tegra.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Just to clarify, the intel-gw driver starts the link and waits for link
-up in its host_init() callback, which is called during probe. That wait
-could possibly just be dropped in favour of the one in
-dw_pcie_host_init() and/or the driver could be reworked to implement
-start_link().
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-Either way, the call in dw_pcie_host_init() will only add an additional
-1 second delay in cases where the link did *not* come up.
+--2ty/DDzd14/803Q9
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> As Johan noted, intel-gw should make use of the async probe to avoid the boot
-> delay instead of adding a special case.
+-----BEGIN PGP SIGNATURE-----
 
-Indeed.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSoCd0ACgkQ3SOs138+
+s6F66w/9Gx7wEbknyiiEmjGQohgnzFz9QdkY7uOPg/m+rSDytZXQto94H0Ym9TlA
+BxMSXlQvsmU0hgzamJUXcRvHp/TXUwiMTT1PFVROSk2HRRQfi49Na7KYCntkvUqt
+uJe97GNSZN1WXwpaDKYNCOcgOHycL5lenJEb5jrVbSfnn73DfzCWrhjaLdl/gt3V
++D7/LsVKr9BfJzMJtF6IMl98pn8gGMpL3gbwZV/B9ckDmXwOuEbC7FL21//Xf7bF
+6Osh9sZ1AeN2Ijyz+8XKvEK+c0+dZNX0Dcua2+A4X6yZ4zHlYFIxmOpviEP329Sv
+zXLv954ru3RyCawTfERFjTFKrd1+XMbhXm3AzHsEXF3bdVRyAft1W0hZ96WRB5HV
+xvxDZM2V2sFuZ0T/+fpnpjmvxpF/z5enMTEfKPdbzGrWZy5VNABxhN6SebnLXwJ1
+OAbCAOCxfjS+oK2tyJMfCZY2Pff7KUlO3xTisGQdSljMa/c4p5Wa6sOWLvqIJs8c
+zvsrQz8epuYiKM1pqK3vGhAOg0EFtp09qe2FXpTXuCR8t09CsDmb6mQHQl87MEXc
+NGoreuG1xUIOxNDH4FWEXWieevX980qS89eVsEDbscqeQB4q7qRiyxOBAiWibvBn
+UYtSqnWfirCYfCgGzfjVA1Tg9APfeoqSDnU1mBkLHPBUlAWhWEs=
+=zriF
+-----END PGP SIGNATURE-----
 
-Johan
+--2ty/DDzd14/803Q9--
