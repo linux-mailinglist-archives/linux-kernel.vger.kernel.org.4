@@ -2,337 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA7774A99F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 06:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5D174A9A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 06:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjGGECE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 00:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S230126AbjGGEGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 00:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjGGEBs (ORCPT
+        with ESMTP id S229525AbjGGEGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 00:01:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49E81FD7;
-        Thu,  6 Jul 2023 21:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688702506; x=1720238506;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VZx8xHPedaTRV9qKZIweeiLjMoAAs5qAkOe10n7Tb9Y=;
-  b=neXvGJ/OY4WMoBD50omoAvlbp0K/GGec+ezrLX9I5J/gzz3K7btippfH
-   Hv89CSUd3dzKcL6upZ9/3GTbmen4xUrvZ6os5TyWEsEv+nzelgZjFpNQ9
-   WOMgKs78+nOgPeLXMTySdv0qf5X8lMeanq+4r1IGyNHqBd8Rua7BM7qlv
-   wyMDWoyuYd6uzYMRzWdrnBMp5/izsNuUemO1YVRLOLrRGDOB0ZQHBsgB7
-   vSXkFJ9nu/DpPd7l0QGTpQQNdP53IQhPqEsnOVDW3A1Aa9xIs6061Ity8
-   E8na/eDMicMhG+C+6iHPzfb77S49tV6X3aK9UMDBZ3dmXrrMLUb6GPeRc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="394561177"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="394561177"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 21:01:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="789805852"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="789805852"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jul 2023 21:01:39 -0700
-Date:   Fri, 7 Jul 2023 12:01:38 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 19/22] x86/kexec(): Reset TDX private memory on
- platforms with TDX erratum
-Message-ID: <20230707040138.heqnc7ivonblejts@yy-desk-7060>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <28aece770321e307d58df77eddee2d3fa851d15a.1687784645.git.kai.huang@intel.com>
+        Fri, 7 Jul 2023 00:06:39 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2103.outbound.protection.outlook.com [40.107.117.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A841FD7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 21:06:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YsXkjT6REKY2c9b941TxU/mMeb6T5cKrPA+wNFWFESHHjSa4/Q5ehNcu5qy0fh+jE+sKv+xQdEx8kE4019LQhRDju6rejL17Y5bdAyOu0pWcQ3wp7HxNfXmZ7U6dyiZoAI1AxKbwoCzfBowbnJejiZuo/Xd2sUT/q8BecfnegN/+xviCmH7nAO1Gor6MMBjq/bLROQwrfsfy1fWsgb7fAwm9HIxiW7YsB/01nvFGUfelfk9FNgyhbD49m3e2zUqVMsABa9+1kQY/ws+uWU7l0UtOKW6JSzA5wnCEiht2ON3TuMhqonsBY4zDT0jWqOYFypShQkq/7yIR3BSy3aKpgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RLIjEIDSi/Gt4CbhogrAqQEpSG4L/IDdFUD/+RxMDXM=;
+ b=kTZWl/jJQWJUbClz7YU0CVFMJqeLK71bwp8QD8MHJUfcY5bqmQMZHQ1JN5joAn3NW4U8VD4U+x5rxBSs8o7ssBZ1WA29BIznoqld9cfQrHelLx61oY1fYmyaT9vxmkyVXvGgXyAUCcTVft+n47zIyT5dgYQTKfIPcktXZFZCV1/69phsY0FEElMCnbnN3VREJN5hl4E49jZg9Im0LBSEv0Qjbg3sQelQBvPTWUYZ5ecXkzt9RJ4zkXEhz/kTvTF1cgxeV4G4Ps0hyUDg0AD9pvShxgwWPcNCaWKJ+Z98jBShooauHnbRt7zacSfEO1shptn3QHRntwpox8n2E1gTrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RLIjEIDSi/Gt4CbhogrAqQEpSG4L/IDdFUD/+RxMDXM=;
+ b=PAgW0rTHR86PZsTq4n9ZIS7fOxvi+eEgDvTF7SmXvnOrss6FyOBnhat0ihyWY6Lqg2Eq0HF/D+LndrcUWl43H2HMhDlvRXnEbkCQQceEGdKDmvHpqcSt2BzGABBBZ1StLDx6uqVxEc9LALns+tc0OKWebTEAUoE1TIEpQdjSa3Zx0DUXn4sD6Ug6c/rY/AX7aINTlcGFrC+9rfhS3+95ScmWuRWUMFBJMhxpja9qjf/+Ek0jYrmx/PX2qFlrC6XI9aUJMu6C2wenNZ7VnoAknk1atORryeVzPLlWiUZ1KR0KzavIk8+ZkW3iAtnxcFXnrPGFf1OZg8NY2AIkWvfZ3Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TY0PR06MB5470.apcprd06.prod.outlook.com (2603:1096:400:264::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
+ 2023 04:06:34 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.025; Fri, 7 Jul 2023
+ 04:06:34 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 01/18] mtd: rawnand: sunxi: Use devm_platform_get_and_ioremap_resource()
+Date:   Fri,  7 Jul 2023 12:06:05 +0800
+Message-Id: <20230707040622.78174-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0112.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::16) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28aece770321e307d58df77eddee2d3fa851d15a.1687784645.git.kai.huang@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB5470:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b6d8d70-e1bf-4ec9-acf2-08db7e9f8d5b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ove5HzqVHf4+ZMTX9g0aJ7dPKdAwHWjAHTf5b3hrbicUD7g6KsLt53ghh84jLbt2v4YoSA0UYaMYbTtyIfpEmABzT1/8d82892RUtora31I5n4+zEW6uCuNMsuL7zTF+Dl+KwVi7dzFPQtkKGO29qFNtHyFyPjmvEPGPE55zKZj9g9HmHTPH+k6USiGWjh08Jwtk4QwDLMvyT5Pv0ENUGy7VkGLp0BV9pjLnIq8+2s5tc1w1prNJTT7Rv1seYneoXfmKTy7JldP88xDsMIWcxRpP+3tQ8ZD2Sy96KlUPQIJ1t4nt88Bl78AjrHyOpUmXjpRibXUyEYXjsB2X6PUuWfvZoGsHYI+WROYwKpvIL+eN6z6oJ8FjSDQz6y1QYWIcnXDD0j7qi8Au4xVuFNcky8uGxiaHM/ejgczASrgRfVM1k05mfu2aVWas16HBihXJbVcf5CdLarklKrMymRBwpzfnAyDAaAF4B8niwdw4IwBSbLTVrMucmLHohBjCo7qyyruyhOoLjG/55kdXgCHc4jf+7SHBbkKpejFVZoK878gQo+pyg1VQOgD2ZqYFzpiuq3vbmTfp1aWxWuiJxoSZrhEc14eDBU9u9+vG8pVmV9zsgkN+3nws0oSdnYYPxvOU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(39860400002)(136003)(366004)(451199021)(478600001)(6486002)(52116002)(6666004)(110136005)(26005)(186003)(6506007)(1076003)(6512007)(2906002)(4744005)(316002)(4326008)(41300700001)(66946007)(66476007)(8936002)(7416002)(5660300002)(8676002)(66556008)(38350700002)(38100700002)(86362001)(36756003)(83380400001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o5hfJDDmkBYVACJ1BHVV054tj9mkbxvdrvU+G3XVc9aJdxO2HArVCh1ehVOF?=
+ =?us-ascii?Q?3PhDIE7HONeBAvLrqAlN+RAsSJs16O9C7RNQswWHyAJ9qXahi4qEDRy26tgK?=
+ =?us-ascii?Q?A8OKk97aHmPoovRZUTzk0V8TVaMZbFlLAHkh7hohC852H1A7RrqfLlWTimz0?=
+ =?us-ascii?Q?UC6v90LJE9DFc+aY24Do96i2/VKTFUpMf3wS/PpJePaPmjZqxKwNuGvXRj3Y?=
+ =?us-ascii?Q?52fU+KcSJFxigfCK8ohvqT4yCplBIvf9Afil9ao+SVAjn3fl3H160kyy008X?=
+ =?us-ascii?Q?h5GxlM0j4EwXRqRG4IGV/UkPIG1TLbkTfZokJk27KJmwKd/YNAaMfqKpf274?=
+ =?us-ascii?Q?pXhslEzWSoCYJFn1pl96HEojSIkqEAqKneY5LUe4P675LL3YyUD2mLC3+m9C?=
+ =?us-ascii?Q?O+tjL0yVLZ02AgEiJbH1l3U1dLNtEmDtAr3886iLQ+XQznoRfBbOY+lMSpBg?=
+ =?us-ascii?Q?D+jehkq/Tb3aag2dD2jRD8cznewWzr1SwwEtN82EIK382cMdAYiFRw6QDj3N?=
+ =?us-ascii?Q?APJ18weXq7jY7LbAEsGZRp4H/aEZ7UNbznptj/AlRe61x/2ML31iiGptRJk2?=
+ =?us-ascii?Q?xg78L815TKNeiUlpFvg24O3IuBeu7DISq0Gbb6BIYPrQDYwgLnw5UUB1swTf?=
+ =?us-ascii?Q?JwhivlD1gssO/CnPuSRz20ReVcIf+5UTO1RzlzQgTyPvzwCcJhDAEVszn1Zl?=
+ =?us-ascii?Q?ucwgRoBSaONsg7x4DN6Jp6w0btH/MCsUGrLDemOAi5stiBAk6IJZJi8KFs/l?=
+ =?us-ascii?Q?J54MnrTV8ysHmzbIvrMqOjZTm0o/T/wa2UlyOScgGWxnWVZY5muWl1Y9Ejd8?=
+ =?us-ascii?Q?z4V37qhohRde0SNydYWoLEwDWE/glxQstSqiLHrdu+Q+4xFlRfCZJiRmsXjD?=
+ =?us-ascii?Q?P7LHRwUpqu8O86f6V7QVc9bv/66KAAdtR8yb4tsCu05ClqoGT6vE8rNRJAjx?=
+ =?us-ascii?Q?xrdr+pbIyFNMlaCfCuWQ5cTG41MY8lcFfWgUmLgPczwwXVKPJxGQPmR467mU?=
+ =?us-ascii?Q?fC4E7dvZ38e/ZzjpV/qvNfMDz7kJbQALyKFsFuxlwbBxAg26+58RK8deAGD9?=
+ =?us-ascii?Q?pcFx+HwbFzXuIRM+sK6AFLf1MgPufBnT3j2qiyro1DRPGNUy6fhe+o0uWSSm?=
+ =?us-ascii?Q?dIgHuS9N4EGQfW3OhLTzbZcqsDPlWYD5GPAuHtPC39b40rGFd9YAQ9f13Eev?=
+ =?us-ascii?Q?R1xZjPYXZ6fLYzWM1UDwBsBddxdlxcLpUqL6kaQsZwq1YWf63ShVuDx1QAez?=
+ =?us-ascii?Q?INiPmMw6XYJJiJ8s1EqA3ZZ1IQ0WDSoyi2cGYL4FLpKkV0vN+JVPq6MyzUbO?=
+ =?us-ascii?Q?CG7itdzMvJbvRKCfrVItKDIOFcAJ2VZQnoDeD9ahfDFzOCkK0mB+GDQyCMvM?=
+ =?us-ascii?Q?cLPK6Y9PARrN1/KNEy+zmInriz/YxYJtRqxmN4cxwzI8sMlVx0+nUDI/cz/C?=
+ =?us-ascii?Q?AVuwhsgyP2jLNFbXjH6/6wkde4KgtdghMwRUjTkb4Zcu/vV304k+dIVq1Yjc?=
+ =?us-ascii?Q?UpHZmR30vRre9USB0LjCjtXdqv10K4dNRv3aeuoVheN7FMY94A64xWtmXfQy?=
+ =?us-ascii?Q?aSChySKqu1d3vxxTXwZzcD2C2teuSW1kG/uz0sAd?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b6d8d70-e1bf-4ec9-acf2-08db7e9f8d5b
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 04:06:34.1885
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 509JWL/kZ4gSjjIIzydOhzv7rzqQMbbdEFABGjay+zgsXDHRHZypav1AbFxIrsnTPicarLNAuAoir1rHHHvoCQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5470
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:49AM +1200, Kai Huang wrote:
-> The first few generations of TDX hardware have an erratum.  A partial
-> write to a TDX private memory cacheline will silently "poison" the
-> line.  Subsequent reads will consume the poison and generate a machine
-> check.  According to the TDX hardware spec, neither of these things
-> should have happened.
->
-> == Background ==
->
-> Virtually all kernel memory accesses operations happen in full
-> cachelines.  In practice, writing a "byte" of memory usually reads a 64
-> byte cacheline of memory, modifies it, then writes the whole line back.
-> Those operations do not trigger this problem.
->
-> This problem is triggered by "partial" writes where a write transaction
-> of less than cacheline lands at the memory controller.  The CPU does
-> these via non-temporal write instructions (like MOVNTI), or through
-> UC/WC memory mappings.  The issue can also be triggered away from the
-> CPU by devices doing partial writes via DMA.
->
-> == Problem ==
->
-> A fast warm reset doesn't reset TDX private memory.  Kexec() can also
-> boot into the new kernel directly.  Thus if the old kernel has enabled
-> TDX on the platform with this erratum, the new kernel may get unexpected
-> machine check.
->
-> Note that w/o this erratum any kernel read/write on TDX private memory
-> should never cause machine check, thus it's OK for the old kernel to
-> leave TDX private pages as is.
->
-> == Solution ==
->
-> In short, with this erratum, the kernel needs to explicitly convert all
-> TDX private pages back to normal to give the new kernel a clean slate
-> after kexec().  The BIOS is also expected to disable fast warm reset as
-> a workaround to this erratum, thus this implementation doesn't try to
-> reset TDX private memory for the reboot case in the kernel but depend on
-> the BIOS to enable the workaround.
->
-> For now TDX private memory can only be PAMT pages.  It would be ideal to
-> cover all types of TDX private memory here (TDX guest private pages and
-> Secure-EPT pages are yet to be implemented when TDX gets supported in
-> KVM), but there's no existing infrastructure to track TDX private pages.
-> It's not feasible to query the TDX module about page type either because
-> VMX has already been stopped when KVM receives the reboot notifier.
->
-> Another option is to blindly convert all memory pages.  But this may
-> bring non-trivial latency to kexec() on large memory systems (especially
-> when the number of TDX private pages is small).  Thus even with this
-> temporary solution, eventually it's better for the kernel to only reset
-> TDX private pages.  Also, it's problematic to convert all memory pages
-> because not all pages are mapped as writable in the direct-mapping.  The
-> kernel needs to switch to another page table which maps all pages as
-> writable (e.g., the identical-mapping table for kexec(), or a new page
-> table) to do so, but this looks overkill.
->
-> Therefore, rather than doing something dramatic, only reset PAMT pages
-> for now.  Do it in machine_kexec() to avoid additional overhead to the
-> machine reboot/shutdown as the kernel depends on the BIOS to disable
-> fast warm reset as a workaround for the reboot case.
->
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->
-> v11 -> v12:
->  - Changed comment/changelog to say kernel doesn't try to handle fast
->    warm reset but depends on BIOS to enable workaround (Kirill)
->  - Added a new tdx_may_has_private_mem to indicate system may have TDX
->    private memory and PAMTs/TDMRs are stable to access. (Dave).
->  - Use atomic_t for tdx_may_has_private_mem for build-in memory barrier
->    (Dave)
->  - Changed calling x86_platform.memory_shutdown() to calling
->    tdx_reset_memory() directly from machine_kexec() to avoid overhead to
->    normal reboot case.
->
-> v10 -> v11:
->  - New patch
->
->
-> ---
->  arch/x86/include/asm/tdx.h         |  2 +
->  arch/x86/kernel/machine_kexec_64.c |  9 ++++
->  arch/x86/virt/vmx/tdx/tdx.c        | 79 ++++++++++++++++++++++++++++++
->  3 files changed, 90 insertions(+)
->
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 91416fd600cd..e95c9fbf52e4 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -100,10 +100,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
->  bool platform_tdx_enabled(void);
->  int tdx_cpu_enable(void);
->  int tdx_enable(void);
-> +void tdx_reset_memory(void);
->  #else	/* !CONFIG_INTEL_TDX_HOST */
->  static inline bool platform_tdx_enabled(void) { return false; }
->  static inline int tdx_cpu_enable(void) { return -ENODEV; }
->  static inline int tdx_enable(void)  { return -ENODEV; }
-> +static inline void tdx_reset_memory(void) { }
->  #endif	/* CONFIG_INTEL_TDX_HOST */
->
->  #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-> index 1a3e2c05a8a5..232253bd7ccd 100644
-> --- a/arch/x86/kernel/machine_kexec_64.c
-> +++ b/arch/x86/kernel/machine_kexec_64.c
-> @@ -28,6 +28,7 @@
->  #include <asm/setup.h>
->  #include <asm/set_memory.h>
->  #include <asm/cpu.h>
-> +#include <asm/tdx.h>
->
->  #ifdef CONFIG_ACPI
->  /*
-> @@ -301,6 +302,14 @@ void machine_kexec(struct kimage *image)
->  	void *control_page;
->  	int save_ftrace_enabled;
->
-> +	/*
-> +	 * On the platform with "partial write machine check" erratum,
-> +	 * all TDX private pages need to be converted back to normal
-> +	 * before booting to the new kernel, otherwise the new kernel
-> +	 * may get unexpected machine check.
-> +	 */
-> +	tdx_reset_memory();
-> +
->  #ifdef CONFIG_KEXEC_JUMP
->  	if (image->preserve_context)
->  		save_processor_state();
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 85b24b2e9417..1107f4227568 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -51,6 +51,8 @@ static LIST_HEAD(tdx_memlist);
->
->  static struct tdmr_info_list tdx_tdmr_list;
->
-> +static atomic_t tdx_may_has_private_mem;
-> +
->  /*
->   * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
->   * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
-> @@ -1113,6 +1115,17 @@ static int init_tdx_module(void)
->  	 */
->  	wbinvd_on_all_cpus();
->
-> +	/*
-> +	 * Starting from this point the system may have TDX private
-> +	 * memory.  Make it globally visible so tdx_reset_memory() only
-> +	 * reads TDMRs/PAMTs when they are stable.
-> +	 *
-> +	 * Note using atomic_inc_return() to provide the explicit memory
-> +	 * ordering isn't mandatory here as the WBINVD above already
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-WBINVD is serial instruction to make sure all things happen before
-it must be committed before finish the exection of this instruction,
-but it should not impact the instructions after it.
-(SDM Vol.3 9.3 Jun 2023)
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ drivers/mtd/nand/raw/sunxi_nand.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I think the atomic operation used below is to make sure the
-change to tdx_may_has_private_mem becomes visible immediately
-to other LPs which read it, e.g running tdx_reset_memory().
-atomic_inc() should be enough for this case because the
-locked Instructions are total order.
-(SDM Vol.3 9.2.3.8 June 2023).
+diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
+index 9884304634f6..db36bd755b8d 100644
+--- a/drivers/mtd/nand/raw/sunxi_nand.c
++++ b/drivers/mtd/nand/raw/sunxi_nand.c
+@@ -2087,8 +2087,7 @@ static int sunxi_nfc_probe(struct platform_device *pdev)
+ 	nand_controller_init(&nfc->controller);
+ 	INIT_LIST_HEAD(&nfc->chips);
+ 
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	nfc->regs = devm_ioremap_resource(dev, r);
++	nfc->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+ 	if (IS_ERR(nfc->regs))
+ 		return PTR_ERR(nfc->regs);
+ 
+-- 
+2.39.0
 
-So per my understanding the key here is the atomic
-operation's guarantee on memory changes visibility, not the
-guarantee from WBINVD, the comment should be changed if
-this is the correct understanding.
-
-> +	 * does that.  Compiler barrier isn't needed here either.
-> +	 */
-> +	atomic_inc_return(&tdx_may_has_private_mem);
-> +
->  	/* Config the key of global KeyID on all packages */
->  	ret = config_global_keyid();
->  	if (ret)
-> @@ -1154,6 +1167,15 @@ static int init_tdx_module(void)
->  	 * as suggested by the TDX spec.
->  	 */
->  	tdmrs_reset_pamt_all(&tdx_tdmr_list);
-> +	/*
-> +	 * No more TDX private pages now, and PAMTs/TDMRs are
-> +	 * going to be freed.  Make this globally visible so
-> +	 * tdx_reset_memory() can read stable TDMRs/PAMTs.
-> +	 *
-> +	 * Note atomic_dec_return(), which is an atomic RMW with
-> +	 * return value, always enforces the memory barrier.
-> +	 */
-> +	atomic_dec_return(&tdx_may_has_private_mem);
->  out_free_pamts:
->  	tdmrs_free_pamt_all(&tdx_tdmr_list);
->  out_free_tdmrs:
-> @@ -1229,6 +1251,63 @@ int tdx_enable(void)
->  }
->  EXPORT_SYMBOL_GPL(tdx_enable);
->
-> +/*
-> + * Convert TDX private pages back to normal on platforms with
-> + * "partial write machine check" erratum.
-> + *
-> + * Called from machine_kexec() before booting to the new kernel.
-> + */
-> +void tdx_reset_memory(void)
-> +{
-> +	if (!platform_tdx_enabled())
-> +		return;
-> +
-> +	/*
-> +	 * Kernel read/write to TDX private memory doesn't
-> +	 * cause machine check on hardware w/o this erratum.
-> +	 */
-> +	if (!boot_cpu_has_bug(X86_BUG_TDX_PW_MCE))
-> +		return;
-> +
-> +	/* Called from kexec() when only rebooting cpu is alive */
-> +	WARN_ON_ONCE(num_online_cpus() != 1);
-> +
-> +	if (!atomic_read(&tdx_may_has_private_mem))
-> +		return;
-> +
-> +	/*
-> +	 * Ideally it's better to cover all types of TDX private pages,
-> +	 * but there's no existing infrastructure to tell whether a page
-> +	 * is TDX private memory or not.  Using SEAMCALL to query TDX
-> +	 * module isn't feasible either because: 1) VMX has been turned
-> +	 * off by reaching here so SEAMCALL cannot be made; 2) Even
-> +	 * SEAMCALL can be made the result from TDX module may not be
-> +	 * accurate (e.g., remote CPU can be stopped while the kernel
-> +	 * is in the middle of reclaiming one TDX private page and doing
-> +	 * MOVDIR64B).
-> +	 *
-> +	 * One solution could be just converting all memory pages, but
-> +	 * this may bring non-trivial latency on large memory systems
-> +	 * (especially when the number of TDX private pages is small).
-> +	 * So even with this temporary solution, eventually the kernel
-> +	 * should only convert TDX private pages.
-> +	 *
-> +	 * Also, not all pages are mapped as writable in direct mapping,
-> +	 * thus it's problematic to do so.  It can be done by switching
-> +	 * to the identical mapping table for kexec() or a new page table
-> +	 * which maps all pages as writable, but the complexity looks
-> +	 * overkill.
-> +	 *
-> +	 * Thus instead of doing something dramatic to convert all pages,
-> +	 * only convert PAMTs as for now TDX private pages can only be
-> +	 * PAMT.
-> +	 *
-> +	 * All other cpus are already dead.  TDMRs/PAMTs are stable when
-> +	 * @tdx_may_has_private_mem reads true.
-> +	 */
-> +	tdmrs_reset_pamt_all(&tdx_tdmr_list);
-> +}
-> +
->  static int __init record_keyid_partitioning(u32 *tdx_keyid_start,
->  					    u32 *nr_tdx_keyids)
->  {
-> --
-> 2.40.1
->
