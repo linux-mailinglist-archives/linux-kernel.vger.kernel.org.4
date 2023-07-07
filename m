@@ -2,116 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6061074A870
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3857374A872
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbjGGB0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 21:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S231786AbjGGB10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 21:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjGGB0m (ORCPT
+        with ESMTP id S229536AbjGGB1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 21:26:42 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13FE113;
-        Thu,  6 Jul 2023 18:26:41 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qxwj91lxDz4f3jq2;
-        Fri,  7 Jul 2023 09:26:37 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7PNaadkfGaHNQ--.3435S3;
-        Fri, 07 Jul 2023 09:26:37 +0800 (CST)
-Subject: Re: [PATCH -next 2/3] md/dm-raid: cleanup multiple equivalent goto
- tags from raid_ctr()
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        song@kernel.org, heinzm@redhat.com, neilb@suse.de,
-        jbrassow@redhat.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230706071622.563073-1-yukuai1@huaweicloud.com>
- <20230706071622.563073-3-yukuai1@huaweicloud.com>
- <37c7a3f7-f769-a313-3279-e8e415369ba4@molgen.mpg.de>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <c42524a9-6854-673b-d54e-392995483cca@huaweicloud.com>
-Date:   Fri, 7 Jul 2023 09:26:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 6 Jul 2023 21:27:24 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DDD1BF3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 18:27:23 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-57764a6bf8cso16969027b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 18:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688693242; x=1691285242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k1SxDMIjddYMTWvLw55OpsQUTvqGqbuqYUQWp4AxT1A=;
+        b=VyFaPZEdU3Wco9SeFT6m+gV08lyDo20IojW2XfGAOCwXFd8/GJtKA3wQwk0a8L7dMi
+         q7WQ9uG1RIq8/loWStNajDWosAj/xZ8csQ3yrf2l84/h0jYFmo2a3KMd+AkLaG+uWmm9
+         wZG/IYZjhDkwi7dNdpUeUCgQJC6B4euutmYwgl+hhZLHKm7TjhjIIhKYt7mitr0YPuTd
+         DKwLtCZtAPjC9zCC+LU4BIMNYV65iJY5bd8LnSFXRcrLTYGk1Y9tKAVj17tfD7ZxE4Yf
+         zTaVbW9m/ee+HJqxXrccVYEIL5bf0BpQMgzgDAr61tY5FELzQTgtVeP32gurTRjZHRCx
+         2LYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688693242; x=1691285242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k1SxDMIjddYMTWvLw55OpsQUTvqGqbuqYUQWp4AxT1A=;
+        b=ZdqNR4OwLx3GV22+E5b5iENvkUK9OTVYYvg2hk8mgCdb2u1BjpEy8bZyl9i87JiZzI
+         2OO4b8UawonLqI1a+OUxVQRFkFrlSnJgFM/xzFMlQ47c+ifLTDCh8dwKRZWb/M3ghaRR
+         jz5oi3BNdkhyBmqZ6hf0Z0LHTOxTTaLQX+9K3Do0i/oyvzz4j6ZkmbJU7QxarlhnsJou
+         kFZfNFqg6jS4jJirVjsNOsrTcDg1utjqs1ADMJ4mh8RSBb8hpYgqtLp9hEymcTnhyfT7
+         /OnsIT4GKI7JaPciE09jtH2n86KQSYAk1jgdzAQ9kcAfx2hiSJdPs4SawwF8cSEMgXEv
+         e4Jw==
+X-Gm-Message-State: ABy/qLZMV2bwudlQx7U96HSmdIJXz/GbonICsStP1qmjfPrJTV7xi/8t
+        JagmaZsj3Uwan+ppl1PCBQ+FMMFkFe+SX+v1X6DaJ3pdbWi+OQv0FVWxZA==
+X-Google-Smtp-Source: APBJJlEkZpYLtp06kMSSDqhHnsv85+pIttuiuqxskOkf2sUemuD2r4Jd4NKMREAeFZHXwLiG72/TZRg8wKAbq4LrVkg=
+X-Received: by 2002:a81:7bc1:0:b0:579:f7d6:cfe6 with SMTP id
+ w184-20020a817bc1000000b00579f7d6cfe6mr3083472ywc.51.1688693242551; Thu, 06
+ Jul 2023 18:27:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <37c7a3f7-f769-a313-3279-e8e415369ba4@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7PNaadkfGaHNQ--.3435S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1xAw43ZrW8Cr45trWkZwb_yoWfCwb_Ca
-        s2yasrGr1SqanxW3W5Gr4F9r90k398GrnrAFyIv3yjva4fXrsYkF4kCrZ0qr45WFWFyryr
-        Jr1UXrWrAry7KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUp6wZUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230623164015.3431990-1-jiaqiyan@google.com> <20230623164015.3431990-3-jiaqiyan@google.com>
+ <20230705235705.GE41006@monkey> <CACw3F511Hk-XM46fYnciKy6=t0bdmGpu9y1qsqrpJOA0zFKWhw@mail.gmail.com>
+ <20230706220612.GA3768@monkey>
+In-Reply-To: <20230706220612.GA3768@monkey>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Thu, 6 Jul 2023 18:27:11 -0700
+Message-ID: <CACw3F51gnG7vUowL-Q4_DBRL=DAHsr7hvcBMT90OF_dLQLoDaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
+ is raw HWPOISON
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     naoya.horiguchi@nec.com, songmuchun@bytedance.com,
+        shy828301@gmail.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jul 6, 2023 at 3:06=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.co=
+m> wrote:
+>
+> On 07/06/23 11:25, Jiaqi Yan wrote:
+> > On Wed, Jul 5, 2023 at 4:57=E2=80=AFPM Mike Kravetz <mike.kravetz@oracl=
+e.com> wrote:
+> > > On 06/23/23 16:40, Jiaqi Yan wrote:
+> > > >
+> > > > +bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
+> > > > +{
+> > > > +     bool ret;
+> > > > +
+> > > > +     spin_lock_irq(&hugetlb_lock);
+> > > > +     ret =3D __is_raw_hwp_subpage(folio, subpage);
+> > > > +     spin_unlock_irq(&hugetlb_lock);
+> > >
+> > > Can you describe what races the hugetlb_lock prevents here?
+> >
+> > I think we should sync here with __get_huge_page_for_hwpoison, who
+> > iterates and inserts an entry to raw_hwp_list. llist itself doesn't
+> > ensure insertion is synchronized with iterating from
+> > __is_raw_hwp_subpage.
+> >
+>
+> Ok, makes sense.  And, since this is only called in the file read patch
+> when we encounter a PageHWPoison(page), the overhead of the lock cycles
+> is not of concern.
 
-在 2023/07/06 21:01, Paul Menzel 写道:
-> Dear Yu,
-> 
-> 
-> Thank you for your patch. Some minor nits, if you are interested.
-> 
-> Am 06.07.23 um 09:16 schrieb Yu Kuai:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> There are four equivalent goto tags in raid_ctr(), clean them up to use
->> just one, there are no functional change and prepare to fix that
-> 
-> Maybe:
-> 
-> There *is* no functional change, and is a preparation to fix an 
-> unprotected `md_stop()`.
-> 
->> md_stop() is not protected.
-> 
-> In the commit message summary/title, I’d spell the verb with a space:
-> 
->      Clean up four equivalent goto tags in raid_ctr()
-> 
+Yes, thanks for pointing this out, (which I forgot), as
+is_raw_hwp_subpage() is after PageHWPoison check in
+hugetlbfs_read_iter. I think both this and the reason why holding the
+lock is worth mentioning in the commit msg.
 
-Thanks for the suggestions, I'll update them in the next version.
 
-Thanks,
-Kuai
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   drivers/md/dm-raid.c | 27 +++++++++------------------
->>   1 file changed, 9 insertions(+), 18 deletions(-)
-> 
-> […]
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> .
-> 
-
+>
+> You can add,
+>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> --
+> Mike Kravetz
