@@ -2,109 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E88474AD76
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2B374AD78
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbjGGI5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S232377AbjGGJAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGGI5i (ORCPT
+        with ESMTP id S229891AbjGGJAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:57:38 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A01999;
-        Fri,  7 Jul 2023 01:57:36 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C0DE81EC0398;
-        Fri,  7 Jul 2023 10:57:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1688720254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GbkfdLxp9rbQ7AZmN6x307z1tOVXWnNsYY4HWTwrins=;
-        b=bTkZdCbdw2GZhc2GvXaNOtj9+aqKb+BrFtxh5mguwFfQVyldtHs3xPkfXBXEyPWnPMsBBz
-        krJh3j19J4FhWVWTC/78jcP6RZEFmFxZDzbAUe2EPooxvvPighLbwwc/ZwfNpG6c/SzV34
-        k0S3pzuXoHUiaU9n50wJcNBr3Faijfw=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id aOrEHwDTfLF3; Fri,  7 Jul 2023 08:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1688720252; bh=GbkfdLxp9rbQ7AZmN6x307z1tOVXWnNsYY4HWTwrins=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Btv9s/ge/XigqKznJFeyxJDvvCxC4amkdlU18+hJG8mAULOQBZOSRqivw1XrmKyrb
-         ZIK5fB1JTWJa6Wq/T2GAMA/yPNoitAo2hmTRqYBfJ9iuQlGxWSBgtmDbsWVGVI7jEh
-         NlSHetQxvPGZIhv6TWQ2LsyTkrASV9rgvAel4SukBGn+MVu0jBYxzl5o4cfPz58EfE
-         /coHNKiPukC3mVE1VpLL1hKBBg4sblcXPOel7s1eu6NMpfvFcuC9V0JB/YweRQmLLw
-         mgQgkbFV0qk62n2JCbxDLNnRndFm+D3eGh/QCJmml57u1mH7WVqR+1qbYBXEtlAFVW
-         CV3kodEru/Pp0091eSlbo2oM4x5zmB2tvBjc6IihDnN+kuopSgQtaGVIfhdBG1RKle
-         IKUL2cVH9Qjxbxhr+BoRKpfuad5wnKbckpQWIEvaPNf/BO7hyjVg6iE0BKKNQhH9i8
-         FN1sVkoxdHHBAVXiJ/rP9QSYho7PXaV4HIry4epe3aPtnm75WRTf7dIPVd49TfM5oN
-         Ga/dbgdFNlsmbveHNVbV2HLKsbuqvicDbjPZR6GRcOKNwn7VcYl6AWyRwLwKqKcZsx
-         YptrBQUkg4V15kl89VPwKWSgbz589YddKW4e618ehFKgHNWUTKyc2rQbFKZbvmeTPo
-         2BJwfVNXl0MPqeec3SK4laeY=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 109AC40E0187;
-        Fri,  7 Jul 2023 08:57:17 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 10:57:12 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Joerg Roedel <jroedel@suse.de>, michael.roth@amd.com
-Cc:     Baoquan He <bhe@redhat.com>, Tao Liu <ltao@redhat.com>,
-        thomas.lendacky@amd.com, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, linux-kernel@vger.kernel.org, dyoung@redhat.com,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <20230707085712.GBZKfTaGJXnzhEenxj@fat_crate.local>
-References: <20230601072043.24439-1-ltao@redhat.com>
- <20230705173359.GDZKWphyFbNE8id6Jm@fat_crate.local>
- <CAO7dBbXdJgpO4Ym=4WME3OOrUhq2MNKpNZmhpsC7pOSugHiKDg@mail.gmail.com>
- <ZKeTX2aemPbsMiVr@MiWiFi-R3L-srv>
- <ZKfLYG_4DANc_i5r@suse.de>
+        Fri, 7 Jul 2023 05:00:40 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EA611B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:00:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R531e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Vmo-124_1688720435;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vmo-124_1688720435)
+          by smtp.aliyun-inc.com;
+          Fri, 07 Jul 2023 17:00:36 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] mm: Fix some kernel-doc comments
+Date:   Fri,  7 Jul 2023 17:00:34 +0800
+Message-Id: <20230707090034.125511-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZKfLYG_4DANc_i5r@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 10:22:56AM +0200, Joerg Roedel wrote:
-> On Fri, Jul 07, 2023 at 12:23:59PM +0800, Baoquan He wrote:
-> > I am wondering why we don't detect the cpu type and return early inside
-> > sev_enable() if it's Intel cpu.
-> > 
-> > We can't rely on CONFIG_AMD_MEM_ENCRYPT to decide if the code need be
-> > executed or not because we usually enable them all in distros.
-> 
-> Looking at the code in head_64.S, by the time sev_enable() runs the SEV
-> bit should already be set in sev_status. Maybe use that to detect
-> whether SEV is enabled and bail out early?
+Add description of @mm_wr_locked and @mm.
+to silence the warnings:
 
-There was something about getting the CPUID page on SNP *before*
-actually calling CPUID but this is not the first time we had trouble in
-this area. This needs to be done differently.
+mm/memory.c:1716: warning: Function parameter or member 'mm_wr_locked' not described in 'unmap_vmas'
+mm/memory.c:5110: warning: Function parameter or member 'mm' not described in 'mm_account_fault'
 
-Michael?
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ mm/memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/mm/memory.c b/mm/memory.c
+index db42a3e939d5..ceff67b5a0e0 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1698,6 +1698,7 @@ static void unmap_single_vma(struct mmu_gather *tlb,
+  * @vma: the starting vma
+  * @start_addr: virtual address at which to start unmapping
+  * @end_addr: virtual address at which to end unmapping
++ * @mm_wr_locked: lock flag
+  *
+  * Unmap all pages in the vma list.
+  *
+@@ -5091,7 +5092,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 
+ /**
+  * mm_account_fault - Do page fault accounting
+- *
++ * @mm: mm from which memcg should be extracted. It can be NULL.
+  * @regs: the pt_regs struct pointer.  When set to NULL, will skip accounting
+  *        of perf event counters, but we'll still do the per-task accounting to
+  *        the task who triggered this page fault.
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1.7.g153144c
 
-https://people.kernel.org/tglx/notes-about-netiquette
