@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA8174B4A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B12274B4B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjGGPwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S232418AbjGGPzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjGGPwA (ORCPT
+        with ESMTP id S229665AbjGGPzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:52:00 -0400
+        Fri, 7 Jul 2023 11:55:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2D7FB;
-        Fri,  7 Jul 2023 08:51:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929DDFB;
+        Fri,  7 Jul 2023 08:55:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 267EE619D7;
-        Fri,  7 Jul 2023 15:51:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C65C433C7;
-        Fri,  7 Jul 2023 15:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688745114;
-        bh=ud+RnxlEPn/6G3NjSjCC8CHTL6y1Q7k2O1jgtO+8ks0=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26F97619FC;
+        Fri,  7 Jul 2023 15:55:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3BFC433C7;
+        Fri,  7 Jul 2023 15:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688745329;
+        bh=w8KYR6gzrUNFbtKM/p+G+JdWO4JfsO1K+O7KqoUEqtc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kQObsH7RATPBds3DH6LDXuVhPjKywqbSxxiz1IwhMkjbejU8lZneQH3UzJsWl7vxf
-         jgVObjr4QhM+Hyko048DT9dtDHQbRvtuTt+gVKS2/BwW5OhmTClfsmCfgZx7I3CJBn
-         Ea6Y3IiqOE2k27eNQINRMXsKv+sveHb4U8FiWcAi9e+Wt9MlezbkmlsANXlgpcV2r9
-         qmoTuvf1FBmUCEqk5w5TEi9Wpt13wg+M2h/Wdcv++wCYeqUfjEeftygfRH5UE1TaE9
-         OsqjcYmj4qEvDuuyZUli3PCPReH4OT2BOHNxJiZHjN3cXg7T5nuQ6Z/rfqCRLD7ecO
-         QnG5zbJ/c3F1A==
-Date:   Fri, 7 Jul 2023 16:51:50 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Walker Chen <walker.chen@starfivetech.com>
-Subject: Re: [PATCH 12/18] soc: starfive: Move the power-domain driver to the
- genpd dir
-Message-ID: <20230707-vexingly-prologue-fea19dd3d962@spud>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-13-ulf.hansson@linaro.org>
+        b=sUQTi0btfsvZqBKWmLBywAmzE41jyD42XPM9Zc0dUv/PHx768itGsSGmaM9v1lkM8
+         P6YWSL0IecjEdMvfbaCTPnDN8ogTsxy9nwnArRewdXEzITBuVKLtDESLlAVpZZSAnF
+         Zp7UcmmV1sQecT3Qc+DiOgs8JpBP9b5SrEtQtmn0=
+Date:   Fri, 7 Jul 2023 17:55:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hsu <John.Hsu@mediatek.com>, stable@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH stable v6.1] mm/mmap: Fix extra maple tree write
+Message-ID: <2023070748-confiding-abnormal-b7e3@gregkh>
+References: <20230706185135.2235532-1-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1JzrwQM+ZMUZcr36"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230707140434.723349-13-ulf.hansson@linaro.org>
+In-Reply-To: <20230706185135.2235532-1-Liam.Howlett@oracle.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 06, 2023 at 02:51:35PM -0400, Liam R. Howlett wrote:
+> commit 0503ea8f5ba73eb3ab13a81c1eefbaf51405385a upstream.
+> 
+> This was inadvertently fixed during the removal of __vma_adjust().
+> 
+> When __vma_adjust() is adjusting next with a negative value (pushing
+> vma->vm_end lower), there would be two writes to the maple tree.  The
+> first write is unnecessary and uses all allocated nodes in the maple
+> state.  The second write is necessary but will need to allocate nodes
+> since the first write has used the allocated nodes.  This may be a
+> problem as it may not be safe to allocate at this time, such as a low
+> memory situation.  Fix the issue by avoiding the first write and only
+> write the adjusted "next" VMA.
 
---1JzrwQM+ZMUZcr36
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Are you sure this is the same git id?  The one you reference above is
+_VERY_ different from your 2 line change below.
 
-On Fri, Jul 07, 2023 at 04:04:28PM +0200, Ulf Hansson wrote:
-> Cc: Walker Chen <walker.chen@starfivetech.com>
-> Cc: Conor Dooley <conor@kernel.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+And the changelog text is not the same.
 
-If you are not going to write a commit message with an explanation,
-the least you could do is CC me on the cover letter.
+confused,
 
-> ---
->  MAINTAINERS                                                    | 2 +-
->  drivers/genpd/Makefile                                         | 1 +
->  drivers/genpd/starfive/Makefile                                | 2 ++
->  .../{soc/starfive/jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c} | 0
->  drivers/soc/starfive/Makefile                                  | 3 ---
-
-Why not also move the Kconfig entry while you are at it?
-
-Thanks,
-Conor.
-
---1JzrwQM+ZMUZcr36
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKg0lgAKCRB4tDGHoIJi
-0j83AP9yg2QIJTuavXk/CPW+8i5V36EcXTunxgI9WNvwQfusvwEAn1IRMWozRQk1
-ZzQwJ3H4/uGazhD+e34w61SNDCpJxgU=
-=rXEk
------END PGP SIGNATURE-----
-
---1JzrwQM+ZMUZcr36--
+greg k-h
