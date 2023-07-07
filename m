@@ -2,172 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB4B74B8DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA99074B8E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjGGVzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S232501AbjGGVzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjGGVzC (ORCPT
+        with ESMTP id S229631AbjGGVzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:55:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE61FF6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688766854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IR3UM/qERNeUL/EjPgvmk0ZZpn8WhkLUZx2wiiCSLjA=;
-        b=M5q0D31kxgBZ6keatYpFl78vK2heboCSQKjl/DmXC+AC0P773ss+5F5szZ9LywRCVZyUO6
-        amrIzZkcxC4gNL103pBdaGHT8p8X0La5gKuUcbyzViUNcI36Qrb+xbLGizuF2+hFfmffoF
-        t9kvaA3CDr7hipHUfeTkqCabcuu7z0s=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-567-gHLKHAtfOnWRAeZ2DUlfRw-1; Fri, 07 Jul 2023 17:54:13 -0400
-X-MC-Unique: gHLKHAtfOnWRAeZ2DUlfRw-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-63788123d11so24719166d6.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:54:13 -0700 (PDT)
+        Fri, 7 Jul 2023 17:55:45 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BF71FF6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:55:44 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5706641dda9so24886697b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688766943; x=1691358943;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dxkJHri43fmKt8R5z8YjbywDBegP4t1apGGC2ZsbmRA=;
+        b=blOAXi+wOuXHyUw01h+hWReeZCVMretOsTcALUUIwdsRWTO5RZumuf0OIL3/2UIoS5
+         /KB9UPDpk5EKnvnsrFNLSZcVSDMGG/N2/L+3YmSDMteudF7B+lVa4lvI0xEgnEzRU7AG
+         UoT1qT5gyo11rYW0M3GTWa4gv6Fl7mczc7rJu9iIc7DUQ/Dlgi315G22kKqEzwYd3kRN
+         vDnVlQpo4V+cUd1aT+ZuiMzo2Te2dRviYwAkiPiQw5TQRmpX3gDOmdLHmX7XCSPv/KAg
+         anijJmgmZqXASMSpxIDxEJHEhFt2cm1S8KTqrc3Gp9IOiRP8C6gfsQ2jHBtNGX2veILY
+         jt/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766853; x=1691358853;
-        h=mime-version:user-agent:content-transfer-encoding:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IR3UM/qERNeUL/EjPgvmk0ZZpn8WhkLUZx2wiiCSLjA=;
-        b=kgk8/R1BeB6+4fWYSTfmO0AiWWhXr568Ij+FlxpSGrLfJMh6i5u4fTEJj4Ol3fc3l/
-         I5fimlWFV5Xd3DSEoOSQVYIt+RAzy1D94icxWsIDvEX3V+7xz6YntAQgPY3DAQiMFW81
-         CKf4cGaFFoySHFTvZDj2esRYaN8vFvrLvqEl3KAkzPszN7V/hNI+/LDYWRy7JlC5uXGE
-         0TZZhOECqXUbbjoQCw36pWQaZpuHWMJdWSeXG3LCRr8AcUAabTasPRLOeaZhaIgAvk6w
-         05meVV7KKarIAGZzAbQE04ekw/ABPf08DEPTYGWdSwgRtXNEkEptWoPptT0ACiznK5aU
-         lIfw==
-X-Gm-Message-State: ABy/qLaSlMRrsLci65r7DUQ0saOvuCRyOEBo6LIxREW0gUIiFzSl6EHj
-        taKYX//sGkdA0Ne1khwfAC2m0x8tIqSFO6xJvM3SS+fmzOKhSh1+r2kli+ltDvosn68YfC6euMw
-        SCNWEtNlbDTtWyNdILvgNlo5W
-X-Received: by 2002:a0c:cc10:0:b0:636:439b:a6de with SMTP id r16-20020a0ccc10000000b00636439ba6demr5936525qvk.13.1688766852899;
-        Fri, 07 Jul 2023 14:54:12 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGy4rbv/6VC4l33AqtqHlOn3FLNo2hdcdd4j6YFakTEWNmLX49tDyvOehAct9nxQ75kSv1gPA==
-X-Received: by 2002:a0c:cc10:0:b0:636:439b:a6de with SMTP id r16-20020a0ccc10000000b00636439ba6demr5936517qvk.13.1688766852667;
-        Fri, 07 Jul 2023 14:54:12 -0700 (PDT)
-Received: from ?IPv6:2600:4040:5c62:8200:4d3e:bd5a:7e0a:133a? ([2600:4040:5c62:8200:4d3e:bd5a:7e0a:133a])
-        by smtp.gmail.com with ESMTPSA id x10-20020a0ce24a000000b0063659410b04sm2470697qvl.107.2023.07.07.14.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 14:54:12 -0700 (PDT)
-Message-ID: <79af2eab7409b75f5a2386fbd82c339111d6deab.camel@redhat.com>
-Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
- string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
-From:   Lyude Paul <lyude@redhat.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Nick Hastings <nicholaschastings@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, kherbst@redhat.com
-Cc:     Salvatore Bonaccorso <carnil@debian.org>, 1036530@bugs.debian.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Date:   Fri, 07 Jul 2023 17:54:11 -0400
-In-Reply-To: <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
-References: <168471337231.1913606.15905047692536779158.reportbug@xps>
-         <ZHKrC4/G6ZyvRReI@xps> <ZHL5cCNUzVdleiag@eldamar.lan>
-         <ab12984e-be17-903d-ba0a-f9c85b8c544f@amd.com> <ZHP4IqxBUPuVRvRV@xps>
-         <09e24386-de63-e9e9-9e7f-5d04bad62d83@amd.com> <ZHQhPcKUF76Kplwm@xps>
-         <ZHUt9xQKCwCflvVC@xps> <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
-         <ZHWfMBeAONerAJmd@xps> <ZHfa/wQlaVCeUC22@xps>
-         <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
-Organization: Red Hat Inc.
+        d=1e100.net; s=20221208; t=1688766943; x=1691358943;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dxkJHri43fmKt8R5z8YjbywDBegP4t1apGGC2ZsbmRA=;
+        b=AlhltMsN/Qj8ELHwzDTDebfJDU5bERTxVToUhJfs9JPI/34JZ0JZ7QvnbStOqNt1R6
+         1UjqsLVJygNhex4Vm722UgYAotkHw5rpbvLjOckfTiZyJ275hGP29QG2vUw3Q6IkApiy
+         yThN6LB4/cv6ExYtTg1XFSnRs/+XzOCo+2ya/IbQID3U0AZjQU73qv3vzhox0yzhPVEV
+         HJG5V9J6n0PIz+o8oYLCuEwIgr8tFSlEteKoBeTF7VsAoYG8ljCAiyp/a0kuh0hKNN4J
+         0q14YcPJR7giUyHJeKTMNTRHv9fLxJZiPC4pT7tZVepKZgyIAOBmy+DzN/I/Ie1KyWBT
+         18oQ==
+X-Gm-Message-State: ABy/qLa6xMBVpMB/0uGTKyx/9Z42LK538FSrOJCNWfovTF4cbnjb1trp
+        FtKTgobzkuUVt6dAeYbVJN5oc3hJUQSucRqJ9kTm
+X-Google-Smtp-Source: APBJJlFel5F91WF38N/Ma9BXBqSumdIUfaXPm38xcZEmd46V3Sw+DRUSf//YD6ttv9zQvAnO8kSEtklzmiH0ms9z3sUS
+X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:c201:5125:39d1:ef3f])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:a941:0:b0:579:e07c:2798 with
+ SMTP id g62-20020a81a941000000b00579e07c2798mr45025ywh.2.1688766943660; Fri,
+ 07 Jul 2023 14:55:43 -0700 (PDT)
+Date:   Fri,  7 Jul 2023 14:55:32 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230707215540.2324998-1-axelrasmussen@google.com>
+Subject: [PATCH v4 0/8] add UFFDIO_POISON to simulate memory poisoning with UFFD
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-01 at 11:18 -0500, Limonciello, Mario wrote:
-> +Lyude, Lukas, Karol
->=20
-> On 5/31/2023 6:40 PM, Nick Hastings wrote:
-> > Hi,
-> >=20
-> > * Nick Hastings <nicholaschastings@gmail.com> [230530 16:01]:
-> > > * Mario Limonciello <mario.limonciello@amd.com> [230530 13:00]:
-> > <snip>
-> > > > As you're actually loading nouveau, can you please try nouveau.runp=
-m=3D0 on
-> > > > the kernel command line?
-> > > I'm not intentionally loading it. This machine also has intel graphic=
-s
-> > > which is what I prefer. Checking my
-> > > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-> > > I see:
-> > >=20
-> > > blacklist nvidia
-> > > blacklist nvidia-drm
-> > > blacklist nvidia-modeset
-> > > blacklist nvidia-uvm
-> > > blacklist ipmi_msghandler
-> > > blacklist ipmi_devintf
-> > >=20
-> > > So I thought I had blacklisted it but it seems I did not. Since I do =
-not
-> > > want to use it maybe it is better to check if the lock up occurs with
-> > > nouveau blacklisted. I will try that now.
-> > I blacklisted nouveau and booted into a 6.1 kernel:
-> > % uname -a
-> > Linux xps 6.1.0-9-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.27-1 (2023-05=
--08) x86_64 GNU/Linux
-> >=20
-> > It has been running without problems for nearly two days now:
-> > % uptime
-> >   08:34:48 up 1 day, 16:22,  2 users,  load average: 1.33, 1.26, 1.27
-> >=20
-> > Regards,
-> >=20
-> > Nick.
->=20
-> Thanks, that makes a lot more sense now.
->=20
-> Nick, Can you please test if nouveau works with runtime PM in the
-> latest 6.4-rc?
->=20
-> If it works in 6.4-rc, there are probably nouveau commits that need
-> to be backported to 6.1 LTS.
->=20
-> If it's still broken in 6.4-rc, I believe you should file a bug:
->=20
-> https://gitlab.freedesktop.org/drm/nouveau/
->=20
->=20
-> Lyude, Lukas, Karol
->=20
-> This thread is in relation to this commit:
->=20
-> 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string")
->=20
-> Nick has found that runtime PM is *not* working for nouveau.
->=20
-> If you recall we did 24867516f06d because 5775b843a619 was
-> supposed to have fixed it.
+This series adds a new userfaultfd feature, UFFDIO_POISON. See commit 4
+for a detailed description of the feature.
 
-Gotcha, I guess keep me updated since it seems like things -might- be worki=
-ng
-from what I gathered here? Happy to look further if they find that 6.4-rc i=
-s
-broken though
+The series is based on Linus master (partial 6.5 merge window), and
+structured like this:
 
->=20
+- Patches 1-3 are preparation / refactoring
+- Patches 4-6 implement and advertise the new feature
+- Patches 7-8 implement a unit test for the new feature
 
---=20
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Changelog:
+
+v3 -> v4:
+ - [Peter] Rename PTE_MARKER_ERROR and helpers to PTE_MARKER_POISONED.
+ - [Peter] Switch from calloc to memset for initializing some state in the
+   selftest.
+
+v2 -> v3:
+ - Rebase onto current Linus master.
+ - Don't overwrite existing PTE markers for non-hugetlb UFFDIO_POISON.
+   Before, non-hugetlb would override them, but hugetlb would not. I don't
+   think there's a use case where we *want* to override a UFFD_WP marker
+   for example, so take the more conservative behavior for all kinds of
+   memory.
+ - [Peter] Drop hugetlb mfill atomic refactoring, since it isn't needed
+   for this series (we don't touch that code directly anyway).
+ - [Peter] Switch to re-using PTE_MARKER_SWAPIN_ERROR instead of defining
+   new PTE_MARKER_UFFD_POISON.
+ - [Peter] Extract start / len range overflow check into existing
+   validate_range helper; this fixes the style issue of unnecessary braces
+   in the UFFDIO_POISON implementation, because this code is just deleted.
+ - [Peter] Extract file size check out into a new helper.
+ - [Peter] Defer actually "enabling" the new feature until the last commit
+   in the series; combine this with adding the documentation. As a
+   consequence, move the selftest commits after this one.
+ - [Randy] Fix typo in documentation.
+
+v1 -> v2:
+ - [Peter] Return VM_FAULT_HWPOISON not VM_FAULT_SIGBUS, to yield the
+   correct behavior for KVM (guest MCE).
+ - [Peter] Rename UFFDIO_SIGBUS to UFFDIO_POISON.
+ - [Peter] Implement hugetlbfs support for UFFDIO_POISON.
+
+Axel Rasmussen (8):
+  mm: make PTE_MARKER_SWAPIN_ERROR more general
+  mm: userfaultfd: check for start + len overflow in validate_range
+  mm: userfaultfd: extract file size check out into a helper
+  mm: userfaultfd: add new UFFDIO_POISON ioctl
+  mm: userfaultfd: support UFFDIO_POISON for hugetlbfs
+  mm: userfaultfd: document and enable new UFFDIO_POISON feature
+  selftests/mm: refactor uffd_poll_thread to allow custom fault handlers
+  selftests/mm: add uffd unit test for UFFDIO_POISON
+
+ Documentation/admin-guide/mm/userfaultfd.rst |  15 +++
+ fs/userfaultfd.c                             |  73 ++++++++++--
+ include/linux/mm_inline.h                    |  19 +++
+ include/linux/swapops.h                      |  15 ++-
+ include/linux/userfaultfd_k.h                |   4 +
+ include/uapi/linux/userfaultfd.h             |  25 +++-
+ mm/hugetlb.c                                 |  51 ++++++--
+ mm/madvise.c                                 |   2 +-
+ mm/memory.c                                  |  15 ++-
+ mm/mprotect.c                                |   4 +-
+ mm/shmem.c                                   |   4 +-
+ mm/swapfile.c                                |   2 +-
+ mm/userfaultfd.c                             |  83 ++++++++++---
+ tools/testing/selftests/mm/uffd-common.c     |   5 +-
+ tools/testing/selftests/mm/uffd-common.h     |   3 +
+ tools/testing/selftests/mm/uffd-stress.c     |   8 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 117 +++++++++++++++++++
+ 17 files changed, 379 insertions(+), 66 deletions(-)
+
+--
+2.41.0.255.g8b1d071c50-goog
 
