@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA67474B3C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BB474B3C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbjGGPIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S231799AbjGGPJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbjGGPIe (ORCPT
+        with ESMTP id S233369AbjGGPJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:08:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7D1FF9;
-        Fri,  7 Jul 2023 08:08:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7388619EF;
-        Fri,  7 Jul 2023 15:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D79DC433C8;
-        Fri,  7 Jul 2023 15:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688742512;
-        bh=Kcc5BRyjmQB+Tg/fy6raV5yMIqWxapI/R18lSX23EDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g4VTNT0m6XKStzKZRJRuNZgU0aQ/+ItOHdFDq0ELIJwcJczeuDmNbRcSR4opAmgfj
-         pX93UNqUpq6kuKnn99yhPPOmHKEQqI8F5xtOjanjdWMvq36pbxp0LIhzGEdNi6/v7m
-         FR0dA86d3Te/x61CbmbOKhcS6efgAAQJTrKgg1OuFLMKYWFej2eErlKe7rbZQJglUj
-         No0e5aEexz54+ZZrEhRPso1aTNBkSa2OVu37uoewpGLMEr+tVLUmNN3+1i+dS6huyr
-         UkuJjnl/90uotHktcCGkUsLZju1h3hj2gkykT8mb+fP82EFx+s4pDy7sP0AdWUqNFU
-         ZnD103wnnBfjQ==
-Date:   Fri, 7 Jul 2023 16:08:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     akpm@linux-foundation.org, andrew.cooper3@citrix.com,
-        arnd@arndb.de, bp@alien8.de, bsingharora@gmail.com,
-        christina.schimpe@intel.com, corbet@lwn.net,
-        dave.hansen@linux.intel.com, david@redhat.com, debug@rivosinc.com,
-        dethoma@microsoft.com, eranian@google.com, esyr@redhat.com,
-        fweimer@redhat.com, gorcunov@gmail.com, hjl.tools@gmail.com,
-        hpa@zytor.com, jamorris@linux.microsoft.com, jannh@google.com,
-        john.allen@amd.com, kcc@google.com, keescook@chromium.org,
-        kirill.shutemov@linux.intel.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
-        mike.kravetz@oracle.com, mingo@redhat.com, nadav.amit@gmail.com,
-        oleg@redhat.com, pavel@ucw.cz, pengfei.xu@intel.com,
-        peterz@infradead.org, rdunlap@infradead.org, rppt@kernel.org,
-        szabolcs.nagy@arm.com, tglx@linutronix.de,
-        torvalds@linux-foundation.org, weijiang.yang@intel.com,
-        willy@infradead.org, x86@kernel.org, yu-cheng.yu@intel.com
-Subject: Re: [PATCH] x86/shstk: Move arch detail comment out of core mm
-Message-ID: <9704b6a9-e7c5-4d50-9567-9e23906aafdf@sirena.org.uk>
-References: <ad6df14b-1fbd-4136-abcd-314425c28306@sirena.org.uk>
- <20230706233248.445713-1-rick.p.edgecombe@intel.com>
+        Fri, 7 Jul 2023 11:09:24 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8DA268B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:09:22 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f954d7309fso2522746e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688742561; x=1691334561;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Vrdg0BN8YeBPDc9Z9UP3CnoTFMFzGJE30KoHXN+rRA=;
+        b=sFjOsKeMEC/86xCtbSTI4Tawd1k3QfcsXGfWApGBL1x19uMmxtfKUPkPuG8FFNDM2S
+         OpZ0fLCttpFipoo5Ezw88q1vgRSIQDKvd96Ur4da02dF7cWUYX9ZyB2uOu/zQlmkprpD
+         PpIZ3ecFS44Ww7k/DjogXpUrAg3q3L1HeGeAJ4O15de+T5rEdVOYADNPxEEDRl+QGAMH
+         dtG8hloMLzjYezyL1eamIPX+3OKgGcy2m6wL01nD53203aJC6W3vtYxwqHdgmEwyoCvV
+         mdy2wF4ECDye1arJb4I3o62REe66ZPU0j1r/ySNGNUP73hEMtql2OR/lt9FrmrNZLwWM
+         XM3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688742561; x=1691334561;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Vrdg0BN8YeBPDc9Z9UP3CnoTFMFzGJE30KoHXN+rRA=;
+        b=aDD9pYsVTrOGIaME32tN//atA3bLe0/exv0ByKq3lIZQR+BdKE/+/z+Z//AYt4MyW6
+         bX8XSXCSlU0Mu+dbnHO6B4VipEqWefvGv/ovO3eR4A1C+124I7gEbIif5JCmQo0virrf
+         fktKP18/pScE92f5YcXZxonYArpQ8AWfxhcmC4V8l0Ey3b5Vldieo+kx+1Gt8l83gGeX
+         p05fHRwxsRLvO/hfQ7SR9V3BP+SzopcPUF99yu1ooV0gXYX9cpOfPToDQ5hXI62WJWKW
+         BU/4NY/bTFUlzKnxq6HPzDVq5vvXd6BgV6+oyOmOoLEhzxm6YHxmchcuREJ4a7BqWFhx
+         e6IQ==
+X-Gm-Message-State: ABy/qLYapWC8d4vvnoRJ62X7i5mmXrIBQ9vNAdw4HqjIgNkvRhtkx7bL
+        kAGBm+LH3GltL+ZsS+odv4rxhA==
+X-Google-Smtp-Source: APBJJlHUCfOsWmEr/nU2X4bUtXexNSuTsdr3Fo86I7TLAV/FuqEMGf0Lzv4Rf+oayoRyWWpP60NnuA==
+X-Received: by 2002:a05:6512:2251:b0:4f9:5807:aba7 with SMTP id i17-20020a056512225100b004f95807aba7mr3390088lfu.27.1688742560970;
+        Fri, 07 Jul 2023 08:09:20 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id v25-20020ac25619000000b004fb745fd22fsm716004lfd.32.2023.07.07.08.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 08:09:20 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v6.5-rc1
+Date:   Fri,  7 Jul 2023 17:09:19 +0200
+Message-Id: <20230707150919.724185-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6nP9Wo8Ehv/TVMQs"
-Content-Disposition: inline
-In-Reply-To: <20230706233248.445713-1-rick.p.edgecombe@intel.com>
-X-Cookie: Victory or defeat!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---6nP9Wo8Ehv/TVMQs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Here's a PR with an MMC fix intended for v6.5-rc1. Details about the highlights
+are as usual found in the signed tag.
 
-On Thu, Jul 06, 2023 at 04:32:48PM -0700, Rick Edgecombe wrote:
-> The comment around VM_SHADOW_STACK in mm.h refers to a lot of x86
-> specific details that don't belong in a cross arch file. Remove these
-> out of core mm, and just leave the non-arch details.
->=20
-> Since the comment includes some useful details that would be good to
-> retain in the source somewhere, put the arch specifics parts in
-> arch/x86/shstk.c near alloc_shstk(), where memory of this type is
-> allocated. Include a reference to the existence of the x86 details near
-> the VM_SHADOW_STACK definition mm.h.
+Please pull this in!
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Kind regards
+Ulf Hansson
 
---6nP9Wo8Ehv/TVMQs
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+The following changes since commit e55e5df193d247a38a5e1ac65a5316a0adcc22fa:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSoKmMACgkQJNaLcl1U
-h9DOVwf/Y0zWXHXNC1vLAm9sKmANgUpp9G9Tqrm1x5ddbXJHfCpcA5GUW5fG4lXa
-GYCDJ1gq8Rlt84gcZU+mPC8evLuDsh7gAysYhq0HcNJOqWr7gYi5/5M3JVrdCUfM
-iMP11cx6d71lxhKkI3V5TYs6D4sX9UJQlD3ytefHHFmZNyouWx3yRRerWukxyNXY
-oEa+zZP8MxfY1YKd6/C9mWisi5F10DqRsxc71IU7uoovWT37E9Qy1Xsx0+DBqyq3
-ceF3B+z+tRbd3CFLJfotCxxiFkhOLq3GJlD/3/aAGS5hJPtrQ7Qy+rwhbQ6nGOfr
-A5+bDsBsdcVJmhjoXp/75wDbyqj0Jg==
-=inrT
------END PGP SIGNATURE-----
+  csky: fix up lock_mm_and_find_vma() conversion (2023-06-29 23:34:29 -0700)
 
---6nP9Wo8Ehv/TVMQs--
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.5-2
+
+for you to fetch changes up to fa700d73494abbd343c47c6f54837c9874c61bbe:
+
+  mmc: Revert "mmc: core: Allow mmc_start_host() synchronously detect a card" (2023-06-30 14:06:51 +0200)
+
+----------------------------------------------------------------
+MMC core:
+ - Fix regression of detection of eMMC/SD/SDIO cards
+
+----------------------------------------------------------------
+Ulf Hansson (1):
+      mmc: Revert "mmc: core: Allow mmc_start_host() synchronously detect a card"
+
+ drivers/mmc/core/core.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
