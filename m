@@ -2,207 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECC474B3DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDA174B3E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjGGPMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S230429AbjGGPMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjGGPML (ORCPT
+        with ESMTP id S233352AbjGGPMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:12:11 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158DE2127
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:12:09 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-307d58b3efbso1969176f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688742727; x=1691334727;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQgaHEs5ElhGcSE1hakyOOb4DKur9FjrT69zZjDMTtE=;
-        b=eDeOV8v3euRnkTXm7Asdaoa32ka9wnAU9XwdcTU4TRBdxYTiTD+A/TNPy9S+nxQTX2
-         1QWoAV30NWEIkrLdAl/8PZLCDU7a7CayxV1zwiObT0G4qZ17TCiDReytvR0JaovP1XVX
-         1BDFkj8mFrH2aqP9lU0PmLcvaY0Ogyo2IgMDG7s/BJUk5mdX1unx7hfxC0oB8Su4wnYl
-         tXwj+tHIecZ6FdhlCMCxQK7Krr1soCCk2KwSdaEgsqfRHbO2jb+G8K9VJ9RL2AL5nZwE
-         WwpVwALG+unL9yOu4rn8Ms7SsAoUp0roQP+SZjuLBq87hCrSdayp1Gsw1n1MdChyvBJX
-         tU/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688742727; x=1691334727;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BQgaHEs5ElhGcSE1hakyOOb4DKur9FjrT69zZjDMTtE=;
-        b=fIqXtkGk9td/S25ieLDARN/D7p3dD1z4vbzCFUm4Ob8Hi5KzxNGbxsc8D9GojTjxpW
-         XCEUE0ZZ9RCjw1PYWgpAp0qwZtfI/BTepW5PmAW+PwR/q3Gg1yhW46fkjpEnfUuubWO4
-         k0QqXEdpTKl6upH2gkeMD1yHgwP7ks4A/CMtxyNxM3lRlqY8kYjGXyDzkaOHLxA7tPkn
-         gqt9f/ZV/3ph01bIP0KgeHMWGiBWaqSml12Mvsm5IBqqu+x4vtc08qFA5VBxDkYxg9eP
-         kVnAPZwUwIiY+n6IW+9hPZH6+xUpAkGO8plnik32bnCgqC61d2nr4nf81clhkSlpvXBS
-         q9iQ==
-X-Gm-Message-State: ABy/qLY5sLiKEqex3PdEiRk4aIeFrbOsgoWtZNEF+V0RiGFxaJZxkYvt
-        nUnAcClH9A9oBB3hhVPln4FBGQ==
-X-Google-Smtp-Source: APBJJlGQBnO4ZSjUTrTkR6jMlfdn1bT1yYIOs2bA+ajpmf1kEC0cZt+Rdb1eRGZokGdXhmUk4EM/FA==
-X-Received: by 2002:adf:f642:0:b0:314:35c2:c4aa with SMTP id x2-20020adff642000000b0031435c2c4aamr3918202wrp.8.1688742727301;
-        Fri, 07 Jul 2023 08:12:07 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:ddd7:8c33:e081:d016? ([2a01:e0a:982:cbb0:ddd7:8c33:e081:d016])
-        by smtp.gmail.com with ESMTPSA id l11-20020a5d668b000000b003063db8f45bsm4678383wru.23.2023.07.07.08.12.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 08:12:06 -0700 (PDT)
-Message-ID: <1496b9c1-289a-c354-f0ae-e14fd4c9bcfa@linaro.org>
-Date:   Fri, 7 Jul 2023 17:12:04 +0200
+        Fri, 7 Jul 2023 11:12:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E268213C;
+        Fri,  7 Jul 2023 08:12:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE619619D3;
+        Fri,  7 Jul 2023 15:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BDAC433C8;
+        Fri,  7 Jul 2023 15:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688742731;
+        bh=Ya0LfXrJm2rcUDVejC5YdLCrCcxE/mUzk/Zqpcvn0TI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=FitX0YVhEKf14hYzYIjYke+cBCO98TDEt32PMkOsaT/udyzSouFno+mb6mSFyXXcM
+         27Qe6wy4y3zrlvCH2j+hQMCykLwg8DS0zy0wW968EMHOvNtH6AXv3Ib+4htPbKsMJJ
+         tsFuvtoxiFfobvUdw4JVQG1syV8Rgx0vgPxmWuEcejrtUGRHs3d66znDOBPhhovb8x
+         +e4505LaicY8G9K8WZqJ+3FrrsE5c3LRfeem9XC4CHQh8fN+shOLFflhcJe+eJoB2s
+         IyfUPrPyrwmVWpVYleW48JQqDNFdZmvrWKJGaAN0xdFBXY/WBGi393Ne6KmSzNxmEz
+         4g6EBVLyh6Iiw==
+Date:   Fri, 7 Jul 2023 10:12:09 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        manivannan.sadhasivam@linaro.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        krzysztof.kozlowski@linaro.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Bo Liu <liubo03@inspur.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <error27@gmail.com>,
+        "open list:MHI BUS" <mhi@lists.linux.dev>
+Subject: Re: [PATCH v3 9/9] bus: mhi: ep: wake up host is the MHI state is in
+ M3
+Message-ID: <20230707151209.GA139708@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
- genpd dir
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-4-ulf.hansson@linaro.org>
- <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
- <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05b4d009-b50b-4971-9220-615f73db4acd@kadam.mountain>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2023 16:54, Ulf Hansson wrote:
-> On Fri, 7 Jul 2023 at 16:42, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->>
->> Hi,
->>
->> On 07/07/2023 16:04, Ulf Hansson wrote:
->>> Cc: Neil Armstrong <neil.armstrong@linaro.org>
->>> Cc: Kevin Hilman <khilman@baylibre.com>
->>> Cc: Jerome Brunet <jbrunet@baylibre.com>
->>> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->>> Cc: <linux-amlogic@lists.infradead.org>
->>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->>> ---
->>>    MAINTAINERS                                        | 1 +
->>>    drivers/genpd/Makefile                             | 1 +
->>>    drivers/genpd/amlogic/Makefile                     | 4 ++++
->>>    drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
->>>    drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
->>>    drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
->>>    drivers/soc/Makefile                               | 1 -
->>>    drivers/soc/amlogic/Makefile                       | 3 ---
->>>    8 files changed, 6 insertions(+), 4 deletions(-)
->>>    create mode 100644 drivers/genpd/amlogic/Makefile
->>>    rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
->>>    rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
->>>    rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 588769fab516..9b8c9ae2375d 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -1843,6 +1843,7 @@ F:      Documentation/devicetree/bindings/phy/amlogic*
->>>    F:  arch/arm/boot/dts/amlogic/
->>>    F:  arch/arm/mach-meson/
->>>    F:  arch/arm64/boot/dts/amlogic/
->>> +F:   drivers/genpd/amlogic/
->>>    F:  drivers/mmc/host/meson*
->>>    F:  drivers/phy/amlogic/
->>>    F:  drivers/pinctrl/meson/
->>> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
->>> index a2d5b2095915..cdba3b9f0c75 100644
->>> --- a/drivers/genpd/Makefile
->>> +++ b/drivers/genpd/Makefile
->>> @@ -1,2 +1,3 @@
->>>    # SPDX-License-Identifier: GPL-2.0-only
->>>    obj-y                                       += actions/
->>> +obj-y                                        += amlogic/
->>> diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
->>> new file mode 100644
->>> index 000000000000..3d58abd574f9
->>> --- /dev/null
->>> +++ b/drivers/genpd/amlogic/Makefile
->>> @@ -0,0 +1,4 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only
->>> +obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
->>> +obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
->>> +obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
->>> diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
->>> similarity index 100%
->>> rename from drivers/soc/amlogic/meson-ee-pwrc.c
->>> rename to drivers/genpd/amlogic/meson-ee-pwrc.c
->>> diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
->>> similarity index 100%
->>> rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
->>> rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
->>> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
->>> similarity index 100%
->>> rename from drivers/soc/amlogic/meson-secure-pwrc.c
->>> rename to drivers/genpd/amlogic/meson-secure-pwrc.c
->>> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
->>> index 3b0f9fb3b5c8..dc93e1762ca7 100644
->>> --- a/drivers/soc/Makefile
->>> +++ b/drivers/soc/Makefile
->>> @@ -23,7 +23,6 @@ obj-y                               += mediatek/
->>>    obj-y                               += microchip/
->>>    obj-y                               += nuvoton/
->>>    obj-y                               += pxa/
->>> -obj-y                                += amlogic/
->>>    obj-y                               += qcom/
->>>    obj-y                               += renesas/
->>>    obj-y                               += rockchip/
->>> diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
->>> index 7b8c5d323f5c..c25f835e6a26 100644
->>> --- a/drivers/soc/amlogic/Makefile
->>> +++ b/drivers/soc/amlogic/Makefile
->>> @@ -2,7 +2,4 @@
->>>    obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
->>>    obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
->>>    obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
->>> -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
->>>    obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
->>> -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
->>> -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
->>
->> I've a few changes for v6.6, how shall we handle that ?
+On Fri, Jul 07, 2023 at 02:41:57PM +0300, Dan Carpenter wrote:
+> On Fri, Jul 07, 2023 at 04:33:56PM +0530, Krishna chaitanya chundru wrote:
+> > If the MHI state is in M3 then the most probably the host kept the
+> > device in D3 hot or D3 cold, due to that endpoint transctions will not
+> > be read by the host, so endpoint wakes up host to bring the host to D0
+> > which eventually bring back the MHI state to M0.
+> > 
+> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > ---
+> >  drivers/bus/mhi/ep/main.c | 28 ++++++++++++++++++++++++++++
+> >  1 file changed, 28 insertions(+)
+> > 
+> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> > index 6008818..46a8a3c 100644
+> > --- a/drivers/bus/mhi/ep/main.c
+> > +++ b/drivers/bus/mhi/ep/main.c
+> > @@ -25,6 +25,27 @@ static DEFINE_IDA(mhi_ep_cntrl_ida);
+> >  static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id);
+> >  static int mhi_ep_destroy_device(struct device *dev, void *data);
+> >  
+> > +static bool mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
+> > +{
+> > +	enum mhi_state state;
+> > +	bool mhi_reset;
+> > +	u32 count = 0;
+> > +
+> > +	mhi_cntrl->wakeup_host(mhi_cntrl);
+> > +
+> > +	/* Wait for Host to set the M0 state */
+> > +	do {
+> > +		msleep(M0_WAIT_DELAY_MS);
+> > +		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
+> > +		count++;
+> > +	} while (state != MHI_STATE_M0 && count < M0_WAIT_COUNT);
+> > +
+> >+	if (state != MHI_STATE_M0)
+> >+		return false;
 > 
-> I think we should continue to use the soc tree until v6.6-rc1 (or if
-> Arnd have some other ideas), there are some more thoughts around this
-> in the cover letter.
-> 
-> Beyond v6.6-rc1 I plan to help with maintenance in practice  and run
-> my own separate git tree.
+> Functions which return false on success are an abomination.  Also
+> boolean functions should be named for the question they answer such
+> as access_ok() or has_feature() etc.
 
-If it helps I can send you a PR with only the pwrc changes you can merge
-before applying this serie.
++1.  Also nice if boolean functions do not have side effects, so in
+this case, where mhi_ep_wake_host() *does* something that might fail,
+I think "return 0 for success or negative error value" is easier to
+read.
 
-Neil
-
+> Write it like this:
 > 
->>
->> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
->>
->> Thanks !
->> Neil
+> static int mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
+> {
+> 	enum mhi_state state;
+> 	bool mhi_reset;
+> 	int count = 0;
 > 
-> Thanks!
+> 	mhi_cntrl->wakeup_host(mhi_cntrl);
 > 
-> Kind regards
-> Uffe
-
+> 	while (count++ < M0_WAIT_COUNT) {
+> 		msleep(M0_WAIT_DELAY_MS);
+> 
+> 		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
+> 		if (state == MHI_STATE_M0)
+> 			return 0;
+> 	}
+> 	return -ENODEV;
+> }
