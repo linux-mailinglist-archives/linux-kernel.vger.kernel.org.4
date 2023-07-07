@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C8174B591
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F0374B594
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjGGRL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S229642AbjGGRMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjGGRL4 (ORCPT
+        with ESMTP id S229571AbjGGRMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:11:56 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4112698
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:11:44 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-780c89d1998so25175639f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 10:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688749904; x=1691341904;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8XwB6FRaSvRVVWlB+iPBaDfSHgTIJ2rhFuwDkZZcuAc=;
-        b=y+Rbar6UyJ3sB2i3EiQDFvPEZlD1XwwM5qGJIYmAebRX8uW17ML4xn/N5HnQWt+FAu
-         ISMMcTmMYwQYOpjx+Jkq3tKob3NqTQCGC4+XZnR3m70DKUp/6EHt3BK2BzhmCKi1aVOB
-         Yeeq+Lx582WcqYKvKth4egDVFkTTKkLDsyjYQuMyePXiUayjZ7GjjxnVceDFC2+LUqT8
-         tn6o3iW+b99cLFJBcPaRU0SQp3ynj7srFT13mqPWa5ehk3MfDMbAMbkExjXSfVAKRNox
-         Sop+OykcQOeWb9SRVc3YmQv5FtqkZTz6fHpxCPCnZ0zLnpSROjcMHU2XYWxZxuG6x4fQ
-         VrMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688749904; x=1691341904;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8XwB6FRaSvRVVWlB+iPBaDfSHgTIJ2rhFuwDkZZcuAc=;
-        b=gf07oOsEcsd3QMnSocXmjXyUUJdNyyuDlqGF5ycf1pVTyKZEo9s6En3fECCeDexzcr
-         hh62dbbF/Oxh2Kz+ztc+czQV1sNUdZDOPDFBWb/DG1yAZ7SJnAa03cng0T6X05ZhnJ0y
-         vGw1W6EKuvvjtKqaH5vqypCrb6bAcOFI4bHc+JXQfcMXx5es6kdVuy0KdrYV1rF+yL37
-         ebdfzmSVcosC/VDzqrHjv1zMYECQcJrnjXeK6BvjnW8wipAg/t662HOf5OzWjVQ3vNFW
-         iiiHGvSVZAncG7eO0IkFdZzyDh3hzkkrmCZDEj4OlldyPMzVJao9PZTC406qS5M78hQW
-         Skew==
-X-Gm-Message-State: ABy/qLZvVOyKeIYitl6mKHbbtR4k8N60ppyK6WFWpFP1reyTseFOXZP/
-        f/xmHJOzpnFPlhSns5Zu4VHm4w==
-X-Google-Smtp-Source: APBJJlECUNSI/mC1/FFJOdkTSyrb9fFsYRyAPjKS5E/ERQJwe8dWC/ZAF4N/QNTZgPmd/TaDi2S5cA==
-X-Received: by 2002:a05:6602:1493:b0:783:6e76:6bc7 with SMTP id a19-20020a056602149300b007836e766bc7mr10257902iow.2.1688749903918;
-        Fri, 07 Jul 2023 10:11:43 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e1-20020a05660222c100b00783634b9eafsm1433746ioe.50.2023.07.07.10.11.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 10:11:42 -0700 (PDT)
-Message-ID: <968801df-0973-4411-9092-95f272142a81@kernel.dk>
-Date:   Fri, 7 Jul 2023 11:11:41 -0600
+        Fri, 7 Jul 2023 13:12:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4E71BE8;
+        Fri,  7 Jul 2023 10:12:41 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B2CAD1EC0398;
+        Fri,  7 Jul 2023 19:12:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1688749959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6OzTAM5FK7zuWehbwIgNlYhTn7gz7QucEzqfEJ1uQTI=;
+        b=Ofn5vYHULl96suxbDMl8V3puQxjmh25Tno5YjGIbEsBkrPiFJOa5NlyzTLaPt/R+MIeZUF
+        Uizt9oJ9o7OW5R7R0wiP5jGIcMGUQymN8GRm9OGilHmdIYUahjq81dg90dw0ypAi4zDjKX
+        MzwRASzQ5bETaid2gx4d3LR0NYyAHck=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id k6gAkJSP5-z2; Fri,  7 Jul 2023 17:12:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1688749957; bh=6OzTAM5FK7zuWehbwIgNlYhTn7gz7QucEzqfEJ1uQTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VDJmOTTLG3llFmdDaKnj+N0q1BVcJThGqAiKNp1ZUHH+UiMBMRE9/QEtwiG/3cfZa
+         6rTjON9AFVVjHpGKcTOar3LrWQr0lV8K/BgOUzXLMHwOiR0/Yjk1jJq7dbJuekJCZZ
+         X1L1rEMgfxlKC1xabfQg0YhvZXBAy4/oGeDF5opiQWZitjBa/mM1tWJQx2zQtPs0mE
+         Slke0oVL8p5vYisoWC64IVbAy6pQR3qyMtzzqu705q4V4TaeXMJFcqZWEzLsLtSqKG
+         vaIcWmD9wbRSP69U8m6r+t9uVZYxZr+bLuK0UJg52fwTrY3DIdcLtZ5PGFbb+QM3QJ
+         ogtoWsUN71NuW3F1148tAjUqcyrk+mxw/qakHSeAu1/Qjg00Lo9qvzvGV8cZ3hlncG
+         WcCi5e4Zqqch83l9g15JQ47DLEcuzjVt2Re6m8TlSmf0jRO/tVJuxy28y1UkjmI8Gz
+         1cMm4q/vM3OOmdd/1RnoZcsln5QfAzBlHBYq8UKcev62KeIra9IrhsnYh3c7kTccoR
+         6g7bNed2WfC0zbQsMSBCUBzH5xpzsES6JeHUXfHFgK/v3JyuB7rt5mLVkBpm+bwgcz
+         e9yOY7qHCeETWZv6Yp/CuCVbtVWJVLhaAeysDmoY5OLOgEoPJPwT3cv6Kzl0shauJ7
+         rD30uRnap9KWpwAVvKoxo2ec=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CECA740E0140;
+        Fri,  7 Jul 2023 17:12:21 +0000 (UTC)
+Date:   Fri, 7 Jul 2023 19:12:17 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Joerg Roedel <jroedel@suse.de>, Baoquan He <bhe@redhat.com>,
+        Tao Liu <ltao@redhat.com>, thomas.lendacky@amd.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
+        linux-kernel@vger.kernel.org, dyoung@redhat.com,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
+ kexec kernel
+Message-ID: <20230707171217.GHZKhHcffp4nn6RgR/@fat_crate.local>
+References: <20230601072043.24439-1-ltao@redhat.com>
+ <20230705173359.GDZKWphyFbNE8id6Jm@fat_crate.local>
+ <CAO7dBbXdJgpO4Ym=4WME3OOrUhq2MNKpNZmhpsC7pOSugHiKDg@mail.gmail.com>
+ <ZKeTX2aemPbsMiVr@MiWiFi-R3L-srv>
+ <ZKfLYG_4DANc_i5r@suse.de>
+ <20230707085712.GBZKfTaGJXnzhEenxj@fat_crate.local>
+ <20230707152515.42gpfzjgvfwe6rf7@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1] io_uring: Use io_schedule* in cqring wait
-Content-Language: en-US
-To:     Andres Freund <andres@anarazel.de>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>
-References: <20230707162007.194068-1-andres@anarazel.de>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230707162007.194068-1-andres@anarazel.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230707152515.42gpfzjgvfwe6rf7@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +88,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/23 10:20?AM, Andres Freund wrote:
-> I observed poor performance of io_uring compared to synchronous IO. That
-> turns out to be caused by deeper CPU idle states entered with io_uring,
-> due to io_uring using plain schedule(), whereas synchronous IO uses
-> io_schedule().
-> 
-> The losses due to this are substantial. On my cascade lake workstation,
-> t/io_uring from the fio repository e.g. yields regressions between 20%
-> and 40% with the following command:
-> ./t/io_uring -r 5 -X0 -d 1 -s 1 -c 1 -p 0 -S$use_sync -R 0 /mnt/t2/fio/write.0.0
-> 
-> This is repeatable with different filesystems, using raw block devices
-> and using different block devices.
-> 
-> Use io_schedule_prepare() / io_schedule_finish() in
-> io_cqring_wait_schedule() to address the difference.
-> 
-> After that using io_uring is on par or surpassing synchronous IO (using
-> registered files etc makes it reliably win, but arguably is a less fair
-> comparison).
-> 
-> There are other calls to schedule() in io_uring/, but none immediately
-> jump out to be similarly situated, so I did not touch them. Similarly,
-> it's possible that mutex_lock_io() should be used, but it's not clear if
-> there are cases where that matters.
+On Fri, Jul 07, 2023 at 10:25:15AM -0500, Michael Roth wrote:
+> ...
+> It would be unfortunate if we finally abandoned this path because of the
+> issue being hit here though. I think the patch posted here is the proper
+> resolution to the issue being hit, and I'm hoping at this point we've
+> identified all the similar cases where EFI/setup_data-related structures
+> were missing explicit mappings. But if we still think it's too much of a
+> liability to access the EFI config table outside of SEV-enabled guests,
+> then I can work on re-implementing things based on the above logic.
 
-This looks good to me, and I also separately tested a similar patch and
-it showed good results for me even with a heavily performance oriented
-setup:
+Replying here to Tom's note too...
 
-	pread2		io_uring	io_uring w/io_sched
-QD1	185K		170K		186K
-QD2	NA		304K		327K
-QD4	NA		630K		640K
-QD8	NA		891K		892K
+So, I like the idea of rechecking CPUID. Yes, let's do the sev_status
+check. As a result, we either fail the guest - no problem - or we boot
+and we recheck. Thus, we don't run AMD code on !AMD machines, if the HV
+is not a lying bastard.
 
-I'll add this, with just one small minor cosmetic edit:
+Now, if we've gotten a valid setup_data SETUP_EFI entry with a valid
+pointer to an EFI config table, then that should happen in the generic
+path - initialize_identity_maps(), for example - like you've done in
+b57feed2cc26 - not in the kexec code because kexec *happens* to need it.
 
-> @@ -2575,6 +2575,9 @@ int io_run_task_work_sig(struct io_ring_ctx *ctx)
->  static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
->  					  struct io_wait_queue *iowq)
->  {
-> +	int ret;
-> +	int token;
+We want to access the EFI config table? Sure, by all means, but make
+that generic for all code.
 
-Should just be a single line.
-
-And I'll mark this for stable as well. Thanks!
+Thx.
 
 -- 
-Jens Axboe
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
