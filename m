@@ -2,100 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13DF74B6E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C7F74B6E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjGGTIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S229688AbjGGTJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbjGGTIM (ORCPT
+        with ESMTP id S230145AbjGGTJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:08:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F81426A0
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688756813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=paIBB7sUf/Zqn/4VcL295pzVpCyEKoMCoSkthIK/cDY=;
-        b=jQ05UvU4OoIW3AEz0DucWBOUW8A0hS6NT+PgJGkEWp/TXOqa3OQpIPer+oqxg95rT3ifqI
-        MEqwJg6fGmyBYbFrHguRiCkZfQkirbkYFzSPXA+XSozCed5npt01cb97Waw+hEFdVBJr1f
-        30uiWhjT7x0jusUuOUmz2nGJ+l0Kx5k=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-308-Lpjx4nWbPQOmL68F0cY1tA-1; Fri, 07 Jul 2023 15:06:52 -0400
-X-MC-Unique: Lpjx4nWbPQOmL68F0cY1tA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fa979d0c32so12643205e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 12:06:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688756811; x=1691348811;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=paIBB7sUf/Zqn/4VcL295pzVpCyEKoMCoSkthIK/cDY=;
-        b=hITDprYJD3OnqgLpu1jBSfNeEWpC2cqVuZ8kcCs8QAofL9uS0/RBP4ttAbUSeCLpSq
-         UQkCXWYacaz3QIbSgGGsMSSiUe/sk3dbCPo1ibDNGVkXccHChrC4ECztcqTNplyxGk2B
-         C3YICBzmxqDUJujErK6ME+X5dqiy0GsCrXubGdYMIOt/G0JchWxJkRCjhkcqAK7v6Plp
-         B25f+4LpSA02mJ1eAUMeiCf+hNt/ddMcuAmeTBhIW4p2TQFy4uce1wNKJeIeGWOhW4t5
-         YfoUfixldNkYI/cOUjR5ckvC0glB82fqsn7SAbZn6eS296RJtYNsBJM+3qcXMqjMrIh1
-         vgHQ==
-X-Gm-Message-State: ABy/qLZ9EHRxIq4aeFjrPmC74ueqzb2oOYDZJVHvOipUrB9UWW5fYTJ7
-        l5PKUvkBefSuiensdqay4gFxQeBNZxaQBH9UjKFeSLi+cTi4B5O/xsCNKIr4P5hKHH55DUTVca8
-        Z8GKaDfB+ItMSGpkMBbSBVQMp
-X-Received: by 2002:a7b:c3d5:0:b0:3f6:91c:4e86 with SMTP id t21-20020a7bc3d5000000b003f6091c4e86mr4429232wmj.3.1688756811017;
-        Fri, 07 Jul 2023 12:06:51 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFZCPQ0FYZqAu9VBMOE7vXIKu8edRl0ks2ySLHo/6XMBlpctAYBJaE1EDQ7rgfWGU/ApHetcA==
-X-Received: by 2002:a7b:c3d5:0:b0:3f6:91c:4e86 with SMTP id t21-20020a7bc3d5000000b003f6091c4e86mr4429208wmj.3.1688756810620;
-        Fri, 07 Jul 2023 12:06:50 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f04:3c00:248f:bf5b:b03e:aac7? (p200300d82f043c00248fbf5bb03eaac7.dip0.t-ipconnect.de. [2003:d8:2f04:3c00:248f:bf5b:b03e:aac7])
-        by smtp.gmail.com with ESMTPSA id c26-20020a7bc01a000000b003f7f475c3bcsm10392928wmb.1.2023.07.07.12.06.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 12:06:49 -0700 (PDT)
-Message-ID: <b1e7c52c-cc3a-92c8-e466-3ba5ec2ba2fb@redhat.com>
-Date:   Fri, 7 Jul 2023 21:06:48 +0200
+        Fri, 7 Jul 2023 15:09:12 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6010310C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688756950; x=1720292950;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3OLO57wVxdEQy4soa+ud5JkYyjjn1pmRPaIZj8Z4CoA=;
+  b=Q2398fAMCVtSgshFh/NEEFDkLIAgpv12JYhU4YE1jK8VzYr4EGzRLNfZ
+   0u2rpvfK2rgFcDTSkm0mWfB4fPpdNlFrSJgVG/T8SZPthbfDmlS+dqSs+
+   9+pQjP6d/QdSSW33zLSWAyKD4VdjVTetje1LVhc75E7kNG+KKZ1RjJbgv
+   2eLPvP8UEpaCft8TxjPadFTIZmpAwjD+vmNlPS2bEyw46VfvJ4DLOvkRD
+   apcuzukXP4TAfxVqidHmDrY0YaM3b7pm9Ml5TpHHTnQq5m6uuFpfEMxrK
+   vHzmfGLsLabIBTy+ElGN4Z8e+c89UV66cdfawi58BfG+chPv0Q/XFzXE7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="366548552"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="366548552"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 12:09:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="864658382"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="864658382"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2023 12:09:08 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qHqpH-0002DQ-1G;
+        Fri, 07 Jul 2023 19:09:07 +0000
+Date:   Sat, 8 Jul 2023 03:08:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/media/i2c/tc358746.c:817:13: warning: 'p_best' is used
+ uninitialized
+Message-ID: <202307080250.28r3inuE-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Ryan Roberts <ryan.roberts@arm.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-5-ryan.roberts@arm.com>
- <87edlkgnfa.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <44e60630-5e9d-c8df-ab79-cb0767de680e@arm.com>
- <524bacd2-4a47-2b8b-6685-c46e31a01631@redhat.com>
- <ZKgZrNuxuq4ACvIb@casper.infradead.org>
- <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
- <9dd036a8-9ba3-0cc4-b791-cb3178237728@arm.com>
- <a8fed7f8-d285-4628-da4b-0ff82c19c582@redhat.com>
- <c5eb896b-dbb4-396d-62f6-5d5dde2d7df6@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-In-Reply-To: <c5eb896b-dbb4-396d-62f6-5d5dde2d7df6@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,83 +65,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> I still feel that it would be better for the thp and large anon folio controls
->>> to be independent though - what's the argument for tying them together?
->>
->> Thinking about desired 2 MiB flexible THP on aarch64 (64k kernel) vs, 2 MiB PMD
->> THP on aarch64 (4k kernel), how are they any different? Just the way they are
->> mapped ...
-> 
-> The last patch in the series shows my current approach to that:
-> 
-> int arch_wants_pte_order(struct vm_area_struct *vma)
-> {
-> 	if (hugepage_vma_check(vma, vma->vm_flags, false, true, true))
-> 		return CONFIG_ARM64_PTE_ORDER_THP; <<< always the contpte size
-> 	else
-> 		return CONFIG_ARM64_PTE_ORDER_NOTHP; <<< limited to 64K
-> }
-> 
-> But Yu has raised concerns that this type of policy needs to be in the core mm.
-> So we could have the arch blindly return the preferred order from HW perspective
-> (which would be contpte size for arm64). Then for !hugepage_vma_check(), mm
-> could take the min of that value and some determined "acceptable" limit (which
-> in my mind is 64K ;-).
+Hi Marco,
 
-Yeah, it's really tricky. Because why should arm64 with 64k base pages 
-*not* return 2MiB (which is one possible cont-pte size IIRC) ?
+FYI, the error/warning still remains.
 
-I share the idea that 64k might *currently* on *some platforms* be a 
-reasonable choice. But that's where the "fun" begins.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4f6b6c2b2f86b7878a770736bf478d8a263ff0bc
+commit: 80a21da360516fa602f3a50eb9792f9dfbfb5fdb media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver
+date:   8 months ago
+config: arc-randconfig-r035-20230708 (https://download.01.org/0day-ci/archive/20230708/202307080250.28r3inuE-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230708/202307080250.28r3inuE-lkp@intel.com/reproduce)
 
-> 
->>
->> It's easy to say "64k vs. 2 MiB" is a difference and we want separate controls,
->> but how is "2MiB vs. 2 MiB" different?
->>
->> Having that said, I think we have to make up our mind how much control we want
->> to give user space. Again, the "2MiB vs. 2 MiB" case nicely shows that it's not
->> trivial: memory waste is a real issue on some systems where we limit THP to
->> madvise().
->>
->>
->> Just throwing it out for discussing:
->>
->> What about keeping the "all / madvise / never" semantics (and MADV_NOHUGEPAGE
->> ...) but having an additional config knob that specifies in which cases we
->> *still* allow flexible THP even though the system was configured for "madvise".
->>
->> I can't come up with a good name for that, but something like
->> "max_auto_size=64k" could be something reasonable to set. We could have an
->> arch+hw specific default.
-> 
-> Ahha, yes, that's essentially what I have above. I personally also like the idea
-> of the limit being an absolute value rather than an order. Although I know Yu
-> feels differently (see [1]).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307080250.28r3inuE-lkp@intel.com/
 
-Exposed to user space I think it should be a human-readable value. 
-Inside the kernel, I don't particularly care.
+All warnings (new ones prefixed by >>):
 
-(Having databases/VMs on arch64 with 64k in mind) I think it might be 
-interesting to have something like the following:
-
-thp=madvise
-max_auto_size=64k/128k/256k
+   drivers/media/i2c/tc358746.c: In function 'tc358746_find_pll_settings':
+>> drivers/media/i2c/tc358746.c:817:13: warning: 'p_best' is used uninitialized [-Wuninitialized]
+     817 |         u16 p_best, p;
+         |             ^~~~~~
+>> drivers/media/i2c/tc358746.c:816:13: warning: 'm_best' is used uninitialized [-Wuninitialized]
+     816 |         u16 m_best, mul;
+         |             ^~~~~~
 
 
-So in MADV_HUGEPAGE VMAs (such as under QEMU), we'd happily take any 
-flexible THP, especially ones < PMD THP (512 MiB) as well. 2 MiB or 4 
-MiB THP? sure, give them to my VM. You're barely going to find 512 MiB 
-THP either way in practice ....
+vim +/p_best +817 drivers/media/i2c/tc358746.c
 
-But for the remainder of my system, just do something reasonable and 
-don't go crazy on the memory waste.
-
-
-I'll try reading all the previous discussions next week.
+   805	
+   806	static unsigned long tc358746_find_pll_settings(struct tc358746 *tc358746,
+   807							unsigned long refclk,
+   808							unsigned long fout)
+   809	
+   810	{
+   811		struct device *dev = tc358746->sd.dev;
+   812		unsigned long best_freq = 0;
+   813		u32 min_delta = 0xffffffff;
+   814		u16 prediv_max = 17;
+   815		u16 prediv_min = 1;
+ > 816		u16 m_best, mul;
+ > 817		u16 p_best, p;
+   818		u8 postdiv;
+   819	
+   820		if (fout > 1000 * HZ_PER_MHZ) {
+   821			dev_err(dev, "HS-Clock above 1 Ghz are not supported\n");
+   822			return 0;
+   823		}
+   824	
+   825		if (fout >= 500 * HZ_PER_MHZ)
+   826			postdiv = 1;
+   827		else if (fout >= 250 * HZ_PER_MHZ)
+   828			postdiv = 2;
+   829		else if (fout >= 125 * HZ_PER_MHZ)
+   830			postdiv = 4;
+   831		else
+   832			postdiv = 8;
+   833	
+   834		for (p = prediv_min; p <= prediv_max; p++) {
+   835			unsigned long delta, fin;
+   836			u64 tmp;
+   837	
+   838			fin = DIV_ROUND_CLOSEST(refclk, p);
+   839			if (fin < 4 * HZ_PER_MHZ || fin > 40 * HZ_PER_MHZ)
+   840				continue;
+   841	
+   842			tmp = fout * p * postdiv;
+   843			do_div(tmp, fin);
+   844			mul = tmp;
+   845			if (mul > 511)
+   846				continue;
+   847	
+   848			tmp = mul * fin;
+   849			do_div(tmp, p * postdiv);
+   850	
+   851			delta = abs(fout - tmp);
+   852			if (delta < min_delta) {
+   853				p_best = p;
+   854				m_best = mul;
+   855				min_delta = delta;
+   856				best_freq = tmp;
+   857			};
+   858	
+   859			if (delta == 0)
+   860				break;
+   861		};
+   862	
+   863		if (!best_freq) {
+   864			dev_err(dev, "Failed find PLL frequency\n");
+   865			return 0;
+   866		}
+   867	
+   868		tc358746->pll_post_div = postdiv;
+   869		tc358746->pll_pre_div = p_best;
+   870		tc358746->pll_mul = m_best;
+   871	
+   872		if (best_freq != fout)
+   873			dev_warn(dev, "Request PLL freq:%lu, found PLL freq:%lu\n",
+   874				 fout, best_freq);
+   875	
+   876		dev_dbg(dev, "Found PLL settings: freq:%lu prediv:%u multi:%u postdiv:%u\n",
+   877			best_freq, p_best, m_best, postdiv);
+   878	
+   879		return best_freq;
+   880	}
+   881	
 
 -- 
-Cheers,
-
-David / dhildenb
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
