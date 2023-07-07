@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39B574B87E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A246674B881
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjGGVHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S232723AbjGGVHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGGVHE (ORCPT
+        with ESMTP id S229573AbjGGVHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:07:04 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B382696;
-        Fri,  7 Jul 2023 14:07:01 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-345f1e0abf9so8764455ab.3;
-        Fri, 07 Jul 2023 14:07:01 -0700 (PDT)
+        Fri, 7 Jul 2023 17:07:33 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECBB2701;
+        Fri,  7 Jul 2023 14:07:15 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7869bcee569so86365439f.0;
+        Fri, 07 Jul 2023 14:07:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688764021; x=1691356021;
+        d=1e100.net; s=20221208; t=1688764035; x=1691356035;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Y+0fMWDG+4t53Of0wn+p5L3a9T2rXQdBwF9pV7SZhak=;
-        b=Kq+SClOpIgY/DK0hHqnnTzAQfrjDWHe194ywvOt2FDZHFn6YjVi4E14VdXsb6HaY7g
-         Yy0OWvTRW2Bqvcc7gqz0YRQbvhjbvhITkIxvuvZ5tBLJQY681fgkxTo0nz8mobXgvXFA
-         9DBaQdI9z9jEqeYrekmG9PBZx7WbYqjfwl/dDMCkT2Ptyl/S56Hk6aaSoL60qGcG4Dwt
-         ZRHN98AQUQ0KQZRBbYda+d4YEfioCozIx+52Y5sHPUST0Ec+IyxAlaPXOmBF1q7LbzFM
-         M27ka5IUdIB9/5Uh6GJaKEioVe+tOOociNOfqA5vy4Io/+/P/GMjb6Sn5iFp74bdawqG
-         gXfA==
-X-Gm-Message-State: ABy/qLY+ND8qcp50QU+8dJt2Lvv66qM1EOI1gXoXwNFB2ZkfODsl66wd
-        WvN4YKQe9WYsgzRf+CB41g==
-X-Google-Smtp-Source: APBJJlHImbGNK7xjpK4WXbh7gFvDm5zHGeWo8l7UZZYsVYEmBj/iD52Ih7d72XtKaNm2exieB/mg4Q==
-X-Received: by 2002:a92:d40d:0:b0:33b:568a:2981 with SMTP id q13-20020a92d40d000000b0033b568a2981mr6161333ilm.8.1688764020857;
-        Fri, 07 Jul 2023 14:07:00 -0700 (PDT)
+        bh=w5ZfCjJKzY2MaRBcREgAL2YyH2jMaEbxPu3Qk3ZLyVc=;
+        b=EFwgBUqQM7RBuMaXTfRgmh/vGuKHwkGtb1KebsTftRFyCfXd9i06zzEwHtEF55T4bL
+         Il7nN2Woe1421sG0bppQusf2m4Va5/JESAWJn1ioy02TXdzQF3oXeHsmneqH/qZiW3gy
+         7fU/zaGLyfyhSrwUhIQzaKmHZIj+tk74EOCOFQy5Id/4HOF3jxYI+Z1EfwY2w4knn/4i
+         mQDrMWQhjWEo/f5d497m4of1dJgCfHsVlYLaTfII6EwEeNM5rz8IUc2+4uzeFbcDnLHD
+         Vi79yJsMCXkVtuAe2c4trnspST2IuvQFqQxoJQTwUfjEgNerdWi918vGN3JjbffFfK1U
+         vbvQ==
+X-Gm-Message-State: ABy/qLaNgDy4DK1eIY/FO7I/0sM5mDhooQBvu3PJF2Wt4b/UlOueEI47
+        tJeOGqZvfbX7BeJuwmU0LUtsy6vzUA==
+X-Google-Smtp-Source: APBJJlF50Cr959QZ4ozRIJVi+JUKZGlsU73N95mY4+UI42bbpOzuIeWVBuq8MTn014rQxidfp6PYaQ==
+X-Received: by 2002:a5d:9451:0:b0:783:72b9:ed67 with SMTP id x17-20020a5d9451000000b0078372b9ed67mr6278929ior.10.1688764034964;
+        Fri, 07 Jul 2023 14:07:14 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t13-20020a92c90d000000b00345b34fcf34sm1558335ilp.38.2023.07.07.14.06.59
+        by smtp.gmail.com with ESMTPSA id w24-20020a6bf018000000b0076c7a2f0f41sm1571577ioc.46.2023.07.07.14.07.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 14:07:00 -0700 (PDT)
-Received: (nullmailer pid 869040 invoked by uid 1000);
-        Fri, 07 Jul 2023 21:06:58 -0000
+        Fri, 07 Jul 2023 14:07:14 -0700 (PDT)
+Received: (nullmailer pid 869315 invoked by uid 1000);
+        Fri, 07 Jul 2023 21:07:12 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Simon Shields <simon@lineageos.org>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: leds: Convert Panasonic AN30259A to DT schema
-Date:   Fri,  7 Jul 2023 15:06:52 -0600
-Message-Id: <20230707210653.868907-1-robh@kernel.org>
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Wei Xu <xuwei5@hisilicon.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH] dt-bindings: arm: hisilicon,cpuctrl: Merge "hisilicon,hix5hd2-clock" into parent binding
+Date:   Fri,  7 Jul 2023 15:07:00 -0600
+Message-Id: <20230707210700.869060-1-robh@kernel.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,168 +64,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Panasonic AN30259A 3-channel LED controller binding to DT
-schema format.
+The "hisilicon,hix5hd2-clock" is simple enough to just add it into its
+parent node binding, "hisilicon,cpuctrl".
+
+This fixes a warning that "hisilicon,hix5hd2-clock" is missing a schema.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/leds/leds-an30259a.txt           | 55 ------------
- .../bindings/leds/panasonic,an30259a.yaml     | 84 +++++++++++++++++++
- 2 files changed, 84 insertions(+), 55 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-an30259a.txt
- create mode 100644 Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
+ .../arm/hisilicon/controller/cpuctrl.yaml     | 20 +++++++++++++
+ .../bindings/clock/hix5hd2-clock.txt          | 30 -------------------
+ 2 files changed, 20 insertions(+), 30 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/hix5hd2-clock.txt
 
-diff --git a/Documentation/devicetree/bindings/leds/leds-an30259a.txt b/Documentation/devicetree/bindings/leds/leds-an30259a.txt
-deleted file mode 100644
-index cbd833906b2b..000000000000
---- a/Documentation/devicetree/bindings/leds/leds-an30259a.txt
-+++ /dev/null
-@@ -1,55 +0,0 @@
--* Panasonic AN30259A 3-channel LED driver
--
--The AN30259A is a LED controller capable of driving three LEDs independently. It supports
--constant current output and sloping current output modes. The chip is connected over I2C.
--
--Required properties:
--	- compatible: Must be "panasonic,an30259a".
--	- reg: I2C slave address.
--	- #address-cells: Must be 1.
--	- #size-cells: Must be 0.
--
--Each LED is represented as a sub-node of the panasonic,an30259a node.
--
--Required sub-node properties:
--	- reg: Pin that the LED is connected to. Must be 1, 2, or 3.
--
--Optional sub-node properties:
--	- function :
--		see Documentation/devicetree/bindings/leds/common.txt
--	- color :
--		see Documentation/devicetree/bindings/leds/common.txt
--	- label :
--		see Documentation/devicetree/bindings/leds/common.txt (deprecated)
--	- linux,default-trigger :
--		see Documentation/devicetree/bindings/leds/common.txt
--
--Example:
--
--#include <dt-bindings/leds/common.h>
--
--led-controller@30 {
--	compatible = "panasonic,an30259a";
--	reg = <0x30>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--
--	led@1 {
--		reg = <1>;
--		linux,default-trigger = "heartbeat";
--		function = LED_FUNCTION_INDICATOR;
--		color = <LED_COLOR_ID_RED>;
--	};
--
--	led@2 {
--		reg = <2>;
--		function = LED_FUNCTION_INDICATOR;
--		color = <LED_COLOR_ID_GREEN>;
--	};
--
--	led@3 {
--		reg = <3>;
--		function = LED_FUNCTION_INDICATOR;
--		color = <LED_COLOR_ID_BLUE>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml b/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
-new file mode 100644
-index 000000000000..f55f8c232bc6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
-@@ -0,0 +1,84 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/panasonic,an30259a.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Panasonic AN30259A 3-channel LED controller
-+
-+maintainers:
-+  - Simon Shields <simon@lineageos.org>
-+
-+description:
-+  The AN30259A is a LED controller capable of driving three LEDs independently.
-+  It supports constant current output and sloping current output modes. The chip
-+  is connected over I2C.
-+
-+properties:
-+  compatible:
-+    const: panasonic,an30259a
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
+diff --git a/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml b/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml
+index 528dad4cde3c..4fc208d3995e 100644
+--- a/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml
++++ b/Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.yaml
+@@ -29,6 +29,26 @@ properties:
+ 
+   ranges: true
+ 
 +patternProperties:
-+  "^led@[1-3]$":
-+    $ref: common.yaml#
-+    unevaluatedProperties: false
++  "^clock@[0-9a-f]+$":
++    type: object
++    additionalProperties: false
 +
 +    properties:
++      compatible:
++        const: hisilicon,hix5hd2-clock
++
 +      reg:
-+        enum: [ 1, 2, 3 ]
++        maxItems: 1
 +
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
++      "#clock-cells":
++        const: 1
 +
-+additionalProperties: false
++    required:
++      - compatible
++      - reg
++      - "#clock-cells"
 +
-+examples:
-+  - |
-+    #include <dt-bindings/leds/common.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        led-controller@30 {
-+            compatible = "panasonic,an30259a";
-+            reg = <0x30>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            led@1 {
-+                reg = <1>;
-+                linux,default-trigger = "heartbeat";
-+                function = LED_FUNCTION_INDICATOR;
-+                color = <LED_COLOR_ID_RED>;
-+            };
-+
-+            led@2 {
-+                reg = <2>;
-+                function = LED_FUNCTION_INDICATOR;
-+                color = <LED_COLOR_ID_GREEN>;
-+            };
-+
-+            led@3 {
-+                reg = <3>;
-+                function = LED_FUNCTION_INDICATOR;
-+                color = <LED_COLOR_ID_BLUE>;
-+            };
-+        };
-+    };
-+...
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/clock/hix5hd2-clock.txt b/Documentation/devicetree/bindings/clock/hix5hd2-clock.txt
+deleted file mode 100644
+index 4733e58e491b..000000000000
+--- a/Documentation/devicetree/bindings/clock/hix5hd2-clock.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-* Hisilicon Hix5hd2 Clock Controller
+-
+-The hix5hd2 clock controller generates and supplies clock to various
+-controllers within the hix5hd2 SoC.
+-
+-Required Properties:
+-
+-- compatible: should be "hisilicon,hix5hd2-clock"
+-- reg: Address and length of the register set
+-- #clock-cells: Should be <1>
+-
+-Each clock is assigned an identifier and client nodes use this identifier
+-to specify the clock which they consume.
+-
+-All these identifier could be found in <dt-bindings/clock/hix5hd2-clock.h>.
+-
+-Examples:
+-	clock: clock@f8a22000 {
+-		compatible = "hisilicon,hix5hd2-clock";
+-		reg = <0xf8a22000 0x1000>;
+-		#clock-cells = <1>;
+-	};
+-
+-	uart0: uart@f8b00000 {
+-		compatible = "arm,pl011", "arm,primecell";
+-		reg = <0xf8b00000 0x1000>;
+-		interrupts = <0 49 4>;
+-		clocks = <&clock HIX5HD2_FIXED_83M>;
+-		clock-names = "apb_pclk";
+-	};
 -- 
 2.40.1
 
