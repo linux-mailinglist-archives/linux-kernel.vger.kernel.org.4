@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B1174AB29
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3C174AB2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjGGGd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 02:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S232185AbjGGGfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 02:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbjGGGdn (ORCPT
+        with ESMTP id S231845AbjGGGe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 02:33:43 -0400
+        Fri, 7 Jul 2023 02:34:57 -0400
 Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EDE1FC7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:33:42 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51e43473ee0so34356a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:33:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF71FDA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:34:30 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d93425853so1900968a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688711621; x=1691303621;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2rZJMXQqBbYtG35iaT5k3WfIhsJUmOKUvW8i0uD8NBI=;
-        b=R6ZFDYFtiyI8QhUOPF6/ZqW8UzJswYZ0EN+ADhSd2YTyJsje3D0PZj3nDoKg+IU2g6
-         oePk+WhsqDnjZIloNBJmSLMHqjTh7jSs/l2GuCbZETzeD4fx6VwJvnlNXfHHZ8GGPRsD
-         5ICdV+l8u7Nf6IaA+Rsx6fDrSi/rctd28Y6urlyxFCJiagJlNi87Cr3wP6dis1J8wMc1
-         eTAl9POvBZ3rb38PLgSDNFPh8k2X3OUDM+GRlL4FpHdIPiyxXES1wcNDdpM0Btn4wxCt
-         QIB9RujK6e936OkZFLvYEedcYoGVRECEYmBhWA9J2y9lkb4N+5Iey2L4FSf/Pl1ycqFq
-         inwQ==
+        d=linaro.org; s=google; t=1688711669; x=1691303669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lo9Ybkp8C7hyjxxxAW7ckg0KRs9g3goLaPeETqx3qFc=;
+        b=roioZ0eYvwTT7tPzv5TyxFc/Ekjoo/kOdQ8i6mdJzkYNlB7+eY0d2uGCC/Hse9ujFg
+         5PMz/RRUmb2OORgU9ftSLxbqkbQbX8WHM0IdjreZyMNIz4u+g06CdggLv4FZvhVf9UDz
+         7Zsy19b8HgsiW/qYZ1aoa9xeRnBGMDYGT+E+t8NzzW3fYB4GhPEeSz10rRCakKZtPwqQ
+         eRsCfqvgQmK00hC+hAXc1HmwnxuNs61Epuegn9DMTBSeArGqbF4UcL4N+jOhb0A0j73c
+         3K9xcAriOUVxYdhpPCZyR/giaoafNyCWEN8q/Gvgcyz8c1xq7lA4hV+RzDIPb2dCZv2f
+         13sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688711621; x=1691303621;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2rZJMXQqBbYtG35iaT5k3WfIhsJUmOKUvW8i0uD8NBI=;
-        b=ipCCryZ7EPhSpUewXXz1Ov5yTi+2LBHog2j4j6fX5wGUOMyRRbfq4AiLwAtZziDgH0
-         P+NWw48wzu6TgF0fjQrURIkf5HYHm3JFGPKw4xSojwac+pyg6IVXRXO1IT3uWOQdbVTh
-         cDl4eFqF6ibImfu/MToqZUxy7w+23Jd2nMXleojVmV/mT9LH9zD72359vzmMv76kPpk5
-         4XA/ehslPBOzI29GV7DCXgytBSMSjc9Fob2Z+Sn5fhdHK7bKvKfIScQG32QkqpY5ykE9
-         K8qgt0geQ6P8oeq1cuSkDQXtoAFlyCymAchrTIuAccjPukjk4bzLYfxGe3kKDlbBOmit
-         7bHg==
-X-Gm-Message-State: ABy/qLaeEE7XdEd2GqW3d8An0hqO6bwOGAkm2i21JkuhD9oaeduE0Bud
-        tfVy2khjjCT3vJBb6ujdzL0tHg==
-X-Google-Smtp-Source: APBJJlFbgp3bzMYcY5DMSqClEkgQHsd57Rd5nfrMO9olrSVVPArWA9IWaAqP0FBML7kLKVnjeSzKyg==
-X-Received: by 2002:a17:906:d7b1:b0:98e:1b9b:aef7 with SMTP id pk17-20020a170906d7b100b0098e1b9baef7mr2683392ejb.64.1688711621156;
-        Thu, 06 Jul 2023 23:33:41 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s24-20020a170906169800b0096f7500502csm1724803ejd.199.2023.07.06.23.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 23:33:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH v2 3/3] arm64: dts: rockchip: correct wifi interrupt flag in Box Demo
-Date:   Fri,  7 Jul 2023 08:33:35 +0200
-Message-Id: <20230707063335.13317-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230707063335.13317-1-krzysztof.kozlowski@linaro.org>
-References: <20230707063335.13317-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20221208; t=1688711669; x=1691303669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lo9Ybkp8C7hyjxxxAW7ckg0KRs9g3goLaPeETqx3qFc=;
+        b=BA9ou4UUTY+9ZBWgzBXbnhmrM0J8oir6inqnBlrnxzmGf41EmLjqQrA8EjbQxmowr7
+         xjn3RgdrnA4oJbYo+YkgPXrBHkQoo2/b6tEnI5GxydFnJ57gJluFbdiHHiDnp2L4OhCg
+         6OJaMxXTdng2Tb4d4ssXGtNlkZ935qmgGWkhXfkiMMX0SIXF3rCPNtZA4Z/UOkdaUP/w
+         tKNiNcmfaFMtmlL7g4f5eMVL+Cjx0wJSWdh94pUekWgU5rJPZjA+skcuhCjasc0cNEWx
+         gq3ZY3T6tpJflVOCLOUhNEZ64GY0gOxj7AxRem48RlZE+zIr0VCi/LxnYCajmVXQ5Mhi
+         6wwg==
+X-Gm-Message-State: ABy/qLY0o/PINDxSb7hYAECz4vykB/LZCBugqbgnV+aBysYdi0MOv3VU
+        Cta1mHwp+5hVJa+sahMxZ0GuXQ==
+X-Google-Smtp-Source: APBJJlF2VOmcYgfChy7bMAqvwhS2dCJYj3prVbUZDw9t+pJQ45oDeOR9Pccv8izstFNC8DH9mX8oJg==
+X-Received: by 2002:a17:906:7a08:b0:974:1ef1:81ad with SMTP id d8-20020a1709067a0800b009741ef181admr3494616ejo.4.1688711669248;
+        Thu, 06 Jul 2023 23:34:29 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id y23-20020a170906471700b00993928e4d1bsm1721167ejq.24.2023.07.06.23.34.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 23:34:28 -0700 (PDT)
+Message-ID: <e9b0b9ea-4871-5fec-b859-aebc1a0e6372@linaro.org>
+Date:   Fri, 7 Jul 2023 08:34:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm7550ba
+ support
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <1688707209-30151-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1688707209-30151-2-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1688707209-30151-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,37 +80,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
-These are simple defines so they could be used in DTS but they will not
-have the same meaning: GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE.
+On 07/07/2023 07:20, Rohit Agarwal wrote:
+> Add support for the pm7550ba GPIO support to the Qualcomm PMIC GPIO
+> binding.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
 
-Correct the interrupt flags, assuming the author of the code wanted same
-logical behavior behind the name "ACTIVE_xxx", this is:
-  ACTIVE_HIGH  => IRQ_TYPE_LEVEL_HIGH
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
-
-Changes in v2:
-1. Correct subject and commit msg (active low -> high)
----
- arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-index 322f3e809f15..0c18406e4c59 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-@@ -416,7 +416,7 @@ brcmf: wifi@1 {
- 		compatible = "brcm,bcm4329-fmac";
- 		reg = <1>;
- 		interrupt-parent = <&gpio2>;
--		interrupts = <RK_PB2 GPIO_ACTIVE_HIGH>;
-+		interrupts = <RK_PB2 IRQ_TYPE_LEVEL_HIGH>;
- 		interrupt-names = "host-wake";
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&wifi_host_wake_h>;
--- 
-2.34.1
+Best regards,
+Krzysztof
 
