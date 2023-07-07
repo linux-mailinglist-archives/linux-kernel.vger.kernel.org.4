@@ -2,142 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD5574B8D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB4B74B8DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGGVuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S229747AbjGGVzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjGGVuh (ORCPT
+        with ESMTP id S229631AbjGGVzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:50:37 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508E2107
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:50:35 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-635857af3beso14201066d6.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688766634; x=1691358634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FoLevPobh7UXy5Nn5YH78W9QxOTU70GaTZt5uBUlM0A=;
-        b=l7nzQ6ic8JvejRrTXeSP9pxsZ4sZpYgEseqeeNmP9tOIRZNTCYJOGUj3u6v5xmSkKd
-         OsGDSBLhMCQCLTDROiZOQPSY4n3XvefXTb8Zu3G6/DKWn449TmE86ze0rC9zM0hq/t31
-         W184sHYkrvflPMo7snf9U29pvGHJZG3E9J66dE3tnh4VgWlH6fT1cWJBoqz2VLzpBBuY
-         r+lZmj1ies7BcP3uSA6UegEarirOuydiO6La9+kxtMfMMXAsUY03/e6ZKuY6Wgmmq22C
-         b8N5z2jOmAGYsC9KQjpfqsh1MiRObcU//UJbLJ0KeKi4ZI2Z1bbDwf1hDh9JlRpZ5He7
-         Y1Ng==
+        Fri, 7 Jul 2023 17:55:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE61FF6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688766854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IR3UM/qERNeUL/EjPgvmk0ZZpn8WhkLUZx2wiiCSLjA=;
+        b=M5q0D31kxgBZ6keatYpFl78vK2heboCSQKjl/DmXC+AC0P773ss+5F5szZ9LywRCVZyUO6
+        amrIzZkcxC4gNL103pBdaGHT8p8X0La5gKuUcbyzViUNcI36Qrb+xbLGizuF2+hFfmffoF
+        t9kvaA3CDr7hipHUfeTkqCabcuu7z0s=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-567-gHLKHAtfOnWRAeZ2DUlfRw-1; Fri, 07 Jul 2023 17:54:13 -0400
+X-MC-Unique: gHLKHAtfOnWRAeZ2DUlfRw-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-63788123d11so24719166d6.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:54:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766634; x=1691358634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FoLevPobh7UXy5Nn5YH78W9QxOTU70GaTZt5uBUlM0A=;
-        b=d91t/wtU7USdWkyxJ9MSwZQ9TJwgGZSMan9TqSCYo8NA7mLmBWk8mEjPsFAHIP3VSI
-         U+2pz0ZRBq0Wz0lbZxPZUwVleDHegDBiPzoa5wRXJlI9xGPMuBUOPFFLnQpZ9rdNYnEp
-         vwyGkyR1u7IurGXs/Hol6Aql0I5zYRGZW5GI052CmqQla4zKPL+MFNk3ICetQggDq2Y9
-         WYgHoo+LfPCm00oaYRv+0w+p4fkq35v1/c+JE88gTp+QOGTS5z0B+91piIRTDM70qa3O
-         8NsJdFy6busDf4kMOIJCTJ9CWsjwNAKufcJoTWo+mBZvQs5aTHyR5IV/EA9vBNU6FiRZ
-         AP1Q==
-X-Gm-Message-State: ABy/qLaRhQ014acrd/JRl1m81f6V31TfXECfE0wiS/i0w5HbFyhQwKGl
-        ma7KKFT2gza4QMh69xwQeAIZRF7+wnTKaHNvGnnxrQ==
-X-Google-Smtp-Source: APBJJlGlQcMZJ3Ushv3xcZlmwD9Pa978expjejTPgbABddwl3wCKInGfLZ2iqBhhPxZWR1b1uxBwbCLiukFcHrak5qI=
-X-Received: by 2002:a0c:e54d:0:b0:634:7c34:6c96 with SMTP id
- n13-20020a0ce54d000000b006347c346c96mr5045432qvm.7.1688766633968; Fri, 07 Jul
- 2023 14:50:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230703113737.694995-1-arnd@kernel.org> <6b963674-fc5a-4abb-8678-a82d35a3f3fd@kadam.mountain>
-In-Reply-To: <6b963674-fc5a-4abb-8678-a82d35a3f3fd@kadam.mountain>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Jul 2023 14:50:23 -0700
-Message-ID: <CAKwvOdmedTDChYYSgdC0LQGOdrzm1ua--kUcz-KGXi4TnxcvUg@mail.gmail.com>
-Subject: Re: [PATCH] sunrpc: avoid constant-out-of-range warning with clang
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Neil Brown <neilb@suse.de>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, Dan Carpenter <error27@gmail.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+        d=1e100.net; s=20221208; t=1688766853; x=1691358853;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IR3UM/qERNeUL/EjPgvmk0ZZpn8WhkLUZx2wiiCSLjA=;
+        b=kgk8/R1BeB6+4fWYSTfmO0AiWWhXr568Ij+FlxpSGrLfJMh6i5u4fTEJj4Ol3fc3l/
+         I5fimlWFV5Xd3DSEoOSQVYIt+RAzy1D94icxWsIDvEX3V+7xz6YntAQgPY3DAQiMFW81
+         CKf4cGaFFoySHFTvZDj2esRYaN8vFvrLvqEl3KAkzPszN7V/hNI+/LDYWRy7JlC5uXGE
+         0TZZhOECqXUbbjoQCw36pWQaZpuHWMJdWSeXG3LCRr8AcUAabTasPRLOeaZhaIgAvk6w
+         05meVV7KKarIAGZzAbQE04ekw/ABPf08DEPTYGWdSwgRtXNEkEptWoPptT0ACiznK5aU
+         lIfw==
+X-Gm-Message-State: ABy/qLaSlMRrsLci65r7DUQ0saOvuCRyOEBo6LIxREW0gUIiFzSl6EHj
+        taKYX//sGkdA0Ne1khwfAC2m0x8tIqSFO6xJvM3SS+fmzOKhSh1+r2kli+ltDvosn68YfC6euMw
+        SCNWEtNlbDTtWyNdILvgNlo5W
+X-Received: by 2002:a0c:cc10:0:b0:636:439b:a6de with SMTP id r16-20020a0ccc10000000b00636439ba6demr5936525qvk.13.1688766852899;
+        Fri, 07 Jul 2023 14:54:12 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGy4rbv/6VC4l33AqtqHlOn3FLNo2hdcdd4j6YFakTEWNmLX49tDyvOehAct9nxQ75kSv1gPA==
+X-Received: by 2002:a0c:cc10:0:b0:636:439b:a6de with SMTP id r16-20020a0ccc10000000b00636439ba6demr5936517qvk.13.1688766852667;
+        Fri, 07 Jul 2023 14:54:12 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c62:8200:4d3e:bd5a:7e0a:133a? ([2600:4040:5c62:8200:4d3e:bd5a:7e0a:133a])
+        by smtp.gmail.com with ESMTPSA id x10-20020a0ce24a000000b0063659410b04sm2470697qvl.107.2023.07.07.14.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 14:54:12 -0700 (PDT)
+Message-ID: <79af2eab7409b75f5a2386fbd82c339111d6deab.camel@redhat.com>
+Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+ string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Nick Hastings <nicholaschastings@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, kherbst@redhat.com
+Cc:     Salvatore Bonaccorso <carnil@debian.org>, 1036530@bugs.debian.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Date:   Fri, 07 Jul 2023 17:54:11 -0400
+In-Reply-To: <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
+References: <168471337231.1913606.15905047692536779158.reportbug@xps>
+         <ZHKrC4/G6ZyvRReI@xps> <ZHL5cCNUzVdleiag@eldamar.lan>
+         <ab12984e-be17-903d-ba0a-f9c85b8c544f@amd.com> <ZHP4IqxBUPuVRvRV@xps>
+         <09e24386-de63-e9e9-9e7f-5d04bad62d83@amd.com> <ZHQhPcKUF76Kplwm@xps>
+         <ZHUt9xQKCwCflvVC@xps> <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
+         <ZHWfMBeAONerAJmd@xps> <ZHfa/wQlaVCeUC22@xps>
+         <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
+Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 5:42=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro.=
-org> wrote:
->
-> On Mon, Jul 03, 2023 at 01:37:22PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The overflow check in xdr_stream_decode_uint32_array() was added for
-> > 32-bit systems, but on 64-bit builds it causes a build warning when
-> > building with clang and W=3D1:
-> >
-> > In file included from init/do_mounts.c:22:
-> > include/linux/sunrpc/xdr.h:778:10: error: result of comparison of const=
-ant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int'=
-) is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-> >   778 |         if (len > SIZE_MAX / sizeof(*p))
-> >
-> > Shut up the warning with a type cast.
-> >
-> > Fixes: 23a9dbbe0faf1 ("NFSD: prevent integer overflow on 32 bit systems=
-")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  include/linux/sunrpc/xdr.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/sunrpc/xdr.h b/include/linux/sunrpc/xdr.h
-> > index f89ec4b5ea169..6736121ee6a03 100644
-> > --- a/include/linux/sunrpc/xdr.h
-> > +++ b/include/linux/sunrpc/xdr.h
-> > @@ -775,7 +775,7 @@ xdr_stream_decode_uint32_array(struct xdr_stream *x=
-dr,
-> >
-> >       if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
-> >               return -EBADMSG;
-> > -     if (len > SIZE_MAX / sizeof(*p))
-> > +     if ((size_t)len > SIZE_MAX / sizeof(*p))
-> >               return -EBADMSG;
-> >       p =3D xdr_inline_decode(xdr, len * sizeof(*p));
->
-> I sent a patch for this last week that takes a different approach.
->
-> https://lore.kernel.org/all/2390fdc8-13fa-4456-ab67-44f0744db412@moroto.m=
-ountain/
->
-> I probably should have used a Fixes tag just for informational purposes.
+On Thu, 2023-06-01 at 11:18 -0500, Limonciello, Mario wrote:
+> +Lyude, Lukas, Karol
+>=20
+> On 5/31/2023 6:40 PM, Nick Hastings wrote:
+> > Hi,
+> >=20
+> > * Nick Hastings <nicholaschastings@gmail.com> [230530 16:01]:
+> > > * Mario Limonciello <mario.limonciello@amd.com> [230530 13:00]:
+> > <snip>
+> > > > As you're actually loading nouveau, can you please try nouveau.runp=
+m=3D0 on
+> > > > the kernel command line?
+> > > I'm not intentionally loading it. This machine also has intel graphic=
+s
+> > > which is what I prefer. Checking my
+> > > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+> > > I see:
+> > >=20
+> > > blacklist nvidia
+> > > blacklist nvidia-drm
+> > > blacklist nvidia-modeset
+> > > blacklist nvidia-uvm
+> > > blacklist ipmi_msghandler
+> > > blacklist ipmi_devintf
+> > >=20
+> > > So I thought I had blacklisted it but it seems I did not. Since I do =
+not
+> > > want to use it maybe it is better to check if the lock up occurs with
+> > > nouveau blacklisted. I will try that now.
+> > I blacklisted nouveau and booted into a 6.1 kernel:
+> > % uname -a
+> > Linux xps 6.1.0-9-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.27-1 (2023-05=
+-08) x86_64 GNU/Linux
+> >=20
+> > It has been running without problems for nearly two days now:
+> > % uptime
+> >   08:34:48 up 1 day, 16:22,  2 users,  load average: 1.33, 1.26, 1.27
+> >=20
+> > Regards,
+> >=20
+> > Nick.
+>=20
+> Thanks, that makes a lot more sense now.
+>=20
+> Nick, Can you please test if nouveau works with runtime PM in the
+> latest 6.4-rc?
+>=20
+> If it works in 6.4-rc, there are probably nouveau commits that need
+> to be backported to 6.1 LTS.
+>=20
+> If it's still broken in 6.4-rc, I believe you should file a bug:
+>=20
+> https://gitlab.freedesktop.org/drm/nouveau/
+>=20
+>=20
+> Lyude, Lukas, Karol
+>=20
+> This thread is in relation to this commit:
+>=20
+> 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string")
+>=20
+> Nick has found that runtime PM is *not* working for nouveau.
+>=20
+> If you recall we did 24867516f06d because 5775b843a619 was
+> supposed to have fixed it.
 
-I have a slight preference for retaining the existing error handling
-here, but am happy to have 2 fixes in hand rather than 0; thank you
-both for your time looking at this.
+Gotcha, I guess keep me updated since it seems like things -might- be worki=
+ng
+from what I gathered here? Happy to look further if they find that 6.4-rc i=
+s
+broken though
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> regards,
-> dan carpenter
->
-
+>=20
 
 --=20
-Thanks,
-~Nick Desaulniers
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+
