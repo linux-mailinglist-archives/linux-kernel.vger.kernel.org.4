@@ -2,66 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BC574A83D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 02:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F04174A842
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 02:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjGGAvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 20:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S230196AbjGGAxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 20:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGGAvs (ORCPT
+        with ESMTP id S230022AbjGGAxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 20:51:48 -0400
-Received: from out-6.mta0.migadu.com (out-6.mta0.migadu.com [IPv6:2001:41d0:1004:224b::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D93FE6E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 17:51:47 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 09:51:34 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688691104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R8hae9bkXUIrv7Qq5bHdTQh6mq6Q71tfUFCX8Q7qpvw=;
-        b=ZtDSL74rvK+DQrwrsX32P91WnXevCHHbttxX/x3D2V1LczBlzKUL3d7DefMuaLi4yZR7ht
-        QHt3d23PPprco3k1zENF9gZK+S6l5TOc5okCoxlB/TCqETVn2bL89rgJ2iLNN3JUFNIyex
-        5mw+hX2FzySHqoqv/1NSvtdZ7fBc8Rc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Jiaqi Yan <jiaqiyan@google.com>
-Cc:     mike.kravetz@oracle.com, naoya.horiguchi@nec.com,
-        songmuchun@bytedance.com, shy828301@gmail.com,
-        linmiaohe@huawei.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duenwen@google.com, axelrasmussen@google.com, jthoughton@google.com
-Subject: Re: [PATCH v2 4/4] selftests/mm: add tests for HWPOISON hugetlbfs
- read
-Message-ID: <20230707005134.GB72816@ik1-406-35019.vs.sakura.ne.jp>
-References: <20230623164015.3431990-1-jiaqiyan@google.com>
- <20230623164015.3431990-5-jiaqiyan@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230623164015.3431990-5-jiaqiyan@google.com>
-X-Migadu-Flow: FLOW_OUT
+        Thu, 6 Jul 2023 20:53:02 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DF21BDB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 17:53:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-313f1085ac2so1277119f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 17:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user; t=1688691179; x=1691283179;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r67n9FyRXMn2NIxHWlUhbk55uKQk9X6Dzb3qD8qYPqE=;
+        b=esjLyRw9yG+IBiqgDC3zXqfCcnN/DbqAvEF78hFJzU3GMueXP0gDEe8GTEqkIWVxa3
+         v5zA190KEwcagvtZcljHSX5zruOtY+4A2hJCW3xQ3kYhJ90qFeRfxiol/gEciWHjfH+V
+         mSyV5wfea0jWsz4PHhQxxB5Beo4CjL8wQp1MdL2w0G7UKtRX2oxrtnD39TtmFgkTupMk
+         WrOKCQbvpbAoBBwRglsxfn/NNxtlufKtOCK89XiZrAuUWobpoJwWEkM6LzWixFkAJGVS
+         MnU63/tx7DAHW6EBB/ZRB4iDp07GMPxP25YJdWEYTFFIVGB2D/It7bRcDQ1rxLN1efdG
+         V0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688691179; x=1691283179;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r67n9FyRXMn2NIxHWlUhbk55uKQk9X6Dzb3qD8qYPqE=;
+        b=gM1UVYGLrHdI4hX/AZ5W/ib+yX7/EGjyvldCo+26KBfSRYljkWJ1HCcY+vZ8sR4j+G
+         DAIqaxTvZtdpaDKcPe/lCci698wdxbknYt9VqTOjom0wTirn3GDuevqr+MbLKB8u9S0o
+         G2aP9rsNnEo6ACm+A9UShPSfhYklQq+JuYv8jGaHIGcDEf56xoN4GnxRUdBZFMX4t/SW
+         J6Pz4A6hW8VzgnAJs+nkuPWfuYRahyN11MI9pIx/Tx1zABsKBMFC/qHqmZUHr0LaKdXP
+         MjhdxRshxitA+pli7rtaFK7hZRD6zYkSKMR07VBooBrGn4C0ZyYmh1/iqJSROBOKsFXN
+         +ezw==
+X-Gm-Message-State: ABy/qLaZNOMDb3J+eJrXJexHX/YHM3Jjt7CDmi6dysfys/wgeQymLf+D
+        NDKjaU0OuLIXkH9FQbON3ai60g==
+X-Google-Smtp-Source: APBJJlG7B59PVAJXs+YJAtg1NQZvtbN9/7wzF9BiD0+Kq6eoLvFO+eLgMC5CjxyPq9DIG3O6/bYyWQ==
+X-Received: by 2002:a5d:54d2:0:b0:313:f5f8:a331 with SMTP id x18-20020a5d54d2000000b00313f5f8a331mr2449781wrv.34.1688691178654;
+        Thu, 06 Jul 2023 17:52:58 -0700 (PDT)
+Received: from smtpclient.apple ([131.111.5.246])
+        by smtp.gmail.com with ESMTPSA id u15-20020a5d6acf000000b003143b7449ffsm3086566wrw.25.2023.07.06.17.52.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jul 2023 17:52:57 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: Re: [RESEND PATCH v3 1/2] RISC-V: mm: Restrict address space for
+ sv39,sv48,sv57
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <ZKdUpzvyfy9f48MI@ghost>
+Date:   Fri, 7 Jul 2023 01:52:47 +0100
+Cc:     Alexandre Ghiti <alex@ghiti.fr>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        mick@ics.forth.gr
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <34483C0C-FA31-41E6-9263-1F9A08CEBE2C@jrtc27.com>
+References: <20230705190002.384799-1-charlie@rivosinc.com>
+ <20230705190002.384799-2-charlie@rivosinc.com>
+ <2084462d-b11d-7a48-3049-6bafbe81e7b4@ghiti.fr> <ZKdUpzvyfy9f48MI@ghost>
+To:     Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: Apple Mail (2.3731.600.7)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 04:40:15PM +0000, Jiaqi Yan wrote:
-> Add tests for the improvement made to read operation on HWPOISON
-> hugetlb page with different read granularities. For each chunk size,
-> three read scenarios are tested:
-> 1. Simple regression test on read without HWPOISON.
-> 2. Sequential read page by page should succeed until encounters the 1st
->    raw HWPOISON subpage.
-> 3. After skip raw HWPOISON subpage by lseek, read()s always succeed.
-> 
-> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+On 7 Jul 2023, at 00:56, Charlie Jenkins <charlie@rivosinc.com> wrote:
+>=20
+> On Thu, Jul 06, 2023 at 11:11:37AM +0200, Alexandre Ghiti wrote:
+>> Hi Charlie,
+>>=20
+>>=20
+>> On 05/07/2023 20:59, Charlie Jenkins wrote:
+>>> Make sv48 the default address space for mmap as some applications
+>>> currently depend on this assumption. The RISC-V specification =
+enforces
+>>> that bits outside of the virtual address range are not used, so
+>>> restricting the size of the default address space as such should be
+>>> temporary.
+>>=20
+>>=20
+>> What do you mean in the last sentence above?
+>>=20
+> Applications like Java and Go broke when sv57 was implemented because
+> they shove bits into the upper space of pointers. However riscv =
+enforces
+> that all of the upper bits in the virtual address are equal to the =
+most=20
+> significant bit. "Temporary" may not have been the best word, but this =
+change=20
+> would be irrelevant if application developers were following this =
+rule, if I
+> am understanding this requirement correctly. What this means to me is
+> that riscv hardware is not guaranteed to not discard the bits in the =
+virtual=20
+> address that are not used in paging.
 
-Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+RISC-V guarantees that it will not discard the bits*. Java and Go =
+aren=E2=80=99t
+actually dereferencing the pointers with their own metadata in the top
+bits (doing so would require a pointer masking extension, like how Arm
+has TBI), they=E2=80=99re just temporarily storing it there, assuming =
+they=E2=80=99re
+not significant bits, then masking out and re-canonicalising the
+address prior to dereferencing. Which breaks, not because the hardware
+is looking at the higher bits (otherwise you could never use Sv57 for
+such applications even if you kept your addresses < 2^47), but because
+the chosen addresses have those high bits as significant.
+
+* A page fault is guaranteed if the address isn=E2=80=99t sign-extended
+
+Jess
+
