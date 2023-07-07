@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B69074B258
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D3874B25A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjGGOAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S229822AbjGGOAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbjGGOAR (ORCPT
+        with ESMTP id S232560AbjGGOAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:00:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2B71FE6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:59:31 -0700 (PDT)
+        Fri, 7 Jul 2023 10:00:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87578210C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:59:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688738370;
+        s=mimecast20190719; t=1688738385;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MGtpw5Ijohgjr845woqe5tjbTFDfrclnX+uXDY4qJTo=;
-        b=BJBZAcSiy+0owhFXivnV6MZ0Fl7AmIiZxe/1Bn2g2ze82cMhIBNusJ3+WPlITRJehjDarU
-        fGe/lLCENMxpuyzMRquPIyRJrhqRc6q0DhY8wlIWaRnE4HT+e8/YKfvF4FAQ9OkQlUIXpt
-        Bs4d0k7KGge7mV+MT082soqDOBjHi2o=
+        bh=CxwA3DJ3ViKIdzagr2m8kE8L4GOotWrmViZBn3jHWi4=;
+        b=E9ceHwCtwY9o96nGyBIRReCvNqol+0Okh2ul7hfLtrvb1B405HPNCXBCRdJkV8udr1wgY+
+        xIZWxE47i1SUA6ZcUFhcC5vgb6811iN3uV0BM8b2VNgPvLj9RmiIH6s14k408hsYBqP/EB
+        GJSCnlpXCuqQs6IFwM6KQB0EB/HZx9E=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-91-jdBeycFfMpWPcS0WdIfb0g-1; Fri, 07 Jul 2023 09:59:27 -0400
-X-MC-Unique: jdBeycFfMpWPcS0WdIfb0g-1
+ us-mta-660-K_nqMDSSN4WPFTDThD3jNA-1; Fri, 07 Jul 2023 09:59:40 -0400
+X-MC-Unique: K_nqMDSSN4WPFTDThD3jNA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A140185A791;
-        Fri,  7 Jul 2023 13:59:26 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60093856F66;
+        Fri,  7 Jul 2023 13:59:39 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BEDF2166B25;
-        Fri,  7 Jul 2023 13:59:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4677C2166B25;
+        Fri,  7 Jul 2023 13:59:26 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
@@ -50,10 +50,10 @@ Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         pabeni@redhat.com, tglx@linutronix.de, maz@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         frowand.list@gmail.com, Baoquan He <bhe@redhat.com>,
-        kernel test robot <lkp@intel.com>, dmaengine@vger.kernel.org
-Subject: [PATCH 1/8] idmaengine: make FSL_EDMA and INTEL_IDMA64 depends on HAS_IOMEM
-Date:   Fri,  7 Jul 2023 21:58:45 +0800
-Message-Id: <20230707135852.24292-2-bhe@redhat.com>
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 2/8] char: xillybus: make XILLYBUS_OF depend on HAS_IOMEM
+Date:   Fri,  7 Jul 2023 21:58:46 +0800
+Message-Id: <20230707135852.24292-3-bhe@redhat.com>
 In-Reply-To: <20230707135852.24292-1-bhe@redhat.com>
 References: <20230707135852.24292-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -76,43 +76,36 @@ than PCI devices. Hence it could have a fully functional s390 kernel
 with CONFIG_PCI=n, then the relevant iomem mapping functions
 [including ioremap(), devm_ioremap(), etc.] are not available.
 
-Here let FSL_EDMA and INTEL_IDMA64 depend on HAS_IOMEM so that it
-won't be built to cause below compiling error if PCI is unset.
+Here let XILLYBUS_OF depend on HAS_IOMEM so that it won't be built
+to cause below compiling error if PCI is unset:
 
---------
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
---------
+------
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
+------
 
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
 Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: dmaengine@vger.kernel.org
+Cc: Eli Billauer <eli.billauer@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/char/xillybus/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index 644c188d6a11..08fdd0e2ed1b 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -211,6 +211,7 @@ config FSL_DMA
- config FSL_EDMA
- 	tristate "Freescale eDMA engine support"
- 	depends on OF
-+	depends on HAS_IOMEM
- 	select DMA_ENGINE
- 	select DMA_VIRTUAL_CHANNELS
- 	help
-@@ -280,6 +281,7 @@ config IMX_SDMA
+diff --git a/drivers/char/xillybus/Kconfig b/drivers/char/xillybus/Kconfig
+index a8036dad437e..f51d533390a9 100644
+--- a/drivers/char/xillybus/Kconfig
++++ b/drivers/char/xillybus/Kconfig
+@@ -29,7 +29,7 @@ config XILLYBUS_PCIE
  
- config INTEL_IDMA64
- 	tristate "Intel integrated DMA 64-bit support"
-+	depends on HAS_IOMEM
- 	select DMA_ENGINE
- 	select DMA_VIRTUAL_CHANNELS
+ config XILLYBUS_OF
+ 	tristate "Xillybus over Device Tree"
+-	depends on OF && HAS_DMA
++	depends on OF && HAS_DMA && HAS_IOMEM
  	help
+ 	  Set to M if you want Xillybus to find its resources from the
+ 	  Open Firmware Flattened Device Tree. If the target is an embedded
 -- 
 2.34.1
 
