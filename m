@@ -2,595 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1656174AACE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E0F74AAD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjGGF4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 01:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        id S229446AbjGGF6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 01:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGGF4n (ORCPT
+        with ESMTP id S231492AbjGGF6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 01:56:43 -0400
-Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA6F51BC9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 22:56:40 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.01,187,1684771200"; 
-   d="scan'208";a="3515396"
-Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
-  by emcscan.emc.com.tw with ESMTP; 07 Jul 2023 13:56:36 +0800
-Received: from 192.168.10.23
-        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(27239:0:AUTH_RELAY)
-        (envelope-from <jingle.wu@emc.com.tw>); Fri, 07 Jul 2023 13:56:34 +0800 (CST)
-Received: from 192.168.33.11
-        by webmail.emc.com.tw with Mail2000 ESMTP Server V7.00(102915:1:AUTH_RELAY)
-        (envelope-from <jingle.wu@emc.com.tw>); Fri, 07 Jul 2023 13:56:32 +0800 (CST)
-From:   "Jingle.Wu" <jingle.wu@emc.com.tw>
-To:     "'Dmitry Torokhov'" <dmitry.torokhov@gmail.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <phoenix@emc.com.tw>, <josh.chen@emc.com.tw>,
-        <dave.wang@emc.com.tw>
-References: <20230531090340.1035499-1-jingle.wu@emc.com.tw> <ZJ4MVbTnBT5sM5XR@google.com> 
-In-Reply-To: 
-Subject: RE: [PATCH]  Input: elan_i2c - Implement inhibit/uninhibit functions.
-Date:   Fri, 7 Jul 2023 13:56:32 +0800
-Message-ID: <000001d9b097$c7c902d0$575b0870$@emc.com.tw>
+        Fri, 7 Jul 2023 01:58:41 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2043.outbound.protection.outlook.com [40.107.9.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C8A1FC6;
+        Thu,  6 Jul 2023 22:58:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hwCCLoiFPbWYWQxR5T2J1/XlTJvoyFumyXZLIm5YVXyvfjrso9+GN0phQOoYYM8P+WbtLNTRoIm0CDO2Rf+Ak1LWYDmVWkg15p2Buitvw3vqeuM31ay7rfIKbsjw6DqHdQo9dv04MEY/TOI0YI8HfpED6Pzrzu7z93NM8u1RhoE7iLOg5rJAGugxm2ZQ5plqZcY0YS+v+MPPxAO5vytVR35kL2wkpxhrPCIRQdEtl27xmjQbSW3bnCM/jTLNFBSdqHAOqY8NDYRp4x7Sb0Q7eACttpOcLxUxPRjKXCh4D097nnX2JCPPZGqF9YvQVY3g1vs6OuB40Qm6rgqxkI+6EA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=02qhPvhImcEK+6g4xrq3f9VO3iQC8nPfxuPOsQJWvyM=;
+ b=f4RjT6wPf2jgnIlSJTlm2cSRu5ZAwVRafyNXdNSNJZ7RJVuiGVAhFpqtkG0pUQ1ibrs2N+yQ14oTP3FgmlJUReojJvOC7uI1JtqUR5AeppRktNidvaDUeNjoprX7SLgLIifjDei9Mi5mO+XSss+5t7uKSbvmf+csLO7yAleYs1XB3NhehG6LwdxGwMhWmzcnMJGzUYyUZ+Gc8sfO6BhhiO684bpbiAqQa33zhhYbVeqYWLJCzei8WwjbXV9O8s3bcqLe14Ya8GoO91flckg5qqQ94jGIp4i2JfIhVT7MSh7l7lATZNjqyzlJ3a0WlTvLgNe+qH7I4KEMYJ4HzxmAhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=02qhPvhImcEK+6g4xrq3f9VO3iQC8nPfxuPOsQJWvyM=;
+ b=DKngXDpWYQ2kGy9uw1wIKkRMx0mjNq0EvRigxiMZtEsVBmV6kPKbsyUsKykw80hm43g+cQwV/qBjrm9O9s++i9LbrptmirWpLLuFMbbfctDFI3LpLSQHxi4WAP0xCPsiGD2LDF8f+8lAjK0w45pLr5Y2dt0egtyJZrHBQvAmYd32ZORR4N+Cgf6QMwrkZgG2Y2OyPiiKu/J4aGakch3jueFbAp9GU4PIfoWozeHyqppU3KQVcAIB2w+abI5VFOWTiaks+bo3BXMQzOwSpfMjF6/kIdsSKgTBPvb9CWVpy/O0pXlva15Fo2xCOveqVDBr3lR2rnC3C1sWhanWwSXO5A==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2360.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
+ 2023 05:58:36 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::802b:33:561c:4217]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::802b:33:561c:4217%4]) with mapi id 15.20.6565.025; Fri, 7 Jul 2023
+ 05:58:36 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "ysato@users.sourceforge.jp" <ysato@users.sourceforge.jp>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "glaubitz@physik.fu-berlin.de" <glaubitz@physik.fu-berlin.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>
+CC:     "kernel@xen0n.name" <kernel@xen0n.name>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "juerg.haefliger@canonical.com" <juerg.haefliger@canonical.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "sebastian.reichel@collabora.com" <sebastian.reichel@collabora.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "ziy@nvidia.com" <ziy@nvidia.com>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
+        "xin3.li@intel.com" <xin3.li@intel.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "tsi@tuyoix.net" <tsi@tuyoix.net>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "hbathini@linux.ibm.com" <hbathini@linux.ibm.com>,
+        "sourabhjain@linux.ibm.com" <sourabhjain@linux.ibm.com>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>
+Subject: Re: [PATCH v5 02/13] x86/kexec: refactor for kernel/Kconfig.kexec
+Thread-Topic: [PATCH v5 02/13] x86/kexec: refactor for kernel/Kconfig.kexec
+Thread-Index: AQHZsFghBMLN4GfYGkC1z1JC7KCAn6+tz3AA
+Date:   Fri, 7 Jul 2023 05:58:35 +0000
+Message-ID: <0d1097dd-f0cb-8518-cf88-e6afbd2a6a19@csgroup.eu>
+References: <20230706222027.189117-1-eric.devolder@oracle.com>
+ <20230706222027.189117-3-eric.devolder@oracle.com>
+In-Reply-To: <20230706222027.189117-3-eric.devolder@oracle.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2360:EE_
+x-ms-office365-filtering-correlation-id: 9c542bb0-4e36-4de4-e4df-08db7eaf33fb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: y/I3BvHXu9Rbyuk88lSsX+P5eGEpsSxVw1IctrZUePOblyeVBfDPRtj1ghGQa8aJ1ZUGjdWmtyX+QYOcLYO/PCDCbOtiwPW8CbVIfcA0jin5MMD3lDYR/IlAxgt3cN8CfgUwL9PCt10GO636PM42Ha8yUch/tZFeKPk4UMwAJJygA6e6o7YWfbV3vGC3KFCPR8Dku6cJWrUM7N10tqL0UFYpDTtD9O4g1aFbTS3tmKe4d6W+4+hDj1Uogjb/zmbCJDcxC4qsOO2CzWWZLSPP6VC+Osly2HSdEosbweiTKCxl4Fvube4GnDkYsT/EoKL2h/ujD2tC0oXv87i8iwhOk1KH5AePDO48wZN3Mm23LCbp3R7iRbyiHGoREBzIssm8HTz4V7DJfr4YYDJ22B7b1O135rDtYBkupiAHGtC9uYhUg5Ck8dSnwRYrqodxiOQ1F+54xn5JMQVo38bsWD/gavxlqgK56E8l/IGaAaAiiAvp4ElKJ53ddzhfs5Q5Nj/KP8ZzENLE+uajVcvk6HCNo8B5jALctHYy1TmEI3ykCVK9WXNreysqxwl1LjRaU6HeZ/CMSViUWLDleJfJKgq98/LQHjYUoKbAKNfFbLLjc8MM1caDvoZufiRGkpQ9Hebffdzov38wxA5HCHlGQ5AdqVXQhwpIhMkBrwQRa9twK1kB0xUNoP64wFJyJAsqJLKKmtPqM479LV4OpuOmKHaAYg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39850400004)(366004)(451199021)(66574015)(83380400001)(2616005)(2906002)(66476007)(64756008)(4326008)(66446008)(66556008)(6486002)(91956017)(76116006)(66946007)(316002)(110136005)(54906003)(478600001)(71200400001)(6512007)(5660300002)(7416002)(6506007)(44832011)(186003)(7366002)(41300700001)(8936002)(8676002)(7406005)(38100700002)(122000001)(921005)(36756003)(31696002)(38070700005)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K3FGWmlnRFVmYS9NRWZDS1NENzdMOFlRdFRZYmRZQ1N2R2tIWFVPQ2hLTDRh?=
+ =?utf-8?B?TURlZm82RWl1WUpUMUEzZWQzeit3L0x6RS9EUTNtREpMMlFjSW5ZSXZBS2Fp?=
+ =?utf-8?B?cnlvZlFYbURmV3FJQUZ2TGpJWFZxUXk3UG9TUlkrTERQMFFGU2FFWEZZVFVu?=
+ =?utf-8?B?TVRCV0JIbEVhZ3BWRVZmM0VvTEtXNU9wZkprTHZLbG16UGZHSlhtZjJhR2c4?=
+ =?utf-8?B?Y3dSbTlQMmdtd1gzenlIc1NpY3VEbXY3VDFaSkpWN3NoYXpWMndUMjVnM1hW?=
+ =?utf-8?B?Z3pKVUR2V2wyZFFhV05Na3c2aG1OT3RCemFqSUNQbVlOUXc4eVNhY3pFblJR?=
+ =?utf-8?B?RVFsdldUVTd2U05XK3ZsaG80cHYrYXQzUVZQZlprNUJrSXBiOU5zYmFEYlNp?=
+ =?utf-8?B?QTE3RmQwYVNHN2F1NnJZeXU2N0RoakRZeUFGSW83SGZMS2swMlZzUzJBbmVN?=
+ =?utf-8?B?NngxK1pZSWFwZldseHVtdEQ2dG9uM1RsRGZQQmZOTWV6cnlmdkJmdmhqVFBX?=
+ =?utf-8?B?bU13Z0duZ1l6NlJVRkI5UGVFdTVrRzFadVQzMGxCQWpUK2t2RitEOW9hNGtp?=
+ =?utf-8?B?T1B2NFYrY0hTUTBVSXo0YUI4eGZpWmNpNXJKQlBVNWpCRDZoM3RaTHRaZGZT?=
+ =?utf-8?B?eUE3U2ZjSFE2YzMyQ3FVNlBoVlcxNmRVOFZkMTJGdkxQU3lXclA3Ung1bm8z?=
+ =?utf-8?B?VVBNTkVldjNiY1BlN0FCWktRelBjdWJNSVF4OFRFNnhkaEZOTCtVYU13SU1Z?=
+ =?utf-8?B?Z1RpSFBheXJENU1GYytqY3VWaU92NklxbVJTUU9rNzJZU1JzdENycnZxNVZO?=
+ =?utf-8?B?YTBWRXFvUFZGU0NMV3gyZWpMNWhGc3FCRThFZlMycU5Qb20rMHVhTWdJN0xB?=
+ =?utf-8?B?RmhCMWdlRWp6VGJyc3hQekJyVjVDZys1dE1KSSs2RHd4OUxOUUNWR2pERHc1?=
+ =?utf-8?B?UnU3T3FxQ3JxV1FiTjJIOVBIZFBPWnpGc1ZHS3BNOHIzZWxKN2JiZlZOa3NW?=
+ =?utf-8?B?UHY4bU1yMkdPL2FMdC94ZW1VTnU0UkxUeDZFanVpdGhXQWgrOWZycXVna1Jy?=
+ =?utf-8?B?TXljQ0hZS2ZlRUNDbzNyeW1aWDdCeUp4R2Y3bmh1SHpLczVnbUZkMENhU0pF?=
+ =?utf-8?B?MXFic0NRVG1KMHBqcXVlSzZuelRJR0w4dUpNa3VFdlZiRDlsNllsMXpHaGJv?=
+ =?utf-8?B?ZnFoY2hoVEt6aEMveXg4amlLUVdYSFlVT211NFNyaHowVWdKT292MTRwbnlZ?=
+ =?utf-8?B?eDUvOVUwTkpBSXdIVnBoaS9yclNZSHQ3ZS9LR2NnZkpXZHBRby93Z1Jwc3Fr?=
+ =?utf-8?B?OGRFMzR0dGRoQm9CQjRKMGNpZkw2aWM0M0VhR29XK3hTeXFnVjM3SjlWcy9j?=
+ =?utf-8?B?NkpLRmFjOWxtTy9EZCs3YnV4TkJnUU5HbFBEOHNjbWtoTUgxS1hFWjR3QTZi?=
+ =?utf-8?B?Zk9UblU2VStPdWkrbGdkRHpQalVJYWtvUm1TaC9QYjBMV1FiRERrbGZOSVRS?=
+ =?utf-8?B?ZjNtcjFNWno4d0NpNHpzUVN6K2kvSitIU0ovM3drNjFCTXA1czlRUUdRYW5D?=
+ =?utf-8?B?UFlCREZXYXZOS0JudzhlUXQ5WE9TOUFCOW1jT044Q1ZtWTh1ZkNVd2N5ZXpL?=
+ =?utf-8?B?My9QRzE5dWNnWDdLN2dyS3pDWmRJMWdpV2k1ekZIZS9JQWRSb0x5VzFQY0Jr?=
+ =?utf-8?B?MVdnTk1kRFRyZ1JRTkZ3c2xPNmh2Z2plMGVMZjlvSVBKTEZQTXVJL1k0RDR4?=
+ =?utf-8?B?OCtRTWt1QTdkZHVKQS8yMDFjQ0V3THhoLzY4RGpFTkdiMEdaemF3ejVGdFBT?=
+ =?utf-8?B?bU1DSWhpa3VoZW0xSWhZbWdsVFdUQXc0STRGQjFzeEd4WUloVzJaMmczclFE?=
+ =?utf-8?B?aStpN1FDQ2Z1STkvRVE3TkNsdFJCMDFCS1BhYmFsM1hFa05qdWVqSThwTDQv?=
+ =?utf-8?B?L0h4OEpqTzdROFBJQmpiYmlIK1kyTUFjbTNrSm1NT1IvcW0zSlh3eHBGcVo3?=
+ =?utf-8?B?b0Y4dTJpaUlTekNpZTY2VHRMSWpQdWJ4VWJHVlRFZlNtTEdvYlZOOVB3LzQ2?=
+ =?utf-8?B?YlhYTGJCWWZIOXkyVUwvUTVxS1lsVks1Z2UzbXhWdHRoSUpZSkZoSEZBUHl3?=
+ =?utf-8?B?TmxhekxGd2tXZktLdzdCSFFUekxCVjRqcC9yYkxkSzk0RGU1VWxYWWd4WWNm?=
+ =?utf-8?B?OVd1VjRXa1QwbjA0c0RQa1lxdkdjT2JkUHV6S29QMU5JelQyK24wbUFRWU80?=
+ =?utf-8?B?TUV1TmtrbTFuWlRxZTViUko3UWhnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <87527B0D04FADE449B8AFEC50A7C121A@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQFEypu60gX+z1j7S/LVgPsQG8PWFQJM2ygisMIRvaCAAyDs4A==
-Content-Language: zh-tw
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMDYwMTFcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy0wNTM1YzVhYi0xYzhiLTExZWUtYTg2MS1mMDc5NTk2OWU3NWVcYW1lLXRlc3RcMDUzNWM1YWQtMWM4Yi0xMWVlLWE4NjEtZjA3OTU5NjllNzVlYm9keS50eHQiIHN6PSIxOTI5MCIgdD0iMTMzMzMxODI5OTE4ODE4NTE0IiBoPSIySGR1Uzg1a3llTm1Eb3ZPd3dqdFRyZnc4Ulk9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c542bb0-4e36-4de4-e4df-08db7eaf33fb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2023 05:58:35.9187
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7F3eCRrz5tqGisTBukOVJkJfWWRYRylN0l8XStCTd7CAhNQ+RpETl1enP/jLPfYb1Jmj6JjHtZB/WnKzEJUNuh8A5h/UcYerWfQyDBCk/GI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2360
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Dmitry:
-
-...
-module_i2c_driver(elan_driver);
-
-static int __init elan_init(void)
-{
-	return elan_create_lid_handler();
-}
-
-static void __exit elan_exit(void)
-{
-	if (elan_mode_wq)
-		elan_destroy_lid_handler();
-}
-
-module_init(elan_init);
-module_exit(elan_exit);
-...
-
-If I change to elan_create_lid_handler() at module_init, complie error as
-follow.
-
-<pre><b>./include/linux/module.h:130:49:</b> <font color="#C01C28"><b>error:
-</b></font>redefinition of '<b>__inittest</b>'
-  130 |         static inline initcall_t __maybe_unused <font
-color="#C01C28"><b>__inittest</b></font>(void)                \
-      |                                                 <font
-color="#C01C28"><b>^~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1666:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_init</b>'
- 1666 | <font color="#2AA1B3"><b>module_init</b></font>(elan_init);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:130:49:</b> <font color="#2AA1B3"><b>note:
-</b></font>previous definition of '<b>__inittest</b>' with type '<b>int
-(*(void))(void)</b>'
-  130 |         static inline initcall_t __maybe_unused <font
-color="#2AA1B3"><b>__inittest</b></font>(void)                \
-      |                                                 <font
-color="#2AA1B3"><b>^~~~~~~~~~</b></font>
-<b>./include/linux/device/driver.h:266:1:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_init</b>'
-  266 | <font color="#2AA1B3"><b>module_init</b></font>(__driver##_init); \
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/i2c.h:956:9:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_driver</b>'
-  956 |         <font
-color="#2AA1B3"><b>module_driver</b></font>(__i2c_driver, i2c_add_driver, \
-      |         <font color="#2AA1B3"><b>^~~~~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1653:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_i2c_driver</b>'
- 1653 | <font color="#2AA1B3"><b>module_i2c_driver</b></font>(elan_driver);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:132:13:</b> <font color="#C01C28"><b>error:
-</b></font>redefinition of '<b>init_module</b>'
-  132 |         int <font color="#C01C28"><b>init_module</b></font>(void)
-__copy(initfn)                    \
-      |             <font color="#C01C28"><b>^~~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1666:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_init</b>'
- 1666 | <font color="#2AA1B3"><b>module_init</b></font>(elan_init);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:132:13:</b> <font color="#2AA1B3"><b>note:
-</b></font>previous definition of '<b>init_module</b>' with type
-'<b>int(void)</b>'
-  132 |         int <font color="#2AA1B3"><b>init_module</b></font>(void)
-__copy(initfn)                    \
-      |             <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/device/driver.h:266:1:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_init</b>'
-  266 | <font color="#2AA1B3"><b>module_init</b></font>(__driver##_init); \
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/i2c.h:956:9:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_driver</b>'
-  956 |         <font
-color="#2AA1B3"><b>module_driver</b></font>(__i2c_driver, i2c_add_driver, \
-      |         <font color="#2AA1B3"><b>^~~~~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1653:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_i2c_driver</b>'
- 1653 | <font color="#2AA1B3"><b>module_i2c_driver</b></font>(elan_driver);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:138:49:</b> <font color="#C01C28"><b>error:
-</b></font>redefinition of '<b>__exittest</b>'
-  138 |         static inline exitcall_t __maybe_unused <font
-color="#C01C28"><b>__exittest</b></font>(void)                \
-      |                                                 <font
-color="#C01C28"><b>^~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1667:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_exit</b>'
- 1667 | <font color="#2AA1B3"><b>module_exit</b></font>(elan_exit);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:138:49:</b> <font color="#2AA1B3"><b>note:
-</b></font>previous definition of '<b>__exittest</b>' with type '<b>void
-(*(void))(void)</b>'
-  138 |         static inline exitcall_t __maybe_unused <font
-color="#2AA1B3"><b>__exittest</b></font>(void)                \
-      |                                                 <font
-color="#2AA1B3"><b>^~~~~~~~~~</b></font>
-<b>./include/linux/device/driver.h:271:1:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_exit</b>'
-  271 | <font color="#2AA1B3"><b>module_exit</b></font>(__driver##_exit);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/i2c.h:956:9:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_driver</b>'
-  956 |         <font
-color="#2AA1B3"><b>module_driver</b></font>(__i2c_driver, i2c_add_driver, \
-      |         <font color="#2AA1B3"><b>^~~~~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1653:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_i2c_driver</b>'
- 1653 | <font color="#2AA1B3"><b>module_i2c_driver</b></font>(elan_driver);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:140:14:</b> <font color="#C01C28"><b>error:
-</b></font>redefinition of '<b>cleanup_module</b>'
-  140 |         void <font
-color="#C01C28"><b>cleanup_module</b></font>(void) __copy(exitfn)
-\
-      |              <font color="#C01C28"><b>^~~~~~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1667:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_exit</b>'
- 1667 | <font color="#2AA1B3"><b>module_exit</b></font>(elan_exit);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/module.h:140:14:</b> <font color="#2AA1B3"><b>note:
-</b></font>previous definition of '<b>cleanup_module</b>' with type
-'<b>void(void)</b>'
-  140 |         void <font
-color="#2AA1B3"><b>cleanup_module</b></font>(void) __copy(exitfn)
-\
-      |              <font color="#2AA1B3"><b>^~~~~~~~~~~~~~</b></font>
-<b>./include/linux/device/driver.h:271:1:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_exit</b>'
-  271 | <font color="#2AA1B3"><b>module_exit</b></font>(__driver##_exit);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~</b></font>
-<b>./include/linux/i2c.h:956:9:</b> <font color="#2AA1B3"><b>note:
-</b></font>in expansion of macro '<b>module_driver</b>'
-  956 |         <font
-color="#2AA1B3"><b>module_driver</b></font>(__i2c_driver, i2c_add_driver, \
-      |         <font color="#2AA1B3"><b>^~~~~~~~~~~~~</b></font>
-<b>drivers/input/mouse/elan_i2c_core.c:1653:1:</b> <font
-color="#2AA1B3"><b>note: </b></font>in expansion of macro
-'<b>module_i2c_driver</b>'
- 1653 | <font color="#2AA1B3"><b>module_i2c_driver</b></font>(elan_driver);
-      | <font color="#2AA1B3"><b>^~~~~~~~~~~~~~~~~</b></font>
-</pre>
-
-THANJS
-JINGLE
------Original Message-----
-From: Jingle.Wu [mailto:jingle.wu@emc.com.tw] 
-Sent: Wednesday, July 5, 2023 2:09 PM
-To: 'Dmitry Torokhov' <dmitry.torokhov@gmail.com>
-Cc: 'linux-kernel@vger.kernel.org' <linux-kernel@vger.kernel.org>;
-'linux-input@vger.kernel.org' <linux-input@vger.kernel.org>;
-'phoenix@emc.com.tw' <phoenix@emc.com.tw>; 'josh.chen@emc.com.tw'
-<josh.chen@emc.com.tw>; 'dave.wang@emc.com.tw' <dave.wang@emc.com.tw>
-Subject: RE: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit
-functions.
-
-HI Dmitry:
-
-1.
-> +static void elan_input_lid_event(struct input_handle *handle, 
-> +unsigned
-int type,
-> +			     unsigned int code, int value) {
-> +	struct elan_tp_data *data, *n;
-> +
-> +	if (type == EV_SW && code == SW_LID) {
-> +		list_for_each_entry_safe(data, n,
-&elan_devices_with_lid_handler, 
-> +list) {
-
-Why do you need the "_safe()" variant here?
--> Because I took the above link as reference.  
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3
-578852/7/drivers/hid/hid-multitouch.c#394
-
-2. 
-> +	data->lid_switch = true;
-> +	INIT_LIST_HEAD(&data->list);
-> +	INIT_WORK(&data->lid_work, lid_work_handler);
-> +	list_add_tail(&data->list, &elan_devices_with_lid_handler);
-
-It looks like you call elan_create_lid_handler() from elan_probe() which
-means it can be called several times (we should not assume there is only one
-controller), I do not see it being destroyed in remove() either, so it will
-break if you bind/unbind the driver.
-
-I also not sure why you need the list of you have a handler per device.
-
--> If the elan_create_lid_handler() function not be put into probe(), 
--> the lid
-handler would be invalid in elan private data("struct elan_tp_data *data").
-Or do you have any suggestions for it? Thanks.
-
-3.
-> +	error = elan_create_lid_handler(data);
-> +	if (error)
-> +		dev_err(dev, "failed to create lid handler: %d\n", error);
-
-Do we need this on _ALL_ devices with ELan controllers, or just certain
-ones? If we need this on all devices how did it work before?
-
--> Yes, we need this on all device.
-In Chromeos kernel v5.4 before, the elan_inhibit()/uninhibit function was
-built and worked successfully in elan_i2c_driver.
-https://chromium.googlesource.com/chromiumos/third_party/kernel/+/refs/heads
-/chromeos-5.4/drivers/input/mouse/elan_i2c_core.c#353
-
-
-Thanks
-JINGLE
-
------Original Message-----
-From: Dmitry Torokhov [mailto:dmitry.torokhov@gmail.com]
-Sent: Friday, June 30, 2023 6:57 AM
-To: jingle.wu <jingle.wu@emc.com.tw>
-Cc: linux-kernel@vger.kernel.org; linux-input@vger.kernel.org;
-phoenix@emc.com.tw; josh.chen@emc.com.tw; dave.wang@emc.com.tw
-Subject: Re: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit
-functions.
-
-Hi Jingle,
-
-On Wed, May 31, 2023 at 05:03:40PM +0800, jingle.wu wrote:
->  Add inhibit/uninhibit functions.
-
-You need to provide justification for this change, i.e. explain why you need
-this/what is currently not working or working sub-optimally.
-
-> 
->  Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
-> ---
->  drivers/input/mouse/elan_i2c_core.c | 207
-> ++++++++++++++++++++++++++++
->  1 file changed, 207 insertions(+)
-> 
-> diff --git a/drivers/input/mouse/elan_i2c_core.c
-> b/drivers/input/mouse/elan_i2c_core.c
-> index 5f0d75a45c80..4ea57f4c7bd4 100644
-> --- a/drivers/input/mouse/elan_i2c_core.c
-> +++ b/drivers/input/mouse/elan_i2c_core.c
-> @@ -56,6 +56,7 @@ struct elan_tp_data {
->  	struct input_dev	*input;
->  	struct input_dev	*tp_input; /* trackpoint input node */
->  	struct regulator	*vcc;
-> +	struct list_head list;	/* for list of devices needing input handler
-*/
->  
->  	const struct elan_transport_ops *ops;
->  
-> @@ -63,6 +64,11 @@ struct elan_tp_data {
->  	struct completion	fw_completion;
->  	bool			in_fw_update;
->  
-> +	struct work_struct	lid_work;
-> +	bool			lid_switch;
-> +	int			lid_value;
-> +	bool			in_inhibit;
-> +
->  	struct mutex		sysfs_mutex;
->  
->  	unsigned int		max_x;
-> @@ -96,6 +102,9 @@ struct elan_tp_data {
->  	u32			quirks;		/* Various quirks */
->  };
->  
-> +static struct workqueue_struct *elan_mode_wq; static 
-> +LIST_HEAD(elan_devices_with_lid_handler);
-> +
->  static u32 elan_i2c_lookup_quirks(u16 ic_type, u16 product_id)  {
->  	static const struct {
-> @@ -329,6 +338,74 @@ static int elan_initialize(struct elan_tp_data *data,
-bool skip_reset)
->  	return error;
->  }
->  
-> +static int elan_reactivate(struct elan_tp_data *data) {
-> +	struct device *dev = &data->client->dev;
-> +	int error;
-> +
-> +	error = elan_set_power(data, true);
-> +	if (error)
-> +		dev_err(dev, "failed to restore power: %d\n", error);
-> +
-> +	error = data->ops->sleep_control(data->client, false);
-> +	if (error) {
-> +		dev_err(dev,
-> +			"failed to wake device up: %d\n", error);
-> +		return error;
-> +	}
-> +
-> +	return error;
-> +}
-> +
-> +static int elan_inhibit(struct input_dev *input_dev)
-
-I would rather you did not call it inhibit/uninhibit because this is not
-what it does.
-
-Please split the logic for recalibration from logic of powering on and off
-the device. I also hope in the future firmware revisions the distinction
-will be more clear (i.e. have a separate method/command to recalibrate
-baseline on demand).
-
-> +{
-> +	struct elan_tp_data *data = input_get_drvdata(input_dev);
-> +	struct i2c_client *client = data->client;
-> +	int error;
-> +
-> +	dev_dbg(&client->dev, "inhibiting\n");
-> +	/*
-> +	 * We are taking the mutex to make sure sysfs operations are
-> +	 * complete before we attempt to bring the device into low[er]
-> +	 * power mode.
-> +	 */
-> +	error = mutex_lock_interruptible(&data->sysfs_mutex);
-> +	if (error)
-> +		return error;
-> +
-> +	disable_irq(client->irq);
-> +
-> +	error = elan_set_power(data, false);
-> +	if (error)
-> +		enable_irq(client->irq);
-> +
-> +	data->in_inhibit = true;
-> +	mutex_unlock(&data->sysfs_mutex);
-> +
-> +	return error;
-> +}
-> +
-> +static int elan_uninhibit(struct input_dev *input_dev) {
-> +	struct elan_tp_data *data = input_get_drvdata(input_dev);
-> +	struct i2c_client *client = data->client;
-> +	int error;
-> +
-> +	dev_dbg(&client->dev, "uninhibiting\n");
-> +	error = mutex_lock_interruptible(&data->sysfs_mutex);
-> +	if (error)
-> +		return error;
-> +
-> +	error = elan_reactivate(data);
-> +	if (error == 0)
-> +		enable_irq(client->irq);
-> +
-> +	data->in_inhibit = false;
-> +	mutex_unlock(&data->sysfs_mutex);
-> +
-> +	return error;
-> +}
-> +
->  static int elan_query_device_info(struct elan_tp_data *data)  {
->  	int error;
-> @@ -1187,6 +1264,124 @@ static void elan_disable_regulator(void *_data)
->  	regulator_disable(data->vcc);
->  }
->  
-> +static void lid_work_handler(struct work_struct *work) {
-> +	struct elan_tp_data *data = container_of(work, struct elan_tp_data,
-> +					    lid_work);
-> +
-> +	if (data->lid_value)
-> +		elan_inhibit(data->input);
-> +	else
-> +		elan_uninhibit(data->input);
-> +
-> +}
-> +
-> +static void elan_input_lid_event(struct input_handle *handle, unsigned
-int type,
-> +			     unsigned int code, int value) {
-> +	struct elan_tp_data *data, *n;
-> +
-> +	if (type == EV_SW && code == SW_LID) {
-> +		list_for_each_entry_safe(data, n,
-&elan_devices_with_lid_handler,
-> +list) {
-
-Why do you need the "_safe()" variant here?
-
-> +			data->lid_value = value;
-> +			queue_work(elan_mode_wq, &data->lid_work);
-> +		}
-> +	}
-> +
-> +}
-> +
-> +struct elan_input_lid {
-> +	struct input_handle handle;
-> +};
-> +
-> +static int elan_input_lid_connect(struct input_handler *handler,
-> +				struct input_dev *dev,
-> +				const struct input_device_id *id) {
-> +	struct elan_input_lid *lid;
-> +	char *name;
-> +	int error;
-> +
-> +	lid = kzalloc(sizeof(*lid), GFP_KERNEL);
-> +	if (!lid)
-> +		return -ENOMEM;
-> +	name = kasprintf(GFP_KERNEL, "elan-i2c-lid-%s",
-dev_name(&dev->dev));
-> +	if (!name) {
-> +		error = -ENOMEM;
-> +		goto err_free_lid;
-> +	}
-> +	lid->handle.dev = dev;
-> +	lid->handle.handler = handler;
-> +	lid->handle.name = name;
-> +	lid->handle.private = lid;
-> +	error = input_register_handle(&lid->handle);
-> +	if (error)
-> +		goto err_free_name;
-> +	error = input_open_device(&lid->handle);
-> +	if (error)
-> +		goto err_unregister_handle;
-> +	return 0;
-> +err_unregister_handle:
-> +	input_unregister_handle(&lid->handle);
-> +err_free_name:
-> +	kfree(name);
-> +err_free_lid:
-> +	kfree(lid);
-> +	return error;
-> +}
-> +
-> +static void elan_input_lid_disconnect(struct input_handle *handle) {
-> +	struct elan_input_lid *lid = handle->private;
-> +
-> +	input_close_device(handle);
-> +	input_unregister_handle(handle);
-> +	kfree(handle->name);
-> +	kfree(lid);
-> +}
-> +
-> +static const struct input_device_id elan_input_lid_ids[] = {
-> +	{
-> +		.flags = INPUT_DEVICE_ID_MATCH_EVBIT |
-INPUT_DEVICE_ID_MATCH_SWBIT,
-> +		.evbit = { BIT_MASK(EV_SW) },
-> +		.swbit = { [BIT_WORD(SW_LID)] = BIT_MASK(SW_LID) },
-> +	},
-> +	{ },
-> +};
-> +
-> +static struct input_handler elan_input_lid_handler = {
-> +	.event =	elan_input_lid_event,
-> +	.connect =	elan_input_lid_connect,
-> +	.disconnect =	elan_input_lid_disconnect,
-> +	.name =		"elan-i2c-lid",
-> +	.id_table =	elan_input_lid_ids,
-> +};
-> +
-> +static int elan_create_lid_handler(struct elan_tp_data *data) {
-> +	int error = 0;
-> +
-> +	elan_mode_wq = create_singlethread_workqueue("elan-i2c-lid");
-> +	if (elan_mode_wq == NULL)
-> +		return -ENOMEM;
-> +	error = input_register_handler(&elan_input_lid_handler);
-> +	if (error)
-> +		goto remove_wq;
-> +
-> +	data->lid_switch = true;
-> +	INIT_LIST_HEAD(&data->list);
-> +	INIT_WORK(&data->lid_work, lid_work_handler);
-> +	list_add_tail(&data->list, &elan_devices_with_lid_handler);
-
-It looks like you call elan_create_lid_handler() from elan_probe() which
-means it can be called several times (we should not assume there is only one
-controller), I do not see it being destroyed in remove() either, so it will
-break if you bind/unbind the driver.
-
-I also not sure why you need the list of you have a handler per device.
-
-> +
-> +	return 0;
-> +
-> +remove_wq:
-> +	data->lid_switch = false;
-> +	destroy_workqueue(elan_mode_wq);
-> +	elan_mode_wq = NULL;
-> +	return error;
-> +}
-> +
->  static int elan_probe(struct i2c_client *client)  {
->  	const struct elan_transport_ops *transport_ops; @@ -1325,6 +1520,10 
-> @@ static int elan_probe(struct i2c_client *client)
->  		}
->  	}
->  
-> +	error = elan_create_lid_handler(data);
-> +	if (error)
-> +		dev_err(dev, "failed to create lid handler: %d\n", error);
-
-Do we need this on _ALL_ devices with ELan controllers, or just certain
-ones? If we need this on all devices how did it work before?
-
-> +
->  	return 0;
->  }
->  
-> @@ -1334,6 +1533,10 @@ static int elan_suspend(struct device *dev)
->  	struct elan_tp_data *data = i2c_get_clientdata(client);
->  	int ret;
->  
-> +	/* Wait for switch on completion */
-> +	if (data->lid_switch)
-> +		flush_workqueue(elan_mode_wq);
-> +
->  	/*
->  	 * We are taking the mutex to make sure sysfs operations are
->  	 * complete before we attempt to bring the device into low[er] @@
-> -1371,6 +1574,10 @@ static int elan_resume(struct device *dev)
->  	struct elan_tp_data *data = i2c_get_clientdata(client);
->  	int error;
->  
-> +	/* Wait for switch on completion */
-> +	if (data->lid_switch)
-> +		flush_workqueue(elan_mode_wq);
-> +
->  	if (!device_may_wakeup(dev)) {
->  		error = regulator_enable(data->vcc);
->  		if (error) {
-> --
-> 2.34.1
-> 
-
-Thanks.
-
---
-Dmitry
-
+DQoNCkxlIDA3LzA3LzIwMjMgw6AgMDA6MjAsIEVyaWMgRGVWb2xkZXIgYSDDqWNyaXTCoDoNCj4g
+VGhlIGtleGVjIGFuZCBjcmFzaCBrZXJuZWwgb3B0aW9ucyBhcmUgcHJvdmlkZWQgaW4gdGhlIGNv
+bW1vbg0KPiBrZXJuZWwvS2NvbmZpZy5rZXhlYy4gVXRpbGl6ZSB0aGUgY29tbW9uIG9wdGlvbnMg
+YW5kIHByb3ZpZGUNCj4gdGhlIEFSQ0hfU1VQUE9SVFNfIGFuZCBBUkNIX1NFTEVDVFNfIGVudHJp
+ZXMgdG8gcmVjcmVhdGUgdGhlDQo+IGVxdWl2YWxlbnQgc2V0IG9mIEtFWEVDIGFuZCBDUkFTSCBv
+cHRpb25zLg0KDQoNCldoeSBkbyB5b3UgbmVlZCB0byBkdXBsaWNhdGUgdGhlIEFSQ0hfU0VMRUNU
+U18gZW50cmllcyBpbiBlYWNoIA0KYXJjaGl0ZWN0dXJlID8NCg0KV2h5IG5vdCBkZWZpbmUgdGhl
+bSBpbiBhcmNoL0tjb25maWcgdGhlbiBzZWxlY3QgaWYgZnJvbSBlYWNoIGFyY2hpdGVjdHVyZSA/
+DQoNCkZvciBpbnN0YW5jZSBoZXJlIGZvciB4ODYgZm9yIEFSQ0hfU0VMRUNUU19LRVhFQ19GSUxF
+IGFsbCB5b3UnbGwgaGF2ZSB0byANCmRvIGlzOg0KCXNlbGVjdCBBUkNIX1NFTEVDVFNfS0VYRUNf
+RklMRSBpZiBLRVhFQ19GSUxFDQoJc2VsZWN0IEhBVkVfSU1BX0tFWEVDIGlmIElNQSAmJiBLRVhF
+Q19GSUxFDQoNCg0KQ2hyaXN0b3BoZQ0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBFcmljIERlVm9s
+ZGVyIDxlcmljLmRldm9sZGVyQG9yYWNsZS5jb20+DQo+IC0tLQ0KPiAgIGFyY2gveDg2L0tjb25m
+aWcgfCA5MiArKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0N
+Cj4gICAxIGZpbGUgY2hhbmdlZCwgMTkgaW5zZXJ0aW9ucygrKSwgNzMgZGVsZXRpb25zKC0pDQo+
+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvS2NvbmZpZyBiL2FyY2gveDg2L0tjb25maWcNCj4g
+aW5kZXggNzQyMmRiNDA5NzcwLi45NzY3YTM0M2Y3YzIgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2
+L0tjb25maWcNCj4gKysrIGIvYXJjaC94ODYvS2NvbmZpZw0KPiBAQCAtMjA0MCw4OCArMjA0MCwz
+NCBAQCBjb25maWcgRUZJX1JVTlRJTUVfTUFQDQo+ICAgDQo+ICAgc291cmNlICJrZXJuZWwvS2Nv
+bmZpZy5oeiINCj4gICANCj4gLWNvbmZpZyBLRVhFQw0KPiAtCWJvb2wgImtleGVjIHN5c3RlbSBj
+YWxsIg0KPiAtCXNlbGVjdCBLRVhFQ19DT1JFDQo+IC0JaGVscA0KPiAtCSAga2V4ZWMgaXMgYSBz
+eXN0ZW0gY2FsbCB0aGF0IGltcGxlbWVudHMgdGhlIGFiaWxpdHkgdG8gc2h1dGRvd24geW91cg0K
+PiAtCSAgY3VycmVudCBrZXJuZWwsIGFuZCB0byBzdGFydCBhbm90aGVyIGtlcm5lbC4gIEl0IGlz
+IGxpa2UgYSByZWJvb3QNCj4gLQkgIGJ1dCBpdCBpcyBpbmRlcGVuZGVudCBvZiB0aGUgc3lzdGVt
+IGZpcm13YXJlLiAgIEFuZCBsaWtlIGEgcmVib290DQo+IC0JICB5b3UgY2FuIHN0YXJ0IGFueSBr
+ZXJuZWwgd2l0aCBpdCwgbm90IGp1c3QgTGludXguDQo+IC0NCj4gLQkgIFRoZSBuYW1lIGNvbWVz
+IGZyb20gdGhlIHNpbWlsYXJpdHkgdG8gdGhlIGV4ZWMgc3lzdGVtIGNhbGwuDQo+IC0NCj4gLQkg
+IEl0IGlzIGFuIG9uZ29pbmcgcHJvY2VzcyB0byBiZSBjZXJ0YWluIHRoZSBoYXJkd2FyZSBpbiBh
+IG1hY2hpbmUNCj4gLQkgIGlzIHByb3Blcmx5IHNodXRkb3duLCBzbyBkbyBub3QgYmUgc3VycHJp
+c2VkIGlmIHRoaXMgY29kZSBkb2VzIG5vdA0KPiAtCSAgaW5pdGlhbGx5IHdvcmsgZm9yIHlvdS4g
+IEFzIG9mIHRoaXMgd3JpdGluZyB0aGUgZXhhY3QgaGFyZHdhcmUNCj4gLQkgIGludGVyZmFjZSBp
+cyBzdHJvbmdseSBpbiBmbHV4LCBzbyBubyBnb29kIHJlY29tbWVuZGF0aW9uIGNhbiBiZQ0KPiAt
+CSAgbWFkZS4NCj4gLQ0KPiAtY29uZmlnIEtFWEVDX0ZJTEUNCj4gLQlib29sICJrZXhlYyBmaWxl
+IGJhc2VkIHN5c3RlbSBjYWxsIg0KPiAtCXNlbGVjdCBLRVhFQ19DT1JFDQo+IC0Jc2VsZWN0IEhB
+VkVfSU1BX0tFWEVDIGlmIElNQQ0KPiAtCWRlcGVuZHMgb24gWDg2XzY0DQo+IC0JZGVwZW5kcyBv
+biBDUllQVE89eQ0KPiAtCWRlcGVuZHMgb24gQ1JZUFRPX1NIQTI1Nj15DQo+IC0JaGVscA0KPiAt
+CSAgVGhpcyBpcyBuZXcgdmVyc2lvbiBvZiBrZXhlYyBzeXN0ZW0gY2FsbC4gVGhpcyBzeXN0ZW0g
+Y2FsbCBpcw0KPiAtCSAgZmlsZSBiYXNlZCBhbmQgdGFrZXMgZmlsZSBkZXNjcmlwdG9ycyBhcyBz
+eXN0ZW0gY2FsbCBhcmd1bWVudA0KPiAtCSAgZm9yIGtlcm5lbCBhbmQgaW5pdHJhbWZzIGFzIG9w
+cG9zZWQgdG8gbGlzdCBvZiBzZWdtZW50cyBhcw0KPiAtCSAgYWNjZXB0ZWQgYnkgcHJldmlvdXMg
+c3lzdGVtIGNhbGwuDQo+ICtjb25maWcgQVJDSF9TVVBQT1JUU19LRVhFQw0KPiArCWRlZl9ib29s
+IHkNCj4gICANCj4gLWNvbmZpZyBBUkNIX0hBU19LRVhFQ19QVVJHQVRPUlkNCj4gLQlkZWZfYm9v
+bCBLRVhFQ19GSUxFDQo+ICtjb25maWcgQVJDSF9TVVBQT1JUU19LRVhFQ19GSUxFDQo+ICsJZGVm
+X2Jvb2wgWDg2XzY0ICYmIENSWVBUTyAmJiBDUllQVE9fU0hBMjU2DQo+ICAgDQo+IC1jb25maWcg
+S0VYRUNfU0lHDQo+IC0JYm9vbCAiVmVyaWZ5IGtlcm5lbCBzaWduYXR1cmUgZHVyaW5nIGtleGVj
+X2ZpbGVfbG9hZCgpIHN5c2NhbGwiDQo+ICtjb25maWcgQVJDSF9TRUxFQ1RTX0tFWEVDX0ZJTEUN
+Cj4gKwlkZWZfYm9vbCB5DQo+ICAgCWRlcGVuZHMgb24gS0VYRUNfRklMRQ0KPiAtCWhlbHANCj4g
+KwlzZWxlY3QgSEFWRV9JTUFfS0VYRUMgaWYgSU1BDQo+ICAgDQo+IC0JICBUaGlzIG9wdGlvbiBt
+YWtlcyB0aGUga2V4ZWNfZmlsZV9sb2FkKCkgc3lzY2FsbCBjaGVjayBmb3IgYSB2YWxpZA0KPiAt
+CSAgc2lnbmF0dXJlIG9mIHRoZSBrZXJuZWwgaW1hZ2UuICBUaGUgaW1hZ2UgY2FuIHN0aWxsIGJl
+IGxvYWRlZCB3aXRob3V0DQo+IC0JICBhIHZhbGlkIHNpZ25hdHVyZSB1bmxlc3MgeW91IGFsc28g
+ZW5hYmxlIEtFWEVDX1NJR19GT1JDRSwgdGhvdWdoIGlmDQo+IC0JICB0aGVyZSdzIGEgc2lnbmF0
+dXJlIHRoYXQgd2UgY2FuIGNoZWNrLCB0aGVuIGl0IG11c3QgYmUgdmFsaWQuDQo+ICtjb25maWcg
+QVJDSF9IQVNfS0VYRUNfUFVSR0FUT1JZDQo+ICsJZGVmX2Jvb2wgS0VYRUNfRklMRQ0KPiAgIA0K
+PiAtCSAgSW4gYWRkaXRpb24gdG8gdGhpcyBvcHRpb24sIHlvdSBuZWVkIHRvIGVuYWJsZSBzaWdu
+YXR1cmUNCj4gLQkgIHZlcmlmaWNhdGlvbiBmb3IgdGhlIGNvcnJlc3BvbmRpbmcga2VybmVsIGlt
+YWdlIHR5cGUgYmVpbmcNCj4gLQkgIGxvYWRlZCBpbiBvcmRlciBmb3IgdGhpcyB0byB3b3JrLg0K
+PiArY29uZmlnIEFSQ0hfU1VQUE9SVFNfS0VYRUNfU0lHDQo+ICsJZGVmX2Jvb2wgeQ0KPiAgIA0K
+PiAtY29uZmlnIEtFWEVDX1NJR19GT1JDRQ0KPiAtCWJvb2wgIlJlcXVpcmUgYSB2YWxpZCBzaWdu
+YXR1cmUgaW4ga2V4ZWNfZmlsZV9sb2FkKCkgc3lzY2FsbCINCj4gLQlkZXBlbmRzIG9uIEtFWEVD
+X1NJRw0KPiAtCWhlbHANCj4gLQkgIFRoaXMgb3B0aW9uIG1ha2VzIGtlcm5lbCBzaWduYXR1cmUg
+dmVyaWZpY2F0aW9uIG1hbmRhdG9yeSBmb3INCj4gLQkgIHRoZSBrZXhlY19maWxlX2xvYWQoKSBz
+eXNjYWxsLg0KPiArY29uZmlnIEFSQ0hfU1VQUE9SVFNfS0VYRUNfU0lHX0ZPUkNFDQo+ICsJZGVm
+X2Jvb2wgeQ0KPiAgIA0KPiAtY29uZmlnIEtFWEVDX0JaSU1BR0VfVkVSSUZZX1NJRw0KPiAtCWJv
+b2wgIkVuYWJsZSBiekltYWdlIHNpZ25hdHVyZSB2ZXJpZmljYXRpb24gc3VwcG9ydCINCj4gLQlk
+ZXBlbmRzIG9uIEtFWEVDX1NJRw0KPiAtCWRlcGVuZHMgb24gU0lHTkVEX1BFX0ZJTEVfVkVSSUZJ
+Q0FUSU9ODQo+IC0Jc2VsZWN0IFNZU1RFTV9UUlVTVEVEX0tFWVJJTkcNCj4gLQloZWxwDQo+IC0J
+ICBFbmFibGUgYnpJbWFnZSBzaWduYXR1cmUgdmVyaWZpY2F0aW9uIHN1cHBvcnQuDQo+ICtjb25m
+aWcgQVJDSF9TVVBQT1JUU19LRVhFQ19CWklNQUdFX1ZFUklGWV9TSUcNCj4gKwlkZWZfYm9vbCB5
+DQo+ICAgDQo+IC1jb25maWcgQ1JBU0hfRFVNUA0KPiAtCWJvb2wgImtlcm5lbCBjcmFzaCBkdW1w
+cyINCj4gLQlkZXBlbmRzIG9uIFg4Nl82NCB8fCAoWDg2XzMyICYmIEhJR0hNRU0pDQo+IC0JaGVs
+cA0KPiAtCSAgR2VuZXJhdGUgY3Jhc2ggZHVtcCBhZnRlciBiZWluZyBzdGFydGVkIGJ5IGtleGVj
+Lg0KPiAtCSAgVGhpcyBzaG91bGQgYmUgbm9ybWFsbHkgb25seSBzZXQgaW4gc3BlY2lhbCBjcmFz
+aCBkdW1wIGtlcm5lbHMNCj4gLQkgIHdoaWNoIGFyZSBsb2FkZWQgaW4gdGhlIG1haW4ga2VybmVs
+IHdpdGgga2V4ZWMtdG9vbHMgaW50bw0KPiAtCSAgYSBzcGVjaWFsbHkgcmVzZXJ2ZWQgcmVnaW9u
+IGFuZCB0aGVuIGxhdGVyIGV4ZWN1dGVkIGFmdGVyDQo+IC0JICBhIGNyYXNoIGJ5IGtkdW1wL2tl
+eGVjLiBUaGUgY3Jhc2ggZHVtcCBrZXJuZWwgbXVzdCBiZSBjb21waWxlZA0KPiAtCSAgdG8gYSBt
+ZW1vcnkgYWRkcmVzcyBub3QgdXNlZCBieSB0aGUgbWFpbiBrZXJuZWwgb3IgQklPUyB1c2luZw0K
+PiAtCSAgUEhZU0lDQUxfU1RBUlQsIG9yIGl0IG11c3QgYmUgYnVpbHQgYXMgYSByZWxvY2F0YWJs
+ZSBpbWFnZQ0KPiAtCSAgKENPTkZJR19SRUxPQ0FUQUJMRT15KS4NCj4gLQkgIEZvciBtb3JlIGRl
+dGFpbHMgc2VlIERvY3VtZW50YXRpb24vYWRtaW4tZ3VpZGUva2R1bXAva2R1bXAucnN0DQo+ICtj
+b25maWcgQVJDSF9TVVBQT1JUU19LRVhFQ19KVU1QDQo+ICsJZGVmX2Jvb2wgeQ0KPiAgIA0KPiAt
+Y29uZmlnIEtFWEVDX0pVTVANCj4gLQlib29sICJrZXhlYyBqdW1wIg0KPiAtCWRlcGVuZHMgb24g
+S0VYRUMgJiYgSElCRVJOQVRJT04NCj4gLQloZWxwDQo+IC0JICBKdW1wIGJldHdlZW4gb3JpZ2lu
+YWwga2VybmVsIGFuZCBrZXhlY2VkIGtlcm5lbCBhbmQgaW52b2tlDQo+IC0JICBjb2RlIGluIHBo
+eXNpY2FsIGFkZHJlc3MgbW9kZSB2aWEgS0VYRUMNCj4gK2NvbmZpZyBBUkNIX1NVUFBPUlRTX0NS
+QVNIX0RVTVANCj4gKwlkZWZfYm9vbCBYODZfNjQgfHwgKFg4Nl8zMiAmJiBISUdITUVNKQ0KPiAg
+IA0KPiAgIGNvbmZpZyBQSFlTSUNBTF9TVEFSVA0KPiAgIAloZXggIlBoeXNpY2FsIGFkZHJlc3Mg
+d2hlcmUgdGhlIGtlcm5lbCBpcyBsb2FkZWQiIGlmIChFWFBFUlQgfHwgQ1JBU0hfRFVNUCkNCg==
