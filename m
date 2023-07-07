@@ -2,190 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5728A74B86F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ACC74B871
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbjGGVEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
+        id S232301AbjGGVEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjGGVEO (ORCPT
+        with ESMTP id S232548AbjGGVEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:04:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FA71BD2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688763853; x=1720299853;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0lf4CsjZMU8LnsYZKbaFdjeTxKhkqzrAQoTvX3+RECU=;
-  b=e76VWmiqdnl6gpTc16gogjDAnXDeB3L+q1PIiSV+Yk/4jBcHiU7uflcY
-   c+f1mNxrRzKDnqN7UVhvp+lKFZwNdJoM5ooL6/9b+EI4XzdN9V+PsxND+
-   eO1OwbE4xcbqmQgWeM81I7GGVcqMb3fgIcV9XwOR6KNMX/GPM2SO/og+5
-   Dwo7wmw4raUuZUFoD0bvYk7vNWpWuZbvcGvaOEaJ/GQF0/v7K79jlu8V8
-   dDF3zvsC7N68/ZFbDf5gC3o1GPoYFX6iYVEMwXnWhI2Va3XEgrZxNPhlk
-   6aAAA5gI/QZ9dJOsgv728Xpapsl1062nSw7iuy+cpHdGbVvEw3kM0GQgj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="353831013"
-X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="353831013"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 14:04:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="670288208"
-X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="670288208"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jul 2023 14:04:10 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qHscb-0002IG-2Z;
-        Fri, 07 Jul 2023 21:04:09 +0000
-Date:   Sat, 8 Jul 2023 05:03:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but
- not used
-Message-ID: <202307080446.rpYEMqQ2-lkp@intel.com>
+        Fri, 7 Jul 2023 17:04:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CCD1BE8
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688763831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jyU5zBy/a84oEoWoieA/ffOtOuuHwgqV4ycNSTCevL0=;
+        b=GgOK4ebGLWs47+pK5hpfiLez2xQr2IquBpFU7uK6sPyUbmN3ucoMa7Vtc20zqQmi+rFD1/
+        q/zw5l+z4i4U6Sx8MYGz09oPsBXgZ80Eokhj/nZ2Z+4uUaEFMG9QNcwGQSo/9qcnVqe3VH
+        UWNft5nZ/CHW16NmNetJjVOyOAUG1fE=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-582-MFrQocwXOz2ERLvzDiiL7Q-1; Fri, 07 Jul 2023 17:03:50 -0400
+X-MC-Unique: MFrQocwXOz2ERLvzDiiL7Q-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7675fc3333eso175236785a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:03:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688763829; x=1691355829;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jyU5zBy/a84oEoWoieA/ffOtOuuHwgqV4ycNSTCevL0=;
+        b=M4YyNZG3jGtPBJKXmg3vP/irCzEL7CwQD0lCroNSYPKftrUsBVaWceFjqKDKGnXijf
+         ZYqx3B+Cbyotwm4RCKa/i4iQ0a+5xWnaYaBz4+BqwJU0jts72bX2SDuH7FQe2WOOPKQ4
+         KNasxrUwEI29VSt3bTLMqi0M/38IWC9YpNZbYBo9HoKXnPdcILJCWRBV+edtigdQ/0EQ
+         grjoiYKXDchLxcPuDqSJjdQAga8RlU+4Y1qFhFw4aks3N7kgqEPBLApZmagHn46UwoXO
+         LUh4ZSN+IuMPPb5qzJMYQJcWOZMf6Y7MiUxoMeYgJKkPtBnUaqzwNaS4ZiN4YgbNcjvv
+         HC5g==
+X-Gm-Message-State: ABy/qLb0JRx2uVcYYLj+4mBDM3qHNcnKjacWt4spdr+q6MKRx1knnyd4
+        lEtIHnxxn9H+fn8fcAc8yE65S//0pMxuvhHFDqnIJqlasKLdtES7tuULuQQC/V90Spio9TcuFo5
+        +gCgJqvtuLwbh9t6MA4rhW2GZ
+X-Received: by 2002:a05:620a:28cc:b0:762:3841:c098 with SMTP id l12-20020a05620a28cc00b007623841c098mr11890017qkp.30.1688763829744;
+        Fri, 07 Jul 2023 14:03:49 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHub679rj9p13wuI63bc+RfomIr/ACWE3AhFx9HYEJTtP2JkglWWuEwG3TTkgaIDBh6fY4VsA==
+X-Received: by 2002:a05:620a:28cc:b0:762:3841:c098 with SMTP id l12-20020a05620a28cc00b007623841c098mr11889999qkp.30.1688763829506;
+        Fri, 07 Jul 2023 14:03:49 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c62:8200:4d3e:bd5a:7e0a:133a? ([2600:4040:5c62:8200:4d3e:bd5a:7e0a:133a])
+        by smtp.gmail.com with ESMTPSA id u6-20020a0cdd06000000b006301ec0d16fsm2493703qvk.0.2023.07.07.14.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 14:03:49 -0700 (PDT)
+Message-ID: <14f2b03302c07a62cce1ec272f54727b2ad39721.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/disp/g94: enable HDMI
+From:   Lyude Paul <lyude@redhat.com>
+To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Ben Skeggs <bskeggs@redhat.com>, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org
+Date:   Fri, 07 Jul 2023 17:03:48 -0400
+In-Reply-To: <20230630160645.3984596-1-kherbst@redhat.com>
+References: <20230630160645.3984596-1-kherbst@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-First bad commit (maybe != root cause):
+But seeing as I looked at this + some other patches yesterday I assume ther=
+e's
+still more to this?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4f6b6c2b2f86b7878a770736bf478d8a263ff0bc
-commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
-date:   10 months ago
-config: powerpc-randconfig-r033-20230708 (https://download.01.org/0day-ci/archive/20230708/202307080446.rpYEMqQ2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230708/202307080446.rpYEMqQ2-lkp@intel.com/reproduce)
+On Fri, 2023-06-30 at 18:06 +0200, Karol Herbst wrote:
+> Cc: Ben Skeggs <bskeggs@redhat.com>
+> Cc: Lyude Paul <lyude@redhat.com>
+> Fixes: f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire + i=
+nfoframe methods")
+> Signed-off-by: Karol Herbst <kherbst@redhat.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c b/drivers/gpu=
+/drm/nouveau/nvkm/engine/disp/g94.c
+> index a4853c4e5ee3..67ef889a0c5f 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
+> @@ -295,6 +295,7 @@ g94_sor =3D {
+>  	.clock =3D nv50_sor_clock,
+>  	.war_2 =3D g94_sor_war_2,
+>  	.war_3 =3D g94_sor_war_3,
+> +	.hdmi =3D &g84_sor_hdmi,
+>  	.dp =3D &g94_sor_dp,
+>  };
+> =20
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307080446.rpYEMqQ2-lkp@intel.com/
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-All warnings (new ones prefixed by >>):
-
->> arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-      14 |         FP_DECL_EX;
-         |         ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-      94 | #define FP_DECL_EX int _fex = 0
-         |                        ^
-   arch/powerpc/math-emu/fsel.c:11:1: warning: no previous prototype for function 'fsel' [-Wmissing-prototypes]
-      11 | fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
-         | ^
-   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      10 | int
-         | ^
-         | static 
-   2 warnings generated.
---
->> arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but not used [-Wunused-but-set-variable]
-      13 |         FP_DECL_D(A);
-         |         ^
-   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
-      73 | #define FP_DECL_D(X)            _FP_DECL(2,X)
-         |                                 ^
-   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
-      28 |   _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
-         |              ^
-   <scratch space>:171:1: note: expanded from here
-     171 | A_c
-         | ^
->> arch/powerpc/math-emu/fcmpu.c:14:2: warning: variable 'B_c' set but not used [-Wunused-but-set-variable]
-      14 |         FP_DECL_D(B);
-         |         ^
-   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
-      73 | #define FP_DECL_D(X)            _FP_DECL(2,X)
-         |                                 ^
-   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
-      28 |   _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
-         |              ^
-   <scratch space>:177:1: note: expanded from here
-     177 | B_c
-         | ^
->> arch/powerpc/math-emu/fcmpu.c:15:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-      15 |         FP_DECL_EX;
-         |         ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-      94 | #define FP_DECL_EX int _fex = 0
-         |                        ^
-   arch/powerpc/math-emu/fcmpu.c:11:1: warning: no previous prototype for function 'fcmpu' [-Wmissing-prototypes]
-      11 | fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-         | ^
-   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      10 | int
-         | ^
-         | static 
-   4 warnings generated.
---
->> arch/powerpc/math-emu/fctiwz.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-      14 |         FP_DECL_EX;
-         |         ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-      94 | #define FP_DECL_EX int _fex = 0
-         |                        ^
-   arch/powerpc/math-emu/fctiwz.c:11:1: warning: no previous prototype for function 'fctiwz' [-Wmissing-prototypes]
-      11 | fctiwz(u32 *frD, void *frB)
-         | ^
-   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      10 | int
-         | ^
-         | static 
-   2 warnings generated.
---
->> arch/powerpc/math-emu/fctiw.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-      14 |         FP_DECL_EX;
-         |         ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-      94 | #define FP_DECL_EX int _fex = 0
-         |                        ^
-   arch/powerpc/math-emu/fctiw.c:11:1: warning: no previous prototype for function 'fctiw' [-Wmissing-prototypes]
-      11 | fctiw(u32 *frD, void *frB)
-         | ^
-   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      10 | int
-         | ^
-         | static 
-   2 warnings generated.
-
-
-vim +/_fex +14 arch/powerpc/math-emu/fsel.c
-
-^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16   9  
-^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  10  int
-^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  11  fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
-^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  12  {
-^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  13  	FP_DECL_D(A);
-d2b194ed820880 arch/powerpc/math-emu/fsel.c Kumar Gala     2008-06-04 @14  	FP_DECL_EX;
-^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  15  
-
-:::::: The code at line 14 was first introduced by commit
-:::::: d2b194ed820880eb19c43b9c10d9f5f30026ee54 powerpc/math-emu: Use kernel generic math-emu code
-
-:::::: TO: Kumar Gala <galak@kernel.crashing.org>
-:::::: CC: Kumar Gala <galak@kernel.crashing.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
