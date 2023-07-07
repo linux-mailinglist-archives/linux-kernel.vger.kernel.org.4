@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCB574ACAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2FC74ACAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbjGGITW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S232413AbjGGIUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjGGITR (ORCPT
+        with ESMTP id S230195AbjGGIUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:19:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168911BEE;
-        Fri,  7 Jul 2023 01:19:15 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 7 Jul 2023 04:20:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ABB1BE9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:20:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ADCD36606FCA;
-        Fri,  7 Jul 2023 09:19:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688717954;
-        bh=V2zCa6YQcn89QUk+30ncJYOiCspZ2CW7lvzYLcoBYmw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EKago4s9/yPqzmRoj0O5g0MNg5s9C9Xge7/MwV8FE8TRU2SGLJxDeIdahrJXMvmwj
-         Z3w/3sIgqHZV8eK3VVGFX7Cfyc7mYfTmfiv65T6vsZsbZftmU/Y42RStc0XhkWyN1E
-         IZUA+jJRMx2Mpc1+t+0qAIkj0Rx2L8z6ZsPAUU2vHU9iAcUrPonmC/MNMcqwUHiBR1
-         1yRpFuvEBuuaWDgrZZquwRyGapgqeKZUz6rCRN4VAwv0f86ErE9Lkdy8wFtZ80tab5
-         YygvdisRuod+sWxfylNiarkLIdTTAP+dOXQGJzh/SClusExi6ev+6mIk9yWobhhEq3
-         ZS7LhUVVs3Jkg==
-Message-ID: <63457512-1cf4-d2a6-7afc-daa579de99e8@collabora.com>
-Date:   Fri, 7 Jul 2023 10:19:10 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 800AD61866
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3F3EC433CA;
+        Fri,  7 Jul 2023 08:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688718020;
+        bh=dcFwVT6awVtN3kz0ZqEErQqasS4zVzfMUWn04fZgPTU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DL9K3X6IKXpDAlUHzYKUzv0IcFTupBd/YUpTLKDAgyf3acXFBQiShxYdjyIceFimE
+         WwPKjrZPrPOshnRwGuy1H/EoZpjfn8mZl5SN7Gx2S6gaSy/3PD5UQgKD32zrD0u/DB
+         ZDBGtGPNzlwTsHSplmD8CZSHpZZy6ps6Y5TMoaUC391/OTBHraEPiKIMqIK8uSQ9DF
+         ION3SE+uzpAVKk61wa9vcudR4myItxbMA4iPRhK6G/YRnh/zaVfGZ7cB3qbDTaY7if
+         CbH6dOZrsd6QIIS7WqNusvVYKcYPHrnc4pv4Rn+G8hfWPbf3lzL9n0WvN6EcR4PerN
+         kERQjtIPekYAA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B3F8FC4167B;
+        Fri,  7 Jul 2023 08:20:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195: Fix PM suspend/resume with
- venc clocks
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        yong.wu@mediatek.com, tinghan.shen@mediatek.com,
-        weiyi.lu@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230706095841.109315-1-angelogioacchino.delregno@collabora.com>
- <CAGXv+5HsScBVMOY4JcSNS_ZZdpLnNAYWUKohwmfQr6gJJv26CA@mail.gmail.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5HsScBVMOY4JcSNS_ZZdpLnNAYWUKohwmfQr6gJJv26CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Subject: Re: [PATCH v2] udp6: add a missing call into udp_fail_queue_rcv_skb
+ tracepoint
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168871802073.22009.17793808873391205698.git-patchwork-notify@kernel.org>
+Date:   Fri, 07 Jul 2023 08:20:20 +0000
+References: <20230707043923.35578-1-ivan@cloudflare.com>
+In-Reply-To: <20230707043923.35578-1-ivan@cloudflare.com>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
+        peilin.ye@bytedance.com, rostedt@goodmis.org, petrm@nvidia.com,
+        nhorman@tuxdriver.com, satoru.moriya@hds.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,94 +63,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/07/23 07:06, Chen-Yu Tsai ha scritto:
-> On Thu, Jul 6, 2023 at 5:59 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Before suspending the LARBs we're making sure that any operation is
->> done: this never happens because we are unexpectedly unclocking the
->> LARB20 before executing the suspend handler for the MediaTek Smart
->> Multimedia Interface (SMI) and the cause of this is incorrect clocks
->> on this LARB.
->>
->> Fix this issue by changing the Local Arbiter 20 (used by the video
->> encoder secondary core) apb clock to CLK_VENC_CORE1_VENC;
->> furthermore, in order to make sure that both the PM resume and video
->> encoder operation is stable, add the CLK_VENC(_CORE1)_LARB clock to
->> the VENC (main core) and VENC_CORE1 power domains, as this IP cannot
->> communicate with the rest of the system (the AP) without local
->> arbiter clocks being operational.
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu,  6 Jul 2023 21:39:20 -0700 you wrote:
+> The tracepoint has existed for 12 years, but it only covered udp
+> over the legacy IPv4 protocol. Having it enabled for udp6 removes
+> the unnecessary difference in error visibility.
 > 
-> Somehow I feel like this is papering over some dependency issue in Linux.
+> Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+> Fixes: 296f7ea75b45 ("udp: add tracepoints for queueing skb to rcvbuf")
 > 
+> [...]
 
-It felt the same here, but then, if you disable the video encoder driver entirely
-(or even both enc/dec drivers), you'll still get issues with the LARB20 timing out
-on the SLP_PROT_RDY check, as there's something in queue going through that larb,
-probably from something done by the bootloader before booting Linux.
+Here is the summary with links:
+  - [v2] udp6: add a missing call into udp_fail_queue_rcv_skb tracepoint
+    https://git.kernel.org/netdev/net/c/8139dccd464a
 
-Note that I'm pointing my finger to the bootloader because - again - even disabling
-the venc entirely produces the same issue, and if you disable probing the LARB20
-you will anyway get sleep issues (wakes up immediately after going to sleep).
-
-That said, there is another possible solution to that (but even then, I think that
-we still need those clock assignments that I've done here), which is to implement
-the SMI power domains (mtcmos...): we'd be saving *all smi registers*, resetting an
-entire SMI ctx with a poweroff, powering back on and restoring all registers *but*
-larb20... at least that's the only solution that I've seen downstream (android
-kernels).
-
-...and that's why I believe that this commit is correct.
-
-Of course, if there's something that I'm underestimating here, I'd be glad to
-understand.
-
-Cheers,
-Angelo
-
->> Fixes: 3b5838d1d82e ("arm64: dts: mt8195: Add iommu and smi nodes")
->> Fixes: 2b515194bf0c ("arm64: dts: mt8195: Add power domains controller")
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->> index 95bd058d6083..5c670fce1e47 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->> @@ -626,6 +626,8 @@ power-domain@MT8195_POWER_DOMAIN_VDEC1 {
->>
->>                                          power-domain@MT8195_POWER_DOMAIN_VENC_CORE1 {
->>                                                  reg = <MT8195_POWER_DOMAIN_VENC_CORE1>;
->> +                                               clocks = <&vencsys_core1 CLK_VENC_CORE1_LARB>;
->> +                                               clock-names = "venc1-larb";
->>                                                  mediatek,infracfg = <&infracfg_ao>;
->>                                                  #power-domain-cells = <0>;
->>                                          };
->> @@ -688,6 +690,8 @@ power-domain@MT8195_POWER_DOMAIN_VDEC2 {
->>
->>                                                  power-domain@MT8195_POWER_DOMAIN_VENC {
->>                                                          reg = <MT8195_POWER_DOMAIN_VENC>;
->> +                                                       clocks = <&vencsys CLK_VENC_LARB>;
->> +                                                       clock-names = "venc0-larb";
->>                                                          mediatek,infracfg = <&infracfg_ao>;
->>                                                          #power-domain-cells = <0>;
->>                                                  };
->> @@ -3094,7 +3098,7 @@ larb20: larb@1b010000 {
->>                          reg = <0 0x1b010000 0 0x1000>;
->>                          mediatek,larb-id = <20>;
->>                          mediatek,smi = <&smi_common_vpp>;
->> -                       clocks = <&vencsys_core1 CLK_VENC_CORE1_LARB>,
->> +                       clocks = <&vencsys_core1 CLK_VENC_CORE1_VENC>,
->>                                   <&vencsys_core1 CLK_VENC_CORE1_GALS>,
->>                                   <&vppsys0 CLK_VPP0_GALS_VDO0_VDO1_VENCSYS_CORE1>;
->>                          clock-names = "apb", "smi", "gals";
->> --
->> 2.40.1
->>
->>
-> 
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
