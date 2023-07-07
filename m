@@ -2,283 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5B874AE20
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14BD74AE1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbjGGJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S232797AbjGGJvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjGGJwP (ORCPT
+        with ESMTP id S232789AbjGGJvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:52:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C082EE72;
-        Fri,  7 Jul 2023 02:52:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2653618E5;
-        Fri,  7 Jul 2023 09:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0AAC433C7;
-        Fri,  7 Jul 2023 09:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688723521;
-        bh=yMWBZi7OWijpDNbPPVU11zT7Ofk6CC1w0krvsGmTO/Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z07rgcHB9zc3yULQo5sHhLIv44yzQod9z2mXK8VAD2ky6t/sKWYV2RwpBSfsckmOs
-         agjSwU4wXzrOoatycsFhpr/tbEEL/fP69Db446Ge2rJz9mePLl3mySa8jKvq+GyiTu
-         4KWv6txOUukHX9wFw6zAalyyt0ZA7Ebj/AVQMqWWhUVheF2F5R/fyMF7TpsVLgmD7X
-         shT+2s00P6kEvLIw1WqbApGnI1TejLDoiQ7J2yAN5K/Ulrz2OokpUU5d5LLVQA/dtl
-         ZJiLtsDua4qi8vlm2W12s8HzAd4X6pykjOz3jsL1fYX2KFgKUbi6PXqdCCzGX7LPBk
-         1qapI2AldOYXw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH 1/3] vgacon: rework screen_info #ifdef checks
-Date:   Fri,  7 Jul 2023 11:50:38 +0200
-Message-Id: <20230707095144.1378789-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 7 Jul 2023 05:51:50 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46F2125;
+        Fri,  7 Jul 2023 02:51:43 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3679pLQh006874;
+        Fri, 7 Jul 2023 04:51:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688723481;
+        bh=qDLhtas3u/8HJM6Jwdk+LzFdFPztFG/DMXDGaDAWII0=;
+        h=From:To:CC:Subject:Date;
+        b=MIP1BVgEKJ3bX0GOsyL3+CLm/36bOVpOLMOlA+t2ueKoSH3kSoI6v4OT5iYIdTY+Z
+         qSc+uq/OmHBJTrTmKdCu2DgUBv33JkgA2UzFyvEz75VJ4rbQtPt3Jv+iCvR5Q2LRZy
+         4VWCnwlR6FZv0uLO3dQId7Rp3/5NGB360RLzzDWA=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3679pLSh122036
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 7 Jul 2023 04:51:21 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 7
+ Jul 2023 04:51:20 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 7 Jul 2023 04:51:20 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3679pKTB065814;
+        Fri, 7 Jul 2023 04:51:20 -0500
+From:   Achal Verma <a-verma1@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-omap@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
+Subject: [PATCH v3] PCI: j721e: Delay 100ms T_PVPERL from power stable to PERST# inactive
+Date:   Fri, 7 Jul 2023 15:21:19 +0530
+Message-ID: <20230707095119.447952-1-a-verma1@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+As per the PCIe Card Electromechanical specification REV. 5.0, PERST#
+signal should be de-asserted after minimum 100ms from the time power-rails
+become stable. So, to ensure 100ms delay to give sufficient time for
+power-rails and refclk to become stable, change delay from 100us to 100ms.
 
-On non-x86 architectures, the screen_info variable is generally only
-used for the VGA console where supported, and in some cases the EFI
-framebuffer or vga16fb.
+From PCIe Card Electromechanical specification REV. 5.0 section 2.9.2:
+TPVPERL: Power stable to PERST# inactive - 100ms
 
-Now that we have a definite list of which architectures actually use it
-for what, use consistent #ifdef checks so the global variable is only
-defined when it is actually used on those architectures.
-
-On powerpc, there is no support for vgacon, but there is support for
-vga16fb. Loongarch and riscv have no support for vgacon or vga16fb, but
-they support EFI firmware, so only that needs to be checked, and the
-initialization can be removed because that is handled by EFI.
-IA64 has both vgacon and EFI.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
+Signed-off-by: Achal Verma <a-verma1@ti.com>
 ---
- arch/alpha/kernel/setup.c          |  2 ++
- arch/alpha/kernel/sys_sio.c        |  2 ++
- arch/ia64/kernel/setup.c           |  4 ++++
- arch/loongarch/kernel/setup.c      |  2 ++
- arch/mips/jazz/setup.c             |  2 +-
- arch/mips/kernel/setup.c           |  2 +-
- arch/mips/sibyte/swarm/setup.c     |  2 +-
- arch/mips/sni/setup.c              |  2 +-
- arch/powerpc/kernel/setup-common.c |  2 +-
- arch/riscv/kernel/setup.c          | 11 ++---------
- 10 files changed, 17 insertions(+), 14 deletions(-)
 
-diff --git a/arch/alpha/kernel/setup.c b/arch/alpha/kernel/setup.c
-index b650ff1cb022e..b4d2297765c02 100644
---- a/arch/alpha/kernel/setup.c
-+++ b/arch/alpha/kernel/setup.c
-@@ -131,6 +131,7 @@ static void determine_cpu_caches (unsigned int);
+Changes from v2:
+* Fix commit message.
+
+Change from v1:
+* Add macro for delay value.
+
+ drivers/pci/controller/cadence/pci-j721e.c | 11 +++++------
+ drivers/pci/pci.h                          |  2 ++
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+index e70213c9060a..32b6a7dc3cff 100644
+--- a/drivers/pci/controller/cadence/pci-j721e.c
++++ b/drivers/pci/controller/cadence/pci-j721e.c
+@@ -498,14 +498,13 @@ static int j721e_pcie_probe(struct platform_device *pdev)
  
- static char __initdata command_line[COMMAND_LINE_SIZE];
+ 		/*
+ 		 * "Power Sequencing and Reset Signal Timings" table in
+-		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
+-		 * indicates PERST# should be deasserted after minimum of 100us
+-		 * once REFCLK is stable. The REFCLK to the connector in RC
+-		 * mode is selected while enabling the PHY. So deassert PERST#
+-		 * after 100 us.
++		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 5.0
++		 * indicates PERST# should be deasserted after minimum of 100ms
++		 * after power rails achieve specified operating limits and
++		 * within this period reference clock should also become stable.
+ 		 */
+ 		if (gpiod) {
+-			usleep_range(100, 200);
++			msleep(PCIE_TPVPERL_DELAY_MS);
+ 			gpiod_set_value_cansleep(gpiod, 1);
+ 		}
  
-+#ifdef CONFIG_VGA_CONSOLE
- /*
-  * The format of "screen_info" is strange, and due to early
-  * i386-setup code. This is just enough to make the console
-@@ -147,6 +148,7 @@ struct screen_info screen_info = {
- };
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index a4c397434057..6ab2367e5867 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -13,6 +13,8 @@
  
- EXPORT_SYMBOL(screen_info);
-+#endif
+ #define PCIE_LINK_RETRAIN_TIMEOUT_MS	1000
  
- /*
-  * The direct map I/O window, if any.  This should be the same
-diff --git a/arch/alpha/kernel/sys_sio.c b/arch/alpha/kernel/sys_sio.c
-index 7c420d8dac53d..7de8a5d2d2066 100644
---- a/arch/alpha/kernel/sys_sio.c
-+++ b/arch/alpha/kernel/sys_sio.c
-@@ -57,11 +57,13 @@ sio_init_irq(void)
- static inline void __init
- alphabook1_init_arch(void)
- {
-+#ifdef CONFIG_VGA_CONSOLE
- 	/* The AlphaBook1 has LCD video fixed at 800x600,
- 	   37 rows and 100 cols. */
- 	screen_info.orig_y = 37;
- 	screen_info.orig_video_cols = 100;
- 	screen_info.orig_video_lines = 37;
-+#endif
++#define PCIE_TPVPERL_DELAY_MS	100	/* see PCIe CEM r5.0, sec 2.9.2 */
++
+ extern const unsigned char pcie_link_speed[];
+ extern bool pci_early_dump;
  
- 	lca_init_arch();
- }
-diff --git a/arch/ia64/kernel/setup.c b/arch/ia64/kernel/setup.c
-index 5a55ac82c13a4..0c09ff7fde46b 100644
---- a/arch/ia64/kernel/setup.c
-+++ b/arch/ia64/kernel/setup.c
-@@ -86,9 +86,11 @@ EXPORT_SYMBOL(local_per_cpu_offset);
- #endif
- unsigned long ia64_cycles_per_usec;
- struct ia64_boot_param *ia64_boot_param;
-+#if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_EFI)
- struct screen_info screen_info;
- unsigned long vga_console_iobase;
- unsigned long vga_console_membase;
-+#endif
- 
- static struct resource data_resource = {
- 	.name	= "Kernel data",
-@@ -497,6 +499,7 @@ early_console_setup (char *cmdline)
- static void __init
- screen_info_setup(void)
- {
-+#ifdef CONFIG_VGA_CONSOLE
- 	unsigned int orig_x, orig_y, num_cols, num_rows, font_height;
- 
- 	memset(&screen_info, 0, sizeof(screen_info));
-@@ -525,6 +528,7 @@ screen_info_setup(void)
- 	screen_info.orig_video_mode = 3;	/* XXX fake */
- 	screen_info.orig_video_isVGA = 1;	/* XXX fake */
- 	screen_info.orig_video_ega_bx = 3;	/* XXX fake */
-+#endif
- }
- 
- static inline void
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 78a00359bde3c..6b3932677f5de 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -57,7 +57,9 @@
- #define SMBIOS_CORE_PACKAGE_OFFSET	0x23
- #define LOONGSON_EFI_ENABLE		(1 << 3)
- 
-+#ifdef CONFIG_EFI
- struct screen_info screen_info __section(".data");
-+#endif
- 
- unsigned long fw_arg0, fw_arg1, fw_arg2;
- DEFINE_PER_CPU(unsigned long, kernelsp);
-diff --git a/arch/mips/jazz/setup.c b/arch/mips/jazz/setup.c
-index ee044261eb223..3c14548353e47 100644
---- a/arch/mips/jazz/setup.c
-+++ b/arch/mips/jazz/setup.c
-@@ -76,7 +76,7 @@ void __init plat_mem_setup(void)
- 
- 	_machine_restart = jazz_machine_restart;
- 
--#ifdef CONFIG_VT
-+#ifdef CONFIG_VGA_CONSOLE
- 	screen_info = (struct screen_info) {
- 		.orig_video_cols	= 160,
- 		.orig_video_lines	= 64,
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index cb871eb784a7c..1aba7dc95132c 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -54,7 +54,7 @@ struct cpuinfo_mips cpu_data[NR_CPUS] __read_mostly;
- 
- EXPORT_SYMBOL(cpu_data);
- 
--#ifdef CONFIG_VT
-+#ifdef CONFIG_VGA_CONSOLE
- struct screen_info screen_info;
- #endif
- 
-diff --git a/arch/mips/sibyte/swarm/setup.c b/arch/mips/sibyte/swarm/setup.c
-index 76683993cdd3a..37df504d3ecbb 100644
---- a/arch/mips/sibyte/swarm/setup.c
-+++ b/arch/mips/sibyte/swarm/setup.c
-@@ -129,7 +129,7 @@ void __init plat_mem_setup(void)
- 	if (m41t81_probe())
- 		swarm_rtc_type = RTC_M41T81;
- 
--#ifdef CONFIG_VT
-+#ifdef CONFIG_VGA_CONSOLE
- 	screen_info = (struct screen_info) {
- 		.orig_video_page	= 52,
- 		.orig_video_mode	= 3,
-diff --git a/arch/mips/sni/setup.c b/arch/mips/sni/setup.c
-index efad85c8c823b..9984cf91be7d0 100644
---- a/arch/mips/sni/setup.c
-+++ b/arch/mips/sni/setup.c
-@@ -38,7 +38,7 @@ extern void sni_machine_power_off(void);
- 
- static void __init sni_display_setup(void)
- {
--#if defined(CONFIG_VT) && defined(CONFIG_VGA_CONSOLE) && defined(CONFIG_FW_ARC)
-+#if defined(CONFIG_VGA_CONSOLE) && defined(CONFIG_FW_ARC)
- 	struct screen_info *si = &screen_info;
- 	DISPLAY_STATUS *di;
- 
-diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
-index d2a446216444f..b717875a12a9a 100644
---- a/arch/powerpc/kernel/setup-common.c
-+++ b/arch/powerpc/kernel/setup-common.c
-@@ -98,6 +98,7 @@ int boot_cpu_hwid = -1;
- int dcache_bsize;
- int icache_bsize;
- 
-+#if IS_ENABLED(CONFIG_FB_VGA16)
- /*
-  * This still seems to be needed... -- paulus
-  */ 
-@@ -109,7 +110,6 @@ struct screen_info screen_info = {
- 	.orig_video_isVGA = 1,
- 	.orig_video_points = 16
- };
--#if defined(CONFIG_FB_VGA16_MODULE)
- EXPORT_SYMBOL(screen_info);
- #endif
- 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 971fe776e2f8b..a3dbe13f45fb3 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -39,15 +39,8 @@
- 
- #include "head.h"
- 
--#if defined(CONFIG_DUMMY_CONSOLE) || defined(CONFIG_EFI)
--struct screen_info screen_info __section(".data") = {
--	.orig_video_lines	= 30,
--	.orig_video_cols	= 80,
--	.orig_video_mode	= 0,
--	.orig_video_ega_bx	= 0,
--	.orig_video_isVGA	= 1,
--	.orig_video_points	= 8
--};
-+#if defined(CONFIG_EFI)
-+struct screen_info screen_info __section(".data");
- #endif
- 
- /*
 -- 
-2.39.2
+2.25.1
 
