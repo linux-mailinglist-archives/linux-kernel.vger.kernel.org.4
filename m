@@ -2,150 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D0674AF48
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D060B74AF4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjGGLAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S232947AbjGGLBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbjGGLAR (ORCPT
+        with ESMTP id S232584AbjGGLBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:00:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458D71994;
-        Fri,  7 Jul 2023 04:00:16 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E12D96606FCD;
-        Fri,  7 Jul 2023 12:00:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688727614;
-        bh=loLGVRQqyArFuNBoSNIhMt6M/KC703SMKl35YJuaCrw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BSRQYXK9Sa3nNwKV4rG0/26Z/hJlhwYBkBDf6C+G2yFkYL25cMFO6WEMv+ks4S13W
-         KxviaaSG8QoCtljRNYygCPaisghYahAVHCA8NuTGMWNk9gxoH2GWL6ivC+i44BMjez
-         iX1a5g/H8Rh3OqcRMDNzrC2XPIhsvuTDhmjhD3fny8TbKyG4TmZiwA/72h179h66y4
-         dtgc3tqCHOJEuD0ebZ/HNT234/vo8p2wCNZDwj/UTCl0USSkmLTUFeK44mk+J1ogIt
-         dZq20bRuqgHT78/tWinzHW276jjSpZCmpEFN9Od+q2c6+727fCX36J2vMXWt/xv0N/
-         DN6kts+12TpuQ==
-Date:   Fri, 7 Jul 2023 13:00:10 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, alexdeucher@gmail.com, ogabbay@kernel.org,
-        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
- mappings
-Message-ID: <20230707130010.1bd5d41b@collabora.com>
-In-Reply-To: <20230629222651.3196-3-dakr@redhat.com>
-References: <20230629222651.3196-1-dakr@redhat.com>
-        <20230629222651.3196-3-dakr@redhat.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Fri, 7 Jul 2023 07:01:14 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8BA183;
+        Fri,  7 Jul 2023 04:01:06 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3677nwDH014849;
+        Fri, 7 Jul 2023 11:00:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hh3FUEQLH5A6z7ukH7BO4W3WBRTzDGTQRuwB7yKyKK8=;
+ b=NdwtTeT2a8wIwCkjroYSdMmXPJghg8roi3z8RKD+qVDjiOI9lSSUQkJ2ATX/IGoXwSBD
+ pCuen9Ks/N40eXrz6+5RLQOfpomGvj47xouRsQ3lfFFY7Phoh9IKn3B9BhtKNhHY+M3e
+ 6XI7k7GFYTIC3pjaHRbRLsjXjOEwj8lK9LaMOLwRVoAn+fEZad7PCWRvR4dpNDFnrjNp
+ mHNukOrY6v6mZFn5ufk2hAODUy/yQG+ByqYlwDo6t9lFb7zjd1zGL7/yEcicrFPfyvpT
+ velbYgAZ9+OdKpKSNf+tt3GSEHSi64axkFbOQa0QOVe1qLh57bXyPH54A7pLMajIjO7E 8g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpenqrh7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 11:00:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 367B0uQ1013508
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 7 Jul 2023 11:00:56 GMT
+Received: from [10.216.29.164] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 7 Jul
+ 2023 04:00:49 -0700
+Message-ID: <1d0bdd8d-0d6f-418a-e219-de71850d847a@quicinc.com>
+Date:   Fri, 7 Jul 2023 16:30:46 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 7/8] PCI: epf-mhi: Add wakeup host op
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <manivannan.sadhasivam@linaro.org>, <helgaas@kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <krzysztof.kozlowski@linaro.org>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        "open list:MHI BUS" <mhi@lists.linux.dev>
+References: <1688122331-25478-1-git-send-email-quic_krichai@quicinc.com>
+ <1688122331-25478-8-git-send-email-quic_krichai@quicinc.com>
+ <20230707061448.GF6001@thinkpad>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20230707061448.GF6001@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -Dp4G1T1VJxFkQylrsHZi-RUXKnkmmx1
+X-Proofpoint-GUID: -Dp4G1T1VJxFkQylrsHZi-RUXKnkmmx1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_07,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 clxscore=1015
+ suspectscore=0 adultscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307070102
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 00:25:18 +0200
-Danilo Krummrich <dakr@redhat.com> wrote:
 
-> +/**
-> + * drm_gpuva_for_each_va_range - iternator to walk over a range of &drm_gpuvas
-> + * @va__: &drm_gpuva structure to assign to in each iteration step
-> + * @mgr__: &drm_gpuva_manager to walk over
-> + * @start__: starting offset, the first gpuva will overlap this
-> + * @end__: ending offset, the last gpuva will start before this (but may
-> + * overlap)
-> + *
-> + * This iterator walks over all &drm_gpuvas in the &drm_gpuva_manager that lie
-> + * between @start__ and @end__. It is implemented similarly to list_for_each(),
-> + * but is using the &drm_gpuva_manager's internal interval tree to accelerate
-> + * the search for the starting &drm_gpuva, and hence isn't safe against removal
-> + * of elements. It assumes that @end__ is within (or is the upper limit of) the
-> + * &drm_gpuva_manager. This iterator does not skip over the &drm_gpuva_manager's
-> + * @kernel_alloc_node.
-> + */
-> +#define drm_gpuva_for_each_va_range(va__, mgr__, start__, end__) \
-> +	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__)); \
+On 7/7/2023 11:44 AM, Manivannan Sadhasivam wrote:
+> On Fri, Jun 30, 2023 at 04:22:10PM +0530, Krishna chaitanya chundru wrote:
+>> Add wakeup host op for MHI EPF.
+>> If the D-state is in D3cold toggle wake signal, otherwise send PME.
+>>
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>>   drivers/pci/endpoint/functions/pci-epf-mhi.c | 19 +++++++++++++++++++
+>>   include/linux/mhi_ep.h                       |  1 +
+>>   2 files changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+>> index 64ff37d..deb742c 100644
+>> --- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
+>> +++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+>> @@ -237,6 +237,24 @@ static int pci_epf_mhi_write_to_host(struct mhi_ep_cntrl *mhi_cntrl,
+>>   	return 0;
+>>   }
+>>   
+>> +static int pci_epf_mhi_wakeup_host(struct mhi_ep_cntrl *mhi_cntrl)
+>> +{
+>> +	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
+>> +	struct pci_epf *epf = epf_mhi->epf;
+>> +	struct pci_epc *epc = epf->epc;
+>> +	int ret;
+>> +
+>> +	if (mhi_cntrl->dstate == PCI_D3cold)
+>> +		ret = pci_epc_wakeup_host(epc, epf->func_no,
+>> +					epf->vfunc_no, PCI_WAKEUP_TOGGLE_WAKE);
+>> +	else
+>> +		ret = pci_epc_wakeup_host(epc, epf->func_no,
+>> +					epf->vfunc_no, PCI_WAKEUP_SEND_PME);
+>> +
+> If the wakeup argument is of type bool (ie. bool use_pme), then
+>
+> 	wakeup = (mhi_cntrl->dstate == PCI_D3cold) ? false : true;
+>
+> 	return pci_epc_wakeup_host(epc, epf->func_no, epf->vfunc_no, state);
+>
+> - Mani
 
-drm_gpuva_find_first() takes the range size as its last argument, not
-the range end:
+better to use type as it as it has more readability
 
-	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)); \
+but I have taken your inputs here and will change the code as suggetsed.
 
+- KC
 
-> +	     va__ && (va__->va.addr < (end__)) && \
-> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
-> +	     va__ = list_next_entry(va__, rb.entry))
-
-If you define:
-
-static inline struct drm_gpuva *
-drm_gpuva_next(struct drm_gpuva *va)
-{
-	if (va && !list_is_last(&va->rb.entry, &va->mgr->rb.list))
-		return list_next_entry(va, rb.entry);
-
-	return NULL;
-}
-
-the for loop becomes a bit more readable:
-
-	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)); \
-	     va__ && (va__->va.addr < (end__)); \
-	     va__ = drm_gpuva_next(va__))
-
-> +
-> +/**
-> + * drm_gpuva_for_each_va_range_safe - iternator to safely walk over a range of
-> + * &drm_gpuvas
-> + * @va__: &drm_gpuva to assign to in each iteration step
-> + * @next__: another &drm_gpuva to use as temporary storage
-> + * @mgr__: &drm_gpuva_manager to walk over
-> + * @start__: starting offset, the first gpuva will overlap this
-> + * @end__: ending offset, the last gpuva will start before this (but may
-> + * overlap)
-> + *
-> + * This iterator walks over all &drm_gpuvas in the &drm_gpuva_manager that lie
-> + * between @start__ and @end__. It is implemented similarly to
-> + * list_for_each_safe(), but is using the &drm_gpuva_manager's internal interval
-> + * tree to accelerate the search for the starting &drm_gpuva, and hence is safe
-> + * against removal of elements. It assumes that @end__ is within (or is the
-> + * upper limit of) the &drm_gpuva_manager. This iterator does not skip over the
-> + * &drm_gpuva_manager's @kernel_alloc_node.
-> + */
-> +#define drm_gpuva_for_each_va_range_safe(va__, next__, mgr__, start__, end__) \
-> +	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__)), \
-> +	     next__ = va ? list_next_entry(va__, rb.entry) : NULL; \
-> +	     va__ && (va__->va.addr < (end__)) && \
-> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
-> +	     va__ = next__, next__ = list_next_entry(va__, rb.entry))
-
-And this is the safe version using the drm_gpuva_next() helper:
-
-	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)), \
-	     next__ = drm_gpuva_next(va__); \
-	     va__ && (va__->va.addr < (end__)); \
-	     va__ = next__, next__ = drm_gpuva_next(va__))
-
-Those changes fixed an invalid pointer access I had in the sm_unmap()
-path.
+>> +	return ret;
+>> +
+>> +}
+>> +
+>>   static int pci_epf_mhi_core_init(struct pci_epf *epf)
+>>   {
+>>   	struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+>> @@ -293,6 +311,7 @@ static int pci_epf_mhi_link_up(struct pci_epf *epf)
+>>   	mhi_cntrl->unmap_free = pci_epf_mhi_unmap_free;
+>>   	mhi_cntrl->read_from_host = pci_epf_mhi_read_from_host;
+>>   	mhi_cntrl->write_to_host = pci_epf_mhi_write_to_host;
+>> +	mhi_cntrl->wakeup_host = pci_epf_mhi_wakeup_host;
+>>   
+>>   	/* Register the MHI EP controller */
+>>   	ret = mhi_ep_register_controller(mhi_cntrl, info->config);
+>> diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
+>> index c3a0685..e353c429 100644
+>> --- a/include/linux/mhi_ep.h
+>> +++ b/include/linux/mhi_ep.h
+>> @@ -137,6 +137,7 @@ struct mhi_ep_cntrl {
+>>   			   void __iomem *virt, size_t size);
+>>   	int (*read_from_host)(struct mhi_ep_cntrl *mhi_cntrl, u64 from, void *to, size_t size);
+>>   	int (*write_to_host)(struct mhi_ep_cntrl *mhi_cntrl, void *from, u64 to, size_t size);
+>> +	int (*wakeup_host)(struct mhi_ep_cntrl *mhi_cntrl);
+>>   
+>>   	enum mhi_state mhi_state;
+>>   
+>> -- 
+>> 2.7.4
+>>
