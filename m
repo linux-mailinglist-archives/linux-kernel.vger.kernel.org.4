@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF1A74AD6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E058274AD70
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjGGIy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S232495AbjGGIz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjGGIyy (ORCPT
+        with ESMTP id S231802AbjGGIzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:54:54 -0400
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B222110
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:54:53 -0700 (PDT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b9c60aa6e7so2396415ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:54:53 -0700 (PDT)
+        Fri, 7 Jul 2023 04:55:25 -0400
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0824210B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:55:24 -0700 (PDT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1b8ad356f6fso17713105ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:55:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688720092; x=1691312092;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MQ6fgIhDLVZg04LxsAC2t0anmvaYhwdWlDV+pQJ8Auc=;
-        b=D9CFWg19sCdXFd4mC7b7t9pbS0YuYNRd9Yk8l5ZyCNGthhqZECBWOJaXPM2/KxDRUQ
-         MuVfPknADtuf71P08To4BjbgLBJ77zT4riD0hwz+l/+f9OWmULx35B8qDeRucPAsHvm+
-         wp1wR9QrBEu97ZxmkCBI5KFYZANOaOpsKftgVZBH4I7V2WsVz9kAxHP/DGOmFO4oIarx
-         DgNe6nnOG1ph/MmSz/p5sDm5Zaz0glHvqDzAt7gj587ARCIXoOjyX25Icoupgw7nJBsa
-         xEqhOaHvibSYLlB666uW88y4Boy3WwADDd7lZIV1sYvL/e+PYfC1bPp0+qxREkyTReFd
-         Q0IQ==
-X-Gm-Message-State: ABy/qLY8C2Iwt2HKmRjX+cRPlAlWpsKfk4o6uXkoOZfwR2+4m2RErBdG
-        UYNjzG0hJQarIVFbZ39W6IsCcz0hz5jv/KDZh4vGdDmvwSdw
-X-Google-Smtp-Source: APBJJlH/6XUTd0vo2I6hYGqtjOXqugsdmlRs6OPKCWMF8oV9KCJpoI4Z+pjsIwuyh/eCQHgzTDqetM2K4JyPrJ5qEez8b5WEP5dr
+        d=1e100.net; s=20221208; t=1688720124; x=1691312124;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cP9O7wz2wVY1uz0Tz+tNVR7jOVmsLzGbSd5qvYHHqCA=;
+        b=aaXso6qR5mFJiC4K+ywONuDlF+5aTk/a0tluu1x5oMAdx94GoICuO7KJovae8SJpnE
+         g9xrE+khJ/IH82YMHe8YT2Mz0ovAb1y8JU/bz0Cko0YJxa68QqeK+V/xHaBuphIi0WvG
+         //nHt8VweyafFCaiiZ3Qp8v929Jzvx80djHc6xVCjnyRIF9pqzyRdathL4MMcDzebSdy
+         xg+bw2MSpAOynvYF2Ycsnv5q7ehGFI5WS8vPHM7qgR3+EHPczQVAhr0XdJUYIRlgLeOC
+         2Y6tLTTBv9aDqo4ldB/ddq1oJjlMlsJ63kK2s6dgmLdNXhsgNyCXKIIYzeHol+uSU3rw
+         Oy7A==
+X-Gm-Message-State: ABy/qLb6bXNb4ByiF5+v7EtbeiT+jyv4aSfZgo5rAt3zgTYo8iFtxzVg
+        RhN6lyWvB6ljnuZDEiO4RLU0V+TW2TdOAauqvdYu570R4dxM
+X-Google-Smtp-Source: APBJJlE3GQMXl1cHyHg5lh6Nt6ubMsGnT10l3ez2+JBHtCWT+vZpFky6rzT2FyrUgqeF+q0zYYmCWBHisoQaeXrNjkKwW/DiQAaD
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:e843:b0:1b8:a70e:dd00 with SMTP id
- t3-20020a170902e84300b001b8a70edd00mr4150807plg.6.1688720092614; Fri, 07 Jul
- 2023 01:54:52 -0700 (PDT)
-Date:   Fri, 07 Jul 2023 01:54:52 -0700
+X-Received: by 2002:a17:902:c1cd:b0:1b3:bfa6:d064 with SMTP id
+ c13-20020a170902c1cd00b001b3bfa6d064mr3877302plc.1.1688720124415; Fri, 07 Jul
+ 2023 01:55:24 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 01:55:24 -0700
+In-Reply-To: <2225033.1688717605@warthog.procyon.org.uk>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003ed80905ffe1c97e@google.com>
-Subject: [syzbot] Monthly f2fs report (Jul 2023)
-From:   syzbot <syzbot+listcf7fbb62c045af90dfd2@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000024166c05ffe1cbb0@google.com>
+Subject: Re: [syzbot] [ext4?] general protection fault in ext4_finish_bio
+From:   syzbot <syzbot+689ec3afb1ef07b766b2@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, boqun.feng@gmail.com,
+        dhowells@redhat.com, herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, longman@redhat.com, mingo@redhat.com,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu, will@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello f2fs maintainers/developers,
+Hello,
 
-This is a 31-day syzbot report for the f2fs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/f2fs
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-During the period, 4 new issues were detected and 1 were fixed.
-In total, 11 issues are still open and 29 have been fixed so far.
+Reported-and-tested-by: syzbot+689ec3afb1ef07b766b2@syzkaller.appspotmail.com
 
-Some of the still happening issues:
+Tested on:
 
-Ref Crashes Repro Title
-<1> 212     Yes   INFO: task hung in f2fs_balance_fs
-                  https://syzkaller.appspot.com/bug?extid=8b85865808c8908a0d8c
-<2> 96      Yes   kernel BUG in f2fs_evict_inode
-                  https://syzkaller.appspot.com/bug?extid=e1246909d526a9d470fa
-<3> 49      Yes   possible deadlock in f2fs_file_mmap
-                  https://syzkaller.appspot.com/bug?extid=c0e3db4f9cd6e05cadd3
-<4> 4       Yes   WARNING: lock held when returning to user space in f2fs_write_single_data_page
-                  https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
-<5> 1       Yes   general protection fault in f2fs_drop_extent_tree
-                  https://syzkaller.appspot.com/bug?extid=f4649be1be739e030111
+commit:         5133c9e5 Merge tag 'drm-next-2023-07-07' of git://anon..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=124f34d8a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8f6b0c7ae2c9c303
+dashboard link: https://syzkaller.appspot.com/bug?extid=689ec3afb1ef07b766b2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1624cf4f280000
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Note: testing is done by a robot and is best-effort only.
