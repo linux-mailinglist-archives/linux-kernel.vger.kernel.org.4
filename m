@@ -2,94 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3C174AB2E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6437774AB30
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjGGGfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 02:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
+        id S230521AbjGGGhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 02:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjGGGe5 (ORCPT
+        with ESMTP id S229778AbjGGGhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 02:34:57 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF71FDA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:34:30 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d93425853so1900968a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688711669; x=1691303669;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lo9Ybkp8C7hyjxxxAW7ckg0KRs9g3goLaPeETqx3qFc=;
-        b=roioZ0eYvwTT7tPzv5TyxFc/Ekjoo/kOdQ8i6mdJzkYNlB7+eY0d2uGCC/Hse9ujFg
-         5PMz/RRUmb2OORgU9ftSLxbqkbQbX8WHM0IdjreZyMNIz4u+g06CdggLv4FZvhVf9UDz
-         7Zsy19b8HgsiW/qYZ1aoa9xeRnBGMDYGT+E+t8NzzW3fYB4GhPEeSz10rRCakKZtPwqQ
-         eRsCfqvgQmK00hC+hAXc1HmwnxuNs61Epuegn9DMTBSeArGqbF4UcL4N+jOhb0A0j73c
-         3K9xcAriOUVxYdhpPCZyR/giaoafNyCWEN8q/Gvgcyz8c1xq7lA4hV+RzDIPb2dCZv2f
-         13sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688711669; x=1691303669;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lo9Ybkp8C7hyjxxxAW7ckg0KRs9g3goLaPeETqx3qFc=;
-        b=BA9ou4UUTY+9ZBWgzBXbnhmrM0J8oir6inqnBlrnxzmGf41EmLjqQrA8EjbQxmowr7
-         xjn3RgdrnA4oJbYo+YkgPXrBHkQoo2/b6tEnI5GxydFnJ57gJluFbdiHHiDnp2L4OhCg
-         6OJaMxXTdng2Tb4d4ssXGtNlkZ935qmgGWkhXfkiMMX0SIXF3rCPNtZA4Z/UOkdaUP/w
-         tKNiNcmfaFMtmlL7g4f5eMVL+Cjx0wJSWdh94pUekWgU5rJPZjA+skcuhCjasc0cNEWx
-         gq3ZY3T6tpJflVOCLOUhNEZ64GY0gOxj7AxRem48RlZE+zIr0VCi/LxnYCajmVXQ5Mhi
-         6wwg==
-X-Gm-Message-State: ABy/qLY0o/PINDxSb7hYAECz4vykB/LZCBugqbgnV+aBysYdi0MOv3VU
-        Cta1mHwp+5hVJa+sahMxZ0GuXQ==
-X-Google-Smtp-Source: APBJJlF2VOmcYgfChy7bMAqvwhS2dCJYj3prVbUZDw9t+pJQ45oDeOR9Pccv8izstFNC8DH9mX8oJg==
-X-Received: by 2002:a17:906:7a08:b0:974:1ef1:81ad with SMTP id d8-20020a1709067a0800b009741ef181admr3494616ejo.4.1688711669248;
-        Thu, 06 Jul 2023 23:34:29 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id y23-20020a170906471700b00993928e4d1bsm1721167ejq.24.2023.07.06.23.34.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 23:34:28 -0700 (PDT)
-Message-ID: <e9b0b9ea-4871-5fec-b859-aebc1a0e6372@linaro.org>
-Date:   Fri, 7 Jul 2023 08:34:26 +0200
+        Fri, 7 Jul 2023 02:37:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48241FC9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:37:07 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1qHf5P-0005iO-2X; Fri, 07 Jul 2023 08:36:59 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1qHf5N-00Cfj7-S9; Fri, 07 Jul 2023 08:36:57 +0200
+Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1qHf5N-006HOk-1v; Fri, 07 Jul 2023 08:36:57 +0200
+From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
+To:     =?UTF-8?q?Nuno=20S=C3=A1?= <noname.nuno@gmail.com>,
+        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        kernel@pengutronix.de, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] iio: adc: add buffering support to the TI LMP92064 ADC driver
+Date:   Fri,  7 Jul 2023 08:36:35 +0200
+Message-Id: <20230707063635.1496437-1-l.goehrs@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/4] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm7550ba
- support
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <1688707209-30151-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688707209-30151-2-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1688707209-30151-2-git-send-email-quic_rohiagar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: lgo@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2023 07:20, Rohit Agarwal wrote:
-> Add support for the pm7550ba GPIO support to the Qualcomm PMIC GPIO
-> binding.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
+Enable buffered reading of samples from the LMP92064 ADC.
+The main benefit of this change is being able to read out current and
+voltage measurements in a single transfer, allowing instantaneous power
+measurements.
 
+Reads into the buffer can be triggered by any software triggers, e.g.
+the iio-trig-hrtimer:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    $ mkdir /sys/kernel/config/iio/triggers/hrtimer/my-trigger
+    $ cat /sys/bus/iio/devices/iio\:device3/name
+    lmp92064
+    $ iio_readdev -t my-trigger -b 16 iio:device3 | hexdump
+    WARNING: High-speed mode not enabled
+    0000000 0000 0176 0101 0001 5507 abd5 7645 1768
+    0000010 0000 016d 0101 0001 ee1e ac6b 7645 1768
+    ...
 
-Best regards,
-Krzysztof
+Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+---
+Changes v1->v2:
+
+  - Remove superfluous .shift = 0 initialization in scan_type.
+  - Replace kmalloc buffer allocation for every read with a stack
+    allocated structure.
+    A struct is used to ensure correct alignment of the timestamp field.
+    See e.g. adc/rockchip_saradc.c for other users of the same pattern.
+  - Use available_scan_masks and always push both voltage and current
+    measurements to the buffer.
+
+Changes v2->v3:
+
+  - Handle errors returned by lmp92064_read_meas() out-of-line via
+    a goto err;
+
+Changes v3->v4:
+
+  - 8-Byte align the 64 bit timestamp in the buffer structure
+    and memset() the stack-allocated buffer to prevent leaking
+    kernel memory to userspace. (Thanks to Nuno Sá)
+---
+ drivers/iio/adc/ti-lmp92064.c | 53 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+diff --git a/drivers/iio/adc/ti-lmp92064.c b/drivers/iio/adc/ti-lmp92064.c
+index c30ed824924f3..84ba5c4a0eea7 100644
+--- a/drivers/iio/adc/ti-lmp92064.c
++++ b/drivers/iio/adc/ti-lmp92064.c
+@@ -16,7 +16,10 @@
+ #include <linux/spi/spi.h>
+ 
+ #include <linux/iio/iio.h>
++#include <linux/iio/buffer.h>
+ #include <linux/iio/driver.h>
++#include <linux/iio/triggered_buffer.h>
++#include <linux/iio/trigger_consumer.h>
+ 
+ #define TI_LMP92064_REG_CONFIG_A 0x0000
+ #define TI_LMP92064_REG_CONFIG_B 0x0001
+@@ -91,6 +94,12 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
+ 		.address = TI_LMP92064_CHAN_INC,
+ 		.info_mask_separate =
+ 			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = TI_LMP92064_CHAN_INC,
++		.scan_type = {
++			.sign = 'u',
++			.realbits = 12,
++			.storagebits = 16,
++		},
+ 		.datasheet_name = "INC",
+ 	},
+ 	{
+@@ -98,8 +107,20 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
+ 		.address = TI_LMP92064_CHAN_INV,
+ 		.info_mask_separate =
+ 			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = TI_LMP92064_CHAN_INV,
++		.scan_type = {
++			.sign = 'u',
++			.realbits = 12,
++			.storagebits = 16,
++		},
+ 		.datasheet_name = "INV",
+ 	},
++	IIO_CHAN_SOFT_TIMESTAMP(2),
++};
++
++static const unsigned long lmp92064_scan_masks[] = {
++	BIT(TI_LMP92064_CHAN_INC) | BIT(TI_LMP92064_CHAN_INV),
++	0
+ };
+ 
+ static int lmp92064_read_meas(struct lmp92064_adc_priv *priv, u16 *res)
+@@ -171,6 +192,32 @@ static int lmp92064_read_raw(struct iio_dev *indio_dev,
+ 	}
+ }
+ 
++static irqreturn_t lmp92064_trigger_handler(int irq, void *p)
++{
++	struct iio_poll_func *pf = p;
++	struct iio_dev *indio_dev = pf->indio_dev;
++	struct lmp92064_adc_priv *priv = iio_priv(indio_dev);
++	struct {
++		u16 values[2];
++		int64_t timestamp __aligned(8);
++	} data;
++	int ret;
++
++	memset(&data, 0, sizeof(data));
++
++	ret = lmp92064_read_meas(priv, data.values);
++	if (ret)
++		goto err;
++
++	iio_push_to_buffers_with_timestamp(indio_dev, &data,
++					   iio_get_time_ns(indio_dev));
++
++err:
++	iio_trigger_notify_done(indio_dev->trig);
++
++	return IRQ_HANDLED;
++}
++
+ static int lmp92064_reset(struct lmp92064_adc_priv *priv,
+ 			  struct gpio_desc *gpio_reset)
+ {
+@@ -301,6 +348,12 @@ static int lmp92064_adc_probe(struct spi_device *spi)
+ 	indio_dev->channels = lmp92064_adc_channels;
+ 	indio_dev->num_channels = ARRAY_SIZE(lmp92064_adc_channels);
+ 	indio_dev->info = &lmp92064_adc_info;
++	indio_dev->available_scan_masks = lmp92064_scan_masks;
++
++	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
++					      lmp92064_trigger_handler, NULL);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to setup buffered read\n");
+ 
+ 	return devm_iio_device_register(dev, indio_dev);
+ }
+
+base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
+-- 
+2.39.2
 
