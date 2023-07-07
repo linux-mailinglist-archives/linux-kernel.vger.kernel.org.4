@@ -2,138 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C459274B869
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC1774B86A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjGGVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
+        id S232308AbjGGVCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGVBx (ORCPT
+        with ESMTP id S229458AbjGGVCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:01:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586AB2127
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688763665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dan6bESP0QByFGbOI4lpud/XpYRSbdBr9ACkzPME/Us=;
-        b=aximQ5EB5fbnoLdt6jsps++F1y88FcA+oXPi3egIFP2x5RdzdW6T3BrT6A1RrmaFd7XuK2
-        /LGp73doJYE7vDS8IuRNHYu70n0R20bARFL3tasM5QuU1mTcCaXGT+j1tAv3kqyJbVcgsa
-        Ko+Lofff5PKpWcuMuXqxgcffM+rzEIs=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-411-a4warshANcedABzp2zXBaA-1; Fri, 07 Jul 2023 17:01:04 -0400
-X-MC-Unique: a4warshANcedABzp2zXBaA-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635eb5b04e1so5943266d6.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:01:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688763664; x=1689368464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dan6bESP0QByFGbOI4lpud/XpYRSbdBr9ACkzPME/Us=;
-        b=AuPWiBJKOTSi20hse8kqWz4RzG+a8OeuqFRhxHvZmuhBgTAfTjBUtHmP451cxbzRFv
-         ihpGRyp7QUr1Bo7t9ZvD3RGy2FF8Qt7nqyhzl+OwFstBkaHYtf5tkkciBPlVSmU4AJ78
-         emu6KWqURCiMFclnfBjERRUuEI4eJP6wUamlhB+rxYG1aaIW0RC5vY7UNKS0cZBl37sb
-         OXJgP5OFv7kloeVXyr+wzJLhuNsIbps7AXOSR0QfoAM2fF55NDkOn0DH8zkEHaa4zSwx
-         WS6tMeRMGbpVZ9QQp+KEOPteK+Num9uaXNqO8fVDXyGMI6QgDv+1GGm5fxVTV9t+k6D5
-         bewg==
-X-Gm-Message-State: ABy/qLYW3TS+1xcsmJWcuqefLZ0r77NDXzW0ucwNwtRHdnJzBivY8zCL
-        mwBwAEmhKlkffxO9Nyg5xD4OtMJrOO03kzihitwUsHs/+O5GgNQwgArl5Dox1UzveDUc08zK6WJ
-        Js5SHsTs2dR0QKkIZMJlRPsSW
-X-Received: by 2002:a05:6214:411c:b0:62b:5410:322d with SMTP id kc28-20020a056214411c00b0062b5410322dmr6797772qvb.6.1688763663949;
-        Fri, 07 Jul 2023 14:01:03 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFi3ocgTXjlN1S3jnNJ0aY+HPfd5soOuCrai0nkztgKDiV5HmKoftoqMO6HM1sv+8OME69FPA==
-X-Received: by 2002:a05:6214:411c:b0:62b:5410:322d with SMTP id kc28-20020a056214411c00b0062b5410322dmr6797738qvb.6.1688763663680;
-        Fri, 07 Jul 2023 14:01:03 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id b22-20020a05620a127600b0074d60b697a6sm2203149qkl.12.2023.07.07.14.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 14:01:03 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 17:00:49 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] selftests/mm: refactor uffd_poll_thread to allow
- custom fault handlers
-Message-ID: <ZKh9AT96XiZ+6nCC@x1n>
-References: <20230706225037.1164380-1-axelrasmussen@google.com>
- <20230706225037.1164380-8-axelrasmussen@google.com>
- <ZKgWOYuIdqa25Qcs@x1n>
- <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
- <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
+        Fri, 7 Jul 2023 17:02:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E121BDB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:02:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54DCE617C2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 21:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE6F2C433C7;
+        Fri,  7 Jul 2023 21:02:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688763723;
+        bh=GJvLW/gqfLJM73MfMfqaOwxiWr3qqT/j+wGcRCsHktM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=C2uhRmFr5uKr64PBiZQ44mPEB+R1YgAQc8trIwUa5SZdzSt24CpW/cIC4+rUkfvz9
+         38YpjG8HpYxrYTdw7j8uC8YQ4FHKuxmao4Jhddwv/FDDXlvL6dzQaQCP9x1ECu1mNg
+         vW9i4oxCId88KuWtcGpHg4A6ywC0vFQwMTArDVww/WFrHEbrEZcOE/8NgHd93xDLTB
+         vZODprhFr4o6YXrebfrW//AGbKhhsKWipg023iGDrFXFuB1d/xt7Lry/qSETjbBG0J
+         Pw6u9GX4lA8QkZH/HuugKtT7tjnr8YM9YwcNAvlGRKTT3hdyFcCLJjiMSWbLthbPw8
+         fYmCmMhtu3jkg==
+Date:   Fri, 7 Jul 2023 14:02:01 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Juergen Gross <jgross@suse.com>
+cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>
+Subject: Re: [PATCH 2/2] xen/virtio: Avoid use of the dom0 backend in dom0
+In-Reply-To: <41893db4-cd66-a9f7-ffe5-d90fffb43657@suse.com>
+Message-ID: <alpine.DEB.2.22.394.2307071351530.761183@ubuntu-linux-20-04-desktop>
+References: <20230621131214.9398-1-petr.pavlu@suse.com> <20230621131214.9398-3-petr.pavlu@suse.com> <15e31609-6c45-7372-76ee-0adf7a64fe88@epam.com> <551a1594-9c8b-d447-6bf3-a4a208d5550f@suse.com> <41893db4-cd66-a9f7-ffe5-d90fffb43657@suse.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 01:38:16PM -0700, Axel Rasmussen wrote:
-> Ah, so I tried switching back to the {0} initializer, and was reminded
-> why I didn't do that in v1. :) Ignoring the missing braces warning I
-> talked about before, using {0} here is actually an error
-> ("variable-sized object may not be initialized") because this is a
-> variable sized array (nr_cpus isn't constant). So, that option is out.
+On Fri, 7 Jul 2023, Juergen Gross wrote:
+> On 26.06.23 15:17, Petr Pavlu wrote:
+> > On 6/21/23 19:58, Oleksandr Tyshchenko wrote:
+> > > On 21.06.23 16:12, Petr Pavlu wrote:
+> > > > When attempting to run Xen on a QEMU/KVM virtual machine with virtio
+> > > > devices (all x86_64), dom0 tries to establish a grant for itself which
+> > > > eventually results in a hang during the boot.
+> > > > 
+> > > > The backtrace looks as follows, the while loop in __send_control_msg()
+> > > > makes no progress:
+> > > > 
+> > > >     #0  virtqueue_get_buf_ctx (_vq=_vq@entry=0xffff8880074a8400,
+> > > > len=len@entry=0xffffc90000413c94, ctx=ctx@entry=0x0 <fixed_percpu_data>)
+> > > > at ../drivers/virtio/virtio_ring.c:2326
+> > > >     #1  0xffffffff817086b7 in virtqueue_get_buf
+> > > > (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94) at
+> > > > ../drivers/virtio/virtio_ring.c:2333
+> > > >     #2  0xffffffff8175f6b2 in __send_control_msg (portdev=<optimized
+> > > > out>, port_id=0xffffffff, event=0x0, value=0x1) at
+> > > > ../drivers/char/virtio_console.c:562
+> > > >     #3  0xffffffff8175f6ee in __send_control_msg (portdev=<optimized
+> > > > out>, port_id=<optimized out>, event=<optimized out>, value=<optimized
+> > > > out>) at ../drivers/char/virtio_console.c:569
+> > > >     #4  0xffffffff817618b1 in virtcons_probe (vdev=0xffff88800585e800)
+> > > > at ../drivers/char/virtio_console.c:2098
+> > > >     #5  0xffffffff81707117 in virtio_dev_probe (_d=0xffff88800585e810)
+> > > > at ../drivers/virtio/virtio.c:305
+> > > >     #6  0xffffffff8198e348 in call_driver_probe (drv=0xffffffff82be40c0
+> > > > <virtio_console>, drv=0xffffffff82be40c0 <virtio_console>,
+> > > > dev=0xffff88800585e810) at ../drivers/base/dd.c:579
+> > > >     #7  really_probe (dev=dev@entry=0xffff88800585e810,
+> > > > drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at
+> > > > ../drivers/base/dd.c:658
+> > > >     #8  0xffffffff8198e58f in __driver_probe_device
+> > > > (drv=drv@entry=0xffffffff82be40c0 <virtio_console>,
+> > > > dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:800
+> > > >     #9  0xffffffff8198e65a in driver_probe_device
+> > > > (drv=drv@entry=0xffffffff82be40c0 <virtio_console>,
+> > > > dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:830
+> > > >     #10 0xffffffff8198e832 in __driver_attach (dev=0xffff88800585e810,
+> > > > data=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1216
+> > > >     #11 0xffffffff8198bfb2 in bus_for_each_dev (bus=<optimized out>,
+> > > > start=start@entry=0x0 <fixed_percpu_data>,
+> > > > data=data@entry=0xffffffff82be40c0 <virtio_console>,
+> > > >         fn=fn@entry=0xffffffff8198e7b0 <__driver_attach>) at
+> > > > ../drivers/base/bus.c:368
+> > > >     #12 0xffffffff8198db65 in driver_attach
+> > > > (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at
+> > > > ../drivers/base/dd.c:1233
+> > > >     #13 0xffffffff8198d207 in bus_add_driver
+> > > > (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at
+> > > > ../drivers/base/bus.c:673
+> > > >     #14 0xffffffff8198f550 in driver_register
+> > > > (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at
+> > > > ../drivers/base/driver.c:246
+> > > >     #15 0xffffffff81706b47 in register_virtio_driver
+> > > > (driver=driver@entry=0xffffffff82be40c0 <virtio_console>) at
+> > > > ../drivers/virtio/virtio.c:357
+> > > >     #16 0xffffffff832cd34b in virtio_console_init () at
+> > > > ../drivers/char/virtio_console.c:2258
+> > > >     #17 0xffffffff8100105c in do_one_initcall (fn=0xffffffff832cd2e0
+> > > > <virtio_console_init>) at ../init/main.c:1246
+> > > >     #18 0xffffffff83277293 in do_initcall_level
+> > > > (command_line=0xffff888003e2f900 "root", level=0x6) at
+> > > > ../init/main.c:1319
+> > > >     #19 do_initcalls () at ../init/main.c:1335
+> > > >     #20 do_basic_setup () at ../init/main.c:1354
+> > > >     #21 kernel_init_freeable () at ../init/main.c:1571
+> > > >     #22 0xffffffff81f64be1 in kernel_init (unused=<optimized out>) at
+> > > > ../init/main.c:1462
+> > > >     #23 0xffffffff81001f49 in ret_from_fork () at
+> > > > ../arch/x86/entry/entry_64.S:308
+> > > >     #24 0x0000000000000000 in ?? ()
+> > > > 
+> > > > Fix the problem by preventing xen_grant_init_backend_domid() from
+> > > > setting dom0 as a backend when running in dom0.
+> > > > 
+> > > > Fixes: 035e3a4321f7 ("xen/virtio: Optimize the setup of "xen-grant-dma"
+> > > > devices")
+> > > 
+> > > 
+> > > I am not 100% sure whether the Fixes tag points to precise commit. If I
+> > > am not mistaken, the said commit just moves the code in the context
+> > > without changing the logic of CONFIG_XEN_VIRTIO_FORCE_GRANT, this was
+> > > introduced before.
+> > 
+> > I see, the tag should better point to 7228113d1fa0 ("xen/virtio: use
+> > dom0 as default backend for CONFIG_XEN_VIRTIO_FORCE_GRANT") which
+> > introduced the original logic to use dom0 as backend.
+> > 
+> > Commit 035e3a4321f7 ("xen/virtio: Optimize the setup of "xen-grant-dma"
+> > devices") is relevant in sense that it extended when this logic is
+> > active by adding an OR check for xen_pv_domain().
+> > 
+> > > 
+> > > 
+> > > > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> > > > ---
+> > > >    drivers/xen/grant-dma-ops.c | 4 +++-
+> > > >    1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> > > > index 76f6f26265a3..29ed27ac450e 100644
+> > > > --- a/drivers/xen/grant-dma-ops.c
+> > > > +++ b/drivers/xen/grant-dma-ops.c
+> > > > @@ -362,7 +362,9 @@ static int xen_grant_init_backend_domid(struct
+> > > > device *dev,
+> > > >    	if (np) {
+> > > >    		ret = xen_dt_grant_init_backend_domid(dev, np,
+> > > > backend_domid);
+> > > >    		of_node_put(np);
+> > > > -	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) ||
+> > > > xen_pv_domain()) {
+> > > > +	} else if ((IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) ||
+> > > > +		    xen_pv_domain()) &&
+> > > > +		   !xen_initial_domain()) {
+> > > 
+> > > The commit lgtm, just one note:
+> > > 
+> > > 
+> > > I would even bail out early in xen_virtio_restricted_mem_acc() instead,
+> > > as I assume the same issue could happen on Arm with DT (although there
+> > > we don't guess the backend's domid, we read it from DT and quite
+> > > unlikely we get Dom0 being in Dom0 with correct DT).
+> > > 
+> > > Something like:
+> > > 
+> > > @@ -416,6 +421,10 @@ bool xen_virtio_restricted_mem_acc(struct
+> > > virtio_device *dev)
+> > >    {
+> > >           domid_t backend_domid;
+> > > 
+> > > +       /* Xen grant DMA ops are not used when running as initial domain
+> > > */
+> > > +       if (xen_initial_domain())
+> > > +               return false;
+> > > +
+> > >           if (!xen_grant_init_backend_domid(dev->dev.parent,
+> > > &backend_domid)) {
+> > >                   xen_grant_setup_dma_ops(dev->dev.parent, backend_domid);
+> > >                   return true;
+> > > (END)
+> > > 
+> > > 
+> > > 
+> > > If so, that commit subject would need to be updated accordingly.
+> > > 
+> > > Let's see what other reviewers will say.
+> > 
+> > Ok, makes sense.
 > 
-> I'm not a huge fan of adding the free() cleanup and dealing with all
-> of the err() calls this function has.
-
-Oh, that's definitely not needed - as long as we know we're going to quit,
-we let kernel clean everything is fine.
-
-I just worry in the future there can be a loop of userfaultfd_stress() so
-it can OOM a host even if no err() hit but by looping.  I hope I explained
-what I meant.. so it's still good we make sure things freed properly when
-in success paths and when we're at it.
-
+> I think this is okay for a fix of the current problem.
 > 
-> Originally I switched to calloc() because I'm not a big fan of VLAs
-> anyway. But, as a compromise in v4 I'll leave it a VLA, and switch to
-> memset() for initializing it.
+> Passing through virtio devices to a PV domU is not covered by this fix, but
+> this
+> should be a rather rare configuration, which doesn't work today either. So the
+> suggested patch would fix the current issue without introducing a regression.
+> 
+> Anything else can be done later.
 
-That'll be good enough to me.  Thanks a lot,
-
--- 
-Peter Xu
-
+Why do you say that passing through virtio devices to a PV domU doesn't
+work today anyway? Also, as you know many people use Xen outside of
+datacenter deployments (laptops, embedded etc.) where drivers domains
+and device assignment are very common. You could assign a virtio network
+card to a domU and use PV network to share the network with other
+guests. Physical virtio devices, especially virtio-net devices, exist. I
+could probably repro this problem today in a domU just installing
+QubesOS inside QEMU. QubesOS uses network driver domains and if QEMU
+provides a virtio-net network card, this would break even with this
+patch.
