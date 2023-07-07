@@ -2,134 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FBB74AADB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A36074AAE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbjGGF67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 01:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S231654AbjGGF7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 01:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjGGF6q (ORCPT
+        with ESMTP id S231492AbjGGF73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 01:58:46 -0400
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CDE1FD8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 22:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=q20VHodHGZT4fdRhC09BV38PMmJx8QS1c7nciSKkwLY=;
-        b=llxEnqN0N+hSG1nTxErtIkueh0kZy0toErFEMYQu3fQKHzYpt5b2VLtD+5o3h/ktfRHfVdFLG+OPA
-         YmlexpgUCZMPpMEpAuVDUI4e5y/S0NpZISH70y3QhgXviwDXT8bP2s/DlZ9ITz7Cg+6D1sPG593PNX
-         txe1pt6a5hER60MmWxQ6dKKyvEgKaDEI52bywhbdz78C9Ie9UIQiGDH2aSIavVWJB1u/g+Qe4/l2I6
-         XvfpoZjcYeHY4W0oMN234RnjQ1uebnRjKsJ0rwW/IIcP5AOw1oP4BgA4KAhvxCnsv/a3+zbGq5NTFU
-         GCdl/dpVwXKDD40cpGpL+gdHbYHTSCA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=q20VHodHGZT4fdRhC09BV38PMmJx8QS1c7nciSKkwLY=;
-        b=B4vI4XJlvHFbmBXLLhbqwy9jE3K8NFS/2kt/gg0ek8JUphip5J02cHk4JQ5WpAyXA4A78DhF6IHkn
-         UDKLsHEAA==
-X-HalOne-ID: 51151cb4-1c8b-11ee-ad7a-99461c6a3fe8
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id 51151cb4-1c8b-11ee-ad7a-99461c6a3fe8;
-        Fri, 07 Jul 2023 05:58:40 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 07:58:38 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Doug Anderson <dianders@google.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
-        neil.armstrong@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com
-Subject: Re: [v4 4/4] drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI
- panel
-Message-ID: <20230707055838.GA288750@ravnborg.org>
-References: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org>
- <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com>
- <20230525093151.2338370-5-yangcong5@huaqin.corp-partner.google.com>
- <CAD=FV=W_Vw=WTuap60PtzU8Jc58T1PsEhJfY96NmFFgmC1DB9w@mail.gmail.com>
- <CACRpkdZkNio99zS+ttEXncOtS1TcYbfunKSKddErRDV1gTY43w@mail.gmail.com>
- <CAD=FV=Xx_Bf=Fr1aCmmcjXAv1CyMYwEFba7C6k_HRE1VPtTtHQ@mail.gmail.com>
+        Fri, 7 Jul 2023 01:59:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2E01FC8;
+        Thu,  6 Jul 2023 22:59:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A9DF61781;
+        Fri,  7 Jul 2023 05:59:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA23C433C7;
+        Fri,  7 Jul 2023 05:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688709562;
+        bh=1df7wJ5JvcGHftBxD2iqTzYXp4hDfpxiLwelJO4deNc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h9NedX2oMA2BVHX+h/90AAsqscVg9UmDOd31k/KKmG5qhizkDJNly5iiNy94gueup
+         C6lCbcFrX6eSbn+/kTde4RC/IXir591vgQGDPsXgTmx21B2pr4K+UCiiRR+aYBMixT
+         Q67O3AuxQLUhqw8e2FFkAplM5Q/bz1S5n9STYYvI3Hlcd5iQc3RqE2erF+SBOuYDRm
+         Bdi3N5JFsntj6IxCdWlIj11hfJAmG+frboZu0ScJ+c/2hGXsq9yrPF0kDLi/9YxC7e
+         +v0SIWYYeLir9pVQfwgyUdTX1Ehviqkw2kHSRS/HpIR9JGsrclPmyLmOtzMjcwOScQ
+         Tovh7COHbxL1g==
+Date:   Fri, 7 Jul 2023 11:29:06 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     manivannan.sadhasivam@linaro.org, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, krzysztof.kozlowski@linaro.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        "open list:MHI BUS" <mhi@lists.linux.dev>
+Subject: Re: [PATCH v2 3/8] PCI: epf-mhi: Add dtate change op
+Message-ID: <20230707055906.GC6001@thinkpad>
+References: <1688122331-25478-1-git-send-email-quic_krichai@quicinc.com>
+ <1688122331-25478-4-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=Xx_Bf=Fr1aCmmcjXAv1CyMYwEFba7C6k_HRE1VPtTtHQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1688122331-25478-4-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-On Thu, Jul 06, 2023 at 02:25:16PM -0700, Doug Anderson wrote:
-> Hi,
+On Fri, Jun 30, 2023 at 04:22:06PM +0530, Krishna chaitanya chundru wrote:
+> Add dstate host op for MHI EPF.
 > 
-> On Tue, Jul 4, 2023 at 12:47 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Thu, Jun 1, 2023 at 5:55 PM Doug Anderson <dianders@google.com> wrote:
-> > > On Thu, May 25, 2023 at 2:32 AM Cong Yang
-> > > <yangcong5@huaqin.corp-partner.google.com> wrote:
-> > > >
-> > > > The Starry-ili9882 is a 10.51" WUXGA TFT panel. which fits in nicely with
-> > > > the existing panel-boe-tv101wum-nl6 driver. From the datasheet,MIPI need
-> > > > to keep the LP11 state before the lcm_reset pin is pulled high. So add
-> > > > lp11_before_reset flag.
-> > > >
-> > > > Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-> > > > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> > > > ---
-> > > >  .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 371 ++++++++++++++++++
-> > > >  1 file changed, 371 insertions(+)
-> > >
-> > > Applied to drm-misc-next:
-> > >
-> > > 8716a6473e6c drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
-> >
-> > Sorry for noticing too late and coming after the fact and complaining.
-> >
-> > We must stop using the panel-boe-tv101wum-nl6.c driver as a
-> > one-stop-shop for Chromium panels. The Starry panel in particular
-> > hardware-wise has nothing in common with the other panels in this
-> > driver and I'm suspicious about patch 3/4 as well.
-> >
-> > Please check my patch breaking it out to a separate driver, and
-> > if you could check internally if you have a datasheet for Ilitek
-> > ILI9882t or can use your vendor leverage to get one to improve
-> > on the driver (such as define the DCS commands...) that would
-> > be great.
-> >
-> > There are good reasons for grouping the panel drivers into
-> > respective display controller such as fixing bugs in one place
-> > and if we ever want to properly support things such as
-> > gamma correction it will provide the proper per-display-controller
-> > approach.
+
+Use "D-state" everywhere. Also the subject should be:
+
+"PCI: epf-mhi: Add support for handling D-state notification from EPC"
+
+Fix the commit message accordingly.
+
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/endpoint/functions/pci-epf-mhi.c | 13 +++++++++++++
+>  include/linux/mhi_ep.h                       |  3 +++
+>  2 files changed, 16 insertions(+)
 > 
-> I mentioned in response to your patch #3 also [1], but closing the
-> loop here as well. The original reason several panels all ended up in
-> one driver was in response to Sam's feedback [2]. That was even
-> documented when the first of the "Chromium" panels landed in commit
-> 93ee1a2c0f08 ("drm/panel: support for BOE and INX video mode panel").
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+> index 9c1f5a1..64ff37d 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+> @@ -339,6 +339,18 @@ static int pci_epf_mhi_bme(struct pci_epf *epf)
+>  	return 0;
+>  }
+>  
+> +static int pci_epf_mhi_dstate_change(struct pci_epf *epf, pci_power_t state)
+> +{
+> +	struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+> +	struct mhi_ep_cntrl *mhi_cntrl = &epf_mhi->mhi_cntrl;
+> +	struct device *dev = &epf->dev;
+> +
+> +	mhi_cntrl->dstate = state;
+> +	dev_info(dev, "D-state changeg to %s\n", pci_power_name(state));
 
-If we should go with any sort of guideline then one-driver-per-controller.
-So we do not mix display controllers in one driver, but we can have
-different panels in one driver.
+This can be removed since we already print the state in pci driver.
 
-Then there may be two almost identical controllers that can share the
-same driver, or there can be controllers used in two different ways so
-they warrant independent drivers. In other words this should be used
-with common sense.
+- Mani
 
-And if someone can help naming all the magic constant that would be
-super.
+> +
+> +	return 0;
+> +}
+> +
+>  static int pci_epf_mhi_bind(struct pci_epf *epf)
+>  {
+>  	struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+> @@ -394,6 +406,7 @@ static struct pci_epc_event_ops pci_epf_mhi_event_ops = {
+>  	.link_up = pci_epf_mhi_link_up,
+>  	.link_down = pci_epf_mhi_link_down,
+>  	.bme = pci_epf_mhi_bme,
+> +	.dstate_change = pci_epf_mhi_dstate_change,
+>  };
+>  
+>  static int pci_epf_mhi_probe(struct pci_epf *epf,
+> diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
+> index f198a8a..c3a0685 100644
+> --- a/include/linux/mhi_ep.h
+> +++ b/include/linux/mhi_ep.h
+> @@ -8,6 +8,7 @@
+>  
+>  #include <linux/dma-direction.h>
+>  #include <linux/mhi.h>
+> +#include <linux/pci.h>
+>  
+>  #define MHI_EP_DEFAULT_MTU 0x8000
+>  
+> @@ -139,6 +140,8 @@ struct mhi_ep_cntrl {
+>  
+>  	enum mhi_state mhi_state;
+>  
+> +	pci_power_t dstate;
+> +
+>  	u32 max_chan;
+>  	u32 mru;
+>  	u32 event_rings;
+> -- 
+> 2.7.4
+> 
 
-	Sam
+-- 
+மணிவண்ணன் சதாசிவம்
