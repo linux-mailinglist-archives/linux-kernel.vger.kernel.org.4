@@ -2,410 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF2B74ABE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAAA74ABE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjGGH0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S232151AbjGGH1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjGGH0j (ORCPT
+        with ESMTP id S229802AbjGGH1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:26:39 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB618E;
-        Fri,  7 Jul 2023 00:26:37 -0700 (PDT)
+        Fri, 7 Jul 2023 03:27:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9D0E72;
+        Fri,  7 Jul 2023 00:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688714798; x=1720250798;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vivwfOi/NInuAJlngLtz6NuTLaWVS6vlx0mOAJxqFoE=;
-  b=S8Vogvyp++NXsXP0f7pDtOQ04MgPi54GIck+uhYhXtgYIUobrF7ghQwn
-   PVvML6kyfgnpU4LfrkdNBDJlnTfPzYMrVfkeK71dr3Uvg+SHS13IvfrZv
-   59rVBtzic2DOwvFvT04mmWBahCaV6vdguhx8GjzLNhryPZLttTkr/lJeJ
-   5Dg0uWiUxE76YDhRkS34vB9it+i0lcdFSkh++UlMY6Gt7dExMb2ILnRzE
-   lY99xouEyCc+jbUdEthvbF1ECUZ44P1CwG4wZJSl13ZM5l6R2Q474SCS6
-   YER3+BYzq8nfezmIjUJWazigCbLvf0xZLWsWUaHHPAx7jt4LXZ06il1cg
+  t=1688714831; x=1720250831;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=AIowfVb19LFlF7CzCCJNlpGunnkTtiwMN0qIbsIefXM=;
+  b=B5KjmQmfSfRbFhSKeWopnIazhch2yBJu2GJk2DEWcErlGsY6iM/KHPuj
+   AKA6SH7K1Qfz8LvVl+L62mF9MIcLgZSRuDtdFh7JmPY6fKXNBnv0A3PKS
+   KfuxS4mZ4x/izXF593JYLvn1056/cXoLumZfTnzQSXAOVpuyezO0dz5p1
+   k1bbaVZKUAcSDYQVbzV3U2CexdBd4wyifhn4HB36+cv/NgsuQZAYd4TjP
+   uDxHTzMoS4kRGluZdbhRftJkDRrR/LeIZWD1yX4h3Ye6XRg4llTgI53xN
+   yY1/8jUidZifmR3hzhHq+sovIt93Ohazbp5nWK8bFmAETyuQJamasqNyv
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="353671263"
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="427509655"
 X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="353671263"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 00:26:37 -0700
+   d="scan'208";a="427509655"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 00:27:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="719857475"
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="713903893"
 X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="719857475"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jul 2023 00:26:29 -0700
-Date:   Fri, 7 Jul 2023 15:26:28 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 21/22] x86/mce: Improve error log of kernel space TDX
- #MC due to erratum
-Message-ID: <20230707072628.4otfm3tr6uxwevxe@yy-desk-7060>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <e8d62487d87409af4f0a760f36aeae56a492a79e.1687784645.git.kai.huang@intel.com>
+   d="scan'208";a="713903893"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 07 Jul 2023 00:27:10 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 00:27:09 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 00:27:09 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Fri, 7 Jul 2023 00:27:09 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.48) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 7 Jul 2023 00:27:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OdHU0kg2jBrtGW1lFfh3RbBw7faakJVaBf54tIkTpuUNu/OXuOeYBr5X4C4yQJCsx44eTbb9wxPrQ6BDnUoGLwsa6il7Ier3WVV2Jqn+RYlq2IX+8ZEOj82Mj5mUpyNXplPKuPMQl0Bi95JlyEpxjp6gHqhdcaxc7aRWEX3WVrmh5e5hYiXzLolcWpqslGXKl/8acb06SxmNt06cM4DZTB1IzYsdTf4rX1ZSrNdCVppYAYQl10yWw/lzIpX9iFx5vHrB2zpaMqnGeDWNC+LzbesL5+8dxskpufEzAjXdw7ZkiDH9zxBUjZvXQpuk3/bMLIQj9Q94tU8ZbhvpetqQJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AIowfVb19LFlF7CzCCJNlpGunnkTtiwMN0qIbsIefXM=;
+ b=d7q/CiFV0zICBr6NgmDPatRnwQlSXs+pLfQw6aevdWBawoIGLFCMIffH+OhvjpnkmUlctcrP0lPZwb6OPSYNMv9BhNepP0KZR80Dd5OeuHquIPdDBANHwKbiyp/97IWd7rs0ALes/bnwmr251ChuI6X9d4Fo+iwWKajv83shm9K2tpVPqqzNZWXuI9RufY3C9ruaPgp5ElAczPE3naXKmOl7G5F/2UgJxBuNcTcjT3ReN19yyM0y2sMqyCjyb+eVsI0xYCynK67zlP7Km015OdDjyT4NvYuJXwdZbop1+OAVcZQW9ZUJISEzIlqxXisQ4ruKhAzigqkJ04wRyH6m0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
+ by PH0PR11MB7564.namprd11.prod.outlook.com (2603:10b6:510:288::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Fri, 7 Jul
+ 2023 07:27:07 +0000
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::221f:dbc7:48ea:7df3]) by CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::221f:dbc7:48ea:7df3%4]) with mapi id 15.20.6565.016; Fri, 7 Jul 2023
+ 07:27:07 +0000
+From:   "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To:     Waiman Long <longman@redhat.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>
+CC:     "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] refscale: Fix use of uninitalized wait_queue_head_t
+Thread-Topic: [PATCH] refscale: Fix use of uninitalized wait_queue_head_t
+Thread-Index: AQHZsGZTWMMAhp7N10uMLBpQCh8AV6+t40Cg
+Date:   Fri, 7 Jul 2023 07:27:07 +0000
+Message-ID: <CY8PR11MB713490FA7B31E495E8B5FB65892DA@CY8PR11MB7134.namprd11.prod.outlook.com>
+References: <20230707000117.2371697-1-longman@redhat.com>
+In-Reply-To: <20230707000117.2371697-1-longman@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|PH0PR11MB7564:EE_
+x-ms-office365-filtering-correlation-id: 1882181e-5b75-4f12-67d1-08db7ebb91c0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yIgFk5gJArXOsQmyxAUP/UWAYq1UMz9YPzIyjtcw9tFwYY09/3dcP7jWtQ/d3dY1t9Bjl6Q9vJEHrUOBUXteRvaEIcDxUK7UPHSbGa4NQT5Hf/AkeDT3KX50ds+/tPI8e8VI0oa8Gob1Pe8ZSLHtKN3P3bfrHY5vq96G2Twz/MihmuAAW2J6dFmbryzL2h5C7gl03jeITZtDhOnHOGeaJsPqRqbfS7B1sOb6pVXZwXvTDs7m9MK7dIkPRZPftGBPalwff4rxNQEl52ljyzvnTdHViaCcK0arm2mECDkQPhjn9/9LwHjRFCLrPKn+I5+4lISuJV5V7xP0cpI189kMo6sy7SU3xRm0TDOglzsZuh1bGvmQAjE0YEt0f7sun1LlC5pQMAgBfwxZ+bKfr24AlJHFO99qh6Yk4OlP3WIwKEff1UL5SHn7eucCCcGRLPHWjRY/+k7D36zcGyOoIMZ2Y9joR3CX/dwck5gUOmZNODgK1NW9TIYUAgbpkPHro3gBYB7Q+e/DQT070htxz7mjvrFO0AQ5x4RhPEYkoK/eSdQkelamKZKXstnS1jGryWe/fJQKx5mLHtG//eRfB+N37uRRrCzwihMb7WOk+7G8EbD37KphA0WqO60144KWNhxvh0PML4qtPaa3yI2VaYNpaw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(346002)(376002)(366004)(396003)(451199021)(66476007)(2906002)(52536014)(7416002)(5660300002)(86362001)(55016003)(8676002)(8936002)(6506007)(186003)(26005)(7696005)(478600001)(9686003)(110136005)(71200400001)(33656002)(38070700005)(38100700002)(122000001)(921005)(54906003)(66446008)(66556008)(4326008)(83380400001)(66946007)(64756008)(76116006)(82960400001)(316002)(41300700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bnZsZmJvR3gvZENjMzlUcXloa25wT3FMQW8vTHZHZWhnZHI2TVVWbG1nNkQ2?=
+ =?utf-8?B?a2kvTVd2dUpldXpCWkZLOWN4UFRtMzgxMnFObnZhTXh1NStaUEdoMlUyMm9S?=
+ =?utf-8?B?OUNsNG4vbzVMeW1LSTF2WmloZ3B6UU1GNktkWlBsQ3pvMEJ5dkN4L3B6Vy90?=
+ =?utf-8?B?eHlrZGZoYWliZnF2YmRlaUZuc3NJZkRqVGY0c0lETGxYOXlIL0JVWWxuM04r?=
+ =?utf-8?B?TjE4N2tERTRvcmpMQWtSb1QvS2dqbWp0NEs2Q1ZTbDRoeFg4V2RBY21NWisw?=
+ =?utf-8?B?T1VoUGI0OGxLSnBjQ2dBenJBMDduam5hdG5PNVl6QkxzMU5XZ1dZSkhjZ3pk?=
+ =?utf-8?B?WEdjSWJTcHdSS04wRjVWZzFqNXE4UkdraktqdktCd0R1aXN6enpuWElhWHVw?=
+ =?utf-8?B?bVdWdThsVU5pZ1cxK0R5UmVDVEdOakM4b3E4VkhlcW15WG9FUzE2VklTYW8z?=
+ =?utf-8?B?OWd2R3JoVmwvWW40RXltcWQ1TmM1UUV1cis0MXZCUysvM2JIeFFYelkzelYv?=
+ =?utf-8?B?Rkl0MUpJbTBCMnM4aFdiMStpT1lWU0s3REFCc1ZNZEhiL2hQK3h0SXBkb29Y?=
+ =?utf-8?B?dTZvVlJxS1gzQThSbjBxT2NOMFVKV1l2UTQ0YlhFaFU3ODBQSUZzWVFwODBp?=
+ =?utf-8?B?bkpnYUh1Uzk1VFRzZTRSWVBIbjhXSmVoTGh2MHhZWXArZHZmMWdQbGI0Q1lu?=
+ =?utf-8?B?TXBBNWV1R0N6SnpGWm5WZit4bHhuM2JyaytmR0VDK2JVQ3N5QjRHeERydTBm?=
+ =?utf-8?B?YVhOd1Y5enUrblZiZW91Yk1tZS9IR3ZGcVdNVlEyM3RycW1nSGxWZGhZbGg3?=
+ =?utf-8?B?cGoydllkSVNEWnhYQXNJbjlmcEgxWWlKZC9sNmttcytCdzFpWUZpc2Ryaytr?=
+ =?utf-8?B?TmRuYlNjakJEU3QybW5vQ2VtV0FoRmVFaGljdUY4TVR0b0ZxeFliU0lZQytU?=
+ =?utf-8?B?Z2lOVGY3bjVicHZHeTQxSm1GSEl2VGJ5cElNN3A0ZHB2QUR4S2RENk9tK1Bw?=
+ =?utf-8?B?ZVQ4b0s5VUxMZkxoL1VqSE1aaVo2MVlBYXQzQjFNeVd3YzYvQlVPQ2o1L2hG?=
+ =?utf-8?B?MTJhTmxJMCtpTzViTHhQNUwvTStMN0RrbmhRelZFNzJENXBJWk9uMEEwVHAw?=
+ =?utf-8?B?UkJRa3F3NDFFU0VRLzRpT2N2Q3lQYmt3Yi9MTG1jemFMQ0k2dDlqcW41T2dN?=
+ =?utf-8?B?cXNaU2hpMHlZbjJoKzZ2SnNIaitZdWVmL1ZMOStzSG1KcEF6YXlKRXorOXFI?=
+ =?utf-8?B?K0JEZ3lNZXpYZHhEeCtzR2F1QUxJSjZ3WmRtejg5UU81RmpyK3dXT1hZV3U3?=
+ =?utf-8?B?alZGaS9xWFc3TW56SE9IU0ZOa0FER29DcVlqQk5NWkpMRHVsYSt6U0phUzhD?=
+ =?utf-8?B?dnAzMWRHak1NNWtNQWJSSzhtSGZqTkZqNElySDdrOW92VlRETDRXZ0cwZ2JX?=
+ =?utf-8?B?UGkyQytoZzZHSXdIVmt6Z0hVakhhQm8rd1JublQ4UU00Q2pwSzdzWjUxS2Jy?=
+ =?utf-8?B?Y0xnc3lqOHBEai93eWR3MGZYdlR0ZnM4RWVYSzNValNhTkVCR0dKNUl0dTA4?=
+ =?utf-8?B?V0tlQlBrSWZpelorSitJVEplL2E0a21QNk11ajhWVkhicVk0bFJIYThaenZz?=
+ =?utf-8?B?aWh6dHoxa0k0MjFKekthajY0S1NpK2FSVnlqMmxIKzgybnovbExlbnl1K2V1?=
+ =?utf-8?B?SjlHYTU0c0RMTDM0ZUpGMExEWHNWTjVtQzNlZHBTZnI0WmJtSHNjdDNoYnBk?=
+ =?utf-8?B?aFl6Z2ZLTHFidk92eFpoSGlYd055WGpKU21oOW1mUS9sWUg1V09xdFpyeUhD?=
+ =?utf-8?B?YnpYWUkzTXErSnNsQUx6RVRnT1gxVHhHM0o1a2NUcFVmWWZQSWpMeVFWZ1RF?=
+ =?utf-8?B?clEyLzlpekxkeUxBQXlRS2VVMnBQaXdhT2V4MVhXMXluK2ZKT2xxeXdRVkhU?=
+ =?utf-8?B?am1OQ0M5eHdOc0dkVTFPcm5XZUVESXpLR3hleDB0ejZPRDgydVFxcExBTFBl?=
+ =?utf-8?B?TitZZHpHQ2Zkd0JDcU93blJlaGVQekNTbFJ3ZXdqTUtEQUdYRjNPalVZS21U?=
+ =?utf-8?B?YVJoSCtUNEV4WlVOdUJiRXdjM1NsdTZ4N3RNbkdiQjhwMVNwRWU2aEhTWHpn?=
+ =?utf-8?Q?raYd6HWdEYjeVU7awrilXERQI?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8d62487d87409af4f0a760f36aeae56a492a79e.1687784645.git.kai.huang@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1882181e-5b75-4f12-67d1-08db7ebb91c0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2023 07:27:07.2247
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fKpOmMl5+RcT7Lhch4O6LShi2BuSpQe/AJQYjn2XtDlARGsszKaXLGzcLHuhJRJRryoBSFklpfMymomWIi/mdw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7564
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:51AM +1200, Kai Huang wrote:
-> The first few generations of TDX hardware have an erratum.  Triggering
-> it in Linux requires some kind of kernel bug involving relatively exotic
-> memory writes to TDX private memory and will manifest via
-> spurious-looking machine checks when reading the affected memory.
->
-> == Background ==
->
-> Virtually all kernel memory accesses operations happen in full
-> cachelines.  In practice, writing a "byte" of memory usually reads a 64
-> byte cacheline of memory, modifies it, then writes the whole line back.
-> Those operations do not trigger this problem.
->
-> This problem is triggered by "partial" writes where a write transaction
-> of less than cacheline lands at the memory controller.  The CPU does
-> these via non-temporal write instructions (like MOVNTI), or through
-> UC/WC memory mappings.  The issue can also be triggered away from the
-> CPU by devices doing partial writes via DMA.
->
-> == Problem ==
->
-> A partial write to a TDX private memory cacheline will silently "poison"
-> the line.  Subsequent reads will consume the poison and generate a
-> machine check.  According to the TDX hardware spec, neither of these
-> things should have happened.
->
-> To add insult to injury, the Linux machine code will present these as a
-> literal "Hardware error" when they were, in fact, a software-triggered
-> issue.
->
-> == Solution ==
->
-> In the end, this issue is hard to trigger.  Rather than do something
-> rash (and incomplete) like unmap TDX private memory from the direct map,
-> improve the machine check handler.
->
-> Currently, the #MC handler doesn't distinguish whether the memory is
-> TDX private memory or not but just dump, for instance, below message:
->
->  [...] mce: [Hardware Error]: CPU 147: Machine Check Exception: f Bank 1: bd80000000100134
->  [...] mce: [Hardware Error]: RIP 10:<ffffffffadb69870> {__tlb_remove_page_size+0x10/0xa0}
->  	...
->  [...] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
->  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
->  [...] Kernel panic - not syncing: Fatal local machine check
->
-> Which says "Hardware Error" and "Data load in unrecoverable area of
-> kernel".
->
-> Ideally, it's better for the log to say "software bug around TDX private
-> memory" instead of "Hardware Error".  But in reality the real hardware
-> memory error can happen, and sadly such software-triggered #MC cannot be
-> distinguished from the real hardware error.  Also, the error message is
-> used by userspace tool 'mcelog' to parse, so changing the output may
-> break userspace.
->
-> So keep the "Hardware Error".  The "Data load in unrecoverable area of
-> kernel" is also helpful, so keep it too.
->
-> Instead of modifying above error log, improve the error log by printing
-> additional TDX related message to make the log like:
->
->   ...
->  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
->  [...] mce: [Hardware Error]: Machine Check: TDX private memory error. Possible kernel bug.
->
-> Adding this additional message requires determination of whether the
-> memory page is TDX private memory.  There is no existing infrastructure
-> to do that.  Add an interface to query the TDX module to fill this gap.
->
-> == Impact ==
->
-> This issue requires some kind of kernel bug to trigger.
->
-> TDX private memory should never be mapped UC/WC.  A partial write
-> originating from these mappings would require *two* bugs, first mapping
-> the wrong page, then writing the wrong memory.  It would also be
-> detectable using traditional memory corruption techniques like
-> DEBUG_PAGEALLOC.
->
-> MOVNTI (and friends) could cause this issue with something like a simple
-> buffer overrun or use-after-free on the direct map.  It should also be
-> detectable with normal debug techniques.
->
-> The one place where this might get nasty would be if the CPU read data
-> then wrote back the same data.  That would trigger this problem but
-> would not, for instance, set off mechanisms like slab redzoning because
-> it doesn't actually corrupt data.
->
-> With an IOMMU at least, the DMA exposure is similar to the UC/WC issue.
-> TDX private memory would first need to be incorrectly mapped into the
-> I/O space and then a later DMA to that mapping would actually cause the
-> poisoning event.
-
-Reviewed-by: Yuan Yao <yuan.yao@intel.com>
-
->
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->
-> v11 -> v12:
->  - Simplified #MC message (Dave/Kirill)
->  - Slightly improved some comments.
->
-> v10 -> v11:
->  - New patch
->
->
-> ---
->  arch/x86/include/asm/tdx.h     |   2 +
->  arch/x86/kernel/cpu/mce/core.c |  33 +++++++++++
->  arch/x86/virt/vmx/tdx/tdx.c    | 102 +++++++++++++++++++++++++++++++++
->  arch/x86/virt/vmx/tdx/tdx.h    |   5 ++
->  4 files changed, 142 insertions(+)
->
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 8d3f85bcccc1..a697b359d8c6 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -106,11 +106,13 @@ bool platform_tdx_enabled(void);
->  int tdx_cpu_enable(void);
->  int tdx_enable(void);
->  void tdx_reset_memory(void);
-> +bool tdx_is_private_mem(unsigned long phys);
->  #else	/* !CONFIG_INTEL_TDX_HOST */
->  static inline bool platform_tdx_enabled(void) { return false; }
->  static inline int tdx_cpu_enable(void) { return -ENODEV; }
->  static inline int tdx_enable(void)  { return -ENODEV; }
->  static inline void tdx_reset_memory(void) { }
-> +static inline bool tdx_is_private_mem(unsigned long phys) { return false; }
->  #endif	/* CONFIG_INTEL_TDX_HOST */
->
->  #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 2eec60f50057..f71b649f4c82 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -52,6 +52,7 @@
->  #include <asm/mce.h>
->  #include <asm/msr.h>
->  #include <asm/reboot.h>
-> +#include <asm/tdx.h>
->
->  #include "internal.h"
->
-> @@ -228,11 +229,34 @@ static void wait_for_panic(void)
->  	panic("Panicing machine check CPU died");
->  }
->
-> +static const char *mce_memory_info(struct mce *m)
-> +{
-> +	if (!m || !mce_is_memory_error(m) || !mce_usable_address(m))
-> +		return NULL;
-> +
-> +	/*
-> +	 * Certain initial generations of TDX-capable CPUs have an
-> +	 * erratum.  A kernel non-temporal partial write to TDX private
-> +	 * memory poisons that memory, and a subsequent read of that
-> +	 * memory triggers #MC.
-> +	 *
-> +	 * However such #MC caused by software cannot be distinguished
-> +	 * from the real hardware #MC.  Just print additional message
-> +	 * to show such #MC may be result of the CPU erratum.
-> +	 */
-> +	if (!boot_cpu_has_bug(X86_BUG_TDX_PW_MCE))
-> +		return NULL;
-> +
-> +	return !tdx_is_private_mem(m->addr) ? NULL :
-> +		"TDX private memory error. Possible kernel bug.";
-> +}
-> +
->  static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
->  {
->  	struct llist_node *pending;
->  	struct mce_evt_llist *l;
->  	int apei_err = 0;
-> +	const char *memmsg;
->
->  	/*
->  	 * Allow instrumentation around external facilities usage. Not that it
-> @@ -283,6 +307,15 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
->  	}
->  	if (exp)
->  		pr_emerg(HW_ERR "Machine check: %s\n", exp);
-> +	/*
-> +	 * Confidential computing platforms such as TDX platforms
-> +	 * may occur MCE due to incorrect access to confidential
-> +	 * memory.  Print additional information for such error.
-> +	 */
-> +	memmsg = mce_memory_info(final);
-> +	if (memmsg)
-> +		pr_emerg(HW_ERR "Machine check: %s\n", memmsg);
-> +
->  	if (!fake_panic) {
->  		if (panic_timeout == 0)
->  			panic_timeout = mca_cfg.panic_timeout;
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index eba7ff91206d..5f96c2d866e5 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -1315,6 +1315,108 @@ void tdx_reset_memory(void)
->  	tdmrs_reset_pamt_all(&tdx_tdmr_list);
->  }
->
-> +static bool is_pamt_page(unsigned long phys)
-> +{
-> +	struct tdmr_info_list *tdmr_list = &tdx_tdmr_list;
-> +	int i;
-> +
-> +	/*
-> +	 * This function is called from #MC handler, and theoretically
-> +	 * it could run in parallel with the TDX module initialization
-> +	 * on other logical cpus.  But it's not OK to hold mutex here
-> +	 * so just blindly check module status to make sure PAMTs/TDMRs
-> +	 * are stable to access.
-> +	 *
-> +	 * This may return inaccurate result in rare cases, e.g., when
-> +	 * #MC happens on a PAMT page during module initialization, but
-> +	 * this is fine as #MC handler doesn't need a 100% accurate
-> +	 * result.
-> +	 */
-> +	if (tdx_module_status != TDX_MODULE_INITIALIZED)
-> +		return false;
-> +
-> +	for (i = 0; i < tdmr_list->nr_consumed_tdmrs; i++) {
-> +		unsigned long base, size;
-> +
-> +		tdmr_get_pamt(tdmr_entry(tdmr_list, i), &base, &size);
-> +
-> +		if (phys >= base && phys < (base + size))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +/*
-> + * Return whether the memory page at the given physical address is TDX
-> + * private memory or not.  Called from #MC handler do_machine_check().
-> + *
-> + * Note this function may not return an accurate result in rare cases.
-> + * This is fine as the #MC handler doesn't need a 100% accurate result,
-> + * because it cannot distinguish #MC between software bug and real
-> + * hardware error anyway.
-> + */
-> +bool tdx_is_private_mem(unsigned long phys)
-> +{
-> +	struct tdx_module_output out;
-> +	u64 sret;
-> +
-> +	if (!platform_tdx_enabled())
-> +		return false;
-> +
-> +	/* Get page type from the TDX module */
-> +	sret = __seamcall(TDH_PHYMEM_PAGE_RDMD, phys & PAGE_MASK,
-> +			0, 0, 0, &out);
-> +	/*
-> +	 * Handle the case that CPU isn't in VMX operation.
-> +	 *
-> +	 * KVM guarantees no VM is running (thus no TDX guest)
-> +	 * when there's any online CPU isn't in VMX operation.
-> +	 * This means there will be no TDX guest private memory
-> +	 * and Secure-EPT pages.  However the TDX module may have
-> +	 * been initialized and the memory page could be PAMT.
-> +	 */
-> +	if (sret == TDX_SEAMCALL_UD)
-> +		return is_pamt_page(phys);
-> +
-> +	/*
-> +	 * Any other failure means:
-> +	 *
-> +	 * 1) TDX module not loaded; or
-> +	 * 2) Memory page isn't managed by the TDX module.
-> +	 *
-> +	 * In either case, the memory page cannot be a TDX
-> +	 * private page.
-> +	 */
-> +	if (sret)
-> +		return false;
-> +
-> +	/*
-> +	 * SEAMCALL was successful -- read page type (via RCX):
-> +	 *
-> +	 *  - PT_NDA:	Page is not used by the TDX module
-> +	 *  - PT_RSVD:	Reserved for Non-TDX use
-> +	 *  - Others:	Page is used by the TDX module
-> +	 *
-> +	 * Note PAMT pages are marked as PT_RSVD but they are also TDX
-> +	 * private memory.
-> +	 *
-> +	 * Note: Even page type is PT_NDA, the memory page could still
-> +	 * be associated with TDX private KeyID if the kernel hasn't
-> +	 * explicitly used MOVDIR64B to clear the page.  Assume KVM
-> +	 * always does that after reclaiming any private page from TDX
-> +	 * gusets.
-> +	 */
-> +	switch (out.rcx) {
-> +	case PT_NDA:
-> +		return false;
-> +	case PT_RSVD:
-> +		return is_pamt_page(phys);
-> +	default:
-> +		return true;
-> +	}
-> +}
-> +
->  static int __init record_keyid_partitioning(u32 *tdx_keyid_start,
->  					    u32 *nr_tdx_keyids)
->  {
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index f6b4e153890d..2fefd688924c 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -21,6 +21,7 @@
->  /*
->   * TDX module SEAMCALL leaf functions
->   */
-> +#define TDH_PHYMEM_PAGE_RDMD	24
->  #define TDH_SYS_KEY_CONFIG	31
->  #define TDH_SYS_INFO		32
->  #define TDH_SYS_INIT		33
-> @@ -28,6 +29,10 @@
->  #define TDH_SYS_TDMR_INIT	36
->  #define TDH_SYS_CONFIG		45
->
-> +/* TDX page types */
-> +#define	PT_NDA		0x0
-> +#define	PT_RSVD		0x1
-> +
->  struct cmr_info {
->  	u64	base;
->  	u64	size;
-> --
-> 2.40.1
->
+PiBGcm9tOiBXYWltYW4gTG9uZyA8bG9uZ21hbkByZWRoYXQuY29tPg0KPiAuLi4NCj4gU3ViamVj
+dDogW1BBVENIXSByZWZzY2FsZTogRml4IHVzZSBvZiB1bmluaXRhbGl6ZWQgd2FpdF9xdWV1ZV9o
+ZWFkX3QNCj4gDQo+IEl0IHdhcyBmb3VuZCB0aGF0IHJ1bm5pbmcgdGhlIHJlZnNjYWxlIHRlc3Qg
+bWlnaHQgc29tZXRpbWVzIGNyYXNoIHRoZSBrZXJuZWwNCj4gd2l0aCB0aGUgZm9sbG93aW5nIGVy
+cm9yOg0KPiANCj4gWyA4NTY5Ljk1Mjg5Nl0gQlVHOiB1bmFibGUgdG8gaGFuZGxlIHBhZ2UgZmF1
+bHQgZm9yIGFkZHJlc3M6IGZmZmZmZmZmZmZmZmZmZTgNCj4gWyA4NTY5Ljk1MjkwMF0gI1BGOiBz
+dXBlcnZpc29yIHJlYWQgYWNjZXNzIGluIGtlcm5lbCBtb2RlIFsgODU2OS45NTI5MDJdDQo+ICNQ
+RjogZXJyb3JfY29kZSgweDAwMDApIC0gbm90LXByZXNlbnQgcGFnZSBbIDg1NjkuOTUyOTA0XSBQ
+R0QgYzRiMDQ4MDY3DQo+IFA0RCBjNGIwNDkwNjcgUFVEIGM0YjA0YjA2NyBQTUQgMCBbIDg1Njku
+OTUyOTEwXSBPb3BzOiAwMDAwIFsjMV0NCj4gUFJFRU1QVF9SVCBTTVAgTk9QVEkgWyA4NTY5Ljk1
+MjkxNl0gSGFyZHdhcmUgbmFtZTogRGVsbCBJbmMuDQo+IFBvd2VyRWRnZSBSNzUwLzBXTVdDUiwg
+QklPUyAxLjIuNCAwNS8yOC8yMDIxIFsgODU2OS45NTI5MTddIFJJUDoNCj4gMDAxMDpwcmVwYXJl
+X3RvX3dhaXRfZXZlbnQrMHgxMDEvMHgxOTANCj4gICA6DQo+IFsgODU2OS45NTI5NDBdIENhbGwg
+VHJhY2U6DQo+IFsgODU2OS45NTI5NDFdICA8VEFTSz4NCj4gWyA4NTY5Ljk1Mjk0NF0gIHJlZl9z
+Y2FsZV9yZWFkZXIrMHgzODAvMHg0YTAgW3JlZnNjYWxlXSBbIDg1NjkuOTUyOTU5XQ0KPiBrdGhy
+ZWFkKzB4MTBlLzB4MTMwIFsgODU2OS45NTI5NjZdICByZXRfZnJvbV9mb3JrKzB4MWYvMHgzMA0K
+PiBbIDg1NjkuOTUyOTczXSAgPC9UQVNLPg0KPiANCj4gVGhpcyBpcyBsaWtlbHkgY2F1c2VkIGJ5
+IHRoZSBmYWN0IHRoYXQgaW5pdF93YWl0cXVldWVfaGVhZCgpIGlzIGNhbGxlZCBhZnRlciB0aGUN
+Cj4gcmVmX3NjYWxlX3JlYWRlciBrdGhyZWFkIGlzIGNyZWF0ZWQuIFNvIHRoZSBrdGhyZWFkIG1h
+eSB0cnkgdG8gdXNlIHRoZQ0KPiB3YWl0cXVldWUgaGVhZCBiZWZvcmUgaXQgaXMgcHJvcGVybHkg
+aW5pdGlhbGl6ZWQuIEZpeCB0aGlzIGJ5IGluaXRpYWxpemluZyB0aGUNCj4gd2FpdHF1ZXVlIGhl
+YWQgZmlyc3QgYmVmb3JlIGt0aHJlYWQgY3JlYXRpb24uDQo+IA0KPiBGaXhlczogNjUzZWQ2NGIw
+MWRjICgicmVmcGVyZjogQWRkIGEgdGVzdCB0byBtZWFzdXJlIHBlcmZvcm1hbmNlIG9mIHJlYWQt
+DQo+IHNpZGUgc3luY2hyb25pemF0aW9uIikNCj4gU2lnbmVkLW9mZi1ieTogV2FpbWFuIExvbmcg
+PGxvbmdtYW5AcmVkaGF0LmNvbT4NCj4gLS0tDQo+ICBrZXJuZWwvcmN1L3JlZnNjYWxlLmMgfCAz
+ICstLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAyIGRlbGV0aW9ucygtKQ0K
+PiANCj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9yY3UvcmVmc2NhbGUuYyBiL2tlcm5lbC9yY3UvcmVm
+c2NhbGUuYyBpbmRleA0KPiAxOTcwY2U1ZjIyZDQuLmUzNjVkNmY4YzEzOSAxMDA2NDQNCj4gLS0t
+IGEva2VybmVsL3JjdS9yZWZzY2FsZS5jDQo+ICsrKyBiL2tlcm5lbC9yY3UvcmVmc2NhbGUuYw0K
+PiBAQCAtMTEwNywxMiArMTEwNywxMSBAQCByZWZfc2NhbGVfaW5pdCh2b2lkKQ0KPiAgCVZFUkJP
+U0VfU0NBTEVPVVQoIlN0YXJ0aW5nICVkIHJlYWRlciB0aHJlYWRzIiwgbnJlYWRlcnMpOw0KPiAN
+Cj4gIAlmb3IgKGkgPSAwOyBpIDwgbnJlYWRlcnM7IGkrKykgew0KPiArCQlpbml0X3dhaXRxdWV1
+ZV9oZWFkKCYocmVhZGVyX3Rhc2tzW2ldLndxKSk7DQoNClJ1bm5pbmcgY2hlY2twYXRjaC5wbCB0
+b29sIHdpdGggdGhlICIgLS1zdHJpY3QiIG9wdGlvbiwgaXQgY29tcGxhaW5lZCB0aGF0IA0KIkNI
+RUNLOiBVbm5lY2Vzc2FyeSBwYXJlbnRoZXNlcyBhcm91bmQgcmVhZGVyX3Rhc2tzW2ldLndxIi4N
+Ckkga25vdyB0aGF0IHlvdSBqdXN0IG1vdmVkIHRoZSBjb2RlIHBvc2l0aW9uLiBUaGUgdG9vbCBz
+aG91bGQgaGF2ZQ0KY29tcGxhaW5lZCB0aGUgb3JpZ2luYWwgY29kZS4g8J+Yig0KDQpPdGhlciB0
+aGFuIHRoYXQsIHRoaXMgcGF0Y2ggTEdUTS4NCg0KICAgIFJldmlld2VkLWJ5OiBRaXV4dSBaaHVv
+IDxxaXV4dS56aHVvQGludGVsLmNvbT4NCg0KVGhhbmtzIQ0KLVFpdXh1DQoNCj4gIAkJZmlyc3Rl
+cnIgPSB0b3J0dXJlX2NyZWF0ZV9rdGhyZWFkKHJlZl9zY2FsZV9yZWFkZXIsICh2b2lkICopaSwN
+Cj4gIAkJCQkJCSAgcmVhZGVyX3Rhc2tzW2ldLnRhc2spOw0KPiAgCQlpZiAodG9ydHVyZV9pbml0
+X2Vycm9yKGZpcnN0ZXJyKSkNCj4gIAkJCWdvdG8gdW53aW5kOw0KPiAtDQo+IC0JCWluaXRfd2Fp
+dHF1ZXVlX2hlYWQoJihyZWFkZXJfdGFza3NbaV0ud3EpKTsNCj4gIAl9DQo+IA0KPiAgCS8vIE1h
+aW4gVGFzaw0KPiAtLQ0KPiAyLjMxLjENCg0K
