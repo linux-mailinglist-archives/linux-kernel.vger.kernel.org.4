@@ -2,130 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14BD74AE1A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E7474AE17
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbjGGJvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S232772AbjGGJvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbjGGJvu (ORCPT
+        with ESMTP id S232730AbjGGJvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:51:50 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46F2125;
-        Fri,  7 Jul 2023 02:51:43 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3679pLQh006874;
-        Fri, 7 Jul 2023 04:51:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688723481;
-        bh=qDLhtas3u/8HJM6Jwdk+LzFdFPztFG/DMXDGaDAWII0=;
-        h=From:To:CC:Subject:Date;
-        b=MIP1BVgEKJ3bX0GOsyL3+CLm/36bOVpOLMOlA+t2ueKoSH3kSoI6v4OT5iYIdTY+Z
-         qSc+uq/OmHBJTrTmKdCu2DgUBv33JkgA2UzFyvEz75VJ4rbQtPt3Jv+iCvR5Q2LRZy
-         4VWCnwlR6FZv0uLO3dQId7Rp3/5NGB360RLzzDWA=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3679pLSh122036
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 7 Jul 2023 04:51:21 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 7
- Jul 2023 04:51:20 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 7 Jul 2023 04:51:20 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3679pKTB065814;
-        Fri, 7 Jul 2023 04:51:20 -0500
-From:   Achal Verma <a-verma1@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
-Subject: [PATCH v3] PCI: j721e: Delay 100ms T_PVPERL from power stable to PERST# inactive
-Date:   Fri, 7 Jul 2023 15:21:19 +0530
-Message-ID: <20230707095119.447952-1-a-verma1@ti.com>
+        Fri, 7 Jul 2023 05:51:39 -0400
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F841BEE;
+        Fri,  7 Jul 2023 02:51:35 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
+        by APP-03 (Coremail) with SMTP id rQCowAB3l2Qd4KdkZ0rOCA--.27075S2;
+        Fri, 07 Jul 2023 17:51:26 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@kernel.org, dkiran@marvell.com, patila@marvell.com,
+        bzhao@marvell.com, linville@tuxdriver.com
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] mwifiex: Add check for skb_copy
+Date:   Fri,  7 Jul 2023 17:51:21 +0800
+Message-Id: <20230707095121.10453-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowAB3l2Qd4KdkZ0rOCA--.27075S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr48KF1xAF1fuw1DWFy5XFb_yoWfZrgEka
+        4kXw4fuw47Grn7Kw1jyw1fur9Yyrn0qFyfWan7trWfGrW0vrZxJ34rZFZ3JrW7C3ZIvrnx
+        Jr17A3y7A3y5XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjMmh5UUUUU==
+X-Originating-IP: [124.16.138.129]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the PCIe Card Electromechanical specification REV. 5.0, PERST#
-signal should be de-asserted after minimum 100ms from the time power-rails
-become stable. So, to ensure 100ms delay to give sufficient time for
-power-rails and refclk to become stable, change delay from 100us to 100ms.
+Add check for the return value of skb_copy in order to avoid NULL pointer
+dereference.
 
-From PCIe Card Electromechanical specification REV. 5.0 section 2.9.2:
-TPVPERL: Power stable to PERST# inactive - 100ms
-
-Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
-Signed-off-by: Achal Verma <a-verma1@ti.com>
+Fixes: 838e4f449297 ("mwifiex: improve uAP RX handling")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+ drivers/net/wireless/marvell/mwifiex/uap_txrx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes from v2:
-* Fix commit message.
-
-Change from v1:
-* Add macro for delay value.
-
- drivers/pci/controller/cadence/pci-j721e.c | 11 +++++------
- drivers/pci/pci.h                          |  2 ++
- 2 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-index e70213c9060a..32b6a7dc3cff 100644
---- a/drivers/pci/controller/cadence/pci-j721e.c
-+++ b/drivers/pci/controller/cadence/pci-j721e.c
-@@ -498,14 +498,13 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+diff --git a/drivers/net/wireless/marvell/mwifiex/uap_txrx.c b/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
+index e495f7eaea03..9cfa5de57207 100644
+--- a/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
++++ b/drivers/net/wireless/marvell/mwifiex/uap_txrx.c
+@@ -243,6 +243,8 @@ int mwifiex_handle_uap_rx_forward(struct mwifiex_private *priv,
  
- 		/*
- 		 * "Power Sequencing and Reset Signal Timings" table in
--		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
--		 * indicates PERST# should be deasserted after minimum of 100us
--		 * once REFCLK is stable. The REFCLK to the connector in RC
--		 * mode is selected while enabling the PHY. So deassert PERST#
--		 * after 100 us.
-+		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 5.0
-+		 * indicates PERST# should be deasserted after minimum of 100ms
-+		 * after power rails achieve specified operating limits and
-+		 * within this period reference clock should also become stable.
- 		 */
- 		if (gpiod) {
--			usleep_range(100, 200);
-+			msleep(PCIE_TPVPERL_DELAY_MS);
- 			gpiod_set_value_cansleep(gpiod, 1);
- 		}
- 
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index a4c397434057..6ab2367e5867 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -13,6 +13,8 @@
- 
- #define PCIE_LINK_RETRAIN_TIMEOUT_MS	1000
- 
-+#define PCIE_TPVPERL_DELAY_MS	100	/* see PCIe CEM r5.0, sec 2.9.2 */
-+
- extern const unsigned char pcie_link_speed[];
- extern bool pci_early_dump;
- 
+ 	if (is_multicast_ether_addr(ra)) {
+ 		skb_uap = skb_copy(skb, GFP_ATOMIC);
++		if (!skb_uap)
++			return -ENOMEM;
+ 		mwifiex_uap_queue_bridged_pkt(priv, skb_uap);
+ 	} else {
+ 		if (mwifiex_get_sta_entry(priv, ra)) {
 -- 
 2.25.1
 
