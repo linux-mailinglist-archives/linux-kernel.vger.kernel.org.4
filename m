@@ -2,113 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB7174B242
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0584D74B24B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjGGNyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S230429AbjGGN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjGGNyp (ORCPT
+        with ESMTP id S229743AbjGGN44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:54:45 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FDE1BEE
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:54:43 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31454996e06so1686593f8f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 06:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688738082; x=1691330082;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jJTnI5bOFiXZjxSo5gJqvfLEvH8akrdBST5kBTlYRFc=;
-        b=sJI9rAeW8PnR8hPPhBs1hw92d5MffHd6A8tD9J3bnyTqmrwlpJRem5yoxcmcZKdtQb
-         fhginQmqQtbHo0VT/F2Bs3cv2U9Ik8GlIiRJKdAfqQoOy/12dsTt8yBcKw5wv7bodx2e
-         uK6jOiozjTi4BniZM+JPjbUrmEN4pLCEMf+CWdGbKuK9qQB53tyT2uJsvSqQhbwE+Jmv
-         vHiXGxxhUhSMwLTPs09/dQT1oXtPvikUVAE5uVh9gGGYrbVJWhIp46Q49b7Qq33wJGUa
-         5Htztozuv8Wg9QzEIHvx+B90napody1iuDt/GS+63Wum00RdAmUdR5zIiCmq73S3Egbs
-         O4ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688738082; x=1691330082;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jJTnI5bOFiXZjxSo5gJqvfLEvH8akrdBST5kBTlYRFc=;
-        b=UACVRcsu1UGEGYyn4fwJNHRhCSu7stnNYmVfGH6FziBkOnwC2fXFleGgFyTK808jxg
-         /dk929MZtBemIkICJBlROlME0JFmRJOYFksCCdhNg0v2J2jRrjlSqJ57oSNohAbQFiQT
-         xvL6UKT1sGqxk4EwCYeG5zbS9erqTI0VeOTdhOGM/jS/bfPu4ph902CXnJUbCpQ5Udnb
-         WE2xwneBqhQm5c76SPsHyr5oKBR4tmtFlS9+svwz8hDOp4Ikvf9FxHv1DMV/gzedSvCB
-         30dCb0BW7OxfL2B5gUHr0QXd0ZaEj1DOigUpvYAfm2Fp9r4yYI1ywtw/byHqLunODHol
-         YYbg==
-X-Gm-Message-State: ABy/qLYXAIXodq6/X99sIsgJR0BbdIKdPiBCV6ttibfLjd5K4/czlwMk
-        llDgZU5zZNFeKU0WkgsLjhvCew==
-X-Google-Smtp-Source: APBJJlG1MkdrB0Xj9FT9FqWVWR4LUOzvfLqDindJnHI+5SJr2VEpgOpqSvIWpTwJAITINDE/EiJxRQ==
-X-Received: by 2002:adf:dd05:0:b0:314:3939:fa1c with SMTP id a5-20020adfdd05000000b003143939fa1cmr4529614wrm.8.1688738082129;
-        Fri, 07 Jul 2023 06:54:42 -0700 (PDT)
-Received: from [192.168.1.172] ([93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id e17-20020a5d4e91000000b0031433760a92sm4477755wru.115.2023.07.07.06.54.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 06:54:41 -0700 (PDT)
-Message-ID: <a993d0a7-e7e7-d30a-0848-6a3612b72345@baylibre.com>
-Date:   Fri, 7 Jul 2023 15:54:40 +0200
+        Fri, 7 Jul 2023 09:56:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA721FC7;
+        Fri,  7 Jul 2023 06:56:55 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 87A131EC0773;
+        Fri,  7 Jul 2023 15:56:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1688738213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iNn8Lobuwq8oGyKnx/IrJ5I2KhzyBS1z7FSQ9+iwXAw=;
+        b=eRR9ZBaJGfBlMs+WLlyj2EELekTQY3VLN25t86xinriciYkfqKGtav3JpbkaUp7gP5jiM6
+        w4Mwi42Hx7dlP0djiUcKW1UYFu6UTxwBCpQhmaToWHZOWIZMzH/r7yF2E9ejYiDo6wmjg+
+        gmLDXQ/9+ofDiFE0d9D+cxZT1gXvTxQ=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Td-cmWnxeZ-a; Fri,  7 Jul 2023 13:56:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1688738210; bh=iNn8Lobuwq8oGyKnx/IrJ5I2KhzyBS1z7FSQ9+iwXAw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NnchMBN7vx1cZyjXa/nEErc3VaRGeJVSvPTmkee4HYTv4Kwg44wRr0dEg1gjU92fJ
+         N9tmvhchhtzR9ACfCEiOUDiZeRVYPHV8rFFxJeiMtmVLzuLMjxMXNZvToRV9Fqka0w
+         GA1kN29bgwOVkLKWd+XftyWFa/K9vDiLTNvtXYZbD7HDEbZ/5ANDLpyIWilf/mkEBl
+         uvxk+Z+IVn2SwyDDHoIQ63Nqclbzu6kp3vsoby/+S9BtfP6+s26IGPHn+HVqJQq9Ez
+         J+/NDo4fbmM6D6vdatjDLyK9yG8n2vcXK11fykyBncBUV4Y0AXoBQFifJKCRqjvh/a
+         HIPG52ObPed1kQwductDSeMY3Hv3Xeubvc5U4lYZBwaji++krp4/QE7OGvqEF7GLki
+         9e0GOWEq0TkAurCd4fJamvGpNJwWnyU2d8LCV+P6IlT0f+iwaYk9iAGyh7e9JieRzw
+         WN9DPPF8JwTQh+IC6+1Fgb1+/OIGp6XAMh0fIe2RbtPm1fe9wOu6IWYsD0GmIwk5ey
+         3RyFx8HMw7AqUb85wRFJXYMBmuM9a8R0n1O3fPWA4hUhdjxBDaY0AfDSRSy7bPnD07
+         y8KcN5lC05sKqfO5HI8t/r/HMchEzktEdsDF3ecs6qpq+axvVlfDTPkkYQCIFtt+8/
+         GkgkN1+KIXkvE+lXjnRKvG6Q=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 927F440E0187;
+        Fri,  7 Jul 2023 13:56:31 +0000 (UTC)
+Date:   Fri, 7 Jul 2023 15:56:27 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v5 05/20] x86/decompressor: Use proper sequence to take
+ the address of the GOT
+Message-ID: <20230707135627.GEZKgZizdtbMokdz2u@fat_crate.local>
+References: <20230607072342.4054036-1-ardb@kernel.org>
+ <20230607072342.4054036-6-ardb@kernel.org>
+ <20230621110852.GAZJLaRAuGBCc5R4yb@fat_crate.local>
+ <CAMj1kXEyWJ7GgcLBdqd1GkEGEEX=4vi7d6ZVEAJ0zjU1Y+ioUQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/6] thermal/drivers/mediatek/lvts_thermal: Use offset
- threshold for IRQ
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230706153823.201943-1-nfraprado@collabora.com>
- <20230706153823.201943-4-nfraprado@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230706153823.201943-4-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEyWJ7GgcLBdqd1GkEGEEX=4vi7d6ZVEAJ0zjU1Y+ioUQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06/07/2023 17:37, Nícolas F. R. A. Prado wrote:
-> There are two kinds of temperature monitoring interrupts available:
-> * High Offset, Low Offset
-> * Hot, Hot to normal, Cold
+On Fri, Jun 23, 2023 at 04:00:30PM +0200, Ard Biesheuvel wrote:
+> if you assemble this
 > 
-> The code currently uses the hot/h2n/cold interrupts, however in a way
-> that doesn't work: the cold threshold is left uninitialized, which
-> prevents the other thresholds from ever triggering, and the h2n
-> interrupt is used as the lower threshold, which prevents the hot
-> interrupt from triggering again after the thresholds are updated by the
-> thermal framework, since a hot interrupt can only trigger again after
-> the hot to normal interrupt has been triggered.
+> movl $_GLOBAL_OFFSET_TABLE_, %eax
+> movl $_GLOBAL_OFFSET_TABLE, %eax
 > 
-> But better yet than addressing those issues, is to use the high/low
-> offset interrupts instead. This way only two thresholds need to be
-> managed, which have a simpler state machine, making them a better match
-> to the thermal framework's high and low thresholds.
+> you'll end up with
+> 
+>    0: b8 01 00 00 00        mov    $0x1,%eax
+> 1: R_386_GOTPC _GLOBAL_OFFSET_TABLE_
+>    5: b8 00 00 00 00        mov    $0x0,%eax
+> 6: R_386_32 _GLOBAL_OFFSET_TABLE
+> 
+> So it is not possible to take the absolute address of
+> _GLOBAL_OFFSET_TABLE_ via an absolute relocation, you will always get
+> the relative offset instead.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Right.
+
+Thx.
 
 -- 
-Regards,
-Alexandre
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
