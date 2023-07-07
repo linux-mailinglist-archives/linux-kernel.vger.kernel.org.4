@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C7174AFCB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B0274AFE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjGGL3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S231184AbjGGLdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232624AbjGGL3O (ORCPT
+        with ESMTP id S229642AbjGGLdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:29:14 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBC31FF7
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 04:29:13 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fba86f069bso2808497e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 04:29:13 -0700 (PDT)
+        Fri, 7 Jul 2023 07:33:38 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFA123
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 04:33:37 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-c5e76dfcc36so1954285276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 04:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688729352; x=1691321352;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+/IkVrANo5V+6KbogXND3G9qj24ymppZG2x92JBd8fA=;
-        b=TGbDnU0V5OSi5aJv5zVgszPi8eMlDFMVf9JujSQeTOFLfRZjFWRyXjL96K7HHyUPa7
-         u6uUIxvCcUfnavDyCyJgg4AlVQAx3RVh1pZcMUAj76czksVmsSfEMg/umAxxSmBPPk7/
-         +3+YtNg3EQJ3WeL9POTfwQd9SCNfklXlVd1bFhVI7Z0tGXBvbv0nd3V1jRl8/iNZCKYW
-         oQnEZJ1IKZTBmn9YU89qFdNZp32Wype2e+0s8vjZMdGGGW3QgIikvAxOhsb79Wv3eOag
-         WYq50K7Occ6UTIn/YzpFxf8XV8HJjc853NQYhiLTx+haiEnu5UAd7UWv2kz6IYTG4gPL
-         cUPg==
+        d=linaro.org; s=google; t=1688729617; x=1691321617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RMDmR1AyUqqSLlrR4dAl1mTPWPJqJms7W4GVYjDPIGA=;
+        b=xiiQaYZq3bDHw91HWI3fRO9UDkLX7hyAFNYDmTVBWHFjkvIZjxGpJ9Ucr1pqYcfkCy
+         mZ8qVZI4gHIQAjBqmvS/E0Lu5McUUZMuarBruPYB3Z5vRsXtxYrhontrBigkgUOWMcTh
+         AcX/Q+4iYvqSQQhP4CqYV5lOm749u86MZwzKYr+PWH5I2o2upjOC8iQKoaLsHS4ZmX9i
+         wduX5j7NLHNyM6waY5iUjI7MOSAgIh63hRMWL+VCYtcrsbS3S8OPN70xEFgGPBQFGdi1
+         qUGifkUwapGATJFhAkRv9er8DG50uEop5Wi7WKN1Ync5B+2EBdQZ+fNxjctFco+oSLIX
+         sYaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688729352; x=1691321352;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+/IkVrANo5V+6KbogXND3G9qj24ymppZG2x92JBd8fA=;
-        b=lA4Ja8gqJQzV3Zu3pMldZt/qKN075TBnCbS8uLocHT3zVOpqFxnZhzH/J0I6XpAB34
-         btgDFKYdV/0tuAbXQViVkD131NURiQG6QnLQF7bivA31OFn2mY3ha1AzIMkDe/31RUCj
-         R3tFIqiVT5YPWZd9NnUU3LqY+dRM/SwcRwDiiu4dMuTke5BO7w7A0OuWJEnv+OTbHoik
-         O9+EVX+bMKMGBHYhwHzZg1jUEFcj9Yz6u340LhvP8ZPER3guE1uGqX3aY3x5RSN+KSmO
-         AtgbsmdwKmIH/YYB/94y6dgVwjzidxh7AAhPpNLByAyCDYWcEP11+H0WdgV4LdZAbULE
-         6E5g==
-X-Gm-Message-State: ABy/qLZl8FppCQ2rcyAupiwjk2RJ8ANswhLK0xlXf2dHRGHQNyFD3Gsa
-        Fjb/uq/2uv6a/6XNJqfFZCrwIg==
-X-Google-Smtp-Source: APBJJlEXoytbdsvnJ6LABV+dK/wkY3qxuE2U9JcLRiBBgON5XUBntE5iUeTQf8zFf0+1ZxlJNu8+XA==
-X-Received: by 2002:a05:6512:78c:b0:4fb:835a:8486 with SMTP id x12-20020a056512078c00b004fb835a8486mr3652176lfr.32.1688729351869;
-        Fri, 07 Jul 2023 04:29:11 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id s16-20020a5d4ed0000000b0031411e46af3sm4198260wrv.97.2023.07.07.04.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 04:29:10 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 14:29:05 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] bus: moxtet: uninitialized data in output_write()
-Message-ID: <ce0c38ef-0300-4633-a82e-1327eb7ae7ba@moroto.mountain>
+        d=1e100.net; s=20221208; t=1688729617; x=1691321617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RMDmR1AyUqqSLlrR4dAl1mTPWPJqJms7W4GVYjDPIGA=;
+        b=S6Y4Iw8/fxLKZsLew9RrmpSmh+eTnO+NqFQyw+3dPekNGJAMVRGYyJgl0seS/2SAea
+         1ocsPEf92jDBT7z56FdiFbusz2vokqmBUwCD46/fykOPvK5ctT50pM3BiQG2a6GGGsJx
+         dCFrI6HASomLyHpMA5DyAnGO0/3DiYvRLtz+w8B/94sZ3KJeeOmsmG7slC/3ASKY+d3V
+         LdY4ou8k+Kdo1Jx2i3RvTKUixXs65TPyuuN9C3P/sOWBdXtyT9NbLYwjlrvCXafYqShp
+         w9XY8/aEOTXx/DY1t8hl0ETXWFpqSB/DvNe9qQWbPCFguXLvPg8SJgjkJTG3WACXVMFZ
+         OkWA==
+X-Gm-Message-State: ABy/qLbD53n22ak6TMVImfDiDH5iRm2xcIlyJUZnc2cA1bNcORshQwR3
+        pSj8K1iTGAsy5g1z60+xXfIsJ0dXgnE+oPwJQQT5ZA==
+X-Google-Smtp-Source: APBJJlEQSj9eXj+7lnzyovN+ytLh/4DHueGCx30NZ+9pdKgvYoJ0FyPX7RpPM7SVjIqI/EaQCzqVM+GieMin6C25zn0=
+X-Received: by 2002:a25:604:0:b0:c5f:d493:c91f with SMTP id
+ 4-20020a250604000000b00c5fd493c91fmr3740950ybg.61.1688729616893; Fri, 07 Jul
+ 2023 04:33:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+References: <20230707095415.1449376-1-arnd@kernel.org> <20230707095415.1449376-3-arnd@kernel.org>
+In-Reply-To: <20230707095415.1449376-3-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 7 Jul 2023 13:33:24 +0200
+Message-ID: <CACRpkdbiDUomH8HLkk_jyJZYc+mEmRaFL8-JasDmd=ooSB62Qw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dummycon: limit Arm console size hack to footbridge
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -70,56 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This doesn't check the return from simple_write_to_buffer() to see how
-many bytes were initialized.  The only thing we can say for sure is that
-the first byte is initialized.
+On Fri, Jul 7, 2023 at 11:56=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 
-There is no need to use the simple_write_to_buffer() function because
-partial writes are not supported.  Even if the user passes in a
-different value for *ppos, we still use dummy = 0 as the starting point.
-So replace the simple_write_to_buffer() with copy_from_user().  I
-added a check for if (*ppos != 0) so that it's more clear that
-partial writes are not supported.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The dummycon default console size used to be determined by architecture,
+> but now this is a Kconfig setting on everything except ARM. Tracing this
+> back in the historic git trees, this was used to match the size of VGA
+> console or VGA framebuffer on early machines, but nowadays that code is
+> no longer used, except probably on the old footbridge/netwinder since
+> that is the only one that supports vgacon.
+>
+> On machines with a framebuffer, booting with DT so far results in always
+> using the hardcoded 80x30 size in dummycon, while on ATAGS the setting
+> can come from a bootloader specific override. Both seem to be worse
+> choices than the Kconfig setting, since the actual text size for fbcon
+> also depends on the selected font.
+>
+> Make this work the same way as everywhere else and use the normal
+> Kconfig setting, except for the footbridge with vgacon, which keeps
+> using the traditional code. If vgacon is disabled, footbridge can
+> also ignore the setting. This means the screen_info only has to be
+> provided when either vgacon or EFI are enabled now.
+>
+> To limit the amount of surprises on Arm, change the Kconfig default
+> to the previously used 80x30 setting instead of the usual 80x25.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Fixes: 5bc7f990cd98 ("bus: Add support for Moxtet bus")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
-The simple_write_to_buffer() is not simple at all and creates a lot of
-bugs, but the nice thing about it is that it takes "sizeof(hex)" as
-an argument.
+Tested this before and after patch and it looks the same on the NetWinder.
+Tested-by: Linus Walleij <linus.walleij@linaro.org>
 
-However, the "len > 2 * moxtet->count + 1" means that we can't overflow.
-And if moxtet->count were wrong it would lead to issues later anyway.
+The legacy in the cyber2000 FB driver supports pseudocolor which
+makes it a bit hard to rewrite into a simple DRM driver, which is something
+I could otherwise look into, it's not a very big or complex driver
+after all.
 
- drivers/bus/moxtet.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/bus/moxtet.c b/drivers/bus/moxtet.c
-index 5eb0fe73ddc4..42453518400a 100644
---- a/drivers/bus/moxtet.c
-+++ b/drivers/bus/moxtet.c
-@@ -513,16 +513,16 @@ static ssize_t output_write(struct file *file, const char __user *buf,
- 	struct moxtet *moxtet = file->private_data;
- 	u8 bin[TURRIS_MOX_MAX_MODULES];
- 	u8 hex[sizeof(bin) * 2 + 1];
--	ssize_t res;
--	loff_t dummy = 0;
- 	int err, i;
- 
-+	if (*ppos != 0)
-+		return -EINVAL;
-+
- 	if (len > 2 * moxtet->count + 1 || len < 2 * moxtet->count)
- 		return -EINVAL;
- 
--	res = simple_write_to_buffer(hex, sizeof(hex), &dummy, buf, len);
--	if (res < 0)
--		return res;
-+	if (copy_from_user(hex, buf, len))
-+		return -EFAULT;
- 
- 	if (len % 2 == 1 && hex[len - 1] != '\n')
- 		return -EINVAL;
--- 
-2.39.2
-
+Yours,
+Linus Walleij
