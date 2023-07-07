@@ -2,77 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE2874B583
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1B974B58B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjGGREa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S230134AbjGGRJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjGGRE2 (ORCPT
+        with ESMTP id S229471AbjGGRJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:04:28 -0400
-X-Greylist: delayed 2277 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Jul 2023 10:04:25 PDT
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106D6213B;
-        Fri,  7 Jul 2023 10:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1688749460;
-        bh=21VLDhi85H/fUtYk9/1oxFtVp3WxHwXrr9P/axAY0Ow=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=YZbt81N6y3eV9qkum3yBaZ0T5LD5yHbh6YptmqONlv3PtxuTTT2OMHbVEXNj79Jx8
-         d3CMQL6T5D6wDVZMBHdqgEN/HggnZYxmRC5ekM46ZEUyZQ7rzjTBypT/Z8Dc+ofak6
-         JnM+0z7vUjl78e9z77PjZKfZCUur2E88xlqcl1q4=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 588F912861BE;
-        Fri,  7 Jul 2023 13:04:20 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id DjaEFW3jjPpi; Fri,  7 Jul 2023 13:04:20 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1688749457;
-        bh=21VLDhi85H/fUtYk9/1oxFtVp3WxHwXrr9P/axAY0Ow=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=a1EZjGONOEij2LOuHroG4+TxPYEXzx0RsLu8/Yl3LgmNbE/OWHQr9v4ksTRXZyIoV
-         LBYT9SSEcJad1F1r9KKiX9/yV4/lSKPYSCDjcQULu1+A7lwK6iGlSqVbRT/ZDmlGvx
-         VpXri+7pkAD5fiKXPY2jLTOHMReXC9yk3POFgBZM=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C7B5E1285F14;
-        Fri,  7 Jul 2023 13:04:15 -0400 (EDT)
-Message-ID: <85ec096ee90e3d62ebb496b3faeb4dce25e3deab.camel@HansenPartnership.com>
-Subject: Re: [GIT PULL] bcachefs
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
-        tytso@mit.edu, bfoster@redhat.com, jack@suse.cz,
-        andreas.gruenbacher@gmail.com, peterz@infradead.org,
-        akpm@linux-foundation.org, dhowells@redhat.com
-Date:   Fri, 07 Jul 2023 13:04:14 -0400
-In-Reply-To: <20230707164808.nisoh3ia4xkdgjj3@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
-         <20230706155602.mnhsylo3pnief2of@moria.home.lan>
-         <20230706164055.GA2306489@perftesting>
-         <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
-         <20230706211914.GB11476@frogsfrogsfrogs>
-         <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
-         <20230707091810.bamrvzcif7ncng46@moria.home.lan>
-         <30661670c55601ff475f2f0698c2be2958e45c38.camel@HansenPartnership.com>
-         <20230707164808.nisoh3ia4xkdgjj3@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Fri, 7 Jul 2023 13:09:24 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8071BE8;
+        Fri,  7 Jul 2023 10:09:23 -0700 (PDT)
+Received: from dslb-188-097-041-027.188.097.pools.vodafone-ip.de ([188.97.41.27] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <postmaster@kaiser.cx>)
+        id 1qHoxF-0003F4-Su; Fri, 07 Jul 2023 19:09:13 +0200
+Received: from martin by martin-debian-2.paytec.ch with local (Exim 4.94.2)
+        (envelope-from <martin@martin-debian-2.paytec.ch>)
+        id 1qHovi-000dvS-4S; Fri, 07 Jul 2023 19:07:38 +0200
+Date:   Fri, 7 Jul 2023 19:07:38 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwrng: timeriomem - Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZKhGWrNip0p9rx0I@martin-debian-2.paytec.ch>
+References: <20230705115242.54285-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705115242.54285-1-frank.li@vivo.com>
+Sender: "Martin Kaiser,,," <martin@martin-debian-2.paytec.ch>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,35 +47,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-07-07 at 12:48 -0400, Kent Overstreet wrote:
-> On Fri, Jul 07, 2023 at 12:26:19PM -0400, James Bottomley wrote:
-> > On Fri, 2023-07-07 at 05:18 -0400, Kent Overstreet wrote:
-[...]
-> > > In that offlist thread, I don't recall much in the way of actual,
-> > > concrete concerns. I do recall Christoph doing his usual schpiel;
-> > > and to be clear, I cut short my interactions with Christoph
-> > > because in nearly 15 years of kernel development he's never been
-> > > anything but hostile to anything I've posted, and the criticisms
-> > > he posts tend to be vague and unaware of the surrounding
-> > > discussion, not anything actionable.
-> > 
-> > This too is a red flag.  Working with difficult people is one of a
-> > maintainer's jobs as well.  Christoph has done an enormous amount
-> > of highly productive work over the years.  Sure, he's prickly and
-> > sure there have been fights, but everyone except you seems to
-> > manage to patch things up and accept his contributions.  If it were
-> > just one personal problem it might be overlookable, but you seem to
-> > be having major fights with the maintainer of every subsystem you
-> > touch...
-> 
-> James, I will bend over backwards to work with people who will work
-> to continue the technical discussion.
+Hi,
 
-You will?  Because that doesn't seem to align with your statement about
-Christoph being "vague and unaware of the surrounding discussions" and
-not posting "anything actionable" for the last 15 years.  No-one else
-has that impression and we've almost all had run-ins with Christoph at
-some point.
+Thus wrote Yangtao Li (frank.li@vivo.com):
 
-James
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  drivers/char/hw_random/timeriomem-rng.c | 25 ++++++++++---------------
+>  1 file changed, 10 insertions(+), 15 deletions(-)
+
+> diff --git a/drivers/char/hw_random/timeriomem-rng.c b/drivers/char/hw_random/timeriomem-rng.c
+> index 26f322d19a88..3db9d868efb1 100644
+> --- a/drivers/char/hw_random/timeriomem-rng.c
+> +++ b/drivers/char/hw_random/timeriomem-rng.c
+> @@ -113,16 +113,6 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!res)
+> -		return -ENXIO;
+> -
+> -	if (res->start % 4 != 0 || resource_size(res) < 4) {
+> -		dev_err(&pdev->dev,
+> -			"address must be at least four bytes wide and 32-bit aligned\n");
+> -		return -EINVAL;
+> -	}
+> -
+>  	/* Allocate memory for the device structure (and zero it) */
+>  	priv = devm_kzalloc(&pdev->dev,
+>  			sizeof(struct timeriomem_rng_private), GFP_KERNEL);
+> @@ -131,6 +121,16 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
+
+>  	platform_set_drvdata(pdev, priv);
+
+> +	priv->io_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +	if (IS_ERR(priv->io_base))
+> +		return PTR_ERR(priv->io_base);
+> +
+> +	if (res->start % 4 != 0 || resource_size(res) < 4) {
+> +		dev_err(&pdev->dev,
+> +			"address must be at least four bytes wide and 32-bit aligned\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (pdev->dev.of_node) {
+>  		int i;
+
+> @@ -158,11 +158,6 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
+>  	priv->rng_ops.name = dev_name(&pdev->dev);
+>  	priv->rng_ops.read = timeriomem_rng_read;
+
+> -	priv->io_base = devm_ioremap_resource(&pdev->dev, res);
+> -	if (IS_ERR(priv->io_base)) {
+> -		return PTR_ERR(priv->io_base);
+> -	}
+> -
+>  	/* Assume random data is already available. */
+>  	priv->present = 1;
+>  	complete(&priv->completion);
+> -- 
+> 2.39.0
+
+Looks ok to me.
+
+Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+
+I was wondering if we really have to check res->start and resource_size(res)
+that we read from the device tree. Other drivers don't check these settings
+and use devm_platform_ioremap_resource(pdev, 0).
+
+Best regards,
+Martin
