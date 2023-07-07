@@ -2,124 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A682D74B608
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DABA74B60A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjGGR5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S232589AbjGGR6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbjGGR5w (ORCPT
+        with ESMTP id S232199AbjGGR6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:57:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F1C170F
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688752630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jJ/fuG3K5KSAUU81uckV1RdmVyNYdH1eHdjrqxK1TTw=;
-        b=IKvCHJQ7vCaEh+Erd1iLxQePMvoK9KLZaPaLaQVQhUFVZHOKezTxZa2cJUb5tNITbZ0TKI
-        RezQ6WJ0D5fnxR09Z3pzhglshKptcspMEOLNk3FjovfbFiXjaimtONI8enP5TruyMiNfF0
-        mxhK+OyQ3LSTkXoBvjGEoWcTLGxSFh0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-510-Py09K79eOiubwylG_AYfpw-1; Fri, 07 Jul 2023 13:57:03 -0400
-X-MC-Unique: Py09K79eOiubwylG_AYfpw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A895381D4D8;
-        Fri,  7 Jul 2023 17:57:03 +0000 (UTC)
-Received: from [10.22.34.12] (unknown [10.22.34.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6E38A4087C6A;
-        Fri,  7 Jul 2023 17:57:02 +0000 (UTC)
-Message-ID: <f9531585-2782-bdfe-cdca-39d2de2e195f@redhat.com>
-Date:   Fri, 7 Jul 2023 13:57:02 -0400
+        Fri, 7 Jul 2023 13:58:15 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637FF170F;
+        Fri,  7 Jul 2023 10:58:09 -0700 (PDT)
+Received: from i53875a50.versanet.de ([83.135.90.80] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qHpiL-0001bc-JS; Fri, 07 Jul 2023 19:57:53 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, davem@davemloft.net,
+        conor.dooley@microchip.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        christoph.muellner@vrull.eu
+Subject: Re: [PATCH v5 4/4] RISC-V: crypto: add accelerated GCM GHASH implementation
+Date:   Fri, 07 Jul 2023 19:57:52 +0200
+Message-ID: <2640941.X9hSmTKtgW@diego>
+In-Reply-To: <ZIw6z7MNJ8Nq1q+k@gondor.apana.org.au>
+References: <20230612210442.1805962-1-heiko.stuebner@vrull.eu>
+ <20230612210442.1805962-5-heiko.stuebner@vrull.eu>
+ <ZIw6z7MNJ8Nq1q+k@gondor.apana.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] refscale: Fix use of uninitalized wait_queue_head_t
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230707000117.2371697-1-longman@redhat.com>
- <y5g37s3yhsqtmdoqziwnsd4kxtudlpqwv2iunt372abpmdzrry@43e54c374j4s>
- <b3a22928-6537-ebca-d9c2-82d2f940208f@redhat.com>
- <8b827d44-b19b-4eb2-8860-f419cc61084e@paulmck-laptop>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <8b827d44-b19b-4eb2-8860-f419cc61084e@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/23 12:16, Paul E. McKenney wrote:
-> On Fri, Jul 07, 2023 at 10:56:51AM -0400, Waiman Long wrote:
->> On 7/7/23 10:07, Davidlohr Bueso wrote:
->>> On Thu, 06 Jul 2023, Waiman Long wrote:
->>>
->>>> It was found that running the refscale test might sometimes crash the
->>>> kernel with the following error:
->>>>
->>>> [ 8569.952896] BUG: unable to handle page fault for address:
->>>> ffffffffffffffe8
->>>> [ 8569.952900] #PF: supervisor read access in kernel mode
->>>> [ 8569.952902] #PF: error_code(0x0000) - not-present page
->>>> [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
->>>> [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
->>>> [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS
->>>> 1.2.4 05/28/2021
->>>> [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
->>>>   :
->>>> [ 8569.952940] Call Trace:
->>>> [ 8569.952941]  <TASK>
->>>> [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
->>>> [ 8569.952959]  kthread+0x10e/0x130
->>>> [ 8569.952966]  ret_from_fork+0x1f/0x30
->>>> [ 8569.952973]  </TASK>
->>>>
->>>> This is likely caused by the fact that init_waitqueue_head() is called
->>>> after the ref_scale_reader kthread is created. So the kthread may try
->>>> to use the waitqueue head before it is properly initialized. Fix this
->>>> by initializing the waitqueue head first before kthread creation.
->>>>
->>>> Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of
->>>> read-side synchronization")
->>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> Strange this wasn't reported sooner.
->> Red Hat does have a pretty large QE organization that run all sort of tests
->> include this one pretty frequently. The race window is pretty small, but
->> they did hit this once in a while.
-> I do run this fairly frequently, but haven't managed to hit it.
->
-> Good show on making it happen, and looking forward to the updated patch!
+Am Freitag, 16. Juni 2023, 12:34:55 CEST schrieb Herbert Xu:
+> On Mon, Jun 12, 2023 at 11:04:42PM +0200, Heiko Stuebner wrote:
+> >
+> > +struct riscv64_ghash_ctx {
+> > +	void (*ghash_func)(u64 Xi[2], const u128 Htable[16],
+> > +			   const u8 *inp, size_t len);
+> > +
+> > +	/* key used by vector asm */
+> > +	u128 htable[16];
+> > +	/* key used by software fallback */
+> > +	be128 key;
+> 
+> Where is the fallback?
 
-v2 sent with a bit more explanation text in the commit log.
+Thanks for catching this. The fallback is of course not needed for the
+Zbc-based variants but only for the future vector-based variants.
 
-Cheers,
-Longman
+So this should not be in here but instead get added once its user is too.
+I've moved this over to that part, that I'll post separately.
+
+Heiko
+
 
