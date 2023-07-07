@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C67D74B56F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DD174B577
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjGGQyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 12:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S233054AbjGGQ4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 12:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbjGGQyf (ORCPT
+        with ESMTP id S232449AbjGGQz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:54:35 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7A426A0
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:54:14 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b89e3715acso25778865ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 09:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688748852; x=1691340852;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYmBa1F2BX8uWvMbkaR1fGi0rnov9XOpVr3batef4e0=;
-        b=LlhKSI0iiNDqU+nBR49VWVVHL5UYlaTDihcgAZUSMvC+r7NXlp88s+ieWkOa+6iHTJ
-         IEzRJgHbrGJy2ocm9pXJcl1A6wPNs8JK8gwoNbhVobbqxNdqYYfGsTUMI6vspI4OSXH8
-         9j2+Vdm0MRw6Y42e9KYC4Mz/Q7ed/FE89+V7cfxxohweG7UbFvs+EhtxnFkYOZHz9+7H
-         WG+6hG0gEbt8li/c4naCJ0uo7UvIkxr+DA9xUwxnEN0IL7+5Mze+YIn8DdzWK8ejHsdw
-         Xo+gf+F7DrNLlUxAcWcD4AsoP1N5VPM6VbYOKhRNA0gzjBTqwMz8kwV3GOPit7NwIEKm
-         DgZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688748852; x=1691340852;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYmBa1F2BX8uWvMbkaR1fGi0rnov9XOpVr3batef4e0=;
-        b=SuP7lWOjDsrVd8jqcASt9Ko0n7rKVnOK2jWDF9Ve2cDclJvgt9BWC7FR1ESAT3Y4nm
-         VY5iaf4Y1v5eq8LZbnSJ15NCn072nZqTEps2rMg0/OdCELsmcSwiFX1LBrfOM4ryDKlg
-         A2g8v1n/wqV292L48awFgQMY+WEgmNzVI/2e5ypQL8IP1HBHxSrBAuoP0R9oLdW0WKIU
-         1yYa7bswM2JREK0CeKo9Y7yVJd2h4KmsEoR2P40bUpjK4lYDeMkp46pOZcsu2BhUWcf4
-         Ucm7R9DvHP/89uZF/f65g9nhPCC3gjcrsd5klJgwswUSgU5K0iVw97V+qSlQ9WW3IX90
-         BtfQ==
-X-Gm-Message-State: ABy/qLZiFB/iP1X7z0VFJFyGEx72UENW+QMVWlJPmL3uyXpNniUFnK08
-        DXZUm1WGKYF3VJGji8ayLDRRfs8=
-X-Google-Smtp-Source: APBJJlEVJjri9XISZQJZlgb4aeeseqypovFXtIuHn7VbDLYBBsX51T1ZKVFL/sdG77g39zWrmfGlal8=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:9a87:b0:1b8:80c9:a98e with SMTP id
- w7-20020a1709029a8700b001b880c9a98emr4881183plp.13.1688748852376; Fri, 07 Jul
- 2023 09:54:12 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 09:54:11 -0700
-In-Reply-To: <b438d804-f73e-a5e4-0473-f21fa22a4486@huawei.com>
-Mime-Version: 1.0
-References: <20230707081253.34638-1-luhongfei@vivo.com> <b438d804-f73e-a5e4-0473-f21fa22a4486@huawei.com>
-Message-ID: <ZKhDMxVpu+w4Wb+t@google.com>
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Corrected two typos
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Hou Tao <houtao1@huawei.com>
-Cc:     Lu Hongfei <luhongfei@vivo.com>, opensource.kernel@vivo.com,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Anton Protopopov <aspsk@isovalent.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        YiFei Zhu <zhuyifei@google.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Jul 2023 12:55:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F1EB2;
+        Fri,  7 Jul 2023 09:55:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69974612D3;
+        Fri,  7 Jul 2023 16:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E350C433C7;
+        Fri,  7 Jul 2023 16:55:57 +0000 (UTC)
+Date:   Fri, 7 Jul 2023 12:55:51 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] fprobes: Add a comment why fprobe_kprobe_handler exits
+ if kprobe is running
+Message-ID: <20230707125551.641ca475@gandalf.local.home>
+In-Reply-To: <168874788299.159442.2485957441413653858.stgit@devnote2>
+References: <168874788299.159442.2485957441413653858.stgit@devnote2>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07, Hou Tao wrote:
-> 
-> 
-> On 7/7/2023 4:12 PM, Lu Hongfei wrote:
-> > When wrapping code, use ';' better than using ',' which is more
-> > in line with the coding habits of most engineers.
-> >
-> > Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> > ---
-> > Compared to the previous version, the modifications made are:
-> > 1. Modified the subject to make it clearer and more accurate
-> > 2. Newly optimized typo in tcp_hdr_options.c
-> >
-> >  tools/testing/selftests/bpf/benchs/bench_ringbufs.c      | 2 +-
-> >  tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> Acked-by: Hou Tao <houtao1@huawei.com>
+On Sat,  8 Jul 2023 01:38:03 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Add a comment the reason why fprobe_kprobe_handler() exits if any other
+> kprobe is running.
+> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Link: https://lore.kernel.org/all/20230706120916.3c6abf15@gandalf.local.home/
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+> ---
+>  kernel/trace/fprobe.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 75517667b54f..133b31f44945 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -100,6 +100,12 @@ static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  		return;
+>  	}
+>  
+> +	/*
+> +	 * This user handler is shared with other kprobes and is not expected to be
+> +	 * called recursively. So if any other kprobe handler is running, this will
+> +	 * exit as kprobe does. See the section 'Share the callbacks with kprobes'
+> +	 * in Documentation/trace/fprobe.rst for more information.
+> +	 */
+>  	if (unlikely(kprobe_running())) {
+>  		fp->nmissed++;
+>  		return;
+
