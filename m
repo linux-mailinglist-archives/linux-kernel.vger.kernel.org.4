@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147BE74A882
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C98774A880
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjGGBgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 21:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S232068AbjGGBfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 21:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjGGBgn (ORCPT
+        with ESMTP id S229910AbjGGBfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 21:36:43 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6572B2115
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 18:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688693779; x=1720229779;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TX3zfSSKDYdQMJ/lhBfeXvJtyWDmev5GpUgBT8vYQ+w=;
-  b=Qwiy4Tm94fhp/tANMqil7VWuQSE71JB3YMFKorbV58HyopeSkjJ1KwnM
-   4Bxc1XpsT+lZC5y2ghouq5oTJyjpVwtExXjnswhQNKpWcc+FEUluHF3ZW
-   0BYZY/VTplsLvEJxilzQCjiDt22YHPDLZte6dHLZHvjfwi3XuFRVg4R8r
-   TT3+yeQHPSLiJ62nP5CdVim5HCntWUdnZh5p4kdSCAzwzGdiH8aWMapne
-   uvChwHtZI/gVaakXab7GIpR6PGNaWOFs2tyB/Q6lh9hIh2GkLxlOQGyPh
-   I3IkDFpp3Woh3FA+Lm1Ln2452S8venTgLvoGDF1/ARI3UKylZ+yzI0jn2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="429832329"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="429832329"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 18:35:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="893791373"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="893791373"
-Received: from fengj-mobl.ccr.corp.intel.com (HELO tinazhan-desk1.www.tendawifi.com) ([10.254.210.124])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 18:35:15 -0700
-From:   Tina Zhang <tina.zhang@intel.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Michael Shavit <mshavit@google.com>
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tina Zhang <tina.zhang@intel.com>
-Subject: [RFC PATCH 6/6] mm: Deprecate pasid field
-Date:   Fri,  7 Jul 2023 09:34:41 +0800
-Message-Id: <20230707013441.365583-7-tina.zhang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230707013441.365583-1-tina.zhang@intel.com>
-References: <20230707013441.365583-1-tina.zhang@intel.com>
+        Thu, 6 Jul 2023 21:35:30 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF122100
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 18:35:15 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fbb281eec6so2007099e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 18:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688693713; x=1691285713;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jHzMQLp6cC/kLBC/6EOoqJ2QCFHXCMXxzGNBM9QacjY=;
+        b=hJRjPgcTCc7q6itd2xbffCg48LKO/Qm/YiojcslhQVKO2e+xGuKwenYHZjO6sm/Nd4
+         j+Q+arjaIozLu+vV0ToUrNaQE3iqbHFkEbzw62omnPFzlS5rZwkuqhAb6kqwNak5ba03
+         v7eBCW1S9UdFdykuZWhw1cVpSMPjbwNVEnVDg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688693713; x=1691285713;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jHzMQLp6cC/kLBC/6EOoqJ2QCFHXCMXxzGNBM9QacjY=;
+        b=Al8CQN6Xa2RZ+tC+OX4Vxu7pKRK6VYcvMO6b8EMCL5gDRHCEWFeiiAlaVbudYBa21E
+         CLTM70ltiiiI2xnW84Dj5ObxRBGltN9tkqQhWj7iR2aAfMvKmHIAeG3U84/CH06Ke4Or
+         dUQRUZOxXvR2b+gxKxe97SY5SMoxwPyg06ph9l4+BcJ78CtDWUIlQgz++d0khMIVNaUI
+         8fFzIsad5Y8omHNXS/qGYzoxwKPyRvvCIZ+3lTpTBjVKwazUl4kOUPDUbrCTrVt4Hvvu
+         cj3eYDWRXpiQjQYwQCz2UAXTUvrD4Av4B8pUk/47bxqkIydhBAzY1PM2fyhv1XFb1VE7
+         qU8A==
+X-Gm-Message-State: ABy/qLbSnlOrNnlxdwDpDijZI1n6jJRR5bZFNOas9oZiwIyS8QEBWe6d
+        0ek7bo9zgdoaAk27RAA4ZOZPK8Q931GpKCK2E5Tr/w==
+X-Google-Smtp-Source: APBJJlE5Z1LKZjv+Su0EOT2WrS/jSlDd30OmLqLSEJNttXtFFbijFLtL5Sn7PdB1lMgsRBKF7D8wQuyk1Ic2XROTdJ4=
+X-Received: by 2002:a05:6512:3e0c:b0:4fb:bc46:7c09 with SMTP id
+ i12-20020a0565123e0c00b004fbbc467c09mr3594815lfv.6.1688693713232; Thu, 06 Jul
+ 2023 18:35:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-6-stevensd@google.com>
+ <20230705101800.ut4c6topn6ylwczs@linux.intel.com> <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
+ <20230706155805.GD3894444@ls.amr.corp.intel.com>
+In-Reply-To: <20230706155805.GD3894444@ls.amr.corp.intel.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Fri, 7 Jul 2023 10:35:02 +0900
+Message-ID: <CAD=HUj6GiK3TSSe7UY8C2Jd+3tjZNBa-TLgk-UodyL=E+qKavg@mail.gmail.com>
+Subject: Re: [PATCH v7 5/8] KVM: x86/mmu: Don't pass FOLL_GET to __kvm_follow_pfn
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,26 +74,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the pasid field, as all the information needed for sva domain
-management has been moved to the newly added iommu_mm field.
+On Fri, Jul 7, 2023 at 12:58=E2=80=AFAM Isaku Yamahata <isaku.yamahata@gmai=
+l.com> wrote:
+>
+> On Thu, Jul 06, 2023 at 01:52:08PM +0900,
+> David Stevens <stevensd@chromium.org> wrote:
+>
+> > On Wed, Jul 5, 2023 at 7:17=E2=80=AFPM Yu Zhang <yu.c.zhang@linux.intel=
+.com> wrote:
+> > >
+> > > On Tue, Jul 04, 2023 at 04:50:50PM +0900, David Stevens wrote:
+> > > > From: David Stevens <stevensd@chromium.org>
+> > > >
+> > > > Stop passing FOLL_GET to __kvm_follow_pfn. This allows the host to =
+map
+> > > > memory into the guest that is backed by un-refcounted struct pages =
+- for
+> > > > example, higher order non-compound pages allocated by the amdgpu dr=
+iver
+> > > > via ttm_pool_alloc_page.
+> > >
+> > > I guess you mean the tail pages of the higher order non-compound page=
+s?
+> > > And as to the head page, it is said to be set to one coincidentally[*=
+],
+> > > and shall not be considered as refcounted.  IIUC, refcount of this he=
+ad
+> > > page will be increased and decreased soon in hva_to_pfn_remapped(), s=
+o
+> > > this may not be a problem(?). But treating this head page differently=
+,
+> > > as a refcounted one(e.g., to set the A/D flags), is weired.
+> > >
+> > > Or maybe I missed some context, e.g., can the head page be allocted t=
+o
+> > > guest at all?
+> >
+> > Yes, this is to allow mapping the tail pages of higher order
+> > non-compound pages - I should have been more precise in my wording.
+> > The head pages can already be mapped into the guest.
+> >
+> > Treating the head and tail pages would require changing how KVM
+> > behaves in a situation it supports today (rather than just adding
+> > support for an unsupported situation). Currently, without this series,
+> > KVM can map VM_PFNMAP|VM_IO memory backed by refcounted pages into the
+> > guest. When that happens, KVM sets the A/D flags. I'm not sure whether
+> > that's actually valid behavior, nor do I know whether anyone actually
+> > cares about it. But it's what KVM does today, and I would shy away
+> > from modifying that behavior without good reason.
+> >
+> > > >
+> > > > The bulk of this change is tracking the is_refcounted_page flag so =
+that
+> > > > non-refcounted pages don't trigger page_count() =3D=3D 0 warnings. =
+This is
+> > > > done by storing the flag in an unused bit in the sptes.
+> > >
+> > > Also, maybe we should mention this only works on x86-64.
+> > >
+> > > >
+> > > > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > > > ---
+> > > >  arch/x86/kvm/mmu/mmu.c          | 44 +++++++++++++++++++++--------=
+----
+> > > >  arch/x86/kvm/mmu/mmu_internal.h |  1 +
+> > > >  arch/x86/kvm/mmu/paging_tmpl.h  |  9 ++++---
+> > > >  arch/x86/kvm/mmu/spte.c         |  4 ++-
+> > > >  arch/x86/kvm/mmu/spte.h         | 12 ++++++++-
+> > > >  arch/x86/kvm/mmu/tdp_mmu.c      | 22 ++++++++++-------
+> > > >  6 files changed, 62 insertions(+), 30 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > > index e44ab512c3a1..b1607e314497 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > >
+> > > ...
+> > >
+> > > > @@ -2937,6 +2943,7 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu=
+, struct kvm_memory_slot *slot,
+> > > >       bool host_writable =3D !fault || fault->map_writable;
+> > > >       bool prefetch =3D !fault || fault->prefetch;
+> > > >       bool write_fault =3D fault && fault->write;
+> > > > +     bool is_refcounted =3D !fault || fault->is_refcounted_page;
+> > >
+> > > Just wonder, what if a non-refcounted page is prefetched?  Or is it p=
+ossible in
+> > > practice?
+> >
+> > Prefetching is still done via gfn_to_page_many_atomic, which sets
+> > FOLL_GET. That's fixable, but it's not something this series currently
+> > does.
+>
+> So if we prefetch a page, REFCOUNTED bit is cleared unconditionally with =
+this
+> hunk.  kvm_set_page_{dirty, accessed} won't be called as expected for pre=
+fetched
+> spte.  If I read the patch correctly, REFCOUNTED bit in SPTE should repre=
+sent
+> whether the corresponding page is ref-countable or not, right?
+>
+> Because direct_pte_prefetch_many() is for legacy KVM MMU and FNAME(prefet=
+ch_pte)
+> is shadow paging, we need to test it with legacy KVM MMU or shadow paging=
+ to hit
+> the issue, though.
+>
 
-Signed-off-by: Tina Zhang <tina.zhang@intel.com>
----
- mm/init-mm.c | 1 -
- 1 file changed, 1 deletion(-)
+direct_pte_prefetch_many and prefetch_gpte both pass NULL for the
+fault parameter, so is_refcounted will evaluate to true. So the spte's
+refcounted bit will get set in that case.
 
-diff --git a/mm/init-mm.c b/mm/init-mm.c
-index c43b7d0347312..50824dd5a949a 100644
---- a/mm/init-mm.c
-+++ b/mm/init-mm.c
-@@ -43,7 +43,6 @@ struct mm_struct init_mm = {
- 	.user_ns	= &init_user_ns,
- 	.cpu_bitmap	= CPU_BITS_NONE,
- #ifdef CONFIG_IOMMU_SVA
--	.pasid		= IOMMU_PASID_INVALID,
- 	.iommu_mm       = &default_iommu_mm,
- #endif
- 	INIT_MM_CONTEXT(init_mm)
--- 
-2.34.1
-
+-David
