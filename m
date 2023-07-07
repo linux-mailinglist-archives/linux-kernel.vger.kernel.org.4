@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2FC74ACAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C5574ACB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjGGIUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
+        id S232855AbjGGIUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjGGIUX (ORCPT
+        with ESMTP id S232566AbjGGIUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:20:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ABB1BE9
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 800AD61866
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3F3EC433CA;
-        Fri,  7 Jul 2023 08:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688718020;
-        bh=dcFwVT6awVtN3kz0ZqEErQqasS4zVzfMUWn04fZgPTU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DL9K3X6IKXpDAlUHzYKUzv0IcFTupBd/YUpTLKDAgyf3acXFBQiShxYdjyIceFimE
-         WwPKjrZPrPOshnRwGuy1H/EoZpjfn8mZl5SN7Gx2S6gaSy/3PD5UQgKD32zrD0u/DB
-         ZDBGtGPNzlwTsHSplmD8CZSHpZZy6ps6Y5TMoaUC391/OTBHraEPiKIMqIK8uSQ9DF
-         ION3SE+uzpAVKk61wa9vcudR4myItxbMA4iPRhK6G/YRnh/zaVfGZ7cB3qbDTaY7if
-         CbH6dOZrsd6QIIS7WqNusvVYKcYPHrnc4pv4Rn+G8hfWPbf3lzL9n0WvN6EcR4PerN
-         kERQjtIPekYAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B3F8FC4167B;
-        Fri,  7 Jul 2023 08:20:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 7 Jul 2023 04:20:30 -0400
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3021D1FDA
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:20:29 -0700 (PDT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-262d69faef9so2236893a91.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:20:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688718028; x=1691310028;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uN1UEoiyjNN/U7zWTps4glZc/qi7ZNLVVS2aoUJ2q4A=;
+        b=e/galWEtcom+9MzH07YqPhoxZFdpEGpQq6SjF+ANHg3sHfMaus40DpGDyHiD+aEHhk
+         uxNSS5xuCO+LxQXsmMcnzLcY38/7uSCVByY9wuu/lutOl60ftprptM2Hnh9V7wwCROmg
+         RSPm28kcOvAm7Aq5RWcDKPp6LC8UoMblZx6JBXpBbFOZlgPPXqDFAMg94xRk6k1pZ53P
+         ZvRlbCcjSh96Ial4+JuxuTsXMskSrwEzTMK0JJSZUAdfHz3IjsD1LqWEjAg1foa6YGBc
+         KWM8aoJmcV/SLSJ/8eeaAsu1O+NEEOfktkAgaqLr/QVx/tWDfUxsW4aDp4JGzgVnst0k
+         D1ew==
+X-Gm-Message-State: ABy/qLbBROcfVaAjuvHJcSs89sYgp3ONzEOdnmJ8DzqG6cm3Ertm4NiO
+        x1LJ4WYapMh6vZyOnpiGKo8mcMHRTNnhuE5AskrRBD8702/R
+X-Google-Smtp-Source: APBJJlE53elBOc0PVBkPt5sMuDbxYXfNijnU6gTgY9iSg9CUfuKQG7NUjF7iYEWUsnBRxcEyGfvev30rDbJTXm2Ub6F9tIUO/Zk8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] udp6: add a missing call into udp_fail_queue_rcv_skb
- tracepoint
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168871802073.22009.17793808873391205698.git-patchwork-notify@kernel.org>
-Date:   Fri, 07 Jul 2023 08:20:20 +0000
-References: <20230707043923.35578-1-ivan@cloudflare.com>
-In-Reply-To: <20230707043923.35578-1-ivan@cloudflare.com>
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
-        peilin.ye@bytedance.com, rostedt@goodmis.org, petrm@nvidia.com,
-        nhorman@tuxdriver.com, satoru.moriya@hds.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:90a:ce8f:b0:262:e5e2:e5af with SMTP id
+ g15-20020a17090ace8f00b00262e5e2e5afmr3633167pju.5.1688718028524; Fri, 07 Jul
+ 2023 01:20:28 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 01:20:28 -0700
+In-Reply-To: <2224784.1688717214@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000037530605ffe14e41@google.com>
+Subject: Re: [syzbot] [ext4?] general protection fault in ext4_finish_bio
+From:   syzbot <syzbot+689ec3afb1ef07b766b2@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, boqun.feng@gmail.com,
+        dhowells@redhat.com, herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, longman@redhat.com, mingo@redhat.com,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+syzbot tried to test the proposed patch but the build/boot failed:
 
-On Thu,  6 Jul 2023 21:39:20 -0700 you wrote:
-> The tracepoint has existed for 12 years, but it only covered udp
-> over the legacy IPv4 protocol. Having it enabled for udp6 removes
-> the unnecessary difference in error visibility.
-> 
-> Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
-> Fixes: 296f7ea75b45 ("udp: add tracepoints for queueing skb to rcvbuf")
-> 
-> [...]
+failed to checkout kernel repo git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/main: failed to run ["git" "fetch" "--force" "f569e972c8e9057ee9c286220c83a480ebf30cc5" "main"]: exit status 128
+fatal: couldn't find remote ref main
 
-Here is the summary with links:
-  - [v2] udp6: add a missing call into udp_fail_queue_rcv_skb tracepoint
-    https://git.kernel.org/netdev/net/c/8139dccd464a
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
+Tested on:
+
+commit:         [unknown 
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git main
+dashboard link: https://syzkaller.appspot.com/bug?extid=689ec3afb1ef07b766b2
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=136ff1b4a80000
 
