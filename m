@@ -2,63 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EA774B1D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2A574B1E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjGGNfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S229612AbjGGNjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjGGNfh (ORCPT
+        with ESMTP id S229458AbjGGNjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:35:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E01997
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:35:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28A9F61900
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:35:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C70C433C7;
-        Fri,  7 Jul 2023 13:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688736935;
-        bh=AiwiaqPWNJg66MgwIKyXQ8fE/65d0K0gg2hNk5w5wqE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NyXFf+PE/rucztgzpu/zExeeC2aZE3ALGtXInnMO0tNE6/hdexIFK1qYVXIZBRh1L
-         DDMH9eoHniDqj3MK8CYFnGeYO0IWgS8a6zOniFgIF/C3B2mAhC+jgBqDu5lMinPgX5
-         fUMVMxSzCoLmWoYgf6+nqFeTjqhhbUh10+sRLu41r1ZA4tpvt5LlZe33jtut+G20yc
-         0uYHHcIBhhct0i7IPuGrk+/9XWBimMv0SD7v+xppT9Jx2WcK9BHTnrYUOou2NPZPEn
-         UGfaxSd1vDCOJBRtNq3vwzkuWvoAbO/cvO91/7GfXDg2dnNIfNTz80RTZQMNgT53wg
-         HbZvMZkCzDtUQ==
-Date:   Fri, 7 Jul 2023 14:35:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Johan Hovold <johan@kernel.org>, perex@perex.cz,
-        tiwai@suse.com, lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
-Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
-Message-ID: <f1041542-bd97-41d9-96b9-c6e5fef6b096@sirena.org.uk>
-References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
- <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
- <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
- <87y1jrkgdx.wl-tiwai@suse.de>
- <3450ef1e-cb20-4242-b482-41d3d34c4564@sirena.org.uk>
- <87wmzbkfw7.wl-tiwai@suse.de>
+        Fri, 7 Jul 2023 09:39:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2211FF7;
+        Fri,  7 Jul 2023 06:39:31 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367DUIf1004101;
+        Fri, 7 Jul 2023 13:39:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NBoUOIsLUqVy/WBSnp0OWqjY9wRFUIsKCOM30ayksCs=;
+ b=tEYbF9lpOwhbRDp8wSbuBF5wsjOpdpOlZbC9Z8NmKa0LgTiacqJ9//IBUPTDyYple3tJ
+ o07jlrfHKTLEo7/2kWVZY1onigyKRxHo+p87jFIBZSgpBsqbV+kr0iPSqLKLv/aHZ1Cy
+ X4TlbfLtmnWwEjoKIr9yd7SccPjAyCwEqWa0j3glRby4ZJ5wDPqD7iuh6kdxyQ/cQjYU
+ dAXU5iUS/3ovl+JOve7MR5KgypkgSjd45N9cqGoybDWgmD6jHzM9vQIiYtPoM+54EEZG
+ rwMzrCgTSKO5QK9ChoGtZH4q7oSGMKINcNWzO23bS1rJiYvFKdpvsjDO4WCqUydCwNtu Zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpkf18q9u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 13:39:29 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367DY8X1011408;
+        Fri, 7 Jul 2023 13:38:47 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpkf18mqq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 13:38:46 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3673dXGF020748;
+        Fri, 7 Jul 2023 13:37:25 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3rjbs4v17b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 13:37:25 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367DbLj221627554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jul 2023 13:37:21 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4B612004B;
+        Fri,  7 Jul 2023 13:37:21 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1CE2A20040;
+        Fri,  7 Jul 2023 13:37:21 +0000 (GMT)
+Received: from [9.171.43.196] (unknown [9.171.43.196])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jul 2023 13:37:21 +0000 (GMT)
+Message-ID: <8ec43fe6-218c-189f-4a90-73e482a0c5ff@linux.ibm.com>
+Date:   Fri, 7 Jul 2023 15:37:20 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A3iaA4igre8crzyb"
-Content-Disposition: inline
-In-Reply-To: <87wmzbkfw7.wl-tiwai@suse.de>
-X-Cookie: Victory or defeat!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH net v2 1/3] s390/ism: Fix locking for forwarding of IRQs
+ and events to clients
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Jan Karcher <jaka@linux.ibm.com>,
+        Stefan Raspl <raspl@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230707105622.3332261-1-schnelle@linux.ibm.com>
+ <20230707105622.3332261-2-schnelle@linux.ibm.com>
+Content-Language: en-US
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <20230707105622.3332261-2-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qjk6yNTpRQAXkbSGQ48l1KT7E9o8tBpo
+X-Proofpoint-ORIG-GUID: 1ZdOLnMmS0jK4qfCZt1mmuDNPF8E4ZF7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_09,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ spamscore=0 mlxscore=0 adultscore=0 phishscore=0 clxscore=1015
+ impostorscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307070125
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,45 +102,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---A3iaA4igre8crzyb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Jul 07, 2023 at 03:30:48PM +0200, Takashi Iwai wrote:
-> Mark Brown wrote:
+On 07.07.23 12:56, Niklas Schnelle wrote:
+[...]
+> Instead of expanding the use of the clients_lock further add a separate
+> array in struct ism_dev which references clients subscribed to the
+> device's events and IRQs. This array is protected by ism->lock which is
+> already taken in ism_handle_irq() and can be taken outside the IRQ
+> handler when adding/removing subscribers or the accessing
 
-> > It's moderately common - typically in these cases the control is
-> > described in the datasheet as an attenuation control rather than a gain,
-> > and this usually corresponds to the physical implementation being only
-> > able to make signals smaller relative to the reference.
+				typo? s/the accessing/accessing the/g
 
-> Yeah, I see the use case.  The problem is, however, that we're using
-> the very same dB info for both gain and attenuation.  That means,
-> application has no idea how to interpret those dB values -- to be
-> added or to be subtracted.
+> ism->sba_client_arr[]. This also means that the clients_lock is no
+> longer taken in IRQ context.
+> 
 
-> We should have defined a new TLV type for attenuation to
-> differentiate, and define the TLV macro to give proper min/max.
+[...]
 
-The ASoC generic control stuff supports inverting the value prior to
-presentation to userspace so it's masked there (instead of writing the
-number userspace sees to the register we subtract the number from the
-maximum value and write that to the register), pulling that up further
-to the ALSA core might be nice I guess?
+> @@ -554,6 +577,7 @@ static void ism_dev_add_work_func(struct work_struct *work)
+>  						 add_work);
+>  
+>  	client->add(client->tgt_ism);
+> +	ism_setup_forwarding(client, client->tgt_ism);
+>  	atomic_dec(&client->tgt_ism->add_dev_cnt);
+>  	wake_up(&client->tgt_ism->waitq);
+>  }
+> @@ -691,7 +715,11 @@ static void ism_dev_remove_work_func(struct work_struct *work)
+>  {
+>  	struct ism_client *client = container_of(work, struct ism_client,
+>  						 remove_work);
+> +	unsigned long flags;
+>  
+> +	spin_lock_irqsave(&client->tgt_ism->lock, flags);
+> +	client->tgt_ism->subs[client->id] = NULL;
+> +	spin_unlock_irqrestore(&client->tgt_ism->lock, flags);
+>  	client->remove(client->tgt_ism);
+>  	atomic_dec(&client->tgt_ism->free_clients_cnt);
+>  	wake_up(&client->tgt_ism->waitq);
 
---A3iaA4igre8crzyb
-Content-Type: application/pgp-signature; name="signature.asc"
+I am not sure I like the new split. here you fix ism_dev_add_work_func() and ism_dev_remove_work_func(),
+that you remove in the next patch. But looks functionally ok to me.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSoFKEACgkQJNaLcl1U
-h9AqmQf/RFCU/P2SXEOUZ99uvePYWAioCNljKTipNMeGeHO1+6cJUPQyofxXd6Uy
-GU5xG8S8GB3vvu5Rlf6w9rl1U1xNXpiZYK85G/hCtSZICIrxHc/HP2dr/gDwMCak
-0Zbzx7fTNQGsgRjh0srTgdkgjOMnWBh/0I1w4/y68uW9yp/2AgMVKkvDrPz70kBo
-QIfKmRYQNbPZ10S44lGd3hZlX7FiKa/DBaT+5++4eJiIvfV21K2jPrbwCkHtd3+W
-i533qM9Zf58HxDQ9OyeQTCmOkdNlDoa6onrrG9SOkUkybLvqsEZoCwvj7aW/1BhM
-Py+TdP3wvkyTjtJ0fH4jk603W/T5gQ==
-=wwQk
------END PGP SIGNATURE-----
-
---A3iaA4igre8crzyb--
+Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
