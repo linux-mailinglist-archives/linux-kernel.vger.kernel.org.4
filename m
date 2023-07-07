@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA8D74AC0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E044E74ABFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjGGHiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S232413AbjGGHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjGGHiF (ORCPT
+        with ESMTP id S229684AbjGGHfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:38:05 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7619B2;
-        Fri,  7 Jul 2023 00:38:02 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5EDF124E1AC;
-        Fri,  7 Jul 2023 15:37:48 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
- 2023 15:37:48 +0800
-Received: from [192.168.125.128] (113.72.145.114) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
- 2023 15:37:47 +0800
-Message-ID: <a664ad04-561d-5060-6e69-10f79c1398d0@starfivetech.com>
-Date:   Fri, 7 Jul 2023 15:34:40 +0800
+        Fri, 7 Jul 2023 03:35:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F401FCE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:35:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3916617BB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:35:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3787EC433CA;
+        Fri,  7 Jul 2023 07:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688715319;
+        bh=ngiEgkYK7ySolai9wW68canKG3JxLVmENycSOl9PzLU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oxeXnpDhClySaU6OWlU7dZSI5c6p79N+YHy2XZfHg/VpD5U+Pobs5W0IuRX0k8T5+
+         pyptW7rPvsuoFeW37J0fSXj6SI4Hc6f4Z0cPAsmyVaiwPgOHZguLFjvt7dbEaBNVKx
+         h0nGy+NdQ1HYAZCcCUg7vT3PNbOqNb2dqbN7Qj4mGyoNe/uj9Mx5K2WqWeHgaNRfSk
+         IepdqSYaVm0+1BVdpNt79mJkoMDmbjZyfhU4/8meJ2bzCTNy9axKdKgtzkq+5Y/7Wn
+         Unhi+g4vqzVlhbaKS33h/CBfkh7vyxtnrvNQmxhuRL+Hx11jkl8xdNh/MXvsdtD6uc
+         ix61AaZSTc05A==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qHg0G-0004Mn-1k;
+        Fri, 07 Jul 2023 09:35:44 +0200
+Date:   Fri, 7 Jul 2023 09:35:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
+Message-ID: <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related
- functions
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Samin Guo <samin.guo@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230706082928.10869-1-paul@crapouillou.net>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <20230706082928.10869-1-paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.114]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,67 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/6 16:29, Paul Cercueil wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+On Wed, Jul 05, 2023 at 01:57:23PM +0100, Srinivas Kandagatla wrote:
+> dB range for HPHL and HPHR gains are from +6dB to -30dB in steps of
+> 1.5dB with register values range from 0 to 24.
 > 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
+> Current code maps these dB ranges incorrectly, fix them to allow proper
+> volume setting.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Fixes: e8ba1e05bdc0("ASoC: codecs: wcd938x: add basic controls")
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 > ---
->  drivers/watchdog/starfive-wdt.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
+>  sound/soc/codecs/wcd938x.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-> index 8058fca4d05d..7c8a1c5e75be 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
->  	starfive_wdt_pm_stop(&wdt->wdd);
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  static int starfive_wdt_suspend(struct device *dev)
->  {
->  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-> @@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
->  
->  	return starfive_wdt_start(wdt);
->  }
-> -#endif /* CONFIG_PM_SLEEP */
->  
-> -#ifdef CONFIG_PM
->  static int starfive_wdt_runtime_suspend(struct device *dev)
->  {
->  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-> @@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
->  
->  	return starfive_wdt_enable_clock(wdt);
->  }
-> -#endif /* CONFIG_PM */
->  
->  static const struct dev_pm_ops starfive_wdt_pm_ops = {
-> -	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-> -	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
-> +	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-> +	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+> index faa15a5ed2c8..3a3360711f8f 100644
+> --- a/sound/soc/codecs/wcd938x.c
+> +++ b/sound/soc/codecs/wcd938x.c
+> @@ -210,7 +210,7 @@ struct wcd938x_priv {
 >  };
 >  
->  static const struct of_device_id starfive_wdt_match[] = {
-> @@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
->  	.shutdown = starfive_wdt_shutdown,
->  	.driver = {
->  		.name = "starfive-wdt",
-> -		.pm = &starfive_wdt_pm_ops,
-> +		.pm = pm_ptr(&starfive_wdt_pm_ops),
->  		.of_match_table = starfive_wdt_match,
->  	},
->  };
+>  static const SNDRV_CTL_TLVD_DECLARE_DB_MINMAX(ear_pa_gain, 600, -1800);
+> -static const SNDRV_CTL_TLVD_DECLARE_DB_MINMAX(line_gain, 600, -3000);
+> +static const DECLARE_TLV_DB_SCALE(line_gain, -3000, 150, -3000);
 
-Great, Thank you for the improvements.
+This looks wrong, and indeed that forth argument appears to be a mute
+flag. I guess that one should have been 0 (false) here?
 
-Best regards,
-Xingyu Wu
+Headphone output also appears to be way too loud by default with this
+patch (alone) applied. Perhaps it's just the default mixer settings need
+to be updated to match?
+
+It looks like you're inverting the scale above. Perhaps that's intended,
+but some more details in the commit message as to what was wrong and
+what you intended to do would have been good.
+
+Johan
