@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CE674A8BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DFD74A8C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjGGCF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
+        id S232163AbjGGCG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjGGCFZ (ORCPT
+        with ESMTP id S229470AbjGGCGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:05:25 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4DF19B7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:05:23 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-26-156-107.bstnma.fios.verizon.net [108.26.156.107])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 36724dQa006186
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 22:04:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1688695484; bh=TsNvuPyUlL4Y8qN5hDRwSDMRTqYJrjD+Crx5PjiM7RE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=llAFptV0qus49wG9N9aii4eNOKcqrXwVjpnI1N2cKbafVw4DSo5wumqZHKa8iwbvP
-         8lxGmujROmsufDc364Ddv7gM9ebx71J+3CemcGOFwhyi2nG00fKxuR3Hye3C+EWcBC
-         8H+Yw9vmC6QMwl2CqpcUrn53eNsjmzfxH8RKMAZcRDWmCOkmHzIBPHgWXoIfHN8817
-         V4JXv5mkGrCt+XZmwui2KGFH3fag1jyDyvrL9kkF2ghRnPg6RuvKIAevSTdJI+AH77
-         Vqx4Z4SILF7Oji89JZDoxRBfGfTsgOUOl/BE3hqLVRx1ycLLx2rymWFuLf1uXNHyhX
-         E1QbjSr2iuvmw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 9914215C0294; Thu,  6 Jul 2023 22:04:39 -0400 (EDT)
-Date:   Thu, 6 Jul 2023 22:04:39 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Josef Bacik <josef@toxicpanda.com>, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, djwong@kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
-        bfoster@redhat.com, jack@suse.cz, andreas.gruenbacher@gmail.com,
-        brauner@kernel.org, peterz@infradead.org,
-        akpm@linux-foundation.org, dhowells@redhat.com
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230707020439.GM1178919@mit.edu>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+        Thu, 6 Jul 2023 22:06:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD1510EA;
+        Thu,  6 Jul 2023 19:06:52 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QxxWq4x28zMqMj;
+        Fri,  7 Jul 2023 10:03:35 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 10:06:49 +0800
+Subject: Re: [PATCH] mm/memcg: remove definition of MEM_CGROUP_ID_MAX when
+ !CONFIG_MEMCG
+To:     Muchun Song <muchun.song@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>, <cgroups@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <20230706112820.2393447-1-linmiaohe@huawei.com>
+ <892B507C-CFE8-4792-BA5F-3C698290A8EE@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <61ce2910-f3de-cfb7-bdd3-546ade0cb6f3@huawei.com>
+Date:   Fri, 7 Jul 2023 10:06:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <892B507C-CFE8-4792-BA5F-3C698290A8EE@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,72 +58,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 01:38:19PM -0400, Kent Overstreet wrote:
-> You, the btrfs developers, got started when Linux filesystem teams were
-> quite a bit bigger than they are now: I was at Google when Google had a
-> bunch of people working on ext4, and that was when ZFS had recently come
-> out and there was recognition that Linux needed an answer to ZFS and you
-> were able to ride that excitement. It's been a bit harder for me to get
-> something equally ambitions going, to be honest.
+On 2023/7/7 9:47, Muchun Song wrote:
+> 
+> 
+>> On Jul 6, 2023, at 19:28, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> MEM_CGROUP_ID_MAX is only used when CONFIG_MEMCG is configured. Remove
+>> unneeded !CONFIG_MEMCG variant.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> MEM_CGROUP_ID_MAX is also only used in mem_cgroup_alloc(), maybe you also
+> could move it from memcontrol.h to memcontrol.c. And define it as:
+> 
+> #define MEM_CGROUP_ID_MAX ((1U << MEM_CGROUP_ID_SHIFT) - 1)
+> 
+> I am not suggesting defining it as USHRT_MAX, because if someone changes
+> MEM_CGROUP_ID_SHIFT in the future, then MEM_CGROUP_ID_MAX will not updated
+> accordingly.
 
-Just to set the historical record straight, I think you're mixing up
-two stories here.
+Looks sensible to me. Do you suggest squashing above changes into the current patch
+or a separate patch is preferred?
 
-*Btrfs* was started while I was at the IBM Linux Technology Center,
-and it was because there were folks from more than one companies that
-were concerned that there needed to be an answer to ZFS.  IBM hosted
-that meeting, but ultimately, never did contribute any developers to
-the btrfs effort.  That's because IBM had a fairly cold, hard
-examination of what their enterprise customers really wanted, and
-would be willing to pay $$$, and the decision was made at a corporate
-level (higher up than the Linux Technology Center, although I
-participated in the company-wide investigation) that *none* of OS's
-that IBM supported (AIX, zOS, Linux, etc.) needed ZFS-like features,
-because IBM's customers didn't need them.  The vast majority of what
-paying customers' workloads at the time was to run things like
-Websphere, and Oracle and DB/2, and these did not need fancy
-snapshots.  And things like integrity could be provided at other
-layers of the storage stack.
+> 
+> For this patch, LGTM.
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-As far as Google was concerned, yes, we had several software engineers
-working on ext4, but it had nothing to do with ZFS.  We had a solid
-business case for how replacing ext2 with ext4 (in nojournal mode,
-since the cluster file system handled data integrity and crash
-recovery) would save the company $XXX millions of dollars in storage
-TCO (total cost of ownership) dollars per year.
+Thanks for review and suggestion.
 
-In any case, at neither company was a "sense of excitement" something
-which drove the technical decisions.  It was all about Return on
-Investment (ROI).  As such, that's driven my bias towards ext4
-maintenance.
 
-I view part of my job is finding matches between interesting file
-system features that I would find technically interesting, and which
-would benefit the general ext4 user base, and specific business cases
-that would encourage the investment of several developers on file
-system technologies.
-
-Things like case insensitive file names, fscrypt, fsverity, etc.,
-where all started *after* I had found a business case that would
-interest one or more companies or divisions inside Google to put
-people on the project.  Smaller projects can get funded on the
-margins, sure.  But for anything big, that might require the focused
-attention of one or more developers for a quarter or more, I generally
-find the business case first, and often, that will inform the
-requirements for the feature.  In other words, not only am I ext4's
-maintainer, I'm also its product manager.
-
-Of course, this is not the only way you can drive technology forward.
-For example, at Sun Microsystems, ZFS was driven just by the techies,
-and initially, they hid the fact that the project was taking place,
-not asking the opinion of the finance and sales teams.  And so ZFS had
-quite a lot of very innovative technologies that pushed the industry
-forward, including inspiring btrfs.  Of course, Sun Microsystems
-didn't do all that well financially, until they were forced to sell
-themselves to the highest bidder.  So perhaps, it might be that this
-particular model is one that other companies, including IBM, Red Hat,
-Microsoft, Oracle, Facebook, etc., might choose to avoid emulating.
-
-Cheers,
-
-					- Ted
