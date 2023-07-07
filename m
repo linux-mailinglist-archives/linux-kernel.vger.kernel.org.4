@@ -2,84 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9012474B789
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F90E74B78C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjGGT5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S232076AbjGGT6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjGGT5O (ORCPT
+        with ESMTP id S231788AbjGGT6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:57:14 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778EC1FEF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:57:08 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-345d2b936c2so2581515ab.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 12:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688759828; x=1691351828;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mgLH4x6SYCM3FO+eSHQqZ04OTA4A5LMIJOwD5iZGGk8=;
-        b=cAhHHR31cXZokqKFqFUU6LpiBxlJylyjK9v28qKYzx6+AzyKuhMfsw097GTDBDySuU
-         nZSPnwCOpTx84jS/jzqemPck6uTOrYjRiLH6PqGIzbuplG74B9PvL0gZ/lbJsGkc/Qmg
-         v95XSITioq9vER0belBMjKUyd4+6OgLDn7GXUQ3DB7eoPEUG/idT2dwk11+P0T+b+C+v
-         18W52rDVmcdWknEXzsdEwN4jrFXy5hwPt6WJvR2Ig2GFBRgYDG7aX+adZeDVFVA6Xf6l
-         i0gyB/47Uxd5hTQMemH1ImSN3E4JKvptKPOnagts19kEX2M4xqy1ui41tfEXLp/RfSN4
-         JkUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688759828; x=1691351828;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mgLH4x6SYCM3FO+eSHQqZ04OTA4A5LMIJOwD5iZGGk8=;
-        b=goqcJeJA/uP9LVNxi16t9GVvLraUXD/T3TUb6pw3w0PCgZzYHQo7r28yc7YOzpP+2N
-         6JreJv2EeSIHiDMPufRhP5xcm/9sTpiwPPM4yBxga/WqIftHt1ldU0yYlxLj+bdlqz2G
-         aZrFVv/wNA6hjR+Qf5OZvYWm4h/Vi1g3uWMFDl1h2f+ocjg3M9DNTT6Jdl120RVNbEe2
-         18Za4KXyJFmjfKaxmMIAyIImXa4B41RajPOvZ2RU+6dYqRNiLyA8XxYgakBERUfxpqFm
-         O4mta/GV2mTAypchcB88BcIZ1ACElO7lS0BEO+Chfl/qf9fO65uNmr8eCzc8gwEArXwH
-         bqYA==
-X-Gm-Message-State: ABy/qLaAf01c+Tu+rVxY5zNH47ec1T4aKyk/JLRAOPZIKGVVxNusT4K8
-        PR+ALmGnQS/D5Su7FA9JY2uNyA==
-X-Google-Smtp-Source: APBJJlG9mOrjG7Jm5uecyJPocz/Abk/1Gj8yaswJkv16M++bqWqAr+rWaqErxmKgB8rkhKCWxaHyTg==
-X-Received: by 2002:a05:6602:3993:b0:780:c6bb:ad8d with SMTP id bw19-20020a056602399300b00780c6bbad8dmr8772671iob.0.1688759827735;
-        Fri, 07 Jul 2023 12:57:07 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id u16-20020a02c950000000b0042b85d6e125sm900567jao.24.2023.07.07.12.57.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 12:57:07 -0700 (PDT)
-Message-ID: <42294e31-9cc8-3c5a-c28f-cfa3854fbe69@kernel.dk>
-Date:   Fri, 7 Jul 2023 13:57:06 -0600
+        Fri, 7 Jul 2023 15:58:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E87519A5
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688759872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xSvAWe0AbfxlQd6ChnkxMAuhPvkStpZHDRjDCilD0FY=;
+        b=XUQp6iXEKRf2Iuo0sA94+ux62pQvAzyoztQ3GAy/nCNgPHK0pMOjnMCr7oJkT7lJL3ztc5
+        QjI0WdDy+qsScAtjS6A7yNoz1vT1JXHzm3064gCEBdQ2H1k50NauZM4HMV7yb8+9vDWF7r
+        75vGXj78y+8NNePyClHfGYNPXyZi80g=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-491-TG5PUHubPpu3k0TjR7rIIQ-1; Fri, 07 Jul 2023 15:57:50 -0400
+X-MC-Unique: TG5PUHubPpu3k0TjR7rIIQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 11FCC3C0E207;
+        Fri,  7 Jul 2023 19:57:50 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-165.bos.redhat.com [10.18.17.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 925124087C6A;
+        Fri,  7 Jul 2023 19:57:49 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Phil Auld <pauld@redhat.com>
+Subject: [PATCH v5 0/2] Fix nohz_full vs cfs bandwidth
+Date:   Fri,  7 Jul 2023 15:57:46 -0400
+Message-Id: <20230707195748.2918490-1-pauld@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
- forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read
- side?)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     =?UTF-8?Q?Ahelenia_Ziemia=c5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>,
-        David Howells <dhowells@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
- <20230626-vorverlegen-setzen-c7f96e10df34@brauner>
- <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
- <20230626-fazit-campen-d54e428aa4d6@brauner>
- <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
- <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
- <20230707-konsens-ruckartig-211a4fb24e27@brauner>
- <CAHk-=whHXogGiPkGFwQQBtn364M4caVNcBTs7hLNfa_X67ouzA@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=whHXogGiPkGFwQQBtn364M4caVNcBTs7hLNfa_X67ouzA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,74 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/23 1:10?PM, Linus Torvalds wrote:
-> On Fri, 7 Jul 2023 at 10:21, Christian Brauner <brauner@kernel.org> wrote:
->>
->> Forgot to say, fwiw, I've been running this through the LTP splice,
->> pipe, and ipc tests without issues. A hanging reader can be signaled
->> away cleanly with this.
-> 
-> So that patch still has a couple of "wait for this" cases remaining.
-> 
-> In particular, when we do a read, and we do have pipe buffers, both
-> the read() system call and a number of internal splice functions will
-> go "Ahh, I have data", and then do pipe_buf_confirm() and read it.
-> 
-> Which then results in pipe_buf_confirm() blocking. It now blocks
-> interruptibly, which is much nicer, but several of these users *could*
-> just do a non-blocking confirmation instead, and wait for pipe
-> readability.
-> 
-> HOWEVER, that's slightly less trivial than you'd expect, because the
-> "wait for readability" needs to be done without the pipe lock held -
-> so you can't actually check the pipe buffer state at that point (since
-> you need the pipe lock to look up the buffer).
-> 
-> That's true even of "trivial" cases like actual user-space "read()
-> with O_NONBLOCK and poll()" situations.
-> 
-> Now, the solution to all this is *fairly* straightforward:
-> 
->  (a) don't use "!pipe_empty()" for a readability check.
-> 
->      We already have "pipe_readable()", but it's hidden in fs/pipe.c,
-> so all the splice() code ended up writing the "does this pipe have
-> data" using "!pipe_empty()" instead.
-> 
->  (b) make "pipe_buf_confirm()" take a "non-blocking" boolean argument,
-> and if it is non-blocking but hits one of those blocked pages, set
-> "pipe->not_ready", and return -EAGAIN.
-> 
->      This is ok, because "pipe_buf_confirm()" is always under the pipe
-> lock, and we'll just clear "pipe->not_ready" under the pipe lock after
-> finalizing all those pages (and before waking up readers)
-> 
->  (c) make "pipe_wait_readable()" and "poll()" know about this all, so
-> that we wait properly for a pipe that was not ready to become ready
-> 
-> This all makes *most* users deal properly with these blocking events.
-> In particular, things like splice_to_socket() can now do the whole
-> proper "wait without holding the pipe lock" sequence, even when the
-> pipe is not empty, just in this blocked state.
-> 
-> This *may* also make all the cases Jens had with io_uring and splicing
-> JustWork(tm).
+This is v5 of patch 2/2 which is adding code to prevent
+the tick from being stopped when the single running task
+has bandwidth limits. Discussions had led to the idea of
+adding a bit to task_struct to help make this decision.
 
-Exactly! I was reading this thread with excitement just now, would be
-nice to get rid of that kludge.
+There was some complexity with doing it in the task which
+is  avoided by using something in the cfs_rq. Looking 
+into that lead me to the hierarchical_quota field in the 
+cfs_bandwith struct. We spend a good deal of effort
+updating (or trying to, see patch 1/2) that value for
+the whole task_group tree when a quota is set/changed.
 
-> NOTE! NOTE! NOTE! Once more, this "feels right to me", and I'd argue
-> that the basic approach is fairly straightfoward. The patch is also
-> not horrendous. It all makes a fair amount of sense. BUT! I haven't
-> tested this, and like the previous patch, I really would want people
-> to think about this a lot.
-> 
-> Comments? Jens?
+This new version first fixes that value to be meaningful
+for cgroupv2 and then leverages it to make the decisions
+about blocking the tick_stop. 
 
-I'll take a closer look at this, but won't be until Monday most likely.
-But the approach seems sane, and going in a more idiomatic direction
-than before. So seems promising.
+Phil Auld (2):
+  sched, cgroup: Restore meaning to hierarchical_quota
+  Sched/fair: Block nohz tick_stop when cfs bandwidth in use
+
+ kernel/sched/core.c     | 23 ++++++++++++++---
+ kernel/sched/fair.c     | 56 ++++++++++++++++++++++++++++++++++++++---
+ kernel/sched/features.h |  2 ++
+ kernel/sched/sched.h    |  3 ++-
+ 4 files changed, 76 insertions(+), 8 deletions(-)
 
 -- 
-Jens Axboe
+2.31.1
 
