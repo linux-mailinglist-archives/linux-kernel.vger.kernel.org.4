@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB8774AB26
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6ED74AB28
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjGGGdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 02:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S231912AbjGGGdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 02:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjGGGdl (ORCPT
+        with ESMTP id S231675AbjGGGdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 02:33:41 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1491FC9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:33:39 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-992ca792065so186613066b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:33:39 -0700 (PDT)
+        Fri, 7 Jul 2023 02:33:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6039E1FD7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:33:41 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98e39784a85so510839166b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688711618; x=1691303618;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1W0PEIp2Z9O+/54QqCCTT57o1K3eq1ISnoT3iEkIG4=;
-        b=Ji+vp0Rf7GnjgL/ryIs4zj5psew4pNxA0cs8GFKCCt4E8wh0ztH3y1BPKo8A6Kr5CR
-         Ssh+LsCi0ePSmFr6nLgrN73CA2MGcMaJIrfjpg/jM7aBYCC7QstmFfJTkw+D0od4S9CL
-         fK43PEE9RS+gtkkroUsHTHuZrB4sb2u/XCw+wBuIGWfkCD0UmOg1nuWcTcVNjB4Y9lBJ
-         XtIxHr9Fe2nvRTn/d7F6dMPhkKhvs3PfzluZg24d0Fqx/c5HsGGJBo/U2On4yiyKU7x2
-         jekKm74a17Mc0FGyAaRQgC6mRyV6NJcMAVHpqNP/NinRZ88jHW6ZblkBXu+EnDP5KDX+
-         smmA==
+        d=linaro.org; s=google; t=1688711620; x=1691303620;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2gUQGEXg3NwnR1jgA5o6lKwJkp5ln8c5jv9qArkjhok=;
+        b=sk8oCY0kkiy/wQ/T3PrdyQFle55qJrxLJxCZ13gyQrboPMWCk6ag5YJu24CBFoVacr
+         E1FkxQTtKjBt5g4vZF9jTM4+MgIVlyTd64hzg21sNVcsIl62YD7WycredOLAT5i7L7If
+         JTxIJmky9s2SSiiugSYOZVbgAVp9PlkQ0h6Slm7erVmqSxMTPkNvtCzufmFX+8UCHBkY
+         qBG7dEUj9oHyRpcAFm5GbSMB2H673Cjbl6kWvdjfWNHKaXQFVPkK2urVkRfIuOV/ls28
+         O034wkpRgYcMfqZ+fbyybp2R2I7/uyaBs2Ug1bVVPBFIFlpuEGAacghxN8nWmEMrhFUU
+         NcnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688711618; x=1691303618;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e1W0PEIp2Z9O+/54QqCCTT57o1K3eq1ISnoT3iEkIG4=;
-        b=CH6oYhL5vXL6mBbBRHmNs5OTl8kY/3NjWwsJZ89Bd6u40787udscaO/RyY0Xta7qe8
-         l4i+Wz4/WTHrLBFfsVzve2JmQNsoFX+vmL2zZeAv7pIrsCk33IJoiOUq+HkIzmrlAxni
-         afbqX5v7nHqhHQNmG+UZLOwC+v84JMLsd4Aq8pkuqIgGwe/XcYVbMxOeTJYRl5Mp+QAj
-         OmfQX7NOgyW9BIXVV3IyRUqLFbZz3SNX8cdt9m/3KZH2Yqk6CI4MptbYh7j+4tj663OW
-         z33raKcqyELbVUYM3OAYA92YuXA8Mlb8wtqPdycRTrJ5gwMRLnbsaSFT/3fj+APFZhfK
-         FU+w==
-X-Gm-Message-State: ABy/qLaC0DQxNkGu+c36ugQdAUGwSTSTmnYmB7MmNhCrmMitH77RnvBa
-        QAS+O6Y7q+bF9KITI08tTwkEUA==
-X-Google-Smtp-Source: APBJJlF+EQzCxlpuXGk2rbnxNVji72DYX39eyT/xKUrWXgFmOCWnAUyM7SHtccK5tqS/eFhQSlzXhw==
-X-Received: by 2002:a17:907:75f6:b0:94f:449e:75db with SMTP id jz22-20020a17090775f600b0094f449e75dbmr3160188ejc.52.1688711618411;
-        Thu, 06 Jul 2023 23:33:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688711620; x=1691303620;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2gUQGEXg3NwnR1jgA5o6lKwJkp5ln8c5jv9qArkjhok=;
+        b=HXwlQuhIkzbxjkBQZdx9B1Lc+t6kCaKVO7n7Dle5vpnXfCHz/1CQA2zbq5zW54yW5G
+         i1YwM0wDUzorEBr2/iQFJBF21bQ6vjx8Dhy+cNAeoU7JFH3hBEeb7fa/3Nqj3rLFHbnq
+         rUAPcg4WNYhVroqYgGpB/+JtboqwHLS9ybj2+ddB5O85BFfwUgNv4HzZ5c12bCD+5Kqb
+         Kv3w6pJcIzwhWAUAOzRKOugDAPG4ra/j9AEqzvtG76oiwRrRHNkI3VvLI00nNjJ+gBM3
+         rfPciJXRvRL8V3/oaTZSvfRGIOVdxqtnom2LcUufctMD1gfmpB187KVPTuY5sg7zl4mF
+         Gh6w==
+X-Gm-Message-State: ABy/qLayAvTs1rcLl+7ScBlzQRRCMV5j2BC5lqnCPaNKkHoPljRj/WyX
+        yyLBw2tPNMb4k7nlfbHK5pheRA==
+X-Google-Smtp-Source: APBJJlH96voHWJqw+7toXEhMMh6gynJRIf12CWBLI1qv1yuI+YA1nsA1kJzUNcK9ofFPaNqH2e0hIQ==
+X-Received: by 2002:a17:907:d15:b0:992:103c:43fa with SMTP id gn21-20020a1709070d1500b00992103c43famr7378130ejc.30.1688711619777;
+        Thu, 06 Jul 2023 23:33:39 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s24-20020a170906169800b0096f7500502csm1724803ejd.199.2023.07.06.23.33.37
+        by smtp.gmail.com with ESMTPSA id s24-20020a170906169800b0096f7500502csm1724803ejd.199.2023.07.06.23.33.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 23:33:38 -0700 (PDT)
+        Thu, 06 Jul 2023 23:33:39 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -56,17 +57,20 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH v2 1/3] arm64: dts: rockchip: correct wifi interrupt flag in eaidk-610
-Date:   Fri,  7 Jul 2023 08:33:33 +0200
-Message-Id: <20230707063335.13317-1-krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>
+Subject: [PATCH v2 2/3] arm64: dts: rockchip: correct wifi interrupt flag in Rock Pi 4B
+Date:   Fri,  7 Jul 2023 08:33:34 +0200
+Message-Id: <20230707063335.13317-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230707063335.13317-1-krzysztof.kozlowski@linaro.org>
+References: <20230707063335.13317-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,20 +86,22 @@ logical behavior behind the name "ACTIVE_xxx", this is:
   ACTIVE_HIGH  => IRQ_TYPE_LEVEL_HIGH
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Tested-by: Christopher Obbard <chris.obbard@collabora.com>
 
 ---
 
 Changes in v2:
 1. Correct subject and commit msg (active low -> high)
+2. Add Tb tag
 ---
- arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts b/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
-index d1f343345f67..6464ef4d113d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts
-@@ -773,7 +773,7 @@ brcmf: wifi@1 {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts
+index cec3b7b1b947..8a17c1eaae15 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts
+@@ -31,7 +31,7 @@ brcmf: wifi@1 {
  		compatible = "brcm,bcm4329-fmac";
  		reg = <1>;
  		interrupt-parent = <&gpio0>;
