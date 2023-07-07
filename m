@@ -2,179 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E85074B3A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AAB74B3AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbjGGPH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S233318AbjGGPHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjGGPH0 (ORCPT
+        with ESMTP id S230443AbjGGPHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:07:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF41AA;
-        Fri,  7 Jul 2023 08:07:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 17FEA22119;
-        Fri,  7 Jul 2023 15:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688742444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0jBwtBpLbUYf3LM/NKeO7/tkOZqs6OnE7Weht0MWPrI=;
-        b=xluMGhDdEdmQeD+p/G424NqPsXOIlT+3mv1x6X1osGvJ3UtYv4eR8Z9hvEMK4sSu263i+g
-        jkks3cMZtj9usi/sIIKk20R8Z0rtbdVeDu3vNktGWsUrquU2KNkiCIRB4lzFDN0pSGHy0j
-        GTn/XAkEe+MEk8QAChmQrjEuByk2Yho=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688742444;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0jBwtBpLbUYf3LM/NKeO7/tkOZqs6OnE7Weht0MWPrI=;
-        b=rEfCQ/agpsvog4ZlEopmxTzX/5gj+tQq+MPw6XcBUGsKTZBazGjAtwumTYwD/3VE44eS3j
-        HlhwcMHTkD3kOBBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BCA60139E0;
-        Fri,  7 Jul 2023 15:07:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Uff6LCsqqGTDCQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 07 Jul 2023 15:07:23 +0000
-Message-ID: <6a6baea8-c7ca-1399-97d8-b6cb8263829c@suse.de>
-Date:   Fri, 7 Jul 2023 17:07:22 +0200
+        Fri, 7 Jul 2023 11:07:31 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CB8102;
+        Fri,  7 Jul 2023 08:07:30 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-78362f574c9so72390239f.3;
+        Fri, 07 Jul 2023 08:07:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688742449; x=1691334449;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A4Q5tL8Q206IfLWZzoyH9okE3A87KjcmbofZ6mTqsrc=;
+        b=G8NFi5xAZCgGJpEvTrtysa7VnjH+I4eLVyfhTxyEBfINbplilid9v3V5dFMIUZXtT7
+         idR219T/89gkbH6qHq2+yW1ZAAXKXkiuuJYcAdzwottTTgPlCZRIQbAyALylu/hZ87Aa
+         NjgBpTFJNpdKPOuceUAWDO/rl3CcwbU3OoMoz8hg7f6IMp/n0awJOCdwFW24IitBTZWj
+         3tTjaO3GUSh2YbQp+4AIPjBn83jRcEOr1t5p8Oql886ZYB0Ud3+5q2NrDYd76J9gHfOc
+         t92w2qCU1AX0itjHlddiQgq6kKR9RPoxbrUvo8RbPBsBKu7noHr8aSK3cUPuKEx1DGy6
+         2qLg==
+X-Gm-Message-State: ABy/qLZUPYb6j3p4hkQB9hiGsurDxGJoaa1gDHFjMwGX4PS8y38nlLA0
+        GrZNfWSo/jy9GXgq8ePt/g==
+X-Google-Smtp-Source: APBJJlGXPgJvWDBMVTtll9d+6jXrCeBMq5n/RgRvf6i5hIMGSlbfHY2db0Kk6Tahydw1jOWNCMMfRg==
+X-Received: by 2002:a5e:c016:0:b0:785:d017:c16f with SMTP id u22-20020a5ec016000000b00785d017c16fmr6407660iol.14.1688742449091;
+        Fri, 07 Jul 2023 08:07:29 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id f11-20020a056638022b00b0042b149aeccdsm1361629jaq.104.2023.07.07.08.07.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 08:07:28 -0700 (PDT)
+Received: (nullmailer pid 311406 invoked by uid 1000);
+        Fri, 07 Jul 2023 15:07:24 -0000
+Date:   Fri, 7 Jul 2023 09:07:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
+        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
+        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
+        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
+        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        arnd@kernel.org, richardcochran@gmail.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
+Message-ID: <20230707150724.GA112541-robh@kernel.org>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
+ <20230706150906.GB3858320-robh@kernel.org>
+ <d13f935c-568b-3c0d-8e7d-006b7d4e7d50@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/4] vgacon: rework Kconfig dependencies
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
-References: <20230707095415.1449376-1-arnd@kernel.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------c0jLEo3DrAkPUh5E8Wczlh0f"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d13f935c-568b-3c0d-8e7d-006b7d4e7d50@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------c0jLEo3DrAkPUh5E8Wczlh0f
-Content-Type: multipart/mixed; boundary="------------9S6fOdJUZ2bMs72BaYhzIUVD";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: javierm@redhat.com, linux-fbdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
- dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
- Helge Deller <deller@gmx.de>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
- linux-csky@vger.kernel.org
-Message-ID: <6a6baea8-c7ca-1399-97d8-b6cb8263829c@suse.de>
-Subject: Re: [PATCH 1/4] vgacon: rework Kconfig dependencies
-References: <20230707095415.1449376-1-arnd@kernel.org>
-In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
+On Fri, Jul 07, 2023 at 03:43:15PM +0200, Gatien CHEVALLIER wrote:
+> 
+> 
+> On 7/6/23 17:09, Rob Herring wrote:
+> > On Wed, Jul 05, 2023 at 07:27:54PM +0200, Gatien Chevallier wrote:
+> > > Introduce a firewall framework that offers to firewall consumers different
+> > > firewall services such as the ability to check their access rights against
+> > > their firewall controller(s).
+> > > 
+> > > The firewall framework offers a generic API that is defined in firewall
+> > > controllers drivers to best fit the specificity of each firewall.
+> > > 
+> > > There are various types of firewalls:
+> > > -Peripheral firewalls that filter accesses to peripherals
+> > > -Memory firewalls that filter accesses to memories or memory regions
+> > > -Resource firewalls that filter accesses to internal resources such as
+> > > reset and clock controllers
+> > 
+> > How do resource firewalls work? Access to registers for some clocks in a
+> > clock controller are disabled? Or something gates off clocks/resets to
+> > a block?
+> 
+> To take a practical example:
+> 
+> A clock controller can be firewall-aware and have its own firewall registers
+> to configure. To access a clock/reset that is handled this way, a device
+> would need to check this "resource firewall". I thought that for these kinds
+> of hardware blocks, having a common API would help.
 
---------------9S6fOdJUZ2bMs72BaYhzIUVD
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+We already have the concept of 'protected clocks' which are ones 
+controlled by secure mode which limits what Linux can do with them. I 
+think you should extend this mechanism if needed and use the existing 
+clock/reset APIs for managing resources.
 
-SGksDQoNCmZvciB0aGUgd2hvbGUgc2VyaWVzOg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFpp
-bW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFz
-DQoNCkFtIDA3LjA3LjIzIHVtIDExOjUyIHNjaHJpZWIgQXJuZCBCZXJnbWFubjoNCj4gRnJv
-bTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4gDQo+IFRoZSBsaXN0IG9mIGRl
-cGVuZGVuY2llcyBoZXJlIGlzIHBocmFzZWQgYXMgYW4gb3B0LW91dCwgYnV0IHRoaXMgaXMg
-bWlzc2luZw0KPiBhIGxvdCBvZiBhcmNoaXRlY3R1cmVzIHRoYXQgZG9uJ3QgYWN0dWFsbHkg
-c3VwcG9ydCBWR0EgY29uc29sZXMsIGFuZCBzb21lDQo+IG9mIHRoZSBlbnRyaWVzIGFyZSBz
-dGFsZToNCj4gDQo+ICAgLSBwb3dlcnBjIHVzZWQgdG8gc3VwcG9ydCBWR0EgY29uc29sZXMg
-aW4gdGhlIG9sZCBhcmNoL3BwYyBjb2RlYmFzZSwgYnV0DQo+ICAgICB0aGUgbWVyZ2VkIGFy
-Y2gvcG93ZXJwYyBuZXZlciBkaWQNCj4gDQo+ICAgLSBhcm0gbGlzdHMgZm9vdGJyaWRnZSwg
-aW50ZWdyYXRvciBhbmQgbmV0d2luZGVyLCBidXQgbmV0d2luZGVyIGlzIGFjdHVhbGx5DQo+
-ICAgICBwYXJ0IG9mIGZvb3RicmlkZ2UsIGFuZCBpbnRlZ3JhdG9yIGRvZXMgbm90IGFwcGVh
-ciB0byBoYXZlIGFuIGFjdHVhbA0KPiAgICAgVkdBIGhhcmR3YXJlLCBvciBsaXN0IGl0IGlu
-IGl0cyBBVEFHIG9yIERULg0KPiANCj4gICAtIG1pcHMgaGFzIGEgZmV3IHBsYXRmb3JtcyAo
-amF6eiwgc2lieXRlLCBhbmQgc25pKSB0aGF0IGluaXRpYWxpemUNCj4gICAgIHNjcmVlbl9p
-bmZvLCBvbiBldmVyeXRoaW5nIGVsc2UgdGhlIGNvbnNvbGUgaXMgc2VsZWN0ZWQgYnV0IGNh
-bm5vdA0KPiAgICAgYWN0dWFsbHkgd29yay4NCj4gDQo+ICAgLSBjc2t5LCBoZXhnYWdvbiwg
-bG9vbmdhcmNoLCBuaW9zMiwgcmlzY3YgYW5kIHh0ZW5zYSBhcmUgbm90IGxpc3RlZA0KPiAg
-ICAgaW4gdGhlIG9wdC1vdXQgdGFibGUgYW5kIGRlY2xhcmUgYSBzY3JlZW5faW5mbyB0byBh
-bGxvdyBidWlsZGluZw0KPiAgICAgdmdhX2NvbiwgYnV0IHRoaXMgY2Fubm90IHdvcmsgYmVj
-YXVzZSB0aGUgY29uc29sZSBpcyBuZXZlciBzZWxlY3RlZC4NCj4gDQo+IFJlcGxhY2UgdGhp
-cyB3aXRoIGFuIG9wdC1pbiB0YWJsZSB0aGF0IGxpc3RzIG9ubHkgdGhlIHBsYXRmb3JtcyB0
-aGF0DQo+IHJlbWFpbi4gVGhpcyBpcyBlZmZlY3RpdmVseSB4ODYsIHBsdXMgYSBjb3VwbGUg
-b2YgaGlzdG9yaWMgd29ya3N0YXRpb24NCj4gYW5kIHNlcnZlciBtYWNoaW5lcyB0aGF0IHJl
-dXNlZCBwYXJ0cyBvZiB0aGUgeDg2IHN5c3RlbSBhcmNoaXRlY3R1cmUuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiAtLS0NCj4gICBk
-cml2ZXJzL3ZpZGVvL2NvbnNvbGUvS2NvbmZpZyB8IDYgKysrLS0tDQo+ICAgMSBmaWxlIGNo
-YW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3ZpZGVvL2NvbnNvbGUvS2NvbmZpZyBiL2RyaXZlcnMvdmlkZW8vY29u
-c29sZS9LY29uZmlnDQo+IGluZGV4IGEyYTg4ZDQyZWRmMGMuLjQ3YzQ5OGRlZmMyMTEgMTAw
-NjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlkZW8vY29uc29sZS9LY29uZmlnDQo+ICsrKyBiL2Ry
-aXZlcnMvdmlkZW8vY29uc29sZS9LY29uZmlnDQo+IEBAIC03LDkgKzcsOSBAQCBtZW51ICJD
-b25zb2xlIGRpc3BsYXkgZHJpdmVyIHN1cHBvcnQiDQo+ICAgDQo+ICAgY29uZmlnIFZHQV9D
-T05TT0xFDQo+ICAgCWJvb2wgIlZHQSB0ZXh0IGNvbnNvbGUiIGlmIEVYUEVSVCB8fCAhWDg2
-DQo+IC0JZGVwZW5kcyBvbiAhNHh4ICYmICFQUENfOHh4ICYmICFTUEFSQyAmJiAhTTY4SyAm
-JiAhUEFSSVNDICYmICAhU1VQRVJIICYmIFwNCj4gLQkJKCFBUk0gfHwgQVJDSF9GT09UQlJJ
-REdFIHx8IEFSQ0hfSU5URUdSQVRPUiB8fCBBUkNIX05FVFdJTkRFUikgJiYgXA0KPiAtCQkh
-QVJNNjQgJiYgIUFSQyAmJiAhTUlDUk9CTEFaRSAmJiAhT1BFTlJJU0MgJiYgIVMzOTAgJiYg
-IVVNTA0KPiArCWRlcGVuZHMgb24gQUxQSEEgfHwgSUE2NCB8fCBYODYgfHwgXA0KPiArCQko
-QVJNICYmIEFSQ0hfRk9PVEJSSURHRSkgfHwgXA0KPiArCQkoTUlQUyAmJiAoTUlQU19NQUxU
-QSB8fCBTSUJZVEVfQkNNMTEyWCB8fCBTSUJZVEVfU0IxMjUwIHx8IFNJQllURV9CQ00xeDgw
-IHx8IFNOSV9STSkpDQo+ICAgCXNlbGVjdCBBUEVSVFVSRV9IRUxQRVJTIGlmIChEUk0gfHwg
-RkIgfHwgVkZJT19QQ0lfQ09SRSkNCj4gICAJZGVmYXVsdCB5DQo+ICAgCWhlbHANCg0KLS0g
-DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
-b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkw
-NDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBB
-bmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJl
-cmcpDQo=
+> > 
+> > It might make more sense for "resource" accesses to be managed within
+> > those resource APIs (i.e. the clock and reset frameworks) and leave this
+> > framework to bus accesses.
+> > 
+> 
+> Okay, I'll drop this for V2 if you find that the above explaination do not
+> justify this.
+> 
+> > > A firewall controller must be probed at arch_initcall level and register
+> > > to the framework so that consumers can use their services.
+> > 
+> > initcall ordering hacks should not be needed. We have both deferred
+> > probe and fw_devlinks to avoid that problem.
+> > 
+> 
+> Greg also doubts this.
+> 
+> Drivers like reset/clock controllers drivers (core_initcall level) will have
+> a dependency on the firewall controllers in order to initialize their
+> resources. I was not sure how to manage these dependencies.
+> 
+> Now, looking at init/main.c, I've realized that core_initcall() level comes
+> before arch_initcall() level...
+> 
+> If managed by fw_devlink, the feature-domains property should be supported
+> as well I suppose? I'm not sure how to handle this properly. I'd welcome
+> your suggestion.
 
---------------9S6fOdJUZ2bMs72BaYhzIUVD--
+DT parent/child child dependencies are already handled which might be 
+enough for you. Otherwise, adding a new provider/consumer binding is a 
+couple of lines to add the property names. See drivers/of/property.c.
 
---------------c0jLEo3DrAkPUh5E8Wczlh0f
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> > > ---
+> > >   MAINTAINERS                               |   5 +
+> > >   arch/arm64/Kconfig.platforms              |   1 +
+> > >   drivers/bus/Kconfig                       |  10 +
+> > >   drivers/bus/Makefile                      |   1 +
+> > >   drivers/bus/stm32_firewall.c              | 252 ++++++++++++++++++++++
+> > >   drivers/bus/stm32_firewall.h              |  83 +++++++
+> > 
+> > Why something stm32 specific? We know there are multiple platforms
+> > wanting something in this area. Wasn't the last attempt common?
+> > 
+> > For a common binding, I'm not eager to accept anything new with only 1
+> > user.
+> > 
+> 
+> Last attempt was common for the feature-domain bindings. The system-bus
+> driver was ST-specific. I don't know if other platforms needs this kind
+> of framework. Are you suggesting that this framework should be generic? Or
+> that this framework should have a st-specific property?
 
------BEGIN PGP SIGNATURE-----
+Ah right, the posting for SCMI device permissions was the binding only. 
+The binding should be generic and support more than 1 user. That somewhat 
+implies a generic framework, but not necessarily.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSoKioFAwAAAAAACgkQlh/E3EQov+Av
-JA//QnTJ1dwQAnEXlldiURfrGPorNI75lYqV20fxNajAJDwvWnl6pHkB0LPysSaQYiJEf5nAwcjm
-2OX8nkHJUQSvTGlaeaBElhEXluMbxzFiMLP9zoWfPh0AiyXG7NB8HunNlEB7fCIdlBvStTXz5Pfs
-KaA+GshCKd7cOvp0LMOTZzY5kERZAq7uyc4E9AIrj4FSQHdaTeASdsiThgni7135x3hJ01/JS8qo
-nHlDFNEbWSpGf7Oz+0TKqwEMRa4zL9najM/OllMTRQMKWirHthfNTgY//JVTh1HADoKBkUtmjGSc
-oybH3jzaGjTvnNk+NbMpefoth5DDDrLAjzkF6PAzVnZVPIE0b674sdlA5Z99lEWA8uDsR96dWScf
-SFzxZxITrYahaiJ3feSci43aeZDyOn/DSFwgo4+cPKdPd1DDAQ2pbpUkeB8tHVfZH7FZoWRcX+5J
-zT2xzoXSVOuE19KfVW/AVGwTYgPgdlFOH77PwNlfVAqwGVQQXfwhDQQ7uURtV6OjavOi3EcAqOFr
-JJBTH2xUn5zgyuLw9IFwssw6gIdafn0nuaWsYOmJUjPsfiXRiMKZG96t6AJtNwcxYQh/mcUPF1FG
-RmOE423rFG9clEQIAR2NcOaI+vcjMJ4kUAnUzIFCoisTkmUAT9YZAEN+5K1f9NbXnPhpgQgKcQt4
-EDg=
-=YXVc
------END PGP SIGNATURE-----
+> I've oriented this firewall framework to serve ST purpose. There may be a
+> need for other platforms but I'm not sure that this framework serves them
+> well. One can argue that it is quite minimalist and covers basic purposes of
+> a hardware firewall but I would need more feedback from other vendors to
+> submit it as a generic one.
 
---------------c0jLEo3DrAkPUh5E8Wczlh0f--
+We already know there are at least 2 users. Why would we make the 2nd 
+user refactor your driver into a common framework?
+
+[...]
+
+> > > +int stm32_firewall_get_firewall(struct device_node *np,
+> > > +				struct stm32_firewall *firewall)
+> > > +{
+> > > +	struct stm32_firewall_controller *ctrl;
+> > > +	struct of_phandle_args args;
+> > > +	u32 controller_phandle;
+> > > +	bool match = false;
+> > > +	size_t i;
+> > > +	int err;
+> > > +
+> > > +	if (!firewall)
+> > > +		return -EINVAL;
+> > > +
+> > > +	/* The controller phandle is always the first argument of the feature-domains property. */
+> > > +	err = of_property_read_u32(np, "feature-domains", &controller_phandle);
+> > 
+> > Why do you need to parse the property twice?
+> > 
+> 
+> The first parsing is to have the first argument, which is the controller
+> phandle. The second parsing is here to get the firewall arguments based on
+> the number of arguments defined by #feature-domain-cells. Maybe using
+> of_property_read_u32_array() would be better. 
+
+No. It's not a u32 array. It's a phandle+args property, so you should 
+only use phandle+args APIs.
+
+> I did not want to close the
+> door for supporting several feature domain controllers, hence multiple
+> phandles. of_parse_phandle_with_args() seemed fine for this purpose but the
+> phandle is parsed out.
+
+There's an iterator for handling multiple phandle+args cases.
+
+Rob
