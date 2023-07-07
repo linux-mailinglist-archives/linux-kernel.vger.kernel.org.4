@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D494A74B9BB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48FE74B9BC
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjGGW5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 18:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S232454AbjGGW5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 18:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjGGW4z (ORCPT
+        with ESMTP id S231617AbjGGW44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 18:56:55 -0400
+        Fri, 7 Jul 2023 18:56:56 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DCC1997
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:56:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17611992
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688770614; x=1720306614;
+  t=1688770615; x=1720306615;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GtHT20V983sr8n3O3e7GEiqoyfK5vMEHBMPj3byjlrM=;
-  b=DW44dRz7PP7qXGzmS0qu36AVxPOX/tWHCYhmHNNhwBvXgo02ykRyF853
-   +KJ0gjLdLL7cT9Gx4OXQfcNWcWvTXRLdh3BhgG4+UleE7IbUmb2nYmfcE
-   HvF0z40i1c/wwagL/P1FqKleyPzyznrO7VkgKy6qsUhGbRBIJJURQ2pXY
-   9jSX97WBjxejfoHbgBZfKVzgMovp82Ia1GKrvvleuvOBSgui43EoBjZt1
-   GuIhAhZxFhX8FBBvO2CnGNDlBQAcuZ+6JaF0iM+3RXbFllfSOS6UizjGP
-   mC651krSCGxP0tjfX3mhjg8nCx22KmGcvt9ZyJfyf31wowwmTkywVbYXC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="427683460"
+  bh=FpAHkI8xLSWqEP7PVVGD4WuKrAVFt/AYDCvhVA2Njec=;
+  b=YNpKETcjCbhcRR9uwK34ZQCicxfZrrR9/UvFNZs3uChyx4vqqf9V7qbC
+   kijiWvwgWePN/eWnw+aN0aVmufoVccOR8eEZN/gt1s5Y+GhTPfiMUabLZ
+   2hGvnMsbJUfoB7ONab8LU/TIjnd+qo+E0xDL8r1g2wC5jSummbgk4aNFT
+   MpQealJrJwZCQkyEhx79wBmZQv9CMoNoMmOL4qALAbgTM+79hP9moD/li
+   EX0RasOpts7MDtTkjZW0kkwCMih4vyyPLsDEnAvaN5leDtk3w/K5gQMPB
+   NOwYW1i7DLccCfWa9Oa0sN+gsyVNZ9zDobNhKIgpQjvEEdFERMrk5gwl0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="427683479"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="427683460"
+   d="scan'208";a="427683479"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 15:56:54 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 15:56:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="714176664"
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="714176670"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="714176664"
+   d="scan'208";a="714176670"
 Received: from b04f130c83f2.jf.intel.com ([10.165.154.98])
-  by orsmga007.jf.intel.com with ESMTP; 07 Jul 2023 15:56:54 -0700
+  by orsmga007.jf.intel.com with ESMTP; 07 Jul 2023 15:56:55 -0700
 From:   Tim Chen <tim.c.chen@linux.intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Tim C Chen <tim.c.chen@linux.intel.com>,
@@ -62,9 +62,9 @@ Cc:     Tim C Chen <tim.c.chen@linux.intel.com>,
         Yicong Yang <yangyicong@hisilicon.com>,
         Barry Song <v-songbaohua@oppo.com>,
         Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: [Patch v3 2/6] sched/topology: Record number of cores in sched group
-Date:   Fri,  7 Jul 2023 15:57:01 -0700
-Message-Id: <04641eeb0e95c21224352f5743ecb93dfac44654.1688770494.git.tim.c.chen@linux.intel.com>
+Subject: [Patch v3 3/6] sched/fair: Implement prefer sibling imbalance calculation between asymmetric groups
+Date:   Fri,  7 Jul 2023 15:57:02 -0700
+Message-Id: <4eacbaa236e680687dae2958378a6173654113df.1688770494.git.tim.c.chen@linux.intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1688770494.git.tim.c.chen@linux.intel.com>
 References: <cover.1688770494.git.tim.c.chen@linux.intel.com>
@@ -82,57 +82,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tim C Chen <tim.c.chen@linux.intel.com>
 
-When balancing sibling domains that have different number of cores,
-tasks in respective sibling domain should be proportional to the number
-of cores in each domain. In preparation of implementing such a policy,
-record the number of tasks in a scheduling group.
+In the current prefer sibling load balancing code, there is an implicit
+assumption that the busiest sched group and local sched group are
+equivalent, hence the tasks to be moved is simply the difference in
+number of tasks between the two groups (i.e. imbalance) divided by two.
+
+However, we may have different number of cores between the cluster groups,
+say when we take CPU offline or we have hybrid groups.  In that case,
+we should balance between the two groups such that #tasks/#cores ratio
+is the same between the same between both groups.  Hence the imbalance
+computed will need to reflect this.
+
+Adjust the sibling imbalance computation to take into account of the
+above considerations.
 
 Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
 ---
- kernel/sched/sched.h    |  1 +
- kernel/sched/topology.c | 10 +++++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ kernel/sched/fair.c | 41 +++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 37 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 3d0eb36350d2..5f7f36e45b87 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1860,6 +1860,7 @@ struct sched_group {
- 	atomic_t		ref;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index f636d6c09dc6..f491b94908bf 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9372,6 +9372,41 @@ static inline bool smt_balance(struct lb_env *env, struct sg_lb_stats *sgs,
+ 	return false;
+ }
  
- 	unsigned int		group_weight;
-+	unsigned int		cores;
- 	struct sched_group_capacity *sgc;
- 	int			asym_prefer_cpu;	/* CPU of highest priority in group */
- 	int			flags;
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 6d5628fcebcf..6b099dbdfb39 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1275,14 +1275,22 @@ build_sched_groups(struct sched_domain *sd, int cpu)
- static void init_sched_groups_capacity(int cpu, struct sched_domain *sd)
- {
- 	struct sched_group *sg = sd->groups;
-+	struct cpumask *mask = sched_domains_tmpmask2;
- 
- 	WARN_ON(!sg);
- 
- 	do {
--		int cpu, max_cpu = -1;
-+		int cpu, cores = 0, max_cpu = -1;
- 
- 		sg->group_weight = cpumask_weight(sched_group_span(sg));
- 
-+		cpumask_copy(mask, sched_group_span(sg));
-+		for_each_cpu(cpu, mask) {
-+			cores++;
-+			cpumask_andnot(mask, mask, cpu_smt_mask(cpu));
-+		}
-+		sg->cores = cores;
++static inline long sibling_imbalance(struct lb_env *env,
++				    struct sd_lb_stats *sds,
++				    struct sg_lb_stats *busiest,
++				    struct sg_lb_stats *local)
++{
++	int ncores_busiest, ncores_local;
++	long imbalance;
 +
- 		if (!(sd->flags & SD_ASYM_PACKING))
- 			goto next;
++	if (env->idle == CPU_NOT_IDLE || !busiest->sum_nr_running)
++		return 0;
++
++	ncores_busiest = sds->busiest->cores;
++	ncores_local = sds->local->cores;
++
++	if (ncores_busiest == ncores_local) {
++		imbalance = busiest->sum_nr_running;
++		lsub_positive(&imbalance, local->sum_nr_running);
++		return imbalance;
++	}
++
++	/* Balance such that nr_running/ncores ratio are same on both groups */
++	imbalance = ncores_local * busiest->sum_nr_running;
++	lsub_positive(&imbalance, ncores_busiest * local->sum_nr_running);
++	/* Normalize imbalance and do rounding on normalization */
++	imbalance = 2 * imbalance + ncores_local + ncores_busiest;
++	imbalance /= ncores_local + ncores_busiest;
++
++	/* Take advantage of resource in an empty sched group */
++	if (imbalance == 0 && local->sum_nr_running == 0 &&
++	    busiest->sum_nr_running > 1)
++		imbalance = 2;
++
++	return imbalance;
++}
++
+ static inline bool
+ sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
+ {
+@@ -10230,14 +10265,12 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 		}
  
+ 		if (busiest->group_weight == 1 || sds->prefer_sibling) {
+-			unsigned int nr_diff = busiest->sum_nr_running;
+ 			/*
+ 			 * When prefer sibling, evenly spread running tasks on
+ 			 * groups.
+ 			 */
+ 			env->migration_type = migrate_task;
+-			lsub_positive(&nr_diff, local->sum_nr_running);
+-			env->imbalance = nr_diff;
++			env->imbalance = sibling_imbalance(env, sds, busiest, local);
+ 		} else {
+ 
+ 			/*
+@@ -10424,7 +10457,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 	 * group's child domain.
+ 	 */
+ 	if (sds.prefer_sibling && local->group_type == group_has_spare &&
+-	    busiest->sum_nr_running > local->sum_nr_running + 1)
++	    sibling_imbalance(env, &sds, busiest, local) > 1)
+ 		goto force_balance;
+ 
+ 	if (busiest->group_type != group_overloaded) {
 -- 
 2.32.0
 
