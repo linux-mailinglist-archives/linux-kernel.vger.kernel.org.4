@@ -2,78 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C5574ACB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A3A74ACB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjGGIUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S232893AbjGGIUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbjGGIUa (ORCPT
+        with ESMTP id S232849AbjGGIUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:20:30 -0400
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3021D1FDA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:20:29 -0700 (PDT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-262d69faef9so2236893a91.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:20:29 -0700 (PDT)
+        Fri, 7 Jul 2023 04:20:53 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216711FE9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:20:50 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-314417861b9so1633716f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688718048; x=1691310048;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7nX8phUtgvJlXBdE7HbRkDLu02J23oMaWSNoummNpM=;
+        b=ZvRIDUsv9vIYR3vOfIKZHZ/QP+RFnql63YTQ2nv/Djpc5JuPK9rESNbVRWm4JJB6Hw
+         kcxszPOe05wTw7dGH+e55op5+Lr9kOqpXCsbic8MTApQWi5qmCy5fQDI/Xo2MRKTRByh
+         FOhDdF54NLDI8XZDEM0Co03nzublpIdqEbZhkFNvP9vIkM4dPSASny6nALE5HEU6jsLm
+         ksl64aDAdJG5c3N9TsdmZqKF5riLzoXId8iPug1/hJaIJdM9upbbnKUZiNfOK63FHvz7
+         /KH6Ss2y7OAGJ17mySEv4H1UoCYj9Wdgdq8ouvYEXgh7vdJ+dIxAsZYU/TDqUXryYE4U
+         u4PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688718028; x=1691310028;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uN1UEoiyjNN/U7zWTps4glZc/qi7ZNLVVS2aoUJ2q4A=;
-        b=e/galWEtcom+9MzH07YqPhoxZFdpEGpQq6SjF+ANHg3sHfMaus40DpGDyHiD+aEHhk
-         uxNSS5xuCO+LxQXsmMcnzLcY38/7uSCVByY9wuu/lutOl60ftprptM2Hnh9V7wwCROmg
-         RSPm28kcOvAm7Aq5RWcDKPp6LC8UoMblZx6JBXpBbFOZlgPPXqDFAMg94xRk6k1pZ53P
-         ZvRlbCcjSh96Ial4+JuxuTsXMskSrwEzTMK0JJSZUAdfHz3IjsD1LqWEjAg1foa6YGBc
-         KWM8aoJmcV/SLSJ/8eeaAsu1O+NEEOfktkAgaqLr/QVx/tWDfUxsW4aDp4JGzgVnst0k
-         D1ew==
-X-Gm-Message-State: ABy/qLbBROcfVaAjuvHJcSs89sYgp3ONzEOdnmJ8DzqG6cm3Ertm4NiO
-        x1LJ4WYapMh6vZyOnpiGKo8mcMHRTNnhuE5AskrRBD8702/R
-X-Google-Smtp-Source: APBJJlE53elBOc0PVBkPt5sMuDbxYXfNijnU6gTgY9iSg9CUfuKQG7NUjF7iYEWUsnBRxcEyGfvev30rDbJTXm2Ub6F9tIUO/Zk8
+        d=1e100.net; s=20221208; t=1688718048; x=1691310048;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P7nX8phUtgvJlXBdE7HbRkDLu02J23oMaWSNoummNpM=;
+        b=hOe1kPMNwWu76hpX6OtcWgMasTEdIQEk78nqGSaszsmDRcxBUIOHLhEyHg8Lx9F3LH
+         twgGRdcYQevgO9MGSBMNhsrEO8dh5l/PmAs0uX0MmacgeDbq8Kpb507PjR37D+8DExxt
+         WoMaEnRV5q5pzBRnRkKZ0dHCL59kbIcLWyHBxQzJdiKJ24RvrOMT6Iq5aGeRZ1FcxLHI
+         +PV6qTJ8wLBuoTGQRAzF9m7TcQ5UyhprYfCHRdcfRA4Jx0GA6/X9zDok/LWXuFm1Lj9r
+         ereFr49Mu2MeQVhxZGh3Yvw4uzpFIXL52zV9CxKEn3lxQjv5sDb8r52ZQkh+jFFDXwvR
+         TLyQ==
+X-Gm-Message-State: ABy/qLZI0mUCxaVaN+34uN0Svv9+UoJ3vlP/s2PTogQC2zDtKyzhbqek
+        AV8E2UBVmj4DzrHREPAploQRbA==
+X-Google-Smtp-Source: APBJJlHuX5vVM/UKRZ/aziETXd4ETuHeeEBeYfXppfJI2XzCYX/DyG4sM35yPGMIok5s9ak2Lm7IHQ==
+X-Received: by 2002:adf:f711:0:b0:30e:3da5:46e5 with SMTP id r17-20020adff711000000b0030e3da546e5mr3619353wrp.59.1688718048582;
+        Fri, 07 Jul 2023 01:20:48 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id a5-20020adffb85000000b00313e4d02be8sm3824395wrr.55.2023.07.07.01.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 01:20:48 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v2 0/2] dt-bindings: pinctrl: amlogic,meson-pinctrl-common:
+ add missing properties
+Date:   Fri, 07 Jul 2023 10:20:43 +0200
+Message-Id: <20230707-topic-amlogic-upstream-pinctrl-fix-bindings-v2-0-2160060446d7@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:ce8f:b0:262:e5e2:e5af with SMTP id
- g15-20020a17090ace8f00b00262e5e2e5afmr3633167pju.5.1688718028524; Fri, 07 Jul
- 2023 01:20:28 -0700 (PDT)
-Date:   Fri, 07 Jul 2023 01:20:28 -0700
-In-Reply-To: <2224784.1688717214@warthog.procyon.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000037530605ffe14e41@google.com>
-Subject: Re: [syzbot] [ext4?] general protection fault in ext4_finish_bio
-From:   syzbot <syzbot+689ec3afb1ef07b766b2@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, boqun.feng@gmail.com,
-        dhowells@redhat.com, herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, longman@redhat.com, mingo@redhat.com,
-        netdev@vger.kernel.org, peterz@infradead.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANvKp2QC/52NQQ6DIBREr2JY9zeIVtqueo/GBSLiTxTIh5o2h
+ ruXeoSuJm8mmbezaAhNZPdqZ2Q2jOhdAXGqmJ6VswZwLMwEFw2XvIPkA2pQ6+JtyVeIiYxaIaD
+ TiRaY8A0DuhGdjaDFIFvdNfIqBSuPgUzZD9uzLzxjTJ4+h3yrf+1/nq0GDpNqWzFelDK3+rGgU
+ +TPnizrc85fDZYshucAAAA=
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1669;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=FyjsoTudixydC0nNMdjfVMOeLJOWeJk3gdhNn8W9tE4=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkp8revvGyh8h+u4H2kef4fC9pa+RedPwKKGzXjMPa
+ X3zF+TSJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKfK3gAKCRB33NvayMhJ0SUdD/
+ 9MuupduiPkUIemehndLwaP/EAV+x1a1xZQnKh3dtyAmELloWg7peQif3zlirC5c1BdctZJNfUF7lWe
+ cSk3/9cFZdd+0FJ/ANgi2kadN+qJ6utMiOO9Na6SzHGnc/JHf68s9963iqzJ7wICkhMK88pz47r/ys
+ tMKZWoqiv/Fr47twhZH0fLTf7OMslDxgDrWqtCcX5o4aWE+sYwTzmQkhJbsEx03LzlVvgX6isPa1Zq
+ 4kA1WIRF1IqvMXZo/PSDWaADi3njfrRPUuEFU1a0cIYMell5xK46CGFrLaN82s9o9Gd8IwBaeK2kNt
+ xEHi4UwBMGP8IwuVca0nQG8UmWa4qbS+kQ9pDMI9nt0dlDslO840gQrh5MAmm/2udaBCsG+JdyUzLY
+ M/52rnAqJMrOPRj/xQkbeIyWOSn5BMpKFnErnU8cTXYWDbQ7bJrOqYrz+SgDIcsjfKk8iM94s3lA3E
+ N8SSJxhx63/GdkI7ztBpkmdPI0F0ouBjPJxf8C11QqDZIE/4Z+HyWdfOVxXn2D2FhU2Rf+QBaFrSOa
+ dUOB9VDTVVeyOamlUfOwIe66aErXGXFvLgsgVmM1cNmtTRMLVlGZQJPB3NICdlq56bRqk67syeG0OU
+ uLi17EtIDg+GERRxYKzcIuEJ77PFMa6hdwUzZDVTvK6IPkVBz21+lNeqIPRQ==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The amlogic DT uses gpio-line-names and gpio-hog, add those
+to the yaml converted pinctrl bindings.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+This will fix the following dtschema check errors:
+arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb: pinctrl@40: bank@40: Unevaluated properties are not allowed ('gpio-line-names', 'usb-hub-hog' were unexpected)
+arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb: pinctrl@4b0: bank@4b0: Unevaluated properties are not allowed ('gpio-line-names' was unexpected)
+..
 
-failed to checkout kernel repo git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/main: failed to run ["git" "fetch" "--force" "f569e972c8e9057ee9c286220c83a480ebf30cc5" "main"]: exit status 128
-fatal: couldn't find remote ref main
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- Added review tags
+- Moved line-names out of common and added min/max items for each bindings
+- Link to v1: https://lore.kernel.org/r/20230706-topic-amlogic-upstream-pinctrl-fix-bindings-v1-0-fa442d5aae91@linaro.org
 
+---
+Neil Armstrong (2):
+      dt-bindings: pinctrl: amlogic,meson-pinctrl: allow gpio-line-names
+      dt-bindings: pinctrl: amlogic,meson-pinctrl-common: allow gpio hogs
 
+ .../devicetree/bindings/pinctrl/amlogic,meson-pinctrl-a1.yaml      | 4 ++++
+ .../devicetree/bindings/pinctrl/amlogic,meson-pinctrl-common.yaml  | 7 +++++++
+ .../bindings/pinctrl/amlogic,meson-pinctrl-g12a-aobus.yaml         | 3 +++
+ .../bindings/pinctrl/amlogic,meson-pinctrl-g12a-periphs.yaml       | 3 +++
+ .../devicetree/bindings/pinctrl/amlogic,meson8-pinctrl-aobus.yaml  | 4 ++++
+ .../devicetree/bindings/pinctrl/amlogic,meson8-pinctrl-cbus.yaml   | 4 ++++
+ 6 files changed, 25 insertions(+)
+---
+base-commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+change-id: 20230706-topic-amlogic-upstream-pinctrl-fix-bindings-c2b74c637872
 
-Tested on:
-
-commit:         [unknown 
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git main
-dashboard link: https://syzkaller.appspot.com/bug?extid=689ec3afb1ef07b766b2
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=136ff1b4a80000
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
