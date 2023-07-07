@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C974A74AF95
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5495674AF99
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjGGLWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
+        id S231953AbjGGLW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjGGLWa (ORCPT
+        with ESMTP id S232577AbjGGLW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:22:30 -0400
+        Fri, 7 Jul 2023 07:22:57 -0400
 Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F771FF6;
-        Fri,  7 Jul 2023 04:22:29 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4faaaa476a9so2824504e87.2;
-        Fri, 07 Jul 2023 04:22:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264182116;
+        Fri,  7 Jul 2023 04:22:53 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso2776821e87.2;
+        Fri, 07 Jul 2023 04:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688728947; x=1691320947;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KZjA1a1Afzs6q7vAiqjeopUm2/pQmTWPahmXLjFLNwg=;
-        b=iK3P6nulx5kICrJoyqmShehCXYzWbkXx4LA+/LJ2S+o2qpnKBYZtPf+QdioNsOdxHF
-         xWB3rJvjxkn59k8hP0uNdizkT62OqXj5oxEht5560RA+6c+HM4jMAhsX5RcHtiu/IVz6
-         7rCMN6ArDyxSP3MTbYsHupPYCTekx3g6AO5kRuNaga2MeFQoXiJmt4Jg0WRmDMnEUymP
-         VkxMf52Ljk4owmZLuU8ECd9NietR0ngAAxJdK3zEnykHaPOiS8+eZZAqNHuBVQ0LWxEk
-         LduG2eDae+PsliDNCQh8LQ75lYBkyjf9G+0VZeZ+6FgKU8K1PUVzvG050Xy8AY1l4D6l
-         sH/Q==
+        d=gmail.com; s=20221208; t=1688728971; x=1691320971;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S63gsi41nElgut5giYC5sHXmkcKRI+eEyk/xCvZ4vzU=;
+        b=PI0eFmI9HOWwTMQIZgWUhEWSsyOCdhR9nlSIj/ZT4vA5K3OEf72r32yrJG8qrUUrH3
+         kgWZdAcZJrjguHPDRqi1vvwiRSzqA2NyEU+WjIVv0pguY3P6DwmjMTPkKWkQ5vu6FdwX
+         XafQbi4fp3dBvKybUJdxVsYvEma2+AzjrQ5YkbqgG0jMcFFp7x71bdUi+e+Z9ez5RSsS
+         WiIRf0UHAY4kCehKGgRBd5ie1NTGLvXPeMSjeZXEZrZpLucJqbwJOT77DKirBsMw9sKf
+         qVdvNoIUUEsAKPBgozA2IouxIUvCDSQepFODY+DBdmxwyW4RArzY0pF9lkp10sEZw25u
+         WjTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688728947; x=1691320947;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZjA1a1Afzs6q7vAiqjeopUm2/pQmTWPahmXLjFLNwg=;
-        b=kK4Fd3YiCTjAKUa93+A77E/JiPXCOGf2iewX6Md1+vpCTdxlZG3wDLk+bL4MmKLl9k
-         VJidw9d+2iXdMeLOwI7DSMcWhWeCaDZz5h5ivRiQs2dvum6trPFwB2Pn6QRT7zjUtdHc
-         F5PomsB4+nQDJK6Tcbt1BR01nccl1dwZoD+lhdS1TFrQxdHWQHYpmJlj5VcCIrIMaZx+
-         j1mnc047+MCorFCIz2NsgG7DyCb5Lt3sbAbmcnDQUk964TaqZhBlpzoz0YaruRBExVnv
-         LRw1NH0byYCVP+igF9XAhQaUmCg5h5xGlxbYgF+plwmnUfY3B69aZnIUrWZRB7rt/LOj
-         hnvg==
-X-Gm-Message-State: ABy/qLa3sw3qIV2th0aJA9Hc1A7b6DvY76Mysd2v4HEZYumsF81g+MKc
-        531czpwsg+y/SiTETMvQHhg=
-X-Google-Smtp-Source: APBJJlF32/MRRb13L0lUA8epvt/PGbReQ1s56ZPqykxUMHTfrQtof+i9wnbh4gtzTlfPgnj7FQUA1Q==
-X-Received: by 2002:a05:6512:464:b0:4fb:97e8:bc25 with SMTP id x4-20020a056512046400b004fb97e8bc25mr3501477lfd.34.1688728947060;
-        Fri, 07 Jul 2023 04:22:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688728971; x=1691320971;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S63gsi41nElgut5giYC5sHXmkcKRI+eEyk/xCvZ4vzU=;
+        b=G0hu9V0BuzZ95TesHy/frLi3O3zcZqp/sHf4mddfZZmT1uMzqrzIqbeMdpWMNr3PSX
+         HYGZoiBWCIzx6dY0P4FSfi+ppF8HNHhRMJxFv5c83IxPbMa3QmgzOE5rKCcfiEaUyEnm
+         G8MweclOGfrdxYsxAQbMSogHGqCWfqjq6QnBB1gKe6Cj53kLQFf8sFUzordx08nNt+jZ
+         UwmobtDfvpN/1LkzQoc6FHf352xIFNGkYyQciV9iIfUvq7ctRFlxn3ATBh78ZEoxyE7J
+         6xs8alECqjKGwzgofpBwhjyIbinJUIaP03ts67UmHLcpuzG7an4ka4HqIfOFvVw92tsX
+         Ah5A==
+X-Gm-Message-State: ABy/qLaBDoQodIc7xlRZNw+Kbu4J8ec0dPFSvUiARO4vr0UWxqGS4qK9
+        Q7eXgYsDoMZeTfVTOmdMYZo=
+X-Google-Smtp-Source: APBJJlGMQF74LWOpArnqyLQiE8MXRT/yHZ6i26veZJudiFy186T+yy8CJ4I8eAOKu3y7O3ihfR44og==
+X-Received: by 2002:a05:6512:6c7:b0:4fb:8eec:ce47 with SMTP id u7-20020a05651206c700b004fb8eecce47mr4167458lff.58.1688728970968;
+        Fri, 07 Jul 2023 04:22:50 -0700 (PDT)
 Received: from dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id q2-20020ac25a02000000b004fb7bb42de4sm644646lfn.58.2023.07.07.04.22.25
+        by smtp.gmail.com with ESMTPSA id b25-20020ac25e99000000b004fb75996493sm638537lfq.284.2023.07.07.04.22.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 04:22:26 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 14:22:14 +0300
+        Fri, 07 Jul 2023 04:22:50 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:22:46 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -60,16 +61,19 @@ Cc:     Jonathan Cameron <jic23@kernel.org>,
         Matti Vaittinen <mazziesaccount@gmail.com>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/3] Support ROHM BU27010 RGBC sensor
-Message-ID: <cover.1688723839.git.mazziesaccount@gmail.com>
+Subject: [PATCH v2 1/3] dt-bindings: iio: ROHM BU27010 RGBC + flickering
+ sensor
+Message-ID: <7b2bb4647be8ff7c551d8efcbe160914bceee669.1688723839.git.mazziesaccount@gmail.com>
+References: <cover.1688723839.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f0lBHn7wM0n6T2zx"
+        protocol="application/pgp-signature"; boundary="aOYtKi0o323/xUOC"
 Content-Disposition: inline
+In-Reply-To: <cover.1688723839.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,71 +81,90 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---f0lBHn7wM0n6T2zx
+--aOYtKi0o323/xUOC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Support ROHM BU27010 RGBC + flickering sensor.
+The ROHM BU27010 is a sensor with 6 photodiodes (red, green, blue, clear,
+IR and flickering detection) with five configurable channels. Red, green
+and flickering detection being always available and two out of the rest
+three (blue, clear, IR) can be selected to be simultaneously measured.
+Typical application is adjusting LCD/OLED backlight of TVs, mobile phones
+and tablet PCs.
 
-Following description copied from commit log:
+Add binding document for ROHM BU27010.
 
-> The ROHM BU27010 is an RGBC sensor with a flickering detection FIFO. The
-> RGBC+IR sensor functionality is largely similar to what the BU27008 has.
-> There are some notable things though:
->  - gain setting is once again new and exotic. Now, there is 6bit gain
->    setting where 4 of the bits are common to all channels and 2 bits
->    can be configured separately for each channel. The BU27010 has
->    similar "1X on other channels vs 2X on IR when selector is 0x0"
->    gain design as BU27008 had. So, we use same gain setting policy for
->    BU27010 as we did for BU27008 - driver sets same gain selector for
->    all channels but shows the gains separately for all channels so users
->    can (at least in theory) detect this 1X vs 2X madness...
->  - BU27010 has suffled all the control register bitfields to new
->    addresses and bit positions while still keeping the register naming
->    same.
->  - Some more power/reset control is added.
->  - FIFO for "flickering detection" is added.
->
-> The control register suffling made this slightly nasty. Still, it is
-> easier for maintenance perspective to add the BU27010 support in BU27008
-> driver because - even though the bit positions/addresses were changed -
-> most of the driver structure can be re-used. Writing own driver for
-> BU27010 would mean plenty of duplicate code albeit a tad more clarity.
-
-This series is done on top of the iio-for-6.5a + this fix-up series:
-https://lore.kernel.org/all/cover.1686648422.git.mazziesaccount@gmail.com/
-
-I didn't spot these fixups from iio git although I think I saw mail
-stating they were applied.
-
-Revision history:
-
-v1 =3D> v2:
- - make vdd-supply required binding.
- - Some re-ordering for struct member init.
- - Some re-ordering for code to get rid of function declarations.
- - Tidy up the mess from patch 2/3.
-   - Refactor parts from 3/3 to 2/3.
-   - Clean-up commented out code and tidy things in general.
-
-Please note: I'll be mostly away from the computer during July. Please,
-take your time reviewing and forgive me if sending follow-up revisions
-is delayed.
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 ---
-
-Matti Vaittinen (3):
-  dt-bindings: iio: ROHM BU27010 RGBC + flickering sensor
-  iio: light: bu27008: add chip info
-  iio: light: bd27008: Support BD27010 RGB
-
- .../bindings/iio/light/rohm,bu27010.yaml      |  49 ++
- drivers/iio/light/rohm-bu27008.c              | 622 ++++++++++++++----
- 2 files changed, 556 insertions(+), 115 deletions(-)
+Revision history:
+v1 =3D> v2:
+  - Drop trailing blank line
+  - Require VDD-supply
+  - Fix subject prefix
+---
+ .../bindings/iio/light/rohm,bu27010.yaml      | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2701=
 0.yaml
 
+diff --git a/Documentation/devicetree/bindings/iio/light/rohm,bu27010.yaml =
+b/Documentation/devicetree/bindings/iio/light/rohm,bu27010.yaml
+new file mode 100644
+index 000000000000..8376d64a641a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/rohm,bu27010.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/rohm,bu27010.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BU27010 color sensor
++
++maintainers:
++  - Matti Vaittinen <mazziesaccount@gmail.com>
++
++description: |
++  The ROHM BU27010 is a sensor with 6 photodiodes (red, green, blue, clear,
++  IR and flickering detection) with five configurable channels. Red, green
++  and flickering detection being always available and two out of the rest
++  three (blue, clear, IR) can be selected to be simultaneously measured.
++  Typical application is adjusting LCD/OLED backlight of TVs, mobile phones
++  and tablet PCs.
++
++properties:
++  compatible:
++    const: rohm,bu27010
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply: true
++
++required:
++  - compatible
++  - reg
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells =3D <1>;
++      #size-cells =3D <0>;
++
++      light-sensor@38 {
++        compatible =3D "rohm,bu27010";
++        reg =3D <0x38>;
++      };
++    };
 --=20
 2.40.1
 
@@ -158,19 +181,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---f0lBHn7wM0n6T2zx
+--aOYtKi0o323/xUOC
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSn9WAACgkQeFA3/03a
-ocXpIQf/efHlfr0i8yGrGK4TBrulAlyuIYElovzNrx1WfT2XtHVskVqsOc2gue8M
-2MqdWbM+xG121YOg8KlzSjWSkB9M/Y/bUfdpe5g3jggcDxGilXjoOtHBFpgAhUEk
-eMIzNhKTU1GgBMxtTdW+jhNW2O3pS1H4qHvopCeVvz6WGj4DCidiMusXU/FX4sYT
-W+oOKBIwId6PKbAooxwtQ+5hJZRU4yiEizP0KmN7DstZGlvUMHDj39ZoOG6y+zbJ
-EGWDeUHUo4GEp3+K4dUzHuNZ0z/B5WARWao9YJRBTfBZ9Z4hO9LiuSIFGDG6QOsl
-BRdoLosMYAm9w6+72LliqP39mTaJwQ==
-=pJVJ
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSn9YYACgkQeFA3/03a
+ocUmfwf+KIdo5sbPTLGyFb3LbbDMLtJRE1wNMeMQvsJz6egqNi2BqmXunUSZJV8J
+4VONhjcPYyOwqeGSsUHWHH3oZHZk8TOFDLIj+ewgkbfmj60nwxc5Rx/3Geb57PvF
+TMTQV5txTksg2aH1D1kKU/ADgB9jNmcsrqCH1rHJwxPSZgZlOhlHaAJ6/d6jOEOp
+Q/cQo/Bfm597CTb/Yk90NawdnLP6C+wrnC0A54evpxO7eiYYTyM1Jd5tPQ3NN8RK
+v/Uzl3H7I/MbQCA1Nx8piHcA4uMzm/mha9/P89q7ocd2WgmVmwnQPsyFZK4jZk3Y
+7HHjKGIGKLqbCTOKi6I4VgzCISCDUA==
+=1AwT
 -----END PGP SIGNATURE-----
 
---f0lBHn7wM0n6T2zx--
+--aOYtKi0o323/xUOC--
