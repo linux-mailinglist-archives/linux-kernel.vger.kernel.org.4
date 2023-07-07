@@ -2,178 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7650E74AED7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7943174AED5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbjGGKkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S232344AbjGGKko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 06:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGKkp (ORCPT
+        with ESMTP id S229458AbjGGKkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:40:45 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CD3172B;
-        Fri,  7 Jul 2023 03:40:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Qy8lq1cCpz9v7Ys;
-        Fri,  7 Jul 2023 18:29:43 +0800 (CST)
-Received: from [10.81.205.205] (unknown [10.81.205.205])
-        by APP1 (Coremail) with SMTP id LxC2BwBn7gmH66dk1qY5BA--.59757S2;
-        Fri, 07 Jul 2023 11:40:19 +0100 (CET)
-Message-ID: <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com>
-Date:   Fri, 7 Jul 2023 12:40:07 +0200
+        Fri, 7 Jul 2023 06:40:42 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD05172B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 03:40:41 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b6ff1a637bso27140311fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 03:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688726439; x=1691318439;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fuYKv/P2hfscQ4ckaEQs4vCgikUTgPM3kKVkqY8o7PA=;
+        b=NBCpTb+tRDe4p0LNC/d21SwbhDl2bg8pxfS8BMjQiJfi+hah37VrmsQxIUoj60EeVu
+         SFPRQoajC9SoKiX58ne1vpnvyJGaSFCTDSF33T9WpjiQauUtBcV/bfTF37DAYcjA/ZtT
+         ASzVaIO2a0YxinmbSEmblaZ4pJvY8L/jrPab8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688726439; x=1691318439;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fuYKv/P2hfscQ4ckaEQs4vCgikUTgPM3kKVkqY8o7PA=;
+        b=Rk+xY2D/vgR7IbtxfPFITjRlKQFSbUOK1ZvhTC/VGGr5OOw571m2wnc0r6UwlzUUMm
+         A8uxKEg4VKhN3oIBBV9v0rTjhYtzCaThtdHQ/vyz60tqfmIqbcYvdgvGhYJsVe4RFCXD
+         Ok60ng7Jr+GxbiJsZvCaKDufyOEsLVEevdKdIhqJJh9FhNibO0SkjQgmTfjHUj1sxn/m
+         cO5vjs02b5hoFDKMKZS2YLt3TgglKDvSxCqu4qXu/Jl7v+EXILJHsQD/ZqSeAObxlCvq
+         hR1eQ5986okxtgxn306o9mYt/7SEjLPUDdZ5Jpwcia1YhdcZ5UixjNinp8iYF+dj9J5G
+         rbQQ==
+X-Gm-Message-State: ABy/qLaLCjKsqDmP7xgGtPXinESgzsjROOvEuJQDT/pGw1WrY76vFZan
+        GtXLU6Qms5eSDs37vsml+/9Z0g==
+X-Google-Smtp-Source: APBJJlHe1iP3pqzcq8B4b4dCrEXHfv0m24s5kBuhCkBqsci8cyZiIGzWjuKzlqjseqGUFnvu44k4QA==
+X-Received: by 2002:a2e:9c06:0:b0:2b4:45bc:7bd with SMTP id s6-20020a2e9c06000000b002b445bc07bdmr3365253lji.4.1688726439330;
+        Fri, 07 Jul 2023 03:40:39 -0700 (PDT)
+Received: from balto.c.googlers.com.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id e18-20020a056402089200b0050bc4600d38sm1904163edy.79.2023.07.07.03.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 03:40:39 -0700 (PDT)
+From:   Fabio Baltieri <fabiobaltieri@chromium.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Fabio Baltieri <fabiobaltieri@chromium.org>
+Subject: [PATCH v2 RESEND] HID: hid-google-stadiaff: add support for Stadia force feedback
+Date:   Fri,  7 Jul 2023 10:40:35 +0000
+Message-ID: <20230707104035.1697204-1-fabiobaltieri@chromium.org>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-To:     Olivier Dion <odion@efficios.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rnk@google.com, Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        gcc@gcc.gnu.org, llvm@lists.linux.dev
-References: <87ttukdcow.fsf@laura>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <87ttukdcow.fsf@laura>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBn7gmH66dk1qY5BA--.59757S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw15tr4xKFy5GrWruF45Wrg_yoWrXr4UpF
-        W8KFy8Kw1kGrn7Zw1kAa1DC3yruan5tay5WFy8Ar1UCw1ag3WIvr47KrZ0vrZrAF4kJw1j
-        qrs0v3W3W34DJFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Add a hid-stadiaff module to support rumble based force feedback on the
+Google Stadia controller. This works using the HID output endpoint
+exposed on both the USB and BLE interface.
 
+Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
+---
 
-Am 7/3/2023 um 9:20 PM schrieb Olivier Dion:
-> Hi all,
->
-> This is a request for comments on extending the atomic builtins API to
-> help avoiding redundant memory barriers.  Indeed, there are
-> discrepancies between the Linux kernel consistency memory model (LKMM)
-> and the C11/C++11 memory consistency model [0].  For example,
-> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
-> have implicit memory barriers before/after the operations [1-2], while
-> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
-> do not have any ordering guarantees of an atomic thread fence
-> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+Hi, this adds rumble support to the stadia controller using the input
+interface. Up to now this has only been implemented at application level
+using hidraw:
 
+https://source.chromium.org/chromium/chromium/src/+/main:device/gamepad/hid_haptic_gamepad.cc
 
-The issues run quite a bit deeper than this. The two models have two 
-completely different perspectives that are quite much incompatible.
-I think all you can really do is bridge the gap at the level of the 
-generated assembly.
-I.e., don't bridge the gap between LKMM and the C11 MCM. Bridge the gap 
-between the assembly code generated by C11 atomics and the one generated 
-by LKMM. But I'm not sure that's really the task here.
+Tested with fftest, works both over USB and BLE.
 
+Changes from v1:
+- renamed the module to hid-google-stadiaff.c
+- added locking for passing the state to the worker code
+- added a module removed check to prevent the work from rescheduling
 
->
-> [...] For example, to make Read-Modify-Write (RMW) operations match
-> the Linux kernel "full barrier before/after" semantics, the liburcu's
-> uatomic API has to emit both a SEQ_CST RMW operation and a subsequent
-> thread fence SEQ_CST, which leads to duplicated barriers in some cases.
+ drivers/hid/Kconfig               |   7 ++
+ drivers/hid/Makefile              |   1 +
+ drivers/hid/hid-google-stadiaff.c | 153 ++++++++++++++++++++++++++++++
+ drivers/hid/hid-ids.h             |   1 +
+ 4 files changed, 162 insertions(+)
+ create mode 100644 drivers/hid/hid-google-stadiaff.c
 
-
-Does it have to though? Can't you just do e.g. an release RMW operation 
-followed by an after_atomic  fence?
-And for loads, a SEQ_CST fence followed by an acquire load? Analogously 
-(but: mirrored) for stores.
-
-
-
->    // Always emit thread fence.
->    __atomic_thread_fence_{before,after}_load(int load_memorder,
->                                              int fence_memorder)
->
->    // NOP for store_memorder == SEQ_CST.
->    // Otherwise, emit thread fence.
->    __atomic_thread_fence_{before,after}_store(int store_memorder,
->                                               int fence_memorder)
->
->     // NOP for clear_memorder == SEQ_CST.
->     // Otherwise, emit thread fence.
->    __atomic_thread_fence_{before,after}_clear(int clear_memorder,
->                                               int fence_memorder)
->
->     // Always NOP.
->    __atomic_thread_fence_{before,after}_rmw(int rmw_memorder,
->                                             int fence_memorder)
-
-
-I currently don't feel comfortable adding such extensions to LKMM (or a 
-compiler API for that matter).
-
-
-You mentioned that the goal is to check some code written using LKMM 
-primitives with TSAN due to some formal requirements. What exactly do 
-these requirements entail? Do you need to check the code exactly as it 
-will be executed (modulo the TSAN instrumentation)? Is it an option to 
-map to normal builtins with suboptimal performance just for the 
-verification purpose, but then run the slightly more optimized original 
-code later?
-
-Specifically for TSAN's ordering requirements, you may need to make 
-LKMM's RMWs into acq+rel with an extra mb, even if all that extra 
-ordering isn't necessary at the assembler level.
-
-
-Also note that no matter what you do, due to the two different 
-perspectives, TSAN's hb relation may introduce false positive data races 
-w.r.t. LKMM.  For example, if the happens-before ordering is guaranteed 
-through pb starting with coe/fre.
-
-Without thinking too hard, it seems to me no matter what fences and 
-barriers you introduce, TSAN will not see this kind of ordering and 
-consider the situation a data race.
-
-(And at least in our own verification methodology for rcu/smr, ordering 
-through fre appears when the rscs reads something that is later 
-overwritten by the writer. Not sure off the top of my head if this fre 
-ordering is what prevents the data race though, or there's some 
-additional ordering that TSAN may also detect.
-
-As a side note, according to LKMM we would also have data races in our 
-critical sections, but I believe use of rcu_dereference would fix that, 
-so you may not experience such data races in your code).
-
-
-best wishes,
-jonas
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 82f64fb31fda..f4f75d8a28ac 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -412,6 +412,13 @@ config HID_GOOGLE_HAMMER
+ 	help
+ 	Say Y here if you have a Google Hammer device.
+ 
++config HID_GOOGLE_STADIA_FF
++	tristate "Google Stadia force feedback"
++	select INPUT_FF_MEMLESS
++	help
++	Say Y here if you want to enable force feedback support for the Google
++	Stadia controller.
++
+ config HID_VIVALDI
+ 	tristate "Vivaldi Keyboard"
+ 	select HID_VIVALDI_COMMON
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 5d37cacbde33..18e9a3afecab 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -55,6 +55,7 @@ obj-$(CONFIG_HID_GFRM)		+= hid-gfrm.o
+ obj-$(CONFIG_HID_GLORIOUS)  += hid-glorious.o
+ obj-$(CONFIG_HID_VIVALDI_COMMON) += hid-vivaldi-common.o
+ obj-$(CONFIG_HID_GOOGLE_HAMMER)	+= hid-google-hammer.o
++obj-$(CONFIG_HID_GOOGLE_STADIA_FF)	+= hid-google-stadiaff.o
+ obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
+ obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
+ obj-$(CONFIG_HID_GYRATION)	+= hid-gyration.o
+diff --git a/drivers/hid/hid-google-stadiaff.c b/drivers/hid/hid-google-stadiaff.c
+new file mode 100644
+index 000000000000..2628099e802c
+--- /dev/null
++++ b/drivers/hid/hid-google-stadiaff.c
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Stadia controller rumble support.
++ *
++ * Copyright 2023 Google LLC
++ */
++
++#include <linux/hid.h>
++#include <linux/input.h>
++#include <linux/slab.h>
++#include <linux/module.h>
++
++#include "hid-ids.h"
++
++#define STADIA_FF_REPORT_ID 5
++
++struct stadiaff_device {
++	struct hid_device *hid;
++	struct hid_report *report;
++	spinlock_t lock;
++	bool removed;
++	uint16_t strong_magnitude;
++	uint16_t weak_magnitude;
++	struct work_struct work;
++};
++
++static void stadiaff_work(struct work_struct *work)
++{
++	struct stadiaff_device *stadiaff =
++		container_of(work, struct stadiaff_device, work);
++	struct hid_field *rumble_field = stadiaff->report->field[0];
++	unsigned long flags;
++
++	spin_lock_irqsave(&stadiaff->lock, flags);
++	rumble_field->value[0] = stadiaff->strong_magnitude;
++	rumble_field->value[1] = stadiaff->weak_magnitude;
++	spin_unlock_irqrestore(&stadiaff->lock, flags);
++
++	hid_hw_request(stadiaff->hid, stadiaff->report, HID_REQ_SET_REPORT);
++}
++
++static int stadiaff_play(struct input_dev *dev, void *data,
++			 struct ff_effect *effect)
++{
++	struct hid_device *hid = input_get_drvdata(dev);
++	struct stadiaff_device *stadiaff = hid_get_drvdata(hid);
++	unsigned long flags;
++
++	spin_lock_irqsave(&stadiaff->lock, flags);
++	if (!stadiaff->removed) {
++		stadiaff->strong_magnitude = effect->u.rumble.strong_magnitude;
++		stadiaff->weak_magnitude = effect->u.rumble.weak_magnitude;
++		schedule_work(&stadiaff->work);
++	}
++	spin_unlock_irqrestore(&stadiaff->lock, flags);
++
++	return 0;
++}
++
++static int stadiaff_init(struct hid_device *hid)
++{
++	struct stadiaff_device *stadiaff;
++	struct hid_report *report;
++	struct hid_input *hidinput;
++	struct input_dev *dev;
++	int error;
++
++	if (list_empty(&hid->inputs)) {
++		hid_err(hid, "no inputs found\n");
++		return -ENODEV;
++	}
++	hidinput = list_entry(hid->inputs.next, struct hid_input, list);
++	dev = hidinput->input;
++
++	report = hid_validate_values(hid, HID_OUTPUT_REPORT,
++				     STADIA_FF_REPORT_ID, 0, 2);
++	if (!report)
++		return -ENODEV;
++
++	stadiaff = devm_kzalloc(&hid->dev, sizeof(struct stadiaff_device),
++				GFP_KERNEL);
++	if (!stadiaff)
++		return -ENOMEM;
++
++	hid_set_drvdata(hid, stadiaff);
++
++	input_set_capability(dev, EV_FF, FF_RUMBLE);
++
++	error = input_ff_create_memless(dev, NULL, stadiaff_play);
++	if (error)
++		return error;
++
++	stadiaff->removed = false;
++	stadiaff->hid = hid;
++	stadiaff->report = report;
++	INIT_WORK(&stadiaff->work, stadiaff_work);
++	spin_lock_init(&stadiaff->lock);
++
++	hid_info(hid, "Force Feedback for Google Stadia controller\n");
++
++	return 0;
++}
++
++static int stadia_probe(struct hid_device *hdev, const struct hid_device_id *id)
++{
++	int ret;
++
++	ret = hid_parse(hdev);
++	if (ret) {
++		hid_err(hdev, "parse failed\n");
++		return ret;
++	}
++
++	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
++	if (ret) {
++		hid_err(hdev, "hw start failed\n");
++		return ret;
++	}
++
++	stadiaff_init(hdev);
++
++	return 0;
++}
++
++static void stadia_remove(struct hid_device *hid)
++{
++	struct stadiaff_device *stadiaff = hid_get_drvdata(hid);
++	unsigned long flags;
++
++	spin_lock_irqsave(&stadiaff->lock, flags);
++	stadiaff->removed = true;
++	spin_unlock_irqrestore(&stadiaff->lock, flags);
++
++	cancel_work_sync(&stadiaff->work);
++	hid_hw_stop(hid);
++}
++
++static const struct hid_device_id stadia_devices[] = {
++	{ HID_USB_DEVICE(USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_STADIA) },
++	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_STADIA) },
++	{ }
++};
++MODULE_DEVICE_TABLE(hid, stadia_devices);
++
++static struct hid_driver stadia_driver = {
++	.name = "stadia",
++	.id_table = stadia_devices,
++	.probe = stadia_probe,
++	.remove = stadia_remove,
++};
++module_hid_driver(stadia_driver);
++
++MODULE_LICENSE("GPL");
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 63545cd307e5..cffd4ac609a0 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -525,6 +525,7 @@
+ #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
+ #define USB_DEVICE_ID_GOOGLE_DON	0x5050
+ #define USB_DEVICE_ID_GOOGLE_EEL	0x5057
++#define USB_DEVICE_ID_GOOGLE_STADIA	0x9400
+ 
+ #define USB_VENDOR_ID_GOTOP		0x08f2
+ #define USB_DEVICE_ID_SUPER_Q2		0x007f
+-- 
+2.40.1.521.gf1e218fcd8-goog
 
