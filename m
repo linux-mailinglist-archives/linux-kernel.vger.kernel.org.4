@@ -2,328 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F96074AC5D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEAE74AC62
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjGGH6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S232135AbjGGH7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbjGGH6A (ORCPT
+        with ESMTP id S231623AbjGGH7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:58:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56332E70;
-        Fri,  7 Jul 2023 00:57:59 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        Fri, 7 Jul 2023 03:59:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED0B1B6;
+        Fri,  7 Jul 2023 00:59:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A0326606FC2;
-        Fri,  7 Jul 2023 08:57:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688716677;
-        bh=wpCN2MraqfrjwJNiynUV8KannPzTI4X03gyxmC+JkbM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Bln0ofoSbwYZi76ZLY/bi4m1Bkkzy6uV7ZhtDIUIdW2k9uufm+y6h1EL3aR4tIAnP
-         b6GiA+LpLHHcig2xie60TXlwPFdAVbTOujWjaLdpgqcDhpmksI9aAGLjWAFXnG64i6
-         ZrQwM8aDpMKX8/pBfcQ4gYKzUcJcs5D/hRls41mnOIPqygGF/gkS6Z0pizbTQYIFhu
-         2Ay3jTeJP1UIfJFJWs/Ue8rfV8sC3U1ZA8/PrqWvuJMqzRdmqajtb5emwIbxJVpxhb
-         lyivE4xprOkWk3r7sUAvd60nManAiGZTRGPnuD8KFP38A0YdIKVh3+7/UBYbASRRDe
-         zI+gYJRGHcaUQ==
-Date:   Fri, 7 Jul 2023 09:57:54 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, alexdeucher@gmail.com, ogabbay@kernel.org,
-        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
- mappings
-Message-ID: <20230707095754.5d365f8e@collabora.com>
-In-Reply-To: <20230706202642.4cbc7227@collabora.com>
-References: <20230629222651.3196-1-dakr@redhat.com>
-        <20230629222651.3196-3-dakr@redhat.com>
-        <20230706202642.4cbc7227@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D76031FE6D;
+        Fri,  7 Jul 2023 07:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1688716744; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HFLQE9L1MZXYwAUTAzY1+nL+XIQNZC3uSrhfR2Cznt0=;
+        b=uSpmqn3mzdudAnHLo2AUSSD8/ginNvzQE8CySIwwRb9jsnz7Vro/X2ccBg07yMeO6cnDlA
+        SdwQOlpnl30zs2gB0CWnKoBKychGGtUOEzgirWvb5wi2mVCDj83PnIjbQN3OCWOyOAWQaa
+        lSChzb2WdHrgbjnJzNdnknzvH0mkmkw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8C06139E0;
+        Fri,  7 Jul 2023 07:59:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Rq6NKsjFp2S/LAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 07 Jul 2023 07:59:04 +0000
+Date:   Fri, 7 Jul 2023 09:59:04 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc:     Sachin Sant <sachinp@linux.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-next@vger.kernel.org
+Subject: Re: [next-20230705] kernel BUG mm/memcontrol.c:3715! (ltp/madvise06)
+Message-ID: <ZKfFyJP2ENnHqkaR@dhcp22.suse.cz>
+References: <7DF50AC5-83AC-4EE1-9422-62D1EA378EE9@linux.ibm.com>
+ <24c0f417-6577-48e6-8eb4-c37be11c5fbb@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <24c0f417-6577-48e6-8eb4-c37be11c5fbb@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jul 2023 20:26:42 +0200
-Boris Brezillon <boris.brezillon@collabora.com> wrote:
-
-> On Fri, 30 Jun 2023 00:25:18 +0200
-> Danilo Krummrich <dakr@redhat.com> wrote:
+On Thu 06-07-23 08:34:05, Thomas Weißschuh wrote:
+> On 2023-07-06 11:41:38+0530, Sachin Sant wrote:
+> > While running LTP tests (madvise06) on IBM Power9 LPAR booted with
+> > 6.4.0-next-20230705 following crash is seen
+> > 
+> > Injecting memory failure for pfn 0x3f79 at process virtual address 0x7fff9b740000
+> > Memory failure: 0x3f79: recovery action for clean LRU page: Recovered
+> > madvise06 (133636): drop_caches: 3
+> > ------------[ cut here ]------------
+> > kernel BUG at mm/memcontrol.c:3715!
+> > Oops: Exception in kernel mode, sig: 5 [#1]
+> > LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=8192 NUMA pSeries
+> > Modules linked in: brd overlay exfat vfat fat xfs loop sctp ip6_udp_tunnel udp_tunnel dm_mod nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 bonding ip_set tls rfkill nf_tables libcrc32c nfnetlink sunrpc pseries_rng vmx_crypto ext4 mbcache jbd2 sd_mod t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse [last unloaded: init_module(O)]
+> > CPU: 10 PID: 133636 Comm: madvise06 Tainted: G O 6.4.0-next-20230705 #1
+> > Hardware name: IBM,8375-42A POWER9 (raw) 0x4e0202 0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
+> > NIP: c00000000054ea88 LR: c00000000028b2a8 CTR: c00000000054e8d0
+> > REGS: c00000029dd7b890 TRAP: 0700 Tainted: G O (6.4.0-next-20230705)
+> > MSR: 8000000000029033 <SF,EE,ME,IR,DR,RI,LE> CR: 28008288 XER: 00000000
+> > CFAR: c00000000054e904 IRQMASK: 0 
+> > GPR00: c00000000028b2a8 c00000029dd7bb30 c000000001431600 c0000002bc978000 
+> > GPR04: c000000002b3b288 0000000000010192 0000000000000000 0000000000000001 
+> > GPR08: c0000000f9abb180 0000000000020000 c0000002bc978580 0000000000000000 
+> > GPR12: c00000000054e8d0 c00000001ec53f00 0000000000000000 0000000000000000 
+> > GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> > GPR20: c00000001b2e6578 0000000000400cc0 000000007fff0000 fffffffffffff000 
+> > GPR24: c00000029dd7bd30 0000000000000000 c00000029dd7bd58 c00000001b2e6568 
+> > GPR28: c00000029dd7bde0 0000000000000001 0000000000000001 c00000001b2e6540 
+> > NIP [c00000000054ea88] mem_cgroup_read_u64+0x1b8/0x1d0
+> > LR [c00000000028b2a8] cgroup_seqfile_show+0xb8/0x160
+> > Call Trace:
+> > [c00000029dd7bb50] [c00000000028b2a8] cgroup_seqfile_show+0xb8/0x160
+> > [c00000029dd7bbc0] [c000000000673ba4] kernfs_seq_show+0x44/0x60
+> > [c00000029dd7bbe0] [c0000000005c4238] seq_read_iter+0x238/0x620
+> > [c00000029dd7bcb0] [c000000000675064] kernfs_fop_read_iter+0x1d4/0x2c0
+> > [c00000029dd7bd00] [c00000000057fbac] vfs_read+0x26c/0x350
+> > [c00000029dd7bdc0] [c00000000058077c] ksys_read+0x7c/0x140
+> > [c00000029dd7be10] [c000000000036900] system_call_exception+0x140/0x350
+> > [c00000029dd7be50] [c00000000000d6a0] system_call_common+0x160/0x2e4
+> > --- interrupt: c00 at 0x7fff9eb41484
+> > NIP: 00007fff9eb41484 LR: 0000000010008540 CTR: 0000000000000000
+> > REGS: c00000029dd7be80 TRAP: 0c00 Tainted: G O (6.4.0-next-20230705)
+> > MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28002282 XER: 00000000
+> > IRQMASK: 0 
+> > GPR00: 0000000000000003 00007fffc33de7d0 00007fff9ec27300 0000000000000013 
+> > GPR04: 00007fffc33e0aa0 0000000000001fff 0000000000000000 0000000000000013 
+> > GPR08: 00007fffc33e0aa0 0000000000000000 0000000000000000 0000000000000000 
+> > GPR12: 0000000000000000 00007fff9ecca3a0 0000000000000000 0000000000000000 
+> > GPR16: ffffffffffffffff 0000000010035520 0000000010035b90 00000000100347a8 
+> > GPR20: 000000001002fb68 0000000010063900 0000000000002000 000000001002fb68 
+> > GPR24: 0000000000000000 000000000000004c 000000001002fa78 00007fffc33e0aa0 
+> > GPR28: 0000000000000013 0000000000000000 0000000000001fff 0000000000001fff 
+> > NIP [00007fff9eb41484] 0x7fff9eb41484
+> > LR [0000000010008540] 0x10008540
+> > --- interrupt: c00
+> > Code: 7fa34800 409effc4 7c0802a6 38600001 f8010030 4bfffdfd e8010030 786383e4 7c0803a6 4bffff6c 7c0802a6 f8010030 <0fe00000> 7c0802a6 f8010030 0fe00000 
+> > ---[ end trace 0000000000000000 ]---
+> > pstore: backend (nvram) writing error (-1)
+> > 
+> > Kernel panic - not syncing: Fatal exception
+> > Rebooting in 10 seconds..
+> > 
+> > Git bisect points to following patch:
+> > 
+> > commit 29bf1eb7d2abbdfc24c4ef7acf7a51b72dc43d2b
+> >     memcg: drop kmem.limit_in_bytes
+> > 
+> > Does the testcase madvise06 need an update?
+> > 
+> > 90         tst_res(TINFO, "\tCached: %ld Kb",
+> > 91                 SAFE_READ_MEMINFO("Cached:") - init_cached);
+> > 92       
+> > 93         print_cgmem("memory.current");
+> > 94         print_cgmem("memory.swap.current");
+> > 95         print_cgmem("memory.kmem.usage_in_bytes”);  <<== this line. 
+> > 96 }
+> > 
+> > If I comment line 95 from the testcase, it completes successfully.
 > 
-> > +#ifdef CONFIG_LOCKDEP
-> > +typedef struct lockdep_map *lockdep_map_p;
-> > +#define drm_gpuva_manager_ext_assert_held(mgr)		\
-> > +	lockdep_assert(lock_is_held((mgr)->ext_lock) != LOCK_STATE_NOT_HELD)
-> > +/**
-> > + * drm_gpuva_manager_set_ext_lock - set the external lock according to
-> > + * @DRM_GPUVA_MANAGER_LOCK_EXTERN
-> > + * @mgr: the &drm_gpuva_manager to set the lock for
-> > + * @lock: the lock to set
-> > + *
-> > + * If @DRM_GPUVA_MANAGER_LOCK_EXTERN is set, drivers need to call this function
-> > + * to provide the lock used to lock linking and unlinking of &drm_gpuvas to the
-> > + * &drm_gem_objects GPUVA list.
-> > + */
-> > +#define drm_gpuva_manager_set_ext_lock(mgr, lock)	\
-> > +	(mgr)->ext_lock = &(lock)->dep_map  
+> The handling for _KMEM was removed from mem_cgroup_read_u64()
+> incorrectly.
+> It is used by the still existing kmem.*usage*_in_bytes in addition to
+> the now removed kmem.*limit*_in_bytes.
+> (And kmem.max_usage_in_bytes, kmem.failcnt)
 > 
-> Okay, so, IIUC, this is the lock protecting the GEM's active mappings
-> list, meaning the lock is likely to be attached to the GEM object. Are
-> we expected to call drm_gpuva_manager_set_ext_lock() every time we call
-> drm_gpuva_[un]link(), or are we supposed to have some lock at the
-> device level serializing all drm_gpuva_[un]link() calls across VMs? The
-> later doesn't sound like a good option to me, and the former feels a bit
-> weird. I'm wondering if we shouldn't just drop this assert_held() check
-> when DRM_GPUVA_MANAGER_LOCK_EXTERN is set. Alternatively, we could say
-> that any driver wanting to use a custom lock (which is basically all
-> drivers modifying the VA space asynchronously in the ::run_job() path)
-> has to provide its own variant of drm_gpuva_[un]link() (maybe with its
-> own VA list too), which doesn't sound like a good idea either.
+> The testcase seems to be fine, it actually did its job.
 
-Or we could just attach the dep_map to drm_gem_object::gpuva::lock, and
-let drivers overload the default lock in their GEM creation function if
-they want to use a custom lock (see the following diff).
+Correct. The updated patch has been already posted
+http://lkml.kernel.org/r/ZKe5wxdbvPi5Cwd7@dhcp22.suse.cz
 
----
+Thanks for the report!
 
-diff --git a/drivers/gpu/drm/drm_gpuva_mgr.c b/drivers/gpu/drm/drm_gpuva_mgr.c
-index e47747f22126..6427c88c22ba 100644
---- a/drivers/gpu/drm/drm_gpuva_mgr.c
-+++ b/drivers/gpu/drm/drm_gpuva_mgr.c
-@@ -675,8 +675,7 @@ drm_gpuva_manager_init(struct drm_gpuva_manager *mgr,
- 		       const char *name,
- 		       u64 start_offset, u64 range,
- 		       u64 reserve_offset, u64 reserve_range,
--		       const struct drm_gpuva_fn_ops *ops,
--		       enum drm_gpuva_manager_flags flags)
-+		       const struct drm_gpuva_fn_ops *ops)
- {
- 	mgr->rb.tree = RB_ROOT_CACHED;
- 	INIT_LIST_HEAD(&mgr->rb.list);
-@@ -686,7 +685,6 @@ drm_gpuva_manager_init(struct drm_gpuva_manager *mgr,
- 	mgr->mm_range = range;
- 
- 	mgr->name = name ? name : "unknown";
--	mgr->flags = flags;
- 	mgr->ops = ops;
- 
- 	memset(&mgr->kernel_alloc_node, 0, sizeof(struct drm_gpuva));
-@@ -822,16 +820,12 @@ EXPORT_SYMBOL(drm_gpuva_remove);
- void
- drm_gpuva_link(struct drm_gpuva *va)
- {
--	struct drm_gpuva_manager *mgr = va->mgr;
- 	struct drm_gem_object *obj = va->gem.obj;
- 
- 	if (unlikely(!obj))
- 		return;
- 
--	if (drm_gpuva_manager_external_lock(mgr))
--		drm_gpuva_manager_ext_assert_held(mgr);
--	else
--		dma_resv_assert_held(obj->resv);
-+	drm_gem_gpuva_assert_lock_held(obj);
- 
- 	list_add_tail(&va->gem.entry, &obj->gpuva.list);
- }
-@@ -850,16 +844,12 @@ EXPORT_SYMBOL(drm_gpuva_link);
- void
- drm_gpuva_unlink(struct drm_gpuva *va)
- {
--	struct drm_gpuva_manager *mgr = va->mgr;
- 	struct drm_gem_object *obj = va->gem.obj;
- 
- 	if (unlikely(!obj))
- 		return;
- 
--	if (drm_gpuva_manager_external_lock(mgr))
--		drm_gpuva_manager_ext_assert_held(mgr);
--	else
--		dma_resv_assert_held(obj->resv);
-+	drm_gem_gpuva_assert_lock_held(obj);
- 
- 	list_del_init(&va->gem.entry);
- }
-@@ -1680,10 +1670,7 @@ drm_gpuva_gem_unmap_ops_create(struct drm_gpuva_manager *mgr,
- 	struct drm_gpuva *va;
- 	int ret;
- 
--	if (drm_gpuva_manager_external_lock(mgr))
--		drm_gpuva_manager_ext_assert_held(mgr);
--	else
--		dma_resv_assert_held(obj->resv);
-+	drm_gem_gpuva_assert_lock_held(obj);
- 
- 	ops = kzalloc(sizeof(*ops), GFP_KERNEL);
- 	if (!ops)
-diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-index 5ec8148a30ee..572d7a538324 100644
---- a/include/drm/drm_gem.h
-+++ b/include/drm/drm_gem.h
-@@ -387,10 +387,14 @@ struct drm_gem_object {
- 	 * Provides the list of GPU VAs attached to this GEM object.
- 	 *
- 	 * Drivers should lock list accesses with the GEMs &dma_resv lock
--	 * (&drm_gem_object.resv).
-+	 * (&drm_gem_object.resv) or a custom lock if one is provided.
- 	 */
- 	struct {
- 		struct list_head list;
-+
-+#ifdef CONFIG_LOCKDEP
-+		struct lockdep_map *lock_dep_map;
-+#endif
- 	} gpuva;
- 
- 	/**
-@@ -540,6 +544,26 @@ unsigned long drm_gem_lru_scan(struct drm_gem_lru *lru,
- 
- int drm_gem_evict(struct drm_gem_object *obj);
- 
-+#ifdef CONFIG_LOCKDEP
-+/*
-+ * drm_gem_gpuva_set_lock() - Set the lock protecting accesses to the gpuva list.
-+ * @obj: the &drm_gem_object
-+ * @lock: the lock used to protect the gpuva list. The locking primitive
-+ * must contain a dep_map field.
-+ *
-+ * Call this if you're not proctecting access to the gpuva list
-+ * with the resv lock, otherwise, drm_gem_gpuva_init() takes case
-+ * of initializing the lock_dep_map for you.
-+ */
-+#define drm_gem_gpuva_set_lock(obj, lock) \
-+	obj->gpuva.lock_dep_map = &(lock)->dep_map
-+#define drm_gem_gpuva_assert_lock_held(obj) \
-+	lockdep_assert(lock_is_held(obj->gpuva.lock_dep_map))
-+#else
-+#define drm_gem_gpuva_set_lock(obj, lock) do {} while(0)
-+#define drm_gem_gpuva_assert_lock_held(obj) do {} while(0)
-+#endif
-+
- /**
-  * drm_gem_gpuva_init - initialize the gpuva list of a GEM object
-  * @obj: the &drm_gem_object
-@@ -552,6 +576,7 @@ int drm_gem_evict(struct drm_gem_object *obj);
- static inline void drm_gem_gpuva_init(struct drm_gem_object *obj)
- {
- 	INIT_LIST_HEAD(&obj->gpuva.list);
-+	drm_gem_gpuva_set_lock(obj, &obj->resv->lock.base);
- }
- 
- /**
-diff --git a/include/drm/drm_gpuva_mgr.h b/include/drm/drm_gpuva_mgr.h
-index 4f23aaf726dd..4ad56b67e244 100644
---- a/include/drm/drm_gpuva_mgr.h
-+++ b/include/drm/drm_gpuva_mgr.h
-@@ -185,44 +185,6 @@ static inline bool drm_gpuva_invalidated(struct drm_gpuva *va)
- 	return va->flags & DRM_GPUVA_INVALIDATED;
- }
- 
--#ifdef CONFIG_LOCKDEP
--typedef struct lockdep_map *lockdep_map_p;
--#define drm_gpuva_manager_ext_assert_held(mgr)		\
--	lockdep_assert(lock_is_held((mgr)->ext_lock) != LOCK_STATE_NOT_HELD)
--/**
-- * drm_gpuva_manager_set_ext_lock - set the external lock according to
-- * @DRM_GPUVA_MANAGER_LOCK_EXTERN
-- * @mgr: the &drm_gpuva_manager to set the lock for
-- * @lock: the lock to set
-- *
-- * If @DRM_GPUVA_MANAGER_LOCK_EXTERN is set, drivers need to call this function
-- * to provide the lock used to lock linking and unlinking of &drm_gpuvas to the
-- * &drm_gem_objects GPUVA list.
-- */
--#define drm_gpuva_manager_set_ext_lock(mgr, lock)	\
--	(mgr)->ext_lock = &(lock)->dep_map
--#else
--typedef struct { /* nothing */ } lockdep_map_p;
--#define drm_gpuva_manager_ext_assert_held(mgr)		do { (void)(mgr); } while (0)
--#define drm_gpuva_manager_set_ext_lock(mgr, lock)	do { } while (0)
--#endif
--
--/**
-- * enum drm_gpuva_manager_flags - the feature flags for the &drm_gpuva_manager
-- */
--enum drm_gpuva_manager_flags {
--	/**
--	 * @DRM_GPUVA_MANAGER_LOCK_EXTERN:
--	 *
--	 * Indicates the driver has it's own external lock for linking and
--	 * unlinking &drm_gpuvas to the &drm_gem_objects GPUVA list.
--	 *
--	 * When setting this flag it is rquired to set a lock via
--	 * drm_gpuva_set_ext_lock().
--	 */
--	DRM_GPUVA_MANAGER_LOCK_EXTERN = (1 << 0),
--};
--
- /**
-  * struct drm_gpuva_manager - DRM GPU VA Manager
-  *
-@@ -241,11 +203,6 @@ struct drm_gpuva_manager {
- 	 */
- 	const char *name;
- 
--	/**
--	 * @flags: the feature flags of the &drm_gpuva_manager
--	 */
--	enum drm_gpuva_manager_flags flags;
--
- 	/**
- 	 * @mm_start: start of the VA space
- 	 */
-@@ -283,31 +240,15 @@ struct drm_gpuva_manager {
- 	 * @ops: &drm_gpuva_fn_ops providing the split/merge steps to drivers
- 	 */
- 	const struct drm_gpuva_fn_ops *ops;
--
--	/**
--	 * @ext_lock: &lockdep_map according to @DRM_GPUVA_MANAGER_LOCK_EXTERN
--	 */
--	lockdep_map_p ext_lock;
- };
- 
- void drm_gpuva_manager_init(struct drm_gpuva_manager *mgr,
- 			    const char *name,
- 			    u64 start_offset, u64 range,
- 			    u64 reserve_offset, u64 reserve_range,
--			    const struct drm_gpuva_fn_ops *ops,
--			    enum drm_gpuva_manager_flags flags);
-+			    const struct drm_gpuva_fn_ops *ops);
- void drm_gpuva_manager_destroy(struct drm_gpuva_manager *mgr);
- 
--/**
-- * drm_gpuva_manager_external_lock - indicates whether the
-- * @DRM_GPUVA_MANAGER_LOCK_EXTERN flag is set
-- * @mgr: the &drm_gpuva_manager to check the flag for
-- */
--static inline bool drm_gpuva_manager_external_lock(struct drm_gpuva_manager *mgr)
--{
--	return mgr->flags & DRM_GPUVA_MANAGER_LOCK_EXTERN;
--}
--
- /**
-  * drm_gpuva_for_each_va_range - iternator to walk over a range of &drm_gpuvas
-  * @va__: &drm_gpuva structure to assign to in each iteration step
+-- 
+Michal Hocko
+SUSE Labs
