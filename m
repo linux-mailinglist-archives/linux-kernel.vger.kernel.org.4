@@ -2,97 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBC774AB7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EC174AB88
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjGGHCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S232139AbjGGHEX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jul 2023 03:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjGGHCe (ORCPT
+        with ESMTP id S232097AbjGGHEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:02:34 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC657199F
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:02:30 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so2433063e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 00:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688713349; x=1691305349;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AO1EV4DB9mmXIuKbzqs+B0XTIHsZhaa6Bi4nPPvJMnI=;
-        b=vhwbcG4KqnclCRSzjjpJ1T7h0FDVpSVcOk6oufyhiNo7GNRtea0mBdKbdDmaP6Fapd
-         3vB3Nf5zv9fBOGPz33lSrpOUN3E1NIgahBty+zMmLIHl6zdXUfjLwyD5pOoHQqFJvZ7p
-         g5OYewMjz5KaGHoluDNnQ18nxJBYFlSp/GbO/he/JPH7Rk4cX3i7zy1XrWXVcn3hANcc
-         T0UO3u6rgQQGLQPGSHfe2YDO2z7O/2Tx/CAScRCG14wKVhLLDXVCNi2ZNsxalcC6AHEU
-         tGGbToHKIvvCNxOfW+MBNawkEFsMi4Wck38lLK6FilfO4msHdnH8IdAT7khBhpGQaPjI
-         9oxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688713349; x=1691305349;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AO1EV4DB9mmXIuKbzqs+B0XTIHsZhaa6Bi4nPPvJMnI=;
-        b=VP6pHsMEGzHo0z7HBbEume5t5aPghsflmP5gEosfGwWccgmZ1R7PbiHbfZxdm+GEfa
-         PBgq+SFEw8eezdlRb9DBnPIIrMTIHGkgGs4GwWYxfHqn45lRpsZf75+tPrhZuL7WWPF6
-         pT65Nhj0BTYKfyFAgkjMp9x3AGUh7dXpvdI9MyVUuEtWJbnB0U2anvRz5RGGrpkvbl9d
-         EDwK7cF9A2lbWIm5vXV+r2luxGzesLTBU8coYSJRYwrblPDljN/IZYKr0udp1jzdBjqQ
-         l5iz1nwiPeQDGrKAIKXmrXHn0OzD7R49FkgwVU9tI103EUuxxJJfKH21Tr3ntxHj5Tgj
-         kwdw==
-X-Gm-Message-State: ABy/qLb6PXL62anr1PftsvxlaIBbNUodpSb+TjWlSn5UoTJ7I29kJ73l
-        9hc6Ltn8gj129npYSBPBQhuiuA==
-X-Google-Smtp-Source: APBJJlE9taobwIfrQlPCx9nte3vZZOvtAvcAIAuF7ehQfbCcQfO8v4STi1qLh78PqwLoEOBtTQQ90A==
-X-Received: by 2002:a05:6512:3d28:b0:4fb:8802:9554 with SMTP id d40-20020a0565123d2800b004fb88029554mr4116891lfv.6.1688713349008;
-        Fri, 07 Jul 2023 00:02:29 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n6-20020a05640206c600b0051dd4daf13fsm1649065edy.30.2023.07.07.00.02.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 00:02:28 -0700 (PDT)
-Message-ID: <4cba2af3-e011-bcaa-7ecd-bc35b8f07e72@linaro.org>
-Date:   Fri, 7 Jul 2023 09:02:26 +0200
+        Fri, 7 Jul 2023 03:04:16 -0400
+Received: from frasgout11.his.huawei.com (ecs-14-137-139-23.compute.hwclouds-dns.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269401709;
+        Fri,  7 Jul 2023 00:04:13 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qy3xy4Zzrz9xqdN;
+        Fri,  7 Jul 2023 14:53:10 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwBHrumsuKdkc9w3BA--.59443S2;
+        Fri, 07 Jul 2023 08:03:29 +0100 (CET)
+Message-ID: <46a2328ab35907970dcd9a7240cd9072abeb66b2.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH 00/10] KEYS: Introduce user asymmetric keys and
+ signatures
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jarkko@kernel.org, song@kernel.org, jolsa@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbrobinson@gmail.com,
+        zbyszek@in.waw.pl, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, wiktor@metacode.biz,
+        devel@lists.sequoia-pgp.org, gnupg-devel@gnupg.org,
+        ebiggers@kernel.org, Jason@zx2c4.com, mail@maciej.szmigiero.name,
+        antony@vennard.ch, konstantin@linuxfoundation.org,
+        James.Bottomley@hansenpartnership.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 07 Jul 2023 09:03:05 +0200
+In-Reply-To: <20230706232709.t6imkh3q234b3dlm@macbook-pro-8.dhcp.thefacebook.com>
+References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
+         <20230706232709.t6imkh3q234b3dlm@macbook-pro-8.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: sound: Update maintainer email id
-Content-Language: en-US
-To:     Rohit kumar <quic_rohkumar@quicinc.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        cychiang@chromium.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230707065259.3099569-1-quic_rohkumar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230707065259.3099569-1-quic_rohkumar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwBHrumsuKdkc9w3BA--.59443S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxArW5Jr48KFWrWw43tw17Awb_yoW5ZFWrpF
+        WrKayrArykJwnxJa4ktw40gayft3y8J3W3KwnxKrWrCwn0gryayr4xKF4rur9akr1kWr10
+        vrZ5A343Gwn5AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4-hwgAAsT
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2023 08:52, Rohit kumar wrote:
-> Updated my mail id to latest quicinc id.
+On Thu, 2023-07-06 at 16:27 -0700, Alexei Starovoitov wrote:
+> On Thu, Jul 06, 2023 at 04:42:13PM +0200, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Define a new TLV-based format for keys and signatures, aiming to store and
+> > use in the kernel the crypto material from other unsupported formats
+> > (e.g. PGP).
+> > 
+> > TLV fields have been defined to fill the corresponding kernel structures
+> > public_key, public_key_signature and key_preparsed_payload.
+> > 
+> > Keys:
+> >                 struct public_key {     struct key_preparsed_payload {
+> > KEY_PUB       -->  void *key;
+> >                    u32 keylen;         --> prep->payload.data[asym_crypto]
+> > KEY_ALGO      -->  const char *pkey_algo;
+> > KEY_KID0
+> > KEY_KID1                               --> prep->payload.data[asym_key_ids]
+> > KEY_KID2  
+> > KEY_DESC                               --> prep->description
+> > 
+> > 
+> > Signatures:
+> >                 struct public_key_signature {
+> > SIG_S         -->  u8 *s;
+> >                    u32 s_size;
+> > SIG_KEY_ALGO  -->  const char *pkey_algo;
+> > SIG_HASH_ALGO -->  const char *hash_algo;
+> >                    u32 digest_size;
+> > SIG_ENC       -->  const char *encoding;   
+> > SIG_KID0
+> > SIG_KID1      -->  struct asymmetric_key_id *auth_ids[3];
+> > SIG_KID2  
+> > 
+> > 
+> > For keys, since the format conversion has to be done in user space, user
+> > space is assumed to be trusted, in this proposal. Without this assumption,
+> > a malicious conversion tool could make a user load to the kernel a
+> > different key than the one expected.
+> > 
+> > That should not be a particular problem for keys that are embedded in the
+> > kernel image and loaded at boot, since the conversion happens in a trusted
+> > environment such as the building infrastructure of the Linux distribution
+> > vendor.
+> > 
+> > In the other cases, such as enrolling a key through the Machine Owner Key
+> > (MOK) mechanism, the user is responsible to ensure that the crypto material
+> > carried in the original format remains the same after the conversion.
+> > 
+> > For signatures, assuming the strength of the crypto algorithms, altering
+> > the crypto material is simply a Denial-of-Service (DoS), as data can be
+> > validated only with the right signature.
+> > 
+> > 
+> > This patch set also offers the following contributions:
+> > 
+> > - An API similar to the PKCS#7 one, to verify the authenticity of system
+> >   data through user asymmetric keys and signatures
+> > 
+> > - A mechanism to store a keyring blob in the kernel image and to extract
+> >   and load the keys at system boot
+> >   
+> > - eBPF binding, so that data authenticity verification with user asymmetric
+> >   keys and signatures can be carried out also with eBPF programs
 > 
-> Signed-off-by: Rohit kumar <quic_rohkumar@quicinc.com>
-> ---
+> Nack to bpf bits.
 
+Sure, no problem. Will remove them in the next iteration.
 
-The subject prefix should be different for ASoC:
+> You've convinced us that bpf_verify_pkcs7_signature() is what you need.
+> Yet, 9 month later there are no users of it and you came back with this new
+> bpf_verify_uasym_signature() helper that practically not much different.
+> 
+> Instead of brand new "public key info" format sign your rpms via
+> existing pkcs7 mechanism and verify with bpf_verify_pkcs7_signature().
 
-ASoC: dt-bindings: Update....
+Asking Linux distribution vendors to execute gpg in their kernel build,
+or asking them to revisit their PKI, rebuild all their packages, and
+adapting all their tools dealing with the current mechanism?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Which solution do you think it is better?
 
-Best regards,
-Krzysztof
+Thanks
+
+Roberto
 
