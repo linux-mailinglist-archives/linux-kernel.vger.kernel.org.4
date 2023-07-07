@@ -2,202 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A215A74A8BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CE674A8BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbjGGCCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S232055AbjGGCF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjGGCCP (ORCPT
+        with ESMTP id S231149AbjGGCFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:02:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9535B19B7;
-        Thu,  6 Jul 2023 19:02:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1082B61522;
-        Fri,  7 Jul 2023 02:02:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571EEC433C7;
-        Fri,  7 Jul 2023 02:02:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688695333;
-        bh=vxF176pHmUyvE88xtKXjwBevErLO4fJiS2ZYNuJq54Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YzwjyV3LF6lqxl7gBFOu5QoBEdBTmZEtIHGujqAeoUKxJG8/VCp1kFQ08MgCKBxGk
-         Sp7SOgJpYxGejSUzF/hkNTAix4II+wxv0Ua9bNoftDrb4iBWHSRmolJSzHw5Vpp3/I
-         09jglmL8cDEDG8t3U82xjXSlnvi6ccyao+jfg4IW5u3cNQIDr1mgYDM76A27Q5gZAg
-         MQ08OisB62XsNyEgyczbaWlABg1Khh1EITrhBmIhJC7QEajaeZ05svFs9SmBl9TyqX
-         vvSm2qEkwrmHRQsuSVvrpgRCJJn8KJU3jzv1PrzEKYsks0J7RnhWr8bPWwBgZRdL4q
-         L5AB9cMfoJqOA==
-Date:   Fri, 7 Jul 2023 11:02:10 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tracing/probes: Fix return value when "(fault)" is
- injected
-Message-Id: <20230707110210.06e81e182c775454ce86280d@kernel.org>
-In-Reply-To: <20230706095039.1cb9c9d1@gandalf.local.home>
-References: <168830922841.2278819.9165254236027770818.stgit@mhiramat.roam.corp.google.com>
-        <168830925534.2278819.7237772177111801959.stgit@mhiramat.roam.corp.google.com>
-        <20230705224956.1c5213e6@gandalf.local.home>
-        <20230706134036.5c074aa5fc6a55cdb5038660@kernel.org>
-        <20230706095039.1cb9c9d1@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 22:05:25 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4DF19B7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:05:23 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-26-156-107.bstnma.fios.verizon.net [108.26.156.107])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 36724dQa006186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Jul 2023 22:04:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1688695484; bh=TsNvuPyUlL4Y8qN5hDRwSDMRTqYJrjD+Crx5PjiM7RE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=llAFptV0qus49wG9N9aii4eNOKcqrXwVjpnI1N2cKbafVw4DSo5wumqZHKa8iwbvP
+         8lxGmujROmsufDc364Ddv7gM9ebx71J+3CemcGOFwhyi2nG00fKxuR3Hye3C+EWcBC
+         8H+Yw9vmC6QMwl2CqpcUrn53eNsjmzfxH8RKMAZcRDWmCOkmHzIBPHgWXoIfHN8817
+         V4JXv5mkGrCt+XZmwui2KGFH3fag1jyDyvrL9kkF2ghRnPg6RuvKIAevSTdJI+AH77
+         Vqx4Z4SILF7Oji89JZDoxRBfGfTsgOUOl/BE3hqLVRx1ycLLx2rymWFuLf1uXNHyhX
+         E1QbjSr2iuvmw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 9914215C0294; Thu,  6 Jul 2023 22:04:39 -0400 (EDT)
+Date:   Thu, 6 Jul 2023 22:04:39 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Josef Bacik <josef@toxicpanda.com>, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, djwong@kernel.org,
+        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
+        bfoster@redhat.com, jack@suse.cz, andreas.gruenbacher@gmail.com,
+        brauner@kernel.org, peterz@infradead.org,
+        akpm@linux-foundation.org, dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230707020439.GM1178919@mit.edu>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+ <20230706164055.GA2306489@perftesting>
+ <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jul 2023 09:50:39 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Thu, Jul 06, 2023 at 01:38:19PM -0400, Kent Overstreet wrote:
+> You, the btrfs developers, got started when Linux filesystem teams were
+> quite a bit bigger than they are now: I was at Google when Google had a
+> bunch of people working on ext4, and that was when ZFS had recently come
+> out and there was recognition that Linux needed an answer to ZFS and you
+> were able to ride that excitement. It's been a bit harder for me to get
+> something equally ambitions going, to be honest.
 
-> On Thu, 6 Jul 2023 13:40:36 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> 
-> > On Wed, 5 Jul 2023 22:49:56 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > > On Sun,  2 Jul 2023 23:47:35 +0900
-> > > "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> > >   
-> > > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > 
-> > > > When the "(fault)" is injected, the return value of fetch_store_string*()
-> > > > should be the length of the "(fault)", but an error code is returned.
-> > > > Fix it to return the correct length and update the data_loc according the
-> > > > updated length.
-> > > > This needs to update a ftracetest test case, which expects trace output
-> > > > to appear as '(fault)' instead of '"(fault)"'.
-> > > >   
-> > > 
-> > > Ah, because of patch 2, the ret < 0 makes it return without printing the
-> > > "fault"?  
-> > 
-> > No, actually set_data_loc() updates the 'ret' argument, but it is just
-> > disposed... (not returned to the caller)
-> 
-> That's not what I was talking about.
-> 
-> We have:
-> 
-> process_fetch_insn_bottom() {
-> 	[..]
-> 	case FETCH_OP_ST_STRING:
-> 		loc = *(u32 *)dest;
-> 		ret = fetch_store_string(val + code->offset, dest, base);
-> 		break;
-> 	[..]
-> 
-> // And from patch 2 we have:
-> 
-> @@ -193,6 +193,8 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
->  	default:
->  		return -EILSEQ;
->  	}
-> +	if (ret < 0)
-> +		return ret;
->  	code++;
-> 
-> And now that the return value of fetch_store_string() is being checked, and
-> if it returns negative, it ends the function before being processed
-> further. And if there's a fault, it happens to return negative!
-> 
-> This patch now changes fetch_store_string() and fetch_store_string_user()
-> to not return negative if there's a fault. As this patch has:
-> 
-> @@ -107,9 +106,7 @@ fetch_store_string(unsigned long addr, void *dest, void *base)
->  	 * probing.
->  	 */
->  	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
-> -	set_data_loc(ret, dest, __dest, base, maxlen);
-> -
-> -	return ret;
-> +	return set_data_loc(ret, dest, __dest, base, maxlen);
->  }
-> 
-> But to do that, you needed to update set_data_loc() to return a value.
-> 
-> *that's* what I meant by 
-> 
-> 'Ah, because of patch 2, the ret < 0 makes it return without printing the "fault"?'
+Just to set the historical record straight, I think you're mixing up
+two stories here.
 
-Yes, that's correct. Actually, the data ("(fault)") is stored, but ignored
-because data_loc is not updated.
+*Btrfs* was started while I was at the IBM Linux Technology Center,
+and it was because there were folks from more than one companies that
+were concerned that there needed to be an answer to ZFS.  IBM hosted
+that meeting, but ultimately, never did contribute any developers to
+the btrfs effort.  That's because IBM had a fairly cold, hard
+examination of what their enterprise customers really wanted, and
+would be willing to pay $$$, and the decision was made at a corporate
+level (higher up than the Linux Technology Center, although I
+participated in the company-wide investigation) that *none* of OS's
+that IBM supported (AIX, zOS, Linux, etc.) needed ZFS-like features,
+because IBM's customers didn't need them.  The vast majority of what
+paying customers' workloads at the time was to run things like
+Websphere, and Oracle and DB/2, and these did not need fancy
+snapshots.  And things like integrity could be provided at other
+layers of the storage stack.
 
-But wait, it seems that the print function shows (fault), so commit 2e9906f84fc7
-("tracing: Add "(fault)" name injection to kernel probes") may not needed?
+As far as Google was concerned, yes, we had several software engineers
+working on ext4, but it had nothing to do with ZFS.  We had a solid
+business case for how replacing ext2 with ext4 (in nojournal mode,
+since the cluster file system handled data integrity and crash
+recovery) would save the company $XXX millions of dollars in storage
+TCO (total cost of ownership) dollars per year.
 
-----
-/* Print type function for string type */
-int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, void *data, void *ent)
-{
-        int len = *(u32 *)data >> 16;
+In any case, at neither company was a "sense of excitement" something
+which drove the technical decisions.  It was all about Return on
+Investment (ROI).  As such, that's driven my bias towards ext4
+maintenance.
 
-        if (!len)
-                trace_seq_puts(s, "(fault)");
-        else
-----
+I view part of my job is finding matches between interesting file
+system features that I would find technically interesting, and which
+would benefit the general ext4 user base, and specific business cases
+that would encourage the investment of several developers on file
+system technologies.
 
-In this case, what we need is to set data_loc length = 0 if ret < 0.
+Things like case insensitive file names, fscrypt, fsverity, etc.,
+where all started *after* I had found a business case that would
+interest one or more companies or divisions inside Google to put
+people on the project.  Smaller projects can get funded on the
+margins, sure.  But for anything big, that might require the focused
+attention of one or more developers for a quarter or more, I generally
+find the business case first, and often, that will inform the
+requirements for the feature.  In other words, not only am I ext4's
+maintainer, I'm also its product manager.
 
-Do you really need to get '"(fault)"' (with double quotation) or
-just '(fault)' (no double quotation) is OK?
+Of course, this is not the only way you can drive technology forward.
+For example, at Sun Microsystems, ZFS was driven just by the techies,
+and initially, they hid the fact that the project was taking place,
+not asking the opinion of the finance and sales teams.  And so ZFS had
+quite a lot of very innovative technologies that pushed the industry
+forward, including inspiring btrfs.  Of course, Sun Microsystems
+didn't do all that well financially, until they were forced to sell
+themselves to the highest bidder.  So perhaps, it might be that this
+particular model is one that other companies, including IBM, Red Hat,
+Microsoft, Oracle, Facebook, etc., might choose to avoid emulating.
 
-Thank you,
-> 
-> 
-> -- Steve
-> 
-> > 
-> > -static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void *base, int len)
-> > +static nokprobe_inline int set_data_loc(int ret, void *dest, void *__dest, void *base, int len)
-> >  {
-> > -	if (ret >= 0) {
-> > -		*(u32 *)dest = make_data_loc(ret, __dest - base);
-> > -	} else {
-> > +	if (ret < 0) {
-> >  		strscpy(__dest, FAULT_STRING, len);
-> >  		ret = strlen(__dest) + 1;
-> >  	}
-> > +
-> > +	*(u32 *)dest = make_data_loc(ret, __dest - base);
-> > +	return ret;
-> >  }
-> > 
-> > So this returns updated 'ret', and also update data_loc to use the
-> > updated 'ret' value (which is the length of the stored data).
-> > 
-> > > 
-> > > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>  
-> > 
-> > Thank you!
-> > 
-> > > 
-> > > -- Steve
-> > > 
-> > >   
-> > > > Fixes: 2e9906f84fc7 ("tracing: Add "(fault)" name injection to kernel probes")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > ---  
-> > 
-> > 
-> 
+Cheers,
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+					- Ted
