@@ -2,128 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9A074B090
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE4174B088
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjGGMRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S231580AbjGGMQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbjGGMRI (ORCPT
+        with ESMTP id S229642AbjGGMQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:17:08 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D25F1FE6;
-        Fri,  7 Jul 2023 05:17:07 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-314172bac25so1724854f8f.3;
-        Fri, 07 Jul 2023 05:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688732226; x=1691324226;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GTz1K2zEa5O0rZFk72kNzqovbUvNASTGghr+QDM5Abk=;
-        b=g1W7Sw0Sy/t8mRFCo08zd3QLZZ6GExmnbtZYatKEFXFrqh7FWSNZtLnPCczms/+2MC
-         T+znQKHvWdBM+XIpxVnR9//SxB+b+tTq/U60Gv+adO3gznyqwwYdWSmOwiWLCnZPYq9e
-         RbR5c02FTwxAa+hX788HpEczUQr7/VpzyXRh7gNi5fBk2B3j9M6rGMA8tD/23/NFlZsk
-         8nXsAPIu0LmvsYLjjhePbrxUTiax3+B8XLRSnQ7gjb28BZPhpU0WYadjJ8JR/kZbrG3a
-         1abpVi/ROAcdoX89ax2epsQBnEMR8LNosZ7y2ZiyOyWbqMi7fX5/9Im1I/3jTL6qMJnE
-         L6kA==
+        Fri, 7 Jul 2023 08:16:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB7E1BE1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688732151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rhpDqg8pI0zX12ElS90vQT8QQV6E3FjtxWt9F4QgwcU=;
+        b=PSEl7yWW0g9KegAQ8cdyMvZHxxVFckOETksGXh1P2F54DjEhb5Vme0/ZTVhEQJJ/C5T6+W
+        qoo/q9rrgU1DV3xDwX1blSHMANGKpcAuzHWww91PI8bpba0k7nw4pWLeV92KeIKn26Rnyx
+        rvP6TchdxcOEbrsT8bR6ZxY6bj/XS6M=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-hKwGDFdpMva43xppaFYdEA-1; Fri, 07 Jul 2023 08:15:48 -0400
+X-MC-Unique: hKwGDFdpMva43xppaFYdEA-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-56fffdea2d0so19082857b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:15:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688732226; x=1691324226;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GTz1K2zEa5O0rZFk72kNzqovbUvNASTGghr+QDM5Abk=;
-        b=P7eTD4lYnaj6Yj1j8NHxxmYo0TMQmaCq0wjeJBccwrxwV3bNSKVPmEbDWhrmQA/Jpf
-         FT9jIkL8Dx71L1BQEnklxkYjPJ4X3uxYtcFAH+noJFW1arQqaQJMJIpwpdjPhHHh94o/
-         gx9EO8D0eUiy9z9cDuu0VTD5fLu1s09WLKOuXIhufm9P+vpuc0qdTBooNNPKtI3OmQek
-         3z7kA93ziHr9CrBPlVx+x+uSXKhYw7lbnqno34Cgm7Lira0otb5sG8MtL3D8TSTQkQH3
-         PLMAzLdcUHksAiaz0OUbCDy/Dv9gWhjDXIP+ftslqqG+4JfWdYxo3i6VY9VFXVvHLcA2
-         w+gA==
-X-Gm-Message-State: ABy/qLZ0wvykUr78xkntzutQOmIynjx/5RBblq59WQYIiKfR4ZVWSd23
-        h4N88/0xBvYciO8JLLPMA/Q=
-X-Google-Smtp-Source: APBJJlGHBXJUAwRNtB9mtV6sGByIqNbQdy3bMIQf/CflMFUCvZi8SakmDxdkBpwZcM1S8DWnQRskdg==
-X-Received: by 2002:adf:f98b:0:b0:313:ee5b:d4bc with SMTP id f11-20020adff98b000000b00313ee5bd4bcmr4009152wrr.5.1688732225554;
-        Fri, 07 Jul 2023 05:17:05 -0700 (PDT)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id n3-20020a5d51c3000000b00313f7b077fesm4300749wrv.59.2023.07.07.05.17.02
+        d=1e100.net; s=20221208; t=1688732148; x=1691324148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rhpDqg8pI0zX12ElS90vQT8QQV6E3FjtxWt9F4QgwcU=;
+        b=a4MfMEwi4C260Uh+Id70r2TGciL/qH7GW5tG6RNpwBA7XDGsuRBkpTl2bJEfR0u2GE
+         W9aKRdvYWRe3JXjxEqIFFpAh1L2oIz0sufPrLqHuxjMNvr0U8HDTwzgnWJrWN5uvoa42
+         Ir9jf1yROEz079HnZTVJ3uMgyLWdPzRP3i8Ubj+Pw0rboFhTON6pSB8vIIfPuzabf0cw
+         enT/xi2T+KGvPkTkCcO7KRPFlrSMOmy71IMOu4nwrKFgWDn4eBM0dqR0wexUPtakKzl7
+         cInVSRJgx5Bn/0dmkWo9/EOT/hsz+UgRsmqkyLteT/NJIJn8MqtDBGzRX6vnXTF21+aN
+         tYQg==
+X-Gm-Message-State: ABy/qLbEs6FTdnSvWjQ43MS48lWJVFq/GRD0sO34AoUKqv+zb/D6Cbh0
+        63DZ4KpUs6PJVcRjji49U/jkmybMs6w79SX/7rJ8MPZzaY3Ivih2AbK4xsGiVEOYr60RyzqDYxZ
+        hfDKnH7RLbvXP/eVa/jCYaoDX
+X-Received: by 2002:a0d:f543:0:b0:570:81f1:7b49 with SMTP id e64-20020a0df543000000b0057081f17b49mr4993724ywf.6.1688732148086;
+        Fri, 07 Jul 2023 05:15:48 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGBjLT+ie9QBkdDcFC6xSFGukVNoSHS7y0OfnI702mFH10yhnLmSvv9I4IBTSn5ORv7zoj+ig==
+X-Received: by 2002:a0d:f543:0:b0:570:81f1:7b49 with SMTP id e64-20020a0df543000000b0057081f17b49mr4993707ywf.6.1688732147833;
+        Fri, 07 Jul 2023 05:15:47 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id n1-20020ac86741000000b00400c5f5e713sm1648278qtp.97.2023.07.07.05.15.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 05:17:05 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 14:16:55 +0200
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
-        dsahern@kernel.org, tom@herbertland.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gal@nvidia.com
-Subject: [PATCH 0/1] net: gro: fix misuse of CB in udp socket lookup
-Message-ID: <20230707121650.GA17677@debian>
+        Fri, 07 Jul 2023 05:15:47 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 08:18:28 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Josef Bacik <josef@toxicpanda.com>, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, djwong@kernel.org,
+        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
+        tytso@mit.edu, jack@suse.cz, andreas.gruenbacher@gmail.com,
+        brauner@kernel.org, peterz@infradead.org,
+        akpm@linux-foundation.org, dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <ZKgClE9AnmLZpXTM@bfoster>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+ <20230706164055.GA2306489@perftesting>
+ <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GRO stack uses `udp_lib_lookup_skb` which relies on IP/IPv6 CB's info, and
-at the GRO stage, CB holds `napi_gro_cb` info.  Specifically,
-`udp_lib_lookup_skb` tries to fetch `iff` and `flags` information from the
-CB, to find the relevant udp tunnel socket (GENEVE/VXLAN/..).  Up until a
-patch I submitted recently [0], it worked merely by luck, due
-to the layouts of `napi_gro_cb` and IP6CB.
+On Thu, Jul 06, 2023 at 01:38:19PM -0400, Kent Overstreet wrote:
+> On Thu, Jul 06, 2023 at 12:40:55PM -0400, Josef Bacik wrote:
+...
+> > I am really, really wanting you to succeed here Kent.  If the general consensus
+> > is you need to have some idiot review fs/bcachefs I will happily carve out some
+> > time and dig in.
+> 
+> That would be much appreciated - I'll owe you some beers next time I see
+> you. But before jumping in, let's see if we can get people who have
+> already worked with the code to say something.
+> 
 
-AFAIU it worked because: 
-`IP6CB(skb)->flags` is at offset 16 inside IP6CB:
- - Before the patch: `flags` was mapped to `flush`.
- - After the patch: `flags` was mapped to `data_offset`.
+I've been poking at bcachefs for several months or so now. I'm happy to
+chime in on my practical experience thus far, though I'm still not
+totally clear what folks are looking for on this front, in terms of
+actual review. I agree with Josef's sentiment that a thorough code
+review of the entire fs is not really practical. I've not done that and
+don't plan to in the short term.
 
-`IP6CB(skb)->iff` is at offset 0 inside IP6CB:
- - Before the patch: `iif` was mapped to `frag0`.
- - After the patch: `iif` was mapped to a union of `frag0` and `last`.
+As it is, I have been able to dig into various areas of the code, learn
+some of the basic principles, diagnose/fix issues and get some of those
+fixes merged without too much trouble. IMO, the code is fairly well
+organized at a high level, reasonably well documented and
+debuggable/supportable. That isn't to say some of those things couldn't
+be improved (and I expect they will be), but these are more time and
+resource constraints than anything and so I don't see any major red
+flags in that regard. Some of my bigger personal gripes would be a lot
+of macro code generation stuff makes it a bit harder (but not
+impossible) for a novice to come up to speed, and similarly a bit more
+introductory/feature level documentation would be useful to help
+navigate areas of code without having to rely on Kent as much. The
+documentation that is available is still pretty good for gaining a high
+level understanding of the fs data structures, though I agree that more
+content on things like on-disk format would be really nice.
 
-After my patch, on the receive phase, while `data_offset` is 40 (since IPv6
-header is 40 bytes), `inet_iif` calls `ipv6_l3mdev_skb`, which checks
-whether `IP6CB(skb)->flags`'s `IP6SKB_L3SLAVE` bit is on or off (in our
-case its off). If it is off, `inet_iif` returns `IP6CB(skb)->iif`, which is
-mapped to `napi_gro_cb->frag0`, making `inet_iif` return 0 most of the
-times. `inet_sdif` returns zero due to a similar reason caused by
-`data_offset` being equal to 40 (and less than 64).
+Functionality wise I think it's inevitable that there will be some
+growing pains as user and developer base grows. For that reason I think
+having some kind of experimental status for a period of time is probably
+the right approach. Most of the issues I've dug into personally have
+been corner case type things, but experience shows that these are the
+sorts of things that eventually arise with more users. We've also
+briefly discussed things like whether bcachefs could take more advantage
+of some of the test coverage that btrfs already has in fstests, since
+the feature sets should largely overlap. That is TBD, but is something
+else that might be a good step towards further proving out reliability.
 
-On the other hand, the complete phase behaves differently.
-`data_offset` is usually greater than 64 and less than 128 so the
-`IP6SKB_L3SLAVE` flag is on.  Thus, `inet_sdif` returns `IP6CB(skb)->iif`,
-which is mapped to `last` which contains a pointer. This causes
-`udp_sk_bound_dev_eq` to fail, which leads to `udp6_lib_lookup2` failing
-and not returning a socket. This leads the receive phase of GRO
-to find the right socket, and on the complete phase, it fails to find it and
-makes the throughput go down to nearly zero.
+Related to that, something I'm not sure I've seen described anywhere is
+the functional/production status of the filesystem itself (not
+necessarily the development status of the various features). For
+example, is the filesystem used in production at any level? If so, what
+kinds of deployments, workloads and use cases do you know about? How
+long have they been in use, etc.? I realize we may not have knowledge or
+permission to share details, but any general info about usage in the
+wild would be interesting.
 
-Before [0] `flags` was mapped to `flush`. `flush`'s possible
-values were 1 and 0, making `inet6_iff` always returning `skb->skb_iif` and
-`inet6_sdif` returning 0, and leading to `udp_sk_bound_dev_eq` returning
-true.
+The development process is fairly ad hoc, so I suspect that is something
+that would have to evolve if this lands upstream. Kent, did you have
+thoughts/plans around that? I don't mind contributing reviews where I
+can, but that means patches would be posted somewhere for feedback, etc.
+I suppose that has potential to slow things down, but also gives people
+a chance to see what's happening, review or ask questions, etc., which
+is another good way to learn or simply keep up with things.
 
-A fix is to not rely on CB, and get `iff` and `sdif` using skb->dev. l3mdev
-case requires special attention since it has a master and a slave device.
+All in all I pretty much agree with Josef wrt to the merge request. ISTM
+the main issues right now are the external dependencies and
+development/community situation (i.e. bus factor). As above, I plan to
+continue contributions at least in terms of fixes and whatnot so long as
+$employer continues to allow me to dedicate at least some time to it and
+the community is functional ;), but it's not clear to me if that is
+sufficient to address the concerns here. WRT the dependencies, I agree
+it makes sense to be deliberate and for anything that is contentious,
+either just drop it or lift it into bcachefs for now to avoid the need
+to debate on these various fronts in the first place (and simplify the
+pull request as much as possible).
 
-[0] https://lore.kernel.org/netdev/20230601160924.GA9194@debian/
+With those issues addressed, perhaps it would be helpful if other
+interested fs maintainers/devs could chime in with any thoughts on what
+they'd want to see in order to ack (but not necessarily "review") a new
+filesystem pull request..? I don't have the context of the off list
+thread, but from this thread ISTM that perhaps Josef and Darrick are
+close to being "soft" acks provided the external dependencies are worked
+out. Christoph sent a nak based on maintainer status. Kent, you can add
+me as a reviewer if 1. you think that will help and 2. if you plan to
+commit to some sort of more formalized development process that will
+facilitate review..? I don't know if that means an ack from Christoph,
+but perhaps it addresses the nak. I don't really expect anybody to
+review the entire codebase, but obviously it's available for anybody who
+might want to dig into certain areas in more detail..
 
-Richard Gobert (1):
-  net: gro: fix misuse of CB in udp socket lookup
-
- include/net/udp.h      |  2 ++
- net/ipv4/udp.c         | 21 +++++++++++++++++++--
- net/ipv4/udp_offload.c |  7 +++++--
- net/ipv6/udp.c         | 21 +++++++++++++++++++--
- net/ipv6/udp_offload.c |  7 +++++--
- 5 files changed, 50 insertions(+), 8 deletions(-)
-
---
-2.36.1
+Brian
 
