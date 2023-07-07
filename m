@@ -2,180 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CFE74B56D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5728074B571
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjGGQyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 12:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S233074AbjGGQyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 12:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbjGGQx7 (ORCPT
+        with ESMTP id S232449AbjGGQyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:53:59 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA32D42
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:53:32 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so1609589a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 09:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688748808; x=1691340808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ganOcRrGX9gVkXMthOtdXTKyr3DXfFEecMxDKDYPHpQ=;
-        b=J8Wr9p6qLani+dIxIJoalPJzoHhWv6PxfhP1BbAYAxKziU/IrMQWCVvaFDv92GEGaq
-         pSkaoPtc3SY90nN8qv+dNCn6Zcj7KfohQoKKSW6JAUn31F9tG8GEfOXIW3U3uNBVbuDV
-         WVZ8i/WlYex/Yz5F5I9fozzKO7sd36Iogex03SkJw/wWV+025xFGK9y6V5+6Bv+eIAbj
-         t/0k7pSgVZX9SOYj0+EL6Ht8pMAKb6vWIim6Exw3tiZgfLv36fE3OS7FRKmw1Scm+MQd
-         VP2BW6t0hWSSjjwrGrW4aK4PFcrH5SN0o2+9PsPCpbigXe4Pj3BPbUVb7MWCmNmdU0CQ
-         WiCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688748808; x=1691340808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ganOcRrGX9gVkXMthOtdXTKyr3DXfFEecMxDKDYPHpQ=;
-        b=Ce1Sf1Q9O56z/ia420bXXDxn5oCm06c4sGpVdc5aN/XzrRgriGvYDejd3KZtWwPYse
-         I7tPF+L8DZOzztDJBlbyKks/E50hTrJ3dZJ4IhUEKQV+uNHLG7yvS3MmfhJzO89u9CSE
-         74/9f6vcx8vhfnpbyYwH9fkiCqQgwU1MHWhXFwDfoZDEZ8bheWfOaUEMMi34062uNq58
-         n/wmnro/gnZAd/oXM49MNWKwpj/DM/zvoPOgqyPs0mOLfdD2HGrT2mX6gVv0AfNGeDd7
-         WhyldAJIUwfhR8Z6VSSVE6BDvdIrwy00qN6cZuy84nIqP+/tDsgl2eu3vzqcrWnwHWIh
-         Xs4Q==
-X-Gm-Message-State: ABy/qLY4oYtkKoZOMheFYXyYWxUJpt+4mcUPPObPOSps3rbg2HNcvwOa
-        6RPv/bYSqVzjGoVGs7xnzC8WgO6opIwsJr4D850=
-X-Google-Smtp-Source: APBJJlGum+21E74xOHmurd3BznTUzbDzbh02qxja4NdlWrkKY0qPGktO+vX87VjpJ0ZpPOz2kKqw5zlIBr+4nwsHTJE=
-X-Received: by 2002:a17:90a:d484:b0:256:2efc:270e with SMTP id
- s4-20020a17090ad48400b002562efc270emr4702991pju.5.1688748807659; Fri, 07 Jul
- 2023 09:53:27 -0700 (PDT)
+        Fri, 7 Jul 2023 12:54:37 -0400
+Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7561B2737
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688748848; bh=7dUG/tEyuCsnWvgTF+ykPusSsDtzDF4QTHRG8+l4fWM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=k33JwQsSTksi1u+D4jg0dnnvzQuJoiIQuMELZK73bYM19E5jrrEVHxkKBATJ3CIQy4agP2hErjjpbFK76q7HdCYIMzMFXwxR7fAl1kg39dx1afZXa8eKMkvl9J4gBbWgVUT9ovyjCxIIgtauM7BidhyVu39YfW4acPysfAEXVYvuZl7B3sCiA131t6GRwKBU0juqrfNQMbtFlzBuWxz/ZEvEaCXXZ9tBx8wxwd4WHAQqDikU1cyFjooBiQyDkM3iMsb9y4e8QOgU6U25gxxleIijzzeJbZiiOKHYfAQxY/f70pXWSBHRz3+yS1xQrsrB+5ZRALrb4aTXkI2a4cwxWw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688748848; bh=tx9k0TN1T8vin8wdHwO2nG4qX/v/r09tkKCH6Un2w5v=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=emeh3ncUq7JgNSue0N0j/Fgm2DlP2UHlUPyz3SHcLXk7/4WXmnygV/tkPu/tzU5Pdhk1HmJ3HhbQvuf3ujiGDlVD+MSsnbUanpaym0EOWXUuOF7lKHQPZNOEovV8mO3Ptziljka2f9Wa3cs3iITZTrxWwEBmFjqX7z1Pv83lss9PkL6FRrn6OPHVkgyUDIpGowNv3zInoCvxakXnwdq31asOYiQ4u+GsrLPNpjVl7FTpHSfqdgObppaIBzwISsVq7C8fiK9pHUJuR7DF1AKM6EJW7T1L38YCdEPKGq73+BF4nvP9IWUYhp+bKOQlMxOJRPoqEXJ9BSVNBFT0LOVvoA==
+X-YMail-OSG: 3cMWPXEVM1ksAsW6ExbAWo3xHajlrtgcL1H_yMZEUdZajHEEbDWayzDJl9unhFx
+ V2I46457HBKjxa8YP9y9f1u7E2dRKrSawhO23vd.M4HcGojwyiRn6BEPRWf97aLuC1mflAnCm6tM
+ WlczvkiigYXMFAWN3M2lpUd3aqyPu8u1pdBLbQsbWZ_zgEO3JXhcbAoVt0hz4_tuLMXFJZwbS5dq
+ Q3lCh_w3aoC4DEytKBscnH5l_D_U5GAQG.hmNekYBnKtlQZN5V0GxmLcvqFBnmMIOaFl1g9oDXGg
+ nOrtwRP61KHzW2nnxz0PVeW1qfevQ76WEKtjmFLMz8qjipv7oAG25p0iv1yqrnF9lzwyWWT8ycbq
+ zcmilJsaDYje5auB6zVrV4YZcmxW0bEkHhOvupWVMZwvzyZKIMxGfofOVldwWz4yoaC1Hn7u72YR
+ JtTz_aWAB6OFYHfjz8Uho0tT5dN2lLbmlS7t8Djh0kcyEZi.IjLlIsVJAvUfGg.TWWZl_95AyaJZ
+ ObS9vycfzaNh0yNu1S1GeUoBkFQ1ep.bQq.OJscU9mjajdkcKE4kM7ZeiaaGrgH6_93_I_RfFj1I
+ pWZ1mwpcWl0k.00tbVj4LFpBqlXg9ebnsDrSo8isUeecWGnetLsbKhXJT2jI5Hw6XgnAWLqo6mSW
+ TOeKXX5ev0XF23DHQCj6tfN9TqAbmrHOXyEqjicTRaCOhQTztTSv3lvVSIxHH1EV0I8R1Q0tNMgF
+ N1GsjrBW6AY6ds5Kgz_gBzPq8mpz.G3QX_lYEUf5hz5vEpvJ3qSnrUpOas_3Ahnnr5s_CWxLWG9V
+ INjKYK4zVW84Me_kGJGqTp1NHHd_8AMvFCm_SktAmH7MddZnt6J6.jW0g11rjp7DSw_CqHNVdxs.
+ efsQ_I6gtbLE6KLDw1s86Ky8WWT8.I6qQQIoBNT1czh8JumJb_Q9ALfGk2cm4FD2x0FVmmMQXYOy
+ 1vptlrjZjD4A9KFEUDi.a2Sij2cUpwT3dDCvPevmhfwB55fYUXW9oBG9p6KLDXWQbpO._S4N25Mo
+ Pa9dIiWCcSqhNZJlCRUFVCfK8ZNxJl.szRY6aYZfQmIOwmdorJQICm2KyjS0PRUxlfzXGHZZNMfO
+ 4_hNr0d1HaRuprP9dz5rdIs8SO8X4FuAOPFBgKX.AG_6ei9y675CSr1dnhjDUWPWjEzwOSR6E31n
+ eHrQM3hqPVOcMl3ILksF3a9poPzgwHE76Kf44UBZMCUNbZZhX7fcLvudutA25XNmxIx4iU8WUwTV
+ 22mVXAZ3KFkOnNuBybve7TeQ82xSbgsC1qszhx4q2.3ygpDXhGRVeB4cuOC7omxDJJl472esmlLK
+ 6OWWOkksKlawCNnw2ZfdSxnzHLNr6fXZw5Fy3hKPBQHjiegdLrb3vOaQWNFfKxeztI1UOMFqAgb1
+ QveMIRWGYJwnd19GzrCkm20G2QQgzCJ5weBGd7TtxJ.RMAl.9mOnnF8z9GmNkZ8M7.Ql4K1zHxCS
+ 5ILM49RYVmo9mEKRR9bQq5P.g3Hl2OjbCRKj0Rkoi23a0FsdA_enxgTUrwZAwg2VVClPLjU9lWw0
+ eGwf9I9yecWmm.hnZ2Nhqc4Dxh7OisHW.GnBhxV7FbVuRDfqOU6G76wKBu9ElqHb62ZtaX0ati1F
+ rwcGJbxMYgttxxvVOYa1Vf01GtMGZF4SDriwYiGdF2UiKU40GXZqHKHzKCkGXYd8vPEXp4b0twqk
+ jj3TUHl6L.5zYYjjGo6b5UVUEMyyFbNSI.2t5XaRmq57Mo9N8mUbFxYZkMa4_eQvJ5isj4rDayPl
+ W82bKlmpH_K3MXQVIlo6uKVnOrXkJDT1LHHLV75zNiSL_CoKoealpTCQRoX89LWDuemeKSKchEtD
+ Z70z9z6TdKdFBCe7520rZCD_9pfY1EVwWzA28celp3YG.y0WmrysXXF9oXrzwU.M8i6LDKpuqT33
+ .OzOUOLKgLmjD4RHP39pFa5uwWJYDLuGr_55ipZLcVUU9UJ1iE6rly3dbQDqyKVkxGgZ7QArEGQQ
+ 6g5LHA8dDXtRjG4z3B7vGht8zmpVxM_H3nJUCpo4VontlqyNDXnN9b5_WllLCj1Sa3T9CM1rOB2d
+ AtkiisZnRZjay67spOW1b2wib6ERZECTBRS.MNbmxRsLcZQd4rh0BoKAU9Nqy7Lt13.mTIbdExOy
+ M8BtBJofjnnuIv21rHyKUwqDktBEXsv9O6ZfaEVPdWLe2f2hwdVJO0MfV7G5g.QmYeUCUUjQjkCo
+ E5WGcnNmqH9xhqf9z2RMo9YzdRv0R.ccKma_5yP3jm4fOO6u2Cx9zYXrQKXzZIojrsNOSJqa8NhA
+ cN5yEA_XMQQ3W
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 8a7232ca-1467-48de-b49b-55042b582814
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 7 Jul 2023 16:54:08 +0000
+Received: by hermes--production-bf1-5d96b4b9f-2ghnc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 74f4f2705c6e8c4c65d3815b934ef2a1;
+          Fri, 07 Jul 2023 16:54:02 +0000 (UTC)
+Message-ID: <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
+Date:   Fri, 7 Jul 2023 09:53:57 -0700
 MIME-Version: 1.0
-References: <20230319125524.58803-1-aford173@gmail.com> <CAMSo37Whxvp82i9hr-L-O4Qo9Pxkh5L+hFXqw9hNQ+asrD6oyA@mail.gmail.com>
-In-Reply-To: <CAMSo37Whxvp82i9hr-L-O4Qo9Pxkh5L+hFXqw9hNQ+asrD6oyA@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 7 Jul 2023 11:53:15 -0500
-Message-ID: <CAHCN7xK+AQmzwc+_o7Y=vNX7CKamQMrfGnrmZ4TsHR8ifSprcw@mail.gmail.com>
-Subject: Re: [PATCH V2] drm/bridge: adv7533: Fix adv7533_mode_valid for
- adv7533 and adv7535
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, dmitry.baryshkov@linaro.org,
-        aford@beaconembedded.com, Robert Foss <rfoss@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-kernel@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
+ <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21638 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 11:05=E2=80=AFAM Yongqin Liu <yongqin.liu@linaro.org=
-> wrote:
+On 7/6/2023 6:43 PM, Paul Moore wrote:
+> On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+>> Currently, the LSM infrastructure supports only one LSM providing an xattr
+>> and EVM calculating the HMAC on that xattr, plus other inode metadata.
+>>
+>> Allow all LSMs to provide one or multiple xattrs, by extending the security
+>> blob reservation mechanism. Introduce the new lbs_xattr_count field of the
+>> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+>> needs, and the LSM infrastructure knows how many xattr slots it should
+>> allocate.
+>>
+>> Modify the inode_init_security hook definition, by passing the full
+>> xattr array allocated in security_inode_init_security(), and the current
+>> number of xattr slots in that array filled by LSMs. The first parameter
+>> would allow EVM to access and calculate the HMAC on xattrs supplied by
+>> other LSMs, the second to not leave gaps in the xattr array, when an LSM
+>> requested but did not provide xattrs (e.g. if it is not initialized).
+>>
+>> Introduce lsm_get_xattr_slot(), which LSMs can call as many times as the
+>> number specified in the lbs_xattr_count field of the lsm_blob_sizes
+>> structure. During each call, lsm_get_xattr_slot() increments the number of
+>> filled xattrs, so that at the next invocation it returns the next xattr
+>> slot to fill.
+>>
+>> Cleanup security_inode_init_security(). Unify the !initxattrs and
+>> initxattrs case by simply not allocating the new_xattrs array in the
+>> former. Update the documentation to reflect the changes, and fix the
+>> description of the xattr name, as it is not allocated anymore.
+>>
+>> Adapt both SELinux and Smack to use the new definition of the
+>> inode_init_security hook, and to call lsm_get_xattr_slot() to obtain and
+>> fill the reserved slots in the xattr array.
+>>
+>> Move the xattr->name assignment after the xattr->value one, so that it is
+>> done only in case of successful memory allocation.
+>>
+>> Finally, change the default return value of the inode_init_security hook
+>> from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
+>> conventions.
+>>
+>> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+>> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
+>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>> ---
+>>  include/linux/lsm_hook_defs.h |  6 +--
+>>  include/linux/lsm_hooks.h     | 20 ++++++++++
+>>  security/security.c           | 71 +++++++++++++++++++++++------------
+>>  security/selinux/hooks.c      | 17 +++++----
+>>  security/smack/smack_lsm.c    | 25 ++++++------
+>>  5 files changed, 92 insertions(+), 47 deletions(-)
+> Two *very* small suggestions below, but I can make those during the
+> merge if you are okay with that Roberto?
 >
-> Hi, Adam, All
->
-> On Sun, 19 Mar 2023 at 20:55, Adam Ford <aford173@gmail.com> wrote:
-> >
-> > When dynamically switching lanes was removed, the intent of the code
-> > was to check to make sure that higher speed items used 4 lanes, but
-> > it had the unintended consequence of removing the slower speeds for
-> > 4-lane users.
-> >
-> > This attempts to remedy this by doing a check to see that the
-> > max frequency doesn't exceed the chip limit, and a second
-> > check to make sure that the max bit-rate doesn't exceed the
-> > number of lanes * max bit rate / lane.
-> >
-> > Fixes: 9a0cdcd6649b ("drm/bridge: adv7533: remove dynamic lane switchin=
-g from adv7533 bridge")
-> > Reviewed-by: Robert Foss <rfoss@kernel.org>
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > ---
-> >
-> > V2:  Fix whitespace in comment
-> >      Remove TODO comment
-> >      Add R-B from Robert.
->
-> With this change, the ACK android-mainline based hikey960 build failed
-> to show UI on the HDMI
-> monitor connected, but it works if I revert this change.
-> Here is the serial console output: http://ix.io/4zK8
->
-> Not sure if you have any idea what the problem is there,
-> and how to have it fixed.
->
-> Please let me know if you need any other information.
+> I'm also going to assume that Casey is okay with the Smack portion of
+> this patchset?  It looks fine to me, and considering his ACK on the
+> other Smack patch in this patchset I'm assuming he is okay with this
+> one as well ... ?
 
-I'd be curious to know the desired clock rate and the number of lanes
-you're trying to use.
+Yes, please feel free to add my Acked-by as needed.
 
-adam
 >
-> Thanks,
-> Yongqin Liu
+>> diff --git a/security/security.c b/security/security.c
+>> index ee4f1cc4902..d5ef7df1ce4 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -1591,11 +1592,15 @@ EXPORT_SYMBOL(security_dentry_create_files_as);
+>>   * created inode and set up the incore security field for the new inode.  This
+>>   * hook is called by the fs code as part of the inode creation transaction and
+>>   * provides for atomic labeling of the inode, unlike the post_create/mkdir/...
+>> - * hooks called by the VFS.  The hook function is expected to allocate the name
+>> - * and value via kmalloc, with the caller being responsible for calling kfree
+>> - * after using them.  If the security module does not use security attributes
+>> - * or does not wish to put a security attribute on this particular inode, then
+>> - * it should return -EOPNOTSUPP to skip this processing.
+>> + * hooks called by the VFS.  The hook function is expected to populate the
+>> + * @xattrs array, by calling lsm_get_xattr_slot() to retrieve the slots
+> I think we want to change "@xattrs array" to just "xattrs array" as
+> there is no function parameter named "xattrs" in the LSM/security_XXX
+> hook itself, just in the 'inode_init_security' hook implementation.
 >
-> > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm=
-/bridge/adv7511/adv7533.c
-> > index fdfeadcefe80..7e3e56441aed 100644
-> > --- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
-> > +++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
-> > @@ -103,22 +103,19 @@ void adv7533_dsi_power_off(struct adv7511 *adv)
-> >  enum drm_mode_status adv7533_mode_valid(struct adv7511 *adv,
-> >                                         const struct drm_display_mode *=
-mode)
-> >  {
-> > -       int lanes;
-> > +       unsigned long max_lane_freq;
-> >         struct mipi_dsi_device *dsi =3D adv->dsi;
-> > +       u8 bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
-> >
-> > -       if (mode->clock > 80000)
-> > -               lanes =3D 4;
-> > -       else
-> > -               lanes =3D 3;
-> > -
-> > -       /*
-> > -        * TODO: add support for dynamic switching of lanes
-> > -        * by using the bridge pre_enable() op . Till then filter
-> > -        * out the modes which shall need different number of lanes
-> > -        * than what was configured in the device tree.
-> > -        */
-> > -       if (lanes !=3D dsi->lanes)
-> > -               return MODE_BAD;
-> > +       /* Check max clock for either 7533 or 7535 */
-> > +       if (mode->clock > (adv->type =3D=3D ADV7533 ? 80000 : 148500))
-> > +               return MODE_CLOCK_HIGH;
-> > +
-> > +       /* Check max clock for each lane */
-> > +       max_lane_freq =3D (adv->type =3D=3D ADV7533 ? 800000 : 891000);
-> > +
-> > +       if (mode->clock * bpp > max_lane_freq * adv->num_dsi_lanes)
-> > +               return MODE_CLOCK_HIGH;
-> >
-> >         return MODE_OK;
-> >  }
-> > --
-> > 2.34.1
-> >
+> I might also break the new text describing the hook implementation
+> into a new paragraph.
 >
+>> + * reserved by the security module with the lbs_xattr_count field of the
+>> + * lsm_blob_sizes structure.  For each slot, the hook function should set ->name
+>> + * to the attribute name suffix (e.g. selinux), to allocate ->value (will be
+>> + * freed by the caller) and set it to the attribute value, to set ->value_len to
+>> + * the length of the value.  If the security module does not use security
+>> + * attributes or does not wish to put a security attribute on this particular
+>> + * inode, then it should return -EOPNOTSUPP to skip this processing.
+>>   *
+>>   * Return: Returns 0 on success, -EOPNOTSUPP if no security attribute is
+>>   * needed, or -ENOMEM on memory allocation failure.
+>> @@ -1604,33 +1609,51 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+>>  				 const struct qstr *qstr,
+>>  				 const initxattrs initxattrs, void *fs_data)
+>>  {
+>> -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+>> -	struct xattr *lsm_xattr, *evm_xattr, *xattr;
+>> -	int ret;
+>> +	struct security_hook_list *P;
+> The above comments were nitpicky, this one is even more so ...
+> convention within security/security.c is to call the
+> security_hook_list pointer "hp", not "P" (although I recognize P is
+> used in the macro).
 >
+>> +	struct xattr *new_xattrs = NULL;
+>> +	int ret = -EOPNOTSUPP, xattr_count = 0;
 > --
-> Best Regards,
-> Yongqin Liu
-> ---------------------------------------------------------------
-> #mailing list
-> linaro-android@lists.linaro.org
-> http://lists.linaro.org/mailman/listinfo/linaro-android
+> paul-moore.com
