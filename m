@@ -2,127 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950F474B443
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A3474B43B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjGGP17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S232565AbjGGP1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGP1y (ORCPT
+        with ESMTP id S233146AbjGGP1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:27:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A00D2139
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:27:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688743627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+8qlgKJYI7kB6D1e5SNd04VHZ2yM21oq3nfTt/gANL8=;
-        b=Xp3V7QpxR0t4kn3riQcIygCunUkXwI6NZ3Tna1R1/eSSKIttUgnUBIEMa0bUEAsweRM2gc
-        U6nnWomAy9UZxVmI7MDDjcPICPUqvUyj2cWWhWFPcUxqtL/gbiqKCzm2QxuPCdKnlNpwQG
-        VW5QSR7ucZvmaJXYRS7+9Gx7xwPi09M=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-652-m5IycyIhOGi8h4lnn3tYjQ-1; Fri, 07 Jul 2023 11:27:05 -0400
-X-MC-Unique: m5IycyIhOGi8h4lnn3tYjQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3fc020021efso1292865e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:27:05 -0700 (PDT)
+        Fri, 7 Jul 2023 11:27:32 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BA62695;
+        Fri,  7 Jul 2023 08:27:30 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3464c774f23so1059095ab.1;
+        Fri, 07 Jul 2023 08:27:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688743624; x=1691335624;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8qlgKJYI7kB6D1e5SNd04VHZ2yM21oq3nfTt/gANL8=;
-        b=AmSYuV2EYlV4r9LZ6i3voXlSdjegufSNK8Tp1VebxjX/Q1m89mhjBdd2NyfshW5GVs
-         XxlkO2XPcUctI7JS0my7fVXW6eNHaIyNJWJl2SlPd8ZwrIxWtoWl5znuH4/k3rqoqpNx
-         HvBIDpp99GHK3pJ6PigPvMNxUupbkmH7Q6k3r46oKVFBd+M79mn20FPvIlsTQJ+6Veaw
-         j1hYJPFcs7PepieEh8u9mtUuIRy39mxjwYp8n06HDkf0zLQEq9fRywo99+cTeXdu3AIQ
-         uS685jl3tkaFlDSusr7ZLWuVt4EI2g5Mqz15mVpQilfYZkAUfHGsKZ9A6RrmHIirRbLL
-         NZcA==
-X-Gm-Message-State: ABy/qLbKz9E012gsxuMVwYPE5KRgDLT5DBFT52bj6oHGjl5/87US2Gc1
-        wsvZ0KTvSzNxCAAbr2fdem/vM0SJjJ7XU2qaKCP30JGMO4tVhpRfeLIIPoMEx+ddtmLjb2d0bWB
-        51hbHnbR2/JmnoSo4rWTqrtCl
-X-Received: by 2002:adf:f052:0:b0:30a:a15d:eb2f with SMTP id t18-20020adff052000000b0030aa15deb2fmr4668089wro.3.1688743624749;
-        Fri, 07 Jul 2023 08:27:04 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGmxd1jbrrvV1R0iu/TeFKW/e1nuXfI0DnXijMIXAlyALphvzgzqltgfOe8J565vUOEzxyvoA==
-X-Received: by 2002:adf:f052:0:b0:30a:a15d:eb2f with SMTP id t18-20020adff052000000b0030aa15deb2fmr4668074wro.3.1688743624480;
-        Fri, 07 Jul 2023 08:27:04 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bl1-20020adfe241000000b003143c9beeaesm4711005wrb.44.2023.07.07.08.27.04
+        d=1e100.net; s=20221208; t=1688743649; x=1691335649;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iSMX3fbwS3ZdQ14KbIA9PVvNgGYdtwwGwe8Mi8kgYeU=;
+        b=EYdHMusEeHXVsH+mdtqPRDbZm3oh153aO23Ej6SfCO0Qz+ww8sbLAOX5CBPwylFWrR
+         RT22WT+jxy+xBM5avAhrSFmgGThZ717vhOT55JHPKwbMb3MQdfBPHoc6tlOAuobnwGP8
+         azql/ZOSIR9Fj/3wMufgQJWpVU8K6LMLutcj4t2VxN9pEKQhmhCe5BpYofmGeC8w7S7F
+         GYMlpL9OYV1xAkLoo/O5s6XuHjB/I1SK10S+jU1Q4CvyrMzPPfe8AqvHvI/ivyo4tf61
+         rRm3oI3SwuUD9DYBAXXwP5Dv/4GpcHygWPfR3+3ok3u6hskNHOTqPpv2Tt/oHGYDOrbH
+         O+6g==
+X-Gm-Message-State: ABy/qLYyUursuKJvkS/IrwuVaXOjsI1dBsI3MSWKLF10sCV2aev6bkw4
+        xIrOdysTCe67y++X8b8IGQ==
+X-Google-Smtp-Source: APBJJlGQb/+NSo1YY2XQiOfry0niDhsIK8kPOwBt3oTrgIhTVOV41ugAIwkpb1OfmPqwJ646BYkBgA==
+X-Received: by 2002:a92:c70f:0:b0:345:c11e:d1ad with SMTP id a15-20020a92c70f000000b00345c11ed1admr5255201ilp.26.1688743649601;
+        Fri, 07 Jul 2023 08:27:29 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id ee17-20020a056638293100b0042b37080b23sm1279795jab.73.2023.07.07.08.27.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 08:27:04 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/4] vgacon: rework screen_info #ifdef checks
-In-Reply-To: <ff9bfcfa-fa3b-42d2-b429-059b5103bce2@app.fastmail.com>
-References: <20230707095415.1449376-1-arnd@kernel.org>
- <20230707095415.1449376-2-arnd@kernel.org>
- <87jzvbyh4p.fsf@minerva.mail-host-address-is-not-set>
- <ff9bfcfa-fa3b-42d2-b429-059b5103bce2@app.fastmail.com>
-Date:   Fri, 07 Jul 2023 17:27:03 +0200
-Message-ID: <87bkgnyc6w.fsf@minerva.mail-host-address-is-not-set>
+        Fri, 07 Jul 2023 08:27:28 -0700 (PDT)
+Received: (nullmailer pid 334293 invoked by uid 1000);
+        Fri, 07 Jul 2023 15:27:24 -0000
+Date:   Fri, 7 Jul 2023 09:27:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "olivier.moysan@foss.st.com" <olivier.moysan@foss.st.com>,
+        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "fabrice.gasnier@foss.st.com" <fabrice.gasnier@foss.st.com>,
+        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "hugues.fruchet@foss.st.com" <hugues.fruchet@foss.st.com>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "arnd@kernel.org" <arnd@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
+ description in binding files
+Message-ID: <20230707152724.GA329615-robh@kernel.org>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
+ <875y6vzuga.fsf@epam.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875y6vzuga.fsf@epam.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
+On Fri, Jul 07, 2023 at 02:07:18PM +0000, Oleksii Moisieiev wrote:
+> 
+> Gatien Chevallier <gatien.chevallier@foss.st.com> writes:
+> 
+> > feature-domains is an optional property that allows a peripheral to
+> > refer to one or more feature domain controller(s).
+> >
+> > Description of this property is added to all peripheral binding files of
+> > the peripheral under the STM32 firewall controllers. It allows an accurate
+> > representation of the hardware, where various peripherals are connected
+> > to this firewall bus. The firewall can then check the peripheral accesses
+> > before allowing it to probe.
+> >
+> > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> > ---
+> >
+> > Disclaimer: Some error with dtbs_check will be observed as I've
+> > considered the property to be generic, as Rob asked
+> >
+> >  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
+> >  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
+> >  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
+> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
+> >  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
+> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
+> >  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
+> >  .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
+> >  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
+> >  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
+> >  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
+> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
+> >  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
+> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
+> >  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
+> >  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
+> >  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
+> >  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
+> >  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
+> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
+> >  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
+> >  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
+> >  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
+> >  Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
+> >  24 files changed, 97 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> > index b767ec72a999..daf8dcaef627 100644
+> > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> > @@ -50,6 +50,10 @@ properties:
+> >    power-domains:
+> >      maxItems: 1
+> >  
+> > +  feature-domains:
+> > +    minItems: 1
+> > +    maxItems: 3
+> > +
+> 
+> I beliewe feature-domains is generic binding. This means that maxItems
+> can be implementation dependend. I would rather drop maxItems so the
+> following format will be possible:
+> 
+>           feature-domains = <&etzpc 1>, <&etzpc 2>, <&some_other_domain 1 2 3 4>
+>           feature-domain-names = "firewall 1", "firewall 2", "other_domain"
 
-> On Fri, Jul 7, 2023, at 15:40, Javier Martinez Canillas wrote:
+The above already allows this (not -names, but the number of entries).
+> 
+> Also I beliewe driver will handle feature-domain-names property so it
+> will parse feature-domains only related to the firewall.
 
-[...]
+Now I'm curious. What's an example that's not a firewall?
 
->> And this is only used by mdacon (not supported by ia64), vgacon and
->> vga16fb (not supported by ia64 either).
->>
->> So this could just be guarded just by CONFIG_VGA_CONSOLE for ia64 ?
->
-> Right, I though about doing this more accurately, but in the end
-> went for the simplest change rather than spending much more time
-> trying to clean up the unused variables etc.
->
-> Let me know if you'd prefer me to respin this part, otherwise
-> I'd call the ia64 bit good enough for the purpose of the series.
->
+(Note I'm still not happy with the naming of 'feature' as anything is a 
+feature, but that's the least of the issues really.)
 
-No need to re-spin, agreed that makes sense to keep it simpler.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Rob
