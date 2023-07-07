@@ -2,184 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A3474B43B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E08F74B46D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjGGP1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S232733AbjGGPd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbjGGP1c (ORCPT
+        with ESMTP id S230443AbjGGPdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:27:32 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BA62695;
-        Fri,  7 Jul 2023 08:27:30 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3464c774f23so1059095ab.1;
-        Fri, 07 Jul 2023 08:27:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688743649; x=1691335649;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iSMX3fbwS3ZdQ14KbIA9PVvNgGYdtwwGwe8Mi8kgYeU=;
-        b=EYdHMusEeHXVsH+mdtqPRDbZm3oh153aO23Ej6SfCO0Qz+ww8sbLAOX5CBPwylFWrR
-         RT22WT+jxy+xBM5avAhrSFmgGThZ717vhOT55JHPKwbMb3MQdfBPHoc6tlOAuobnwGP8
-         azql/ZOSIR9Fj/3wMufgQJWpVU8K6LMLutcj4t2VxN9pEKQhmhCe5BpYofmGeC8w7S7F
-         GYMlpL9OYV1xAkLoo/O5s6XuHjB/I1SK10S+jU1Q4CvyrMzPPfe8AqvHvI/ivyo4tf61
-         rRm3oI3SwuUD9DYBAXXwP5Dv/4GpcHygWPfR3+3ok3u6hskNHOTqPpv2Tt/oHGYDOrbH
-         O+6g==
-X-Gm-Message-State: ABy/qLYyUursuKJvkS/IrwuVaXOjsI1dBsI3MSWKLF10sCV2aev6bkw4
-        xIrOdysTCe67y++X8b8IGQ==
-X-Google-Smtp-Source: APBJJlGQb/+NSo1YY2XQiOfry0niDhsIK8kPOwBt3oTrgIhTVOV41ugAIwkpb1OfmPqwJ646BYkBgA==
-X-Received: by 2002:a92:c70f:0:b0:345:c11e:d1ad with SMTP id a15-20020a92c70f000000b00345c11ed1admr5255201ilp.26.1688743649601;
-        Fri, 07 Jul 2023 08:27:29 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id ee17-20020a056638293100b0042b37080b23sm1279795jab.73.2023.07.07.08.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 08:27:28 -0700 (PDT)
-Received: (nullmailer pid 334293 invoked by uid 1000);
-        Fri, 07 Jul 2023 15:27:24 -0000
-Date:   Fri, 7 Jul 2023 09:27:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Cc:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "olivier.moysan@foss.st.com" <olivier.moysan@foss.st.com>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "fabrice.gasnier@foss.st.com" <fabrice.gasnier@foss.st.com>,
-        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "hugues.fruchet@foss.st.com" <hugues.fruchet@foss.st.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "arnd@kernel.org" <arnd@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
+        Fri, 7 Jul 2023 11:33:39 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803D12123;
+        Fri,  7 Jul 2023 08:33:35 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id A0397120010;
+        Fri,  7 Jul 2023 18:33:32 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru A0397120010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688744012;
+        bh=GKtM0bSwk3y4gBkptV+v8XDqcrZiJgzslOcrYoAtv4g=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=W/Cq9WaeaAXXAZoG/ni/YfrW58kcWRQRFU0JbkcrxG/FLtQe3jOm4CZnU1duCNeQ6
+         AhC5Wg7fuMyWih0PBLFsi6a+RkDLN4i86dsV/HXhfQ4FQ0eIjBemzWVd8kgNRckn7D
+         dYWUvQbv6a8VNl9FYL59Zkigb+GKZLnAy+UqdNusD9F8PvBnT68wB5wqX8QZWV7JDJ
+         /BKCNdj2usNvEbDum2Up63ybTXKtcTkCMVTrL9yaENvcqOl3TPc3OcgPlO+cr9HIy8
+         SjdqWeCoRlAiznHkcK1pANvgi/UDFq9MX9NvbN/rFs2jU3wUtzYFhx/OkjcH4UxTD/
+         fFmFvTScKBSfA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Fri,  7 Jul 2023 18:33:32 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 7 Jul 2023 18:33:15 +0300
+From:   George Stark <gnstark@sberdevices.ru>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
+        <gnstark@sberdevices.ru>
+CC:     <linux-iio@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-Message-ID: <20230707152724.GA329615-robh@kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
- <875y6vzuga.fsf@epam.com>
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
+        George Stark <GNStark@sberdevices.ru>
+Subject: [PATCH v4 0/6] iio: adc: meson: add iio channels to read channel 7 mux inputs
+Date:   Fri, 7 Jul 2023 18:27:37 +0300
+Message-ID: <20230707153322.114302-1-gnstark@sberdevices.ru>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875y6vzuga.fsf@epam.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178491 [Jul 07 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: GNStark@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/07 14:34:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/07 14:35:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/07 03:24:00 #21575635
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 02:07:18PM +0000, Oleksii Moisieiev wrote:
-> 
-> Gatien Chevallier <gatien.chevallier@foss.st.com> writes:
-> 
-> > feature-domains is an optional property that allows a peripheral to
-> > refer to one or more feature domain controller(s).
-> >
-> > Description of this property is added to all peripheral binding files of
-> > the peripheral under the STM32 firewall controllers. It allows an accurate
-> > representation of the hardware, where various peripherals are connected
-> > to this firewall bus. The firewall can then check the peripheral accesses
-> > before allowing it to probe.
-> >
-> > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > ---
-> >
-> > Disclaimer: Some error with dtbs_check will be observed as I've
-> > considered the property to be generic, as Rob asked
-> >
-> >  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
-> >  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
-> >  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
-> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
-> >  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
-> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
-> >  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
-> >  .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
-> >  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
-> >  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
-> >  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
-> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
-> >  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
-> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
-> >  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
-> >  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
-> >  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
-> >  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
-> >  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
-> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
-> >  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
-> >  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
-> >  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
-> >  Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
-> >  24 files changed, 97 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > index b767ec72a999..daf8dcaef627 100644
-> > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > @@ -50,6 +50,10 @@ properties:
-> >    power-domains:
-> >      maxItems: 1
-> >  
-> > +  feature-domains:
-> > +    minItems: 1
-> > +    maxItems: 3
-> > +
-> 
-> I beliewe feature-domains is generic binding. This means that maxItems
-> can be implementation dependend. I would rather drop maxItems so the
-> following format will be possible:
-> 
->           feature-domains = <&etzpc 1>, <&etzpc 2>, <&some_other_domain 1 2 3 4>
->           feature-domain-names = "firewall 1", "firewall 2", "other_domain"
+From: George Stark <GNStark@sberdevices.ru>
 
-The above already allows this (not -names, but the number of entries).
-> 
-> Also I beliewe driver will handle feature-domain-names property so it
-> will parse feature-domains only related to the firewall.
+Changelog:
 
-Now I'm curious. What's an example that's not a firewall?
+v1->v2:
+split refactoring patch [1] into 4 smaller patches, fix comment style
 
-(Note I'm still not happy with the naming of 'feature' as anything is a 
-feature, but that's the least of the issues really.)
+[1] https://lore.kernel.org/lkml/20230621062715.455652-2-gnstark@sberdevices.ru/
 
-Rob
+v2->v3:
+remove patch 'meson saradc: unite iio channel array definitions' [1] after discussion
+
+patch 'meson saradc: add enum for iio channel array indexes'
+  - change enum items prefix from INDEX_ to NUM_ since name 'channel index' is
+  more relevant to channel array index in iio world and with 2 tables our array index is
+  not always equal to channel number
+  - resolve conflicts after deleting [1]
+  - update commit message, previous patch [2]
+  - return channel number for temp channel. It wasn't used and isn't used currently
+  but may need later
+
+patch meson saradc: support reading from channel 7 mux inputs
+  - resolve conflicts after deleting [1]
+  - update commit message, previous patch [3]
+  - add routine find_channel_by_num to get channel by channel number
+
+[1] https://lore.kernel.org/lkml/20230623022334.791026-4-gnstark@sberdevices.ru/
+[2] https://lore.kernel.org/lkml/20230623022334.791026-5-gnstark@sberdevices.ru/
+[3] https://lore.kernel.org/lkml/20230623022334.791026-7-gnstark@sberdevices.ru/
+
+v3->v4:
+add new patch 'iio: adc: meson: remove unused timestamp channel' [1]
+
+patch 'iio: adc: meson: move enums declaration before'
+	update commit message, previous patch [2]
+patch 'iio: adc: meson: move meson_sar_adc_set_chan7_mux'
+	update commit message, previous patch [3]
+patch 'iio: adc: meson: add enum for iio channel numbers'
+	update commit message, previous patch [4]
+patch 'iio: adc: meson: add channel labels'
+	update commit message, previous patch [5]
+	change sprintf(label, "%s\n", "temp-sensor") to sprintf(label, "temp-sensor\n")
+patch 'iio: adc: meson: support reading from channel 7 mux'
+	rewrite enum meson_sar_adc_chan7_mux_sel definition and
+		read_label routine proposed by Andy [7], previous patch [6]
+
+[1] https://lore.kernel.org/lkml/20230705160413.000062e7@Huawei.com/
+[2] https://lore.kernel.org/lkml/20230627224017.1724097-2-gnstark@sberdevices.ru/
+[3] https://lore.kernel.org/lkml/20230627224017.1724097-3-gnstark@sberdevices.ru/
+[4] https://lore.kernel.org/lkml/20230627224017.1724097-4-gnstark@sberdevices.ru/
+[5] https://lore.kernel.org/lkml/20230627224017.1724097-5-gnstark@sberdevices.ru/
+[6] https://lore.kernel.org/lkml/20230627224017.1724097-6-gnstark@sberdevices.ru/
+[7] https://lore.kernel.org/lkml/ZJwGCNA+ZURri24i@smile.fi.intel.com/
+
+George Stark (6):
+  iio: adc: meson: remove unused timestamp channel
+  iio: adc: meson: move enums declaration before variables declaration
+  iio: adc: meson: move meson_sar_adc_set_chan7_mux routine upper
+  iio: adc: meson: add enum for iio channel numbers
+  iio: adc: meson: add channel labels
+  iio: adc: meson: support reading from channel 7 mux inputs
+
+ drivers/iio/adc/meson_saradc.c | 173 +++++++++++++++++++++++++--------
+ 1 file changed, 134 insertions(+), 39 deletions(-)
+
+-- 
+2.38.4
+
