@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8AB74A8D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D2374A8D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjGGCQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S232203AbjGGCRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbjGGCQ4 (ORCPT
+        with ESMTP id S232076AbjGGCRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:16:56 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7B8721709
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:16:54 -0700 (PDT)
-Received: (qmail 1198458 invoked by uid 1000); 6 Jul 2023 22:16:52 -0400
-Date:   Thu, 6 Jul 2023 22:16:52 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     richard.yu@hpe.com
-Cc:     verdun@hpe.com, nick.hawkins@hpe.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB support
-Message-ID: <9171a00d-9ce5-4aca-8f81-2ad2b6961e17@rowland.harvard.edu>
-References: <20230706215910.78772-1-richard.yu@hpe.com>
- <20230706215910.78772-3-richard.yu@hpe.com>
+        Thu, 6 Jul 2023 22:17:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4182B19B7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:17:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C21FB6152B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C49C433C7;
+        Fri,  7 Jul 2023 02:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688696232;
+        bh=JnxhhM1caNPNzvpuk3DMvL0aLRLKS2KlkCHyZiudBO8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vqay8oFiTH0Ojp3oVDNTOMv6XuO+B8YQhtFb8ejQ+ry9IUyvIC2jhYPQ4RgnsEy/m
+         mqlLbd5+27Z4Pw2GYhXqdTLOD4vZy8kTZgO1yn6AYqIezWM7I0XUVzzQK1k0HpR2XG
+         DpJW6Rixb5aEaWd6MWvVaScd7BEz6DJRmG08SeZlcQD8sC/bqYhzhT3jr0p+pNTkZ5
+         97ksk5nEk8YvKSX5pHM0PMi9nvQzkXYS8jsu8OXS4bhw5VYfqF4+FgighSbHNEavND
+         KLkdEVqegiQltcw7YfqqcQb1q59LPSKSRxaYthDpdWpfG478QOCHwW7HPOk3e2zYFI
+         jqvN0hUyCEDKg==
+Date:   Thu, 6 Jul 2023 19:17:10 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Satoru Moriya <satoru.moriya@hds.com>
+Subject: Re: [PATCH] udp6: add a missing call into udp_fail_queue_rcv_skb
+ tracepoint
+Message-ID: <20230706191710.5f071724@kernel.org>
+In-Reply-To: <20230706172237.28341-1-ivan@cloudflare.com>
+References: <20230706172237.28341-1-ivan@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706215910.78772-3-richard.yu@hpe.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 04:59:09PM -0500, richard.yu@hpe.com wrote:
-> From: Richard Yu <richard.yu@hpe.com>
+On Thu,  6 Jul 2023 10:22:36 -0700 Ivan Babrou wrote:
+> The tracepoint has existed for 12 years, but it only covered udp
+> over the legacy IPv4 protocol. Having it enabled for udp6 removes
+> the unnecessary difference in error visibility.
 > 
-> The HPE GXP vEHCI controller presents a four port EHCI compatible PCI
-> function to host software. Each vEHCI port is logically connected to a
-> corresponding set of virtual device registers.
+> Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+> Fixes: 296f7ea75b45 ("udp: add tracepoints for queueing skb to rcvbuf")
 
-What makes the vEHCI controller virtual?  Presenting a "PCI function"
-certainly seems to indicate it is a physical device, indeed, a PCI
-device.
-
-> 
-> Signed-off-by: Richard Yu <richard.yu@hpe.com>
-> ---
->  drivers/usb/gadget/udc/Kconfig   |    6 +
->  drivers/usb/gadget/udc/Makefile  |    1 +
->  drivers/usb/gadget/udc/gxp-udc.c | 1401 ++++++++++++++++++++++++++++++
->  3 files changed, 1408 insertions(+)
->  create mode 100644 drivers/usb/gadget/udc/gxp-udc.c
-> 
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index 83cae6bb12eb..c01eb2a2c7db 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -461,6 +461,12 @@ config USB_ASPEED_UDC
->  	  dynamically linked module called "aspeed_udc" and force all
->  	  gadget drivers to also be dynamically linked.
->  
-> +config USB_GXP_UDC
-> +        bool "GXP UDC Driver"
-> +        depends on ARCH_HPE_GXP || COMPILE_TEST
-> +        help
-> +          Say "y" to add support for GXP UDC driver
-
-Now hang on a second.  What sort of driver is this patch adding support 
-for: a GXP vEHCI controller driver or a GXP UDC controller driver?  The 
-patch description says the first, but the code says the second.
-
-It sounds like this thing actually is a PCI device that appears to the 
-OS as an actual EHCI controller, but with virtual (rather than physical) 
-downstream ports, and it includes a virtual UDC for each port.  As such, 
-it requires a driver for the virtual UDCs, which is what this patch 
-provides.  (No new driver is needed for the EHCI controller part, since 
-the kernel already has an EHCI driver.)
-
-Is that a correct description?  And if it is, what is the purpose of 
-this device?  To act as a testing ground for gadget drivers?
-
-Alan Stern
+Doesn't build when IPv6=m, you need to export the tp?
+-- 
+pw-bot: cr
