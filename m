@@ -2,190 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFCD74B781
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F2C74B782
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjGGTxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S229502AbjGGTy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjGGTxi (ORCPT
+        with ESMTP id S229542AbjGGTy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:53:38 -0400
+        Fri, 7 Jul 2023 15:54:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB3119A5
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:53:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD6C19A5;
+        Fri,  7 Jul 2023 12:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E845561A4F
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC240C433C8;
-        Fri,  7 Jul 2023 19:53:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A730C61A34;
+        Fri,  7 Jul 2023 19:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE70C433C8;
+        Fri,  7 Jul 2023 19:54:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688759616;
-        bh=OTwBIWjS+lRVssTp4xtuqn6WnWPckgnWTLxmnMqHGMw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kYR5DDiUGLuVRQ5kg3tQkEv5LFvouP7qrZE+obKy3HwP0yZvCnctPAOAFnRId00a4
-         k4jXPDdEXYL3SqpJCGAtIyvfVhnbNCCq/AjVDMEXRyHu1VXlV0iXpa1oM+eAF0gWna
-         rHauwGNlhAkKdWKSCq7mX9aKBuVNqMrAUh6w3XK4DS+oz1aa2r8HRamPxhKIZpJJ76
-         cO4OM4z06YJ14R29uMnXrH/0EP4siStNtLXEqPd23cdcWj4rqw2SSocIDESMTfV3Ks
-         wnPPxerIL562rK4L6NV7kfbhc6jWXdOsU1arbMXJBCtpIF7Ep0FL/r4nCRKLt2yCAh
-         MvTU7wHMNxIBw==
-Message-ID: <161c5a69-dd26-a7ae-7548-efa45418f5aa@kernel.org>
-Date:   Fri, 7 Jul 2023 14:53:34 -0500
+        s=k20201202; t=1688759694;
+        bh=wdUqdpRF/SKerHOFXhjdav6c/7lqS9b7DIwJzkdkCM0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pNDK3/yYC+eEal/D8caLdAsHQPYDGnl1vqJhFKK/NfonlaATvI0HRe+vSt1LBpbKB
+         L609xmrPS6qmm+LmFrX4A+1LEOCFN4LG1jpD8g3ZrgNmaqZqyaZSjZ49xQHECJ9zDO
+         8iHB+sOSwpis4C14vqJdS1PYCmdFqNAJTjHwXnnD6hx4Cx/cwCOX+R+RaQz0tegdCD
+         WvwEBKAnRJ+na0pe99YOQjJQrhDxNsown/PBdIfxvX75q/bHxCaGTFJKI/ehg38iz4
+         qBLnO1MsIkdIwSOE8sHidafDRrd1Kos0PlT2HO+ENysR11IUB8cmR3ioaN0u7i7DY5
+         og1EwBPakaYFA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9874BCE007B; Fri,  7 Jul 2023 12:54:53 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 12:54:53 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Subject: Re: [PATCH v2] refscale: Fix use of uninitalized wait_queue_head_t
+Message-ID: <37d52a42-c6d5-4c4d-9879-53578c154d1f@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230707175355.2442933-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2 RESEND] firmware: stratix10-svc: Generic Mailbox
- Command
-Content-Language: en-US
-To:     kah.jing.lee@intel.com
-Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
-        tien.sung.ang@intel.com, Teh Wen Ping <wen.ping.teh@intel.com>
-References: <20230707080112.1722827-1-kah.jing.lee@intel.com>
- <20230707080305.1722983-1-kah.jing.lee@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230707080305.1722983-1-kah.jing.lee@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230707175355.2442933-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/7/23 03:03, kah.jing.lee@intel.com wrote:
-> From: Teh Wen Ping <wen.ping.teh@intel.com>
+On Fri, Jul 07, 2023 at 01:53:55PM -0400, Waiman Long wrote:
+> It was found that running the refscale test might crash the kernel once
+> in a while with the following error:
 > 
-> Add generic mailbox command that can support SDM command. User can use this
-> command to send SDM mailbox command. User have to specified an input file
-> which contain the command data and an output file for SDM response to be
-> copied over.
+> [ 8569.952896] BUG: unable to handle page fault for address: ffffffffffffffe8
+> [ 8569.952900] #PF: supervisor read access in kernel mode
+> [ 8569.952902] #PF: error_code(0x0000) - not-present page
+> [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
+> [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
+> [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS 1.2.4 05/28/2021
+> [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
+>   :
+> [ 8569.952940] Call Trace:
+> [ 8569.952941]  <TASK>
+> [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
+> [ 8569.952959]  kthread+0x10e/0x130
+> [ 8569.952966]  ret_from_fork+0x1f/0x30
+> [ 8569.952973]  </TASK>
 > 
-> Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
-> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
-> ---
->   drivers/firmware/stratix10-svc.c              | 18 +++++++++++++
->   include/linux/firmware/intel/stratix10-smc.h  | 25 +++++++++++++++++++
->   .../firmware/intel/stratix10-svc-client.h     |  5 ++++
->   3 files changed, 48 insertions(+)
+> This is likely caused by the fact that init_waitqueue_head() is
+> called after the ref_scale_reader kthread is created. The kthread
+> can potentially try to use the waitqueue head before it is properly
+> initialized. The crash happened at
 > 
-> diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-> index 2d674126160f..430e8bf0bca9 100644
-> --- a/drivers/firmware/stratix10-svc.c
-> +++ b/drivers/firmware/stratix10-svc.c
-> @@ -37,6 +37,7 @@
->   #define SVC_NUM_CHANNEL				3
->   #define FPGA_CONFIG_DATA_CLAIM_TIMEOUT_MS	200
->   #define FPGA_CONFIG_STATUS_TIMEOUT_SEC		30
-> +#define BYTE_TO_WORD_SIZE              4
->   
->   /* stratix10 service layer clients */
->   #define STRATIX10_RSU				"stratix10-rsu"
-> @@ -361,6 +362,13 @@ static void svc_thread_recv_status_ok(struct stratix10_svc_data *p_data,
->   		cb_data->kaddr2 = svc_pa_to_va(res.a2);
->   		cb_data->kaddr3 = &res.a3;
->   		break;
-> +	case COMMAND_MBOX_SEND_CMD:
-> +		cb_data->status = BIT(SVC_STATUS_OK);
-> +		cb_data->kaddr1 = &res.a1;
-> +		/* SDM return size in u32 word. Convert size to u8 */
+> 	static inline void __add_wait_queue(...)
+> 	{
+> 		:
+> 		if (!(wq->flags & WQ_FLAG_PRIORITY)) <=== Crash here
+> 
+> The offset of flags from list_head entry in wait_queue_entry is -0x18. If
+> reader_tasks[i].wq.head.next is NULL as allocated reader_task structure
+> is zero initialized, the instruction will try to access address
+> 0xffffffffffffffe8 which is the fault address listed above.
+> 
+> Fix this by initializing the waitqueue head first before kthread
+> creation.
+> 
+> Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of read-side synchronization")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
 
-Check this comment. I don't see how this is accurate.
-> +		res.a2 = res.a2 * BYTE_TO_WORD_SIZE;
-> +		cb_data->kaddr2 = &res.a2;
-> +		break;
->   	default:
->   		pr_warn("it shouldn't happen\n");
->   		break;
-> @@ -534,6 +542,15 @@ static int svc_normal_to_secure_thread(void *data)
->   			a1 = 0;
->   			a2 = 0;
->   			break;
-> +		case COMMAND_MBOX_SEND_CMD:
-> +			a0 = INTEL_SIP_SMC_MBOX_SEND_CMD;
-> +			a1 = pdata->arg[0];
-> +			a2 = (unsigned long)pdata->paddr;
-> +			a3 = (unsigned long)pdata->size / BYTE_TO_WORD_SIZE;
-> +			a4 = pdata->arg[1];
-> +			a5 = (unsigned long)pdata->paddr_output;
-> +			a6 = (unsigned long)pdata->size_output / BYTE_TO_WORD_SIZE;
-> +			break;
->   		default:
->   			pr_warn("it shouldn't happen\n");
->   			break;
-> @@ -597,6 +614,7 @@ static int svc_normal_to_secure_thread(void *data)
->   			case COMMAND_FCS_DATA_ENCRYPTION:
->   			case COMMAND_FCS_DATA_DECRYPTION:
->   			case COMMAND_FCS_RANDOM_NUMBER_GEN:
-> +			case COMMAND_MBOX_SEND_CMD:
->   				cbdata->status = BIT(SVC_STATUS_INVALID_PARAM);
->   				cbdata->kaddr1 = NULL;
->   				cbdata->kaddr2 = NULL;
-> diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
-> index a718f853d457..ee80ca4bb0d0 100644
-> --- a/include/linux/firmware/intel/stratix10-smc.h
-> +++ b/include/linux/firmware/intel/stratix10-smc.h
-> @@ -466,6 +466,31 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
->   #define INTEL_SIP_SMC_FIRMWARE_VERSION \
->           INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FIRMWARE_VERSION)
->   
-> +/**
-> + * SMC call protocol for Mailbox, starting FUNCID from 60
-> + *
-> + * Call register usage:
-> + * a0 INTEL_SIP_SMC_MBOX_SEND_CMD
-> + * a1 mailbox command code
-> + * a2 physical address that contain mailbox command data (not include header)
-> + * a3 mailbox command data size in word
-> + * a4 set to 0 for CASUAL, set to 1 for URGENT
-> + * a5 physical address for secure firmware to put response data
-> + *    (not include header)
-> + * a6 maximum size in word of physical address to store response data
-> + * a7 not used
-> + *
-> + * Return status
-> + * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_REJECTED or
-> + *    INTEL_SIP_SMC_STATUS_ERROR
-> + * a1 mailbox error code
-> + * a2 response data length in word
-> + * a3 not used
-> + */
-> +#define INTEL_SIP_SMC_FUNCID_MBOX_SEND_CMD 60
-> +	#define INTEL_SIP_SMC_MBOX_SEND_CMD \
-> +	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_MBOX_SEND_CMD)
-> +
->   /**
->    * Request INTEL_SIP_SMC_SVC_VERSION
->    *
-> diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
-> index 0c16037fd08d..60ed82112680 100644
-> --- a/include/linux/firmware/intel/stratix10-svc-client.h
-> +++ b/include/linux/firmware/intel/stratix10-svc-client.h
-> @@ -118,6 +118,9 @@ struct stratix10_svc_chan;
->    * @COMMAND_SMC_SVC_VERSION: Non-mailbox SMC SVC API Version,
->    * return status is SVC_STATUS_OK
->    *
-> + * @COMMAND_MBOX_SEND_CMD: send generic mailbox command, return status is
-> + * SVC_STATUS_OK or SVC_STATUS_ERROR
-> + *
->    * @COMMAND_RSU_DCMF_STATUS: query firmware for the DCMF status
->    * return status is SVC_STATUS_OK or SVC_STATUS_ERROR
->    *
-> @@ -164,6 +167,8 @@ enum stratix10_svc_command_code {
->   	COMMAND_FCS_RANDOM_NUMBER_GEN,
->   	/* for general status poll */
->   	COMMAND_POLL_SERVICE_STATUS = 40,
-> +	/* for generic mailbox send command */
-> +	COMMAND_MBOX_SEND_CMD = 100,
->   	/* Non-mailbox SMC Call */
->   	COMMAND_SMC_SVC_VERSION = 200,
->   };
+Queued and pushed, thank you all!
+
+As always, I could not resist wordsmithing the commit log, please see
+below.
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 933d3bf8f96d7cedf78081030e004d23aee2b56c
+Author: Waiman Long <longman@redhat.com>
+Date:   Fri Jul 7 13:53:55 2023 -0400
+
+    refscale: Fix uninitalized use of wait_queue_head_t
+    
+    Running the refscale test occasionally crashes the kernel with the
+    following error:
+    
+    [ 8569.952896] BUG: unable to handle page fault for address: ffffffffffffffe8
+    [ 8569.952900] #PF: supervisor read access in kernel mode
+    [ 8569.952902] #PF: error_code(0x0000) - not-present page
+    [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
+    [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
+    [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS 1.2.4 05/28/2021
+    [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
+      :
+    [ 8569.952940] Call Trace:
+    [ 8569.952941]  <TASK>
+    [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
+    [ 8569.952959]  kthread+0x10e/0x130
+    [ 8569.952966]  ret_from_fork+0x1f/0x30
+    [ 8569.952973]  </TASK>
+    
+    The likely cause is that init_waitqueue_head() is called after the call to
+    the torture_create_kthread() function that creates the ref_scale_reader
+    kthread.  Although this init_waitqueue_head() call will very likely
+    complete before this kthread is created and starts running, it is
+    possible that the calling kthread will be delayed between the calls to
+    torture_create_kthread() and init_waitqueue_head().  In this case, the
+    new kthread will use the waitqueue head before it is properly initialized,
+    which is not good for the kernel's health and well-being.
+    
+    The above crash happened here:
+    
+            static inline void __add_wait_queue(...)
+            {
+                    :
+                    if (!(wq->flags & WQ_FLAG_PRIORITY)) <=== Crash here
+    
+    The offset of flags from list_head entry in wait_queue_entry is
+    -0x18. If reader_tasks[i].wq.head.next is NULL as allocated reader_task
+    structure is zero initialized, the instruction will try to access address
+    0xffffffffffffffe8, which is exactly the fault address listed above.
+    
+    This commit therefore invokes init_waitqueue_head() before creating
+    the kthread.
+    
+    Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of read-side synchronization")
+    Signed-off-by: Waiman Long <longman@redhat.com>
+    Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+    Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+    Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
+index 1970ce5f22d4..71d138573856 100644
+--- a/kernel/rcu/refscale.c
++++ b/kernel/rcu/refscale.c
+@@ -1107,12 +1107,11 @@ ref_scale_init(void)
+ 	VERBOSE_SCALEOUT("Starting %d reader threads", nreaders);
+ 
+ 	for (i = 0; i < nreaders; i++) {
++		init_waitqueue_head(&reader_tasks[i].wq);
+ 		firsterr = torture_create_kthread(ref_scale_reader, (void *)i,
+ 						  reader_tasks[i].task);
+ 		if (torture_init_error(firsterr))
+ 			goto unwind;
+-
+-		init_waitqueue_head(&(reader_tasks[i].wq));
+ 	}
+ 
+ 	// Main Task
