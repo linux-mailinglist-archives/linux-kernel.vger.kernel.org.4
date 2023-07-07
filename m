@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E4874B18A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAF774B18C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjGGNMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S231950AbjGGNNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjGGNMe (ORCPT
+        with ESMTP id S229740AbjGGNNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:12:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2676C1FEC
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wFqH+7Ljt87dhV27Wcx4gWglYgjDuLdi+M0sLgvzXk4=; b=nAYdwiUTj5N+C2ndcrXIOg0NzR
-        WgxCiFOP2iVzT08YnZ2DvkdKCcsuzkmwLFNZyNSRpRI8+WvxQlC9WBYmP44C+6AGeVqjql77XetW3
-        stIXD8X2JRK8P1VBm98RpEWHXhV5VosQB5Jmp/Bj24p5Q8HsLIWls2YhnQ/zaECn92lZGEYyzbMkV
-        c7I7WPtCQ+QQGIQBT0bvqSTcGvjYXgSXSTcLMC+97NqXFtyneSoi+IKhdyvw0JkysOHYAYJPirPg5
-        Jy3ZsbWiifnqtPL+dfpsjtd0mPjbFoq53nlpAJeX/+dzpASGKox4pRSYzjifqPNyX5XiVQlcGhA+j
-        MPL5FXAA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qHlFi-00C2ig-1Z; Fri, 07 Jul 2023 13:12:02 +0000
-Date:   Fri, 7 Jul 2023 14:12:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 0/5] variable-order, large folios for anonymous memory
-Message-ID: <ZKgPIXSrxqymWrsv@casper.infradead.org>
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <78159ed0-a233-9afb-712f-2df1a4858b22@redhat.com>
- <4d4c45a2-0037-71de-b182-f516fee07e67@arm.com>
- <d9cb4563-c622-9660-287b-a2f35121aec7@redhat.com>
+        Fri, 7 Jul 2023 09:13:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D4C1FF0;
+        Fri,  7 Jul 2023 06:13:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 879C51FDB4;
+        Fri,  7 Jul 2023 13:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688735587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UobiIK3q2vMGQKwcTXx1XKYb4NcuR8QXMg/mvRkRX3c=;
+        b=THkKxvvoPilHwhcm5SMUq87l4542ld7wHMlU0mmVX5ikmZf5AHOacfPNDCaO/UoxLmi41h
+        cTGxaI1u/JUiOq58VWCP+EOFe5Qei2iRUX9LnwqMkosaZ8XS+oH5C/cZ7TB17aGfgdH+F4
+        3AlIohytQ6fBpZGTv1hCqVjmCyj5nRU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688735587;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UobiIK3q2vMGQKwcTXx1XKYb4NcuR8QXMg/mvRkRX3c=;
+        b=wavFwp2g5JelLLtGhdgW6aKQtITsRQEvgYhJyoA9C+y8j8OrXpazqqPL0Jz+KJIXTuyNsN
+        UFe00CisOpZr+zDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 681B41346D;
+        Fri,  7 Jul 2023 13:13:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GNtfGWMPqGSfUAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 07 Jul 2023 13:13:07 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E7F93A0717; Fri,  7 Jul 2023 15:13:06 +0200 (CEST)
+Date:   Fri, 7 Jul 2023 15:13:06 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
+        tytso@mit.edu, bfoster@redhat.com, jack@suse.cz,
+        andreas.gruenbacher@gmail.com, brauner@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230707131306.2wdgtuafc3unjetu@quack3>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+ <20230706164055.GA2306489@perftesting>
+ <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+ <20230706211914.GB11476@frogsfrogsfrogs>
+ <20230706224314.u5zbeld23uqur2ct@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d9cb4563-c622-9660-287b-a2f35121aec7@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <20230706224314.u5zbeld23uqur2ct@moria.home.lan>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,37 +83,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 01:40:53PM +0200, David Hildenbrand wrote:
-> On 06.07.23 10:02, Ryan Roberts wrote:
-> But can you comment on the page migration part (IOW did you try it already)?
+On Thu 06-07-23 18:43:14, Kent Overstreet wrote:
+> On Thu, Jul 06, 2023 at 02:19:14PM -0700, Darrick J. Wong wrote:
+> > /me shrugs, been on vacation and in hospitals for the last month or so.
+> > 
+> > >      bcachefs doesn't use sget() for mutual exclusion because a) sget()
+> > >      is insane, what we really want is the _block device_ to be opened
+> > >      exclusively (which we do), and we have our own block device opening
+> > >      path - which we need to, as we're a multi device filesystem.
+> > 
+> > ...and isn't jan kara already messing with this anyway?
 > 
-> For example, memory hotunplug, CMA, MCE handling, compaction all rely on
-> page migration of something that was allocated using GFP_MOVABLE to actually
-> work.
-> 
-> Compaction seems to skip any higher-order folios, but the question is if the
-> udnerlying migration itself works.
-> 
-> If it already works: great! If not, this really has to be tackled early,
-> because otherwise we'll be breaking the GFP_MOVABLE semantics.
+> The blkdev_get_handle() patchset? I like that, but I don't think that's
+> related - if there's something more related to sget() I haven't seen it
+> yet
 
-I have looked at this a bit.  _Migration_ should be fine.  _Compaction_
-is not.
+There's a series on top of that that also modifies how sget() works [1].
+Christian wants that bit to be merged separately from the bdev handle stuff
+and Christoph chimed in with some other related cleanups so he'll now take
+care of that change.
 
-If you look at a function like folio_migrate_mapping(), it all seems
-appropriately folio-ised.  There might be something in there that is
-slightly wrong, but that would just be a bug to fix, not a huge
-architectural problem.
+Anyhow we should have sget() that does not exclusively claim the bdev
+unless it needs to create a new superblock soon.
 
-The problem comes in the callers of migrate_pages().  They pass a
-new_folio_t callback.  alloc_migration_target() is the usual one passed
-and as far as I can tell is fine.  I've seen no problems reported with it.
+								Honza
 
-compaction_alloc() is a disaster, and I don't know how to fix it.
-The compaction code has its own allocator which is populated with order-0
-folios.  How it populates that freelist is awful ... see split_map_pages()
+[1] https://lore.kernel.org/all/20230704125702.23180-6-jack@suse.cz
 
-> Is swapping working as expected? zswap?
-
-Suboptimally.  Swap will split folios in order to swap them.  Somebody
-needs to fix that, but it should work.
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
