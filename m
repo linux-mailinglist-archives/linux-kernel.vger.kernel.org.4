@@ -2,149 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F4A74ADF0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC2574ADF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjGGJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S232624AbjGGJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjGGJlt (ORCPT
+        with ESMTP id S232614AbjGGJmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:41:49 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241592105
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:41:48 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-4039a42467fso3434511cf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 02:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688722907; x=1691314907;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f1H87IT1KxERv/QSJsjsKJPplxoIARfdzpnvpKldpmI=;
-        b=ThOeo9d3EvutWunUKVZdN5JmByIpYKnG9+E7k601GSh1pP4FHmnyFiI9IDq8bTOz/7
-         75FvYx9PTTT08Lc+aVSE+qxE7mnO9zLUVvhlUJtPFsDu9StTH8hDEVeUu46roHNQGEkL
-         mTk2324xVsfcHDfffC1Qyzc89lJpHyjxkEoXySoAD8JgigJJTNqWHWQ0QOmxMa2RpmDV
-         aIYtwpEsmoxQtaQ7V5DY3E50esljCT41D2yyTqTZM+GxdV4EmT28ZSUndzOawc1Zvmud
-         yMpNrjJ10OyCerhwnmZWnFQTscTEwAFIBDBObn6jMAdPm/oVyjNsn+op+kKe8ZSeZtPQ
-         Je+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688722907; x=1691314907;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f1H87IT1KxERv/QSJsjsKJPplxoIARfdzpnvpKldpmI=;
-        b=BNEn+9BQ8RweLOFSzOhs8r55XCz+VTmtEz1EKQiKcheo0qV0CCLNjeo0lgen1V2Rlf
-         iXtN/JNJyQhfH8Ze1ptJr0IyExJWTbIR6gLlxE4z+G4iwbqEjzyEjP7dOh+wRUfmc/d7
-         zDnuFZDQ7nmYnFVhgK6yHECDG1FzrLNbdF43sMc9xff2u6YexFv3+y76dTmKXrBMRxiv
-         37b29qfbFHWzoX1DkrqD1Bih0rX2yn4SLdVzhCZ2jd/yQCvdQvZQ1DRSq8M9xBqEoAMo
-         Dex88WLNvBTZdNPj4GpSDAOfuQ8i3k7bCijhYIvnPD9VYYRKRuaCFF2JDu5HF/eqk0du
-         e2dg==
-X-Gm-Message-State: ABy/qLan/JkrNBsL4vh6Uyg5QJ4+VngnoBKksS52OAbZOMGjPEkt813Y
-        royPW5ivgYcqFmW1ocU0buOaA7/mnGfpfUb4laIQAA==
-X-Google-Smtp-Source: APBJJlFZlS5WMjckDXcsFWaLy4EQyAspqR3fiYE2RhQxmaQKAbUHr4udmeBY7ue3I2MxpwoLd8R/dD4kntChkCj2HF4=
-X-Received: by 2002:ac8:5aca:0:b0:403:9ef2:fec8 with SMTP id
- d10-20020ac85aca000000b004039ef2fec8mr193297qtd.12.1688722907182; Fri, 07 Jul
- 2023 02:41:47 -0700 (PDT)
+        Fri, 7 Jul 2023 05:42:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A051BEE;
+        Fri,  7 Jul 2023 02:42:09 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:27cd:2d0a:f02b:d955])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 73D316606FE7;
+        Fri,  7 Jul 2023 10:42:07 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688722927;
+        bh=2RocGZadPxeM62Wimx6tn0ZTuqx4/+NH7SB92y3TF7g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OLfyRpXzX1AUrp8m+OCD2XhJlw8I7+yBWCoEPPjYJwICy+2slRJARBAAENODjOQC9
+         1c8yzsHJ5sn2H/rjQRU7dcAZ+JGrspz/3f333FFukb4zu/faMHCIz9GF1MvNNROLg4
+         npBR3KuCVKMwFnWYRfu0OnioniqzVduWpEvlDLWZWUrhT5dvkD7hZ7GL5TQqIQnhoB
+         45I4F7P+ft0Emrf6bhNHREVyHlPLeNlF92oxgtT0iZMBA5snEE0nlPB2SVVRIw6Nh0
+         KtAc7r5hBFEAlP7GJeUEXVfl8F43q7TQn073VIqRvZXgydDanvQzcBs+tLl0H5Z3cT
+         CoIaGcNu45MrA==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        ezequiel@vanguardiasur.com.ar, aford173@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH] ARM64: dts: freescale: Fix VPU G2 clock
+Date:   Fri,  7 Jul 2023 11:42:00 +0200
+Message-Id: <20230707094200.47119-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230531090424.3187-1-johan+linaro@kernel.org> <20230531090424.3187-3-johan+linaro@kernel.org>
-In-Reply-To: <20230531090424.3187-3-johan+linaro@kernel.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Fri, 7 Jul 2023 15:11:11 +0530
-Message-ID: <CAMi1Hd3fe=wk02WG8J7K5Ud1GcWkuKKKrxFjkNguxDkzNz2WVQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND 2/2] Bluetooth: fix use-bdaddr-property quirk
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+Set VPU G2 clock to 300MHz like described in documentation.
+This fix pixels error occurring with large resolution ( >= 2560x1600)
+HEVC test stream when using the postprocessor to produce NV12.
 
-On Wed, 31 May 2023 at 14:35, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> Devices that lack persistent storage for the device address can indicate
-> this by setting the HCI_QUIRK_INVALID_BDADDR which causes the controller
-> to be marked as unconfigured until user space has set a valid address.
->
-> The related HCI_QUIRK_USE_BDADDR_PROPERTY was later added to similarly
-> indicate that the device lacks a valid address but that one may be
-> specified in the devicetree.
->
-> As is clear from commit 7a0e5b15ca45 ("Bluetooth: Add quirk for reading
-> BD_ADDR from fwnode property") that added and documented this quirk and
-> commits like de79a9df1692 ("Bluetooth: btqcomsmd: use
-> HCI_QUIRK_USE_BDADDR_PROPERTY"), the device address of controllers with
-> this flag should be treated as invalid until user space has had a chance
-> to configure the controller in case the devicetree property is missing.
->
-> As it does not make sense to allow controllers with invalid addresses,
-> restore the original semantics, which also makes sure that the
-> implementation is consistent (e.g. get_missing_options() indicates that
-> the address must be set) and matches the documentation (including
-> comments in the code, such as, "In case any of them is set, the
-> controller has to start up as unconfigured.").
->
+Fixes: 4ac7e4a81272 ("arm64: dts: imx8mq: Enable both G1 and G2 VPU's with vpu-blk-ctrl")
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This patch broke Bluetooth on Dragonboard 845c (SDM845) devboard.
-Reverting this patch fixes the BT breakage and I see the following
-messages in dmesg:
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index 0492556a10db..345c70c6c697 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -770,7 +770,7 @@ pgc_vpu: power-domain@6 {
+ 									 <&clk IMX8MQ_SYS1_PLL_800M>,
+ 									 <&clk IMX8MQ_VPU_PLL>;
+ 						assigned-clock-rates = <600000000>,
+-								       <600000000>,
++								       <300000000>,
+ 								       <800000000>,
+ 								       <0>;
+ 					};
+-- 
+2.39.2
 
-Bluetooth: hci0: setting up wcn399x
-Bluetooth: hci0: QCA Product ID   :0x0000000a
-Bluetooth: hci0: QCA SOC Version  :0x40010214
-Bluetooth: hci0: QCA ROM Version  :0x00000201
-Bluetooth: hci0: QCA Patch Version:0x00000001
-Bluetooth: hci0: QCA controller version 0x02140201
-Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-Bluetooth: hci0: QCA Downloading qca/crnv21.bin
-Bluetooth: hci0: QCA setup on UART is completed
-
-Regards,
-Amit Pundir
-
-> Fixes: e668eb1e1578 ("Bluetooth: hci_core: Don't stop BT if the BD address missing in dts")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  net/bluetooth/hci_sync.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index c2a805ee55cc..ce03038b3460 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4615,16 +4615,14 @@ static int hci_dev_setup_sync(struct hci_dev *hdev)
->          * BD_ADDR invalid before creating the HCI device or in
->          * its setup callback.
->          */
-> -       invalid_bdaddr = test_bit(HCI_QUIRK_INVALID_BDADDR, &hdev->quirks);
-> -
-> +       invalid_bdaddr = test_bit(HCI_QUIRK_INVALID_BDADDR, &hdev->quirks) ||
-> +                        test_bit(HCI_QUIRK_USE_BDADDR_PROPERTY, &hdev->quirks);
->         if (!ret) {
->                 if (test_bit(HCI_QUIRK_USE_BDADDR_PROPERTY, &hdev->quirks) &&
->                     !bacmp(&hdev->public_addr, BDADDR_ANY))
->                         hci_dev_get_bd_addr_from_property(hdev);
->
-> -               if ((invalid_bdaddr ||
-> -                    test_bit(HCI_QUIRK_USE_BDADDR_PROPERTY, &hdev->quirks)) &&
-> -                   bacmp(&hdev->public_addr, BDADDR_ANY) &&
-> +               if (invalid_bdaddr && bacmp(&hdev->public_addr, BDADDR_ANY) &&
->                     hdev->set_bdaddr) {
->                         ret = hdev->set_bdaddr(hdev, &hdev->public_addr);
->                         if (!ret)
-> --
-> 2.39.3
->
