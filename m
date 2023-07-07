@@ -2,121 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB1E74B459
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2B174B45E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbjGGPa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S232710AbjGGPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjGGPa1 (ORCPT
+        with ESMTP id S229629AbjGGPb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:30:27 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5979419B7;
-        Fri,  7 Jul 2023 08:30:25 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b895a06484so10773775ad.1;
-        Fri, 07 Jul 2023 08:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688743825; x=1691335825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=23fqDXyoBeUMVhuKSW8F1o5jrSURNCbcDsreKQGADIQ=;
-        b=kmY9x4Hl5lou7/neUj4ZHr9FyuqDnV9af9hyxvpWJm1buSQZKqdSb9gXu0elbdK4V+
-         X72UwMF7/+5zq4kDO1YzqV0q6Ct+LZFjfEZurY4meI/eVl2x31+5JsjkJK76KZySY4lO
-         0GyVnmBjHNeZm5O8J/lViByY3OTtDELeL4TIZtfUGuv/+oKLCj2tSjSVRmZOYCYNadGq
-         Hvb3lxCq7iuH+idaF4Tu2O4/1/5L0JuQfFK+pSQjAfGjBI53iTJ/WH7ZnxifQ+gCYAzr
-         YuZMdjjQr5vvIj4iH6WrFbrFnly1Mz0hdxrk67sfO+fhAAbGliXFfiDRUZl6WaterdTO
-         KejA==
+        Fri, 7 Jul 2023 11:31:28 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F1B2128;
+        Fri,  7 Jul 2023 08:31:27 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3463dd0bd4eso6893385ab.1;
+        Fri, 07 Jul 2023 08:31:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688743825; x=1691335825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=23fqDXyoBeUMVhuKSW8F1o5jrSURNCbcDsreKQGADIQ=;
-        b=dCnFCdBXSQPg7V+Z0h163QrqHf6Fn3MB8eLurUu6TA+3++oK/fhMr19PvvMXZEzV6T
-         QHXMLLsP1PwSUrAKI1A2KNq2P5LHmkpgxUHlELrKmnKs8vIJasLvJ1GRhMO0hA382uN4
-         gjlC+MtBnsIw1qH5bO+++gKyzGpHWJrEuzKfrBgrzJugBKvEGOyZuJK+cBz4lOncJd74
-         Pt7VmoFs7FI7GAFTWXRexRKtGEw13kDeQ/0OY0VokwL5/xrnStmELK1lLoOA5re1P+MN
-         NPj+0RLI/YZb+rlDUJuGq4xzzNA8PZZRXN2LlyKA8jL2citPgwOU+OiqV3GqV6A1HUsZ
-         R0Sw==
-X-Gm-Message-State: ABy/qLZfUL/tlcy1EaDoX0onMcIin82WHb4n/ukOYjfSVTJdRC6lV8hl
-        TG3wN9liauGijFMalc9eDt6RvvbM1g0=
-X-Google-Smtp-Source: APBJJlE4AtjAv83gXgurA1uTa/SFwHaiudMa6q87SvxelfAFeOy0Vi/sG8vfiZj59mHz098I85y6zQ==
-X-Received: by 2002:a17:902:b402:b0:1b6:a972:4414 with SMTP id x2-20020a170902b40200b001b6a9724414mr4321648plr.3.1688743824652;
-        Fri, 07 Jul 2023 08:30:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902f54500b001b53c8659fesm3405218plf.30.2023.07.07.08.30.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 08:30:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7ed3afcf-42f2-af72-9837-76c14c9bb3a1@roeck-us.net>
-Date:   Fri, 7 Jul 2023 08:30:22 -0700
+        d=1e100.net; s=20221208; t=1688743887; x=1691335887;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4krSfV5RdVLkdj4vMo1p32Ocs53a/+FB/VamolfXKgk=;
+        b=WBp05flFXWoWVZq0YXHDZnGoKOBKtl6VfMCvZFQrzTolU7oL3M69DelJQjissuu0RN
+         /apxE0MdKp2e5LlY/8czBJGrK7LS1I6/Phbuiht54ovgY8yXK/lI6Sik6wAY/q+ysqJv
+         nuMdxNRWkwsI5vO3lWlH7/dt7ZxBF1+Jg+UNVc6HMRmUDOFhfslbb/ByiSB/ZcY3QGOP
+         2aufgXnF6fFl/hxX1jUNHkQxNnW213E5ntkhjmVaCmqtLujfCnzcDXQJo11XXW5Dto/j
+         qlEXV+dPhv+sHIWSC1SSNsIV5DpnRP/6Hue0HZjXD/UUCFXI77XwrcO+oPSvgCS2L/HO
+         j2Hw==
+X-Gm-Message-State: ABy/qLZCXaubBe21tSvoq8ZW7BjTvpGrUsl4OQdIzNpe/N3yk/VRbYIk
+        GqwdrowOQDvcgEFGz/HExw==
+X-Google-Smtp-Source: APBJJlGsBsKFeZBb8fU2bcyVgRL9aJv0pp9rDtUdPfMV8gTZk6+GrVqq4VjMLpT6v23Sh93K9+x0rA==
+X-Received: by 2002:a92:c083:0:b0:345:ba42:ca4d with SMTP id h3-20020a92c083000000b00345ba42ca4dmr5490944ile.15.1688743886724;
+        Fri, 07 Jul 2023 08:31:26 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w5-20020a92db45000000b00342093347d8sm1346438ilq.76.2023.07.07.08.31.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 08:31:25 -0700 (PDT)
+Received: (nullmailer pid 339098 invoked by uid 1000);
+        Fri, 07 Jul 2023 15:31:24 -0000
+Date:   Fri, 7 Jul 2023 09:31:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        devicetree@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: amlogic,meson-pinctrl:
+ allow gpio-line-names
+Message-ID: <168874388364.339042.7246831191006264441.robh@kernel.org>
+References: <20230707-topic-amlogic-upstream-pinctrl-fix-bindings-v2-0-2160060446d7@linaro.org>
+ <20230707-topic-amlogic-upstream-pinctrl-fix-bindings-v2-1-2160060446d7@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <d8254cce-a6a6-46b4-ea28-3a1df2760499@roeck-us.net>
- <407492B8-5D9F-41BC-A696-24C421C69F49@physik.fu-berlin.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <407492B8-5D9F-41BC-A696-24C421C69F49@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230707-topic-amlogic-upstream-pinctrl-fix-bindings-v2-1-2160060446d7@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/23 08:19, John Paul Adrian Glaubitz wrote:
-> Hi Guenter!
+
+On Fri, 07 Jul 2023 10:20:44 +0200, Neil Armstrong wrote:
+> Allow gpio-line-names property for the gpio subnodes.
 > 
->> On Jul 7, 2023, at 4:35 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> ﻿On 7/7/23 02:53, John Paul Adrian Glaubitz wrote:
->>> Hi Geert!
->>> On Fri, 2023-07-07 at 10:48 +0200, Geert Uytterhoeven wrote:
->>>>> I can reproduce the issue with rts7751r2dplus_defconfig, but I may
->>>>> not be able to look into it today...
->>>>
->>>> Disabling CONFIG_USB_OHCI_HCD fixes the hang.
->>> I picked rts7751r2dplus_defconfig, disabled CONFIG_USB_OHCI_HCD but it still
->>> hangs for me. Are you sure it's CONFIG_USB_OHCI_HCD and not something else?
->>
->> It seems to be related. With this patch reverted, ohci_irq() gets a single
->> interrupt, and boot continues. With this patch in place, ohci_irq() does
->> not get any interrupts, and boot hangs with qemu at 100% CPU. I confirmed
->> this by disabling CONFIG_MFD_SM501. After that, the hang is no longer seen.
->> Of course, that also means that OHCI and other emulated sm501 functionality
->> no longer works.
->>
->> My suspicion is that something goes wrong with interrupt routing to
->> SM501 and with it to ohci_irq(), but that is just a wild guess.
-> 
-> Looking at drivers/mfd/sm501.c, sm501_plat_probe() is explicitly requesting IRQ 0 which is no longer supported on SH:
-> 
->  > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/mfd/sm501.c <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/mfd/sm501.c>
-> 
-> So, we need to shift this by 16, I guess.
+> Fixes: 94df03a45276 ("dt-bindings: pinctrl: Convert Amlogic Meson pinctrl binding")
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/pinctrl/amlogic,meson-pinctrl-a1.yaml         | 4 ++++
+>  .../devicetree/bindings/pinctrl/amlogic,meson-pinctrl-g12a-aobus.yaml | 3 +++
+>  .../bindings/pinctrl/amlogic,meson-pinctrl-g12a-periphs.yaml          | 3 +++
+>  .../devicetree/bindings/pinctrl/amlogic,meson8-pinctrl-aobus.yaml     | 4 ++++
+>  .../devicetree/bindings/pinctrl/amlogic,meson8-pinctrl-cbus.yaml      | 4 ++++
+>  5 files changed, 18 insertions(+)
 > 
 
-It isn't interrupt 0, it is interrupt _index_ 0. See platform_get_irq_optional()
-which calls platform_get_resource(dev, IORESOURCE_IRQ, num). There are lots
-of calls to platform_get_irq() with index 0 in the kernel.
-
-Guenter
+Reviewed-by: Rob Herring <robh@kernel.org>
 
