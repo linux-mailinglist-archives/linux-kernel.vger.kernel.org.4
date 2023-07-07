@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7693074ADD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496AD74ADDD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjGGJgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S232139AbjGGJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjGGJgC (ORCPT
+        with ESMTP id S232671AbjGGJhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:36:02 -0400
-Received: from out-33.mta0.migadu.com (out-33.mta0.migadu.com [91.218.175.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4B62107
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:36:00 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 05:35:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688722559;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iLz4FNRJXkZQlHsfs5x/mcA+1hjEngxn49GO585IyRg=;
-        b=qEt/4nlf1NL5w80gAIY0gRn2phztUoU207aCufEGGpZjtvBhCiOzhkh094uO+6s07JMXMb
-        pfF7RjJreEtkDLGO2sEv4bX67Ne92ZXEpFxNp+unIns9VNvTUhuymTYDn/7H21ssMRCFYL
-        K+93IYXiauSjLv8i7nAw6+2EzkgGDo0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
-        tytso@mit.edu, bfoster@redhat.com, jack@suse.cz,
-        andreas.gruenbacher@gmail.com, peterz@infradead.org,
-        akpm@linux-foundation.org, dhowells@redhat.com
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230707093553.j5ftk6t4tkgfhgz4@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
- <20230706211914.GB11476@frogsfrogsfrogs>
- <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
+        Fri, 7 Jul 2023 05:37:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB582105;
+        Fri,  7 Jul 2023 02:37:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C445618DF;
+        Fri,  7 Jul 2023 09:37:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6375FC433D9;
+        Fri,  7 Jul 2023 09:37:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688722629;
+        bh=LiQDwPwTkBNAq6Qw/pxa2ZzWigHnaTtJLG4PuMYRTg0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lnqBvV0Y4ozrI0ckSNZOieXkU5tXT/O0IgcmbC6SqEPn17zehD74nBDRLuRmzwf7B
+         oah8TIlh9bYSwcRN/+V+kBqdOIW6nSnCT3khroTAc2PQzeWrT+6wqsKl7snZn9KlcC
+         LdwnvJLlZOLs5FkebVBmiXheGDk3YjbNLLi8fX2vJtDc1dW/510ZMWvc7ZJFV+6T3M
+         JkbpHfwMKK+CgH2kPuJIbp82RmX4So+jzK/zIewoPsQugMk+RCyx+Qo8U9BKugjf5u
+         wMVYEENf7L1irZ6rFBFNVQXzfuny0qI+YZ8jMtV/oXN1z3y9r0TdJSotWHXCxa6Hta
+         V32Qg9tu0w27A==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4fb8574a3a1so2500756e87.1;
+        Fri, 07 Jul 2023 02:37:09 -0700 (PDT)
+X-Gm-Message-State: ABy/qLY70ugQF/GoPeb9QhU84K9x3Vw8x3Z57ARWpww81oxnoBZtl/xc
+        J38in1aEE7+oYzginvDmKOKB5o/T3JVg399dwNk=
+X-Google-Smtp-Source: APBJJlHTmxouDwdCH2EEfJexLiCy9F8BTrk7JONjMu/+VY/8uZTK043qrMe0fyX49ipBmvXdDdeBpoufEemGsjSWHtw=
+X-Received: by 2002:a05:6512:3a82:b0:4f9:cd02:4af1 with SMTP id
+ q2-20020a0565123a8200b004f9cd024af1mr3851999lfu.34.1688722627389; Fri, 07 Jul
+ 2023 02:37:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230628010756.70649-1-yukuai1@huaweicloud.com>
+ <20230628010756.70649-3-yukuai1@huaweicloud.com> <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
+ <e5d746d0-1d42-3d60-450b-2450f24f0915@huaweicloud.com> <4690dfff-ad72-bf83-7feb-75018712eb17@huaweicloud.com>
+ <d6a6ec52-3c33-726f-1ce2-40168bfa7e27@huaweicloud.com>
+In-Reply-To: <d6a6ec52-3c33-726f-1ce2-40168bfa7e27@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 7 Jul 2023 17:36:54 +0800
+X-Gmail-Original-Message-ID: <CAPhsuW5jy=SrWnGVPYQyLJBY3bN7uK1OnXQsh8J_ety=oieZeg@mail.gmail.com>
+Message-ID: <CAPhsuW5jy=SrWnGVPYQyLJBY3bN7uK1OnXQsh8J_ety=oieZeg@mail.gmail.com>
+Subject: Re: [PATCH -next v2 2/2] md/raid5-cache: fix null-ptr-deref in r5l_reclaim_thread()
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     xni@redhat.com, logang@deltatee.com, hch@lst.de, shli@fb.com,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawwe.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 10:48:55AM +0200, Christian Brauner wrote:
-> > just merge it and let's move on to the next thing."
-> 
-> "and let the block and vfs maintainers and developers deal with the fallout"
-> 
-> is how that reads to others that deal with 65+ filesystems and counting.
-> 
-> The offlist thread that was started by Kent before this pr was sent has
-> seen people try to outline calmly what problems they currently still
-> have both maintenance wise and upstreaming wise. And it seems there's
-> just no way this can go over calmly but instead requires massive amounts
-> of defensive pushback and grandstanding.
-> 
-> Our main task here is to consider the concerns of people that constantly
-> review and rework massive amounts of generic code. And I can't in good
-> conscience see their concerns dismissed with snappy quotes.
-> 
-> I understand the impatience, I understand the excitement, I really do.
-> But not in this way where core people just drop off because they don't
-> want to deal with this anymore.
-> 
-> I've spent enough time on this thread.
+On Fri, Jul 7, 2023 at 5:19=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> wr=
+ote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/07/07 17:16, Yu Kuai =E5=86=99=E9=81=93:
+> > Perhaps you means this order?
+> >
+> > r5l_exit_log
+> >   flush_work(&log->disable_writeback_work)
+> >   conf->log =3D NULL
+> >   md_unregister_thread(&log->reclaim_thread)
+> >
+> > I think this is better indeed.
+> Never mind, this is wrong, I got confused...
+>
+> Please ignore this and take a look at my original fix.
 
-Also, if you do feel like coming back to the discussion: I would still
-like to hear in more detail about your specific pain points and talk
-about what we can do to address them.
+How about
 
-I've put a _ton_ of work into test infrastructure over the years, and
-it's now scalable enough to handle fstests runs on every filesystem
-fstests support - and it'll get you the results in short order.
+r5l_exit_log
+  md_unregister_thread(&log->reclaim_thread)
+  conf->log =3D NULL
+  flush_work(&log->disable_writeback_work)
 
-I've started making the cluster available to other devs, and I'd be
-happy to make it available to you as well. Perhaps there's other things
-we could do.
+?
 
-Cheers,
-Kent
+Thanks,
+Song
