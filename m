@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D6074AEE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1347774AEE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjGGKoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S232647AbjGGKoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 06:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbjGGKoN (ORCPT
+        with ESMTP id S232707AbjGGKoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:44:13 -0400
+        Fri, 7 Jul 2023 06:44:16 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8AA172B;
-        Fri,  7 Jul 2023 03:44:11 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367Afqua023791;
-        Fri, 7 Jul 2023 10:44:08 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB4010E2;
+        Fri,  7 Jul 2023 03:44:14 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367Adhqi000645;
+        Fri, 7 Jul 2023 10:44:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=FiXmI2k/9244Z9oQXE/8cOVrPyhmB3N3R1TpxJXn6ew=;
- b=qVKbP9Pxvzsg652hqOib9ebKCJ4pyPPWi2N4Ra+sMvp67ymvlgYVg1DAEg3AHjosFagH
- OICXqgBmOF0XYr2WMJ7IcjCGI9hGicW+rJc/qNL2KbNdGuprVbIuhbmB612gy0PloRgq
- 7R6YFcH7ffgHb09ZPLat07BCHEbw/Y8ADCDiNQ0uxGirctI1xspn5b+n7aHWpWwVWKfY
- ZZlc8wLJ9hRbB6lJz+UOMPAlBVqVN9LRiT1bZtN7CKANXAWNtJ8jr5giKS+XIvg8rhgV
- 7mb+oWCnuWa+iHGYA8f4Q+1vp/k3aKfBRBnNyz9ycsdLPeOH3TE9dTGwAWyKa7phlUzu 0A== 
+ bh=3kmISSrzganXOnjVP+9ZKmumyMf+Nbe/QCVQo+hbBhw=;
+ b=VHrIfABnrtsYQ0CiZj0foiqLPyv5ei7h0JQKH1SzlHSTwCFRBK1W8XnsjVdqP0zalalL
+ mSKA7xyi26h2jeOSnEDhTgw8A6QOpddoXS3gfwJQMSNwE52khep1kbI9Qbo0wEZTfLMg
+ O3J9O/d70w4IN63ts9PGPstaDZPofC4aKZV2hvecA+dZGzKAobk0Fozisqmk1w5VIDsl
+ y7GBzBAg8N43FCMlwsTSGAg4J0UZzbeZjX7ZRwRJ5e7GNMr0ocjQivkwlKFOIZ1cXRYu
+ A9F5AdC9mHUpEcUHG01266fU3shUFKbUVQEWqNsPpcPHhNaD92gi4DSR9dDr6LhAFvaZ Sg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpgu3rc9y-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpgw50apg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 10:44:08 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367Afw2s023990;
-        Fri, 7 Jul 2023 10:44:07 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpgu3rc9a-1
+        Fri, 07 Jul 2023 10:44:12 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367AhE86012287;
+        Fri, 7 Jul 2023 10:44:12 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpgw50ant-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 10:44:07 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3673KxD1020329;
-        Fri, 7 Jul 2023 10:44:05 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rjbs4uy42-1
+        Fri, 07 Jul 2023 10:44:12 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3676w1qk014731;
+        Fri, 7 Jul 2023 10:44:10 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3rjbde3xqu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 10:44:05 +0000
+        Fri, 07 Jul 2023 10:44:10 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367Ai0QJ43451048
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367Ai2jH19726954
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jul 2023 10:44:00 GMT
+        Fri, 7 Jul 2023 10:44:02 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB82120040;
-        Fri,  7 Jul 2023 10:44:00 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id E82BB20063;
+        Fri,  7 Jul 2023 10:44:01 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3ED762005A;
-        Fri,  7 Jul 2023 10:44:00 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6375420040;
+        Fri,  7 Jul 2023 10:44:01 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jul 2023 10:44:00 +0000 (GMT)
+        Fri,  7 Jul 2023 10:44:01 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Paolo Abeni <pabeni@redhat.com>,
         Alexandra Winter <wintera@linux.ibm.com>,
@@ -67,30 +67,30 @@ To:     Paolo Abeni <pabeni@redhat.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Jan Karcher <jaka@linux.ibm.com>,
         Stefan Raspl <raspl@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>
+        "David S. Miller" <davem@davemloft.net>
 Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 1/3] s390/ism: Fix locking for forwarding of IRQs and events to clients
-Date:   Fri,  7 Jul 2023 12:43:57 +0200
-Message-Id: <20230707104359.3324039-2-schnelle@linux.ibm.com>
+Subject: [PATCH net v2 2/3] s390/ism: Fix and simplify add()/remove() callback handling
+Date:   Fri,  7 Jul 2023 12:43:58 +0200
+Message-Id: <20230707104359.3324039-3-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230707104359.3324039-1-schnelle@linux.ibm.com>
 References: <20230707104359.3324039-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ComVDJxSxacbzW_OLn79l4BaJ_GuzV1z
-X-Proofpoint-GUID: rW-lHT37QAAq0u_DLXGZTBgK5EUXHcWP
+X-Proofpoint-GUID: wsfRGkosQvCZvc7aRIZ466DEzzNXLSvK
+X-Proofpoint-ORIG-GUID: EyByd6bf-1JMg4NDGqyQNEs39WFTH0cP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-07_06,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 malwarescore=0 clxscore=1015 phishscore=0 adultscore=0
- spamscore=0 impostorscore=0 mlxlogscore=869 mlxscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307070097
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ phishscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307070097
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -101,200 +101,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clients array references all registered clients and is protected by
-the clients_lock. Besides its use as general list of clients the clients
-array is accessed in ism_handle_irq() to forward ISM device events to
-clients.
+Previously the clients_lock was protecting the clients array against
+concurrent addition/removal of clients but was also accessed from IRQ
+context. This meant that it had to be a spinlock and that the add() and
+remove() callbacks in which clients need to do allocation and take
+mutexes can't be called under the clients_lock. To work around this these
+callbacks were moved to workqueues. This not only introduced significant
+complexity but is also subtly broken in at least one way.
 
-While the clients_lock is taken in the IRQ handler when calling
-handle_event() it is however incorrectly not held during the
-client->handle_irq() call and for the preceding clients[] access leaving
-it unprotected against concurrent client (un-)registration.
+In ism_dev_init() and ism_dev_exit() clients[i]->tgt_ism is used to
+communicate the added/removed ISM device to the work function. While
+write access to client[i]->tgt_ism is protected by the clients_lock and
+the code waits that there is no pending add/remove work before and after
+setting clients[i]->tgt_ism this is not enough. The problem is that the
+wait happens based on per ISM device counters. Thus a concurrent
+ism_dev_init()/ism_dev_exit() for a different ISM device may overwrite
+a clients[i]->tgt_ism between unlocking the clients_lock and the
+subsequent wait for the work to finnish.
 
-Furthermore the accesses to ism->sba_client_arr[] in ism_register_dmb()
-and ism_unregister_dmb() are not protected by any lock. This is
-especially problematic as the client ID from the ism->sba_client_arr[]
-is not checked against NO_CLIENT and neither is the client pointer
-checked.
-
-Instead of expanding the use of the clients_lock further add a separate
-array in struct ism_dev which references clients subscribed to the
-device's events and IRQs. This array is protected by ism->lock which is
-already taken in ism_handle_irq() and can be taken outside the IRQ
-handler when adding/removing subscribers or the accessing
-ism->sba_client_arr[]. This also means that the clients_lock is no
-longer taken in IRQ context.
+Thankfully with the clients_lock no longer held in IRQ context it can be
+turned into a mutex which can be held during the calls to add()/remove()
+completely removing the need for the workqueues and the associated
+broken housekeeping including the per ISM device counters and the
+clients[i]->tgt_ism.
 
 Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/s390/net/ism_drv.c | 44 +++++++++++++++++++++++++++++++-------
- include/linux/ism.h        |  1 +
- 2 files changed, 37 insertions(+), 8 deletions(-)
+ drivers/s390/net/ism_drv.c | 90 +++++++++++---------------------------
+ include/linux/ism.h        |  6 ---
+ 2 files changed, 26 insertions(+), 70 deletions(-)
 
 diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
-index 9b5fccdbc7d6..b664e4a08645 100644
+index b664e4a08645..54091b7aea16 100644
 --- a/drivers/s390/net/ism_drv.c
 +++ b/drivers/s390/net/ism_drv.c
-@@ -47,6 +47,15 @@ static struct ism_dev_list ism_dev_list = {
- 	.mutex = __MUTEX_INITIALIZER(ism_dev_list.mutex),
- };
- 
-+static void ism_setup_forwarding(struct ism_client *client, struct ism_dev *ism)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&ism->lock, flags);
-+	ism->subs[client->id] = client;
-+	spin_unlock_irqrestore(&ism->lock, flags);
-+}
-+
+@@ -36,7 +36,7 @@ static const struct smcd_ops ism_ops;
+ static struct ism_client *clients[MAX_CLIENTS];	/* use an array rather than */
+ 						/* a list for fast mapping  */
+ static u8 max_client;
+-static DEFINE_SPINLOCK(clients_lock);
++static DEFINE_MUTEX(clients_lock);
+ struct ism_dev_list {
+ 	struct list_head list;
+ 	struct mutex mutex; /* protects ism device list */
+@@ -59,11 +59,10 @@ static void ism_setup_forwarding(struct ism_client *client, struct ism_dev *ism)
  int ism_register_client(struct ism_client *client)
  {
  	struct ism_dev *ism;
-@@ -71,6 +80,7 @@ int ism_register_client(struct ism_client *client)
- 		list_for_each_entry(ism, &ism_dev_list.list, list) {
- 			ism->priv[i] = NULL;
- 			client->add(ism);
-+			ism_setup_forwarding(client, ism);
- 		}
- 	}
- 	mutex_unlock(&ism_dev_list.mutex);
-@@ -92,6 +102,9 @@ int ism_unregister_client(struct ism_client *client)
- 		max_client--;
- 	spin_unlock_irqrestore(&clients_lock, flags);
- 	list_for_each_entry(ism, &ism_dev_list.list, list) {
-+		spin_lock_irqsave(&ism->lock, flags);
-+		/* Stop forwarding IRQs and events */
-+		ism->subs[client->id] = NULL;
- 		for (int i = 0; i < ISM_NR_DMBS; ++i) {
- 			if (ism->sba_client_arr[i] == client->id) {
- 				pr_err("%s: attempt to unregister client '%s'"
-@@ -101,6 +114,7 @@ int ism_unregister_client(struct ism_client *client)
- 				goto out;
- 			}
- 		}
-+		spin_unlock_irqrestore(&ism->lock, flags);
- 	}
- out:
- 	mutex_unlock(&ism_dev_list.mutex);
-@@ -328,6 +342,7 @@ int ism_register_dmb(struct ism_dev *ism, struct ism_dmb *dmb,
- 		     struct ism_client *client)
- {
- 	union ism_reg_dmb cmd;
-+	unsigned long flags;
- 	int ret;
+-	unsigned long flags;
+ 	int i, rc = -ENOSPC;
  
- 	ret = ism_alloc_dmb(ism, dmb);
-@@ -351,7 +366,9 @@ int ism_register_dmb(struct ism_dev *ism, struct ism_dmb *dmb,
- 		goto out;
+ 	mutex_lock(&ism_dev_list.mutex);
+-	spin_lock_irqsave(&clients_lock, flags);
++	mutex_lock(&clients_lock);
+ 	for (i = 0; i < MAX_CLIENTS; ++i) {
+ 		if (!clients[i]) {
+ 			clients[i] = client;
+@@ -74,7 +73,8 @@ int ism_register_client(struct ism_client *client)
+ 			break;
+ 		}
  	}
- 	dmb->dmb_tok = cmd.response.dmb_tok;
-+	spin_lock_irqsave(&ism->lock, flags);
- 	ism->sba_client_arr[dmb->sba_idx - ISM_DMB_BIT_OFFSET] = client->id;
-+	spin_unlock_irqrestore(&ism->lock, flags);
- out:
+-	spin_unlock_irqrestore(&clients_lock, flags);
++	mutex_unlock(&clients_lock);
++
+ 	if (i < MAX_CLIENTS) {
+ 		/* initialize with all devices that we got so far */
+ 		list_for_each_entry(ism, &ism_dev_list.list, list) {
+@@ -96,11 +96,11 @@ int ism_unregister_client(struct ism_client *client)
+ 	int rc = 0;
+ 
+ 	mutex_lock(&ism_dev_list.mutex);
+-	spin_lock_irqsave(&clients_lock, flags);
++	mutex_lock(&clients_lock);
+ 	clients[client->id] = NULL;
+ 	if (client->id + 1 == max_client)
+ 		max_client--;
+-	spin_unlock_irqrestore(&clients_lock, flags);
++	mutex_unlock(&clients_lock);
+ 	list_for_each_entry(ism, &ism_dev_list.list, list) {
+ 		spin_lock_irqsave(&ism->lock, flags);
+ 		/* Stop forwarding IRQs and events */
+@@ -571,21 +571,9 @@ static u64 ism_get_local_gid(struct ism_dev *ism)
+ 	return ism->local_gid;
+ }
+ 
+-static void ism_dev_add_work_func(struct work_struct *work)
+-{
+-	struct ism_client *client = container_of(work, struct ism_client,
+-						 add_work);
+-
+-	client->add(client->tgt_ism);
+-	ism_setup_forwarding(client, client->tgt_ism);
+-	atomic_dec(&client->tgt_ism->add_dev_cnt);
+-	wake_up(&client->tgt_ism->waitq);
+-}
+-
+ static int ism_dev_init(struct ism_dev *ism)
+ {
+ 	struct pci_dev *pdev = ism->pdev;
+-	unsigned long flags;
+ 	int i, ret;
+ 
+ 	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI);
+@@ -618,25 +606,16 @@ static int ism_dev_init(struct ism_dev *ism)
+ 		/* hardware is V2 capable */
+ 		ism_create_system_eid();
+ 
+-	init_waitqueue_head(&ism->waitq);
+-	atomic_set(&ism->free_clients_cnt, 0);
+-	atomic_set(&ism->add_dev_cnt, 0);
+-
+-	wait_event(ism->waitq, !atomic_read(&ism->add_dev_cnt));
+-	spin_lock_irqsave(&clients_lock, flags);
+-	for (i = 0; i < max_client; ++i)
+-		if (clients[i]) {
+-			INIT_WORK(&clients[i]->add_work,
+-				  ism_dev_add_work_func);
+-			clients[i]->tgt_ism = ism;
+-			atomic_inc(&ism->add_dev_cnt);
+-			schedule_work(&clients[i]->add_work);
+-		}
+-	spin_unlock_irqrestore(&clients_lock, flags);
+-
+-	wait_event(ism->waitq, !atomic_read(&ism->add_dev_cnt));
+-
+ 	mutex_lock(&ism_dev_list.mutex);
++	mutex_lock(&clients_lock);
++	for (i = 0; i < max_client; ++i) {
++		if (clients[i]) {
++			clients[i]->add(ism);
++			ism_setup_forwarding(clients[i], ism);
++		}
++	}
++	mutex_unlock(&clients_lock);
++
+ 	list_add(&ism->list, &ism_dev_list.list);
+ 	mutex_unlock(&ism_dev_list.mutex);
+ 
+@@ -711,40 +690,24 @@ static int ism_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  	return ret;
  }
-@@ -360,6 +377,7 @@ EXPORT_SYMBOL_GPL(ism_register_dmb);
- int ism_unregister_dmb(struct ism_dev *ism, struct ism_dmb *dmb)
+ 
+-static void ism_dev_remove_work_func(struct work_struct *work)
+-{
+-	struct ism_client *client = container_of(work, struct ism_client,
+-						 remove_work);
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&client->tgt_ism->lock, flags);
+-	client->tgt_ism->subs[client->id] = NULL;
+-	spin_unlock_irqrestore(&client->tgt_ism->lock, flags);
+-	client->remove(client->tgt_ism);
+-	atomic_dec(&client->tgt_ism->free_clients_cnt);
+-	wake_up(&client->tgt_ism->waitq);
+-}
+-
+-/* Callers must hold ism_dev_list.mutex */
+ static void ism_dev_exit(struct ism_dev *ism)
  {
- 	union ism_unreg_dmb cmd;
-+	unsigned long flags;
- 	int ret;
- 
- 	memset(&cmd, 0, sizeof(cmd));
-@@ -368,7 +386,9 @@ int ism_unregister_dmb(struct ism_dev *ism, struct ism_dmb *dmb)
- 
- 	cmd.request.dmb_tok = dmb->dmb_tok;
- 
-+	spin_lock_irqsave(&ism->lock, flags);
- 	ism->sba_client_arr[dmb->sba_idx - ISM_DMB_BIT_OFFSET] = NO_CLIENT;
-+	spin_unlock_irqrestore(&ism->lock, flags);
- 
- 	ret = ism_cmd(ism, &cmd);
- 	if (ret && ret != ISM_ERROR)
-@@ -491,6 +511,7 @@ static u16 ism_get_chid(struct ism_dev *ism)
- static void ism_handle_event(struct ism_dev *ism)
- {
- 	struct ism_event *entry;
-+	struct ism_client *clt;
+ 	struct pci_dev *pdev = ism->pdev;
+ 	unsigned long flags;
  	int i;
  
- 	while ((ism->ieq_idx + 1) != READ_ONCE(ism->ieq->header.idx)) {
-@@ -499,21 +520,21 @@ static void ism_handle_event(struct ism_dev *ism)
+-	wait_event(ism->waitq, !atomic_read(&ism->free_clients_cnt));
+-	spin_lock_irqsave(&clients_lock, flags);
++	spin_lock_irqsave(&ism->lock, flags);
+ 	for (i = 0; i < max_client; ++i)
+-		if (clients[i]) {
+-			INIT_WORK(&clients[i]->remove_work,
+-				  ism_dev_remove_work_func);
+-			clients[i]->tgt_ism = ism;
+-			atomic_inc(&ism->free_clients_cnt);
+-			schedule_work(&clients[i]->remove_work);
+-		}
+-	spin_unlock_irqrestore(&clients_lock, flags);
++		ism->subs[i] = NULL;
++	spin_unlock_irqrestore(&ism->lock, flags);
  
- 		entry = &ism->ieq->entry[ism->ieq_idx];
- 		debug_event(ism_debug_info, 2, entry, sizeof(*entry));
--		spin_lock(&clients_lock);
--		for (i = 0; i < max_client; ++i)
--			if (clients[i])
--				clients[i]->handle_event(ism, entry);
--		spin_unlock(&clients_lock);
-+		for (i = 0; i < max_client; ++i) {
-+			clt = ism->subs[i];
-+			if (clt)
-+				clt->handle_event(ism, entry);
-+		}
- 	}
+-	wait_event(ism->waitq, !atomic_read(&ism->free_clients_cnt));
++	mutex_lock(&ism_dev_list.mutex);
++	mutex_lock(&clients_lock);
++	for (i = 0; i < max_client; ++i) {
++		if (clients[i])
++			clients[i]->remove(ism);
++	}
++	mutex_unlock(&clients_lock);
+ 
+ 	if (SYSTEM_EID.serial_number[0] != '0' ||
+ 	    SYSTEM_EID.type[0] != '0')
+@@ -755,15 +718,14 @@ static void ism_dev_exit(struct ism_dev *ism)
+ 	kfree(ism->sba_client_arr);
+ 	pci_free_irq_vectors(pdev);
+ 	list_del_init(&ism->list);
++	mutex_unlock(&ism_dev_list.mutex);
  }
  
- static irqreturn_t ism_handle_irq(int irq, void *data)
+ static void ism_remove(struct pci_dev *pdev)
  {
- 	struct ism_dev *ism = data;
--	struct ism_client *clt;
- 	unsigned long bit, end;
- 	unsigned long *bv;
- 	u16 dmbemask;
-+	u8 client_id;
+ 	struct ism_dev *ism = dev_get_drvdata(&pdev->dev);
  
- 	bv = (void *) &ism->sba->dmb_bits[ISM_DMB_WORD_OFFSET];
- 	end = sizeof(ism->sba->dmb_bits) * BITS_PER_BYTE - ISM_DMB_BIT_OFFSET;
-@@ -530,8 +551,10 @@ static irqreturn_t ism_handle_irq(int irq, void *data)
- 		dmbemask = ism->sba->dmbe_mask[bit + ISM_DMB_BIT_OFFSET];
- 		ism->sba->dmbe_mask[bit + ISM_DMB_BIT_OFFSET] = 0;
- 		barrier();
--		clt = clients[ism->sba_client_arr[bit]];
--		clt->handle_irq(ism, bit + ISM_DMB_BIT_OFFSET, dmbemask);
-+		client_id = ism->sba_client_arr[bit];
-+		if (unlikely(client_id == NO_CLIENT || !ism->subs[client_id]))
-+			continue;
-+		ism->subs[client_id]->handle_irq(ism, bit + ISM_DMB_BIT_OFFSET, dmbemask);
- 	}
+-	mutex_lock(&ism_dev_list.mutex);
+ 	ism_dev_exit(ism);
+-	mutex_unlock(&ism_dev_list.mutex);
  
- 	if (ism->sba->e) {
-@@ -554,6 +577,7 @@ static void ism_dev_add_work_func(struct work_struct *work)
- 						 add_work);
- 
- 	client->add(client->tgt_ism);
-+	ism_setup_forwarding(client, client->tgt_ism);
- 	atomic_dec(&client->tgt_ism->add_dev_cnt);
- 	wake_up(&client->tgt_ism->waitq);
- }
-@@ -691,7 +715,11 @@ static void ism_dev_remove_work_func(struct work_struct *work)
- {
- 	struct ism_client *client = container_of(work, struct ism_client,
- 						 remove_work);
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&client->tgt_ism->lock, flags);
-+	client->tgt_ism->subs[client->id] = NULL;
-+	spin_unlock_irqrestore(&client->tgt_ism->lock, flags);
- 	client->remove(client->tgt_ism);
- 	atomic_dec(&client->tgt_ism->free_clients_cnt);
- 	wake_up(&client->tgt_ism->waitq);
+ 	pci_release_mem_regions(pdev);
+ 	pci_disable_device(pdev);
 diff --git a/include/linux/ism.h b/include/linux/ism.h
-index ea2bcdae7401..5160d47e5ea9 100644
+index 5160d47e5ea9..9a4c204df3da 100644
 --- a/include/linux/ism.h
 +++ b/include/linux/ism.h
-@@ -44,6 +44,7 @@ struct ism_dev {
- 	u64 local_gid;
+@@ -45,9 +45,6 @@ struct ism_dev {
  	int ieq_idx;
  
-+	struct ism_client *subs[MAX_CLIENTS];
- 	atomic_t free_clients_cnt;
- 	atomic_t add_dev_cnt;
- 	wait_queue_head_t waitq;
+ 	struct ism_client *subs[MAX_CLIENTS];
+-	atomic_t free_clients_cnt;
+-	atomic_t add_dev_cnt;
+-	wait_queue_head_t waitq;
+ };
+ 
+ struct ism_event {
+@@ -69,9 +66,6 @@ struct ism_client {
+ 	 */
+ 	void (*handle_irq)(struct ism_dev *dev, unsigned int bit, u16 dmbemask);
+ 	/* Private area - don't touch! */
+-	struct work_struct remove_work;
+-	struct work_struct add_work;
+-	struct ism_dev *tgt_ism;
+ 	u8 id;
+ };
+ 
 -- 
 2.39.2
 
