@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B361074B6E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1B474B6E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjGGTGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
+        id S232827AbjGGTHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbjGGTGg (ORCPT
+        with ESMTP id S232889AbjGGTHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:06:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6927E2727
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VcC79p5FnMDwACqVyoSz3qMUxvEDx9IUffDrpYxsszc=; b=N8ZEPVxHT83vnm3M+WmDnfzVB6
-        dhEiuQUir9TbVm5ORKOEIqSiak5ggPVHFoveW3X0jNSxGZ6dvIqWkZy09g8SjKrKgMn/igz+oRIj2
-        FbZBWcko1aH6e7fJJflty4mm1y+OdN76mXh/Yuu8g5azTi6aQZFXiflsb4rV7alUEEGKyln9vVTdZ
-        2+i3q4Z6FBzDkB3NFJUgSPOzX79bsOr1EaUB4wMoIN1Q7Xg01y0PRRPc/IUOF3SGKWBBzCWTKfwlG
-        tKVvAg4LpUrWI48B71r2gfZ+cjDkQ3nqIWCzLOC+Cg80MBsmFYSbWqxMPjGYNf5Vr92B3R7XdNnmB
-        hxeE8I3Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qHqmG-00CHRg-A1; Fri, 07 Jul 2023 19:06:00 +0000
-Date:   Fri, 7 Jul 2023 20:06:00 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yuzhao@google.com,
-        ryan.roberts@arm.com, shy828301@gmail.com,
-        akpm@linux-foundation.org
-Subject: Re: [RFC PATCH 0/3] support large folio for mlock
-Message-ID: <ZKhiGLpIWi5Z2WnY@casper.infradead.org>
-References: <20230707165221.4076590-1-fengwei.yin@intel.com>
- <ZKhK1Ic1KCdOLRYm@casper.infradead.org>
- <4bb39d6e-a324-0d85-7d44-8e8a37a1cfec@redhat.com>
+        Fri, 7 Jul 2023 15:07:04 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E5D2727;
+        Fri,  7 Jul 2023 12:06:44 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.86.230) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 7 Jul 2023
+ 22:06:42 +0300
+Subject: Re: [PATCH v2 06/11] ata: sata_rcar: Remove unnecessary return value
+ check
+To:     Yangtao Li <frank.li@vivo.com>, Damien Le Moal <dlemoal@kernel.org>
+CC:     <linux-ide@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230707095513.64224-1-frank.li@vivo.com>
+ <20230707095513.64224-6-frank.li@vivo.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <67fde0cc-4136-f4bb-5800-bd88e7128ead@omp.ru>
+Date:   Fri, 7 Jul 2023 22:06:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4bb39d6e-a324-0d85-7d44-8e8a37a1cfec@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230707095513.64224-6-frank.li@vivo.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.86.230]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/07/2023 18:41:49
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 178491 [Jul 07 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;git.kernel.org:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.86.230
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/07/2023 18:48:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/7/2023 3:11:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,66 +78,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 08:54:33PM +0200, David Hildenbrand wrote:
-> On 07.07.23 19:26, Matthew Wilcox wrote:
-> > On Sat, Jul 08, 2023 at 12:52:18AM +0800, Yin Fengwei wrote:
-> > > This series identified the large folio for mlock to two types:
-> > >    - The large folio is in VM_LOCKED VMA range
-> > >    - The large folio cross VM_LOCKED VMA boundary
-> > 
-> > This is somewhere that I think our fixation on MUST USE PMD ENTRIES
-> > has led us astray.  Today when the arguments to mlock() cross a folio
-> > boundary, we split the PMD entry but leave the folio intact.  That means
-> > that we continue to manage the folio as a single entry on the LRU list.
-> > But userspace may have no idea that we're doing this.  It may have made
-> > several calls to mmap() 256kB at once, they've all been coalesced into
-> > a single VMA and khugepaged has come along behind its back and created
-> > a 2MB THP.  Now userspace calls mlock() and instead of treating that as
-> > a hint that oops, maybe we shouldn't've done that, we do our utmost to
-> > preserve the 2MB folio.
-> > 
-> > I think this whole approach needs rethinking.  IMO, anonymous folios
-> > should not cross VMA boundaries.  Tell me why I'm wrong.
-> 
-> I think we touched upon that a couple of times already, and the main issue
-> is that while it sounds nice in theory, it's impossible in practice.
-> 
-> THP are supposed to be transparent, that is, we should not let arbitrary
-> operations fail.
-> 
-> But nothing stops user space from
-> 
-> (a) mmap'ing a 2 MiB region
-> (b) GUP-pinning the whole range
-> (c) GUP-pinning the first half
-> (d) unpinning the whole range from (a)
-> (e) munmap'ing the second half
-> 
-> 
-> And that's just one out of many examples I can think of, not even
-> considering temporary/speculative references that can prevent a split at
-> random points in time -- especially when splitting a VMA.
-> 
-> Sure, any time we PTE-map a THP we might just say "let's put that on the
-> deferred split queue" and cross fingers that we can eventually split it
-> later. (I was recently thinking about that in the context of the mapcount
-> ...)
-> 
-> It's all a big mess ...
+On 7/7/23 12:55 PM, Yangtao Li wrote:
 
-Oh, I agree, there are always going to be circumstances where we realise
-we've made a bad decision and can't (easily) undo it.  Unless we have a
-per-page pincount, and I Would Rather Not Do That.  But we should _try_
-to do that because it's the right model -- that's what I meant by "Tell
-me why I'm wrong"; what scenarios do we have where a user temporarilly
-mlocks (or mprotects or ...) a range of memory, but wants that memory
-to be aged in the LRU exactly the same way as the adjacent memory that
-wasn't mprotected?
+> As commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0
+> is invalid") says, there is no need to check if the platform_get_irq
+> return value is 0. Let's remove it.
 
-GUP-pinning is different, and I don't think GUP-pinning should split
-a folio.  That's a temporary use (not FOLL_LONGTERM), eg, we're doing
-tcp zero-copy or it's the source/target of O_DIRECT.  That's not an
-instruction that this memory is different from its neighbours.
+   No, that patch still allows returning IRQ0, actually you need:
 
-Maybe we end up deciding to split folios on GUP-pin.  That would be
-regrettable.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ce753ad1549cbe9ccaea4c06a1f5fa47432c8289
+
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+
+   Aside from that:
+
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
+
+MBR, Sergey
