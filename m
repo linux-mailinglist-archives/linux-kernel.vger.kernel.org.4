@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D3E74B367
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11DB74B36E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbjGGO4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S233188AbjGGO5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjGGO4T (ORCPT
+        with ESMTP id S233173AbjGGO5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:56:19 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD4A2117;
-        Fri,  7 Jul 2023 07:56:10 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1688741756t4957kso
-Received: from linux-lab-host.localdomain ( [116.30.131.119])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 07 Jul 2023 22:55:54 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: ILHsT53NKPgT3vYb7mSqef6qq6ijJFi5yZN+5IyXvKcCNY/FIjIcEWS0O5O+d
-        2NGhVscVoSruYGQXUG1TyM4Xedj+I/qg+7nL+jSkOz5tn0vd+07XiMUqFJslNu8QBkHhpUT
-        0MtEI2n1qoAZP64wEYuleIEOyFT9uh9c1HTh0aSVkydPB8MzgzUkyVLD2FoKPyNMJTecK1R
-        y8/UG3/PQNvw4I5GSsIMvazUH7UcFyNyWD0VmHh9aKiUcZ9t5PFVjbGpo/bLKCzqHxq2NMY
-        u8rgA6n/NSDFQIjFKpQAFBV4nNGLkxZd3pehjtNaIJ27EX2lHZEqBpdXgouPeQOc2OYwhVe
-        2zZjcdcsqh/BgXe/5Va1Z/B03oHnY72gBId+uoUZIAuyabDfddtVo0xRQgnKg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8772950966564420236
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: [PATCH v6 05/15] tools/nolibc: add missing my_syscall6() for mips
-Date:   Fri,  7 Jul 2023 22:55:35 +0800
-Message-Id: <c847dd087b65c1eb3edaca31ed47d31d43759518.1688739492.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688739492.git.falcon@tinylab.org>
-References: <cover.1688739492.git.falcon@tinylab.org>
+        Fri, 7 Jul 2023 10:57:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7520B1FE1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688741819;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eiOAjwadAWrcb7BoEkfxT+CYoQ+BF4xaAyjip1hV5Xs=;
+        b=Zs5tnBao6KyW3yjgqKWmYdIwSHI7uwQJDiv7BcjmvAiZ9YqSey9ZWdTGuBx8uIqpU7moa3
+        NZJE7RfaVcVxb0ttszGNqwSZ3vaYZKZokUtDUCO9lrniENb3EoqVM5SbCK8T22t9XobWxM
+        i9fHXCBTn6gRLh1fFUHs66RyIJ/jEV0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-172-IuoQqGI5NpuHDIjJsSoFHQ-1; Fri, 07 Jul 2023 10:56:53 -0400
+X-MC-Unique: IuoQqGI5NpuHDIjJsSoFHQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79C973C0F685;
+        Fri,  7 Jul 2023 14:56:52 +0000 (UTC)
+Received: from [10.22.34.12] (unknown [10.22.34.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D2D2D2166B25;
+        Fri,  7 Jul 2023 14:56:51 +0000 (UTC)
+Message-ID: <b3a22928-6537-ebca-d9c2-82d2f940208f@redhat.com>
+Date:   Fri, 7 Jul 2023 10:56:51 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] refscale: Fix use of uninitalized wait_queue_head_t
+Content-Language: en-US
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230707000117.2371697-1-longman@redhat.com>
+ <y5g37s3yhsqtmdoqziwnsd4kxtudlpqwv2iunt372abpmdzrry@43e54c374j4s>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <y5g37s3yhsqtmdoqziwnsd4kxtudlpqwv2iunt372abpmdzrry@43e54c374j4s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is able to pass the 6th argument like the 5th argument via the stack
-for mips, let's add a new my_syscall6() now, see [1] for details:
+On 7/7/23 10:07, Davidlohr Bueso wrote:
+> On Thu, 06 Jul 2023, Waiman Long wrote:
+>
+>> It was found that running the refscale test might sometimes crash the
+>> kernel with the following error:
+>>
+>> [ 8569.952896] BUG: unable to handle page fault for address: 
+>> ffffffffffffffe8
+>> [ 8569.952900] #PF: supervisor read access in kernel mode
+>> [ 8569.952902] #PF: error_code(0x0000) - not-present page
+>> [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
+>> [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
+>> [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS 
+>> 1.2.4 05/28/2021
+>> [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
+>>  :
+>> [ 8569.952940] Call Trace:
+>> [ 8569.952941]  <TASK>
+>> [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
+>> [ 8569.952959]  kthread+0x10e/0x130
+>> [ 8569.952966]  ret_from_fork+0x1f/0x30
+>> [ 8569.952973]  </TASK>
+>>
+>> This is likely caused by the fact that init_waitqueue_head() is called
+>> after the ref_scale_reader kthread is created. So the kthread may try
+>> to use the waitqueue head before it is properly initialized. Fix this
+>> by initializing the waitqueue head first before kthread creation.
+>>
+>> Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of 
+>> read-side synchronization")
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>
+> Strange this wasn't reported sooner.
 
-  The mips/o32 system call convention passes arguments 5 through 8 on
-  the user stack.
+Red Hat does have a pretty large QE organization that run all sort of 
+tests include this one pretty frequently. The race window is pretty 
+small, but they did hit this once in a while.
 
-Both mmap() and pselect6() require my_syscall6().
-
-[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/arch-mips.h | 27 ++++++++++++++++++++++++++-
- tools/include/nolibc/nolibc.h    |  9 ++++-----
- 2 files changed, 30 insertions(+), 6 deletions(-)
-
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index 1848f57777c4..a2bfdf57b957 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -166,7 +166,7 @@ struct sys_stat_struct {
- 	__asm__ volatile (                                                    \
- 		"addiu $sp, $sp, -32\n"                                       \
- 		"sw %7, 16($sp)\n"                                            \
--		"syscall\n  "                                                 \
-+		"syscall\n"                                                   \
- 		"addiu $sp, $sp, 32\n"                                        \
- 		: "=r" (_num), "=r"(_arg4)                                    \
- 		: "0"(_num),                                                  \
-@@ -176,6 +176,31 @@ struct sys_stat_struct {
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+({                                                                            \
-+	register long _num __asm__ ("v0")  = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("a3") = (long)(arg4);                    \
-+	register long _arg5 = (long)(arg5);                                   \
-+	register long _arg6 = (long)(arg6);                                   \
-+									      \
-+	__asm__ volatile (                                                    \
-+		"addiu $sp, $sp, -32\n"                                       \
-+		"sw %7, 16($sp)\n"                                            \
-+		"sw %8, 20($sp)\n"                                            \
-+		"syscall\n"                                                   \
-+		"addiu $sp, $sp, 32\n"                                        \
-+		: "=r" (_num), "=r"(_arg4)                                    \
-+		: "0"(_num),                                                  \
-+		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
-+		  "r"(_arg6)                                                  \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST                                 \
-+	);                                                                    \
-+	_arg4 ? -_num : _num;                                                 \
-+})
-+
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 05a228a6ee78..1f8d821000ac 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -13,11 +13,10 @@
-  * Syscalls are split into 3 levels:
-  *   - The lower level is the arch-specific syscall() definition, consisting in
-  *     assembly code in compound expressions. These are called my_syscall0() to
-- *     my_syscall6() depending on the number of arguments. The MIPS
-- *     implementation is limited to 5 arguments. All input arguments are cast
-- *     to a long stored in a register. These expressions always return the
-- *     syscall's return value as a signed long value which is often either a
-- *     pointer or the negated errno value.
-+ *     my_syscall6() depending on the number of arguments. All input arguments
-+ *     are castto a long stored in a register. These expressions always return
-+ *     the syscall's return value as a signed long value which is often either
-+ *     a pointer or the negated errno value.
-  *
-  *   - The second level is mostly architecture-independent. It is made of
-  *     static functions called sys_<name>() which rely on my_syscallN()
--- 
-2.25.1
+Cheers,
+Longman
 
