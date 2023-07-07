@@ -2,158 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2034174AAA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163D574AAA3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjGGFfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 01:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S229910AbjGGFh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 01:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjGGFex (ORCPT
+        with ESMTP id S229553AbjGGFhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 01:34:53 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C8D1FD8;
-        Thu,  6 Jul 2023 22:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1688708067; x=1720244067;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+rD/hewzM2PrvRZh93DLP5SxI8Y+Nxb+YvSesx2inws=;
-  b=j+wumgaKtKSQz/tnytf50GsRiPANTFcArSjzOSsvUxh+/W5aKit8oJMe
-   pLL1dUal6xUgDyoSbXMEjDpJAB5UYx9vKAelsxiogsvNSg4M+Scp96GxL
-   0mCtO6e0c6QRw1/3RaWJshlF9t6Zx34A+x0wDa1BFHI/Mh6g9zzmyagkH
-   yDfEuBSzxjVFHxCNjdiBjBfBTNAlAp1BLeLGcBlT2UG+iiZzyf4mf+2ya
-   vFok1Tik7XSiOkc1X33iVWZ//awpKkbmoHpPNUCavIMWbMbT/eEtFMn1D
-   b7EmT3Fv/x1cD0RG1gPfv+LzgJot1NjWGxHgcLlFAQywzLRDVXkly4uGD
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,187,1684792800"; 
-   d="scan'208";a="31803225"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 07 Jul 2023 07:34:24 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
+        Fri, 7 Jul 2023 01:37:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2261BC3;
+        Thu,  6 Jul 2023 22:37:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id DFB9C280084;
-        Fri,  7 Jul 2023 07:34:23 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Robin Murphy <robin.murphy@arm.com>, Frank Li <Frank.li@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>, suzuki.poulose@arm.com,
-        coresight@lists.linaro.org, imx@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
-        Adam Ford <aford173@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] arm64: dts: imx8mp: remove arm, primecell-periphid at etm nodes
-Date:   Fri, 07 Jul 2023 07:34:23 +0200
-Message-ID: <24260662.6Emhk5qWAg@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <ZKbSC8LBjLuo3ygD@lizhi-Precision-Tower-5810>
-References: <20230705205954.4159781-1-Frank.Li@nxp.com> <49ef52b7-0269-898c-7cc2-096f2f1037fc@arm.com> <ZKbSC8LBjLuo3ygD@lizhi-Precision-Tower-5810>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C8736173C;
+        Fri,  7 Jul 2023 05:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5010C433C7;
+        Fri,  7 Jul 2023 05:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688708272;
+        bh=6W39rcO0mo+MX7jP0Rws3FAS7SxpwgwiBILDqfm4DBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e9IOERvYN7BRwEBDVq/vqnzvKVtsFGl6S5ganEQmziXK8TORpqQOF9LZFRfN1/sWn
+         9amCjXxZc0nheITnMkVqkDrhQNZHeh4e2e+rc6KC4tSqODoT8nhiQtcA0O9LyC2W53
+         fz+omtSeQOi4INedOPP+cwGPhORe1z03xcu7cMZbrhABNScuTf92fv/nf8V/Dbhsyi
+         G+/DzfBra1+fClMKJ6TKxiXnShb4xEDs+AI2EdiWs1auGOvadxGYrcaNFZRDdCRxIV
+         kInlF8hx/ikhfVukuJaQFi/tNC9UkmNvlVbGAmifp4Uy8+OxyRvuYT0/YJJkSvzsta
+         7MpZR7fPPm1FQ==
+Date:   Fri, 7 Jul 2023 11:07:48 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peng.fan@nxp.com, joy.zou@nxp.com,
+        shenwei.wang@nxp.com, imx@lists.linux.dev
+Subject: Re: [PATCH v9 01/13] dmaengine: fsl-edma: fix build error when arch
+ is s390
+Message-ID: <ZKekrGdWWNOXNg0M@matsya>
+References: <20230620201221.2580428-1-Frank.Li@nxp.com>
+ <20230620201221.2580428-2-Frank.Li@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620201221.2580428-2-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+On 20-06-23, 16:12, Frank Li wrote:
+> fixed build error reported by kernel test robot.
+> 
+> >> s390-linux-ld: fsl-edma-main.c:(.text+0xf4c): undefined reference to `devm_platform_ioremap_resource'
+>    s390-linux-ld: drivers/dma/idma64.o: in function `idma64_platform_probe':
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306210131.zaHVasxz-lkp@intel.com/
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/dma/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+> index 644c188d6a11..c1065c444cde 100644
+> --- a/drivers/dma/Kconfig
+> +++ b/drivers/dma/Kconfig
+> @@ -210,7 +210,7 @@ config FSL_DMA
+>  
+>  config FSL_EDMA
+>  	tristate "Freescale eDMA engine support"
+> -	depends on OF
+> +	depends on ARCH_NXP
 
-Am Donnerstag, 6. Juli 2023, 16:39:07 CEST schrieb Frank Li:
-> On Thu, Jul 06, 2023 at 12:06:19PM +0100, Robin Murphy wrote:
-> > > > Am Mittwoch, 5. Juli 2023, 22:59:53 CEST schrieb Frank Li:
-> > > > > The reg size of etm nodes is incorrectly set to 64k instead of 4k.
-> > > > > This
-> > > > > leads to a crash when calling amba_read_periphid().  After correc=
-ted
-> > > > > reg
-> > > > > size, amba_read_periphid() retrieve the correct periphid.
-> > > > > arm,primecell-periphid were removed from the etm nodes.
-> > > >=20
-> > > > So this means the reference manual is wrong here? It clearly states
-> > > > the size is 64kiB. Reference Manual i.MX8MP Rev 1. 06/2021
-> > > > On a side note: Is imx8mq affected by this as well? The DAP memory
-> > > > table lists similar sizes in the RM .
-> > >=20
-> > > Note that the 64K MMIO space per device is really an alignment thing.
-> > > It's a recommendation from ARM to allow individual device MMIO regions
-> > > to be mapped on kernels with 64K page size. Most of the time the real
-> > > MMIO space occupied by the device is actually much smaller than 64K.
-> >=20
-> > Indeed, it's quite common for TRM memory maps to be written in terms of
-> > the
-> > interconnect configuration, i.e. from the point of view of the
-> > interconnect
-> > itself, that whole range of address space is assigned to that periphera=
-l,
-> > and it may even be true that the entire range is routed to the port whe=
-re
-> > that peripheral is connected. However what's of more interest for DT is
-> > how
-> > much of that range the peripheral itself actually decodes.
->=20
-> Yes, there are not problem by mapping bigger space in most case.
->=20
-> amba bus's periphal use close to end of region to show device's identical
-> information.
+That is not really a fix! you are masking this by making the driver
+build only on NXP
 
-Ah, thanks for the explanation. This make things more clear.
-But on the other is it sensible to assume the memory resource size to fit t=
-he=20
-IP address space? It appears to me the size is fixed to 4kiB anyway. Would =
-it=20
-make more sense to read the values from the address "base + 4K - x" instead=
- of=20
-"base + size - x"?
+I think better fix is to depend on HAS_IOMEM
 
-Best regards,
-Alexander
+>  	select DMA_ENGINE
+>  	select DMA_VIRTUAL_CHANNELS
+>  	help
+> -- 
+> 2.34.1
 
-> In drivers/amba/bus.c,
->=20
-> amba_read_periphid()
-> {
-> 	...
-> 	size =3D resource_size(&dev->res);
-> 	...
-> 	for (pid =3D 0, i =3D 0; i < 4; i++)
-> 		pid |=3D (readl(tmp + size - 0x20 + 4 * i) & 255) << (i *=20
-8);
-> }
->=20
-> So the range in DTS for arm,primecell should be actual IP address space.
->=20
-> > Robin.
-> >=20
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+-- 
+~Vinod
