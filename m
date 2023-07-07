@@ -2,123 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17F974ADCC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DCD74ADCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjGGJ3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        id S231962AbjGGJbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjGGJ3u (ORCPT
+        with ESMTP id S229636AbjGGJbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:29:50 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3984D1BE8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1688722189;
-  x=1720258189;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=vmoHkaxzOc3W5AxZzvRg6PaJA6l2pLh+CK3MdeJgboY=;
-  b=IOmnOa31JrhhQHJDSKKnfpYl2YhvnPeJi3WuY8tXrW3aYK+l/hQjURmK
-   01IEdRkd3O8AKyXWCYdWbDi40q7YHb1qy8y9AB5EfBp+9X6cX24mZoV/8
-   hMk944Mn7erm6uqmNX2QFNLpSNVAFmAyIpXTNyZG/iYuJ5fZrUpkX1qdZ
-   YIuto1IsHPSPtGbnKtHgNWv4bMnr5Yr/LvS6Oy06EuFYUZiUnXmJM8DKK
-   sc5CI9jcKDODvqxgI4427bdUeAH3Vkmp0PX7pUaKnF7KzVEjhjvbdL1aL
-   yJZDpRBNgkToKn0mBcq6x30Y+RZ5pD68CT1fDczlQLd8sY7FCb5Y0hHll
-   w==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-Date:   Fri, 7 Jul 2023 11:29:36 +0200
-Subject: [PATCH] signal: Print comm and exe name on fatal signals
+        Fri, 7 Jul 2023 05:31:18 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548EB1FEE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:31:08 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.98.39]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M3UEW-1qH9YK1WR0-000dcP; Fri, 07 Jul 2023 11:29:50 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 992013E7EB; Fri,  7 Jul 2023 11:29:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1688722186; bh=tCQ6HrnYZ/FGc+RkZTXZUlGBozAP7H6M0nYG/YXQEKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=3WIw/LXB6vdjJrH7rsNWzQUPj+aItETbSEUBeCCE5+tFSttHNWNlguptKP/ekbITl
+         ejYYS697XK91aoKy7i/jnbLOXybsGpr1GHkU4PIToIvvOC1lPIn5wIZRQRH/q6ovAU
+         5MH/KlHKRT3eHE0S+Rp2KhVptm7LC/RfCtOhp0GA=
+Date:   Fri, 7 Jul 2023 11:29:46 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: Remove the arch_calc_vm_prot_bits() macro from the
+ uapi
+Message-ID: <ZKfbCqiiMcUF2qeZ@fjasle.eu>
+References: <20230706190217.371721-1-thuth@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20230707-fatal-comm-v1-1-400363905d5e@axis.com>
-X-B4-Tracking: v=1; b=H4sIAP/ap2QC/x2NQQqEMAwAvyI5G6itePAr4iHGVAPaSiuyIP59q
- 8cZGOaGLEklQ1/dkOTSrDEUaOoKeKWwCOpcGKyxznTOoKeTNuS479h0jtm2xrKfoQQTZcEpUeD
- 1TXyM7auPJF5/32MYn+cP0t/SSnMAAAA=
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Vineet Gupta" <vgupta@kernel.org>, Tejun Heo <tj@kernel.org>,
-        <kernel@axis.com>, Vincent Whitchurch <vincent.whitchurch@axis.com>
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230706190217.371721-1-thuth@redhat.com>
+X-Provags-ID: V03:K1:0/+r3K2elFy/AStcbUMDJZzFiPdvBMt49zrIRuNrCVat+Xsj8XG
+ toEmDLrDjTi5Owv4hjHzgh7xx/QD8aiQPL+2WRLJUYeztZiLEpEEowrSISLTcLLAO38rSyP
+ 6kCpYQU/ZeSmPEDXg1MIYCKIBFohjn9rYZCmqeDo6OKTo6c9FdQprurpxX+/HCWyVbSpdHe
+ xoRo688nMpt+Z9CaCxgxA==
+UI-OutboundReport: notjunk:1;M01:P0:ivbDZpvZmLw=;LRwQ3wKoxbiqPojrczcPaEvna/U
+ +/8hrHqCBoY6dgWJBgE0X3axkec4/7x2CZ9z/ukGfpZFMKZzZpJ9jcF9N8BrEuGxXiS/bM5pu
+ UUifWU4gZebeypJXx8OFOFw+wJLsj7UFF4zRlNBVI/MlCbEuXhtJRzcI5w4aaSroKyzTVa/Wd
+ fBPfnSzLUswQt99DoeeIeT0fB2vp9rVYe1QVzWZ6GX/JLzU8+sgYE8W0syD+llrBMpiqN6kUZ
+ 0qTgPUOHBO7hM8Le2tuBzkTWyKWydnaHPgYJy2rPq/U+hWVlrJohiDUU467y4FpTsJBZp/xci
+ DQoAQhHJW0J7EUsnt4OPN/RAURFmEXS9GJl6wco4pkD8E+jbiEOO8ZR0wtPDkBDkqa1JYOWT4
+ GHT5gRt17FtZQn8APuEmG1TrM5wNoWN8YGcfBgOasj9Lr2wm4ygsBBSfAyff3+LU77MRtlD/Y
+ u3cr+zlsjZsOq0EjaSuI94MGQV0bigdQF5r95yazFPb94FTIegpPI2lZWUc/wihKEii2KUoCu
+ 5bglh04s/gra1b3Qsnkjr0+31b+LhIe3dUTyUpYdx9J50Bn9j3ZTxaH3XtUix7SZ3MDZtakh0
+ BKVKOVEv3BUxTe729WnjcdE+la0laDMDVAl6gbKXZeD8GcEHQq3o/Xm+L7a1KqcTrsg3AAU1r
+ VoozNES3Xy/dB1u1EyIkVTkDmx52zmkqvAP8yJVjlQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the print-fatal-signals message more useful by printing the comm
-and the exe name for the process which received the fatal signal:
+On Thu, Jul 06, 2023 at 09:02:17PM +0200 Thomas Huth wrote:
+> The arch_calc_vm_prot_bits() macro uses VM_PKEY_BIT0 etc. which are
+> not part of the uapi, so the macro is completely useless for userspace.
+> It is also hidden behind the CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+> config switch which we shouldn't expose to userspace. Thus let's move
+> this macro into a new internal header instead.
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
 
-Before:
+Thanks for fixing this config leakage.
 
- potentially unexpected fatal signal 4
- potentially unexpected fatal signal 11
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-After:
 
- buggy-program: pool: potentially unexpected fatal signal 4
- some-daemon: gdbus: potentially unexpected fatal signal 11
+>  arch/x86/include/asm/mman.h      | 15 +++++++++++++++
+>  arch/x86/include/uapi/asm/mman.h |  8 --------
+>  scripts/headers_install.sh       |  1 -
+>  3 files changed, 15 insertions(+), 9 deletions(-)
+>  create mode 100644 arch/x86/include/asm/mman.h
+> 
+> diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+> new file mode 100644
+> index 0000000000000..12b820259b9f3
+> --- /dev/null
+> +++ b/arch/x86/include/asm/mman.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_MMAN_H__
+> +#define __ASM_MMAN_H__
+> +
+> +#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+> +#define arch_calc_vm_prot_bits(prot, key) (		\
+> +		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
+> +		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
+> +		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
+> +		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
+> +#endif
+> +
+> +#include <uapi/asm/mman.h>
+> +
+> +#endif /* __ASM_MMAN_H__ */
+> diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+> index 775dbd3aff736..a72e4f3e13b17 100644
+> --- a/arch/x86/include/uapi/asm/mman.h
+> +++ b/arch/x86/include/uapi/asm/mman.h
+> @@ -4,14 +4,6 @@
+>  
+>  #define MAP_32BIT	0x40		/* only give out 32bit addresses */
+>  
+> -#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+> -#define arch_calc_vm_prot_bits(prot, key) (		\
+> -		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
+> -		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
+> -		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
+> -		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
+> -#endif
+> -
+>  #include <asm-generic/mman.h>
+>  
+>  #endif /* _ASM_X86_MMAN_H */
+> diff --git a/scripts/headers_install.sh b/scripts/headers_install.sh
+> index afdddc82f02b3..56d3c338d91d7 100755
+> --- a/scripts/headers_install.sh
+> +++ b/scripts/headers_install.sh
+> @@ -81,7 +81,6 @@ arch/nios2/include/uapi/asm/swab.h:CONFIG_NIOS2_CI_SWAB_NO
+>  arch/nios2/include/uapi/asm/swab.h:CONFIG_NIOS2_CI_SWAB_SUPPORT
+>  arch/x86/include/uapi/asm/auxvec.h:CONFIG_IA32_EMULATION
+>  arch/x86/include/uapi/asm/auxvec.h:CONFIG_X86_64
+> -arch/x86/include/uapi/asm/mman.h:CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+>  "
+>  
+>  for c in $configs
+> -- 
+> 2.39.3
 
-comm used to be present but was removed in commit 681a90ffe829b8ee25d
-("arc, print-fatal-signals: reduce duplicated information") because it's
-also included as part of the later stack trace.  Having the comm as part
-of the main "unexpected fatal..." print is rather useful though when
-analysing logs, and the exe name is also valuable as shown in the
-examples above where the comm ends up having some generic name like
-"pool".
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- kernel/signal.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 2547fa73bde51..fe1ce5f003784 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -22,8 +22,10 @@
- #include <linux/sched/cputime.h>
- #include <linux/file.h>
- #include <linux/fs.h>
-+#include <linux/mm.h>
- #include <linux/proc_fs.h>
- #include <linux/tty.h>
-+#include <linux/file.h>
- #include <linux/binfmts.h>
- #include <linux/coredump.h>
- #include <linux/security.h>
-@@ -1255,7 +1257,17 @@ int send_signal_locked(int sig, struct kernel_siginfo *info,
- static void print_fatal_signal(int signr)
- {
- 	struct pt_regs *regs = task_pt_regs(current);
--	pr_info("potentially unexpected fatal signal %d.\n", signr);
-+	struct file *exe_file;
-+
-+	exe_file = get_task_exe_file(current);
-+	if (exe_file) {
-+		pr_info("%pD: %s: potentially unexpected fatal signal %d.\n",
-+			exe_file, current->comm, signr);
-+		fput(exe_file);
-+	} else {
-+		pr_info("%s: potentially unexpected fatal signal %d.\n",
-+			current->comm, signr);
-+	}
- 
- #if defined(__i386__) && !defined(__arch_um__)
- 	pr_info("code at %08lx: ", regs->ip);
-
----
-base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
-change-id: 20230630-fatal-comm-163cc2402cfd
-
-Best regards,
 -- 
-Vincent Whitchurch <vincent.whitchurch@axis.com>
-
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
