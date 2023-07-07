@@ -2,82 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F7374AEAB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDE674AEAE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjGGKWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S232211AbjGGKWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 06:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGKWU (ORCPT
+        with ESMTP id S229458AbjGGKWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:22:20 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D61810B;
-        Fri,  7 Jul 2023 03:22:18 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 291D6EB4F0;
-        Fri,  7 Jul 2023 12:22:15 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1688725335; bh=R2JAn8dEc5t5IbxpMIYj+ROpC8mKUwi+oGPWhkhnmps=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hrw3hX5hun3YSXg/bR+StoUqmBtv5Sg4IUiJIG4MBvgSTT8nNjHLDBlwAxI/Bgus2
-         f++y7N3Z1Wa5LMZrneYAvSsBQ3NkH/xvR6QjWjMIveXWXfbNevXIqCBNV4YCOQjBAj
-         WECHj7caN3qm6AJ8He9i9tGPkhCGQg0Krp19h20yz99u5X+9BPg0Gdgz3R9hE7N5mn
-         ozvvrVEjkXoAMyYrINs49hiIRN1hd2XoGedS6hDK0kwmzglSNWF6XGZr8B7FmzvcZ4
-         80/N8K8H+Sxi8onYywDqbBt4L7jxPlco1/GoFG7/OVNeYT14QIYXOD4psk7JWBhyxJ
-         JNUUAHieg1MmQ==
-Date:   Fri, 7 Jul 2023 12:22:13 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
- transient memory pool
-Message-ID: <20230707122213.3a7378b5@meshulam.tesarici.cz>
-In-Reply-To: <2023070706-humbling-starfish-c68f@gregkh>
-References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
-        <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
-        <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-        <2023070626-boxcar-bubbly-471d@gregkh>
-        <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-        <2023070706-humbling-starfish-c68f@gregkh>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        Fri, 7 Jul 2023 06:22:49 -0400
+Received: from mail-pj1-f79.google.com (mail-pj1-f79.google.com [209.85.216.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A41C128
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 03:22:48 -0700 (PDT)
+Received: by mail-pj1-f79.google.com with SMTP id 98e67ed59e1d1-26337f5d2daso2650100a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 03:22:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688725368; x=1691317368;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ueiBuEN+wg/Nr0s18dKyTssSqkuw56srD8rsuBlk7o=;
+        b=mH5uJ/Gy8zsjul1UPjx4Z9nfQzjQjv5Wf5aobWkNtjotDY22bNWUzxw5gxOFIuOEAo
+         xfh5CDIC/taAOebbSgXZR41fY+dkTSZ68dhXbghs63kyrl/9WH0c1xxdQOzau1/Z5SZ2
+         sd+HabSwGEJBfLcakEqYPT6XcNZm+3DOFp67soC8Tialj4cQHvOtmkPkN86hAMneKryY
+         1I4tS02a+/OzuGNl2No9bmv4Zj2zzy79fqFqT1DWWDQ37UNxEIIYqv9BTtml0IXH9P17
+         dAv0P4AJkl2p4MTFf/4+zitw/w8aCJuKY0k1VSzSYOzFjPPW977e6yCE0FmV3DbqM/70
+         T/Cw==
+X-Gm-Message-State: ABy/qLZjhIxVwun8ikkEP3Mve1OEvL5jc9Ti0VzNeWHPCLG08L1WQpUV
+        AAEXKHag/D7cvudv1nCJllaiI4n/SCwtOLtW1HAbkKY0hpLN
+X-Google-Smtp-Source: APBJJlHAjHS5Zwyl861BtEFX+Npa6vDdErTSRVEAvVNf97Q4n430gWj6tp24eGEJUBCbXBiM882ZjGa8ganuzbzKjIAjMXAraUCJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Received: by 2002:a17:90a:d793:b0:263:2f09:20c3 with SMTP id
+ z19-20020a17090ad79300b002632f0920c3mr3945414pju.9.1688725367851; Fri, 07 Jul
+ 2023 03:22:47 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 03:22:47 -0700
+In-Reply-To: <0000000000006d817e05f85cd6a8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ac930905ffe30322@google.com>
+Subject: Re: [syzbot] [nfc?] UBSAN: shift-out-of-bounds in nci_activate_target
+From:   syzbot <syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com>
+To:     anupnewsmail@gmail.com, davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,92 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 10:29:00 +0100
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+syzbot has found a reproducer for the following issue on:
 
-> On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrote:
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, July 6, 2023 1:07 AM  
-> > > 
-> > > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) wrote:  
-> > > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday, June 27, 2023  
-> > > 2:54 AM  
-> > > > >
-> > > > > Try to allocate a transient memory pool if no suitable slots can be found,
-> > > > > except when allocating from a restricted pool. The transient pool is just
-> > > > > enough big for this one bounce buffer. It is inserted into a per-device
-> > > > > list of transient memory pools, and it is freed again when the bounce
-> > > > > buffer is unmapped.
-> > > > >
-> > > > > Transient memory pools are kept in an RCU list. A memory barrier is
-> > > > > required after adding a new entry, because any address within a transient
-> > > > > buffer must be immediately recognized as belonging to the SWIOTLB, even if
-> > > > > it is passed to another CPU.
-> > > > >
-> > > > > Deletion does not require any synchronization beyond RCU ordering
-> > > > > guarantees. After a buffer is unmapped, its physical addresses may no
-> > > > > longer be passed to the DMA API, so the memory range of the corresponding
-> > > > > stale entry in the RCU list never matches. If the memory range gets
-> > > > > allocated again, then it happens only after a RCU quiescent state.
-> > > > >
-> > > > > Since bounce buffers can now be allocated from different pools, add a
-> > > > > parameter to swiotlb_alloc_pool() to let the caller know which memory pool
-> > > > > is used. Add swiotlb_find_pool() to find the memory pool corresponding to
-> > > > > an address. This function is now also used by is_swiotlb_buffer(), because
-> > > > > a simple boundary check is no longer sufficient.
-> > > > >
-> > > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_alloc_pages(),
-> > > > > simplified and enhanced to use coherent memory pools if needed.
-> > > > >
-> > > > > Note that this is not the most efficient way to provide a bounce buffer,
-> > > > > but when a DMA buffer can't be mapped, something may (and will) actually
-> > > > > break. At that point it is better to make an allocation, even if it may be
-> > > > > an expensive operation.  
-> > > >
-> > > > I continue to think about swiotlb memory management from the standpoint
-> > > > of CoCo VMs that may be quite large with high network and storage loads.
-> > > > These VMs are often running mission-critical workloads that can't tolerate
-> > > > a bounce buffer allocation failure.  To prevent such failures, the swiotlb
-> > > > memory size must be overly large, which wastes memory.  
-> > > 
-> > > If "mission critical workloads" are in a vm that allowes overcommit and
-> > > no control over other vms in that same system, then you have worse
-> > > problems, sorry.
-> > > 
-> > > Just don't do that.
-> > >   
-> > 
-> > No, the cases I'm concerned about don't involve memory overcommit.
-> > 
-> > CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current swiotlb
-> > code in the Linux guest allocates a configurable, but fixed, amount of guest
-> > memory at boot time for this purpose.  But it's hard to know how much
-> > swiotlb bounce buffer memory will be needed to handle peak I/O loads.
-> > This patch set does dynamic allocation of swiotlb bounce buffer memory,
-> > which can help avoid needing to configure an overly large fixed size at boot.  
-> 
-> But, as you point out, memory allocation can fail at runtime, so how can
-> you "guarantee" that this will work properly anymore if you are going to
-> make it dynamic?
+HEAD commit:    a452483508d7 Merge tag 's390-6.5-2' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=161e174aa80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7df0cabaf5becfdc
+dashboard link: https://syzkaller.appspot.com/bug?extid=0839b78e119aae1fec78
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123fc664a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12003f4aa80000
 
-In general, there is no guarantee, of course, because bounce buffers
-may be requested from interrupt context. I believe Michael is looking
-for the SWIOTLB_MAY_SLEEP flag that was introduced in my v2 series, so
-new pools can be allocated with GFP_KERNEL instead of GFP_NOWAIT if
-possible, and then there is no need to dip into the coherent pool.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/524f562d731e/disk-a4524835.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/253005f05b78/vmlinux-a4524835.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1864a30871e7/bzImage-a4524835.xz
 
-Well, I have deliberately removed all complexities from my v3 series,
-but I have more WIP local topic branches in my local repo:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com
 
-- allow blocking allocations if possible
-- allocate a new pool before existing pools are full
-- free unused memory pools
+================================================================================
+UBSAN: shift-out-of-bounds in net/nfc/nci/core.c:912:45
+shift exponent 268435489 is too large for 32-bit type 'int'
+CPU: 0 PID: 5028 Comm: syz-executor696 Not tainted 6.4.0-syzkaller-12155-ga452483508d7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x221/0x5a0 lib/ubsan.c:387
+ nci_activate_target.cold+0x1a/0x1f net/nfc/nci/core.c:912
+ nfc_activate_target+0x1f8/0x4c0 net/nfc/core.c:420
+ nfc_genl_activate_target+0x1f3/0x290 net/nfc/netlink.c:900
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:970
+ genl_family_rcv_msg net/netlink/genetlink.c:1050 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1067
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2549
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1078
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1914
+ sock_sendmsg_nosec net/socket.c:725 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:748
+ ____sys_sendmsg+0x739/0x920 net/socket.c:2494
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2548
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2577
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff498fc3ab9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 16 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff49876f2e8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007ff4990542a0 RCX: 00007ff498fc3ab9
+RDX: 0000000000000000 RSI: 0000000020000780 RDI: 0000000000000005
+RBP: 00007ff49901a510 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000005
+R13: 0000000000000001 R14: 0000000000000000 R15: 00007ff4990542a8
+ </TASK>
+================================================================================
 
-I can make a bigger series, or I can send another series as RFC if this
-is desired. ATM I don't feel confident enough that my v3 series will be
-accepted without major changes, so I haven't invested time into
-finalizing the other topic branches.
 
-@Michael: If you know that my plan is to introduce blocking allocations
-with a follow-up patch series, is the present approach acceptable?
-
-Petr T
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
