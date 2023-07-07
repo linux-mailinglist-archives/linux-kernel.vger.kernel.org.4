@@ -2,118 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A44D74B039
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B44D74B037
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjGGLrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S231849AbjGGLrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjGGLrd (ORCPT
+        with ESMTP id S229649AbjGGLrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:47:33 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69E2110
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 04:47:30 -0700 (PDT)
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id F3CB53F72E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 11:47:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688730448;
-        bh=yCrZiw7BEnZOoMlxwV+fDzQMDThIgv0il3cqJ87wTwY=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Llb7Hv+BkpXGknGE4BLATfOdgDXGpPt6wbOfo3SCNN+N397eA+Hj4q8AOgCw0PxA9
-         3D2oTzSM2lRi5Ap0NJn3GPQJfcwU67FqJI024j0gvC+swADRBEt08lgFmOFlD+sqI7
-         jOi91Rer+UzqrmrHRT9jcQ61BopVU9aLzGlQ1mo58CrdNAjXO0vwyRPS3tMfMaFTG4
-         vaxeeOsOregxRa5QV5hfekuF9R+wlB5hF+CirnaCwWJrBcqfayHZsxQi0THUWE+7UP
-         RsEAogfUOTfmCDyT3Vi8kAjY7Ja+UeY6TIF+btkfNmKqGo+bkNBUxPj45y2RU95RTi
-         QhnxCPfgIfHpg==
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-31273e0507dso979295f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 04:47:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688730447; x=1691322447;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yCrZiw7BEnZOoMlxwV+fDzQMDThIgv0il3cqJ87wTwY=;
-        b=guxVvmNTJzf05tUY3c5/LAD5dFWXxtMdCsFEC1jvltKTohzajpAso/LVFH48InI+Kt
-         ifvCM5Nxjsy2uPCK8kW82TzOA6TfxdF6suFAHX4pJAz88Fh92tsSIvZuNC+Bn70DpshS
-         LVc3b6npBU1jpSOoaRb8WG40JnYOKbdlXtvncE5DhiZhv7J/4ARM9xUnZ+7eejyF1Vt3
-         ECoQIr/Oma68ghinMq13hsgNzvj0dM9sTNueKEObadv54Sc1HwMtHy3RbOn2HNND4Tpe
-         /wU4DgEQJxeq6qFFxWT3VCn8Q55QW6FaFY+8bS1bA/KiJw64n7pbXr5PtiV8SqHpPE5g
-         pFVw==
-X-Gm-Message-State: ABy/qLbMQjkQnVlzonp7kR6vVOg3uvbX8dJTZ0Kd6nIq1HztVuWYgttu
-        wDWgtQY6YxUdSyyKNr/kmIwWwn8hdpCKE8N8x9WJLyuC/ZYFD2mcFJe6ZiYrNo6XgDUrxUgjAAJ
-        IClB9VCNidDEqCjFaKaK1ZypWyJH/WYrW/4g8nmKE/xuEq3KabOeC1lyzNw==
-X-Received: by 2002:adf:ed05:0:b0:313:f0d7:a43 with SMTP id a5-20020adfed05000000b00313f0d70a43mr4002206wro.23.1688730447420;
-        Fri, 07 Jul 2023 04:47:27 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGVAIBpTa1MVAlzodE1XgvifnvQI9UgGx54CHGg+qXLudKYtN63Ml6dNysCS8JNx6f/EsqAIEvNKoE2Xvud+mI=
-X-Received: by 2002:adf:ed05:0:b0:313:f0d7:a43 with SMTP id
- a5-20020adfed05000000b00313f0d70a43mr4002192wro.23.1688730447144; Fri, 07 Jul
- 2023 04:47:27 -0700 (PDT)
+        Fri, 7 Jul 2023 07:47:20 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2047.outbound.protection.outlook.com [40.107.237.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233D0E53
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 04:47:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dfpRTPKImpyQIFi1LW/t50VP1fA4kV0nQ2hcreCseLDzGa68YX9oSlRy+tBvA7ook3hhGgS1og6z+OuUu4pwrSAvP32ndhl3MyKcPA5VCEEgq514imbv4DFUl9fTNC9HnQoxrT9NvDhdxozAa44RTld7mz4XtFsz9jRQNpmgmm1vTTyT/U1JiQKYUKx0EHmMuXBhrtOn31a+A8UZxt0MlvgVQh+kUvl9nNllcctpT4vI+6JvtI5JY+pL1cuqjQzWhHE4hR6iP9R/AZ1mdq16OHB18FXwsJU/3nS/U+8Xj1wAVKExUF141jXmMQdaQJZVoT80tZDxPTwY/OZ3ttXgPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qZbSH6GeZu3srC+GdbtTg2oAHRVOJPBiweUAIaclw60=;
+ b=ij5EHHWAvv9BofHcdHP3CPFZChQTJIaNdyMIjJ5xmP2QyAltxuiKedauOvMETJd5bkQdaID7dG88+Jc2mZON1w2o/LmrNFY2yjLfzpZGu9k3/U09iGshYcqx47vFnPLi/7+0ww4REtUU40TH3q6lDGlxZfn7IuSqPojhXEgxASdc4BBBTXsbZ8+j+keLC/5TIOJoMpdMLpA+yNng8LUUvNkPT+rhcoYe1iDrrZGmbVvKdPQNHtpGVMVz1KIcM+vVOy4fAJB42fF9pYwUq3wHbqcpY8AzuoYqiA4sKDVLcAa6IIxpnWNarawmFCVsmf+ImIiFYXuhyhCPXzV86z4BeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qZbSH6GeZu3srC+GdbtTg2oAHRVOJPBiweUAIaclw60=;
+ b=tnmni/nC5sYnXdDd1zgpiOe1JHArfhrM4rBDlXqL0ZTzRnI6cdUZk4YJcqyXrqI2euBKyT1KeO1A4Nfm0t7pveEqxuxwxqKNEfkz6nzkaCSfRQb/RkCtqEVkS4Hw14RJYQIMdrm6Th9i64Vy7Wfbsobcme77CvRff6IhjaCRQOA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BN9PR12MB5339.namprd12.prod.outlook.com (2603:10b6:408:104::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
+ 2023 11:47:16 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e8c1:b961:25c0:1fb0]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e8c1:b961:25c0:1fb0%6]) with mapi id 15.20.6565.025; Fri, 7 Jul 2023
+ 11:47:16 +0000
+Message-ID: <f32098e2-d680-d02e-8181-cad76daf2416@amd.com>
+Date:   Fri, 7 Jul 2023 13:47:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] [v2] drm/amdgpu: avoid integer overflow warning in
+ amdgpu_device_resize_fb_bar()
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>, Le Ma <le.ma@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>,
+        Shiwu Zhang <shiwu.zhang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230707111157.209432-1-arnd@kernel.org>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230707111157.209432-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0212.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ac::11) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20230707105601.133221-1-dimitri.ledkov@canonical.com> <20230707112805.GCZKf2xdf2kMJ/S1DU@fat_crate.local>
-In-Reply-To: <20230707112805.GCZKf2xdf2kMJ/S1DU@fat_crate.local>
-From:   Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-Date:   Fri, 7 Jul 2023 12:46:50 +0100
-Message-ID: <CADWks+Y7yRfQgd3iKM=qg8-HnQc51QLFNOsWXmR7Rfdn29SSkw@mail.gmail.com>
-Subject: Re: [PATCH] x86/cpu: Add support for modern x86-64-v* march
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|BN9PR12MB5339:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb4db5d6-41c1-41bd-a048-08db7edfe8c5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ncLggLZDVf7Fu6KSVLwfpm80V7bSHbHVW6BRTc4kG6oIxnXJzBGLDtxDzItBjAGvklR2/xkF9dCU9hXo2ujT+6va4E90esJRBSmCYCVrV7PMYr7FcreyR1LdRsPtiz2D6xeZSmXhwy7Ytu1UMkngslQww7f74Axnj1OelqwGcaVCE5u1ZIXKj2TYZ85YkktNxVDE8bp1vn4+5ISnRtoUD9gEkB8N9Xi3kclB6HycryUoEcI6pHfxXH4S4QjaGl/yDQhTLxdcvP+wz/ouBonrFNNQTpptCVfdMFuwigvpoe4HbY50vXx363uQvRi5oq9hcIQIFPNRcsCsZseUSHh+WHnAF9fTNIqI6o18N3A6/HzSF94WP9gpqSkxzn3CC9iqd7fdUWdffWD3Mcp+lVR9MF0FzA26ntO8TCIlXboVa6c5XWfty7kn/nZHlznlCBr5hhpp6HIefwQgSTAInur8eHP1tpeUsM/a0gBjnc+ULApklNKHWd/yLbLKDZJcHqEh0PfxbubUSkbbJDBNkm4CqZ8IbqhIavimfvCaMoK0r9XC6znSC/amYuZ+enVCA1Zw6qqBFNLz3cEN2yxcRTXDxkM9rxdk3Qilu9kEBRVCiBap2RfCsLL2BVnWT7KKUnPN/IVy5lFfKadB5cyNBDHvoQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199021)(316002)(8676002)(66574015)(83380400001)(2616005)(2906002)(66556008)(4326008)(66476007)(66946007)(6666004)(110136005)(6486002)(54906003)(478600001)(5660300002)(6512007)(186003)(6506007)(41300700001)(8936002)(38100700002)(36756003)(31696002)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHJOVG41d0I5YW52UDNhMDh3SGx1ZThmWFZNRFZ4WXh5QndCWkVFUzlrZ0xp?=
+ =?utf-8?B?UVdTd243WjdtWHU3dmp4bGhNcEZsaGFleW4zZFFiQVJFVUtaRk5YUHk0bUlq?=
+ =?utf-8?B?SkRxM3NUM2RiM0JPVWNXL1lraHNVd200cmU2UTFrUmZTaTMrWE55ZDl0ejdR?=
+ =?utf-8?B?bDYzYUJxandVZEttMTRPdzhUdUk0UllkV0Q5V0NsZDhrNWJhY1VSQk1nV293?=
+ =?utf-8?B?WlFYaVJDZXNkTlZjU3pqV3p0OW9xK3QwVHd4czhtOVZYNlp3SHJnQ21wVUhK?=
+ =?utf-8?B?K3hnWlJGTnl6TVU4cC9HVHlINVR1QmxzZkNnTnBBN3Y3R1RqWVpnWkM3UndF?=
+ =?utf-8?B?UHB4TXBsUjJYQlM5RXhvMUh2RzMreFZZTWtTWTBwV2JueGZtYnovQjNiQjIy?=
+ =?utf-8?B?NkVhd0hYZjR0QU9UMDV1bFppZW1FcmxnMmtwSzFXUktRL3dVRGcwUGtVeHFD?=
+ =?utf-8?B?cVUzU2tSUE56YlVQTEdiQTg5TGdaUGlueVpxeGN2dkxabTBwZlVkNmpFTmVj?=
+ =?utf-8?B?azdlS1ExRHZWRkd5cjdZMnV4NHVLcDB0R051OWhDczF1UkI2dVZ0cC9QMktR?=
+ =?utf-8?B?ejczTGk3RUdYZDdkUElJcjRUK3lsS1V0WFNXSDFtNzJoTEovUW5VQk5od3Qz?=
+ =?utf-8?B?T1VNUWF3VGNmL2RJVHdHT0tDU2tmUjJWYmdCeFljZkZyRWZIYm9UWWRuTzln?=
+ =?utf-8?B?c0F1M21aanN3bHBKcUltVEVPV3NubTlqanNza0U1OU5rQnp0MDZCcXZRSVh5?=
+ =?utf-8?B?SEczRnloWWtqVGVLclVTVHgraTFheFRmMDJqV2syMGR5OFpjTkxuRWtJTkV5?=
+ =?utf-8?B?U2JmUEQzRUdIQzhIM3lGUVdYYVpwZ1BoMmcwOEo2QWNEd2YvcVlyU2wxRFhp?=
+ =?utf-8?B?dTJvb0NLVFZ5MHpLT0lDR0VGTzJEbTdmZW5Cb1lBWkVwOWxRUEFiQlJtN2dh?=
+ =?utf-8?B?YmtBY3FWcnNqK0YxMFlWQWE2UXNneXVGY0cvWm9pMC8ybjZ1NEY1QWtERjBa?=
+ =?utf-8?B?dXV4L0VtSXRjd0lYaTRWbWF6YkxROG1OYWEyNk5WWVdmRGl5aEpscWhqNFpP?=
+ =?utf-8?B?aktzTzJhWmk3YTNQdUtSR2w2QWFuOTA4S2c2eTZVNmI5RTY1UVF0aEhDUnd4?=
+ =?utf-8?B?d1B3SUFySElocWsxOUhzUDdRakVRWXVmMk5Ra2RmY3REbWRPUk1CL2cvUHNi?=
+ =?utf-8?B?bXZ2Y0pYSVVGN3RyU1BkOUk5bnIzcURobzhsRWNhSU01QU83MlpOQVhEcTNw?=
+ =?utf-8?B?NEh0V1B3S1d2VGFlMStJMFdQUVQvQ1pubjJxL2RkZTVWZGlML0QxbjhhODNG?=
+ =?utf-8?B?bVh3R0ZkWnc1b2plOGw2bFZYck42L09KSlVVMktXblNQYVdaUWw0YmdDcktF?=
+ =?utf-8?B?SkNjQTFienhJczF6bEdBV3VkbFdPbHZJVGQyZXRXV3hUcGlncUJlZW83R3Y4?=
+ =?utf-8?B?WkVvYVU1SXZZcUxDdkltQzhzRDB1Z3Q4bnFXMVJ2WjdrakZGWkxGNGF4T3U1?=
+ =?utf-8?B?c0huTHdjRXIwZHk3dkpnQXlyRTg2NVpldkZBRzRPS1l6ZkVxcUpjOVh5QTcv?=
+ =?utf-8?B?YlYrMUFGOE9hOTFLcCt3cVhXUkt3bzR3OXh2cFNNZWdKblBtd2hxeVhPNWlD?=
+ =?utf-8?B?T2tGckRiS2w5Q3BKeE5LM0Z5bmJQS0xESk92WkkxdkJUYkt4dStaRERPRFJU?=
+ =?utf-8?B?bXlQZGtuVjJaSXRqWVNodEZUbkFtN3FQQm5qQjdnd1l2TkZ5eDRxaWlvSTVi?=
+ =?utf-8?B?bjI3YkRWbFdDY1UvQWdqUUdQMkNsY0M4RHViQnhNUlZRL0JXUkVVZkRUOUpu?=
+ =?utf-8?B?ZFFRRE4vbnQrVmd5YWJ6REVrajBVaWdJdzFiMTVEV2hhZ3hrNGUvUytJRTFD?=
+ =?utf-8?B?UU1NZU94QXZlVzZVbE40N2xqQUVlc1Y3REV1bDFMZk5ONng3Z0k5NzVmYXVa?=
+ =?utf-8?B?TzkvOGFnVEI2SWdPMWllV0t5WGRlOVpweUZkYzgraGVkaXcxeVRhQU5jVVB4?=
+ =?utf-8?B?NWc3MkZRd0ZNY2R2VC94Wm9VTk1XSnJNUmV3a0ZYWVl5Uyt5YXZJckkyZWJk?=
+ =?utf-8?B?NEhvemc2OTRtTmgzVy9vTEViUy9mVGtBaDA0dDdFWE1PUlZGMTBKS003MGFU?=
+ =?utf-8?B?ajhvb2F5TFlodG94S0ZXRENTMkQzbUFVblB2SUV0S094THJyVUVhelo2NHJH?=
+ =?utf-8?Q?CziGD1856cF2ScvOH3/8I0C6D1G8sRglsyxDBij81OFx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb4db5d6-41c1-41bd-a048-08db7edfe8c5
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 11:47:15.4349
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KEvr45XkBTWLT4Kr3yCVJ+VZZCDF5jlAWBDwptgmRuyZGjIWjxYV4Prbwyc+/xUN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5339
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 at 12:28, Borislav Petkov <bp@alien8.de> wrote:
+Am 07.07.23 um 13:11 schrieb Arnd Bergmann:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> On Fri, Jul 07, 2023 at 11:56:00AM +0100, Dimitri John Ledkov wrote:
-> > Add support for setting march to x86-64-v2, x86-64-v3, x86-64-v4 with
-> > tuning set to an early family of CPUs that support such instruction
-> > levels. By default gcc sets generic tuning for x86-64-v*, which is
-> > suboptimal for all brands of CPUs with such instruction set support.
+> On 32-bit architectures comparing a resource against a value larger than
+> U32_MAX can cause a warning:
 >
-> Prove that it is suboptimal for the kernel. Numbers please.
-
-It's not suboptimal for the kernel as is, it is suboptimal for
-march=x86-64-v* as documented in gcc - probably gcc should actually
-prohibit mtune=generic with march=x86-64-v* settings.
-
-> And even if it shows on *some* uarch:
+> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1344:18: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>                      res->start > 0x100000000ull)
+>                      ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
 >
-> * we need a *single* setting for distro kernels - i.e.,
-> CONFIG_GENERIC_CPU and compilers do make sure that -mtune=generic does
-> the most optimal code generation for all uarches
+> As gcc does not warn about this in dead code, add an IS_ENABLED() check at
+> the start of the function. This will always return success but not actually resize
+> the BAR on 32-bit architectures without high memory, which is exactly what
+> we want here, as the driver can fall back to bank switching the VRAM
+> access.
 >
-> * our Kconfig option set is abysmal so don't need any more if useless.
+> Fixes: 31b8adab3247e ("drm/amdgpu: require a root bus window above 4GB for BAR resize")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
+> ---
+> v2: return early instead of shutting up the warning with a cast and
+> running into a failure
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 3 +++
+>   1 file changed, 3 insertions(+)
 >
-> Yeah, a patch like that keeps popping up on a regular basis but no,
-> thanks.
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index 7f069e1731fee..fcf5f07c47751 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -1325,6 +1325,9 @@ int amdgpu_device_resize_fb_bar(struct amdgpu_device *adev)
+>   	u16 cmd;
+>   	int r;
+>   
+> +	if (!IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
+> +		return 0;
+> +
+>   	/* Bypass for VF */
+>   	if (amdgpu_sriov_vf(adev))
+>   		return 0;
 
-The biggest issue is that march & mtune is always set, and there is no
-option to use the compiler configured builtin default, or pass in an
-arbitrary string.
-
-Would it be acceptable to change GENERIC_CPU to not set neither march
-nor mtune and thus use the compiler configured default? If not, would
-it be acceptable to have a new option GENERIC_NONE which does not set
-any march/mtune and thus uses a compiler configured default? Or for
-example, allow a new freeform string for march and mtune?
-
--- 
-okurrr,
-
-Dimitri
