@@ -2,219 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21A174A8F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0021174A8F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjGGCYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S232229AbjGGCZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjGGCYv (ORCPT
+        with ESMTP id S230521AbjGGCZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:24:51 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B6DB6;
-        Thu,  6 Jul 2023 19:24:49 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3672KpSa027044;
-        Fri, 7 Jul 2023 02:24:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gcKzje3TR7gu11x5qYtexR+kzdaXYRdhFtfgzkm5HMk=;
- b=kehEMVkpMBEzzPrS6eaxQGgYPySScNX/XBOtOFWNjP9iMeAivByQk5JlElpXdT2mN/yI
- E29m/0g6n20R62dnAqZrWdQAtgfvr/IH5XyXhqNTYjWB51oE8Hp/zmgpj9bk/O5wpL2u
- mEE6OOH7WEMsOSqiCB9lnGTT7iMevffo+8AopMnYA8EdtqiEMtlEOA891RrHqmeCOOeM
- Wi/HDQhybHh8b9GgvB8iP5cQOkbyUcePikvI0Y+iJuOcx2eFWLTY2AXvLYHLhz3K7sS0
- Q41iIP7r6WJSTyjcvrhR7gqWnMFtljvg5oIcWMGIUlP6MYBu+I7BI5YYNuVKEKYT6EVC Eg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnvyvhhyf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 02:24:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3672Obh8007943
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Jul 2023 02:24:37 GMT
-Received: from [10.110.53.25] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
- 2023 19:24:36 -0700
-Message-ID: <7f9af9af-6a6c-d47e-8bff-b72f3f451703@quicinc.com>
-Date:   Thu, 6 Jul 2023 19:24:35 -0700
+        Thu, 6 Jul 2023 22:25:20 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8858B6;
+        Thu,  6 Jul 2023 19:25:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688696711; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=hfya/VD4HCGSX9BIWKXyqEpBVt029ogQGcFDDA7NLfz3K/PMe8U7D6qTqIvUjF862OHu2jXUbuZyItXNiW1S8Vz+Cp7+Ww2r0w/y4XBB1gN6wZZh5SCdCulcjSyahSU+faTiRC0jCismLLI832TDe7Dff0lsMD7r/BzL9L8Q1Lk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1688696711; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=ik2eT2U2tcZUtukNJ6ARDpEzq7gr9zv2EARephZUF7A=; 
+        b=WcVRMSUVebWK3HY5pO24PDR8WJ/zT6Mnw2nOkPnZlxeB80inJYDdHVdg/atLMtj353j1hs3rvGjdZ5tYwpK0yg4dlU44U9QBzfd/YFZlaeCCDYZpvSEhDKP4e08KQ2mrfyHg08XOdgVlLO5H4+nVT2KZYIxsFPEtzbCv3Nq9d+c=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1688696711;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=ik2eT2U2tcZUtukNJ6ARDpEzq7gr9zv2EARephZUF7A=;
+        b=VPcqvnAogxc1aNwjI32fgfI12Umh4Cui7+azKIRc3GZJX9kInDbptI9lZ5xY0TfD
+        um/x2CV2zg8apK+QYZ7i/Ttk9guKKOoyZiMjOKbexg+H9tpeNefZjBUXTGmZ0AIVObI
+        eQ+NhcjyGmprHYWBtdjwwOX+76KwuBF1UhkMWjaQ=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1688696709492195.79904115078568; Thu, 6 Jul 2023 19:25:09 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 10:25:09 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "Tom Joseph" <tjoseph@cadence.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
+        "Rob Herring" <robh@kernel.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "linux-pci" <linux-pci@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <1892e2ae15f.f7e5dc061620757.4339091752690983066@linux.beauty>
+In-Reply-To: 
+Subject: PCI: cadence: Allow async probe
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 5/6] drm/msm/dpu: Refactor printing of main blocks in
- device core dump
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        "David Airlie" <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-CC:     Rob Clark <robdclark@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jesszhan@quicinc.com>
-References: <20230622-devcoredump_patch-v4-0-e304ddbe9648@quicinc.com>
- <20230622-devcoredump_patch-v4-5-e304ddbe9648@quicinc.com>
- <deb38d54-bf7f-f42a-8b61-f6c8f46370b0@linaro.org>
- <da04a824-b44c-d6a0-3dfc-f1b8e8272195@quicinc.com>
- <dc937077-91bd-8c4f-b220-82df11efd215@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <dc937077-91bd-8c4f-b220-82df11efd215@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xL14X_wVIDda8I9QjqeuArXgv5pecif_
-X-Proofpoint-ORIG-GUID: xL14X_wVIDda8I9QjqeuArXgv5pecif_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_17,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 malwarescore=0 phishscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307070020
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Li Chen <lchen@ambarella.com>
+
+I observed that on Ambarella SoC, which also utilizes
+the Cadence controller, the boot time increases by 1
+second when no endpoints (including switch) are connected
+to PCIe. This increase is caused by cdns_pcie_host_wait_for_link.
+
+Enabling async probe can eliminate this boot time increase.
+
+I guess other platforms also has this issue.
+
+Signed-off-by: Li Chen <lchen@ambarella.com>
+---
+ drivers/pci/controller/cadence/pcie-cadence-plat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+index e091fef9c919..5177f18e1dfc 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+@@ -174,6 +174,7 @@ static struct platform_driver cdns_plat_pcie_driver = {
+ 		.name = "cdns-pcie",
+ 		.of_match_table = cdns_plat_pcie_of_match,
+ 		.pm	= &cdns_pcie_pm_ops,
++		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	},
+ 	.probe = cdns_plat_pcie_probe,
+ 	.shutdown = cdns_plat_pcie_shutdown,
+-- 
+2.34.1
 
 
-On 7/6/2023 7:19 PM, Dmitry Baryshkov wrote:
-> On 07/07/2023 03:16, Abhinav Kumar wrote:
->>
->>
->> On 7/6/2023 5:07 PM, Dmitry Baryshkov wrote:
->>> On 06/07/2023 23:48, Ryan McCann wrote:
->>>> Currently, the names of main blocks are hardcoded into the
->>>> msm_disp_snapshot_add_block function rather than using the name that
->>>> already exists in the catalog. Change this to take the name directly 
->>>> from
->>>> the catalog instead of hardcoding it.
->>>>
->>>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
->>>> ---
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 32 
->>>> ++++++++++++++++----------------
->>>>   1 file changed, 16 insertions(+), 16 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>> index aa8499de1b9f..70dbb1204e6c 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>> @@ -899,38 +899,38 @@ static void dpu_kms_mdp_snapshot(struct 
->>>> msm_disp_state *disp_state, struct msm_k
->>>>       /* dump CTL sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->ctl_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
->>>> -                dpu_kms->mmio + cat->ctl[i].base, "ctl_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->ctl[i].base, cat->ctl[i].name);
->>>
->>> Splitting on the `+' sign is a bad idea. It makes it harder to read 
->>> the code. Please keep the first line as is, it is perfectly fine on 
->>> its own, and do just what you have stated in the commit message: 
->>> change printed block name.
->>>
->>
->> Actually, I asked Ryan to fix the indent here in the same patch as he 
->> was touching this code anyway.
->>
->> So you would prefer thats left untouched?
-> 
-> Yes. The current one was definitely better than splitting in the middle 
-> of a statement.
-> 
-
-Certainly Yes. Splitting across '+' was the last resort. For some 
-reason, I thought any other option of splitting was breaking checkpatch 
-for ryan so we had to do that. But, for this change it seems like even 
-if we had done like below checkpatch didnt complain.
-
-@@ -900,7 +900,7 @@ static void dpu_kms_mdp_snapshot(struct 
-msm_disp_state *disp_state, struct msm_k
-         /* dump CTL sub-blocks HW regs info */
-         for (i = 0; i < cat->ctl_count; i++)
-                 msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
--                               dpu_kms->mmio + cat->ctl[i].base, 
-"ctl_%d", i);
-+                                           dpu_kms->mmio + 
-cat->ctl[i].base, "ctl_%d", i);
-
-But anyway, we can just take care of fixing indentation separately to 
-avoid the hassle.
-
->>
->>>>       /* dump DSPP sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->dspp_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len,
->>>> -                dpu_kms->mmio + cat->dspp[i].base, "dspp_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->dspp[i].base, cat->dspp[i].name);
->>>>       /* dump INTF sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->intf_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->intf[i].len,
->>>> -                dpu_kms->mmio + cat->intf[i].base, "intf_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->intf[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->intf[i].base, cat->intf[i].name);
->>>>       /* dump PP sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->pingpong_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len,
->>>> -                dpu_kms->mmio + cat->pingpong[i].base, 
->>>> "pingpong_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, 
->>>> cat->pingpong[i].len, dpu_kms->mmio +
->>>> +                        cat->pingpong[i].base, cat->pingpong[i].name);
->>>>       /* dump SSPP sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->sspp_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len,
->>>> -                dpu_kms->mmio + cat->sspp[i].base, "sspp_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->sspp[i].base, cat->sspp[i].name);
->>>>       /* dump LM sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->mixer_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len,
->>>> -                dpu_kms->mmio + cat->mixer[i].base, "lm_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->mixer[i].base, cat->mixer[i].name);
->>>>       /* dump WB sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->wb_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
->>>> -                dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->wb[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->wb[i].base, cat->wb[i].name);
->>>>       if (cat->mdp[0].features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->>>>           msm_disp_snapshot_add_block(disp_state, MDP_PERIPH_TOP0,
->>>> @@ -944,8 +944,8 @@ static void dpu_kms_mdp_snapshot(struct 
->>>> msm_disp_state *disp_state, struct msm_k
->>>>       /* dump DSC sub-blocks HW regs info */
->>>>       for (i = 0; i < cat->dsc_count; i++)
->>>> -        msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
->>>> -                dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
->>>> +        msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len, 
->>>> dpu_kms->mmio +
->>>> +                        cat->dsc[i].base, cat->dsc[i].name);
->>>>       pm_runtime_put_sync(&dpu_kms->pdev->dev);
->>>>   }
->>>>
->>>
-> 
