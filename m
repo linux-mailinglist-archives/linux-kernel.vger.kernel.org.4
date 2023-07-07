@@ -2,182 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BCE74B32D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5692C74B330
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjGGOmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S232904AbjGGOmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjGGOmg (ORCPT
+        with ESMTP id S230414AbjGGOmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:42:36 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8D71FD8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:42:34 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso24936725e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 07:42:34 -0700 (PDT)
+        Fri, 7 Jul 2023 10:42:44 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAC31FE0;
+        Fri,  7 Jul 2023 07:42:42 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b703d7ed3aso31949611fa.1;
+        Fri, 07 Jul 2023 07:42:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688740953; x=1691332953;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=z4lWoBqUTsmtDgqpIXQd4kMN9P4iNoBN46guAJ4J0UY=;
-        b=PY8Trs51ttpj0rQ77raRmZRLf1dKh8mRaBthfH/Z69kQfenZfIgqssui+V1ic649Mu
-         y83Av13S3K2KL2ROegnSN6y/mrKgyyrxz8l9iu5L4EsrDokiMpcsTbwtVwV15nZu9OCY
-         3Sa0LitqLGs5/ED0l7IjmKZuu89vfFGj+OT8FwOoSoZUUuBMy7tuuZ6w1EsUyFjAnews
-         GLcS5IWrlr5KyMocqgNAwAR8R8os91F1mbaF2dldsrhAxHlRgLZJWYNKAg81F5U6IjMQ
-         ArhQACobVp3SBs5CsONrv4Rqmb/GDRbU3vi4J8HXCUj79yyZlp3AflM1oqLHpljJ8x1q
-         AZJA==
+        d=gmail.com; s=20221208; t=1688740961; x=1691332961;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0gz0zDS9xLELEnZkRE5nA4ZFSmOliq1henpF9telWdQ=;
+        b=YwYyyCeRG4Jz/IHnToTa1SexCRc8DZlFSOKOJlgWoW02knsIyaUqcBPRmTDf+Q6Ij/
+         Vw6vPAcj3K5sQy5LjlZulNdxgCko415o2cvpSfjXHTrS1uT3KD4temrr9XL1ZeEY1HKL
+         xcE628E6gsumnl8eoUjyeEb4cP3kqQ34J83iFt0omHhBPFU/sNUmR7piC/n8t4/e85u/
+         v1uZR6uD2YjylQNtcRFJQkKBl0NaNz7a+V4XUXa8+pew3tVcdqAKq3TpBdOAMOk05cG3
+         wygcSVIGS9WWn5AZGU9VKAuOn1Dr1j9TgHN4htn5wadC+MyclD2C0OWw2J0EESuvXzBi
+         Es/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688740953; x=1691332953;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z4lWoBqUTsmtDgqpIXQd4kMN9P4iNoBN46guAJ4J0UY=;
-        b=W0Y4yel7vstYNgUopP3CM7FSssx201aEAZl/zgtNRCWkG62Be/9/7pG4EvRPl3XoL6
-         QoGDTel3FUjTJsTltyoAI/plJS8/2MoiL8HDGwWYUp3HhrTGbmVZK9VUZ22RGr9RhP6j
-         kNrSHfza3a+bXdz9skvU+DrOBp3Wslwb4jsrVM2ziJjColV/CXMS1JSOw0JSELThW88w
-         FGTfX1UbVtAgoCR1vMmvBDrLOJs8o+c562iQyjlCIpwOHgNXQgKLUayN/uX/YohRhj1M
-         olD23YW14TyjR34hvwZA4aCJL1/opH+ZoanAqCpQFCdPIvQHuGOLXTPBY0Hb1adaZpak
-         0N0A==
-X-Gm-Message-State: ABy/qLZfO8qlMGPqsv0hom5VFcj2lFOHffBl7H1ZKsIWi/bwgV9oZ/SZ
-        6hR7ueuhsFyGk4NyZGOETQqonw==
-X-Google-Smtp-Source: APBJJlHBP9G/LqJXiH8qNwypAEFyU81HIVpOXYc4p9njD0acJ2CEliu5SxfbBxyOn5IJb2gB5tdV5w==
-X-Received: by 2002:adf:ee0c:0:b0:314:3997:530d with SMTP id y12-20020adfee0c000000b003143997530dmr6132017wrn.31.1688740953164;
-        Fri, 07 Jul 2023 07:42:33 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:ac80:753:1ffc:791b? ([2a01:e0a:982:cbb0:ac80:753:1ffc:791b])
-        by smtp.gmail.com with ESMTPSA id h16-20020adff4d0000000b0031134bcdacdsm4631399wrp.42.2023.07.07.07.42.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 07:42:32 -0700 (PDT)
-Message-ID: <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
-Date:   Fri, 7 Jul 2023 16:42:29 +0200
+        d=1e100.net; s=20221208; t=1688740961; x=1691332961;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0gz0zDS9xLELEnZkRE5nA4ZFSmOliq1henpF9telWdQ=;
+        b=ODaohfPzqcVN3LCVlC3wQZZeZdcMj2qTQWpdp9jq99anPBE32sywb3SKVo/QZVKrqD
+         To0m7XTT+whN3jbAO313fNjafxNl/3wjBjOEs+4W5PKQ9iFhPhWwjj1NP1cDMD+NAQFJ
+         4izwj7Qh19MEwAGZxS7OJvNG1fjxT5dTz6sVLK4VGuy6FgiD4sjp2Cdf10A5P8qh/h8y
+         glMNv4KxWKHXLbT6aIwjDk86g925JGlpL48SbiN2L9YcD7LR1e8NZP++q8kTBFOwPGwh
+         8lU69hWYL3Vo1h+fTnEsbIEFG/nBAmcUJyHdE9ikWDgHyCJVUSUX2XmZV0qp8FU1wW95
+         GAPg==
+X-Gm-Message-State: ABy/qLaualSnSaOM8fleVSKgEyvrUTKkttXGLMCJRPxXFw55Z8r8AvtE
+        qYcPfydl8IVMUtmvzk5n07PWf/08wZ+nc148nZGzmvRk4wY=
+X-Google-Smtp-Source: APBJJlH7yc4YkJQaJn32oMDaXxvhFj69UYcvN4XSDSJ1sxykTAef3GhFxBmitZww73g++NclMpJeXZusC0/M/GFV/Uc=
+X-Received: by 2002:a2e:3206:0:b0:2b6:e159:2c3e with SMTP id
+ y6-20020a2e3206000000b002b6e1592c3emr4127764ljy.33.1688740960554; Fri, 07 Jul
+ 2023 07:42:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
- genpd dir
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-4-ulf.hansson@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230707140434.723349-4-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
+ <20230703105745.1314475-2-tero.kristo@linux.intel.com> <CAADnVQL2Tn+2rP0hVB3kdB0At12qVu+vJ_WbJzrkxqOJ5va2vQ@mail.gmail.com>
+ <64a64e46b7d5b_b20ce208de@john.notmuch> <4b874e4c-4ad3-590d-3885-b4a3b894524e@linux.intel.com>
+ <CAADnVQK0rzHWxxx7LMFSTuBx18A+6H6AEkKFHNDkPwbPUbsk4Q@mail.gmail.com>
+ <64a7a597b1e9e_dddea208db@john.notmuch> <6b0c67e9-e806-200c-3af4-cfdd2e5c47d3@linux.intel.com>
+In-Reply-To: <6b0c67e9-e806-200c-3af4-cfdd2e5c47d3@linux.intel.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 7 Jul 2023 07:42:29 -0700
+Message-ID: <CAADnVQ+bsKuio_wNQV-sk-ZHbS-+z686BLs5_5u7Uybbt5GU=Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/tsc: Add new BPF helper call bpf_rdtsc
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jul 7, 2023 at 1:28=E2=80=AFAM Tero Kristo <tero.kristo@linux.intel=
+.com> wrote:
+>
+>
+> On 07/07/2023 08:41, John Fastabend wrote:
+> > Alexei Starovoitov wrote:
+> >> On Thu, Jul 6, 2023 at 4:59=E2=80=AFAM Tero Kristo <tero.kristo@linux.=
+intel.com> wrote:
+> >>>
+> >>> On 06/07/2023 08:16, John Fastabend wrote:
+> >>>> Alexei Starovoitov wrote:
+> >>>>> On Mon, Jul 3, 2023 at 3:58=E2=80=AFAM Tero Kristo <tero.kristo@lin=
+ux.intel.com> wrote:
+> >>>>>> Currently the raw TSC counter can be read within kernel via rdtsc_=
+ordered()
+> >>>>>> and friends, and additionally even userspace has access to it via =
+the
+> >>>>>> RDTSC assembly instruction. BPF programs on the other hand don't h=
+ave
+> >>>>>> direct access to the TSC counter, but alternatively must go throug=
+h the
+> >>>>>> performance subsystem (bpf_perf_event_read), which only provides r=
+elative
+> >>>>>> value compared to the start point of the program, and is also much=
+ slower
+> >>>>>> than the direct read. Add a new BPF helper definition for bpf_rdts=
+c() which
+> >>>>>> can be used for any accurate profiling needs.
+> >>>>>>
+> >>>>>> A use-case for the new API is for example wakeup latency tracing v=
+ia
+> >>>>>> eBPF on Intel architecture, where it is extremely beneficial to be=
+ able
+> >>>>>> to get raw TSC timestamps and compare these directly to the value
+> >>>>>> programmed to the MSR_IA32_TSC_DEADLINE register. This way a direc=
+t
+> >>>>>> latency value from the hardware interrupt to the execution of the
+> >>>>>> interrupt handler can be calculated. Having the functionality with=
+in
+> >>>>>> eBPF also has added benefits of allowing to filter any other relev=
+ant
+> >>>>>> data like C-state residency values, and also to drop any irrelevan=
+t
+> >>>>>> data points directly in the kernel context, without passing all th=
+e
+> >>>>>> data to userspace for post-processing.
+> >>>>>>
+> >>>>>> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+> >>>>>> ---
+> >>>>>>    arch/x86/include/asm/msr.h |  1 +
+> >>>>>>    arch/x86/kernel/tsc.c      | 23 +++++++++++++++++++++++
+> >>>>>>    2 files changed, 24 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr=
+.h
+> >>>>>> index 65ec1965cd28..3dde673cb563 100644
+> >>>>>> --- a/arch/x86/include/asm/msr.h
+> >>>>>> +++ b/arch/x86/include/asm/msr.h
+> >>>>>> @@ -309,6 +309,7 @@ struct msr *msrs_alloc(void);
+> >>>>>>    void msrs_free(struct msr *msrs);
+> >>>>>>    int msr_set_bit(u32 msr, u8 bit);
+> >>>>>>    int msr_clear_bit(u32 msr, u8 bit);
+> >>>>>> +u64 bpf_rdtsc(void);
+> >>>>>>
+> >>>>>>    #ifdef CONFIG_SMP
+> >>>>>>    int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
+> >>>>>> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> >>>>>> index 344698852146..ded857abef81 100644
+> >>>>>> --- a/arch/x86/kernel/tsc.c
+> >>>>>> +++ b/arch/x86/kernel/tsc.c
+> >>>>>> @@ -15,6 +15,8 @@
+> >>>>>>    #include <linux/timex.h>
+> >>>>>>    #include <linux/static_key.h>
+> >>>>>>    #include <linux/static_call.h>
+> >>>>>> +#include <linux/btf.h>
+> >>>>>> +#include <linux/btf_ids.h>
+> >>>>>>
+> >>>>>>    #include <asm/hpet.h>
+> >>>>>>    #include <asm/timer.h>
+> >>>>>> @@ -29,6 +31,7 @@
+> >>>>>>    #include <asm/intel-family.h>
+> >>>>>>    #include <asm/i8259.h>
+> >>>>>>    #include <asm/uv/uv.h>
+> >>>>>> +#include <asm/tlbflush.h>
+> >>>>>>
+> >>>>>>    unsigned int __read_mostly cpu_khz;    /* TSC clocks / usec, no=
+t used here */
+> >>>>>>    EXPORT_SYMBOL(cpu_khz);
+> >>>>>> @@ -1551,6 +1554,24 @@ void __init tsc_early_init(void)
+> >>>>>>           tsc_enable_sched_clock();
+> >>>>>>    }
+> >>>>>>
+> >>>>>> +u64 bpf_rdtsc(void)
+> >>>>>> +{
+> >>>>>> +       /* Check if Time Stamp is enabled only in ring 0 */
+> >>>>>> +       if (cr4_read_shadow() & X86_CR4_TSD)
+> >>>>>> +               return 0;
+> >>>>> Why check this? It's always enabled in the kernel, no?
+> >>> It is always enabled, but there are certain syscalls that can be used=
+ to
+> >>> disable the TSC access for oneself. prctl(PR_SET_TSC, ...) and
+> >>> seccomp(SET_MODE_STRICT,...). Not having the check in place would in
+> >>> theory allow a restricted BPF program to circumvent this (if there ev=
+er
+> >>> was such a thing.) But yes, I do agree this part is a bit debatable
+> >>> whether it should be there at all.
+> >> What do you mean 'circumvent' ?
+> >> It's a tracing bpf prog running in the kernel loaded by root
+> >> and reading tsc for the purpose of the kernel.
+> >> There is no unprivileged access to tsc here.
+> This was based on some discussions with the security team at Intel, I
+> don't pretend to know anything about security myself. But I can drop the
+> check. It is probably not needed because of the fact that it is already
+> possible to read the TSC counter with the approach I mention in the
+> cover letter; via perf and bpf_core_read().
+> >>
+> >>>>>> +
+> >>>>>> +       return rdtsc_ordered();
+> >>>>> Why _ordered? Why not just rdtsc ?
+> >>>>> Especially since you want to trace latency. Extra lfence will ruin
+> >>>>> the measurements.
+> >>>>>
+> >>>> If we used it as a fast way to order events on multiple CPUs I
+> >>>> guess we need the lfence? We use ktime_get_ns() now for things
+> >>>> like this when we just need an order counter. We have also
+> >>>> observed time going backwards with this and have heuristics
+> >>>> to correct it but its rare.
+> >>> Yeah, I think it is better to induce some extra latency instead of
+> >>> having some weird ordering issues with the timestamps.
+> >> lfence is not 'some extra latency'.
+> >> I suspect rdtsc_ordered() will be slower than bpf_ktime_get_ns().
+> >> What's the point of using it then?
+> > I would only use it if its faster then bpf_ktime_get_ns() and
+> > have already figured out how to handle rare unordered events
+> > so I think its OK to relax somewhat strict ordering.
+>
+> I believe that on x86-arch using bpf_ktime_get_ns() also ends up calling
+> rdtsc_odered() under the hood.
+>
+> I just did some measurements on an Intel(R) Xeon(R) Platinum 8360Y CPU @
+> 2.40GHz, with a simple BPF code:
+>
+>          t1 =3D bpf_ktime_get_ns();
+>
+>          for (i =3D 0; i < NUM_CYC; i++) {
+>                  bpf_rdtsc(); // or bpf_ktime_get_ns() here
+>          }
+>
+>          t2 =3D bpf_ktime_get_ns();
+>
+> The results I got with the CPU locked at 2.4GHz (average execution times
+> per a call within the loop, this with some 10M executions):
+>
+> bpf_rdtsc() ordered : 45ns
+>
+> bpf_rdtsc() un-ordered : 23ns
+>
+> bpf_ktime_get_ns() : 49ns
 
-On 07/07/2023 16:04, Ulf Hansson wrote:
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: <linux-amlogic@lists.infradead.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->   MAINTAINERS                                        | 1 +
->   drivers/genpd/Makefile                             | 1 +
->   drivers/genpd/amlogic/Makefile                     | 4 ++++
->   drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
->   drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
->   drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
->   drivers/soc/Makefile                               | 1 -
->   drivers/soc/amlogic/Makefile                       | 3 ---
->   8 files changed, 6 insertions(+), 4 deletions(-)
->   create mode 100644 drivers/genpd/amlogic/Makefile
->   rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
->   rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
->   rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 588769fab516..9b8c9ae2375d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1843,6 +1843,7 @@ F:	Documentation/devicetree/bindings/phy/amlogic*
->   F:	arch/arm/boot/dts/amlogic/
->   F:	arch/arm/mach-meson/
->   F:	arch/arm64/boot/dts/amlogic/
-> +F:	drivers/genpd/amlogic/
->   F:	drivers/mmc/host/meson*
->   F:	drivers/phy/amlogic/
->   F:	drivers/pinctrl/meson/
-> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> index a2d5b2095915..cdba3b9f0c75 100644
-> --- a/drivers/genpd/Makefile
-> +++ b/drivers/genpd/Makefile
-> @@ -1,2 +1,3 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   obj-y					+= actions/
-> +obj-y					+= amlogic/
-> diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
-> new file mode 100644
-> index 000000000000..3d58abd574f9
-> --- /dev/null
-> +++ b/drivers/genpd/amlogic/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
-> +obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
-> +obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
-> diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
-> similarity index 100%
-> rename from drivers/soc/amlogic/meson-ee-pwrc.c
-> rename to drivers/genpd/amlogic/meson-ee-pwrc.c
-> diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
-> similarity index 100%
-> rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
-> rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
-> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
-> similarity index 100%
-> rename from drivers/soc/amlogic/meson-secure-pwrc.c
-> rename to drivers/genpd/amlogic/meson-secure-pwrc.c
-> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> index 3b0f9fb3b5c8..dc93e1762ca7 100644
-> --- a/drivers/soc/Makefile
-> +++ b/drivers/soc/Makefile
-> @@ -23,7 +23,6 @@ obj-y				+= mediatek/
->   obj-y				+= microchip/
->   obj-y				+= nuvoton/
->   obj-y				+= pxa/
-> -obj-y				+= amlogic/
->   obj-y				+= qcom/
->   obj-y				+= renesas/
->   obj-y				+= rockchip/
-> diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
-> index 7b8c5d323f5c..c25f835e6a26 100644
-> --- a/drivers/soc/amlogic/Makefile
-> +++ b/drivers/soc/amlogic/Makefile
-> @@ -2,7 +2,4 @@
->   obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
->   obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
->   obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
-> -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
->   obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
-> -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
-> -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+Thanks for crunching the numbers.
+Based on them it's hard to justify adding the ordered variant.
+We already have ktime_get_ns, ktime_get_boot_ns, ktime_get_coarse_ns,
+ktime_get_tai_ns with pretty close performance and different time
+constraints. rdtsc_ordered doesn't bring anything new to the table.
+bpf_rdtsc() would be justified if it's significantly faster
+than traditional ktime*() helpers.
 
-I've a few changes for v6.6, how shall we handle that ?
-
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-Thanks !
-Neil
+> Locking the CPU at 800MHz the results are:
+>
+> bpf_rdtsc() ordered : 55ns
+>
+> bpf_rdtsc() un-ordered : 33ns
+>
+> bpf_ktime_get_ns() : 71ns
+>
+> The bpf_rdtsc() in these results contains some extra latency caused by
+> conditional execution, I added a flag to the call to select whether it
+> should use _ordered() or not, and it also still contains the CR4_TSD
+> check in place.
+>
+> -Tero
+>
+> >
+> >>> Also, things like the ftrace also use rdtsc_ordered() as its underlyi=
+ng
+> >>> clock, if you use x86-tsc as the trace clock (see
+> >>> arch/x86/kernel/trace_clock.c.)
+> >>>
+> >>> -Tero
+> >>>
+> >
