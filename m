@@ -2,132 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDA174B3E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB2E74B3E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjGGPMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S232533AbjGGPN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbjGGPMR (ORCPT
+        with ESMTP id S229561AbjGGPN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:12:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E268213C;
-        Fri,  7 Jul 2023 08:12:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE619619D3;
-        Fri,  7 Jul 2023 15:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BDAC433C8;
-        Fri,  7 Jul 2023 15:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688742731;
-        bh=Ya0LfXrJm2rcUDVejC5YdLCrCcxE/mUzk/Zqpcvn0TI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FitX0YVhEKf14hYzYIjYke+cBCO98TDEt32PMkOsaT/udyzSouFno+mb6mSFyXXcM
-         27Qe6wy4y3zrlvCH2j+hQMCykLwg8DS0zy0wW968EMHOvNtH6AXv3Ib+4htPbKsMJJ
-         tsFuvtoxiFfobvUdw4JVQG1syV8Rgx0vgPxmWuEcejrtUGRHs3d66znDOBPhhovb8x
-         +e4505LaicY8G9K8WZqJ+3FrrsE5c3LRfeem9XC4CHQh8fN+shOLFflhcJe+eJoB2s
-         IyfUPrPyrwmVWpVYleW48JQqDNFdZmvrWKJGaAN0xdFBXY/WBGi393Ne6KmSzNxmEz
-         4g6EBVLyh6Iiw==
-Date:   Fri, 7 Jul 2023 10:12:09 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        manivannan.sadhasivam@linaro.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        krzysztof.kozlowski@linaro.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Bo Liu <liubo03@inspur.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        "open list:MHI BUS" <mhi@lists.linux.dev>
-Subject: Re: [PATCH v3 9/9] bus: mhi: ep: wake up host is the MHI state is in
- M3
-Message-ID: <20230707151209.GA139708@bhelgaas>
+        Fri, 7 Jul 2023 11:13:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E8772115
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:13:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F31FD75;
+        Fri,  7 Jul 2023 08:14:38 -0700 (PDT)
+Received: from [10.57.77.63] (unknown [10.57.77.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 091EF3F762;
+        Fri,  7 Jul 2023 08:13:53 -0700 (PDT)
+Message-ID: <9dd036a8-9ba3-0cc4-b791-cb3178237728@arm.com>
+Date:   Fri, 7 Jul 2023 16:13:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05b4d009-b50b-4971-9220-615f73db4acd@kadam.mountain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
+To:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <20230703135330.1865927-5-ryan.roberts@arm.com>
+ <87edlkgnfa.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <44e60630-5e9d-c8df-ab79-cb0767de680e@arm.com>
+ <524bacd2-4a47-2b8b-6685-c46e31a01631@redhat.com>
+ <ZKgZrNuxuq4ACvIb@casper.infradead.org>
+ <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 02:41:57PM +0300, Dan Carpenter wrote:
-> On Fri, Jul 07, 2023 at 04:33:56PM +0530, Krishna chaitanya chundru wrote:
-> > If the MHI state is in M3 then the most probably the host kept the
-> > device in D3 hot or D3 cold, due to that endpoint transctions will not
-> > be read by the host, so endpoint wakes up host to bring the host to D0
-> > which eventually bring back the MHI state to M0.
-> > 
-> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > ---
-> >  drivers/bus/mhi/ep/main.c | 28 ++++++++++++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> > 
-> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-> > index 6008818..46a8a3c 100644
-> > --- a/drivers/bus/mhi/ep/main.c
-> > +++ b/drivers/bus/mhi/ep/main.c
-> > @@ -25,6 +25,27 @@ static DEFINE_IDA(mhi_ep_cntrl_ida);
-> >  static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id);
-> >  static int mhi_ep_destroy_device(struct device *dev, void *data);
-> >  
-> > +static bool mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
-> > +{
-> > +	enum mhi_state state;
-> > +	bool mhi_reset;
-> > +	u32 count = 0;
-> > +
-> > +	mhi_cntrl->wakeup_host(mhi_cntrl);
-> > +
-> > +	/* Wait for Host to set the M0 state */
-> > +	do {
-> > +		msleep(M0_WAIT_DELAY_MS);
-> > +		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
-> > +		count++;
-> > +	} while (state != MHI_STATE_M0 && count < M0_WAIT_COUNT);
-> > +
-> >+	if (state != MHI_STATE_M0)
-> >+		return false;
+On 07/07/2023 15:07, David Hildenbrand wrote:
+> On 07.07.23 15:57, Matthew Wilcox wrote:
+>> On Fri, Jul 07, 2023 at 01:29:02PM +0200, David Hildenbrand wrote:
+>>> On 07.07.23 11:52, Ryan Roberts wrote:
+>>>> On 07/07/2023 09:01, Huang, Ying wrote:
+>>>>> Although we can use smaller page order for FLEXIBLE_THP, it's hard to
+>>>>> avoid internal fragmentation completely.  So, I think that finally we
+>>>>> will need to provide a mechanism for the users to opt out, e.g.,
+>>>>> something like "always madvise never" via
+>>>>> /sys/kernel/mm/transparent_hugepage/enabled.  I'm not sure whether it's
+>>>>> a good idea to reuse the existing interface of THP.
+>>>>
+>>>> I wouldn't want to tie this to the existing interface, simply because that
+>>>> implies that we would want to follow the "always" and "madvise" advice too;
+>>>> That
+>>>> means that on a thp=madvise system (which is certainly the case for android and
+>>>> other client systems) we would have to disable large anon folios for VMAs that
+>>>> haven't explicitly opted in. That breaks the intention that this should be an
+>>>> invisible performance boost. I think it's important to set the policy for
+>>>> use of
+>>>
+>>> It will never ever be a completely invisible performance boost, just like
+>>> ordinary THP.
+>>>
+>>> Using the exact same existing toggle is the right thing to do. If someone
+>>> specify "never" or "madvise", then do exactly that.
+>>>
+>>> It might make sense to have more modes or additional toggles, but
+>>> "madvise=never" means no memory waste.
+>>
+>> I hate the existing mechanisms.  They are an abdication of our
+>> responsibility, and an attempt to blame the user (be it the sysadmin
+>> or the programmer) of our code for using it wrongly.  We should not
+>> replicate this mistake.
 > 
-> Functions which return false on success are an abomination.  Also
-> boolean functions should be named for the question they answer such
-> as access_ok() or has_feature() etc.
+> I don't agree regarding the programmer responsibility. In some cases the
+> programmer really doesn't want to get more memory populated than requested --
+> and knows exactly why setting MADV_NOHUGEPAGE is the right thing to do.
+> 
+> Regarding the madvise=never/madvise/always (sys admin decision), memory waste
+> (and nailing down bugs or working around them in customer setups) have been very
+> good reasons to let the admin have a word.
+> 
+>>
+>> Our code should be auto-tuning.  I posted a long, detailed outline here:
+>> https://lore.kernel.org/linux-mm/Y%2FU8bQd15aUO97vS@casper.infradead.org/
+>>
+> 
+> Well, "auto-tuning" also should be perfect for everybody, but once reality
+> strikes you know it isn't.
+> 
+> If people don't feel like using THP, let them have a word. The "madvise" config
+> option is probably more controversial. But the "always vs. never" absolutely
+> makes sense to me.
+> 
+>>> I remember I raised it already in the past, but you *absolutely* have to
+>>> respect the MADV_NOHUGEPAGE flag. There is user space out there (for
+>>> example, userfaultfd) that doesn't want the kernel to populate any
+>>> additional page tables. So if you have to respect that already, then also
+>>> respect MADV_HUGEPAGE, simple.
+>>
+>> Possibly having uffd enabled on a VMA should disable using large folios,
+> 
+> There are cases where we enable uffd *after* already touching memory (postcopy
+> live migration in QEMU being the famous example). That doesn't fly.
+> 
+>> I can get behind that.  But the notion that userspace knows what it's
+>> doing ... hahaha.  Just ignore the madvise flags.  Userspace doesn't
+>> know what it's doing.
+> 
+> If user space sets MADV_NOHUGEPAGE, it exactly knows what it is doing ... in
+> some cases. And these include cases I care about messing with sparse VM memory :)
+> 
+> I have strong opinions against populating more than required when user space set
+> MADV_NOHUGEPAGE.
 
-+1.  Also nice if boolean functions do not have side effects, so in
-this case, where mhi_ep_wake_host() *does* something that might fail,
-I think "return 0 for success or negative error value" is easier to
-read.
+I can see your point about honouring MADV_NOHUGEPAGE, so think that it is
+reasonable to fallback to allocating an order-0 page in a VMA that has it set.
+The app has gone out of its way to explicitly set it, after all.
 
-> Write it like this:
+I think the correct behaviour for the global thp controls (cmdline and sysfs)
+are less obvious though. I could get on board with disabling large anon folios
+globally when thp="never". But for other situations, I would prefer to keep
+large anon folios enabled (treat "madvise" as "always"), with the argument that
+their order is much smaller than traditional THP and therefore the internal
+fragmentation is significantly reduced. I really don't want to end up with user
+space ever having to opt-in (with MADV_HUGEPAGE) to see the benefits of large
+anon folios.
+
+I still feel that it would be better for the thp and large anon folio controls
+to be independent though - what's the argument for tying them together?
+
 > 
-> static int mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
-> {
-> 	enum mhi_state state;
-> 	bool mhi_reset;
-> 	int count = 0;
-> 
-> 	mhi_cntrl->wakeup_host(mhi_cntrl);
-> 
-> 	while (count++ < M0_WAIT_COUNT) {
-> 		msleep(M0_WAIT_DELAY_MS);
-> 
-> 		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
-> 		if (state == MHI_STATE_M0)
-> 			return 0;
-> 	}
-> 	return -ENODEV;
-> }
+
