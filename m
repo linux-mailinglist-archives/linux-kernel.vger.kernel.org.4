@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7220674B604
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A682D74B608
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbjGGRx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S229663AbjGGR5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjGGRx6 (ORCPT
+        with ESMTP id S232245AbjGGR5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:53:58 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92B4AF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:53:56 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-760dff4b701so33270239f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 10:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688752436; x=1691344436;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SslnkP80X51uSIcroqhn4NwluHxYbq7es0S39E9aqHU=;
-        b=bHrhMZ/xB4SQzlpnZvtgT17dBX0gt63OtmfrAhjeGSfFfXqFnUUnsLWTyo38zsHvwx
-         eW1gnVsgBQaGJl+pXfLYIn4CaPguC68ET5ihHXFn8iAt/uoOztvNETF4hf0rcs5lwoiu
-         OJfR+VsJgoxUs42nU0HIUtt+Dd5cTHGBDPF8tvU+o7Az+eSW1bw+garJQt6Qcvm0/aB6
-         1t8ommkcffJbz6e3y4eTLLsouoI8Kd605t7iOU6hKRHOGZf5gclh64nTrfX31MdxTvOA
-         yj+FrDtCxNwv+lOlg4vG9chE4rnpcSJP2I3qqfbUZSFWIV1Pp+//fb8qUSIlo7BS1XRP
-         MBeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688752436; x=1691344436;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SslnkP80X51uSIcroqhn4NwluHxYbq7es0S39E9aqHU=;
-        b=RJhxr84RNjxTd+vCgPZG0fL4aBobZcvfrwH+12EFaZyMia9A1jJhUtDKDm40+yb7Ff
-         NpXEGd6TJVgIDYjrIamqvYRWh9PFBsKTdi/XBQ/vv3pWFYbe53GIwzB6v2N+386zX50R
-         ycD/W+km2Vp6eRKEPVYsLvAht9cilymtNlAlP6H+0Wkq7lZsTm6dnGHqTHrygE6ObBTL
-         fsdnSG70wiG0XzgncDI5ku84VansvgcNSJ/a/sg1v73vgStaEFOm38OhGNXYqWexOVar
-         f1Zsy1FbNZhgrBLzs39ludrhRh4tYYnkaqdl/oOWrKFxKbV/8TGwlG562n3hE/VvlixY
-         d33Q==
-X-Gm-Message-State: ABy/qLZxZoOn9Y8VFDVik4EDE94gqMs0Bi524HPG1XdZxJuoB+FAIV0w
-        4Q2aYcLYVThYjQTDQIP+j4W9QQ==
-X-Google-Smtp-Source: APBJJlFnOdOYUadwtC3XIOBPxBNcAjlXXau2HXXmsfLddxVCYrYNkRy9A6JdF41dH75gTI9iowwPBw==
-X-Received: by 2002:a05:6e02:e04:b0:345:e438:7381 with SMTP id a4-20020a056e020e0400b00345e4387381mr6005599ilk.2.1688752436306;
-        Fri, 07 Jul 2023 10:53:56 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id cu3-20020a05663848c300b0042b72208aa6sm1353173jab.77.2023.07.07.10.53.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 10:53:55 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andres Freund <andres@anarazel.de>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20230707162007.194068-1-andres@anarazel.de>
-References: <20230707162007.194068-1-andres@anarazel.de>
-Subject: Re: [PATCH v1] io_uring: Use io_schedule* in cqring wait
-Message-Id: <168875243541.1538686.6247556523906342367.b4-ty@kernel.dk>
-Date:   Fri, 07 Jul 2023 11:53:55 -0600
+        Fri, 7 Jul 2023 13:57:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F1C170F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688752630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jJ/fuG3K5KSAUU81uckV1RdmVyNYdH1eHdjrqxK1TTw=;
+        b=IKvCHJQ7vCaEh+Erd1iLxQePMvoK9KLZaPaLaQVQhUFVZHOKezTxZa2cJUb5tNITbZ0TKI
+        RezQ6WJ0D5fnxR09Z3pzhglshKptcspMEOLNk3FjovfbFiXjaimtONI8enP5TruyMiNfF0
+        mxhK+OyQ3LSTkXoBvjGEoWcTLGxSFh0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-510-Py09K79eOiubwylG_AYfpw-1; Fri, 07 Jul 2023 13:57:03 -0400
+X-MC-Unique: Py09K79eOiubwylG_AYfpw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A895381D4D8;
+        Fri,  7 Jul 2023 17:57:03 +0000 (UTC)
+Received: from [10.22.34.12] (unknown [10.22.34.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6E38A4087C6A;
+        Fri,  7 Jul 2023 17:57:02 +0000 (UTC)
+Message-ID: <f9531585-2782-bdfe-cdca-39d2de2e195f@redhat.com>
+Date:   Fri, 7 Jul 2023 13:57:02 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] refscale: Fix use of uninitalized wait_queue_head_t
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230707000117.2371697-1-longman@redhat.com>
+ <y5g37s3yhsqtmdoqziwnsd4kxtudlpqwv2iunt372abpmdzrry@43e54c374j4s>
+ <b3a22928-6537-ebca-d9c2-82d2f940208f@redhat.com>
+ <8b827d44-b19b-4eb2-8860-f419cc61084e@paulmck-laptop>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <8b827d44-b19b-4eb2-8860-f419cc61084e@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/7/23 12:16, Paul E. McKenney wrote:
+> On Fri, Jul 07, 2023 at 10:56:51AM -0400, Waiman Long wrote:
+>> On 7/7/23 10:07, Davidlohr Bueso wrote:
+>>> On Thu, 06 Jul 2023, Waiman Long wrote:
+>>>
+>>>> It was found that running the refscale test might sometimes crash the
+>>>> kernel with the following error:
+>>>>
+>>>> [ 8569.952896] BUG: unable to handle page fault for address:
+>>>> ffffffffffffffe8
+>>>> [ 8569.952900] #PF: supervisor read access in kernel mode
+>>>> [ 8569.952902] #PF: error_code(0x0000) - not-present page
+>>>> [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
+>>>> [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
+>>>> [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS
+>>>> 1.2.4 05/28/2021
+>>>> [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
+>>>>   :
+>>>> [ 8569.952940] Call Trace:
+>>>> [ 8569.952941]  <TASK>
+>>>> [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
+>>>> [ 8569.952959]  kthread+0x10e/0x130
+>>>> [ 8569.952966]  ret_from_fork+0x1f/0x30
+>>>> [ 8569.952973]  </TASK>
+>>>>
+>>>> This is likely caused by the fact that init_waitqueue_head() is called
+>>>> after the ref_scale_reader kthread is created. So the kthread may try
+>>>> to use the waitqueue head before it is properly initialized. Fix this
+>>>> by initializing the waitqueue head first before kthread creation.
+>>>>
+>>>> Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of
+>>>> read-side synchronization")
+>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>> Strange this wasn't reported sooner.
+>> Red Hat does have a pretty large QE organization that run all sort of tests
+>> include this one pretty frequently. The race window is pretty small, but
+>> they did hit this once in a while.
+> I do run this fairly frequently, but haven't managed to hit it.
+>
+> Good show on making it happen, and looking forward to the updated patch!
 
-On Fri, 07 Jul 2023 09:20:07 -0700, Andres Freund wrote:
-> I observed poor performance of io_uring compared to synchronous IO. That
-> turns out to be caused by deeper CPU idle states entered with io_uring,
-> due to io_uring using plain schedule(), whereas synchronous IO uses
-> io_schedule().
-> 
-> The losses due to this are substantial. On my cascade lake workstation,
-> t/io_uring from the fio repository e.g. yields regressions between 20%
-> and 40% with the following command:
-> ./t/io_uring -r 5 -X0 -d 1 -s 1 -c 1 -p 0 -S$use_sync -R 0 /mnt/t2/fio/write.0.0
-> 
-> [...]
+v2 sent with a bit more explanation text in the commit log.
 
-Applied, thanks!
-
-[1/1] io_uring: Use io_schedule* in cqring wait
-      (no commit info)
-
-Best regards,
--- 
-Jens Axboe
-
-
+Cheers,
+Longman
 
