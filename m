@@ -2,57 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE7A74B07D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713FC74B082
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjGGMKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S231492AbjGGMMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjGGMKB (ORCPT
+        with ESMTP id S230134AbjGGMMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:10:01 -0400
-Received: from mail-pg1-f206.google.com (mail-pg1-f206.google.com [209.85.215.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D1B2114
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:09:59 -0700 (PDT)
-Received: by mail-pg1-f206.google.com with SMTP id 41be03b00d2f7-55bf3002ac7so2435262a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:09:59 -0700 (PDT)
+        Fri, 7 Jul 2023 08:12:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2CC2110
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688731877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BVyqwSHAPLftzopmtaxC0lFHhRx6FuTQym8jgnJKosE=;
+        b=C7v9qL8xscHUE70Cbwk/KNat6S5olCxoSlMVnwcPo+MFJ1jwLZrqvhJBQY6pJQYa6blED4
+        1EcG2R2dnda6LhhyqTNULwahowoXtnFE6wjhYfbIpgWln97HZopfLiTMptTN2xLKwxVVyr
+        WTmkA8A9sYPRWIj/t5AvpxLNsqGTI48=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-520-zpTWAHKOMSCu7g8PX-N3mg-1; Fri, 07 Jul 2023 08:11:14 -0400
+X-MC-Unique: zpTWAHKOMSCu7g8PX-N3mg-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3143c941d0bso999895f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:11:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688731799; x=1691323799;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PI5ApXs2ZsjZ5d4mdhTHU0eytxqvGV+WP25cKrMce9g=;
-        b=e9094y4R01jeM3fcUHp0gommF4YtzwfVT+eHdGi7TYIAkMul045GWj5tWcREugvtlq
-         FPoLwMfeNIYf+QUwENJ5aqijOQ3IL2ImgRhi4sRFvvxz42X9xPAx4wJ+MrX7Pfw038ZU
-         49u9nLgPTA751dh3AKruSbg+Daxq4ZonWPXpSfe9NyqsQZLyUfhQo+e/ZevEXZQZttS3
-         IzRur+FumiY3zOPs3Y8gNxwBp+X3p/HZEJNfOEHafc6n6mgkiYO6l4iAb0p7k9XUZZu8
-         JIgh8ayBUUBUC5YR/yT1xRCpg4aXj8ENh3xwaNnJrJcfD5aycMEQa8Jr7gaJ1PXLWGBJ
-         TlFA==
-X-Gm-Message-State: ABy/qLZYsvhM4H5rIEZBl46IlX5dqWzCjKPlyYb9MzasN+8/9HhPFtEM
-        n9J8Mv938eSpkKhOSA9m7o8NJEWo5serADDpD19ZVuJVKEM9
-X-Google-Smtp-Source: APBJJlEkPiPGEAwT1NW5Be+lY9WbmPdCS+Em6ZYAz1iNcqNoXt84xdvqCKDYoj+oEntwbFaTKXS9KvFls1sND9+Lo0JyWiicbB0C
+        d=1e100.net; s=20221208; t=1688731873; x=1691323873;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BVyqwSHAPLftzopmtaxC0lFHhRx6FuTQym8jgnJKosE=;
+        b=ZltVstAMytRk4MnoyLUj7G6fkIS4o8AXkf9JcGvHf8XielNwAXOfRLXvjWCeK9VkYj
+         vwm/5seOOw0j68fNZYV5lh91PZYoUh/uOct1U2FFmROzS9zV0JYh52wl8xHTM/IibqnY
+         3wNTISGD2SMMQFHxryqCNEJ8vYJyPeADifo/HLvLrqPWXDTZujgiI9klnYs+TOXshN7t
+         sLkjuSGiVahDHCBN612PG+uZlJF10gVfYrezbx/vcefD5622n+gSpzh/rVQYalM0r11l
+         nF6lwoT9AGV4gwygOWCo/3Bgg3Ih145QcU6TF5rT9P7zglNW0ETXgRQqOIN765SDj5Xu
+         MNxQ==
+X-Gm-Message-State: ABy/qLa9ve3u8dsmmdfZFSV2md5bqaZesYUiYc9q/LGpCCqIWuQbpB4z
+        CojJm4tERg6JGSLz206j269zbymL8b9zxy6yHh/3brRujBPTj0mDDHnSmT90vtPcwBbuwbmNFbl
+        JhXJ67Kv+4tT8Fm5sNRWQjsvK
+X-Received: by 2002:a5d:5450:0:b0:314:3503:15ac with SMTP id w16-20020a5d5450000000b00314350315acmr4071151wrv.10.1688731872960;
+        Fri, 07 Jul 2023 05:11:12 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGQ+0CrqDvb4lVn+YlJy3j3lhmI2e5jJ3pz4I7kZYIBFwKLH8Ug0fJ0/CydpV5KGXWVfJemXw==
+X-Received: by 2002:a5d:5450:0:b0:314:3503:15ac with SMTP id w16-20020a5d5450000000b00314350315acmr4071129wrv.10.1688731872601;
+        Fri, 07 Jul 2023 05:11:12 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f04:3c00:248f:bf5b:b03e:aac7? (p200300d82f043c00248fbf5bb03eaac7.dip0.t-ipconnect.de. [2003:d8:2f04:3c00:248f:bf5b:b03e:aac7])
+        by smtp.gmail.com with ESMTPSA id k6-20020adfd846000000b00314315071bbsm4324550wrl.38.2023.07.07.05.11.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jul 2023 05:11:12 -0700 (PDT)
+Message-ID: <b8bf72f4-f590-a159-ca94-526153b73216@redhat.com>
+Date:   Fri, 7 Jul 2023 14:11:11 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a17:90b:a4a:b0:263:c6b4:5267 with SMTP id
- gw10-20020a17090b0a4a00b00263c6b45267mr4122522pjb.7.1688731798795; Fri, 07
- Jul 2023 05:09:58 -0700 (PDT)
-Date:   Fri, 07 Jul 2023 05:09:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fcfb4a05ffe48213@google.com>
-Subject: [syzbot] [tomoyo?] [hfs?] general protection fault in
- tomoyo_check_acl (3)
-From:   syzbot <syzbot+28aaddd5a3221d7fd709@syzkaller.appspotmail.com>
-To:     jmorris@namei.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        penguin-kernel@I-love.SAKURA.ne.jp, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp,
-        tomoyo-dev-en@lists.osdn.me
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC 0/4] arm64/mm: Clean up pte_dirty() state management
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230707053331.510041-1-anshuman.khandual@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230707053331.510041-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,136 +90,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 07.07.23 07:33, Anshuman Khandual wrote:
+> These pte_dirty() changes make things explicitly clear, while improving the
+> code readability. This optimizes HW dirty state transfer into SW dirty bit.
+> This also adds a new arm64 documentation explaining overall pte dirty state
+> management in detail. This series applies on the latest mainline kernel.
+> 
+>
 
-syzbot found the following issue on:
+I skimmed over most of the series, and I am not convinced that this is 
+actually a cleanup. If we cannot really always differentiate between 
+sw/hw clearing, why have separate primitives that give one the illusion 
+that it could be done and that they are two different concepts?
 
-HEAD commit:    a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.ke..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15e4c8a4a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7406f415f386e786
-dashboard link: https://syzkaller.appspot.com/bug?extid=28aaddd5a3221d7fd709
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17b5bb80a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10193ee7280000
+Maybe there are other opinions, but at least for me this made the code 
+harder to grasp.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/119fd918f733/disk-a901a356.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/79f9ac119639/vmlinux-a901a356.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8bd8662e2869/bzImage-a901a356.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/8e36b52190bc/mount_0.gz
+I do appreciate a doc update, though :)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+28aaddd5a3221d7fd709@syzkaller.appspotmail.com
+-- 
+Cheers,
 
-loop0: detected capacity change from 0 to 64
-hfs: unable to locate alternate MDB
-hfs: continuing without an alternate MDB
-general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
-CPU: 0 PID: 5189 Comm: syz-executor307 Not tainted 6.4.0-syzkaller-10173-ga901a3568fd2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:tomoyo_check_acl+0xb0/0x440 security/tomoyo/domain.c:173
-Code: 00 0f 85 64 03 00 00 49 8b 5d 00 49 39 dd 0f 84 fa 01 00 00 e8 71 fc b1 fd 48 8d 7b 18 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <0f> b6 04 28 38 d0 7f 08 84 c0 0f 85 f2 02 00 00 44 0f b6 73 18 31
-RSP: 0018:ffffc90003caf790 EFLAGS: 00010246
-RAX: 0000000000000003 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff83d2d25f RDI: 0000000000000018
-RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003caf880
-R13: ffff888016f31410 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000555556ffa300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc16e620c80 CR3: 0000000075643000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- tomoyo_path_permission security/tomoyo/file.c:586 [inline]
- tomoyo_path_permission+0x1ff/0x3a0 security/tomoyo/file.c:573
- tomoyo_check_open_permission+0x366/0x3a0 security/tomoyo/file.c:777
- tomoyo_file_open security/tomoyo/tomoyo.c:332 [inline]
- tomoyo_file_open+0xaa/0xd0 security/tomoyo/tomoyo.c:327
- security_file_open+0x49/0xb0 security/security.c:2797
- do_dentry_open+0x57a/0x17b0 fs/open.c:901
- do_open fs/namei.c:3636 [inline]
- path_openat+0x1b65/0x2710 fs/namei.c:3793
- do_filp_open+0x1ba/0x410 fs/namei.c:3820
- do_sys_openat2+0x160/0x1c0 fs/open.c:1407
- do_sys_open fs/open.c:1422 [inline]
- __do_sys_openat fs/open.c:1438 [inline]
- __se_sys_openat fs/open.c:1433 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1433
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc16e647a19
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcc752e608 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 000000000000e483 RCX: 00007fc16e647a19
-RDX: 0000000000141842 RSI: 0000000020000380 RDI: 00000000ffffff9c
-RBP: 0000000000000000 R08: 0000000000000260 R09: 00007ffcc752e630
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcc752e62c
-R13: 00007ffcc752e660 R14: 00007ffcc752e640 R15: 00000000000000be
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:tomoyo_check_acl+0xb0/0x440 security/tomoyo/domain.c:173
-Code: 00 0f 85 64 03 00 00 49 8b 5d 00 49 39 dd 0f 84 fa 01 00 00 e8 71 fc b1 fd 48 8d 7b 18 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <0f> b6 04 28 38 d0 7f 08 84 c0 0f 85 f2 02 00 00 44 0f b6 73 18 31
-RSP: 0018:ffffc90003caf790 EFLAGS: 00010246
-RAX: 0000000000000003 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff83d2d25f RDI: 0000000000000018
-RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003caf880
-R13: ffff888016f31410 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000555556ffa300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d594f5c028 CR3: 0000000075643000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	00 0f                	add    %cl,(%rdi)
-   2:	85 64 03 00          	test   %esp,0x0(%rbx,%rax,1)
-   6:	00 49 8b             	add    %cl,-0x75(%rcx)
-   9:	5d                   	pop    %rbp
-   a:	00 49 39             	add    %cl,0x39(%rcx)
-   d:	dd 0f                	fisttpll (%rdi)
-   f:	84 fa                	test   %bh,%dl
-  11:	01 00                	add    %eax,(%rax)
-  13:	00 e8                	add    %ch,%al
-  15:	71 fc                	jno    0x13
-  17:	b1 fd                	mov    $0xfd,%cl
-  19:	48 8d 7b 18          	lea    0x18(%rbx),%rdi
-  1d:	48 89 f8             	mov    %rdi,%rax
-  20:	48 89 fa             	mov    %rdi,%rdx
-  23:	48 c1 e8 03          	shr    $0x3,%rax
-  27:	83 e2 07             	and    $0x7,%edx
-* 2a:	0f b6 04 28          	movzbl (%rax,%rbp,1),%eax <-- trapping instruction
-  2e:	38 d0                	cmp    %dl,%al
-  30:	7f 08                	jg     0x3a
-  32:	84 c0                	test   %al,%al
-  34:	0f 85 f2 02 00 00    	jne    0x32c
-  3a:	44 0f b6 73 18       	movzbl 0x18(%rbx),%r14d
-  3f:	31                   	.byte 0x31
+David / dhildenb
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
