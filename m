@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CA874AB8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F83374AB94
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjGGHFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S231833AbjGGHH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjGGHFp (ORCPT
+        with ESMTP id S231367AbjGGHHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:05:45 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFC21FDB;
-        Fri,  7 Jul 2023 00:05:40 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qy4DJ4LL1z4f3tpX;
-        Fri,  7 Jul 2023 15:05:36 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP2 (Coremail) with SMTP id Syh0CgAH79w9uadkE+1HNQ--.17177S2;
-        Fri, 07 Jul 2023 15:05:37 +0800 (CST)
-Subject: Re: [PATCH] tools: testing: Corrected a clerical error
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     opensource.kernel@vivo.com, Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Anton Protopopov <aspsk@isovalent.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230706095339.4048-1-luhongfei@vivo.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <dd226e17-2f3a-4cca-429d-9dd2d711425c@huaweicloud.com>
-Date:   Fri, 7 Jul 2023 15:05:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20230706095339.4048-1-luhongfei@vivo.com>
-Content-Type: text/plain; charset=utf-8
+        Fri, 7 Jul 2023 03:07:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2396C1BF4;
+        Fri,  7 Jul 2023 00:07:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AE39617BC;
+        Fri,  7 Jul 2023 07:07:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75569C433C9;
+        Fri,  7 Jul 2023 07:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688713672;
+        bh=3UTkCpBwK2iQHAtoeNbf/AKfzPq8aQb03fC1G6e4X5c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vGLlCf3CCce1n1q1ujTHKwBviDH77kuZGTiWiTVLtd6VIM31Ifaxd6YmENJ0xQfCM
+         CtTWwfryWM3AHwPd3mCFpkzoZegxWqXLIeHHu7akXoUV2PQYGRaF64rertbsYUEJzT
+         7JC8OFPk8l/svUiam94JYHMkCZQr+oLsr1u52s4HyXjkqggC0dFPCUnD5uTZuv2qfj
+         Uv3JV/uyo5F6qfbctfXPaqFyjE05ZeEXoDfd8fEEYOSEBOECQiKHkBgF93jLjFuW4r
+         sp3Hr0P/oBjbfYg8Qvjhw/zhuG++7KMyOrFDXvxthWLyA+2ARB/py9BGqjVnDq7ELp
+         6sClYzJubnwiA==
+Date:   Fri, 7 Jul 2023 16:07:49 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] tracing/probes: Fix to exit fetching if an error is
+ detected
+Message-Id: <20230707160749.0dcf02cf0b7ee9e0ded2816e@kernel.org>
+In-Reply-To: <168830924625.2278819.7022958622963157629.stgit@mhiramat.roam.corp.google.com>
+References: <168830922841.2278819.9165254236027770818.stgit@mhiramat.roam.corp.google.com>
+        <168830924625.2278819.7022958622963157629.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID: Syh0CgAH79w9uadkE+1HNQ--.17177S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFWxKrWxtr4UAF47uF1xZrb_yoW8Jw13pa
-        1xGr1FkryftF1rJ3W8uFW5WryfXrnFqrWrGF4fZrWUZr1xJF9aqr1xKrWYqrn0qrZYvw1f
-        ua9agF1fuw48A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun,  2 Jul 2023 23:47:26 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-On 7/6/2023 5:53 PM, Lu Hongfei wrote:
-> When wrapping code, use ';' better than using ',' which is more
-> in line with the coding habits of most engineers.
->
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Fix to exit fetching arguments if an error is detected when storing
+> strings. Without this fix, if an array is specified with string types
+> it may store the data at the wrong address.
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/all/8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain/
+> Fixes: 9b960a38835f ("tracing: probeevent: Unify fetch_insn processing common part")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  tools/testing/selftests/bpf/benchs/bench_ringbufs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-> index 3ca14ad36607..e1ee979e6acc 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-> @@ -399,7 +399,7 @@ static void perfbuf_libbpf_setup(void)
->  	ctx->skel = perfbuf_setup_skeleton();
+>  kernel/trace/trace_probe_tmpl.h |    2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+> index 4735c5cb76fa..d6f2bf69f9bc 100644
+> --- a/kernel/trace/trace_probe_tmpl.h
+> +++ b/kernel/trace/trace_probe_tmpl.h
+> @@ -193,6 +193,8 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+>  	default:
+>  		return -EILSEQ;
+>  	}
+> +	if (ret < 0)
+> +		return ret;
+
+I found this will leave a garbage data on the trace data if we are in the array.
+Let me fix this issue.
+(-EILSEQ case has another issue. I think it should not be recorded)
+
+Thank you,
+
+>  	code++;
 >  
->  	memset(&attr, 0, sizeof(attr));
-> -	attr.config = PERF_COUNT_SW_BPF_OUTPUT,
-> +	attr.config = PERF_COUNT_SW_BPF_OUTPUT;
->  	attr.type = PERF_TYPE_SOFTWARE;
->  	attr.sample_type = PERF_SAMPLE_RAW;
->  	/* notify only every Nth sample */
-
-Acked-by: Hou Tao <houtao1@huawei.com>
-
-Please update the subject of the patch in v2. The subject should be
-something like: "[PATCH bpf-next] selftests/bpf: xxxxxx"
-
-Just be curious. How do you find out the typo ? Is there any similar
-typos in bpf selftests and could you please fix these typos as well ?
+>  	/* 4th stage: modify stored value if needed */
+> 
 
 
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
