@@ -2,173 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF28E74B320
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3A574B326
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjGGOfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S232624AbjGGOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbjGGOfM (ORCPT
+        with ESMTP id S230036AbjGGOjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:35:12 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2936F1FE6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:35:10 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-579ed2829a8so25075147b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 07:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1688740509; x=1691332509;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3byNldQYPIXJHmP2gWtnYb97CCpo9o+8rBL4rOGmYI=;
-        b=O+sNIMFB87eFKv59KzF3dXdq0akAoOhXxAYsi4up1srWeaMLB3uPvj4RXV1KolJ7J1
-         SJ8TnlN6tOOt5IxKn6+QSbfvdVUP2pEx0kK+QtCM3hyO948Vq6sgwkHQfwTpwjkHp8OI
-         kTOW/kHq3hukeFIKa8rciOZa7Z1EmENtgr7Z4zERYBUzd/rkYE+S0pgRgQdPolxeZIbI
-         ZHjpsm+KzGotamfgtTJPCujYCr4NajLOq11slLTWRC5Wr6wUjlj/r1pNurMweaD5lahD
-         ScwzDxMszuEdmarj8a/iONZ4WrhqT5HzAq2Q8YKzk0lW25NyBriZB/GkNnOJwPkdfHVF
-         y86g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688740509; x=1691332509;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i3byNldQYPIXJHmP2gWtnYb97CCpo9o+8rBL4rOGmYI=;
-        b=hIpXhhSSJpOkMHcN93eubgi2bXefeirwiAHoN3EL0x22TTUcZIDegwhsbjxw6DzSbw
-         aQx7oI1M2Dw+DBrnSfWZpIaUXrs5TSHv7Jw6boOFrGfekUKRezdFLseAoOn6YiSGzERc
-         AA51txsLObn2brH6/78NG/vOvlraxfi7CaGORv64p44hgjxDNyGMZVYEhAbf7aag4ZMg
-         +qe6k9xm4Zx1eA5JMO5q9zw4GHJxclK09My1dai02cHrHF/6Wa02tE5uQ1tHny2SuAcA
-         YieYduTPK7o3e7sXDqbsrTae6m5GglGwJF6GElXhXLAfnxW2O+kwFgT5d4+LcKnOh0yO
-         h1lQ==
-X-Gm-Message-State: ABy/qLbWa2r0hXGvTsrISBBKIMTtbq/RHJ4hQlsyeHkOCcX74RwJIorr
-        02x9o2CVPcl4BLP/AwnwJUtmEjTJTeSoEftqcbEn
-X-Google-Smtp-Source: APBJJlECD+Fxdi9BNOzrpj5Usym5F7Y7TYpZF1e7TZ1QWeJ63Ak8CgJ0g21u5oIhLC4SE/PlJ7VT/jXb2Tha32fhQ6Q=
-X-Received: by 2002:a5b:40d:0:b0:c12:29ac:1d3b with SMTP id
- m13-20020a5b040d000000b00c1229ac1d3bmr4758615ybp.11.1688740509290; Fri, 07
- Jul 2023 07:35:09 -0700 (PDT)
+        Fri, 7 Jul 2023 10:39:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16B21BE8;
+        Fri,  7 Jul 2023 07:39:19 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367EKoLn002537;
+        Fri, 7 Jul 2023 14:38:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xDHweLfB2jGmEALLzfHomsEO0iNqJHh+OCBfH7P6xK8=;
+ b=JJiwO3bD6N7eg3IH8SPkBO+4d/XtPlb+o/JWZVlM7CzRU21imiL40tTT7ZrGWc/rcgC8
+ /ZQawoJzJ/Wi4YLFowBQZTzFSsAioyMZPUQj2/+TzATXsOqAEwPAm/8Er5fao4qLfzKD
+ kRYH5IZgLX1rkVyo5Dnxic2rIqYoORkHY4hH4THeouMwfaTpM9WXeJAc6VddXVoilfaE
+ gfwbTZuv0iejbuxSU1u0BBVFoIAK4bhb+avBCh+DDMSLdfERrKFp1/Onb3Na6Dda/11u
+ xhZI5AYKQfEArH0gbJFiFlEy61E8nbrzVLvMyMHX6afIi6idU/k5hOjVWQR8mRXwhuDJ Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpmcv0h7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:38:17 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367Ebf4c029017;
+        Fri, 7 Jul 2023 14:37:44 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpmcv0ftt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:37:44 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 367E0T2h032367;
+        Fri, 7 Jul 2023 14:37:18 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3rjbde41s0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:37:18 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367EbECL36962894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jul 2023 14:37:14 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 024662004B;
+        Fri,  7 Jul 2023 14:37:14 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 998F720043;
+        Fri,  7 Jul 2023 14:37:10 +0000 (GMT)
+Received: from thinkpad-T15 (unknown [9.179.12.113])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Fri,  7 Jul 2023 14:37:10 +0000 (GMT)
+Date:   Fri, 7 Jul 2023 16:37:08 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables
+ sharing page
+Message-ID: <20230707163708.5157e19f@thinkpad-T15>
+In-Reply-To: <8c6a4a46-2d17-8cfb-50f-f89f1d44973f@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+        <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com>
+        <20230628211624.531cdc58@thinkpad-T15>
+        <cd7c2851-1440-7220-6c53-16b343b1474@google.com>
+        <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca>
+        <20230629175645.7654d0a8@thinkpad-T15>
+        <edaa96f-80c1-1252-acbb-71c4f045b035@google.com>
+        <7bef5695-fa4a-7215-7e9d-d4a83161c7ab@google.com>
+        <ZKUR0HItN2Va8J1D@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+        <8c6a4a46-2d17-8cfb-50f-f89f1d44973f@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
- <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com> <8fd08063bc6b4325b9785052d02da9f2@huawei.com>
-In-Reply-To: <8fd08063bc6b4325b9785052d02da9f2@huawei.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 7 Jul 2023 10:34:58 -0400
-Message-ID: <CAHC9VhQGWWQgA9DBpq+q4XQerbN0SXAB8RG94G8uMD0-J968xA@mail.gmail.com>
-Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "nicolas.bouchinet@clip-os.org" <nicolas.bouchinet@clip-os.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9Q6opkkwFp06hBkp91WUs1l0tejkNqki
+X-Proofpoint-ORIG-GUID: IKcXEBRjrfIrdRwSgUlS8tQG9J7PotRS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307070134
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 2:49=E2=80=AFAM Roberto Sassu <roberto.sassu@huawei.=
-com> wrote:
-> > From: Paul Moore [mailto:paul@paul-moore.com]
-> > Sent: Friday, July 7, 2023 3:44 AM
-> > On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > >
-> > > Currently, the LSM infrastructure supports only one LSM providing an =
-xattr
-> > > and EVM calculating the HMAC on that xattr, plus other inode metadata=
-.
-> > >
-> > > Allow all LSMs to provide one or multiple xattrs, by extending the se=
-curity
-> > > blob reservation mechanism. Introduce the new lbs_xattr_count field o=
-f the
-> > > lsm_blob_sizes structure, so that each LSM can specify how many xattr=
-s it
-> > > needs, and the LSM infrastructure knows how many xattr slots it shoul=
-d
-> > > allocate.
-> > >
-> > > Modify the inode_init_security hook definition, by passing the full
-> > > xattr array allocated in security_inode_init_security(), and the curr=
-ent
-> > > number of xattr slots in that array filled by LSMs. The first paramet=
-er
-> > > would allow EVM to access and calculate the HMAC on xattrs supplied b=
-y
-> > > other LSMs, the second to not leave gaps in the xattr array, when an =
-LSM
-> > > requested but did not provide xattrs (e.g. if it is not initialized).
-> > >
-> > > Introduce lsm_get_xattr_slot(), which LSMs can call as many times as =
-the
-> > > number specified in the lbs_xattr_count field of the lsm_blob_sizes
-> > > structure. During each call, lsm_get_xattr_slot() increments the numb=
-er of
-> > > filled xattrs, so that at the next invocation it returns the next xat=
-tr
-> > > slot to fill.
-> > >
-> > > Cleanup security_inode_init_security(). Unify the !initxattrs and
-> > > initxattrs case by simply not allocating the new_xattrs array in the
-> > > former. Update the documentation to reflect the changes, and fix the
-> > > description of the xattr name, as it is not allocated anymore.
-> > >
-> > > Adapt both SELinux and Smack to use the new definition of the
-> > > inode_init_security hook, and to call lsm_get_xattr_slot() to obtain =
-and
-> > > fill the reserved slots in the xattr array.
-> > >
-> > > Move the xattr->name assignment after the xattr->value one, so that i=
-t is
-> > > done only in case of successful memory allocation.
-> > >
-> > > Finally, change the default return value of the inode_init_security h=
-ook
-> > > from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
-> > > conventions.
-> > >
-> > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
-> > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archli=
-nux/
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  include/linux/lsm_hook_defs.h |  6 +--
-> > >  include/linux/lsm_hooks.h     | 20 ++++++++++
-> > >  security/security.c           | 71 +++++++++++++++++++++++----------=
---
-> > >  security/selinux/hooks.c      | 17 +++++----
-> > >  security/smack/smack_lsm.c    | 25 ++++++------
-> > >  5 files changed, 92 insertions(+), 47 deletions(-)
-> >
-> > Two *very* small suggestions below, but I can make those during the
-> > merge if you are okay with that Roberto?
->
-> Hi Paul
->
-> yes, sure, I'm ok with them. Please make them during the merge.
+On Wed, 5 Jul 2023 17:52:40 -0700 (PDT)
+Hugh Dickins <hughd@google.com> wrote:
 
-Great, I'll queue this up for merging once the merge window closes.
-I'll send confirmation once it's done but just a heads-up that things
-might be a little delayed next week.
+> On Wed, 5 Jul 2023, Alexander Gordeev wrote:
+> > On Sat, Jul 01, 2023 at 09:32:38PM -0700, Hugh Dickins wrote:  
+> > > On Thu, 29 Jun 2023, Hugh Dickins wrote:  
+> > 
+> > Hi Hugh,
+> > 
+> > ...
+> >   
+> > > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
+> > > +{
+> > > +	struct page *page;  
+> > 
+> > If I got your and Claudio conversation right, you were going to add
+> > here WARN_ON_ONCE() in case of mm_alloc_pgste(mm)?  
 
---=20
-paul-moore.com
+Good point, thanks Alexander for noticing!
+
+> 
+> Well, Claudio approved, so I would have put it in, if we had stuck with
+> that version which had "if (mm_alloc_pgste(mm)) {" in pte_free_defer();
+> but once that went away, it became somewhat irrelevant... to me anyway.
+> 
+> But I don't mind adding it here, in the v3 I'll post when -rc1 is out,
+> if it might help you guys - there is some point, since pte_free_defer()
+> is a route which can usefully check for such a case, without confusion
+> from harmless traffic from immediate frees of just-in-case allocations.
+> 
+> But don't expect it to catch all such cases (if they exist): another
+> category of s390 page_table_free()s comes from the PageAnon
+> zap_deposited_table() in zap_huge_pmd(): those tables might or might
+> not have been exposed to userspace at some time in the past.
+
+Right, after THP collapse, the previously active PTE table would be
+deposited in this case, and then later freed in zap_deposited_table().
+I guess we need to be very careful, if THP was ever enabled for KVM
+guests.
+
+> 
+> I'll add the WARN_ON_ONCE in pte_free_defer() (after checking that
+> WARN_ON_ONCE is the one we want - I get confused by all the different
+> flavours of WARN, and have to check the header file each time to be
+> sure of the syntax and semantics): but be aware that it won't be
+> checking all potential cases.
+
+Thanks, looks good.
