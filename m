@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0021174A8F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE8474A8FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjGGCZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S232295AbjGGC0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjGGCZU (ORCPT
+        with ESMTP id S230521AbjGGC0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:25:20 -0400
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8858B6;
-        Thu,  6 Jul 2023 19:25:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1688696711; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=hfya/VD4HCGSX9BIWKXyqEpBVt029ogQGcFDDA7NLfz3K/PMe8U7D6qTqIvUjF862OHu2jXUbuZyItXNiW1S8Vz+Cp7+Ww2r0w/y4XBB1gN6wZZh5SCdCulcjSyahSU+faTiRC0jCismLLI832TDe7Dff0lsMD7r/BzL9L8Q1Lk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1688696711; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=ik2eT2U2tcZUtukNJ6ARDpEzq7gr9zv2EARephZUF7A=; 
-        b=WcVRMSUVebWK3HY5pO24PDR8WJ/zT6Mnw2nOkPnZlxeB80inJYDdHVdg/atLMtj353j1hs3rvGjdZ5tYwpK0yg4dlU44U9QBzfd/YFZlaeCCDYZpvSEhDKP4e08KQ2mrfyHg08XOdgVlLO5H4+nVT2KZYIxsFPEtzbCv3Nq9d+c=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1688696711;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-        bh=ik2eT2U2tcZUtukNJ6ARDpEzq7gr9zv2EARephZUF7A=;
-        b=VPcqvnAogxc1aNwjI32fgfI12Umh4Cui7+azKIRc3GZJX9kInDbptI9lZ5xY0TfD
-        um/x2CV2zg8apK+QYZ7i/Ttk9guKKOoyZiMjOKbexg+H9tpeNefZjBUXTGmZ0AIVObI
-        eQ+NhcjyGmprHYWBtdjwwOX+76KwuBF1UhkMWjaQ=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1688696709492195.79904115078568; Thu, 6 Jul 2023 19:25:09 -0700 (PDT)
-Date:   Fri, 07 Jul 2023 10:25:09 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Tom Joseph" <tjoseph@cadence.com>,
-        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
-        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
-        "Rob Herring" <robh@kernel.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "linux-pci" <linux-pci@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <1892e2ae15f.f7e5dc061620757.4339091752690983066@linux.beauty>
-In-Reply-To: 
-Subject: PCI: cadence: Allow async probe
+        Thu, 6 Jul 2023 22:26:15 -0400
+Received: from out-22.mta1.migadu.com (out-22.mta1.migadu.com [IPv6:2001:41d0:203:375::16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8D9DD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:26:13 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688696770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0xRLT9ea/2ScZsoJKQA4zG+jZgoWMbP6gLAC+IguOQ8=;
+        b=Wf36/tDV+B1vbKdnbBZ3K4lf3PqmVLFmdnV05SyMbbAZQ3rrHLS+oJeEwM9jfj8Us3Bqd2
+        T9CB2agUUHRxpTTZBp1RhpB7BrW2H3eVlV/A0mG6izsBCPlunuGuLqRy0aYbExsdC5ELeQ
+        VxY2I2256KXI+KJem9mlrCol+BHn8hA=
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Subject: Re: [PATCH] mm/memcg: remove definition of MEM_CGROUP_ID_MAX when
+ !CONFIG_MEMCG
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <61ce2910-f3de-cfb7-bdd3-546ade0cb6f3@huawei.com>
+Date:   Fri, 7 Jul 2023 10:25:35 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>, cgroups@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <52C942A9-29F7-473F-8674-6CB584F009BA@linux.dev>
+References: <20230706112820.2393447-1-linmiaohe@huawei.com>
+ <892B507C-CFE8-4792-BA5F-3C698290A8EE@linux.dev>
+ <61ce2910-f3de-cfb7-bdd3-546ade0cb6f3@huawei.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,35 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Chen <lchen@ambarella.com>
 
-I observed that on Ambarella SoC, which also utilizes
-the Cadence controller, the boot time increases by 1
-second when no endpoints (including switch) are connected
-to PCIe. This increase is caused by cdns_pcie_host_wait_for_link.
 
-Enabling async probe can eliminate this boot time increase.
+> On Jul 7, 2023, at 10:06, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>=20
+> On 2023/7/7 9:47, Muchun Song wrote:
+>>=20
+>>=20
+>>> On Jul 6, 2023, at 19:28, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>>=20
+>>> MEM_CGROUP_ID_MAX is only used when CONFIG_MEMCG is configured. =
+Remove
+>>> unneeded !CONFIG_MEMCG variant.
+>>>=20
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>=20
+>> MEM_CGROUP_ID_MAX is also only used in mem_cgroup_alloc(), maybe you =
+also
+>> could move it from memcontrol.h to memcontrol.c. And define it as:
+>>=20
+>> #define MEM_CGROUP_ID_MAX ((1U << MEM_CGROUP_ID_SHIFT) - 1)
+>>=20
+>> I am not suggesting defining it as USHRT_MAX, because if someone =
+changes
+>> MEM_CGROUP_ID_SHIFT in the future, then MEM_CGROUP_ID_MAX will not =
+updated
+>> accordingly.
+>=20
+> Looks sensible to me. Do you suggest squashing above changes into the =
+current patch
+> or a separate patch is preferred?
 
-I guess other platforms also has this issue.
+I think it's better to squash.
 
-Signed-off-by: Li Chen <lchen@ambarella.com>
----
- drivers/pci/controller/cadence/pcie-cadence-plat.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
-index e091fef9c919..5177f18e1dfc 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
-@@ -174,6 +174,7 @@ static struct platform_driver cdns_plat_pcie_driver = {
- 		.name = "cdns-pcie",
- 		.of_match_table = cdns_plat_pcie_of_match,
- 		.pm	= &cdns_pcie_pm_ops,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
- 	.probe = cdns_plat_pcie_probe,
- 	.shutdown = cdns_plat_pcie_shutdown,
--- 
-2.34.1
-
+>=20
+>>=20
+>> For this patch, LGTM.
+>>=20
+>> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+>=20
+> Thanks for review and suggestion.
+>=20
+>=20
+>=20
 
