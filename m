@@ -2,162 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CC674B9C0
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C847574B9C3
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 01:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjGGW6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 18:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
+        id S232134AbjGGXAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 19:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGGW6c (ORCPT
+        with ESMTP id S229725AbjGGXAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 18:58:32 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBB726A3
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:58:01 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so312325766b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 15:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688770679; x=1691362679;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aiyrN/NLbtRtJ2Eno6WAqJSwgD+9i9p80n4AP4hY4BU=;
-        b=A7o9wo2yJuJBZ5Mse5kTmtRKGM7/TAHejTN+89va5tKJutwu5Amq/mmvphhGfr6okE
-         JLQZ+ZRuKXm6kHTjFFZ4+BrzZ3Z2u5Qer/c5NkGB4/ZFzyJYCe6DWHgqfW5x2QeX2G6e
-         e86nWv3y1/+t3WQrRbnFg19yRBkYZYhwRTo40=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688770679; x=1691362679;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aiyrN/NLbtRtJ2Eno6WAqJSwgD+9i9p80n4AP4hY4BU=;
-        b=Y1ZJeRUDYpjhgt7dzQz3pgNe7jH69QsOU6bZds/pPHdOFBFS0K6RMN/rMew07cr/A4
-         2qsQvHD8OdAPwZJaBRijwJFW/vaILEb1Nl7SWaoPTL5FCjJnuZBj5ZJDhXn9Vp8Pb8hF
-         QvuaMpUJHcXx4eN2ziFwVXzNWCAjsufpaJ/l2gnNP5io1u4WMcxj5Y6n81+xIYAxGc14
-         Ug2RDxgEEPhs5tpUUzZP4WI2IKGg2YFrmz6aBEOM7DPDGjKj9LTAtX7dBT4dWrQjDOWI
-         13Q0DjazS8qTOnEFX6VEdYGiOJQXa+hiZcdmSIPIgxxR+t4UhcITdSxm2yIJLPSNnOf/
-         41Dg==
-X-Gm-Message-State: ABy/qLYOgEY/b5LdRlt/hgQLBCt16OcvUEM4JL1418VCnUMQMEbYliRI
-        crdfX9+NXehn/KlxksuuRhU1aRLeV/V3nxqBJdRyJ+eh
-X-Google-Smtp-Source: APBJJlFqvd2z1dOkJZoyOm2sK7e0QhMSPyOlq1/OUgAniTbB5qB9Wv+d60QvpUR6jfgTVPEDqpCkzQ==
-X-Received: by 2002:a17:906:10dd:b0:993:e752:1a6a with SMTP id v29-20020a17090610dd00b00993e7521a6amr366436ejv.21.1688770678872;
-        Fri, 07 Jul 2023 15:57:58 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id z27-20020a170906715b00b00993150e5325sm2699927ejj.60.2023.07.07.15.57.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 15:57:57 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-51e292cf214so3064751a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 15:57:57 -0700 (PDT)
-X-Received: by 2002:a50:fc13:0:b0:51e:251d:5cab with SMTP id
- i19-20020a50fc13000000b0051e251d5cabmr4203390edr.39.1688770677279; Fri, 07
- Jul 2023 15:57:57 -0700 (PDT)
+        Fri, 7 Jul 2023 19:00:41 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2051.outbound.protection.outlook.com [40.107.8.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2065C1992;
+        Fri,  7 Jul 2023 16:00:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qf9cSaJQuCKuPux+1GWO11PdEP5u+W0j5s3SvFTh2nRg9+5AZrwBO48SdcO1Jjk6Ii3OnjecYv/jzeEKdKhbqbbCyku4xMOnZ+UBw1xazYvOaqVEUJgGTz3C8IJokhCUSIM3antXAn2w66xpeMPoCc3lNbEuGxkJT+50C8VuRyGQdoyZfrbhlxqG0+3dSGEgKPfmm98+EVqP68850+42Mg5+g0q0BQiMXqVSd3D9x6AmC4oyyZMR5Jlo99Kz6+Mw1kz4utW9Cro7L03WUMrxpJCZUdmROcBBnrEndgX5nuHkgNdt983yDR/G5u65yG3MSSW/zR9aVW7B5VjsFxPS/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6m/JOX9UTRsXaVIVrUg+UGCjqv4DvrmI1oBO0DcwUig=;
+ b=JRaeg++hAo4iOpuakwdBAP9EubEgrohdEz0hH9Gey9RoId2rmJUv6FbAbd5xSUJtn7tzeEAYyImg3Sb3LJkhFE37Ump6eofDeAUUA96KweLN8vUZp6oun+GjwWExTa2AsWbtTiV8Dk9g6OZLZYp2B5WS7nJCUL19UbTACSETgkGn19c8l22Qqo4FYOkUMkPuEBdPuxPPJUiJItpPr5czgPWRh5SKWNWOtos1h9/C5iO6FUYQ4lxKx91dh9EFd80nuBEuua5fBJaaYrtE6+QiPqYopZvj4utx1lhm1GxjcRJSPcSeEgNEVcclIewdAFqpWd3R6iPgAp846pDPk2e0TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6m/JOX9UTRsXaVIVrUg+UGCjqv4DvrmI1oBO0DcwUig=;
+ b=RDLVX12RF5lNX/bG1E54HVqig2Aj/dfYA+GKamohZov65c62FFkG8DrWgxMsW7Qq43DSZcqWaKndz7YMJ3Ww8aN+QUIlB7guA/k7rDPySPRE7/0F5mANHpXec87a5OdXAMQhS3uHLqyzFLzFLlCWqH32p7rAG8KGKMtqRdX25Yg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by AM7PR04MB7173.eurprd04.prod.outlook.com (2603:10a6:20b:122::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
+ 2023 23:00:35 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::4a2a:262e:415f:e41c]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::4a2a:262e:415f:e41c%7]) with mapi id 15.20.6565.016; Fri, 7 Jul 2023
+ 23:00:35 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     frank.li@nxp.com
+Cc:     Thinh.Nguyen@synopsys.com, andriy.shevchenko@linux.intel.com,
+        gregkh@linuxfoundation.org, imx@lists.linux.dev, jgilab@gmail.com,
+        jun.li@nxp.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, peter.chen@kernel.org,
+        quic_eserrao@quicinc.com, quic_prashk@quicinc.com,
+        r-gunasekaran@ti.com, rogerq@kernel.org
+Subject: [PATCH v2 1/2] usb: gadget: call usb_gadget_check_config() to verify UDC capability
+Date:   Fri,  7 Jul 2023 19:00:14 -0400
+Message-Id: <20230707230015.494999-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR04CA0019.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::24) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 MIME-Version: 1.0
-References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
- <20230626-vorverlegen-setzen-c7f96e10df34@brauner> <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
- <20230626-fazit-campen-d54e428aa4d6@brauner> <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
- <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
- <20230707-konsens-ruckartig-211a4fb24e27@brauner> <CAHk-=whHXogGiPkGFwQQBtn364M4caVNcBTs7hLNfa_X67ouzA@mail.gmail.com>
- <zu7gnignulf7qqnoblpzjbu6cx5xtk2qum2uqr7q52ahxjbtdx@4ergovgpfuxt>
-In-Reply-To: <zu7gnignulf7qqnoblpzjbu6cx5xtk2qum2uqr7q52ahxjbtdx@4ergovgpfuxt>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Jul 2023 15:57:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjEC_Rh8+-rtEi8C45upO-Ffw=M_i1211qS_3AvWZCbOg@mail.gmail.com>
-Message-ID: <CAHk-=wjEC_Rh8+-rtEi8C45upO-Ffw=M_i1211qS_3AvWZCbOg@mail.gmail.com>
-Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
- forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read side?)
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000053b4c805ffed902d"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AM7PR04MB7173:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79315378-7157-41de-f150-08db7f3df921
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aFG45xV3dSKzVSGvgpefeL6EmyS1eqNtDj7BhjUgsFbfDBNgi4QaSJWJrUp3fLQ2/0G0v1JDgko2dhBaZadqQNPrg7xTbUX/lSd/C7rTqg4eeT/YjhIGkpHa9hYPd2FhKSD6m1boqR8ODASqPev9y9OkL2VCnW87MJZoyJudVFmbX2pRAQpCIVDsVfT7m3OLvrx0EYa2i8P8m4l34+FZKzkxnYl/YOzBxoszL1S/kxjsx0mQeqF5+YKYqPx0iVD+h1szF4rXx7uDFmG9h3cTmzsa98LRdVmK1brBePugPpU/c2fGiHyLQppfTpGnvjnnf4VYApYITygdu0emP1Co3KxBcn0c02fvs4+ObBNj4wxcia8NfudNuvMQB/0Cq4mVhsPKVvGaoOkFTquxGZqr/zPW6wEtfSTjV8BG8pvG8EbwxQiEHCPgUuKiCHcNQUAB3FWPu1K//vjmIONCGEko7CfUgfHRZE9c+8zGN3DYYZtKxoCiS6QwWdRGux8MIDPUv2nZ9soURAR7qfrLcvuvNUJvnG6qiQfr0N1LHnYv5nN/mpLVQme5afO16Kt86Qm62x0UND/95DXT07cPW3+wIkWScn2ODBJalNsYZ59ycVOl1sW02eW8MXpDsbo7CtCQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199021)(52116002)(6486002)(6666004)(478600001)(37006003)(36756003)(86362001)(2616005)(2906002)(1076003)(26005)(6506007)(186003)(6512007)(38350700002)(66946007)(38100700002)(4326008)(66556008)(41300700001)(316002)(8676002)(5660300002)(66476007)(34206002)(8936002)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?semQpYiZJG6JUP+wirbT3mqZsFEtCIlJVvmqaOD1MBTyFhtVdtRkF2iHiAs+?=
+ =?us-ascii?Q?+pCGjttSow76hiiarfhRDzD1XkwPqbzgqK6PGNtTAEhkGHYf0j6YE0cxpmps?=
+ =?us-ascii?Q?WRGnkUrTA4rqaUvkXAwqkVZp+LpGmQB+mt2GPAkuyT/QEKtOM+CDREKSOuwP?=
+ =?us-ascii?Q?AuvUj8h8cMfIkzOrZ2bG106zNBEEfyO1RlmxogU1sXPJwh3edUbw7DsKffqM?=
+ =?us-ascii?Q?DCNWrEQv1uSjPAwBUUxIqannaDKLdbNMK3DmrMGDU26O34yTjiaki4Gc0kSA?=
+ =?us-ascii?Q?EbqeKoky8RIiZC6GKkhFXZSkBt724TLRtcxgHf8QsCS0dbPr/GmPsOMJ8nE+?=
+ =?us-ascii?Q?LIYfMDiApJbDVF35TK1cvhhapsqAKCVi4bx434zj50aSW7t1B+74XF1Kn7pO?=
+ =?us-ascii?Q?gpJ4qeHPUmcyt7ai4QBT862iNuVSOzHU+zdheztc1gfyfIdLqN2aOkTqv1na?=
+ =?us-ascii?Q?RYdf1/dj/nfBUsywpambkVZEci0DZ3N6tQYPeJTRc1kCqwIglyvkZxHJwccG?=
+ =?us-ascii?Q?Djt3tBgueyEG35EqylcvVKQXB+I28gF/5ywJfVMlUfVBynD8uIpSsRCv3hQa?=
+ =?us-ascii?Q?wucxJjZ4karJWWHKYgogoAfpImO6NxCQ98GO69Lj4hMCaksLtVvrE56JL1UA?=
+ =?us-ascii?Q?Ceyl8ASFz1HyL/JUuvnqPIaq+/W6QSl82s+7yvUkqXvw9lZKlxQUMVC+bDqI?=
+ =?us-ascii?Q?+nBBT31LscnaHk/fPcMNM4qYIxKFgDbu47ouQPLzd3OiDGz6JfyfBsnfWkfa?=
+ =?us-ascii?Q?8Qgz5UgG458qXP2o2cPE8ICiNBetbPJq8lJdOBIev4Ac3GKsDMetP0j5NRJL?=
+ =?us-ascii?Q?O6B7HmwLM65QmA2PlwuB3ZENeuRxbvpkAJlBhGQQuM+qyyx2MspetbcP9P4U?=
+ =?us-ascii?Q?Xa5tK9jBPDV2IMM/xzQbL6u2mDvJQQHtfRAYEpSPx9/vvEGuKTz5unCuoG/K?=
+ =?us-ascii?Q?YYvVtywEHeGf+HSAAN520axAftaTUb1X4PPNd8blMTCUCjadxwDS1IdPn1Et?=
+ =?us-ascii?Q?J8tOisD/zw96m4yQlX03sXItphXP8e5pWraWJ3qtp8ohgSc68DgIm+E7keqD?=
+ =?us-ascii?Q?32lvSSBolDVvw6plQ4P+vDMbbHBdsJSWZCcyMEi+ph/JLPM5mtWRKGIz/5tq?=
+ =?us-ascii?Q?mU5fKrX9V1l5IoVX/m1RRkenwG42JEdpCnbqI7kajZYrr0JsdEclxw5iK4fQ?=
+ =?us-ascii?Q?oPNAFyQOWp1/The/yJlqhxL6z1hGshbDdUMMAt4ibXj3XNBw5QHSBP3eI8Sg?=
+ =?us-ascii?Q?58cbNLJDX1pOCemKEh5/JnqMM/rVijHH1hW92nxHKWCHTx+s828fO/Sjt4a+?=
+ =?us-ascii?Q?VDKdkYh8gCDDA1UmNGDt44X/zEhMBSrA1cDU4XxcyDpsVGO40sr7pHm5Jcsy?=
+ =?us-ascii?Q?QroWB9LVkq+ijWUstp6GpgAFho0BTGhIEnNNz2X3NhoHaRvtmNEyUnTDqtGY?=
+ =?us-ascii?Q?fbNQwmrMsjIxv/mLR96H17uSrP+C6avVdf+M2fgGs0E+CipOs/XQBlgfDdMB?=
+ =?us-ascii?Q?gz/vNjZ8SYW2mKatUj4SUbWoISnRQzoSlqiW8T8tnw/ZfHu1jrtD3Lt7RlUE?=
+ =?us-ascii?Q?rHEg2Sm2rCCUv/5GwtjpN7EwxTiItAmvEzEanUkB?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79315378-7157-41de-f150-08db7f3df921
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 23:00:35.6129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V2wqiavprwfyVYSMgLG4iVXPoeLPdf0rV0DaaJyeNd+LJmekZkwOk6FilRBZ0MwPMhK13MqdigH3rlwsH7P6kA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7173
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000053b4c805ffed902d
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+The legacy gadget driver omitted calling usb_gadget_check_config()
+to ensure that the USB device controller (UDC) has adequate resources,
+including sufficient endpoint numbers and types, to support the given
+configuration.
 
-On Fri, 7 Jul 2023 at 15:41, Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> (inlined by) eat_empty_buffer at fs/splice.c:594
+Previously, usb_add_config() was solely invoked by the legacy gadget
+driver. Adds the necessary usb_gadget_check_config() after the bind()
+operation to fix the issue.
 
-Ahh, eat_empty_buffer() ends up releasing the buffer without waiting for it=
-.
+Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to composite EP number")
+Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+change from v1 to v2
+- not change for this patch, just add new patch to fix multi-config case
 
-And the reason for that is actually somewhat interesting: we do have that
+ drivers/usb/gadget/composite.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-        while (!pipe_readable(pipe)) {
-             ..
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 403563c06477..cb0a4e2cdbb7 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1029,6 +1029,10 @@ int usb_add_config(struct usb_composite_dev *cdev,
+ 		goto done;
+ 
+ 	status = bind(config);
++
++	if (status == 0)
++		status = usb_gadget_check_config(cdev->gadget);
++
+ 	if (status < 0) {
+ 		while (!list_empty(&config->functions)) {
+ 			struct usb_function		*f;
+-- 
+2.34.1
 
-above it, but the logic for this all is that pipes with pipe buffers
-are by *default* considered readable until they try to actually
-confirm the buffer, and at that point they might say "oh, I have to
-return -EAGAIN and set 'not_ready'".
-
-And that splice_from_pipe_next() doesn't do that.
-
-End result: it will happily free that pipe buffer that is still in the
-process of being filled.
-
-The good news is that I think the fix is probably trivial. Something
-like the attached?
-
-Again - NOT TESTED.
-
-> Besides that, this doesn't solve the original issue, inasmuch as
->   ./v > fifo &
->   head fifo &
->   echo zupa > fifo
-> (where ./v splices from an empty pty to stdout; v.c attached)
-> echo still sleeps until ./v dies, though it also succumbs to ^C now.
-
-Yeah, I concentrated on just making everything interruptible,
-
-But the fact that the echo has to wait for the previous write to
-finish is kind of fundamental. We can't just magically do writes out
-of order. 'v' is busy writing to the fifo, we can't let some other
-write just come in.
-
-(We *could* make the splice in ./v not fill the whole pipe buffer, and
-allow some other writes to fill in buffers afterwards, but at _some_
-point you'll hit the "pipe buffers are full and busy, can't add any
-more without waiting for them to empty").
-
-One thing we could possibly do is to say that we just don't accept any
-new writes if there are old busy splices in process. So we could make
-new writes return -EBUSY or something, I guess.
-
-             Linus
-
---00000000000053b4c805ffed902d
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljt6c8rj0>
-X-Attachment-Id: f_ljt6c8rj0
-
-IGZzL3NwbGljZS5jIHwgNyArKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCsp
-CgpkaWZmIC0tZ2l0IGEvZnMvc3BsaWNlLmMgYi9mcy9zcGxpY2UuYwppbmRleCA0OTEzOTQxMzQ1
-N2QuLmRmNmQzNGRiZjExNiAxMDA2NDQKLS0tIGEvZnMvc3BsaWNlLmMKKysrIGIvZnMvc3BsaWNl
-LmMKQEAgLTU5MCw2ICs1OTAsMTMgQEAgc3RhdGljIGlubGluZSBib29sIGVhdF9lbXB0eV9idWZm
-ZXIoc3RydWN0IHBpcGVfaW5vZGVfaW5mbyAqcGlwZSkKIAl1bnNpZ25lZCBpbnQgbWFzayA9IHBp
-cGUtPnJpbmdfc2l6ZSAtIDE7CiAJc3RydWN0IHBpcGVfYnVmZmVyICpidWYgPSAmcGlwZS0+YnVm
-c1t0YWlsICYgbWFza107CiAKKwkvKgorCSAqIERvIGEgbm9uLWJsb2NraW5nIGJ1ZmZlciBjb25m
-aXJtLiBXZSBtYXkgbmVlZAorCSAqIHRvIGdvIGJhY2sgdG8gd2FpdGluZyBmb3IgdGhlIHBpcGUg
-dG8gYmUgcmVhZGFibGUuCisJICovCisJaWYgKHBpcGVfYnVmX2NvbmZpcm0ocGlwZSwgYnVmLCB0
-cnVlKSA9PSAtRUFHQUlOKQorCQlyZXR1cm4gdHJ1ZTsKKwogCWlmICh1bmxpa2VseSghYnVmLT5s
-ZW4pKSB7CiAJCXBpcGVfYnVmX3JlbGVhc2UocGlwZSwgYnVmKTsKIAkJcGlwZS0+dGFpbCA9IHRh
-aWwrMTsK
---00000000000053b4c805ffed902d--
