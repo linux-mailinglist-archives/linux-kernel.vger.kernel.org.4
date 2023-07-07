@@ -2,192 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F2C74B782
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A2774B783
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjGGTy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
+        id S229846AbjGGTzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjGGTy4 (ORCPT
+        with ESMTP id S229600AbjGGTzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:54:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD6C19A5;
-        Fri,  7 Jul 2023 12:54:55 -0700 (PDT)
+        Fri, 7 Jul 2023 15:55:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978671FEE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:55:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A730C61A34;
-        Fri,  7 Jul 2023 19:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE70C433C8;
-        Fri,  7 Jul 2023 19:54:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36E7961A33
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02AFC433C7;
+        Fri,  7 Jul 2023 19:55:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688759694;
-        bh=wdUqdpRF/SKerHOFXhjdav6c/7lqS9b7DIwJzkdkCM0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=pNDK3/yYC+eEal/D8caLdAsHQPYDGnl1vqJhFKK/NfonlaATvI0HRe+vSt1LBpbKB
-         L609xmrPS6qmm+LmFrX4A+1LEOCFN4LG1jpD8g3ZrgNmaqZqyaZSjZ49xQHECJ9zDO
-         8iHB+sOSwpis4C14vqJdS1PYCmdFqNAJTjHwXnnD6hx4Cx/cwCOX+R+RaQz0tegdCD
-         WvwEBKAnRJ+na0pe99YOQjJQrhDxNsown/PBdIfxvX75q/bHxCaGTFJKI/ehg38iz4
-         qBLnO1MsIkdIwSOE8sHidafDRrd1Kos0PlT2HO+ENysR11IUB8cmR3ioaN0u7i7DY5
-         og1EwBPakaYFA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9874BCE007B; Fri,  7 Jul 2023 12:54:53 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 12:54:53 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Subject: Re: [PATCH v2] refscale: Fix use of uninitalized wait_queue_head_t
-Message-ID: <37d52a42-c6d5-4c4d-9879-53578c154d1f@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230707175355.2442933-1-longman@redhat.com>
+        s=k20201202; t=1688759701;
+        bh=RsJA1J7DRjoIYo78M1XUEsFCF0c2xLVidbDZoutsGgc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jLoea8gSW34amoR1P+rYB9Zkeyoy8A6WiK/PJuaBaa544/JL7RXe3lt/MMfGf4Jrk
+         V7fUz988bzZbghWlkyYpZ0ashvOkNFxw9h8tIK+8ZL+mjIbSD7wyANqlZcS7Gy2p+Z
+         vmRSHFPMU1lskxyWzX6X2hHrjUIPEM8OGw/SWhm4d/5wVwA1kDEjxU9zpBXB/bnvCg
+         y+6AwzrXLaewXf1GgL4G+87C0R73yCUHXkXI3qsFtqSNFbOtV6COx8yVm7DEvX0Qck
+         u0IEKD1Fkl7nAWlmnB+QleEMpvq9ZjkoOcMkznih/cfmwAtvJ3tz7vSnOez8JQAmd9
+         C+56DBSlCg05g==
+Message-ID: <6c7ec9f8-6dae-8db6-c5ba-e88b641b34e7@kernel.org>
+Date:   Fri, 7 Jul 2023 14:54:59 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230707175355.2442933-1-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2 RESEND] firmware: stratix10-rsu: query spt addresses
+Content-Language: en-US
+To:     kah.jing.lee@intel.com
+Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
+        tien.sung.ang@intel.com
+References: <20230707080112.1722827-1-kah.jing.lee@intel.com>
+ <20230707080349.1723083-1-kah.jing.lee@intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230707080349.1723083-1-kah.jing.lee@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 01:53:55PM -0400, Waiman Long wrote:
-> It was found that running the refscale test might crash the kernel once
-> in a while with the following error:
+
+
+On 7/7/23 03:03, kah.jing.lee@intel.com wrote:
+> From: Radu Bacrau <radu.bacrau@intel.com>
 > 
-> [ 8569.952896] BUG: unable to handle page fault for address: ffffffffffffffe8
-> [ 8569.952900] #PF: supervisor read access in kernel mode
-> [ 8569.952902] #PF: error_code(0x0000) - not-present page
-> [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
-> [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
-> [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS 1.2.4 05/28/2021
-> [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
->   :
-> [ 8569.952940] Call Trace:
-> [ 8569.952941]  <TASK>
-> [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
-> [ 8569.952959]  kthread+0x10e/0x130
-> [ 8569.952966]  ret_from_fork+0x1f/0x30
-> [ 8569.952973]  </TASK>
+> Extend Intel Remote System Update (RSU) driver to get SPT
+> (Sub-Partition Table) addresses. The query SPT address can be used
+> to determine if the RSU QSPI layout is 32kB or 64kB aligned.
+> The alignment can be determined by minus the upper with the lower of
+> the SPT addresses.
 > 
-> This is likely caused by the fact that init_waitqueue_head() is
-> called after the ref_scale_reader kthread is created. The kthread
-> can potentially try to use the waitqueue head before it is properly
-> initialized. The crash happened at
+> This patch depends on patch:
+> firmware: stratix10-svc: Generic Mailbox Command
 > 
-> 	static inline void __add_wait_queue(...)
-> 	{
-> 		:
-> 		if (!(wq->flags & WQ_FLAG_PRIORITY)) <=== Crash here
+> Signed-off-by: Radu Bacrau <radu.bacrau@intel.com>
+> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
+> ---
+>   drivers/firmware/stratix10-rsu.c | 100 ++++++++++++++++++++++++++++++-
+>   1 file changed, 99 insertions(+), 1 deletion(-)
 > 
-> The offset of flags from list_head entry in wait_queue_entry is -0x18. If
-> reader_tasks[i].wq.head.next is NULL as allocated reader_task structure
-> is zero initialized, the instruction will try to access address
-> 0xffffffffffffffe8 which is the fault address listed above.
-> 
-> Fix this by initializing the waitqueue head first before kthread
-> creation.
-> 
-> Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of read-side synchronization")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> diff --git a/drivers/firmware/stratix10-rsu.c b/drivers/firmware/stratix10-rsu.c
+> index e51c95f8d445..9f82d5147890 100644
+> --- a/drivers/firmware/stratix10-rsu.c
+> +++ b/drivers/firmware/stratix10-rsu.c
+> @@ -34,6 +34,10 @@
+>   #define INVALID_RETRY_COUNTER		0xFF
+>   #define INVALID_DCMF_VERSION		0xFF
+>   #define INVALID_DCMF_STATUS		0xFFFFFFFF
+> +#define INVALID_SPT_ADDRESS		0x0
+> +
+> +#define RSU_GET_SPT_CMD			0x5A
+> +#define RSU_GET_SPT_RESP_LEN		(4 * sizeof(unsigned int))
+>   
+>   typedef void (*rsu_callback)(struct stratix10_svc_client *client,
+>   			     struct stratix10_svc_cb_data *data);
+> @@ -59,6 +63,9 @@ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
+>    * @dcmf_status.dcmf3: dcmf3 status
+>    * @retry_counter: the current image's retry counter
+>    * @max_retry: the preset max retry value
+> + * @spt0_address: address of spt0
+> + * @spt1_address: address of spt1
+> + * @get_spt_response_buf: response from sdm for get_spt command
+>    */
+>   struct stratix10_rsu_priv {
+>   	struct stratix10_svc_chan *chan;
+> @@ -90,6 +97,11 @@ struct stratix10_rsu_priv {
+>   
+>   	unsigned int retry_counter;
+>   	unsigned int max_retry;
+> +
+> +	unsigned long spt0_address;
+> +	unsigned long spt1_address;
+> +
+> +	unsigned int *get_spt_response_buf;
+>   };
+>   
+>   /**
+> @@ -259,6 +271,36 @@ static void rsu_dcmf_status_callback(struct stratix10_svc_client *client,
+>   	complete(&priv->completion);
+>   }
+>   
+> +static void rsu_get_spt_callback(struct stratix10_svc_client *client,
+> +				     struct stratix10_svc_cb_data *data)
+> +{
+> +	struct stratix10_rsu_priv *priv = client->priv;
+> +	unsigned long *mbox_err = (unsigned long *)data->kaddr1;
+> +	unsigned long *resp_len = (unsigned long *)data->kaddr2;
+> +
+> +	if ((data->status != BIT(SVC_STATUS_OK)) || (*mbox_err) ||
+> +	    (*resp_len != RSU_GET_SPT_RESP_LEN))
+> +		goto error;
+> +
+> +	priv->spt0_address = priv->get_spt_response_buf[0];
+> +	priv->spt0_address <<= 32;
+> +	priv->spt0_address |= priv->get_spt_response_buf[1];
+> +
+> +	priv->spt1_address = priv->get_spt_response_buf[2];
+> +	priv->spt1_address <<= 32;
+> +	priv->spt1_address |= priv->get_spt_response_buf[3];
+> +
+> +	goto complete;
+> +
+> +error:
+> +	dev_err(client->dev, "failed to get SPTs\n");
+> +
+> +complete:
+> +	stratix10_svc_free_memory(priv->chan, priv->get_spt_response_buf);
+> +	priv->get_spt_response_buf = NULL;
+> +	complete(&priv->completion);
+> +}
+> +
+>   /**
+>    * rsu_send_msg() - send a message to Intel service layer
+>    * @priv: pointer to rsu private data
+> @@ -288,6 +330,14 @@ static int rsu_send_msg(struct stratix10_rsu_priv *priv,
+>   	if (arg)
+>   		msg.arg[0] = arg;
+>   
+> +	if (command == COMMAND_MBOX_SEND_CMD) {
+> +		msg.arg[1] = 0;
+> +		msg.payload = NULL;
+> +		msg.payload_length = 0;
+> +		msg.payload_output = priv->get_spt_response_buf;
+> +		msg.payload_length_output = RSU_GET_SPT_RESP_LEN;
+> +	}
+> +
+>   	ret = stratix10_svc_send(priv->chan, &msg);
+>   	if (ret < 0)
+>   		goto status_done;
+> @@ -572,6 +622,34 @@ static ssize_t notify_store(struct device *dev,
+>   	return count;
+>   }
+>   
+> +static ssize_t spt0_address_show(struct device *dev,
+> +				  struct device_attribute *attr, char *buf)
+> +{
+> +	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
+> +
+> +	if (!priv)
+> +		return -ENODEV;
+> +
+> +	if (priv->spt0_address == INVALID_SPT_ADDRESS)
+> +		return -EIO;
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "0x%08lx\n", priv->spt0_address);
+> +}
+> +
+> +static ssize_t spt1_address_show(struct device *dev,
+> +				  struct device_attribute *attr, char *buf)
+> +{
+> +	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
+> +
+> +	if (!priv)
+> +		return -ENODEV;
+> +
+> +	if (priv->spt1_address == INVALID_SPT_ADDRESS)
+> +		return -EIO;
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "0x%08lx\n", priv->spt1_address);
+> +}
+> +
+>   static DEVICE_ATTR_RO(current_image);
+>   static DEVICE_ATTR_RO(fail_image);
+>   static DEVICE_ATTR_RO(state);
+> @@ -590,6 +668,8 @@ static DEVICE_ATTR_RO(dcmf2_status);
+>   static DEVICE_ATTR_RO(dcmf3_status);
+>   static DEVICE_ATTR_WO(reboot_image);
+>   static DEVICE_ATTR_WO(notify);
+> +static DEVICE_ATTR_RO(spt0_address);
+> +static DEVICE_ATTR_RO(spt1_address);
+>   
+>   static struct attribute *rsu_attrs[] = {
+>   	&dev_attr_current_image.attr,
+> @@ -610,6 +690,8 @@ static struct attribute *rsu_attrs[] = {
+>   	&dev_attr_dcmf3_status.attr,
+>   	&dev_attr_reboot_image.attr,
+>   	&dev_attr_notify.attr,
+> +	&dev_attr_spt0_address.attr,
+> +	&dev_attr_spt1_address.attr,
+>   	NULL
+>   };
+>   
+> @@ -639,11 +721,13 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
+>   	priv->dcmf_version.dcmf1 = INVALID_DCMF_VERSION;
+>   	priv->dcmf_version.dcmf2 = INVALID_DCMF_VERSION;
+>   	priv->dcmf_version.dcmf3 = INVALID_DCMF_VERSION;
+> -	priv->max_retry = INVALID_RETRY_COUNTER;
+>   	priv->dcmf_status.dcmf0 = INVALID_DCMF_STATUS;
+>   	priv->dcmf_status.dcmf1 = INVALID_DCMF_STATUS;
+>   	priv->dcmf_status.dcmf2 = INVALID_DCMF_STATUS;
+>   	priv->dcmf_status.dcmf3 = INVALID_DCMF_STATUS;
+> +	priv->max_retry = INVALID_RETRY_COUNTER;
+> +	priv->spt0_address = INVALID_SPT_ADDRESS;
+> +	priv->spt1_address = INVALID_SPT_ADDRESS;
+>   
+>   	mutex_init(&priv->lock);
+>   	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
+> @@ -693,6 +777,20 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
+>   		stratix10_svc_free_channel(priv->chan);
+>   	}
+>   
+> +	priv->get_spt_response_buf =
+> +		stratix10_svc_allocate_memory(priv->chan, RSU_GET_SPT_RESP_LEN);
+> +
+> +	if (!priv->get_spt_response_buf) {
 
-Queued and pushed, thank you all!
+This is wrong, stratix10_svc_allocate_memory does not return NULL, it 
+returns an ERR_PTR()
 
-As always, I could not resist wordsmithing the commit log, please see
-below.
+> +		dev_err(dev, "failed to allocate get spt buffer\n");
+> +	} else {
+> +		int ret_val = rsu_send_msg(priv, COMMAND_MBOX_SEND_CMD,
+> +				   RSU_GET_SPT_CMD, rsu_get_spt_callback);
 
-							Thanx, Paul
+Reuse the already defined ret;
 
-------------------------------------------------------------------------
-
-commit 933d3bf8f96d7cedf78081030e004d23aee2b56c
-Author: Waiman Long <longman@redhat.com>
-Date:   Fri Jul 7 13:53:55 2023 -0400
-
-    refscale: Fix uninitalized use of wait_queue_head_t
-    
-    Running the refscale test occasionally crashes the kernel with the
-    following error:
-    
-    [ 8569.952896] BUG: unable to handle page fault for address: ffffffffffffffe8
-    [ 8569.952900] #PF: supervisor read access in kernel mode
-    [ 8569.952902] #PF: error_code(0x0000) - not-present page
-    [ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
-    [ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
-    [ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS 1.2.4 05/28/2021
-    [ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
-      :
-    [ 8569.952940] Call Trace:
-    [ 8569.952941]  <TASK>
-    [ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
-    [ 8569.952959]  kthread+0x10e/0x130
-    [ 8569.952966]  ret_from_fork+0x1f/0x30
-    [ 8569.952973]  </TASK>
-    
-    The likely cause is that init_waitqueue_head() is called after the call to
-    the torture_create_kthread() function that creates the ref_scale_reader
-    kthread.  Although this init_waitqueue_head() call will very likely
-    complete before this kthread is created and starts running, it is
-    possible that the calling kthread will be delayed between the calls to
-    torture_create_kthread() and init_waitqueue_head().  In this case, the
-    new kthread will use the waitqueue head before it is properly initialized,
-    which is not good for the kernel's health and well-being.
-    
-    The above crash happened here:
-    
-            static inline void __add_wait_queue(...)
-            {
-                    :
-                    if (!(wq->flags & WQ_FLAG_PRIORITY)) <=== Crash here
-    
-    The offset of flags from list_head entry in wait_queue_entry is
-    -0x18. If reader_tasks[i].wq.head.next is NULL as allocated reader_task
-    structure is zero initialized, the instruction will try to access address
-    0xffffffffffffffe8, which is exactly the fault address listed above.
-    
-    This commit therefore invokes init_waitqueue_head() before creating
-    the kthread.
-    
-    Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of read-side synchronization")
-    Signed-off-by: Waiman Long <longman@redhat.com>
-    Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-    Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-    Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
-index 1970ce5f22d4..71d138573856 100644
---- a/kernel/rcu/refscale.c
-+++ b/kernel/rcu/refscale.c
-@@ -1107,12 +1107,11 @@ ref_scale_init(void)
- 	VERBOSE_SCALEOUT("Starting %d reader threads", nreaders);
- 
- 	for (i = 0; i < nreaders; i++) {
-+		init_waitqueue_head(&reader_tasks[i].wq);
- 		firsterr = torture_create_kthread(ref_scale_reader, (void *)i,
- 						  reader_tasks[i].task);
- 		if (torture_init_error(firsterr))
- 			goto unwind;
--
--		init_waitqueue_head(&(reader_tasks[i].wq));
- 	}
- 
- 	// Main Task
+> +		if (ret_val) {
+> +			dev_err(dev, "Error, getting SPT table %i\n", ret_val);
+> +			stratix10_svc_free_channel(priv->chan);
+> +		}
+> +	}
+> +
+>   	return ret;
+>   }
+>   
