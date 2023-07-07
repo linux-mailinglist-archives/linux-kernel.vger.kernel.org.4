@@ -2,527 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFD374A8C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE2274A8C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjGGCHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S231147AbjGGCJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGGCHQ (ORCPT
+        with ESMTP id S229452AbjGGCJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:07:16 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217B10EA;
-        Thu,  6 Jul 2023 19:07:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Vmmfv85_1688695628;
-Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0Vmmfv85_1688695628)
-          by smtp.aliyun-inc.com;
-          Fri, 07 Jul 2023 10:07:09 +0800
-From:   Dust Li <dust.li@linux.alibaba.com>
-To:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>
-Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org
-Subject: [PATCH net-next] ipvs: make ip_vs_svc_table and ip_vs_svc_fwm_table per netns
-Date:   Fri,  7 Jul 2023 10:07:08 +0800
-Message-Id: <20230707020708.75168-1-dust.li@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        Thu, 6 Jul 2023 22:09:18 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769771709
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:09:16 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id a1e0cc1a2514c-794cddcab71so530520241.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 19:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688695755; x=1691287755;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=loqW22wuoKMuno5FXgzwjahhKM4TiUSzWOa3tNZOKjw=;
+        b=op/2A1G1bfRmixNAG+OKxYYihwcVCs4FT2kMe0e86NGyOohzplPoCqGUUalIvD5Qai
+         ehvRRoZzltmr0irrngGKlnRXx6l/piomlsxLbAXobtn+AuX3DqanXJfKwgJGwOXF9PzE
+         g5BZIiHNfZfNtUQC1iAzMq1LkgPPNPMGpKPRfYdERcymb2lIRv5KCPNpyLzuXMOoqBai
+         nm2KJhY+SHx9kytni0bL4DxMpTzddkLg5d4mJV7Mx5VwXFeG3BcWYYltKFLPaeB/6aku
+         PWldYTB+SN8aKabt2Vyqzk7ozNSZxKFoqBIxg3zNTTpOGEph0KElx42ErZEkDccBu/qc
+         84HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688695755; x=1691287755;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=loqW22wuoKMuno5FXgzwjahhKM4TiUSzWOa3tNZOKjw=;
+        b=IEq1nQKbrkMgSQ37xI8Iw16oageXZANnwAyWyVg/bGuPlAMkLXpb/8DEheqPTEmtW0
+         oWYPBrQcFq4yUBEI0nk4ts5qodIVxoP4BahiU9of2qB+hqQSEnL7yFedXDz2tPnFahVe
+         4+p6bNtDf3wdX+ekGaXDYTSUR8VWc+jlo2nWhyhsYbVa47NTyyaehJ45B4hi3n87GAPd
+         A1IGY6ygfF+v/wtLQwUIECu1xI8VNXcry8pt//kQTTKsJE9EbuDflhSozOTTf2yvdglv
+         J8okIMiHfC56BI3JzvT5fhTEkKjGgKQUQj75oTNpSh4L8Iiq9GuBhVG0cOsAo+ovCTsV
+         tvrw==
+X-Gm-Message-State: ABy/qLaadAHDFu5CyJhR11ZRlrA5OSFnuwO1ICiRBUAs85eaO3o0ug2b
+        O1ETWT0gGc0hgeimh334Fz9Ukd7+xJecD/zdozc2sod/HUE=
+X-Google-Smtp-Source: APBJJlE5i5Nhg0OPrI3DSJathyjiauKG+4zPHUzv2PaNLf5cWZM7JoqObJPGqGI2ZtqitDLRicMQLqUsOn72Hf2Nw6s=
+X-Received: by 2002:a67:b14b:0:b0:443:92af:a851 with SMTP id
+ z11-20020a67b14b000000b0044392afa851mr2315437vsl.32.1688695755387; Thu, 06
+ Jul 2023 19:09:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <CAG-UpRQsdL_Fs9HSEv2pDYXehJC+YXcYjiZKFLvkGBTZkkaTcg@mail.gmail.com>
+ <20230706120103.GJ2833176@hirez.programming.kicks-ass.net> <CAG-UpRTQ-ovVO02HRd5z-9oZGCPvZ0vODJse8oyuA9L-3NV_pQ@mail.gmail.com>
+In-Reply-To: <CAG-UpRTQ-ovVO02HRd5z-9oZGCPvZ0vODJse8oyuA9L-3NV_pQ@mail.gmail.com>
+From:   Henry Wu <triangletrap12@gmail.com>
+Date:   Fri, 7 Jul 2023 10:09:04 +0800
+Message-ID: <CAG-UpRRLFTHg64b0hG4=FbuzhhqNQEU8jGt6TygCVAK1BaT2kQ@mail.gmail.com>
+Subject: Fwd: Possible race in rt_mutex_adjust_prio_chain
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000a2507905ffdc1e8b"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiejian Wu <jiejian@linux.alibaba.com>
+--000000000000a2507905ffdc1e8b
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Current ipvs uses one global mutex "__ip_vs_mutex" to keep the global
-"ip_vs_svc_table" and "ip_vs_svc_fwm_table" safe. But when there are
-tens of thousands of services from different netns in the table, it
-takes a long time to look up the table, for example, using "ipvsadm
--ln" from different netns simultaneously.
+I forget to CC linux-kernel, sorry for duplicate mail.
 
-We make "ip_vs_svc_table" and "ip_vs_svc_fwm_table" per netns, and we
-add "service_mutex" per netns to keep these two tables safe instead of
-the global "__ip_vs_mutex" in current version. To this end, looking up
-services from different netns simultaneously will not get stuck,
-shortening the time consumption in large-scale deployment. Evaluation
-methods and results are provided below.
+Hi, Peter.
 
-init.sh: #!/bin/bash
-for((i=1;i<=4;i++));do
-        ip netns add ns$i
-        ip netns exec ns$i ip link set dev lo up
-        ip netns exec ns$i sh add-services.sh
-done
+Peter Zijlstra <peterz@infradead.org> =E4=BA=8E2023=E5=B9=B47=E6=9C=886=E6=
+=97=A5=E5=91=A8=E5=9B=9B 20:01=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Jul 06, 2023 at 02:08:20PM +0800, Henry Wu wrote:
+> > Hi,
+> >
+> > I found that it's not safe to change waiter->prio after waiter
+> > dequeued from mutex's waiter rbtree because it's still on owner's
+> > pi_waiters rbtree. From my analysis, waiters on pi_waiters rbtree
+> > should be protected by pi_lock of task which have pi_waiters and
+> > corresponding rt_mutex's wait_lock, but pi_waiters is shared by many
+> > locks owned by this task, so actually we serialize changes on
+> > pi_waiters only by pi_lock.
+> >
+> > `rt_mutex_adjust_prio_chain' changes key of nodes of pi_waiters rbtree
+> > without pi_lock and pi_waiters rbtree's invariant is violated. Maybe
+> > we are enqueuing waiter on other cpu and pi_waiters rbtree will be
+> > corrupted.
+>
+> Are you talking about [7];
+>
+> Where we do waiter_update_prio() while only
+> holding [L] rtmutex->wait_lock.
+>
+> VS
+>
+> rt_mutex_adjust_prio() / task_top_pi_waiter() that accesses ->pi_waiters
+> while holding [P] task->pi_lock.
+>
+> ?
+>
+> I'll go stare at that in more detail -- but I wanted to verify that's
+> what you're talking about.
+>
 
-add-services.sh: #!/bin/bash
-for((i=0;i<30000;i++)); do
-        ipvsadm -A  -t 10.10.10.10:$((80+$i)) -s rr
-done
+I refered step 7. I checked every call site of rt_mutex_adjust_prio()
+and all of them are protected by the right pi_lock.
 
-runtest.sh: #!/bin/bash
-for((i=1;i<4;i++));do
-        ip netns exec ns$i ipvsadm -ln > /dev/null &
-done
-ip netns exec ns4 ipvsadm -ln > /dev/null
+Imagine a scenario that we have two rt_mutex (M1, M2) and three
+threads (A, B, C). Both rt_mutex are owned by thread A. B is blocked
+when acquiring M1 and C is blocked when acquiring M2. We use
+sched_setattr to change priority of B and C.
 
-Run "sh init.sh" to initiate the network environment. Then run "time
-./runtest.sh" to evaluate the time consumption. Our testbed is a 4-core
-Intel Xeon ECS. The result of the original version is around 8 seconds,
-while the result of the modified version is only 0.8 seconds.
+CPU0                                             CPU1
+.........                                              ..........
 
-Signed-off-by: Jiejian Wu <jiejian@linux.alibaba.com>
-Co-developed-by: Dust Li <dust.li@linux.alibaba.com>
-Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
----
- include/net/ip_vs.h            |  12 ++++
- net/netfilter/ipvs/ip_vs_ctl.c | 109 +++++++++++++++------------------
- 2 files changed, 62 insertions(+), 59 deletions(-)
+rt_mutex_adjust_prio_chain(C)
+rt_mutex_adjust_prio_chain(B)
+......
+[7] update waiter->prio
+(Now A's pi_waiters rbtree is
+ corrupted temporarily)
+......                                                 [11] enqueue
+operation may select
+                                                       insert position
+according to corrupted
+                                                       waiter node CPU0 cre=
+ated.
+[11] Even though we fixed
+corrupted waiter now, we
+are not sure about pi_waiters's
+sanity because other cpu may
+create new invariant violation
+based on our violation.
 
-diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-index ff406ef4fd4aa..83ab2db4a994b 100644
---- a/include/net/ip_vs.h
-+++ b/include/net/ip_vs.h
-@@ -33,6 +33,12 @@
- 
- #define IP_VS_HDR_INVERSE	1
- #define IP_VS_HDR_ICMP		2
-+/*
-+ *	Hash table: for virtual service lookups
-+ */
-+#define IP_VS_SVC_TAB_BITS 8
-+#define IP_VS_SVC_TAB_SIZE (1 << IP_VS_SVC_TAB_BITS)
-+#define IP_VS_SVC_TAB_MASK (IP_VS_SVC_TAB_SIZE - 1)
- 
- /* Generic access of ipvs struct */
- static inline struct netns_ipvs *net_ipvs(struct net* net)
-@@ -1041,6 +1047,12 @@ struct netns_ipvs {
- 	 */
- 	unsigned int		mixed_address_family_dests;
- 	unsigned int		hooks_afmask;	/* &1=AF_INET, &2=AF_INET6 */
-+
-+	struct mutex service_mutex;
-+	/* the service table hashed by <protocol, addr, port> */
-+	struct hlist_head ip_vs_svc_table[IP_VS_SVC_TAB_SIZE];
-+	/* the service table hashed by fwmark */
-+	struct hlist_head ip_vs_svc_fwm_table[IP_VS_SVC_TAB_SIZE];
- };
- 
- #define DEFAULT_SYNC_THRESHOLD	3
-diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 62606fb44d027..c8b30f9ec5106 100644
---- a/net/netfilter/ipvs/ip_vs_ctl.c
-+++ b/net/netfilter/ipvs/ip_vs_ctl.c
-@@ -50,6 +50,7 @@
- MODULE_ALIAS_GENL_FAMILY(IPVS_GENL_NAME);
- 
- DEFINE_MUTEX(__ip_vs_mutex); /* Serialize configuration with sockopt/netlink */
-+static struct lock_class_key __ipvs_service_key;
- 
- /* sysctl variables */
- 
-@@ -294,17 +295,6 @@ ip_vs_use_count_dec(void)
- }
- 
- 
--/*
-- *	Hash table: for virtual service lookups
-- */
--#define IP_VS_SVC_TAB_BITS 8
--#define IP_VS_SVC_TAB_SIZE (1 << IP_VS_SVC_TAB_BITS)
--#define IP_VS_SVC_TAB_MASK (IP_VS_SVC_TAB_SIZE - 1)
--
--/* the service table hashed by <protocol, addr, port> */
--static struct hlist_head ip_vs_svc_table[IP_VS_SVC_TAB_SIZE];
--/* the service table hashed by fwmark */
--static struct hlist_head ip_vs_svc_fwm_table[IP_VS_SVC_TAB_SIZE];
- 
- 
- /*
-@@ -359,13 +349,13 @@ static int ip_vs_svc_hash(struct ip_vs_service *svc)
- 		 */
- 		hash = ip_vs_svc_hashkey(svc->ipvs, svc->af, svc->protocol,
- 					 &svc->addr, svc->port);
--		hlist_add_head_rcu(&svc->s_list, &ip_vs_svc_table[hash]);
-+		hlist_add_head_rcu(&svc->s_list, &svc->ipvs->ip_vs_svc_table[hash]);
- 	} else {
- 		/*
- 		 *  Hash it by fwmark in svc_fwm_table
- 		 */
- 		hash = ip_vs_svc_fwm_hashkey(svc->ipvs, svc->fwmark);
--		hlist_add_head_rcu(&svc->f_list, &ip_vs_svc_fwm_table[hash]);
-+		hlist_add_head_rcu(&svc->f_list, &svc->ipvs->ip_vs_svc_fwm_table[hash]);
- 	}
- 
- 	svc->flags |= IP_VS_SVC_F_HASHED;
-@@ -414,7 +404,7 @@ __ip_vs_service_find(struct netns_ipvs *ipvs, int af, __u16 protocol,
- 	/* Check for "full" addressed entries */
- 	hash = ip_vs_svc_hashkey(ipvs, af, protocol, vaddr, vport);
- 
--	hlist_for_each_entry_rcu(svc, &ip_vs_svc_table[hash], s_list) {
-+	hlist_for_each_entry_rcu(svc, &ipvs->ip_vs_svc_table[hash], s_list) {
- 		if ((svc->af == af)
- 		    && ip_vs_addr_equal(af, &svc->addr, vaddr)
- 		    && (svc->port == vport)
-@@ -441,7 +431,7 @@ __ip_vs_svc_fwm_find(struct netns_ipvs *ipvs, int af, __u32 fwmark)
- 	/* Check for fwmark addressed entries */
- 	hash = ip_vs_svc_fwm_hashkey(ipvs, fwmark);
- 
--	hlist_for_each_entry_rcu(svc, &ip_vs_svc_fwm_table[hash], f_list) {
-+	hlist_for_each_entry_rcu(svc, &ipvs->ip_vs_svc_fwm_table[hash], f_list) {
- 		if (svc->fwmark == fwmark && svc->af == af
- 		    && (svc->ipvs == ipvs)) {
- 			/* HIT */
-@@ -1701,7 +1691,7 @@ static int ip_vs_flush(struct netns_ipvs *ipvs, bool cleanup)
- 	 * Flush the service table hashed by <netns,protocol,addr,port>
- 	 */
- 	for(idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry_safe(svc, n, &ip_vs_svc_table[idx],
-+		hlist_for_each_entry_safe(svc, n, &ipvs->ip_vs_svc_table[idx],
- 					  s_list) {
- 			if (svc->ipvs == ipvs)
- 				ip_vs_unlink_service(svc, cleanup);
-@@ -1712,7 +1702,7 @@ static int ip_vs_flush(struct netns_ipvs *ipvs, bool cleanup)
- 	 * Flush the service table hashed by fwmark
- 	 */
- 	for(idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry_safe(svc, n, &ip_vs_svc_fwm_table[idx],
-+		hlist_for_each_entry_safe(svc, n, &ipvs->ip_vs_svc_fwm_table[idx],
- 					  f_list) {
- 			if (svc->ipvs == ipvs)
- 				ip_vs_unlink_service(svc, cleanup);
-@@ -1732,12 +1722,12 @@ void ip_vs_service_nets_cleanup(struct list_head *net_list)
- 	struct net *net;
- 
- 	/* Check for "full" addressed entries */
--	mutex_lock(&__ip_vs_mutex);
- 	list_for_each_entry(net, net_list, exit_list) {
- 		ipvs = net_ipvs(net);
-+		mutex_lock(&ipvs->service_mutex);
- 		ip_vs_flush(ipvs, true);
-+		mutex_unlock(&ipvs->service_mutex);
- 	}
--	mutex_unlock(&__ip_vs_mutex);
- }
- 
- /* Put all references for device (dst_cache) */
-@@ -1775,9 +1765,9 @@ static int ip_vs_dst_event(struct notifier_block *this, unsigned long event,
- 	if (event != NETDEV_DOWN || !ipvs)
- 		return NOTIFY_DONE;
- 	IP_VS_DBG(3, "%s() dev=%s\n", __func__, dev->name);
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_table[idx], s_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_table[idx], s_list) {
- 			if (svc->ipvs == ipvs) {
- 				list_for_each_entry(dest, &svc->destinations,
- 						    n_list) {
-@@ -1786,7 +1776,7 @@ static int ip_vs_dst_event(struct notifier_block *this, unsigned long event,
- 			}
- 		}
- 
--		hlist_for_each_entry(svc, &ip_vs_svc_fwm_table[idx], f_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_fwm_table[idx], f_list) {
- 			if (svc->ipvs == ipvs) {
- 				list_for_each_entry(dest, &svc->destinations,
- 						    n_list) {
-@@ -1802,7 +1792,7 @@ static int ip_vs_dst_event(struct notifier_block *this, unsigned long event,
- 		ip_vs_forget_dev(dest, dev);
- 	}
- 	spin_unlock_bh(&ipvs->dest_trash_lock);
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 	return NOTIFY_DONE;
- }
- 
-@@ -1826,14 +1816,14 @@ static int ip_vs_zero_all(struct netns_ipvs *ipvs)
- 	struct ip_vs_service *svc;
- 
- 	for(idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_table[idx], s_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_table[idx], s_list) {
- 			if (svc->ipvs == ipvs)
- 				ip_vs_zero_service(svc);
- 		}
- 	}
- 
- 	for(idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_fwm_table[idx], f_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_fwm_table[idx], f_list) {
- 			if (svc->ipvs == ipvs)
- 				ip_vs_zero_service(svc);
- 		}
-@@ -2303,9 +2293,9 @@ static struct ip_vs_service *ip_vs_info_array(struct seq_file *seq, loff_t pos)
- 
- 	/* look in hash by protocol */
- 	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry_rcu(svc, &ip_vs_svc_table[idx], s_list) {
-+		hlist_for_each_entry_rcu(svc, &ipvs->ip_vs_svc_table[idx], s_list) {
- 			if ((svc->ipvs == ipvs) && pos-- == 0) {
--				iter->table = ip_vs_svc_table;
-+				iter->table = ipvs->ip_vs_svc_table;
- 				iter->bucket = idx;
- 				return svc;
- 			}
-@@ -2314,10 +2304,10 @@ static struct ip_vs_service *ip_vs_info_array(struct seq_file *seq, loff_t pos)
- 
- 	/* keep looking in fwmark */
- 	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry_rcu(svc, &ip_vs_svc_fwm_table[idx],
-+		hlist_for_each_entry_rcu(svc, &ipvs->ip_vs_svc_fwm_table[idx],
- 					 f_list) {
- 			if ((svc->ipvs == ipvs) && pos-- == 0) {
--				iter->table = ip_vs_svc_fwm_table;
-+				iter->table = ipvs->ip_vs_svc_fwm_table;
- 				iter->bucket = idx;
- 				return svc;
- 			}
-@@ -2340,6 +2330,8 @@ static void *ip_vs_info_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- 	struct hlist_node *e;
- 	struct ip_vs_iter *iter;
- 	struct ip_vs_service *svc;
-+	struct net *net = seq_file_net(seq);
-+	struct netns_ipvs *ipvs = net_ipvs(net);
- 
- 	++*pos;
- 	if (v == SEQ_START_TOKEN)
-@@ -2348,7 +2340,7 @@ static void *ip_vs_info_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- 	svc = v;
- 	iter = seq->private;
- 
--	if (iter->table == ip_vs_svc_table) {
-+	if (iter->table == ipvs->ip_vs_svc_table) {
- 		/* next service in table hashed by protocol */
- 		e = rcu_dereference(hlist_next_rcu(&svc->s_list));
- 		if (e)
-@@ -2356,13 +2348,13 @@ static void *ip_vs_info_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- 
- 		while (++iter->bucket < IP_VS_SVC_TAB_SIZE) {
- 			hlist_for_each_entry_rcu(svc,
--						 &ip_vs_svc_table[iter->bucket],
-+						 &ipvs->ip_vs_svc_table[iter->bucket],
- 						 s_list) {
- 				return svc;
- 			}
- 		}
- 
--		iter->table = ip_vs_svc_fwm_table;
-+		iter->table = ipvs->ip_vs_svc_fwm_table;
- 		iter->bucket = -1;
- 		goto scan_fwmark;
- 	}
-@@ -2375,7 +2367,7 @@ static void *ip_vs_info_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-  scan_fwmark:
- 	while (++iter->bucket < IP_VS_SVC_TAB_SIZE) {
- 		hlist_for_each_entry_rcu(svc,
--					 &ip_vs_svc_fwm_table[iter->bucket],
-+					 &ipvs->ip_vs_svc_fwm_table[iter->bucket],
- 					 f_list)
- 			return svc;
- 	}
-@@ -2411,7 +2403,7 @@ static int ip_vs_info_seq_show(struct seq_file *seq, void *v)
- 
- 		if (svc->ipvs != ipvs)
- 			return 0;
--		if (iter->table == ip_vs_svc_table) {
-+		if (iter->table == ipvs->ip_vs_svc_table) {
- #ifdef CONFIG_IP_VS_IPV6
- 			if (svc->af == AF_INET6)
- 				seq_printf(seq, "%s  [%pI6]:%04X %s ",
-@@ -2733,7 +2725,7 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, sockptr_t ptr, unsigned int len)
- 		return ret;
- 	}
- 
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 	if (cmd == IP_VS_SO_SET_FLUSH) {
- 		/* Flush the virtual service */
- 		ret = ip_vs_flush(ipvs, false);
-@@ -2830,7 +2822,7 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, sockptr_t ptr, unsigned int len)
- 	}
- 
-   out_unlock:
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 	return ret;
- }
- 
-@@ -2868,7 +2860,7 @@ __ip_vs_get_service_entries(struct netns_ipvs *ipvs,
- 	int ret = 0;
- 
- 	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_table[idx], s_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_table[idx], s_list) {
- 			/* Only expose IPv4 entries to old interface */
- 			if (svc->af != AF_INET || (svc->ipvs != ipvs))
- 				continue;
-@@ -2887,7 +2879,7 @@ __ip_vs_get_service_entries(struct netns_ipvs *ipvs,
- 	}
- 
- 	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_fwm_table[idx], f_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_fwm_table[idx], f_list) {
- 			/* Only expose IPv4 entries to old interface */
- 			if (svc->af != AF_INET || (svc->ipvs != ipvs))
- 				continue;
-@@ -3058,7 +3050,7 @@ do_ip_vs_get_ctl(struct sock *sk, int cmd, void __user *user, int *len)
- 		return ret;
- 	}
- 
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 	switch (cmd) {
- 	case IP_VS_SO_GET_VERSION:
- 	{
-@@ -3157,7 +3149,7 @@ do_ip_vs_get_ctl(struct sock *sk, int cmd, void __user *user, int *len)
- 	}
- 
- out:
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 	return ret;
- }
- 
-@@ -3392,9 +3384,9 @@ static int ip_vs_genl_dump_services(struct sk_buff *skb,
- 	struct net *net = sock_net(skb->sk);
- 	struct netns_ipvs *ipvs = net_ipvs(net);
- 
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 	for (i = 0; i < IP_VS_SVC_TAB_SIZE; i++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_table[i], s_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_table[i], s_list) {
- 			if (++idx <= start || (svc->ipvs != ipvs))
- 				continue;
- 			if (ip_vs_genl_dump_service(skb, svc, cb) < 0) {
-@@ -3405,7 +3397,7 @@ static int ip_vs_genl_dump_services(struct sk_buff *skb,
- 	}
- 
- 	for (i = 0; i < IP_VS_SVC_TAB_SIZE; i++) {
--		hlist_for_each_entry(svc, &ip_vs_svc_fwm_table[i], f_list) {
-+		hlist_for_each_entry(svc, &ipvs->ip_vs_svc_fwm_table[i], f_list) {
- 			if (++idx <= start || (svc->ipvs != ipvs))
- 				continue;
- 			if (ip_vs_genl_dump_service(skb, svc, cb) < 0) {
-@@ -3416,7 +3408,7 @@ static int ip_vs_genl_dump_services(struct sk_buff *skb,
- 	}
- 
- nla_put_failure:
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 	cb->args[0] = idx;
- 
- 	return skb->len;
-@@ -3605,7 +3597,7 @@ static int ip_vs_genl_dump_dests(struct sk_buff *skb,
- 	struct net *net = sock_net(skb->sk);
- 	struct netns_ipvs *ipvs = net_ipvs(net);
- 
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 
- 	/* Try to find the service for which to dump destinations */
- 	if (nlmsg_parse_deprecated(cb->nlh, GENL_HDRLEN, attrs, IPVS_CMD_ATTR_MAX, ip_vs_cmd_policy, cb->extack))
-@@ -3630,7 +3622,7 @@ static int ip_vs_genl_dump_dests(struct sk_buff *skb,
- 	cb->args[0] = idx;
- 
- out_err:
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 
- 	return skb->len;
- }
-@@ -3916,7 +3908,7 @@ static int ip_vs_genl_set_cmd(struct sk_buff *skb, struct genl_info *info)
- 
- 	cmd = info->genlhdr->cmd;
- 
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 
- 	if (cmd == IPVS_CMD_FLUSH) {
- 		ret = ip_vs_flush(ipvs, false);
-@@ -4028,7 +4020,7 @@ static int ip_vs_genl_set_cmd(struct sk_buff *skb, struct genl_info *info)
- 	}
- 
- out:
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 
- 	return ret;
- }
-@@ -4058,7 +4050,7 @@ static int ip_vs_genl_get_cmd(struct sk_buff *skb, struct genl_info *info)
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&__ip_vs_mutex);
-+	mutex_lock(&ipvs->service_mutex);
- 
- 	reply = genlmsg_put_reply(msg, info, &ip_vs_genl_family, 0, reply_cmd);
- 	if (reply == NULL)
-@@ -4126,7 +4118,7 @@ static int ip_vs_genl_get_cmd(struct sk_buff *skb, struct genl_info *info)
- out_err:
- 	nlmsg_free(msg);
- out:
--	mutex_unlock(&__ip_vs_mutex);
-+	mutex_unlock(&ipvs->service_mutex);
- 
- 	return ret;
- }
-@@ -4243,6 +4235,7 @@ static struct genl_family ip_vs_genl_family __ro_after_init = {
- 	.small_ops	= ip_vs_genl_ops,
- 	.n_small_ops	= ARRAY_SIZE(ip_vs_genl_ops),
- 	.resv_start_op	= IPVS_CMD_FLUSH + 1,
-+	.parallel_ops	= 1,
- };
- 
- static int __init ip_vs_genl_register(void)
-@@ -4411,6 +4404,13 @@ int __net_init ip_vs_control_net_init(struct netns_ipvs *ipvs)
- 	int ret = -ENOMEM;
- 	int idx;
- 
-+	/* Initialize service_mutex, svc_table, ip_vs_svc_fwm_table per netns */
-+	__mutex_init(&ipvs->service_mutex, "ipvs->service_mutex", &__ipvs_service_key);
-+	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
-+		INIT_HLIST_HEAD(&ipvs->ip_vs_svc_table[idx]);
-+		INIT_HLIST_HEAD(&ipvs->ip_vs_svc_fwm_table[idx]);
-+	}
-+
- 	/* Initialize rs_table */
- 	for (idx = 0; idx < IP_VS_RTAB_SIZE; idx++)
- 		INIT_HLIST_HEAD(&ipvs->rs_table[idx]);
-@@ -4515,17 +4515,8 @@ void ip_vs_unregister_nl_ioctl(void)
- 
- int __init ip_vs_control_init(void)
- {
--	int idx;
- 	int ret;
- 
--	/* Initialize svc_table, ip_vs_svc_fwm_table */
--	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
--		INIT_HLIST_HEAD(&ip_vs_svc_table[idx]);
--		INIT_HLIST_HEAD(&ip_vs_svc_fwm_table[idx]);
--	}
--
--	smp_wmb();	/* Do we really need it now ? */
--
- 	ret = register_netdevice_notifier(&ip_vs_dst_notifier);
- 	if (ret < 0)
- 		return ret;
--- 
-2.19.1.6.gb485710b
+> > I attach a source file which can trigger this violation. I tested it
+> > on Ubuntu 20.04 LTS with 5.4 kernel.
+>
+> Well, that's a horribly old kernel :-( Please double check on v6.4 and
+> consult that code for the discussion above -- I'm really not too
+> interested in debugging something ancient.
 
+I revised my code to make it work on 6.4.2 and fixed one logic error.
+I tested it on Fedora 38 with kernel 6.4.2-858.vanilla.fc38.x86_64.
+You can find the new code in attachment.
+
+$ sudo ./a.out
+.........................
+prio: -21
+prio: -21
+prio: -21
+prio: -21
+prio: -21
+prio: -21
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+prio: -20
+    PID     LWP TTY          TIME CMD
+   4564    4564 pts/0    00:00:01 a.out
+   4564    4565 pts/0    00:00:00 waiter-0
+   4564    4566 pts/0    00:00:00 waiter-1
+   4564    4567 pts/0    00:00:00 waiter-2
+   4564    4568 pts/0    00:00:00 waiter-3
+   4564    4569 pts/0    00:00:00 waiter-4
+   4564    4570 pts/0    00:00:00 waiter-5
+   4564    4571 pts/0    00:00:00 waiter-6
+   4564    4572 pts/0    00:00:00 waiter-7
+   4564    4573 pts/0    00:00:00 waiter-8
+   4564    4574 pts/0    00:00:00 waiter-9
+   4564    4575 pts/0    00:00:00 waiter-10
+   4564    4576 pts/0    00:00:00 waiter-11
+   4564    4577 pts/0    00:00:00 waiter-12
+   4564    4578 pts/0    00:00:00 waiter-13
+   4564    4579 pts/0    00:00:00 waiter-14
+   4564    4580 pts/0    00:00:00 waiter-15
+   4564    4581 pts/0    00:00:00 waiter-16
+   4564    4582 pts/0    00:00:00 waiter-17
+   4564    4583 pts/0    00:00:00 waiter-18
+   4564    4584 pts/0    00:00:00 waiter-19
+   4564    4585 pts/0    00:00:00 changer-0
+   4564    4586 pts/0    00:00:00 changer-1
+   4564    4587 pts/0    00:00:00 changer-2
+   4564    4588 pts/0    00:00:00 changer-3
+   4564    4589 pts/0    00:00:00 changer-4
+   4564    4590 pts/0    00:00:00 changer-5
+   4564    4591 pts/0    00:00:00 changer-6
+   4564    4592 pts/0    00:00:00 changer-7
+   4564    4593 pts/0    00:00:00 changer-8
+   4564    4594 pts/0    00:00:00 changer-9
+   4564    4595 pts/0    00:00:00 changer-10
+   4564    4596 pts/0    00:00:00 changer-11
+   4564    4597 pts/0    00:00:00 changer-12
+   4564    4598 pts/0    00:00:00 changer-13
+   4564    4599 pts/0    00:00:00 changer-14
+   4564    4600 pts/0    00:00:00 changer-15
+   4564    4601 pts/0    00:00:00 changer-16
+   4564    4602 pts/0    00:00:00 changer-17
+   4564    4603 pts/0    00:00:00 changer-18
+   4564    4604 pts/0    00:00:00 changer-19
+found race, hang...
+
+$ sudo crash --no_module
+.....................
+crash> task -R prio,normal_prio,rt_priority,pi_waiters 4564
+PID: 4564     TASK: ffff9b7c8480a8c0  CPU: 3    COMMAND: "a.out"
+  prio =3D 80,
+  normal_prio =3D 120,
+  rt_priority =3D 0,
+  pi_waiters =3D {
+    rb_root =3D {
+      rb_node =3D 0xffffb5bad2ddfcf8
+    },
+    rb_leftmost =3D 0xffffb5bad2da7d98
+  },
+
+crash> print (struct rb_node *)0xffffb5bad2ddfcf8
+$1 =3D (struct rb_node *) 0xffffb5bad2ddfcf8
+crash> print *(struct rt_mutex_waiter *)((void *)$ - 24)
+$2 =3D {
+  tree_entry =3D {
+    __rb_parent_color =3D 1,
+    rb_right =3D 0x0,
+    rb_left =3D 0x0
+  },
+  pi_tree_entry =3D {
+    __rb_parent_color =3D 1,
+    rb_right =3D 0xffffb5bad2df7d28,
+    rb_left =3D 0xffffb5bad2dafd68
+  },
+  task =3D 0xffff9b7c80388000,
+  lock =3D 0xffff9b7caa2cceb0,
+  wake_state =3D 3,
+  prio =3D 89,
+  deadline =3D 0,
+  ww_ctx =3D 0x0
+}
+crash> print $1->rb_left
+$3 =3D (struct rb_node *) 0xffffb5bad2dafd68
+crash> print *(struct rt_mutex_waiter *)((void *)$ - 24)
+$4 =3D {
+  tree_entry =3D {
+    __rb_parent_color =3D 1,
+    rb_right =3D 0x0,
+    rb_left =3D 0x0
+  },
+  pi_tree_entry =3D {
+    __rb_parent_color =3D 18446662412739149049,
+    rb_right =3D 0xffffb5bad2defdb8,
+    rb_left =3D 0xffffb5bad2dbfd30
+  },
+  task =3D 0xffff9b7d2bca28c0,
+  lock =3D 0xffff9b7d004a2970,
+  wake_state =3D 3,
+  prio =3D 83,
+  deadline =3D 0,
+  ww_ctx =3D 0x0
+}
+crash> print $1->rb_left->rb_left
+$5 =3D (struct rb_node *) 0xffffb5bad2dbfd30
+crash> print *(struct rt_mutex_waiter *)((void *)$ - 24)
+$6 =3D {
+  tree_entry =3D {
+    __rb_parent_color =3D 1,
+    rb_right =3D 0x0,
+    rb_left =3D 0x0
+  },
+  pi_tree_entry =3D {
+    __rb_parent_color =3D 18446662412738952552,
+    rb_right =3D 0xffffb5bad2d87d18,
+    rb_left =3D 0xffffb5bad2da7d98
+  },
+  task =3D 0xffff9b7cfd55a8c0,
+  lock =3D 0xffff9b7caa2cc6d0,
+  wake_state =3D 3,
+  prio =3D 79,
+  deadline =3D 0,
+  ww_ctx =3D 0x0
+}
+crash> print $1->rb_left->rb_left->rb_left
+$7 =3D (struct rb_node *) 0xffffb5bad2da7d98
+crash> print *(struct rt_mutex_waiter *)((void *)$ - 24)
+$8 =3D {
+  tree_entry =3D {
+    __rb_parent_color =3D 1,
+    rb_right =3D 0x0,
+    rb_left =3D 0x0
+  },
+  pi_tree_entry =3D {
+    __rb_parent_color =3D 18446662412739018033,
+    rb_right =3D 0x0,
+    rb_left =3D 0x0
+  },
+  task =3D 0xffff9b7c80bd0000,
+  lock =3D 0xffff9b7caa2ccb50,
+  wake_state =3D 3,
+  prio =3D 80,
+  deadline =3D 0,
+  ww_ctx =3D 0x0
+}
+crash>
+
+Key order invariant of pi_waiters had been violated by the last two
+waiters above.
+
+Thanks.
+
+Henry
+
+--000000000000a2507905ffdc1e8b
+Content-Type: text/x-c-code; charset="US-ASCII"; name="pi_642.c"
+Content-Disposition: attachment; filename="pi_642.c"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljrxlur40>
+X-Attachment-Id: f_ljrxlur40
+
+I2RlZmluZSBfR05VX1NPVVJDRQoKI2luY2x1ZGUgPGFzc2VydC5oPgojaW5jbHVkZSA8c3RkaW8u
+aD4KI2luY2x1ZGUgPHB0aHJlYWQuaD4KI2luY2x1ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8c3Rk
+aW50Lmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KI2luY2x1ZGUgPHNjaGVkLmg+CiNpbmNsdWRlIDxl
+cnJuby5oPgojaW5jbHVkZSA8c3lzL3N5c2NhbGwuaD4KCiNkZWZpbmUgUENPVU5UIDIwCiNkZWZp
+bmUgRVhQRUNURURfUFJJTyAtMjEKCi8vIENvcGllZCBmcm9tIHJlbGF0ZWQgaGVhZGVyLgpzdHJ1
+Y3Qgc2NoZWRfYXR0ciB7Cgl1aW50MzJfdCBzaXplOwoKCXVpbnQzMl90IHNjaGVkX3BvbGljeTsK
+CXVpbnQ2NF90IHNjaGVkX2ZsYWdzOwoKCS8qIFNDSEVEX05PUk1BTCwgU0NIRURfQkFUQ0ggKi8K
+CWludDMyX3Qgc2NoZWRfbmljZTsKCgkvKiBTQ0hFRF9GSUZPLCBTQ0hFRF9SUiAqLwoJdWludDMy
+X3Qgc2NoZWRfcHJpb3JpdHk7CgoJLyogU0NIRURfREVBRExJTkUgKi8KCXVpbnQ2NF90IHNjaGVk
+X3J1bnRpbWU7Cgl1aW50NjRfdCBzY2hlZF9kZWFkbGluZTsKCXVpbnQ2NF90IHNjaGVkX3Blcmlv
+ZDsKCgkvKiBVdGlsaXphdGlvbiBoaW50cyAqLwoJdWludDMyX3Qgc2NoZWRfdXRpbF9taW47Cgl1
+aW50MzJfdCBzY2hlZF91dGlsX21heDsKfTsKCnN0YXRpYyBwdGhyZWFkX211dGV4X3QgbXV0ZXhl
+c1tQQ09VTlRdOwoKc3RhdGljIHZvaWQgaW5pdF9tdXRleChwdGhyZWFkX211dGV4X3QgKm11dGV4
+KSB7CglwdGhyZWFkX211dGV4YXR0cl90IGF0dHI7CglpbnQgcmV0OwoKCXJldCA9IHB0aHJlYWRf
+bXV0ZXhhdHRyX2luaXQoJmF0dHIpOwoJYXNzZXJ0KCFyZXQpOwoJcmV0ID0gcHRocmVhZF9tdXRl
+eGF0dHJfc2V0cHJvdG9jb2woJmF0dHIsIFBUSFJFQURfUFJJT19JTkhFUklUKTsKCWFzc2VydCgh
+cmV0KTsKCglyZXQgPSBwdGhyZWFkX211dGV4X2luaXQobXV0ZXgsICZhdHRyKTsKCWFzc2VydCgh
+cmV0KTsKCglwdGhyZWFkX211dGV4YXR0cl9kZXN0cm95KCZhdHRyKTsKfQoKZW51bSB0aHJlYWRf
+dHlwZSB7CglXQUlURVIsCglQUklPX0NIQU5HRVIsCn07CgpzdGF0aWMgc3RydWN0IHRocmVhZF9z
+cGVjIHsKCWVudW0gdGhyZWFkX3R5cGUgdHlwZTsKCWludCBuYW1lX2luZGV4OwoJcHRocmVhZF9i
+YXJyaWVyX3QgKmJhcnJpZXI7CgoJLy8gVXNlZCBieSB3YWl0ZXIuCglwdGhyZWFkX211dGV4X3Qg
+KndhaXRfbXV0ZXg7CglwaWRfdCBwaWRfc2F2ZTsKCQoJLy8gVXNlZCBieSBwcmlvIGNoYW5nZXIu
+CglwaWRfdCAqd2FpdGVyX3BpZDsKCXVpbnQzMl90IHByaW87Cn0gdGhyZWFkX3NwZWNzW1BDT1VO
+VCAqIDJdOwoKc3RhdGljIHB0aHJlYWRfdCB0aHJlYWRzW1BDT1VOVCAqIDJdOwpzdGF0aWMgaW50
+IHRocmVhZF9jb3VudCA9IDA7CgpzdGF0aWMgaW50IGJhcnJpZXJfd2FpdChwdGhyZWFkX2JhcnJp
+ZXJfdCAqYmFycmllcikgewoJaWYgKCFiYXJyaWVyKSB7CgkJcmV0dXJuIDA7Cgl9CgoJaW50IHJl
+dCA9IHB0aHJlYWRfYmFycmllcl93YWl0KGJhcnJpZXIpOwoJYXNzZXJ0KCFyZXQgfHwgcmV0ID09
+IFBUSFJFQURfQkFSUklFUl9TRVJJQUxfVEhSRUFEKTsKCglyZXR1cm4gcmV0Owp9CgpzdGF0aWMg
+aW50IHNjaGVkX2dldGF0dHIocGlkX3QgcGlkLCBzdHJ1Y3Qgc2NoZWRfYXR0ciAqYXR0ciwgaW50
+IGZsYWdzKSB7CglyZXR1cm4gc3lzY2FsbChTWVNfc2NoZWRfZ2V0YXR0ciwgcGlkLCBhdHRyLCBz
+aXplb2YoKmF0dHIpLCBmbGFncyk7Cn0KCnN0YXRpYyBpbnQgc2NoZWRfc2V0YXR0cihwaWRfdCBw
+aWQsIHN0cnVjdCBzY2hlZF9hdHRyICphdHRyLCBpbnQgZmxhZ3MpIHsKCXJldHVybiBzeXNjYWxs
+KFNZU19zY2hlZF9zZXRhdHRyLCBwaWQsIGF0dHIsIGZsYWdzKTsKfQoKc3RhdGljIHZvaWQgKnBy
+aW9fY2hhbmdlX2xvb3Aoc3RydWN0IHRocmVhZF9zcGVjICpzcGVjKSB7CglzdHJ1Y3Qgc2NoZWRf
+YXR0ciBhdHRyOwoJaW50IHJldDsKCglmb3IgKDs7KSB7CgkJYmFycmllcl93YWl0KHNwZWMtPmJh
+cnJpZXIpOwoKCQlyZXQgPSBzY2hlZF9nZXRhdHRyKCpzcGVjLT53YWl0ZXJfcGlkLCAmYXR0ciwg
+MCk7CgkJaWYgKHJldCA8IDApIHsKCQkJcGVycm9yKCJzY2hlZF9nZXRhdHRyIik7CgkJCWFzc2Vy
+dCgwKTsKCQl9CgkJCgkJYXR0ci5zY2hlZF9wb2xpY3kgPSBTQ0hFRF9SUjsKCQlhdHRyLnNjaGVk
+X3ByaW9yaXR5ID0gc3BlYy0+cHJpbzsKCQoJCXJldCA9IHNjaGVkX3NldGF0dHIoKnNwZWMtPndh
+aXRlcl9waWQsICZhdHRyLCAwKTsKCQlpZiAocmV0IDwgMCkgewoJCQlwZXJyb3IoInNjaGVkX3Nl
+dGF0dHIiKTsKCQkJZXhpdCgxKTsKCQl9CgoJCWJhcnJpZXJfd2FpdChzcGVjLT5iYXJyaWVyKTsK
+CX0KfQoKc3RhdGljIHZvaWQgKnRocmVhZCh2b2lkICphcmcpIHsKCXN0cnVjdCB0aHJlYWRfc3Bl
+YyAqc3BlYyA9IGFyZzsKCWNoYXIgbmFtZVs2NF07CglpbnQgcmV0OwoJCglzbnByaW50ZihuYW1l
+LCBzaXplb2YobmFtZSksICIlcy0lZCIsIAoJCQlzcGVjLT50eXBlID09IFdBSVRFUiA/ICJ3YWl0
+ZXIiIDogImNoYW5nZXIiLCAKCQkJc3BlYy0+bmFtZV9pbmRleCk7CglyZXQgPSBwdGhyZWFkX3Nl
+dG5hbWVfbnAocHRocmVhZF9zZWxmKCksIG5hbWUpOwoJYXNzZXJ0KCFyZXQpOwoKCXN3aXRjaCAo
+c3BlYy0+dHlwZSkgewoJY2FzZSBXQUlURVI6CgkJc3BlYy0+cGlkX3NhdmUgPSBnZXR0aWQoKTsK
+CgkJYmFycmllcl93YWl0KHNwZWMtPmJhcnJpZXIpOwoKCQlyZXQgPSBwdGhyZWFkX211dGV4X2xv
+Y2soc3BlYy0+d2FpdF9tdXRleCk7CgkJYXNzZXJ0KCFyZXQpOwoJCWJyZWFrOwoJY2FzZSBQUklP
+X0NIQU5HRVI6CgkJcHJpb19jaGFuZ2VfbG9vcChzcGVjKTsKCQlicmVhazsKCWRlZmF1bHQ6CgkJ
+YXNzZXJ0KDApOwoJCWJyZWFrOwoJfQoKCXJldHVybiBOVUxMOwp9CgpzdGF0aWMgdm9pZCBjcmVh
+dGVfdGhyZWFkKHN0cnVjdCB0aHJlYWRfc3BlYyAqc3BlYykgewoJaW50IHJldDsKCglyZXQgPSBw
+dGhyZWFkX2NyZWF0ZSgmdGhyZWFkc1t0aHJlYWRfY291bnQrK10sIE5VTEwsIHRocmVhZCwgc3Bl
+Yyk7Cglhc3NlcnQoIXJldCk7Cn0KCnN0YXRpYyBpbnQgcHJpbnRfcHJpbygpIHsKCUZJTEUgKmZp
+bGUgPSBmb3BlbigiL3Byb2Mvc2VsZi9zdGF0IiwgInIiKTsKCWFzc2VydChmaWxlKTsKCgljaGFy
+IGNvbW1bNjRdOwoJaW50IHRtcCwgcHJpbywgcmV0OwoJcmV0ID0gZnNjYW5mKGZpbGUsICIlZCAl
+cyAlYyAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCAlZCIsCgkJCSZ0
+bXAsIGNvbW0sIGNvbW0sICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsCgkJCSZ0
+bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZ0bXAsICZwcmlvKTsKCWFz
+c2VydChyZXQgPT0gMTgpOwoKCXByaW50ZigicHJpbzogJWRcbiIsIHByaW8pOwoKCWZjbG9zZShm
+aWxlKTsKCglyZXR1cm4gcHJpbzsKfQoKc3RhdGljIHZvaWQgcHJpbnRfdGhyZWFkcyhwaWRfdCBw
+cm9jZXNzX3BpZCkgewoJY2hhciBjbWRbMTI4XTsKCXNucHJpbnRmKGNtZCwgc2l6ZW9mKGNtZCks
+ICJwcyAtTCAtcCAlZCIsIHByb2Nlc3NfcGlkKTsKCXN5c3RlbShjbWQpOwp9CgppbnQgbWFpbih2
+b2lkKSB7CglwaWRfdCBwaWQ7CglpbnQgcmV0OwoKCXBpZCA9IGdldHBpZCgpOwoJcHJpbnRmKCJw
+aWQ6ICVkXG4iLCBwaWQpOwoKCWZvciAoaW50IGkgPSAwOyBpIDwgc2l6ZW9mKG11dGV4ZXMpIC8g
+c2l6ZW9mKG11dGV4ZXNbMF0pOyArK2kpIHsKCQlpbml0X211dGV4KCZtdXRleGVzW2ldKTsKCQly
+ZXQgPSBwdGhyZWFkX211dGV4X2xvY2soJm11dGV4ZXNbaV0pOwoJCWFzc2VydCghcmV0KTsKCX0K
+CglwdGhyZWFkX2JhcnJpZXJfdCBiYXJyaWVyOwoJcmV0ID0gcHRocmVhZF9iYXJyaWVyX2luaXQo
+JmJhcnJpZXIsIE5VTEwsIFBDT1VOVCArIDEpOwoJYXNzZXJ0KCFyZXQpOwoKCWZvciAoaW50IGkg
+PSAwOyBpIDwgUENPVU5UOyArK2kpIHsKCQlzdHJ1Y3QgdGhyZWFkX3NwZWMgKnNwZWMgPSAmdGhy
+ZWFkX3NwZWNzW2ldOwoJCQoJCXNwZWMtPnR5cGUgPSBXQUlURVI7CgkJc3BlYy0+bmFtZV9pbmRl
+eCA9IGk7CgkJc3BlYy0+d2FpdF9tdXRleCA9ICZtdXRleGVzW2ldOwoJCXNwZWMtPmJhcnJpZXIg
+PSAmYmFycmllcjsKCgkJY3JlYXRlX3RocmVhZChzcGVjKTsKCX0KCgkvLyBXYWl0IGZvciBmaWxs
+aW5nIG9mIHBpZF9zYXZlLgoJYmFycmllcl93YWl0KCZiYXJyaWVyKTsKCglmb3IgKGludCBpID0g
+MDsgaSA8IFBDT1VOVDsgKytpKSB7CgkJc3RydWN0IHRocmVhZF9zcGVjICpzcGVjID0gJnRocmVh
+ZF9zcGVjc1tpICsgUENPVU5UXTsKCgkJc3BlYy0+dHlwZSA9IFBSSU9fQ0hBTkdFUjsgCgkJc3Bl
+Yy0+bmFtZV9pbmRleCA9IGk7CgkJc3BlYy0+cHJpbyA9IDk5OwoJCXNwZWMtPmJhcnJpZXIgPSAm
+YmFycmllcjsKCQlzcGVjLT53YWl0ZXJfcGlkID0gJnRocmVhZF9zcGVjc1tpXS5waWRfc2F2ZTsK
+CgkJY3JlYXRlX3RocmVhZChzcGVjKTsKCX0KCglwcmludF9wcmlvKCk7CglwcmludF90aHJlYWRz
+KHBpZCk7CgoJc3JhbmRvbSh0aW1lKE5VTEwpKTsKCWludCBpdGVyID0gMDsKCWZvciAoOzspIHsK
+CQkrK2l0ZXI7CgkJZm9yIChpbnQgaSA9IDA7IGkgPCBQQ09VTlQ7ICsraSkgewoJCQl0aHJlYWRf
+c3BlY3NbaSArIFBDT1VOVF0ucHJpbyA9IChpdGVyICUgMikgPyBpICsgMSA6IFBDT1VOVCAtIGk7
+CgkJfQoKCQlmb3IgKGludCBpID0gMDsgaSA8IFBDT1VOVDsgKytpKSB7CgkJCWludCBwb3MgPSBy
+YW5kb20oKSAlIFBDT1VOVDsKCQkJaW50IHRtcCA9IHRocmVhZF9zcGVjc1twb3MgKyBQQ09VTlRd
+LnByaW87CgkJCXRocmVhZF9zcGVjc1twb3MgKyBQQ09VTlRdLnByaW8gPSB0aHJlYWRfc3BlY3Nb
+UENPVU5UXS5wcmlvOwoJCQl0aHJlYWRfc3BlY3NbUENPVU5UXS5wcmlvID0gdG1wOwoJCX0KCgkJ
+YmFycmllcl93YWl0KCZiYXJyaWVyKTsKCQliYXJyaWVyX3dhaXQoJmJhcnJpZXIpOwoKCQkvL3N5
+c3RlbSgiZWNobyBpdGVyYXRpb24gPiAvc3lzL2tlcm5lbC9kZWJ1Zy90cmFjaW5nL3RyYWNlX21h
+cmtlciIpOwoKCQlmb3IgKGludCB0cnkgPSAwOyA7ICsrdHJ5KSB7CgkJCWludCBwcmlvID0gcHJp
+bnRfcHJpbygpOwoJCQlpZiAocHJpbyA9PSBFWFBFQ1RFRF9QUklPKSB7CgkJCQkvLyBUcnkgYSBu
+ZXcgaXRlcmF0aW9uLgoJCQkJYnJlYWs7CgkJCX0KCgkJCWlmICh0cnkgPj0gMTApIHsKCQkJCXBy
+aW50X3RocmVhZHMocGlkKTsKCQkJCXByaW50ZigiZm91bmQgcmFjZSwgaGFuZy4uLlxuIik7CgkJ
+CQl3aGlsZSAoMSkgewoJCQkJCXNsZWVwKDM2MDApOwoJCQkJfQoJCQl9CgkJfQoJfQoKCWZvciAo
+aW50IGkgPSAwOyBpIDwgdGhyZWFkX2NvdW50OyArK2kpIHsKCQlwdGhyZWFkX2pvaW4odGhyZWFk
+c1tpXSwgTlVMTCk7Cgl9CgoJcmV0dXJuIDA7Cn0KCg==
+--000000000000a2507905ffdc1e8b--
