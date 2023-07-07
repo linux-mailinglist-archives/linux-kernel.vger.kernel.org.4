@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD45974B1B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6A374B1AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjGGNUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S231580AbjGGNUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjGGNUt (ORCPT
+        with ESMTP id S229661AbjGGNUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:20:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A269F1FC9;
-        Fri,  7 Jul 2023 06:20:47 -0700 (PDT)
-Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QyDTN1LY9zMqNw;
-        Fri,  7 Jul 2023 21:17:28 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 7 Jul 2023 21:20:42 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <liulongfang@huawei.com>
-Subject: [PATCH] crypto: hisilicon/hpre - ensure private key less than n
-Date:   Fri, 7 Jul 2023 21:18:19 +0800
-Message-ID: <20230707131819.50016-1-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Jul 2023 09:20:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1591FC9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:20:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 75F25225EC;
+        Fri,  7 Jul 2023 13:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688736011; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QNyk8rEvT/WeKKmpb7nlokLV1tikUvvvzyU4QMCSflU=;
+        b=TZlYlRRU41HI1fYx2xJpMb5oVokM0T+eDNotH7caV1igxRTdfcMEUYtJQKv4PignIssLyB
+        I6QecqaWmvS0G4RHOfbf7gEAa9hBY0Y+Vv1TxYiugjQyXKPho2HcUxxM8Ii8rum6/Cn47B
+        UKt+4XSNMLR+bpXQtwAlqAeShqkyXtE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688736011;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QNyk8rEvT/WeKKmpb7nlokLV1tikUvvvzyU4QMCSflU=;
+        b=+a+gdlqQXQKCIJXRHWKJXxe5EnLeB26FiwAmJrLuY1dWao2/shy5wl1phTzwGq59gaVrIJ
+        CnqgXUb3xM0EEsCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33A761346D;
+        Fri,  7 Jul 2023 13:20:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6SNVCwsRqGQ9VAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 07 Jul 2023 13:20:11 +0000
+Date:   Fri, 07 Jul 2023 15:20:10 +0200
+Message-ID: <87y1jrkgdx.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
+In-Reply-To: <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
+References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
+        <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+        <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The private key of the curve key size generated by stdrng, which maybe
-not less than n. Therefore, the private key with the curve key size
-minus 1 is generated to ensure that the private key is less than n.
+On Fri, 07 Jul 2023 14:54:31 +0200,
+Srinivas Kandagatla wrote:
+> 
+> On 07/07/2023 08:35, Johan Hovold wrote:
+> > On Wed, Jul 05, 2023 at 01:57:23PM +0100, Srinivas Kandagatla wrote:
+> >> dB range for HPHL and HPHR gains are from +6dB to -30dB in steps of
+> >> 1.5dB with register values range from 0 to 24.
+> >> 
+> >> Current code maps these dB ranges incorrectly, fix them to allow proper
+> >> volume setting.
+> >> 
+> >> Fixes: e8ba1e05bdc0("ASoC: codecs: wcd938x: add basic controls")
+> >> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> >> ---
+> >>   sound/soc/codecs/wcd938x.c | 6 +++---
+> >>   1 file changed, 3 insertions(+), 3 deletions(-)
+> >> 
+> >> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+> >> index faa15a5ed2c8..3a3360711f8f 100644
+> >> --- a/sound/soc/codecs/wcd938x.c
+> >> +++ b/sound/soc/codecs/wcd938x.c
+> >> @@ -210,7 +210,7 @@ struct wcd938x_priv {
+> >>   };
+> >>     static const SNDRV_CTL_TLVD_DECLARE_DB_MINMAX(ear_pa_gain, 600,
+> >> -1800);
+> >> -static const SNDRV_CTL_TLVD_DECLARE_DB_MINMAX(line_gain, 600, -3000);
+> >> +static const DECLARE_TLV_DB_SCALE(line_gain, -3000, 150, -3000);
+> > 
+> > This looks wrong, and indeed that forth argument appears to be a mute
+> > flag. I guess that one should have been 0 (false) here?
+> 
+> yes, this should be true instead of a mute dB value.
+> 
+> > 
+> > Headphone output also appears to be way too loud by default with this
+> > patch (alone) applied. Perhaps it's just the default mixer settings need
+> > to be updated to match?
+> > 
+> > It looks like you're inverting the scale above. Perhaps that's intended,
+> 
+> yes, the highest value corresponds to lowest dB which is why its inverted.
 
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/hpre/hpre_crypto.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Ouch, that's a bad design choice...
 
-diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-index 8ede77310dc5..9a1c61be32cc 100644
---- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-+++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-@@ -1392,9 +1392,9 @@ static int hpre_ecdh_set_secret(struct crypto_kpp *tfm, const void *buf,
- 				unsigned int len)
- {
- 	struct hpre_ctx *ctx = kpp_tfm_ctx(tfm);
-+	unsigned int sz, sz_shift, curve_sz;
- 	struct device *dev = ctx->dev;
- 	char key[HPRE_ECC_MAX_KSZ];
--	unsigned int sz, sz_shift;
- 	struct ecdh params;
- 	int ret;
- 
-@@ -1406,7 +1406,13 @@ static int hpre_ecdh_set_secret(struct crypto_kpp *tfm, const void *buf,
- 	/* Use stdrng to generate private key */
- 	if (!params.key || !params.key_size) {
- 		params.key = key;
--		params.key_size = hpre_ecdh_get_curvesz(ctx->curve_id);
-+		curve_sz = hpre_ecdh_get_curvesz(ctx->curve_id);
-+		if (!curve_sz) {
-+			dev_err(dev, "Invalid curve size!\n");
-+			return -EINVAL;
-+		}
-+
-+		params.key_size = curve_sz - 1;
- 		ret = ecdh_gen_privkey(ctx, &params);
- 		if (ret)
- 			return ret;
--- 
-2.33.0
 
+Takashi
