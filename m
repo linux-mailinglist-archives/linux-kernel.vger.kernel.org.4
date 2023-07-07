@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9F474B59D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887DB74B5A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjGGRPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S232418AbjGGRQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjGGRPD (ORCPT
+        with ESMTP id S232230AbjGGRQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:15:03 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DC71FEC;
-        Fri,  7 Jul 2023 10:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=s31663417; t=1688750096; x=1689354896; i=ps.report@gmx.net;
- bh=nT9MzanYfas+8UyCfJFgGFCln2TwGY3qDAvaQA84xuQ=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Ki3qbJjaJsVaUzikTX75M6x0Pwhknj5NAQIDq40tWr70dwVWKDY8+yqVgeYynojsCHvPOe0
- zdYUlX5OxgNOPq6aAa+7AzlXnJJyHWOQcYRdROOXZ1qo5FXKUM0ZoimblITo5mHm4PvaOHiDS
- KUAGBHwloV1R5zs2iWEYuOsrMy7Vv0INKZ+VT3g+N8xNU0q1qJ5dJuEW0T6xeRaYAT/4seGPM
- 2tmxZF9Lb09tWh1GFDrYnr1uyp4t31AIIUoCWxZAI2Fc1GrIIbfKwN9ch72HOXconXlzyJDYq
- /aYc41LDRIiFE0z6Us6p0DZVKJWisD6j8nOeysOsW8pp/22cgjiQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.106]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MN5if-1qajVV30gn-00J1Pc; Fri, 07 Jul 2023 19:14:56 +0200
-From:   Peter Seiderer <ps.report@gmx.net>
-To:     linux-can@vger.kernel.org
-Cc:     Markus Marb <marm@hms-networks.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        socketcan@hms-networks.de, linux-kernel@vger.kernel.org,
-        Peter Seiderer <ps.report@gmx.net>
-Subject: [PATCH v10 3/3] can: usb: ixxat_usb: promote legacy adapters with up-todate firmware to cl2
-Date:   Fri,  7 Jul 2023 19:14:13 +0200
-Message-ID: <20230707171412.31195-4-ps.report@gmx.net>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230707171412.31195-2-ps.report@gmx.net>
-References: <20230707171412.31195-2-ps.report@gmx.net>
+        Fri, 7 Jul 2023 13:16:46 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943AF1FEC
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:16:44 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6ef9ed2fdso34664841fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 10:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1688750203; x=1691342203;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g+3ftUrKkGKWTNUl/ff+NksMj5plBKBFyR+RGdmjZos=;
+        b=C9Va5MTTcTbYBoTWRyAjroFbhLGDCi9734g2/O9X2iYuULUit3WlukK/8oa6EG/vJw
+         z/NjnGfT0rP9Ym30qjGRlJtYy/nqLNO7pMFpC8E5YovHWxIDS33Ikso5mrvKehmmN07V
+         bfp1W9rObG7Ch/OW64rjV/67n4WHmDZiiFxG0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688750203; x=1691342203;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g+3ftUrKkGKWTNUl/ff+NksMj5plBKBFyR+RGdmjZos=;
+        b=BJimQaiqiAB8ftHQ9iYOhm/FnBnL09WgtsX2IjLjFxstEwIhZbatnV8IzPshIqwuX9
+         ZkHyAiKZtzsQXrfGFc2OCv9dwF4L7fdXF/IgcS5ZfW85P0CBFveVyUIfRsCA1nzMqEB1
+         AFIR9GAD8ufkhtzE3oCQN9pn88ds+r2GOcQnR223HLE/7OvoWL/2TkeL0/yfPU0iUPQS
+         gshmEXFBmyn3fpzl9fwjei01cnsF5e6WFyOzpzAYNK+rqSWfToOpkg75odU0+0JMxBnz
+         DCliDnNfejHtArSMdIgmrKGvANeQ2ZJK+5Jti0yLReOSmHBIVdZ+uxyzy5NHiEdwauRS
+         mGhw==
+X-Gm-Message-State: ABy/qLYj0cA3t+y5OA/tOPhVEcwP8SuFnEdiBZ0Eqrsq9iZdXha9n/79
+        /qP5gdQXK/17JhVBB5n2+oMruwHU5mCIUhNC6rUiBQ==
+X-Google-Smtp-Source: APBJJlGuAy0wLSoXaNkgFRdRYIchwP9YRwUB84DL3lJ/iIaXa1QXT3d98xpD9CPLKc9maFWRi64RchlLudBkRQJuJ6Q=
+X-Received: by 2002:a2e:9c95:0:b0:2b6:c16a:db06 with SMTP id
+ x21-20020a2e9c95000000b002b6c16adb06mr4517649lji.39.1688750202658; Fri, 07
+ Jul 2023 10:16:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:pFGRxMWz2RYpFrYrTwkRs4xu1rNshCRjUv8Vl/iam4FkEO/AiNl
- 8IVHZrdYnRo8mSSmEDHBvhSUioIlS1x7IaNmYjC5p10pxFUmSpHb4p3f7t7w3rmPKVGmTCy
- 9Y5PoaqZyrugl7a8moILqtVrrkLsr8SQwFVWBp3JtQH3F/6WNjHMjGpTkZCuypeqW2BGDPI
- Xqefy4Rbb3X1cTIL7/s3g==
-UI-OutboundReport: notjunk:1;M01:P0:otC/sWtHa+E=;mi8OMJMhrNOiooWRjA20rQGoP1r
- ONORsBUhnE2DNOeImNmu1hfQVo/LIglUeRLzOOCj+T+x8IINHYHyOjLayO7IhHb/VMLlpVrev
- vJfCabSgsyFBf30wm2cV5+JhGfFMRHj4VoxsV9UHf2NEDTvVBG7ImtX2N6Oh0M4/M3vVt28mP
- sjBbKc85SPVNOENesBkdWMCMNI8DywHvRlqDQVFAeL5G/W01urPi6149fgUnsdrVHL6B9Ao92
- Mh3a6VD5kS405FkCMfW9XG+fMqaVHxdCTXUhnp27nHD6E/aGCe3pEf6IgW+D8H4VZOT5eFs0g
- 0bk8nwfVfwQ+U0vv9jRkZNIv+iimB7693iiOiFtvIXoSTaFhEY5ee35BNQz332xM7JXZFsTb6
- 1+QreSSoSsdlaamEnc3eb8Q/rr7WkL5Pc5hgJmeU1a1xWP1sBiii9Fx7/0ryfhP7+eo3sreEB
- p/PZA8qn/CyrmGpvBe7irM6tLRANO0C7cSMED8V1tpw21oNQ7HJTZC6A1kRkpsLKdy0gLhDc8
- 5ST+P4o6XbxaNqBZ3AlDw6pFU0LkgI3NIp/KkO7qtQxzRNg8YT2wpof0DtBtA92ujyX8WXic7
- 6WrcVHQ/EXKtSDEYCkx0EWKfAdIAMSm+e9rEHp2KdowUBamdhpS8s1K7+ILg8x3Z/QjgwlSr+
- Nq7Lk9xWvHHePLm/vaFLB6qCxxmfViROG3uqUIxyofBrseOZ2xIj2g0cf+wib5IMLJgbJZwAs
- VKlsbmeZQmGFb7wCeGzgJe5RB+ECdGmXXD8rYX9sRbub3FemxadD1kqPGjXFJSNJYwYZubioB
- pnVQS2LNGUzIWNsX1xC++fj66izI1zfPUYjKn6OIh102sQ+FvwhSrR+cL0a5ALx6hM0KJo6K2
- YyuBodSx+gOSYccT6CvpOe4Viq1ebwFyPVCGyf9G2KUG2InSBJcoonMiYykgfe90fQG6w9khY
- VCGoMEEgraOhuvfsMra0hUsgTWw=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230704082615.7415-1-qiang.zhang1211@gmail.com>
+ <77d16cbb-b28c-4b13-aecb-9ad787559557@paulmck-laptop> <CALm+0cW6DojcxSnzf2mMXhXP-MHJ0aEvSqyh1TbtvBC4bzfsOw@mail.gmail.com>
+ <087e3da2-ffd9-4cf4-8893-73f4edc3cfba@paulmck-laptop>
+In-Reply-To: <087e3da2-ffd9-4cf4-8893-73f4edc3cfba@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 7 Jul 2023 13:16:31 -0400
+Message-ID: <CAEXW_YSfMSQ=z-pEO16_jwZSYt5N+zJHFaDOxDsPNoojm1v4Sg@mail.gmail.com>
+Subject: Re: [PATCH] srcu: Make srcu_might_be_idle() take early return if
+ rcu_gp_is_normal() return true
+To:     paulmck@kernel.org
+Cc:     Z qiang <qiang.zhang1211@gmail.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,121 +70,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LSBhZGQgSVhYQVRfVVNCX0JSRF9DTURfR0VUX0ZXSU5GTyBzdXBwb3J0IHRvIHJldHJpZXZlIGZp
-cm13YXJlIGluZm8gYW5kCiAgcHJvbW90ZSBhbGwgbGVnYWN5IGFkYXB0ZXJzIHdpdGggdXAtdG8t
-ZGF0ZSBmaXJtd2FyZSB0byBjb21tdW5pY2F0aW9uCiAgbGF5ZXIgY2wyIChiYWNrcG9ydGVkIGZy
-b20gdXBzdHJlYW0gZHJpdmVyIGl4X3VzYl9jYW5fMi4wLjM2Ni1SRUwpCgpTaWduZWQtb2ZmLWJ5
-OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Ci0tLQpDaGFuZ2VzIHY5IC0+IHYx
-MCAoUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pik6CiAgLSBuZXcgcGF0Y2gKLS0t
-CiBkcml2ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY2wyLmMgfCA0MCArKysr
-KysrKysrKysrKysrKwogLi4uL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY29yZS5j
-ICAgIHwgNDQgKysrKysrKysrKysrKysrKysrKwogLi4uL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9p
-eHhhdF91c2JfY29yZS5oICAgIHwgMzUgKysrKysrKysrKysrKysrCiAzIGZpbGVzIGNoYW5nZWQs
-IDExOSBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhh
-dF91c2IvaXh4YXRfdXNiX2NsMi5jIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4
-YXRfdXNiX2NsMi5jCmluZGV4IDNjOWQwNWM0YjM0Zi4uMDc4NTM2MDcyODJmIDEwMDY0NAotLS0g
-YS9kcml2ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY2wyLmMKKysrIGIvZHJp
-dmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NsMi5jCkBAIC0xMiw2ICsxMiw4
-IEBACiAKICNkZWZpbmUgSVhYQVRfVVNCX0NMT0NLICg4MCAqIE1FR0EgLyogSHogKi8pCiAKKyNk
-ZWZpbmUgSVhYQVRfVVNCVjJfQ0xPQ0sgKDM2ICogTUVHQSAvKiBIeiAqLykKKwogI2RlZmluZSBJ
-WFhBVF9VU0JfQlVGRkVSX1NJWkVfUlggNTEyCiAjZGVmaW5lIElYWEFUX1VTQl9CVUZGRVJfU0la
-RV9UWCA1MTIKIApAQCAtNDEsNiArNDMsMTggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBjYW5fYml0
-dGltaW5nX2NvbnN0IHVzYjJjYW5fYnRkID0gewogCS5icnBfaW5jID0gMSwKIH07CiAKK3N0YXRp
-YyBjb25zdCBzdHJ1Y3QgY2FuX2JpdHRpbWluZ19jb25zdCB1c2IyY2FuX3YyX2J0ID0geworCS5u
-YW1lID0gSVhYQVRfVVNCX0NUUkxfTkFNRSwKKwkudHNlZzFfbWluID0gMSwKKwkudHNlZzFfbWF4
-ID0gMTYsCisJLnRzZWcyX21pbiA9IDEsCisJLnRzZWcyX21heCA9IDgsCisJLnNqd19tYXggPSA0
-LAorCS5icnBfbWluID0gMSwKKwkuYnJwX21heCA9IDEwMjQsCisJLmJycF9pbmMgPSAxLAorfTsK
-Kwogc3RhdGljIGNvbnN0IHN0cnVjdCBjYW5fYml0dGltaW5nX2NvbnN0IGNhbmlkbV9idCA9IHsK
-IAkubmFtZSA9IElYWEFUX1VTQl9DVFJMX05BTUUsCiAJLnRzZWcxX21pbiA9IDEsCkBAIC0xNDks
-NiArMTYzLDMyIEBAIGNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciB1c2IyY2FuX2NsMiA9
-IHsKIAkuaW5pdF9jdHJsID0gaXh4YXRfdXNiX2luaXRfY3RybAogfTsKIAorY29uc3Qgc3RydWN0
-IGl4eGF0X3VzYl9hZGFwdGVyIHVzYjJjYW5fdjIgPSB7CisJLmNsb2NrID0gSVhYQVRfVVNCVjJf
-Q0xPQ0ssCisJLmJ0ID0gJnVzYjJjYW5fdjJfYnQsCisJLmJ0ZCA9IE5VTEwsCisJLm1vZGVzID0g
-Q0FOX0NUUkxNT0RFXzNfU0FNUExFUyB8IENBTl9DVFJMTU9ERV9MSVNURU5PTkxZIHwKKwkJQ0FO
-X0NUUkxNT0RFX0JFUlJfUkVQT1JUSU5HLAorCS5idWZmZXJfc2l6ZV9yeCA9IElYWEFUX1VTQl9C
-VUZGRVJfU0laRV9SWCwKKwkuYnVmZmVyX3NpemVfdHggPSBJWFhBVF9VU0JfQlVGRkVSX1NJWkVf
-VFgsCisJLmVwX21zZ19pbiA9IHsKKwkJMSB8IFVTQl9ESVJfSU4sCisJCTIgfCBVU0JfRElSX0lO
-LAorCQkzIHwgVVNCX0RJUl9JTiwKKwkJNCB8IFVTQl9ESVJfSU4sCisJCTUgfCBVU0JfRElSX0lO
-CisJfSwKKwkuZXBfbXNnX291dCA9IHsKKwkJMSB8IFVTQl9ESVJfSU4sCisJCTIgfCBVU0JfRElS
-X0lOLAorCQkzIHwgVVNCX0RJUl9JTiwKKwkJNCB8IFVTQl9ESVJfSU4sCisJCTUgfCBVU0JfRElS
-X0lOCisJfSwKKwkuZXBfb2ZmcyA9IDAsCisJLmluaXRfY3RybCA9IGl4eGF0X3VzYl9pbml0X2N0
-cmwKK307CisKIGNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciBjYW5faWRtID0gewogCS5j
-bG9jayA9IElYWEFUX1VTQl9DTE9DSywKIAkuYnQgPSAmY2FuaWRtX2J0LApkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NvcmUuYyBiL2RyaXZlcnMv
-bmV0L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jb3JlLmMKaW5kZXggODk0ODM2YmRlZWQz
-Li44NTUxNDY1NWUwM2MgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L2Nhbi91c2IvaXh4YXRfdXNi
-L2l4eGF0X3VzYl9jb3JlLmMKKysrIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4
-YXRfdXNiX2NvcmUuYwpAQCAtMjIzLDYgKzIyMywzNyBAQCBzdGF0aWMgaW50IGl4eGF0X3VzYl9n
-ZXRfZGV2X2luZm8oc3RydWN0IHVzYl9kZXZpY2UgKmRldiwKIAlyZXR1cm4gMDsKIH0KIAorc3Rh
-dGljIGludCBpeHhhdF91c2JfZ2V0X2Z3X2luZm8oc3RydWN0IHVzYl9kZXZpY2UgKmRldiwKKwkJ
-CQkgc3RydWN0IGl4eGF0X2Z3X2luZm8gKmRldl9pbmZvKQoreworCWludCBlcnI7CisJc3RydWN0
-IGl4eGF0X3VzYl9md2luZm9fY21kICpjbWQ7CisKKwljbWQgPSBrbWFsbG9jKHNpemVvZigqY21k
-KSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFjbWQpCisJCXJldHVybiAtRU5PTUVNOworCisJaXh4YXRf
-dXNiX3NldHVwX2NtZCgmY21kLT5yZXEsICZjbWQtPnJlcyk7CisJY21kLT5yZXEuY29kZSA9IGNw
-dV90b19sZTMyKElYWEFUX1VTQl9CUkRfQ01EX0dFVF9GV0lORk8pOworCWNtZC0+cmVzLnJlc19z
-aXplID0gY3B1X3RvX2xlMzIoSVhYQVRfVVNCX1JFU19TSVpFKGNtZCkpOworCisJZXJyID0gaXh4
-YXRfdXNiX3NlbmRfY21kKGRldiwgbGUxNl90b19jcHUoY21kLT5yZXEucG9ydCksIGNtZCwKKwkJ
-CQkgc2l6ZW9mKGNtZC0+cmVxKSArIHNpemVvZihjbWQtPnJlcyksCisJCQkJICZjbWQtPnJlcywg
-SVhYQVRfVVNCX1JFU19TSVpFKGNtZCkpOworCWlmIChlcnIpIHsKKwkJa2ZyZWUoY21kKTsKKwkJ
-cmV0dXJuIGVycjsKKwl9CisKKwlkZXZfaW5mby0+ZmlybXdhcmVfdHlwZSA9IGNtZC0+ZndfaW5m
-by5maXJtd2FyZV90eXBlOworCWRldl9pbmZvLT5tYWpvcl92ZXJzaW9uID0gY21kLT5md19pbmZv
-Lm1ham9yX3ZlcnNpb247CisJZGV2X2luZm8tPm1pbm9yX3ZlcnNpb24gPSBjbWQtPmZ3X2luZm8u
-bWlub3JfdmVyc2lvbjsKKwlkZXZfaW5mby0+YnVpbGRfdmVyc2lvbiA9IGNtZC0+ZndfaW5mby5i
-dWlsZF92ZXJzaW9uOworCisJa2ZyZWUoY21kKTsKKwlyZXR1cm4gMDsKK30KKwogc3RhdGljIGlu
-dCBpeHhhdF91c2Jfc3RhcnRfY3RybChzdHJ1Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2LCB1MzIg
-KnRpbWVfcmVmKQogewogCWNvbnN0IHUxNiBwb3J0ID0gZGV2LT5jdHJsX2luZGV4OwpAQCAtMTE4
-NSw2ICsxMjE2LDcgQEAgc3RhdGljIGludCBpeHhhdF91c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRl
-cmZhY2UgKmludGYsCiAJc3RydWN0IHVzYl9ob3N0X2ludGVyZmFjZSAqaG9zdF9pbnRmID0gaW50
-Zi0+YWx0c2V0dGluZzsKIAljb25zdCBzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIgKmFkYXB0ZXI7
-CiAJc3RydWN0IGl4eGF0X2Rldl9jYXBzIGRldl9jYXBzOworCXN0cnVjdCBpeHhhdF9md19pbmZv
-IGRldl9md2luZm8gPSB7IDAgfTsKIAl1MTYgaTsKIAlpbnQgZXJyOwogCkBAIC0xMTkyLDYgKzEy
-MjQsMTggQEAgc3RhdGljIGludCBpeHhhdF91c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2Ug
-KmludGYsCiAKIAlhZGFwdGVyID0gKGNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciAqKWlk
-LT5kcml2ZXJfaW5mbzsKIAorCWlmICghaXh4YXRfdXNiX2dldF9md19pbmZvKHVkZXYsICZkZXZf
-ZndpbmZvKSkgeworCQlpZiAoYWRhcHRlciA9PSAmdXNiMmNhbl9jbDEgJiYKKwkJICAgIChpZC0+
-aWRWZW5kb3IgPT0gVVNCMkNBTl9DT01QQUNUX1BST0RVQ1RfSUQgfHwKKwkJICAgICBpZC0+aWRW
-ZW5kb3IgPT0gVVNCMkNBTl9FTUJFRERFRF9QUk9EVUNUX0lEIHx8CisJCSAgICAgaWQtPmlkVmVu
-ZG9yID09IFVTQjJDQU5fUFJPRkVTU0lPTkFMX1BST0RVQ1RfSUQgfHwKKwkJICAgICBpZC0+aWRW
-ZW5kb3IgPT0gVVNCMkNBTl9BVVRPTU9USVZFX1BST0RVQ1RfSUQgfHwKKwkJICAgICBpZC0+aWRW
-ZW5kb3IgPT0gVVNCMkNBTl9QTFVHSU5fUFJPRFVDVF9JRCkgJiYKKwkJICAgIGxlMTZfdG9fY3B1
-KGRldl9md2luZm8ubWFqb3JfdmVyc2lvbikgPj0gMSAmJgorCQkgICAgbGUxNl90b19jcHUoZGV2
-X2Z3aW5mby5taW5vcl92ZXJzaW9uKSA+PSA2KQorCQkJYWRhcHRlciA9ICZ1c2IyY2FuX3YyOwor
-CX0KKwogCWZvciAoaSA9IDA7IGkgPCBob3N0X2ludGYtPmRlc2MuYk51bUVuZHBvaW50czsgaSsr
-KSB7CiAJCWNvbnN0IHU4IGVwYWRkciA9IGhvc3RfaW50Zi0+ZW5kcG9pbnRbaV0uZGVzYy5iRW5k
-cG9pbnRBZGRyZXNzOwogCQlpbnQgbWF0Y2g7CmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9jYW4v
-dXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY29yZS5oIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhh
-dF91c2IvaXh4YXRfdXNiX2NvcmUuaAppbmRleCA1ODEwYzQ4MWE4NzUuLjFjNTNkOTg5ZDhmYSAx
-MDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NvcmUu
-aAorKysgYi9kcml2ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY29yZS5oCkBA
-IC0xMDEsNiArMTAxLDcgQEAKICNkZWZpbmUgSVhYQVRfVVNCX0NBTl9DTURfU1RPUCAweDMyNwog
-I2RlZmluZSBJWFhBVF9VU0JfQ0FOX0NNRF9SRVNFVCAweDMyOAogCisjZGVmaW5lIElYWEFUX1VT
-Ql9CUkRfQ01EX0dFVF9GV0lORk8gIDB4NDAwCiAjZGVmaW5lIElYWEFUX1VTQl9CUkRfQ01EX0dF
-VF9ERVZDQVBTIDB4NDAxCiAjZGVmaW5lIElYWEFUX1VTQl9CUkRfQ01EX0dFVF9ERVZJTkZPIDB4
-NDAyCiAjZGVmaW5lIElYWEFUX1VTQl9CUkRfQ01EX1BPV0VSIDB4NDIxCkBAIC0yMTcsNiArMjE4
-LDI1IEBAIHN0cnVjdCBpeHhhdF9kZXZfaW5mbyB7CiAJX19sZTMyIGRldmljZV9mcGdhX3ZlcnNp
-b247CiB9IF9fcGFja2VkOwogCisvKioKKyAqIHN0cnVjdCBpeHhhdF9md19pbmZvIElYWEFUIHVz
-YiBmaXJtd2FyZSBpbmZvcm1hdGlvbgorICogQGZpcm13YXJlX3R5cGU6IHR5cGUgb2YgY3VycmVu
-dGx5IHJ1bm5pbmcgZmlybXdhcmUKKyAqIEByZXNlcnZlZDogcmVzZXJ2ZWQgYnl0ZXMKKyAqIEBt
-YWpvcl92ZXJzaW9uOiBtYWpvciBmaXJtd2FyZSB2ZXJzaW9uIG51bWJlcgorICogQG1pbm9yX3Zl
-cnNpb246IG1pbm9yIGZpcm13YXJlIHZlcnNpb24gbnVtYmVyCisgKiBAYnVpbGRfdmVyc2lvbjog
-YnVpbGQgZmlybXdhcmUgdmVyc2lvbiBudW1iZXIKKyAqCisgKiBDb250YWlucyBmaXJtd2FyZSBp
-bmZvcm1hdGlvbiBvZiBJWFhBVCBVU0IgZGV2aWNlcworICovCisKK3N0cnVjdCBpeHhhdF9md19p
-bmZvIHsKKwlfX2xlMzIgZmlybXdhcmVfdHlwZTsKKwl1OCByZXNlcnZlZFsyXTsKKwlfX2xlMTYg
-bWFqb3JfdmVyc2lvbjsKKwlfX2xlMTYgbWlub3JfdmVyc2lvbjsKKwlfX2xlMTYgYnVpbGRfdmVy
-c2lvbjsKK30gX19wYWNrZWQ7CisKIC8qKgogICogc3RydWN0IGl4eGF0X3RpbWVfcmVmIFRpbWUg
-cmVmZXJlbmNlCiAgKiBAa3RfaG9zdF8wOiBMYXRlc3QgdGltZSBvbiB0aGUgaG9zdApAQCAtNDQ5
-LDYgKzQ2OSwyMCBAQCBzdHJ1Y3QgaXh4YXRfdXNiX2luZm9fY21kIHsKIAlzdHJ1Y3QgaXh4YXRf
-ZGV2X2luZm8gaW5mbzsKIH0gX19wYWNrZWQ7CiAKKy8qKgorICogc3RydWN0IGl4eGF0X3VzYl9m
-d2luZm9fY21kIEZpcm13YXJlIGluZm9ybWF0aW9uIGNvbW1hbmQKKyAqIEByZXE6IFJlcXVlc3Qg
-YmxvY2sKKyAqIEByZXM6IFJlc3BvbnNlIGJsb2NrCisgKiBAZndfaW5mbzogRmlybXdhcmUgaW5m
-b3JtYXRpb24KKyAqCisgKiBDYW4gYmUgc2VudCB0byBhIGRldmljZSB0byByZXF1ZXN0IGl0cyBm
-aXJtd2FyZSBpbmZvcm1hdGlvbgorICovCitzdHJ1Y3QgaXh4YXRfdXNiX2Z3aW5mb19jbWQgewor
-CXN0cnVjdCBpeHhhdF91c2JfZGFsX3JlcSByZXE7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxfcmVz
-IHJlczsKKwlzdHJ1Y3QgaXh4YXRfZndfaW5mbyBmd19pbmZvOworfSBfX3BhY2tlZDsKKwogLyoq
-CiAgKiBzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIgSVhYQVQgVVNCIGRldmljZSBhZGFwdGVyCiAg
-KiBAY2xvY2s6IENsb2NrIGZyZXF1ZW5jeQpAQCAtNDc4LDYgKzUxMiw3IEBAIHN0cnVjdCBpeHhh
-dF91c2JfYWRhcHRlciB7CiAKIGV4dGVybiBjb25zdCBzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIg
-dXNiMmNhbl9jbDE7CiBleHRlcm4gY29uc3Qgc3RydWN0IGl4eGF0X3VzYl9hZGFwdGVyIHVzYjJj
-YW5fY2wyOworZXh0ZXJuIGNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciB1c2IyY2FuX3Yy
-OwogZXh0ZXJuIGNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciBjYW5faWRtOwogCiAvKioK
-LS0gCjIuNDEuMAoK
+On Fri, Jul 7, 2023 at 12:05=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
+g> wrote:
+>
+> On Fri, Jul 07, 2023 at 06:28:29PM +0800, Z qiang wrote:
+> > >
+> > > On Tue, Jul 04, 2023 at 04:26:15PM +0800, Zqiang wrote:
+> > > > When invoke synchronize_srcu(), in the srcu_might_be_idle(), the cu=
+rrent
+> > > > CPU's sdp->lock will be acquired to check whether there are pending
+> > > > callbacks in the sdp->srcu_cblist, if there are no pending callback=
+s,
+> > > > probabilistically probe global state to decide whether to convert t=
+o
+> > > > synchronize_srcu_expedited() call. however, for the rcupdate.rcu_no=
+rmal=3D1
+> > > > kernels and after the rcu_set_runtime_mode() is called, invoke the
+> > > > rcu_gp_is_normal() is always return true, this mean that invoke the
+> > > > synchronize_srcu_expedited() always fall back to synchronize_srcu()=
+,
+> > > > so there is no need to acquire sdp->lock to check sdp->srcu_cblist =
+and
+> > > > probe global state in srcu_might_be_idle().
+> > > >
+> > > > This commit therefore make srcu_might_be_idle() return immediately =
+if the
+> > > > rcu_gp_is_normal() return true.
+> > > >
+> > > > Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
+> > > > ---
+> > > >  kernel/rcu/srcutree.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > > > index 20d7a238d675..aea49cb60a45 100644
+> > > > --- a/kernel/rcu/srcutree.c
+> > > > +++ b/kernel/rcu/srcutree.c
+> > > > @@ -1172,6 +1172,8 @@ static bool srcu_might_be_idle(struct srcu_st=
+ruct *ssp)
+> > > >       unsigned long tlast;
+> > > >
+> > > >       check_init_srcu_struct(ssp);
+> > > > +     if (rcu_gp_is_normal())
+> > > > +             return false;
+> > >
+> > > Again, thank you for looking into SRCU!
+> > >
+> > > I am not at all enthusiastic about this one.  With this change, the n=
+ame
+> > > srcu_might_be_idle() is no longer accurate.  Yes, the name could chan=
+ge,
+> > > but any name would be longer and more confusing.
+> > >
+> > > So unless there is a measureable benefit to this one on a production
+> > > workload, I cannot justify taking it.
+> > >
+> > > Is there a measureable benefit?
+> >
+> > Hi, Paul
+> >
+> > I only find that for Preempt-RT kernel,  the rcu_normal_after_boot is
+> > set by default:
+> > static int rcu_normal_after_boot =3D IS_ENABLED(CONFIG_PREEMPT_RT);
+> > This affects only rcu but also srcu, this make the synchronize_srcu() a=
+nd
+> > synchronize_srcu_expedited() always fall back to __synchronize_srcu(ssp=
+, true),
+> > this means that call the srcu_might_be_idle() is meaningless.
+>
+> I do understand that the current setup favors default kernel builds at
+> runtime by a few low-cost instructions, and that your change favors,
+> as you say, kernels built for real-time, kernels built for certain types
+> of HPC workloads, and all kernels during a small time during boot.
+>
+> My question is instead whether any of this makes a measureable difference
+> at the system level.
+>
+> My guess is "no, not even close", but the way to convince me otherwise
+> would be to actually run the workload and kernels on real hardware and
+> provide measurements showing a statistically significant difference that
+> the workload(s) in question care(s) about.
+>
+> So what can you show me?
+>
+> And srcu_might_be_idle() is not meaningless in that situation, just
+> ignored completely.  And that is in fact the nature and purpose of the
+> C-language || operator.  ;-)
+
+I agree with Paul, without any evidence of improvement, optimizing an
+obvious slow path is a NAK.
+
+thanks,
+
+ - Joel
