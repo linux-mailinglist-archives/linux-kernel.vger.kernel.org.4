@@ -2,117 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D8D74B1BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C16674B1CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjGGN0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S231492AbjGGNab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjGGN0U (ORCPT
+        with ESMTP id S231280AbjGGNa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:26:20 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DC81FEC
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1688736370;
-        bh=RjFudN2v4bhzNxCuByoq2h/CbTispUzi4a0aD2emOMQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bZplSR3gH/yZQCgcKsOr6CAhSBRiczQhttW/G7MXRUfDzOrK/fEFhZh88MGbUri6V
-         1AJ/QCsz1xbGKx64Q4mhqlKOMS91kow2TGmQx5cNiG7pXvbygzZU1KHwU+4Dk/7ZFv
-         nRY5TAFkwMPjLgf0dv5ibLfXYfUXgvOh/2Vj+9PM9VAnxCyb/FZGqBo/T/T50YuYe5
-         BTwD1s9Grrevo8ptZcWsg3mw0SdfZ+k8hIrKsU61H8Pu1rpsjrqUjeZgLSxxyj8dux
-         AwLk4unXiyD81nAuLlqRFUDtnw+q+g5PV3UnfmM2xme4J78PZv9FKfVG2lRWJsi7ed
-         zFVBjvnaOCuDA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QyDgQ4xsPz4wxP;
-        Fri,  7 Jul 2023 23:26:10 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dianders@chromium.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, pali@kernel.org,
-        rdunlap@infradead.org
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.5-2 tag
-Date:   Fri, 07 Jul 2023 23:26:06 +1000
-Message-ID: <875y6vluoh.fsf@mail.lhotse>
+        Fri, 7 Jul 2023 09:30:29 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A80F1FEC;
+        Fri,  7 Jul 2023 06:30:24 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-313f3a6db22so1920260f8f.3;
+        Fri, 07 Jul 2023 06:30:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688736622; x=1691328622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ftYzHLKHA6jQwOeOLbZCOVzlCTrND+vrcO0fHuzH0RE=;
+        b=daYFo6pLzCf+h/ZYf9rYFsX+y5gMaSX43HPdj6aNAv/C5rprAE0GN/2Ybvx9JEdBW/
+         fA+j37WDtUcKaXJSU7Jw50XzPQxf3WiVNiKdrduSJ7mUf80nINySZnnHlOv+AB9FPWKl
+         PqeR1lPpBcb97dE3HPNss3YU5e2a+q1WvWdIIsfVPuK2dVe2ZPqxJb20ZX86Fc3bT3Yj
+         +VzV6YPbYipN/oxgDxFabSYpru3+9FB1iBrY3Nqr3+eXZUo6E2fLfRYldKtGj/WH/m5h
+         1ujiUTy97LeJ3iB6/TfMAvyGuatZsYujfwY6ok92w54z61a2N/4Rwy5w9636/Tc6guw0
+         mrGg==
+X-Gm-Message-State: ABy/qLYHS3QU86tDjxqSQmK7DRdMiPUDkl57mC4ZmRyuW4Xuznyp7ey3
+        L9RsY3ewy01OP9pPfCG6G4k=
+X-Google-Smtp-Source: APBJJlGhp/PdJ8scRrYxgtcV5d1vcA3FhFyT8rSRUJcNN3yrlUxSQCue1CjrdKbtKjNM8kwDNbXocA==
+X-Received: by 2002:a5d:6ad0:0:b0:313:fdbb:422 with SMTP id u16-20020a5d6ad0000000b00313fdbb0422mr4629822wrw.43.1688736621624;
+        Fri, 07 Jul 2023 06:30:21 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-117.fbsv.net. [2a03:2880:31ff:75::face:b00c])
+        by smtp.gmail.com with ESMTPSA id l15-20020a1c790f000000b003fc00789d5bsm1264186wme.1.2023.07.07.06.30.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 06:30:20 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     sergey.senozhatsky@gmail.com, pmladek@suse.com, tj@kernel.org,
+        stephen@networkplumber.org, Dave Jones <davej@codemonkey.org.uk>,
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] netconsole: Append kernel version to message
+Date:   Fri,  7 Jul 2023 06:29:11 -0700
+Message-Id: <20230707132911.2033870-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Create a new netconsole runtime option that prepends the kernel version in
+the netconsole message. This is useful to map kernel messages to kernel
+version in a simple way, i.e., without checking somewhere which kernel
+version the host that sent the message is using.
 
-Hi Linus,
+If this option is selected, then the "<release>," is prepended before the
+netconsole message. This is an example of a netconsole output, with
+release feature enabled:
 
-Please pull a few powerpc fixes for 6.5:
+	6.4.0-01762-ga1ba2ffe946e;12,426,112883998,-;this is a test
 
-The following changes since commit d8b0bd57c2d68eb500f356f0f9228e6183da94ae:
+Calvin Owens send a RFC about this problem in 2016[1], but his
+approach was a bit more intrusive, changing the printk subsystem. This
+approach is lighter, and just append the information in the last mile,
+just before netconsole push the message to netpoll.
 
-  Merge tag 'powerpc-6.5-1' of git://git.kernel.org/pub/scm/linux/kernel/gi=
-t/powerpc/linux (2023-06-30 09:20:08 -0700)
+[1] Link: https://lore.kernel.org/all/51047c0f6e86abcb9ee13f60653b6946f8fcfc99.1463172791.git.calvinowens@fb.com/
 
-are available in the git repository at:
+Cc: Dave Jones <davej@codemonkey.org.uk>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+V1 -> V2:
+ * Configured at runtime instead of at compilation time
+ * Reuse send_ext_msg_udp to avoid extra memory allocation
+---
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
-werpc-6.5-2
+ Documentation/networking/netconsole.rst | 11 +++-
+ drivers/net/netconsole.c                | 80 ++++++++++++++++++++++++-
+ 2 files changed, 87 insertions(+), 4 deletions(-)
 
-for you to fetch changes up to abaa02fc944f2f9f2c2e1925ddaceaf35c48528c:
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index dd0518e002f6..7a9de0568e84 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -13,6 +13,8 @@ IPv6 support by Cong Wang <xiyou.wangcong@gmail.com>, Jan 1 2013
+ 
+ Extended console support by Tejun Heo <tj@kernel.org>, May 1 2015
+ 
++Release prepend support by Breno Leitao <leitao@debian.org>, Jul 7 2023
++
+ Please send bug reports to Matt Mackall <mpm@selenic.com>
+ Satyam Sharma <satyam.sharma@gmail.com>, and Cong Wang <xiyou.wangcong@gmail.com>
+ 
+@@ -34,10 +36,11 @@ Sender and receiver configuration:
+ It takes a string configuration parameter "netconsole" in the
+ following format::
+ 
+- netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
++ netconsole=[+][r][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+ 
+    where
+ 	+             if present, enable extended console support
++	r             if present, prepend kernel version (release) to the message
+ 	src-port      source for UDP packets (defaults to 6665)
+ 	src-ip        source IP to use (interface address)
+ 	dev           network interface (eth0)
+@@ -125,6 +128,7 @@ The interface exposes these parameters of a netconsole target to userspace:
+ 	==============  =================================       ============
+ 	enabled		Is this target currently enabled?	(read-write)
+ 	extended	Extended mode enabled			(read-write)
++	release		Prepend kernel release to message	(read-write)
+ 	dev_name	Local network interface name		(read-write)
+ 	local_port	Source UDP port to use			(read-write)
+ 	remote_port	Remote agent's UDP port			(read-write)
+@@ -165,6 +169,11 @@ following format which is the same as /dev/kmsg::
+ 
+  <level>,<sequnum>,<timestamp>,<contflag>;<message text>
+ 
++If 'r' (release) feature is enabled, the kernel release version is
++prepended to the start of the message. Example::
++
++ 6.4.0,6,444,501151268,-;netconsole: network logging started
++
+ Non printable characters in <message text> are escaped using "\xff"
+ notation. If the message contains optional dictionary, verbatim
+ newline is used as the delimiter.
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 4f4f79532c6c..a72f471ddf02 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -36,6 +36,7 @@
+ #include <linux/inet.h>
+ #include <linux/configfs.h>
+ #include <linux/etherdevice.h>
++#include <linux/utsname.h>
+ 
+ MODULE_AUTHOR("Maintainer: Matt Mackall <mpm@selenic.com>");
+ MODULE_DESCRIPTION("Console driver for network interfaces");
+@@ -84,6 +85,8 @@ static struct console netconsole_ext;
+  *		Also, other parameters of a target may be modified at
+  *		runtime only when it is disabled (enabled == 0).
+  * @extended:	Denotes whether console is extended or not.
++ * @release:	Denotes whether kernel release version should be prepended
++ *		to the message. Depends on extended console.
+  * @np:		The netpoll structure for this target.
+  *		Contains the other userspace visible parameters:
+  *		dev_name	(read-write)
+@@ -101,6 +104,7 @@ struct netconsole_target {
+ #endif
+ 	bool			enabled;
+ 	bool			extended;
++	bool			release;
+ 	struct netpoll		np;
+ };
+ 
+@@ -188,6 +192,14 @@ static struct netconsole_target *alloc_param_target(char *target_config)
+ 		target_config++;
+ 	}
+ 
++	if (*target_config == 'r') {
++		if (!nt->extended)
++			pr_err("Not enabling release feature, since extended message is disabled\n");
++		else
++			nt->release = true;
++		target_config++;
++	}
++
+ 	/* Parse parameters and setup netpoll */
+ 	err = netpoll_parse_options(&nt->np, target_config);
+ 	if (err)
+@@ -222,6 +234,7 @@ static void free_param_target(struct netconsole_target *nt)
+  *				|
+  *				<target>/
+  *				|	enabled
++ *				|	release
+  *				|	dev_name
+  *				|	local_port
+  *				|	remote_port
+@@ -254,6 +267,11 @@ static ssize_t extended_show(struct config_item *item, char *buf)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", to_target(item)->extended);
+ }
+ 
++static ssize_t release_show(struct config_item *item, char *buf)
++{
++	return snprintf(buf, PAGE_SIZE, "%d\n", to_target(item)->release);
++}
++
+ static ssize_t dev_name_show(struct config_item *item, char *buf)
+ {
+ 	return snprintf(buf, PAGE_SIZE, "%s\n", to_target(item)->np.dev_name);
+@@ -332,6 +350,11 @@ static ssize_t enabled_store(struct config_item *item,
+ 	}
+ 
+ 	if (enabled) {	/* true */
++		if (nt->release && !nt->extended) {
++			pr_err("release feature requires extended log message\n");
++			goto out_unlock;
++		}
++
+ 		if (nt->extended && !console_is_registered(&netconsole_ext))
+ 			register_console(&netconsole_ext);
+ 
+@@ -366,6 +389,38 @@ static ssize_t enabled_store(struct config_item *item,
+ 	return err;
+ }
+ 
++static ssize_t release_store(struct config_item *item, const char *buf,
++			     size_t count)
++{
++	struct netconsole_target *nt = to_target(item);
++	int release;
++	int err;
++
++	mutex_lock(&dynamic_netconsole_mutex);
++	if (nt->enabled) {
++		pr_err("target (%s) is enabled, disable to update parameters\n",
++		       config_item_name(&nt->item));
++		err = -EINVAL;
++		goto out_unlock;
++	}
++
++	err = kstrtoint(buf, 10, &release);
++	if (err < 0)
++		goto out_unlock;
++	if (release < 0 || release > 1) {
++		err = -EINVAL;
++		goto out_unlock;
++	}
++
++	nt->release = release;
++
++	mutex_unlock(&dynamic_netconsole_mutex);
++	return strnlen(buf, count);
++out_unlock:
++	mutex_unlock(&dynamic_netconsole_mutex);
++	return err;
++}
++
+ static ssize_t extended_store(struct config_item *item, const char *buf,
+ 		size_t count)
+ {
+@@ -576,10 +631,12 @@ CONFIGFS_ATTR(, local_ip);
+ CONFIGFS_ATTR(, remote_ip);
+ CONFIGFS_ATTR_RO(, local_mac);
+ CONFIGFS_ATTR(, remote_mac);
++CONFIGFS_ATTR(, release);
+ 
+ static struct configfs_attribute *netconsole_target_attrs[] = {
+ 	&attr_enabled,
+ 	&attr_extended,
++	&attr_release,
+ 	&attr_dev_name,
+ 	&attr_local_port,
+ 	&attr_remote_port,
+@@ -772,9 +829,23 @@ static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
+ 	const char *header, *body;
+ 	int offset = 0;
+ 	int header_len, body_len;
++	const char *msg_ready = msg;
++	const char *release;
++	int release_len = 0;
++
++	if (nt->release) {
++		release = init_utsname()->release;
++		release_len = strlen(release) + 1;
++	}
+ 
+-	if (msg_len <= MAX_PRINT_CHUNK) {
+-		netpoll_send_udp(&nt->np, msg, msg_len);
++	if (msg_len + release_len <= MAX_PRINT_CHUNK) {
++		/* No fragmentation needed */
++		if (nt->release) {
++			scnprintf(buf, MAX_PRINT_CHUNK, "%s,%s", release, msg);
++			msg_len += release_len;
++			msg_ready = buf;
++		}
++		netpoll_send_udp(&nt->np, msg_ready, msg_len);
+ 		return;
+ 	}
+ 
+@@ -792,7 +863,10 @@ static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
+ 	 * Transfer multiple chunks with the following extra header.
+ 	 * "ncfrag=<byte-offset>/<total-bytes>"
+ 	 */
+-	memcpy(buf, header, header_len);
++	if (nt->release)
++		scnprintf(buf, MAX_PRINT_CHUNK, "%s,", release);
++	memcpy(buf + release_len, header, header_len);
++	header_len += release_len;
+ 
+ 	while (offset < body_len) {
+ 		int this_header = header_len;
+-- 
+2.34.1
 
-  powerpc: dts: turris1x.dts: Fix PCIe MEM size for pci2 node (2023-07-03 1=
-6:26:51 +1000)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.5 #2
-
- - Fix PCIe MEM size for pci2 node on Turris 1.x boards.
-
- - Two minor build fixes.
-
-Thanks to: Christophe Leroy, Douglas Anderson, Pali Roh=C3=A1r, Petr Mladek=
-, Randy Dunlap.
-
-- ------------------------------------------------------------------
-Douglas Anderson (1):
-      powerpc: Include asm/nmi.c in mobility.c for watchdog_hardlockup_set_=
-timeout_pct()
-
-Pali Roh=C3=A1r (1):
-      powerpc: dts: turris1x.dts: Fix PCIe MEM size for pci2 node
-
-Randy Dunlap (1):
-      powerpc: allow PPC_EARLY_DEBUG_CPM only when SERIAL_CPM=3Dy
-
-
- arch/powerpc/Kconfig.debug                | 2 +-
- arch/powerpc/boot/dts/turris1x.dts        | 6 +++---
- arch/powerpc/platforms/pseries/mobility.c | 1 +
- 3 files changed, 5 insertions(+), 4 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmSoEjEACgkQUevqPMjh
-pYDReg/9Fa0T8KPBQYLQPMG0n8kHf2nDFv4UoB/jnf3TvxpdPqOVDFBveXZbr75p
-jvOw8EooS/zn460xni+SgJIE9nrgwJePBss7EX77wsIeY/OJ7BLgBUoXBGVWim0T
-7mx3t36DC3yqrTCeEnBndil4E+IBY/J9j63tyO3weY6N2qXZMwxZ4fpeLvo8/mM2
-OuaGvSgRg3KPjubHpkHtlowDiSQg5PfaNWI4t88BaQ8rIRWGZDmqUyAYLcM7ycSf
-XlSbSeV+aUBQLUTM41L5H521R4e6NssCRUEEMRIjXQDWr2E9qAloq1d0rm1XJopB
-5l13Pq+tfXliPdPLRbonqY0HuVDEBOSsChpFtg2teMin2XNJsV7UwR6Y52ay0fNk
-z6y4pv4LrnQmoiN/BjLCl/p9E6caLjTn38CIoaWSrI3+IDyzKy/lyb9pkr8s9x+O
-yXHnmIgZHUwR8z6vQt6wWF/wD8OabMMScKiNsq0hAs+EojsQbhiNf0p4w3faKRY5
-leIA7AK5zDrZpjShOv7ajnsbbMnRmwgaS289qNePULDDqhmIMSjXmN42vCJmMN1A
-qvyx21H0kKklTA3mo8hD84iKDkQKU0IWQHhkq19GeVI+9QScsxIz3Vqc7O9KNVN+
-OF3eckv7APwDGU8t8un3YIVNVRKCryZCeYeovSwiLHM2+9HjojM=3D
-=3DACih
------END PGP SIGNATURE-----
