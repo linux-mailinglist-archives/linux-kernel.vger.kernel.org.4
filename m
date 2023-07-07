@@ -2,149 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD8574B823
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0587574B849
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbjGGUjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 16:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S232523AbjGGUqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 16:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbjGGUj2 (ORCPT
+        with ESMTP id S231245AbjGGUqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 16:39:28 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D2F2123
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:38:54 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9741caaf9d4so269861266b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:38:54 -0700 (PDT)
+        Fri, 7 Jul 2023 16:46:09 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC262123
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:46:08 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-7659db6339eso117325485a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:46:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688762333; x=1691354333;
+        d=google.com; s=20221208; t=1688762767; x=1691354767;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j5GzoeG98fEPpoz1Cl1g4Qg71twRkm1tM+omwnJ1Pnk=;
-        b=WH7E9lv9EnTxKkw+kdIYBI9TKdORaKmjvGgb3pPV847969g1QlrNpJzaggCcNI2bbg
-         h+aTRRezJFDZNa2ZALyMVsdt2NvoXYZGyWbcku/1E36NYHjSECN46W7AD+0oz1803eA4
-         lzdBpVev9ZPerFAPGyWWO/aHlqgZl1OgHopnYcusk3HaKmwHFdBjqlJcsIoNJzycsTn1
-         kfnhJVTTNJRQ2wO1kfChdtz/wWwRdt88CkvoYcHmynwgWZRDLPCqtSlJvsAVO5fi2LMu
-         NHRdL3HXNn9cKscccOT7hsBazJ5f0Fua/tERjXEy/liWWxehP1UtUX7sQbJENxFBTTsl
-         H3dQ==
+        bh=0aYVMvYe1G1Ct9F0r9UZVqRVY35bvxFcxuMPw9DOHvw=;
+        b=lkuqLxF14A/w/d+fV/ttf+K3Ub3mN4dsNqaNLTsP+ZDcGTajiX2EvRqyzkSjnpw90h
+         2/kSM88bqsMjXMcVJVwmaRQGqOm4/nSCxcUal0Du0s8hegtUlJy/KdIPSt3tU5D0lEw0
+         WN36Zgo/31PlXBRBCDW4zoA6ZdCUY76aH/bC14sD01W8wnDCdG9bYPTUABJxt5CYePd+
+         lDwNBBGzo8oQPeOZ7xteUlOayvMdyzlP9mBMsp2tPYiyDWDygUa0ybaVaKei63uKBEih
+         5lPTF8ShwuPVLnHlcCIXQLPBhagZJxmmubKJEEIZbSH7Snzkbfqr4uNsd1A2DxzC8zKa
+         yTaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688762333; x=1691354333;
+        d=1e100.net; s=20221208; t=1688762767; x=1691354767;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j5GzoeG98fEPpoz1Cl1g4Qg71twRkm1tM+omwnJ1Pnk=;
-        b=kN2Puc762JQMM5BCsxI9ZvxZMnvAFjWtzGr2gCOk4ahAWh+iypZ3XJO8dg4irxO1hM
-         YWTIQcy8eCZeoof8Iab1++sO//OhBiGkErBhlmhJhgBay0T8AhrcaocWjaPreEfl6pif
-         X/eYH5+LyXCV+WGAFleT06/dUbCPTaCxe6A6XgwARPzFztzl4pW1cjtaMn+T5Rxt45Mb
-         JI/kODIj8Vd7geA4TrWZhkwVZxOAPobVRbhT+Nd0A4b9T8aQAUJDwNAO/y5JbxOQheyv
-         XadVxllFob1fm1FcwMySXuwNm2kL8E51+FQIBq/dIMUZi9AE8kkxCJ0tN7AUkGQEkzJo
-         sqWA==
-X-Gm-Message-State: ABy/qLYdiuA0eE8Y4wSmE2Zb7s38V258TyFaQQNv0eRZbmYQ6QPM74fQ
-        nB6/FgFIQjBXlvrwSAPTPg5iJ+Or2WHneBeb+pZ2vg==
-X-Google-Smtp-Source: APBJJlGvHGSDao1yQTFp/8AttfmOyAketz902pkJlwD7mID8tlI+W7elLQoXUGZjItFKxk9cWhaH/7FWxQqXJBHz7a0=
-X-Received: by 2002:a17:906:1001:b0:962:46d7:c8fc with SMTP id
- 1-20020a170906100100b0096246d7c8fcmr5864601ejm.21.1688762333216; Fri, 07 Jul
- 2023 13:38:53 -0700 (PDT)
+        bh=0aYVMvYe1G1Ct9F0r9UZVqRVY35bvxFcxuMPw9DOHvw=;
+        b=QR1GxdQXE/AIQuaVQEm57nbUOVd7alw1c9AOk6gjz1mk7j0MgFj+7Bt9G00yu1yvBg
+         9RbLkmR1/IZ+yY4zuuJYdlNuJ7JsSaKtYTUxiGI64cmHPyvoa+Sti41ZzJmcCp71HE8n
+         3BzmD7tjFlVaD8s3c5NX9kETvXUuzJs6kWENUXAqIPMtcfjiuRmoEAn34q1YA6uzeNfU
+         A6CmTOoo3ZxfzmR2JNIbqXfEJW4edq4F5T5cWsP9r+T+hn27DJi/xjtdR34GllUNl2P3
+         jqzqTQj21+eOR28HIpJTsEbh3j8xtO3A0BCz/QZ3xHWpIY2xRlnX7WzpVuomP0jswz+g
+         RA5Q==
+X-Gm-Message-State: ABy/qLbNYumzzL1netz4ul7zjkCjXIa7QhiBuoC95ZycqotWpA/cfvDc
+        cAv5mS1xuYd+G0ks4SMtaf5O6y8ta4N3QUQf5QxO3g==
+X-Google-Smtp-Source: APBJJlHUf0rmBIyOI/T2pORO24BydSGObRtEeKTOwPbRW6TmxkjVJRfSahixaV1hd2/4VLJVPsq9WGAU0WIhQb6nXas=
+X-Received: by 2002:a05:620a:2687:b0:765:449d:1397 with SMTP id
+ c7-20020a05620a268700b00765449d1397mr10632093qkp.13.1688762767012; Fri, 07
+ Jul 2023 13:46:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230706225037.1164380-1-axelrasmussen@google.com>
- <20230706225037.1164380-8-axelrasmussen@google.com> <ZKgWOYuIdqa25Qcs@x1n> <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
-In-Reply-To: <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 7 Jul 2023 13:38:16 -0700
-Message-ID: <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] selftests/mm: refactor uffd_poll_thread to allow
- custom fault handlers
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
+ <20230620145338.1300897-1-dhowells@redhat.com> <20230620145338.1300897-11-dhowells@redhat.com>
+ <58466.1688074499@warthog.procyon.org.uk> <20230629164318.44f45caf@kernel.org>
+ <20230630161043.GA2902645@dev-arch.thelio-3990X> <20230630091442.172ec67f@kernel.org>
+ <20230630192825.GA2745548@dev-arch.thelio-3990X>
+In-Reply-To: <20230630192825.GA2745548@dev-arch.thelio-3990X>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Jul 2023 13:45:55 -0700
+Message-ID: <CAKwvOd=H3R0sZjFSNs4xyFdw5yGgxSWk2=v+dmR5TrZfjjXaWA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use sendmsg(MSG_SPLICE_PAGES)
+ rather then sendpage
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Aurelien Aptel <aaptel@nvidia.com>, netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        Willem de Bruijn <willemb@google.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 10:03=E2=80=AFAM Axel Rasmussen <axelrasmussen@googl=
-e.com> wrote:
+On Fri, Jun 30, 2023 at 12:28=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
 >
-> On Fri, Jul 7, 2023 at 6:42=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
-:
-> >
-> > On Thu, Jul 06, 2023 at 03:50:35PM -0700, Axel Rasmussen wrote:
-> > > @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
-> > >  {
-> > >       void *area;
-> > >       unsigned long nr;
-> > > -     struct uffd_args args[nr_cpus];
-> > > +     struct uffd_args *args;
-> > >       uint64_t mem_size =3D nr_pages * page_size;
+> On Fri, Jun 30, 2023 at 09:14:42AM -0700, Jakub Kicinski wrote:
+> > On Fri, 30 Jun 2023 09:10:43 -0700 Nathan Chancellor wrote:
+> > > > Let me CC llvm@ in case someone's there is willing to make
+> > > > the compiler warn about this.
 > > >
-> > > +     args =3D calloc(nr_cpus, sizeof(struct uffd_args));
-> > > +     if (!args)
-> > > +             err("allocating args array failed");
-> >
-> > This is trivial, but I think I requested a "free" (or keep it allocate =
-on
-> > stack) in previous version but it didn't get a response on why we canno=
-t
-> > and it kept going..  could you help explain?
+> > > Turns out clang already has a warning for this, -Wcomma:
+> > >
+> > >   drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma op=
+erator here [-Werror,-Wcomma]
+> > >    1017 |                         msg.msg_flags &=3D ~MSG_SPLICE_PAGE=
+S,
+> > >         |                                                           ^
+> > >   drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to si=
+lence warning
+> > >    1017 |                         msg.msg_flags &=3D ~MSG_SPLICE_PAGE=
+S,
+> > >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >         |                         (void)(                           )
+> > >   1 error generated.
+> > >
+> > > Let me do some wider build testing to see if it is viable to turn thi=
+s
+> > > on for the whole kernel because it seems worth it, at least in this
+> > > case. There are a lot of cases where a warning won't be emitted (see =
+the
+> > > original upstream review for a list: https://reviews.llvm.org/D3976) =
+but
+> > > something is better than nothing, right? :)
 >
-> Oh, sorry! I had meant to change this after our discussion, and simply
-> overlooked it while reworking the patches.
+> Well, that was a pipe dream :/ In ARCH=3Darm multi_v7_defconfig alone,
+> there are 289 unique instances of the warning (although a good number
+> have multiple instances per line, so it is not quite as bad as it seems,
+> but still bad):
 >
-> I'll include this change in a v4 which also addresses e.g. the
-> comments on commit 1.
+> $ rg -- -Wcomma arm-multi_v7_defconfig.log | sort | uniq -c | wc -l
+> 289
+>
+> https://gist.github.com/nathanchance/907867e0a7adffc877fd39fd08853801
 
-Ah, so I tried switching back to the {0} initializer, and was reminded
-why I didn't do that in v1. :) Ignoring the missing braces warning I
-talked about before, using {0} here is actually an error
-("variable-sized object may not be initialized") because this is a
-variable sized array (nr_cpus isn't constant). So, that option is out.
-
-I'm not a huge fan of adding the free() cleanup and dealing with all
-of the err() calls this function has.
-
-Originally I switched to calloc() because I'm not a big fan of VLAs
-anyway. But, as a compromise in v4 I'll leave it a VLA, and switch to
-memset() for initializing it.
+It's definitely interesting to take a look at some of these cases.
+Some are pretty funny IMO.
 
 >
-> >
-> > --
-> > Peter Xu
-> >
+> Probably not a good sign of the signal to noise ratio, I looked through
+> a good handful and all the cases I saw were not interesting... Perhaps
+> the warning could be tuned further to become useful for the kernel but
+> in its current form, it is definitely a no-go :/
+>
+> > Ah, neat. Misleading indentation is another possible angle, I reckon,
+> > but not sure if that's enabled/possible to enable for the entire kernel
+>
+> Yeah, I was surprised there was no warning for misleading indentation...
+> it is a part of -Wall for both clang and GCC, so it is on for the
+> kernel, it just appears not to trigger in this case.
+>
+> > either :( We test-build with W=3D1 in networking, FWIW, so W=3D1 would =
+be
+> > enough for us.
+>
+> Unfortunately, even in its current form, it is way too noisy for W=3D1, a=
+s
+> the qualifier for W=3D1 is "do not occur too often". Probably could be
+> placed under W=3D2 but it still has the problem of wading through every
+> instance and it is basically a no-op because nobody tests with W=3D2.
+>
+> Cheers,
+> Nathan
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
