@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411D374B191
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB9474B194
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjGGNPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S232257AbjGGNQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjGGNPG (ORCPT
+        with ESMTP id S229695AbjGGNQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:15:06 -0400
+        Fri, 7 Jul 2023 09:16:33 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9981FEB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:14:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396BE1FE9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688735659;
+        s=mimecast20190719; t=1688735750;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=6vnw9WeYBMqYt9YWOLp+S5fHsLpKwmQh+j83UzoShuI=;
-        b=XB+2hyqX+RgG0KF7POd4w1+nySTTVymLEO7kr/t+09EBuSHf879ReoDc2tfWn05IUFNWel
-        SBUFvLLHIArfJ2Wchv27PrkaTi2BJRF1KkCci8B+UMHzGbqAmCtwctmD53Ki4wydDebGD1
-        /JrCpFenTvMECtJdVT0BVad/gj+DB8Y=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=/scmW41nRLEVCcvmVFRaHD3MznC8NV7fH9vmMT3xxpU=;
+        b=XKz+z5z+XaIBEKxFucvEi7DBUwmuvpqt4f3Bd/5X/j5dqZc23qSfkFJX9hDeC6wk67KOlQ
+        EaELiesjnetegZnBmi7O7GOGJpMVkggoK46SBEWk9oXXpCOD5RtFOWal5DNRh1mn7v7PIi
+        N5oJxzHfj4YA2JHNYOPvr5RoIkxrhCY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-472-EHDRChWCNVeHPgKts3tO3w-1; Fri, 07 Jul 2023 09:14:18 -0400
-X-MC-Unique: EHDRChWCNVeHPgKts3tO3w-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7673887b2cfso47810585a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 06:14:18 -0700 (PDT)
+ us-mta-70-jS5McAOKOuOe4W9Vjskz3g-1; Fri, 07 Jul 2023 09:15:49 -0400
+X-MC-Unique: jS5McAOKOuOe4W9Vjskz3g-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-76716078e78so38626685a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 06:15:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688735657; x=1691327657;
+        d=1e100.net; s=20221208; t=1688735749; x=1689340549;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6vnw9WeYBMqYt9YWOLp+S5fHsLpKwmQh+j83UzoShuI=;
-        b=h8PChxIZsBkMC+zJR5wYRYu2tuJCWp7ge2eE/YGbG13wqwn8m9vUbmq6J957UeUJ8l
-         IAZVn6KawrLjm5akvJWPVv8DJbfmkZYGEnE9pCyo6rMG1nOEywNmLevL9g2rxPty1gIX
-         h05KNgQwlCUZmugHbB7EMuWu8sJ3R0xu9Qr9TDgWOMCXv1/UaWeWmIg3ZkJsKRNTVyhU
-         GzPemvZJ3dv7Ix0k5g1VPxINN9kkl/lgcNmGKdjFua41Bzi+4kySI8EcmREUJ4gHXKJZ
-         LcqJdCg1yWmrR/mZ6UBIuXXX/j58R9KxbCWSF4l2foYsboJFNY/nj9GAS260LdgxqcbF
-         tW1Q==
-X-Gm-Message-State: ABy/qLbVuaHvgWA9Fq4wVUh5xLd7vhy0eigoNR92U78MPt9SOn+EIOlk
-        N2+lBGo+68EOqxgbajswo9sLPbCsLaN3DOXKkTU7ji1vLEeig/+HYFBzOrk243p3Pcl9HCggtnU
-        O7/W1esnr3BG8QAwY+w0rqeJo
-X-Received: by 2002:a05:620a:444c:b0:767:1573:d36e with SMTP id w12-20020a05620a444c00b007671573d36emr5602278qkp.3.1688735657686;
-        Fri, 07 Jul 2023 06:14:17 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFM9ujXAoIaW0G5RqfQhUiyk9Pp98RfcrEYp1lty1Ca8TCUHVClMKEuALmkLm8iW1IpWPaeUA==
-X-Received: by 2002:a05:620a:444c:b0:767:1573:d36e with SMTP id w12-20020a05620a444c00b007671573d36emr5602241qkp.3.1688735657399;
-        Fri, 07 Jul 2023 06:14:17 -0700 (PDT)
+        bh=/scmW41nRLEVCcvmVFRaHD3MznC8NV7fH9vmMT3xxpU=;
+        b=VI9pc/PVmSSyoMVm+itA3ZxEp2mSMfYthlrgZRcnHSYCOdwltPeqx9DtVqCEZM7jCm
+         DRo4xMOSGsrmajJGDXQ0n4njuIfIfFAxjlofhJ6OLCLKFqicAtvN2elu1tvecDU9wxg3
+         WLl1YKs0AEqeS1Qd4BIJFJxP88OlvTezGluX21azRVfZchSsnD7h7uGFka8NxkBqjFuF
+         +4/18BK1+MAsXXWRDJ8drKNPHRKalw8vcCMbTn9kVRgPNMgaOfd5eE0em1QBbwxAmMg2
+         9vtofEC2CO+5aMxO+jgvx7qiFo8JO4w3oT0Sl2a1NiapQXph2eoAuLo4Myzc2C1Rc/jK
+         W4Hg==
+X-Gm-Message-State: ABy/qLYAKp9LpA1fp0DRRZ15smzmGuzJWM9MKY7cFwXGyNPA2flNTmu7
+        wE+KVnWVtHdGj7tYzaRzDGhOYZJSfMRJUXhJGNuALLtHaRXocKGmcWYS6EVFn9LRyyewildWFxm
+        9ivUFT4LzkqliwL96hbj7ULPQ
+X-Received: by 2002:a05:620a:1908:b0:765:a957:f526 with SMTP id bj8-20020a05620a190800b00765a957f526mr5626647qkb.3.1688735748797;
+        Fri, 07 Jul 2023 06:15:48 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHGcT7o9U4nGwCRjHqy1oj78ajsK+fO3PKeth2RE5DnD0ZtdR5yHIs+kzadtUDYBH9DWM2VOg==
+X-Received: by 2002:a05:620a:1908:b0:765:a957:f526 with SMTP id bj8-20020a05620a190800b00765a957f526mr5626622qkb.3.1688735748545;
+        Fri, 07 Jul 2023 06:15:48 -0700 (PDT)
 Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id a22-20020a05620a16d600b007671678e31fsm1800467qkn.86.2023.07.07.06.14.15
+        by smtp.gmail.com with ESMTPSA id c11-20020ae9e20b000000b0075cebaa1540sm1797911qkc.58.2023.07.07.06.15.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 06:14:17 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 09:14:14 -0400
+        Fri, 07 Jul 2023 06:15:48 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 09:15:44 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,15 +87,15 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/8] mm: userfaultfd: check for start + len overflow
- in validate_range
-Message-ID: <ZKgPpkx0l7mZ6s5E@x1n>
+Subject: Re: [PATCH v3 3/8] mm: userfaultfd: extract file size check out into
+ a helper
+Message-ID: <ZKgQAKIst4DH3lgw@x1n>
 References: <20230706225037.1164380-1-axelrasmussen@google.com>
- <20230706225037.1164380-3-axelrasmussen@google.com>
+ <20230706225037.1164380-4-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230706225037.1164380-3-axelrasmussen@google.com>
+In-Reply-To: <20230706225037.1164380-4-axelrasmussen@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -107,15 +107,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:50:30PM -0700, Axel Rasmussen wrote:
-> Most userfaultfd ioctls take a `start + len` range as an argument.
-> We have the validate_range helper to check that such ranges are valid.
-> However, some (but not all!) ioctls *also* check that `start + len`
-> doesn't wrap around (overflow).
-> 
-> Just check for this in validate_range. This saves some repetitive code,
-> and adds the check to some ioctls which weren't bothering to check for
-> it before.
+On Thu, Jul 06, 2023 at 03:50:31PM -0700, Axel Rasmussen wrote:
+> This code is already duplicated twice, and UFFDIO_POISON will do the
+> same check a third time. So, it's worth extracting into a helper to save
+> repetitive lines of code.
 > 
 > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
