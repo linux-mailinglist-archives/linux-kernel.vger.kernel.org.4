@@ -2,48 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAA174B13D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C9174B142
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjGGMqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S231972AbjGGMrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjGGMqc (ORCPT
+        with ESMTP id S229753AbjGGMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:46:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B8511B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=epRwf36yVmCI0wCfpPMQq9jRILgggfDPrqVrqjBCaHU=; b=aRcME96TksAYGGy3xhnReI37vC
-        5vl2uIBCN9A8Tje4vTHDc0G5gPxthtBsNPG/mabnhgWkLg1hh7FNtFbJ3LRVn1mr6aHBOXgCp1GKG
-        6+EAsjOhy6AyH9NwB76t7ISQALA6g3SgxnG5fo998wq79otfqefffisrYYgPQMaNTW1LnPnF9gdyW
-        uTTfX+xTnghYYA8ZnX7MwIJEH1fiRGelBGIe1F30FOTDbUYocTRS67jwjZRdkVhy04QhYMLWL9V2L
-        EoWg6Y0BRKwSZYvkGogB3bYF+Hn4OU3LxHMuWa/IzLxEU1ekKD8vnAcuBXeDH51qUEpFrqlcMTs36
-        4LZpzHpA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qHkqw-00C1ck-Ly; Fri, 07 Jul 2023 12:46:26 +0000
-Date:   Fri, 7 Jul 2023 13:46:26 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Pintu Kumar <quic_pintu@quicinc.com>, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org, pintu.ping@gmail.com
-Subject: Re: [PATCH v2] mm: cma: print cma name as well in cma_alloc debug
-Message-ID: <ZKgJIlqZk8cw4MBa@casper.infradead.org>
-References: <1688668070-8408-1-git-send-email-quic_pintu@quicinc.com>
- <1688668414-12350-1-git-send-email-quic_pintu@quicinc.com>
- <26816f0a-7f55-f5ce-b71d-769011f9230f@arm.com>
+        Fri, 7 Jul 2023 08:47:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7344124;
+        Fri,  7 Jul 2023 05:47:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 548AE61997;
+        Fri,  7 Jul 2023 12:47:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32AAC433C7;
+        Fri,  7 Jul 2023 12:47:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688734050;
+        bh=aIGBVnL4h550uklj+CUMoa+LNgGz6m/8MWw5loKY/Dk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U55sAdF24LuBpmMzrBY8PF4P+pcjfEHWJnDCWYRbE9X3jPFEbEmrw9/sTaHxQ4qnR
+         zTB8+hGehm2JZgcMQPW3zSkowkH5D6Ay1sslWMka9pHR03d6zYos/DzSv3uZOAQyx/
+         K8Bl9btbJeZWHrYpD8jWq1WMRMEXnZkIa6+P+SMvVLpn4u4x+VLYTfgoupbjOIR4E8
+         lvrFtJqLr4Ky/qCWFLxYUyJUw6FtFwoA+UnUqdGPGkY/lKl8VsKxTuXPy2rDfKJm9J
+         E+6wlHya/uA5YqLio50yZfe7vFB9hPCyQX691xl33ikT6AEbapNZzIM0zKGOxtT+5M
+         cH1eFd8j6Mbwg==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qHksO-0007lO-21;
+        Fri, 07 Jul 2023 14:47:56 +0200
+Date:   Fri, 7 Jul 2023 14:47:56 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Sajid Dalvi <sdalvi@google.com>,
+        Ajay Agarwal <ajayagarwal@google.com>
+Subject: Re: [PATCH] Revert "PCI: dwc: Wait for link up only if link is
+ started"
+Message-ID: <ZKgJfG5Mi-e77LQT@hovoldconsulting.com>
+References: <20230706082610.26584-1-johan+linaro@kernel.org>
+ <20230706125811.GD4808@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <26816f0a-7f55-f5ce-b71d-769011f9230f@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230706125811.GD4808@thinkpad>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,21 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 03:57:42PM +0530, Anshuman Khandual wrote:
-> LGTM, cma->name is an identifying attribute for the region for which the allocation
-> request was made. But how about using cma_get_name() helper instead ? Very few call
-> sites have been using the helper.
+On Thu, Jul 06, 2023 at 06:28:11PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Jul 06, 2023 at 10:26:10AM +0200, Johan Hovold wrote:
 
-It's not really a "helper", is it?  The function name is longer than
-its implementation.
+> > Finally, note that the intel-gw driver is the only driver currently not
+> > providing a start_link callback and instead starts the link in its
+> > host_init callback, and which may avoid an additional one-second timeout
+> > during probe by making the link-up wait conditional. If anyone cares,
+> > that can be done in a follow-up patch with a proper motivation.
 
-cma_get_name(cma)
-vs
-cma->name
+> The offending commit is bogus since it makes the intel-gw _special_ w.r.t
+> waiting for the link up. Most of the drivers call dw_pcie_host_init() during the
+> probe time and they all have to wait for 1 sec if the slot is empty.
 
-Plus there's the usual question about whether a "got" name needs to be
-"put" (does it grab a refcount?)
+Just to clarify, the intel-gw driver starts the link and waits for link
+up in its host_init() callback, which is called during probe. That wait
+could possibly just be dropped in favour of the one in
+dw_pcie_host_init() and/or the driver could be reworked to implement
+start_link().
 
-I think it's useful that this function exists since it lets us not expose
-struct cma outside of mm/, but it really should be called cma_name()
-and I don't think we should be encouraging its use within cma.c.
+Either way, the call in dw_pcie_host_init() will only add an additional
+1 second delay in cases where the link did *not* come up.
+
+> As Johan noted, intel-gw should make use of the async probe to avoid the boot
+> delay instead of adding a special case.
+
+Indeed.
+
+Johan
