@@ -2,115 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A35674B9B5
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C28D74B9B6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjGGWvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 18:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S230040AbjGGWwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 18:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjGGWvq (ORCPT
+        with ESMTP id S229629AbjGGWwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 18:51:46 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B6A10C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:51:45 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-4036bd4fff1so46961cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 15:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688770304; x=1691362304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xRS1+vzqoKA6WQhbEprHzN1QDhN5ZxO4uWWH/803Ycw=;
-        b=cCoBFJBTSCsx+sWLkqKlnPjv3VkWiOnzh95mffIbbKYhWflksKKw+p/SH7HmfNzhaV
-         cfsYo5f9MnvR2SkaQW9UO1HnlRBAuDsio+sY6kO85m2WFPgm5gDZqI/8wDYlrIhuQ/K0
-         /yThOsBpOzmvrvwfsSeCoiu8BuanzOgU8cp6Klbg6og+7z8t6TKkCmbwdD3W6HFnmoId
-         RSodymi8cSFcd2eZGOe2fqEEtmbFqwZlDNbBr5Ct0nEwSfkC3liiTVJ7RbiTc/UXAERx
-         HpyzXuF3qM58iXX11ZC+UcSIyhOiNcraDFe2Zo2U7TketXrauwEahRQ1fXlVMrKdvEP7
-         DKug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688770304; x=1691362304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xRS1+vzqoKA6WQhbEprHzN1QDhN5ZxO4uWWH/803Ycw=;
-        b=MG0UAMmOrYz1ZYmiEeiaCkJy8xi4gxY9qrzIpdJvjqtNILqMjrMrp+dE29LqViiuLk
-         ZWQpMviTRXEgIjIHnSE4fcBzUz4pPvk7FGpQK/DK53YiCoZsSlamvzbGDMzPp9Y4MeaG
-         AuZPVmG6rmXOFZ7xqkBtYKrmqFtbkoC78qPfjy5Bq4+tZo1FgltVl+BLbtF/1KSpS+2x
-         dThwItnP90x3MWQYOzMrKILjKAaxnbBPI5b0NCaMmuOxmzCqPP7il5rVslFWuu1YV/mF
-         mumS3hRBAmsobRuLEN36Mod61EOSYgkvOSBPaE6tEyhSeS+fX4dmUqIPXBe99b8JjmJF
-         VDbw==
-X-Gm-Message-State: ABy/qLYxh+r1r1OVxmW04MZ3FHvFiIHC4h7vuj6NnQFdDM/msAjU+Ixh
-        BKCtBorDCA8Vv+9c4YYcdekN9CiMkQUcd8GVTsM9
-X-Google-Smtp-Source: APBJJlHmPMbf5wZ2gS+TsmPvkLDic/A6ieQ7Tj2Cyb5u75LiPR2cZp/onwlLz1TbJvJUGxd2LjDOVglbhm6qG40Ukq8=
-X-Received: by 2002:ac8:5781:0:b0:3fa:45ab:22a5 with SMTP id
- v1-20020ac85781000000b003fa45ab22a5mr27304qta.27.1688770304082; Fri, 07 Jul
- 2023 15:51:44 -0700 (PDT)
+        Fri, 7 Jul 2023 18:52:39 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44036B9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:52:38 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:47910)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qHuJW-00GDhM-90; Fri, 07 Jul 2023 16:52:34 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:34532 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qHuJV-00FYwO-6s; Fri, 07 Jul 2023 16:52:33 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "brgerst@gmail.com" <brgerst@gmail.com>
+References: <20230706052231.2183-1-xin3.li@intel.com>
+        <87v8exgmot.fsf@email.froward.int.ebiederm.org>
+        <SA1PR11MB67348D11385F584354AB84C3A82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+        <SA1PR11MB6734F3F72095C4D6B9C12C9BA82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+        <87sf9zfx76.fsf@email.froward.int.ebiederm.org>
+        <SA1PR11MB6734577080AC6734E305D735A82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+Date:   Fri, 07 Jul 2023 17:51:49 -0500
+In-Reply-To: <SA1PR11MB6734577080AC6734E305D735A82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
+        (Xin3 Li's message of "Fri, 7 Jul 2023 22:17:36 +0000")
+Message-ID: <87pm53e3ne.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230630171052.985577-1-peter.hilber@opensynergy.com> <20230630171052.985577-2-peter.hilber@opensynergy.com>
-In-Reply-To: <20230630171052.985577-2-peter.hilber@opensynergy.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 7 Jul 2023 15:51:32 -0700
-Message-ID: <CANDhNCpaoRRKGz0XxV3zjA-ux66gU-dT_bGQ_OqDh4ty=VdXLQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] timekeeping: Fix cross-timestamp interpolation on
- counter wrap
-To:     Peter Hilber <peter.hilber@opensynergy.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Christopher S. Hall" <christopher.s.hall@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1qHuJV-00FYwO-6s;;;mid=<87pm53e3ne.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19QTPt1VjS7X1hGX42zlzX0I1GsKs+iLg4=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;"Li, Xin3" <xin3.li@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 499 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 15 (3.0%), b_tie_ro: 12 (2.5%), parse: 1.55
+        (0.3%), extract_message_metadata: 15 (3.1%), get_uri_detail_list: 2.3
+        (0.5%), tests_pri_-2000: 4.6 (0.9%), tests_pri_-1000: 2.5 (0.5%),
+        tests_pri_-950: 1.44 (0.3%), tests_pri_-900: 1.21 (0.2%),
+        tests_pri_-200: 1.06 (0.2%), tests_pri_-100: 6 (1.1%), tests_pri_-90:
+        62 (12.5%), check_bayes: 60 (12.1%), b_tokenize: 9 (1.8%),
+        b_tok_get_all: 10 (2.0%), b_comp_prob: 3.4 (0.7%), b_tok_touch_all: 32
+        (6.5%), b_finish: 1.56 (0.3%), tests_pri_0: 316 (63.4%),
+        check_dkim_signature: 0.60 (0.1%), check_dkim_adsp: 7 (1.4%),
+        poll_dns_idle: 45 (9.1%), tests_pri_10: 3.6 (0.7%), tests_pri_500: 63
+        (12.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] x86/ia32: Do not modify the DPL bits for a null selector
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:12=E2=80=AFAM Peter Hilber
-<peter.hilber@opensynergy.com> wrote:
->
-> cycle_between() decides whether get_device_system_crosststamp() will
-> interpolate for older counter readings.
->
-> cycle_between() yields wrong results for a counter wrap-around where afte=
-r
-> < before < test, and for the case after < test < before.
->
-> Fix the comparison logic.
->
-> Fixes: 2c756feb18d9 ("time: Add history to cross timestamp interface supp=
-orting slower devices")
-> Signed-off-by: Peter Hilber <peter.hilber@opensynergy.com>
-> ---
->  kernel/time/timekeeping.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index 266d02809dbb..8f35455b6250 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -1186,7 +1186,7 @@ static bool cycle_between(u64 before, u64 test, u64=
- after)
->  {
->         if (test > before && test < after)
->                 return true;
-> -       if (test < before && before > after)
-> +       if (before > after && (test > before || test < after))
->                 return true;
->         return false;
->  }
+"Li, Xin3" <xin3.li@intel.com> writes:
 
-Thanks for catching this and sending it in.
-Looks good to me. Curious: Did you actually hit such a wrap around with u64=
-s?
+>> Perhaps something like patch below to make it clear that we are
+>> normalizing the segment values and forcing that normalization.
+>
+> "Normalizing" sounds a good term.
+>
+>> I am a bit confused why this code is not the same for ia32 and
+>> ia32_emulation.  I would think the normalization at least should apply
+>> to the 32bit case as well.
+>> 
+>> Eric
+>> 
+>> diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
+>> index 9027fc088f97..e5f3978388fd 100644
+>> --- a/arch/x86/kernel/signal_32.c
+>> +++ b/arch/x86/kernel/signal_32.c
+>> @@ -36,22 +36,47 @@
+>>  #ifdef CONFIG_IA32_EMULATION
+>>  #include <asm/ia32_unistd.h>
+>> 
+>> +static inline unsigned int normalize_seg_index(unsigned int index)
+>
+> normalize_usrseg_index?
 
-Acked-by: John Stultz <jstultz@google.com>
+Perhaps useg?  I think that is the abbreviation I have seen used
+elsewhere.  I was trying to get things as close as I could to the
+x86 documentation so people could figure out what is going on by
+reading the documentation.
 
-thanks
--john
+>> +{
+>> +	/*
+>> +	 * Convert the segment index into normalized form.
+>> +	 *
+>> +	 * For the indexes 0,1,2,3 always use the value of 0, as IRET
+>> +	 * forces this form for the nul segment.
+>> +	 *
+>> +	 * Otherwise set both DPL bits to force it to be a userspace
+>> +	 * ring 3 segment index.
+>> +	 */
+>> +	return (index < 3) ? 0 : index | 3;
+>
+> s/</<=
+>
+> no?
+
+Yes.  My typo.
+
+The patch was very much a suggestion on how we can perhaps write the
+code to make it clearer what is happening.  Normalizing the segment
+index values seems like what we have been intending to do all along.
+
+In fact it might make sense for clarity to simply use the existing
+"index | 3" logic in what I called normal_seg_index, and then just
+update the normalization to add the null pointer case.
+
+I was just spending a little time trying to make it so that the code
+is readable.
+
+> With this patch it looks that 1,2,3 are no longer valid selector values
+> in Linux, which seems the right thing to do but I don't know if there is
+> any side effect.
+
+You have said that IRET always changes 1,2,3 to 0.  So I don't expect
+the selector values of 1,2,3 will last very long.
+
+If that is not the case I misunderstood, and we should consider doing
+something else.
+
+It bothers me that the existing code, and your code as well only
+handles the normalization on x86_64 for ia32 mode.  Shouldn't
+the same normalization logic apply in a 32bit kernel as well?
+Scope creep I know but the fact the code does not match
+seems concerning.
+
+Eric
+
+
+>> +}
+>> +
+>>  static inline void reload_segments(struct sigcontext_32 *sc)
+>>  {
+>> -	unsigned int cur;
+>> +	unsigned int new, cur;
+>> 
+>> +	new = normalize_seg_index(sc->gs);
+>>  	savesegment(gs, cur);
+>> -	if ((sc->gs | 0x03) != cur)
+>> -		load_gs_index(sc->gs | 0x03);
+>> +	cur = normalize_seg_index(cur);
+>> +	if (new != cur)
+>> +		load_gs_index(new);
+>> +
+>> +	new = normalize_seg_index(sc->fs);
+>>  	savesegment(fs, cur);
+>> -	if ((sc->fs | 0x03) != cur)
+>> -		loadsegment(fs, sc->fs | 0x03);
+>> +	cur = normalize_seg_index(cur);
+>> +	if (new != cur)
+>> +		loadsegment(fs, new);
+>> +
+>> +	new = normalize_seg_index(sc->ds);
+>>  	savesegment(ds, cur);
+>> -	if ((sc->ds | 0x03) != cur)
+>> -		loadsegment(ds, sc->ds | 0x03);
+>> +	cur = normalize_seg_index(cur);
+>> +	if (new != cur)
+>> +		loadsegment(ds, new);
+>> +
+>> +	new = normalize_seg_index(sc->es);
+>>  	savesegment(es, cur);
+>> -	if ((sc->es | 0x03) != cur)
+>> -		loadsegment(es, sc->es | 0x03);
+>> +	cur = normalize_seg_index(cur);
+>> +	if (new != cur)
+>> +		loadsegment(es, new);
+>>  }
+>> 
+>>  #define sigset32_t			compat_sigset_t
