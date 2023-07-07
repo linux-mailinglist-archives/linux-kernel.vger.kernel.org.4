@@ -2,216 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9789574B499
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8FE74B4A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjGGPup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S230012AbjGGPvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjGGPuo (ORCPT
+        with ESMTP id S229502AbjGGPvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:50:44 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE98819B2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:50:42 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-7658430eb5dso201592085a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:50:42 -0700 (PDT)
+        Fri, 7 Jul 2023 11:51:16 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318A91723
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:51:15 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8a44ee159so10922265ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688745042; x=1691337042;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeK5iqjthaezt9omvDFKAc3BKUn40isG944zwT7XUBA=;
-        b=FlVxfEwo7+mTZCXeCo3gHw5T02yj00JiJdEW9gmaYOYRi8UEplGQncRkfmhDosbPLp
-         bP9FsnzUerNGEs4+sg35PdcnQcuDg3+CFIM/SfVXQ4kFbpRtbek1Oai12K/QtsXwjh4+
-         zpNGt1vWBhG/HvFVweCnmmjgh+4RbRBcOtYgw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688745042; x=1691337042;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688745074; x=1691337074;
+        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oeK5iqjthaezt9omvDFKAc3BKUn40isG944zwT7XUBA=;
-        b=PRbB3kBUxMxEGh+Myjp/1ZdstRb9QGhDS6SEyg+nI+qbHG5pOpUvQf6PZZmj5U44k6
-         z93Gb+tK2EoyTBy6lU+Z4VjXvxFcIYksB3F4AExlxXBnaTIH9MLOOxC0pSLulJQlQESG
-         b4sBiVGyECYG0nPjDfhMpaf7ZEPW/tOjZ83f4vPtOFh9oYCQQT5V27BrS6kNSp74EHZs
-         ypvJSFbCQfQAC29w9zIY8cfwViDr/zP4kioUx202LtfypV7U19QqcZYr6KJNp90Pdq8h
-         rFXnsgv6eOHwl6jKtmcklHW5IlKuVKyHOmICM4grqi7rtRznxzXK5SYzZVP9yJNei3da
-         AIMA==
-X-Gm-Message-State: ABy/qLYHsg6kJslxx9nVSEjFuqToZY+IVpf9Drvzkzpfkf4iGG/41mfU
-        gPt0Ge5XI4ZUnUQjG1gM/fS4Hg==
-X-Google-Smtp-Source: APBJJlFN2nocxSf9TcaIIz2ohyopOIqwWkiEgKKHQwwdEysttD2w7GwA1bbUozw0vhin3BWdCkP3Sg==
-X-Received: by 2002:a05:620a:17a7:b0:763:b4d7:51c1 with SMTP id ay39-20020a05620a17a700b00763b4d751c1mr7126782qkb.50.1688745041910;
-        Fri, 07 Jul 2023 08:50:41 -0700 (PDT)
-Received: from [10.136.64.163] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id z23-20020ae9c117000000b00765a9f53af0sm1909493qki.128.2023.07.07.08.50.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 08:50:41 -0700 (PDT)
-Message-ID: <6e6d8cfd-63fd-f3b5-7ab0-a4d99895a17c@broadcom.com>
-Date:   Fri, 7 Jul 2023 08:50:38 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] i2c: bcm-iproc: Fix bcm_iproc_i2c_isr deadlock issue
-To:     Chengfeng Ye <dg573847474@gmail.com>, andi.shyti@kernel.org,
-        rjui@broadcom.com, sbranden@broadcom.com, wsa@kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230707084941.28964-1-dg573847474@gmail.com>
-From:   Ray Jui <ray.jui@broadcom.com>
-In-Reply-To: <20230707084941.28964-1-dg573847474@gmail.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005d5bf105ffe7986e"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        bh=23cqmaEm1+rrwu4ItjV07c6c0kx8Bev4W0iEP8t8VCI=;
+        b=U10ZQQZsDLQHXCqxVXq6yUQsji0YGHTfX2ZCsMxoVeh48lPWeUbidTGBNGS5mLBnZM
+         P8XoZ8iExj7zEgD0S4gJ6qC9Jh7CrjjgLa9jQyS3Ud3ywSt7pSprhqrue1PYsxDah8rD
+         nCdpomZDXWTJw8aj5BR2l2ufxGSYdCIKVYe0ILFVgNpZszjXevgxmKk6UfnzkfoTnPRQ
+         vBcFynlRh1tNP13Ys+8Xu6tBZG2AL2c6iFDJXnJdqeICS20ivKmU4DI6RWDr+yWeIdDR
+         Hsx6ydU0HIlF4PPwXaUhgMdRz08/SE2TnHKEzZEvjznxV7f0l1aEFgNUrz9F/CDV0Bll
+         5E5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688745074; x=1691337074;
+        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=23cqmaEm1+rrwu4ItjV07c6c0kx8Bev4W0iEP8t8VCI=;
+        b=CE1LjnNT/++J9FQnivYZ+MtbxT6QdjAsOhv/7Bjs/goM09VEOCWfGryANhFD/kp/8B
+         8krO8/xtLJb5CSfheywRHVu09fBp/kT4tnxtOXK+lkKbkqhmdVoobWtshQwIvGVkU3eh
+         K1ScI5YN1TDBChSiqwHFXIKW56XwiV+atz1DGnQQKgmPGBdQePIPzY74zH8Y1mHFLe1m
+         OU8cVIzrqnIUXscBwfpJdFTLP2BdcxhSsN5pbnnfMUmko5mbZzofWupTjJLKy3xreyGN
+         ENASAvG+qSYu6F+nFV6IOdYaWrSMTXzZ59pnFc9/y+Q9yLXMlBPsFX7CHHsjSeUf+kmb
+         hgqg==
+X-Gm-Message-State: ABy/qLblZUMPu5PfAZY0lkW9SXvgaxHmzI1NRG0x3wAFSwQDQVv5YbIE
+        TNQMhdgdwMqkaRXn26To+LmRe6Z83QIlQ1Ygy74=
+X-Google-Smtp-Source: APBJJlE3eojbqcmQROaqORyMFmvhpy4Zwg4fksxax5v7BA6ga0UBhHagU0OKgJqGLKZAwZtC3fMNGA==
+X-Received: by 2002:a17:902:e5c1:b0:1b6:4bbd:c3a3 with SMTP id u1-20020a170902e5c100b001b64bbdc3a3mr4836177plf.52.1688745074445;
+        Fri, 07 Jul 2023 08:51:14 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id k6-20020a170902694600b001b53d3d8f3dsm3415493plt.299.2023.07.07.08.51.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 08:51:13 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 08:51:13 -0700 (PDT)
+X-Google-Original-Date: Fri, 07 Jul 2023 08:51:06 PDT (-0700)
+Subject: [GIT PULL] RISC-V Patches for the 6.5 Merge Window, Part 2
+CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-4bd23a4e-dd7c-4f62-90c8-804c137c2621@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000005d5bf105ffe7986e
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+merged tag 'riscv-for-linus-6.5-mw1'
+The following changes since commit 533925cb760431cb496a8c965cfd765a1a21d37e:
 
+  Merge tag 'riscv-for-linus-6.5-mw1' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux (2023-06-30 09:37:26 -0700)
 
+are available in the Git repository at:
 
-On 7/7/2023 1:49 AM, Chengfeng Ye wrote:
-> iproc_i2c_rd_reg() and iproc_i2c_wr_reg() are called from both
-> interrupt context (e.g. bcm_iproc_i2c_isr) and process context
-> (e.g. bcm_iproc_i2c_suspend). Therefore, interrupts should be
-> disabled to avoid potential deadlock. To prevent this scenario,
-> use spin_lock_irqsave().
-> 
-> Fixes: 9a1038728037 ("i2c: iproc: add NIC I2C support")
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-bcm-iproc.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index 85d8a6b04885..30a2a3200bed 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -233,13 +233,14 @@ static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
->  				   u32 offset)
->  {
->  	u32 val;
-> +	unsigned long flags;
->  
->  	if (iproc_i2c->idm_base) {
-> -		spin_lock(&iproc_i2c->idm_lock);
-> +		spin_lock_irqsave(&iproc_i2c->idm_lock, flags);
->  		writel(iproc_i2c->ape_addr_mask,
->  		       iproc_i2c->idm_base + IDM_CTRL_DIRECT_OFFSET);
->  		val = readl(iproc_i2c->base + offset);
-> -		spin_unlock(&iproc_i2c->idm_lock);
-> +		spin_unlock_irqrestore(&iproc_i2c->idm_lock, flags);
->  	} else {
->  		val = readl(iproc_i2c->base + offset);
->  	}
-> @@ -250,12 +251,14 @@ static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
->  static inline void iproc_i2c_wr_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
->  				    u32 offset, u32 val)
->  {
-> +	unsigned long flags;
-> +
->  	if (iproc_i2c->idm_base) {
-> -		spin_lock(&iproc_i2c->idm_lock);
-> +		spin_lock_irqsave(&iproc_i2c->idm_lock, flags);
->  		writel(iproc_i2c->ape_addr_mask,
->  		       iproc_i2c->idm_base + IDM_CTRL_DIRECT_OFFSET);
->  		writel(val, iproc_i2c->base + offset);
-> -		spin_unlock(&iproc_i2c->idm_lock);
-> +		spin_unlock_irqrestore(&iproc_i2c->idm_lock, flags);
->  	} else {
->  		writel(val, iproc_i2c->base + offset);
->  	}
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.5-mw2
 
-Acked-by: Ray Jui <ray.jui@broadcom.com>
+for you to fetch changes up to e8605e8fdf42642048b7e59141deaf8e4cf06d71:
 
-Thanks, Chengfeng.
+  Merge patch series "riscv: some CMO alternative related clean up" (2023-07-06 10:32:38 -0700)
 
---0000000000005d5bf105ffe7986e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+----------------------------------------------------------------
+RISC-V Patches for the 6.5 Merge Window, Part 2
 
-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
-YVhHgdTTB3aAzFyz4UFRLwxCzIG7d7GIiB9MoLImssS08R5WQ5EJCd1fAF6iefLupAn/plPmn2w0
-GF8bLF/FhwOn8jObLW5pQiKhjQSv3QIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
-BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
-YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
-b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
-MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
-cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
-bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
-anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
-NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIScG7uNJuCYBQieQC+eonQS9tdkwDQYJKoZIhvcNAQEL
-BQADggEBAGLwq/sDtwLmkAa5/UpIG4o5HA9EH7SaYi05EUlzrDdIeZsJnXDkxmG9144wNZBbndHx
-nKXRnpJjCX4jhZeNQFyY4m5c9c8bMytO4zb8XUJIxCjqkhtukJtqHieEogwGsmZlpOxt6Ucc2JXg
-6oTTbyITD4Bvn7cFb7EI2FBcT7K8bf8AvwtNLl/dKYtUA/nEvVhjqp0wsDL3t//Q3GTwGWZB41gf
-LC04V6gD9TVFl7i/N48Gu8PzTt4Kt0SZvBr7kQ9PKi7DVyXe23Ou89QVflaja3bPjt2UZCyq0JxJ
-Nu5SjFDWjKlBCzbLDGkCBlM4DpjAb0y4MyKOsiVv7vIxNlYxggJtMIICaQIBATBrMFsxCzAJBgNV
-BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
-QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwcAgHcg4j27cIp1UUwDQYJYIZIAWUDBAIBBQCg
-gdQwLwYJKoZIhvcNAQkEMSIEIN4dGdvzE6b+VqvLwd49+hde3mhGEmn+/hE+/D5BR7lTMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcwNzE1NTA0MlowaQYJKoZI
-hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
-AASCAQAS6tvPPNK0CGuf/DFOh4gF8IeFXJNmHBWi3N8ed5dndW9tda2p4uCdVcISoTysOQ/ezU47
-GR/o6z5D6jo2/h9vxUQyMnMhdGmrzc6jEx6eByQES3oN3r2/L1xH0zFePkk0YAOhB9eL/m9uRHUO
-pbK2pRl+g5IFeewpfTWaY02mXWZ4ecEX0Q4ky03NWF/ErVWte53IARt+nntrR0A2huw5yUCOQFTr
-uA3Ootga9VQxyXdBgeDEZXQXLGB9oS0O+s3LS3MCpc5I5hZ8K2RDeKGdITZ/1HJneugMFH0BbPVu
-NExsVR2MeFzyJxql6AyaisDELmXFZ+Wyi/GLeayfTtRM
---0000000000005d5bf105ffe7986e--
+* A bunch of fixes/cleanups from the first part of the merge window,
+  mostly related to ACPI and vector as those were large.
+* Some documentation improvements, mostly related to the new code.
+* The "riscv,isa" DT key is deprecated.
+* Support for link-time dead code elimination.
+* Support for minor fault registration in userfaultd.
+* A handful of cleanups around CMO alternatives.
+
+----------------------------------------------------------------
+The batch from yesterday morning didn't make it to linux-next, I just screwed
+up and forgot to move them off staging in time.  They're all fairly small and
+still pass my tests, but I don't really like to skip linux-next so I figured
+I'd say something.
+
+Aside from that, things look fairly sane for what was a pretty large merge
+window.  There's one outstanding bug related to mapping symbols that manifests
+in some randconfigs, there's a fix out already [1].  That's not a merge window
+regression though, so I think it's safe to proceed.  There's also a handful of
+the normal merge window all{yes,mod}config issues, they have fixes on the lists
+as well.
+
+1: https://lore.kernel.org/all/437ac153-620c-2012-7ce3-66442b505972@infradead.org/
+
+----------------------------------------------------------------
+Andy Chiu (3):
+      riscv: vector: only enable interrupts in the first-use trap
+      riscv: vector: clear V-reg in the first-use trap
+      selftests: Test RISC-V Vector's first-use handler
+
+Ben Dooks (1):
+      riscv: vdso: include vdso/vsyscall.h for vdso_data
+
+Björn Töpel (1):
+      riscv: Discard vector state on syscalls
+
+Conor Dooley (2):
+      RISC-V: drop error print from riscv_hartid_to_cpuid()
+      dt-bindings: riscv: deprecate riscv,isa
+
+Jisheng Zhang (6):
+      riscv: move options to keep entries sorted
+      riscv: vmlinux-xip.lds.S: remove .alternative section
+      vmlinux.lds.h: use correct .init.data.* section name
+      riscv: errata: thead: only set cbom size & noncoherent during boot
+      riscv: mm: mark CBO relate initialization funcs as __init
+      riscv: mm: mark noncoherent_supported as __ro_after_init
+
+John Hubbard (1):
+      mm: riscv: fix an unsafe pte read in huge_pte_alloc()
+
+Marc Zyngier (1):
+      risc-v: Fix order of IPI enablement vs RCU startup
+
+Nick Desaulniers (1):
+      riscv: disable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for LLD
+
+Palmer Dabbelt (5):
+      RISC-V: Document that V registers are clobbered on syscalls
+      RISC-V: Fix up some vector state related build failures
+      Merge patch series "riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION"
+      RISC-V: Document the ISA string parsing rules for ACPI
+      Merge patch series "riscv: some CMO alternative related clean up"
+
+Samuel Holland (1):
+      riscv: Select HAVE_ARCH_USERFAULTFD_MINOR
+
+Song Shuai (1):
+      riscv: Enable ARCH_SUSPEND_POSSIBLE for s2idle
+
+Woody Zhang (1):
+      riscv: move memblock_allow_resize() after linear mapping is ready
+
+Zhangjin Wu (1):
+      riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |  43 ++--
+ .../devicetree/bindings/riscv/extensions.yaml      | 250 +++++++++++++++++++++
+ Documentation/riscv/acpi.rst                       |  10 +
+ Documentation/riscv/index.rst                      |   1 +
+ Documentation/riscv/vector.rst                     |   8 +
+ arch/riscv/Kconfig                                 |  18 +-
+ arch/riscv/errata/thead/errata.c                   |   7 +-
+ arch/riscv/include/asm/vector.h                    |  34 +++
+ arch/riscv/include/uapi/asm/sigcontext.h           |   4 +
+ arch/riscv/kernel/smp.c                            |   1 -
+ arch/riscv/kernel/smpboot.c                        |   5 +-
+ arch/riscv/kernel/traps.c                          |  10 +-
+ arch/riscv/kernel/vdso.c                           |   1 +
+ arch/riscv/kernel/vector.c                         |   1 +
+ arch/riscv/kernel/vmlinux-xip.lds.S                |   6 -
+ arch/riscv/kernel/vmlinux.lds.S                    |   6 +-
+ arch/riscv/mm/cacheflush.c                         |   8 +-
+ arch/riscv/mm/dma-noncoherent.c                    |   2 +-
+ arch/riscv/mm/hugetlbpage.c                        |   6 +-
+ arch/riscv/mm/init.c                               |   4 +-
+ include/asm-generic/vmlinux.lds.h                  |   2 +-
+ tools/testing/selftests/riscv/vector/.gitignore    |   1 +
+ tools/testing/selftests/riscv/vector/Makefile      |   6 +-
+ .../selftests/riscv/vector/v_initval_nolibc.c      |  68 ++++++
+ 24 files changed, 449 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/riscv/extensions.yaml
+ create mode 100644 Documentation/riscv/acpi.rst
+ create mode 100644 tools/testing/selftests/riscv/vector/v_initval_nolibc.c
