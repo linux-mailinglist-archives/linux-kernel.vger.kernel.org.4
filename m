@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0673074B9A3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A35674B9B5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 00:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjGGWlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 18:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S229675AbjGGWvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 18:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbjGGWlj (ORCPT
+        with ESMTP id S229629AbjGGWvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 18:41:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866C82684
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=9SbVTk+LNTBxoLThJ67eA8KRw/oJMiqxVh5LsFdQDWo=; b=hvjsFz3VzVIsRj4w3CYdGg22Hu
-        DBX18iPtBuhcrbBACMIdScLSMXBCEWQTLSaCyo7K34mkKQdSinlJes/DYKkUneTjemDIYb92iP/Wu
-        vG8JNncl3DuqsFnwwPnLBvAwtu27BVM7Nwo/Iv8WSTaqmMWdpPk22XT/xK2AgSp5xoROvUa3cvE0p
-        U093LjuItCOfT+MO/CSQX5KXI4zahDYUbhKGs1gnsLOrFabPd491CHUsjkmjFPmQF1QhuA8/VjlOB
-        1BTSPSjkxt/Pee6v78I7XEbQd/QoCizA2cF8OMSOrhZ+l89I6rJvOLfiOsb30as9yDC13MzwC7yUr
-        aRuDvYxw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHu8r-005qd2-2p;
-        Fri, 07 Jul 2023 22:41:33 +0000
-Message-ID: <67dabd7d-5c3a-2016-a59a-4a0717e478dc@infradead.org>
-Date:   Fri, 7 Jul 2023 15:41:31 -0700
+        Fri, 7 Jul 2023 18:51:46 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B6A10C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:51:45 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-4036bd4fff1so46961cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 15:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688770304; x=1691362304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xRS1+vzqoKA6WQhbEprHzN1QDhN5ZxO4uWWH/803Ycw=;
+        b=cCoBFJBTSCsx+sWLkqKlnPjv3VkWiOnzh95mffIbbKYhWflksKKw+p/SH7HmfNzhaV
+         cfsYo5f9MnvR2SkaQW9UO1HnlRBAuDsio+sY6kO85m2WFPgm5gDZqI/8wDYlrIhuQ/K0
+         /yThOsBpOzmvrvwfsSeCoiu8BuanzOgU8cp6Klbg6og+7z8t6TKkCmbwdD3W6HFnmoId
+         RSodymi8cSFcd2eZGOe2fqEEtmbFqwZlDNbBr5Ct0nEwSfkC3liiTVJ7RbiTc/UXAERx
+         HpyzXuF3qM58iXX11ZC+UcSIyhOiNcraDFe2Zo2U7TketXrauwEahRQ1fXlVMrKdvEP7
+         DKug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688770304; x=1691362304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xRS1+vzqoKA6WQhbEprHzN1QDhN5ZxO4uWWH/803Ycw=;
+        b=MG0UAMmOrYz1ZYmiEeiaCkJy8xi4gxY9qrzIpdJvjqtNILqMjrMrp+dE29LqViiuLk
+         ZWQpMviTRXEgIjIHnSE4fcBzUz4pPvk7FGpQK/DK53YiCoZsSlamvzbGDMzPp9Y4MeaG
+         AuZPVmG6rmXOFZ7xqkBtYKrmqFtbkoC78qPfjy5Bq4+tZo1FgltVl+BLbtF/1KSpS+2x
+         dThwItnP90x3MWQYOzMrKILjKAaxnbBPI5b0NCaMmuOxmzCqPP7il5rVslFWuu1YV/mF
+         mumS3hRBAmsobRuLEN36Mod61EOSYgkvOSBPaE6tEyhSeS+fX4dmUqIPXBe99b8JjmJF
+         VDbw==
+X-Gm-Message-State: ABy/qLYxh+r1r1OVxmW04MZ3FHvFiIHC4h7vuj6NnQFdDM/msAjU+Ixh
+        BKCtBorDCA8Vv+9c4YYcdekN9CiMkQUcd8GVTsM9
+X-Google-Smtp-Source: APBJJlHmPMbf5wZ2gS+TsmPvkLDic/A6ieQ7Tj2Cyb5u75LiPR2cZp/onwlLz1TbJvJUGxd2LjDOVglbhm6qG40Ukq8=
+X-Received: by 2002:ac8:5781:0:b0:3fa:45ab:22a5 with SMTP id
+ v1-20020ac85781000000b003fa45ab22a5mr27304qta.27.1688770304082; Fri, 07 Jul
+ 2023 15:51:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] module: Ignore RISC-V mapping symbols too
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>, mcgrof@kernel.org,
-        thomas@t-8ch.de
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230707160051.2305-2-palmer@rivosinc.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230707160051.2305-2-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230630171052.985577-1-peter.hilber@opensynergy.com> <20230630171052.985577-2-peter.hilber@opensynergy.com>
+In-Reply-To: <20230630171052.985577-2-peter.hilber@opensynergy.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Fri, 7 Jul 2023 15:51:32 -0700
+Message-ID: <CANDhNCpaoRRKGz0XxV3zjA-ux66gU-dT_bGQ_OqDh4ty=VdXLQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] timekeeping: Fix cross-timestamp interpolation on
+ counter wrap
+To:     Peter Hilber <peter.hilber@opensynergy.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Christopher S. Hall" <christopher.s.hall@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,88 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/7/23 09:00, Palmer Dabbelt wrote:
-> RISC-V has an extended form of mapping symbols that we use to encode
-> the ISA when it changes in the middle of an ELF.  This trips up modpost
-> as a build failure, I haven't yet verified it yet but I believe the
-> kallsyms difference should result in stacks looking sane again.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/9d9e2902-5489-4bf0-d9cb-556c8e5d71c2@infradead.org/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
+On Fri, Jun 30, 2023 at 10:12=E2=80=AFAM Peter Hilber
+<peter.hilber@opensynergy.com> wrote:
+>
+> cycle_between() decides whether get_device_system_crosststamp() will
+> interpolate for older counter readings.
+>
+> cycle_between() yields wrong results for a counter wrap-around where afte=
+r
+> < before < test, and for the case after < test < before.
+>
+> Fix the comparison logic.
+>
+> Fixes: 2c756feb18d9 ("time: Add history to cross timestamp interface supp=
+orting slower devices")
+> Signed-off-by: Peter Hilber <peter.hilber@opensynergy.com>
 > ---
-> Changes since v1 <20230707054007.32591-1-palmer@rivosinc.com/>:
-> 
-> * Drop the unnecessary IS_RISCV define and just inline it.
-> ---
->  include/linux/module_symbol.h | 12 +++++++++++-
->  kernel/module/kallsyms.c      |  2 +-
->  scripts/mod/modpost.c         |  2 +-
->  3 files changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
-> index 7ace7ba30203..5b799942b243 100644
-> --- a/include/linux/module_symbol.h
-> +++ b/include/linux/module_symbol.h
-> @@ -3,12 +3,22 @@
->  #define _LINUX_MODULE_SYMBOL_H
->  
->  /* This ignores the intensely annoying "mapping symbols" found in ELF files. */
-> -static inline int is_mapping_symbol(const char *str)
-> +static inline int is_mapping_symbol(const char *str, int is_riscv)
+>  kernel/time/timekeeping.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+> index 266d02809dbb..8f35455b6250 100644
+> --- a/kernel/time/timekeeping.c
+> +++ b/kernel/time/timekeeping.c
+> @@ -1186,7 +1186,7 @@ static bool cycle_between(u64 before, u64 test, u64=
+ after)
 >  {
->  	if (str[0] == '.' && str[1] == 'L')
->  		return true;
->  	if (str[0] == 'L' && str[1] == '0')
->  		return true;
-> +	/*
-> +	 * RISC-V defines various special symbols that start with "$".  The
-> +	 * mapping symbols, which exist to differentiate between incompatible
-> +	 * instruction encodings when disassembling, show up all over the place
-> +	 * and are generally not meant to be treated like other symbols.  So
-> +	 * just ignore any of the special symbols.
-> +	 */
-> +	if (is_riscv)
-> +		return str[0] == '$';
-> +
->  	return str[0] == '$' &&
->  	       (str[1] == 'a' || str[1] == 'd' || str[1] == 't' || str[1] == 'x')
->  	       && (str[2] == '\0' || str[2] == '.');
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index ef73ae7c8909..78a1ffc399d9 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -289,7 +289,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
->  		 * and inserted at a whim.
->  		 */
->  		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
-> -		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-> +		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i), IS_ENABLED(CONFIG_RISCV)))
->  			continue;
->  
->  		if (thisval <= addr && thisval > bestval) {
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index b29b29707f10..7c71429d6502 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1052,7 +1052,7 @@ static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
->  
->  	if (!name || !strlen(name))
->  		return 0;
-> -	return !is_mapping_symbol(name);
-> +	return !is_mapping_symbol(name, elf->hdr->e_machine == EM_RISCV);
+>         if (test > before && test < after)
+>                 return true;
+> -       if (test < before && before > after)
+> +       if (before > after && (test > before || test < after))
+>                 return true;
+>         return false;
 >  }
->  
->  /* Look up the nearest symbol based on the section and the address */
 
--- 
-~Randy
+Thanks for catching this and sending it in.
+Looks good to me. Curious: Did you actually hit such a wrap around with u64=
+s?
+
+Acked-by: John Stultz <jstultz@google.com>
+
+thanks
+-john
