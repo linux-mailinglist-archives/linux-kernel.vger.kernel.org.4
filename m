@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ED274B7C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2DE74B7C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbjGGUTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 16:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S232277AbjGGUUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 16:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjGGUTY (ORCPT
+        with ESMTP id S229557AbjGGUU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 16:19:24 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1596B2106
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:19:21 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-55bf5cd4fb8so2535552a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688761160; x=1691353160;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmSXGhNgjtW0Yb8+yIyK70NmvAjyR1vjV+RIYl0ULq4=;
-        b=cgDoU3tDkKP7JTQ+F0CzAiBgvzjb4qUPJbX80bmEdZNC2kBFPhSxB/2KWqZSIhGnu5
-         DNnicuDpK4RRjfvI8Od0feJbKV0/XU2e63+LYPuJBKE3rThjUkLPqnYx6RjItC6itmd6
-         E8oybw7gnCOvuqj/lkQyUEa8CGnU/e60XfcGhlrIjKezX1hZaq+Fbq1wQe5hiMJLfSxY
-         04YtCgIm9GcwTklBS9EFbPw5TLQgXGtx3bb42RDjvnpfonqnq7jboBzGk/LZy1us4JKo
-         w+8/QeI5pWZgUe4X5h5uG4tRJUsMzcCNRRNm03kEX6WEvTDa0+st3K25FuKUsfWelq3J
-         yj+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688761160; x=1691353160;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmSXGhNgjtW0Yb8+yIyK70NmvAjyR1vjV+RIYl0ULq4=;
-        b=PURmerhlN8w14FyMItiPfsI47nkcSVYi/0JsFSKOyKgsW8zeJrC8eb33671cS45mKl
-         Kj82nD8Q7REfvXoO1t/5QpAbwzwu3dmsmjhbeaf1yTBXCo2PfNxdrtuzSCIbMNFqnJHz
-         FtIJOEDMUWbZtT4Wqzzu9gBtglvkjnNG4maNbsvGOatdEkw3YQONGAglUi0b0jKaDZS6
-         5hjA0+4zjljJ1/CZFQHBQr2l6qyakwaIJlNRKkbfifrkikS5X6DPSBHy324paLxiHgna
-         5rpf6VzGA3NXKM+QxcY0JmLU4sBRnmcBZUi0D6Z6WEmJPYkBI4JkMZXqYyR+jPI4rapN
-         An6w==
-X-Gm-Message-State: ABy/qLYgrFXLZXDZ4Q4Ei4Lu8vfLQpRNxAXWuIQo0HXC/qbvwp/ZWN4M
-        2dHsnscFzgkaQ90MyTi6oi88n65zNp4v3A==
-X-Google-Smtp-Source: APBJJlH7Cq0eDn70cDDe92uconHq1/8/0rJBg2JnBViw/2FmoEOJgxc84w8NuFGWdffzBFiFeO6rajwXkfI/1A==
-X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a63:9316:0:b0:53f:f32b:1f20 with SMTP id
- b22-20020a639316000000b0053ff32b1f20mr4028211pge.2.1688761160596; Fri, 07 Jul
- 2023 13:19:20 -0700 (PDT)
-Date:   Fri,  7 Jul 2023 20:19:04 +0000
-In-Reply-To: <20230707201904.953262-1-jiaqiyan@google.com>
-Mime-Version: 1.0
-References: <20230707201904.953262-1-jiaqiyan@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230707201904.953262-5-jiaqiyan@google.com>
-Subject: [PATCH v3 4/4] selftests/mm: add tests for HWPOISON hugetlbfs read
-From:   Jiaqi Yan <jiaqiyan@google.com>
-To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        naoya.horiguchi@nec.com
-Cc:     songmuchun@bytedance.com, shy828301@gmail.com,
-        linmiaohe@huawei.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duenwen@google.com,
-        axelrasmussen@google.com, jthoughton@google.com,
-        Jiaqi Yan <jiaqiyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Fri, 7 Jul 2023 16:20:26 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D45126A6;
+        Fri,  7 Jul 2023 13:19:50 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367KGFFM030554;
+        Fri, 7 Jul 2023 20:19:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=gFKGmEMS7UOM4+alXurC/O8sK3asvYK18nibq8FZEBA=;
+ b=TdClrnAYsJo/vUSoZnBav6NnVxIw6aSAl5koBURezWefn/Pd/Jvkrj6HZscnbkHcSRa7
+ opDz5U8Um9ws/HMkL+rjLAnO1/9iPYuiaTwhJioqpwUykwP1DL6xbmNYcZ06H8xsSGgy
+ LE1jstq+wplcX4osTN+QIiaaqE29laEr7CAmXQiL0E9ImqDZbxS5V9//stuv0e4lZiXL
+ s3pWdP7FMyydu8+8F9zlUS1+JH99yXLjdZmveO2GWWsoSLj9+OQN1139AxDbe4acgs28
+ w0hliN7shrBT04rydeEHxVJKGfwJh6nZcocXfp7uK5E+XPFzMwOQ8kydAkfsMw5UiwiK 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpskj03u8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 20:19:43 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367KGKvt030772;
+        Fri, 7 Jul 2023 20:19:43 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpskj03tw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 20:19:42 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 367IcjrQ016311;
+        Fri, 7 Jul 2023 20:19:42 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3rjbs6yw48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 20:19:42 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367KJeJ160555566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jul 2023 20:19:41 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 964B058055;
+        Fri,  7 Jul 2023 20:19:40 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2FC958054;
+        Fri,  7 Jul 2023 20:19:38 +0000 (GMT)
+Received: from [9.171.14.249] (unknown [9.171.14.249])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jul 2023 20:19:38 +0000 (GMT)
+Message-ID: <93285ee9-cc63-ed74-f7e9-4ff0fb56e7c8@linux.ibm.com>
+Date:   Fri, 7 Jul 2023 22:19:37 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH net v2 0/3] s390/ism: Fixes to client handling
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Jan Karcher <jaka@linux.ibm.com>,
+        Stefan Raspl <raspl@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230707105622.3332261-1-schnelle@linux.ibm.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <20230707105622.3332261-1-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vHUE4-o9y-3K2Z4kfiUTQ8Y9IbN2xps-
+X-Proofpoint-ORIG-GUID: qGUuJ5sboWvfcW66HsXhLG3MT_4bFJze
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_14,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 clxscore=1011 bulkscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=903
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307070184
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,376 +98,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for the improvement made to read operation on HWPOISON
-hugetlb page with different read granularities. For each chunk size,
-three read scenarios are tested:
-1. Simple regression test on read without HWPOISON.
-2. Sequential read page by page should succeed until encounters the 1st
-   raw HWPOISON subpage.
-3. After skip a raw HWPOISON subpage by lseek, read()s always succeed.
 
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
----
- tools/testing/selftests/mm/.gitignore         |   1 +
- tools/testing/selftests/mm/Makefile           |   1 +
- .../selftests/mm/hugetlb-read-hwpoison.c      | 322 ++++++++++++++++++
- 3 files changed, 324 insertions(+)
- create mode 100644 tools/testing/selftests/mm/hugetlb-read-hwpoison.c
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 7e2a982383c0..cdc9ce4426b9 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -5,6 +5,7 @@ hugepage-mremap
- hugepage-shm
- hugepage-vmemmap
- hugetlb-madvise
-+hugetlb-read-hwpoison
- khugepaged
- map_hugetlb
- map_populate
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 66d7c07dc177..b7fce9073279 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -41,6 +41,7 @@ TEST_GEN_PROGS += gup_longterm
- TEST_GEN_PROGS += gup_test
- TEST_GEN_PROGS += hmm-tests
- TEST_GEN_PROGS += hugetlb-madvise
-+TEST_GEN_PROGS += hugetlb-read-hwpoison
- TEST_GEN_PROGS += hugepage-mmap
- TEST_GEN_PROGS += hugepage-mremap
- TEST_GEN_PROGS += hugepage-shm
-diff --git a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-new file mode 100644
-index 000000000000..ba6cc6f9cabc
---- /dev/null
-+++ b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-@@ -0,0 +1,322 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <string.h>
-+
-+#include <linux/magic.h>
-+#include <sys/mman.h>
-+#include <sys/statfs.h>
-+#include <errno.h>
-+#include <stdbool.h>
-+
-+#include "../kselftest.h"
-+
-+#define PREFIX " ... "
-+#define ERROR_PREFIX " !!! "
-+
-+#define MAX_WRITE_READ_CHUNK_SIZE (getpagesize() * 16)
-+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-+
-+enum test_status {
-+	TEST_PASSED = 0,
-+	TEST_FAILED = 1,
-+	TEST_SKIPPED = 2,
-+};
-+
-+static char *status_to_str(enum test_status status)
-+{
-+	switch (status) {
-+	case TEST_PASSED:
-+		return "TEST_PASSED";
-+	case TEST_FAILED:
-+		return "TEST_FAILED";
-+	case TEST_SKIPPED:
-+		return "TEST_SKIPPED";
-+	default:
-+		return "TEST_???";
-+	}
-+}
-+
-+static int setup_filemap(char *filemap, size_t len, size_t wr_chunk_size)
-+{
-+	char iter = 0;
-+
-+	for (size_t offset = 0; offset < len;
-+	     offset += wr_chunk_size) {
-+		iter++;
-+		memset(filemap + offset, iter, wr_chunk_size);
-+	}
-+
-+	return 0;
-+}
-+
-+static bool verify_chunk(char *buf, size_t len, char val)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; ++i) {
-+		if (buf[i] != val) {
-+			printf(PREFIX ERROR_PREFIX "check fail: buf[%lu] = %u != %u\n",
-+				i, buf[i], val);
-+			return false;
-+		}
-+	}
-+
-+	return true;
-+}
-+
-+static bool seek_read_hugepage_filemap(int fd, size_t len, size_t wr_chunk_size,
-+				       off_t offset, size_t expected)
-+{
-+	char buf[MAX_WRITE_READ_CHUNK_SIZE];
-+	ssize_t ret_count = 0;
-+	ssize_t total_ret_count = 0;
-+	char val = offset / wr_chunk_size + offset % wr_chunk_size;
-+
-+	printf(PREFIX PREFIX "init val=%u with offset=0x%lx\n", val, offset);
-+	printf(PREFIX PREFIX "expect to read 0x%lx bytes of data in total\n",
-+	       expected);
-+	if (lseek(fd, offset, SEEK_SET) < 0) {
-+		perror(PREFIX ERROR_PREFIX "seek failed");
-+		return false;
-+	}
-+
-+	while (offset + total_ret_count < len) {
-+		ret_count = read(fd, buf, wr_chunk_size);
-+		if (ret_count == 0) {
-+			printf(PREFIX PREFIX "read reach end of the file\n");
-+			break;
-+		} else if (ret_count < 0) {
-+			perror(PREFIX ERROR_PREFIX "read failed");
-+			break;
-+		}
-+		++val;
-+		if (!verify_chunk(buf, ret_count, val))
-+			return false;
-+
-+		total_ret_count += ret_count;
-+	}
-+	printf(PREFIX PREFIX "actually read 0x%lx bytes of data in total\n",
-+	       total_ret_count);
-+
-+	return total_ret_count == expected;
-+}
-+
-+static bool read_hugepage_filemap(int fd, size_t len,
-+				  size_t wr_chunk_size, size_t expected)
-+{
-+	char buf[MAX_WRITE_READ_CHUNK_SIZE];
-+	ssize_t ret_count = 0;
-+	ssize_t total_ret_count = 0;
-+	char val = 0;
-+
-+	printf(PREFIX PREFIX "expect to read 0x%lx bytes of data in total\n",
-+	       expected);
-+	while (total_ret_count < len) {
-+		ret_count = read(fd, buf, wr_chunk_size);
-+		if (ret_count == 0) {
-+			printf(PREFIX PREFIX "read reach end of the file\n");
-+			break;
-+		} else if (ret_count < 0) {
-+			perror(PREFIX ERROR_PREFIX "read failed");
-+			break;
-+		}
-+		++val;
-+		if (!verify_chunk(buf, ret_count, val))
-+			return false;
-+
-+		total_ret_count += ret_count;
-+	}
-+	printf(PREFIX PREFIX "actually read 0x%lx bytes of data in total\n",
-+	       total_ret_count);
-+
-+	return total_ret_count == expected;
-+}
-+
-+static enum test_status
-+test_hugetlb_read(int fd, size_t len, size_t wr_chunk_size)
-+{
-+	enum test_status status = TEST_SKIPPED;
-+	char *filemap = NULL;
-+
-+	if (ftruncate(fd, len) < 0) {
-+		perror(PREFIX ERROR_PREFIX "ftruncate failed");
-+		return status;
-+	}
-+
-+	filemap = mmap(NULL, len, PROT_READ | PROT_WRITE,
-+		       MAP_SHARED | MAP_POPULATE, fd, 0);
-+	if (filemap == MAP_FAILED) {
-+		perror(PREFIX ERROR_PREFIX "mmap for primary mapping failed");
-+		goto done;
-+	}
-+
-+	setup_filemap(filemap, len, wr_chunk_size);
-+	status = TEST_FAILED;
-+
-+	if (read_hugepage_filemap(fd, len, wr_chunk_size, len))
-+		status = TEST_PASSED;
-+
-+	munmap(filemap, len);
-+done:
-+	if (ftruncate(fd, 0) < 0) {
-+		perror(PREFIX ERROR_PREFIX "ftruncate back to 0 failed");
-+		status = TEST_FAILED;
-+	}
-+
-+	return status;
-+}
-+
-+static enum test_status
-+test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
-+			   bool skip_hwpoison_page)
-+{
-+	enum test_status status = TEST_SKIPPED;
-+	char *filemap = NULL;
-+	char *hwp_addr = NULL;
-+	const unsigned long pagesize = getpagesize();
-+
-+	if (ftruncate(fd, len) < 0) {
-+		perror(PREFIX ERROR_PREFIX "ftruncate failed");
-+		return status;
-+	}
-+
-+	filemap = mmap(NULL, len, PROT_READ | PROT_WRITE,
-+		       MAP_SHARED | MAP_POPULATE, fd, 0);
-+	if (filemap == MAP_FAILED) {
-+		perror(PREFIX ERROR_PREFIX "mmap for primary mapping failed");
-+		goto done;
-+	}
-+
-+	setup_filemap(filemap, len, wr_chunk_size);
-+	status = TEST_FAILED;
-+
-+	/*
-+	 * Poisoned hugetlb page layout (assume hugepagesize=2MB):
-+	 * |<---------------------- 1MB ---------------------->|
-+	 * |<---- healthy page ---->|<---- HWPOISON page ----->|
-+	 * |<------------------- (1MB - 8KB) ----------------->|
-+	 */
-+	hwp_addr = filemap + len / 2 + pagesize;
-+	if (madvise(hwp_addr, pagesize, MADV_HWPOISON) < 0) {
-+		perror(PREFIX ERROR_PREFIX "MADV_HWPOISON failed");
-+		goto unmap;
-+	}
-+
-+	if (!skip_hwpoison_page) {
-+		/*
-+		 * Userspace should be able to read (1MB + 1 page) from
-+		 * the beginning of the HWPOISONed hugepage.
-+		 */
-+		if (read_hugepage_filemap(fd, len, wr_chunk_size,
-+					  len / 2 + pagesize))
-+			status = TEST_PASSED;
-+	} else {
-+		/*
-+		 * Userspace should be able to read (1MB - 2 pages) from
-+		 * HWPOISONed hugepage.
-+		 */
-+		if (seek_read_hugepage_filemap(fd, len, wr_chunk_size,
-+					       len / 2 + MAX(2 * pagesize, wr_chunk_size),
-+					       len / 2 - MAX(2 * pagesize, wr_chunk_size)))
-+			status = TEST_PASSED;
-+	}
-+
-+unmap:
-+	munmap(filemap, len);
-+done:
-+	if (ftruncate(fd, 0) < 0) {
-+		perror(PREFIX ERROR_PREFIX "ftruncate back to 0 failed");
-+		status = TEST_FAILED;
-+	}
-+
-+	return status;
-+}
-+
-+static int create_hugetlbfs_file(struct statfs *file_stat)
-+{
-+	int fd;
-+
-+	fd = memfd_create("hugetlb_tmp", MFD_HUGETLB);
-+	if (fd < 0) {
-+		perror(PREFIX ERROR_PREFIX "could not open hugetlbfs file");
-+		return -1;
-+	}
-+
-+	memset(file_stat, 0, sizeof(*file_stat));
-+	if (fstatfs(fd, file_stat)) {
-+		perror(PREFIX ERROR_PREFIX "fstatfs failed");
-+		goto close;
-+	}
-+	if (file_stat->f_type != HUGETLBFS_MAGIC) {
-+		printf(PREFIX ERROR_PREFIX "not hugetlbfs file\n");
-+		goto close;
-+	}
-+
-+	return fd;
-+close:
-+	close(fd);
-+	return -1;
-+}
-+
-+int main(void)
-+{
-+	int fd;
-+	struct statfs file_stat;
-+	enum test_status status;
-+	/* Test read() in different granularity. */
-+	size_t wr_chunk_sizes[] = {
-+		getpagesize() / 2, getpagesize(),
-+		getpagesize() * 2, getpagesize() * 4
-+	};
-+	size_t i;
-+
-+	for (i = 0; i < ARRAY_SIZE(wr_chunk_sizes); ++i) {
-+		printf("Write/read chunk size=0x%lx\n",
-+		       wr_chunk_sizes[i]);
-+
-+		fd = create_hugetlbfs_file(&file_stat);
-+		if (fd < 0)
-+			goto create_failure;
-+		printf(PREFIX "HugeTLB read regression test...\n");
-+		status = test_hugetlb_read(fd, file_stat.f_bsize,
-+					   wr_chunk_sizes[i]);
-+		printf(PREFIX "HugeTLB read regression test...%s\n",
-+		       status_to_str(status));
-+		close(fd);
-+		if (status == TEST_FAILED)
-+			return -1;
-+
-+		fd = create_hugetlbfs_file(&file_stat);
-+		if (fd < 0)
-+			goto create_failure;
-+		printf(PREFIX "HugeTLB read HWPOISON test...\n");
-+		status = test_hugetlb_read_hwpoison(fd, file_stat.f_bsize,
-+						    wr_chunk_sizes[i], false);
-+		printf(PREFIX "HugeTLB read HWPOISON test...%s\n",
-+		       status_to_str(status));
-+		close(fd);
-+		if (status == TEST_FAILED)
-+			return -1;
-+
-+		fd = create_hugetlbfs_file(&file_stat);
-+		if (fd < 0)
-+			goto create_failure;
-+		printf(PREFIX "HugeTLB seek then read HWPOISON test...\n");
-+		status = test_hugetlb_read_hwpoison(fd, file_stat.f_bsize,
-+						    wr_chunk_sizes[i], true);
-+		printf(PREFIX "HugeTLB seek then read HWPOISON test...%s\n",
-+		       status_to_str(status));
-+		close(fd);
-+		if (status == TEST_FAILED)
-+			return -1;
-+	}
-+
-+	return 0;
-+
-+create_failure:
-+	printf(ERROR_PREFIX "Abort test: failed to create hugetlbfs file\n");
-+	return -1;
-+}
--- 
-2.41.0.255.g8b1d071c50-goog
+On 07.07.23 12:56, Niklas Schnelle wrote:
+> Hi networking developers,
+> 
+> This is v2 of the patch previously titled "s390/ism: Detangle ISM client
+> IRQ and event forwarding". As suggested by Paolo Abeni I split the patch
+> up. While doing so I noticed another problem that was fixed by this patch
+> concerning the way the workqueues access the client structs. This means the
+> second patch turning the workqueues into simple direct calls also fixes
+> a problem. Finally I split off a third patch just for fixing
+> ism_unregister_client()s error path.
+> 
+> The code after these 3 patches is identical to the result of the v1 patch
+> except that I also turned the dev_err() for still registered DMBs into
+> a WARN().
+> 
+> Thanks,
+> Niklas
+> 
+> Changes since v1:
+> - Split into three patches (Paolo Abeni)
+> - Turned the dev_err() in ism_unregsiter_client() on still registered DMBs
+>    into a WARN() as it should only happen due to client bugs.
+> 
+> Niklas Schnelle (3):
+>    s390/ism: Fix locking for forwarding of IRQs and events to clients
+>    s390/ism: Fix and simplify add()/remove() callback handling
+>    s390/ism: Do not unregister clients with registered DMBs
+> 
+>   drivers/s390/net/ism_drv.c | 153 ++++++++++++++++++-------------------
+>   include/linux/ism.h        |   7 +-
+>   2 files changed, 74 insertions(+), 86 deletions(-)
+> 
+> 
+> base-commit: d528014517f2b0531862c02865b9d4c908019dc4
+
+
+Reviewed-by: Wenjia Zhang <wenjia@linux.ibm.com>
 
