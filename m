@@ -2,212 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6A574B7C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC98374B7C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjGGUS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 16:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S232781AbjGGUTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 16:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjGGUS4 (ORCPT
+        with ESMTP id S232729AbjGGUTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 16:18:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D790213F
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688761088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QsU9CpQJcJnSyC5QilPYtQblG/4GpfxRSns3tJv6ujw=;
-        b=LT5PGaQd6lVE0OzloRWbGSYG+mJlE+w1XumLb+FTeurxt9CgqjTFwhGPaKhhbnQsriXC6O
-        81tQSk3YxN4Mra4kZVtiVxb/s2kx0tA1EgwfdVfeZq4kt6ouPExlHLZcDnPFbhWTW35RcJ
-        5Ta8xbf9tXv9Zd8BhUp1u7ZTxnUH7jU=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-lh7d_wFYPMiwZ05-OCrhIA-1; Fri, 07 Jul 2023 16:18:07 -0400
-X-MC-Unique: lh7d_wFYPMiwZ05-OCrhIA-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-579dd7e77f5so26108107b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:18:07 -0700 (PDT)
+        Fri, 7 Jul 2023 16:19:19 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB10FE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:19:15 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-666eb721e75so2860686b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688761154; x=1691353154;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5cuWPEEHk0qemKXdohzw8tGEj12XWM9UTKttPYReOKw=;
+        b=PaHzD33A8GbxvtEGuq9tWAYnBOW1xlL2mqiPI2ahcXOm9fn/nE59FBtXB4ixnXnOyi
+         xeKzyZtFH98ipx/zrWpe9QI5rvEzBaA9YyLIHiy1e6jZo5fx/949E8OXquAa8EnMbarA
+         rphXYw+5/NRi1dLVvfbKVoIKQ9IUV4Ori5NuSONz5JWNTPWJV85MBD85a1Lru3KvKb8b
+         7VsjE9t8VWk/2KbXcHk7dUh6beDQU4dJeNJoMf1RNzK4VwTrjJhDSKBpLkYv8PX9CQRU
+         RTB5aIUDCq6Be1gUe1Ii0aSlYbWQTU3c6+LAunFTzBAYzquOxCH/Sg6uVeHz6ABG5uE6
+         M55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688761087; x=1691353087;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QsU9CpQJcJnSyC5QilPYtQblG/4GpfxRSns3tJv6ujw=;
-        b=ZtEi/dO5XgN0FWWN47FuypvugMeThdYpeAznhAdc2++0DX4601ZllzoEFNlqp0tdkw
-         RHzpvA2dVFjz5ckV/GQBZjOMSzvnRU3AP8dDkOkHpdZ/RQ1Y/iFcUIcbArEr0Fu+773R
-         WBLZ9UMxNB7/HfqPZQtWTUfBHdjlxVcX6uaeMcOZ0Lw72QrZWWJ2BJZbom9CQtKubknj
-         flYb2k4PoAxVBxubXz8GGCH2z7I87zW97WInJvfphOQM2N4sXRzpqz9XqtNU/7LQvvW2
-         rDMTqBtSjz55Q7OUJGR8pTqOXl9GGKG1LTCdi+8f5GYNnXoeZ6FdmAcwBhfj/q6GXhr7
-         8BnQ==
-X-Gm-Message-State: ABy/qLbierjW21cFu7680BUWevpCLCVdQpwcNg4QD9oplyiBu3vRhUhC
-        h05R6LTsm+g3T1Xq3Rhr6wOrvZM+mD5VKeLsdwr3/WlskkNkR5Po9PJEuUWqOIRUUB8ncsNd7RI
-        haukna3yy2Tf432yWIzksfi/G
-X-Received: by 2002:a0d:df03:0:b0:573:44b3:bf7f with SMTP id i3-20020a0ddf03000000b0057344b3bf7fmr5574314ywe.41.1688761086842;
-        Fri, 07 Jul 2023 13:18:06 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEcy1F3qiLujYMIH1fTZqShj4I/wz9gAu5axzhCWv+xGy36lu6+2plJw0mwuczqS0vLSBTefg==
-X-Received: by 2002:a0d:df03:0:b0:573:44b3:bf7f with SMTP id i3-20020a0ddf03000000b0057344b3bf7fmr5574300ywe.41.1688761086534;
-        Fri, 07 Jul 2023 13:18:06 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id x7-20020a817c07000000b005707fb5110bsm1269237ywc.58.2023.07.07.13.18.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 13:18:06 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 13:18:04 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>, stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.ibm.com>
-Subject: Re: [PATCH] tpm: return false from tpm_amd_is_rng_defective on
- non-x86 platforms
-Message-ID: <b4lqa5urhgbnvtqon6qgoaftr6ut32mbq4uosugr7w6ar2uqis@lbwodwhrfchs>
-References: <20230629204147.1852823-1-jsnitsel@redhat.com>
- <CTPWGNGECE0A.7MSU6S60YWDK@suppilovahvero>
- <mbbb2mdlmkhnkgmw37glklmllzelolmdvmdgz5pziidromxsh5@gkflot73u6gd>
- <5b9ec275-31b5-7b77-d00b-da128bea8bb3@leemhuis.info>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b9ec275-31b5-7b77-d00b-da128bea8bb3@leemhuis.info>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1688761154; x=1691353154;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5cuWPEEHk0qemKXdohzw8tGEj12XWM9UTKttPYReOKw=;
+        b=IiTfqpLTs54h64eMIrPrqZU3Dah85Rq7geT+PbbqX70ZjyYBOAdo8LKHzjQr2DUC4D
+         t0YLuNbMCCaSXLb/zqwlwdCWy9NKdl6CCap3hN+OTPO2Elt77gWfIsar/AJ7+s2JYWtD
+         sZCIZXO5ncs6VTsxps6TSsp3U9TOJZOmci9TkatrW2Xp3inczVcZx6tQsKJwQjpMJUtB
+         JB5PMdshE43T2OxN8CdrRH2KOPbZiKY3Qgq6hS9YOXdnASfgvxgxOFQBZufwCqPv1xkc
+         JfR0x4jM+uVQQuDPp4lIqVw9qcf4V2iSuHWz2W2xcMfZhr1kt6foP7NOJUtmiK7YSfWW
+         uRww==
+X-Gm-Message-State: ABy/qLYXqhiZw63iMx/2EA6+d105vDGJ7C8uD7u0N5wKxEnTTiN13wo1
+        lO2pSM1T+aWPwXtAbpbbZuRUGHw75pbjfg==
+X-Google-Smtp-Source: APBJJlELEHiYxWCanU50B0NWcctTGr6R0VtA3e+AA6Y9l8crmkhCRoeflyMRWIMkxMRvVNTQwRWTUXdFG3wmTw==
+X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
+ (user=jiaqiyan job=sendgmr) by 2002:a05:6a00:3923:b0:674:a3be:2773 with SMTP
+ id fh35-20020a056a00392300b00674a3be2773mr8362712pfb.5.1688761154687; Fri, 07
+ Jul 2023 13:19:14 -0700 (PDT)
+Date:   Fri,  7 Jul 2023 20:19:00 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230707201904.953262-1-jiaqiyan@google.com>
+Subject: [PATCH v3 0/4] Improve hugetlbfs read on HWPOISON hugepages
+From:   Jiaqi Yan <jiaqiyan@google.com>
+To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        naoya.horiguchi@nec.com
+Cc:     songmuchun@bytedance.com, shy828301@gmail.com,
+        linmiaohe@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com,
+        Jiaqi Yan <jiaqiyan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 06:07:49PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
-> 
-> So what's the way forward now? It sounded like Jarkko wanted to apply
-> the patch from this thread days ago, but that didn't happen afaics. Then
-> below message showed up, but Marios patch also wasn't applied.
-> 
-> Is this intentional, or did something somewhere fall through the cracks?
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Today when hardware memory is corrupted in a hugetlb hugepage,
+kernel leaves the hugepage in pagecache [1]; otherwise future mmap or
+read will suject to silent data corruption. This is implemented by
+returning -EIO from hugetlb_read_iter immediately if the hugepage has
+HWPOISON flag set.
 
-I haven't seen any update to Jarkko's repo.
+Since memory_failure already tracks the raw HWPOISON subpages in a
+hugepage, a natural improvement is possible: if userspace only asks for
+healthy subpages in the pagecache, kernel can return these data.
 
-My patch resolves the immediate issue being seen on the ppc system,
-and was mostly just me asking why even go through this amd specific
-code on non-x86 systems.
+This patchset implements this improvement. It consist of three parts.
+The 1st commit exports the functionality to tell if a subpage inside a
+hugetlb hugepage is a raw HWPOISON page. The 2nd commit teaches
+hugetlbfs_read_iter to return as many healthy bytes as possible.
+The 3rd commit properly tests this new feature.
 
-The vio bus shutdown code only does the remove call when kexec is in
-progress. The pnp and platform bus type shutdown calls do not do
-something similar so maybe the check in Mario's patch isn't needed,
-but I don't think it would hurt to have it in there.
+[1] commit 8625147cafaa ("hugetlbfs: don't delete error page from pagecache")
 
-Regards,
-Jerry
+Changelog
 
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
-> 
-> #regzbot poke
-> 
-> On 05.07.23 19:04, Jerry Snitselaar wrote:
-> > On Fri, Jun 30, 2023 at 01:07:00PM +0300, Jarkko Sakkinen wrote:
-> >> On Thu Jun 29, 2023 at 11:41 PM EEST, Jerry Snitselaar wrote:
-> >>> tpm_amd_is_rng_defective is for dealing with an issue related to the
-> >>> AMD firmware TPM, so on non-x86 architectures just have it inline and
-> >>> return false.
-> >>>
-> >>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> >>> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> >>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> >>> Cc: Peter Huewe <peterhuewe@gmx.de>
-> >>> Cc: stable@vger.kernel.org
-> >>> Cc: Linux regressions mailing list <regressions@lists.linux.dev>
-> >>> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> >>> Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
-> >>> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-> >>> Closes: https://lore.kernel.org/lkml/99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com/
-> >>> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
-> >>> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> >>> ---
-> >>>  drivers/char/tpm/tpm-chip.c | 7 +++++++
-> >>>  1 file changed, 7 insertions(+)
-> >>>
-> >>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> >>> index cd48033b804a..cf5499e51999 100644
-> >>> --- a/drivers/char/tpm/tpm-chip.c
-> >>> +++ b/drivers/char/tpm/tpm-chip.c
-> >>> @@ -518,6 +518,7 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
-> >>>   * 6.x.y.z series: 6.0.18.6 +
-> >>>   * 3.x.y.z series: 3.57.y.5 +
-> >>>   */
-> >>> +#ifdef CONFIG_X86
-> >>>  static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> >>>  {
-> >>>  	u32 val1, val2;
-> >>> @@ -566,6 +567,12 @@ static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> >>>  
-> >>>  	return true;
-> >>>  }
-> >>> +#else
-> >>> +static inline bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> >>> +{
-> >>> +	return false;
-> >>> +}
-> >>> +#endif /* CONFIG_X86 */
-> >>>  
-> >>>  static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
-> >>>  {
-> >>> -- 
-> >>> 2.38.1
-> >>
-> >> Sanity check, this was the right patch, right?
-> >>
-> >> I'll apply it.
-> >>
-> >> BR, Jarkko
-> > 
-> > Sorry, I've been dealing with a family health issue the past week. It wasn't clear
-> > to me why chip->ops was null when I first took a look, but I think I understand
-> > now looking at it again this morning. The stack trace shows it in the device_shutdown() path:
-> > 
-> >     [ 34.381674] NIP [c0000000009db1e4] tpm_amd_is_rng_defective+0x74/0x240
-> >     [ 34.381681] LR [c0000000009db928] tpm_chip_unregister+0x138/0x160
-> >     [ 34.381685] Call Trace:
-> >     [ 34.381686] [c00000009742faa0] [c0000000009db928] tpm_chip_unregister+0x138/0x160
-> >     [ 34.381690] [c00000009742fae0] [c0000000009eab94] tpm_ibmvtpm_remove+0x34/0x130
-> >     [ 34.381695] [c00000009742fb50] [c000000000115738] vio_bus_remove+0x58/0xd0
-> >     [ 34.381701] [c00000009742fb90] [c000000000a01ecc] device_shutdown+0x21c/0x39c
-> >     [ 34.381705] [c00000009742fc20] [c0000000001a2684] kernel_restart_prepare+0x54/0x70
-> >     [ 34.381710] [c00000009742fc40] [c000000000292c48] kernel_kexec+0xa8/0x100
-> >     [ 34.381714] [c00000009742fcb0] [c0000000001a2cd4] __do_sys_reboot+0x214/0x2c0
-> >     [ 34.381718] [c00000009742fe10] [c000000000034adc] system_call_exception+0x13c/0x340
-> >     [ 34.381723] [c00000009742fe50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
-> > 
-> > So I think what happened is:
-> > 
-> > device_shutdown -> dev->class->shutdown_pre (tpm_class_shutdown) // clears chip->ops
-> >                 -> dev->bus->shutdown (vio_bus_shutdown) -> vio_bus_remove -> viodrv->remove (tpm_ibmvtpm_remove) -> tpm_chip_unregister -> tpm_amd_is_rng_defective -> oops!
-> > 
-> > 
-> > I guess anything that gets called in the tpm_chip_unregister path
-> > should be doing a check of chip->ops prior to using it. So I think
-> > Mario's patch would still be a good thing to have.
-> > 
-> > Regards,
-> > Jerry
-> > 
-> > 
-> > 
+v2 => v3
+* Updates commit messages for future reader to know background and
+  code details
+* v3 is based on commit 5bb367dca2b9 ("Merge branch 'master' into
+  mm-stable")
+
+v1 => v2
+* __folio_free_raw_hwp deletes all entries in raw_hwp_list before it
+  traverses and frees raw_hwp_page.
+* find_raw_hwp_page => __is_raw_hwp_subpage and __is_raw_hwp_subpage
+  only returns bool instead of a raw_hwp_page entry.
+* is_raw_hwp_subpage holds hugetlb_lock while checking
+  __is_raw_hwp_subpage.
+* No need to do folio_lock in adjust_range_hwpoison.
+* v2 is based on commit a6e79df92e4a ("mm/gup: disallow FOLL_LONGTERM
+  GUP-fast writing to file-backed mappings")
+
+Jiaqi Yan (4):
+  mm/hwpoison: delete all entries before traversal in
+    __folio_free_raw_hwp
+  mm/hwpoison: check if a subpage of a hugetlb folio is raw HWPOISON
+  hugetlbfs: improve read HWPOISON hugepage
+  selftests/mm: add tests for HWPOISON hugetlbfs read
+
+ fs/hugetlbfs/inode.c                          |  58 +++-
+ include/linux/hugetlb.h                       |  19 ++
+ include/linux/mm.h                            |   7 +
+ mm/hugetlb.c                                  |  10 +
+ mm/memory-failure.c                           |  42 ++-
+ tools/testing/selftests/mm/.gitignore         |   1 +
+ tools/testing/selftests/mm/Makefile           |   1 +
+ .../selftests/mm/hugetlb-read-hwpoison.c      | 322 ++++++++++++++++++
+ 8 files changed, 439 insertions(+), 21 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+
+-- 
+2.41.0.255.g8b1d071c50-goog
 
