@@ -2,251 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF78074A982
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B5574A987
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 05:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjGGD4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 23:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S231706AbjGGD66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 23:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjGGDz5 (ORCPT
+        with ESMTP id S229566AbjGGD6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 23:55:57 -0400
-Received: from mail-pl1-f206.google.com (mail-pl1-f206.google.com [209.85.214.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177B81FC9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 20:55:55 -0700 (PDT)
-Received: by mail-pl1-f206.google.com with SMTP id d9443c01a7336-1b8b2a2e720so16521555ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 20:55:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688702154; x=1691294154;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cD9gzy9rGVKFy/FcC9kmlxQffo/fkPLst1u8NEodE3k=;
-        b=i2UOTTPgMYpN7ARrUi9f+A6s5IL97Jy2t54sZrJQn/rzI5ROw92qxakvpVu2UZ0Q4U
-         KfFHwrArP0xyH6+bmXC35pYxunyMKu2AeUn2VjmYTjleKfhidneJoNJ088SiRuodk7Yn
-         7h9ZAPS6eLiO1Wa/c2/RaE9AUGITxDmYxkA3K+aMT0EnQBMscVmhxOqzPAu7vQ+YDT+7
-         PQiI6yqDEb0LNxnDejXS4m+8uwc6ZHEjokLhWarBcRy/lqltgJybJyc5UKq+ZZhprJ1p
-         /rfoq4CXAZsoVzMNYh8V4jQmlEoqKbwNM+xysdEPubomGk6IeMlcjg06Bn3FEUlWjivi
-         ASAg==
-X-Gm-Message-State: ABy/qLY8Nu3+Xn2SxArYQS3tigwLwG2lB6Tv5pghKUpvUFSKupseqs4U
-        1VU1TW4MWZ1O2Jf+WBiivmbi2T2kBJwpwJnYG3bcJkW/BzXa
-X-Google-Smtp-Source: APBJJlHKOzNRftPB9LBFJ6v4vTr5R+EAJbb+41b4DuvAXdBCLMYbWAlFNqQ0yum6P35IeUPZ+eFZWrr8+nkATuhC3ce58u0Wr9ym
+        Thu, 6 Jul 2023 23:58:55 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6FE1FD8;
+        Thu,  6 Jul 2023 20:58:54 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3673BxeF022462;
+        Fri, 7 Jul 2023 03:58:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=ykw/5J1G41sJtF9h3i5KKBlxAwm6E2iNoi0rNzWZwVc=;
+ b=Dq60AyVRChHgZsRX1+bYSu9vLvBmwkaxA+fsjlgV+3blQ+M581rvIJ6CyFxwhqBB1JC+
+ KF39X4kAtkXgpRZqVHIvUFxW22tAV8MrEtxauO9cZcuUTFUD9LyJiPAKFGZutaFSoXWc
+ GQpwbb55Xpa5GfgMLW6UIoqA0dYOIQ++zAtYF4KIKLcHW+Oq06klnphJoVy3qBymhyGX
+ c9swSj944MIgAJD+eLmU2KCli67ZmDbRJ2z34qvi8j1/v3HgbkwxZ0fDvfHkxGrPKlF7
+ m4Pe9aW2lSiCffaU9KH/w0VPiUdm6G0NfxPwWoGWB9lVMZj75v+QTCOh9jS4uBRKhj8s 7w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rp71y8cs9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 03:58:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3673wlYr007139
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 7 Jul 2023 03:58:47 GMT
+Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 20:58:42 -0700
+From:   Jagadeesh Kona <quic_jkona@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+Subject: [PATCH V6 0/5] Add camera clock controller support for SM8550
+Date:   Fri, 7 Jul 2023 09:27:39 +0530
+Message-ID: <20230707035744.22245-1-quic_jkona@quicinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Received: by 2002:a17:903:41c2:b0:1b5:61d3:dae5 with SMTP id
- u2-20020a17090341c200b001b561d3dae5mr3866473ple.1.1688702154641; Thu, 06 Jul
- 2023 20:55:54 -0700 (PDT)
-Date:   Thu, 06 Jul 2023 20:55:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f188605ffdd9cf8@google.com>
-Subject: [syzbot] [f2fs?] possible deadlock in f2fs_add_inline_entry
-From:   syzbot <syzbot+a4976ce949df66b1ddf1@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: N0On_-0hIDR6XVpG_B5nVepQAvUXyUmV
+X-Proofpoint-ORIG-GUID: N0On_-0hIDR6XVpG_B5nVepQAvUXyUmV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_01,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 phishscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307070035
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add bindings, driver and devicetree node for camera clock controller on
+SM8550.
 
-syzbot found the following issue on:
+Changes in v6:
+ - Updated parent map and frequency table of cam_cc_xo_clk_src to use
+   active only source P_BI_TCXO_AO instead of P_BI_TCXO
 
-HEAD commit:    296d53d8f84c Add linux-next specific files for 20230703
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1742e724a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5241eb40bbf2c7cf
-dashboard link: https://syzkaller.appspot.com/bug?extid=a4976ce949df66b1ddf1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17030110a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a2f1f0a80000
+Changes in v5:
+ - Added clk_lucid_ole_pll_configure() to configure lucid ole PLL's
+ - Used module_platform_driver() instead of subsys_initcall()
+ - Fixed overloading .l config with CAL_L and RINGOSC_CAL_L fields
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/86f91798abf1/disk-296d53d8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/80ef8a306265/vmlinux-296d53d8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d2faf52c9a84/bzImage-296d53d8.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a912111147f7/mount_0.gz
+Changes in v4:
+ - Dropped the extra patches added in v2, since the review comments on
+   v3 recommended an alternate solution
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a4976ce949df66b1ddf1@syzkaller.appspotmail.com
+Changes in v3:
+ - Squashed 2 extra patches added in v2 into single patch as per review
+   comments
 
-F2FS-fs (loop0): Mounted with checkpoint version = 48b305e5
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-next-20230703-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor218/5030 is trying to acquire lock:
-ffff8880752cb160 (&fi->i_sem){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
-ffff8880752cb160 (&fi->i_sem){+.+.}-{3:3}, at: f2fs_add_inline_entry+0x2c4/0x6c0 fs/f2fs/inline.c:644
+Changes in v2:
+ - Took care of review comments from v1 
+     + Removed new YAML file and reused SM8450 CAMCC YAML file for SM8550
+     + Sorted the PLL names in proper order
+     + Updated all PLL configurations to lower case hex
+     + Reused evo ops instead of adding new ops for ole pll
+     + Moved few clocks to separate patch to fix patch too long error
+     + Padded non-zero address part to 8 hex digits in DT change
+ - Added 2 extra patches updating .l config value across chipsets to
+   include CAL_L and RINGOSC_CAL_L fields and removed setting CAL_L
+   field explicitly in clk_lucid_evo_pll_configure().
 
-but task is already holding lock:
-ffff8880752c9978 (&fi->i_xattr_sem){.+.+}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
-ffff8880752c9978 (&fi->i_xattr_sem){.+.+}-{3:3}, at: f2fs_add_dentry+0x92/0x240 fs/f2fs/dir.c:783
+v1:
+  - Initial CAMCC changes for SM8550
 
-which lock already depends on the new lock.
+Previous series:
+v5 - https://patchwork.kernel.org/project/linux-clk/list/?series=759863
+v4 - https://patchwork.kernel.org/project/linux-clk/list/?series=755683 
+v3 - https://patchwork.kernel.org/project/linux-clk/list/?series=753150
+v2 - https://patchwork.kernel.org/project/linux-clk/list/?series=751058
+v1 - https://patchwork.kernel.org/project/linux-clk/list/?series=749294
 
+Jagadeesh Kona (5):
+  dt-bindings: clock: qcom: Add SM8550 camera clock controller
+  clk: qcom: clk-alpha-pll: Add support for lucid ole pll configure
+  clk: qcom: camcc-sm8550: Add camera clock controller driver for SM8550
+  clk: qcom: camcc-sm8550: Add support for qdss, sleep and xo clocks
+  arm64: dts: qcom: sm8550: Add camera clock controller
 
-the existing dependency chain (in reverse order) is:
+ .../bindings/clock/qcom,sm8450-camcc.yaml     |    8 +-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |   15 +
+ drivers/clk/qcom/Kconfig                      |    7 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/camcc-sm8550.c               | 3564 +++++++++++++++++
+ drivers/clk/qcom/clk-alpha-pll.c              |   29 +
+ drivers/clk/qcom/clk-alpha-pll.h              |    2 +
+ include/dt-bindings/clock/qcom,sm8550-camcc.h |  187 +
+ 8 files changed, 3811 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/clk/qcom/camcc-sm8550.c
+ create mode 100644 include/dt-bindings/clock/qcom,sm8550-camcc.h
 
--> #1 (&fi->i_xattr_sem){.+.+}-{3:3}:
-       down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
-       f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
-       f2fs_getxattr+0xb96/0xfd0 fs/f2fs/xattr.c:532
-       __f2fs_get_acl+0x59/0x610 fs/f2fs/acl.c:179
-       f2fs_acl_create fs/f2fs/acl.c:377 [inline]
-       f2fs_init_acl+0x152/0xb40 fs/f2fs/acl.c:420
-       f2fs_init_inode_metadata+0x15d/0x1260 fs/f2fs/dir.c:558
-       f2fs_add_regular_entry+0x776/0xb70 fs/f2fs/dir.c:740
-       f2fs_add_dentry+0x1e1/0x240 fs/f2fs/dir.c:788
-       f2fs_do_add_link+0x183/0x270 fs/f2fs/dir.c:827
-       f2fs_add_link fs/f2fs/f2fs.h:3554 [inline]
-       f2fs_mkdir+0x387/0x630 fs/f2fs/namei.c:781
-       vfs_mkdir+0x242/0x460 fs/namei.c:4117
-       do_mkdirat+0x28d/0x310 fs/namei.c:4140
-       __do_sys_mkdir fs/namei.c:4160 [inline]
-       __se_sys_mkdir fs/namei.c:4158 [inline]
-       __x64_sys_mkdir+0xf6/0x140 fs/namei.c:4158
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+-- 
+2.40.1
 
--> #0 (&fi->i_sem){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3142 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3261 [inline]
-       validate_chain kernel/locking/lockdep.c:3876 [inline]
-       __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
-       lock_acquire kernel/locking/lockdep.c:5761 [inline]
-       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
-       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
-       f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
-       f2fs_add_inline_entry+0x2c4/0x6c0 fs/f2fs/inline.c:644
-       f2fs_add_dentry+0xa6/0x240 fs/f2fs/dir.c:784
-       f2fs_do_add_link+0x183/0x270 fs/f2fs/dir.c:827
-       f2fs_add_link fs/f2fs/f2fs.h:3554 [inline]
-       f2fs_mkdir+0x387/0x630 fs/f2fs/namei.c:781
-       vfs_mkdir+0x242/0x460 fs/namei.c:4117
-       ovl_do_mkdir fs/overlayfs/overlayfs.h:196 [inline]
-       ovl_mkdir_real+0xbc/0x390 fs/overlayfs/dir.c:146
-       ovl_workdir_create+0x3d2/0x900 fs/overlayfs/super.c:309
-       ovl_make_workdir fs/overlayfs/super.c:711 [inline]
-       ovl_get_workdir fs/overlayfs/super.c:864 [inline]
-       ovl_fill_super+0xcb6/0x5c90 fs/overlayfs/super.c:1400
-       vfs_get_super+0xea/0x280 fs/super.c:1152
-       vfs_get_tree+0x8d/0x350 fs/super.c:1519
-       do_new_mount fs/namespace.c:3335 [inline]
-       path_mount+0x136e/0x1e70 fs/namespace.c:3662
-       do_mount fs/namespace.c:3675 [inline]
-       __do_sys_mount fs/namespace.c:3884 [inline]
-       __se_sys_mount fs/namespace.c:3861 [inline]
-       __x64_sys_mount+0x283/0x300 fs/namespace.c:3861
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  rlock(&fi->i_xattr_sem);
-                               lock(&fi->i_sem);
-                               lock(&fi->i_xattr_sem);
-  lock(&fi->i_sem);
-
- *** DEADLOCK ***
-
-5 locks held by syz-executor218/5030:
- #0: ffff8880780d60e0 (&type->s_umount_key#42/1){+.+.}-{3:3}, at: alloc_super+0x22e/0xb40 fs/super.c:228
- #1: ffff8880271d6410 (sb_writers#9){.+.+}-{0:0}, at: ovl_make_workdir fs/overlayfs/super.c:707 [inline]
- #1: ffff8880271d6410 (sb_writers#9){.+.+}-{0:0}, at: ovl_get_workdir fs/overlayfs/super.c:864 [inline]
- #1: ffff8880271d6410 (sb_writers#9){.+.+}-{0:0}, at: ovl_fill_super+0xc8d/0x5c90 fs/overlayfs/super.c:1400
- #2: ffff8880752c9300 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:806 [inline]
- #2: ffff8880752c9300 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: ovl_workdir_create+0x137/0x900 fs/overlayfs/super.c:281
- #3: ffff8880786603b0 (&sbi->cp_rwsem){.+.+}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
- #3: ffff8880786603b0 (&sbi->cp_rwsem){.+.+}-{3:3}, at: f2fs_lock_op fs/f2fs/f2fs.h:2151 [inline]
- #3: ffff8880786603b0 (&sbi->cp_rwsem){.+.+}-{3:3}, at: f2fs_mkdir+0x2a2/0x630 fs/f2fs/namei.c:780
- #4: ffff8880752c9978 (&fi->i_xattr_sem){.+.+}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
- #4: ffff8880752c9978 (&fi->i_xattr_sem){.+.+}-{3:3}, at: f2fs_add_dentry+0x92/0x240 fs/f2fs/dir.c:783
-
-stack backtrace:
-CPU: 0 PID: 5030 Comm: syz-executor218 Not tainted 6.4.0-next-20230703-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x2df/0x3b0 kernel/locking/lockdep.c:2195
- check_prev_add kernel/locking/lockdep.c:3142 [inline]
- check_prevs_add kernel/locking/lockdep.c:3261 [inline]
- validate_chain kernel/locking/lockdep.c:3876 [inline]
- __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
- lock_acquire kernel/locking/lockdep.c:5761 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
- down_write+0x92/0x200 kernel/locking/rwsem.c:1573
- f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
- f2fs_add_inline_entry+0x2c4/0x6c0 fs/f2fs/inline.c:644
- f2fs_add_dentry+0xa6/0x240 fs/f2fs/dir.c:784
- f2fs_do_add_link+0x183/0x270 fs/f2fs/dir.c:827
- f2fs_add_link fs/f2fs/f2fs.h:3554 [inline]
- f2fs_mkdir+0x387/0x630 fs/f2fs/namei.c:781
- vfs_mkdir+0x242/0x460 fs/namei.c:4117
- ovl_do_mkdir fs/overlayfs/overlayfs.h:196 [inline]
- ovl_mkdir_real+0xbc/0x390 fs/overlayfs/dir.c:146
- ovl_workdir_create+0x3d2/0x900 fs/overlayfs/super.c:309
- ovl_make_workdir fs/overlayfs/super.c:711 [inline]
- ovl_get_workdir fs/overlayfs/super.c:864 [inline]
- ovl_fill_super+0xcb6/0x5c90 fs/overlayfs/super.c:1400
- vfs_get_super+0xea/0x280 fs/super.c:1152
- vfs_get_tree+0x8d/0x350 fs/super.c:1519
- do_new_mount fs/namespace.c:3335 [inline]
- path_mount+0x136e/0x1e70 fs/namespace.c:3662
- do_mount fs/namespace.c:3675 [inline]
- __do_sys_mount fs/namespace.c:3884 [inline]
- __se_sys_mount fs/namespace.c:3861 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3861
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0b7b784909
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcdf3d7158 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f0b7b784909
-RDX: 0000000020000280 RSI: 0000000020000040 RDI: 0000000000000000
-RBP: 00007f0b7b7441a0 R08: 0000000020000180 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f0b7b744230
-R13: 0000000
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
