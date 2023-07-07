@@ -2,71 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ECE74B315
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6383A74B319
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbjGGOdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S233058AbjGGOeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjGGOdn (ORCPT
+        with ESMTP id S231616AbjGGOeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:33:43 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A14911B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:33:42 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-47e611669e5so553083e0c.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 07:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688740421; x=1691332421;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aVeuS4wdToj74Jk3B8MYFfuAdcYEpuPAI6KS5+ndsoc=;
-        b=E+2jC5481ARYh3dPlxGMzlhLDmS+fOLAo98wKgmu/R40uiF8p8BOc8JFDHKwjuKRSE
-         7x56GH6uVFW9/PbWpTHu3BKDTE+0kPUHd9DqZ9+kzNLKA6O/kbNrKIePtoIqj55DTCIC
-         bJ4Tf2l5Cmo1CKcuVCzGigluNEPAnqQb3ebAtJ0dtue2EUOY41icM2uvO1fEdAQDZ56S
-         Ekn2lXwjafAnaR0yWMiBZuPbCPVzBrD1k2WCHlfMhbLUkdjGxlhHxwDouOLTUjvtCP7Y
-         rEZqwOVH7w5mn4ouYOPQYH1BICswXH3VEXPqiwvZfCEWtiYzq9A3kQNSoxud9F6+NHPS
-         g0YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688740421; x=1691332421;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aVeuS4wdToj74Jk3B8MYFfuAdcYEpuPAI6KS5+ndsoc=;
-        b=iMRQoKU+FUmuIoHCsRrExE0ZVzesVyA8sFgksXtgE+BELWlIKlsnkbX7o1kk3dqhV2
-         fIU2qoQ4aOP4um8H5/NsdwkiiLpkTJa9G3jFqarmWcmuC1v1igCI2zjwh61kEK8UqFm1
-         PaP+8CmX999KUsijztAIxjA8Deu6Q9cDV5dRwk7Q2ql92Fy3Dx1OrxjLrrWkk2N6pZ5o
-         o4/YBgmpej6f7jr0tZmAo+9viChkpnXCr1aDEPXbLXLCBVL45Wcu07HDDkozLTT0lP9A
-         zkRXISPASSQS28pOVzhPfTT5t6/HXpRqs5EXkOewZ8C227xoGicTMHzMlSFyfufrCi6T
-         cAEw==
-X-Gm-Message-State: ABy/qLbRJf4lw92BgtZFEzXXP6S/KI9AnZdUkDa6La+j/TXMlcwiqNGy
-        h3MJxXYTPzF+o1dJ3Kzp942CCOU5whcTM6OiD7c=
-X-Google-Smtp-Source: APBJJlFHV4AdYtL5p4KgCODe0r5dDG+8ia3+EEsir5TXqYa+2KqWgefInkEDcHcIDkNjV0O84qMihE3hbBBbM1spljA=
-X-Received: by 2002:a67:fd66:0:b0:443:72b0:6675 with SMTP id
- h6-20020a67fd66000000b0044372b06675mr2184824vsa.16.1688740421300; Fri, 07 Jul
- 2023 07:33:41 -0700 (PDT)
+        Fri, 7 Jul 2023 10:34:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FDF2117
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:34:02 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367EMRrQ011692;
+        Fri, 7 Jul 2023 14:33:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+h69f4EjpCXMPQsjfXmi+MajyQ8uint8SFc0+QUY2nU=;
+ b=X+4vWnjF3Zk1i3w+J6J3V+TN82tJWTBxA3uBLvdHEkWYQh9p536CDTJ5c15ILwZJIE38
+ Gokhh2b+XUiF9lcT4vuckQpVYfWkkAzhtUVyIPdMKX2VuC8y7PwRUYcjQyL0YP2kLzaV
+ BeAVeb0dUOCOpT+CzPP76AQgPtB4Cp3iY6DXbldIaGipm7l4zqe9Wr0BiUAnz4iHsGVm
+ 7o6cW5AwGYwTu+lzY1U5m0OIs83yaPQCRpLEPEXyyKo/72drQzH3NvXnIyDLVxa0JAwq
+ BiV0cS9ELP84KQB9jxgap4apXfJH16qw0QLSTyFAaBI6RuFQ0bRDjn1+t6qQS8INgjqy Nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpmdp095m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:33:48 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367EOKmL018561;
+        Fri, 7 Jul 2023 14:33:48 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpmdp091t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:33:48 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 367ARgvI014742;
+        Fri, 7 Jul 2023 14:33:45 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3rjbs6dt56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:33:45 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367EXiJu55116158
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jul 2023 14:33:44 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B3E158050;
+        Fri,  7 Jul 2023 14:33:44 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE3B358045;
+        Fri,  7 Jul 2023 14:33:37 +0000 (GMT)
+Received: from [9.171.16.132] (unknown [9.171.16.132])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jul 2023 14:33:37 +0000 (GMT)
+Message-ID: <27520864-3693-324e-717e-6bd628fb75ed@linux.vnet.ibm.com>
+Date:   Fri, 7 Jul 2023 20:03:35 +0530
 MIME-Version: 1.0
-References: <1688668070-8408-1-git-send-email-quic_pintu@quicinc.com>
- <1688668414-12350-1-git-send-email-quic_pintu@quicinc.com>
- <26816f0a-7f55-f5ce-b71d-769011f9230f@arm.com> <ZKgJIlqZk8cw4MBa@casper.infradead.org>
- <CAOuPNLiOO_Pa=J_-0RhDBQ0auL0rgCjmpCZHtH3ngv6D1OhW6Q@mail.gmail.com>
- <ZKgctnmuVbLvYb9d@casper.infradead.org> <CAOuPNLjcBe7iEdJUhLS-kJuCc-uxXarh6o=JiTirGixq+tj+jg@mail.gmail.com>
- <ZKgfkhOMNT1xDjk+@casper.infradead.org>
-In-Reply-To: <ZKgfkhOMNT1xDjk+@casper.infradead.org>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Fri, 7 Jul 2023 20:03:30 +0530
-Message-ID: <CAOuPNLgwRugBZg7UB+jvW5Q1K2Bk2cJwz1svUP7XscLW18ttFg@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: cma: print cma name as well in cma_alloc debug
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pintu Kumar <quic_pintu@quicinc.com>,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC 1/1] sched/fair: Consider asymmetric scheduler groups in
+ load balancer
+Content-Language: en-US
+To:     Tobias Huschle <huschle@linux.ibm.com>
+Cc:     juri.lelli@redhat.com, vschneid@redhat.com,
+        srikar@linux.vnet.ibm.com, peterz@infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        rostedt@goodmis.org, bsegall@google.com, mingo@redhat.com,
+        mgorman@suse.de, bristot@redhat.com, dietmar.eggemann@arm.com,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <20230515114601.12737-1-huschle@linux.ibm.com>
+ <20230515114601.12737-2-huschle@linux.ibm.com>
+ <CAKfTPtC9050oY2EikUTAXTL8pAui3L+Sr4DBS0T-TccGNaA2hw@mail.gmail.com>
+ <9021d4d99370162a815928cd6467f4a5@linux.ibm.com>
+ <ZKUhPO3xcvCfjWfe@vingu-book>
+ <12befe210503469beac9e711d9782675@linux.ibm.com>
+From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
+In-Reply-To: <12befe210503469beac9e711d9782675@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qi0hI_Bu7W-f-QNkY6ByvcWguMHRPDQd
+X-Proofpoint-ORIG-GUID: EcU9vge5MgG05dS5AKBD3htIMNUskalD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0 phishscore=0
+ spamscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307070134
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +104,276 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 at 19:52, Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Jul 07, 2023 at 07:46:31PM +0530, Pintu Agarwal wrote:
-> > On Fri, 7 Jul 2023 at 19:40, Matthew Wilcox <willy@infradead.org> wrote:
-> > > > One more question from here:
-> > > > pr_debug("%s(cma %p, name: %s, count %lu, align %d)\n", __func__,
-> > > >                 (void *)cma, cma->name, count, align);
-> > > >
-> > > > Do we really need this "cma %p" printing ?
-> > > > I hardly check it and simply rely on name and count.
-> > >
-> > > Printing pointers is almost always a bad idea.  Printing the base_pfn
-> > > might be a good idea to distinguish CMAs which happen to have the
-> > > same name?
-> > >
-> > No there is no name there, it's just a ptrval
-> > cma: cma_alloc(cma (ptrval), name: reserved, count 64, align 6)
->
-> You misunderstand me.  I don't know how CMAs get their name.  Is it not
-> possible for two CMAs to have the same name as each other?
->
-Oh yah that is possible, for example multiple players can use the same
-global cma region.
+
+
+On 7/7/23 1:14 PM, Tobias Huschle wrote:
+> On 2023-07-05 09:52, Vincent Guittot wrote:
+>> Le lundi 05 juin 2023 à 10:07:16 (+0200), Tobias Huschle a écrit :
+>>> On 2023-05-16 15:36, Vincent Guittot wrote:
+>>> > On Mon, 15 May 2023 at 13:46, Tobias Huschle <huschle@linux.ibm.com>
+>>> > wrote:
+>>> > >
+>>> > > The current load balancer implementation implies that scheduler
+>>> > > groups,
+>>> > > within the same domain, all host the same number of CPUs. This is
+>>> > > reflected in the condition, that a scheduler group, which is load
+>>> > > balancing and classified as having spare capacity, should pull work
+>>> > > from the busiest group, if the local group runs less processes than
+>>> > > the busiest one. This implies that these two groups should run the
+>>> > > same number of processes, which is problematic if the groups are not
+>>> > > of the same size.
+>>> > >
+>>> > > The assumption that scheduler groups within the same scheduler
+>>> domain
+>>> > > host the same number of CPUs appears to be true for non-s390
+>>> > > architectures. Nevertheless, s390 can have scheduler groups of
+>>> unequal
+>>> > > size.
+>>> > >
+>>> > > This introduces a performance degredation in the following scenario:
+>>> > >
+>>> > > Consider a system with 8 CPUs, 6 CPUs are located on one CPU socket,
+>>> > > the remaining 2 are located on another socket:
+>>> > >
+>>> > > Socket   -----1-----    -2-
+>>> > > CPU      1 2 3 4 5 6    7 8
+>>> > >
+>>> > > Placing some workload ( x = one task ) yields the following
+>>> > > scenarios:
+>>> > >
+>>> > > The first 5 tasks are distributed evenly across the two groups.
+>>> > >
+>>> > > Socket   -----1-----    -2-
+>>> > > CPU      1 2 3 4 5 6    7 8
+>>> > >          x x x          x x
+>>> > >
+>>> > > Adding a 6th task yields the following distribution:
+>>> > >
+>>> > > Socket   -----1-----    -2-
+>>> > > CPU      1 2 3 4 5 6    7 8
+>>> > > SMT1     x x x          x x
+>>> > > SMT2                    x
+>>> >
+>>> > Your description is a bit confusing for me. What you name CPU above
+>>> > should be named Core, doesn' it ?
+>>> >
+>>> > Could you share with us your scheduler topology ?
+>>> >
+>>>
+>>> You are correct, it should say core instead of CPU.
+>>>
+>>> One actual configuration from one of my test machines (lscpu -e):
+>>>
+>>
+>> [...]
+>>
+>>>
+>>> So, 6 cores / 12 CPUs in one group 2 cores / 4 CPUs in the other.
+>>
+>> Thaks for the details
+>>
+>>>
+>>> If I run stress-ng with 8 cpu stressors on the original code I get a
+>>> distribution
+>>> like this:
+>>>
+>>> 00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
+>>>                 x     x     x     x      x  x  x  x
+>>>
+>>> Which means that the two cores in the smaller group are running into SMT
+>>> while two
+>>> cores in the larger group are still idle. This is caused by the
+>>> prefer_sibling path
+>>> which really wants to see both groups run the same number of tasks.
+>>
+>> yes and it considers that there are the same number of CPUs per group
+>>
+>>>
+>>> > >
+>>> > > The task is added to the 2nd scheduler group, as the scheduler
+>>> has the
+>>> > > assumption that scheduler groups are of the same size, so they
+>>> should
+>>> > > also host the same number of tasks. This makes CPU 7 run into SMT
+>>> > > thread, which comes with a performance penalty. This means, that in
+>>> > > the window of 6-8 tasks, load balancing is done suboptimally,
+>>> because
+>>> > > SMT is used although there is no reason to do so as fully idle CPUs
+>>> > > are still available.
+>>> > >
+>>> > > Taking the weight of the scheduler groups into account, ensures that
+>>> > > a load balancing CPU within a smaller group will not try to pull
+>>> tasks
+>>> > > from a bigger group while the bigger group still has idle CPUs
+>>> > > available.
+>>> > >
+>>> > > Signed-off-by: Tobias Huschle <huschle@linux.ibm.com>
+>>> > > ---
+>>> > >  kernel/sched/fair.c | 3 ++-
+>>> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+>>> > >
+>>> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>> > > index 48b6f0ca13ac..b1307d7e4065 100644
+>>> > > --- a/kernel/sched/fair.c
+>>> > > +++ b/kernel/sched/fair.c
+>>> > > @@ -10426,7 +10426,8 @@ static struct sched_group
+>>> > > *find_busiest_group(struct lb_env *env)
+>>> > >          * group's child domain.
+>>> > >          */
+>>> > >         if (sds.prefer_sibling && local->group_type ==
+>>> > > group_has_spare &&
+>>> > > -           busiest->sum_nr_running > local->sum_nr_running + 1)
+>>> > > +           busiest->sum_nr_running * local->group_weight >
+>>> > > +                       local->sum_nr_running *
+>>> > > busiest->group_weight + 1)
+>>
+>>
+>> what you want to test here is that moving 1 task from busiest to local
+>> group
+>> would help and balance the ratio of tasks per cpu
+>>
+>> (busiest->sum_nr_running - 1) / busiest->group_weight >
+>> (local->sum_nr_running + 1) / local->group_weight
+>>
+>> which can be develop into
+>>
+>> busiest->sum_nr_running * local->group_weight >= local->sum_nr_running
+>> * busiest->group_weight + busiest->group_weight + local->group_weight
+>>
+>> and you also have to change how we calculate the imbalance which just
+>> provide the half of the diff of nr_running
+>>
+>> by something like
+>>
+>> (busiest->sum_nr_running * local->group_weight) -
+>> (local->sum_nr_running * busiest->group_weight) /
+>> (busiest->group_weight + local->group_weight)
+>>
+> 
+> Ahh right, I had a look at the imbalance part now and your suggestion works
+> pretty well. Just had to make some minor adjustments so far.
+> Nice side effect is, that this allows the load balancer to behave
+> exactly the
+> same as before in the cases where local->group_weight ==
+> busiest->group_weight.
+> The behavior only changes for the case where the groups are not of equal
+> size.
+
+
+Not sure if it has been figured/discussed out already, pointing one possible scenario. 
+
+Taking the formulas:
+busiest->sum_nr_running * local->group_weight >= local->sum_nr_running * busiest->group_weight + busiest->group_weight + local->group_weight
+and calulate_imbalance:
+(busiest->sum_nr_running * local->group_weight) - (local->sum_nr_running * busiest->group_weight) / (busiest->group_weight + local->group_weight)
+
+
+First lets say imbalance was like this. same example as before. sched_group in [busy_cpus/idle_cpus/group_weight]
+[3/9/12] - local group.
+[3/1/4] - busy group.
+
+3*12 >= 3*4+12+4 --> true and imbalance would be (3*12-3*4)/(12+4) -- 24/16 >> 1 -- lets say 1. 
+we will balance, good.
+
+[4/8/12] 
+[2/2/4] 
+There will not be further load balances. good.
+
+a new process comes, it would be scheduled on [4/8/120 sched group as that would be idlest. 
+[5/7/12] 
+[2/2/4] 
+
+Process running on [2/2/4] exits. then in this scenario do you expect the balance to happen again? Since balancing would result into optimal performance.
+[5/7/12] - busy_group
+[1/3/4] - local group
+
+5*4 >= 1*12+12+4 --> will not balance. 
+
+[5/7/12] - local group
+[1/3/4] - busy group 
+1*12 >= 5*4 + 12 + 4 --> will not balance. 
+
+Is this scenario needs to be handled as well?
+
+> 
+> I will figure out a solution and send a patch soon which incorporates these
+> adjustments plus a more detailed description.
+> 
+> Thanks for the feedback.
+> 
+>>> >
+>>> > This is the prefer_sibling path. Could it be that you should disable
+>>> > prefer_siling between your sockets for such topology ? the default
+>>> > path compares the number of idle CPUs when groups has spare capacity
+>>> >
+>>> >
+>>>
+>>> If I disable prefer_sibling (I played around with it a bit), I run
+>>> into the
+>>> problem,
+>>> that the tasks are distributed s.t. each group has the same amount of
+>>> idle
+>>> CPUs, which
+>>> yields distributions similar to this:
+>>>
+>>> 00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
+>>>     x  x  x     x  x     x     x  x
+>>>
+>>> Now both groups have 4 idle CPUs which fulfills the criteria imposed
+>>> by the
+>>> load balancer,
+>>> but the larger group is now running SMT while the smaller one is just
+>>> idle.
+>>>
+>>> So, in this asymmetric setup, both criteria seem to not work in an
+>>> optimal
+>>> way. Going for
+>>> the same number of idle CPUs or alternatively for the same number of
+>>> running
+>>> processes
+>>> both cause a sub-optimal distribution of tasks, leading to
+>>> unnecessary SMT.
+>>
+>> there is the same behavior and assumption here too
+>>
+>>
+>>>
+>>> It seems also to be possible to address the regular load balancing
+>>> path by
+>>> aiming to have the
+>>> same unused capacity between groups instead of the same number of
+>>> idle CPUs.
+>>> This seems to
+>>> have been considered in the past, but the choice went in favor of the
+>>> number
+>>> of idle CPUs.
+>>
+>> unused capacity doesn't give the instantaneous state so a group can be
+>> idle but without
+>> unused capacity
+>>
+>>> Since this decision was actively taken already, I focused on the
+>>> prefer_sibling path.
+>>>
+>>> The question now would be how to address this properly (or if I'm
+>>> missing
+>>> something here).
+>>> As mentioned in the cover letter, this was the most simplistic and least
+>>> invasive approach
+>>> I could find, others might be more sophisticated but also have some
+>>> side-effects.
+>>>
+>>> I have a bit of a hard time leaving this one as-is, as it just
+>>> introduces
+>>> two additional
+>>> multiplications with no effect for most architectures. Maybe an
+>>> architectures specific
+>>> inline function that the compiler can optimize away if not needed?
+>>>
+>>> > >                 goto force_balance;
+>>> > >
+>>> > >         if (busiest->group_type != group_overloaded) {
+>>> > > --
+>>> > > 2.34.1
+>>> > >
+>>>
