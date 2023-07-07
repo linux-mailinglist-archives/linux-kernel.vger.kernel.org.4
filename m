@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2B374AD78
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B7874AD7C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 11:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjGGJAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 05:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S232531AbjGGJCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 05:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGGJAk (ORCPT
+        with ESMTP id S229891AbjGGJCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 05:00:40 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EA611B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:00:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R531e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Vmo-124_1688720435;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vmo-124_1688720435)
-          by smtp.aliyun-inc.com;
-          Fri, 07 Jul 2023 17:00:36 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] mm: Fix some kernel-doc comments
-Date:   Fri,  7 Jul 2023 17:00:34 +0800
-Message-Id: <20230707090034.125511-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 7 Jul 2023 05:02:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49451FEB;
+        Fri,  7 Jul 2023 02:02:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C00618D6;
+        Fri,  7 Jul 2023 09:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC4C433C9;
+        Fri,  7 Jul 2023 09:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688720549;
+        bh=GcjyvAqlB1nFoHnR6u7qvh6E/8eckipjnRXnkOO5UR0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pdfLlMHxyuZ1crlZqegbrRJAtjkB+goX1CQhW+JSm8mTCi/s9y2I9j1RT/5TJnOsc
+         iD6lCXkyG6ujjZxy/8QeNRcuxPfx4pSaaueK/0k7+4GjKZ2wR7ucmpDyO7w5tOo4md
+         7vKDfAZl2gajDZgoLAaAEQTB47wIFwN/QcXyVqJUL65oFKEA+fjKdfIR9FGqiPBv0d
+         XhV83XLPIEG5XQ/UAn8QPT6vYMvhwXsqVIAV+14tFHtaivO4HN5cXNDLccdDsfmTDF
+         xsTOeg/iJzB/a6rUTVsgogX0BwjC2qo7THplO/k1VctSRxW3mvT3U9/QDRF5v057gx
+         A1xREGdmm8LdA==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f95bf5c493so2420404e87.3;
+        Fri, 07 Jul 2023 02:02:29 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZ62p4Lwzmo34r7b8WBcfrldWp6J/Vgd5+Hl4ZFsSxPPSii3LIK
+        9pBwhU1WdAtyR5y1x9u46OpCSEfGTvlpjKjuHY8=
+X-Google-Smtp-Source: APBJJlHOVAjiNT1y+X5iuKR9dT0pGLklPJ2XlvR7B0rPRmIjdUb7Hnc5heIbdMQCiSDZavgDwG14LS2pWv2jx70ok7c=
+X-Received: by 2002:a05:6512:3253:b0:4fa:5e76:7ad4 with SMTP id
+ c19-20020a056512325300b004fa5e767ad4mr3150740lfr.10.1688720547581; Fri, 07
+ Jul 2023 02:02:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230628012931.88911-1-yukuai1@huaweicloud.com> <a2bf6819-224f-4b2d-89c9-67528469b03f@huaweicloud.com>
+In-Reply-To: <a2bf6819-224f-4b2d-89c9-67528469b03f@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 7 Jul 2023 17:02:15 +0800
+X-Gmail-Original-Message-ID: <CAPhsuW7j4TcVDRSqsj2XMOLHv_suvP5vUZG5c9Jh8W3XVi=nkA@mail.gmail.com>
+Message-ID: <CAPhsuW7j4TcVDRSqsj2XMOLHv_suvP5vUZG5c9Jh8W3XVi=nkA@mail.gmail.com>
+Subject: Re: [PATCH -next 0/2] md: clean up and fix for mddev_suspend()
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     xni@redhat.com, colyli@suse.de, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add description of @mm_wr_locked and @mm.
-to silence the warnings:
+On Fri, Jul 7, 2023 at 9:25=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> wr=
+ote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/06/28 9:29, Yu Kuai =E5=86=99=E9=81=93:
+> > From: Yu Kuai <yukuai3@huawei.com>
+> >
+> > This patchset is minor changes that I found by code review while I'm
+> > working on synchronize io and array configuration. I'm planing to
+> > refactor mddev_suspend() from:
+> >
+> > mddev_lock
+> > // array configuration
+> > mddev_unlock
+> >
+> > and:
+> >
+> > mddev_lock
+> > mddev_suspend
+> > // array configuration
+> > mddev_resume
+> > mddev_unlock
+> >
+> > to:
+> >
+> > mddev_suspend
+> > mddev_lock
+> > // array configuration
+> > mddev_unlock
+> > mddev_resume
+> >
+>
+> Friendly ping ...
 
-mm/memory.c:1716: warning: Function parameter or member 'mm_wr_locked' not described in 'unmap_vmas'
-mm/memory.c:5110: warning: Function parameter or member 'mm' not described in 'mm_account_fault'
+Applied to md-next. Thanks!
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- mm/memory.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/mm/memory.c b/mm/memory.c
-index db42a3e939d5..ceff67b5a0e0 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1698,6 +1698,7 @@ static void unmap_single_vma(struct mmu_gather *tlb,
-  * @vma: the starting vma
-  * @start_addr: virtual address at which to start unmapping
-  * @end_addr: virtual address at which to end unmapping
-+ * @mm_wr_locked: lock flag
-  *
-  * Unmap all pages in the vma list.
-  *
-@@ -5091,7 +5092,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
- 
- /**
-  * mm_account_fault - Do page fault accounting
-- *
-+ * @mm: mm from which memcg should be extracted. It can be NULL.
-  * @regs: the pt_regs struct pointer.  When set to NULL, will skip accounting
-  *        of perf event counters, but we'll still do the per-task accounting to
-  *        the task who triggered this page fault.
--- 
-2.20.1.7.g153144c
-
+Song
