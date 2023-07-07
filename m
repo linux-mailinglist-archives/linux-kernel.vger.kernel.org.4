@@ -2,206 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A26D74B45B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D959774B46F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjGGPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S230443AbjGGPhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjGGPbS (ORCPT
+        with ESMTP id S229582AbjGGPhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:31:18 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8F8AF;
-        Fri,  7 Jul 2023 08:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1688743875;
-        bh=6r0pVTMiXPIZxuj/C4xxxu1nMFpZhaCFC1W3fq20TXI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FhFFgHuTdpwQ36mN93527p/AICqsZ5lB/YjyN69PD4017Iki3cN4uXGK0oAyzRNw0
-         6mvCFv026mjMRE4lEzF2LcIC82byjyYDs99uXizssVVk2UdekAMg7ZTrxApZUQLodC
-         KGvmhoTdjtccOt83XDbM547OTeQrcq42/8kBB09xGzCXO7ur1XzEcocHOg7g3BagIc
-         xMm+XTDpJhqDd0FB51ZNRS/tYZWObEqD9OoQt4jRGUgkvGCmLALh2prjw9HCG4E1NH
-         YHqzx2EHUg8UZa6brQuJzJm9d6Q9+N0mpynIUlR/zTdRlN+oTyPoFykhkaxl6sbqFz
-         p9LcYkmT47vRA==
-Received: from [172.16.0.85] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QyHRj4PP0z1G9d;
-        Fri,  7 Jul 2023 11:31:13 -0400 (EDT)
-Message-ID: <ecf1b725-1351-3460-4a99-7a03f15af152@efficios.com>
-Date:   Fri, 7 Jul 2023 11:31:46 -0400
+        Fri, 7 Jul 2023 11:37:04 -0400
+Received: from mail-pf1-f208.google.com (mail-pf1-f208.google.com [209.85.210.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C5D1BF4
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:36:59 -0700 (PDT)
+Received: by mail-pf1-f208.google.com with SMTP id d2e1a72fcca58-67c2f6fb908so2580516b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:36:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688744219; x=1691336219;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WMSWFp8IqdtzjWGGpav6HqhyMzA5tdJU+4Q1rqmerQs=;
+        b=Ctom3ZDvwksU/jOhtMuIiBwVZvizVFwdeS9nO2zV+PM4oYr8Ixs//g2NApszjgtsPa
+         bn1HlIufk0K8ga2LEcHt940Bv11477/cd8TDAQQBMMGe886KW/z5H02TbHhmHtCcMVee
+         XEehNbyxq0nX8/BP347O4vlsfh+s06rWbGBp7RYawkIOIjK40v1P7cv2ts1aOCaH2Btr
+         fhcBiGZEn2lY43W0sGsHZk4l/OjOJk3MY5JQAVAMgm2mKDDm8zT9ShriBTWbGWseSX9m
+         4B5u2vRVu9oa9QI5BCTKn9vqzqdCUSwem3KtadefcclUMBopzJEAdk8yFDGjM5y6OBkV
+         8PAw==
+X-Gm-Message-State: ABy/qLblu4ERlPyclfsJkx0mjcYOFpKz2XJGy4CgakLVWCvH7f9k3AJz
+        +I6m4FewXILbiLbdIuEfPH2jjQSEYIkB8gi6n6l8pcgug4e+
+X-Google-Smtp-Source: APBJJlFDGMhIUSGN7txEvyL05VyRA+rXUexFGCmLSay5OiA5H71zqlUvE6PBri+pKGRgAyPTXv1Ao8OKaLLd1976xL/F3aDXXtmc
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-Content-Language: en-US
-To:     Jonathan Wakely <jwakely.gcc@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Olivier Dion <odion@efficios.com>, rnk@google.com,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-References: <87ttukdcow.fsf@laura>
- <20230704094627.GS4253@hirez.programming.kicks-ass.net>
- <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6a00:3902:b0:67d:41a8:3e19 with SMTP id
+ fh2-20020a056a00390200b0067d41a83e19mr7579784pfb.3.1688744219328; Fri, 07 Jul
+ 2023 08:36:59 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 08:36:59 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004f463f05ffe76731@google.com>
+Subject: [syzbot] [media?] [usb?] WARNING in smsusb_start_streaming
+From:   syzbot <syzbot+a7c205f9c1168e2f1dcc@syzkaller.appspotmail.com>
+To:     duoming@zju.edu.cn, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/23 06:23, Jonathan Wakely wrote:
-> On Tue, 4 Jul 2023 at 10:47, Peter Zijlstra wrote:
->>
->> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
->>
->>>    int x = 0;
->>>    int y = 0;
->>>    int r0, r1;
->>>
->>>    int dummy;
->>>
->>>    void t0(void)
->>>    {
->>>            __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
->>>
->>>            __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
->>>            __atomic_thread_fence(__ATOMIC_SEQ_CST);
->>>
->>>            r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
->>>    }
->>>
->>>    void t1(void)
->>>    {
->>>            __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
->>>            __atomic_thread_fence(__ATOMIC_SEQ_CST);
->>>            r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
->>>    }
->>>
->>>    // BUG_ON(r0 == 0 && r1 == 0)
->>>
->>> On x86-64 (gcc 13.1 -O2) we get:
->>>
->>>    t0():
->>>            movl    $1, x(%rip)
->>>            movl    $1, %eax
->>>            xchgl   dummy(%rip), %eax
->>>            lock orq $0, (%rsp)       ;; Redundant with previous exchange.
->>>            movl    y(%rip), %eax
->>>            movl    %eax, r0(%rip)
->>>            ret
->>>    t1():
->>>            movl    $1, y(%rip)
->>>            lock orq $0, (%rsp)
->>>            movl    x(%rip), %eax
->>>            movl    %eax, r1(%rip)
->>>            ret
->>
->> So I would expect the compilers to do better here. It should know those
->> __atomic_thread_fence() thingies are superfluous and simply not emit
->> them. This could even be done as a peephole pass later, where it sees
->> consecutive atomic ops and the second being a no-op.
-> 
-> Right, I don't see why we need a whole set of new built-ins that say
-> "this fence isn't needed if the adjacent atomic op already implies a
-> fence". If the adjacent atomic op already implies a fence for a given
-> ISA, then the compiler should already be able to elide the explicit
-> fence.
-> 
-> So just write your code with the explicit fence, and rely on the
-> compiler to optimize it properly. Admittedly, today's compilers don't
-> do that optimization well, but they also don't support your proposed
-> built-ins, so you're going to have to wait for compilers to make
-> improvements either way.
+Hello,
 
-Emitting the redundant fences is the plan we have for liburcu.  The
-current situation unfortunately requires users to choose between
-generation of inefficient code with C11 or implement their own inline
-assembler until the compilers catch up.
+syzbot found the following issue on:
 
-> 
-> https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4455.html
-> discusses that compilers could (and should) optimize around atomics
-> better.
+HEAD commit:    d528014517f2 Revert ".gitignore: ignore *.cover and *.mbx"
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10953308a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d576750da57ebbb5
+dashboard link: https://syzkaller.appspot.com/bug?extid=a7c205f9c1168e2f1dcc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17dd0d94a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ea4fa0a80000
 
-Our understanding of the C11/C++11 memory model is that it aims at
-defining the weakest possible guarantees for each ordering to be as
-efficient as possible on weakly ordered architectures.  However, when
-writing portable code in practice, the C11/C++11 memory model force the
-programmer to insert memory fences which are redundant on strongly
-ordered architectures.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/25611d498c84/disk-d5280145.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6cd9d0d55a7a/vmlinux-d5280145.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f0627705b54b/bzImage-d5280145.xz
 
-We want something that can apply across procedures from different
-modules: e.g. a mutex lock operation (glibc) has an acquire semantic
-using a RMW operation that the caller could promote to a full fence.
-The peephole optimizations cannot do this because they focus on a single
-basic block.  PRE can apply across procedures, but would rely on LTO and
-possibly function annotation across modules.  I am not aware of any
-progress in that research field in the past 6 years. [1-2]
+The issue was bisected to:
 
-The new atomic builtins we propose allow the user to better express its
-intent to the compiler, allowing for better code generation.  Therefore,
-reducing the number of emitted redundant fences, without having to rely on
-optimizations.
+commit ebad8e731c1c06adf04621d6fd327b860c0861b5
+Author: Duoming Zhou <duoming@zju.edu.cn>
+Date:   Mon Jan 23 02:04:38 2023 +0000
 
-It should be noted that the builtins extensions we propose are not
-entirely free.  Here are our perceived downsides of introducing those
-APIs:
+    media: usb: siano: Fix use after free bugs caused by do_submit_urb
 
-- They add complexity to the atomic builtins API.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=172533e8a80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14a533e8a80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a533e8a80000
 
-- They add constraints which need to be taken into account for future
-   architecture-specific backend optimizations, as an example the (broken)
-   xchg RELEASE | RELAXED -> store on x86 (Clang) [3].
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a7c205f9c1168e2f1dcc@syzkaller.appspotmail.com
+Fixes: ebad8e731c1c ("media: usb: siano: Fix use after free bugs caused by do_submit_urb")
 
-   If an atomic op class (e.g. rmw) can be optimized to a weaker
-   instruction by the architecture backend, then the emission of a
-   before/after-fence associated with this class of atomic op, must be
-   pessimistic and assume the weakest instruction pattern which can
-   be generated.
+smsusb:smsusb_probe: board id=7, interface number 55
+smsusb:smsusb_probe: board id=7, interface number 147
+smsusb:smsusb_probe: board id=7, interface number 0
+smsusb:siano_media_device_register: media controller created
+smsusb:smsusb_start_streaming: smsusb_submit_urb(...) failed
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 917 at kernel/workqueue.c:3379 __flush_work+0x946/0xb60 kernel/workqueue.c:3379
+Modules linked in:
+CPU: 0 PID: 917 Comm: kworker/0:2 Not tainted 6.4.0-syzkaller-11478-gd528014517f2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__flush_work+0x946/0xb60 kernel/workqueue.c:3379
+Code: 00 48 c7 c6 2b 36 54 81 48 c7 c7 00 27 9a 8c e8 c0 09 12 00 e9 6f fc ff ff e8 16 a9 30 00 0f 0b e9 63 fc ff ff e8 0a a9 30 00 <0f> 0b 45 31 ed e9 54 fc ff ff e8 6b d8 83 00 e9 3e fb ff ff e8 f1
+RSP: 0018:ffffc900050aebf0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888071a480e8 RCX: 0000000000000000
+RDX: ffff88801fc05940 RSI: ffffffff81543666 RDI: 0000000000000001
+RBP: ffffc900050aed88 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 1ffffffff21ed137 R12: ffff888071a480e8
+R13: 0000000000000001 R14: 0000000000000001 R15: ffff888071a48100
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000564a82410ac8 CR3: 000000002c52c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3473
+ smsusb_stop_streaming drivers/media/usb/siano/smsusb.c:182 [inline]
+ smsusb_start_streaming+0x33c/0x650 drivers/media/usb/siano/smsusb.c:199
+ smsusb_init_device+0x7f7/0xd20 drivers/media/usb/siano/smsusb.c:476
+ smsusb_probe+0x5b9/0x10b0 drivers/media/usb/siano/smsusb.c:567
+ usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:798
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:828
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:956
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1028
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
+ usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:798
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:828
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:956
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1028
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2590
+ hub_port_connect drivers/usb/core/hub.c:5422 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5566 [inline]
+ port_event drivers/usb/core/hub.c:5726 [inline]
+ hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5808
+ process_one_work+0xa34/0x16f0 kernel/workqueue.c:2597
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2748
+ kthread+0x344/0x440 kernel/kthread.c:389
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-There are optimizations of atomics and redundant fences in Clang.  The
-redundant fences optimizations appear to be limited to a peephole, which
-does not appear to leverage the fact that lock-prefixed atomic
-operations act as implicit fences on x86.  Perhaps this could be a
-low-hanging fruit for optimization.
 
-We have not observed any similar optimizations in gcc as of today, which
-appears to be a concern for many users. [4-7]
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks,
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Mathieu
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-[1] https://dl.acm.org/doi/10.1145/3033019.3033021
-[2] https://reviews.llvm.org/D5758
-[3] https://github.com/llvm/llvm-project/issues/60418
-[4] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86056
-[5] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68622
-[6] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86072
-[7] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63273
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
