@@ -2,201 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1C274A918
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B569A74A91D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjGGCqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
+        id S231976AbjGGCry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjGGCqU (ORCPT
+        with ESMTP id S231769AbjGGCrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 22:46:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBCA19A0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688697938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qoH4ad0vFVh5H5bsCMA0Q+pNHJiT6f1IPBQfe5zvw5s=;
-        b=e0Tjb/9STr9F+3GDDf700FaUP302Hj0U2k54TttANmOyHkPbNPuizsXDJjN5rIO1RYg+0c
-        G1gVOJ+e2ImVNQAsIRT/zPwnu0vHUkI1CCvqrmbgmAtUZ3HfmrKhmj2kPTFjmeaTzEKgW1
-        EGvpfeU+Q92RgW7pWZo117SyiXlu4WU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-99-6NPFoNixMW60lkBybvpoSw-1; Thu, 06 Jul 2023 22:45:34 -0400
-X-MC-Unique: 6NPFoNixMW60lkBybvpoSw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0DED638149A8;
-        Fri,  7 Jul 2023 02:45:34 +0000 (UTC)
-Received: from darkstar.users.ipa.redhat.com (ovpn-12-250.pek2.redhat.com [10.72.12.250])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4C469C478DE;
-        Fri,  7 Jul 2023 02:45:27 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 10:47:00 +0800
-From:   Dave Young <dyoung@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tao Liu <ltao@redhat.com>, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, linux-kernel@vger.kernel.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        Michael Roth <michael.roth@amd.com>
-Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <ZKd8pK7yQ31FWkIx@darkstar.users.ipa.redhat.com>
-References: <20230601072043.24439-1-ltao@redhat.com>
- <20230705173359.GDZKWphyFbNE8id6Jm@fat_crate.local>
+        Thu, 6 Jul 2023 22:47:51 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13AC91BE9;
+        Thu,  6 Jul 2023 19:47:48 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8AxlPDSfKdkH08BAA--.4928S3;
+        Fri, 07 Jul 2023 10:47:46 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF8zRfKdk_2EgAA--.55042S3;
+        Fri, 07 Jul 2023 10:47:45 +0800 (CST)
+Message-ID: <bdc6eb71-482d-5dd6-d527-c2f2f68dfb38@loongson.cn>
+Date:   Fri, 7 Jul 2023 10:47:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705173359.GDZKWphyFbNE8id6Jm@fat_crate.local>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5] PCI: Align pci memory space base address with page
+ size
+Content-Language: en-US
+From:   bibo mao <maobibo@loongson.cn>
+To:     Will Deacon <will@kernel.org>, loongson-kernel@lists.loongnix.cn
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Reply-To: Bjorn Helgaas <bhelgaas@google.com>,
+          Huacai Chen <chenhuacai@kernel.org>
+References: <20230619014715.3792883-1-maobibo@loongson.cn>
+ <f676d9e0-bb88-283a-5189-f1ae945ee4dd@loongson.cn>
+In-Reply-To: <f676d9e0-bb88-283a-5189-f1ae945ee4dd@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxF8zRfKdk_2EgAA--.55042S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxWF4fJFyxZFWDWF4xtr4xAFc_yoWrWw48pF
+        yfA3ZrCrW8Jr13Gwsaq34kuFsxZ397KrW5Kry5Ca4rGF9ruryUCry5WryagayDArs8WrW0
+        qFn5KF1Yva15XacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+        wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
+        CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+        67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMI
+        IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+        14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+        W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URa0PU
+        UUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/05/23 at 07:33pm, Borislav Petkov wrote:
-> On Thu, Jun 01, 2023 at 03:20:44PM +0800, Tao Liu wrote:
-> > A kexec kernel bootup hang is observed on Intel Atom cpu due to unmapped
-> 
-> s/cpu/CPU/g
-> 
-> > EFI config table.
-> > 
-> > Currently EFI system table is identity-mapped for the kexec kernel, but EFI
-> > config table is not mapped explicitly:
-> 
-> Why does the EFI config table *need* to be mapped explicitly?
-> 
-> >     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
-> >                           tables to the ident map")
-> > 
-> > Later in the following 2 commits, EFI config table will be accessed when
-> > enabling sev at kernel startup.
-> 
-> What does SEV have to do with an Intel problem?
+Bjourn, Hucai,
 
-I'm also curious, let's cc the author of below mentioned commits.
+ping again.
 
-> 
-> > This may result in a page fault due to EFI
-> > config table's unmapped address. Since the page fault occurs at an early
-> > stage, it is unrecoverable and kernel hangs.
-> > 
-> >     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME features
-> >                           earlier during boot")
-> >     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
-> >                           detection/setup")
-> > 
-> > In addition, the issue doesn't appear on all systems, because the kexec
-> > kernel uses Page Size Extension (PSE) for identity mapping. In most cases,
-> > EFI config table can end up to be mapped into due to 1 GB page size.
-> > However if nogbpages is set, or cpu doesn't support pdpe1gb feature
-> > (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
-> > due to 2 MB page size, thus a page fault hang is more likely to happen.
-> 
-> This doesn't answer my question above.
-> 
-> > This patch will make sure the EFI config table is always mapped.
-> 
-> Avoid having "This patch" or "This commit" in the commit message. It is
-> tautologically useless.
-> 
-> Also, do
-> 
-> $ git grep 'This patch' Documentation/process
-> 
-> for more details.
-> 
-> 
-> > 
-> > Signed-off-by: Tao Liu <ltao@redhat.com>
-> > ---
-> > Changes in v2:
-> > - Rephrase the change log based on Baoquan's suggestion.
-> > - Rename map_efi_sys_cfg_tab() to map_efi_tables().
-> > - Link to v1: https://lore.kernel.org/kexec/20230525094914.23420-1-ltao@redhat.com/
-> > ---
-> >  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
-> >  1 file changed, 31 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-> > index 1a3e2c05a8a5..664aefa6e896 100644
-> > --- a/arch/x86/kernel/machine_kexec_64.c
-> > +++ b/arch/x86/kernel/machine_kexec_64.c
-> > @@ -28,6 +28,7 @@
-> >  #include <asm/setup.h>
-> >  #include <asm/set_memory.h>
-> >  #include <asm/cpu.h>
-> > +#include <asm/efi.h>
-> >  
-> >  #ifdef CONFIG_ACPI
-> >  /*
-> > @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
-> >  #endif
-> >  
-> >  static int
-> > -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> > +map_efi_tables(struct x86_mapping_info *info, pgd_t *level4p)
-> >  {
-> >  #ifdef CONFIG_EFI
-> >  	unsigned long mstart, mend;
-> > +	void *kaddr;
-> > +	int ret;
-> >  
-> >  	if (!efi_enabled(EFI_BOOT))
-> >  		return 0;
-> > @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> >  	if (!mstart)
-> >  		return 0;
-> >  
-> > +	ret = kernel_ident_mapping_init(info, level4p, mstart, mend);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	kaddr = memremap(mstart, mend - mstart, MEMREMAP_WB);
-> > +	if (!kaddr) {
-> > +		pr_err("Could not map UEFI system table\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	mstart = efi_config_table;
-> 
-> Yeah, about this, did you see efi_reuse_config() and the comment above
-> it especially?
-> 
-> Or is it that the EFI in that box wants the config table mapped 1:1 and
-> accesses it during boot/kexec?
-> 
-> In any case, this is all cloudy without a proper root cause.
+The is such issue on only LoongArch system since 16K page size is used.
 
-efi_reuse_config is patching the SMBIOS table address in efi init path
-durint kexec kernel bootup due to some nasty firmware behavior.
+Should we add code in general framework  or in LoongArch specified code
+in v1?  
 
-It seems the sev code is searching for table with EFI_CC_BLOB_GUID. In
-theory it is safe as it will not access SMBIOS table here.  But for
-safe purpose it would be better to test on AMD SEV guest, see if the
-EFI_CC_BLOB table address is untouched after the 1st kernel booting.
+If you do not think that it is problem, I can give up. LoongArch system
+is not only for myself own, I do not care about it also since LoongArch
+Maintainer think it is not a issue.
 
+Regards
+Bibo Mao
+
+在 2023/6/26 09:30, bibo mao 写道:
+> gentle ping.
 > 
-> Also, I'd like for Ard to have a look at this too.
+> 在 2023/6/19 09:47, Bibo Mao 写道:
+>> Some PCI devices have only 4K memory space size, it is normal in general
+>> machines and aligned with page size. However some architectures which
+>> support different page size, default page size on LoongArch is 16K, and
+>> ARM64 supports page size varying from 4K to 64K. On machines where larger
+>> page size is use, memory space region of two different pci devices may be
+>> in one page. It is not safe with mmu protection, also VFIO pci device
+>> driver requires base address of pci memory space page aligned, so that it
+>> can be memory mapped to qemu user space when it is passed-through to vm.
+>>
+>> It consumes more pci memory resource with page size alignment requirement,
+>> here extra option PCI_MEMRES_PAGE_ALIGN is added, it can be enabled by
+>> different architectures, currently arm64/loongarch enable this option.
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+>> ---
+>> Change history
+>> v5: enable option PCI_MEMRES_PAGE_ALIGN on arm64. Verified on LoongArch
+>> and pass to compile on arm64 with defconfig
+>>
+>> v4: add extra kernel option PCI_MEMRES_PAGE_ALIGN to set memory resource
+>>     page aligned
+>>
+>> v3: move alignment requirement to generic pci code
+>>
+>> v2: add pci resource alignment requirement in arch specified function
+>>     pcibios_align_resource on arm64/LoongArch platforms
+>>
+>> ---
+>>  arch/arm64/Kconfig      | 1 +
+>>  arch/loongarch/Kconfig  | 1 +
+>>  drivers/pci/Kconfig     | 3 +++
+>>  drivers/pci/setup-res.c | 7 +++++++
+>>  4 files changed, 12 insertions(+)
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 343e1e1cae10..24858bbf2b72 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -232,6 +232,7 @@ config ARM64
+>>  	select OF_EARLY_FLATTREE
+>>  	select PCI_DOMAINS_GENERIC if PCI
+>>  	select PCI_ECAM if (ACPI && PCI)
+>> +	select PCI_MEMRES_PAGE_ALIGN if PCI
+>>  	select PCI_SYSCALL if PCI
+>>  	select POWER_RESET
+>>  	select POWER_SUPPLY
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index d38b066fc931..7dbde5e5b351 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -140,6 +140,7 @@ config LOONGARCH
+>>  	select PCI_DOMAINS_GENERIC
+>>  	select PCI_ECAM if ACPI
+>>  	select PCI_LOONGSON
+>> +	select PCI_MEMRES_PAGE_ALIGN
+>>  	select PCI_MSI_ARCH_FALLBACKS
+>>  	select PCI_QUIRKS
+>>  	select PERF_USE_VMALLOC
+>> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+>> index 9309f2469b41..9be5f85ff9dc 100644
+>> --- a/drivers/pci/Kconfig
+>> +++ b/drivers/pci/Kconfig
+>> @@ -128,6 +128,9 @@ config PCI_LOCKLESS_CONFIG
+>>  config PCI_BRIDGE_EMUL
+>>  	bool
+>>  
+>> +config PCI_MEMRES_PAGE_ALIGN
+>> +	bool
+>> +
+>>  config PCI_IOV
+>>  	bool "PCI IOV support"
+>>  	select PCI_ATS
+>> diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
+>> index 967f9a758923..6ad76734a670 100644
+>> --- a/drivers/pci/setup-res.c
+>> +++ b/drivers/pci/setup-res.c
+>> @@ -339,6 +339,13 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
+>>  		return -EINVAL;
+>>  	}
+>>  
+>> +#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
+>> +	/*
+>> +	 * force minimum page alignment for vfio pci usage
+>> +	 */
+>> +	if (res->flags & IORESOURCE_MEM)
+>> +		align = max_t(resource_size_t, PAGE_SIZE, align);
+>> +#endif
+>>  	size = resource_size(res);
+>>  	ret = _pci_assign_resource(dev, resno, size, align);
+>>  
 > 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-> 
+> _______________________________________________
+> Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
+> To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
 
