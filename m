@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE6D74AF45
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D0674AF48
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbjGGK7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S232185AbjGGLAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjGGK7w (ORCPT
+        with ESMTP id S232881AbjGGLAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:59:52 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F7019B7
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 03:59:37 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbd200d354so74565e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 03:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688727576; x=1691319576;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=N/x5Wj/WL6k7KcWrje94j9nFZPfPj+YDs51VmCpKkkI=;
-        b=tLKBqqLcbwiuJ4HJSMiKoyUCqJ2pofweLBAP4wX35TMUoWjCm37+wTM8Vc1H9pAse1
-         DAPjP/yBO/EcMTcpEQfvBMqU7uexy/8CI06hiLXPRojm/cm0aXwpzO5QyNS6Ddg/Pjus
-         iHPjpLreMPzUk0NgRJFSF3WnaZohIxJrRZJPm3nmjsl5alBSVVCVfoItqdlS8PG/XeQ9
-         H3Ng7liy8ktNjwz43gp+qpBf0ovJ2ReA+4dDz0P55Qewv8nWINbf0CXarkGqeXW5tyIx
-         ah/7LgzBafIXOV3IGQKaXyNKPLKxXwnx8siuu1fs5Ui+W4sJZCFHNcehgZOcZEcNXWvF
-         VCzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688727576; x=1691319576;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N/x5Wj/WL6k7KcWrje94j9nFZPfPj+YDs51VmCpKkkI=;
-        b=VJyPUlFjPODMCj/mifd2oNOPF52pSM5M5ZOOLpfyJAsxypz/aA0g4GK92XW3FvbOac
-         Dfv87MpYMoRj5rBMZ/+Dyt2s0ioxdMXJiNXZvAmHReTIR0Jdk6tYiZuyrUhhtI33OYI5
-         8+Y1ZplG9GvAWzrg59/Wh92s+uHDeDlsRVaBS55Z/21e7YVOLhP+xwk+JyzSyc4EsMxb
-         T/kC4KBi3Bj/b/jDeV9jzgF7+8I016T4snE7PnElEttlhryHsxfeJTirEG3z9pJOQ75w
-         JMO1hKidl/ILtMwZuuKATOjBelVgDuoLrLF/dGnZK/HPeqYl0Q4VO+MpMYjrMfGZ6DA2
-         6AnA==
-X-Gm-Message-State: ABy/qLY6gCVspocLKZb+sV0KmAVnuPfZP3bjaXGE8yBLlRmg2dNCvelu
-        KNKAKu/R/YUrCs68L33S7xcObg==
-X-Google-Smtp-Source: APBJJlHavId3npqyWjwmxxh+L3MOX+TI2eDAvEBy5QXlXnLOCWoT4gzGdsCPE5FEAqODsyU9NRKh2A==
-X-Received: by 2002:a05:600c:1d15:b0:3fb:c838:c681 with SMTP id l21-20020a05600c1d1500b003fbc838c681mr104628wms.4.1688727575832;
-        Fri, 07 Jul 2023 03:59:35 -0700 (PDT)
-Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
-        by smtp.gmail.com with ESMTPSA id l4-20020a1ced04000000b003fbe561f6a3sm2100287wmh.37.2023.07.07.03.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 03:59:35 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 10:59:31 +0000
-From:   Mostafa Saleh <smostafa@google.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     maz@kernel.org, oliver.upton@linux.dev,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com,
-        will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com,
-        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
-        gshan@redhat.com
-Subject: Re: [PATCH v2] KVM: arm64: Add missing BTI instructions
-Message-ID: <ZKfwE2VlaxXDoh8R@google.com>
-References: <20230706152240.685684-1-smostafa@google.com>
- <20230706162308.kyeitspgfaqb6vgn@bogus>
+        Fri, 7 Jul 2023 07:00:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458D71994;
+        Fri,  7 Jul 2023 04:00:16 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E12D96606FCD;
+        Fri,  7 Jul 2023 12:00:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688727614;
+        bh=loLGVRQqyArFuNBoSNIhMt6M/KC703SMKl35YJuaCrw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BSRQYXK9Sa3nNwKV4rG0/26Z/hJlhwYBkBDf6C+G2yFkYL25cMFO6WEMv+ks4S13W
+         KxviaaSG8QoCtljRNYygCPaisghYahAVHCA8NuTGMWNk9gxoH2GWL6ivC+i44BMjez
+         iX1a5g/H8Rh3OqcRMDNzrC2XPIhsvuTDhmjhD3fny8TbKyG4TmZiwA/72h179h66y4
+         dtgc3tqCHOJEuD0ebZ/HNT234/vo8p2wCNZDwj/UTCl0USSkmLTUFeK44mk+J1ogIt
+         dZq20bRuqgHT78/tWinzHW276jjSpZCmpEFN9Od+q2c6+727fCX36J2vMXWt/xv0N/
+         DN6kts+12TpuQ==
+Date:   Fri, 7 Jul 2023 13:00:10 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
+        bskeggs@redhat.com, Liam.Howlett@oracle.com,
+        matthew.brost@intel.com, alexdeucher@gmail.com, ogabbay@kernel.org,
+        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Donald Robson <donald.robson@imgtec.com>,
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
+ mappings
+Message-ID: <20230707130010.1bd5d41b@collabora.com>
+In-Reply-To: <20230629222651.3196-3-dakr@redhat.com>
+References: <20230629222651.3196-1-dakr@redhat.com>
+        <20230629222651.3196-3-dakr@redhat.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230706162308.kyeitspgfaqb6vgn@bogus>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 05:23:08PM +0100, Sudeep Holla wrote:
-> On Thu, Jul 06, 2023 at 03:22:40PM +0000, Mostafa Saleh wrote:
-> > Some bti instructions were missing from
-> > commit b53d4a272349 ("KVM: arm64: Use BTI for nvhe")
-> > 
-> > 1) kvm_host_psci_cpu_entry
-> > kvm_host_psci_cpu_entry is called from __kvm_hyp_init_cpu through "br"
-> > instruction as __kvm_hyp_init_cpu resides in idmap section while
-> > kvm_host_psci_cpu_entry is in hyp .text so the offset is larger than
-> > 128MB range covered by "b".
-> > Which means that this function should start with "bti j" instruction.
-> > 
-> > LLVM which is the only compiler supporting BTI for Linux, adds "bti j"
-> > for jump tables or by when taking the address of the block [1].
-> > Same behaviour is observed with GCC.
-> > 
-> > As kvm_host_psci_cpu_entry is a C function, this must be done in
-> > assembly.
-> > 
-> > Another solution is to use X16/X17 with "br", as according to ARM
-> > ARM DDI0487I.a RLJHCL/IGMGRS, PACIASP has an implicit branch
-> > target identification instruction that is compatible with
-> > PSTATE.BTYPE 0b01 which includes "br X16/X17"
-> > And the kvm_host_psci_cpu_entry has PACIASP as it is an external
-> > function.
-> > Although, using explicit "bti" makes it more clear than relying on
-> > which register is used.
-> > 
-> > A third solution is to clear SCTLR_EL2.BT, which would make PACIASP
-> > compatible PSTATE.BTYPE 0b11 ("br" to other registers).
-> > However this deviates from the kernel behaviour (in bti_enable()).
-> > 
-> > 2) Spectre vector table
-> > "br" instructions are generated at runtime for the vector table
-> > (__bp_harden_hyp_vecs).
-> > These branches would land on vectors in __kvm_hyp_vector at offset 8.
-> > As all the macros are defined with valid_vect/invalid_vect, it is
-> > sufficient to add "bti j" at the correct offset.
-> > 
-> > [1] https://reviews.llvm.org/D52867
-> > 
-> > Fixes: b53d4a272349 ("KVM: arm64: Use BTI for nvhe")
-> > Signed-off-by: Mostafa Saleh <smostafa@google.com>
-> > Reported-by: Sudeep Holla <sudeep.holla@arm.com>
-> 
-> Nothing change w.r.t cpu suspend-resume path in v2 anyways, but I assure
-> I tested this again just be absolutely sure and it still fixes the issue
-> I reported 😄, so
-> 
-> Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+On Fri, 30 Jun 2023 00:25:18 +0200
+Danilo Krummrich <dakr@redhat.com> wrote:
 
-Thanks for testing the patch again!
+> +/**
+> + * drm_gpuva_for_each_va_range - iternator to walk over a range of &drm_gpuvas
+> + * @va__: &drm_gpuva structure to assign to in each iteration step
+> + * @mgr__: &drm_gpuva_manager to walk over
+> + * @start__: starting offset, the first gpuva will overlap this
+> + * @end__: ending offset, the last gpuva will start before this (but may
+> + * overlap)
+> + *
+> + * This iterator walks over all &drm_gpuvas in the &drm_gpuva_manager that lie
+> + * between @start__ and @end__. It is implemented similarly to list_for_each(),
+> + * but is using the &drm_gpuva_manager's internal interval tree to accelerate
+> + * the search for the starting &drm_gpuva, and hence isn't safe against removal
+> + * of elements. It assumes that @end__ is within (or is the upper limit of) the
+> + * &drm_gpuva_manager. This iterator does not skip over the &drm_gpuva_manager's
+> + * @kernel_alloc_node.
+> + */
+> +#define drm_gpuva_for_each_va_range(va__, mgr__, start__, end__) \
+> +	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__)); \
 
+drm_gpuva_find_first() takes the range size as its last argument, not
+the range end:
+
+	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)); \
+
+
+> +	     va__ && (va__->va.addr < (end__)) && \
+> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
+> +	     va__ = list_next_entry(va__, rb.entry))
+
+If you define:
+
+static inline struct drm_gpuva *
+drm_gpuva_next(struct drm_gpuva *va)
+{
+	if (va && !list_is_last(&va->rb.entry, &va->mgr->rb.list))
+		return list_next_entry(va, rb.entry);
+
+	return NULL;
+}
+
+the for loop becomes a bit more readable:
+
+	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)); \
+	     va__ && (va__->va.addr < (end__)); \
+	     va__ = drm_gpuva_next(va__))
+
+> +
+> +/**
+> + * drm_gpuva_for_each_va_range_safe - iternator to safely walk over a range of
+> + * &drm_gpuvas
+> + * @va__: &drm_gpuva to assign to in each iteration step
+> + * @next__: another &drm_gpuva to use as temporary storage
+> + * @mgr__: &drm_gpuva_manager to walk over
+> + * @start__: starting offset, the first gpuva will overlap this
+> + * @end__: ending offset, the last gpuva will start before this (but may
+> + * overlap)
+> + *
+> + * This iterator walks over all &drm_gpuvas in the &drm_gpuva_manager that lie
+> + * between @start__ and @end__. It is implemented similarly to
+> + * list_for_each_safe(), but is using the &drm_gpuva_manager's internal interval
+> + * tree to accelerate the search for the starting &drm_gpuva, and hence is safe
+> + * against removal of elements. It assumes that @end__ is within (or is the
+> + * upper limit of) the &drm_gpuva_manager. This iterator does not skip over the
+> + * &drm_gpuva_manager's @kernel_alloc_node.
+> + */
+> +#define drm_gpuva_for_each_va_range_safe(va__, next__, mgr__, start__, end__) \
+> +	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__)), \
+> +	     next__ = va ? list_next_entry(va__, rb.entry) : NULL; \
+> +	     va__ && (va__->va.addr < (end__)) && \
+> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
+> +	     va__ = next__, next__ = list_next_entry(va__, rb.entry))
+
+And this is the safe version using the drm_gpuva_next() helper:
+
+	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)), \
+	     next__ = drm_gpuva_next(va__); \
+	     va__ && (va__->va.addr < (end__)); \
+	     va__ = next__, next__ = drm_gpuva_next(va__))
+
+Those changes fixed an invalid pointer access I had in the sm_unmap()
+path.
