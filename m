@@ -2,164 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A29674B3C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA67474B3C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjGGPJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S233340AbjGGPIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbjGGPIz (ORCPT
+        with ESMTP id S233336AbjGGPIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:08:55 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157926B5;
-        Fri,  7 Jul 2023 08:08:49 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1688742515ti7jswgp
-Received: from linux-lab-host.localdomain ( [116.30.131.119])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 07 Jul 2023 23:08:34 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: D6RqbDSxuq6OBW3CsVdKIjFvpbHMW/wgNqC9K9ilhUQlZg0IgX7nDFBEM0M1Q
-        Xro0AOa3zXB43uoPd20W0Y477EJFex9MLuooi5XD4l6HZh5jKuXPydugZugaq81/kFkWdzi
-        3NKHk+AalEIw0dPBy4h4W6KiwiEYiJPPyFG6rYQmY/1kCx+saPO3DCVGv3MJVWfYJsPD6KV
-        IuJTjUO3zKXqGBxMOdDSSIuwIhoddepxd1W7qukyLJhlVo6ysR4binyQztDX5Ilg0LLohMa
-        XYhps7gmzdcUzBnqBo8YRSzHFNKM1F6c/RShkpHyQHJCnFVnbO0EY/nmeOLelwc4WTsFgqO
-        KwzB6ccg8NLuclWZ81+ujKcAIST6H1z9RVvh+O8xaKEeySAb/fX7v939M8dFY1sJi6Xp/fp
-        /tU5uvp4U9o=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12299959330165944862
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v6 15/15] selftests/nolibc: add mmap_munmap_good test case
-Date:   Fri,  7 Jul 2023 23:08:20 +0800
-Message-Id: <838f401801aea4476f54d7f5117dc90d8839a515.1688739493.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688739492.git.falcon@tinylab.org>
-References: <cover.1688739492.git.falcon@tinylab.org>
+        Fri, 7 Jul 2023 11:08:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7D1FF9;
+        Fri,  7 Jul 2023 08:08:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7388619EF;
+        Fri,  7 Jul 2023 15:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D79DC433C8;
+        Fri,  7 Jul 2023 15:08:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688742512;
+        bh=Kcc5BRyjmQB+Tg/fy6raV5yMIqWxapI/R18lSX23EDA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g4VTNT0m6XKStzKZRJRuNZgU0aQ/+ItOHdFDq0ELIJwcJczeuDmNbRcSR4opAmgfj
+         pX93UNqUpq6kuKnn99yhPPOmHKEQqI8F5xtOjanjdWMvq36pbxp0LIhzGEdNi6/v7m
+         FR0dA86d3Te/x61CbmbOKhcS6efgAAQJTrKgg1OuFLMKYWFej2eErlKe7rbZQJglUj
+         No0e5aEexz54+ZZrEhRPso1aTNBkSa2OVu37uoewpGLMEr+tVLUmNN3+1i+dS6huyr
+         UkuJjnl/90uotHktcCGkUsLZju1h3hj2gkykT8mb+fP82EFx+s4pDy7sP0AdWUqNFU
+         ZnD103wnnBfjQ==
+Date:   Fri, 7 Jul 2023 16:08:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     akpm@linux-foundation.org, andrew.cooper3@citrix.com,
+        arnd@arndb.de, bp@alien8.de, bsingharora@gmail.com,
+        christina.schimpe@intel.com, corbet@lwn.net,
+        dave.hansen@linux.intel.com, david@redhat.com, debug@rivosinc.com,
+        dethoma@microsoft.com, eranian@google.com, esyr@redhat.com,
+        fweimer@redhat.com, gorcunov@gmail.com, hjl.tools@gmail.com,
+        hpa@zytor.com, jamorris@linux.microsoft.com, jannh@google.com,
+        john.allen@amd.com, kcc@google.com, keescook@chromium.org,
+        kirill.shutemov@linux.intel.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        mike.kravetz@oracle.com, mingo@redhat.com, nadav.amit@gmail.com,
+        oleg@redhat.com, pavel@ucw.cz, pengfei.xu@intel.com,
+        peterz@infradead.org, rdunlap@infradead.org, rppt@kernel.org,
+        szabolcs.nagy@arm.com, tglx@linutronix.de,
+        torvalds@linux-foundation.org, weijiang.yang@intel.com,
+        willy@infradead.org, x86@kernel.org, yu-cheng.yu@intel.com
+Subject: Re: [PATCH] x86/shstk: Move arch detail comment out of core mm
+Message-ID: <9704b6a9-e7c5-4d50-9567-9e23906aafdf@sirena.org.uk>
+References: <ad6df14b-1fbd-4136-abcd-314425c28306@sirena.org.uk>
+ <20230706233248.445713-1-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6nP9Wo8Ehv/TVMQs"
+Content-Disposition: inline
+In-Reply-To: <20230706233248.445713-1-rick.p.edgecombe@intel.com>
+X-Cookie: Victory or defeat!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mmap() a file with a good offset and then munmap() it. a non-zero offset
-is passed to test the 6th argument of my_syscall6().
 
-Note, it is not easy to find a unique file for mmap() in different
-scenes, so, a file list is used to search the right one:
+--6nP9Wo8Ehv/TVMQs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- /dev/zero: is commonly used to allocate anonymous memory and is likely
-  present and readable
+On Thu, Jul 06, 2023 at 04:32:48PM -0700, Rick Edgecombe wrote:
+> The comment around VM_SHADOW_STACK in mm.h refers to a lot of x86
+> specific details that don't belong in a cross arch file. Remove these
+> out of core mm, and just leave the non-arch details.
+>=20
+> Since the comment includes some useful details that would be good to
+> retain in the source somewhere, put the arch specifics parts in
+> arch/x86/shstk.c near alloc_shstk(), where memory of this type is
+> allocated. Include a reference to the existence of the x86 details near
+> the VM_SHADOW_STACK definition mm.h.
 
-- /proc/1/exe: for 'run' and 'run-user' target, 'run-user' can not find
-  '/proc/self/exe'
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-- /proc/self/exe: for 'libc-test' target, normal program 'libc-test' has
-  no permission to access '/proc/1/exe'
+--6nP9Wo8Ehv/TVMQs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-- argv0: the path of the program itself, let it pass even with worst
-  case scene: no procfs and no /dev/zero
+-----BEGIN PGP SIGNATURE-----
 
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/20230702193306.GK16233@1wt.eu/
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 60 ++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSoKmMACgkQJNaLcl1U
+h9DOVwf/Y0zWXHXNC1vLAm9sKmANgUpp9G9Tqrm1x5ddbXJHfCpcA5GUW5fG4lXa
+GYCDJ1gq8Rlt84gcZU+mPC8evLuDsh7gAysYhq0HcNJOqWr7gYi5/5M3JVrdCUfM
+iMP11cx6d71lxhKkI3V5TYs6D4sX9UJQlD3ytefHHFmZNyouWx3yRRerWukxyNXY
+oEa+zZP8MxfY1YKd6/C9mWisi5F10DqRsxc71IU7uoovWT37E9Qy1Xsx0+DBqyq3
+ceF3B+z+tRbd3CFLJfotCxxiFkhOLq3GJlD/3/aAGS5hJPtrQ7Qy+rwhbQ6nGOfr
+A5+bDsBsdcVJmhjoXp/75wDbyqj0Jg==
+=inrT
+-----END PGP SIGNATURE-----
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 8644e415cb66..a7191b637b85 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -595,6 +595,65 @@ static int test_stat_timestamps(void)
- 	return 0;
- }
- 
-+int test_mmap_munmap(void)
-+{
-+	int ret, fd, i;
-+	void *mem;
-+	size_t page_size, file_size, length;
-+	off_t offset, pa_offset;
-+	struct stat stat_buf;
-+	const char * const files[] = {
-+		"/dev/zero",
-+		"/proc/1/exe", "/proc/self/exe",
-+		argv0,
-+		NULL
-+	};
-+
-+	page_size = getpagesize();
-+	if (page_size < 0)
-+		return -1;
-+
-+	/* find a right file to mmap, existed and accessible */
-+	for (i = 0; files[i] != NULL; i++) {
-+		ret = fd = open(files[i], O_RDONLY);
-+		if (ret == -1)
-+			continue;
-+		else
-+			break;
-+	}
-+	if (ret == -1)
-+		return ret;
-+
-+	ret = stat(files[i], &stat_buf);
-+	if (ret == -1)
-+		goto end;
-+
-+	/* file size of the special /dev/zero is 0, let's assign one manually */
-+	if (i == 0)
-+		file_size = 3*page_size;
-+	else
-+		file_size = stat_buf.st_size;
-+
-+	offset = file_size - 1;
-+	if (offset < 0)
-+		offset = 0;
-+	length = file_size - offset;
-+	pa_offset = offset & ~(page_size - 1);
-+
-+	mem = mmap(NULL, length + offset - pa_offset, PROT_READ, MAP_SHARED, fd, pa_offset);
-+	if (mem == MAP_FAILED) {
-+		ret = -1;
-+		goto end;
-+	}
-+
-+	ret = munmap(mem, length + offset - pa_offset);
-+
-+end:
-+	close(fd);
-+	return ret;
-+}
-+
-+
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-  */
-@@ -671,6 +730,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
- 		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
- 		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)1, 0), -1, EINVAL); break;
-+		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
- 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
--- 
-2.25.1
-
+--6nP9Wo8Ehv/TVMQs--
