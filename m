@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEAE74AC62
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D761474AC63
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjGGH7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S232740AbjGGH7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjGGH7H (ORCPT
+        with ESMTP id S232745AbjGGH7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:59:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED0B1B6;
-        Fri,  7 Jul 2023 00:59:06 -0700 (PDT)
+        Fri, 7 Jul 2023 03:59:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C91FE6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:59:15 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D76031FE6D;
-        Fri,  7 Jul 2023 07:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1688716744; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HFLQE9L1MZXYwAUTAzY1+nL+XIQNZC3uSrhfR2Cznt0=;
-        b=uSpmqn3mzdudAnHLo2AUSSD8/ginNvzQE8CySIwwRb9jsnz7Vro/X2ccBg07yMeO6cnDlA
-        SdwQOlpnl30zs2gB0CWnKoBKychGGtUOEzgirWvb5wi2mVCDj83PnIjbQN3OCWOyOAWQaa
-        lSChzb2WdHrgbjnJzNdnknzvH0mkmkw=
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DB3882184B;
+        Fri,  7 Jul 2023 07:59:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688716753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=msQB0PlYCLaUI5f8QX/H2nPF6pKu0y6ybuSzKYyPVlg=;
+        b=UTR9hGfjeHaUlXJ5JaDmwNzYHXoZINqQI1dBaDq4J56Z4o1SUBMXCbhxSXX13XorPTM3xV
+        S0q1uXqm27BrbmuS8QH/zpmLXhKXI5Q6Y7tTzsrQGB6SGm+T+pAJ9BKL5ivEmG8QPG837m
+        tdlC9QbpK0ByF9DdoWaU49LLXdU6R34=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688716753;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=msQB0PlYCLaUI5f8QX/H2nPF6pKu0y6ybuSzKYyPVlg=;
+        b=tb7mxuPA3R4Coa7ofWAQPSpY6VJC8+rQ/qCnlEUreA6sdHddVCevdohNLzpSVU63DanQz3
+        WfcRfkBlUOEsUXBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8C06139E0;
-        Fri,  7 Jul 2023 07:59:04 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9AE4139E0;
+        Fri,  7 Jul 2023 07:59:13 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rq6NKsjFp2S/LAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 07 Jul 2023 07:59:04 +0000
-Date:   Fri, 7 Jul 2023 09:59:04 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Sachin Sant <sachinp@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-next@vger.kernel.org
-Subject: Re: [next-20230705] kernel BUG mm/memcontrol.c:3715! (ltp/madvise06)
-Message-ID: <ZKfFyJP2ENnHqkaR@dhcp22.suse.cz>
-References: <7DF50AC5-83AC-4EE1-9422-62D1EA378EE9@linux.ibm.com>
- <24c0f417-6577-48e6-8eb4-c37be11c5fbb@t-8ch.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <24c0f417-6577-48e6-8eb4-c37be11c5fbb@t-8ch.de>
+        id D4JnLNHFp2TQLAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 07 Jul 2023 07:59:13 +0000
+Date:   Fri, 07 Jul 2023 09:59:13 +0200
+Message-ID: <87o7kokv8u.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.5-rc1
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,97 +64,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 06-07-23 08:34:05, Thomas Weißschuh wrote:
-> On 2023-07-06 11:41:38+0530, Sachin Sant wrote:
-> > While running LTP tests (madvise06) on IBM Power9 LPAR booted with
-> > 6.4.0-next-20230705 following crash is seen
-> > 
-> > Injecting memory failure for pfn 0x3f79 at process virtual address 0x7fff9b740000
-> > Memory failure: 0x3f79: recovery action for clean LRU page: Recovered
-> > madvise06 (133636): drop_caches: 3
-> > ------------[ cut here ]------------
-> > kernel BUG at mm/memcontrol.c:3715!
-> > Oops: Exception in kernel mode, sig: 5 [#1]
-> > LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=8192 NUMA pSeries
-> > Modules linked in: brd overlay exfat vfat fat xfs loop sctp ip6_udp_tunnel udp_tunnel dm_mod nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 bonding ip_set tls rfkill nf_tables libcrc32c nfnetlink sunrpc pseries_rng vmx_crypto ext4 mbcache jbd2 sd_mod t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse [last unloaded: init_module(O)]
-> > CPU: 10 PID: 133636 Comm: madvise06 Tainted: G O 6.4.0-next-20230705 #1
-> > Hardware name: IBM,8375-42A POWER9 (raw) 0x4e0202 0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
-> > NIP: c00000000054ea88 LR: c00000000028b2a8 CTR: c00000000054e8d0
-> > REGS: c00000029dd7b890 TRAP: 0700 Tainted: G O (6.4.0-next-20230705)
-> > MSR: 8000000000029033 <SF,EE,ME,IR,DR,RI,LE> CR: 28008288 XER: 00000000
-> > CFAR: c00000000054e904 IRQMASK: 0 
-> > GPR00: c00000000028b2a8 c00000029dd7bb30 c000000001431600 c0000002bc978000 
-> > GPR04: c000000002b3b288 0000000000010192 0000000000000000 0000000000000001 
-> > GPR08: c0000000f9abb180 0000000000020000 c0000002bc978580 0000000000000000 
-> > GPR12: c00000000054e8d0 c00000001ec53f00 0000000000000000 0000000000000000 
-> > GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> > GPR20: c00000001b2e6578 0000000000400cc0 000000007fff0000 fffffffffffff000 
-> > GPR24: c00000029dd7bd30 0000000000000000 c00000029dd7bd58 c00000001b2e6568 
-> > GPR28: c00000029dd7bde0 0000000000000001 0000000000000001 c00000001b2e6540 
-> > NIP [c00000000054ea88] mem_cgroup_read_u64+0x1b8/0x1d0
-> > LR [c00000000028b2a8] cgroup_seqfile_show+0xb8/0x160
-> > Call Trace:
-> > [c00000029dd7bb50] [c00000000028b2a8] cgroup_seqfile_show+0xb8/0x160
-> > [c00000029dd7bbc0] [c000000000673ba4] kernfs_seq_show+0x44/0x60
-> > [c00000029dd7bbe0] [c0000000005c4238] seq_read_iter+0x238/0x620
-> > [c00000029dd7bcb0] [c000000000675064] kernfs_fop_read_iter+0x1d4/0x2c0
-> > [c00000029dd7bd00] [c00000000057fbac] vfs_read+0x26c/0x350
-> > [c00000029dd7bdc0] [c00000000058077c] ksys_read+0x7c/0x140
-> > [c00000029dd7be10] [c000000000036900] system_call_exception+0x140/0x350
-> > [c00000029dd7be50] [c00000000000d6a0] system_call_common+0x160/0x2e4
-> > --- interrupt: c00 at 0x7fff9eb41484
-> > NIP: 00007fff9eb41484 LR: 0000000010008540 CTR: 0000000000000000
-> > REGS: c00000029dd7be80 TRAP: 0c00 Tainted: G O (6.4.0-next-20230705)
-> > MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28002282 XER: 00000000
-> > IRQMASK: 0 
-> > GPR00: 0000000000000003 00007fffc33de7d0 00007fff9ec27300 0000000000000013 
-> > GPR04: 00007fffc33e0aa0 0000000000001fff 0000000000000000 0000000000000013 
-> > GPR08: 00007fffc33e0aa0 0000000000000000 0000000000000000 0000000000000000 
-> > GPR12: 0000000000000000 00007fff9ecca3a0 0000000000000000 0000000000000000 
-> > GPR16: ffffffffffffffff 0000000010035520 0000000010035b90 00000000100347a8 
-> > GPR20: 000000001002fb68 0000000010063900 0000000000002000 000000001002fb68 
-> > GPR24: 0000000000000000 000000000000004c 000000001002fa78 00007fffc33e0aa0 
-> > GPR28: 0000000000000013 0000000000000000 0000000000001fff 0000000000001fff 
-> > NIP [00007fff9eb41484] 0x7fff9eb41484
-> > LR [0000000010008540] 0x10008540
-> > --- interrupt: c00
-> > Code: 7fa34800 409effc4 7c0802a6 38600001 f8010030 4bfffdfd e8010030 786383e4 7c0803a6 4bffff6c 7c0802a6 f8010030 <0fe00000> 7c0802a6 f8010030 0fe00000 
-> > ---[ end trace 0000000000000000 ]---
-> > pstore: backend (nvram) writing error (-1)
-> > 
-> > Kernel panic - not syncing: Fatal exception
-> > Rebooting in 10 seconds..
-> > 
-> > Git bisect points to following patch:
-> > 
-> > commit 29bf1eb7d2abbdfc24c4ef7acf7a51b72dc43d2b
-> >     memcg: drop kmem.limit_in_bytes
-> > 
-> > Does the testcase madvise06 need an update?
-> > 
-> > 90         tst_res(TINFO, "\tCached: %ld Kb",
-> > 91                 SAFE_READ_MEMINFO("Cached:") - init_cached);
-> > 92       
-> > 93         print_cgmem("memory.current");
-> > 94         print_cgmem("memory.swap.current");
-> > 95         print_cgmem("memory.kmem.usage_in_bytes”);  <<== this line. 
-> > 96 }
-> > 
-> > If I comment line 95 from the testcase, it completes successfully.
-> 
-> The handling for _KMEM was removed from mem_cgroup_read_u64()
-> incorrectly.
-> It is used by the still existing kmem.*usage*_in_bytes in addition to
-> the now removed kmem.*limit*_in_bytes.
-> (And kmem.max_usage_in_bytes, kmem.failcnt)
-> 
-> The testcase seems to be fine, it actually did its job.
+Linus,
 
-Correct. The updated patch has been already posted
-http://lkml.kernel.org/r/ZKe5wxdbvPi5Cwd7@dhcp22.suse.cz
+please pull sound fixes for v6.5-rc1 from:
 
-Thanks for the report!
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-fix-6.5-rc1
 
--- 
-Michal Hocko
-SUSE Labs
+The topmost commit is 5251605f4d297a0eb5d3b7f39f9dcee9e4d0115a
+
+----------------------------------------------------------------
+
+sound fixes for 6.5-rc1
+
+A collection of small fixes that have been gathered recently:
+
+- Two code-typo fixes in the new UMP core
+- A fix in jack reporting to avoid the usage of mutex
+- A potential data race fix in HD-audio core regmap code
+- A potential data race fix in PCM allocation helper code
+- HD-audio quirks for ASUS, Clevo and Unis machines
+- Constifications in FireWire drivers
+
+----------------------------------------------------------------
+
+Colin Ian King (1):
+      ALSA: oxfw: make read-only const array models static
+
+Luke D. Jones (6):
+      ALSA: hda/realtek: Add quirk for ASUS ROG GX650P
+      ALSA: hda/realtek: Add quirk for ASUS ROG GA402X
+      ALSA: hda/realtek: Amend G634 quirk to enable rear speakers
+      ALSA: hda/realtek: Add quirk for ASUS ROG G614Jx
+      ALSA: hda/realtek: Whitespace fix
+      ALSA: hda/realtek: Add quirk for ASUS ROG GZ301V
+
+Minjie Du (1):
+      ALSA: seq: ump: fix typo in system_2p_ev_to_ump_midi1()
+
+Takashi Iwai (3):
+      ALSA: ump: Correct wrong byte size at converting a UMP System message
+      ALSA: pcm: Fix potential data race at PCM memory allocation helpers
+      ALSA: jack: Fix mutex call in snd_jack_report()
+
+Takashi Sakamoto (1):
+      ALSA: fireface: make read-only const array for model names static
+
+Tuo Li (1):
+      ALSA: hda: fix a possible null-pointer dereference due to data race in snd_hdac_regmap_sync()
+
+Werner Sembach (1):
+      ALSA: hda/realtek: Add quirk for Clevo NPx0SNx
+
+dengxiang (1):
+      ALSA: hda/realtek: Add quirks for Unis H3C Desktop B760 & Q760
+
+---
+ sound/core/jack.c                | 15 ++++++-------
+ sound/core/pcm_memory.c          | 44 +++++++++++++++++++++++++++++++-------
+ sound/core/seq/seq_ump_convert.c |  2 +-
+ sound/core/ump_convert.c         |  2 +-
+ sound/firewire/fireface/ff.c     |  2 +-
+ sound/firewire/oxfw/oxfw.c       |  2 +-
+ sound/hda/hdac_regmap.c          |  7 +++---
+ sound/pci/hda/patch_realtek.c    | 46 ++++++++++++++++++++++++++++++++++++++--
+ 8 files changed, 94 insertions(+), 26 deletions(-)
+
