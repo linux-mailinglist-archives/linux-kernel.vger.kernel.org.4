@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4541B74B8EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F6874B8EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 23:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbjGGV4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 17:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S232713AbjGGV4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 17:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbjGGVzt (ORCPT
+        with ESMTP id S232602AbjGGVzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:55:49 -0400
+        Fri, 7 Jul 2023 17:55:51 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5F31FF6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:55:48 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c6cc0dd02c3so1420008276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:55:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC2C2108
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 14:55:49 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c01e1c0648aso2605088276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 14:55:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688766947; x=1691358947;
+        d=google.com; s=20221208; t=1688766949; x=1691358949;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NbMcVYI2pBRE777guUXN8FaAW75orbR1/eldPHt/4Qo=;
-        b=NOEsj6QlU33fkoMHjc+WtoODa05QBYjoZyIbXV7SYMyRK4hq0SF4tb/6rEhclUqRYC
-         mOAiI18o28n3yIQcsYTOwNtyQs9I4Y75+l2ujaQgav71uvbNCaDX8ZAB71qsYgJ7+xTa
-         uxTM2xxcQMPCK82+u5G0FIcYmJndcJvSC2j4rI/o0BwYIadvkUVSbCsJTgLi+uxz3KVd
-         Q99KgDvVH0Fhf1f3UtgXY26LR8Gv38XOQazfPV3NexlCyCTv+Yqi8QmGof9JmvYLxs5o
-         0PxXYucNeE0EtG/ra5xrr2THGEnwJn3zj/1ct12e0dwMeVPDE0288jdN/lwXa8MEHOhK
-         4RFQ==
+        bh=5XpJBVMM9VGEbS89HlMJM/b+46oLjR8s/ahtpOvDxE4=;
+        b=Vna1SetL1twavTmQ3g0qKEnlEJ8kJBZCi65Nnw+YcV5ZZCoEneQ4zTFVsFXUuvkRKr
+         Y9wbkNV5IwnplqQXfIPLSaPB2IcZ307sSmUuIJy2rwTPrQUVsrk2CdliIB7gI42gWhdM
+         6gimHkR7Zsp03wFa9g3UVN+pHLvWeuzqesEJ2UoOZley50vyuTzor2gOnslHanzRO+2V
+         zz+MOmoHULIYJJA/CUzyHkrN7bP3g2kVeV9cVUxa0wQEPONQ3+8KsB0PFHA1Sp9MPuuD
+         2F0o29XPzlT5FRPXTikiGPDnm68fX68i/xryJT4RapXWGGzNcDuVhIoxEk1qtV2lNW65
+         X5GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766947; x=1691358947;
+        d=1e100.net; s=20221208; t=1688766949; x=1691358949;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NbMcVYI2pBRE777guUXN8FaAW75orbR1/eldPHt/4Qo=;
-        b=frnooSUzFlT2Dh3U677yMaZcl794DwwvELZ9ozzPnrodEGP+OUsvx8djzV4lXHZ+Po
-         BSAHdnSDAmmhCI9Wg0u6965NwnV8T4khFOQ1eNRc4HA651Eol3kfj5ie42nLUE16ioe+
-         apV1hQtohWxKV+W10+EM6/oCs0nbQugt02kEH9rHRSgmXoKiALN33R+0waes7KQk23Pq
-         fxnUvrXEdu2v5pJIulHh88bPqkwlgZETquE0JeyoQKnf4qmzQiX6pfno/qfZ/fFzP/C9
-         EcLX9k+a8zUzs68eJxrpczwsY9iESOHMqhy9IUCjegJcrjS7/9Ikp/soNP/NeIGb5UaO
-         8VrA==
-X-Gm-Message-State: ABy/qLZbPkpnO4vJILH5rZ9tocZYyvFaQl7DMUtioz9zoYtPtJN4Xyur
-        fEtzp+GKZvXn45O3qxlNra4NyQ7GkZBWWIr1ea5B
-X-Google-Smtp-Source: APBJJlEoVC4taEJfd9VKK1x5AQ0VZDBfiUiNYwaYXwEPy1wLKPyTHC7hYYwTD01ltEHbhNSVCtGCPYme0YQ0PD4Gp2hC
+        bh=5XpJBVMM9VGEbS89HlMJM/b+46oLjR8s/ahtpOvDxE4=;
+        b=hVlabYBSqpmNPBaBcPwnOE5PrWN9ohP6xCX/Em4Mg1zXiFXRq6PO+qrsAXsgMWUu8p
+         ANm7swjZSagktAYaZqV+nFGdCS6OtirDbpCSayOWaWPXXcnsZqsA9U+CeBLId4qwndkf
+         YBal15qrxiQO5NNR7iMmnPXAibK3kRvPQuB56dbawR9vvIvzD9VjXGp/20O+rVa1Fayz
+         hP8moGCzYUV+2/W8k75SB/T/HWVszd8k2xPRfl66xgyxBsDRR0rPDiMXFIBD6VoIZ79T
+         zQ1OV05ahiIBwwlCNjB2oRoq2whsgRvHB1K/IY3od4ye7pvCJnvQsYLO0JtA33eSzCRr
+         Z1WA==
+X-Gm-Message-State: ABy/qLbVm0rjyt3P8P4/waIbv3adzcR5vknRkFU+MFWjx2BVkdWD7uap
+        Ig4dWOpkt8ts4iJd3xO6IUDlUsQu5ICICBPtmp5U
+X-Google-Smtp-Source: APBJJlHNyRYQbB7ZObZHpnn7dAmDsn5jT+2xbl5BfWLddNXyMesuVTzhCBkP1TN4IxNkWiSdwYOjtvr2Xk3oVPP6sM47
 X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:c201:5125:39d1:ef3f])
- (user=axelrasmussen job=sendgmr) by 2002:a25:ac9e:0:b0:c5b:c4:1789 with SMTP
- id x30-20020a25ac9e000000b00c5b00c41789mr33953ybi.1.1688766947243; Fri, 07
- Jul 2023 14:55:47 -0700 (PDT)
-Date:   Fri,  7 Jul 2023 14:55:34 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:350:b0:c4c:ef98:6252 with
+ SMTP id e16-20020a056902035000b00c4cef986252mr34624ybs.9.1688766948974; Fri,
+ 07 Jul 2023 14:55:48 -0700 (PDT)
+Date:   Fri,  7 Jul 2023 14:55:35 -0700
 In-Reply-To: <20230707215540.2324998-1-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20230707215540.2324998-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230707215540.2324998-3-axelrasmussen@google.com>
-Subject: [PATCH v4 2/8] mm: userfaultfd: check for start + len overflow in validate_range
+Message-ID: <20230707215540.2324998-4-axelrasmussen@google.com>
+Subject: [PATCH v4 3/8] mm: userfaultfd: extract file size check out into a helper
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -90,69 +90,102 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most userfaultfd ioctls take a `start + len` range as an argument.
-We have the validate_range helper to check that such ranges are valid.
-However, some (but not all!) ioctls *also* check that `start + len`
-doesn't wrap around (overflow).
-
-Just check for this in validate_range. This saves some repetitive code,
-and adds the check to some ioctls which weren't bothering to check for
-it before.
+This code is already duplicated twice, and UFFDIO_POISON will do the
+same check a third time. So, it's worth extracting into a helper to save
+repetitive lines of code.
 
 Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- fs/userfaultfd.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ mm/userfaultfd.c | 38 ++++++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 7cecd49e078b..2e84684c46f0 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1306,6 +1306,8 @@ static __always_inline int validate_range(struct mm_struct *mm,
- 		return -EINVAL;
- 	if (len > task_size - start)
- 		return -EINVAL;
-+	if (start + len <= start)
-+		return -EINVAL;
- 	return 0;
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index a2bf37ee276d..4244ca7ee903 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -45,6 +45,22 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
+ 	return dst_vma;
  }
  
-@@ -1760,14 +1762,8 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 	ret = validate_range(ctx->mm, uffdio_copy.dst, uffdio_copy.len);
- 	if (ret)
- 		goto out;
--	/*
--	 * double check for wraparound just in case. copy_from_user()
--	 * will later check uffdio_copy.src + uffdio_copy.len to fit
--	 * in the userland range.
--	 */
++/* Check if dst_addr is outside of file's size. Must be called with ptl held. */
++static bool mfill_file_over_size(struct vm_area_struct *dst_vma,
++				 unsigned long dst_addr)
++{
++	struct inode *inode;
++	pgoff_t offset, max_off;
 +
- 	ret = -EINVAL;
--	if (uffdio_copy.src + uffdio_copy.len <= uffdio_copy.src)
--		goto out;
- 	if (uffdio_copy.mode & ~(UFFDIO_COPY_MODE_DONTWAKE|UFFDIO_COPY_MODE_WP))
- 		goto out;
- 	if (uffdio_copy.mode & UFFDIO_COPY_MODE_WP)
-@@ -1927,11 +1923,6 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
++	if (!dst_vma->vm_file)
++		return false;
++
++	inode = dst_vma->vm_file->f_inode;
++	offset = linear_page_index(dst_vma, dst_addr);
++	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
++	return offset >= max_off;
++}
++
+ /*
+  * Install PTEs, to map dst_addr (within dst_vma) to page.
+  *
+@@ -64,8 +80,6 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
+ 	bool page_in_cache = page_mapping(page);
+ 	spinlock_t *ptl;
+ 	struct folio *folio;
+-	struct inode *inode;
+-	pgoff_t offset, max_off;
+ 
+ 	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+ 	_dst_pte = pte_mkdirty(_dst_pte);
+@@ -81,14 +95,9 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
+ 	if (!dst_pte)
  		goto out;
  
- 	ret = -EINVAL;
--	/* double check for wraparound just in case. */
--	if (uffdio_continue.range.start + uffdio_continue.range.len <=
--	    uffdio_continue.range.start) {
--		goto out;
--	}
- 	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
- 				     UFFDIO_CONTINUE_MODE_WP))
+-	if (vma_is_shmem(dst_vma)) {
+-		/* serialize against truncate with the page table lock */
+-		inode = dst_vma->vm_file->f_inode;
+-		offset = linear_page_index(dst_vma, dst_addr);
+-		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
++	if (mfill_file_over_size(dst_vma, dst_addr)) {
+ 		ret = -EFAULT;
+-		if (unlikely(offset >= max_off))
+-			goto out_unlock;
++		goto out_unlock;
+ 	}
+ 
+ 	ret = -EEXIST;
+@@ -211,8 +220,6 @@ static int mfill_atomic_pte_zeropage(pmd_t *dst_pmd,
+ 	pte_t _dst_pte, *dst_pte;
+ 	spinlock_t *ptl;
+ 	int ret;
+-	pgoff_t offset, max_off;
+-	struct inode *inode;
+ 
+ 	_dst_pte = pte_mkspecial(pfn_pte(my_zero_pfn(dst_addr),
+ 					 dst_vma->vm_page_prot));
+@@ -220,14 +227,9 @@ static int mfill_atomic_pte_zeropage(pmd_t *dst_pmd,
+ 	dst_pte = pte_offset_map_lock(dst_vma->vm_mm, dst_pmd, dst_addr, &ptl);
+ 	if (!dst_pte)
  		goto out;
+-	if (dst_vma->vm_file) {
+-		/* the shmem MAP_PRIVATE case requires checking the i_size */
+-		inode = dst_vma->vm_file->f_inode;
+-		offset = linear_page_index(dst_vma, dst_addr);
+-		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
++	if (mfill_file_over_size(dst_vma, dst_addr)) {
+ 		ret = -EFAULT;
+-		if (unlikely(offset >= max_off))
+-			goto out_unlock;
++		goto out_unlock;
+ 	}
+ 	ret = -EEXIST;
+ 	if (!pte_none(ptep_get(dst_pte)))
 -- 
 2.41.0.255.g8b1d071c50-goog
 
