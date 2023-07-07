@@ -2,77 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C59274B2E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE82B74B2E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjGGOPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
+        id S233000AbjGGOOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbjGGOPT (ORCPT
+        with ESMTP id S232076AbjGGOOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:15:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A921999;
-        Fri,  7 Jul 2023 07:15:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18FAE619BF;
-        Fri,  7 Jul 2023 14:15:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1773C433C7;
-        Fri,  7 Jul 2023 14:15:02 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 10:14:20 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/4] Revert "tracing: Add "(fault)" name injection to
- kernel probes"
-Message-ID: <20230707101420.49b1fd54@gandalf.local.home>
-In-Reply-To: <168873727209.2687993.6806850187024303094.stgit@mhiramat.roam.corp.google.com>
-References: <168873724526.2687993.15242662075324919195.stgit@mhiramat.roam.corp.google.com>
-        <168873727209.2687993.6806850187024303094.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 7 Jul 2023 10:14:38 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8BDE72;
+        Fri,  7 Jul 2023 07:14:37 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 73D7B21B5;
+        Fri,  7 Jul 2023 14:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1688738962;
+        bh=r515y2vXpvOHrZg95ZCLv5OC11gqtBQ6XJAJt+SxN1U=;
+        h=Date:To:CC:From:Subject;
+        b=fk7vHzrFfxs7suZ6STIL1eGmz9SNrq5JQKz2HH49nDU6M3iOffTxA7+sBHEMa4ylD
+         Lzc/F69rVO/lhc4Luku/e0PoJKQxTke52713RqJ+8wb8RrHaZNxbvwm4a4j5urJ/LX
+         eTgcbeUeFNjq98I+WcEvrm3h/k9M2x33OLjWgLc4=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id D63731E47;
+        Fri,  7 Jul 2023 14:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1688739275;
+        bh=r515y2vXpvOHrZg95ZCLv5OC11gqtBQ6XJAJt+SxN1U=;
+        h=Date:To:CC:From:Subject;
+        b=H1sL5WAMNOV3d5r+wAZYzIrysjR0VEDap4gPGwjg4oVv2FssWA9NrZOSHwtUhUaEg
+         QUvOv6qrBqSm8FiKKQoMaoHWcSPIO6G2+cg6/QHruhkSR6osm8VsrtKrNQSDwBvi2v
+         ofEBeM6I+2q1iqqMYJWkZTi0KvM2R8dgW4UEcSs8=
+Received: from [192.168.211.150] (192.168.211.150) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 7 Jul 2023 17:14:35 +0300
+Message-ID: <c9649ce0-98c7-71cb-73c3-8a172d6689ff@paragon-software.com>
+Date:   Fri, 7 Jul 2023 18:14:34 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     <torvalds@linux-foundation.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [GIT PULL] ntfs3: changes for 6.5
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.150]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Jul 2023 22:41:12 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Hi Linus,
 
-> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-> index c4e1d4c03a85..6deae2ce34f8 100644
-> --- a/kernel/trace/trace_probe_kernel.h
-> +++ b/kernel/trace/trace_probe_kernel.h
-> @@ -2,8 +2,6 @@
->  #ifndef __TRACE_PROBE_KERNEL_H_
->  #define __TRACE_PROBE_KERNEL_H_
->  
-> -#define FAULT_STRING "(fault)"
-> -
+Please pull this branch containing ntfs3 code for 6.5.
 
-Instead of deleting this, why not use it in both places? After applying
-your patch, we have:
+Added:
+- support /proc/fs/ntfs3/<dev>/volinfo and label;
+- alternative boot if primary boot is corrupted;
+- small optimizations.
 
- $ git grep '(fault)' kernel/trace
-kernel/trace/trace_events_synth.c:                      strcpy(str_field, "(fault)");
-kernel/trace/trace_probe.c:             trace_seq_puts(s, "(fault)");
+Fixed:
+- some endian problem;
+- some logic errors;
+- code is refactored and reformatted.
 
-We could make that consistent with:
+Regards,
 
-kernel/trace/trace_events_synth.c:                      strcpy(str_field, FAULT_STRING);
-kernel/trace/trace_probe.c:             trace_seq_puts(s, FAULT_STRING);
+Konstantin
 
--- Steve
+----------------------------------------------------------------
+
+The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
+
+    Linux 6.4 (Sun Jun 25 16:29:58 2023 -0700)
+
+are available in the Git repository at:
+
+    https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_6.5
+
+for you to fetch changes up to 44b4494d5c5971dc8f531c8783d90a637e862880:
+
+    fs/ntfs3: Correct mode for label entry inside /proc/fs/ntfs3/ (Fri 
+Jun 30 15:23:07 2023 +0400)
+
+----------------------------------------------------------------
+
+Edward Lo (2):
+   fs/ntfs3: Enhance sanity check while generating attr_list
+   fs/ntfs3: Return error for inconsistent extended attributes
+
+Jia-Ju Bai (1):
+   fs: ntfs3: Fix possible null-pointer dereferences in mi_read()
+
+Konstantin Komarov (11):
+   fs/ntfs3: Correct checking while generating attr_list
+   fs/ntfs3: Fix ntfs_atomic_open
+   fs/ntfs3: Mark ntfs dirty when on-disk struct is corrupted
+   fs/ntfs3: Alternative boot if primary boot is corrupted
+   fs/ntfs3: Do not update primary boot in ntfs_init_from_boot()
+   fs/ntfs3: Code formatting
+   fs/ntfs3: Code refactoring
+   fs/ntfs3: Add ability to format new mft records with bigger/smaller
+     header
+   fs/ntfs3: Fix endian problem
+   fs/ntfs3: Add support /proc/fs/ntfs3/<dev>/volinfo and
+     /proc/fs/ntfs3/<dev>/label
+   fs/ntfs3: Correct mode for label entry inside /proc/fs/ntfs3/
+
+Tetsuo Handa (1):
+   fs/ntfs3: Use __GFP_NOWARN allocation at ntfs_load_attr_list()
+
+Yangtao Li (1):
+   fs/ntfs3: Use wrapper i_blocksize() in ntfs_zero_range()
+
+Zeng Heng (1):
+   ntfs: Fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+
+  fs/ntfs3/attrib.c   |   2 +-
+  fs/ntfs3/attrlist.c |   7 +-
+  fs/ntfs3/bitmap.c   |  10 +-
+  fs/ntfs3/file.c     |   6 +-
+  fs/ntfs3/frecord.c  |  58 ++++-----
+  fs/ntfs3/fslog.c    |  40 +++----
+  fs/ntfs3/fsntfs.c   |  99 ++++++++++++----
+  fs/ntfs3/index.c    |  20 ++--
+  fs/ntfs3/inode.c    |  23 ++--
+  fs/ntfs3/lznt.c     |   6 +-
+  fs/ntfs3/namei.c    |  31 ++---
+  fs/ntfs3/ntfs.h     | 117 ++++++++++--------
+  fs/ntfs3/ntfs_fs.h  |  31 ++---
+  fs/ntfs3/record.c   |  14 ++-
+  fs/ntfs3/run.c      |   4 +-
+  fs/ntfs3/super.c    | 280 ++++++++++++++++++++++++++++++++++++++------
+  fs/ntfs3/xattr.c    |  20 ++--
+  17 files changed, 531 insertions(+), 237 deletions(-)
 
