@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5F174A84E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F29774A853
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjGGBDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 21:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S231594AbjGGBEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 21:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjGGBDX (ORCPT
+        with ESMTP id S229506AbjGGBEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 21:03:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26D9172B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 18:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688691758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1yyqbpHCBj1owppJL9+7IUc8i+R1e/YK0bJp67wQ+M4=;
-        b=eaN2QJI+07XHTE31OTtw0W3KcLcnLCEPulYEcgvnDzbvzfi+6fwxUyYJIMMUHb5hbJDvtl
-        hwMr/bOMpmDzGsqriC9FsdJXZ2ih9/lhI5Bfb/z0dGB+YafC9xxpB3xPJ5/aBJrfb2iJBz
-        XDGKM4tt33cp5zXdwi1AR+8UgVevCjk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-YTUVvhpkPzS6e8xMtzWI9Q-1; Thu, 06 Jul 2023 21:02:32 -0400
-X-MC-Unique: YTUVvhpkPzS6e8xMtzWI9Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3B66858F1E;
-        Fri,  7 Jul 2023 01:02:31 +0000 (UTC)
-Received: from ovpn-8-34.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4E14F492B02;
-        Fri,  7 Jul 2023 01:02:22 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 09:02:17 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Minwoo Im <minwoo.im.dev@gmail.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        gost.dev@samsung.com, Jens Axboe <axboe@kernel.dk>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Damien Le Moal <dlemoal@kernel.org>
-Subject: Re: [PATCH v6 2/3] ublk: add helper to check if device supports user
- copy
-Message-ID: <ZKdkGZBLINFV8cbj@ovpn-8-34.pek2.redhat.com>
-References: <20230706130930.64283-1-nmi@metaspace.dk>
- <20230706130930.64283-3-nmi@metaspace.dk>
+        Thu, 6 Jul 2023 21:04:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD5D172B;
+        Thu,  6 Jul 2023 18:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1688691815; x=1689296615; i=w_armin@gmx.de;
+ bh=5882YwYHfG/JJxzZayJ8NZBGgsdnPI/wsZ7JwnWwUvo=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=rKFY3UKreNqlHVa9m7ibtqNC4hZyCTYpmbcYEHkBBdgfcDuZvmV5pHSSYxMiLHqTvPcMzQq
+ w050oaxBvvb431Qlba9cSX8TVc41l06we5Yl00QmSAEivuGBQLTfSflZ3FWbbfbxabhBc5e9d
+ c2i6NE4zBUc2uAgu5qkYSzH8LRf6YiUKdOvLnlCLpl3IdAVVQDucKl7U8/Tr/iftiQWywuLsL
+ 0kijFXMPs1W0VFsOMgk+8UcvWuYi7tGormMLiFK20qS5QlQSVQf21rGKKX9Ch06OEdTgM6oUN
+ kclJWM04Zf4O+vn1IE6LUKm/JVbYG/mC5Hy1qPESdKTWuKexBMjg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N5G9n-1pppsg0TQb-0117WS; Fri, 07 Jul 2023 03:03:35 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] platform/x86: dell-ddv: Improve error handling
+Date:   Fri,  7 Jul 2023 03:03:32 +0200
+Message-Id: <20230707010333.12954-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706130930.64283-3-nmi@metaspace.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:GciWBDV2OMvqV9LClnMebCWS3o42rBZCi9eifhwPnqwUFyXawaR
+ jVsJB9Owq9G0gj0A6o9TerEqF4bMYPC/XIuXXxpgA2ki+XA37WBrK/VwV23RODWXrj4gLbC
+ 73PQZW+8CusSo5Y1NZidx4XwTZ1F/dFNXHn6S12d+sXYT9D8dlvdtHliw3HDqgsJhdnnFDK
+ Y2YHtk5VwIdg/2L0jEcQQ==
+UI-OutboundReport: notjunk:1;M01:P0:rL4xnUL/AgA=;5oAYG5vEAbGqd6twCiNcj2IXbhu
+ wBCWN7evla+ZTLJW/l+5ws3RvsHvJ8TVv68aoyPWU3WS/aLEzej7WKmy7x0Aw3zG0TxO8ajI/
+ n/K/Nl85g8oslZkmW4uwTXyJK7+nSstwHMSAOZg4GxjtiT/tbPFvZZhSRI2ikYtuni8Wqp8s0
+ JgFrkWugiHgKifjyGQgZ3hyHIMK5s7II6+1hlkRoJw3kjBGwgFxvUHqFkW1FtfXjYGRh+0JGw
+ 7fXI1lWonziK08fggqf5LCj6R2zkwXGUzX0rePZ0H4SSclA2V8kYeuhOvJw4ef+MjPI/N6jSY
+ yiPKVDEzgoNtTqJJsgHgPFUQHREsnunziosgdIDdf7nj1sex1Xg0u0MoLxUFgJVOdg03TPy3d
+ FbKip5j/F8qVwdFWUOgSEY3haTtvJoxycEXRA9Rvma1QpgI2hsvfgpKuUNuYbFUmTPvN9eiFN
+ DDwR8ItD4lK6qZdcFHc71y2OJq4rIt1H29lmxQssy9zaEOAh2wgcgjzz/yQyCDnGJ11M22oPy
+ JVOwy3C35ye9SOkNPL+Dv0mxokEmxrMwoNX1/zqrJNvVsoS/l2j0ybDpvcbu0sI/4ln1r+KxT
+ gmcGQiLO1nQ/0C9dnoemPnPDZYVjZ4ZTbGGANIyCiRI3SIIyafmmKs4XoRQuJsHn6Ms5WGHfu
+ Dd5FS7DV7q/kCWuG4CmIJEUda9Fj/b6BKDDAcXO21BKxnhqA/It+HCAiZQrdTiOjecqI0jcQy
+ oIn75cwnSTYvwjBuquKuNO7qZAx7OHKwBcYSVocF3NR8mWUeGvoTzR6plo4e/g+ybXxuSAKQL
+ iMxizB4pD5Jf4qBCk5esdiBEVb8ZHe6Who1Nf7/ER2S8bC36MbAFqrVL1vxOnVK8C3LbRS4r9
+ ZyKWUejeW2rNHJOeyiimmazXViEE+IF12E/hEhDbBhkkOGNxRlpo7NBOb7shjjBr0JDap/JNQ
+ DABP8/wyoW4qFg5VFrgPA7s1aBU=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,15 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:09:29PM +0200, Andreas Hindborg wrote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
-> 
-> This will be used by ublk zoned storage support.
-> 
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+If for some reason a external function returns -ENODEV,
+no error message is being displayed because the driver
+assumes that -ENODEV can only be returned internally if
+no sensors, etc where found.
+Fix this by explicitly returning 0 in such a case since
+missing hardware is no error. Also remove the now obsolete
+check for -ENODEV.
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/platform/x86/dell/dell-wmi-ddv.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thanks,
-Ming
+diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
+86/dell/dell-wmi-ddv.c
+index 2750dee99c3e..db1e9240dd02 100644
+=2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
++++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+@@ -616,7 +616,8 @@ static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_=
+data *data)
+ 	}
+
+ 	if (index < 2) {
+-		ret =3D -ENODEV;
++		/* Finding no available sensors is not an error */
++		ret =3D 0;
+
+ 		goto err_release;
+ 	}
+@@ -841,13 +842,13 @@ static int dell_wmi_ddv_probe(struct wmi_device *wde=
+v, const void *context)
+
+ 	if (IS_REACHABLE(CONFIG_ACPI_BATTERY)) {
+ 		ret =3D dell_wmi_ddv_battery_add(data);
+-		if (ret < 0 && ret !=3D -ENODEV)
++		if (ret < 0)
+ 			dev_warn(&wdev->dev, "Unable to register ACPI battery hook: %d\n", ret=
+);
+ 	}
+
+ 	if (IS_REACHABLE(CONFIG_HWMON)) {
+ 		ret =3D dell_wmi_ddv_hwmon_add(data);
+-		if (ret < 0 && ret !=3D -ENODEV)
++		if (ret < 0)
+ 			dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+ 	}
+
+=2D-
+2.30.2
 
