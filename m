@@ -2,143 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4593474AD42
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A15974AD48
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbjGGInq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S231565AbjGGIo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjGGIno (ORCPT
+        with ESMTP id S229815AbjGGIo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:43:44 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2617B1BF0;
-        Fri,  7 Jul 2023 01:43:43 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qHh3y-0006cd-MO; Fri, 07 Jul 2023 10:43:38 +0200
-Message-ID: <ff646259-8ce1-f1fe-4627-cdf99321dba8@leemhuis.info>
-Date:   Fri, 7 Jul 2023 10:43:37 +0200
+        Fri, 7 Jul 2023 04:44:56 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F16A1FCE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:44:55 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so2580489e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688719493; x=1691311493;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6MNmBZkZiwOWAtBo5QJa5YcHi+crvtXYiCkURW4I84=;
+        b=yg3BmoXxjDcdSv5i03LxVrD3ErleVKEvveBCzB9wVppBkxmVVOo1/C1qa4vTEYwFTF
+         1/ZrXF3+wXYGlpJtKaJbBOhGeZCr0InhsluSYas5tIXewsDSgpMMeUB1x8zxjo9G43x8
+         McOXOwRMT2UX7LmrMR31DvkVETOarvIavhRgfje0XkaIjsf2HywbjbN5U3ThxNucHplL
+         Tq+Co0K7dvqc0+2OvgBgvqiu1AKztrQDfxdlMRuk2n2IU4DagLXpLwWZ4VfSiTZ6LQ7+
+         TuAFSmecXiWGzRvCTm5zHnhZbhzt1ZlXzFE4T/EqQpk4pxGlkgBg+JJ8hb/x5NvYmREC
+         cfxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688719493; x=1691311493;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A6MNmBZkZiwOWAtBo5QJa5YcHi+crvtXYiCkURW4I84=;
+        b=ac+QDsMJrujKpIoL3qNTn4JuAfzQ8UR0rFBEOaSFqUzSHTLISU0ZPv/Ux8pnPpiI0H
+         6w3MWNPO2/2XffWQzrBzqxuRy4LhztBXjW2mu3elznGwfzJkWlEHFReJUxtFmtsfUMF4
+         YFFtKtm19unNcf/m7XnWsTn50ijKtsVeZP250qFI6O6wceHAkdQmTaYoTvXEA/YemLgi
+         AcAM5G9RfOZaAKRl6Tk+/Q/9lCIc9bVwXWUx1HH1vPWAR3aIErXMZLNdfOSh0wdFVawy
+         8hmxeF5YpJs3jdFShOVc1fA86kmoU8AizpBku4S6auNjJq5D5viFtjKvbjvhDHve1OXJ
+         o1Mw==
+X-Gm-Message-State: ABy/qLbZwuspgA4XXW1lAhdsdkF8vXIfXcfrei3Fx06m3H4j+I70kKKz
+        ySDZFMFcu227NdZy5i3yi+0xnIipjvMF+jk4RZzIdvyHHV/NWlsL
+X-Google-Smtp-Source: APBJJlEaKgj+9uPvPpz3a4MrB/goNjvJbbDkfBTWdZ2m0SXgqWaCQuJE9Pu7t7erZdBK4i5fiFtMxYWjMcWDmhbnvak=
+X-Received: by 2002:a05:6512:3c87:b0:4fb:7642:88dd with SMTP id
+ h7-20020a0565123c8700b004fb764288ddmr3539103lfv.67.1688719493532; Fri, 07 Jul
+ 2023 01:44:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Linux-6.5 iwlwifi crash
-Content-Language: en-US, de-DE
-To:     Jeff Chua <jeff.chua.linux@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-References: <20230429020951.082353595@lindbergh.monkeyblade.net>
- <CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com>
- <ZE0kndhsXNBIb1g7@debian.me> <b9ab37d2-42bf-cc31-a2c0-a9b604e95530@gmail.com>
- <CAAJw_Zug6VCS5ZqTWaFSr9sd85k=tyPm9DEE+mV=AKoECZM+sQ@mail.gmail.com>
- <7fee3284-b9ba-58f4-8118-fe0b99ae6bf7@leemhuis.info>
- <CAAJw_Zu=MPtGPARgCB2fteP+7F793YDFXE9RuzSH8EqYBS-OOw@mail.gmail.com>
- <64b8732f-6319-9f10-b82a-b4a3dd8d4b8e@lwfinger.net>
- <CAAJw_ZvZNQzrFyQizJnKe5PerqqAUOmPYd6cnjAcvs68xNdwSA@mail.gmail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <CAAJw_ZvZNQzrFyQizJnKe5PerqqAUOmPYd6cnjAcvs68xNdwSA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688719423;dcfe48ac;
-X-HE-SMSGID: 1qHh3y-0006cd-MO
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230621114439.42851-1-alexghiti@rivosinc.com> <20230621114439.42851-2-alexghiti@rivosinc.com>
+In-Reply-To: <20230621114439.42851-2-alexghiti@rivosinc.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Fri, 7 Jul 2023 10:44:42 +0200
+Message-ID: <CAHVXubicGLp0-aOpeq7M1Cs3YZ+3WC1d_0gjyaoS8Z1j03JAQQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] libstub: zboot: Use -ffunction-sections + --gc-sections
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-for once, to make this easily accessible to everyone.
+Hi Ard,
 
-Jeff, thx for bisecting. Johannes afaik is unavailable for a while
-(CCing him nevertheless), hence:
+On Wed, Jun 21, 2023 at 1:45=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
+>
+> Static linking is done at an object file (actually section) granularity,
+> meaning that if a function in an object has an undefined reference, the
+> link will fail, even though this function is not used in the resulting
+> ELF.
+>
+> To avoid such failures, allow the linker to garbage collect unused sectio=
+ns
+> (which actually are functions).
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  drivers/firmware/efi/libstub/Makefile       | 1 +
+>  drivers/firmware/efi/libstub/Makefile.zboot | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi=
+/libstub/Makefile
+> index 3abb2b357482..6182366d00c0 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -40,6 +40,7 @@ KBUILD_CFLAGS                 :=3D $(subst $(CC_FLAGS_F=
+TRACE),,$(cflags-y)) \
+>                                    -ffreestanding \
+>                                    -fno-stack-protector \
+>                                    $(call cc-option,-fno-addrsig) \
+> +                                  -ffunction-sections \
+>                                    -D__DISABLE_EXPORTS
+>
+>  #
+> diff --git a/drivers/firmware/efi/libstub/Makefile.zboot b/drivers/firmwa=
+re/efi/libstub/Makefile.zboot
+> index 89ef820f3b34..5bb52d262133 100644
+> --- a/drivers/firmware/efi/libstub/Makefile.zboot
+> +++ b/drivers/firmware/efi/libstub/Makefile.zboot
+> @@ -51,7 +51,7 @@ $(obj)/zboot-header.o: $(srctree)/drivers/firmware/efi/=
+libstub/zboot-header.S FO
+>
+>  ZBOOT_DEPS :=3D $(obj)/zboot-header.o $(objtree)/drivers/firmware/efi/li=
+bstub/lib.a
+>
+> -LDFLAGS_vmlinuz.efi.elf :=3D -T $(srctree)/drivers/firmware/efi/libstub/=
+zboot.lds
+> +LDFLAGS_vmlinuz.efi.elf :=3D -T $(srctree)/drivers/firmware/efi/libstub/=
+zboot.lds --gc-sections
+>  $(obj)/vmlinuz.efi.elf: $(obj)/vmlinuz.o $(ZBOOT_DEPS) FORCE
+>         $(call if_changed,ld)
+>
+> --
+> 2.39.2
+>
 
-Gregory, could you please take a look at this? And maybe provide a few
-hints for Jeff how to generate more data that allows us to find the root
-of the problem?
+Sorry to bother you, do you have any opinion about this patch? Does
+that make sense? If not, I should find another solution for my riscv
+KASLR series!
 
-Jeff, btw, the iwlwifi bug reporting guide (
-https://wireless.wiki.kernel.org/en/users/drivers/iwlwifi/debugging
-) says to file a bugs in http://bugzilla.kernel.org/ Might be wise to do
-this in case Gregory is also unavailable, but instructed someone to keep
-an eye on things there.
+Thanks,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-On 07.07.23 03:56, Jeff Chua wrote:
-> On Thu, Jul 6, 2023 at 2:11 AM Larry Finger <Larry.Finger@lwfinger.net> wrote:
-> 
->> Fow what it is worth, my 6.4-git (6.5-rc0?) commit d528014517f2 (pulled today)
->> is working OK with iwlmvm. Lspci says my device is
->>
->> 04:00.0 Network controller [0280]: Intel Corporation Wireless 7260 [8086:08b1]
->> (rev 73)
->>
->> I think you do need to do a bisection.
->> Larry
-> 
-> 
-> Larry,
-> 
-> I did a bisect and here's what it came up with ... reverted the
-> following and iwlwiifi worked again.
-> 
-> 
-> 19898ce9cf8a33e0ac35cb4c7f68de297cc93cb2 is the first bad commit
-> commit 19898ce9cf8a33e0ac35cb4c7f68de297cc93cb2
-> Author: Johannes Berg <johannes.berg@intel.com>
-> Date:   Wed Jun 21 13:12:07 2023 +0300
-> 
->     wifi: iwlwifi: split 22000.c into multiple files
-> 
->     Split the configuration list in 22000.c into four new files,
->     per new device family, so we don't have this huge unusable
->     file. Yes, this duplicates a few small things, but that's
->     still much better than what we have now.
-> 
->     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
->     Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
->     Link: https://lore.kernel.org/r/20230621130443.7543603b2ee7.Ia8dd54216d341ef1ddc0531f2c9aa30d30536a5d@changeid
->     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-> 
->  drivers/net/wireless/intel/iwlwifi/Makefile     |   1 +
->  drivers/net/wireless/intel/iwlwifi/cfg/22000.c  | 939 +-----------------------
->  drivers/net/wireless/intel/iwlwifi/cfg/ax210.c  | 452 ++++++++++++
->  drivers/net/wireless/intel/iwlwifi/cfg/bz.c     | 523 +++++++++++++
->  drivers/net/wireless/intel/iwlwifi/cfg/sc.c     | 214 ++++++
->  drivers/net/wireless/intel/iwlwifi/iwl-config.h |   2 +
->  drivers/net/wireless/intel/iwlwifi/pcie/drv.c   |   3 +
->  7 files changed, 1206 insertions(+), 928 deletions(-)
->  create mode 100644 drivers/net/wireless/intel/iwlwifi/cfg/ax210.c
->  create mode 100644 drivers/net/wireless/intel/iwlwifi/cfg/bz.c
->  create mode 100644 drivers/net/wireless/intel/iwlwifi/cfg/sc.c
-> 
-> 
-> My best.,
-> Jeff
-> 
->>
->>
-> 
-> 
+Alex
