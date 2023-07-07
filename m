@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0817674B9FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 01:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8B174BA0D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 01:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjGGXYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 19:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S230166AbjGGX1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 19:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjGGXYu (ORCPT
+        with ESMTP id S229573AbjGGX1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 19:24:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B25C2106
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 16:24:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688772242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XNAe7PgV0fkePnBzfDbEzA+U1/1CfkmWpKX+HX/k7jo=;
-        b=dKQlr39MqvEISdaVAJyq4n2uZQ/3nAcaIeqHKLfJiioc9+ZwQ30XfovoHPHUtCw+209zxY
-        jRN9RbxfBjjwvvVeii6/Hw3gB2RVYMl+KZHXooyvK4I3ahX2TRKpN/7Muldd4u8xF67rNO
-        87tnaoyngRvoNy76BxGY8nKSJibdLsk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-214--j3nidQAMjSc7kd_HMjhaw-1; Fri, 07 Jul 2023 19:24:00 -0400
-X-MC-Unique: -j3nidQAMjSc7kd_HMjhaw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 7 Jul 2023 19:27:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2B12107
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 16:27:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 864CD380451E;
-        Fri,  7 Jul 2023 23:24:00 +0000 (UTC)
-Received: from [10.22.34.12] (unknown [10.22.34.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5737BF643A;
-        Fri,  7 Jul 2023 23:24:00 +0000 (UTC)
-Message-ID: <9a3cb0c2-0b1a-28d0-0ebf-c29c6cb37f29@redhat.com>
-Date:   Fri, 7 Jul 2023 19:24:00 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E54A261AAF
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 23:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCE2C433C7;
+        Fri,  7 Jul 2023 23:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688772458;
+        bh=P+uTzSoEqJJWCevlsdh+M1GqE95HMg/uVvhx5B1sX1M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g7qA+fyPMtwHwYkAqhITQUei9SCkfMhs7WRXaXAJGM1VslLzlR+unsnZj0WbYsPXb
+         6xAE4bLv9l2Lq/hVKRRUwpN2bU9q7TtlmjiPfkTi3upYlPY5VQ3x1g8m3TrUgdcnT9
+         sUdPou1NXL1PYYNLgF0XbVxv8YYcSis/9GkDPcoIjU93vlM++GwTOzszv9KyUTsSTu
+         mAXHxOaP5JLj9Ku0t+qiW55ca/WhLsQLlMJq2K2AjTF0O2Bt+MTZPYD15YEGDfh71y
+         10qneoudIs8cClwUT79qcLm70hH4hC+lXLxMEemyXADmZ6Rhwy0yDqq+07u1lEGqPL
+         XDwKFAgsHtsJg==
+Date:   Fri, 7 Jul 2023 16:27:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Justin Forbes <jforbes@fedoraproject.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Move rmnet out of NET_VENDOR_QUALCOMM dependency
+Message-ID: <20230707162737.0a411b18@kernel.org>
+In-Reply-To: <CAFxkdApnEo8RPOQ3zVjAZBeTtH2UbaT2798gQ5w0SA5e-dtZng@mail.gmail.com>
+References: <20230706145154.2517870-1-jforbes@fedoraproject.org>
+        <20230706084433.5fa44d4c@kernel.org>
+        <CAFbkSA0wW-tQ_b_GF3z2JqtO4hc0c+1gcbcyTcgjYbQBsEYLyA@mail.gmail.com>
+        <20230707151206.137d3a94@kernel.org>
+        <CAFxkdApnEo8RPOQ3zVjAZBeTtH2UbaT2798gQ5w0SA5e-dtZng@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [BUG 6.4] sched/core: Possible buffer overflow in
- do_set_cpu_allowed
-Content-Language: en-US
-To:     Joe Korty <joe.korty@concurrent-rt.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-References: <20230707202851.GA4231@zipoli.concurrent-rt.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230707202851.GA4231@zipoli.concurrent-rt.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/23 16:28, Joe Korty wrote:
-> In commit 9a5418bc48bab ("sched/core: Use kfree_rcu() in
-> do_set_cpus_allowed()"), a kfree_rcu() is used to free a cpu mask.
-> However, cpu masks can be as short as 8 bytes and this is a problem,
-> as kfree_rcu requires the to-be freed buffer to be at least 16 bytes.
-> Thus there is a chance of buffer overflow corruption when the number of
-> possible cpus in the system is 64 or less.
->
-> I have not seen this corruption in the wild.  I only noticed this possibility
-> when reviewing the scheduler differences between 6.1 and 6.4.
+On Fri, 7 Jul 2023 17:19:12 -0600 Justin Forbes wrote:
+> they add an entry for it, and don't realize that the entry is ignored
 
-We were aware of this known limitation. If you look at 
-alloc_user_cpus_ptr():
+Maybe that someone should not be "adding an entry" to a file which 
+has this at the top:
 
-static cpumask_t *alloc_user_cpus_ptr(int node)
-{
-         /*
-          * See do_set_cpus_allowed() above for the rcu_head usage.
-          */
-         int size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
+#
+# Automatically generated file; DO NOT EDIT.
 
-         return kmalloc_node(size, GFP_KERNEL, node);
-}
+?
 
-We made sure that the allocated buffer is big enough to hold struct 
-rcu_head.
+> VENDOR_QUALCOMM is not enabled.  Either all devices capable of using
+> rmnet should be hidden behind VENDOR_QUALCOMM or rmnet should not be.
 
-Cheers,
-Longman
-
+I agree that Qualcomm drivers are an atrocious mess.
+They should live neatly in the wwan section. But it's Qualcomm,
+they don't care. Let's not have it sprawl even more.
