@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60A974ABFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA8D74AC0A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbjGGHea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S232442AbjGGHiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjGGHe3 (ORCPT
+        with ESMTP id S229910AbjGGHiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:34:29 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3A91FCE
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:34:28 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qHfyq-0003Q6-E7; Fri, 07 Jul 2023 09:34:16 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D3E421EAE26;
-        Fri,  7 Jul 2023 07:34:14 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 09:34:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kumari Pallavi <kumari.pallavi@intel.com>
-Cc:     "rcsekar@samsung.com" <rcsekar@samsung.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "Nikula, Jarkko" <jarkko.nikula@intel.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Thokala, Srikanth" <srikanth.thokala@intel.com>
-Subject: Re: RE: [RESEND] [PATCH 1/1] can: m_can: Control tx and rx flow to
- avoid communication stall
-Message-ID: <20230707-breeder-shaft-61b826633b7e-mkl@pengutronix.de>
-References: <20230623085920.12904-1-kumari.pallavi@intel.com>
- <20230705-return-slogan-36c499673bb6-mkl@pengutronix.de>
- <SJ1PR11MB608478D62EDFAEDDBE8C0890872DA@SJ1PR11MB6084.namprd11.prod.outlook.com>
+        Fri, 7 Jul 2023 03:38:05 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7619B2;
+        Fri,  7 Jul 2023 00:38:02 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 5EDF124E1AC;
+        Fri,  7 Jul 2023 15:37:48 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
+ 2023 15:37:48 +0800
+Received: from [192.168.125.128] (113.72.145.114) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
+ 2023 15:37:47 +0800
+Message-ID: <a664ad04-561d-5060-6e69-10f79c1398d0@starfivetech.com>
+Date:   Fri, 7 Jul 2023 15:34:40 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dxld4druqcvwrqfa"
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB608478D62EDFAEDDBE8C0890872DA@SJ1PR11MB6084.namprd11.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related
+ functions
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Samin Guo <samin.guo@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230706082928.10869-1-paul@crapouillou.net>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <20230706082928.10869-1-paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.114]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/7/6 16:29, Paul Cercueil wrote:
+> Use the new PM macros for the suspend and resume functions to be
+> automatically dropped by the compiler when CONFIG_PM or
+> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+> 
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/watchdog/starfive-wdt.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 8058fca4d05d..7c8a1c5e75be 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
+>  	starfive_wdt_pm_stop(&wdt->wdd);
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int starfive_wdt_suspend(struct device *dev)
+>  {
+>  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
+> @@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
+>  
+>  	return starfive_wdt_start(wdt);
+>  }
+> -#endif /* CONFIG_PM_SLEEP */
+>  
+> -#ifdef CONFIG_PM
+>  static int starfive_wdt_runtime_suspend(struct device *dev)
+>  {
+>  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
+> @@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
+>  
+>  	return starfive_wdt_enable_clock(wdt);
+>  }
+> -#endif /* CONFIG_PM */
+>  
+>  static const struct dev_pm_ops starfive_wdt_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
+> -	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+> +	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+>  };
+>  
+>  static const struct of_device_id starfive_wdt_match[] = {
+> @@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
+>  	.shutdown = starfive_wdt_shutdown,
+>  	.driver = {
+>  		.name = "starfive-wdt",
+> -		.pm = &starfive_wdt_pm_ops,
+> +		.pm = pm_ptr(&starfive_wdt_pm_ops),
+>  		.of_match_table = starfive_wdt_match,
+>  	},
+>  };
 
---dxld4druqcvwrqfa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Great, Thank you for the improvements.
 
-On 07.07.2023 05:38:09, Kumari Pallavi wrote:
-> > >  			if (netif_queue_stopped(dev) &&
-> > >  			    !m_can_tx_fifo_full(cdev))
-> > >  				netif_wake_queue(dev);
-> > > @@ -1787,6 +1787,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_b=
-uff
-> > *skb,
-> > >  		}
-> > >  	} else {
-> > >  		cdev->tx_skb =3D skb;
-> > > +		m_can_write(cdev, M_CAN_IE, IR_ALL_INT & (IR_TEFN));
-> >=20
-> > - What's the purpose of  "()" around IR_TEFN?
-> > - "IR_ALL_INT & (IR_TEFN)" is equal to IR_TEFN, isn't it?
-> > - This basically disables all other interrupts, is this what you want to
-> >   do?
-> > - What happens if the bus is busy with high prio CAN frames and you want
-> >   to send low prio ones? You will not get any RX-IRQ, this doesn't look
-> >   correct to me.
-> >=20
->=20
-> Even though the RX interrupt is disabled (in IE), if there is an TX
-> interrupt and the RF0N bit is set (in IR), the RX packet will still be
-> serviced because the TX and RX share the same IRQ handler.
-
-If the bus is busy with high prio CAN frames and the m_can wants to send
-a low prio frame, the m_can will not be able to send it's CAN frame,
-there will be not TX interrupt. If there are enough high prio CAN frames
-the RX buffer will overflow.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---dxld4druqcvwrqfa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSnv/MACgkQvlAcSiqK
-BOjdRAf/ev2175DU15TwDRx6naSR7QltyRAabcBHohWJrGf/oDogSB3PYo3V6wFY
-fRtr7Dy0JRw2p2jm1oTL+UzfB45Ap3Kp8x6DDA4+4Ca2eok+aK6r7jDE1rWKfod/
-iBjQt6x0Plk5PT4ph7M1f1ukGUsJERyFoAQsR1rZQv2n+eT0pqGJZwpWofNtppG5
-AQw04M1keRRE6LeMk1aeMdHi3fGiZT8QEJom0i1UEOiERIARuVsL5B3NDFEYkxVF
-FXSX8YPH6QZS6hNAbY7x79qEB0qRRX52Uj2FklIsYnl8YeXnFUe7ISp+n+9bFERs
-NcnMQ/tGrFAUHZc8ln6jnQOE5jtk0g==
-=dHVD
------END PGP SIGNATURE-----
-
---dxld4druqcvwrqfa--
+Best regards,
+Xingyu Wu
