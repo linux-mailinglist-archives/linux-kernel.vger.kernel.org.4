@@ -2,186 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB02F74B055
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7C974B05E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjGGL5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S229458AbjGGL7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGL5L (ORCPT
+        with ESMTP id S231421AbjGGL7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:57:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FCE1FCE
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 04:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688730982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+zNBj9eYnDea9EN+o9qg7xJQFBC+d+IwoAvBLbNge90=;
-        b=AABUd5X9+JY4xXJyvP4xFCon306MM55VhvA/TvXAji2/UbgTNOVs1lf70SpYKQmIo5uj4R
-        x+ih550HZv769tvci8se+igvgpmFBeGzwLVS2CThpiLlONjTfjMujnOaMMHLQzsJyvTrmE
-        YefdEknib93mrndaolOUXC9jghV3v9s=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-185-ylkRbBPtOw2P2U_zfJVGoQ-1; Fri, 07 Jul 2023 07:56:17 -0400
-X-MC-Unique: ylkRbBPtOw2P2U_zfJVGoQ-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f84a8b00e3so1760628e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 04:56:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688730976; x=1691322976;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+zNBj9eYnDea9EN+o9qg7xJQFBC+d+IwoAvBLbNge90=;
-        b=Z4aXBhRBNT4rxpBf4mZOE8M/i9E3eyuD2m7AI7OZkucSnDCYVdfjzhXqrI3cXSUL1m
-         vIrYedVcEeUc/zww5f/0xPx/M1qMPqI5H4aevz37iGoFHvBwXtj5/5+HZoR6LwbZlGZz
-         JXKyag31mYfk8HEdZIiXxLjtnS5BQ+UAMSN0sybUWg5tXcSvtm7N0ozW4ZyhZqJPkpDQ
-         p3QAsMAbTzXOjI5ZPx0tiggC9da/pLLSrhvHh06BOgVsDucp3hEDb4v7jum/qmUwOv7P
-         fMnYDsdbcSFSe1zkypsbs+UCFCKlz2knTNbBK+GPDeNd/5SLsGUYtA7d+0MFNov5kkBp
-         vZIg==
-X-Gm-Message-State: ABy/qLZtO32LxSRWaTSq2dzPvmYjHAn6Dhh5mX5lNgUccjgUS+Zvp6Fc
-        tOxK/H8LidG2PzSvOv6Zb70/V5AEO/MdKkPQAkuwAUyhL6nwIvbzcDm+1qUPPtSwNSD2dkwGM2m
-        yovYWx5zzQ6cfqUhMxPUuH7AW
-X-Received: by 2002:a19:3817:0:b0:4f8:6ac1:15a9 with SMTP id f23-20020a193817000000b004f86ac115a9mr3528061lfa.31.1688730976194;
-        Fri, 07 Jul 2023 04:56:16 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlH1NgRVc3OyU27DGp44pw0IZffZSzCCo4rAZ1Zy7J5nsJoOjuSMd5Nz/ESPaFv4Afa474lRAQ==
-X-Received: by 2002:a19:3817:0:b0:4f8:6ac1:15a9 with SMTP id f23-20020a193817000000b004f86ac115a9mr3528046lfa.31.1688730975779;
-        Fri, 07 Jul 2023 04:56:15 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f04:3c00:248f:bf5b:b03e:aac7? (p200300d82f043c00248fbf5bb03eaac7.dip0.t-ipconnect.de. [2003:d8:2f04:3c00:248f:bf5b:b03e:aac7])
-        by smtp.gmail.com with ESMTPSA id k14-20020a7bc30e000000b003fbd2a9e94asm2257133wmj.31.2023.07.07.04.56.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 04:56:15 -0700 (PDT)
-Message-ID: <b0328149-16c6-a687-4c28-5f537e190ae4@redhat.com>
-Date:   Fri, 7 Jul 2023 13:56:14 +0200
+        Fri, 7 Jul 2023 07:59:23 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2102.outbound.protection.outlook.com [40.107.215.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ACA1FF9;
+        Fri,  7 Jul 2023 04:59:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BSvVAi3EXam2EpPqjP6bcO7gMPs3H7YFyGFAgoeRIngRXi+Uu15i3mH+6+Kgbv6xOIE9QZBAPYZUASbHzjvVA5y38XLKlIucVdXBgOa4wey/Cmn9X4qbzAXSJR3F+jRKmzBpfrcEoai39f8W0/DGMH+pD02Uyve0gJ0DXs99YzMH+azsL49J+Rf1ySMjO3L1omIVwb/1OX+QwuEV2AhfbtTXdSlwoirtkjtbRMTkdv5dWX83K7W9W7rtPXekk31M0f3KZKp7qvx3Z77FQ8UtAOJN97JMEcyu9eoewJSFWhqru6CBKtqjNF7Nqb88er5JgyB3G0rAT+Ni8iu1HFv6aQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VZdQecR+nLLnTW9y6Ylj0AudMG3nYWI789EOvNRovvM=;
+ b=WhKWVJqIiUncVJrxgTFAOSBDXs3ccKN5/bAR7/TgUTJOsmFq7V8K99YwW+c2Vwenbba6Fe7Fgaow3Df1HMecICNLXmQvfVLK1fAs+JBEiKuKxMo3PXypX7CTL0EGZvSdb/LR2GXnhvVLbXBBuECv3vyCfGDwr/xUQCcI3p9NBdUviD36UXxhhIEjN3K/TTpjAFD9ETrg8kcvDeGdZLQVGOl9iZufz0W4366ooeIfqnfTsq5apy+hOD87LM6Q/6ce4dLdUfxgEDnqFZ+6SmaP0l00StlHJWS8/7+9PrrrbzLjtiiiMvxyNhCIYN1JueT20rWhhGo8Gp84+3MIt3sMIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VZdQecR+nLLnTW9y6Ylj0AudMG3nYWI789EOvNRovvM=;
+ b=M37/mxOZMQ1ZDNabQx33ojyTPSS7q1a0aazws7BrIPXYLtOHoJ97j8eqyc+Xl5p0YizSb9ZDA5NbvqfkeTUT3qMNH6BMKjC67sSOCj3NgS5BnMXQ+DRqJGTPgaSSapZJKh6fVD/F7BZo6mSGcjRZCj8Z4WSb0K4EevX2fyov4Xi3MMKRzB7nfzFMvxVntg/yvqTDdR5Ot+Kx+VYwaPdWpezYJGSruhYX1a0WOFbfu59rGLhDoDz4X1AqcEdyXlZSNwHS8udIojs8lJlxkSLGw6Fkuit/L7OR4Elf6c0CrbAESDeE2hRbSqRXc5ij6fVo5A1uqy1qKhBwT2QdEQXL+w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by SI2PR06MB5363.apcprd06.prod.outlook.com (2603:1096:4:1eb::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.24; Fri, 7 Jul
+ 2023 11:59:18 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::8586:be41:eaad:7c03]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::8586:be41:eaad:7c03%7]) with mapi id 15.20.6565.019; Fri, 7 Jul 2023
+ 11:59:18 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] fs/ext4: convert to use sbi directly
+Date:   Fri,  7 Jul 2023 19:59:07 +0800
+Message-Id: <20230707115907.26637-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0137.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::17) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] mm: compaction: skip the memory hole rapidly when
- isolating free pages
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, vbabka@suse.cz, ying.huang@intel.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <b21cd8e2e32b9a1d9bc9e43ebf8acaf35e87f8df.1688715750.git.baolin.wang@linux.alibaba.com>
- <d2ba7e41ee566309b594311207ffca736375fc16.1688715750.git.baolin.wang@linux.alibaba.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <d2ba7e41ee566309b594311207ffca736375fc16.1688715750.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SI2PR06MB5363:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff740a64-509d-436a-2b38-08db7ee197ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JAzN2JFa3/OWCeJQ7LAHlj1Q8uHKAcArd/qfuRqezxzWaptVXaWMeyr9jqyfir3wwCJRgjjCGQg2ubqSVIBbnkiUmze679ppE1TzfUV2Oyw1AgIOP80WbB65FpdI77VcYNmW+CRP7GGaE1ti4pAca/hg3CMft3AJqx+G1UNPs+cehzp/Juhp4Nowi/W8FGt/PYOu9mipkJmq+EOEHkQB1k1fWpMTfC5LHaR04B8nJEagRuctO56RSKiCsOjF/PSYT+jgZcNVKyF0T/w/M7+/vhubz4gTqkfJypXHcwCfnFFSXbLEi9Xp5WuN9w6q/gz6xztEzAAgCuSZTj6KdN9Sw7Nx38DVru/wvkgl38Dmun6e/awhbyTUeqTyHPMz08KWmwBI+u/S577iEjp4zO8SLM2OghuL+LazXgZpaNwxMoPnaHoK6+NJuZJ2Wjttj+MeYDOeYwwABswH1N8TgvYVsZxaZlEVQ+Wa+SEsFAkTa6HfA4JspCyyEoC62pFwFXi12dG3TuP6E9W6ftMc/h7p73FbH0vatdbH5FlBLlOJTRgZZeDbeNOB980kYF3VxCCkX7SxsLptCvWu1wyEXH7Qffp8o0kDxP/9kh1wmozWZJhgwDVJOnJ1Ie9ONcgim4j3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(346002)(376002)(39860400002)(451199021)(36756003)(86362001)(110136005)(38100700002)(38350700002)(478600001)(6486002)(52116002)(6666004)(6512007)(8676002)(8936002)(5660300002)(4326008)(316002)(66476007)(2906002)(66556008)(66946007)(41300700001)(4744005)(2616005)(83380400001)(1076003)(26005)(6506007)(107886003)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AH7/w7zgoUEERYI7kWmZiKG4AGD1ayYOXdha9v5yWCc4MCcLRQitK5i5jCJc?=
+ =?us-ascii?Q?1WiuHKibbfHSoqWE33koHOjFmQNtdtAT5+rSNUsbPv1qvaO8cth2CZ1M6w1T?=
+ =?us-ascii?Q?yLMf5xhtRb8Id3yWKyk2nUIjgigcGACMi1lh8yFoNx+JyFKjgQXWwqVQtIwl?=
+ =?us-ascii?Q?5vm0btZcvraAgzeih25hmLMduW+IpQYBnLdswwwaDjsE3ngyFklXMXvRl9+0?=
+ =?us-ascii?Q?ARWQcpkTE8lwYTLcFHQC30W5xw1Pqy1nphkiZKUXgeoKh1ROyC3JOT+/lgMI?=
+ =?us-ascii?Q?Z5PXBYnr99ctnBBRpgDgQ2t006SxUQFux+dKI4U+Rcn897IgOgsvhJNGPlOx?=
+ =?us-ascii?Q?xvSBi8h69N1PV0iesoFLWrvkoahLGp+LBa7yxX9uqY4AF4PVDOn5OVxCABO1?=
+ =?us-ascii?Q?JKF83md1v7M5wmYPwYZq95IdZMTsokJyuMu5zEzRl8fcoxHAzV2+OKUxoJZU?=
+ =?us-ascii?Q?/xFBbgb9GunDeO7neGsHpjXBJvHMYpKpdp7+ZBABm2Vc1TB1f1l1wYHGIeQa?=
+ =?us-ascii?Q?JKqgJkfFc60UepDRE0/O/o1cx/SJH3oNl60U2u5WkUyb2mc8xMMy8gOLnKCf?=
+ =?us-ascii?Q?JZ2/AU0UhZGZMO/XAx4hpueKJghEfFElp041XRhjyknFO8sLn+OfoOzcrsWK?=
+ =?us-ascii?Q?qUGMJWm9D6jlFGEyS3/IeEq+nHmkWrTmYXsWIO47kJJSYPvAaCuJkWpmhIS9?=
+ =?us-ascii?Q?Au+7iD9c4N07r2LOIrwCersHyf8P3e6sSrnIMkgpz31BrCBteXItZYs+w4ea?=
+ =?us-ascii?Q?hll+Gk4JOY1+hvl+hNWn7Dmrx/D2w0/wzr9duWM42shEtCa4xPn9FNH19Igu?=
+ =?us-ascii?Q?kwBKfQsqdTv7vTxONqbiePwEUdBLrrFUzqhnH869AnSdOOhttFvjoDK47TOE?=
+ =?us-ascii?Q?lMUTr98guiu6wjmNG3Bez2DVuiMmaNxMwGkDv0Cy11aue97pFK9dx6C1+JsC?=
+ =?us-ascii?Q?GkxVlzHeUdiyyec2sN58zL0KJC9fFRAenn0dsjbagsld1wTrzWQgqzFxwKo9?=
+ =?us-ascii?Q?eIQ1Egr4Q1bv4Od3ZU3ldD5CZ8vjCbGBamWSZyiWBgFf9/wlKmOLDDA82mJP?=
+ =?us-ascii?Q?/xpUy/nYIUqwbR5AdSOVgpedEZ5traAE8kMdAbnmTemddF6lrOpJViEwCXsV?=
+ =?us-ascii?Q?B3yIqTf41BEHPmG7PhBO5ocwx1KTgzIMdwndn6FGEpaJZDVtx6IvAWOiWNHu?=
+ =?us-ascii?Q?x8Wxf/A/C3PBhKkMozJIeNzDnatfJehiWQ+BVEaBrlkbS/3MxZ/AjfJcpZRm?=
+ =?us-ascii?Q?9Lg28CRvtfl+m0QqzDPGuoHrqC8HB1Zt4vhN1trIS93KAfMKhYh01WvwfSXX?=
+ =?us-ascii?Q?C16gKdFGIhSpgsVZi7u9YrXaCApWRM5D+i3AmKK9lDIkb4ZM1bMVFuFAAg5/?=
+ =?us-ascii?Q?7oaqhupXsyl5DBbibmEL3JlNwO6h+gCJSq8/lFkHY1ZTNC3dkgthiEbNIwdU?=
+ =?us-ascii?Q?xyxA0RqZGHYuoAQB+eQOTiIVN02VjQJcaoctRf6ZT+2LV7ZEn7YqRhvjqovs?=
+ =?us-ascii?Q?+dVstJYnQckHvcDXrSlSWtBqO8ZCS4ae2NWTX7qbWnE1DjudIN+KM4GQ+gV/?=
+ =?us-ascii?Q?FIwFpzKqTJN88QiUlTa3pmqIDf6f26vPoA9HLPOC?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff740a64-509d-436a-2b38-08db7ee197ac
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 11:59:18.2265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3hn71o2+vIs7pGg56M8IEYU+2P/bEhRzUE2kKbo5HBYVSSC3qbytY8LGs/FxE3z+eb1J8ZObNwnmcIp4wypPKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5363
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.07.23 10:51, Baolin Wang wrote:
-> On my machine with below memory layout, and I can see it will take more
-> time to skip the larger memory hole (range: 0x100000000 - 0x1800000000)
-> when isolating free pages. So adding a new helper to skip the memory
-> hole rapidly, which can reduce the time consumed from about 70us to less
-> than 1us.
+EXT4_SB(sb) is redundant.
 
-Can you clarify how this relates to the previous commit and mention that 
-commit?
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+ fs/ext4/mballoc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> [    0.000000] Zone ranges:
-> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
-> [    0.000000]   DMA32    empty
-> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
-> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
-> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
-> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
-> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
-> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->   mm/compaction.c | 30 +++++++++++++++++++++++++++++-
->   1 file changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 43358efdbdc2..9641e2131901 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -249,11 +249,31 @@ static unsigned long skip_offline_sections(unsigned long start_pfn)
->   
->   	return 0;
->   }
-> +
-> +static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
-> +{
-> +	unsigned long start_nr = pfn_to_section_nr(start_pfn);
-> +
-> +	if (!start_nr || online_section_nr(start_nr))
-> +		return 0;
-> +
-> +	while (start_nr-- > 0) {
-> +		if (online_section_nr(start_nr))
-> +			return section_nr_to_pfn(start_nr) + PAGES_PER_SECTION - 1;
-> +	}
-> +
-> +	return 0;
-> +}
->   #else
->   static unsigned long skip_offline_sections(unsigned long start_pfn)
->   {
->   	return 0;
->   }
-> +
-> +static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
-> +{
-> +	return 0;
-> +}
->   #endif
->   
->   /*
-> @@ -1668,8 +1688,16 @@ static void isolate_freepages(struct compact_control *cc)
->   
->   		page = pageblock_pfn_to_page(block_start_pfn, block_end_pfn,
->   									zone);
-> -		if (!page)
-> +		if (!page) {
-> +			unsigned long next_pfn;
-> +
-> +			next_pfn = skip_offline_sections_reverse(block_start_pfn);
-> +			if (next_pfn)
-> +				block_start_pfn = max(pageblock_start_pfn(next_pfn),
-> +						      low_pfn);
-> +
->   			continue;
-> +		}
->   
->   		/* Check the block is suitable for migration */
->   		if (!suitable_migration_target(cc, page))
-
-
-LGTM
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index a2475b8c9fb5..752260903d14 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -5994,7 +5994,7 @@ ext4_mb_new_blocks_simple(struct ext4_allocation_request *ar, int *errp)
+ 	ext4_grpblk_t max = EXT4_CLUSTERS_PER_GROUP(sb);
+ 	ext4_grpblk_t i = 0;
+ 	ext4_fsblk_t goal, block;
+-	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
++	struct ext4_super_block *es = sbi->s_es;
+ 
+ 	goal = ar->goal;
+ 	if (goal < le32_to_cpu(es->s_first_data_block) ||
 -- 
-Cheers,
-
-David / dhildenb
+2.39.0
 
