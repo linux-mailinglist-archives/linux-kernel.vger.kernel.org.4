@@ -2,250 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9528D74B2DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C0374B2DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjGGOMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S232734AbjGGONn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjGGOMm (ORCPT
+        with ESMTP id S229471AbjGGONl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:12:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549802114;
-        Fri,  7 Jul 2023 07:12:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D684619CC;
-        Fri,  7 Jul 2023 14:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90D7C433C7;
-        Fri,  7 Jul 2023 14:12:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688739141;
-        bh=xKI4tJjFwB2inCEEimsopT5TgiFdgHAOO7kacDEX0Zo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F0IdHISGjGsWRx49yYNiXBaeszm77RxZs94VsAK1AjPyUQt7kYJ43l7l1XQIC6cw4
-         F/N+9Jt6YLXBOcqaiEIU4wQOhEssDB8HLzOb4TeBD8AZKYDco8m8tDQqwf0tuZj7Ob
-         aMF6QUip7T+DfTIlrBkQEmIoeArHXnBOhyeT9MH7X2WPPALZLbUR+CW4o07pQg8cYm
-         YvDQApfh0vMoGCuq3olqv6uKf+EJ69ra5/4uKCpR9WT0SVq20rGQY6UJ6+InHznhZw
-         jXP1LK2FEqUnT3plEtSo5vEsk8dd797RVC/wypoGsNcgTdoVKAHeZ4HHjdgmomLzSd
-         UXD4/N60w5IkQ==
-Date:   Fri, 7 Jul 2023 23:12:14 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-trace-kernel@vger.kernel.org,
-        Ding Hui <dinghui@sangfor.com.cn>, huangcun@sangfor.com.cn
-Subject: Re: [PATCH v13 09/12] tracing/probes: Add BTF retval type support
-Message-Id: <20230707231214.2787a24ac36d41f7edc5e94a@kernel.org>
-In-Reply-To: <cb07ac16-cc0f-7e8d-6271-cde2e02e739d@sangfor.com.cn>
-References: <168507466597.913472.10572827237387849017.stgit@mhiramat.roam.corp.google.com>
-        <168507476195.913472.16290308831790216609.stgit@mhiramat.roam.corp.google.com>
-        <cb07ac16-cc0f-7e8d-6271-cde2e02e739d@sangfor.com.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Jul 2023 10:13:41 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB60B2;
+        Fri,  7 Jul 2023 07:13:38 -0700 (PDT)
+Received: from i53875a50.versanet.de ([83.135.90.80] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qHmDG-0000Sg-8C; Fri, 07 Jul 2023 16:13:34 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 10/18] soc: rockchip: Mover power-domain driver to the genpd dir
+Date:   Fri, 07 Jul 2023 16:13:33 +0200
+Message-ID: <4517610.cEBGB3zze1@diego>
+In-Reply-To: <20230707140434.723349-11-ulf.hansson@linaro.org>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-11-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 15:29:00 +0800
-Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
+Am Freitag, 7. Juli 2023, 16:04:26 CEST schrieb Ulf Hansson:
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: <linux-rockchip@lists.infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> On 2023/5/26 12:19, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Check the target function has non-void retval type and set the correct
-> > fetch type if user doesn't specify it.
-> > If the function returns void, $retval is rejected as below;
-> > 
-> >   # echo 'f unregister_kprobes%return $retval' >> dynamic_events
-> > sh: write error: No such file or directory
-> >   # cat error_log
-> > [   37.488397] trace_fprobe: error: This function returns 'void' type
-> >    Command: f unregister_kprobes%return $retval
-> >                                         ^
-> > 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> > Changes in v8:
-> >   - Fix wrong indentation.
-> > Changes in v7:
-> >   - Introduce this as a new patch.
-> > ---
-> >   kernel/trace/trace_probe.c |   69 ++++++++++++++++++++++++++++++++++++++++----
-> >   kernel/trace/trace_probe.h |    1 +
-> >   2 files changed, 63 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> > index 7318642aceb3..dfe3e1823eec 100644
-> > --- a/kernel/trace/trace_probe.c
-> > +++ b/kernel/trace/trace_probe.c
-> > @@ -371,15 +371,13 @@ static const char *type_from_btf_id(struct btf *btf, s32 id)
-> >   	return NULL;
-> >   }
-> >   
-> > -static const struct btf_param *find_btf_func_param(const char *funcname, s32 *nr,
-> > -						   bool tracepoint)
-> > +static const struct btf_type *find_btf_func_proto(const char *funcname)
-> >   {
-> >   	struct btf *btf = traceprobe_get_btf();
-> > -	const struct btf_param *param;
-> >   	const struct btf_type *t;
-> >   	s32 id;
-> >   
-> > -	if (!btf || !funcname || !nr)
-> > +	if (!btf || !funcname)
-> >   		return ERR_PTR(-EINVAL);
-> >   
-> >   	id = btf_find_by_name_kind(btf, funcname, BTF_KIND_FUNC);
-> > @@ -396,6 +394,22 @@ static const struct btf_param *find_btf_func_param(const char *funcname, s32 *nr
-> >   	if (!btf_type_is_func_proto(t))
-> >   		return ERR_PTR(-ENOENT);
-> >   
-> > +	return t;
-> > +}
-> > +
-> > +static const struct btf_param *find_btf_func_param(const char *funcname, s32 *nr,
-> > +						   bool tracepoint)
-> > +{
-> > +	const struct btf_param *param;
-> > +	const struct btf_type *t;
-> > +
-> > +	if (!funcname || !nr)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	t = find_btf_func_proto(funcname);
-> > +	if (IS_ERR(t))
-> > +		return (const struct btf_param *)t;
-> > +
-> >   	*nr = btf_type_vlen(t);
-> >   	param = (const struct btf_param *)(t + 1);
-> >   
-> > @@ -462,6 +476,32 @@ static const struct fetch_type *parse_btf_arg_type(int arg_idx,
-> >   	return find_fetch_type(typestr, ctx->flags);
-> >   }
-> >   
-> > +static const struct fetch_type *parse_btf_retval_type(
-> > +					struct traceprobe_parse_context *ctx)
-> > +{
+I guess this is part of a bigger series moving these things around, so
+Acked-by: Heiko Stuebner <heiko@sntech.de>
+
+> ---
+>  drivers/genpd/Makefile                                          | 1 +
+>  drivers/genpd/rockchip/Makefile                                 | 2 ++
+>  .../{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c}  | 0
+>  drivers/soc/rockchip/Makefile                                   | 1 -
+>  4 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/genpd/rockchip/Makefile
+>  rename drivers/{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c} (100%)
 > 
-> Can we make this a common interface so that the funcgraph-retval can
->   also use it to get the return type?
-
-It is possible to expose BTF part as an independent file so that
-other ftrace tracers reuse it.
-But you might need to store the result for each function somewhere
-in the kernel. Would you have any idea?
-
-Thank you,
-
-> 
-> -- Donglin Peng
-> 
-> > +	struct btf *btf = traceprobe_get_btf();
-> > +	const char *typestr = NULL;
-> > +	const struct btf_type *t;
-> > +
-> > +	if (btf && ctx->funcname) {
-> > +		t = find_btf_func_proto(ctx->funcname);
-> > +		if (!IS_ERR(t))
-> > +			typestr = type_from_btf_id(btf, t->type);
-> > +	}
-> > +
-> > +	return find_fetch_type(typestr, ctx->flags);
-> > +}
-> > +
-> > +static bool is_btf_retval_void(const char *funcname)
-> > +{
-> > +	const struct btf_type *t;
-> > +
-> > +	t = find_btf_func_proto(funcname);
-> > +	if (IS_ERR(t))
-> > +		return false;
-> > +
-> > +	return t->type == 0;
-> > +}
-> >   #else
-> >   static struct btf *traceprobe_get_btf(void)
-> >   {
-> > @@ -480,8 +520,15 @@ static int parse_btf_arg(const char *varname, struct fetch_insn *code,
-> >   	trace_probe_log_err(ctx->offset, NOSUP_BTFARG);
-> >   	return -EOPNOTSUPP;
-> >   }
-> > +
-> >   #define parse_btf_arg_type(idx, ctx)		\
-> >   	find_fetch_type(NULL, ctx->flags)
-> > +
-> > +#define parse_btf_retval_type(ctx)		\
-> > +	find_fetch_type(NULL, ctx->flags)
-> > +
-> > +#define is_btf_retval_void(funcname)	(false)
-> > +
-> >   #endif
-> >   
-> >   #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
-> > @@ -512,6 +559,11 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> >   
-> >   	if (strcmp(arg, "retval") == 0) {
-> >   		if (ctx->flags & TPARG_FL_RETURN) {
-> > +			if ((ctx->flags & TPARG_FL_KERNEL) &&
-> > +			    is_btf_retval_void(ctx->funcname)) {
-> > +				err = TP_ERR_NO_RETVAL;
-> > +				goto inval;
-> > +			}
-> >   			code->op = FETCH_OP_RETVAL;
-> >   			return 0;
-> >   		}
-> > @@ -912,9 +964,12 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
-> >   		goto fail;
-> >   
-> >   	/* Update storing type if BTF is available */
-> > -	if (IS_ENABLED(CONFIG_PROBE_EVENTS_BTF_ARGS) &&
-> > -	    !t && code->op == FETCH_OP_ARG)
-> > -		parg->type = parse_btf_arg_type(code->param, ctx);
-> > +	if (IS_ENABLED(CONFIG_PROBE_EVENTS_BTF_ARGS) && !t) {
-> > +		if (code->op == FETCH_OP_ARG)
-> > +			parg->type = parse_btf_arg_type(code->param, ctx);
-> > +		else if (code->op == FETCH_OP_RETVAL)
-> > +			parg->type = parse_btf_retval_type(ctx);
-> > +	}
-> >   
-> >   	ret = -EINVAL;
-> >   	/* Store operation */
-> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> > index c864e6dea10f..eb43bea5c168 100644
-> > --- a/kernel/trace/trace_probe.h
-> > +++ b/kernel/trace/trace_probe.h
-> > @@ -449,6 +449,7 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
-> >   	C(BAD_EVENT_NAME,	"Event name must follow the same rules as C identifiers"), \
-> >   	C(EVENT_EXIST,		"Given group/event name is already used by another event"), \
-> >   	C(RETVAL_ON_PROBE,	"$retval is not available on probe"),	\
-> > +	C(NO_RETVAL,		"This function returns 'void' type"),	\
-> >   	C(BAD_STACK_NUM,	"Invalid stack number"),		\
-> >   	C(BAD_ARG_NUM,		"Invalid argument number"),		\
-> >   	C(BAD_VAR,		"Invalid $-valiable specified"),	\
-> > 
-> > 
-> > 
+> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> index 286598ce7620..c178421e0cbc 100644
+> --- a/drivers/genpd/Makefile
+> +++ b/drivers/genpd/Makefile
+> @@ -6,3 +6,4 @@ obj-y					+= bcm/
+>  obj-y					+= mediatek/
+>  obj-y					+= qcom/
+>  obj-y					+= renesas/
+> +obj-y					+= rockchip/
+> diff --git a/drivers/genpd/rockchip/Makefile b/drivers/genpd/rockchip/Makefile
+> new file mode 100644
+> index 000000000000..8fb9d88a3492
+> --- /dev/null
+> +++ b/drivers/genpd/rockchip/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_ROCKCHIP_PM_DOMAINS)	+= pm-domains.o
+> diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/genpd/rockchip/pm-domains.c
+> similarity index 100%
+> rename from drivers/soc/rockchip/pm_domains.c
+> rename to drivers/genpd/rockchip/pm-domains.c
+> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
+> index 05f31a4e743c..23d414433c8c 100644
+> --- a/drivers/soc/rockchip/Makefile
+> +++ b/drivers/soc/rockchip/Makefile
+> @@ -4,5 +4,4 @@
+>  #
+>  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
+>  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
+> -obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
+>  obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
 > 
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+
