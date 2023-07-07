@@ -2,160 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBDF74AF33
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6E974AF3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbjGGK4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S229997AbjGGK7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 06:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbjGGK4h (ORCPT
+        with ESMTP id S232033AbjGGK7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:56:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34001FEA;
-        Fri,  7 Jul 2023 03:56:31 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367AiQDC009098;
-        Fri, 7 Jul 2023 10:56:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=jXhueTSPOHMzlueqvymp8seQ1H++N+GTe725CM9biwY=;
- b=gycLR1ya41kA/wDSyfdQ3X401hBRX/IRT+Wa0heCbNoB6UBcjvHvhH8T/5OQ+F+jP58A
- 2Xy0TAuvYA0aWH8uMIxg6faqKFUeyuZw50mDw4CM5hk4hZYC0KBq9LyoUByq2UA08Y0p
- ZGNdhinTnWpO0v9mPTSA7HxebGDbujHmWtKQgp1dIsv7QoYMxMwpvjn+t5YSGy2Aixvy
- acmj1/DurWxP596pWw+HGnjtWb18oRJJq0ZV2CW7qCjQATFPSMsLQvEK32xmOb01VdIt
- yMryd5+y+WkzU0OXzp0OXwLPjgtxKckJpaYeRemu0OzIL4BOqGbY525HL/DQyZPwyzM6 Vg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rph768840-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 10:56:31 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 367AjHWb011549;
-        Fri, 7 Jul 2023 10:56:30 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rph76882y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 10:56:30 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3674pEjd002638;
-        Fri, 7 Jul 2023 10:56:28 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3rjbde3xvy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 10:56:28 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367AuOGf9765432
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jul 2023 10:56:25 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D1F4020040;
-        Fri,  7 Jul 2023 10:56:24 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 797902004E;
-        Fri,  7 Jul 2023 10:56:24 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jul 2023 10:56:24 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Stefan Raspl <raspl@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 3/3] s390/ism: Do not unregister clients with registered DMBs
-Date:   Fri,  7 Jul 2023 12:56:22 +0200
-Message-Id: <20230707105622.3332261-4-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230707105622.3332261-1-schnelle@linux.ibm.com>
-References: <20230707105622.3332261-1-schnelle@linux.ibm.com>
+        Fri, 7 Jul 2023 06:59:09 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D83E19A5;
+        Fri,  7 Jul 2023 03:59:01 -0700 (PDT)
+Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qy9P33kdlz1FDfy;
+        Fri,  7 Jul 2023 18:58:31 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 18:58:59 +0800
+From:   Junxian Huang <huangjunxian6@hisilicon.com>
+To:     <jgg@nvidia.com>, <leon@kernel.org>
+CC:     <linux-rdma@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <huangjunxian6@hisilicon.com>
+Subject: [PATCH v3 for-next] RDMA/core: Get IB width and speed from netdev
+Date:   Fri, 7 Jul 2023 18:56:34 +0800
+Message-ID: <20230707105634.1921046-1-huangjunxian6@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eF6GmWa2em_q6HOwZDmSWChiC5_9b-Dt
-X-Proofpoint-GUID: -xqR_-d9SHz2JVE0DnHrpavlIJTqY8uC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_06,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307070097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500006.china.huawei.com (7.221.188.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ism_unregister_client() is called but the client still has DMBs
-registered it returns -EBUSY and prints an error. This only happens
-after the client has already been unregistered however. This is
-unexpected as the unregister claims to have failed. Furthermore as this
-implies a client bug a WARN() is more appropriate. Thus move the
-deregistration after the check and use WARN().
+From: Haoyue Xu <xuhaoyue1@hisilicon.com>
 
-Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Previously, there was no way to query the number of lanes for a network
+card, so the same netdev_speed would result in a fixed pair of width and
+speed. As network card specifications become more diverse, such fixed
+mode is no longer suitable, so a method is needed to obtain the correct
+width and speed based on the number of lanes.
+
+This patch retrieves netdev lanes and speed from net_device and
+translates them to IB width and speed. Also, add a generic function
+to translating netdev speed to IB speed.
+
+Signed-off-by: Haoyue Xu <xuhaoyue1@hisilicon.com>
+Signed-off-by: Luoyouming <luoyouming@huawei.com>
+Signed-off-by: Junxian Huang <huangjunxian6@hisilicon.com>
 ---
- drivers/s390/net/ism_drv.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ drivers/infiniband/core/verbs.c | 17 +++++++++++++++--
+ include/rdma/ib_verbs.h         | 26 ++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
-index 54091b7aea16..6df7f377d2f9 100644
---- a/drivers/s390/net/ism_drv.c
-+++ b/drivers/s390/net/ism_drv.c
-@@ -96,29 +96,32 @@ int ism_unregister_client(struct ism_client *client)
- 	int rc = 0;
- 
- 	mutex_lock(&ism_dev_list.mutex);
--	mutex_lock(&clients_lock);
--	clients[client->id] = NULL;
--	if (client->id + 1 == max_client)
--		max_client--;
--	mutex_unlock(&clients_lock);
- 	list_for_each_entry(ism, &ism_dev_list.list, list) {
- 		spin_lock_irqsave(&ism->lock, flags);
- 		/* Stop forwarding IRQs and events */
- 		ism->subs[client->id] = NULL;
- 		for (int i = 0; i < ISM_NR_DMBS; ++i) {
- 			if (ism->sba_client_arr[i] == client->id) {
--				pr_err("%s: attempt to unregister client '%s'"
--				       "with registered dmb(s)\n", __func__,
--				       client->name);
-+				WARN(1, "%s: attempt to unregister '%s' with registered dmb(s)\n",
-+				     __func__, client->name);
- 				rc = -EBUSY;
--				goto out;
-+				goto err_reg_dmb;
- 			}
- 		}
- 		spin_unlock_irqrestore(&ism->lock, flags);
- 	}
--out:
- 	mutex_unlock(&ism_dev_list.mutex);
- 
-+	mutex_lock(&clients_lock);
-+	clients[client->id] = NULL;
-+	if (client->id + 1 == max_client)
-+		max_client--;
-+	mutex_unlock(&clients_lock);
-+	return rc;
-+
-+err_reg_dmb:
-+	spin_unlock_irqrestore(&ism->lock, flags);
-+	mutex_unlock(&ism_dev_list.mutex);
- 	return rc;
+diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
+index b99b3cc283b6..55a3ac9d01e2 100644
+--- a/drivers/infiniband/core/verbs.c
++++ b/drivers/infiniband/core/verbs.c
+@@ -1880,6 +1880,13 @@ int ib_modify_qp_with_udata(struct ib_qp *ib_qp, struct ib_qp_attr *attr,
  }
- EXPORT_SYMBOL_GPL(ism_unregister_client);
+ EXPORT_SYMBOL(ib_modify_qp_with_udata);
+ 
++static void ib_get_width_and_speed(u32 netdev_speed, u32 lanes,
++				   u16 *speed, u8 *width)
++{
++	*width = ib_int_to_ib_width(lanes);
++	*speed = ib_eth_to_ib_speed(netdev_speed / lanes);
++}
++
+ int ib_get_eth_speed(struct ib_device *dev, u32 port_num, u16 *speed, u8 *width)
+ {
+ 	int rc;
+@@ -1902,10 +1909,16 @@ int ib_get_eth_speed(struct ib_device *dev, u32 port_num, u16 *speed, u8 *width)
+ 
+ 	if (!rc && lksettings.base.speed != (u32)SPEED_UNKNOWN) {
+ 		netdev_speed = lksettings.base.speed;
++		if (lksettings.lanes) {
++			ib_get_width_and_speed(netdev_speed, lksettings.lanes,
++					       speed, width);
++			return 0;
++		}
+ 	} else {
+ 		netdev_speed = SPEED_1000;
+-		pr_warn("%s speed is unknown, defaulting to %u\n", netdev->name,
+-			netdev_speed);
++		if (rc)
++			pr_warn("%s speed is unknown, defaulting to %u\n",
++				netdev->name, netdev_speed);
+ 	}
+ 
+ 	if (netdev_speed <= SPEED_1000) {
+diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+index 1e7774ac808f..7dc926ec7fee 100644
+--- a/include/rdma/ib_verbs.h
++++ b/include/rdma/ib_verbs.h
+@@ -552,6 +552,18 @@ static inline int ib_width_enum_to_int(enum ib_port_width width)
+ 	}
+ }
+ 
++static inline int ib_int_to_ib_width(u32 lanes)
++{
++	switch (lanes) {
++	case 1: return IB_WIDTH_1X;
++	case 2: return IB_WIDTH_2X;
++	case 4: return IB_WIDTH_4X;
++	case 8: return IB_WIDTH_8X;
++	case 12: return IB_WIDTH_12X;
++	default: return IB_WIDTH_1X;
++	}
++}
++
+ enum ib_port_speed {
+ 	IB_SPEED_SDR	= 1,
+ 	IB_SPEED_DDR	= 2,
+@@ -563,6 +575,20 @@ enum ib_port_speed {
+ 	IB_SPEED_NDR	= 128,
+ };
+ 
++static inline int ib_eth_to_ib_speed(u32 speed)
++{
++	switch (speed) {
++	case SPEED_2500: return IB_SPEED_SDR;
++	case SPEED_5000: return IB_SPEED_DDR;
++	case SPEED_10000: return IB_SPEED_FDR10;
++	case SPEED_14000: return IB_SPEED_FDR;
++	case SPEED_25000: return IB_SPEED_EDR;
++	case SPEED_50000: return IB_SPEED_HDR;
++	case SPEED_100000: return IB_SPEED_NDR;
++	default: return IB_SPEED_SDR;
++	}
++}
++
+ enum ib_stat_flag {
+ 	IB_STAT_FLAG_OPTIONAL = 1 << 0,
+ };
 -- 
-2.39.2
+2.30.0
 
