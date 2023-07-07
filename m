@@ -2,208 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C2074B6FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E6674B703
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbjGGTU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S233019AbjGGTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbjGGTUZ (ORCPT
+        with ESMTP id S229556AbjGGTXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:20:25 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0056F18B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:20:23 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-766b22593faso182319585a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 12:20:23 -0700 (PDT)
+        Fri, 7 Jul 2023 15:23:08 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B9D199F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:23:07 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7658430eb5dso221451585a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 12:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20221208.gappssmtp.com; s=20221208; t=1688757623; x=1691349623;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tI3ZmzlJ8v1yyhdsh409Oan9mJwrZdLHSmF+6lcsYDo=;
-        b=o6gsgUpVHX876p9nKUzMhUuL65DtNUr6D3gts1qCNw+BCcKfdoPowDa56n2Aw9cMWX
-         DQBS5WXsO5GqzKKgQMV0f3A99cUIL78bamPuqTDCAEVOE6P99Y6cw/0Cr8uMDg5ZRXaX
-         9GydJ/5hromEATQK1QXoaPiCSyHeu+D/xXL+r7UHnlLvy/PcKOK3adD1OKeg3A1vRvtP
-         6WoOsDNfyvX/qE3K8vrqEy0RiQ1dhwQer1tFKIyEQAnK4a755igvWykytipr6pmA7Yk3
-         znV2e2Lw7tSiud1OieO9cRl8UbcWVmXYst+8MSRGPzTTrMenVGuedzYCf4oCcGZGkW5H
-         a11g==
+        d=chromium.org; s=google; t=1688757786; x=1691349786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1jc8MxfBFrqlxL1JRDuemqx+BlSeG0AElWZoXGUcoH4=;
+        b=O+qvecf043fcQ8KFHKE5jWGIuEq0Pzl6mJyowjQhwz2ugwfGyTTUSar3bTPgidns0T
+         0f3NBNLx1U7b0c6pVLHFw0RukdjxJY0vYpXaOv5fgbkCQ3tGocIWntcggEJ2uSAiwegz
+         TP0kXLbnRS99uOCECr67/reJRzh8OcWVQMRQY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688757623; x=1691349623;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tI3ZmzlJ8v1yyhdsh409Oan9mJwrZdLHSmF+6lcsYDo=;
-        b=DOiU5Bmr7xU75jNqwBymqP1IayPhPbHBoUYs7cD/93+UmbfUtf3mCZmQfIETZb0WpJ
-         a9sRgK+pUMxWITORqgBCLYHzXGoX5BdnR4m73RiVVZ1dkcXDMDjlkj9Lli7Ldc19txTQ
-         zAg3Z1qrzYVtxPIN2IKZ0Xz8BaFIxQcbefpd0XB1xl2JmoCvIkfpHYR3U5J+JNhc99js
-         FEnVdF/2VR2zADgiKbpx3Io+2OPYNRv7yTse+vI69AjYgmKRHbpYq3OOr1AdyG+auCTB
-         vGzIwMRLQf4s6uGp1k3TMZ4mMc25YR88tKp0u9W9iP/nZq7HDdJgr51IdNyoStc0CIX2
-         2PDw==
-X-Gm-Message-State: ABy/qLYaup1yOPSmnmOjNomI98CAsWs/Urbfi0WLjVr/4vLKk+t3lGTW
-        nBNiBbQDEfNaP227O9dgiVe7kQ==
-X-Google-Smtp-Source: APBJJlG27mC1OWJZZUJrFwnyL6NsblWizZzqY8Es3mmhufpkYjVVzxSpthf8EHPs/Bw2jDKTlPK48g==
-X-Received: by 2002:a37:b441:0:b0:765:6782:cafd with SMTP id d62-20020a37b441000000b007656782cafdmr4172788qkf.69.1688757622996;
-        Fri, 07 Jul 2023 12:20:22 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
-        by smtp.gmail.com with ESMTPSA id w27-20020a05620a129b00b00767c4a1e9d3sm102644qki.76.2023.07.07.12.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 12:20:22 -0700 (PDT)
-Message-ID: <575b5a7bd48b3fab7a33c7c25962b36b2ccf6b14.camel@ndufresne.ca>
-Subject: Re: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Hsia-Jun Li <randy.li@synaptics.com>, linux-media@vger.kernel.org
-Cc:     ayaka@soulik.info, hans.verkuil@cisco.com, tfiga@chromium.org,
-        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        hiroh@chromium.org, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 07 Jul 2023 15:20:21 -0400
-In-Reply-To: <20230704040044.681850-3-randy.li@synaptics.com>
-References: <20230704040044.681850-1-randy.li@synaptics.com>
-         <20230704040044.681850-3-randy.li@synaptics.com>
+        d=1e100.net; s=20221208; t=1688757786; x=1691349786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1jc8MxfBFrqlxL1JRDuemqx+BlSeG0AElWZoXGUcoH4=;
+        b=VXysBwAsPhfchWgHNZVQRglE92QOqp5xaamkjGU7g6OdgG2UglqpIQZLFN7ygYUBnu
+         9bNy1Aa/CvtQYXdWxlbkTLBBlKJ99vkEiVw+wJkQ1vy+EdqY7fjQX1v4arB1CsqDsfN1
+         JbgqtvRQv4xqZeputjPj0vTp0Gg4Y2dvQ9U+pVezpLbkvlOkPyxG/ghmZ6GQW5QNlTnU
+         ARTcyvbpFbdgrkp6ypIE0AzLusRKP8H97147PORZBwCpD9Um/hYrCWODyLa6HsmDXXqU
+         bFSidyrYgsFvmgfBVoO5uNsHBPr4RoKfg+MUVFEmouhJMW7zwYwKcX+d+TCMXCkgp4yn
+         RKXA==
+X-Gm-Message-State: ABy/qLbJgrTNv6okzbnjINLwPWZIc4F+zD58EavZK4yCB8vKH1AiPTJF
+        ayf2Ilt5UOWMmnplW9OMATtbypXtYA+71zUWlHRYmg==
+X-Google-Smtp-Source: APBJJlEswutdWPX1UcnVWzbKzZRmKGnwy8FAhHjdqFruBu+dTBQdo/DucAGkKmgqmjWbYEGiO+Is5YMvpdgYkNijJCU=
+X-Received: by 2002:a0c:9d45:0:b0:636:39ed:4dce with SMTP id
+ n5-20020a0c9d45000000b0063639ed4dcemr5230055qvf.20.1688757786150; Fri, 07 Jul
+ 2023 12:23:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230707065318.18681-1-utkarsh.h.patel@intel.com> <20230707065318.18681-2-utkarsh.h.patel@intel.com>
+In-Reply-To: <20230707065318.18681-2-utkarsh.h.patel@intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Fri, 7 Jul 2023 12:22:54 -0700
+Message-ID: <CACeCKae0Vq2g9jq+69RodmJyDo7+tUEunp3JXS7vw1y7YVhzhw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] platform/chrome: cros_ec_typec: Configure Retimer
+ cable type
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, bleung@chromium.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 04 juillet 2023 =C3=A0 12:00 +0800, Hsia-Jun Li a =C3=A9crit=C2=A0=
-:
-> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
->=20
-> Many drivers have to create its own buf_struct for a
-> vb2_queue to track such a state. Also driver has to
-> iterate over rdy_queue every times to find out a buffer
-> which is not sent to hardware(or firmware), this new
-> list just offers the driver a place to store the buffer
-> that hardware(firmware) has acknowledged.
->=20
-> One important advance about this list, it doesn't like
-> rdy_queue which both bottom half of the user calling
-> could operate it, while the v4l2 worker would as well.
-> The v4l2 core could only operate this queue when its
-> v4l2_context is not running, the driver would only
-> access this new hw_queue in its own worker.
+Hi Utkarsh,
 
-That's an interesting proposal. I didn't like leaving decoded frames into t=
-he
-rdy_queue, but removing them required me to have my own list, so that I can
-clean it up if some buffers are never displayed.
-
-We'll see if we can use this into wave5.
-
->=20
-> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+On Thu, Jul 6, 2023 at 11:51=E2=80=AFPM Utkarsh Patel <utkarsh.h.patel@inte=
+l.com> wrote:
+>
+> Connector class driver only configure cable type active or passive.
+> Configure if the cable type is retimer or redriver with this change.
+> This detail will be provided as a part of cable discover mode VDO.
+>
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
 > ---
->  drivers/media/v4l2-core/v4l2-mem2mem.c | 25 +++++++++++++++++--------
->  include/media/v4l2-mem2mem.h           | 10 +++++++++-
->  2 files changed, 26 insertions(+), 9 deletions(-)
->=20
-> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-=
-core/v4l2-mem2mem.c
-> index c771aba42015..b4151147d5bd 100644
-> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> @@ -321,15 +321,21 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_de=
-v *m2m_dev,
->  		goto job_unlock;
->  	}
-> =20
-> -	src =3D v4l2_m2m_next_src_buf(m2m_ctx);
-> -	dst =3D v4l2_m2m_next_dst_buf(m2m_ctx);
-> -	if (!src && !m2m_ctx->out_q_ctx.buffered) {
-> -		dprintk("No input buffers available\n");
-> -		goto job_unlock;
-> +	if (list_empty(&m2m_ctx->out_q_ctx.hw_queue)) {
-> +		src =3D v4l2_m2m_next_src_buf(m2m_ctx);
+> Changes in v2:
+> - Implemented use of cable discover mode vdo.
+> - Removed adittional changes to host command.
+>
+> Changes in v3:
+> - Changed the return method in cros_typec_get_cable_vdo.
+> - Changed passed parameters in cros_typec_get_cable_vdo.
+> - Corrected definition for unsigned integers as kerenl standard.
+> - Assigning cable_vdo values directly in to cable_mode.
+> - Removed unncessary checks for Retimer cable type.
+> ---
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 26 ++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index 25f9767c28e8..0ea085fec55a 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -406,6 +406,20 @@ static int cros_typec_usb_safe_state(struct cros_typ=
+ec_port *port)
+>         return ret;
+>  }
+>
+> +static int cros_typec_get_cable_vdo(struct cros_typec_port *port, u16 sv=
+id)
+Return type should be u32.
+Also, since you're not using common return patterns (-ve return value), ple=
+ase
+add a kernel doc comment specifying what the return value holds ("0 if VDO
+is not found" etc.)
+
+> +{
+> +       struct list_head *head =3D &port->plug_mode_list;
+> +       struct cros_typec_altmode_node *node;
+> +       int ret =3D 0;
 > +
-> +		if (!src && !m2m_ctx->out_q_ctx.buffered) {
-> +			dprintk("No input buffers available\n");
-> +			goto job_unlock;
-> +		}
->  	}
-> -	if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-> -		dprintk("No output buffers available\n");
-> -		goto job_unlock;
+> +       list_for_each_entry(node, head, list) {
+> +               if (node->amode->svid =3D=3D svid)
+> +                       return node->amode->vdo;
+> +       }
 > +
-> +	if (list_empty(&m2m_ctx->cap_q_ctx.hw_queue)) {
-> +		dst =3D v4l2_m2m_next_dst_buf(m2m_ctx);
-> +		if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-> +			dprintk("No output buffers available\n");
-> +			goto job_unlock;
-> +		}
->  	}
-> =20
->  	m2m_ctx->new_frame =3D true;
-> @@ -896,6 +902,7 @@ int v4l2_m2m_streamoff(struct file *file, struct v4l2=
-_m2m_ctx *m2m_ctx,
->  	INIT_LIST_HEAD(&q_ctx->rdy_queue);
->  	q_ctx->num_rdy =3D 0;
->  	spin_unlock_irqrestore(&q_ctx->rdy_spinlock, flags);
-> +	INIT_LIST_HEAD(&q_ctx->hw_queue);
-> =20
->  	if (m2m_dev->curr_ctx =3D=3D m2m_ctx) {
->  		m2m_dev->curr_ctx =3D NULL;
-> @@ -1234,6 +1241,8 @@ struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct v4l2_=
-m2m_dev *m2m_dev,
-> =20
->  	INIT_LIST_HEAD(&out_q_ctx->rdy_queue);
->  	INIT_LIST_HEAD(&cap_q_ctx->rdy_queue);
-> +	INIT_LIST_HEAD(&out_q_ctx->hw_queue);
-> +	INIT_LIST_HEAD(&cap_q_ctx->hw_queue);
->  	spin_lock_init(&out_q_ctx->rdy_spinlock);
->  	spin_lock_init(&cap_q_ctx->rdy_spinlock);
-> =20
-> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-> index d6c8eb2b5201..2342656e582d 100644
-> --- a/include/media/v4l2-mem2mem.h
-> +++ b/include/media/v4l2-mem2mem.h
-> @@ -53,9 +53,16 @@ struct v4l2_m2m_dev;
->   *	processed
->   *
->   * @q:		pointer to struct &vb2_queue
-> - * @rdy_queue:	List of V4L2 mem-to-mem queues
-> + * @rdy_queue:	List of V4L2 mem-to-mem queues. If v4l2_m2m_buf_queue() i=
-s
-> + *		called in struct vb2_ops->buf_queue(), the buffer enqueued
-> + *		by user would be added to this list.
->   * @rdy_spinlock: spin lock to protect the struct usage
->   * @num_rdy:	number of buffers ready to be processed
-> + * @hw_queue:	A list for tracking the buffer is occupied by the hardware
-> + * 		(or device's firmware). A buffer could only be in either
-> + * 		this list or @rdy_queue.
-> + * 		Driver may choose not to use this list while uses its own
-> + * 		private data to do this work.
+> +       return ret;
+> +}
+> +
+>  /*
+>   * Spoof the VDOs that were likely communicated by the partner for TBT a=
+lt
+>   * mode.
+> @@ -416,6 +430,7 @@ static int cros_typec_enable_tbt(struct cros_typec_da=
+ta *typec,
+>  {
+>         struct cros_typec_port *port =3D typec->ports[port_num];
+>         struct typec_thunderbolt_data data;
+> +       u32 cable_vdo;
+If we're using this in only 1 place, we can just inline it completely:
+          data.cable_mode |=3D cros_typec_get_cable_vdo(port, USB_TYPEC_TBT=
+_SID);
 
-What's the threading protection around this one ? Also, would it be possibl=
-e to
-opt-in that the driver cleanup that list automatically after streamoff has =
-been
-executed ?
+>         int ret;
+>
+>         if (typec->pd_ctrl_ver < 2) {
+> @@ -432,6 +447,10 @@ static int cros_typec_enable_tbt(struct cros_typec_d=
+ata *typec,
+>
+>         /* Cable Discover Mode VDO */
+>         data.cable_mode =3D TBT_MODE;
+> +
+> +       cable_vdo =3D cros_typec_get_cable_vdo(port, USB_TYPEC_TBT_SID);
+> +       data.cable_mode |=3D cable_vdo;
+> +
+>         data.cable_mode |=3D TBT_SET_CABLE_SPEED(pd_ctrl->cable_speed);
+>
+>         if (pd_ctrl->control_flags & USB_PD_CTRL_OPTICAL_CABLE)
+> @@ -513,17 +532,22 @@ static int cros_typec_enable_usb4(struct cros_typec=
+_data *typec,
+>  {
+>         struct cros_typec_port *port =3D typec->ports[port_num];
+>         struct enter_usb_data data;
+> +       u32 cable_vdo;
+>
+>         data.eudo =3D EUDO_USB_MODE_USB4 << EUDO_USB_MODE_SHIFT;
+>
+> +       cable_vdo =3D cros_typec_get_cable_vdo(port, USB_TYPEC_TBT_SID);
 
-One thing the doc is missing, is that HW buffer are actually flagged as ACT=
-IVE
-buffer vb2, there is a strong link between the two concept, and the doc sho=
-uld
-take care.
+Same deal here, if we're only using this variable in one place, just
+inline the call
+inside the else if() statement.
 
->   * @buffered:	is the queue buffered?
->   *
->   * Queue for buffers ready to be processed as soon as this
-> @@ -68,6 +75,7 @@ struct v4l2_m2m_queue_ctx {
->  	struct list_head	rdy_queue;
->  	spinlock_t		rdy_spinlock;
->  	u8			num_rdy;
-> +	struct list_head	hw_queue;
->  	bool			buffered;
->  };
-> =20
-
+> +
+>         /* Cable Speed */
+>         data.eudo |=3D pd_ctrl->cable_speed << EUDO_CABLE_SPEED_SHIFT;
+>
+>         /* Cable Type */
+>         if (pd_ctrl->control_flags & USB_PD_CTRL_OPTICAL_CABLE)
+>                 data.eudo |=3D EUDO_CABLE_TYPE_OPTICAL << EUDO_CABLE_TYPE=
+_SHIFT;
+> -       else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+> +       else if (cable_vdo & TBT_CABLE_RETIMER)
+>                 data.eudo |=3D EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYP=
+E_SHIFT;
+> +       else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+> +               data.eudo |=3D EUDO_CABLE_TYPE_RE_DRIVER << EUDO_CABLE_TY=
+PE_SHIFT;
+>
+>         data.active_link_training =3D !!(pd_ctrl->control_flags &
+>                                        USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
+> --
+> 2.25.1
+>
