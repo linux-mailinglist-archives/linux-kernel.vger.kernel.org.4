@@ -2,116 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F7574B6DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B361074B6E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 21:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjGGTG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 15:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S232888AbjGGTGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 15:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjGGTG1 (ORCPT
+        with ESMTP id S232827AbjGGTGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 15:06:27 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515B9269E;
-        Fri,  7 Jul 2023 12:05:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id A795E5C00D6;
-        Fri,  7 Jul 2023 15:05:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 07 Jul 2023 15:05:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688756711; x=1688843111; bh=S/
-        sKC+j2TRg2RQQy0ZV7Lc1gET+LltLUonVflsJid7o=; b=XTjGP7IVmi6yN46O7T
-        Ci0BcMSjK9Yl6Dg2Zk7MChMgoUHr/K+qhSkiY3sVhTmkintjM8rYAfWSFaEUaQym
-        YyO6w1vcddODF6YxT47uEcJytirJE5F/fF85WomWpg6Cfzs7KQBpJSQxheMMVZ+H
-        mZNoS0wcVu8cV5o85EcarTlsr/5Vqf9AY3sN6UcjP5h1DNcXXS2BGynAH6jWW8zy
-        1B/fbQa60RxeeWnw5xnxnVJigIx94KNWqyAzXxrtgA16fHFn21wr+a7g91QlA8Fp
-        fsHpG4VoxM07qRYJB4oIZ7fg+wlgYux+1wAAnLchrNfue0NzyM7SSN516V6Uv0WK
-        LTLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688756711; x=1688843111; bh=S/sKC+j2TRg2R
-        QQy0ZV7Lc1gET+LltLUonVflsJid7o=; b=hSforSkRer7o84ADH2YsHbx2ZAoPR
-        wzMqmFd+sBroTfYKoJ3IUojG+foqlNogRBvDU+qi8p0vgZgmpvb5GqAbkAHIyNBH
-        rtl6VhDDCGE0DBrddgzEmSCm0c508T5H5YdcLygSvuxdjS2ZZ6WZWF5R0fstlzbi
-        wJd4RG+zxa50xaVHf6rx30nCC1akuW/56sYSNshEyYbfLVpaIglT/MxrNIpoTHlD
-        3G/5FPp+TQihS2M12cV1SDdWFrXAQNmdui/hamqFoGXrS7Qv+cRoljNyXQ2XT0JJ
-        VFmxT4rQp+dlQ6N7vI8zmkvmINwnVG4PFIC5dw44wduKY1krcY8UAXHHQ==
-X-ME-Sender: <xms:5mGoZKwEcncMygIYkFErlDqR-j3pBWPufhGNzbVSgMnv-CuP0eVQmA>
-    <xme:5mGoZGShRApNxSrKZcVFeulHfLzTKltiPr8f65iIvY_JHjolBfWi2ZaMSXYaRHc0v
-    7VQSt5C6Ztau79D7KA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddugddufeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5mGoZMXnyH8QeZquYT8O7HkU-OGrPIisdsi1IoHPE5cdlceknXAcvQ>
-    <xmx:5mGoZAgZRa3xqgAgqD8BJS-S2srYocMIm-slw6Mght1ZIpcl7mAbMA>
-    <xmx:5mGoZMCcjBoh6pCBUEaCWuDueyZyMRF1iZ-cM3LISDTvv9JwCXCXNQ>
-    <xmx:52GoZKBMabj1UfKaCW41m2q7QGKftXrE7TEAp5dytvrK5JI_F3rFZw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8B6A7B60086; Fri,  7 Jul 2023 15:05:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <653aafb6-ddf5-496f-a780-6d5214a3bd00@app.fastmail.com>
-In-Reply-To: <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-4-ulf.hansson@linaro.org>
- <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
- <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
-Date:   Fri, 07 Jul 2023 21:04:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>
-Cc:     "Olof Johansson" <olof@lixom.net>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Kevin Hilman" <khilman@baylibre.com>,
-        "Jerome Brunet" <jbrunet@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the genpd dir
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 7 Jul 2023 15:06:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6927E2727
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 12:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VcC79p5FnMDwACqVyoSz3qMUxvEDx9IUffDrpYxsszc=; b=N8ZEPVxHT83vnm3M+WmDnfzVB6
+        dhEiuQUir9TbVm5ORKOEIqSiak5ggPVHFoveW3X0jNSxGZ6dvIqWkZy09g8SjKrKgMn/igz+oRIj2
+        FbZBWcko1aH6e7fJJflty4mm1y+OdN76mXh/Yuu8g5azTi6aQZFXiflsb4rV7alUEEGKyln9vVTdZ
+        2+i3q4Z6FBzDkB3NFJUgSPOzX79bsOr1EaUB4wMoIN1Q7Xg01y0PRRPc/IUOF3SGKWBBzCWTKfwlG
+        tKVvAg4LpUrWI48B71r2gfZ+cjDkQ3nqIWCzLOC+Cg80MBsmFYSbWqxMPjGYNf5Vr92B3R7XdNnmB
+        hxeE8I3Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qHqmG-00CHRg-A1; Fri, 07 Jul 2023 19:06:00 +0000
+Date:   Fri, 7 Jul 2023 20:06:00 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yuzhao@google.com,
+        ryan.roberts@arm.com, shy828301@gmail.com,
+        akpm@linux-foundation.org
+Subject: Re: [RFC PATCH 0/3] support large folio for mlock
+Message-ID: <ZKhiGLpIWi5Z2WnY@casper.infradead.org>
+References: <20230707165221.4076590-1-fengwei.yin@intel.com>
+ <ZKhK1Ic1KCdOLRYm@casper.infradead.org>
+ <4bb39d6e-a324-0d85-7d44-8e8a37a1cfec@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4bb39d6e-a324-0d85-7d44-8e8a37a1cfec@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023, at 16:54, Ulf Hansson wrote:
-> On Fri, 7 Jul 2023 at 16:42, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+On Fri, Jul 07, 2023 at 08:54:33PM +0200, David Hildenbrand wrote:
+> On 07.07.23 19:26, Matthew Wilcox wrote:
+> > On Sat, Jul 08, 2023 at 12:52:18AM +0800, Yin Fengwei wrote:
+> > > This series identified the large folio for mlock to two types:
+> > >    - The large folio is in VM_LOCKED VMA range
+> > >    - The large folio cross VM_LOCKED VMA boundary
+> > 
+> > This is somewhere that I think our fixation on MUST USE PMD ENTRIES
+> > has led us astray.  Today when the arguments to mlock() cross a folio
+> > boundary, we split the PMD entry but leave the folio intact.  That means
+> > that we continue to manage the folio as a single entry on the LRU list.
+> > But userspace may have no idea that we're doing this.  It may have made
+> > several calls to mmap() 256kB at once, they've all been coalesced into
+> > a single VMA and khugepaged has come along behind its back and created
+> > a 2MB THP.  Now userspace calls mlock() and instead of treating that as
+> > a hint that oops, maybe we shouldn't've done that, we do our utmost to
+> > preserve the 2MB folio.
+> > 
+> > I think this whole approach needs rethinking.  IMO, anonymous folios
+> > should not cross VMA boundaries.  Tell me why I'm wrong.
+> 
+> I think we touched upon that a couple of times already, and the main issue
+> is that while it sounds nice in theory, it's impossible in practice.
+> 
+> THP are supposed to be transparent, that is, we should not let arbitrary
+> operations fail.
+> 
+> But nothing stops user space from
+> 
+> (a) mmap'ing a 2 MiB region
+> (b) GUP-pinning the whole range
+> (c) GUP-pinning the first half
+> (d) unpinning the whole range from (a)
+> (e) munmap'ing the second half
+> 
+> 
+> And that's just one out of many examples I can think of, not even
+> considering temporary/speculative references that can prevent a split at
+> random points in time -- especially when splitting a VMA.
+> 
+> Sure, any time we PTE-map a THP we might just say "let's put that on the
+> deferred split queue" and cross fingers that we can eventually split it
+> later. (I was recently thinking about that in the context of the mapcount
+> ...)
+> 
+> It's all a big mess ...
 
->> > @@ -2,7 +2,4 @@
->> >   obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
->> >   obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
->> >   obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
->> > -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
->> >   obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
->> > -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
->> > -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
->>
->> I've a few changes for v6.6, how shall we handle that ?
->
-> I think we should continue to use the soc tree until v6.6-rc1 (or if
-> Arnd have some other ideas), there are some more thoughts around this
-> in the cover letter.
+Oh, I agree, there are always going to be circumstances where we realise
+we've made a bad decision and can't (easily) undo it.  Unless we have a
+per-page pincount, and I Would Rather Not Do That.  But we should _try_
+to do that because it's the right model -- that's what I meant by "Tell
+me why I'm wrong"; what scenarios do we have where a user temporarilly
+mlocks (or mprotects or ...) a range of memory, but wants that memory
+to be aged in the LRU exactly the same way as the adjacent memory that
+wasn't mprotected?
 
-Right, I think I can handle the merge conflicts as I add stuff
-to the soc tree.
+GUP-pinning is different, and I don't think GUP-pinning should split
+a folio.  That's a temporary use (not FOLL_LONGTERM), eg, we're doing
+tcp zero-copy or it's the source/target of O_DIRECT.  That's not an
+instruction that this memory is different from its neighbours.
 
-     Arnd
+Maybe we end up deciding to split folios on GUP-pin.  That would be
+regrettable.
