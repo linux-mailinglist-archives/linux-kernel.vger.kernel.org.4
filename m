@@ -2,149 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AA574B81F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD8574B823
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 22:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjGGUiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 16:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S232560AbjGGUjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 16:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjGGUh5 (ORCPT
+        with ESMTP id S232199AbjGGUj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 16:37:57 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16891986
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:37:56 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so25173245e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:37:56 -0700 (PDT)
+        Fri, 7 Jul 2023 16:39:28 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D2F2123
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 13:38:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9741caaf9d4so269861266b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 13:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688762275; x=1691354275;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1688762333; x=1691354333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=INi3JugwL05IgttziwnbGPvMFEJjhzc+9jyw1opOkqE=;
-        b=ARupnTbks4h3FT95+Y36hjBDayLzdEXaLdFPPyr+ek3g+mJSB/XJYX++SAyGlBMAb/
-         jMfh1kQ1dMnmOwlxCYORpntRz6a6D/j5C9kxQXyv8STSihhLMggreKVFyIoh8b0QFI6j
-         gOxVQ2XqTMrmwEybx7nUyYG67ccuGB9YL3qp9GVxZSBcGQyGqISD+h7r6O86bztPtrab
-         woGGaQfuANLzpBnzv5Y2yTEZLYbKnJI3JxG1tsAsASUixNLJwFUMrjl9PVkTf0TvbWJe
-         JGmMA3SmmkylQsYK1qwa6i7SVb1C0Ikl5qsXyb0wUHiBtwbOsCsL+yqIYY0wA/FdBj8E
-         EOaw==
+        bh=j5GzoeG98fEPpoz1Cl1g4Qg71twRkm1tM+omwnJ1Pnk=;
+        b=WH7E9lv9EnTxKkw+kdIYBI9TKdORaKmjvGgb3pPV847969g1QlrNpJzaggCcNI2bbg
+         h+aTRRezJFDZNa2ZALyMVsdt2NvoXYZGyWbcku/1E36NYHjSECN46W7AD+0oz1803eA4
+         lzdBpVev9ZPerFAPGyWWO/aHlqgZl1OgHopnYcusk3HaKmwHFdBjqlJcsIoNJzycsTn1
+         kfnhJVTTNJRQ2wO1kfChdtz/wWwRdt88CkvoYcHmynwgWZRDLPCqtSlJvsAVO5fi2LMu
+         NHRdL3HXNn9cKscccOT7hsBazJ5f0Fua/tERjXEy/liWWxehP1UtUX7sQbJENxFBTTsl
+         H3dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688762275; x=1691354275;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688762333; x=1691354333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=INi3JugwL05IgttziwnbGPvMFEJjhzc+9jyw1opOkqE=;
-        b=eXcy/ZTgtBngMVV+YusdaKoUroaY09QgZzAAXaHWaa4ik19TaShAJueVZzTYrPztjx
-         GznOF66iQS8c/Ie+gl6p2LDWlLd0uxIlpIsrA6ncrRcuiyT5A0oq6+T2LOjCdGwemGyS
-         aeUUOIZjO64ApyZnbdl0Gvcm8B9pGHidjat7kgd+K3UYsfeelFatTYG1/VC0AgpbRA0M
-         fGI2csTo7tAj9EDlNO67vY+BRz3GuP2cyBVybnSG5GBmcPKxDvr2ZaB9SwCaxi/eGhzP
-         jrA80TMPb6rouqzM/F7TRJ5iYZjmEGwL80XCEJhfPgErgFEqfHJDXokvcllH9ZjgqLJn
-         ngLA==
-X-Gm-Message-State: ABy/qLZy1yE6INNyg2vclAsyNv3pQRRu14XUdP/moeYZjfyyx/xQ9wR7
-        Oa/X10JVSaQF4IbkzJXAHJWdfoFMbxML8NGVD54=
-X-Google-Smtp-Source: APBJJlE3ves+dG+pjqCsX+JqO34D54faHcVRS3DfpFlTo0Qi/49l4OTkpixz/vyc/5OcmUfGCN7guA==
-X-Received: by 2002:a05:6000:887:b0:313:f4b9:99cc with SMTP id cs7-20020a056000088700b00313f4b999ccmr5156584wrb.68.1688762275135;
-        Fri, 07 Jul 2023 13:37:55 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id i4-20020adfefc4000000b003143be36d99sm5260674wrp.58.2023.07.07.13.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 13:37:54 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        linux-kernel@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Dhruva Gole <d-gole@ti.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH v2 4/4] thermal/drivers/int340x: Do not check the thermal zone state
-Date:   Fri,  7 Jul 2023 22:37:31 +0200
-Message-Id: <20230707203731.848188-5-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230707203731.848188-1-daniel.lezcano@linaro.org>
-References: <20230707203731.848188-1-daniel.lezcano@linaro.org>
+        bh=j5GzoeG98fEPpoz1Cl1g4Qg71twRkm1tM+omwnJ1Pnk=;
+        b=kN2Puc762JQMM5BCsxI9ZvxZMnvAFjWtzGr2gCOk4ahAWh+iypZ3XJO8dg4irxO1hM
+         YWTIQcy8eCZeoof8Iab1++sO//OhBiGkErBhlmhJhgBay0T8AhrcaocWjaPreEfl6pif
+         X/eYH5+LyXCV+WGAFleT06/dUbCPTaCxe6A6XgwARPzFztzl4pW1cjtaMn+T5Rxt45Mb
+         JI/kODIj8Vd7geA4TrWZhkwVZxOAPobVRbhT+Nd0A4b9T8aQAUJDwNAO/y5JbxOQheyv
+         XadVxllFob1fm1FcwMySXuwNm2kL8E51+FQIBq/dIMUZi9AE8kkxCJ0tN7AUkGQEkzJo
+         sqWA==
+X-Gm-Message-State: ABy/qLYdiuA0eE8Y4wSmE2Zb7s38V258TyFaQQNv0eRZbmYQ6QPM74fQ
+        nB6/FgFIQjBXlvrwSAPTPg5iJ+Or2WHneBeb+pZ2vg==
+X-Google-Smtp-Source: APBJJlGvHGSDao1yQTFp/8AttfmOyAketz902pkJlwD7mID8tlI+W7elLQoXUGZjItFKxk9cWhaH/7FWxQqXJBHz7a0=
+X-Received: by 2002:a17:906:1001:b0:962:46d7:c8fc with SMTP id
+ 1-20020a170906100100b0096246d7c8fcmr5864601ejm.21.1688762333216; Fri, 07 Jul
+ 2023 13:38:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230706225037.1164380-1-axelrasmussen@google.com>
+ <20230706225037.1164380-8-axelrasmussen@google.com> <ZKgWOYuIdqa25Qcs@x1n> <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
+In-Reply-To: <CAJHvVcj-3gUC3dx4LAVnNr-zgo8+cwjGNafQ480EhDifojrcRA@mail.gmail.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 7 Jul 2023 13:38:16 -0700
+Message-ID: <CAJHvVci6qCv+d7Hz0QkqeuEZze0OFJt0P9qnWgA_cgDeaLmptQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] selftests/mm: refactor uffd_poll_thread to allow
+ custom fault handlers
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is accessing the thermal zone state to ensure the state is
-different from the one we want to set.
+On Fri, Jul 7, 2023 at 10:03=E2=80=AFAM Axel Rasmussen <axelrasmussen@googl=
+e.com> wrote:
+>
+> On Fri, Jul 7, 2023 at 6:42=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
+:
+> >
+> > On Thu, Jul 06, 2023 at 03:50:35PM -0700, Axel Rasmussen wrote:
+> > > @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
+> > >  {
+> > >       void *area;
+> > >       unsigned long nr;
+> > > -     struct uffd_args args[nr_cpus];
+> > > +     struct uffd_args *args;
+> > >       uint64_t mem_size =3D nr_pages * page_size;
+> > >
+> > > +     args =3D calloc(nr_cpus, sizeof(struct uffd_args));
+> > > +     if (!args)
+> > > +             err("allocating args array failed");
+> >
+> > This is trivial, but I think I requested a "free" (or keep it allocate =
+on
+> > stack) in previous version but it didn't get a response on why we canno=
+t
+> > and it kept going..  could you help explain?
+>
+> Oh, sorry! I had meant to change this after our discussion, and simply
+> overlooked it while reworking the patches.
+>
+> I'll include this change in a v4 which also addresses e.g. the
+> comments on commit 1.
 
-We don't want the driver to access the thermal zone device internals.
+Ah, so I tried switching back to the {0} initializer, and was reminded
+why I didn't do that in v1. :) Ignoring the missing braces warning I
+talked about before, using {0} here is actually an error
+("variable-sized object may not be initialized") because this is a
+variable sized array (nr_cpus isn't constant). So, that option is out.
 
-Actually, the thermal core code already checks if the thermal zone's
-state is different before calling this function, thus this check is
-duplicate.
+I'm not a huge fan of adding the free() cleanup and dealing with all
+of the err() calls this function has.
 
-Remove it.
+Originally I switched to calloc() because I'm not a big fan of VLAs
+anyway. But, as a compromise in v4 I'll leave it a VLA, and switch to
+memset() for initializing it.
 
-Acked-by: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- .../intel/int340x_thermal/int3400_thermal.c   | 32 ++++++++-----------
- 1 file changed, 14 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 72a6e28ded2e..c40b03d6c29f 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -503,32 +503,28 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
- {
- 	struct int3400_thermal_priv *priv = thermal_zone_device_priv(thermal);
- 	int result = 0;
-+	int enabled;
- 
- 	if (!priv)
- 		return -EINVAL;
- 
--	if (mode != thermal->mode) {
--		int enabled;
-+	enabled = mode == THERMAL_DEVICE_ENABLED;
- 
--		enabled = mode == THERMAL_DEVICE_ENABLED;
--
--		if (priv->os_uuid_mask) {
--			if (!enabled) {
--				priv->os_uuid_mask = 0;
--				result = set_os_uuid_mask(priv, priv->os_uuid_mask);
--			}
--			goto eval_odvp;
-+	if (priv->os_uuid_mask) {
-+		if (!enabled) {
-+			priv->os_uuid_mask = 0;
-+			result = set_os_uuid_mask(priv, priv->os_uuid_mask);
- 		}
--
--		if (priv->current_uuid_index < 0 ||
--		    priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
--			return -EINVAL;
--
--		result = int3400_thermal_run_osc(priv->adev->handle,
--						 int3400_thermal_uuids[priv->current_uuid_index],
--						 &enabled);
-+		goto eval_odvp;
- 	}
- 
-+	if (priv->current_uuid_index < 0 ||
-+	    priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
-+		return -EINVAL;
-+
-+	result = int3400_thermal_run_osc(priv->adev->handle,
-+					 int3400_thermal_uuids[priv->current_uuid_index],
-+					 &enabled);
- eval_odvp:
- 	evaluate_odvp(priv);
- 
--- 
-2.34.1
-
+>
+> >
+> > --
+> > Peter Xu
+> >
