@@ -2,156 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2643674AC1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61B574AC26
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 09:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbjGGHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 03:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S232704AbjGGHpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 03:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjGGHo2 (ORCPT
+        with ESMTP id S232319AbjGGHo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:44:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EF51BF8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:44:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 92F951FDC8;
-        Fri,  7 Jul 2023 07:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688715865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WUox90kNbHGDz0cSQfHjWRs53Yp892D2brDRNpzZUVg=;
-        b=osr2LlfxpS1y5w1uTxpMZExb/1Mo/XHJjybtkXJatTNRQS7NUEdxkgJlkzC6auvrsxLBWq
-        1SiE6Zx4KM7/JTS++DIiPZyU6tpltf0vHpX9vwu8Tea0chFq12PkaaTc4uOXIaFgRRd5YW
-        jev7Kv+ip0IuoUBSS5NJCOUHsYnZ4Ws=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688715865;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WUox90kNbHGDz0cSQfHjWRs53Yp892D2brDRNpzZUVg=;
-        b=DE4EZSmQzAXIOO1Tyvpno7Vp59tlJ8+D6vqWmCGYp4A0NHseRqjvHpXYdMeYC7NS/993QL
-        AH/zmQGQ24WyOYBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6660A139E0;
-        Fri,  7 Jul 2023 07:44:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IWX/F1nCp2QZJQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 07 Jul 2023 07:44:25 +0000
-Message-ID: <15b9cfd1-c0ae-3fcf-0108-0f617505903c@suse.de>
-Date:   Fri, 7 Jul 2023 09:44:24 +0200
+        Fri, 7 Jul 2023 03:44:57 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D2F2127
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 00:44:48 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3677g95J026286;
+        Fri, 7 Jul 2023 07:44:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
+ from : to : cc : subject : in-reply-to : references : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2XjSjii12jEZEYqR5hgZ9WvQJc2jKWvoolshRGTF8XU=;
+ b=KuNqyKQM8gT5ZCP7jqSnav2GUKIK7lA+mI924UnJTmdoKtIlf7rAFUXL1ovRAN4YdYsw
+ O8+H7nqxXv9NMGec5tyuSdECdSoVQwYF6jCBWvVr53dhByJ0+zSlLc3P1oH2ZYyh0Ltl
+ c5efuVbYJWtT4qDBDjrDhvDIRX0ufREeGOHW7HLGc7HhCSNF0UewRAxxJI7hPNyPt67E
+ ipViC1XHGlLw71gAAFo5aIc6eOxgbBorFA+QfVhbO6241b5aKhH9+m6J24d/mpZmbrU+
+ Y+nNnHYrIZkjov2siHoSKSwprPDyXOMITzHlrpz7z72ercS01pHAf6cLAcJkPeYZW/b4 7w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpe6b0dwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 07:44:28 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3677gYYO027426;
+        Fri, 7 Jul 2023 07:44:27 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpe6b0dw8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 07:44:27 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3677BANq030154;
+        Fri, 7 Jul 2023 07:44:26 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3rjbs6c3m8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 07:44:26 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3677iPZ452560362
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jul 2023 07:44:25 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28B5858061;
+        Fri,  7 Jul 2023 07:44:25 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9F60F58064;
+        Fri,  7 Jul 2023 07:44:24 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jul 2023 07:44:24 +0000 (GMT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/fbdev-dma: Fix documented default preferred_bpp value
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <91f093ffe436a9f94d58fb2bfbc1407f1ebe8bb0.1688656591.git.geert+renesas@glider.be>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <91f093ffe436a9f94d58fb2bfbc1407f1ebe8bb0.1688656591.git.geert+renesas@glider.be>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------3wgPayiDQJR3n92656d8p0uL"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 07 Jul 2023 09:44:24 +0200
+From:   Tobias Huschle <huschle@linux.ibm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [RFC 1/1] sched/fair: Consider asymmetric scheduler groups in
+ load balancer
+In-Reply-To: <ZKUhPO3xcvCfjWfe@vingu-book>
+References: <20230515114601.12737-1-huschle@linux.ibm.com>
+ <20230515114601.12737-2-huschle@linux.ibm.com>
+ <CAKfTPtC9050oY2EikUTAXTL8pAui3L+Sr4DBS0T-TccGNaA2hw@mail.gmail.com>
+ <9021d4d99370162a815928cd6467f4a5@linux.ibm.com>
+ <ZKUhPO3xcvCfjWfe@vingu-book>
+Message-ID: <12befe210503469beac9e711d9782675@linux.ibm.com>
+X-Sender: huschle@linux.ibm.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iTYBgSSkyX_3tKPXLsHoOZe5nNHWem4m
+X-Proofpoint-ORIG-GUID: _NyWLlklvEXUVcMntcc02F5jbXDZnwOU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307070068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------3wgPayiDQJR3n92656d8p0uL
-Content-Type: multipart/mixed; boundary="------------YLMrCrwKsYbM2J6JK3E5O45r";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>,
- Javier Martinez Canillas <javierm@redhat.com>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <15b9cfd1-c0ae-3fcf-0108-0f617505903c@suse.de>
-Subject: Re: [PATCH] drm/fbdev-dma: Fix documented default preferred_bpp value
-References: <91f093ffe436a9f94d58fb2bfbc1407f1ebe8bb0.1688656591.git.geert+renesas@glider.be>
-In-Reply-To: <91f093ffe436a9f94d58fb2bfbc1407f1ebe8bb0.1688656591.git.geert+renesas@glider.be>
+On 2023-07-05 09:52, Vincent Guittot wrote:
+> Le lundi 05 juin 2023 à 10:07:16 (+0200), Tobias Huschle a écrit :
+>> On 2023-05-16 15:36, Vincent Guittot wrote:
+>> > On Mon, 15 May 2023 at 13:46, Tobias Huschle <huschle@linux.ibm.com>
+>> > wrote:
+>> > >
+>> > > The current load balancer implementation implies that scheduler
+>> > > groups,
+>> > > within the same domain, all host the same number of CPUs. This is
+>> > > reflected in the condition, that a scheduler group, which is load
+>> > > balancing and classified as having spare capacity, should pull work
+>> > > from the busiest group, if the local group runs less processes than
+>> > > the busiest one. This implies that these two groups should run the
+>> > > same number of processes, which is problematic if the groups are not
+>> > > of the same size.
+>> > >
+>> > > The assumption that scheduler groups within the same scheduler domain
+>> > > host the same number of CPUs appears to be true for non-s390
+>> > > architectures. Nevertheless, s390 can have scheduler groups of unequal
+>> > > size.
+>> > >
+>> > > This introduces a performance degredation in the following scenario:
+>> > >
+>> > > Consider a system with 8 CPUs, 6 CPUs are located on one CPU socket,
+>> > > the remaining 2 are located on another socket:
+>> > >
+>> > > Socket   -----1-----    -2-
+>> > > CPU      1 2 3 4 5 6    7 8
+>> > >
+>> > > Placing some workload ( x = one task ) yields the following
+>> > > scenarios:
+>> > >
+>> > > The first 5 tasks are distributed evenly across the two groups.
+>> > >
+>> > > Socket   -----1-----    -2-
+>> > > CPU      1 2 3 4 5 6    7 8
+>> > >          x x x          x x
+>> > >
+>> > > Adding a 6th task yields the following distribution:
+>> > >
+>> > > Socket   -----1-----    -2-
+>> > > CPU      1 2 3 4 5 6    7 8
+>> > > SMT1     x x x          x x
+>> > > SMT2                    x
+>> >
+>> > Your description is a bit confusing for me. What you name CPU above
+>> > should be named Core, doesn' it ?
+>> >
+>> > Could you share with us your scheduler topology ?
+>> >
+>> 
+>> You are correct, it should say core instead of CPU.
+>> 
+>> One actual configuration from one of my test machines (lscpu -e):
+>> 
+> 
+> [...]
+> 
+>> 
+>> So, 6 cores / 12 CPUs in one group 2 cores / 4 CPUs in the other.
+> 
+> Thaks for the details
+> 
+>> 
+>> If I run stress-ng with 8 cpu stressors on the original code I get a
+>> distribution
+>> like this:
+>> 
+>> 00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
+>>                 x     x     x     x      x  x  x  x
+>> 
+>> Which means that the two cores in the smaller group are running into 
+>> SMT
+>> while two
+>> cores in the larger group are still idle. This is caused by the
+>> prefer_sibling path
+>> which really wants to see both groups run the same number of tasks.
+> 
+> yes and it considers that there are the same number of CPUs per group
+> 
+>> 
+>> > >
+>> > > The task is added to the 2nd scheduler group, as the scheduler has the
+>> > > assumption that scheduler groups are of the same size, so they should
+>> > > also host the same number of tasks. This makes CPU 7 run into SMT
+>> > > thread, which comes with a performance penalty. This means, that in
+>> > > the window of 6-8 tasks, load balancing is done suboptimally, because
+>> > > SMT is used although there is no reason to do so as fully idle CPUs
+>> > > are still available.
+>> > >
+>> > > Taking the weight of the scheduler groups into account, ensures that
+>> > > a load balancing CPU within a smaller group will not try to pull tasks
+>> > > from a bigger group while the bigger group still has idle CPUs
+>> > > available.
+>> > >
+>> > > Signed-off-by: Tobias Huschle <huschle@linux.ibm.com>
+>> > > ---
+>> > >  kernel/sched/fair.c | 3 ++-
+>> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+>> > >
+>> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> > > index 48b6f0ca13ac..b1307d7e4065 100644
+>> > > --- a/kernel/sched/fair.c
+>> > > +++ b/kernel/sched/fair.c
+>> > > @@ -10426,7 +10426,8 @@ static struct sched_group
+>> > > *find_busiest_group(struct lb_env *env)
+>> > >          * group's child domain.
+>> > >          */
+>> > >         if (sds.prefer_sibling && local->group_type ==
+>> > > group_has_spare &&
+>> > > -           busiest->sum_nr_running > local->sum_nr_running + 1)
+>> > > +           busiest->sum_nr_running * local->group_weight >
+>> > > +                       local->sum_nr_running *
+>> > > busiest->group_weight + 1)
+> 
+> 
+> what you want to test here is that moving 1 task from busiest to local 
+> group
+> would help and balance the ratio of tasks per cpu
+> 
+> (busiest->sum_nr_running - 1) / busiest->group_weight >
+> (local->sum_nr_running + 1) / local->group_weight
+> 
+> which can be develop into
+> 
+> busiest->sum_nr_running * local->group_weight >= local->sum_nr_running
+> * busiest->group_weight + busiest->group_weight + local->group_weight
+> 
+> and you also have to change how we calculate the imbalance which just
+> provide the half of the diff of nr_running
+> 
+> by something like
+> 
+> (busiest->sum_nr_running * local->group_weight) -
+> (local->sum_nr_running * busiest->group_weight) /
+> (busiest->group_weight + local->group_weight)
+> 
 
---------------YLMrCrwKsYbM2J6JK3E5O45r
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Ahh right, I had a look at the imbalance part now and your suggestion 
+works
+pretty well. Just had to make some minor adjustments so far.
+Nice side effect is, that this allows the load balancer to behave 
+exactly the
+same as before in the cases where local->group_weight == 
+busiest->group_weight.
+The behavior only changes for the case where the groups are not of equal 
+size.
 
-SGkNCg0KQW0gMDYuMDcuMjMgdW0gMTc6MzAgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
-DQo+IEFzIG9mIGNvbW1pdCA2YzgwYTkzYmU2MmQzOThlICgiZHJtL2ZiLWhlbHBlcjogSW5p
-dGlhbGl6ZSBmYi1oZWxwZXIncw0KPiBwcmVmZXJyZWQgQlBQIGluIHByZXBhcmUgZnVuY3Rp
-b24iKSwgdGhlIHByZWZlcnJlZF9icHAgcGFyYW1ldGVyIG9mDQo+IGRybV9mYl9oZWxwZXJf
-cHJlcGFyZSgpIGRlZmF1bHRzIHRvIDMyIGluc3RlYWQgb2YNCj4gZHJtX21vZGVfY29uZmln
-LnByZWZlcnJlZF9kZXB0aC4gIEhlbmNlIHRoaXMgYWxzbyBhcHBsaWVzIHRvDQo+IGRybV9m
-YmRldl9kbWFfc2V0dXAoKSwgd2hpY2gganVzdCBwYXNzZXMgaXRzIG93biBwcmVmZXJyZWRf
-YnBwDQo+IHBhcmFtZXRlci4NCj4gDQo+IEZpeGVzOiBiNzlmZTlhYmQ1OGJhYjczICgiZHJt
-L2ZiZGV2LWRtYTogSW1wbGVtZW50IGZiZGV2IGVtdWxhdGlvbiBmb3IgR0VNIERNQSBoZWxw
-ZXJzIikNCj4gU2lnbmVkLW9mZi1ieTogR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydCtyZW5l
-c2FzQGdsaWRlci5iZT4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emlt
-bWVybWFubkBzdXNlLmRlPg0KDQpUaGFua3MgYSBsb3QuIEknbGwgYWRkIGl0IHRvIC1taXNj
-LW5leHQuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gLS0tDQo+ICAgZHJpdmVycy9n
-cHUvZHJtL2RybV9mYmRldl9kbWEuYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBp
-bnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L2dwdS9kcm0vZHJtX2ZiZGV2X2RtYS5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9mYmRldl9k
-bWEuYw0KPiBpbmRleCBkODY3NzNmYThhYjAwZjQ5Li43NmFhNTJiMzhhMTNlZDYzIDEwMDY0
-NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiZGV2X2RtYS5jDQo+ICsrKyBiL2Ry
-aXZlcnMvZ3B1L2RybS9kcm1fZmJkZXZfZG1hLmMNCj4gQEAgLTIxNyw3ICsyMTcsNyBAQCBz
-dGF0aWMgY29uc3Qgc3RydWN0IGRybV9jbGllbnRfZnVuY3MgZHJtX2ZiZGV2X2RtYV9jbGll
-bnRfZnVuY3MgPSB7DQo+ICAgICogZHJtX2ZiZGV2X2RtYV9zZXR1cCgpIC0gU2V0dXAgZmJk
-ZXYgZW11bGF0aW9uIGZvciBHRU0gRE1BIGhlbHBlcnMNCj4gICAgKiBAZGV2OiBEUk0gZGV2
-aWNlDQo+ICAgICogQHByZWZlcnJlZF9icHA6IFByZWZlcnJlZCBiaXRzIHBlciBwaXhlbCBm
-b3IgdGhlIGRldmljZS4NCj4gLSAqICAgICAgICAgICAgICAgICBAZGV2LT5tb2RlX2NvbmZp
-Zy5wcmVmZXJyZWRfZGVwdGggaXMgdXNlZCBpZiB0aGlzIGlzIHplcm8uDQo+ICsgKiAgICAg
-ICAgICAgICAgICAgMzIgaXMgdXNlZCBpZiB0aGlzIGlzIHplcm8uDQo+ICAgICoNCj4gICAg
-KiBUaGlzIGZ1bmN0aW9uIHNldHMgdXAgZmJkZXYgZW11bGF0aW9uIGZvciBHRU0gRE1BIGRy
-aXZlcnMgdGhhdCBzdXBwb3J0DQo+ICAgICogZHVtYiBidWZmZXJzIHdpdGggYSB2aXJ0dWFs
-IGFkZHJlc3MgYW5kIHRoYXQgY2FuIGJlIG1tYXAnZWQuDQoNCi0tIA0KVGhvbWFzIFppbW1l
-cm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRp
-b25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcs
-IEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxk
-LCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
+I will figure out a solution and send a patch soon which incorporates 
+these
+adjustments plus a more detailed description.
 
---------------YLMrCrwKsYbM2J6JK3E5O45r--
+Thanks for the feedback.
 
---------------3wgPayiDQJR3n92656d8p0uL
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSnwlgFAwAAAAAACgkQlh/E3EQov+DT
-xA/7Blngxp2foeiqsys5x8PdAHlvIlNUlVJZ56WP6B9wSxjLa7NU1XFTDDqQd5BMML9/Hylp1vtC
-FykcLSuXnpuxYkMPYEMY7aQ3HItIj+BPcg9r6YpZ7/TLX7toKIh/fCCs30bCJE5OEwvTMI6sBteJ
-xrVHJgWTLl3tFy8Ec2kgNrJicmvfKo6mRkl2TzG5W5fT+2AUGsjS33Rc3GBwMUZKqGH3tuMHLkUi
-HpK+JrrrM8G4U0Hkiw7vYA74xEvDCj29952cT/bLFXN+sZhJFreT2CNhbUQrpql8dFfWPvzQ4KQz
-zo0wUXdhb/dCVoaATDVyIwcRBDroIIL7HrlH06UA+V2SMZOmXI+oX5itOE1Pa53Ydq8PwqtoyYae
-grWRGnOPX3C6rqytF2Ya2xoP0IVqYZ8oqOUD/Mj03F4gU2bR87tX3MYdsxpqqU5x62ORaC31nBSe
-qK6CCrgdXfC5eOIyVXksBQAMh6HN0AY9VYO6zVrhqsiLBchF1m8PQHfPE81Jc66+VkZs8XXahUTn
-BO0c7mtTN3v3Ho6IcKq8RS1AUz6ODgQ+nzRAAqTHBxTflCLmyAc2cvbBGQ2tcGGGI/htQo73QGLK
-G8N0W2CLJV9WIlciC4ZT/vDdQ+svrEyO3VeE/Tq+X7/exgfvjAIIWELiIs8UWKJ1KnmyOZmO1iR6
-R40=
-=eu8E
------END PGP SIGNATURE-----
-
---------------3wgPayiDQJR3n92656d8p0uL--
+>> >
+>> > This is the prefer_sibling path. Could it be that you should disable
+>> > prefer_siling between your sockets for such topology ? the default
+>> > path compares the number of idle CPUs when groups has spare capacity
+>> >
+>> >
+>> 
+>> If I disable prefer_sibling (I played around with it a bit), I run 
+>> into the
+>> problem,
+>> that the tasks are distributed s.t. each group has the same amount of 
+>> idle
+>> CPUs, which
+>> yields distributions similar to this:
+>> 
+>> 00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
+>>     x  x  x     x  x     x     x  x
+>> 
+>> Now both groups have 4 idle CPUs which fulfills the criteria imposed 
+>> by the
+>> load balancer,
+>> but the larger group is now running SMT while the smaller one is just 
+>> idle.
+>> 
+>> So, in this asymmetric setup, both criteria seem to not work in an 
+>> optimal
+>> way. Going for
+>> the same number of idle CPUs or alternatively for the same number of 
+>> running
+>> processes
+>> both cause a sub-optimal distribution of tasks, leading to unnecessary 
+>> SMT.
+> 
+> there is the same behavior and assumption here too
+> 
+> 
+>> 
+>> It seems also to be possible to address the regular load balancing 
+>> path by
+>> aiming to have the
+>> same unused capacity between groups instead of the same number of idle 
+>> CPUs.
+>> This seems to
+>> have been considered in the past, but the choice went in favor of the 
+>> number
+>> of idle CPUs.
+> 
+> unused capacity doesn't give the instantaneous state so a group can be
+> idle but without
+> unused capacity
+> 
+>> Since this decision was actively taken already, I focused on the
+>> prefer_sibling path.
+>> 
+>> The question now would be how to address this properly (or if I'm 
+>> missing
+>> something here).
+>> As mentioned in the cover letter, this was the most simplistic and 
+>> least
+>> invasive approach
+>> I could find, others might be more sophisticated but also have some
+>> side-effects.
+>> 
+>> I have a bit of a hard time leaving this one as-is, as it just 
+>> introduces
+>> two additional
+>> multiplications with no effect for most architectures. Maybe an
+>> architectures specific
+>> inline function that the compiler can optimize away if not needed?
+>> 
+>> > >                 goto force_balance;
+>> > >
+>> > >         if (busiest->group_type != group_overloaded) {
+>> > > --
+>> > > 2.34.1
+>> > >
+>> 
