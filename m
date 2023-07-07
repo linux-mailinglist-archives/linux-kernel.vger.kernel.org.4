@@ -2,120 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475B474AEA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F7374AEAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 12:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjGGKSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 06:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S231959AbjGGKWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 06:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjGGKSo (ORCPT
+        with ESMTP id S229458AbjGGKWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 06:18:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D602110B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 03:18:42 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688725121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2d3houmsYkGVGZJ+TnslUxorhkLSwL4n9/p70tnZL7A=;
-        b=y4doa5DKfOzdCF21tIHXXGEp7Tighcyi2aqc4+bE5su2grB8igK69DcILbae5lykTRs5JV
-        PYm8S351m8I52i6O6betlp1NJBOuaDOhcpSjHpAf5gkPS4ql4bPs59vUfRwN0hS9oBxuGZ
-        HjfgVjqt5FZpSyJuXRwsWXqLu6J3UyRqhFNdrmogJQ1uVYvApG4e2Mrb+3YSpKMjw+Fuhg
-        aRPDRjqsb/hyTS0kFyDNsh6kwdQIYmX8MSLyHPhJp7wTnbDAeNbh9ORfvwHzHkqL0p85+B
-        TOR0s68ZDsmb21uc+eK6qJ/CoWkJZQt1mKvLGEyZipI8aM+1MJbfWzOqwFeCDw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688725121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2d3houmsYkGVGZJ+TnslUxorhkLSwL4n9/p70tnZL7A=;
-        b=9tdprbeuz34HJLn6OXpF/f1dsXMyUURUW2bxIbsBMyXUbdtkctVG/W3f9EIP518gzZTyL0
-        btin56Kv04H/BoDg==
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     arjan@linux.intel.com, ashok.raj@intel.com,
-        ashok.raj@linux.intel.com, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
-        thomas.lendacky@amd.com, tony.luck@intel.com,
-        tonyb@cybernetics.com, x86@kernel.org,
-        yangerkun <yangerkun@huawei.com>, Baoquan He <bhe@redhat.com>,
-        kexec@lists.infradead.org, Baokun Li <libaokun1@huawei.com>
-Subject: Re: [BUG REPORT] Triggering a panic in an x86 virtual machine does
- not wait
-In-Reply-To: <d7f266fd-e34d-e26e-e371-ee6ff13b6696@huawei.com>
-References: <20230615193330.608657211@linutronix.de>
- <71578392-63ed-02a9-24da-2adf8cce38c7@huawei.com> <87ttui91jo.ffs@tglx>
- <d7f266fd-e34d-e26e-e371-ee6ff13b6696@huawei.com>
-Date:   Fri, 07 Jul 2023 12:18:39 +0200
-Message-ID: <87lefs81og.ffs@tglx>
+        Fri, 7 Jul 2023 06:22:20 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D61810B;
+        Fri,  7 Jul 2023 03:22:18 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 291D6EB4F0;
+        Fri,  7 Jul 2023 12:22:15 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1688725335; bh=R2JAn8dEc5t5IbxpMIYj+ROpC8mKUwi+oGPWhkhnmps=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hrw3hX5hun3YSXg/bR+StoUqmBtv5Sg4IUiJIG4MBvgSTT8nNjHLDBlwAxI/Bgus2
+         f++y7N3Z1Wa5LMZrneYAvSsBQ3NkH/xvR6QjWjMIveXWXfbNevXIqCBNV4YCOQjBAj
+         WECHj7caN3qm6AJ8He9i9tGPkhCGQg0Krp19h20yz99u5X+9BPg0Gdgz3R9hE7N5mn
+         ozvvrVEjkXoAMyYrINs49hiIRN1hd2XoGedS6hDK0kwmzglSNWF6XGZr8B7FmzvcZ4
+         80/N8K8H+Sxi8onYywDqbBt4L7jxPlco1/GoFG7/OVNeYT14QIYXOD4psk7JWBhyxJ
+         JNUUAHieg1MmQ==
+Date:   Fri, 7 Jul 2023 12:22:13 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
+ transient memory pool
+Message-ID: <20230707122213.3a7378b5@meshulam.tesarici.cz>
+In-Reply-To: <2023070706-humbling-starfish-c68f@gregkh>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+        <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
+        <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070626-boxcar-bubbly-471d@gregkh>
+        <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070706-humbling-starfish-c68f@gregkh>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06 2023 at 14:44, Baokun Li wrote:
-> On 2023/7/5 16:59, Thomas Gleixner wrote:
->> +	/*
->> +	 * If this is a crash stop which does not execute on the boot CPU,
->> +	 * then this cannot use the INIT mechanism because INIT to the boot
->> +	 * CPU will reset the machine.
->> +	 */
->> +	if (this_cpu)
->> +		return false;
+On Fri, 7 Jul 2023 10:29:00 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-> This patch does fix the problem of rebooting at panic, but the
-> exported stack stays at stop_this_cpu() like below, instead of showing
-> what the corresponding process is doing as before.
->
-> PID: 681=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TASK: ffff9ac2429d3080=C2=A0 CPU: =
-2=C2=A0=C2=A0=C2=A0 COMMAND: "fsstress"
->  =C2=A0#0 [ffffb00200184fd0] stop_this_cpu at ffffffff89a4ffd8
->  =C2=A0#1 [ffffb00200184fe8] __sysvec_reboot at ffffffff89a94213
->  =C2=A0#2 [ffffb00200184ff0] sysvec_reboot at ffffffff8aee7491
-> --- <IRQ stack> ---
->  =C2=A0=C2=A0=C2=A0 RIP: 0000000000000010=C2=A0 RSP: 0000000000000018=C2=
-=A0 RFLAGS: ffffb00200f8bd08
->  =C2=A0=C2=A0=C2=A0 RAX: ffff9ac256fda9d8=C2=A0 RBX: 0000000009973a85=C2=
-=A0 RCX: ffff9ac256fda078
->  =C2=A0=C2=A0=C2=A0 RDX: ffff9ac24416e300=C2=A0 RSI: ffff9ac256fda9e0=C2=
-=A0 RDI: ffffffffffffffff
->  =C2=A0=C2=A0=C2=A0 RBP: ffff9ac2443a5f88=C2=A0=C2=A0 R8: 000000000000000=
-0=C2=A0=C2=A0 R9: ffff9ac2422eeea0
->  =C2=A0=C2=A0=C2=A0 R10: ffff9ac256fda9d8=C2=A0 R11: 0000000000549921=C2=
-=A0 R12: ffff9ac2422eeea0
->  =C2=A0=C2=A0=C2=A0 R13: ffff9ac251cd23c8=C2=A0 R14: ffff9ac24269a800=C2=
-=A0 R15: ffff9ac251cd2150
->  =C2=A0=C2=A0=C2=A0 ORIG_RAX: ffffffff8a1719e4=C2=A0 CS: 0206=C2=A0 SS: f=
-fffffff8a1719c8
-> bt: WARNING: possibly bogus exception frame
->
-> Do you know how this happened? I would be grateful if you could fix it.
+> On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrote:
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, July 6, 2023 1:07 AM  
+> > > 
+> > > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) wrote:  
+> > > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday, June 27, 2023  
+> > > 2:54 AM  
+> > > > >
+> > > > > Try to allocate a transient memory pool if no suitable slots can be found,
+> > > > > except when allocating from a restricted pool. The transient pool is just
+> > > > > enough big for this one bounce buffer. It is inserted into a per-device
+> > > > > list of transient memory pools, and it is freed again when the bounce
+> > > > > buffer is unmapped.
+> > > > >
+> > > > > Transient memory pools are kept in an RCU list. A memory barrier is
+> > > > > required after adding a new entry, because any address within a transient
+> > > > > buffer must be immediately recognized as belonging to the SWIOTLB, even if
+> > > > > it is passed to another CPU.
+> > > > >
+> > > > > Deletion does not require any synchronization beyond RCU ordering
+> > > > > guarantees. After a buffer is unmapped, its physical addresses may no
+> > > > > longer be passed to the DMA API, so the memory range of the corresponding
+> > > > > stale entry in the RCU list never matches. If the memory range gets
+> > > > > allocated again, then it happens only after a RCU quiescent state.
+> > > > >
+> > > > > Since bounce buffers can now be allocated from different pools, add a
+> > > > > parameter to swiotlb_alloc_pool() to let the caller know which memory pool
+> > > > > is used. Add swiotlb_find_pool() to find the memory pool corresponding to
+> > > > > an address. This function is now also used by is_swiotlb_buffer(), because
+> > > > > a simple boundary check is no longer sufficient.
+> > > > >
+> > > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_alloc_pages(),
+> > > > > simplified and enhanced to use coherent memory pools if needed.
+> > > > >
+> > > > > Note that this is not the most efficient way to provide a bounce buffer,
+> > > > > but when a DMA buffer can't be mapped, something may (and will) actually
+> > > > > break. At that point it is better to make an allocation, even if it may be
+> > > > > an expensive operation.  
+> > > >
+> > > > I continue to think about swiotlb memory management from the standpoint
+> > > > of CoCo VMs that may be quite large with high network and storage loads.
+> > > > These VMs are often running mission-critical workloads that can't tolerate
+> > > > a bounce buffer allocation failure.  To prevent such failures, the swiotlb
+> > > > memory size must be overly large, which wastes memory.  
+> > > 
+> > > If "mission critical workloads" are in a vm that allowes overcommit and
+> > > no control over other vms in that same system, then you have worse
+> > > problems, sorry.
+> > > 
+> > > Just don't do that.
+> > >   
+> > 
+> > No, the cases I'm concerned about don't involve memory overcommit.
+> > 
+> > CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current swiotlb
+> > code in the Linux guest allocates a configurable, but fixed, amount of guest
+> > memory at boot time for this purpose.  But it's hard to know how much
+> > swiotlb bounce buffer memory will be needed to handle peak I/O loads.
+> > This patch set does dynamic allocation of swiotlb bounce buffer memory,
+> > which can help avoid needing to configure an overly large fixed size at boot.  
+> 
+> But, as you point out, memory allocation can fail at runtime, so how can
+> you "guarantee" that this will work properly anymore if you are going to
+> make it dynamic?
 
-No, I don't. But there is clearly a hint:
+In general, there is no guarantee, of course, because bounce buffers
+may be requested from interrupt context. I believe Michael is looking
+for the SWIOTLB_MAY_SLEEP flag that was introduced in my v2 series, so
+new pools can be allocated with GFP_KERNEL instead of GFP_NOWAIT if
+possible, and then there is no need to dip into the coherent pool.
 
-> bt: WARNING: possibly bogus exception frame
+Well, I have deliberately removed all complexities from my v3 series,
+but I have more WIP local topic branches in my local repo:
 
-So the exception frame seems to be corrupted. I have no idea why.
+- allow blocking allocations if possible
+- allocate a new pool before existing pools are full
+- free unused memory pools
 
-The question is, whether this goes away when you revert that commit or not.
-I can't oracle that out from your report.
+I can make a bigger series, or I can send another series as RFC if this
+is desired. ATM I don't feel confident enough that my v3 series will be
+accepted without major changes, so I haven't invested time into
+finalizing the other topic branches.
 
-Can you please revert 45e34c8af58f on top of Linus tree and verify that
-it makes the issue go away?
+@Michael: If you know that my plan is to introduce blocking allocations
+with a follow-up patch series, is the present approach acceptable?
 
-Thanks,
-
-        tglx
+Petr T
