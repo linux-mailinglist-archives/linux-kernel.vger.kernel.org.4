@@ -2,75 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C1474AAC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE61874AACA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 07:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232728AbjGGFv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 01:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S232626AbjGGFwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 01:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGGFvN (ORCPT
+        with ESMTP id S232815AbjGGFvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 01:51:13 -0400
+        Fri, 7 Jul 2023 01:51:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F84D1BEE;
-        Thu,  6 Jul 2023 22:51:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4BA2686;
+        Thu,  6 Jul 2023 22:51:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 349256173F;
-        Fri,  7 Jul 2023 05:51:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AD7AC433CA;
-        Fri,  7 Jul 2023 05:51:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7DDF61652;
+        Fri,  7 Jul 2023 05:51:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401CDC433C9;
+        Fri,  7 Jul 2023 05:51:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688709070;
-        bh=chm3pFneSxGMrL2frbc8rgxhCRE6r2Wq/BvmnW77hRI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=BvZ252kGZ/FtF9qkunWwad469l5zVGxoFs6CKdn8Bt1SFpEufgpa3tcmvTOqN6Ucq
-         tR4d143Dle9Thy42az4k3oaaqyj7W+Qg/5CcxxUu9mDbdsc04EsYxFE1+zkGiXxPDE
-         dIi7Uzsev+6/XQsN1mRrG5PUHA1+DOhdVEEMSEtzynCfKTMQaoXYhYlJuA5cvyUZXh
-         whH81IZ+d038OCcjsfDhoIbgujjNp8OscXc4zoxC/Pc3RdD2Le1OLZe2X6owclbchj
-         Tbixqxz7TZEUZB+F5UNJGZIpbkyw4KWUnZtArrcYh3MLMUT1MikVnp21bGpNxJminy
-         A1r7JOU9wPsoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85F63C0C40E;
-        Fri,  7 Jul 2023 05:51:10 +0000 (UTC)
-Subject: Re: [GIT PULL] A few more documentation changes for 6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87cz14d4ld.fsf@meer.lwn.net>
-References: <87cz14d4ld.fsf@meer.lwn.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <87cz14d4ld.fsf@meer.lwn.net>
-X-PR-Tracked-Remote: git://git.lwn.net/linux.git tags/docs-6.5-2
-X-PR-Tracked-Commit-Id: e27cb89a22ada4e3e7bee1567a8daa1fb2260b78
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7210de3a328c4df5cb8b25b2ef5703c72d8842e9
-Message-Id: <168870907054.5711.789342435153678631.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Jul 2023 05:51:10 +0000
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+        s=k20201202; t=1688709097;
+        bh=Qj31jtQ+hz+K7R2TBC5oSAupfXV4EUMpsex+zxUEQmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LShkrSAWi9pb43EVbEGdVFj/xP5x3WOfGQhRfRyNupEDa12wYUvmjoRu9YFelPFlf
+         JVhZqEjpUlXaMx91KdzlUO5rc5Hp1Kv+WCydSNu9ZV7SN8N+wPy3RuRwopo6TSeCMu
+         oZAMdSv3rCAlNK6fbbhT0S7IEzVVE81RgHtpIAIM1GK+/P+KBj+k3RIgwwwBgQTBDf
+         bIIh2HexHyoyBhChm1Q0HE//IsNLXPwmjLJpr2eHALHMXnKQJAAfWRGHc6rR8xPI/d
+         jupHouDWUuA9TgWPZdeF+lit012gKduXtTaxEb4xhajwjJ+YIWkSp3R0/DQqO+b/5x
+         L7dafIhRo7NSg==
+Date:   Fri, 7 Jul 2023 11:21:21 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     manivannan.sadhasivam@linaro.org, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, krzysztof.kozlowski@linaro.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 2/8] PCI: qcom-ep: Add support for D-state change
+ notification
+Message-ID: <20230707055121.GB6001@thinkpad>
+References: <1688122331-25478-1-git-send-email-quic_krichai@quicinc.com>
+ <1688122331-25478-3-git-send-email-quic_krichai@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1688122331-25478-3-git-send-email-quic_krichai@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 06 Jul 2023 17:04:30 -0600:
+On Fri, Jun 30, 2023 at 04:22:05PM +0530, Krishna chaitanya chundru wrote:
+> Add support to pass D-state change notification to Endpoint
+> function driver.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
 
-> git://git.lwn.net/linux.git tags/docs-6.5-2
+Few comments below.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7210de3a328c4df5cb8b25b2ef5703c72d8842e9
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom-ep.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> index 1435f51..e75aec4 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> @@ -561,6 +561,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+>  	struct device *dev = pci->dev;
+>  	u32 status = readl_relaxed(pcie_ep->parf + PARF_INT_ALL_STATUS);
+>  	u32 mask = readl_relaxed(pcie_ep->parf + PARF_INT_ALL_MASK);
+> +	pci_power_t state;
+>  	u32 dstate, val;
+>  
+>  	writel_relaxed(status, pcie_ep->parf + PARF_INT_ALL_CLEAR);
+> @@ -583,11 +584,16 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+>  		dstate = dw_pcie_readl_dbi(pci, DBI_CON_STATUS) &
+>  					   DBI_CON_STATUS_POWER_STATE_MASK;
+>  		dev_dbg(dev, "Received D%d state event\n", dstate);
 
-Thank you!
+We should also change this debug output to make use of pci_power_name() based on
+the "state" variable and move it just above pci_epc_dstate_change(). But this
+should be a separate patch.
+
+> +		state = dstate;
+>  		if (dstate == 3) {
+>  			val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
+>  			val |= PARF_PM_CTRL_REQ_EXIT_L1;
+>  			writel_relaxed(val, pcie_ep->parf + PARF_PM_CTRL);
+> +			state = PCI_D3hot;
+> +			if (gpiod_get_value(pcie_ep->reset))
+> +				state = PCI_D3cold;
+>  		}
+> +		pci_epc_dstate_change(pci->ep.epc, state);
+
+Need to change this API as per my comment on patch 1.
+
+- Mani
+
+>  	} else if (FIELD_GET(PARF_INT_ALL_LINK_UP, status)) {
+>  		dev_dbg(dev, "Received Linkup event. Enumeration complete!\n");
+>  		dw_pcie_ep_linkup(&pci->ep);
+> -- 
+> 2.7.4
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+மணிவண்ணன் சதாசிவம்
