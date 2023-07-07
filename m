@@ -2,150 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC5674B0C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E93774B0DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjGGM20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S232552AbjGGM34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjGGM2Y (ORCPT
+        with ESMTP id S230289AbjGGM3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:28:24 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6282172B;
-        Fri,  7 Jul 2023 05:28:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3143b88faebso1966859f8f.3;
-        Fri, 07 Jul 2023 05:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688732902; x=1691324902;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rJA6+/g6hyQtclq9OA+60uWzgmpTlAiLIyqyQBByGJo=;
-        b=atGuYPEU5d8ttk2i/U9gnbpEE4VH7IYHznzcHE2YFGDaXUSXZPbWWiSKJo9smMCcm9
-         QanNiFXqWkMHtvwoAfquB56dS1SLhkBJKXkysGit8pu6kdhw4mjeHwiAXcJVl2QYJFwV
-         LuktSzppQnRXpfSO5jS8t3NyAoq6icvGiVhaDm0ctYXpo9hbjdLmh5HbKdF1dymTrvkA
-         Vm0KsP1KGwPj0cSDGV/ByLnhp4L+Iim8Ikw8AB2cAXZYwDqNvqiaHGEycjlRMT+eqo1a
-         D+R/iITQVozvANPIy+r/1c6juSWDHwhOAJRSdXD3z4dVtyftbiOrC6GdpT1JIwz6dZuS
-         UEvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688732902; x=1691324902;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rJA6+/g6hyQtclq9OA+60uWzgmpTlAiLIyqyQBByGJo=;
-        b=d2gSoD3JUf9vsVrU4sq4traiJviX3fP4akWeaerMiuvJXu6HCOFlRGRF3h5pCpvrc5
-         4nWuaWQMjQRthGj3Gdw2XXCVmMYfsPmLRBecSGRCaHJTfLCYpwLjD+EUAi0SE6Fz7MUT
-         +k+78wiGuApWR/NFinXGjB/SmiRuV8aZS0I0TGwNG20q0WhGa88uPvF4Bfy8dpc9X/K9
-         G0LFl+EL4sVDwvvNoeSa8QDUQxRoxnss7Pw77lxYS8s9tAR2t7mJLPLCZ6DsUS0kKODe
-         QKtCCSrKPoUrTDmcbJ26MrS5tIePNw1/AR3akgAJKo5wJYDTjNGzXBgFsa6OUKI7EqgA
-         9dBQ==
-X-Gm-Message-State: ABy/qLaVpG7MYHW5v6Q3pwhveX2oYuWUvAWHM71lAHgGIAxNMxIOynLv
-        0nc0PK/XRnGqezpvw2bLbvc=
-X-Google-Smtp-Source: APBJJlEAIrjPu2Q1b2mUmPFXZHE/mktSLFqXqOh8lDPkDerFqD9Tl2Il12cwVSatuF8JIu+Q+UpnBg==
-X-Received: by 2002:a5d:460c:0:b0:314:41e9:9a92 with SMTP id t12-20020a5d460c000000b0031441e99a92mr4294457wrq.24.1688732901438;
-        Fri, 07 Jul 2023 05:28:21 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i14-20020adffdce000000b003141f96ed36sm4418753wrs.0.2023.07.07.05.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 05:28:21 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 14:28:19 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/18] drm/tegra: dpaux: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZKgE407-trIp_7HV@orome>
-References: <20230707072034.48977-1-frank.li@vivo.com>
- <20230707072034.48977-12-frank.li@vivo.com>
+        Fri, 7 Jul 2023 08:29:53 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BFA172B;
+        Fri,  7 Jul 2023 05:29:51 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3678vO65029918;
+        Fri, 7 Jul 2023 14:29:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=qa/ZpaXlILgzVxoBJk7a+24v02/Sfx+AkZW9A3Vu/hY=;
+ b=rbbDWdcKpSJfL7g40hrtk6xrxyf9fm7MqRL0m1shu10ursGy1PNvchOYCcGi7eBcmhjm
+ 9b2stLFV5Oz1RNlDPUdNijZEaCmV+xVhuWf51KUv7dzMcV1Q8FTz8Tt89DWlbI3zdE7N
+ bbWPYU5XTOCjJaEhTsAncS+5swNkppzt/GfyIbVcL/USpQhANMRrTsATDqVMuvOqqVvI
+ 1w7CzK9vNNva+g9ef0U5FOq1R7ClSlh2nARm66N2eTV+1xTx4UpqAb+mmZebicRhNO97
+ I0FI6yrb78IW0IAapw+FegssrAqoorMfu4VOqSrLEdwpB2jazpwAYSYeIY08P1q5AsRe rA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rpfnchkmr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 14:29:06 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C2685100050;
+        Fri,  7 Jul 2023 14:29:03 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 643ED21F14B;
+        Fri,  7 Jul 2023 14:29:03 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 7 Jul
+ 2023 14:29:00 +0200
+Message-ID: <0aaace47-1bb4-82c5-57a5-6f5d27eb4d45@foss.st.com>
+Date:   Fri, 7 Jul 2023 14:28:28 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qEQdviPueCKP2hNt"
-Content-Disposition: inline
-In-Reply-To: <20230707072034.48977-12-frank.li@vivo.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
+ description in binding files
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
+        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
+        <arnd@kernel.org>, <richardcochran@gmail.com>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
+ <20230706145108.GA3858320-robh@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <20230706145108.GA3858320-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_08,2023-07-06_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Rob,
 
---qEQdviPueCKP2hNt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/6/23 16:51, Rob Herring wrote:
+> On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
+>> feature-domains is an optional property that allows a peripheral to
+>> refer to one or more feature domain controller(s).
+>>
+>> Description of this property is added to all peripheral binding files of
+>> the peripheral under the STM32 firewall controllers. It allows an accurate
+>> representation of the hardware, where various peripherals are connected
+>> to this firewall bus. The firewall can then check the peripheral accesses
+>> before allowing it to probe.
+>>
+>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>> ---
+>>
+>> Disclaimer: Some error with dtbs_check will be observed as I've
+>> considered the property to be generic, as Rob asked
+>>
+>>   Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
+>>   Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
+>>   Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
+>>   Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
+>>   Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
+>>   .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
+>>   Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
+>>   .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
+>>   Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
+>>   .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
+>>   Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
+>>   Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
+>>   Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
+>>   Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
+>>   Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
+>>   .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
+>>   Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
+>>   Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
+>>   Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
+>>   Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
+>>   .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
+>>   Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
+>>   Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
+>>   Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
+>>   24 files changed, 97 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+>> index b767ec72a999..daf8dcaef627 100644
+>> --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+>> +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+>> @@ -50,6 +50,10 @@ properties:
+>>     power-domains:
+>>       maxItems: 1
+>>   
+>> +  feature-domains:
+>> +    minItems: 1
+>> +    maxItems: 3
+> 
+> What are the 3 entries?
+> 
+> Rob
 
-On Fri, Jul 07, 2023 at 03:20:28PM +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
->=20
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  drivers/gpu/drm/tegra/dpaux.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/tegra/dpaux.c b/drivers/gpu/drm/tegra/dpaux.c
-> index 4d2677dcd831..f120897ce4b3 100644
-> --- a/drivers/gpu/drm/tegra/dpaux.c
-> +++ b/drivers/gpu/drm/tegra/dpaux.c
-> @@ -447,7 +447,6 @@ static const struct pinmux_ops tegra_dpaux_pinmux_ops=
- =3D {
->  static int tegra_dpaux_probe(struct platform_device *pdev)
->  {
->  	struct tegra_dpaux *dpaux;
-> -	struct resource *regs;
->  	u32 value;
->  	int err;
-> =20
-> @@ -461,14 +460,13 @@ static int tegra_dpaux_probe(struct platform_device=
- *pdev)
->  	INIT_LIST_HEAD(&dpaux->list);
->  	dpaux->dev =3D &pdev->dev;
-> =20
-> -	regs =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	dpaux->regs =3D devm_ioremap_resource(&pdev->dev, regs);
-> +	dpaux->regs =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(dpaux->regs))
->  		return PTR_ERR(dpaux->regs);
-> =20
->  	dpaux->irq =3D platform_get_irq(pdev, 0);
->  	if (dpaux->irq < 0)
-> -		return -ENXIO;
-> +		return dpaux->irq;
+I thought I was benefiting from the description of the pattern-property 
+in the RIFSC YAML file. But yes anyway, it seems like it needs some 
+description here as the dependency does not appear in this file.
 
-This change has nothing to do with what the commit message says. It
-looks correct, but it should be a separate patch.
+I picked 3 as a maxItems for our ST needs, I'll give it some more 
+thought when coming back with something clearer.
 
-Thierry
+I will change that in V2, thank you for pointing that out.
 
---qEQdviPueCKP2hNt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSoBOMACgkQ3SOs138+
-s6E1Cg/7BwHVxlGOZc5s4JgJCBnTWhzOzzu19uGD50cxCUqf+eWXsgMq60G9QhLU
-1AlrpwVh8W+1+Iig9hcMUPM365j5a4PmiLcxTp1FFKkQKQB0DdKk2mAWFgbD4RXt
-WlmMXFbelc5qw1YNF3nNYZtuGE8lLzCGI0LV4hOs24KmXJBx0sRSuKkwVB7rGb86
-pjVGv8XMLCtr0Ij8p8Zp1q3rne4F5WUOhS5BP/+p4HP4eNlXD31mwHsRhZkirNUC
-ncsT+vGmle/FjBiyEFxOFnaii2O4bkvV8b9KbUVHjV3kDDPCqVMvUidKkXVY8Vjw
-8S3Agm8dz6dLcWqeqpQhg9pCcMs+m+6wkAAYgIb2H9vZXmyg/UXH+oLceF/MyYnR
-tKGzr4AutYFm3aar7bVwfy9taSkcFScfP3yJauZSEkLFc9/4rsY+FbBsZwYmarq6
-+rME9qUjwapHEyppQXiAV9FOA2GVVAc5X19RCmG9Da/LA/lDPrinhkE2/ngZZsQH
-nf5cN25ravD+qKcDgYtJlda72nSwo4H2zXbPE4q1poLr7B7Mye8Qvuups0Ninsem
-IqlqueYQXfgprwTG3WyQbpXJ3cSV8CaGqW6svI4MtcQiRVKfLWMrFj+HJ/1MRI46
-QlC0mhvtb015qqQuDdB9nqy04Xm88lmiPXxFSnA+CiQWbT1M+6M=
-=k0Vf
------END PGP SIGNATURE-----
-
---qEQdviPueCKP2hNt--
+Best regards,
+Gatien
