@@ -2,137 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC37C74AD5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA64E74AD5A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjGGIvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S232248AbjGGIur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGGIvK (ORCPT
+        with ESMTP id S231959AbjGGIup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:51:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8141FEF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688719824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cvhYF/rnQ9Q9FlESAs3rIUXc/r8fN/uEOaJ2PUqHY1c=;
-        b=ZyIxiIsvgWCfrk2xpAjeTMpNcc1D1vSNW68VyxP08NM/i++DjNz5en/h13VapUx8al9uQ+
-        yV3/YRi60z+cE8vOeJtRLEeGvVrS+AxqQ/UE7pqb3WFbN4CXvyZA/icUbyZv2D1R7jPhaX
-        7YStGw3jMlTXfDpn0mbNA80AWvG25II=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-100-UVdQLKokNYixZn1T3XzrnQ-1; Fri, 07 Jul 2023 04:50:22 -0400
-X-MC-Unique: UVdQLKokNYixZn1T3XzrnQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-40328438392so17630281cf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 01:50:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688719821; x=1691311821;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cvhYF/rnQ9Q9FlESAs3rIUXc/r8fN/uEOaJ2PUqHY1c=;
-        b=kzzy7FYIjNmmWEmQYfLXK9nZYief+kS8qms6YVYdTvnLGeBDTniF1x46YvqHq+lI6+
-         1cOJMvU/EPa2Wt15BV6Q0Q5CrGEBIrQx5XszYnEQDjelKADtQeXRubZ96fAmUkGqJ5NH
-         4+PaZOW0tg+u1Z9fdXwYdzXdgCtCzVELCSZVbQxV6i54Q2bUo9FkJNorfA/sooWddZuT
-         yrwpXGvNdhKhxSHfv4Gxq1qC1HIK4gE8V/FBt4S/qv3ToRWKULoAaGEYkicgBWatwAv/
-         8xLEoFBxRO57IWhozQAJVThJrNYXs7C+URydkmY5L4BUTck+pMqwzKWv0f1Yz4x9Qfj8
-         gjvw==
-X-Gm-Message-State: ABy/qLbrlmO8HHcjUQU/FeLwCY3Z69eMp0Me/D7AhzAv3N5nUrhh98Vo
-        iYHxFGmTEkLo4TSVGk1bhkAejqdxcQWbQuFUL4rsrTRzJ8Nj9qGqiyMjpA4sTCIxXGdf1pO/fY3
-        7t7zasy9GyZWRLp78q7E0EW0=
-X-Received: by 2002:ac8:4e96:0:b0:400:84a9:a0a5 with SMTP id 22-20020ac84e96000000b0040084a9a0a5mr5117187qtp.52.1688719821618;
-        Fri, 07 Jul 2023 01:50:21 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFNQkkqADRC0X7jsXNbnJO2I9arLpnWYJiv9igytdJ6RB4AJLzQiymUb7qKfGGuR1Eu2wEBAA==
-X-Received: by 2002:ac8:4e96:0:b0:400:84a9:a0a5 with SMTP id 22-20020ac84e96000000b0040084a9a0a5mr5117167qtp.52.1688719821382;
-        Fri, 07 Jul 2023 01:50:21 -0700 (PDT)
-Received: from [192.168.9.29] (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
-        by smtp.gmail.com with ESMTPSA id q25-20020ac84119000000b0040335131048sm1523246qtl.93.2023.07.07.01.50.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 01:50:21 -0700 (PDT)
-Message-ID: <b3ef657d-22a9-a52f-821e-55fc5faf1ca5@redhat.com>
-Date:   Fri, 7 Jul 2023 10:50:16 +0200
+        Fri, 7 Jul 2023 04:50:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09C51FE4;
+        Fri,  7 Jul 2023 01:50:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6526ED75;
+        Fri,  7 Jul 2023 01:51:25 -0700 (PDT)
+Received: from [10.57.28.254] (unknown [10.57.28.254])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B06E3F73F;
+        Fri,  7 Jul 2023 01:50:39 -0700 (PDT)
+Message-ID: <5cf23bfd-a3b7-3dde-146b-4892d75b3485@arm.com>
+Date:   Fri, 7 Jul 2023 09:50:31 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 2/2] fpga: bridge: fix kernel-doc
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20230706142755.124879-1-marpagan@redhat.com>
- <20230706142755.124879-3-marpagan@redhat.com>
- <a3da8412-2e13-6b25-346b-da53414f5dba@infradead.org>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <a3da8412-2e13-6b25-346b-da53414f5dba@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH 1/1] arm64: dts: imx8mp: remove arm, primecell-periphid at
+ etm nodes
+Content-Language: en-GB
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Frank Li <Frank.li@nxp.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>, suzuki.poulose@arm.com,
+        coresight@lists.linaro.org, imx@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
+        Adam Ford <aford173@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230705205954.4159781-1-Frank.Li@nxp.com>
+ <49ef52b7-0269-898c-7cc2-096f2f1037fc@arm.com>
+ <ZKbSC8LBjLuo3ygD@lizhi-Precision-Tower-5810> <24260662.6Emhk5qWAg@steina-w>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <24260662.6Emhk5qWAg@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-07-07 06:34, Alexander Stein wrote:
+> Hi Frank,
+> 
+> Am Donnerstag, 6. Juli 2023, 16:39:07 CEST schrieb Frank Li:
+>> On Thu, Jul 06, 2023 at 12:06:19PM +0100, Robin Murphy wrote:
+>>>>> Am Mittwoch, 5. Juli 2023, 22:59:53 CEST schrieb Frank Li:
+>>>>>> The reg size of etm nodes is incorrectly set to 64k instead of 4k.
+>>>>>> This
+>>>>>> leads to a crash when calling amba_read_periphid().  After corrected
+>>>>>> reg
+>>>>>> size, amba_read_periphid() retrieve the correct periphid.
+>>>>>> arm,primecell-periphid were removed from the etm nodes.
+>>>>>
+>>>>> So this means the reference manual is wrong here? It clearly states
+>>>>> the size is 64kiB. Reference Manual i.MX8MP Rev 1. 06/2021
+>>>>> On a side note: Is imx8mq affected by this as well? The DAP memory
+>>>>> table lists similar sizes in the RM .
+>>>>
+>>>> Note that the 64K MMIO space per device is really an alignment thing.
+>>>> It's a recommendation from ARM to allow individual device MMIO regions
+>>>> to be mapped on kernels with 64K page size. Most of the time the real
+>>>> MMIO space occupied by the device is actually much smaller than 64K.
+>>>
+>>> Indeed, it's quite common for TRM memory maps to be written in terms of
+>>> the
+>>> interconnect configuration, i.e. from the point of view of the
+>>> interconnect
+>>> itself, that whole range of address space is assigned to that peripheral,
+>>> and it may even be true that the entire range is routed to the port where
+>>> that peripheral is connected. However what's of more interest for DT is
+>>> how
+>>> much of that range the peripheral itself actually decodes.
+>>
+>> Yes, there are not problem by mapping bigger space in most case.
+>>
+>> amba bus's periphal use close to end of region to show device's identical
+>> information.
+> 
+> Ah, thanks for the explanation. This make things more clear.
+> But on the other is it sensible to assume the memory resource size to fit the
+> IP address space? It appears to me the size is fixed to 4kiB anyway. Would it
+> make more sense to read the values from the address "base + 4K - x" instead of
+> "base + size - x"?
 
+The size of PrimeCell components in general isn't necessarily 4KB 
+though, and the ID registers were defined relative to the *end* of the 
+register space. The old PrimeCell standards evolved into the CoreSight 
+spec, and from the oldest version of that I can easily link to[1]:
 
-On 2023-07-06 23:35, Randy Dunlap wrote:
-> HI--
-> 
-> On 7/6/23 07:27, Marco Pagani wrote:
->> Fix the following warnings issued by the kernel-doc script:
->>
->> drivers/fpga/fpga-bridge.c:99: warning: No description found for return value of 'of_fpga_bridge_get'
->> drivers/fpga/fpga-bridge.c:163: warning: No description found for return value of 'fpga_bridges_enable'
->> drivers/fpga/fpga-bridge.c:187: warning: No description found for return value of 'fpga_bridges_disable'
->> drivers/fpga/fpga-bridge.c:238: warning: No description found for return value of 'of_fpga_bridge_get_to_list'
->> drivers/fpga/fpga-bridge.c:268: warning: No description found for return value of 'fpga_bridge_get_to_list'
->>
->> - Extend the return description of of_fpga_bridge_get() to include the
->>   case when try_module_get() fails.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/fpga-bridge.c | 23 ++++++++++++-----------
->>  1 file changed, 12 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
->> index a6c25dee9cc1..0b76c67c50e5 100644
->> --- a/drivers/fpga/fpga-bridge.c
->> +++ b/drivers/fpga/fpga-bridge.c
->> @@ -87,12 +87,13 @@ static struct fpga_bridge *__fpga_bridge_get(struct device *dev,
->>  /**
->>   * of_fpga_bridge_get - get an exclusive reference to an fpga bridge
->>   *
->> - * @np: node pointer of an FPGA bridge
->> - * @info: fpga image specific information
->> + * @np: node pointer of an FPGA bridge.
->> + * @info: fpga image specific information.
-> 
-> Those are not sentences. There is no reason that a period ('.') is needed
-> to end those lines. OTOH, the maintainers can do as they like with it.
-> 
-> The rest looks good. Thanks.
-> 
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+"Each component occupies one or more contiguous 4KB blocks of address 
+space. Where a component occupies more than one 4KB block, these 
+registers must appear in the highest 4KB block."
 
-I added a period at the end of each argument description to follow
-the style recommended in the "Function documentation" section of the
-kernel-doc documentation.
+(FWIW the latest Coresight 3.0 spec relaxes this restriction, but we 
+tend to model newer stuff as platform drivers with explicit DT/ACPI 
+identifiers rather than amba drivers anyway)
 
 Thanks,
-Marco
+Robin.
 
-[...]
+[1] https://developer.arm.com/documentation/ihi0029/d/?lang=en
 
+> 
+> Best regards,
+> Alexander
+> 
+>> In drivers/amba/bus.c,
+>>
+>> amba_read_periphid()
+>> {
+>> 	...
+>> 	size = resource_size(&dev->res);
+>> 	...
+>> 	for (pid = 0, i = 0; i < 4; i++)
+>> 		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i *
+> 8);
+>> }
+>>
+>> So the range in DTS for arm,primecell should be actual IP address space.
+>>
+>>> Robin.
+>>>
+>>>> _______________________________________________
+>>>> linux-arm-kernel mailing list
+>>>> linux-arm-kernel@lists.infradead.org
+>>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+> 
