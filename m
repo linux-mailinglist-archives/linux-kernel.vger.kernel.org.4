@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90D574A9EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 06:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAF174A9F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 06:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjGGEcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 00:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S232010AbjGGEcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 00:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGGEcR (ORCPT
+        with ESMTP id S231866AbjGGEcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 00:32:17 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B717119BD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 21:32:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-57704af0e64so16481407b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 21:32:15 -0700 (PDT)
+        Fri, 7 Jul 2023 00:32:18 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C571D1BCA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 21:32:17 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-569e7aec37bso17411957b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 21:32:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688704335; x=1691296335;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sZ6z8dQsy+feCMa6mHLv7bXXJoh0AFryfACo+v22y/I=;
-        b=Gwtq/b9i6ROYeVk/l2zLnMZzShNECphjVgRqvWJv5OGn+qPgDf0aYOccyWRYQYFvoe
-         a7kkq7Xd+cJ5Yl1sqH5mEwr1FQQ5mDvqjjOvtUPlT/znd2rFs7Pck6McGti6M/rVA24s
-         llLvscQ9xrZVeoRLucl11LU6f6n6b0Xa29TjReH/+Gm/F3SrGIpra5wV33NUcvECjY3b
-         edvx0fZJHvb/lQFLmDlwXRw3XoweSUsN7MydjcGTLSgxwpx2SVLkOc4pe3ecCewVkym6
-         3owTws6qa98ajMMWF0iXsyo8KL9j5OzHAPnkMl9JjHL2TyBxof/pLt96lGmatkHdhHzc
-         zIJw==
+        d=google.com; s=20221208; t=1688704337; x=1691296337;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sOqq0WN+jYVzOAHPCJmC3T8ZmV+ri02/8UcPUSwENZU=;
+        b=eODw2VAG4LYwUudSofmYsJnD5sDvgnvXm7FQ6WhI9uyNSxsp0njiK6thMN6LRU5jTF
+         gYmW5dl0SjECbLtK8iZkOH2xEUNg27Y4ApUuh7waJQakQ9qHP1nx+nYn3YKoVQ98VxWz
+         OY4YiR+GiMKjF2MsRbpXNOQvq0vJJsB3vwvYf8qNkr7WvRvnC7O9FwEtRfKLje9Z1BZP
+         9cOyuGcTKL1Y+u5/k71eAVQKBKvf+ar9q4SEqw+qNvkFIduc73n4qBi271JwmDnSiSe9
+         HnhcI0RwPWBtG3pS/6ZbVosWthJ25wdjphq0ZVDNfyhX/7kCWTDbFnICRKBZ285B6A6q
+         2nhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688704335; x=1691296335;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sZ6z8dQsy+feCMa6mHLv7bXXJoh0AFryfACo+v22y/I=;
-        b=mErcT84tWlJw4WGle7CidaQeUpnUw0j0+8T+45vLpFQZimkGM1MzivemaoXHvSZ7Ss
-         DXOJhavzEI+A5Y7PqseyipUren8PrYhuXZuBS2tvOoJZnqlSvTno3Gw1r/YvJoQdj6ZW
-         ZLGTxpvNUuLsoIYlBml9dyFM0Q6SC1et5ICknXa9xRZyHiRp4hYvpKE3zo7zYSQGf6ES
-         ARm8N4wB2MwqCva49r8OFY2hbmbuzo7B2R3BCffWDfhOHkPBNLjF4H+lHaV0Oz0gkmJn
-         Jlp5GLVjYpRLQ8lsw1TJvyHXz7SwMzjvPmf7N1Ax42YdScQj9esCs2fKkO/tDGjiBOov
-         WGYA==
-X-Gm-Message-State: ABy/qLa4LFOAkivFiEnaj6NDWhFmWkt6a2hQJ5laBUVXGbC/ez1zoj4O
-        0QUCIBhGMrrJ9DIxF3SRQckbGW8Nzw0=
-X-Google-Smtp-Source: APBJJlFkYEJCxhTy7hdsK2AY5aTIGyzLomxQxPwMN23ZBPHY8N4SuK35j+IjBDaJ4zJACbfSU1q2dNs4+C8=
+        d=1e100.net; s=20221208; t=1688704337; x=1691296337;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sOqq0WN+jYVzOAHPCJmC3T8ZmV+ri02/8UcPUSwENZU=;
+        b=CRbVG/Px1KF5NusTdaSDcvV6SwL8u+EbEtGAfvFrbubh331qv1SOwjcS2mZ8bUPqTZ
+         9oL04G6Rz+CFRaBcpCy3dWgkcq7/gIngxtGdKkqsITUVbaXQ8VqlNw8518pfyxPXGFpe
+         l/VpRgiS7OEV3eRJS1WNdrSBvbjdlcO3QRpAuMdMTGU1h6112OcBKiRxrwz1VUQYo6u/
+         zoeQqNk1HwBsK3cFpDiBX9ADrNjm/C87WZOyGnC+EQGqyMYFl0PeuLNKuCHTmjybVxDY
+         XppsQ/m/g+X7GKOuSmJjv/IUOroa0LsHuRn1OxD/auKFmJPCCmJvOxZT//Nhk8NTvJNI
+         lj5g==
+X-Gm-Message-State: ABy/qLYPwE07zp8VGodonJ5XNVMFCeMHphfJw2AwCUK70yCbpRztXcQh
+        b89vQ7fLXBJPMXgj2+Rv8deZh7Lxu9I=
+X-Google-Smtp-Source: APBJJlHJJzo6xKqRfCwu3K4BMa/DSUqUwTqtDXrv/pQ5MfhlCzg1HW7hTPTkOQo0rodXtQODdOcQ37BKfgc=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:fd8f:e174:8bb4:814])
- (user=surenb job=sendgmr) by 2002:a05:6902:508:b0:c4b:6ed6:6147 with SMTP id
- x8-20020a056902050800b00c4b6ed66147mr43761ybs.9.1688704334865; Thu, 06 Jul
- 2023 21:32:14 -0700 (PDT)
-Date:   Thu,  6 Jul 2023 21:32:10 -0700
+ (user=surenb job=sendgmr) by 2002:a81:af1b:0:b0:573:6b9c:6fa1 with SMTP id
+ n27-20020a81af1b000000b005736b9c6fa1mr27409ywh.1.1688704337053; Thu, 06 Jul
+ 2023 21:32:17 -0700 (PDT)
+Date:   Thu,  6 Jul 2023 21:32:11 -0700
+In-Reply-To: <20230707043211.3682710-1-surenb@google.com>
 Mime-Version: 1.0
+References: <20230707043211.3682710-1-surenb@google.com>
 X-Mailer: git-send-email 2.41.0.390.g38632f3daf-goog
-Message-ID: <20230707043211.3682710-1-surenb@google.com>
-Subject: [PATCH 1/2] mm: lock a vma before stack expansion
+Message-ID: <20230707043211.3682710-2-surenb@google.com>
+Subject: [PATCH 2/2] mm: lock newly mapped VMA which can be modified after it
+ becomes visible
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     willy@infradead.org, liam.howlett@oracle.com, david@redhat.com,
@@ -73,38 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With recent changes necessitating mmap_lock to be held for write while
-expanding a stack, per-VMA locks should follow the same rules and be
-write-locked to prevent page faults into the VMA being expanded. Add
-the necessary locking.
+mmap_region adds a newly created VMA into VMA tree and might modify it
+afterwards before dropping the mmap_lock. This poses a problem for page
+faults handled under per-VMA locks because they don't take the mmap_lock
+and can stumble on this VMA while it's still being modified. Currently
+this does not pose a problem since post-addition modifications are done
+only for file-backed VMAs, which are not handled under per-VMA lock.
+However, once support for handling file-backed page faults with per-VMA
+locks is added, this will become a race.
+Fix this by write-locking the VMA before inserting it into the VMA tree.
+Other places where a new VMA is added into VMA tree do not modify it
+after the insertion, so do not need the same locking.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/mmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ mm/mmap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 204ddcd52625..c66e4622a557 100644
+index c66e4622a557..84c71431a527 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -1977,6 +1977,8 @@ static int expand_upwards(struct vm_area_struct *vma, unsigned long address)
- 		return -ENOMEM;
- 	}
+@@ -2812,6 +2812,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	if (vma->vm_file)
+ 		i_mmap_lock_write(vma->vm_file->f_mapping);
  
-+	/* Lock the VMA before expanding to prevent concurrent page faults */
++	/* Lock the VMA since it is modified after insertion into VMA tree */
 +	vma_start_write(vma);
- 	/*
- 	 * vma->vm_start/vm_end cannot change under us because the caller
- 	 * is required to hold the mmap_lock in read mode.  We need the
-@@ -2064,6 +2066,8 @@ int expand_downwards(struct vm_area_struct *vma, unsigned long address)
- 		return -ENOMEM;
- 	}
- 
-+	/* Lock the VMA before expanding to prevent concurrent page faults */
-+	vma_start_write(vma);
- 	/*
- 	 * vma->vm_start/vm_end cannot change under us because the caller
- 	 * is required to hold the mmap_lock in read mode.  We need the
+ 	vma_iter_store(&vmi, vma);
+ 	mm->map_count++;
+ 	if (vma->vm_file) {
 -- 
 2.41.0.255.g8b1d071c50-goog
 
