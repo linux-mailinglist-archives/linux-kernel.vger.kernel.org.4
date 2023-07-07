@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E803374A8DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479BF74A8DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 04:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjGGCUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 22:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S232099AbjGGCUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 22:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjGGCU2 (ORCPT
+        with ESMTP id S231557AbjGGCU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Jul 2023 22:20:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8230170C;
-        Thu,  6 Jul 2023 19:20:24 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7F719B7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 19:20:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CBD7614D4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D2961637
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 02:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8075BC433C9;
         Fri,  7 Jul 2023 02:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65888C433C8;
-        Fri,  7 Jul 2023 02:20:23 +0000 (UTC)
-Date:   Thu, 6 Jul 2023 22:20:20 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tracing/probes: Fix return value when "(fault)" is
- injected
-Message-ID: <20230706222020.6e5c8e89@rorschach.local.home>
-In-Reply-To: <20230707110210.06e81e182c775454ce86280d@kernel.org>
-References: <168830922841.2278819.9165254236027770818.stgit@mhiramat.roam.corp.google.com>
-        <168830925534.2278819.7237772177111801959.stgit@mhiramat.roam.corp.google.com>
-        <20230705224956.1c5213e6@gandalf.local.home>
-        <20230706134036.5c074aa5fc6a55cdb5038660@kernel.org>
-        <20230706095039.1cb9c9d1@gandalf.local.home>
-        <20230707110210.06e81e182c775454ce86280d@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688696424;
+        bh=QX8ydS+01RAznifunMEpbyUhZSB5I5EmS3nsZGI1KWI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CBU+Pjs/FGudG/pjhRZwN4Fcmjq/H0/IWM0KmFKskPrJW1SC9cuboyRy0BLBZP92v
+         32hOr747366R93tRGfR5FqbMELzo/ZSvG8QWmCEvqu11JnMqiACmjjduZ03rlyNey/
+         BHeseK0Evvmhc0Xog/YVJgsKaCVve1zTTY+B/WSaOBjsDPoBhBvPzYyd3HofqRfbuf
+         MDkst9NkfvFRma8QQ/vr9keeN5SGygyAFq+68YvZJs6MrEREYQAy2/0/UGYuZZv+dB
+         SJWAgANmxM4u/fF2e+Xf83CymCQLkeAtrr5CzBxLvp6uEH2ZC0gaK87qyoA0YJdDD1
+         0L2WlxxqJzsiA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E17FC73FEB;
+        Fri,  7 Jul 2023 02:20:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/3] Fix dropping of oversize preemptible frames with
+ felix DSA driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168869642438.27656.6734580798991464812.git-patchwork-notify@kernel.org>
+Date:   Fri, 07 Jul 2023 02:20:24 +0000
+References: <20230705104422.49025-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20230705104422.49025-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        xiaoliang.yang_1@nxp.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 11:02:10 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+Hello:
 
-> /* Print type function for string type */
-> int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, void *data, void *ent)
-> {
->         int len = *(u32 *)data >> 16;
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed,  5 Jul 2023 13:44:19 +0300 you wrote:
+> It has been reported that preemptible traffic doesn't completely behave
+> as expected. Namely, large packets should be able to be squeezed
+> (through fragmentation) through taprio time slots smaller than the
+> transmission time of the full frame. That does not happen due to logic
+> in the driver (for oversize frame dropping with taprio) that was not
+> updated in order for this use case to work.
 > 
->         if (!len)
->                 trace_seq_puts(s, "(fault)");
->         else
-> ----
-> 
-> In this case, what we need is to set data_loc length = 0 if ret < 0.
-> 
-> Do you really need to get '"(fault)"' (with double quotation) or
-> just '(fault)' (no double quotation) is OK?
+> [...]
 
- ># echo 'e:myopen syscalls/sys_enter_openat file=+0($filename):ustring' >> /sys/kernel/tracing/dynamic_events
- ># trace-cmd start -e myopen
- ># trace-cmd show
-# tracer: nop
-#
-# entries-in-buffer/entries-written: 19/19   #P:4
-#
-#                                _-----=> irqs-off/BH-disabled
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| / _-=> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-       trace-cmd-4688    [000] ...1. 466968.015784: myopen: (syscalls.sys_enter_openat) file=(fault)
-       trace-cmd-4688    [000] ...1. 466968.015816: myopen: (syscalls.sys_enter_openat) file=(fault)
-       trace-cmd-4688    [000] ...1. 466968.015833: myopen: (syscalls.sys_enter_openat) file=(fault)
-       trace-cmd-4688    [000] ...1. 466968.015849: myopen: (syscalls.sys_enter_openat) file=(fault)
-       trace-cmd-4688    [000] ...1. 466968.015864: myopen: (syscalls.sys_enter_openat) file=(fault)
-       trace-cmd-4688    [000] ...1. 466968.015879: myopen: (syscalls.sys_enter_openat) file=(fault)
+Here is the summary with links:
+  - [net,1/3] net: mscc: ocelot: extend ocelot->fwd_domain_lock to cover ocelot->tas_lock
+    https://git.kernel.org/netdev/net/c/009d30f1a777
+  - [net,2/3] net: dsa: felix: make vsc9959_tas_guard_bands_update() visible to ocelot->ops
+    https://git.kernel.org/netdev/net/c/c60819149b63
+  - [net,3/3] net: mscc: ocelot: fix oversize frame dropping for preemptible TCs
+    https://git.kernel.org/netdev/net/c/c6efb4ae387c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Does that answer your question? ;-)
-
--- Steve
