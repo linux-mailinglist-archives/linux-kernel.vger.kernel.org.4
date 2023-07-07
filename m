@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BB474B3C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D1374B3C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjGGPJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S232783AbjGGPKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233369AbjGGPJY (ORCPT
+        with ESMTP id S229480AbjGGPKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:09:24 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8DA268B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:09:22 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f954d7309fso2522746e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 08:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688742561; x=1691334561;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Vrdg0BN8YeBPDc9Z9UP3CnoTFMFzGJE30KoHXN+rRA=;
-        b=sFjOsKeMEC/86xCtbSTI4Tawd1k3QfcsXGfWApGBL1x19uMmxtfKUPkPuG8FFNDM2S
-         OpZ0fLCttpFipoo5Ezw88q1vgRSIQDKvd96Ur4da02dF7cWUYX9ZyB2uOu/zQlmkprpD
-         PpIZ3ecFS44Ww7k/DjogXpUrAg3q3L1HeGeAJ4O15de+T5rEdVOYADNPxEEDRl+QGAMH
-         dtG8hloMLzjYezyL1eamIPX+3OKgGcy2m6wL01nD53203aJC6W3vtYxwqHdgmEwyoCvV
-         mdy2wF4ECDye1arJb4I3o62REe66ZPU0j1r/ySNGNUP73hEMtql2OR/lt9FrmrNZLwWM
-         XM3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688742561; x=1691334561;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Vrdg0BN8YeBPDc9Z9UP3CnoTFMFzGJE30KoHXN+rRA=;
-        b=aDD9pYsVTrOGIaME32tN//atA3bLe0/exv0ByKq3lIZQR+BdKE/+/z+Z//AYt4MyW6
-         bX8XSXCSlU0Mu+dbnHO6B4VipEqWefvGv/ovO3eR4A1C+124I7gEbIif5JCmQo0virrf
-         fktKP18/pScE92f5YcXZxonYArpQ8AWfxhcmC4V8l0Ey3b5Vldieo+kx+1Gt8l83gGeX
-         p05fHRwxsRLvO/hfQ7SR9V3BP+SzopcPUF99yu1ooV0gXYX9cpOfPToDQ5hXI62WJWKW
-         BU/4NY/bTFUlzKnxq6HPzDVq5vvXd6BgV6+oyOmOoLEhzxm6YHxmchcuREJ4a7BqWFhx
-         e6IQ==
-X-Gm-Message-State: ABy/qLYapWC8d4vvnoRJ62X7i5mmXrIBQ9vNAdw4HqjIgNkvRhtkx7bL
-        kAGBm+LH3GltL+ZsS+odv4rxhA==
-X-Google-Smtp-Source: APBJJlHUCfOsWmEr/nU2X4bUtXexNSuTsdr3Fo86I7TLAV/FuqEMGf0Lzv4Rf+oayoRyWWpP60NnuA==
-X-Received: by 2002:a05:6512:2251:b0:4f9:5807:aba7 with SMTP id i17-20020a056512225100b004f95807aba7mr3390088lfu.27.1688742560970;
-        Fri, 07 Jul 2023 08:09:20 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id v25-20020ac25619000000b004fb745fd22fsm716004lfd.32.2023.07.07.08.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 08:09:20 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v6.5-rc1
-Date:   Fri,  7 Jul 2023 17:09:19 +0200
-Message-Id: <20230707150919.724185-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 7 Jul 2023 11:10:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AEDAA
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 08:10:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 183E2619EC
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 15:10:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F88DC433C8;
+        Fri,  7 Jul 2023 15:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688742623;
+        bh=2dh4tnVkPfE/NzvB3pEYoTiSBYTXVvMwmr877tZQ0Ic=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ICetrvfi1hW/2srHYb3SFLoBmdGXeN5OsIDMJHSm7oDNexAzcIRUnbRve1jaCYT6M
+         j7BZS3+Z4K6wRa7m2po5Y0fx/skuAb50FYoG1D61eERZGZwMYKNBPH0o4xXTX2xzPZ
+         K9Nr2jgtht0cLyDmrdNttVDDtmJe9AM9OGlQ66FKdoblaGCeHYjiiKEspvxdwOvUej
+         AExCh0HzCPPTx1tWbglABOZLaXN3YF9CJcjsuXfvQddXIpeF3uk4ZnGHJHKEH2OIsu
+         mVJ/9a0b5yy32cjgjgvFsMNwvj17mgM5MNRWhMLxXGCvJ5SIa7vHRVGoJ6JL6YZ8x3
+         ELVgEIlQ4pwKw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 54507E53801;
+        Fri,  7 Jul 2023 15:10:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/3] riscv: some CMO alternative related clean up
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168874262334.15275.18352096242766499021.git-patchwork-notify@kernel.org>
+Date:   Fri, 07 Jul 2023 15:10:23 +0000
+References: <20230614165504.532-1-jszhang@kernel.org>
+In-Reply-To: <20230614165504.532-1-jszhang@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello:
 
-Here's a PR with an MMC fix intended for v6.5-rc1. Details about the highlights
-are as usual found in the signed tag.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Please pull this in!
+On Thu, 15 Jun 2023 00:55:01 +0800 you wrote:
+> This series consists of clean up patches of the "riscv: Reduce
+> ARCH_KMALLOC_MINALIGN to 8" series[1]. Per Catalin suggestion, I will
+> submit the enabling of riscv ARCH_KMALLOC_MINALIGN 8 in next
+> development window. However, the cleanups are good for submitting
+> now.
+> 
+> PS: Conor's reviewed-by tag is included.
+> 
+> [...]
 
-Kind regards
-Ulf Hansson
+Here is the summary with links:
+  - [1/3] riscv: errata: thead: only set cbom size & noncoherent during boot
+    https://git.kernel.org/riscv/c/31ca5d49264b
+  - [2/3] riscv: mm: mark CBO relate initialization funcs as __init
+    https://git.kernel.org/riscv/c/3b472f860c5c
+  - [3/3] riscv: mm: mark noncoherent_supported as __ro_after_init
+    https://git.kernel.org/riscv/c/8500808a991f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-The following changes since commit e55e5df193d247a38a5e1ac65a5316a0adcc22fa:
-
-  csky: fix up lock_mm_and_find_vma() conversion (2023-06-29 23:34:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.5-2
-
-for you to fetch changes up to fa700d73494abbd343c47c6f54837c9874c61bbe:
-
-  mmc: Revert "mmc: core: Allow mmc_start_host() synchronously detect a card" (2023-06-30 14:06:51 +0200)
-
-----------------------------------------------------------------
-MMC core:
- - Fix regression of detection of eMMC/SD/SDIO cards
-
-----------------------------------------------------------------
-Ulf Hansson (1):
-      mmc: Revert "mmc: core: Allow mmc_start_host() synchronously detect a card"
-
- drivers/mmc/core/core.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
