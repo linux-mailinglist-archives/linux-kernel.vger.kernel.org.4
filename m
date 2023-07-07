@@ -2,142 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1558174B150
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAA274B152
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjGGMwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        id S232010AbjGGMyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjGGMww (ORCPT
+        with ESMTP id S229740AbjGGMyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:52:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C06B1FEB;
-        Fri,  7 Jul 2023 05:52:47 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFB866606FCA;
-        Fri,  7 Jul 2023 13:52:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688734365;
-        bh=qDwANLQ61icK21USCiych8PHXsbfyaAg3fQVfsTFR0E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=boT51Xa27cuR67WqrDMmww5kmVhzhlbknsmSumNKNe2IMGQNPOAPwayNQiMid4Arm
-         PCTi9I1uDsmSeinZi5hJgv1iZVciUExuTV8atQOoC/yizk9RwVG6MyE3ruNem4HUBk
-         3FX5ogGMBHTxJBk92bd3zAhDwPTeLWhIBsTO1nUnmEjs4eDm2K5Xldn/ave9FEr57N
-         vUukeiXBD0H9dTTUeWBRS38RYnx6MPjdWayiXBGCVurLNPe3gPAm8C/jtCWbTuPVnW
-         53rsS7H9wLon79o5Pk63NH0cw74yWoqIISnsT1HUnJiwOlOkS0w5SGQzStyPMmjjZv
-         Oth6cqLZl2npw==
-Date:   Fri, 7 Jul 2023 14:52:41 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, alexdeucher@gmail.com, ogabbay@kernel.org,
-        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
- mappings
-Message-ID: <20230707145241.6ea73643@collabora.com>
-In-Reply-To: <e92219d7-77f7-a40a-39d9-ea7afc5f3687@redhat.com>
-References: <20230629222651.3196-1-dakr@redhat.com>
-        <20230629222651.3196-3-dakr@redhat.com>
-        <20230707130010.1bd5d41b@collabora.com>
-        <e92219d7-77f7-a40a-39d9-ea7afc5f3687@redhat.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Fri, 7 Jul 2023 08:54:35 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9A61BF4
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:54:34 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-313fb7f0f80so1887552f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688734473; x=1691326473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=//HmX2rwH4kNsgH83nKEdamx6qwz4xhPHaVhwq5zDNc=;
+        b=DBvyiGaQWXVlWzt3CvPY5sxFRQUw8nXRMtQDxRwIJ8zj+XJcDEUxOsujGhtXBFOAHy
+         bW/s+9ngfwoVnD6g88h9hsuy9gr99f2jPN+O297guVAHuQPErDCGYTDADGtOYTyVc7Gs
+         C4JkzA3Dj7TiJIGjwmoivhD7WyOXafTc+8dc6thUy81uVSbBp9ovMbjatMjGf9ClDvKU
+         pFHQ7vbDXfIKALy+bOg+AUIo+H50bYpUhrvAzuF8tXXmuKpKV+unxfgmy1tAs4BCOVjz
+         MiYxO14J3KUhqj2gtNtwZJaFw2Lc4auomOApRyGPLPWIEo7bSdmoddL8p8y7sYlTTrmL
+         l1ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688734473; x=1691326473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=//HmX2rwH4kNsgH83nKEdamx6qwz4xhPHaVhwq5zDNc=;
+        b=G3CMrPmN2ODS+MlhUSYjv1HUKdRLwZDGNz6FDtV9rxlcWbA8BQDjP1gTtt6kXJXlAl
+         NOfauuUJRM0yEee1h1P8pOyNcDKU4yDta/2GbiDN/GinEtPRZ+sFs9T3G95lIigDAr6Q
+         dm1uRq869fGKvqCspiJw0irdxnk+zMc/51L+ZBegVa+t4CYeytZW/s75lAX6D/qrV6A6
+         XDgh4/Y52jJXs9Dkftcv4VrxVkRegGsxXJMxOz2DutC5voIFIjOJVp5inY2V9rkG4dIs
+         bJJpClQAtGQMXqs08Vb+jHitPPLmHf36vD4g1n1VcPRAtaAEh1/yUFDHeg3R2sXb/AEk
+         ZR2A==
+X-Gm-Message-State: ABy/qLa/nWMNAZmO3+uCb7JS7UGlZlv7UUyrQ+v6HLtIi2FgVPaqpqpI
+        48t99YVdtt80As1M6Zpp1Kq4rg==
+X-Google-Smtp-Source: APBJJlHvsrINvPQT0ac2eHj3X1qsLxYz25VEg3MHYtCOHGh7p/6C1edZJp6JGL5VpbqsaehK1vgDTA==
+X-Received: by 2002:a05:6000:150:b0:306:46c4:d313 with SMTP id r16-20020a056000015000b0030646c4d313mr3928132wrx.28.1688734472847;
+        Fri, 07 Jul 2023 05:54:32 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id k15-20020a056000004f00b003140fff4f75sm4436162wrx.17.2023.07.07.05.54.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jul 2023 05:54:32 -0700 (PDT)
+Message-ID: <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
+Date:   Fri, 7 Jul 2023 13:54:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
+References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
+ <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 14:41:23 +0200
-Danilo Krummrich <dakr@redhat.com> wrote:
 
-> >> +	     va__ && (va__->va.addr < (end__)) && \
-> >> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
-> >> +	     va__ = list_next_entry(va__, rb.entry))  
-> > 
-> > If you define:
-> > 
-> > static inline struct drm_gpuva *
-> > drm_gpuva_next(struct drm_gpuva *va)
-> > {
-> > 	if (va && !list_is_last(&va->rb.entry, &va->mgr->rb.list))
-> > 		return list_next_entry(va, rb.entry);
-> > 
-> > 	return NULL;
-> > } >
-> > the for loop becomes a bit more readable:  
+
+On 07/07/2023 08:35, Johan Hovold wrote:
+> On Wed, Jul 05, 2023 at 01:57:23PM +0100, Srinivas Kandagatla wrote:
+>> dB range for HPHL and HPHR gains are from +6dB to -30dB in steps of
+>> 1.5dB with register values range from 0 to 24.
+>>
+>> Current code maps these dB ranges incorrectly, fix them to allow proper
+>> volume setting.
+>>
+>> Fixes: e8ba1e05bdc0("ASoC: codecs: wcd938x: add basic controls")
+>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> ---
+>>   sound/soc/codecs/wcd938x.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+>> index faa15a5ed2c8..3a3360711f8f 100644
+>> --- a/sound/soc/codecs/wcd938x.c
+>> +++ b/sound/soc/codecs/wcd938x.c
+>> @@ -210,7 +210,7 @@ struct wcd938x_priv {
+>>   };
+>>   
+>>   static const SNDRV_CTL_TLVD_DECLARE_DB_MINMAX(ear_pa_gain, 600, -1800);
+>> -static const SNDRV_CTL_TLVD_DECLARE_DB_MINMAX(line_gain, 600, -3000);
+>> +static const DECLARE_TLV_DB_SCALE(line_gain, -3000, 150, -3000);
 > 
-> Yes, it would. However, I don't want it to be confused with 
-> drm_gpuva_find_next(). Maybe I should rename the latter to something 
-> like drm_gpuva_find_next_neighbor() then.
+> This looks wrong, and indeed that forth argument appears to be a mute
+> flag. I guess that one should have been 0 (false) here?
 
-If you want to keep drm_gpuva_find_next(), feel free to rename/prefix
-the drm_gpuva_next() function. I was just posting it as a reference.
+yes, this should be true instead of a mute dB value.
 
 > 
-> > 
-> > 	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)); \
-> > 	     va__ && (va__->va.addr < (end__)); \
-> > 	     va__ = drm_gpuva_next(va__))
-> >   
-> >> +
-> >> +/**
-> >> + * drm_gpuva_for_each_va_range_safe - iternator to safely walk over a range of
-> >> + * &drm_gpuvas
-> >> + * @va__: &drm_gpuva to assign to in each iteration step
-> >> + * @next__: another &drm_gpuva to use as temporary storage
-> >> + * @mgr__: &drm_gpuva_manager to walk over
-> >> + * @start__: starting offset, the first gpuva will overlap this
-> >> + * @end__: ending offset, the last gpuva will start before this (but may
-> >> + * overlap)
-> >> + *
-> >> + * This iterator walks over all &drm_gpuvas in the &drm_gpuva_manager that lie
-> >> + * between @start__ and @end__. It is implemented similarly to
-> >> + * list_for_each_safe(), but is using the &drm_gpuva_manager's internal interval
-> >> + * tree to accelerate the search for the starting &drm_gpuva, and hence is safe
-> >> + * against removal of elements. It assumes that @end__ is within (or is the
-> >> + * upper limit of) the &drm_gpuva_manager. This iterator does not skip over the
-> >> + * &drm_gpuva_manager's @kernel_alloc_node.
-> >> + */
-> >> +#define drm_gpuva_for_each_va_range_safe(va__, next__, mgr__, start__, end__) \
-> >> +	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__)), \
-> >> +	     next__ = va ? list_next_entry(va__, rb.entry) : NULL; \
-> >> +	     va__ && (va__->va.addr < (end__)) && \
-> >> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
-> >> +	     va__ = next__, next__ = list_next_entry(va__, rb.entry))  
-> > 
-> > And this is the safe version using the drm_gpuva_next() helper:
-> > 
-> > 	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)), \
-> > 	     next__ = drm_gpuva_next(va__); \
-> > 	     va__ && (va__->va.addr < (end__)); \
-> > 	     va__ = next__, next__ = drm_gpuva_next(va__))
-> > 
-> > Those changes fixed an invalid pointer access I had in the sm_unmap()
-> > path.
-> >   
+> Headphone output also appears to be way too loud by default with this
+> patch (alone) applied. Perhaps it's just the default mixer settings need
+> to be updated to match?
 > 
-> Sorry you did run into this bug.
+> It looks like you're inverting the scale above. Perhaps that's intended,
 
-No worries, that's what testing/debugging/reviewing is for. And I'm glad
-someone decided to work on this gpuva stuff so I don't have to code it
-myself, so that's the least I can do.
+yes, the highest value corresponds to lowest dB which is why its inverted.
+
+> but some more details in the commit message as to what was wrong and
+> what you intended to do would have been good.
+
+HPHR/HPHL Volume control is broken on this codec.
+current UCM uses digital volume control for x13s which needs to be moved 
+to Analog volume control.
+I have this change https://termbin.com/mpp9 in UCM which I plan to send 
+out once I test and fix other paths as well.
+
+--srini
+> 
+> Johan
