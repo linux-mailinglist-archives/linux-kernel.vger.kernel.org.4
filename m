@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383CC74B563
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD8074B565
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjGGQxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 12:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S233037AbjGGQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 12:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbjGGQxA (ORCPT
+        with ESMTP id S233007AbjGGQxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:53:00 -0400
+        Fri, 7 Jul 2023 12:53:06 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9583C213F
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:52:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB08F2694
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688748751; x=1720284751;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=44TeDqOSGPdOaD7ZSx3H22uGfgMB+zSFFCjyv01ZsZU=;
-  b=kiaAsdAVAevuvw6EoDUNk+RcnrgEJ2z84KFivzqdxq0VfNs4zQgxDaOx
-   fTl8QsJ+wm9AzUwEA8k7XmSu2HcFxB2cvgKN3rHYhbgRKCyODsuT1yTGc
-   /f59+3dHip33MxH8UD4Bifn4gnxwo7Upf21swhNt0QicObogcZrYZpmnN
-   fFhNlR4FDj8YgXQ4kqxZ8g04dboL7VZSmVKzcw2CYXl7M/yPuxNzjEoLt
-   4fRtuQzmvfFFtJ82M5v+nlVYTeTZTvxVGRnDNrpOm/VVjKn0UPfoNAMi+
-   xyT9NwA3+ZMBYQcwJgrXXXmCA3himXMuSKimXwRJ7wgSIEYp8tpeLvXWE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="353776184"
+  t=1688748756; x=1720284756;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9AZoEU1dBDfQPpclAW3AxhTYvcE6HGN/KVZD4GlGeoo=;
+  b=d/94MWC/wkbSzhSnmtqy5gZ/71whsbZAxyYKwWuqvq42/epCEH7Ifmjb
+   O6vAkzc2/R1uguu4CnTsodWb4+Yd5TsewLztAqMLlXiUY9wrQbTtYm7Ub
+   YsTBfTzMyvPSrsrzT7TDfs4jgwuZURehrbUT+Ql6YzOVyteHSTW0QSDXl
+   0Mp+Zv9PAnlVYwI9LJcATgMQFdqXHRSG9bm9WCe5E3PJWUWNER6NoFPcM
+   1QeEHWL7lsz0IgkXIiOmJan0WKA3NfZNcGOGu9dEoTIpgRUeZvbmgpfG1
+   TmvUiu8YszLz2WU72jqNep4sxYVXCN+og6g9GO1mPuD9t0WIE0fYVtAZc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="353776318"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="353776184"
+   d="scan'208";a="353776318"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 09:52:22 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 09:52:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="697290400"
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="697290444"
 X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="697290400"
+   d="scan'208";a="697290444"
 Received: from fyin-dev.sh.intel.com ([10.239.159.32])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jul 2023 09:52:19 -0700
+  by orsmga006.jf.intel.com with ESMTP; 07 Jul 2023 09:52:33 -0700
 From:   Yin Fengwei <fengwei.yin@intel.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         yuzhao@google.com, ryan.roberts@arm.com, shy828301@gmail.com,
         akpm@linux-foundation.org, willy@infradead.org, david@redhat.com
 Cc:     fengwei.yin@intel.com
-Subject: [RFC PATCH 0/3] support large folio for mlock
-Date:   Sat,  8 Jul 2023 00:52:18 +0800
-Message-Id: <20230707165221.4076590-1-fengwei.yin@intel.com>
+Subject: [RFC PATCH 1/3] mm: add function folio_in_range()
+Date:   Sat,  8 Jul 2023 00:52:19 +0800
+Message-Id: <20230707165221.4076590-2-fengwei.yin@intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230707165221.4076590-1-fengwei.yin@intel.com>
+References: <20230707165221.4076590-1-fengwei.yin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,53 +63,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yu mentioned at [1] about the mlock() can't be applied to large folio.
+It will be used to check whether the folio is mapped to specific
+VMA and whether the mapping address of folio is in the range.
 
-I leant the related code and here is my understanding:
-- For RLIMIT_MEMLOCK related, there is no problem. Becuase the
-  RLIMIT_MEMLOCK statistics is not related underneath page. That means
-  underneath page mlock or munlock doesn't impact the RLIMIT_MEMLOCK
-  statistics collection which is always correct.
+Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+---
+ mm/internal.h | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-- For keeping the page in RAM, there is no problem either. At least,
-  during try_to_unmap_one(), once detect the VMA has VM_LOCKED bit
-  set in vm_flags, the folio will be kept whatever the folio is
-  mlocked or not.
-
-So the function of mlock for large folio works. But it's not optimized
-because the page reclaim needs scan these large folio and may split
-them.
-
-This series identified the large folio for mlock to two types:
-  - The large folio is in VM_LOCKED VMA range
-  - The large folio cross VM_LOCKED VMA boundary
-
-For the first type, we mlock large folio so page relcaim will skip it.
-For the second type, we don't mlock large folio. It's allowed to be
-picked by page reclaim and be split. So the pages not in VM_LOCKED VMA
-range are allowed to be reclaimed/released.
-
-patch1 introduce API to check whether large folio is in VMA range.
-patch2 make page reclaim/mlock_vma_folio/munlock_vma_folio support
-large folio mlock/munlock.
-patch3 make mlock/munlock syscall support large folio.
-
-testing done:
-  - kernel selftest. No extra failure introduced
-
-
-[1] https://lore.kernel.org/linux-mm/CAOUHufbtNPkdktjt_5qM45GegVO-rCFOMkSh0HQminQ12zsV8Q@mail.gmail.com/
-
-Yin Fengwei (3):
-  mm: add function folio_in_range()
-  mm: handle large folio when large folio in VM_LOCKED VMA range
-  mm: mlock: update mlock_pte_range to handle large folio
-
- mm/internal.h |  37 ++++++++++++++++--
- mm/mlock.c    | 103 ++++++++++++++++++++++++++++++++++++++++++++++----
- mm/rmap.c     |   3 +-
- 3 files changed, 131 insertions(+), 12 deletions(-)
-
+diff --git a/mm/internal.h b/mm/internal.h
+index f1276d90484ad..66117523d7d71 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -585,6 +585,32 @@ extern long faultin_vma_page_range(struct vm_area_struct *vma,
+ 				   bool write, int *locked);
+ extern bool mlock_future_ok(struct mm_struct *mm, unsigned long flags,
+ 			       unsigned long bytes);
++
++static inline bool
++folio_in_range(struct folio *folio, struct vm_area_struct *vma,
++		unsigned long start, unsigned long end)
++{
++	pgoff_t pgoff, addr;
++	unsigned long vma_pglen = (vma->vm_end - vma->vm_start) >> PAGE_SHIFT;
++
++	VM_WARN_ON_FOLIO(folio_test_ksm(folio), folio);
++	if (start < vma->vm_start)
++		start = vma->vm_start;
++
++	if (end > vma->vm_end)
++		end = vma->vm_end;
++
++	pgoff = folio_pgoff(folio);
++
++	/* if folio start address is not in vma range */
++	if (pgoff < vma->vm_pgoff || pgoff > vma->vm_pgoff + vma_pglen)
++		return false;
++
++	addr = vma->vm_start + ((pgoff - vma->vm_pgoff) << PAGE_SHIFT);
++
++	return ((addr >= start) && (addr + folio_size(folio) <= end));
++}
++
+ /*
+  * mlock_vma_folio() and munlock_vma_folio():
+  * should be called with vma's mmap_lock held for read or write,
 -- 
 2.39.2
 
