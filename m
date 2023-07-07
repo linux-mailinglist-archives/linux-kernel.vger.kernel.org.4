@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B9274B182
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6752374B185
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 15:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232391AbjGGNLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 09:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S231962AbjGGNLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 09:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbjGGNLC (ORCPT
+        with ESMTP id S232134AbjGGNLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 09:11:02 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2054.outbound.protection.outlook.com [40.107.13.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831B31BF4;
-        Fri,  7 Jul 2023 06:10:59 -0700 (PDT)
+        Fri, 7 Jul 2023 09:11:04 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2056.outbound.protection.outlook.com [40.107.241.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE9F1FF0;
+        Fri,  7 Jul 2023 06:11:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fW6wORowJcT0IhSi93deq1xfzkNwiHVdHlLTPGV5tLVijkN/h2sinGey+Fnd1lzKNCFZBqlwObIGQCBwKAfRpDk1Tbs20Me3MZEWmNY4JlajDjglvBuZmgm6ywUyhMI7x5BDNVa9wn/CmzwIHkYq0XvrQlrB81/pHeI+nNjqTm+nWwJKDnVNtxjK6+20moP0K9urECYuqf6OXiM8UonoX3scWxXv3YES7NhMwoO31oNnNTWfMI+dhZ7n7LGFpDFkxPXEjr4Efohq+hJgtD4KSIubAcltk+vFizieRKyc/qrmdHrMFmSjT6pjWDaWPMntjWJg0BId7O+9+jeVyDO5fw==
+ b=L2QOjgIliM7itAwZNMcgE6kNyiRIXsjIw3EWSkHjF+FnIrU/7jT7pZbD8BmcF7hhDbpkphoSMu0BF6FwhFm6/fL3ENm6Ve4hLcHr8nAnNvcf06LpXutjPhXCJJjaAgtwaO3GF2ohQIw7/wzpjA377QUctLRm/ReDfWsbgH9MokwgsoVFsBDC2hXJgKu9vcWOJxU6ji7aRWuuyLZIyoeO2xJT7gYpQJov4biQFyBUbbeb256b0KzO+08dKz2tSpdo30LQ8Nl66zb/GDMSsLSUxwoSCsNwkIZNs/n65RFrKLZY058+0eCNEXJqVz1WRHNwFrycJJE8OE+fcD3zgKZH2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mMq0ue+njo+cH4FjOP6FVncY2qbxB+eHwEiIXB5aWJw=;
- b=HTWzjmRvD0FW51XAC9ZJV1WktAuz7ksIRSuCcvMyQQjJJGkhRq+eHChH+JDtJLGPruFprCSiJCFBRvSxsZsPcLHM2VkCPPTxvontL4Bv48GgRfcdUKpyiZDGe3Pk1VbpbrJMSvXMZ9CnmEVVNaIM4tCK9tqF/ICa7Ht13Lces5wJI8uAd34GFwIlvUuanGtc/z1irIhFZyeEMQ/6e4y7E+mM06fr52X7d6WBC7D70UzRE39/HXLZzX2q7x9raoxnuCRApJxzn1nZ8ma2CJT7KMc7fI2LdICppmWe/IDZ3n75bOoEusWQf1bfjXqv0haffjPUTRkOncFoDcx0ZQIP1w==
+ bh=GVgvWbkOF/IFTQLpsubIH02XoZ8iTo+ESZhSIIaVwxc=;
+ b=F3eTD94GMZ1W9lRyb65JADQPTPbhN3UdU4SSRaT60j5R6Tm70hHsc9c5hBD3pFiJc22qZvIee27FzKovSOVpA6RT4wOJWdgahT1ygp/Rg75aW4vlw2/7O8heCSJOms+5dv2WrbRnk1F3XNPlYIYyNwerd9srK+gToDRdEwlBf5/dkUs1oQ0RHxAs7zNGNcfJWlwejHaPDfb0Xr3BMlrpoOEEd4FRjZ2hWBIEh8hMJ5NWcXj/vHvpIJ+hWwBN7nShqnZAM9e++C40gVMBY7ivk0cMvQK+HrDtutJakxObwkr32GvE9KAvWVy4rmmlTMtEXWcMywj40YB+ByW0OlYJ7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  20.93.157.195) smtp.rcpttodomain=vger.kernel.org
  smtp.mailfrom=topicproducts.com; dmarc=none action=none header.from=topic.nl;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mMq0ue+njo+cH4FjOP6FVncY2qbxB+eHwEiIXB5aWJw=;
- b=Ngxm6L4Jlp4+IS/1rFEbf6rme22m4B5ZIAlwsJd1AFxHOuvRci5GtZRriLOn2vIK2tRItzDyd13A1so8VxlukxDtZ2MU3LnLDyHL28UMSb5dz1sa8Tt6Ptml+0DvDaP14eT+E/DWA4M/L1KNDq8dIXDA4vn3JQ/q+3kHdp7z9CREBDt3IGSmbxhO8sPOsL7MzWDfOaft4TBLdpa8/Z2JOC+yqAAjBd/DJjYrQXI8X+8oJHG9WD/WhOHUyqlxndv0QPmC/c0Ly5Hd8fvkdLdhaLXC9uenWjOeeCRAqE6GDyPmJN++wAq+wlypgg7J6j+eFjZwjgT8A7BLx96VwyJZyA==
-Received: from BE1P281CA0424.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:83::12)
- by PAXPR04MB8989.eurprd04.prod.outlook.com (2603:10a6:102:20c::11) with
+ bh=GVgvWbkOF/IFTQLpsubIH02XoZ8iTo+ESZhSIIaVwxc=;
+ b=MTHYILH1/Oi0p1UtRchnP1wnS2j6iJjc/k26UNn2SaWbvFVGJfSOfs1GGMQceboya1zPHv7qz94HdhduHty1B5/jNfjVwm8X0CEiQ6TUulHZYNDBT1WYtmR5Ddd1Ri3Fl3ZL0WGbXsMN/Z9qXCuQ7U1S+u6yjwPfYu2QRXLhaohA3l9At/lN2Qy6ZNrDW67xX6Sux+DDZSnGRLFzQcnkiE73PFmWtqphziBDkqxnzd+gUMgJW5pLyfeiqFXsC/nzR9ckUHCpIcw1vhhojmFiiacLQoiWDPlM1gTFB+n506wFsU9rNalM9utqru09dNEYG+JTaBAzspOKvigo0hLDzQ==
+Received: from OS6P279CA0179.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:38::17)
+ by AM9PR04MB8524.eurprd04.prod.outlook.com (2603:10a6:20b:433::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Fri, 7 Jul
- 2023 13:10:56 +0000
-Received: from VE1EUR01FT048.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:b10:83:cafe::13) by BE1P281CA0424.outlook.office365.com
- (2603:10a6:b10:83::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.13 via Frontend
- Transport; Fri, 7 Jul 2023 13:10:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Fri, 7 Jul
+ 2023 13:10:57 +0000
+Received: from HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:e10:38:cafe::83) by OS6P279CA0179.outlook.office365.com
+ (2603:10a6:e10:38::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25 via Frontend
+ Transport; Fri, 7 Jul 2023 13:10:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.93.157.195)
  smtp.mailfrom=topicproducts.com; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=topic.nl;
@@ -48,66 +48,67 @@ Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
  receiver=protection.outlook.com; client-ip=20.93.157.195;
  helo=westeu11-emailsignatures-cloud.codetwo.com; pr=C
 Received: from westeu11-emailsignatures-cloud.codetwo.com (20.93.157.195) by
- VE1EUR01FT048.mail.protection.outlook.com (10.152.3.69) with Microsoft SMTP
+ HE1EUR01FT043.mail.protection.outlook.com (10.152.0.207) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.25 via Frontend Transport; Fri, 7 Jul 2023 13:10:55 +0000
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (104.47.13.51) by westeu11-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Fri, 07 Jul 2023 13:10:54 +0000
+ 15.20.6588.13 via Frontend Transport; Fri, 7 Jul 2023 13:10:57 +0000
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (104.47.11.42) by westeu11-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Fri, 07 Jul 2023 13:10:56 +0000
 Authentication-Results-Original: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=topic.nl;
 Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
- by PAXPR04MB8653.eurprd04.prod.outlook.com (2603:10a6:102:21c::24) with
+ by AS8PR04MB8817.eurprd04.prod.outlook.com (2603:10a6:20b:42c::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Fri, 7 Jul
- 2023 13:10:50 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Fri, 7 Jul
+ 2023 13:10:52 +0000
 Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
  ([fe80::4cd1:3e90:54e5:9696]) by DB8PR04MB6523.eurprd04.prod.outlook.com
  ([fe80::4cd1:3e90:54e5:9696%5]) with mapi id 15.20.6565.016; Fri, 7 Jul 2023
- 13:10:50 +0000
+ 13:10:52 +0000
 From:   Mike Looijmans <mike.looijmans@topic.nl>
 To:     devicetree@vger.kernel.org, linux-input@vger.kernel.org
 CC:     Mike Looijmans <mike.looijmans@topic.nl>,
-        Conor Dooley <conor+dt@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: Input: exc3000 - Support power supply regulators
-Date:   Fri, 7 Jul 2023 15:10:41 +0200
-Message-ID: <20230707131042.10795-1-mike.looijmans@topic.nl>
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/2] Input: exc3000 - Support power supply regulators
+Date:   Fri, 7 Jul 2023 15:10:42 +0200
+Message-ID: <20230707131042.10795-2-mike.looijmans@topic.nl>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230707131042.10795-1-mike.looijmans@topic.nl>
+References: <20230707131042.10795-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.e9863e93-aebd-4f13-b014-08dab638277d@emailsignatures365.codetwo.com>
 Content-Type: text/plain
 X-ClientProxiedBy: AM8P190CA0014.EURP190.PROD.OUTLOOK.COM
  (2603:10a6:20b:219::19) To DB8PR04MB6523.eurprd04.prod.outlook.com
  (2603:10a6:10:10f::26)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|PAXPR04MB8653:EE_|VE1EUR01FT048:EE_|PAXPR04MB8989:EE_
-X-MS-Office365-Filtering-Correlation-Id: 812932af-2173-46d2-967d-08db7eeb993e
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|AS8PR04MB8817:EE_|HE1EUR01FT043:EE_|AM9PR04MB8524:EE_
+X-MS-Office365-Filtering-Correlation-Id: b112cde5-bed6-4676-4505-08db7eeb9a2e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: mvn0Qd/lQ7froOZXNC8/ejotkHq4RrN1uU8VpGkwbsF8q2svkpmH6nTL64izNSL7+4vUJeVirlRb9J2FMU8a6mT91pl4ymUue16mOZVh+JRNFD3TpAYSqN5pL7cD0T+reYaqShCYszq2QnRK5I2KxcyjorYZxeWWYW471a5dUPDnG/jDUOr+9kfeoh7/nmJO9y78L0MaLIywubuyvJyxkhBVlgaznZ11SaLnVvDVL3Mhbrq98BtWKhhc7N27EM0SuE+IE1EOE1aAycRrgZMtLTlT9GFSbMPk79bliZogfplput7MXyhDE+oRNADFR0z/00A4kq01z68BFng3OZGJ3liwxT+N3OB86k9CS0/q6ykba7EfCEAQ6xFEX7LX5Fxah2k323S+AY7UOMH8TltCmy+44q+RL+NgnasOKI/+ABwPQWWnZ7xXkWh8sKFxHGIvePHYeZ+E+I1lk3JwuQS+iRPWve78rUi375RRDVOrJxdzs279HbKvxIlUqqTvdQ1VZp/fPJkOMtBsAT20a3UVGB/SYz3oDpUT/MEq4/LRqvVvsrcEjAAoJBT98mXk6BNfjXQ4cLUIUhG1MWCp3F/vYA/0S10q4Obqhhf5VD+ZvGiLF7FACze6Jye2SQgHNEb/
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(136003)(366004)(396003)(376002)(451199021)(26005)(478600001)(1076003)(6666004)(6506007)(186003)(6512007)(2616005)(83170400001)(42882007)(54906003)(66556008)(38350700002)(66946007)(4326008)(66476007)(38100700002)(52116002)(316002)(6486002)(5660300002)(8936002)(8676002)(44832011)(4744005)(2906002)(41300700001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8653
-X-CodeTwo-MessageID: 9f0d0063-aa94-4e75-92cd-87f4e87161ff.20230707131054@westeu11-emailsignatures-cloud.codetwo.com
+X-Microsoft-Antispam-Message-Info-Original: X2n2s8PiEkgZLi2Qw6TwHMnopaRnt0zA1sCY4tPxdYwSPl3ql3gnHynUmqC2ZwSAS/HuxA1xEjCE55m3IRhNqWqgya0nMHQfjTWsMk1rkCftQ/4H0Driej659mV8zwS9uYr7En6saSpN4H1WDRtU+2W7eS/55YQ2UMS1zYq9lyLP4uUDJo0iN5pU3gTJ9d5UpS4R0RLvw48G9PT8Mbzp0Dy+fdxWr/R6bSE5KE2b6RTElNy+6g9Ihee8+0ZZKK4lbRe7GiaS5CW8W0ICQ5h9C0tmxB6dOm8fj8COpJtmjn5cUKX7L5xs5uEsD2E0+W7RajJFASLANl5dw99VeKwHkRZ7NDfJuYvWb/ONHWdnvYVNdhp24PZPMTeEObPHvzVhJhFOWs6KRYHktXZZxVfqO6JHc/7/g0ao6rfq7DSmxb1h24GvrwlrfafB0DV5479AFeqy1b4loaAaWspFdm4gYOFaNH9MevQ4A6XH8oVixrtTMH9l0zU0xx7IW9s3AIh3XhgPC0qTvevOYpr+B4RTFmNhr6++ME1VlB0mNFLf2dg3hjJb65l67zNJ1ktBCsQsfqCfcZvq4wyVS2K5UHju5+ZGyVb1DpPaqMz3AM80OD5nPUCxr9zlrmHX8+tIx5Bk
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(366004)(346002)(376002)(136003)(451199021)(6486002)(6666004)(52116002)(6512007)(42882007)(186003)(6506007)(1076003)(26005)(83380400001)(36756003)(2616005)(38350700002)(38100700002)(83170400001)(66556008)(66476007)(66946007)(4326008)(44832011)(316002)(2906002)(8936002)(8676002)(5660300002)(41300700001)(54906003)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8817
+X-CodeTwo-MessageID: f70c9e22-1b55-4047-9e8f-d0ed698bd164.20230707131055@westeu11-emailsignatures-cloud.codetwo.com
 X-CodeTwoProcessed: true
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.067a6add-28c9-4499-a235-882581bddc85@emailsignatures365.codetwo.com>
 Content-Transfer-Encoding: quoted-printable
 X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT048.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 593e4393-e610-4b18-2a7e-08db7eeb95bc
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 6f31972c-e10b-49f1-e944-08db7eeb961d
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N5wWpUCp5nGhcgBiVdkIkM/zmnSwSvgnrvVjV+IXY/KR9SWhTBK/c6PAg5sXyqTVA5vuc/AL5z/AAPtW7RxE4YfT7XoX2OuwO8K9AbV/vdKNS87j8CpGHbMrGt4iWekhFd3fr6RjTYQnTZLZ0LKPMC0jeFtqlDMQEdg3eoxrk9JyqGk95+yBK04IILzIonkSF2s0NO0cwyiZDBlTZ4hfhzf8s+/xqu0dADNNNJTtY7YsN2gB5vT2CaS7JyuQwFpBn28IV2NGWj+xJ8q6urcSFR1hPr62hEfQmAm7BZ6bJWy9mRl5rn99il9npsKzijBHwv4tx5QDzz6TQb7UdpOqdAjAbAoeixeIdk8ut3sfMVsoAvDU/Qkht6/R1B8BJaf4MxuXq5o0/f5naWPTJk6GCbf5MbxhlqgU6a6ZUvPDXFLhuXzoQ5wXKwnzVTRwQZQkZhu2Hs7V5LCURn90Vj1IUGG9IcYl3xz3un0oP3JYWjEG/wSaJqaOvDkzmjh/0NFPhwERbTvYMiouB/7D1LnCmltaclFUxjWq3YxT/yGR5RKV5W2vRvJjuJ2lFTD15SfdyncNHLW26zjZUh4Qv9XEgwRAdeF6UiGTP7tg2r7+E0RkKjtlYYnSfMdak13UMdERlne9cNbF3BptCqP3CRKJBCtClxzFdn7NWL3IPHeKX7/3MwEU5npmkyP7SgVNapyQ
-X-Forefront-Antispam-Report: CIP:20.93.157.195;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu11-emailsignatures-cloud.codetwo.com;PTR:westeu11-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39840400004)(451199021)(36840700001)(46966006)(40480700001)(356005)(70586007)(54906003)(7596003)(7636003)(6486002)(83170400001)(8676002)(8936002)(478600001)(41300700001)(70206006)(316002)(4326008)(6666004)(42882007)(186003)(36860700001)(47076005)(6512007)(336012)(26005)(1076003)(6506007)(2616005)(82310400005)(15974865002)(5660300002)(2906002)(36756003)(44832011);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: w3Rx3djhfBd8IUfAGV8AzbGy4z04FiIMULp/5uGoa3bD0rTmGVxq7IwB83+jA4vzJYgq3AGSi+CPue1G4mOICN5PJfGQvziTSsP0abkEmoWrmtZveLqkmNIboTlvDMusq18jnE4Q1bDwDLKgTUPt8C4jQByT0CIy+Y7KTh3k6J0hBY0wtqAPsS8Bwk48JW7MuBaTx2abun1njX1B2YcbTVCfsfFtjyl4VHuxJdTFGRJbe4ju+zF15fFHUzKtpAcyHJMG5cHLCddGBaybqDH+ZV/SFXGAR5WJYAzaA6xB7yslH22bUX6mI9petKyW3MeZt4LfgYdgAQMjSuWhaXMInB4uv+tESm3EuO3XdLSidkBVgL9PzEQLAT9x9lMv/ew/pWZbED0F1u6t2MxNUwXTWT06LCqhZ1uTrvetPGwnyl0zDxcC6x+tWyokqaHHuShFOxPUOaqBsc1XtuT9j/6iHpsm2C1omDOK6GeEuE+CPIpBQNq/c2FXdAV2nIQLFm0XpxqhqzQhOc3WdF68fnyYF+u7xZWaE8MqpngWg/U5Uta/ZkH/4QdIPIDIBpOzPN1plFzAbh+VLgZgQg7T14UEC2opBI/VZ7iQzY7KhVGD9NoKND2PWzfnl+iZLYDbF5hB/E5D5FYthA6rGXcVVHtKEwNLzdhgxXTzZjygtAdi5s+DdUmaWrt6uK62Acl9ZkTC
+X-Forefront-Antispam-Report: CIP:20.93.157.195;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu11-emailsignatures-cloud.codetwo.com;PTR:westeu11-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39840400004)(396003)(136003)(451199021)(46966006)(36840700001)(44832011)(8936002)(8676002)(36860700001)(83380400001)(41300700001)(47076005)(83170400001)(5660300002)(316002)(336012)(2906002)(2616005)(42882007)(70586007)(40480700001)(70206006)(356005)(7596003)(7636003)(4326008)(82310400005)(54906003)(186003)(6486002)(1076003)(26005)(15974865002)(6506007)(478600001)(36756003)(6512007)(6666004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: topic.nl
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 13:10:55.4768
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 13:10:57.0476
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 812932af-2173-46d2-967d-08db7eeb993e
+X-MS-Exchange-CrossTenant-Network-Message-Id: b112cde5-bed6-4676-4505-08db7eeb9a2e
 X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[20.93.157.195];Helo=[westeu11-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT048.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8989
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8524
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -122,30 +123,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Add power supply regulator support to the exc3000 devices.
 
 Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
 
-(no changes since v1)
+Changes in v2:
+Add missing "return" statement
+Use devm_regulator_get_enable without _optional
 
- .../devicetree/bindings/input/touchscreen/eeti,exc3000.yaml     | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/input/touchscreen/exc3000.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/eeti,exc30=
-00.yaml b/Documentation/devicetree/bindings/input/touchscreen/eeti,exc3000.=
-yaml
-index 007adbc89c14..9dc25d30a0a8 100644
---- a/Documentation/devicetree/bindings/input/touchscreen/eeti,exc3000.yaml
-+++ b/Documentation/devicetree/bindings/input/touchscreen/eeti,exc3000.yaml
-@@ -24,6 +24,8 @@ properties:
-     maxItems: 1
-   reset-gpios:
-     maxItems: 1
-+  vdd-supply:
-+    description: Power supply regulator for the chip
-   touchscreen-size-x: true
-   touchscreen-size-y: true
-   touchscreen-inverted-x: true
+diff --git a/drivers/input/touchscreen/exc3000.c b/drivers/input/touchscree=
+n/exc3000.c
+index 4af4c1e5d0da..e3f6d21b3c1b 100644
+--- a/drivers/input/touchscreen/exc3000.c
++++ b/drivers/input/touchscreen/exc3000.c
+@@ -18,6 +18,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/sizes.h>
+ #include <linux/timer.h>
+ #include <asm/unaligned.h>
+@@ -360,6 +361,12 @@ static int exc3000_probe(struct i2c_client *client)
+ 	if (IS_ERR(data->reset))
+ 		return PTR_ERR(data->reset);
+=20
++	/* For proper reset sequence, enable power while reset asserted */
++	error =3D devm_regulator_get_enable(&client->dev, "vdd");
++	if (error && error !=3D -ENODEV)
++		return dev_err_probe(&client->dev, error,
++				     "failed to request vdd regulator\n");
++
+ 	if (data->reset) {
+ 		msleep(EXC3000_RESET_MS);
+ 		gpiod_set_value_cansleep(data->reset, 0);
 --=20
 2.17.1
 
