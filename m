@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E162274AB14
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FB474AB16
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjGGGZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 02:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S229891AbjGGG06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 02:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjGGGZg (ORCPT
+        with ESMTP id S229559AbjGGG04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 02:25:36 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08EE8F;
-        Thu,  6 Jul 2023 23:25:33 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qy3Kz2RLsz4f3lY0;
-        Fri,  7 Jul 2023 14:25:27 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgCHK5_Xr6dkxLOXNQ--.9805S4;
-        Fri, 07 Jul 2023 14:25:29 +0800 (CST)
-From:   Zhong Jinghua <zhongjinghua@huaweicloud.com>
-To:     josef@toxicpanda.com, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel@vger.kernel.org, zhongjinghua@huaweicloud.com,
-        yi.zhang@huawei.com, yukuai3@huawei.com
-Subject: [PATCH -next] nbd: get config_lock before sock_shutdown
-Date:   Fri,  7 Jul 2023 14:22:56 +0800
-Message-Id: <20230707062256.1271948-1-zhongjinghua@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 7 Jul 2023 02:26:56 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075F3E1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:26:55 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d946d2634so2054436a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688711213; x=1691303213;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0W3Gd8jBrQTVEqQoMXv1avQ4XCiWz9OzEFTfcGO5S9w=;
+        b=MYBnj45u6lsvuU47y/JuHX0SOY1/oJw5yUoKG81Pu7RI1xlBhhgOR3wTdPJoj+VkJO
+         74I1YLJOZdWGawEVLQ/jrC7hUgrP7dUgqBBFE2nxAhk/zII5kNrgSv+VoQjLWJp1VZLS
+         Tszfnj20a+NJT/gj45+t0DgPbhMiX7dD2j9hZSK3mKotd2HwGN6VID9M4UNetT/S7g6+
+         QMNlg0b+Fy6Zvdyb9ySaJSZrDi/NnHF8+T0pkeEI3AJVxgHbN6nMlLxInaXssakWqvK3
+         cCf1PFeLS79ezXP5vt6+itYDxLG6r1N+33kA8MR0YfG3eKQBvCzhQRYggxh3LiSg7II7
+         1chg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688711213; x=1691303213;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0W3Gd8jBrQTVEqQoMXv1avQ4XCiWz9OzEFTfcGO5S9w=;
+        b=d7G4cxpS6xji64FIWF11A4JUlDdjbcZYMQZ054GOqgY9v7OUvFRPW5EN6mmPfjzWtw
+         Md59WW+Q5OhvzofIMJMldFSewH3aoqrgpGlher2Fm0QsGvuRpevRz65z/Fe7u09HAEg4
+         a9cmmgZ5LdPMy/C7gK/FRbtkQok2M8DYs/L28zI5pA9kOcWrKI4dGh8Q62QQQ4TXT0M6
+         c+xKXsmmJMfO93DCzuJuhFmOVeEtWdUf30Y5dQg1/D40Lq8Dpt73dTvkPWr/HBKQUAnT
+         3qvn8mcfmViix7xhDsmjLxmWcHUubZfZ5RGAPlPG5fIuHdAxKk/PLdQR5w00yS09vbKz
+         bNOg==
+X-Gm-Message-State: ABy/qLY3/LQkYxANqlzw5DTfJ06JYFAIXOw2iSzmodUXVaJ2Gw509vpw
+        mBzd6aAiNV0gwu4LyMh588TJpw==
+X-Google-Smtp-Source: APBJJlGyXXAFlZKcUiBo8uH2mXTvF+2xcpddNfdWn8QuWvicVEB5eBFG1KaGmK8LsJfFTahNxI5cRg==
+X-Received: by 2002:a17:906:224d:b0:977:e87c:e633 with SMTP id 13-20020a170906224d00b00977e87ce633mr2949201ejr.23.1688711213433;
+        Thu, 06 Jul 2023 23:26:53 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id ov24-20020a170906fc1800b0099364d9f0e6sm1727055ejb.117.2023.07.06.23.26.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 23:26:52 -0700 (PDT)
+Message-ID: <0fd87e8f-7d09-549f-1170-3bcebbc572f6@linaro.org>
+Date:   Fri, 7 Jul 2023 08:26:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCHK5_Xr6dkxLOXNQ--.9805S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw1DWw1xGryfWr1UAw1fZwb_yoW8Ww45pF
-        4UCF4DGr4rXa1S9FZ8J34xWr1UJ342gay7GryUZ3Z0vr93CrW7Zrn8KF1fCr1UtwsrXF45
-        XFyrKF95Cas5JrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: x2kr0wpmlqwxtxd6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFT PATCH 1/3] arm64: dts: rockchip: correct audio-codec
+ interrupt flag in eaidk-610
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230705064823.9210-1-krzysztof.kozlowski@linaro.org>
+ <941ead9e-9e46-b5cb-0a8b-345df6606484@linaro.org>
+ <9d9245fb-463f-c967-46e5-cfc0ac832792@arm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9d9245fb-463f-c967-46e5-cfc0ac832792@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Config->socks in sock_shutdown may trigger a UAF problem.
-The reason is that sock_shutdown does not hold the config_lock,
-so that nbd_ioctl can release config->socks at this time.
+On 06/07/2023 19:49, Robin Murphy wrote:
+> On 2023-07-06 14:54, Krzysztof Kozlowski wrote:
+>> On 05/07/2023 08:48, Krzysztof Kozlowski wrote:
+>>> GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
+>>> These are simple defines so they could be used in DTS but they will not
+>>> have the same meaning: GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE.
+>>>
+>>> Correct the interrupt flags, assuming the author of the code wanted same
+>>> logical behavior behind the name "ACTIVE_xxx", this is:
+>>>    ACTIVE_LOW  => IRQ_TYPE_LEVEL_LOW
+>>
+>> This should be HIGH in both cases. I will send a v2.
+> 
+> Also the titles say "audio-codec" but they're all touching SDIO WiFi 
+> modules ;)
 
-T0: NBD_SET_SOCK
-T1: NBD_DO_IT
+Thanks. Too much of copy-pasta.
 
-T0						T1
-
-nbd_ioctl
-  mutex_lock(&nbd->config_lock)
-  // get lock
-  __nbd_ioctl
-    nbd_start_device_ioctl
-      nbd_start_device
-       mutex_unlock(&nbd->config_lock)
-         // relase lock
-         wait_event_interruptible
-         (kill, enter sock_shutdown)
-         sock_shutdown
-					nbd_ioctl
-					  mutex_lock(&nbd->config_lock)
-					  // get lock
-					  __nbd_ioctl
-					    nbd_add_socket
-					      krealloc
-						kfree(p)
-					        //config->socks is NULL
-           nbd_sock *nsock = config->socks // error
-
-Fix it by moving config_lock up before sock_shutdown.
-
-Signed-off-by: Zhong Jinghua <zhongjinghua@huaweicloud.com>
----
- drivers/block/nbd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index c410cf29fb0c..accbe99ebb7e 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1428,13 +1428,18 @@ static int nbd_start_device_ioctl(struct nbd_device *nbd)
- 	mutex_unlock(&nbd->config_lock);
- 	ret = wait_event_interruptible(config->recv_wq,
- 					 atomic_read(&config->recv_threads) == 0);
-+
-+	/*
-+	 * recv_work in flush_workqueue will not get this lock, because nbd_open
-+	 * will hold nbd->config_refs
-+	 */
-+	mutex_lock(&nbd->config_lock);
- 	if (ret) {
- 		sock_shutdown(nbd);
- 		nbd_clear_que(nbd);
- 	}
- 
- 	flush_workqueue(nbd->recv_workq);
--	mutex_lock(&nbd->config_lock);
- 	nbd_bdev_reset(nbd);
- 	/* user requested, ignore socket errors */
- 	if (test_bit(NBD_RT_DISCONNECT_REQUESTED, &config->runtime_flags))
--- 
-2.31.1
+Best regards,
+Krzysztof
 
