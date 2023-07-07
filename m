@@ -2,89 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479AA74B26C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FED874B276
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjGGOB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S230044AbjGGODa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbjGGOBW (ORCPT
+        with ESMTP id S229663AbjGGOD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:01:22 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DB61FEF;
-        Fri,  7 Jul 2023 07:01:11 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367D5JPm029918;
-        Fri, 7 Jul 2023 16:00:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=geb7y3s4woJ3gVvgbLEepweyY2vxzrtl4SkK7CXSDOM=;
- b=XImO+YhUaKoxthCWbN1dHrm9EWgj7Ol4QnI642tf/UuBsjrjg4RCxEX18++7YVWQRjMe
- 2gClSEn5DCM70KR0iBJxU1HCp4pq8VdtPqncnsahJDTG8LO8pnkGuZiFjSAUUHyn2qOO
- 87w5QQQVhOAohte/TMzbFUUj8Kv+0O6f2AFZfmeMFCsQWaC7u4cHeJ6leZ/cXPKJ8H/p
- RDvCSFE7xdtBOmzK6K/w8vqYYtB/ofpAbZsVZPlmaJmO2Iy7eN4Mr8JYQdhkh9U9TQyH
- lz8ho3clWXCOZVYuJNs4Hc8eIbNm29P+xV/I9xFqDEXYwpI5NLsnRpuH5kNVbX77ZWzr CA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rpfncj7rs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 16:00:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 582A2100050;
-        Fri,  7 Jul 2023 16:00:25 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0E4CF2278A4;
-        Fri,  7 Jul 2023 16:00:25 +0200 (CEST)
-Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 7 Jul
- 2023 16:00:23 +0200
-Message-ID: <febd65e1-68c7-f9d8-c8a4-3c3e88f15f3e@foss.st.com>
-Date:   Fri, 7 Jul 2023 16:00:23 +0200
+        Fri, 7 Jul 2023 10:03:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13211B6;
+        Fri,  7 Jul 2023 07:03:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77B61619BD;
+        Fri,  7 Jul 2023 14:03:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BA9C433C7;
+        Fri,  7 Jul 2023 14:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688738604;
+        bh=SLinMWnZAVI3P22sgqB7gSLnrZlUscYV51apQlD/gUg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BAvfZI7nJdF1ulD+736MGEirlLTD8Q8+190AmkBIeKfjbjfnWiaAAXKVTji8RTkxc
+         hFZlcXSoIeZ2NHv0jtJWfqu9p0//gZ5AuXpbqRxik3C6a64ejLnTsmYTJRDz8R6bfw
+         b6Mat4LeSRyk/LqCZX/BzZmPhIEr2FOg9CHzULyFF8m1Cb4mv6VdLDocbSDtFUqsGc
+         K3z2yRlGtYvG+A/1F+/RsZywqhE1h97j4l/0ztTQReGwkynq6PV+CPUHZz5+vGNGxb
+         csIZHj2UStT9nip8BBTszHIFSGbVOY7dTTKosSHoASK43wbOygSIzhQhNWox7jpytS
+         9dtiab1DLKb+A==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v2] fprobe: Ensure running fprobe_exit_handler() finished before calling rethook_free()
+Date:   Fri,  7 Jul 2023 23:03:19 +0900
+Message-Id: <168873859949.156157.13039240432299335849.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
- <2023070748-false-enroll-e5dc@gregkh>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <2023070748-false-enroll-e5dc@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_09,2023-07-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,147 +57,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-On 7/7/23 12:37, Greg KH wrote:
-> On Wed, Jul 05, 2023 at 07:27:54PM +0200, Gatien Chevallier wrote:
->> Introduce a firewall framework that offers to firewall consumers different
->> firewall services such as the ability to check their access rights against
->> their firewall controller(s).
->>
->> The firewall framework offers a generic API that is defined in firewall
->> controllers drivers to best fit the specificity of each firewall.
-> 
-> But you aren't defining a "generic" api here, you are defining a
-> specific one for your specific hardware.
-> 
-> Or am I missing something?
-> 
+Ensure running fprobe_exit_handler() has finished before
+calling rethook_free() in the unregister_fprobe() so that caller can free
+the fprobe right after unregister_fprobe().
 
-This framework is indeed ST-oriented, I should have specified :
-"...offers a generic API for STM32 firewall controllers that is defined
-in their drivers...". Will change in V2
+unregister_fprobe() ensured that all running fprobe_entry/exit_handler()
+have finished by calling unregister_ftrace_function() which synchronizes
+RCU. But commit 5f81018753df ("fprobe: Release rethook after the ftrace_ops
+is unregistered") changed to call rethook_free() after
+unregister_ftrace_function(). So call rethook_stop() to make rethook
+disabled before unregister_ftrace_function() and ensure it again.
 
->>
->> There are various types of firewalls:
->> -Peripheral firewalls that filter accesses to peripherals
->> -Memory firewalls that filter accesses to memories or memory regions
->> -Resource firewalls that filter accesses to internal resources such as
->> reset and clock controllers
->>
->> A firewall controller must be probed at arch_initcall level and register
->> to the framework so that consumers can use their services.
-> 
-> Why must it happen at arch_initcall?  So it can never be a module?  That
-> feels wrong.
-> 
+Here is the possible code flow that can call the exit handler after
+unregister_fprobe().
 
-Rob asked the same question.
+------
+ CPU1                              CPU2
+ call unregister_fprobe(fp)
+ ...
+                                   __fprobe_handler()
+                                   rethook_hook() on probed function
+ unregister_ftrace_function()
+                                   return from probed function
+                                   rethook hooks
+                                   find rh->handler == fprobe_exit_handler
+                                   call fprobe_exit_handler()
+ rethook_free():
+   set rh->handler = NULL;
+ return from unreigster_fprobe;
+                                   call fp->exit_handler() <- (*)
+------
 
-I responded under his comment, I'm not quite sure how to handle it with
-fw_devlink for dependencies with drivers that are probed at early init
-levels.
+(*) At this point, the exit handler is called after returning from
+unregister_fprobe().
 
->>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>   MAINTAINERS                               |   5 +
->>   arch/arm64/Kconfig.platforms              |   1 +
->>   drivers/bus/Kconfig                       |  10 +
->>   drivers/bus/Makefile                      |   1 +
->>   drivers/bus/stm32_firewall.c              | 252 ++++++++++++++++++++++
->>   drivers/bus/stm32_firewall.h              |  83 +++++++
->>   include/linux/bus/stm32_firewall_device.h | 134 ++++++++++++
->>   7 files changed, 486 insertions(+)
->>   create mode 100644 drivers/bus/stm32_firewall.c
->>   create mode 100644 drivers/bus/stm32_firewall.h
->>   create mode 100644 include/linux/bus/stm32_firewall_device.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 41385f01fa98..fabf95ba9b86 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -20123,6 +20123,11 @@ T:	git git://linuxtv.org/media_tree.git
->>   F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
->>   F:	drivers/media/i2c/st-mipid02.c
->>   
->> +ST STM32 FIREWALL
->> +M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
->> +S:	Maintained
->> +F:	drivers/bus/stm32_firewall.c
->> +
->>   ST STM32 I2C/SMBUS DRIVER
->>   M:	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
->>   M:	Alain Volmat <alain.volmat@foss.st.com>
->> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->> index 6069120199bb..5a46e90f1e4e 100644
->> --- a/arch/arm64/Kconfig.platforms
->> +++ b/arch/arm64/Kconfig.platforms
->> @@ -293,6 +293,7 @@ config ARCH_STM32
->>   	select ARM_SMC_MBOX
->>   	select ARM_SCMI_PROTOCOL
->>   	select COMMON_CLK_SCMI
->> +	select STM32_FIREWALL
->>   	help
->>   	  This enables support for ARMv8 based STMicroelectronics
->>   	  STM32 family, including:
->> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
->> index fcfa280df98a..4d54a7ea52b2 100644
->> --- a/drivers/bus/Kconfig
->> +++ b/drivers/bus/Kconfig
->> @@ -163,6 +163,16 @@ config QCOM_SSC_BLOCK_BUS
->>   	  i2c/spi/uart controllers, a hexagon core, and a clock controller
->>   	  which provides clocks for the above.
->>   
->> +config STM32_FIREWALL
->> +	bool "STM32 Firewall framework"
->> +	depends on ARCH_STM32
-> 
-> Why this dependency?
-> 
->> +	default MACH_STM32MP157 || MACH_STM32MP13 || MACH_STM32MP25
->> +	help
->> +	  Say y to enable firewall framework and its services. Firewall
->> +	  controllers will be able to register to the framework. Firewall
->> +	  controllers must be initialized and register to the firewall framework
->> +	  at arch_initcall level.
-> 
-> This needs better wording saying it is only for stm32 devices.
-> 
+This fixes it as following;
+------
+ CPU1                              CPU2
+ call unregister_fprobe()
+ ...
+ rethook_stop():
+   set rh->handler = NULL;
+                                   __fprobe_handler()
+                                   rethook_hook() on probed function
+ unregister_ftrace_function()
+                                   return from probed function
+                                   rethook hooks
+                                   find rh->handler == NULL
+                                   return from rethook
+ rethook_free()
+ return from unreigster_fprobe;
+------
 
-Ack, will change in V2.
 
->> +
->>   config SUN50I_DE2_BUS
->>   	bool "Allwinner A64 DE2 Bus Driver"
->>   	  default ARM64
->> diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
->> index d90eed189a65..fc0511450ec2 100644
->> --- a/drivers/bus/Makefile
->> +++ b/drivers/bus/Makefile
->> @@ -26,6 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_l3_smx.o omap_l3_noc.o
->>   obj-$(CONFIG_OMAP_OCP2SCP)	+= omap-ocp2scp.o
->>   obj-$(CONFIG_QCOM_EBI2)		+= qcom-ebi2.o
->>   obj-$(CONFIG_QCOM_SSC_BLOCK_BUS)	+= qcom-ssc-block-bus.o
->> +obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o
->>   obj-$(CONFIG_SUN50I_DE2_BUS)	+= sun50i-de2.o
->>   obj-$(CONFIG_SUNXI_RSB)		+= sunxi-rsb.o
->>   obj-$(CONFIG_OF)		+= simple-pm-bus.o
->> diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
->> new file mode 100644
->> index 000000000000..510db5bc6eaf
->> --- /dev/null
->> +++ b/drivers/bus/stm32_firewall.c
->> @@ -0,0 +1,252 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
-> 
-> Are you _SURE_ this needs to be "or later"?  Sorry, I have to ask.
-> 
-> thanks,
-> 
-> greg k-h
+Fixes: 5f81018753df ("fprobe: Release rethook after the ftrace_ops is unregistered")
+Cc: stable@vger.kernel.org
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ Changes in v2:
+ - Update changelog to add a problematic code flow.
+---
+ include/linux/rethook.h |    1 +
+ kernel/trace/fprobe.c   |    3 +++
+ kernel/trace/rethook.c  |   13 +++++++++++++
+ 3 files changed, 17 insertions(+)
 
-I'll change to (GPL-2.0-only OR BSD-3-Clause) :)
+diff --git a/include/linux/rethook.h b/include/linux/rethook.h
+index c8ac1e5afcd1..bdbe6717f45a 100644
+--- a/include/linux/rethook.h
++++ b/include/linux/rethook.h
+@@ -59,6 +59,7 @@ struct rethook_node {
+ };
+ 
+ struct rethook *rethook_alloc(void *data, rethook_handler_t handler);
++void rethook_stop(struct rethook *rh);
+ void rethook_free(struct rethook *rh);
+ void rethook_add_node(struct rethook *rh, struct rethook_node *node);
+ struct rethook_node *rethook_try_get(struct rethook *rh);
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 0121e8c0d54e..75517667b54f 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -364,6 +364,9 @@ int unregister_fprobe(struct fprobe *fp)
+ 		    fp->ops.saved_func != fprobe_kprobe_handler))
+ 		return -EINVAL;
+ 
++	if (fp->rethook)
++		rethook_stop(fp->rethook);
++
+ 	ret = unregister_ftrace_function(&fp->ops);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+index 60f6cb2b486b..468006cce7ca 100644
+--- a/kernel/trace/rethook.c
++++ b/kernel/trace/rethook.c
+@@ -53,6 +53,19 @@ static void rethook_free_rcu(struct rcu_head *head)
+ 		kfree(rh);
+ }
+ 
++/**
++ * rethook_stop() - Stop using a rethook.
++ * @rh: the struct rethook to stop.
++ *
++ * Stop using a rethook to prepare for freeing it. If you want to wait for
++ * all running rethook handler before calling rethook_free(), you need to
++ * call this first and wait RCU, and call rethook_free().
++ */
++void rethook_stop(struct rethook *rh)
++{
++	WRITE_ONCE(rh->handler, NULL);
++}
++
+ /**
+  * rethook_free() - Free struct rethook.
+  * @rh: the struct rethook to be freed.
 
-Best regards,
-Gatien
