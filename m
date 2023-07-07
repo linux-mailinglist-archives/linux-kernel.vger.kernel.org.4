@@ -2,157 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435AE74B5D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795E374B5D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 19:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjGGR3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 13:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
+        id S232562AbjGGR2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 13:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjGGR3B (ORCPT
+        with ESMTP id S229600AbjGGR2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 13:29:01 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121281FE0
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:28:59 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:56172)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1qHpGK-00HIAl-AI; Fri, 07 Jul 2023 11:28:56 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:60874 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1qHpGJ-00Ek6z-5y; Fri, 07 Jul 2023 11:28:55 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "brgerst@gmail.com" <brgerst@gmail.com>
-References: <20230706052231.2183-1-xin3.li@intel.com>
-        <87v8exgmot.fsf@email.froward.int.ebiederm.org>
-        <SA1PR11MB67348D11385F584354AB84C3A82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
-        <SA1PR11MB6734F3F72095C4D6B9C12C9BA82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
-Date:   Fri, 07 Jul 2023 12:28:13 -0500
-In-Reply-To: <SA1PR11MB6734F3F72095C4D6B9C12C9BA82DA@SA1PR11MB6734.namprd11.prod.outlook.com>
-        (Xin3 Li's message of "Fri, 7 Jul 2023 04:16:47 +0000")
-Message-ID: <87sf9zfx76.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 7 Jul 2023 13:28:38 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07891BD2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 10:28:37 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-440b9d60606so895889137.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 10:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688750917; x=1691342917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pFu4flp75v9onUsNmfCEUOpEoM1tS1lAreinLjPuGSc=;
+        b=sgX0/IfuWQLnwlciUncvEw+t8Wj3pdMJUvHXNvaFKuZcWT5sgNOAnp9BZ+zhCDRfu7
+         OBoRDoAx61DBjg/tYlTZpOIEEA3Uimf6uN3lrNQKYDBCSDyM3cWIAjyuSFO40q+iQIhY
+         3zPFyk6vD7TBSck5UBViVZle4sIf02kBmFzISlHb6QVBNud4LaHUavRuV/D+NHZKH4rI
+         OZk2qKe7mNeY4QDLhhqEJQUi9OESuOskgwd2/RnEtaUOsGaGbuongJBlmT/uXWw2Dekl
+         dImwuO+dEHQP2c8/H7bOdoOs80kAB9Qya8pUwyh+MuHBr0Fn6OpQsmlvxEM0BBCPjaUA
+         XLoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688750917; x=1691342917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pFu4flp75v9onUsNmfCEUOpEoM1tS1lAreinLjPuGSc=;
+        b=R4wNB1W8byPcYMrA3uGne+0o9EXG4t+la45rQzZVfTyNAgTnVfBgelFN0vSCTz3ncG
+         UV37BxclPPBQj/0ydX456K9vYgOerjhBqRJAD5Ey2RA0KEYPw+YP9DkEtjgToOJ1eCSn
+         9nLfqloCBELoXWd+9NkkpHWxbJv3x0O8vAfaFVaEJk4F1RsSV4auQl8QDLF5I2nTDQCN
+         0BQwo55zcAo+TOyPV8ZIdRE00Q7jp+5znur+/JeL1FlKM2Z4eVIUAckdh/0LdjrmCHNu
+         5Z9w+SDp04iL0nm+yExICmPhrFyVtU+COtSheBDAj86r13qlf3UBbhxRl6zcYZyAyF/F
+         VrMw==
+X-Gm-Message-State: ABy/qLYjnJLuKwzUkjoC6PH6CuqBswB7SVAkt0U45yGjD8rQa/uyogwA
+        a1xDz8x9BEzJG2ReMXLttVAzujIV5KlA3JWSMy8=
+X-Google-Smtp-Source: APBJJlGTEYV9dPqQC3jdHNFHGSC0vERwM9T6QcSXH9U3UDUw54xeJ5CtOQL1uwFB/JoLYuDX0Jj5TUzBseP5SYDGX44=
+X-Received: by 2002:a67:e918:0:b0:443:6c53:e26b with SMTP id
+ c24-20020a67e918000000b004436c53e26bmr3585085vso.10.1688750916646; Fri, 07
+ Jul 2023 10:28:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1qHpGJ-00Ek6z-5y;;;mid=<87sf9zfx76.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19MFWwAxB9up/uPIKvfkqhggKcsdpx8Cdo=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <CAG-UpRQsdL_Fs9HSEv2pDYXehJC+YXcYjiZKFLvkGBTZkkaTcg@mail.gmail.com>
+ <20230706120103.GJ2833176@hirez.programming.kicks-ass.net>
+ <CAG-UpRTQ-ovVO02HRd5z-9oZGCPvZ0vODJse8oyuA9L-3NV_pQ@mail.gmail.com>
+ <CAG-UpRRLFTHg64b0hG4=FbuzhhqNQEU8jGt6TygCVAK1BaT2kQ@mail.gmail.com>
+ <20230707125942.GB2883469@hirez.programming.kicks-ass.net> <f4e839ac5ecb285b8a9d666f1a73e0a39b698864.camel@gmx.de>
+In-Reply-To: <f4e839ac5ecb285b8a9d666f1a73e0a39b698864.camel@gmx.de>
+From:   Henry Wu <triangletrap12@gmail.com>
+Date:   Sat, 8 Jul 2023 01:28:25 +0800
+Message-ID: <CAG-UpRTur0PHkWNZ0FqLnz5K85P-HQkuO-PCCxOwJ5XVgwgxyQ@mail.gmail.com>
+Subject: Re: Fwd: Possible race in rt_mutex_adjust_prio_chain
+To:     Mike Galbraith <efault@gmx.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;"Li, Xin3" <xin3.li@intel.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 588 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 11 (1.8%), b_tie_ro: 9 (1.6%), parse: 0.93 (0.2%),
-         extract_message_metadata: 12 (2.0%), get_uri_detail_list: 1.49 (0.3%),
-         tests_pri_-2000: 11 (1.8%), tests_pri_-1000: 2.5 (0.4%),
-        tests_pri_-950: 1.22 (0.2%), tests_pri_-900: 1.01 (0.2%),
-        tests_pri_-200: 0.85 (0.1%), tests_pri_-100: 4.2 (0.7%),
-        tests_pri_-90: 266 (45.3%), check_bayes: 261 (44.4%), b_tokenize: 7
-        (1.2%), b_tok_get_all: 171 (29.0%), b_comp_prob: 2.2 (0.4%),
-        b_tok_touch_all: 78 (13.2%), b_finish: 0.90 (0.2%), tests_pri_0: 263
-        (44.7%), check_dkim_signature: 0.50 (0.1%), check_dkim_adsp: 3.5
-        (0.6%), poll_dns_idle: 0.99 (0.2%), tests_pri_10: 2.0 (0.3%),
-        tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] x86/ia32: Do not modify the DPL bits for a null selector
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Li, Xin3" <xin3.li@intel.com> writes:
+Hi, Peter and Mike.
 
->> Thus 3 as a selector is the same as 0, and it doesn't matter to change it or not. But
->> when IRET sees an invalid segment register in ES, FS, GS, and DS, it sets it to 0,
->> making 0 a preferred null selector value.
+Mike Galbraith <efault@gmx.de> =E4=BA=8E2023=E5=B9=B47=E6=9C=887=E6=97=A5=
+=E5=91=A8=E4=BA=94 23:39=E5=86=99=E9=81=93=EF=BC=9A
 >
-> To clarify, an invalid segment register value includes NULL selector values.
+> On Fri, 2023-07-07 at 14:59 +0200, Peter Zijlstra wrote:
+> >
+> > The below implements this duplication and seems to not insta-crash.
+>
+> RT bits of ww_mutex.h needed tree_entry -> tree.entry.  Modulo that, RT
+> seems content.
+>
+>         -Mike
 
-Perhaps something like patch below to make it clear that we are
-normalizing the segment values and forcing that normalization.
-
-I am a bit confused why this code is not the same for ia32 and
-ia32_emulation.  I would think the normalization at least should apply
-to the 32bit case as well.
-
-Eric
-
-diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
-index 9027fc088f97..e5f3978388fd 100644
---- a/arch/x86/kernel/signal_32.c
-+++ b/arch/x86/kernel/signal_32.c
-@@ -36,22 +36,47 @@
- #ifdef CONFIG_IA32_EMULATION
- #include <asm/ia32_unistd.h>
- 
-+static inline unsigned int normalize_seg_index(unsigned int index)
-+{
-+	/*
-+	 * Convert the segment index into normalized form.
-+	 *
-+	 * For the indexes 0,1,2,3 always use the value of 0, as IRET
-+	 * forces this form for the nul segment.
-+	 *
-+	 * Otherwise set both DPL bits to force it to be a userspace
-+	 * ring 3 segment index.
-+	 */
-+	return (index < 3) ? 0 : index | 3;
-+}
-+
- static inline void reload_segments(struct sigcontext_32 *sc)
- {
--	unsigned int cur;
-+	unsigned int new, cur;
- 
-+	new = normalize_seg_index(sc->gs);
- 	savesegment(gs, cur);
--	if ((sc->gs | 0x03) != cur)
--		load_gs_index(sc->gs | 0x03);
-+	cur = normalize_seg_index(cur);
-+	if (new != cur)
-+		load_gs_index(new);
-+
-+	new = normalize_seg_index(sc->fs);
- 	savesegment(fs, cur);
--	if ((sc->fs | 0x03) != cur)
--		loadsegment(fs, sc->fs | 0x03);
-+	cur = normalize_seg_index(cur);
-+	if (new != cur)
-+		loadsegment(fs, new);
-+
-+	new = normalize_seg_index(sc->ds);
- 	savesegment(ds, cur);
--	if ((sc->ds | 0x03) != cur)
--		loadsegment(ds, sc->ds | 0x03);
-+	cur = normalize_seg_index(cur);
-+	if (new != cur)
-+		loadsegment(ds, new);
-+
-+	new = normalize_seg_index(sc->es);
- 	savesegment(es, cur);
--	if ((sc->es | 0x03) != cur)
--		loadsegment(es, sc->es | 0x03);
-+	cur = normalize_seg_index(cur);
-+	if (new != cur)
-+		loadsegment(es, new);
- }
- 
- #define sigset32_t			compat_sigset_t
+I patched my kernel with Peter's patch and tested it with my test
+program. I haven't seen any race so far and I will test more tomorrow.
+Fedora's default kernel config doesn't enable CONFIG_PREEMPT_RT so I
+didn't come across with compile error. I will test final patch if
+available.
