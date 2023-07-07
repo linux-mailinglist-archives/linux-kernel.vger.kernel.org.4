@@ -2,67 +2,498 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9E674A85A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A544474A85D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 03:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjGGBGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 21:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S230501AbjGGBPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 21:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjGGBGl (ORCPT
+        with ESMTP id S229470AbjGGBPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 21:06:41 -0400
-Received: from out-45.mta1.migadu.com (out-45.mta1.migadu.com [95.215.58.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FFB1BDB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 18:06:40 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 10:06:27 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688691998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wRs7UDAuBBZVgG3mgjyndrSpjt8gqrJGLfpPaemJoWM=;
-        b=f6OffiSsSmbedveQuKFXNzJtLUS3lqfI4EGER6lUu6oj2ID2wFCTU8Wzw8D1K3J/icI28k
-        hu5D4qUCe44JYs77N2IVgR93kznTAUyqVWYC1w0msg6YjB897Aeg4DbOycwwxiGIbgd1A7
-        JG81lKy7zSPTk1E4MZrtkBsLDrBFo8U=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Jiaqi Yan <jiaqiyan@google.com>
-Cc:     mike.kravetz@oracle.com, naoya.horiguchi@nec.com,
-        songmuchun@bytedance.com, shy828301@gmail.com,
-        linmiaohe@huawei.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duenwen@google.com, axelrasmussen@google.com, jthoughton@google.com
-Subject: Re: [PATCH v2 2/4] mm/hwpoison: check if a subpage of a hugetlb
- folio is raw HWPOISON
-Message-ID: <20230707010627.GC72816@ik1-406-35019.vs.sakura.ne.jp>
-References: <20230623164015.3431990-1-jiaqiyan@google.com>
- <20230623164015.3431990-3-jiaqiyan@google.com>
+        Thu, 6 Jul 2023 21:15:04 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7FB1BDB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 18:15:01 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b6ff1a637bso21097991fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 18:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688692499; x=1691284499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+RUjRABQIUIogF+XDLSUxLTnaEG058n3Ex5S+/JZCJ8=;
+        b=JxuCg5NGGyKDdIOrsmgr+ATJPUy/RZi4vqkRnj4iHK1fAqW2LGmQXOElvff89pdn4b
+         pLXZzoT1Q/E5O1eh8aNUOBRdn98laI0uLfwO/ygslUpdlYBl92dtBI5ARJSeR1wYtzNN
+         qadKi+snlWtMM4KSBczjQryOzcocOGoVenmPdzy/B+a+0y9YBSYVZ7JQ35niajCi425v
+         cjsixk/mWg/+jyF7wc+9lPB9AFGC36fR6wmQcb3FY2JBHuEpai6b9aucF4vK/nzWOQGC
+         iUwF9fNLDzIwZiGL25OIASWN/qtshkmqccd8embJSLA+scyC/aIiqaJTkGR2YKEB5LXy
+         ixMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688692499; x=1691284499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+RUjRABQIUIogF+XDLSUxLTnaEG058n3Ex5S+/JZCJ8=;
+        b=EjPpCs78v7IoEvKvnU4hMjLI/x3Rr1dMV3E77VsGO1bcH4Zmupbni+3X3JEj5qQW4X
+         QN3NAfqdmVGuz7/hS1q8du7vETJlCJrcooDpq2LBda5hb+psTMujxfPudEXSOPQ3VKpf
+         oWPohkK/x7/yXWqET4fUJpLgQYDjRBEzjW0jHdCyEgCc3DDLM7088i0iOtGYwUjXa2zb
+         q/QqWx/UITmko8DjvPT9RSxuH+nXqQSKe0mj/zm9gDRakudAtfu0jdjHhAUf5E0SdzkI
+         gJrIXN8FnZ+R8gVC0siuSp5ZGShobp6aOkNyABiU65cYyEe96q1jhtJ4l79JM/C89pIY
+         69Vw==
+X-Gm-Message-State: ABy/qLZ7+taAm/Vso1V9UWoHUlnCEpJUqv42kUGP/aWl0bv4dSFLlifW
+        0Pkg75r+fFkypmsCwkhkyg9f+P+rrB+Hkyk0PF8=
+X-Google-Smtp-Source: APBJJlEH7DZ6wCqMvpCIDkERUqBREIKYdQ+fLfjQLjVv1r6H9oxjfHWiB471nZTA9xV58LR4zXSbPzPJklZZLf8zfc4=
+X-Received: by 2002:a2e:6e15:0:b0:2b6:cd40:21ad with SMTP id
+ j21-20020a2e6e15000000b002b6cd4021admr2519304ljc.37.1688692498533; Thu, 06
+ Jul 2023 18:14:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230623164015.3431990-3-jiaqiyan@google.com>
-X-Migadu-Flow: FLOW_OUT
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 7 Jul 2023 11:14:46 +1000
+Message-ID: <CAPM=9twAjnoMTUAmm42=hmAtbPuqmMzDgOFDA4zGK2BuD0g2DQ@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.5-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 04:40:13PM +0000, Jiaqi Yan wrote:
-> Adds the functionality to tell if a subpage of a hugetlb folio is a
-> raw HWPOISON page. This functionality relies on RawHwpUnreliable to
-> be not set; otherwise hugepage's HWPOISON list becomes meaningless.
-> 
-> Exports this functionality to be immediately used in the read operation
-> for hugetlbfs.
-> 
-> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+Hi Linus,
 
-Looks good to me, thank you.
+Lots of fixes, mostly i915 and amdgpu. It's 2 weeks of i915, and I
+think 3 weeks of amdgpu.
 
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Dave.
+
+drm-next-2023-07-07:
+drm fixes for 6.5-rc1
+
+fbdev:
+- Fix module infos on sparc
+
+panel:
+- Fix mode on Starry-ili9882t
+
+i915:
+- Allow DC states along with PW2 only for PWB functionality [adlp+]
+- Fix SSC selection for MPLLA [mtl]
+- Use hw.adjusted mode when calculating io/fast wake times [psr]
+- Apply min softlimit correctly [guc/slpc]
+- Assign correct hdcp content type [hdcp]
+- Add missing forward declarations/includes to display power headers
+- Fix BDW PSR AUX CH data register offsets [psr]
+- Use mock device info for creating mock device
+
+amdgpu:
+- Misc cleanups
+- GFX 9.4.3 fixes
+- DEBUGFS build fix
+- Fix LPDDR5 reporting
+- ASPM fixes
+- DCN 3.1.4 fixes
+- DP MST fixes
+- DCN 3.2.x fixes
+- Display PSR TCON fixes
+- SMU 13.x fixes
+- RAS fixes
+- Vega12/20 SMU fixes
+- PSP flashing cleanup
+- GFX9 MCBP fixes
+- SR-IOV fixes
+- GPUVM clear mappings fix for always valid BOs
+- Add FAMS quirk for problematic monitor
+- Fix possible UAF
+- Better handle momentary temperature fluctuations
+- SDMA 4.4.2 fixes
+- Fencing fix
+The following changes since commit 5ff2977b19769fd24b0cfbe7cbe4d5114b6106af=
+:
+
+  Merge tag 'drm-intel-next-fixes-2023-06-21' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next (2023-06-29
+06:25:26 +1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2023-07-07
+
+for you to fetch changes up to 6725f33228077902ddac2a05e0ab361dee36e4ba:
+
+  Merge tag 'drm-misc-next-fixes-2023-07-06' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next (2023-07-07
+11:05:16 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.5-rc1
+
+fbdev:
+- Fix module infos on sparc
+
+panel:
+- Fix mode on Starry-ili9882t
+
+i915:
+- Allow DC states along with PW2 only for PWB functionality [adlp+]
+- Fix SSC selection for MPLLA [mtl]
+- Use hw.adjusted mode when calculating io/fast wake times [psr]
+- Apply min softlimit correctly [guc/slpc]
+- Assign correct hdcp content type [hdcp]
+- Add missing forward declarations/includes to display power headers
+- Fix BDW PSR AUX CH data register offsets [psr]
+- Use mock device info for creating mock device
+
+amdgpu:
+- Misc cleanups
+- GFX 9.4.3 fixes
+- DEBUGFS build fix
+- Fix LPDDR5 reporting
+- ASPM fixes
+- DCN 3.1.4 fixes
+- DP MST fixes
+- DCN 3.2.x fixes
+- Display PSR TCON fixes
+- SMU 13.x fixes
+- RAS fixes
+- Vega12/20 SMU fixes
+- PSP flashing cleanup
+- GFX9 MCBP fixes
+- SR-IOV fixes
+- GPUVM clear mappings fix for always valid BOs
+- Add FAMS quirk for problematic monitor
+- Fix possible UAF
+- Better handle monentary temperature fluctuations
+- SDMA 4.4.2 fixes
+- Fencing fix
+
+----------------------------------------------------------------
+Alex Deucher (3):
+      drm/amdgpu/atomfirmware: fix LPDDR5 width reporting
+      drm/amdgpu: make mcbp a per device setting
+      drm/amdgpu: enable mcbp by default on gfx9
+
+Alex Sierra (1):
+      drm/amdkfd: set coherent host access capability flag
+
+Alvin Lee (7):
+      drm/amd/display: Fix pipe check condition for manual trigger
+      drm/amd/display: Clear update flags at end of flip
+      drm/amd/display: enable the new fast update path for supported ASICs
+      drm/amd/display: Enable dc mode clock switching for DCN32x
+      drm/amd/display: Limit new fast update path to addr and gamma / color
+      drm/amd/display: For new fast update path, loop through each surface
+      drm/amd/display: Take full update path if number of planes changed
+
+Aric Cyr (2):
+      drm/amd/display: 3.2.240
+      drm/amd/display: 3.2.241
+
+Aurabindo Pillai (1):
+      drm/amd/display: Add monitor specific edid quirk
+
+Austin Zheng (3):
+      drm/amd/display: Add Clock Table Entry With Max DC Values
+      drm/amd/display: Disable DC Mode Capping On DCN321
+      drm/amd/display: Remove Phantom Pipe Check When Calculating K1 and K2
+
+Christian K=C3=B6nig (1):
+      drm/amdgpu: fix number of fence calculations
+
+Cong Yang (1):
+      drm/panel: Fine tune Starry-ili9882t panel HFP and HBP
+
+Daniel Miess (4):
+      drm/amd/display: disable power gating for DCN314
+      drm/amd/display: disable RCO for DCN314
+      Revert "drm/amd/display: Move DCN314 DOMAIN power control to DMCUB"
+      Partially revert "drm/amd/display: Fix possible underflow for
+displays with large vblank"
+
+Dave Airlie (5):
+      Merge tag 'drm-misc-next-fixes-2023-06-29' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next
+      Merge tag 'drm-intel-next-fixes-2023-06-29' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'amd-drm-fixes-6.5-2023-06-30-1' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next
+      Merge tag 'drm-intel-next-fixes-2023-07-06' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'drm-misc-next-fixes-2023-07-06' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next
+
+Dmytro Laktyushkin (1):
+      drm/amd/display: fix odm k2 div calculation
+
+Emily Deng (1):
+      drm/amdgpu/vcn: Need to unpause dpg before stop dpg
+
+Evan Quan (5):
+      drm/amd/pm: revise the ASPM settings for thunderbolt attached scenari=
+o
+      drm/amd/pm: update the LC_L1_INACTIVITY setting to address
+possible noise issue
+      drm/amd/pm: fulfill the missing enablement for vega12/vega20 L2H
+and H2L interrupts
+      drm/amd/pm: expose swctf threshold setting for legacy powerplay
+      drm/amd/pm: avoid unintentional shutdown due to temperature
+momentary fluctuation
+
+Fangzhi Zuo (1):
+      drm/amd/display: Add MST Preferred Link Setting Entry
+
+Gianna Binder (1):
+      drm/amd/display: Create debugging mechanism for Gaming FAMS
+
+Hamza Mahfooz (1):
+      drm/amd/display: perform a bounds check before filling dirty rectangl=
+es
+
+Harry Wentland (1):
+      drm/amd/display: Fix the delta clamping for shaper LUT
+
+Hersen Wu (1):
+      Revert "drm/amd/display: edp do not add non-edid timings"
+
+Hong-lu Cheng (1):
+      drm/amd/display: Remove asserts
+
+Ilya Bakoulin (2):
+      drm/amd/display: Fix 128b132b link loss handling
+      drm/amd/display: Work around bad DPCD state on link loss
+
+Imre Deak (2):
+      drm/i915/adlp+: Allow DC states along with PW2 only for PWB functiona=
+lity
+      drm/i915: Add missing forward declarations/includes to display
+power headers
+
+James Zhu (1):
+      drm/amdgpu: share drm device for pci amdgpu device with 1st
+partition device
+
+Jani Nikula (1):
+      drm/i915: use mock device info for creating mock device
+
+Jiadong Zhu (1):
+      drm/amdgpu: Skip mark offset for high priority rings
+
+Jouni H=C3=B6gander (1):
+      drm/i915/psr: Use hw.adjusted mode when calculating io/fast wake time=
+s
+
+Kenneth Feng (1):
+      drm/amd/pm: add abnormal fan detection for smu 13.0.0
+
+Le Ma (1):
+      drm/amdgpu: remove duplicated doorbell range init for sdma v4.4.2
+
+Leo Chen (1):
+      drm/amd/display: disable seamless boot if force_odm_combine is enable=
+d
+
+Lijo Lazar (7):
+      drm/amdgpu: Move calculation of xcp per memory node
+      drm/amdgpu: Add vbios attribute only if supported
+      drm/amdgpu: Modify for_each_inst macro
+      drm/amd/pm: Provide energy data in 15.625mJ units
+      drm/amd/pm: Enable pp_feature attribute
+      drm/amd/pm: Add GFX v9.4.3 unique id to sysfs
+      drm/amdgpu: Keep non-psp path for partition switch
+
+Mangesh Gadre (1):
+      drm/amdgpu:Remove sdma halt/unhalt during frontdoor load
+
+Mario Limonciello (7):
+      drm/amd: Disable PSR-SU on Parade 0803 TCON
+      drm/amd: Don't try to enable secure display TA multiple times
+      drm/amd/display: Correct `DMUB_FW_VERSION` macro
+      drm/amd/display: Set minimum requirement for using PSR-SU on Rembrand=
+t
+      drm/amd/display: Set minimum requirement for using PSR-SU on Phoenix
+      Revert "drm/amd: Disable PSR-SU on Parade 0803 TCON"
+      drm/amd: Don't initialize PSP twice for Navi3x
+
+Melissa Wen (1):
+      drm/amd/display: program DPP shaper and 3D LUT if updated
+
+Mingtong Bao (1):
+      drm/amd/pm: remove unneeded variable
+
+Mukul Joshi (2):
+      drm/amdkfd: Enable GWS on GFX9.4.3
+      drm/amdkfd: Update interrupt handling for GFX 9.4.3
+
+Nathan Chancellor (2):
+      drm/amdgpu: Remove CONFIG_DEBUG_FS guard around body of
+amdgpu_rap_debugfs_init()
+      drm/amdgpu: Move clocks closer to its only usage in
+amdgpu_parse_cg_state()
+
+Radhakrishna Sripada (1):
+      drm/i915/mtl: Fix SSC selection for MPLLA
+
+Samuel Pitoiset (1):
+      drm/amdgpu: fix clearing mappings for BOs that are always valid in VM
+
+Sridevi Arvindekar (1):
+      drm/amd/display: add missing ABM registers
+
+Sung-huai Wang (1):
+      drm/amd/display: add a NULL pointer check
+
+Suraj Kandpal (1):
+      drm/i915/hdcp: Assign correct hdcp content type
+
+Tao Zhou (1):
+      drm/amdgpu: check RAS irq existence for VCN/JPEG
+
+Thomas Zimmermann (1):
+      arch/sparc: Add module license and description for fbdev helpers
+
+Ville Syrj=C3=A4l=C3=A4 (1):
+      drm/i915/psr: Fix BDW PSR AUX CH data register offsets
+
+Vinay Belgaumkar (1):
+      drm/i915/guc/slpc: Apply min softlimit correctly
+
+Wang Ming (1):
+      amd/display/dc: remove repeating expression
+
+Xiaogang Chen (1):
+      drm/amdgpu: remove vm sanity check from amdgpu_vm_make_compute
+
+YiPeng Chai (1):
+      drm/amdgpu: gpu recovers from fatal error in poison mode
+
+Zhigang Luo (2):
+      drm/amdgpu: Skip TMR for MP0_HWIP 13.0.6
+      drm/amdgpu: port SRIOV VF missed changes
+
+shanzhulig (1):
+      drm/amdgpu: Fix potential fence use-after-free v2
+
+ arch/sparc/video/fbdev.c                           |   3 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h                |  10 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c       |   9 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.h       |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c   |  18 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |  17 +--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  29 +++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   8 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h            |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_jpeg.c           |   3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c            |   8 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_rap.c            |   2 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |  11 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.h            |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring_mux.c       |   3 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c           |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c            |   3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c           |   3 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c             |  24 +++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_xcp.c            |  13 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c             |   4 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             |   2 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c            |  43 +++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c             |  13 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  18 +--
+ drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c              |   2 +
+ drivers/gpu/drm/amd/amdkfd/kfd_device.c            |  44 +++++-
+ drivers/gpu/drm/amd/amdkfd/kfd_int_process_v9.c    |  29 ++++
+ drivers/gpu/drm/amd/amdkfd/kfd_priv.h              |   1 +
+ drivers/gpu/drm/amd/amdkfd/kfd_process.c           |   9 ++
+ .../gpu/drm/amd/amdkfd/kfd_process_queue_manager.c |  35 +++--
+ drivers/gpu/drm/amd/amdkfd/kfd_topology.c          |   4 +
+ drivers/gpu/drm/amd/amdkfd/soc15_int.h             |   1 +
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  21 +--
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c  | 156 +++++++++++++++++=
++++-
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c  |  26 ++++
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c  |   3 +-
+ .../amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c   |  43 +++++-
+ drivers/gpu/drm/amd/display/dc/core/dc.c           | 141 +++++++++++++++++=
++-
+ .../gpu/drm/amd/display/dc/core/dc_hw_sequencer.c  |   2 +-
+ drivers/gpu/drm/amd/display/dc/dc.h                |  16 ++-
+ drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c       |   7 +
+ drivers/gpu/drm/amd/display/dc/dc_dmub_srv.h       |   1 +
+ drivers/gpu/drm/amd/display/dc/dce/dce_abm.h       |  29 +++-
+ .../drm/amd/display/dc/dce112/dce112_resource.c    |  10 +-
+ .../gpu/drm/amd/display/dc/dcn10/dcn10_cm_common.c |  19 ++-
+ .../gpu/drm/amd/display/dc/dcn10/dcn10_cm_common.h |   1 +
+ .../drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c  |   2 +-
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c |  11 +-
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_dwb_cm.c    |   2 +-
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c |   2 +-
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |   6 +-
+ .../drm/amd/display/dc/dcn302/dcn302_resource.c    |   3 +-
+ .../drm/amd/display/dc/dcn303/dcn303_resource.c    |   1 +
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c    |   2 +-
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_hwseq.c   |  30 +---
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_hwseq.h   |   4 +-
+ .../gpu/drm/amd/display/dc/dcn314/dcn314_init.c    |   2 +-
+ .../drm/amd/display/dc/dcn314/dcn314_resource.c    |  15 +-
+ .../drm/amd/display/dc/dcn315/dcn315_resource.c    |   2 +-
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hubp.c  |   1 +
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c |  18 +--
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.h |   2 +-
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_init.c  |   1 +
+ .../gpu/drm/amd/display/dc/dcn32/dcn32_resource.c  |   2 +
+ .../amd/display/dc/dcn32/dcn32_resource_helpers.c  |   3 +-
+ .../drm/amd/display/dc/dcn321/dcn321_resource.c    |   3 +
+ .../amd/display/dc/dml/dcn20/display_mode_vba_20.c |  16 ++-
+ .../gpu/drm/amd/display/dc/dml/dcn314/dcn314_fpu.c |   2 +-
+ .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c   |  90 +++++++++++-
+ .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h   |   4 -
+ .../gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.c | 102 ++++++++++++--
+ .../gpu/drm/amd/display/dc/dml/dcn321/dcn321_fpu.h |   4 -
+ .../drm/amd/display/dc/dml/display_mode_structs.h  |   1 +
+ drivers/gpu/drm/amd/display/dc/inc/hw/clk_mgr.h    |   1 +
+ .../drm/amd/display/dc/inc/hw_sequencer_private.h  |   2 +-
+ .../dc/link/protocols/link_dp_irq_handler.c        |  37 ++++-
+ drivers/gpu/drm/amd/display/dmub/dmub_srv.h        |   4 +-
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn31.c  |   5 +
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn31.h  |   2 +
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn314.c |   5 +
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn314.h |   2 +
+ drivers/gpu/drm/amd/display/dmub/src/dmub_srv.c    |  11 +-
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                 |  81 +++++------
+ drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h            |   2 +
+ drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c   |  48 +++++++
+ .../drm/amd/pm/powerplay/hwmgr/hardwaremanager.c   |   4 +-
+ .../gpu/drm/amd/pm/powerplay/hwmgr/smu7_hwmgr.c    |   2 +
+ .../gpu/drm/amd/pm/powerplay/hwmgr/smu_helper.c    |  27 ++--
+ .../gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c  |  10 ++
+ .../gpu/drm/amd/pm/powerplay/hwmgr/vega12_hwmgr.c  |   4 +
+ .../drm/amd/pm/powerplay/hwmgr/vega12_thermal.c    |   4 +-
+ .../gpu/drm/amd/pm/powerplay/hwmgr/vega20_hwmgr.c  |   4 +
+ .../drm/amd/pm/powerplay/hwmgr/vega20_thermal.c    |   4 +-
+ drivers/gpu/drm/amd/pm/powerplay/inc/hwmgr.h       |   2 +
+ drivers/gpu/drm/amd/pm/powerplay/inc/power_state.h |   1 +
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |  34 +++++
+ drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h      |   2 +
+ drivers/gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c    |  10 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c     |   9 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |   9 +-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |   1 +
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_6_ppt.c   |   4 +-
+ drivers/gpu/drm/i915/display/intel_cx0_phy.c       |   3 +-
+ drivers/gpu/drm/i915/display/intel_display_power.h |   4 +
+ .../gpu/drm/i915/display/intel_display_power_map.c |  16 +--
+ .../drm/i915/display/intel_display_power_well.h    |   2 +
+ drivers/gpu/drm/i915/display/intel_hdcp.c          |   2 +-
+ drivers/gpu/drm/i915/display/intel_psr.c           |   4 +-
+ drivers/gpu/drm/i915/display/intel_psr_regs.h      |   2 +-
+ drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c        |   2 +-
+ drivers/gpu/drm/i915/selftests/mock_gem_device.c   |  45 +++---
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c     |   6 +-
+ 114 files changed, 1252 insertions(+), 349 deletions(-)
