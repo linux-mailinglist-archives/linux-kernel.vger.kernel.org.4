@@ -2,157 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825C474B509
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8790A74B50E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjGGQSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 12:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        id S232662AbjGGQUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 12:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjGGQSw (ORCPT
+        with ESMTP id S229642AbjGGQUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:18:52 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11AB1BEE
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:18:51 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d7f350758so2818576a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 09:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688746730; x=1691338730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BwphiLKBiEsc7end01Y8mmEBaeTtS1uM+mpDszrjNwU=;
-        b=kLJvIcllBwq3yuN7T4W5b/a9y5XRFLkSDvzTLkaIXA5rjr3sDKw+zwZB9eXr3Wo+Rm
-         CnegdWjDjTi1vU7Au9bDR1xfGmtpynB4ocTa4raBPAmzXOetWr/X8lWdxQEUZ30Y5cqg
-         nssvL/k0HrWueSeLqFJ7k7URhQNdosToSXpYGj3BWNjVkw9VB+HD3G2EyCu8/51Q55Lg
-         wfa4k2NL4mxqjsu/BvDlFJ9se/xU3aCf69Iw0DSBAC7Wjhd2me8Tcuq/eOhRa0qXio2u
-         bZpQRprslU43SNWWy8AmwP3J/bKbj9CPy0WMnUgwoK2m+Lqm+YuPKzhJ2ejG7pixXfIK
-         yF3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688746730; x=1691338730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BwphiLKBiEsc7end01Y8mmEBaeTtS1uM+mpDszrjNwU=;
-        b=FTWFggtlomc7kAKG0KtgaZ7heNfxwkKlJxjA9KQwlhFEHYi+qUS211VRvKOZbGvcT7
-         D2ZQE/68HtG69kj6szpUmwhiKkAzipIPm5F20zbw9uyRh9mm5fsbG72uwgraKMcx/x3A
-         UadKUG9sXL9r8ZH3jxaTjdQPEbB7/rA2GIVoXShCzhPHeVr6OMX9CCncMwSQDrkJJIyx
-         ycAO8Ajrm7B30VxYtLNioTYjPVkGUAnCVqzZv9At+hIRhzMDeyHouGVSXw0dGwOZv8EG
-         w1fJ5Y0VIe8ZMBShvtCySP7WqtL3bg/nhqdnkdJysvzHP2T6ZqnElIhX3EjTYfO0Gnxo
-         amkQ==
-X-Gm-Message-State: ABy/qLYekXhWuxLJ2IN+eYUVYLSr7fi38c0I6OxIvb1Neptoi4JCK13g
-        nVNAk5CIROD3nMwKAzvAzzQn2AOcfabpk3j0ZLyKyw==
-X-Google-Smtp-Source: APBJJlGNXWN5iR0lxERw28DBQHWKhrGGYB0EGkwrVdX0DNT38+8FUlx2ZocVTPj1M0RsuZ0At5riiFSUnWNrWNAhazs=
-X-Received: by 2002:aa7:cf96:0:b0:51d:7fa6:62ca with SMTP id
- z22-20020aa7cf96000000b0051d7fa662camr4182986edx.14.1688746730201; Fri, 07
- Jul 2023 09:18:50 -0700 (PDT)
+        Fri, 7 Jul 2023 12:20:13 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D21B1BEE;
+        Fri,  7 Jul 2023 09:20:11 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id B4A845C0151;
+        Fri,  7 Jul 2023 12:20:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 07 Jul 2023 12:20:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1688746810; x=1688833210; bh=RM0mgP8xGV
+        Q+Nh9DbRaHnprRjsG173RHiqAP1dmkn7c=; b=fzU62APvTW8+dgJYTmIYymrU/c
+        LY+HivEwSTRkIC1LW8y8xnrkCKUtGQVsiZ0UUPwcQrqoJcpYgoBBoNziWePuvUPD
+        1qlMr+gHSSz921QIi+sjfN5F4kT6MT5YhfxP/uyjcPoutAHfYoGdyBtO9iOXz3bO
+        fZ6Y+ihOnPZm0qiCpgYm/eAGKzCtYTQTgx0kyOuD+QJbpm1IyXAWpKxIsYFLXOdY
+        l1+NsKwHMBNv3bWlLjpPsk/U3GWcWnhZFD4gzqXuhxMUjWh9AwdmkIaLBdRpRfgC
+        mTGGCYVTRGSVyV+N/4HhqNijVR++uWeeFInYkQ4ihKox1xqWEpkLruCEum6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688746810; x=1688833210; bh=RM0mgP8xGVQ+N
+        h9DbRaHnprRjsG173RHiqAP1dmkn7c=; b=ky5qLHzlOrBhd0QJ3x3ae+U2fCDEZ
+        aWHzMKZYV+I39bYLCuZxu7dSH4JbWROejltB48WB0GmaVu+d/oRJHuMSp3/e8szu
+        CJ+lqMxh8JpG9r7xTh/1+nH4tlwOC9Leq/x0gwWWR+hzFM8BxqQs6LnM7G4Adt1W
+        gEbm87TREA3IjLtHjJ23hLoznXDkcB5tYP+8Jw55Jc5s8W2utj8KD3xq8z5zz5QV
+        ftDU+D/PtMUEBMThl5xjE3H38CpUTXxHxabS60k5isXtTX0w/YcNQxTGCcskQtWf
+        V1zJU/sxyzCZ+f7irAB7FTywjdiRvBX/7qi4e0/NdsdjL0SRoLT081Fng==
+X-ME-Sender: <xms:OjuoZDbIKpEXC4P-YbU1j06D9MtE8eNGJVKmcXkvx9LptqygOLEbtw>
+    <xme:OjuoZCbf1exYuY-qw-B5rTko61-JXnai9lDklcDMynue4lW2oUhoHaBbNq-b-VX6T
+    KXz_CLGUOLTWQpGSA>
+X-ME-Received: <xmr:OjuoZF9_9J8YDOfaykxPJgzC0W0lE8y4t_lxChiv3iBoSos-6fuRrixNVYgEppdHCswtutg-h9_pS4SgJRDS5OhnBKYwYwU56XyIIxAeviegDmB3aLP7TvqoFN6h>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddugdellecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeetnhgurhgvshcu
+    hfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtffrrghtth
+    gvrhhnpeekieeigeekleeggfeugfehudeigeejfeehvefhleetgeeujeffvdegueefgedt
+    veenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnh
+    gurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:OjuoZJoBAdiUyIpBUZ2BD56SEsvmY-7FHyBvGnDqltL1E3jt5ZGBJA>
+    <xmx:OjuoZOrOGSLkyuyj0Ar8dh0XUmuHDPx0XlqIEaB1iV96vGZwCRswuQ>
+    <xmx:OjuoZPTxgeEmDQ02kI6z-09PrYxObfVwgqPlp06E9SwrpuLE1ZLM-Q>
+    <xmx:OjuoZF0PdGem4KOLQqVXukXgoyI6x9yQ9bWD7nM0f6jlU70qo3m7xA>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 7 Jul 2023 12:20:10 -0400 (EDT)
+From:   Andres Freund <andres@anarazel.de>
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH v1] io_uring: Use io_schedule* in cqring wait
+Date:   Fri,  7 Jul 2023 09:20:07 -0700
+Message-Id: <20230707162007.194068-1-andres@anarazel.de>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <CAMj1kXFZren0Q19DimwQaETCLz64D4bZQC5B2N=i3SAWHygkTQ@mail.gmail.com>
- <mhng-b66b085a-eb15-4c9b-b2aa-93ddf16ec7aa@palmer-ri-x1c9a>
- <CAP6exYKwZG=_47r0jAUFYNL5-P-SS==k6vWdKiMJ9nB0upH5Zw@mail.gmail.com>
- <20230707-attach-conjuror-306d967347ce@wendy> <ZKfsSsdiso0W8mW6@sunil-laptop>
- <CAN3iYbMhQU5Ng4r6_rQDnLmit1GCmheC5T49rsUP5NgHFEXsHA@mail.gmail.com>
- <ZKgLKvBoWKSxzm6r@sunil-laptop> <CAN3iYbOe+i4jVhz0sSQwVQ2PMB7UvaTPyN_sLtZj0uiOD2emDA@mail.gmail.com>
- <20230707-gargle-enjoyable-f9f7f87fc7ea@spud>
-In-Reply-To: <20230707-gargle-enjoyable-f9f7f87fc7ea@spud>
-From:   =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>
-Date:   Sat, 8 Jul 2023 00:18:39 +0800
-Message-ID: <CAN3iYbObSC_g=+oN6mxCp_OAzLVcw7nnt_iud1-p_XBdYQ9hjQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from FFI
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Sunil V L <sunilvl@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        ron minnich <rminnich@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Ard Biesheuvel <ardb@kernel.org>, cuiyunhui@bytedance.com,
-        jrtc27@jrtc27.com, kernel@esmil.dk,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, weidong.wd@bytedance.com,
-        Dong Wei <Dong.Wei@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 12:07=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> Hey,
->
-> On Fri, Jul 07, 2023 at 11:56:48PM +0800, =E8=91=9B=E5=A3=AB=E5=BB=BA wro=
-te:
-> > On Fri, Jul 7, 2023 at 8:55=E2=80=AFPM Sunil V L <sunilvl@ventanamicro.=
-com> wrote:
-> >
-> > > On Fri, Jul 07, 2023 at 08:05:48PM +0800, =E8=91=9B=E5=A3=AB=E5=BB=BA=
- wrote:
-> > > > Hi Sunil,
-> > > >
-> > > > From Sunil:
-> > > > IMO, if the question is generic like "Is UEFI mandatory for RISC-V?=
-",
-> > > > the answer will be solid "no" because we can use DT without UEFI. B=
-ut if
-> > > > you ask whether UEFI is mandatory for ACPI support on RISC-V, then =
-the
-> > > > answer will be "yes".
-> > > > ---- Why UEFI is mandatory for ACPI support on RISC-V?  As we know,=
- on X86,
-> > > > ACPI works well without UEFI. Is there any limitation on RISC-V
-> > > > architecture?
-> > > Yes, the limitation is RISC-V can not use IA-PC BIOS. Please see
-> > > section 5.2.5 and 15 in ACPI spec.
-> > >
-> > > I don't have much to add to Ard's reasons.
-> > >
-> > > https://lore.kernel.org/linux-riscv/CAMj1kXFZren0Q19DimwQaETCLz64D4bZ=
-QC5B2N=3Di3SAWHygkTQ@mail.gmail.com/
-> > >
->
-> > I don't think that's the limitation on RISC-V. BTW, how does OSPM find =
-the
-> > RSDP on ARM systems? Does it meet 5.2.5?
-> >
-> > Here are
-> > 1. Purpose: purpose is to provide another option on Firmware Solution; =
-Our
-> > purpose is NOT to ban UEFI.
-> > 2. Both ARM and RISC-V starts from UBOOT solution, and that's close to
-> > coreboot, so we would like to enable flexible and rich ecosystem.
-> > 3. We don't like to push coreboot and UEFI together, so we don't plan t=
-o
-> > enable UEFI in coreboot(maybe from Uboot); because that makes the solut=
-ion
-> > complex.
-> > 4. I think we should fix the request and problem, banning or protecting
-> > something is NOT the goal of us.
-> >
-> > I think the solution is for both RISC-V and ARM, and also it works on X=
-86
-> > if it's done.
-> > Let me know what the problem and impact is, please.
->
-> If you are going to keep arguing this, please stop sending top-posted
-> HTML to the mailing list. It makes it impossible for those not in the CC
-> list to follow along.
+I observed poor performance of io_uring compared to synchronous IO. That
+turns out to be caused by deeper CPU idle states entered with io_uring,
+due to io_uring using plain schedule(), whereas synchronous IO uses
+io_schedule().
 
-Thanks Conor, I will follow the rules.
+The losses due to this are substantial. On my cascade lake workstation,
+t/io_uring from the fio repository e.g. yields regressions between 20%
+and 40% with the following command:
+./t/io_uring -r 5 -X0 -d 1 -s 1 -c 1 -p 0 -S$use_sync -R 0 /mnt/t2/fio/write.0.0
 
->
->
-> Thanks,
-> Conor.
+This is repeatable with different filesystems, using raw block devices
+and using different block devices.
+
+Use io_schedule_prepare() / io_schedule_finish() in
+io_cqring_wait_schedule() to address the difference.
+
+After that using io_uring is on par or surpassing synchronous IO (using
+registered files etc makes it reliably win, but arguably is a less fair
+comparison).
+
+There are other calls to schedule() in io_uring/, but none immediately
+jump out to be similarly situated, so I did not touch them. Similarly,
+it's possible that mutex_lock_io() should be used, but it's not clear if
+there are cases where that matters.
+
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: io-uring@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Andres Freund <andres@anarazel.de>
+---
+ io_uring/io_uring.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 3bca7a79efda..4661a39de716 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2575,6 +2575,9 @@ int io_run_task_work_sig(struct io_ring_ctx *ctx)
+ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 					  struct io_wait_queue *iowq)
+ {
++	int ret;
++	int token;
++
+ 	if (unlikely(READ_ONCE(ctx->check_cq)))
+ 		return 1;
+ 	if (unlikely(!llist_empty(&ctx->work_llist)))
+@@ -2585,11 +2588,20 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 		return -EINTR;
+ 	if (unlikely(io_should_wake(iowq)))
+ 		return 0;
++
++	/*
++	 * Use io_schedule_prepare/finish, so cpufreq can take into account
++	 * that the task is waiting for IO - turns out to be important for low
++	 * QD IO.
++	 */
++	token = io_schedule_prepare();
++	ret = 0;
+ 	if (iowq->timeout == KTIME_MAX)
+ 		schedule();
+ 	else if (!schedule_hrtimeout(&iowq->timeout, HRTIMER_MODE_ABS))
+-		return -ETIME;
+-	return 0;
++		ret = -ETIME;
++	io_schedule_finish(token);
++	return ret;
+ }
+ 
+ /*
+-- 
+2.38.0
+
