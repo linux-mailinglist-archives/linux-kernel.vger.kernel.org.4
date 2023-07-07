@@ -2,110 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8646A74B501
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825C474B509
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 18:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjGGQQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 12:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S232469AbjGGQSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 12:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjGGQQX (ORCPT
+        with ESMTP id S229642AbjGGQSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:16:23 -0400
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0A91FD9
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:16:20 -0700 (PDT)
-Received: from eig-obgw-5009a.ext.cloudfilter.net ([10.0.29.176])
-        by cmsmtp with ESMTP
-        id HllaqbGUmEoVsHo83qI9Vn; Fri, 07 Jul 2023 16:16:20 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTPS
-        id Ho82qW5jNeQQzHo83qLHGF; Fri, 07 Jul 2023 16:16:19 +0000
-X-Authority-Analysis: v=2.4 cv=VaXkgXl9 c=1 sm=1 tr=0 ts=64a83a53
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=ws7JD89P4LkA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=hRA6dbrf6ar1ToGhP8sA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i0RIjplkv8YMTvjY+KkgMdjkmPutWbywcnCQfTBbR4Y=; b=oY0RcCTaOAZ4kucMLnrx0pgLTr
-        pMJjxOZkMhUDKUuYUSit3JPJnp5fLVHeOaE46TQ4SEySnUguxsQumkq88jLQCO/fnCAOVcomVGZIS
-        fWQFn6eLKCKI6xqWjOt8kG6ToJloTygEdY72dpksbLsWQBNfNsNBLgTMoE0g4hcq8H1G7T3lpnub1
-        tUDkv7WUa87oYqMNhOjnwRFmZiuHbHcRfqcFExf8Lmpbs53tY4BhDm5RJWNQgow9/+Ct4QmWOfX/v
-        D2nVN1Yu9YMNzcH5HHpUuSDrYDg/QBoLRfJSArnDNQBBISY9Gwt85dqx1/OQFtw4OP8kJwlcSUymO
-        WsvSo5mQ==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:58802 helo=[192.168.15.8])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1qHo82-002XfG-0s;
-        Fri, 07 Jul 2023 11:16:18 -0500
-Message-ID: <1fb40135-2a4c-5d54-c5a1-db36244128aa@embeddedor.com>
-Date:   Fri, 7 Jul 2023 10:17:01 -0600
+        Fri, 7 Jul 2023 12:18:52 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11AB1BEE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 09:18:51 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d7f350758so2818576a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 09:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688746730; x=1691338730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BwphiLKBiEsc7end01Y8mmEBaeTtS1uM+mpDszrjNwU=;
+        b=kLJvIcllBwq3yuN7T4W5b/a9y5XRFLkSDvzTLkaIXA5rjr3sDKw+zwZB9eXr3Wo+Rm
+         CnegdWjDjTi1vU7Au9bDR1xfGmtpynB4ocTa4raBPAmzXOetWr/X8lWdxQEUZ30Y5cqg
+         nssvL/k0HrWueSeLqFJ7k7URhQNdosToSXpYGj3BWNjVkw9VB+HD3G2EyCu8/51Q55Lg
+         wfa4k2NL4mxqjsu/BvDlFJ9se/xU3aCf69Iw0DSBAC7Wjhd2me8Tcuq/eOhRa0qXio2u
+         bZpQRprslU43SNWWy8AmwP3J/bKbj9CPy0WMnUgwoK2m+Lqm+YuPKzhJ2ejG7pixXfIK
+         yF3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688746730; x=1691338730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BwphiLKBiEsc7end01Y8mmEBaeTtS1uM+mpDszrjNwU=;
+        b=FTWFggtlomc7kAKG0KtgaZ7heNfxwkKlJxjA9KQwlhFEHYi+qUS211VRvKOZbGvcT7
+         D2ZQE/68HtG69kj6szpUmwhiKkAzipIPm5F20zbw9uyRh9mm5fsbG72uwgraKMcx/x3A
+         UadKUG9sXL9r8ZH3jxaTjdQPEbB7/rA2GIVoXShCzhPHeVr6OMX9CCncMwSQDrkJJIyx
+         ycAO8Ajrm7B30VxYtLNioTYjPVkGUAnCVqzZv9At+hIRhzMDeyHouGVSXw0dGwOZv8EG
+         w1fJ5Y0VIe8ZMBShvtCySP7WqtL3bg/nhqdnkdJysvzHP2T6ZqnElIhX3EjTYfO0Gnxo
+         amkQ==
+X-Gm-Message-State: ABy/qLYekXhWuxLJ2IN+eYUVYLSr7fi38c0I6OxIvb1Neptoi4JCK13g
+        nVNAk5CIROD3nMwKAzvAzzQn2AOcfabpk3j0ZLyKyw==
+X-Google-Smtp-Source: APBJJlGNXWN5iR0lxERw28DBQHWKhrGGYB0EGkwrVdX0DNT38+8FUlx2ZocVTPj1M0RsuZ0At5riiFSUnWNrWNAhazs=
+X-Received: by 2002:aa7:cf96:0:b0:51d:7fa6:62ca with SMTP id
+ z22-20020aa7cf96000000b0051d7fa662camr4182986edx.14.1688746730201; Fri, 07
+ Jul 2023 09:18:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: mainline build failure due to df8fc4e934c1 ("kbuild: Enable
- -fstrict-flex-arrays=3")
-Content-Language: en-US
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <ZJ2M4yqnOCqqGWH0@debian>
- <c0db4c48-6090-5c72-b597-9d4146dbc26c@embeddedor.com>
- <423a78fe-ac40-9983-ff44-90b1759fc0b5@leemhuis.info>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <423a78fe-ac40-9983-ff44-90b1759fc0b5@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qHo82-002XfG-0s
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:58802
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfG/yroYrpkjpMbeG1dNLPcosoBtC0ccY8dJzd8jZLAhLtANBx69DZ7gQqwe8Al2yfPS3E7KryBcjZk/6pCxfyC3pj02wnj8OJoY+0FZCbq+kHk/TfpS6
- UwQH46LECdZB3yRDEq7ZHDV6NlELrZ0rW7nVIpm1Hu6Rk7gwkl5NXjCBfICZJwJbTrGisEFd5GoDCYxn9eDo2Vkg1QwRPXEynP/f9abNz2qRK1tvDsfp5Y+Q
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <CAMj1kXFZren0Q19DimwQaETCLz64D4bZQC5B2N=i3SAWHygkTQ@mail.gmail.com>
+ <mhng-b66b085a-eb15-4c9b-b2aa-93ddf16ec7aa@palmer-ri-x1c9a>
+ <CAP6exYKwZG=_47r0jAUFYNL5-P-SS==k6vWdKiMJ9nB0upH5Zw@mail.gmail.com>
+ <20230707-attach-conjuror-306d967347ce@wendy> <ZKfsSsdiso0W8mW6@sunil-laptop>
+ <CAN3iYbMhQU5Ng4r6_rQDnLmit1GCmheC5T49rsUP5NgHFEXsHA@mail.gmail.com>
+ <ZKgLKvBoWKSxzm6r@sunil-laptop> <CAN3iYbOe+i4jVhz0sSQwVQ2PMB7UvaTPyN_sLtZj0uiOD2emDA@mail.gmail.com>
+ <20230707-gargle-enjoyable-f9f7f87fc7ea@spud>
+In-Reply-To: <20230707-gargle-enjoyable-f9f7f87fc7ea@spud>
+From:   =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>
+Date:   Sat, 8 Jul 2023 00:18:39 +0800
+Message-ID: <CAN3iYbObSC_g=+oN6mxCp_OAzLVcw7nnt_iud1-p_XBdYQ9hjQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from FFI
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Sunil V L <sunilvl@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        ron minnich <rminnich@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Ard Biesheuvel <ardb@kernel.org>, cuiyunhui@bytedance.com,
+        jrtc27@jrtc27.com, kernel@esmil.dk,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>, lpieralisi@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, weidong.wd@bytedance.com,
+        Dong Wei <Dong.Wei@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jul 8, 2023 at 12:07=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> Hey,
+>
+> On Fri, Jul 07, 2023 at 11:56:48PM +0800, =E8=91=9B=E5=A3=AB=E5=BB=BA wro=
+te:
+> > On Fri, Jul 7, 2023 at 8:55=E2=80=AFPM Sunil V L <sunilvl@ventanamicro.=
+com> wrote:
+> >
+> > > On Fri, Jul 07, 2023 at 08:05:48PM +0800, =E8=91=9B=E5=A3=AB=E5=BB=BA=
+ wrote:
+> > > > Hi Sunil,
+> > > >
+> > > > From Sunil:
+> > > > IMO, if the question is generic like "Is UEFI mandatory for RISC-V?=
+",
+> > > > the answer will be solid "no" because we can use DT without UEFI. B=
+ut if
+> > > > you ask whether UEFI is mandatory for ACPI support on RISC-V, then =
+the
+> > > > answer will be "yes".
+> > > > ---- Why UEFI is mandatory for ACPI support on RISC-V?  As we know,=
+ on X86,
+> > > > ACPI works well without UEFI. Is there any limitation on RISC-V
+> > > > architecture?
+> > > Yes, the limitation is RISC-V can not use IA-PC BIOS. Please see
+> > > section 5.2.5 and 15 in ACPI spec.
+> > >
+> > > I don't have much to add to Ard's reasons.
+> > >
+> > > https://lore.kernel.org/linux-riscv/CAMj1kXFZren0Q19DimwQaETCLz64D4bZ=
+QC5B2N=3Di3SAWHygkTQ@mail.gmail.com/
+> > >
+>
+> > I don't think that's the limitation on RISC-V. BTW, how does OSPM find =
+the
+> > RSDP on ARM systems? Does it meet 5.2.5?
+> >
+> > Here are
+> > 1. Purpose: purpose is to provide another option on Firmware Solution; =
+Our
+> > purpose is NOT to ban UEFI.
+> > 2. Both ARM and RISC-V starts from UBOOT solution, and that's close to
+> > coreboot, so we would like to enable flexible and rich ecosystem.
+> > 3. We don't like to push coreboot and UEFI together, so we don't plan t=
+o
+> > enable UEFI in coreboot(maybe from Uboot); because that makes the solut=
+ion
+> > complex.
+> > 4. I think we should fix the request and problem, banning or protecting
+> > something is NOT the goal of us.
+> >
+> > I think the solution is for both RISC-V and ARM, and also it works on X=
+86
+> > if it's done.
+> > Let me know what the problem and impact is, please.
+>
+> If you are going to keep arguing this, please stop sending top-posted
+> HTML to the mailing list. It makes it impossible for those not in the CC
+> list to follow along.
 
+Thanks Conor, I will follow the rules.
 
-On 7/7/23 06:52, Linux regression tracking (Thorsten Leemhuis) wrote:
-
-> Are those fixes still on track? Looks like there was not much progress
-> since then, so I suspect this won't be fixed before -rc1? Or did miss
-> something?
-
-The change is already in SCSI for them to send it to mainline when they
-see fit:
-https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/commit/?h=6.5/scsi-staging&id=47699a2b63caaa0de4841d4402627c2fdf3452a6
-
---
-Gustavo
+>
+>
+> Thanks,
+> Conor.
