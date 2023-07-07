@@ -2,88 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC69774B080
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE7A74B07D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjGGMKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S231972AbjGGMKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbjGGMKJ (ORCPT
+        with ESMTP id S229740AbjGGMKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:10:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA30212B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688731753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gORiq5GodS7ZyZ8uTXDDTjpB1bJALeNv6hXNnjMKMlE=;
-        b=bfE/adARTIqWU7lSTcubqJjaGdCRkCgihWc3YPuqS7Zty0uzFhD5Q03RYPCBslM1R/ZupI
-        Yz+xqhI7RWrEmYHZIl1FZtdO35MGjvGbYBoqi5HHVwvCJyplrqugRZ2r7SvX57eq+ICgh0
-        kGWAAE/FA3W1eqvBj2YleP4gsQINBUE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-251-k_tO0PkeOFqH1KR6qnlQuA-1; Fri, 07 Jul 2023 08:09:10 -0400
-X-MC-Unique: k_tO0PkeOFqH1KR6qnlQuA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fbb18e9bd9so10052975e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:09:10 -0700 (PDT)
+        Fri, 7 Jul 2023 08:10:01 -0400
+Received: from mail-pg1-f206.google.com (mail-pg1-f206.google.com [209.85.215.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D1B2114
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:09:59 -0700 (PDT)
+Received: by mail-pg1-f206.google.com with SMTP id 41be03b00d2f7-55bf3002ac7so2435262a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:09:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688731749; x=1691323749;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gORiq5GodS7ZyZ8uTXDDTjpB1bJALeNv6hXNnjMKMlE=;
-        b=ifjjocHZtXgoJb+GxC3isZ9ALiG6LmcWvlCE/TpO7QukGnuyAZ5wLOX3btwbnYbXfd
-         9WVCGq1XCLX/4wz37aEtQI0yoYo3hA7ZxdCa5HYcGyL8t5hb5hfI+2oWJqGQcVchJX1v
-         jc6kZUSy12epfG6Y68qz/TPXxScVHMrqHAJMLPzAqrWBME/HzSdxK7YmKpygbO2dzZnX
-         Phu0BVzzS435ccyZxTy2nVi3wJ4OCKRU3BGWH1c7ZNLkDDlsf26w56SDx7xSFLhmBkIA
-         Jgx2UwzUQSNWrwH8YiSlzFZLLLrhCDEUKo5r8AbUjMv+6UQN2KGv5pIXMfH2EhqHd7NO
-         +iBA==
-X-Gm-Message-State: ABy/qLaajZLKhkM4d7Twq8fghuDcpP20AsmcUSiDIO7mBn+BFN7dHaV5
-        DATamUzEt6mEM9PtZvwyETXE8K+h5ayp4BNfSbQeOuYEYBR2g4DAlOpzHu9F3heqL0OOHOrBNxf
-        bF6R4MouFdEVEW7EfQznYd2xQtpkBUiSM
-X-Received: by 2002:a7b:cd1a:0:b0:3fb:c075:b308 with SMTP id f26-20020a7bcd1a000000b003fbc075b308mr4996098wmj.12.1688731749308;
-        Fri, 07 Jul 2023 05:09:09 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFfKiKrAhyycHkgU5qil5GH1DqpfQJ20sg3fOGI5gZ6Cq9A4H9d55aCtQPRZY9qqIDQHOJH+A==
-X-Received: by 2002:a7b:cd1a:0:b0:3fb:c075:b308 with SMTP id f26-20020a7bcd1a000000b003fbc075b308mr4996081wmj.12.1688731749005;
-        Fri, 07 Jul 2023 05:09:09 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f04:3c00:248f:bf5b:b03e:aac7? (p200300d82f043c00248fbf5bb03eaac7.dip0.t-ipconnect.de. [2003:d8:2f04:3c00:248f:bf5b:b03e:aac7])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d4742000000b0031434936f0dsm4305585wrs.68.2023.07.07.05.09.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 05:09:08 -0700 (PDT)
-Message-ID: <0d035a57-b502-32b3-0010-d029f62d7757@redhat.com>
-Date:   Fri, 7 Jul 2023 14:09:07 +0200
+        d=1e100.net; s=20221208; t=1688731799; x=1691323799;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PI5ApXs2ZsjZ5d4mdhTHU0eytxqvGV+WP25cKrMce9g=;
+        b=e9094y4R01jeM3fcUHp0gommF4YtzwfVT+eHdGi7TYIAkMul045GWj5tWcREugvtlq
+         FPoLwMfeNIYf+QUwENJ5aqijOQ3IL2ImgRhi4sRFvvxz42X9xPAx4wJ+MrX7Pfw038ZU
+         49u9nLgPTA751dh3AKruSbg+Daxq4ZonWPXpSfe9NyqsQZLyUfhQo+e/ZevEXZQZttS3
+         IzRur+FumiY3zOPs3Y8gNxwBp+X3p/HZEJNfOEHafc6n6mgkiYO6l4iAb0p7k9XUZZu8
+         JIgh8ayBUUBUC5YR/yT1xRCpg4aXj8ENh3xwaNnJrJcfD5aycMEQa8Jr7gaJ1PXLWGBJ
+         TlFA==
+X-Gm-Message-State: ABy/qLZYsvhM4H5rIEZBl46IlX5dqWzCjKPlyYb9MzasN+8/9HhPFtEM
+        n9J8Mv938eSpkKhOSA9m7o8NJEWo5serADDpD19ZVuJVKEM9
+X-Google-Smtp-Source: APBJJlEkPiPGEAwT1NW5Be+lY9WbmPdCS+Em6ZYAz1iNcqNoXt84xdvqCKDYoj+oEntwbFaTKXS9KvFls1sND9+Lo0JyWiicbB0C
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230707053331.510041-1-anshuman.khandual@arm.com>
- <20230707053331.510041-2-anshuman.khandual@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC 1/4] arm64/mm: Add SW and HW dirty state helpers
-In-Reply-To: <20230707053331.510041-2-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a17:90b:a4a:b0:263:c6b4:5267 with SMTP id
+ gw10-20020a17090b0a4a00b00263c6b45267mr4122522pjb.7.1688731798795; Fri, 07
+ Jul 2023 05:09:58 -0700 (PDT)
+Date:   Fri, 07 Jul 2023 05:09:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fcfb4a05ffe48213@google.com>
+Subject: [syzbot] [tomoyo?] [hfs?] general protection fault in
+ tomoyo_check_acl (3)
+From:   syzbot <syzbot+28aaddd5a3221d7fd709@syzkaller.appspotmail.com>
+To:     jmorris@namei.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        penguin-kernel@I-love.SAKURA.ne.jp, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp,
+        tomoyo-dev-en@lists.osdn.me
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,138 +60,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.07.23 07:33, Anshuman Khandual wrote:
-> This factors out low level SW and HW state changes i.e make and clear into
-> separate helpers making them explicit improving readability. This also adds
-> pte_rdonly() helper as well. No functional change is intended.
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   arch/arm64/include/asm/pgtable.h | 52 ++++++++++++++++++++++++++------
->   1 file changed, 42 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 0bd18de9fd97..fb03be697819 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -103,6 +103,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->   #define pte_young(pte)		(!!(pte_val(pte) & PTE_AF))
->   #define pte_special(pte)	(!!(pte_val(pte) & PTE_SPECIAL))
->   #define pte_write(pte)		(!!(pte_val(pte) & PTE_WRITE))
-> +#define pte_rdonly(pte)		(!!(pte_val(pte) & PTE_RDONLY))
->   #define pte_user(pte)		(!!(pte_val(pte) & PTE_USER))
->   #define pte_user_exec(pte)	(!(pte_val(pte) & PTE_UXN))
->   #define pte_cont(pte)		(!!(pte_val(pte) & PTE_CONT))
-> @@ -120,7 +121,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->   	(__boundary - 1 < (end) - 1) ? __boundary : (end);			\
->   })
->   
-> -#define pte_hw_dirty(pte)	(pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
-> +#define pte_hw_dirty(pte)	(pte_write(pte) && !pte_rdonly(pte))
->   #define pte_sw_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
->   #define pte_dirty(pte)		(pte_sw_dirty(pte) || pte_hw_dirty(pte))
->   
-> @@ -174,6 +175,39 @@ static inline pmd_t clear_pmd_bit(pmd_t pmd, pgprot_t prot)
->   	return pmd;
->   }
->   
-> +static inline pte_t pte_hw_mkdirty(pte_t pte)
+Hello,
 
-I'd have called this "pte_mkhw_dirty", similar to "pte_mksoft_dirty".
+syzbot found the following issue on:
 
-> +{
-> +	if (pte_write(pte))
-> +		pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
-> +
-> +	return pte;
-> +}
-> +
-> +static inline pte_t pte_sw_mkdirty(pte_t pte)
+HEAD commit:    a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.ke..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15e4c8a4a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7406f415f386e786
+dashboard link: https://syzkaller.appspot.com/bug?extid=28aaddd5a3221d7fd709
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17b5bb80a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10193ee7280000
 
-pte_mksw_dirty
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/119fd918f733/disk-a901a356.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/79f9ac119639/vmlinux-a901a356.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8bd8662e2869/bzImage-a901a356.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/8e36b52190bc/mount_0.gz
 
-> +{
-> +	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline __always_unused pte_t pte_hw_clr_dirty(pte_t pte)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+28aaddd5a3221d7fd709@syzkaller.appspotmail.com
 
-pte_clear_hw_dirty (again, similar to pte_clear_soft_dirty )
+loop0: detected capacity change from 0 to 64
+hfs: unable to locate alternate MDB
+hfs: continuing without an alternate MDB
+general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+CPU: 0 PID: 5189 Comm: syz-executor307 Not tainted 6.4.0-syzkaller-10173-ga901a3568fd2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:tomoyo_check_acl+0xb0/0x440 security/tomoyo/domain.c:173
+Code: 00 0f 85 64 03 00 00 49 8b 5d 00 49 39 dd 0f 84 fa 01 00 00 e8 71 fc b1 fd 48 8d 7b 18 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <0f> b6 04 28 38 d0 7f 08 84 c0 0f 85 f2 02 00 00 44 0f b6 73 18 31
+RSP: 0018:ffffc90003caf790 EFLAGS: 00010246
+RAX: 0000000000000003 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff83d2d25f RDI: 0000000000000018
+RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003caf880
+R13: ffff888016f31410 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000555556ffa300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc16e620c80 CR3: 0000000075643000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ tomoyo_path_permission security/tomoyo/file.c:586 [inline]
+ tomoyo_path_permission+0x1ff/0x3a0 security/tomoyo/file.c:573
+ tomoyo_check_open_permission+0x366/0x3a0 security/tomoyo/file.c:777
+ tomoyo_file_open security/tomoyo/tomoyo.c:332 [inline]
+ tomoyo_file_open+0xaa/0xd0 security/tomoyo/tomoyo.c:327
+ security_file_open+0x49/0xb0 security/security.c:2797
+ do_dentry_open+0x57a/0x17b0 fs/open.c:901
+ do_open fs/namei.c:3636 [inline]
+ path_openat+0x1b65/0x2710 fs/namei.c:3793
+ do_filp_open+0x1ba/0x410 fs/namei.c:3820
+ do_sys_openat2+0x160/0x1c0 fs/open.c:1407
+ do_sys_open fs/open.c:1422 [inline]
+ __do_sys_openat fs/open.c:1438 [inline]
+ __se_sys_openat fs/open.c:1433 [inline]
+ __x64_sys_openat+0x143/0x1f0 fs/open.c:1433
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc16e647a19
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcc752e608 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 000000000000e483 RCX: 00007fc16e647a19
+RDX: 0000000000141842 RSI: 0000000020000380 RDI: 00000000ffffff9c
+RBP: 0000000000000000 R08: 0000000000000260 R09: 00007ffcc752e630
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcc752e62c
+R13: 00007ffcc752e660 R14: 00007ffcc752e640 R15: 00000000000000be
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:tomoyo_check_acl+0xb0/0x440 security/tomoyo/domain.c:173
+Code: 00 0f 85 64 03 00 00 49 8b 5d 00 49 39 dd 0f 84 fa 01 00 00 e8 71 fc b1 fd 48 8d 7b 18 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <0f> b6 04 28 38 d0 7f 08 84 c0 0f 85 f2 02 00 00 44 0f b6 73 18 31
+RSP: 0018:ffffc90003caf790 EFLAGS: 00010246
+RAX: 0000000000000003 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff83d2d25f RDI: 0000000000000018
+RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003caf880
+R13: ffff888016f31410 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000555556ffa300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055d594f5c028 CR3: 0000000075643000 CR4: 0000000000350ef0
+----------------
+Code disassembly (best guess):
+   0:	00 0f                	add    %cl,(%rdi)
+   2:	85 64 03 00          	test   %esp,0x0(%rbx,%rax,1)
+   6:	00 49 8b             	add    %cl,-0x75(%rcx)
+   9:	5d                   	pop    %rbp
+   a:	00 49 39             	add    %cl,0x39(%rcx)
+   d:	dd 0f                	fisttpll (%rdi)
+   f:	84 fa                	test   %bh,%dl
+  11:	01 00                	add    %eax,(%rax)
+  13:	00 e8                	add    %ch,%al
+  15:	71 fc                	jno    0x13
+  17:	b1 fd                	mov    $0xfd,%cl
+  19:	48 8d 7b 18          	lea    0x18(%rbx),%rdi
+  1d:	48 89 f8             	mov    %rdi,%rax
+  20:	48 89 fa             	mov    %rdi,%rdx
+  23:	48 c1 e8 03          	shr    $0x3,%rax
+  27:	83 e2 07             	and    $0x7,%edx
+* 2a:	0f b6 04 28          	movzbl (%rax,%rbp,1),%eax <-- trapping instruction
+  2e:	38 d0                	cmp    %dl,%al
+  30:	7f 08                	jg     0x3a
+  32:	84 c0                	test   %al,%al
+  34:	0f 85 f2 02 00 00    	jne    0x32c
+  3a:	44 0f b6 73 18       	movzbl 0x18(%rbx),%r14d
+  3f:	31                   	.byte 0x31
 
-> +{
-> +	return set_pte_bit(pte, __pgprot(PTE_RDONLY));
-> +}
-> +
-> +static inline pte_t pte_sw_clr_dirty(pte_t pte)
 
-pte_clear_sw_dirty
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +{
-> +	pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +
-> +	/*
-> +	 * Clearing the software dirty state requires clearing
-> +	 * the PTE_DIRTY bit along with setting the PTE_RDONLY
-> +	 * ensuring a page fault on subsequent write access.
-> +	 *
-> +	 * NOTE: Setting the PTE_RDONLY (as a coincident) also
-> +	 * implies clearing the HW dirty state.
-> +	 */
-> +	return set_pte_bit(pte, __pgprot(PTE_RDONLY));
-> +}
-> +
->   static inline pmd_t set_pmd_bit(pmd_t pmd, pgprot_t prot)
->   {
->   	pmd_val(pmd) |= pgprot_val(prot);
-> @@ -189,19 +223,17 @@ static inline pte_t pte_mkwrite(pte_t pte)
->   
->   static inline pte_t pte_mkclean(pte_t pte)
->   {
-> -	pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> -	pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
-> -
-> -	return pte;
-> +	/*
-> +	 * Subsequent call to pte_hw_clr_dirty() is not required
-> +	 * because pte_sw_clr_dirty() in turn does that as well.
-> +	 */
-> +	return pte_sw_clr_dirty(pte);
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Hm, I'm not sure if that simplifies things.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-You call pte_sw_clr_dirty() and suddenly your hw dirty bit is clear?
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-In that case I think the current implementation is clearer: it doesn't 
-provide primitives that don't make any sense.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
->   }
->   
->   static inline pte_t pte_mkdirty(pte_t pte)
->   {
-> -	pte = set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> -
-> -	if (pte_write(pte))
-> -		pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
-> -
-> +	pte = pte_sw_mkdirty(pte);
-> +	pte = pte_hw_mkdirty(pte);
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-That looks weird. Especially, pte_hw_mkdirty() only does something if 
-pte_write().
-
-Shouldn't pte_hw_mkdirty() bail out if it cannot do anything reasonable 
-(IOW, !writable)?
-
->   	return pte;
->   }
->   
-
--- 
-Cheers,
-
-David / dhildenb
-
+If you want to undo deduplication, reply with:
+#syz undup
