@@ -2,87 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6319B74AB58
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D953774AB5D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 08:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjGGGtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 02:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S230036AbjGGGug convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jul 2023 02:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbjGGGtH (ORCPT
+        with ESMTP id S229580AbjGGGud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 02:49:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F124B130
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 23:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688712498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HodJdBlqSffql6XiM4u7BM5sylthEOlaUhQsYf8llqA=;
-        b=RmkHCBNOcNwFQmdwevoT8JEip+KliPw1zxtjrh/+1A9xhGnSEzMfVa5HWv3AFq9aXPg1JW
-        5yi5877bqcxqrkqrcvlThT5srbNeEwv2fUNFHex/WIVxvjzCb4x8gnhTKGAN6XWORn3J17
-        hyVuNVBoIzKPe1VD7zxib9auZ/iGBOo=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-403-C0VKP1N_Ng2ssx3NsCUxUQ-1; Fri, 07 Jul 2023 02:48:17 -0400
-X-MC-Unique: C0VKP1N_Ng2ssx3NsCUxUQ-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765986c0568so213548485a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 23:48:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688712496; x=1691304496;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HodJdBlqSffql6XiM4u7BM5sylthEOlaUhQsYf8llqA=;
-        b=PsQmvSkUitiOnpTp9cZBmKl3y1/9/ubMqJQnPFFnAfKklOtTkpqwb7y4SkU4ISyQVW
-         eV+9uvtMqcYoImcTtgtMjKWzzAqMq28tFUtrm0hAZfLpV9b+sWfI7EvMrl20dYYxa+rz
-         +escu0EXvIFiZXR+wr6vJ2SfngCXl+9VN60eQupQ8aDmy3UaxVFskH+N20XYig0Fz/Kd
-         W8giEDfvDt0zILdAeGsyoO9RSL+KVgio2cEh6xJQ2PMnZWCwnJpaqwHULx26eqSA9zr3
-         xI8FVgUasCe+FBexAzYwaFbONDezoipQY12KjqshE1v9A9WW5+ZGPhk83NGuh+/lfKMM
-         qthw==
-X-Gm-Message-State: ABy/qLajspkfa20640SbgQ1FGU4fJdsEhJFcrQTnBJfroqf2HdiS9nKC
-        o7B7J4QdXvnbr0vka5fIqspdwOIm0OnogTie2mnmKyKe7dfHncMsRLyLFxRtMjF1EGjkJnHZNIE
-        aPYVeoJP7O48MwPF8p53ba9ph
-X-Received: by 2002:a05:620a:3195:b0:765:ac6f:df84 with SMTP id bi21-20020a05620a319500b00765ac6fdf84mr4696071qkb.4.1688712496807;
-        Thu, 06 Jul 2023 23:48:16 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFH8ilJmpjOriuqxlHflP5tK93Vk3Lpph18AVN0GOH0fI6+exQDEUdBLbjtb9DvIA1NpOWNOg==
-X-Received: by 2002:a05:620a:3195:b0:765:ac6f:df84 with SMTP id bi21-20020a05620a319500b00765ac6fdf84mr4696058qkb.4.1688712496618;
-        Thu, 06 Jul 2023 23:48:16 -0700 (PDT)
-Received: from [192.168.0.5] (ip-109-43-176-230.web.vodafone.de. [109.43.176.230])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05620a075500b007677f66b160sm1530219qki.124.2023.07.06.23.48.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 23:48:15 -0700 (PDT)
-Message-ID: <54dff33c-c289-23a8-cb02-d608e93b6ca2@redhat.com>
-Date:   Fri, 7 Jul 2023 08:48:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] x86: Remove the arch_calc_vm_prot_bits() macro from the
- uapi
-To:     Dave Hansen <dave.hansen@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20230706190217.371721-1-thuth@redhat.com>
- <2d9bb146-e1ec-4fc2-a4bc-e1c67cfda723@app.fastmail.com>
- <8ec7f329-a0a3-7631-ba05-225944b19771@intel.com>
+        Fri, 7 Jul 2023 02:50:33 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8531FDA;
+        Thu,  6 Jul 2023 23:49:59 -0700 (PDT)
+Received: from frapeml500007.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qy3pB2SwYz67L0F;
+        Fri,  7 Jul 2023 14:46:26 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (7.182.85.13) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 08:49:26 +0200
+Received: from frapeml500005.china.huawei.com ([7.182.85.13]) by
+ frapeml500005.china.huawei.com ([7.182.85.13]) with mapi id 15.01.2507.027;
+ Fri, 7 Jul 2023 08:49:26 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "eparis@parisplace.org" <eparis@parisplace.org>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "nicolas.bouchinet@clip-os.org" <nicolas.bouchinet@clip-os.org>
+Subject: RE: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
+  inode_init_security hook
+Thread-Topic: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
+  inode_init_security hook
+Thread-Index: AQHZsHSGuRovFN0LUUi8HyIwTywt+q+t3OnA
+Date:   Fri, 7 Jul 2023 06:49:26 +0000
+Message-ID: <8fd08063bc6b4325b9785052d02da9f2@huawei.com>
+References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
+ <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
+In-Reply-To: <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <8ec7f329-a0a3-7631-ba05-225944b19771@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,30 +73,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2023 22.30, Dave Hansen wrote:
-> On 7/6/23 13:22, Arnd Bergmann wrote:
->> On Thu, Jul 6, 2023, at 21:02, Thomas Huth wrote:
->>> The arch_calc_vm_prot_bits() macro uses VM_PKEY_BIT0 etc. which are
->>> not part of the uapi, so the macro is completely useless for userspace.
->>> It is also hidden behind the CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
->>> config switch which we shouldn't expose to userspace. Thus let's move
->>> this macro into a new internal header instead.
->>>
->>> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> Fixes: 8f62c883222c9 ("x86/mm/pkeys: Add arch-specific VMA protection bits")
->> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->>
->> It looks like this was introduced right after the uapi split,
->> and probably is the result of an incorrect rebase.
+> From: Paul Moore [mailto:paul@paul-moore.com]
+> Sent: Friday, July 7, 2023 3:44 AM
+> On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> >
+> > Currently, the LSM infrastructure supports only one LSM providing an xattr
+> > and EVM calculating the HMAC on that xattr, plus other inode metadata.
+> >
+> > Allow all LSMs to provide one or multiple xattrs, by extending the security
+> > blob reservation mechanism. Introduce the new lbs_xattr_count field of the
+> > lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+> > needs, and the LSM infrastructure knows how many xattr slots it should
+> > allocate.
+> >
+> > Modify the inode_init_security hook definition, by passing the full
+> > xattr array allocated in security_inode_init_security(), and the current
+> > number of xattr slots in that array filled by LSMs. The first parameter
+> > would allow EVM to access and calculate the HMAC on xattrs supplied by
+> > other LSMs, the second to not leave gaps in the xattr array, when an LSM
+> > requested but did not provide xattrs (e.g. if it is not initialized).
+> >
+> > Introduce lsm_get_xattr_slot(), which LSMs can call as many times as the
+> > number specified in the lbs_xattr_count field of the lsm_blob_sizes
+> > structure. During each call, lsm_get_xattr_slot() increments the number of
+> > filled xattrs, so that at the next invocation it returns the next xattr
+> > slot to fill.
+> >
+> > Cleanup security_inode_init_security(). Unify the !initxattrs and
+> > initxattrs case by simply not allocating the new_xattrs array in the
+> > former. Update the documentation to reflect the changes, and fix the
+> > description of the xattr name, as it is not allocated anymore.
+> >
+> > Adapt both SELinux and Smack to use the new definition of the
+> > inode_init_security hook, and to call lsm_get_xattr_slot() to obtain and
+> > fill the reserved slots in the xattr array.
+> >
+> > Move the xattr->name assignment after the xattr->value one, so that it is
+> > done only in case of successful memory allocation.
+> >
+> > Finally, change the default return value of the inode_init_security hook
+> > from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
+> > conventions.
+> >
+> > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+> > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/lsm_hook_defs.h |  6 +--
+> >  include/linux/lsm_hooks.h     | 20 ++++++++++
+> >  security/security.c           | 71 +++++++++++++++++++++++------------
+> >  security/selinux/hooks.c      | 17 +++++----
+> >  security/smack/smack_lsm.c    | 25 ++++++------
+> >  5 files changed, 92 insertions(+), 47 deletions(-)
 > 
-> Yeah, I bet I just glossed over the "uapi" in the path.
+> Two *very* small suggestions below, but I can make those during the
+> merge if you are okay with that Roberto?
+
+Hi Paul
+
+yes, sure, I'm ok with them. Please make them during the merge.
+
+Thanks
+
+Roberto
+
+> I'm also going to assume that Casey is okay with the Smack portion of
+> this patchset?  It looks fine to me, and considering his ACK on the
+> other Smack patch in this patchset I'm assuming he is okay with this
+> one as well ... ?
 > 
-> Is this causing any real problems?  Or is it OK to just send it along
-> during the next merge window with other random cleanups?
-
-As Arnd already said, it's not a real problem - I just came across this file 
-while looking at the list in scripts/headers_install.sh.
-
-  Thomas
-
-
+> > diff --git a/security/security.c b/security/security.c
+> > index ee4f1cc4902..d5ef7df1ce4 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -1591,11 +1592,15 @@ EXPORT_SYMBOL(security_dentry_create_files_as);
+> >   * created inode and set up the incore security field for the new inode.  This
+> >   * hook is called by the fs code as part of the inode creation transaction and
+> >   * provides for atomic labeling of the inode, unlike the post_create/mkdir/...
+> > - * hooks called by the VFS.  The hook function is expected to allocate the name
+> > - * and value via kmalloc, with the caller being responsible for calling kfree
+> > - * after using them.  If the security module does not use security attributes
+> > - * or does not wish to put a security attribute on this particular inode, then
+> > - * it should return -EOPNOTSUPP to skip this processing.
+> > + * hooks called by the VFS.  The hook function is expected to populate the
+> > + * @xattrs array, by calling lsm_get_xattr_slot() to retrieve the slots
+> 
+> I think we want to change "@xattrs array" to just "xattrs array" as
+> there is no function parameter named "xattrs" in the LSM/security_XXX
+> hook itself, just in the 'inode_init_security' hook implementation.
+> 
+> I might also break the new text describing the hook implementation
+> into a new paragraph.
+> 
+> > + * reserved by the security module with the lbs_xattr_count field of the
+> > + * lsm_blob_sizes structure.  For each slot, the hook function should set ->name
+> > + * to the attribute name suffix (e.g. selinux), to allocate ->value (will be
+> > + * freed by the caller) and set it to the attribute value, to set ->value_len to
+> > + * the length of the value.  If the security module does not use security
+> > + * attributes or does not wish to put a security attribute on this particular
+> > + * inode, then it should return -EOPNOTSUPP to skip this processing.
+> >   *
+> >   * Return: Returns 0 on success, -EOPNOTSUPP if no security attribute is
+> >   * needed, or -ENOMEM on memory allocation failure.
+> > @@ -1604,33 +1609,51 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+> >  				 const struct qstr *qstr,
+> >  				 const initxattrs initxattrs, void *fs_data)
+> >  {
+> > -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> > -	struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> > -	int ret;
+> > +	struct security_hook_list *P;
+> 
+> The above comments were nitpicky, this one is even more so ...
+> convention within security/security.c is to call the
+> security_hook_list pointer "hp", not "P" (although I recognize P is
+> used in the macro).
+> 
+> > +	struct xattr *new_xattrs = NULL;
+> > +	int ret = -EOPNOTSUPP, xattr_count = 0;
+> 
+> --
+> paul-moore.com
