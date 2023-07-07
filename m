@@ -2,446 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3422274B08A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9A074B090
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjGGMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S232194AbjGGMRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232457AbjGGMRQ (ORCPT
+        with ESMTP id S232404AbjGGMRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:17:16 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536EE1FE6;
-        Fri,  7 Jul 2023 05:17:15 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367BTuV6022708;
-        Fri, 7 Jul 2023 12:16:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=ZDszClylungj96Uc5t9pZUbglqh0g62lyINCCXnVMF8=;
- b=wIjTw3vHw72SNVON/pdWkHPoZiAi2yBYdb2AseaHEzOzQMbyz6z/a4U9BLZJ+T3IbcnO
- yuZQl6J42o2EfOspLPBy9I1Kg/lMi5jPpFsMDMDa0E02Rqi+6aQmIlW6HyOf00QxROdj
- /SWG7n/31KfM6nZWrIvULCcOU08G8zdnF/ZDwbn1hT4QDXLg8MD/sqLACRW+qBz6+o+H
- LvpZYvbmkM4NQwSeVBFQwL/AUrSGWCLmGM3fKK1VfjlLJNyTPoAt4YncciEioGHG5tUJ
- 2xw/ZtNRXOkoU4yZCcqZcp5BmV5CmPeog+svGi0XrhS8HrGPdTCMNSH3L18wzESBE1oA YQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rphvjr24h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jul 2023 12:16:39 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 367CBgG9033490;
-        Fri, 7 Jul 2023 12:16:38 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rjak8jk30-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jul 2023 12:16:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aEjn/7Ywo9Fbq/tgQeLFZLTHZkKIAroDugvBHsYKxv384ta2ingouPaLkDPWL3DFx8VgVKq1SpGw3ewmQObRHdYUjO+T0DSqC4WLEaTlRNf6gDw8UmT9t6jEzmwnU6cqX5vBfzsJb9zbcDzAAztIvO0ZZm8vP4f6h7Yw+3VTK2tvdNKEUkPtpL/2UFlhpvSbCMXp/0iAoc+DLHZ2xAxpRPwfItN2GmPudMo0j/tHrzbZUmfzeeR5NFKiuY4jrYDCEKpGDjp43a2E80w5WjAjzePZ9v8BCCWbDtS7tGjvPrgcSuyTkmoy9F0Yp4DBDgWCjnwaqsJvEVS+oMTaFT18/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZDszClylungj96Uc5t9pZUbglqh0g62lyINCCXnVMF8=;
- b=grFtC4jyurLntw1grpmG/h0Dg8s1g07IdFLf/74YUy9quuJaNi7JYMOL67slP35YutZjOU8pPSrPCR3TW29ZtL+Jc2dx+vSn6WtDv6+HZ3S2HszU2zs/jTWcERtiWzWgVGFQKb5at7OBNX+n9aGuzZ5iuxHsWJXc/Thl3967zQ2u34xupoTk8AoCJPNC/ICNsthqmQ39P2VKnKuMYmXQmv9KaGty9S3miuduNLTP0XDNJJ1SmV1FzuwH1ZaQXdsKW4HJlcScJRwSCea4GjVS9PNkinvHLG1VUOgdvqU9G+lptL1P3GCaCFknODYyc8YRiYdfDNq9FPeLsUnj9wh4kA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 7 Jul 2023 08:17:08 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D25F1FE6;
+        Fri,  7 Jul 2023 05:17:07 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-314172bac25so1724854f8f.3;
+        Fri, 07 Jul 2023 05:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZDszClylungj96Uc5t9pZUbglqh0g62lyINCCXnVMF8=;
- b=g4CMBQzQ1xOpwI+JpJwuVxwMjXZUffwMJqo/Ai9s4zNtbDMIuUSjnpHXa2qyhSwJWQpu9M27n100FWQq0xooml5MJ839xjPUWPSR31gp3qafetqYpKpad/YURFceRV+OTXNHYkLSmS8zcui9QXeYnGq/oAqQjFyXZYuWSDGaliM=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by CH0PR10MB5354.namprd10.prod.outlook.com (2603:10b6:610:df::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.25; Fri, 7 Jul
- 2023 12:16:35 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6565.019; Fri, 7 Jul 2023
- 12:16:34 +0000
-Message-ID: <c7e2b428-eb61-50c3-dd44-2d3fbe39301d@oracle.com>
-Date:   Fri, 7 Jul 2023 07:16:23 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 02/13] x86/kexec: refactor for kernel/Kconfig.kexec
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "ysato@users.sourceforge.jp" <ysato@users.sourceforge.jp>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "glaubitz@physik.fu-berlin.de" <glaubitz@physik.fu-berlin.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>
-Cc:     "kernel@xen0n.name" <kernel@xen0n.name>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "juerg.haefliger@canonical.com" <juerg.haefliger@canonical.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "sebastian.reichel@collabora.com" <sebastian.reichel@collabora.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "ziy@nvidia.com" <ziy@nvidia.com>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
-        "xin3.li@intel.com" <xin3.li@intel.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "tsi@tuyoix.net" <tsi@tuyoix.net>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "hbathini@linux.ibm.com" <hbathini@linux.ibm.com>,
-        "sourabhjain@linux.ibm.com" <sourabhjain@linux.ibm.com>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>
-References: <20230706222027.189117-1-eric.devolder@oracle.com>
- <20230706222027.189117-3-eric.devolder@oracle.com>
- <0d1097dd-f0cb-8518-cf88-e6afbd2a6a19@csgroup.eu>
-From:   Eric DeVolder <eric.devolder@oracle.com>
-In-Reply-To: <0d1097dd-f0cb-8518-cf88-e6afbd2a6a19@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR05CA0127.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::12) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
+        d=gmail.com; s=20221208; t=1688732226; x=1691324226;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GTz1K2zEa5O0rZFk72kNzqovbUvNASTGghr+QDM5Abk=;
+        b=g1W7Sw0Sy/t8mRFCo08zd3QLZZ6GExmnbtZYatKEFXFrqh7FWSNZtLnPCczms/+2MC
+         T+znQKHvWdBM+XIpxVnR9//SxB+b+tTq/U60Gv+adO3gznyqwwYdWSmOwiWLCnZPYq9e
+         RbR5c02FTwxAa+hX788HpEczUQr7/VpzyXRh7gNi5fBk2B3j9M6rGMA8tD/23/NFlZsk
+         8nXsAPIu0LmvsYLjjhePbrxUTiax3+B8XLRSnQ7gjb28BZPhpU0WYadjJ8JR/kZbrG3a
+         1abpVi/ROAcdoX89ax2epsQBnEMR8LNosZ7y2ZiyOyWbqMi7fX5/9Im1I/3jTL6qMJnE
+         L6kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688732226; x=1691324226;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GTz1K2zEa5O0rZFk72kNzqovbUvNASTGghr+QDM5Abk=;
+        b=P7eTD4lYnaj6Yj1j8NHxxmYo0TMQmaCq0wjeJBccwrxwV3bNSKVPmEbDWhrmQA/Jpf
+         FT9jIkL8Dx71L1BQEnklxkYjPJ4X3uxYtcFAH+noJFW1arQqaQJMJIpwpdjPhHHh94o/
+         gx9EO8D0eUiy9z9cDuu0VTD5fLu1s09WLKOuXIhufm9P+vpuc0qdTBooNNPKtI3OmQek
+         3z7kA93ziHr9CrBPlVx+x+uSXKhYw7lbnqno34Cgm7Lira0otb5sG8MtL3D8TSTQkQH3
+         PLMAzLdcUHksAiaz0OUbCDy/Dv9gWhjDXIP+ftslqqG+4JfWdYxo3i6VY9VFXVvHLcA2
+         w+gA==
+X-Gm-Message-State: ABy/qLZ0wvykUr78xkntzutQOmIynjx/5RBblq59WQYIiKfR4ZVWSd23
+        h4N88/0xBvYciO8JLLPMA/Q=
+X-Google-Smtp-Source: APBJJlGHBXJUAwRNtB9mtV6sGByIqNbQdy3bMIQf/CflMFUCvZi8SakmDxdkBpwZcM1S8DWnQRskdg==
+X-Received: by 2002:adf:f98b:0:b0:313:ee5b:d4bc with SMTP id f11-20020adff98b000000b00313ee5bd4bcmr4009152wrr.5.1688732225554;
+        Fri, 07 Jul 2023 05:17:05 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id n3-20020a5d51c3000000b00313f7b077fesm4300749wrv.59.2023.07.07.05.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 05:17:05 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:16:55 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
+        dsahern@kernel.org, tom@herbertland.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gal@nvidia.com
+Subject: [PATCH 0/1] net: gro: fix misuse of CB in udp socket lookup
+Message-ID: <20230707121650.GA17677@debian>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|CH0PR10MB5354:EE_
-X-MS-Office365-Filtering-Correlation-Id: 252203d0-9f79-4b83-f58e-08db7ee4017f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ge0sogSf7HeEvH0EQ548JJlBeqIFcCq6R3TsPY+81flrZ9fGAcllMQMuu3EzpmpEwlgw4p4z9Uj891ZP/oKRFUG1EGMdzrWfJB05WMir3KYW+hy/zue993l/tp/ikj0dSZqt+6LAjDdXNR8ZSfJhuen+964s6QT7Vf5sjmUqiox2MyMRMcwHSREKrNtJEAsc6ZZbWJfhcZK5Jx4n7HDp56/k9y9H3Vm6i+uv48asQJm6o3Xb2G+9m0/P3QC+kHl9riE15SfUaQ/PV8g8FzT6TMHg2yWdC8kbgxGlv8ysKp10HW6p6/AkuEMs0OW1hKJ1W9UpJx2IqdUdReQFIV5bmKtQGZST+VM6Y7jA6jD3XXrhXvLqbQynoTX0lQCYxHmrL0vRIbNwwo9nt7/ccPSlZKh6QUaEW9FsdIHGEpQhzyYkLJgjfgKXvTOc8AycdX4LnlDZlUqp+MF/BHqaEhjNuWZxf1vT4xN3tC13H8fqFZN9LBY9Fc8aUi81wewOvBAk8in8PTGPDFNvdwfa451zs+WHLJngntEJSgC7chjnLG7sXqILJcA1uagdcNNwwRKJwI9+mg7Uf798ScL8gm3eo8TeMipYIk5kScVe8aREtlTJmQoe2SHOav8Ex+96KUYJfgEhqRMxdMjfqJqCVv28csymBzIGMABDr3bnPmSUuE4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(396003)(366004)(39860400002)(451199021)(316002)(921005)(38100700002)(31696002)(36756003)(86362001)(31686004)(8936002)(41300700001)(26005)(7366002)(6512007)(5660300002)(107886003)(7416002)(7406005)(6506007)(53546011)(186003)(8676002)(2906002)(83380400001)(2616005)(66574015)(6666004)(66946007)(478600001)(110136005)(54906003)(6486002)(4326008)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkN2VUpPSm1zL3N4OXBEdGJMNW4zSS9ZOTlmTDMwb2o3UENzaE1mQUozYndk?=
- =?utf-8?B?bEVnMmFCMkZla0JoanVrSXc1b3dnM0xmSDJ4WkZLc09nem0yRHp0aFlDRGtT?=
- =?utf-8?B?Q3FwWVJWVzM0WUdwNnRaWFJaVzBwVjFwd1B3TG04dGo3MGFvUVhWMFBqU2Uw?=
- =?utf-8?B?ellqUGVaT3RGZVlING11QWEwalIzSTVnNUR3L0xlMGlEN3pWWkdFWWRJVlA3?=
- =?utf-8?B?RWE4SU9Fd3BRSTlxemNVdjFsajJXZitCbzQ5TzJxdmNjUUJxUDdBZTROLysz?=
- =?utf-8?B?WWYreGdnSnVsUUc0UGorU0Zob2IzbmpoSzRCOUEyWklDa1F1Tm9xU0VYOW9V?=
- =?utf-8?B?S1ZuYk9XcXFPdm92TlY4RjFtOGpqWTJnTGxLS0puNmV0bXhIenJDc3hMbGRF?=
- =?utf-8?B?RHlhOVAvejdGS0h6UTB5TUtPc3k4d1hCWjFndkxRVFZtbVZneEYxbm8zTGF5?=
- =?utf-8?B?Uko0anZRNTd2YUxnMlBJZ3ptdWJOQzVmNHNhNWRlZDRMQ1ZSZkNEdngxeStJ?=
- =?utf-8?B?dm5OZ0hwMWJiWHpLNVl4VnFzcUExTkFlSWJEZUpPckp1SEFqN1pvRXZEMTNj?=
- =?utf-8?B?TGhvOExrc1E3RmV5V0ZQRUZLeWgyWk9BMUZac1ZvTmVJdU1YLzNRdzVtalYx?=
- =?utf-8?B?WXBkcGRJdjc4NHNyZWlGSCtKeGdoUVpJWEwwY3ZzL1JEOC9SV2RxWnhaK0R0?=
- =?utf-8?B?dlVwSU9vTE5kYk0wOWxnS0Nha1BWNGVPQm10RG9QWFV0Qk51NFN3QmhWMjhU?=
- =?utf-8?B?bnVRRmR5ZC84MkxiV2NIWFlaZjVjYldqZm5kRTlBSUM1OE5VOHZzZWNGdmx3?=
- =?utf-8?B?ckVnTkwyUVNBWnRhdDQzcXJ2UWJmZTFyL09hZzVVVWJGeDA4b3MzUnY5elJS?=
- =?utf-8?B?Sk5TZFNRN3ZkWkZhSlNvejNJUWZYVnZEZWNGdHFUVy9Zcmp0S1BZUFl1WWkz?=
- =?utf-8?B?c1NMYnh0am5BYkl2d3VsbGxvRXREMWN3b0NlUGN3aVFvRWtxeEYrWWFVOThU?=
- =?utf-8?B?R25lSXpRUU1sc0taYnNNb3VkM2hDVzNIZlVBQUwreGZDcitHMlVXR0E0Vklv?=
- =?utf-8?B?UkdPN0VaSkpnR2NJZHVlYUhOckFFc1ZiTjVkNytLM25aRXZOSHNlcHBrWnJ2?=
- =?utf-8?B?UzZha2VqMFZwOWdUbS9oT3RYU0lkZFJEVHM3ekgvb0NaMDF0NzRMQXhBVG03?=
- =?utf-8?B?cnJOUVVuWHpkL0NNSGNDZVp3VEFuRXc3MWxOaStXZ3pzY2pydG10eEt1SGxQ?=
- =?utf-8?B?ZVdkbWMvcTAydmZrc0ZsbzR1cXVCdGQydVM2UE9xeFg4R0MwMklMeCttSFBX?=
- =?utf-8?B?cmlqUHRUVW0vT21iU2UwNnFSVTdJNUlTbUdaMEVud0JWVjZ2YXN5cjlhdThD?=
- =?utf-8?B?eGtnOGd1dXVXVFJsSG1MOVltaWNxQ0o0LzdvdUFVRkJlOEVObEVONytUVVhy?=
- =?utf-8?B?eVIzSUttVlp0L2FXSFVzQkVHbHdlZzFoUUtFbEt3UFBrNmdIOFFSWWNqK25S?=
- =?utf-8?B?cWVWQ0MwQ1RmUVluVDhPSFRWZCs1NlJpcjM0dkxyYmNsQkpQdVhyMFBQZStI?=
- =?utf-8?B?aDRQcWdlTWxaaFNBM285b25Qc3Btb3F1S0UrZzYxQk9EeUxHK3NTaWNveFpO?=
- =?utf-8?B?R3g0dnVqbzdyM2tIdEVLeE5JSkRwWHhNbFpkZXZ6UkYrQk9QN2dYRkwrbWVv?=
- =?utf-8?B?ZFFjbTNFVktldHJadWJBYUZ6ekpNZkV1YlpuQzVjR1kzZlJmM0I4VmErOHRr?=
- =?utf-8?B?dEQ4cjVJV0J2Z3Q1WitPZWxoWnArOEVhdHUwQlhQWjRIVXkvT0t4MW5EeUZB?=
- =?utf-8?B?SjVteTFnM29nZXhDaDJzY05FekY5aTRQd3MyeFBUQm9VdGc5MWs5WFBoeith?=
- =?utf-8?B?dnowbzhjUVlKVE9qNVdweXAyRy9vSlBKbDg2dW1xMDZUSDVnTWZVNGFTczJi?=
- =?utf-8?B?Y0EydFVRNFpidDd1Y2p4eHMxZGx1aG9yYjhOVks1WFc3c05Ob1A1UTlzWU1k?=
- =?utf-8?B?OS9rSnhJK2RaWFBWQ280QXZTZllndmF5Q2MrQUtWazZlaDBRUTlVMkVVa09p?=
- =?utf-8?B?VlgyaGt4VUYvWlpvQlcreDVYdmNwL1ZvdGxFNkRzRUREck5wRlViUlBOWW9N?=
- =?utf-8?B?UmdOKzVsRkFtR1Q1MC9vcW5qalk3VHNZUnNkNE4wd3FRTHZlQ0krSnNHR3JY?=
- =?utf-8?B?WXc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?Rldiakk0NG11aTlaNERqOEpweEtHejFWNlVTSW9BYnM4MTU4ZTdHU3dHZWxM?=
- =?utf-8?B?Rkw0bzY2UjJnLzFoNFJ3Sy9qMmRrOTZuVzhvSVZCNUFEbkFmSVVIckdtWDRm?=
- =?utf-8?B?dnUvNisxWWVHTkMvbmYwM2x3S04rbGU1RXVNekVFWXpYVVFFREdhOXZjQWw4?=
- =?utf-8?B?ZHdaSlh0YkNvci9FSW40Q2RqSlFvRUpBbm5DK2xyaEhZdkE3RGIzZ1MrN2V2?=
- =?utf-8?B?UjB2cHJZSXJzMEpYTHVnMTFOc0F3cnNuZVRoRURra2x5SHZXbkJxeUt6V0hS?=
- =?utf-8?B?OW9HZWd0SFViQlN3U0FBNnhCbnp3Nk9SQ3lCR0hYaTllSnV4dVFEWVJwa1Yr?=
- =?utf-8?B?aTNTTUkxaitrZjIzZ05GazNPSzg3V0NpUmdsTmEzc3UyUkdRNlNuWkRBTWlQ?=
- =?utf-8?B?bU12TWZvNCtNZi91L0UwelNlcnlJT2ZYZVVCRVFRUy9vZk96R0xKdFUyMmhl?=
- =?utf-8?B?ZXhkRkFvTTZPdWtGRlY4NnllOUZlMGFjSDM2TW9tQkJYeVpudXR5TG1pUmNM?=
- =?utf-8?B?bGQ0U1ZQUGhPajFRcnpxNkFTYkZ3WEFpT1NISFBqSTlHc3d3YU5zbk0yMUo5?=
- =?utf-8?B?L01EVDZOeDFuaFJhS1B2MlZmeFVORi9qY1ppYmEzMVlqSkdTWEdWR3JHNzJT?=
- =?utf-8?B?eDRYSnArUHdhSnFsb0pJTXVXZkRIWlRzOEJHZXNjaW1ibmpBOGkvZEVXWDdE?=
- =?utf-8?B?WG9WVlRHSnh1STBTSFkzWFQzdVVxcXVzSTdjRUhEWG4wR2hGRlRUZnpWSmFn?=
- =?utf-8?B?TXB1OXAvNnNxSzVaNkdEdWlSSVJnNUhyYk9IeS9JM0kyL0dxZE43RmxVT3Fa?=
- =?utf-8?B?Z01makRlSmZ1dHJ1Y1luaEVjUndoaWJEMkVjOUh6MzN0RW1nUitVTHJHT1ZT?=
- =?utf-8?B?NSsrTVFocWtScERMakpDcG5ud1hJVFdUd24yZFZmNUxpa3VQZWtmbnhHbDZD?=
- =?utf-8?B?eTFDaXkwVDRQTml1Nk1Cd3ZKenBkY2ZnSkFJZkRMS25OcjVhMUExWVZaUDh4?=
- =?utf-8?B?djVWUldRK09IcUR1Mm5JMkpiZzZ3K2IxVGR6bEZyR1A0UmozRHFOQmh6U3dL?=
- =?utf-8?B?WmVPd290UVR0RTRwbllxUEsxUWtDbzV3bTRBR1BKT0xGU3lUbDlUYm4rMnZN?=
- =?utf-8?B?RG44NjE2SEl0eDFZUjlSbk9kK1NySXZnUmdjUUQ2a2JScmRxRXhJamJvanVJ?=
- =?utf-8?B?bmUyTklHNTVHejBhcWpxNUNHWkx2b2hBYXFKUGZWTXJQMXVPV2xnbUhqdm5Z?=
- =?utf-8?B?U2dDSTB2RVJ1WUpZQkZneGx0NnFmSmE4UXNMczRWMy92VG5PUktiRE9hc3p0?=
- =?utf-8?B?aS9tY1V3NDl2MUtIaTJ4dHdsSkNVRVlvOWFkRFdzL2lTV1U3WDRYSGRaV0N4?=
- =?utf-8?B?YWNaclJkNXJYZE9GbHRxYXBBalBYS1FoaEIwY0R5Y2N3TmZFWFZNSmVhWWd5?=
- =?utf-8?B?cVJITXRDUmlLR2xpNVlMai9zbVNCajJyU0Vxa1RjRVZVSEpvWkRRa3VGTWls?=
- =?utf-8?B?S0JDVll5ajg5aGFyUDVaZk9kRmcvTk1PQnhSZjl5eEN4eEF2NzVWMWlYd2lX?=
- =?utf-8?B?bzRzUCs5MWZDNlhFdVZCY0RVSVdGT2FTdjIvZ2RBcktJQnRMdEUwbVBYM1FX?=
- =?utf-8?B?YnJZd1ZNWTh4NHBXSXNZU2prSXZFdm4rRGpRZEl5Vlk2bVF6aC9LUlFaZDdP?=
- =?utf-8?B?V003MzMxWkNsRmVxVHBQVFJEak03NWZlNXd1SlhLb1IzcXNhNkdRT3Z0cVgw?=
- =?utf-8?B?WWZWMWR4SDgyNTRYRU4rZGxhanZ5NHRiaGRVVVFjUzE0dVBFTHF1VlI3TFgy?=
- =?utf-8?B?eFpuaE1jNXhWdER6TVkwQnowbEtGbllGbUlTUktVUkVIL2xvNndnN2VOb2Fp?=
- =?utf-8?B?ZSt5YnpuYmdvV002WWovT2lrVVJCaVFMcDdxMVlpalVUbUV2bWFEd1JCeEtS?=
- =?utf-8?B?NGI0RHAvK0x1c2l1MUFCRVNWMU04MjdPOTBXTDFjc0NWZXhOQk9Pc2hxUXdC?=
- =?utf-8?B?a0JXNDFzdFpuUXBEZWFDbXZ5MXNWeVBkaG5JRXlyTWQxUU1YRi9SYnpBYThF?=
- =?utf-8?B?NHpoSjBxOG5nVFVFZWV2amFhL1JvSXMxdFJtKzZ6SDBXTFpJQTJETExsay8v?=
- =?utf-8?B?S3IvQ3JSVnhncHVIQWdsMW5uSklaRkN4TExmeFhJWkFoUGs5aURpekdTWkps?=
- =?utf-8?B?N2x0d1FGMTFpUFNzZ2VaYmkrRHhTcmJYOFdFVkdMRjJjejBaSlJzaG1WdnRX?=
- =?utf-8?B?QlQ2UzlBM0svUDh0aU1ySVZNM1lxbWZHakJGcGRsUlVKSVpZRHdMc3ZQdzJ4?=
- =?utf-8?B?M243R2xPUW0rOXBRUHlyaWpVSXlIdThZL3NFS1kvY0hvSTNjM3ppeE92Njdv?=
- =?utf-8?Q?3305T3+MdCUySFL5ZUBa/Ewa+OOapb4v3/SjZgDVQArpc?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: QosDKHLeGs/CAfeT83EgBxsYfRhqD1IVA7bDlwoI6+IZRKAEoSJh03ihhFn/rdNy5bkmeaNGQHS1QKNzIigFisZRZxC5wv5cgJOF9pC6azWAbbFk7GwUvAl8sALDsjOLEtMC3dp+vNxrQPfXnuLA/F+KUFEbhepn2zYNUaI1lVxdHQ08JLTYjBwRQjnVOpyhSMfKnoRNqJVi3JW1+vZVIheJJxr/RjwDUhsuKuZInCFtWypn9SsFLQi22asr3UmBpFDOxxCuoPhKtWSq/QGlP11t6DBaBSMJbGHTwQR+ZeWOkl1lQF4s4UJWdcV3LnNHTaJ4uWbvkh3yyWsjwZ7eswjCDWJ7xULjQr/7mp4lAkDUD/AAHzRbMHifwrUE+rLI7pnoiwubRQ6FSeut85UCq36PuVOQwIfMKX564Bo9C8o3UXSuYQcYe5HmErFWEmNi4mgPX3irKqe/gg==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 252203d0-9f79-4b83-f58e-08db7ee4017f
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2023 12:16:34.7932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tadNWrXpdlNZJHPF8w06ExCZ4V0Xl4cFbNlKdwShlDQC+aMfq8ZLLaLpMP3KgaGxLhTvLtbGOYOzxgLHtiZosrjtCJpzJoAMFTUyeoEQbqY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5354
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_08,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307070114
-X-Proofpoint-GUID: bhlY-lzXrhqQr_Fg9wxavC4FSAdtsUu7
-X-Proofpoint-ORIG-GUID: bhlY-lzXrhqQr_Fg9wxavC4FSAdtsUu7
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+GRO stack uses `udp_lib_lookup_skb` which relies on IP/IPv6 CB's info, and
+at the GRO stage, CB holds `napi_gro_cb` info.  Specifically,
+`udp_lib_lookup_skb` tries to fetch `iff` and `flags` information from the
+CB, to find the relevant udp tunnel socket (GENEVE/VXLAN/..).  Up until a
+patch I submitted recently [0], it worked merely by luck, due
+to the layouts of `napi_gro_cb` and IP6CB.
 
+AFAIU it worked because: 
+`IP6CB(skb)->flags` is at offset 16 inside IP6CB:
+ - Before the patch: `flags` was mapped to `flush`.
+ - After the patch: `flags` was mapped to `data_offset`.
 
-On 7/7/23 00:58, Christophe Leroy wrote:
-> 
-> 
-> Le 07/07/2023 à 00:20, Eric DeVolder a écrit :
->> The kexec and crash kernel options are provided in the common
->> kernel/Kconfig.kexec. Utilize the common options and provide
->> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
->> equivalent set of KEXEC and CRASH options.
-> 
-> 
-> Why do you need to duplicate the ARCH_SELECTS_ entries in each
-> architecture ?
-> 
-> Why not define them in arch/Kconfig then select if from each architecture ?
-> 
-> For instance here for x86 for ARCH_SELECTS_KEXEC_FILE all you'll have to
-> do is:
-> 	select ARCH_SELECTS_KEXEC_FILE if KEXEC_FILE
-> 	select HAVE_IMA_KEXEC if IMA && KEXEC_FILE
-> 
-> 
-> Christophe
+`IP6CB(skb)->iff` is at offset 0 inside IP6CB:
+ - Before the patch: `iif` was mapped to `frag0`.
+ - After the patch: `iif` was mapped to a union of `frag0` and `last`.
 
-Hi Christophe, thanks for looking at this!
-The ARCH_SELECTS_ is where the "customization" is performed for that option. The customization is 
-putting in place the differences that the arch had from the common option.
+After my patch, on the receive phase, while `data_offset` is 40 (since IPv6
+header is 40 bytes), `inet_iif` calls `ipv6_l3mdev_skb`, which checks
+whether `IP6CB(skb)->flags`'s `IP6SKB_L3SLAVE` bit is on or off (in our
+case its off). If it is off, `inet_iif` returns `IP6CB(skb)->iif`, which is
+mapped to `napi_gro_cb->frag0`, making `inet_iif` return 0 most of the
+times. `inet_sdif` returns zero due to a similar reason caused by
+`data_offset` being equal to 40 (and less than 64).
 
-For example, with ARCH_SELECTS_KEXEC_FILE, here are all the uses:
+On the other hand, the complete phase behaves differently.
+`data_offset` is usually greater than 64 and less than 128 so the
+`IP6SKB_L3SLAVE` flag is on.  Thus, `inet_sdif` returns `IP6CB(skb)->iif`,
+which is mapped to `last` which contains a pointer. This causes
+`udp_sk_bound_dev_eq` to fail, which leads to `udp6_lib_lookup2` failing
+and not returning a socket. This leads the receive phase of GRO
+to find the right socket, and on the complete phase, it fails to find it and
+makes the throughput go down to nearly zero.
 
-x86:
-     select HAVE_IMA_KEXEC if IMA
+Before [0] `flags` was mapped to `flush`. `flush`'s possible
+values were 1 and 0, making `inet6_iff` always returning `skb->skb_iif` and
+`inet6_sdif` returning 0, and leading to `udp_sk_bound_dev_eq` returning
+true.
 
-arm64:
-     select HAVE_IMA_KEXEC if IMA
+A fix is to not rely on CB, and get `iff` and `sdif` using skb->dev. l3mdev
+case requires special attention since it has a master and a slave device.
 
-powerpc:
-     select KEXEC_ELF
-     select HAVE_IMA_KEXEC if IMA
+[0] https://lore.kernel.org/netdev/20230601160924.GA9194@debian/
 
-riscv:
-     select HAVE_IMA_KEXEC if IMA
-     select KEXEC_ELF
+Richard Gobert (1):
+  net: gro: fix misuse of CB in udp socket lookup
 
-And there are archs (parisc, riscv, s390) that support KEXEC_FILE that do not need 
-ARCH_SELECTS_KEXEC_FILE.
+ include/net/udp.h      |  2 ++
+ net/ipv4/udp.c         | 21 +++++++++++++++++++--
+ net/ipv4/udp_offload.c |  7 +++++--
+ net/ipv6/udp.c         | 21 +++++++++++++++++++--
+ net/ipv6/udp_offload.c |  7 +++++--
+ 5 files changed, 50 insertions(+), 8 deletions(-)
 
-So there isn't a clear path for optimizing the IMA statement, in this example, that I'm aware of.
+--
+2.36.1
 
-But perhaps I don't quite understand the technique you are suggesting, either...
-
-eric
-
-
-
-> 
->>
->> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
->> ---
->>    arch/x86/Kconfig | 92 ++++++++++--------------------------------------
->>    1 file changed, 19 insertions(+), 73 deletions(-)
->>
->> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> index 7422db409770..9767a343f7c2 100644
->> --- a/arch/x86/Kconfig
->> +++ b/arch/x86/Kconfig
->> @@ -2040,88 +2040,34 @@ config EFI_RUNTIME_MAP
->>    
->>    source "kernel/Kconfig.hz"
->>    
->> -config KEXEC
->> -	bool "kexec system call"
->> -	select KEXEC_CORE
->> -	help
->> -	  kexec is a system call that implements the ability to shutdown your
->> -	  current kernel, and to start another kernel.  It is like a reboot
->> -	  but it is independent of the system firmware.   And like a reboot
->> -	  you can start any kernel with it, not just Linux.
->> -
->> -	  The name comes from the similarity to the exec system call.
->> -
->> -	  It is an ongoing process to be certain the hardware in a machine
->> -	  is properly shutdown, so do not be surprised if this code does not
->> -	  initially work for you.  As of this writing the exact hardware
->> -	  interface is strongly in flux, so no good recommendation can be
->> -	  made.
->> -
->> -config KEXEC_FILE
->> -	bool "kexec file based system call"
->> -	select KEXEC_CORE
->> -	select HAVE_IMA_KEXEC if IMA
->> -	depends on X86_64
->> -	depends on CRYPTO=y
->> -	depends on CRYPTO_SHA256=y
->> -	help
->> -	  This is new version of kexec system call. This system call is
->> -	  file based and takes file descriptors as system call argument
->> -	  for kernel and initramfs as opposed to list of segments as
->> -	  accepted by previous system call.
->> +config ARCH_SUPPORTS_KEXEC
->> +	def_bool y
->>    
->> -config ARCH_HAS_KEXEC_PURGATORY
->> -	def_bool KEXEC_FILE
->> +config ARCH_SUPPORTS_KEXEC_FILE
->> +	def_bool X86_64 && CRYPTO && CRYPTO_SHA256
->>    
->> -config KEXEC_SIG
->> -	bool "Verify kernel signature during kexec_file_load() syscall"
->> +config ARCH_SELECTS_KEXEC_FILE
->> +	def_bool y
->>    	depends on KEXEC_FILE
->> -	help
->> +	select HAVE_IMA_KEXEC if IMA
->>    
->> -	  This option makes the kexec_file_load() syscall check for a valid
->> -	  signature of the kernel image.  The image can still be loaded without
->> -	  a valid signature unless you also enable KEXEC_SIG_FORCE, though if
->> -	  there's a signature that we can check, then it must be valid.
->> +config ARCH_HAS_KEXEC_PURGATORY
->> +	def_bool KEXEC_FILE
->>    
->> -	  In addition to this option, you need to enable signature
->> -	  verification for the corresponding kernel image type being
->> -	  loaded in order for this to work.
->> +config ARCH_SUPPORTS_KEXEC_SIG
->> +	def_bool y
->>    
->> -config KEXEC_SIG_FORCE
->> -	bool "Require a valid signature in kexec_file_load() syscall"
->> -	depends on KEXEC_SIG
->> -	help
->> -	  This option makes kernel signature verification mandatory for
->> -	  the kexec_file_load() syscall.
->> +config ARCH_SUPPORTS_KEXEC_SIG_FORCE
->> +	def_bool y
->>    
->> -config KEXEC_BZIMAGE_VERIFY_SIG
->> -	bool "Enable bzImage signature verification support"
->> -	depends on KEXEC_SIG
->> -	depends on SIGNED_PE_FILE_VERIFICATION
->> -	select SYSTEM_TRUSTED_KEYRING
->> -	help
->> -	  Enable bzImage signature verification support.
->> +config ARCH_SUPPORTS_KEXEC_BZIMAGE_VERIFY_SIG
->> +	def_bool y
->>    
->> -config CRASH_DUMP
->> -	bool "kernel crash dumps"
->> -	depends on X86_64 || (X86_32 && HIGHMEM)
->> -	help
->> -	  Generate crash dump after being started by kexec.
->> -	  This should be normally only set in special crash dump kernels
->> -	  which are loaded in the main kernel with kexec-tools into
->> -	  a specially reserved region and then later executed after
->> -	  a crash by kdump/kexec. The crash dump kernel must be compiled
->> -	  to a memory address not used by the main kernel or BIOS using
->> -	  PHYSICAL_START, or it must be built as a relocatable image
->> -	  (CONFIG_RELOCATABLE=y).
->> -	  For more details see Documentation/admin-guide/kdump/kdump.rst
->> +config ARCH_SUPPORTS_KEXEC_JUMP
->> +	def_bool y
->>    
->> -config KEXEC_JUMP
->> -	bool "kexec jump"
->> -	depends on KEXEC && HIBERNATION
->> -	help
->> -	  Jump between original kernel and kexeced kernel and invoke
->> -	  code in physical address mode via KEXEC
->> +config ARCH_SUPPORTS_CRASH_DUMP
->> +	def_bool X86_64 || (X86_32 && HIGHMEM)
->>    
->>    config PHYSICAL_START
->>    	hex "Physical address where the kernel is loaded" if (EXPERT || CRASH_DUMP)
