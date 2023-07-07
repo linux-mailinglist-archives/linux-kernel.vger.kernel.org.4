@@ -2,128 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB8074AD5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36ABD74AD61
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjGGIv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S232505AbjGGIxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbjGGIv4 (ORCPT
+        with ESMTP id S232055AbjGGIxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:51:56 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC55129
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:51:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vmo.NB4_1688719910;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vmo.NB4_1688719910)
-          by smtp.aliyun-inc.com;
-          Fri, 07 Jul 2023 16:51:51 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
-        ying.huang@intel.com, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mm: compaction: skip the memory hole rapidly when isolating free pages
-Date:   Fri,  7 Jul 2023 16:51:47 +0800
-Message-Id: <d2ba7e41ee566309b594311207ffca736375fc16.1688715750.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <b21cd8e2e32b9a1d9bc9e43ebf8acaf35e87f8df.1688715750.git.baolin.wang@linux.alibaba.com>
-References: <b21cd8e2e32b9a1d9bc9e43ebf8acaf35e87f8df.1688715750.git.baolin.wang@linux.alibaba.com>
+        Fri, 7 Jul 2023 04:53:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096A7129;
+        Fri,  7 Jul 2023 01:53:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 970DF617B9;
+        Fri,  7 Jul 2023 08:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BEFDC433C8;
+        Fri,  7 Jul 2023 08:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688719981;
+        bh=B5hPcOxxzJ0jpPaiyd3+n22kW4lc95EF3CeyUdQr46s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=phOqDQCRbXj1hciqDFUYc6fB1/2xtZDvPUxqii3j+14BU4hjHdMRTSpq3I3y36Wjv
+         eCZdEa/bzIMn72KiGjeR6Lix5KCnL86A4UQ5bluYGgTJydhda9kxItiWSn/GQN3h5u
+         7CunJAufX9EDB2UyMwkr7RyDzQhohZSdNoG50/6QF8JPSInosN7zq7seC6mGkRjQlb
+         dFr9iYv+uwAVz5tVwa9La+jGSoiyEvap92pWmktGsF7TrvuS3t8XkPuNbFqZsOujgA
+         l9lo0hIMVtuOeyv+P4C5KlXJQ94OKUYZztrVbQm48jaOwRcSNz9TVNtjcMn5DriTIi
+         iwenO1YR71eWQ==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4fb73ba3b5dso2579822e87.1;
+        Fri, 07 Jul 2023 01:53:00 -0700 (PDT)
+X-Gm-Message-State: ABy/qLYF8wIkO/pyEc0lzZ8Z8A9JU3wFufvVpsRyjHhecvUNEQkx9gtb
+        v9WFYCxklEdOD9h3Aoe2UUTn5Bs5zhC/Rx6fsic=
+X-Google-Smtp-Source: APBJJlEWeiDCRf6PVs5ujUOH8YhNen1v+kger9T1aDT3xKtQyuCvxxIRZQcwf4+AmpjxP4CRBnFllS8GahgpRQAgnTw=
+X-Received: by 2002:ac2:4f0d:0:b0:4fa:21d5:8ed8 with SMTP id
+ k13-20020ac24f0d000000b004fa21d58ed8mr3749590lfr.4.1688719979066; Fri, 07 Jul
+ 2023 01:52:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230628010756.70649-1-yukuai1@huaweicloud.com> <20230628010756.70649-3-yukuai1@huaweicloud.com>
+In-Reply-To: <20230628010756.70649-3-yukuai1@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 7 Jul 2023 16:52:46 +0800
+X-Gmail-Original-Message-ID: <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
+Message-ID: <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
+Subject: Re: [PATCH -next v2 2/2] md/raid5-cache: fix null-ptr-deref in r5l_reclaim_thread()
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     xni@redhat.com, logang@deltatee.com, hch@lst.de, shli@fb.com,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawwe.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On my machine with below memory layout, and I can see it will take more
-time to skip the larger memory hole (range: 0x100000000 - 0x1800000000)
-when isolating free pages. So adding a new helper to skip the memory
-hole rapidly, which can reduce the time consumed from about 70us to less
-than 1us.
+On Wed, Jun 28, 2023 at 9:08=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> r5l_reclaim_thread() already check that 'conf->log' is not NULL in the
+> beginning, however, r5c_do_reclaim() and r5l_do_reclaim() will
+> dereference 'conf->log' again, which will cause null-ptr-deref if
+> 'conf->log' is set to NULL from r5l_exit_log() concurrently.
 
-[    0.000000] Zone ranges:
-[    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
-[    0.000000]   DMA32    empty
-[    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
-[    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
-[    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
-[    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
-[    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
-[    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
-[    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
-[    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
-[    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
-[    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+r5l_exit_log() will wait until reclaim_thread() finishes, and then set
+conf->log to NULL. So this is not a problem, no?
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
- mm/compaction.c | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+Thanks,
+Song
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 43358efdbdc2..9641e2131901 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -249,11 +249,31 @@ static unsigned long skip_offline_sections(unsigned long start_pfn)
- 
- 	return 0;
- }
-+
-+static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
-+{
-+	unsigned long start_nr = pfn_to_section_nr(start_pfn);
-+
-+	if (!start_nr || online_section_nr(start_nr))
-+		return 0;
-+
-+	while (start_nr-- > 0) {
-+		if (online_section_nr(start_nr))
-+			return section_nr_to_pfn(start_nr) + PAGES_PER_SECTION - 1;
-+	}
-+
-+	return 0;
-+}
- #else
- static unsigned long skip_offline_sections(unsigned long start_pfn)
- {
- 	return 0;
- }
-+
-+static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
-+{
-+	return 0;
-+}
- #endif
- 
- /*
-@@ -1668,8 +1688,16 @@ static void isolate_freepages(struct compact_control *cc)
- 
- 		page = pageblock_pfn_to_page(block_start_pfn, block_end_pfn,
- 									zone);
--		if (!page)
-+		if (!page) {
-+			unsigned long next_pfn;
-+
-+			next_pfn = skip_offline_sections_reverse(block_start_pfn);
-+			if (next_pfn)
-+				block_start_pfn = max(pageblock_start_pfn(next_pfn),
-+						      low_pfn);
-+
- 			continue;
-+		}
- 
- 		/* Check the block is suitable for migration */
- 		if (!suitable_migration_target(cc, page))
--- 
-2.39.3
-
+>
+> Fix this problem by don't dereference 'conf->log' again in
+> r5c_do_reclaim() and r5c_do_reclaim().
+>
+> Fixes: a39f7afde358 ("md/r5cache: write-out phase and reclaim support")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  drivers/md/raid5-cache.c | 20 ++++++++------------
+>  1 file changed, 8 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+> index 083288e36949..ba6fc146d265 100644
+> --- a/drivers/md/raid5-cache.c
+> +++ b/drivers/md/raid5-cache.c
+> @@ -1148,10 +1148,9 @@ static void r5l_run_no_space_stripes(struct r5l_lo=
+g *log)
+>   * for write through mode, returns log->next_checkpoint
+>   * for write back, returns log_start of first sh in stripe_in_journal_li=
+st
+>   */
+> -static sector_t r5c_calculate_new_cp(struct r5conf *conf)
+> +static sector_t r5c_calculate_new_cp(struct r5l_log *log)
+>  {
+>         struct stripe_head *sh;
+> -       struct r5l_log *log =3D conf->log;
+>         sector_t new_cp;
+>         unsigned long flags;
+>
+> @@ -1159,12 +1158,12 @@ static sector_t r5c_calculate_new_cp(struct r5con=
+f *conf)
+>                 return log->next_checkpoint;
+>
+>         spin_lock_irqsave(&log->stripe_in_journal_lock, flags);
+> -       if (list_empty(&conf->log->stripe_in_journal_list)) {
+> +       if (list_empty(&log->stripe_in_journal_list)) {
+>                 /* all stripes flushed */
+>                 spin_unlock_irqrestore(&log->stripe_in_journal_lock, flag=
+s);
+>                 return log->next_checkpoint;
+>         }
+> -       sh =3D list_first_entry(&conf->log->stripe_in_journal_list,
+> +       sh =3D list_first_entry(&log->stripe_in_journal_list,
+>                               struct stripe_head, r5c);
+>         new_cp =3D sh->log_start;
+>         spin_unlock_irqrestore(&log->stripe_in_journal_lock, flags);
+> @@ -1173,10 +1172,8 @@ static sector_t r5c_calculate_new_cp(struct r5conf=
+ *conf)
+>
+>  static sector_t r5l_reclaimable_space(struct r5l_log *log)
+>  {
+> -       struct r5conf *conf =3D log->rdev->mddev->private;
+> -
+>         return r5l_ring_distance(log, log->last_checkpoint,
+> -                                r5c_calculate_new_cp(conf));
+> +                                r5c_calculate_new_cp(log));
+>  }
+>
+>  static void r5l_run_no_mem_stripe(struct r5l_log *log)
+> @@ -1419,9 +1416,9 @@ void r5c_flush_cache(struct r5conf *conf, int num)
+>         }
+>  }
+>
+> -static void r5c_do_reclaim(struct r5conf *conf)
+> +static void r5c_do_reclaim(struct r5l_log *log)
+>  {
+> -       struct r5l_log *log =3D conf->log;
+> +       struct r5conf *conf =3D log->rdev->mddev->private;
+>         struct stripe_head *sh;
+>         int count =3D 0;
+>         unsigned long flags;
+> @@ -1496,7 +1493,6 @@ static void r5c_do_reclaim(struct r5conf *conf)
+>
+>  static void r5l_do_reclaim(struct r5l_log *log)
+>  {
+> -       struct r5conf *conf =3D log->rdev->mddev->private;
+>         sector_t reclaim_target =3D xchg(&log->reclaim_target, 0);
+>         sector_t reclaimable;
+>         sector_t next_checkpoint;
+> @@ -1525,7 +1521,7 @@ static void r5l_do_reclaim(struct r5l_log *log)
+>                                     log->io_list_lock);
+>         }
+>
+> -       next_checkpoint =3D r5c_calculate_new_cp(conf);
+> +       next_checkpoint =3D r5c_calculate_new_cp(log);
+>         spin_unlock_irq(&log->io_list_lock);
+>
+>         if (reclaimable =3D=3D 0 || !write_super)
+> @@ -1554,7 +1550,7 @@ static void r5l_reclaim_thread(struct md_thread *th=
+read)
+>
+>         if (!log)
+>                 return;
+> -       r5c_do_reclaim(conf);
+> +       r5c_do_reclaim(log);
+>         r5l_do_reclaim(log);
+>  }
+>
+> --
+> 2.39.2
+>
