@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6B874B489
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D3174B490
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 17:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjGGPpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 11:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S232724AbjGGPqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 11:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGPpI (ORCPT
+        with ESMTP id S229677AbjGGPp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 11:45:08 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3859F173B;
-        Fri,  7 Jul 2023 08:45:07 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367CH9mW027393;
-        Fri, 7 Jul 2023 17:44:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=UirHfJWJ0M0c3P66CSNWUmzBZIs0e0lzSHowOTIQOxY=;
- b=R077onV69jpX15gfnwED6gCxOl6yExQaqxA53M7kAUStTuqI6BK8nT5z07EXtUEmHolY
- riyqdNY+iqw2vdORFsm8Ff3OR9V6cs5mzg/rbN1iDNyCpDtaXAmAKIeIylrkc1PkUjmO
- hchsdwamHlynmEL1RY40fiFNk47LZKTBA5P1Qhnz+JMV18+Ew+dTtXCkzH1eRGffvA8x
- wlSz5XaqZE2Y2se0KTE7WNPLGB6T8d3cDevC2/gA7JAHKnptpGkPK72PlMBcPaae7E88
- vBYPyaIvZL1KHTdsxqUau3JWVd60dpGsiUNHy8ji7tFOVFiy85DSPwi1zOkp0W8r83d2 SA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rpjjtsepn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 17:44:37 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 39181100050;
-        Fri,  7 Jul 2023 17:44:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0FC1C22A6F1;
-        Fri,  7 Jul 2023 17:44:36 +0200 (CEST)
-Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 7 Jul
- 2023 17:44:34 +0200
-Message-ID: <c6533f17-6100-5901-7281-256bff5db773@foss.st.com>
-Date:   Fri, 7 Jul 2023 17:44:34 +0200
+        Fri, 7 Jul 2023 11:45:59 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209F1BF4;
+        Fri,  7 Jul 2023 08:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Sbue8uRujdfGf15vt4de2yZ6JUgInnsREPoZVJderQQ=; b=DnEXpIFT0PgJN2YOy+8MTlp/11
+        yOSSIOasFRVBy2ZRej2Cs0zE7gH2sBSuU+7WStq5iYCb5rSGqEwfEezf7VGmHbTiryPxUP5EECc0w
+        SNr0vnNR8zv83zLeWiBlkARHRvxEzL7pXf9aWN23zXLiCB7B2bgpTj7bFj++G/bTC14cSb+jXRetR
+        3OI24q6VzExGvCnX+rJmpmG62TC9RI9RwwKKc5SoDerbcqt3aFCKNgVj0aA+kprMx4soLR1SZaXh/
+        XWdOy0cKvOg5vdN5Z965slmgRJ3bRT8Hv5Z1hRf2IGrwUqoC/fjabYxuPaHnPbiuYMj3PYnWpwEZN
+        IoaDe3dA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qHneF-00F9FP-0y;
+        Fri, 07 Jul 2023 15:45:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A2DA5300222;
+        Fri,  7 Jul 2023 17:45:28 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8DC7724B204C3; Fri,  7 Jul 2023 17:45:28 +0200 (CEST)
+Date:   Fri, 7 Jul 2023 17:45:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Olivier Dion <odion@efficios.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+Message-ID: <20230707154528.GC2883469@hirez.programming.kicks-ass.net>
+References: <87ttukdcow.fsf@laura>
+ <20230704094627.GS4253@hirez.programming.kicks-ass.net>
+ <87cz13hl7t.fsf@laura>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
- <2023070748-false-enroll-e5dc@gregkh>
- <febd65e1-68c7-f9d8-c8a4-3c3e88f15f3e@foss.st.com>
- <2023070744-superjet-slum-1772@gregkh>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <2023070744-superjet-slum-1772@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_10,2023-07-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87cz13hl7t.fsf@laura>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,22 +74,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/7/23 17:10, Greg KH wrote:
-> On Fri, Jul 07, 2023 at 04:00:23PM +0200, Gatien CHEVALLIER wrote:
->> I'll change to (GPL-2.0-only OR BSD-3-Clause) :)
+On Fri, Jul 07, 2023 at 10:04:06AM -0400, Olivier Dion wrote:
+> On Tue, 04 Jul 2023, Peter Zijlstra <peterz@infradead.org> wrote:
+> > On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+> [...]
+> >> On x86-64 (gcc 13.1 -O2) we get:
+> >> 
+> >>   t0():
+> >>           movl    $1, x(%rip)
+> >>           movl    $1, %eax
+> >>           xchgl   dummy(%rip), %eax
+> >>           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
+> >>           movl    y(%rip), %eax
+> >>           movl    %eax, r0(%rip)
+> >>           ret
+> >>   t1():
+> >>           movl    $1, y(%rip)
+> >>           lock orq $0, (%rsp)
+> >>           movl    x(%rip), %eax
+> >>           movl    %eax, r1(%rip)
+> >>           ret
+> >
+> > So I would expect the compilers to do better here. It should know those
+> > __atomic_thread_fence() thingies are superfluous and simply not emit
+> > them. This could even be done as a peephole pass later, where it sees
+> > consecutive atomic ops and the second being a no-op.
 > 
-> If you do that, I'll require a lawyer to sign off on it to verify that
-> you all know EXACTLY the work involved in dealing with dual-licensed
-> kernel code.  Sorry, licenses aren't jokes.
+> Indeed, a peephole optimization could work for this Dekker, if the
+> compiler adds the pattern for it.  However, AFAIK, a peephole can not be
+> applied when the two fences are in different basic blocks.  For example,
+> only emitting a fence on a compare_exchange success.  This limitation
+> implies that the optimization can not be done across functions/modules
+> (shared libraries).
 
-I was worried about the interactions with software running on BSD
-license, hence my (poorly written) proposal. Looking back at it
-there's no good reason to use a dual-license here.
-GPL-2.0-only is fine.
+LTO FTW :-)
 
+> For example, it would be interesting to be able to
+> promote an acquire fence of a pthread_mutex_lock() to a full fence on
+> weakly ordered architectures while preventing a redundant fence on
+> strongly ordered architectures.
+
+That's a very non-trivial thing to do. I know Linux has
+smp_mb__after_spinlock() and that x86 has it a no-op, but even on x86
+adding a full fence after a lock has observable differences IIRC.
+
+Specifically, the actual store that acquires the lock is not well
+ordered vs the critical section itself for non-trivial spinlock
+implementations (notably qspinlock).
+
+For RCU you mostly care about RCsc locks (IIRC), and upgrading unlock is
+a 'simpler' (IMO) approach to achieve that (which is what RCU does with
+smp_mb_after_unlock_lock()).
+
+> We know that at least Clang has such peephole optimizations for some
+> architecture backends.  It seems however that they do not recognize
+> lock-prefixed instructions as fence.
+
+They seem confused in general for emitting MFENCE.
+
+> AFAIK, GCC does not have that kind
+> of optimization.
+
+> We are also aware that some research has been done on this topic [0].
+> The idea is to use PRE for elimiation of redundant fences.  This would
+> work across multiple basic blocks, although the paper focus on
+> intra-procedural eliminations.  However, it seems that the latest work
+> on that [1] has never been completed [2].
 > 
-> thanks,
-> 
-> greg k-h
+> Our proposed approach provides a mean for the user to express -- and
+> document -- the wanted semantic in the source code.  This allows the
+> compiler to only emit wanted fences, therefore not relying on
+> architecture specific backend optimizations.  In other words, this
+> applies even on unoptimized binaries.
+
+I'm not a tool person, but if I were, I'd be very hesitant to add
+__builtin functions that 'conflict'/'overlap' with what an optimizer
+should be able to do.
+
+Either way around you need work done on the compilers, and I'm thinking
+'fixing' the optimizer will benefit far more people than adding
+__builtin's.
+
+Then again, I'm not a tools person, so you don't need to convince me.
+But one of the selling points of the whole Atomics as a language feature
+was that whole optimizer angle. Otherwise you might as well do as we do,
+inline asm the world.
+
+I'll shut up now, thanks for that PRE reference [0], that seems a fun
+read for when I'm bored.
