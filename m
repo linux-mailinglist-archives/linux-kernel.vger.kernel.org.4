@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7B674B255
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B69074B258
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbjGGOAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S232258AbjGGOAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjGGOAC (ORCPT
+        with ESMTP id S232505AbjGGOAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:00:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311CB1FEF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:59:17 -0700 (PDT)
+        Fri, 7 Jul 2023 10:00:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2B71FE6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 06:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688738356;
+        s=mimecast20190719; t=1688738370;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sC4UZ5LhNpjOJFleo9uAvg01y2IfXa2wUDSaFXs4svI=;
-        b=cSsm37C88ztInlH8+iOktJ3MNl6882QsbcbtEOgXhfLLDbr/ZZDlGaMgvRAHSPUm9Tlyji
-        Jvy2ulr+wS7Aw4Gxg9LL/IIh4veg1fUwPq1NGpzw/xxlBSV/s8e6npOA7DMgKXhu2akRNC
-        KaC5iVZXlgjhpH3bE2+irjc6TdHLF3E=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MGtpw5Ijohgjr845woqe5tjbTFDfrclnX+uXDY4qJTo=;
+        b=BJBZAcSiy+0owhFXivnV6MZ0Fl7AmIiZxe/1Bn2g2ze82cMhIBNusJ3+WPlITRJehjDarU
+        fGe/lLCENMxpuyzMRquPIyRJrhqRc6q0DhY8wlIWaRnE4HT+e8/YKfvF4FAQ9OkQlUIXpt
+        Bs4d0k7KGge7mV+MT082soqDOBjHi2o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-rz09Yx07OJ2J9x61qdPxAw-1; Fri, 07 Jul 2023 09:59:12 -0400
-X-MC-Unique: rz09Yx07OJ2J9x61qdPxAw-1
+ us-mta-91-jdBeycFfMpWPcS0WdIfb0g-1; Fri, 07 Jul 2023 09:59:27 -0400
+X-MC-Unique: jdBeycFfMpWPcS0WdIfb0g-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6643B3C0DDC1;
-        Fri,  7 Jul 2023 13:59:10 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A140185A791;
+        Fri,  7 Jul 2023 13:59:26 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 33AC12166B25;
-        Fri,  7 Jul 2023 13:58:55 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BEDF2166B25;
+        Fri,  7 Jul 2023 13:59:10 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
@@ -49,10 +50,12 @@ Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         pabeni@redhat.com, tglx@linutronix.de, maz@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         frowand.list@gmail.com, Baoquan He <bhe@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 0/8] Make several Kconfig options depend on HAS_IOMEM
-Date:   Fri,  7 Jul 2023 21:58:44 +0800
-Message-Id: <20230707135852.24292-1-bhe@redhat.com>
+        kernel test robot <lkp@intel.com>, dmaengine@vger.kernel.org
+Subject: [PATCH 1/8] idmaengine: make FSL_EDMA and INTEL_IDMA64 depends on HAS_IOMEM
+Date:   Fri,  7 Jul 2023 21:58:45 +0800
+Message-Id: <20230707135852.24292-2-bhe@redhat.com>
+In-Reply-To: <20230707135852.24292-1-bhe@redhat.com>
+References: <20230707135852.24292-1-bhe@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -67,52 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In thread of one patch posting, LKP test robot reported some compiling
-errors, paste the LKP report link here: 
-
-https://lore.kernel.org/all/202306211329.ticOJCSv-lkp@intel.com/T/#u
-
-In the config file, several Kconfig options are like below:
-------
-'# CONFIG_PCI is not set'
-CONFIG_OF_EARLY_FLATTREE=y
-CONFIG_DMA_DECLARE_COHERENT=y
-------
-
-The reason is (words arranged from Niklas):
-===
 On s390 systems (aka mainframes), it has classic channel devices for
 networking and permanent storage that are currently even more common
 than PCI devices. Hence it could have a fully functional s390 kernel
 with CONFIG_PCI=n, then the relevant iomem mapping functions
 [including ioremap(), devm_ioremap(), etc.] are not available.
 
-So make several Kconfig options depend on HAS_IOMEM so that it won't
-build in those driver code if PCI is unset.
+Here let FSL_EDMA and INTEL_IDMA64 depend on HAS_IOMEM so that it
+won't be built to cause below compiling error if PCI is unset.
+
+--------
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
+--------
 
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
+Signed-off-by: Baoquan He <bhe@redhat.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+---
+ drivers/dma/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Baoquan He (8):
-  idmaengine: make FSL_EDMA and INTEL_IDMA64 depends on HAS_IOMEM
-  char: xillybus: make XILLYBUS_OF depend on HAS_IOMEM
-  misc: open-dice: make OPEN_DICE depend on HAS_IOMEM
-  pcmcia : make PCMCIA depend on HAS_IOMEM
-  net: altera-tse: make ALTERA_TSE depend on HAS_IOMEM
-  irqchip/al-fic: make AL_FIC depend on HAS_IOMEM
-  clk: fixed-mmio: make COMMON_CLK_FIXED_MMIO depend on HAS_IOMEM
-  of: make OF_EARLY_FLATTREE depend on HAS_IOMEM
-
- drivers/char/xillybus/Kconfig       | 2 +-
- drivers/clk/Kconfig                 | 1 +
- drivers/dma/Kconfig                 | 2 ++
- drivers/irqchip/Kconfig             | 1 +
- drivers/misc/Kconfig                | 1 +
- drivers/net/ethernet/altera/Kconfig | 1 +
- drivers/of/Kconfig                  | 2 +-
- drivers/pcmcia/Kconfig              | 1 +
- 8 files changed, 9 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index 644c188d6a11..08fdd0e2ed1b 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -211,6 +211,7 @@ config FSL_DMA
+ config FSL_EDMA
+ 	tristate "Freescale eDMA engine support"
+ 	depends on OF
++	depends on HAS_IOMEM
+ 	select DMA_ENGINE
+ 	select DMA_VIRTUAL_CHANNELS
+ 	help
+@@ -280,6 +281,7 @@ config IMX_SDMA
+ 
+ config INTEL_IDMA64
+ 	tristate "Intel integrated DMA 64-bit support"
++	depends on HAS_IOMEM
+ 	select DMA_ENGINE
+ 	select DMA_VIRTUAL_CHANNELS
+ 	help
 -- 
 2.34.1
 
