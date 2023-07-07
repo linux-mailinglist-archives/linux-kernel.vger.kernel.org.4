@@ -2,178 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE4174B088
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA85374B093
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjGGMQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S230159AbjGGMTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjGGMQj (ORCPT
+        with ESMTP id S229584AbjGGMTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:16:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB7E1BE1
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688732151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 7 Jul 2023 08:19:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF031BC9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:19:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4F49F1FD93;
+        Fri,  7 Jul 2023 12:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688732388; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rhpDqg8pI0zX12ElS90vQT8QQV6E3FjtxWt9F4QgwcU=;
-        b=PSEl7yWW0g9KegAQ8cdyMvZHxxVFckOETksGXh1P2F54DjEhb5Vme0/ZTVhEQJJ/C5T6+W
-        qoo/q9rrgU1DV3xDwX1blSHMANGKpcAuzHWww91PI8bpba0k7nw4pWLeV92KeIKn26Rnyx
-        rvP6TchdxcOEbrsT8bR6ZxY6bj/XS6M=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-618-hKwGDFdpMva43xppaFYdEA-1; Fri, 07 Jul 2023 08:15:48 -0400
-X-MC-Unique: hKwGDFdpMva43xppaFYdEA-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-56fffdea2d0so19082857b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:15:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688732148; x=1691324148;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rhpDqg8pI0zX12ElS90vQT8QQV6E3FjtxWt9F4QgwcU=;
-        b=a4MfMEwi4C260Uh+Id70r2TGciL/qH7GW5tG6RNpwBA7XDGsuRBkpTl2bJEfR0u2GE
-         W9aKRdvYWRe3JXjxEqIFFpAh1L2oIz0sufPrLqHuxjMNvr0U8HDTwzgnWJrWN5uvoa42
-         Ir9jf1yROEz079HnZTVJ3uMgyLWdPzRP3i8Ubj+Pw0rboFhTON6pSB8vIIfPuzabf0cw
-         enT/xi2T+KGvPkTkCcO7KRPFlrSMOmy71IMOu4nwrKFgWDn4eBM0dqR0wexUPtakKzl7
-         cInVSRJgx5Bn/0dmkWo9/EOT/hsz+UgRsmqkyLteT/NJIJn8MqtDBGzRX6vnXTF21+aN
-         tYQg==
-X-Gm-Message-State: ABy/qLbEs6FTdnSvWjQ43MS48lWJVFq/GRD0sO34AoUKqv+zb/D6Cbh0
-        63DZ4KpUs6PJVcRjji49U/jkmybMs6w79SX/7rJ8MPZzaY3Ivih2AbK4xsGiVEOYr60RyzqDYxZ
-        hfDKnH7RLbvXP/eVa/jCYaoDX
-X-Received: by 2002:a0d:f543:0:b0:570:81f1:7b49 with SMTP id e64-20020a0df543000000b0057081f17b49mr4993724ywf.6.1688732148086;
-        Fri, 07 Jul 2023 05:15:48 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGBjLT+ie9QBkdDcFC6xSFGukVNoSHS7y0OfnI702mFH10yhnLmSvv9I4IBTSn5ORv7zoj+ig==
-X-Received: by 2002:a0d:f543:0:b0:570:81f1:7b49 with SMTP id e64-20020a0df543000000b0057081f17b49mr4993707ywf.6.1688732147833;
-        Fri, 07 Jul 2023 05:15:47 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac86741000000b00400c5f5e713sm1648278qtp.97.2023.07.07.05.15.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 05:15:47 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 08:18:28 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Josef Bacik <josef@toxicpanda.com>, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, djwong@kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, willy@infradead.org,
-        tytso@mit.edu, jack@suse.cz, andreas.gruenbacher@gmail.com,
-        brauner@kernel.org, peterz@infradead.org,
-        akpm@linux-foundation.org, dhowells@redhat.com
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <ZKgClE9AnmLZpXTM@bfoster>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+        bh=xOXr7QoWpZ3X2+T8tGBbRIhretiWSAYNHeNZqoiPNpk=;
+        b=BRNi36lT7Q3aNxOPhHXQxg4RjJtIDxqLfxcfF+RMliSPCaJV0+EPPv4thI13XlfZ97KToL
+        7UJRsjkr6gTJ0jgjpuzdyrUph6QMhcH4of496QQ/Ri2dwjGZ/s5MBWSFcg1SJWuGigIA2F
+        bPCOaUi5RSB3Xc4HgzLVD9by3BxVxP0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688732388;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xOXr7QoWpZ3X2+T8tGBbRIhretiWSAYNHeNZqoiPNpk=;
+        b=nD19oLnfglya0Z8LJqdXocAxqQQQp9LIitNCIQD5c+mbP20ilyRzQHV0WTT18pgAXNAoJl
+        k8LgIX+3Ty+OkmBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4079D139E0;
+        Fri,  7 Jul 2023 12:19:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8nyvD+QCqGSDNAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 07 Jul 2023 12:19:48 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C9F62A0717; Fri,  7 Jul 2023 14:19:47 +0200 (CEST)
+Date:   Fri, 7 Jul 2023 14:19:47 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Lu Hongfei <luhongfei@vivo.com>
+Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH] fs/udf: Change the type of blocksize from 'int' to
+ 'unsigned int' in udf_discard_prealloc
+Message-ID: <20230707121947.sa2l3y3b5d2kwmdj@quack3>
+References: <20230707110752.13436-1-luhongfei@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230707110752.13436-1-luhongfei@vivo.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 01:38:19PM -0400, Kent Overstreet wrote:
-> On Thu, Jul 06, 2023 at 12:40:55PM -0400, Josef Bacik wrote:
-...
-> > I am really, really wanting you to succeed here Kent.  If the general consensus
-> > is you need to have some idiot review fs/bcachefs I will happily carve out some
-> > time and dig in.
+On Fri 07-07-23 19:07:52, Lu Hongfei wrote:
+> The return value type of i_blocksize() is 'unsigned int', so the
+> type of blocksize has been modified from 'int' to 'unsigned int'
+> to ensure data type consistency.
 > 
-> That would be much appreciated - I'll owe you some beers next time I see
-> you. But before jumping in, let's see if we can get people who have
-> already worked with the code to say something.
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+
+Thanks for the patch but I'm sorry but how does this make a difference?
+Blocksize is a small positive integer (512-64k). So it doesn't matter
+whether you store it in int or unsigned it. I agree sometimes there are
+nasty issues in C with signed comparisons, sign extension and other complex
+logic and there it is beneficial to really be sure to match signedness etc.
+to avoid subtle issues. But in this particular case I don't see the
+point so I'd just keep the code as is... But please tell me if you see some
+readability or other benefit in this change.
+
+								Honza
+
+> ---
+>  fs/udf/truncate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-
-I've been poking at bcachefs for several months or so now. I'm happy to
-chime in on my practical experience thus far, though I'm still not
-totally clear what folks are looking for on this front, in terms of
-actual review. I agree with Josef's sentiment that a thorough code
-review of the entire fs is not really practical. I've not done that and
-don't plan to in the short term.
-
-As it is, I have been able to dig into various areas of the code, learn
-some of the basic principles, diagnose/fix issues and get some of those
-fixes merged without too much trouble. IMO, the code is fairly well
-organized at a high level, reasonably well documented and
-debuggable/supportable. That isn't to say some of those things couldn't
-be improved (and I expect they will be), but these are more time and
-resource constraints than anything and so I don't see any major red
-flags in that regard. Some of my bigger personal gripes would be a lot
-of macro code generation stuff makes it a bit harder (but not
-impossible) for a novice to come up to speed, and similarly a bit more
-introductory/feature level documentation would be useful to help
-navigate areas of code without having to rely on Kent as much. The
-documentation that is available is still pretty good for gaining a high
-level understanding of the fs data structures, though I agree that more
-content on things like on-disk format would be really nice.
-
-Functionality wise I think it's inevitable that there will be some
-growing pains as user and developer base grows. For that reason I think
-having some kind of experimental status for a period of time is probably
-the right approach. Most of the issues I've dug into personally have
-been corner case type things, but experience shows that these are the
-sorts of things that eventually arise with more users. We've also
-briefly discussed things like whether bcachefs could take more advantage
-of some of the test coverage that btrfs already has in fstests, since
-the feature sets should largely overlap. That is TBD, but is something
-else that might be a good step towards further proving out reliability.
-
-Related to that, something I'm not sure I've seen described anywhere is
-the functional/production status of the filesystem itself (not
-necessarily the development status of the various features). For
-example, is the filesystem used in production at any level? If so, what
-kinds of deployments, workloads and use cases do you know about? How
-long have they been in use, etc.? I realize we may not have knowledge or
-permission to share details, but any general info about usage in the
-wild would be interesting.
-
-The development process is fairly ad hoc, so I suspect that is something
-that would have to evolve if this lands upstream. Kent, did you have
-thoughts/plans around that? I don't mind contributing reviews where I
-can, but that means patches would be posted somewhere for feedback, etc.
-I suppose that has potential to slow things down, but also gives people
-a chance to see what's happening, review or ask questions, etc., which
-is another good way to learn or simply keep up with things.
-
-All in all I pretty much agree with Josef wrt to the merge request. ISTM
-the main issues right now are the external dependencies and
-development/community situation (i.e. bus factor). As above, I plan to
-continue contributions at least in terms of fixes and whatnot so long as
-$employer continues to allow me to dedicate at least some time to it and
-the community is functional ;), but it's not clear to me if that is
-sufficient to address the concerns here. WRT the dependencies, I agree
-it makes sense to be deliberate and for anything that is contentious,
-either just drop it or lift it into bcachefs for now to avoid the need
-to debate on these various fronts in the first place (and simplify the
-pull request as much as possible).
-
-With those issues addressed, perhaps it would be helpful if other
-interested fs maintainers/devs could chime in with any thoughts on what
-they'd want to see in order to ack (but not necessarily "review") a new
-filesystem pull request..? I don't have the context of the off list
-thread, but from this thread ISTM that perhaps Josef and Darrick are
-close to being "soft" acks provided the external dependencies are worked
-out. Christoph sent a nak based on maintainer status. Kent, you can add
-me as a reviewer if 1. you think that will help and 2. if you plan to
-commit to some sort of more formalized development process that will
-facilitate review..? I don't know if that means an ack from Christoph,
-but perhaps it addresses the nak. I don't really expect anybody to
-review the entire codebase, but obviously it's available for anybody who
-might want to dig into certain areas in more detail..
-
-Brian
-
+> diff --git a/fs/udf/truncate.c b/fs/udf/truncate.c
+> index a686c10fd709..c80dfcc583f6 100644
+> --- a/fs/udf/truncate.c
+> +++ b/fs/udf/truncate.c
+> @@ -123,7 +123,7 @@ void udf_discard_prealloc(struct inode *inode)
+>  	uint64_t lbcount = 0;
+>  	int8_t etype = -1;
+>  	struct udf_inode_info *iinfo = UDF_I(inode);
+> -	int bsize = i_blocksize(inode);
+> +	unsigned int bsize = i_blocksize(inode);
+>  
+>  	if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_IN_ICB ||
+>  	    ALIGN(inode->i_size, bsize) == ALIGN(iinfo->i_lenExtents, bsize))
+> -- 
+> 2.39.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
