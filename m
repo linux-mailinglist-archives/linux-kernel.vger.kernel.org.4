@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0837974B338
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E909B74B2CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 16:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbjGGOnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 10:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S232736AbjGGOKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 10:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjGGOnv (ORCPT
+        with ESMTP id S233019AbjGGOJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:43:51 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFDF1FE5;
-        Fri,  7 Jul 2023 07:43:48 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id E6C134C0C80;
-        Fri,  7 Jul 2023 14:43:43 +0000 (UTC)
-Received: from pdx1-sub0-mail-a313.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 436E24C1898;
-        Fri,  7 Jul 2023 14:43:43 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1688741023; a=rsa-sha256;
-        cv=none;
-        b=RvDdGwYqqjRQULUfpCMgFL2Jv6TkkvFBPPuQsmsbMoDCXzFb4hHkQOMP85vMXDbwg4m9O1
-        wJoStFGkf79qxjqKJEy+3OCzDixcKXw71LQNtqAQCDPHgaZFfRlu6XNaj9Y7Z7Z+GgE1C3
-        cJvnSmN+w3AaY7v6J4zehXTN3C4sFZhTVgztyqZ9/mvXDjzprj7WI4Nr3tV3NJF06oCQ+X
-        BNFTCOj3NzikKQIRnf8IphSElSqoRSFLIa8zYM5l5709LzAb+um1/tgKB+eiT8yeJSIHlS
-        EUE1u2wf5fxSYEOOrwNABLqGzX1iRGMPgppdMMak/HI/0VwTpu51ik5gC6ar1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1688741023;
+        Fri, 7 Jul 2023 10:09:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E7826A1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 07:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688738869;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=7bkqh2JJg8izQz3FcF4aa1t9Cj215Zpu2IgSPJgzyhI=;
-        b=FAxlwmBWt+tiSol65AsXej9Vl9pOrOnK1GDZke7x4hUhavTqHYtJ7TDef0QQYyKZY1pMR+
-        oo4w6Urxm8USsfRU650bhLtI8rlcn7+yF9w8L+Y3qLtnmCHDgRoa0vdZhM21yY0TxW6Vvw
-        y/A/3cYgvqEtTb8SFqOQful/4qAluHMscG8sCk1cTvwzUOZsEnQJGEh6xt/aOBHZqan/T+
-        fPkC1jvOHE/6uLzv4NlfYKuUgc9m9Zxmtl4/EKCOhRimnCAlyjnwyD/tI2mTG/X1lRYdlv
-        bV5oQ6Vjx6sBquqd676lveA4g4gnryYIrwy8gtHFXXo35dwo3xwv0r7oAkFH1A==
-ARC-Authentication-Results: i=1;
-        rspamd-7ccd4b867f-p4srp;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Obese-Print: 44f84d824b4c6e6e_1688741023726_2019953256
-X-MC-Loop-Signature: 1688741023726:2316620585
-X-MC-Ingress-Time: 1688741023726
-Received: from pdx1-sub0-mail-a313.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.187.85 (trex/6.9.1);
-        Fri, 07 Jul 2023 14:43:43 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a313.dreamhost.com (Postfix) with ESMTPSA id 4QyGNr2yhQz15G;
-        Fri,  7 Jul 2023 07:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1688741023;
-        bh=7bkqh2JJg8izQz3FcF4aa1t9Cj215Zpu2IgSPJgzyhI=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=ZlSSYbOUEYnGHHfBP9N1RpNkrZVX2znPZ3ZMkK/JiXS+e4897e4EowTGgcNmBVAdJ
-         S7gJPoSEsV3ERXDWX2BDyaeVBvZhHBYgQL/wsdjTIRbrEIacWOzcWAU6DADd6bDEs1
-         xNaHd0jxLrafS5CCZ1qr+z9AcjUQpQwKaJ42PrtUnE/bQ2/Yv3SqQXteSWsx5DihSb
-         qokwNPPoJTTvRdr1Za7Ipyf/41+ZzYU0+7jmN6LL7JTSlddZah+oFUr/dtBWcO4AH7
-         Q5LgItsm6nuw23T17skLsbBdP/vR3h3hC0S3YyNsn52Ztpl+Bcgcr2BGnt2OsjdHcJ
-         LNTGJkXpfmOuw==
-Date:   Fri, 7 Jul 2023 07:07:33 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Waiman Long <longman@redhat.com>
-Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] refscale: Fix use of uninitalized wait_queue_head_t
-Message-ID: <y5g37s3yhsqtmdoqziwnsd4kxtudlpqwv2iunt372abpmdzrry@43e54c374j4s>
-References: <20230707000117.2371697-1-longman@redhat.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OlC2iXIzLQA3lWZwQgQsQkPg2mfqo3LAJWALzfWOUOw=;
+        b=FSOhCULsW1PoI8wt2luQAd936ggfa2iGBk/LUym4hEo6AU4lRUX0uWEzy9U/3FozfqPBwZ
+        jGbki0t0yODQzaZPjRTGGULs3oXUd62mhYeDDlqzZGERxx5rbY39FxYwV4gz80Xa34jy4j
+        OF6OcmVIgrBVfIREpWiKtfRMn2vCbL0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-674-eR8Kgra2OKS16E-aPA8L0w-1; Fri, 07 Jul 2023 10:07:48 -0400
+X-MC-Unique: eR8Kgra2OKS16E-aPA8L0w-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3faabd8fd33so11611555e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 07:07:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688738867; x=1691330867;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OlC2iXIzLQA3lWZwQgQsQkPg2mfqo3LAJWALzfWOUOw=;
+        b=K3QMEAJNmT2SRSFWhJVm5ykBA3Hy3IS2YDLYlmiIFn9JbOEOwo5yT+EWbsCe3XC2g3
+         gT4EK3ghU3qyxFvsQ3oBl+za3o9EV40F0HBE/tZhPQKoJZSODMmBeP7YzNYzmN3ZR18m
+         KXr5BYbDJSXxxhNAvJlpWmc5h/gS+6QJbmod+8a4CoLxz1t8xiQwDI0C2T5yNZR+4gQZ
+         lidiqjDom9ym3zT7LabHL4eMU7BGp/Z9iJV1UStkyHHfGoXrQLOSDdIX/M8K8t7gmh8q
+         1wutOPK5y93cRjpTbJX88UrtTIsIXamTxzZl/fGainMk75B6gXQ8x/3ITM4QalRnoIui
+         CNTw==
+X-Gm-Message-State: ABy/qLYyZoI/NkRarv/AkQ7YqwS8ownHYDvxhF6A8xyA3QaF5wgpXqN8
+        KcjZEuDLaeG+Vw9w+nYb04/Sghs8Mor1ndkOZD+0w97cYDZCk2xzF8Mx0mSEuhO7mxYWTY6BpNc
+        8LXNjJTbdUnylNM/Y2tWlw6AV
+X-Received: by 2002:a1c:4c09:0:b0:3f8:f1db:d206 with SMTP id z9-20020a1c4c09000000b003f8f1dbd206mr4038596wmf.25.1688738867022;
+        Fri, 07 Jul 2023 07:07:47 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFyKYecEsefKx61xe08GTcuK37noRkMqXHT3eR9Z1Eg7QLfbEP9g0GcKdt4S/xrCRjDAxDhEg==
+X-Received: by 2002:a1c:4c09:0:b0:3f8:f1db:d206 with SMTP id z9-20020a1c4c09000000b003f8f1dbd206mr4038581wmf.25.1688738866619;
+        Fri, 07 Jul 2023 07:07:46 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f04:3c00:248f:bf5b:b03e:aac7? (p200300d82f043c00248fbf5bb03eaac7.dip0.t-ipconnect.de. [2003:d8:2f04:3c00:248f:bf5b:b03e:aac7])
+        by smtp.gmail.com with ESMTPSA id 12-20020a05600c020c00b003f819faff24sm2584225wmi.40.2023.07.07.07.07.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jul 2023 07:07:46 -0700 (PDT)
+Message-ID: <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
+Date:   Fri, 7 Jul 2023 16:07:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230707000117.2371697-1-longman@redhat.com>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Ryan Roberts <ryan.roberts@arm.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <20230703135330.1865927-5-ryan.roberts@arm.com>
+ <87edlkgnfa.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <44e60630-5e9d-c8df-ab79-cb0767de680e@arm.com>
+ <524bacd2-4a47-2b8b-6685-c46e31a01631@redhat.com>
+ <ZKgZrNuxuq4ACvIb@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
+In-Reply-To: <ZKgZrNuxuq4ACvIb@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,34 +99,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Jul 2023, Waiman Long wrote:
+On 07.07.23 15:57, Matthew Wilcox wrote:
+> On Fri, Jul 07, 2023 at 01:29:02PM +0200, David Hildenbrand wrote:
+>> On 07.07.23 11:52, Ryan Roberts wrote:
+>>> On 07/07/2023 09:01, Huang, Ying wrote:
+>>>> Although we can use smaller page order for FLEXIBLE_THP, it's hard to
+>>>> avoid internal fragmentation completely.  So, I think that finally we
+>>>> will need to provide a mechanism for the users to opt out, e.g.,
+>>>> something like "always madvise never" via
+>>>> /sys/kernel/mm/transparent_hugepage/enabled.  I'm not sure whether it's
+>>>> a good idea to reuse the existing interface of THP.
+>>>
+>>> I wouldn't want to tie this to the existing interface, simply because that
+>>> implies that we would want to follow the "always" and "madvise" advice too; That
+>>> means that on a thp=madvise system (which is certainly the case for android and
+>>> other client systems) we would have to disable large anon folios for VMAs that
+>>> haven't explicitly opted in. That breaks the intention that this should be an
+>>> invisible performance boost. I think it's important to set the policy for use of
+>>
+>> It will never ever be a completely invisible performance boost, just like
+>> ordinary THP.
+>>
+>> Using the exact same existing toggle is the right thing to do. If someone
+>> specify "never" or "madvise", then do exactly that.
+>>
+>> It might make sense to have more modes or additional toggles, but
+>> "madvise=never" means no memory waste.
+> 
+> I hate the existing mechanisms.  They are an abdication of our
+> responsibility, and an attempt to blame the user (be it the sysadmin
+> or the programmer) of our code for using it wrongly.  We should not
+> replicate this mistake.
 
->It was found that running the refscale test might sometimes crash the
->kernel with the following error:
->
->[ 8569.952896] BUG: unable to handle page fault for address: ffffffffffffffe8
->[ 8569.952900] #PF: supervisor read access in kernel mode
->[ 8569.952902] #PF: error_code(0x0000) - not-present page
->[ 8569.952904] PGD c4b048067 P4D c4b049067 PUD c4b04b067 PMD 0
->[ 8569.952910] Oops: 0000 [#1] PREEMPT_RT SMP NOPTI
->[ 8569.952916] Hardware name: Dell Inc. PowerEdge R750/0WMWCR, BIOS 1.2.4 05/28/2021
->[ 8569.952917] RIP: 0010:prepare_to_wait_event+0x101/0x190
->  :
->[ 8569.952940] Call Trace:
->[ 8569.952941]  <TASK>
->[ 8569.952944]  ref_scale_reader+0x380/0x4a0 [refscale]
->[ 8569.952959]  kthread+0x10e/0x130
->[ 8569.952966]  ret_from_fork+0x1f/0x30
->[ 8569.952973]  </TASK>
->
->This is likely caused by the fact that init_waitqueue_head() is called
->after the ref_scale_reader kthread is created. So the kthread may try
->to use the waitqueue head before it is properly initialized. Fix this
->by initializing the waitqueue head first before kthread creation.
->
->Fixes: 653ed64b01dc ("refperf: Add a test to measure performance of read-side synchronization")
->Signed-off-by: Waiman Long <longman@redhat.com>
+I don't agree regarding the programmer responsibility. In some cases the 
+programmer really doesn't want to get more memory populated than 
+requested -- and knows exactly why setting MADV_NOHUGEPAGE is the right 
+thing to do.
 
-Strange this wasn't reported sooner.
+Regarding the madvise=never/madvise/always (sys admin decision), memory 
+waste (and nailing down bugs or working around them in customer setups) 
+have been very good reasons to let the admin have a word.
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> 
+> Our code should be auto-tuning.  I posted a long, detailed outline here:
+> https://lore.kernel.org/linux-mm/Y%2FU8bQd15aUO97vS@casper.infradead.org/
+> 
+
+Well, "auto-tuning" also should be perfect for everybody, but once 
+reality strikes you know it isn't.
+
+If people don't feel like using THP, let them have a word. The "madvise" 
+config option is probably more controversial. But the "always vs. never" 
+absolutely makes sense to me.
+
+>> I remember I raised it already in the past, but you *absolutely* have to
+>> respect the MADV_NOHUGEPAGE flag. There is user space out there (for
+>> example, userfaultfd) that doesn't want the kernel to populate any
+>> additional page tables. So if you have to respect that already, then also
+>> respect MADV_HUGEPAGE, simple.
+> 
+> Possibly having uffd enabled on a VMA should disable using large folios,
+
+There are cases where we enable uffd *after* already touching memory 
+(postcopy live migration in QEMU being the famous example). That doesn't 
+fly.
+
+> I can get behind that.  But the notion that userspace knows what it's
+> doing ... hahaha.  Just ignore the madvise flags.  Userspace doesn't
+> know what it's doing.
+
+If user space sets MADV_NOHUGEPAGE, it exactly knows what it is doing 
+... in some cases. And these include cases I care about messing with 
+sparse VM memory :)
+
+I have strong opinions against populating more than required when user 
+space set MADV_NOHUGEPAGE.
+
+-- 
+Cheers,
+
+David / dhildenb
+
