@@ -2,182 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0488C74AA14
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 06:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3547174AA0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 06:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjGGEvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 00:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S232037AbjGGEqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 00:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjGGEu6 (ORCPT
+        with ESMTP id S229778AbjGGEqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 00:50:58 -0400
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE07DD;
-        Thu,  6 Jul 2023 21:50:55 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 8DA21120006;
-        Fri,  7 Jul 2023 07:50:54 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8DA21120006
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688705454;
-        bh=FmK6nWbAjVAWkNNorY5E7FVMZ25C0PmKlvlL0zT+jaA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-        b=DywWOWeZT85QSKWjq9BJ3d2AbSzTut2sL+Po/X7pjN+5j+noecFE/dr2uiKAXtAYw
-         KHE4sSsLZfeMWp15XECXuUOO/kbpggf5M6CxJSH0QAU9O6zD8NuqUeoLJiW6XPExyR
-         nlVvCt2D6L52J+qJj8oU+7mBBWT9rlugoPZjW2iEyBCG+6S34AMU3m6YcZ4UehDfhH
-         VYgTe3/ISi2mOm/3g8sRa/dVD3GNQtAMYqwYaBMMhjzgverycZXDfLBIFL2vQ9j8wd
-         eTYRYuVgEmX/TCJgu+lGmC1rjEuypVsZNPVOqiNJnmHFdPy0AIztmEbEL6bD8oHsHA
-         cdRLiR88FavQA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Fri,  7 Jul 2023 07:50:54 +0300 (MSK)
-Received: from [192.168.0.12] (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 7 Jul 2023 07:50:39 +0300
-Message-ID: <7e2407b7-fcdd-f047-66be-87ab371301f0@sberdevices.ru>
-Date:   Fri, 7 Jul 2023 07:45:40 +0300
+        Fri, 7 Jul 2023 00:46:43 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B1E1BF0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 21:46:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666e97fcc60so1143303b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 21:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688705202; x=1691297202;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+8KrRjriTlWtsSChPn/s5oP2eGKo7GVW4eTsZHk6Ir8=;
+        b=cYoFrKnXiO+tDsFSsK1B1T1ZBRIT6BcP5+RMU9iiBwFEGpc/P6Ii4QVhDvxiK+kjEZ
+         coApwrD87wyCH9lFoZItavQ3uWqGeqH4QqyVfeidIHdjpHY9YRzocmCPt4Mlje6+Lug7
+         KQXhMElZZn+AJeJRlLG/4oV7peNLjlRFC97krGhJK+ncxy9nFt+h9GAJ1kr/TA4knJJ0
+         QVg61Ye2jktdt+i9ZOjFhRJBNrMGUjyW9Xi+0MWAyotjd1k5c9Hut0pCQGJ1dt9i7c8q
+         mdl6JRCWnNIcTM+CDDujnsyn3Y0/yUQMkQUPAjDWnD7ofmwBKkSL8KseMbhfCYFkYR+e
+         3HTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688705202; x=1691297202;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+8KrRjriTlWtsSChPn/s5oP2eGKo7GVW4eTsZHk6Ir8=;
+        b=BZTqh3rEMtjKuqNPmQRzh7tZJEc4hl6dDRKM0uzeKM/vNQ/6BGtLc2VMSC9sEsC2sq
+         bHji3KMdU6uFjjQgyDv699EQqwJdlpaSxUvNvS4Jpz9xh1xp4ERJvf1KKi8moJ4mJY70
+         60Elcmz9Bs/8TsPqjGm5Nxi2hceUAzqlMzjvYbw3+Qyx5I+U0ySJggXsvBPEac38aOj4
+         pfUdBdSr6U0wa7GAI+Am8gFQR7Sc0s7qPE8N+isuO7xU9KuXKKucGHE/Tt24yWwHvueh
+         FjSp3XLeXc10FZ+A52awcJSIDL/0FCu3+vQiTbuHuJJ/4aXBl3fZNfIhkON7qZC5M6Sq
+         XcyA==
+X-Gm-Message-State: ABy/qLb92cGUc0FSw8S2IiLawQRwGUhMb/3Tizy4RuKC1t2yiKHxcw0m
+        6dxN+WfHlaBaevEnmzkm2RBhioaDRZx/xyG3gF8=
+X-Google-Smtp-Source: APBJJlE+46zk9//AWNid+YikU2na+nPHt/wQKFs/Qk3UE1jZtuou5ZQg0EjDa9LUwhKDJ5lyTcwYfA==
+X-Received: by 2002:a05:6a00:228a:b0:64d:1c59:6767 with SMTP id f10-20020a056a00228a00b0064d1c596767mr3699062pfe.24.1688705202320;
+        Thu, 06 Jul 2023 21:46:42 -0700 (PDT)
+Received: from Tower.bytedance.net ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id x53-20020a056a000bf500b0064d32771fa8sm2027315pfu.134.2023.07.06.21.46.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 21:46:41 -0700 (PDT)
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+To:     minchan@kernel.org, senozhatsky@chromium.org, mhocko@suse.com
+Cc:     david@redhat.com, yosryahmed@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhongkun He <hezhongkun.hzk@bytedance.com>
+Subject: [RFC PATCH 0/2] zram: objects charge to mem_cgroup
+Date:   Fri,  7 Jul 2023 12:46:13 +0800
+Message-Id: <20230707044613.1169103-1-hezhongkun.hzk@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 14/17] docs: net: description of MSG_ZEROCOPY for
- AF_VSOCK
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <20230701063947.3422088-1-AVKrasnov@sberdevices.ru>
- <20230701063947.3422088-15-AVKrasnov@sberdevices.ru>
- <CAGxU2F410NSNSzdNS4m-9UM8rZFBFpe5LeNZtkF0VzJc5_JFmg@mail.gmail.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <CAGxU2F410NSNSzdNS4m-9UM8rZFBFpe5LeNZtkF0VzJc5_JFmg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178485 [Jul 06 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/07 00:05:00 #21574510
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a new solution to charge ZRAM objects,more simple than
+previous one[1],The compressed RAM is currently charged to
+kernel,not to any memory cgroup.
 
+As we know, zram can be used in two ways, direct and
+indirect, this patchset can charge memory in both cases.
+Direct zram usage by process within a cgroup will fail
+to charge if there is no memory. Indirect zram usage by
+process within a cgroup via swap in PF_MEMALLOC context,
+will charge successfully.
 
-On 06.07.2023 20:06, Stefano Garzarella wrote:
-> On Sat, Jul 01, 2023 at 09:39:44AM +0300, Arseniy Krasnov wrote:
->> This adds description of MSG_ZEROCOPY flag support for AF_VSOCK type of
->> socket.
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->> Documentation/networking/msg_zerocopy.rst | 12 ++++++++++--
->> 1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/networking/msg_zerocopy.rst b/Documentation/networking/msg_zerocopy.rst
->> index b3ea96af9b49..34bc7ff411ce 100644
->> --- a/Documentation/networking/msg_zerocopy.rst
->> +++ b/Documentation/networking/msg_zerocopy.rst
->> @@ -7,7 +7,8 @@ Intro
->> =====
->>
->> The MSG_ZEROCOPY flag enables copy avoidance for socket send calls.
->> -The feature is currently implemented for TCP and UDP sockets.
->> +The feature is currently implemented for TCP, UDP and VSOCK (with
->> +virtio transport) sockets.
->>
->>
->> Opportunity and Caveats
->> @@ -174,7 +175,7 @@ read_notification() call in the previous snippet. A notification
->> is encoded in the standard error format, sock_extended_err.
->>
->> The level and type fields in the control data are protocol family
->> -specific, IP_RECVERR or IPV6_RECVERR.
->> +specific, IP_RECVERR or IPV6_RECVERR (for TCP or UDP socket).
->>
->> Error origin is the new type SO_EE_ORIGIN_ZEROCOPY. ee_errno is zero,
->> as explained before, to avoid blocking read and write system calls on
->> @@ -201,6 +202,7 @@ undefined, bar for ee_code, as discussed below.
->>
->>       printf("completed: %u..%u\n", serr->ee_info, serr->ee_data);
->>
->> +For VSOCK socket, cmsg_level will be SOL_VSOCK and cmsg_type will be 0.
-> 
-> Maybe better to move up, just under the previous change.
-> 
-> By the way, should we define a valid type value for vsock
-> (e.g. VSOCK_RECVERR)?
+[1]
+https://lore.kernel.org/all/20230615034830.1361853-1-hezhongkun.hzk@bytedance.com/
 
-Yes I think, I'll add it in the same patch which adds SOL_VSOCK.
+Zhongkun He (2):
+  memcg: Add support for zram object charge
+  zram: charge the compressed RAM to the page's memcgroup
 
-Thanks, Arseniy
+ drivers/block/zram/zram_drv.c | 43 +++++++++++++++++++++++++++++++++++
+ drivers/block/zram/zram_drv.h |  1 +
+ include/linux/memcontrol.h    | 10 ++++++++
+ mm/memcontrol.c               | 23 +++++++++++++++++++
+ 4 files changed, 77 insertions(+)
 
-> 
->>
->> Deferred copies
->> ~~~~~~~~~~~~~~~
->> @@ -235,12 +237,15 @@ Implementation
->> Loopback
->> --------
->>
->> +For TCP and UDP:
->> Data sent to local sockets can be queued indefinitely if the receive
->> process does not read its socket. Unbound notification latency is not
->> acceptable. For this reason all packets generated with MSG_ZEROCOPY
->> that are looped to a local socket will incur a deferred copy. This
->> includes looping onto packet sockets (e.g., tcpdump) and tun devices.
->>
->> +For VSOCK:
->> +Data path sent to local sockets is the same as for non-local sockets.
->>
->> Testing
->> =======
->> @@ -254,3 +259,6 @@ instance when run with msg_zerocopy.sh between a veth pair across
->> namespaces, the test will not show any improvement. For testing, the
->> loopback restriction can be temporarily relaxed by making
->> skb_orphan_frags_rx identical to skb_orphan_frags.
->> +
->> +For VSOCK type of socket example can be found in  tools/testing/vsock/
->> +vsock_test_zerocopy.c.
-> 
-> For VSOCK socket, example can be found in
-> tools/testing/vsock/vsock_test_zerocopy.c
-> 
-> (we should leave the entire path on the same line)
-> 
->> --
->> 2.25.1
->>
-> 
+-- 
+2.25.1
+
