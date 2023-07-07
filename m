@@ -2,263 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5132C74B0B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81F974B146
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 14:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjGGM11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 08:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S232151AbjGGMrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 08:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjGGM10 (ORCPT
+        with ESMTP id S232203AbjGGMrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:27:26 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E243B19BD
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 05:27:24 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b890e2b9b7so9761045ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 05:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688732844; x=1691324844;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZ8JSt047fABCf/ocyk/dBCgET4YP8jMebMJ8/IUJmo=;
-        b=YD3CkmbM2zj4toDN3vLlUM9Ndf4dprd27VqOEVwc/i1C31rz8qKfl5vWFRXl0Nf4Fb
-         pW1aBpAmxtfFpWf1sQyD7sdH/TgFHyT/5urdJIvv8Pj5ygUmLAnmZXq1/qHN7iCWkhQg
-         So2PWAdkJNKadcI4lS5Vc7KLvW/cDvEoxsrB7UeooiOfImoxAcMf4ObNPuyYOAJ/ScaQ
-         z5vqKc067UzyST7UNmuJNk0VnlM6edmFLCKTeRJaxoATkIn3pUVVHZ1kBevW6g+L9Rfo
-         F51A1yohZjnuRxurnmOe4PeFlwKU8dHaXJMrGTfHQq8byxUldpyOlwDoHx0b7bvAfAh1
-         YCxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688732844; x=1691324844;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NZ8JSt047fABCf/ocyk/dBCgET4YP8jMebMJ8/IUJmo=;
-        b=R491KwWyeU2NHJ8Y209vXnx9kONBT7z/J79ZbMH2srT+HaQ5cjiAI0lyaGy22sSmtx
-         /r56FiC2YsC2mdZpzABz/0KL+rKkvV3nYOued+tDorbrLbjJOtKtsGDDAvmIh7gDRa4M
-         i1ErNNLwx+3UCczSd4Y+W5NCoVVuK66FMKqoBBH2AxyHzSNLujFhViQlQPddl2Ks7d1f
-         LqGnuzZviWE74iv/xxzh3kBWL29A7fQDBYXh7z38FaVYa07Wnn8gasfM9sFgdKtTElAR
-         AqgBDC/pJeWE0aP9JfjkpNZsdz4Oq0y2AhMHkAKw+CMmFA1rMiW/R/nFTxlVgRh95N4m
-         dlow==
-X-Gm-Message-State: ABy/qLY4QQ2oFVzgjKSdiQ3zOw+032qH+6RnZDRyHOHZV8qY2+zq/U7k
-        +Zx/KtsHFVnQkwJnG5mlnbU7
-X-Google-Smtp-Source: APBJJlENIIpeVTgL/DM7JL5TDsVfBcU0N6G5sjkUNneJZr+86lpJjH1tQ4POc0M/GKAA+unbTlw7UA==
-X-Received: by 2002:a17:902:db11:b0:1b8:9ec5:79e2 with SMTP id m17-20020a170902db1100b001b89ec579e2mr4692812plx.1.1688732844320;
-        Fri, 07 Jul 2023 05:27:24 -0700 (PDT)
-Received: from localhost.localdomain ([117.216.120.82])
-        by smtp.gmail.com with ESMTPSA id v5-20020a1709029a0500b001b8b0ac2258sm3144140plp.174.2023.07.07.05.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 05:27:23 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] soc: qcom: rpmh: Include resource name in the trace event
-Date:   Fri,  7 Jul 2023 17:57:13 +0530
-Message-Id: <20230707122713.37487-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 7 Jul 2023 08:47:40 -0400
+X-Greylist: delayed 1149 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Jul 2023 05:47:25 PDT
+Received: from exhmta09.bpe.bigpond.com (exhmta09.bpe.bigpond.com [203.42.40.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0A311B;
+        Fri,  7 Jul 2023 05:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=bigpond.com
+        ; s=202303; h=Content-Type:MIME-Version:Date:Message-ID:From:To:Subject;
+        bh=vzhRXbz2UpgobFDiFaVPq9YFwfbsEXh4XG75B7YpJXc=; b=qTv3AgblbGiUrJdMGQ8MOG0c6b
+        EhUB3ISV1ZC4ytcVyJuawAcbHzlrbOBco+B9TwHa4XOAUS4ExfOAO3JC8lqXGkx9MgOxDxJ+G6H0i
+        teztreZRKnIvIUUx0Qo+7QTIHCDyxt7LbZUCrewfILxmZzJ9343bybxayeeD1dTpOjEqgen59OTrt
+        Z5BdzY3b/1apJ5KKP44EUDArYXr6FxftPCYHBzOXQCps5hajpSCY6kKPsLOgJrwqSy8gDIj3FtaPi
+        SJDNJqRyPp+RogcmYj2l1IIFBNfpA1uXe1Jg6HirCQHNdiwz3yN0YevAk25DHQ6e5wkgYeoyNjybe
+        5c9aJtsw==;
+Received: from exhprdcmr02
+         by exhprdomr09 with esmtp
+         (envelope-from <bids.7405@bigpond.com>)
+         id 1qHkZK-0003Kj-1l
+         for ;
+        Fri, 07 Jul 2023 22:28:14 +1000
+Received: from [101.191.138.223] (helo=[10.0.0.38])
+         by exhprdcmr02 with esmtpa
+        (envelope-from <bids.7405@bigpond.com>)
+        id 1qHkZL-000H1k-2K;
+        Fri, 07 Jul 2023 22:28:14 +1000
+Subject: Re: Fwd: 3 more broken Zaurii - SL-5600, A300, C700
+To:     Dave Jones <davej@codemonkey.org.uk>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
+ <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
+ <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
+ <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
+From:   Ross Maynard <bids.7405@bigpond.com>
+Message-ID: <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
+Date:   Fri, 7 Jul 2023 22:28:11 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
+Content-Type: multipart/mixed;
+ boundary="------------8628B942F2195D19390C676E"
+Content-Language: en-US
+X-tce-id: bids.7405@bigpond.com
+X-tce-ares-id: e{4a9eb6c6-2d9a-4e3c-8cca-a779deb79200}1
+X-tce-spam-action: no action
+X-tce-spam-score: 0.0
+X-Cm-Analysis: v=2.4 cv=Cvt5MF0D c=1 sm=1 tr=0 ts=64a804de a=I+ymoOSk5yzZBOYXmf4WnA==:117 a=I+ymoOSk5yzZBOYXmf4WnA==:17 a=ws7JD89P4LkA:10 a=r77TgQKjGQsHNAKrUKIA:9 a=gj2XTu5y7l5qDgVZD0wA:9 a=QEXdDO2ut3YA:10 a=TILydWMaAdQ53EHaNYoA:9 a=B2y7HmGcmWMA:10
+X-Cm-Envelope: MS4xfIoILScwK33rbupbBpEtbV4ZzqANKCuQY393vXbD0WiKc6WXcEatxhUr19gldVyCIEfV2DKcKRv2Z7ovSbONdF4nJBhsrNEgtMrgj2J1dXVInPA/Hpo7 Q57QrzVo5S4Nu+gvGM7E12lHSLJySTo4GYPCPEoucFsk3tuFV3a8iUq/bpOTsQPJUGF4cWeZV0jyNA==
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The client drivers of RPMh like rpmhpd and bcm-voter has the name of the
-resource they are dealing with along with the address. So let's include
-the resource name in the RPMh trace event as it avoids doing a post
-processing of the trace event to resolve the resource name its address.
+This is a multi-part message in MIME format.
+--------------8628B942F2195D19390C676E
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+Hi,
 
-This patch depends on:
-https://lore.kernel.org/all/20230620230058.428833-1-quic_bjorande@quicinc.com/
+I am not a kernel developer, but I think the attached patch would work.
 
- drivers/interconnect/qcom/bcm-voter.c |  5 +++--
- drivers/soc/qcom/rpmh.c               |  9 ++++++---
- drivers/soc/qcom/rpmhpd.c             |  1 +
- drivers/soc/qcom/trace-rpmh.h         | 12 ++++++++----
- include/soc/qcom/tcs.h                |  2 ++
- 5 files changed, 20 insertions(+), 9 deletions(-)
+Ross
 
-diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
-index 8f385f9c2dd3..8cf65ef4e1fb 100644
---- a/drivers/interconnect/qcom/bcm-voter.c
-+++ b/drivers/interconnect/qcom/bcm-voter.c
-@@ -95,7 +95,7 @@ static void bcm_aggregate(struct qcom_icc_bcm *bcm)
- }
- 
- static inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
--			       u32 addr, bool commit, bool wait)
-+			       const char *name, u32 addr, bool commit, bool wait)
- {
- 	bool valid = true;
- 
-@@ -113,6 +113,7 @@ static inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
- 	if (vote_y > BCM_TCS_CMD_VOTE_MASK)
- 		vote_y = BCM_TCS_CMD_VOTE_MASK;
- 
-+	cmd->name = name;
- 	cmd->addr = addr;
- 	cmd->data = BCM_TCS_CMD(commit, valid, vote_x, vote_y);
- 
-@@ -146,7 +147,7 @@ static void tcs_list_gen(struct bcm_voter *voter, int bucket,
- 		wait = commit && (voter->tcs_wait & BIT(bucket));
- 
- 		tcs_cmd_gen(&tcs_list[idx], bcm->vote_x[bucket],
--			    bcm->vote_y[bucket], bcm->addr, commit, wait);
-+			    bcm->vote_y[bucket], bcm->name, bcm->addr, commit, wait);
- 		idx++;
- 		n[batch]++;
- 		/*
-diff --git a/drivers/soc/qcom/rpmh.c b/drivers/soc/qcom/rpmh.c
-index 08e09642d7f5..dfb849f134cd 100644
---- a/drivers/soc/qcom/rpmh.c
-+++ b/drivers/soc/qcom/rpmh.c
-@@ -49,6 +49,7 @@
-  * @list: linked list obj
-  */
- struct cache_req {
-+	const char *name;
- 	u32 addr;
- 	u32 sleep_val;
- 	u32 wake_val;
-@@ -127,6 +128,7 @@ static struct cache_req *cache_rpm_request(struct rpmh_ctrlr *ctrlr,
- 		goto unlock;
- 	}
- 
-+	req->name = cmd->name;
- 	req->addr = cmd->addr;
- 	req->sleep_val = req->wake_val = UINT_MAX;
- 	list_add_tail(&req->list, &ctrlr->cache);
-@@ -405,12 +407,13 @@ static int is_req_valid(struct cache_req *req)
- }
- 
- static int send_single(struct rpmh_ctrlr *ctrlr, enum rpmh_state state,
--		       u32 addr, u32 data)
-+		       const char *name, u32 addr, u32 data)
- {
- 	DEFINE_RPMH_MSG_ONSTACK(NULL, state, NULL, rpm_msg);
- 
- 	/* Wake sets are always complete and sleep sets are not */
- 	rpm_msg.msg.wait_for_compl = (state == RPMH_WAKE_ONLY_STATE);
-+	rpm_msg.cmd[0].name = name;
- 	rpm_msg.cmd[0].addr = addr;
- 	rpm_msg.cmd[0].data = data;
- 	rpm_msg.msg.num_cmds = 1;
-@@ -461,11 +464,11 @@ int rpmh_flush(struct rpmh_ctrlr *ctrlr)
- 				 __func__, p->addr, p->sleep_val, p->wake_val);
- 			continue;
- 		}
--		ret = send_single(ctrlr, RPMH_SLEEP_STATE, p->addr,
-+		ret = send_single(ctrlr, RPMH_SLEEP_STATE, p->name, p->addr,
- 				  p->sleep_val);
- 		if (ret)
- 			goto exit;
--		ret = send_single(ctrlr, RPMH_WAKE_ONLY_STATE, p->addr,
-+		ret = send_single(ctrlr, RPMH_WAKE_ONLY_STATE, p->name, p->addr,
- 				  p->wake_val);
- 		if (ret)
- 			goto exit;
-diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-index f20e2a49a669..770a998c159e 100644
---- a/drivers/soc/qcom/rpmhpd.c
-+++ b/drivers/soc/qcom/rpmhpd.c
-@@ -543,6 +543,7 @@ static int rpmhpd_send_corner(struct rpmhpd *pd, int state,
- 			      unsigned int corner, bool sync)
- {
- 	struct tcs_cmd cmd = {
-+		.name = pd->res_name,
- 		.addr = pd->addr,
- 		.data = corner,
- 	};
-diff --git a/drivers/soc/qcom/trace-rpmh.h b/drivers/soc/qcom/trace-rpmh.h
-index be6b42ecc1f8..20a920d2202c 100644
---- a/drivers/soc/qcom/trace-rpmh.h
-+++ b/drivers/soc/qcom/trace-rpmh.h
-@@ -21,6 +21,7 @@ TRACE_EVENT(rpmh_tx_done,
- 	TP_STRUCT__entry(
- 			 __string(name, d->name)
- 			 __field(int, m)
-+			 __string(tcs_name, r->cmds[0].name)
- 			 __field(u32, addr)
- 			 __field(u32, data)
- 	),
-@@ -28,12 +29,13 @@ TRACE_EVENT(rpmh_tx_done,
- 	TP_fast_assign(
- 		       __assign_str(name, d->name);
- 		       __entry->m = m;
-+		       __assign_str(tcs_name, r->cmds[0].name);
- 		       __entry->addr = r->cmds[0].addr;
- 		       __entry->data = r->cmds[0].data;
- 	),
- 
--	TP_printk("%s: ack: tcs-m: %d addr: %#x data: %#x",
--		  __get_str(name), __entry->m, __entry->addr, __entry->data)
-+	TP_printk("%s: ack: tcs-m: %d name: %s addr: %#x data: %#x",
-+		  __get_str(name), __entry->m, __get_str(tcs_name), __entry->addr, __entry->data)
- );
- 
- TRACE_EVENT(rpmh_send_msg,
-@@ -49,6 +51,7 @@ TRACE_EVENT(rpmh_send_msg,
- 			 __field(u32, state)
- 			 __field(int, n)
- 			 __field(u32, hdr)
-+			 __string(tcs_name, c->name)
- 			 __field(u32, addr)
- 			 __field(u32, data)
- 			 __field(bool, wait)
-@@ -60,12 +63,13 @@ TRACE_EVENT(rpmh_send_msg,
- 		       __entry->state = state;
- 		       __entry->n = n;
- 		       __entry->hdr = h;
-+		       __assign_str(tcs_name, c->name);
- 		       __entry->addr = c->addr;
- 		       __entry->data = c->data;
- 		       __entry->wait = c->wait;
- 	),
- 
--	TP_printk("%s: tcs(m): %d [%s] cmd(n): %d msgid: %#x addr: %#x data: %#x complete: %d",
-+	TP_printk("%s: tcs(m): %d [%s] cmd(n): %d msgid: %#x name: %s addr: %#x data: %#x complete: %d",
- 		  __get_str(name), __entry->m,
- 		  __print_symbolic(__entry->state,
- 				   { RPMH_SLEEP_STATE, "sleep" },
-@@ -73,7 +77,7 @@ TRACE_EVENT(rpmh_send_msg,
- 				   { RPMH_ACTIVE_ONLY_STATE, "active" }),
- 		  __entry->n,
- 		  __entry->hdr,
--		  __entry->addr, __entry->data, __entry->wait)
-+		  __get_str(tcs_name), __entry->addr, __entry->data, __entry->wait)
- );
- 
- #endif /* _TRACE_RPMH_H */
-diff --git a/include/soc/qcom/tcs.h b/include/soc/qcom/tcs.h
-index 3acca067c72b..65779c4156a1 100644
---- a/include/soc/qcom/tcs.h
-+++ b/include/soc/qcom/tcs.h
-@@ -28,6 +28,7 @@ enum rpmh_state {
- /**
-  * struct tcs_cmd: an individual request to RPMH.
-  *
-+ * @name: the name of the resource
-  * @addr: the address of the resource slv_id:18:16 | offset:0:15
-  * @data: the resource state request
-  * @wait: ensure that this command is complete before returning.
-@@ -39,6 +40,7 @@ enum rpmh_state {
-  *                       (There's no request completion callback)
-  */
- struct tcs_cmd {
-+	const char *name;
- 	u32 addr;
- 	u32 data;
- 	u32 wait;
--- 
-2.25.1
+On 7/7/23 2:41 am, Dave Jones wrote:
+> On Thu, Jul 06, 2023 at 01:45:57PM +0200, Thorsten Leemhuis wrote:
+>   > On 06.07.23 05:08, Bagas Sanjaya wrote:
+>   > >>
+>   > >> I notice a regression report on Bugzilla [1]. Quoting from it:
+>   > >>
+>   > >>> The following patch broke support of 3 more Zaurus models: SL-5600, A300 and C700
+>   > >>>
+>   > >>> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad module alias from zaurus
+>   >
+>   > ...
+>   > He sometimes shows up on Linux kernel lists, but I doubt he cares about
+>   > that change after all these years. And I would not blame him at all.
+>
+> That's about the size of it.  This is pretty near the bottom of my ever-shrinking
+> list of kernel drivers I care about.
+>
+>   > Yes, we have the "no regressions" rule, but contributing a change to the
+>   > kernel OTOH should not mean that you are responsible for all regressions
+>   > it causes for your whole life. :-)
+>
+> That said, 12 years later, 16adf5d07987d93675945f3cecf0e33706566005
+> is still the right thing to do. Adding actual matches for the devices
+> rather than matching by class will prevent this getting loaded where it
+> doesn't need to be.
+>
+> If someone actually cares to get this working, cargo-culting Oliver's
+> change to add the extra id is likely the way forward.
+>
+> 	Dave
+>
 
+--------------8628B942F2195D19390C676E
+Content-Type: text/x-patch; charset=UTF-8;
+ name="3-zaurii-patch.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="3-zaurii-patch.patch"
+
+diff -urpN a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+--- a/drivers/net/usb/cdc_ether.c	2023-07-07 17:48:27.991833366 +1000
++++ b/drivers/net/usb/cdc_ether.c	2023-07-07 21:53:11.556198087 +1000
+@@ -616,6 +616,13 @@ static const struct usb_device_id	produc
+ }, {
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+ 			  | USB_DEVICE_ID_MATCH_DEVICE,
++    .idVendor		= 0x04DD,
++    .idProduct		= 0x8005,   /* A-300 */
++    ZAURUS_FAKE_INTERFACE,
++    .driver_info        = 0,
++}, {
++    .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
+ 	ZAURUS_MASTER_INTERFACE,
+@@ -623,12 +630,26 @@ static const struct usb_device_id	produc
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 			  | USB_DEVICE_ID_MATCH_DEVICE,
++    .idVendor		= 0x04DD,
++    .idProduct		= 0x8006,   /* B-500/SL-5600 */
++    ZAURUS_FAKE_INTERFACE,
++    .driver_info        = 0,
++}, {
++    .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8007,	/* C-700 */
+ 	ZAURUS_MASTER_INTERFACE,
+ 	.driver_info		= 0,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++    .idVendor		= 0x04DD,
++    .idProduct		= 0x8007,   /* C-700 */
++    ZAURUS_FAKE_INTERFACE,
++    .driver_info        = 0,
++}, {
++    .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	.idProduct              = 0x9031,	/* C-750 C-760 */
+Binary files a/drivers/net/usb/.cdc_ether.c.swp and b/drivers/net/usb/.cdc_ether.c.swp differ
+diff -urpN a/drivers/net/usb/zaurus.c b/drivers/net/usb/zaurus.c
+--- a/drivers/net/usb/zaurus.c	2023-07-07 17:48:28.043849110 +1000
++++ b/drivers/net/usb/zaurus.c	2023-07-07 22:06:49.267699853 +1000
+@@ -289,11 +289,25 @@ static const struct usb_device_id	produc
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+ 			  | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
++	.idProduct		= 0x8005,	/* A-300 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long) &bogus_mdlm_info,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
+ 	ZAURUS_MASTER_INTERFACE,
+ 	.driver_info = ZAURUS_PXA_INFO,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8006,	/* B-500/SL-5600 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long) &bogus_mdlm_info,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 	          | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8007,	/* C-700 */
+@@ -301,6 +315,13 @@ static const struct usb_device_id	produc
+ 	.driver_info = ZAURUS_PXA_INFO,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8007,	/* C-700 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long) &bogus_mdlm_info,
++}, {
++        .match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	.idProduct              = 0x9031,	/* C-750 C-760 */
+
+--------------8628B942F2195D19390C676E--
