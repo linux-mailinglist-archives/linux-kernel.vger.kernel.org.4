@@ -2,111 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6608274B00D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB13974B011
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 13:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjGGLl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 07:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S231721AbjGGLmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 07:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjGGLl2 (ORCPT
+        with ESMTP id S231952AbjGGLmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 07:41:28 -0400
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D19171D;
-        Fri,  7 Jul 2023 04:41:26 -0700 (PDT)
+        Fri, 7 Jul 2023 07:42:13 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC3E171D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 04:42:04 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb96e2b573so2821937e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 04:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688730087; x=1720266087;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=r4V2ufLUCNsoI97ffmWSoc6qtnrBHBX8sx3vLJWt3JA=;
-  b=GB83ByNCMyP5NdmRVx7WBD1l+HhFavzivCwKE3g3aogx0iHvzktwQTu8
-   MYXzBPNl5NOV3sp8rr89+tDNPEfxN9cplbdmvPrM8Pq1M8zZWhyZe2gj3
-   CG6zxpLbXyIBKCMPvjYtyvlbrABgS2vdZ1r80e6ajLwhOzXxPzA7tfG8B
-   0=;
-X-IronPort-AV: E=Sophos;i="6.01,187,1684800000"; 
-   d="scan'208";a="570858371"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 11:41:24 +0000
-Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com (Postfix) with ESMTPS id 10D9C40D4E;
-        Fri,  7 Jul 2023 11:41:23 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 7 Jul 2023 11:41:22 +0000
-Received: from b0f1d8753182.ant.amazon.com (10.95.106.196) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 7 Jul 2023 11:41:17 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Eric Northup <digitaleric@google.com>,
-        Eric Northup <digitaleric@gmail.com>,
-        Jon Cargille <jcargill@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, Takahiro Itazuri <zulinx86@gmail.com>,
-        Takahiro Itazuri <itazur@amazon.com>
-Subject: Re: [PATCH 1/1] KVM: pass through CPUID(0x80000006)
-Date:   Fri, 7 Jul 2023 12:41:07 +0100
-Message-ID: <20230707114107.73019-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20200415023726.GD12547@linux.intel.com>
-References: <20200415023726.GD12547@linux.intel.com>
+        d=linaro.org; s=google; t=1688730123; x=1691322123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wa7BsPp1pwuUXYKFDe8+3rIlSyzZmk8L9MfJjPY7Hc=;
+        b=Q4+p1BE3f451ZQ4nncfxOhnfmawK6shA59BM3UDHQl20cQtxz2Z6Brt9NDWxt/D6zF
+         xhFDpWZCxjmpgG3BeBjXv9kHbc7lc4rhbQEbM1MhUvpRKiArZwYaJhn4/WOyZIWphda5
+         +tMxSzrkiOdB5eIOQWkp0T2zpZvIIFD+Bgf+CT07wRrad774qCuGuLVpyXuwTb5N6O29
+         gr+EWqyxblX7Bc2lzj6U4A4HJ0cOWE4z1EAtDWKX0inJFDyPH+CwhxukS8rLzLIx+j++
+         38nFy/HGu2k++J+0d/nKQxEREgNDpEzVIn1q4zU/Jfk5IDh+grbthTxVAGwHmG1tKj6f
+         w41A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688730123; x=1691322123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wa7BsPp1pwuUXYKFDe8+3rIlSyzZmk8L9MfJjPY7Hc=;
+        b=GVD/V1e6dHdMZqxg9jru2AowWVbokm9FjP02c7HJaG1Gy1B93NbrUV5aDo9r9e5ygp
+         rpQWcEXEui1JeH0og/w2yHx4N1kfMP/hr97QnlKdVx8iBMU8rlRdVXgqMa0QTB3jEH2H
+         YXYwad54n+2tuEUIIVqxqQ3gOX3yIxZ32pUlqhBciHy0wktzd2HassY48qNcX28uxaks
+         /GdWwcvlRDnaSXlgU8wOHIkeoFb41X3468INliDp+N7dpWEquoD2zf3S7Raw2oV7OTyU
+         A2rttOXjLv4QFKluZ3sb+o/SFNyyUYpldI36voGdXcu7doqdZ2P68s5rva2V+40FpQD2
+         q8kw==
+X-Gm-Message-State: ABy/qLbr2ZLwrWUYVfGZ0du2WlNmXf31mdLi/L+cjqwzBPGTpk5zE4J6
+        Hp+u4tSeZoTMK6zsB1gV9CLnIg==
+X-Google-Smtp-Source: APBJJlHy5isDdras5n41PxiBO6xaM9mbE5GHZK/Y351j80tyDTleBNnaJY5mxZHx/5Y9DkbUDIyIEA==
+X-Received: by 2002:a05:6512:230a:b0:4fb:758c:74ed with SMTP id o10-20020a056512230a00b004fb758c74edmr4579360lfu.35.1688730123070;
+        Fri, 07 Jul 2023 04:42:03 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id 23-20020a05600c025700b003fbc9371193sm2216754wmj.13.2023.07.07.04.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 04:42:01 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 14:41:57 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     manivannan.sadhasivam@linaro.org, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, krzysztof.kozlowski@linaro.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Bo Liu <liubo03@inspur.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <error27@gmail.com>,
+        "open list:MHI BUS" <mhi@lists.linux.dev>
+Subject: Re: [PATCH v3 9/9] bus: mhi: ep: wake up host is the MHI state is in
+ M3
+Message-ID: <05b4d009-b50b-4971-9220-615f73db4acd@kadam.mountain>
+References: <1688727836-11141-1-git-send-email-quic_krichai@quicinc.com>
+ <1688727836-11141-10-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.95.106.196]
-X-ClientProxiedBy: EX19D044UWA001.ant.amazon.com (10.13.139.100) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688727836-11141-10-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please forgive me if this is an absurd question.
+On Fri, Jul 07, 2023 at 04:33:56PM +0530, Krishna chaitanya chundru wrote:
+> If the MHI state is in M3 then the most probably the host kept the
+> device in D3 hot or D3 cold, due to that endpoint transctions will not
+> be read by the host, so endpoint wakes up host to bring the host to D0
+> which eventually bring back the MHI state to M0.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/bus/mhi/ep/main.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> index 6008818..46a8a3c 100644
+> --- a/drivers/bus/mhi/ep/main.c
+> +++ b/drivers/bus/mhi/ep/main.c
+> @@ -25,6 +25,27 @@ static DEFINE_IDA(mhi_ep_cntrl_ida);
+>  static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id);
+>  static int mhi_ep_destroy_device(struct device *dev, void *data);
+>  
+> +static bool mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
+> +{
+> +	enum mhi_state state;
+> +	bool mhi_reset;
+> +	u32 count = 0;
+> +
+> +	mhi_cntrl->wakeup_host(mhi_cntrl);
+> +
+> +	/* Wait for Host to set the M0 state */
+> +	do {
+> +		msleep(M0_WAIT_DELAY_MS);
+> +		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
+> +		count++;
+> +	} while (state != MHI_STATE_M0 && count < M0_WAIT_COUNT);
+> +
+>+	if (state != MHI_STATE_M0)
+>+		return false;
 
-Date:   Tue, 14 Apr 2020 19:37:26 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
->   Return the host's L2 cache and TLB information for CPUID.0x80000006
->   instead of zeroing out the entry as part of KVM_GET_SUPPORTED_CPUID.
->   This allows a userspace VMM to feed KVM_GET_SUPPORTED_CPUID's output
->   directly into KVM_SET_CPUID2 (without breaking the guest).
+Functions which return false on success are an abomination.  Also
+boolean functions should be named for the question they answer such as
+access_ok() or has_feature() etc.
 
-I noticed that CPUID 0x80000005 also returns cache information (L1 Cache
-and TLB Information) when looking at AMD APM, while it is marked
-reserved on Intel SDM. What do you think about passing through CPUID
-0x80000005 to guests?
+Actually, I think it's the caller which is wrong.  This returns true on
+success and false on failure.  But the caller assumes true is failure.
+It suggests that this has not been tested.
 
-To be honest, I'm not sure if it is harmless from security and
-performance perspectives in the first place.
+> +
+> +	return true;
+> +}
 
-Regard security aspect, I'm a bit concerned that it could help malicious
-guests to know something to allow cache side channel attacks. However,
-CPUID 0x80000006 has already passed through L2 Cache and TLB and L3
-Cache Information. If passing through CPUID 0x80000006 is really fine,
-I'm guessing it is the case with CPUID 0x80000005 as well.
+Write it like this:
 
-In terms of performance, as far as I know, some softwares utilizes cache
-information to achieve better performance. To simply put, by letting
-guests know cache information, they may gain some benefits. Having said
-that, if I understand correctly, guests can be scheduled on CPUs that do
-not belong to the same group of CPUs that they run last time, unless
-guests are pinned to a specific set of host physical CPUs. In such
-cases, guests may not benefit from using cache information.
+static int mhi_ep_wake_host(struct mhi_ep_cntrl *mhi_cntrl)
+{
+	enum mhi_state state;
+	bool mhi_reset;
+	int count = 0;
 
-If I'm missing something or say something wrong, I'd appreciate it if
-you could correct me. If it sounds no problem, I'd like to send a patch
-for it.
+	mhi_cntrl->wakeup_host(mhi_cntrl);
 
-Best regards,
-Takahiro Itazuri
+	while (count++ < M0_WAIT_COUNT) {
+		msleep(M0_WAIT_DELAY_MS);
+
+		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
+		if (state == MHI_STATE_M0)
+			return 0;
+	}
+	return -ENODEV;
+}
+
+> +
+>  static int mhi_ep_send_event(struct mhi_ep_cntrl *mhi_cntrl, u32 ring_idx,
+>  			     struct mhi_ring_element *el, bool bei)
+>  {
+> @@ -464,6 +485,13 @@ int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, struct sk_buff *skb)
+>  	buf_left = skb->len;
+>  	ring = &mhi_cntrl->mhi_chan[mhi_chan->chan].ring;
+>  
+> +	if (mhi_cntrl->mhi_state == MHI_STATE_M3) {
+> +		if (mhi_ep_wake_host(mhi_cntrl)) {
+> +			dev_err(dev, "Failed to wakeup host\n");
+> +			return -ENODEV;
+> +		}
+
+Then this becomes:
+
+	if (mhi_cntrl->mhi_state == MHI_STATE_M3) {
+		ret = mhi_ep_wake_host(mhi_cntrl);
+		if (ret) {
+			dev_err(dev, "Failed to wakeup host\n");
+			return ret;
+		}
+	}
+
+regards,
+dan carpenter
 
