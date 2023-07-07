@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A544674A81F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 02:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC6874A82E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 02:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbjGGAbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 20:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S230443AbjGGAiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 20:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjGGAbb (ORCPT
+        with ESMTP id S229891AbjGGAh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 20:31:31 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3656B1992;
-        Thu,  6 Jul 2023 17:31:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-262c42d3fafso920951a91.0;
-        Thu, 06 Jul 2023 17:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688689889; x=1691281889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsL+nUW+0v3XUtpK8KNcb9gGGFha081JmYpkCXmvvAE=;
-        b=GXpjwIAvLMq+kyUKw50MZNRwCy+1QvDyjCIT9Vj8bKNYT+3xxDCf34QJQJ4R6cLDap
-         I2xZXGYFmyvjSHNE6TFqHbs0KRe9aaFRKNkRXIUUJZ5zzZ12hFb4Vp1gB+DEjcu1qi9i
-         j/y7Bjq2SZJTlV6HQFeg78uDrEa2n//VYQTAeeES7sOMoZ0/ECG6Jv3ealK2BAp026/7
-         ua5ptOsk1KNNCmKd6zxlFNd4pGVt3TgVf/ANIKMtyPt4cHK9mQqfGBztgHwIFymoq3xV
-         wo3jQjh3xphu0RhSBGxDF508bajnYQtaie1/Y4N5PCz9l2Yw10xYS8Kb6W4df4iefmnT
-         q+6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688689889; x=1691281889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wsL+nUW+0v3XUtpK8KNcb9gGGFha081JmYpkCXmvvAE=;
-        b=WNpxQlTH9+HDLuEVEojCelgz8quZ/Vqr1xyFxYAVwC+4uCya9LKnWq/ffVEVPQvt5o
-         ZomuhySUwvP29z08WoR/klP8ADmj4NI+DbTWz13CPZ2L9GZ4AfqZTvK7P4qrW684L99C
-         Le5Ff0sEP6dh44TTP+yp8/aV/mz4F7nd6luASvBcwRaHYncMytPtMM5R+OhYXegexT89
-         blnX2BsDwf9Vrh+M3Qd9f9vm/OMRIlbc0LGYCc4ZwpU0dW0Z3IpByM/3v1qTvqswqtbk
-         JvKeKSB3UrmBwWY6gYrAn1huO/Un2JdwV9mQ+p6NuFgzYt499xHjK9Hajcrvb3m8BnuM
-         ONTg==
-X-Gm-Message-State: ABy/qLaUUVtTepzTVoa74l9LKf+Qr/h4FZVr455aTLncgqMyeg1yAR0Q
-        Sy+VElVLhX3bVQz97kDT9Zs=
-X-Google-Smtp-Source: APBJJlHmGmp/kMMoWIXZOfL5JEIX/ee7sbk/t6Qa4o1H88DgMkVuUNPnFWkk+WVjC8P3Fl0BcPXt9w==
-X-Received: by 2002:a17:90a:fe07:b0:262:ca9c:edcb with SMTP id ck7-20020a17090afe0700b00262ca9cedcbmr5574821pjb.9.1688689889483;
-        Thu, 06 Jul 2023 17:31:29 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:9b44])
-        by smtp.gmail.com with ESMTPSA id gm13-20020a17090b100d00b00259e553f59bsm329275pjb.20.2023.07.06.17.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 17:31:28 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 17:31:25 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     andrii@kernel.org, ast@kernel.org, shuah@kernel.org,
-        daniel@iogearbox.net, fw@strlen.de, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v2 6/6] bpf: selftests: Add defrag selftests
-Message-ID: <20230707003125.6cxwqev7f5ybjcom@macbook-pro-8.dhcp.thefacebook.com>
-References: <cover.1688685338.git.dxu@dxuuu.xyz>
- <deb1c4c5003892997dfb6f628e185b124e590472.1688685338.git.dxu@dxuuu.xyz>
+        Thu, 6 Jul 2023 20:37:59 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC41619A7;
+        Thu,  6 Jul 2023 17:37:14 -0700 (PDT)
+Received: from droid01-cd.amlogic.com (10.98.11.200) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Fri, 7 Jul 2023
+ 08:37:04 +0800
+From:   Xianwei Zhao <xianwei.zhao@amlogic.com>
+To:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Xianwei Zhao <xianwei.zhao@amlogic.com>
+Subject: [PATCH V2 0/4] Power: C3: add  power domain driver
+Date:   Fri, 7 Jul 2023 08:37:06 +0800
+Message-ID: <20230707003710.2667989-1-xianwei.zhao@amlogic.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <deb1c4c5003892997dfb6f628e185b124e590472.1688685338.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.98.11.200]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 05:25:53PM -0600, Daniel Xu wrote:
-> +static int attach(struct ip_check_defrag *skel, bool ipv6)
-> +{
-> +	LIBBPF_OPTS(bpf_netfilter_opts, opts,
-> +		    .pf = ipv6 ? NFPROTO_IPV6 : NFPROTO_IPV4,
-> +		    .priority = 42,
-> +		    .flags = BPF_F_NETFILTER_IP_DEFRAG);
+First patch is that Use 'name' instead of 'index' as criterion.
+The  variate 'index' could be equal to zero in some SoCs. Such as C3 SoC,
+PWRC_C3_NNA_ID be defined zero.
 
-imo the end results is pretty neat. The users would just add this flag and
-netfilter bpf prog will see reassembled packets.
+Other patchs adds power controller driver support for Amlogic C3 SoC.
+The power domains registers can be accessed in the secure world only.
 
-The patches look good to me.
+Changes Since v1:
+ -Add a new patch for change that use 'name' instead of 'index'.
+ -Mofiy filename  matching compatibles
+ -Delete unnecessary blank line.
+ -Fixed some formatting.
+ -Delete status,use "okay" status by default.
 
-Florian,
-could you please review/ack, so we can pull them in?
+Xianwei Zhao (4):
+  soc: amlogic: use name instead of index as criterion
+  dt-bindings: power: add Amlogic C3 power domains
+  soc: c3: Add support for power domains controller
+  arm64: dts: add support for C3 power domain controller
+
+ .../power/amlogic,meson-sec-pwrc.yaml         |  3 +-
+ arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi   |  9 ++++++
+ drivers/soc/amlogic/meson-secure-pwrc.c       | 28 ++++++++++++++++++-
+ include/dt-bindings/power/amlogic,c3-pwrc.h   | 25 +++++++++++++++++
+ 4 files changed, 63 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/power/amlogic,c3-pwrc.h
+
+
+base-commit: 057889cb4244096ea5abcbe76ffd4d311c3078fe
+-- 
+2.37.1
+
