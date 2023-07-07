@@ -2,85 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F8074AD3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD9D74AD46
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 10:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjGGImK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 04:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        id S231820AbjGGIoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 04:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjGGImI (ORCPT
+        with ESMTP id S229642AbjGGIoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:42:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE071997
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 01:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688719282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hBR9f0r6qj9T/laRL93krURZPm3hZ8Dm5t8S9yrOV30=;
-        b=F5hTGzHyObxTPFMzjWMGdIicSbG2zeLiZufCjbOe8i+SIk3iSlEvZ961wCnhEXyOU3nFe6
-        082oJcI4rGjMFxvbjc+sdSAgVixCZfFwZmNKTwaq1CSEnioNQSxZfpaOoX0dJDze6RNVgm
-        +XWNZMoF0J0JEfxGjCR8MfwkK1TAIb8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-mseXw9BVPAa9SLtaA0G1vQ-1; Fri, 07 Jul 2023 04:41:17 -0400
-X-MC-Unique: mseXw9BVPAa9SLtaA0G1vQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2C5680027F;
-        Fri,  7 Jul 2023 08:41:16 +0000 (UTC)
-Received: from localhost (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C4DE1200B402;
-        Fri,  7 Jul 2023 08:41:15 +0000 (UTC)
-Date:   Fri, 7 Jul 2023 16:41:12 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Tao Liu <ltao@redhat.com>, thomas.lendacky@amd.com,
-        Borislav Petkov <bp@alien8.de>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, ardb@kernel.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, kexec@lists.infradead.org,
-        linux-efi@vger.kernel.org, michael.roth@amd.com
-Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <ZKfPqK+lqK6zly2w@MiWiFi-R3L-srv>
-References: <20230601072043.24439-1-ltao@redhat.com>
- <20230705173359.GDZKWphyFbNE8id6Jm@fat_crate.local>
- <CAO7dBbXdJgpO4Ym=4WME3OOrUhq2MNKpNZmhpsC7pOSugHiKDg@mail.gmail.com>
- <ZKeTX2aemPbsMiVr@MiWiFi-R3L-srv>
- <ZKfLYG_4DANc_i5r@suse.de>
+        Fri, 7 Jul 2023 04:44:12 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 479E31FD8;
+        Fri,  7 Jul 2023 01:44:11 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 71567603362EB;
+        Fri,  7 Jul 2023 16:43:50 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Su Hui <suhui@nfschina.com>
+Subject: [PATCH] KVM: VMX: Avoid noinstr warning
+Date:   Fri,  7 Jul 2023 16:43:28 +0800
+Message-Id: <20230707084328.2563454-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKfLYG_4DANc_i5r@suse.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/23 at 10:22am, Joerg Roedel wrote:
-> On Fri, Jul 07, 2023 at 12:23:59PM +0800, Baoquan He wrote:
-> > I am wondering why we don't detect the cpu type and return early inside
-> > sev_enable() if it's Intel cpu.
-> > 
-> > We can't rely on CONFIG_AMD_MEM_ENCRYPT to decide if the code need be
-> > executed or not because we usually enable them all in distros.
-> 
-> Looking at the code in head_64.S, by the time sev_enable() runs the SEV
-> bit should already be set in sev_status. Maybe use that to detect
-> whether SEV is enabled and bail out early?
+vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x2d8:
+call to vmread_error_trampoline() leaves .noinstr.text section
 
-Makes sense to me. Thanks.
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ arch/x86/kvm/vmx/vmx_ops.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
+index ce47dc265f89..54f86ce2ad60 100644
+--- a/arch/x86/kvm/vmx/vmx_ops.h
++++ b/arch/x86/kvm/vmx/vmx_ops.h
+@@ -112,6 +112,7 @@ static __always_inline unsigned long __vmcs_readl(unsigned long field)
+ 
+ #else /* !CONFIG_CC_HAS_ASM_GOTO_OUTPUT */
+ 
++	instrumentation_begin();
+ 	asm volatile("1: vmread %2, %1\n\t"
+ 		     ".byte 0x3e\n\t" /* branch taken hint */
+ 		     "ja 3f\n\t"
+@@ -139,6 +140,7 @@ static __always_inline unsigned long __vmcs_readl(unsigned long field)
+ 		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_ONE_REG, %1)
+ 
+ 		     : ASM_CALL_CONSTRAINT, "=&r"(value) : "r"(field) : "cc");
++	instrumentation_end();
+ 	return value;
+ 
+ #endif /* CONFIG_CC_HAS_ASM_GOTO_OUTPUT */
+-- 
+2.30.2
 
