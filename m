@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A6474BDC0
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 16:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0338E74BDC4
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 16:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjGHOMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 10:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S230333AbjGHOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 10:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjGHOM1 (ORCPT
+        with ESMTP id S229496AbjGHOR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 10:12:27 -0400
+        Sat, 8 Jul 2023 10:17:58 -0400
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D61991;
-        Sat,  8 Jul 2023 07:12:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0599F183;
+        Sat,  8 Jul 2023 07:17:57 -0700 (PDT)
 Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
         by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qI8fe-0004R5-4r; Sat, 08 Jul 2023 16:12:22 +0200
-Message-ID: <cf6ef663-d947-ca54-a9c4-beeb105ff5bb@leemhuis.info>
-Date:   Sat, 8 Jul 2023 16:12:21 +0200
+        id 1qI8kx-00053q-Qa; Sat, 08 Jul 2023 16:17:51 +0200
+Message-ID: <c65d0837-5e64-bec7-9e56-04aa91148d05@leemhuis.info>
+Date:   Sat, 8 Jul 2023 16:17:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH RESEND 2/2] Bluetooth: fix use-bdaddr-property quirk
+Subject: Re: [Regression][BISECTED] kernel boot hang after 19898ce9cf8a
+ ("wifi: iwlwifi: split 22000.c into multiple files")
 Content-Language: en-US, de-DE
-To:     Amit Pundir <amit.pundir@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <20230531090424.3187-1-johan+linaro@kernel.org>
- <20230531090424.3187-3-johan+linaro@kernel.org>
- <CAMi1Hd3fe=wk02WG8J7K5Ud1GcWkuKKKrxFjkNguxDkzNz2WVQ@mail.gmail.com>
-From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "Greenman, Gregory" <gregory.greenman@intel.com>,
+        "Berg, Johannes" <johannes.berg@intel.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Baruch, Yaara" <yaara.baruch@intel.com>,
+        "Ben Ami, Golan" <golan.ben.ami@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>
 Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <CAMi1Hd3fe=wk02WG8J7K5Ud1GcWkuKKKrxFjkNguxDkzNz2WVQ@mail.gmail.com>
+References: <b533071f38804247f06da9e52a04f15cce7a3836.camel@intel.com>
+ <a4265090-d6b8-b185-a400-b09b27a347cc@leemhuis.info>
+In-Reply-To: <a4265090-d6b8-b185-a400-b09b27a347cc@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688825545;b7616270;
-X-HE-SMSGID: 1qI8fe-0004R5-4r
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688825877;d2788880;
+X-HE-SMSGID: 1qI8kx-00053q-Qa
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -53,74 +62,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
-
-On 07.07.23 11:41, Amit Pundir wrote:
-> Hi Johan,
+On 07.07.23 12:55, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 07.07.23 10:25, Zhang, Rui wrote:
+>>
+>> I run into a NULL pointer dereference and kernel boot hang after
+>> switching to latest upstream kernel, and git bisect shows that below
+>> commit is the first offending commit, and I have confirmed that commit
+>> 19898ce9cf8a has the issue while 19898ce9cf8a~1 does not.
 > 
-> On Wed, 31 May 2023 at 14:35, Johan Hovold <johan+linaro@kernel.org> wrote:
->>
->> Devices that lack persistent storage for the device address can indicate
->> this by setting the HCI_QUIRK_INVALID_BDADDR which causes the controller
->> to be marked as unconfigured until user space has set a valid address.
->>
->> The related HCI_QUIRK_USE_BDADDR_PROPERTY was later added to similarly
->> indicate that the device lacks a valid address but that one may be
->> specified in the devicetree.
->>
->> As is clear from commit 7a0e5b15ca45 ("Bluetooth: Add quirk for reading
->> BD_ADDR from fwnode property") that added and documented this quirk and
->> commits like de79a9df1692 ("Bluetooth: btqcomsmd: use
->> HCI_QUIRK_USE_BDADDR_PROPERTY"), the device address of controllers with
->> this flag should be treated as invalid until user space has had a chance
->> to configure the controller in case the devicetree property is missing.
->>
->> As it does not make sense to allow controllers with invalid addresses,
->> restore the original semantics, which also makes sure that the
->> implementation is consistent (e.g. get_missing_options() indicates that
->> the address must be set) and matches the documentation (including
->> comments in the code, such as, "In case any of them is set, the
->> controller has to start up as unconfigured.").
->>
+> FWIW, this is the fourth such report about this that I'm aware of.
 > 
-> This patch broke Bluetooth on Dragonboard 845c (SDM845) devboard.
-> Reverting this patch fixes the BT breakage and I see the following
-> messages in dmesg:
+> The first is this one (with two affected users afaics):
+> https://bugzilla.kernel.org/show_bug.cgi?id=217622
 > 
-> Bluetooth: hci0: setting up wcn399x
-> Bluetooth: hci0: QCA Product ID   :0x0000000a
-> Bluetooth: hci0: QCA SOC Version  :0x40010214
-> Bluetooth: hci0: QCA ROM Version  :0x00000201
-> Bluetooth: hci0: QCA Patch Version:0x00000001
-> Bluetooth: hci0: QCA controller version 0x02140201
-> Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-> Bluetooth: hci0: QCA Downloading qca/crnv21.bin
-> Bluetooth: hci0: QCA setup on UART is completed
+> The second is this one:
+> https://lore.kernel.org/all/CAAJw_Zug6VCS5ZqTWaFSr9sd85k%3DtyPm9DEE%2BmV%3DAKoECZM%2BsQ@mail.gmail.com/
+> 
+> The third:
+> https://lore.kernel.org/all/9274d9bd3d080a457649ff5addcc1726f08ef5b2.camel@xry111.site/
+> 
+> And in the past few days two people from Fedora land talked to me on IRC
+> with problems that in retrospective might be caused by this as well.
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+I got confirmation: one of those cases is also caused by 19898ce9cf8a
+But I write for a different reason:
 
-#regzbot ^introduced 6945795bc81
-#regzbot title Bluetooth: Dragonboard 845c (SDM845) devboard broken
-#regzbot ignore-activity
+Larry (now CCed) looked at the culprit and spotted something that looked
+suspicious to him; he posted a patch and looks for testers:
+https://lore.kernel.org/all/0068af47-e475-7e8d-e476-c374e90dff5f@lwfinger.net/
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+Ciao, Thorsten
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+> This many reports about a problem at this stage of the cycle makes me
+> suspect we'll see a lot more once -rc1 is out. That's why I raising the
+> awareness of this. Sadly a simple revert of just this commit is not
+> possible. :-/
+> 
+> Ciao, Thorsten
+> 
+>> commit 19898ce9cf8a33e0ac35cb4c7f68de297cc93cb2 (refs/bisect/bad)
+>> Author:     Johannes Berg <johannes.berg@intel.com>
+>> AuthorDate: Wed Jun 21 13:12:07 2023 +0300
+>> Commit:     Johannes Berg <johannes.berg@intel.com>
+>> CommitDate: Wed Jun 21 14:07:00 2023 +0200
+>>
+>>     wifi: iwlwifi: split 22000.c into multiple files
+>>     
+>>     Split the configuration list in 22000.c into four new files,
+>>     per new device family, so we don't have this huge unusable
+>>     file. Yes, this duplicates a few small things, but that's
+>>     still much better than what we have now.
+>>     
+>>     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+>>     Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+>>     Link:
+>> https://lore.kernel.org/r/20230621130443.7543603b2ee7.Ia8dd54216d341ef1ddc0531f2c9aa30d30536a5d@changeid
+>>     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+>>
+>> I have some screenshots which show that RIP points to iwl_mem_free_skb,
+>> I can create a kernel bugzilla and attach the screenshots there if
+>> needed.
+>>
+>> BTW, lspci output of the wifi device and git bisect log attached.
+>>
+>> If any other information needed, please let me know.
+> 
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> That page also explains what to do if mails like this annoy you.
+> 
+> P.S.: for regzbot
+> 
+> #regzbot ^introduced 19898ce9cf8a
+> #regzbot dup-of:
+> https://lore.kernel.org/all/a5cdc7f8-b340-d372-2971-0d24b01de217@gmail.com/
