@@ -2,138 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D1574BE6F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 18:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC3774BE71
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 18:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjGHQXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 12:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S230008AbjGHQ0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 12:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGHQXp (ORCPT
+        with ESMTP id S229725AbjGHQ0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 12:23:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094021B5;
-        Sat,  8 Jul 2023 09:23:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E3B560D3E;
-        Sat,  8 Jul 2023 16:23:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288F6C433C7;
-        Sat,  8 Jul 2023 16:23:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688833424;
-        bh=A99StwgY1zVXF+35oUPoJCWd4DIdXY+XY+Fo3IdGtGg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=plJOZS8ECyGooTXfwF7IOYvuuOWM1+09HRUTTotfwfuvmTHIAq8kADJQi4FyKUR1Z
-         +OOdRQLXZmBpLAB4Yvad49q6DDJhg5x6ueoQTqa/teoi8P5qo5yYOKbTJYxVRD2KGH
-         PZ3pM+liDaluVVK0Dd4SlyCli46Zyh9MFX6qU/AQ5wm7nlYe8TYUQ55R6vSn6bq1I8
-         I4IQCfiUszMuaeZ9OxuOGhGzEmyUWttsQXgeNhIEVv3rZXz44VBalFmRPRtGLWWQNW
-         wonaGj3XLW/CdjgvmshixOSCm9aiahcCNE7Awt18SdrwNXnv6uu2eDHTPWGz4M/Wbz
-         IxfR2cIppiRUw==
-Date:   Sat, 8 Jul 2023 17:23:36 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>
-Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 0/7] iio: accel: Add support for Kionix/ROHM
- KX132-1211 accelerometer
-Message-ID: <20230708172336.79e68a0f@jic23-huawei>
-In-Reply-To: <cover.1686651032.git.mehdi.djait.k@gmail.com>
-References: <cover.1686651032.git.mehdi.djait.k@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 8 Jul 2023 12:26:05 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFFFE4D
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 09:26:04 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-666e916b880so1303452b3a.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 09:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1688833564; x=1691425564;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n81lmkpIohF/iUaSujpw1NRiU2XjmhYlsAoXp3Ij8w0=;
+        b=XoJYhRowRtKqhr6yAj3k3G47roVPlfesolIYJyVSQ5jmBRDNulN4MnX0TSgOHGE0sI
+         eEfdbomyMeP3Vd+jM2tWEfFJXsFvzdk4ccig325fpQHhxp1pQjaOshrWNSVD5NQkDWTx
+         s/SnHLirC7MuftFSinmcvvxsv8Jm7dPm2PXsjLJtd/QSTSkkOwPvmq5DAv0eVR4blSN7
+         0ahQfSf1mjWdfPSTGzi2BrhKqh6qP681w6TjLGTBva8TQjhGORiQprYdLAgGx5xf+lTB
+         uVyeR+Tk74WTeozdvUtGIXPS9Xje10Nm01Jty2IJdsKY2Yhy/syZm2ijhUY/iRA2F5mo
+         RUNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688833564; x=1691425564;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n81lmkpIohF/iUaSujpw1NRiU2XjmhYlsAoXp3Ij8w0=;
+        b=JPfwoFJKAFzcIN6Q96oauMK264N8lB2lqsnam+dvLPWSz/3F6+aGNPduHxDIcPX6Uz
+         udeG5uZTjB9d9joAYNSZzyP3C3IkpqBEAlq1s/iJGlkJ8DwmDH3DkuF/p/X2rXaRYlHa
+         YKiDt8M5e+Wc6qnt1eHrHpnevLf7LR/p625QRUiOImb9pBoyXBGCpuJIh20nnw7fcyhW
+         qOmjHMSPNC1fTh63xv/xhdtUXMU2ojdSS43+eg8gWgQAPXhORlJqo/QKggx/8/U86Zm6
+         0wpA+M0J0injnAxDuBouMz9wFPDdsXl21eRkPTC0YXmPckiQPwkeaS/Em6/Qcx7FDCfI
+         GZEA==
+X-Gm-Message-State: ABy/qLY1QuH4azZMUoMVftpRU3o0rsV3/xIAYa4Zl5v9ezeyhHdrHcM0
+        u52lgzXl1tRQkiNDRs8l5Gqsjw==
+X-Google-Smtp-Source: APBJJlHXpNokdQddu2gwij/B247jXEox4H02oR5fN5aljXmnnk6OpDbx1BH42oQu7t47hSMyA/Yf1A==
+X-Received: by 2002:a17:902:b118:b0:1b3:c3ca:1513 with SMTP id q24-20020a170902b11800b001b3c3ca1513mr5118192plr.65.1688833563858;
+        Sat, 08 Jul 2023 09:26:03 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id ju19-20020a170903429300b001aadd0d7364sm5142121plb.83.2023.07.08.09.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 09:26:03 -0700 (PDT)
+Date:   Sat, 08 Jul 2023 09:26:03 -0700 (PDT)
+X-Google-Original-Date: Sat, 08 Jul 2023 09:26:01 PDT (-0700)
+Subject:     Re: [External] Re: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from FFI
+In-Reply-To: <CAMj1kXEkL0gF8uGcy2AjJvD-yZHmyLX9jiVVDtR+uBAYf+BfUg@mail.gmail.com>
+CC:     Dong.Wei@arm.com, Conor Dooley <conor@kernel.org>,
+        geshijian@bytedance.com, sunilvl@ventanamicro.com,
+        Conor Dooley <conor.dooley@microchip.com>, rminnich@gmail.com,
+        cuiyunhui@bytedance.com, jrtc27@jrtc27.com, kernel@esmil.dk,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>, lpieralisi@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, weidong.wd@bytedance.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Message-ID: <mhng-d4a8b5de-5500-43ec-867a-972d873a0759@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 12:22:33 +0200
-Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
+On Sat, 08 Jul 2023 01:45:27 PDT (-0700), Ard Biesheuvel wrote:
+> On Fri, 7 Jul 2023 at 18:21, Dong Wei <Dong.Wei@arm.com> wrote:
+>>
+>> On Arm systems today, the ACPI RSDP is found using the UEFI Configuration Table. This is true for all Arm SystemReady compliant systems: 1) SystemReady LS: LBBRv1 is using a minimal UEFI FW to load LinuxBoot, that minimal UEFI FW is producing the UEFI Configuration Table. We are working on LBBRv2. LBBRv2 is based on Coreboot loading LinuxBoot. But we do not have a way today to get CoreBoot to produce this pointer to ACPI RSDP. Arm does not support x86 E820 BIOS interface. 2) SystemReady IR: this solution uses DT rather than ACPI. 3) SystemReady ES: this solution can use UBoot or EDK2, and it requires ACPI. Since both UBoot and EDK2 support UEFI now, so ACPI RSDP can be found using the UEFI Configuration Table. 4) SystemReady SR: this solution typically uses EDK2 and requires ACPI, so no issue finding RSDP via UEFI Configuration Table.
+>>
+>>
+>>
+>> So the ACPI RSDP issue only exist if we want to remove the minimum UEFI FW and go to CoreBoot completely to load LinuxBoot. We are currently exploring how to solve that issue…
+>>
+>
+> Hello Dong,
+>
+> This fixes the RSDP issue perhaps, but that is not the only problem. I
+> have mentioned this many times already, but let me mention it again
+> for completeness:
+>
+> ACPI does not have a memory map, and ARM is much more finicky about
+> mapping memory regions with the right attributes, given that uncached
+> accesses don't snoop the caches like they do on x86. This means it is
+> essential that memory mappings constructed from AML code (which
+> doesn't provide any context pertaining to the memory type either) are
+> created with the right memory type.
+>
+> Currently, the Linux/arm64 glue code for the ACPI core
+> cross-references every memory mapping created from a SystemMemory
+> OpRegion by AML code against the EFI memory map, and uses the EFI
+> memory type and attributes to infer the memory type to program into
+> the page tables. So simply providing the RSDP is *not* sufficient: on
+> arm64, more work is needed and currently, booting ACPI without a EFI
+> memory map results in SystemMemory OpRegions not working at all.
+>
+> Of course, we might be able to work around that by providing a
+> 'coreboot' memory map for doing ACPI on arm64, but that results in
+> more fragmentation and an inflated validation matrix, which puts the
+> burden on the Linux subsystem maintainers to make sure that all these
+> different combinations remain supported.
+>
+> AIUI, this memory type issue does not exist for RISC-V today, but I'd
+> suggest to the RISC-V maintainers to take a careful look at arm64's
+> acpi_os_ioremap() implementation and decide whether or not RISC-V
+> needs similar logic.
 
-> Hello everyone,
-> 
-> Version 6 for adding support for the kx132-1211 accelerometer
-> 
-> KX132-1211 accelerometer is a sensor which:
-> 	- supports G-ranges of (+/-) 2, 4, 8, and 16G
-> 	- can be connected to I2C or SPI
-> 	- has internal HW FIFO buffer
-> 	- supports various ODRs (output data rates)
-> 
-> The KX132-1211 accelerometer is very similar to the KX022A. 
-> One key difference is number of bits to report the number of data bytes that 
-> have been stored in the buffer: 8 bits for KX022A vs 10 bits for
-> KX132-1211.
-> 
-Just though I'd say that the series looks fine to me. I'm just waiting
-on reply to Matti's query on the last patch before applying it.
-
-Thanks,
-
-Jonathan
-
-
-> Changes in v6:
-> - check for availability of chip_info for the SPI case
-> - changed the order of elements in the kx022a_data struct to save memory
-> 
-> Changes in v5:
-> - moved the "kfree" call to match the reverse of what happens in 
->   kx022a_fifo_enable() as suggested by Matti and Jonathan
-> - used min_t, checked for availability of chip_info and moved the
->   position of u16 buf_smp_lvl_mask as suggested by Andy
-> - introduced buf_smp_lvl_mask in Patch 7 as suggested by Jonathan
-> 
-> Changes in v4:
-> - moved the allocation of the fifo_buffer to kx022a_fifo_enable and
->   kx022a_fifo_disable
-> - some fixes to the regmap ranges of kx132-1211 
-> 
-> Changes in v3:
-> - added two new patches by separating the addition of the 
->   i2c_device_id table and the removal of blank lines from other
->   unrelated changes
-> - fixes a warning detected by the kernel test robot
-> - made all the changes related the chip_info in one patch
-> 
-> Changes in v2:
-> - added a new patch for warning when the device_id match fails in the
->   probe function
-> - added a new patch for the function that retrieves the number of bytes
->   in the buffer
-> - added a change to the Kconfig file in the patch adding the support
->   for the kx132-1211
-> - various fixes and modifications listed under each patch
-> 
-> Mehdi Djait (7):
->   dt-bindings: iio: Add KX132-1211 accelerometer
->   iio: accel: kionix-kx022a: Remove blank lines
->   iio: accel: kionix-kx022a: Warn on failed matches and assume
->     compatibility
->   iio: accel: kionix-kx022a: Add an i2c_device_id table
->   iio: accel: kionix-kx022a: Refactor driver and add chip_info structure
->   iio: accel: kionix-kx022a: Add a function to retrieve number of bytes
->     in buffer
->   iio: accel: Add support for Kionix/ROHM KX132-1211 accelerometer
-> 
->  .../bindings/iio/accel/kionix,kx022a.yaml     |  12 +-
->  drivers/iio/accel/Kconfig                     |   8 +-
->  drivers/iio/accel/kionix-kx022a-i2c.c         |  24 +-
->  drivers/iio/accel/kionix-kx022a-spi.c         |  15 +-
->  drivers/iio/accel/kionix-kx022a.c             | 312 ++++++++++++++----
->  drivers/iio/accel/kionix-kx022a.h             | 110 +++++-
->  6 files changed, 406 insertions(+), 75 deletions(-)
-> 
-
+We've got a handful of messes around this in RISC-V already, I'd be 
+surprised if we don't need anything for ACPI.  It's probably not going 
+to show up until we're running on real platforms, though, and we're 
+going to need some M-mode interface to get it right in the long run.
