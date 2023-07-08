@@ -2,293 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0B074BBAF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 06:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3E374BBB5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 06:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjGHEI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 00:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S231959AbjGHELC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 00:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbjGHEIX (ORCPT
+        with ESMTP id S229751AbjGHEK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 00:08:23 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1234D2115;
-        Fri,  7 Jul 2023 21:08:16 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-579d5d89b41so31190577b3.2;
-        Fri, 07 Jul 2023 21:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688789295; x=1691381295;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d/1ppc1+fQOwKtdkvy2jg3fPFdLjpoPEZefNDxsHMnI=;
-        b=amywClrnsUFfS63X28sRzb6/e/tWGVSej8NBmom7ND1us44qjuX7WVF3gstVAg9KXq
-         1xj2zigFAEECUvY6wCTp1tEazUM1x37QbJL1OSPhLUC8YHP1Yx13ZIrtIqU72Owf99K5
-         MMRxRZrn4LJQq5xi16obDfu4L7bAeGJlnPZOcG2vQ19SjiBurmhTf/GFTYdxCGSO5NWL
-         k9lYj0x4hm9pl4m1QmwCd4a3w9NK9G+DxIRFMhDhdyyR0vHaBfx6PVeetIjUkXcHQxrF
-         hHH+eaknzDlKRtLVGXaLmwDddTGgsbAGX2XRcJWrBjcwi+SmiAAH8rMuSIVCSjgb9oMk
-         AavA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688789295; x=1691381295;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d/1ppc1+fQOwKtdkvy2jg3fPFdLjpoPEZefNDxsHMnI=;
-        b=hZdJwPTwtQnAebVFAv4eAEOLvnHdq2MpblQXkpNErQiLAWYe0oh4QQiVV4Pg39qcad
-         p559Vf+Xg8gLLEUlHqgyPD63oYTE6tb8+ADdaOeFsW+2IBgKUCxDJpCrze++5e9d79ia
-         Kh3/J5XGQ3mY3hFskuVhcY+bcslgoyyfDduWCoYvmIzII7bJ/ZvhyrzXaCeEfG55roVr
-         cFyZ+a53KaKQ3ThcFonZGz2OD/MxvJlaPmOF+ps2wGXW40NTc78uo/gHJcMG+q1jZvvA
-         2XkWXuQFWTDSR6nuV6rPubJl9/4Zd1GtJCk0RNtJ0nmepkG3ZbJ1tpYifTi2RPq2BZNH
-         pW9w==
-X-Gm-Message-State: ABy/qLZkOdh6pO59Gzs9NWrn9ixzJm7DmyQes5fJ7sf1dof+8gTG538F
-        8TCo58IvIV24sHEUvSorLMk=
-X-Google-Smtp-Source: APBJJlHRCVMVxdZ84OZZgUFndYKeVLUHyQhOF0C6yJk1vRxgpNdFz55+HkFGXqBWRuINYt6C1o+Qjg==
-X-Received: by 2002:a0d:d50b:0:b0:56d:1528:c56f with SMTP id x11-20020a0dd50b000000b0056d1528c56fmr6788851ywd.16.1688789295113;
-        Fri, 07 Jul 2023 21:08:15 -0700 (PDT)
-Received: from localhost.localdomain (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
-        by smtp.gmail.com with ESMTPSA id v12-20020a62a50c000000b00640f51801e6sm3507814pfm.159.2023.07.07.21.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 21:08:14 -0700 (PDT)
-From:   Leon Hwang <hffilwlqm@gmail.com>
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
-        hffilwlqm@gmail.com, tangyeechou@gmail.com,
-        kernel-patches-bot@fb.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] bpf: Introduce bpf user log
-Date:   Sat,  8 Jul 2023 12:07:50 +0800
-Message-ID: <20230708040750.72570-3-hffilwlqm@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230708040750.72570-1-hffilwlqm@gmail.com>
-References: <20230708040750.72570-1-hffilwlqm@gmail.com>
+        Sat, 8 Jul 2023 00:10:58 -0400
+Received: from out-26.mta1.migadu.com (out-26.mta1.migadu.com [95.215.58.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6A71FEA
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 21:10:56 -0700 (PDT)
+Date:   Sat, 8 Jul 2023 00:10:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688789454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tua3cusTVAWiQUobwnIpJERruf3dwUSDMjP59oVXpbA=;
+        b=GPa5oZizFI9+msR4SXLzcoMgJkBvTt+D93ZbTGPMlJAQMpdoXXkgJLUbYSbxtydyJAa9pX
+        9pjJuFDCzcishQaHaAJxvNiBs9GX0r+Opp8+kSD8NI4zmpCHaOtaxGhyMHN/ZVrFYCmCjm
+        WriBPdv1lp+dEH+swlj8FNXEi6ULiIs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        dchinner@redhat.com, sandeen@redhat.com, tytso@mit.edu,
+        bfoster@redhat.com, jack@suse.cz, andreas.gruenbacher@gmail.com,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230708041049.2tdw6fnnjtqwuqlw@moria.home.lan>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+ <20230706164055.GA2306489@perftesting>
+ <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
+ <20230706211914.GB11476@frogsfrogsfrogs>
+ <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
+ <20230707091810.bamrvzcif7ncng46@moria.home.lan>
+ <30661670c55601ff475f2f0698c2be2958e45c38.camel@HansenPartnership.com>
+ <ZKjd7nQxvzRDA2tK@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKjd7nQxvzRDA2tK@casper.infradead.org>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 42c4e63ef36ea9b5ae50 (bpf: Introduce bpf generic log) is
-introduced to back propagate the error message in dev_xdp_attach() to
-user space when users provide buffer to receive the error message.
-But it breaks uapi and exposes many log details in header file.
+On Sat, Jul 08, 2023 at 04:54:22AM +0100, Matthew Wilcox wrote:
+> One thing I particularly like about btrfs
 
-To overcome the shortcomings, a) make the struct bpf_generic_user_log
-as one field of the union in link_create of struct bpf_attr, b) hide
-log details in log_ulog_once() and let its declaration in header file.
+:) 
 
-Furthermore, it's not a good idea to reuse bpf_verifier_log infra. Or, a
-warning comes up:
+> compared to ntfs3 is that it doesn't use old legacy code like the buffer
+> heads, which means that it doesn't add to the technical debt.  From the
+> page cache point of view, it's fairly clean.  I wish it used iomap, but
+> iomap would need quite a lot of new features to accommodate everything
+> bcachefs wants to do.  Maybe iomap will grow those features over time.
 
-net/core/dev.c: In function 'bpf_xdp_link_log.isra.0':
-net/core/dev.c:9093:1: warning: the frame size of 1056 bytes is larger than 1024 bytes [-Wframe-larger-than=]
- 9093 | }
-      |
+My big complaint with iomap is that it's still the old callback based
+approach - an indirect function call into the filesystem to get a
+mapping, then Doing Stuff, for every walk.
 
-As a result, a small kernel buffer, like 256 bytes, is preferred to
-cache error message, then copy_to_user().
+Instead of calling back and forth, we could be filling out a data
+structure to represent the IO, then handing it off to the filesystem to
+look up the mappings and send to the right place, splitting as needed.
+Best part is, we already have such a data structure: struct bio. That's
+the approach bcachefs takes.
 
-Then, unlike verifier to provide more and more error details, bpf user
-log is only able to provide a simple error message limit 255 chars for
-every time.
+It would be nice sharing the page cache management code, but like you
+mentioned, iomap would have to grow a bunch of features. But, some of
+those features other users might like: in particular bcachefs hangs disk
+reservations and dirty sector (for i_blocks accounting) off the
+pagecache, which to me is a total no brainer, it eliminates looking up
+in a second data structure for e.g. the buffered write path.
 
-Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
----
- include/linux/bpf.h            | 31 ++-------------------------
- include/uapi/linux/bpf.h       |  4 +++-
- kernel/bpf/log.c               | 39 +++++++++++++++++++++++++---------
- net/core/dev.c                 |  9 +-------
- tools/include/uapi/linux/bpf.h |  4 +++-
- 5 files changed, 38 insertions(+), 49 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7d2124a537943..36af7cc89cafc 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3107,34 +3107,7 @@ static inline gfp_t bpf_memcg_flags(gfp_t flags)
- 	return flags;
- }
- 
--#define BPF_GENERIC_TMP_LOG_SIZE	256
--
--struct bpf_generic_log {
--	char		kbuf[BPF_GENERIC_TMP_LOG_SIZE];
--	char __user	*ubuf;
--	u32		len_used;
--	u32		len_total;
--};
--
--__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
--			const char *fmt, ...);
--static inline void bpf_generic_log_init(struct bpf_generic_log *log,
--			const struct bpf_generic_user_log *ulog)
--{
--	log->ubuf = (char __user *) (unsigned long) ulog->log_buf;
--	log->len_total = ulog->log_size;
--	log->len_used = 0;
--}
--
--#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)	do {	\
--	const char *____fmt = (fmt);				\
--	bpf_generic_log_init(log, ulog);			\
--	bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__);	\
--} while (0)
--
--#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...)	do {			\
--	struct bpf_generic_log ____log;					\
--	BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);	\
--} while (0)
-+__printf(2, 3) void bpf_ulog_once(const struct bpf_generic_user_log *ulog,
-+				  const char *fmt, ...);
- 
- #endif /* _LINUX_BPF_H */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 34fa334938ba5..8a458cfcd91bd 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1549,7 +1549,6 @@ union bpf_attr {
- 		};
- 		__u32		attach_type;	/* attach type */
- 		__u32		flags;		/* extra flags */
--		struct bpf_generic_user_log log; /* user log */
- 		union {
- 			__u32		target_btf_id;	/* btf_id of target to attach to */
- 			struct {
-@@ -1585,6 +1584,9 @@ union bpf_attr {
- 				__s32		priority;
- 				__u32		flags;
- 			} netfilter;
-+			struct {
-+				struct bpf_generic_user_log ulog; /* user log */
-+			} xdp;
- 		};
- 	} link_create;
- 
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index be56b153bbf0b..4d197b52ea207 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -326,15 +326,32 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
- }
- EXPORT_SYMBOL_GPL(bpf_log);
- 
--static inline void __bpf_generic_log_write(struct bpf_generic_log *log, const char *fmt,
--				      va_list args)
-+#define BPF_USER_TMP_LOG_SIZE	256
-+
-+struct bpf_user_log {
-+	char		kbuf[BPF_USER_TMP_LOG_SIZE];
-+	char __user	*ubuf;
-+	u32		len_used;
-+	u32		len_total;
-+};
-+
-+static inline void bpf_ulog_init(struct bpf_user_log *log,
-+				 const struct bpf_generic_user_log *ulog)
-+{
-+	log->ubuf = (char __user *) (unsigned long) ulog->log_buf;
-+	log->len_total = ulog->log_size;
-+	log->len_used = 0;
-+}
-+
-+static inline void bpf_ulog_write(struct bpf_user_log *log,
-+				  const char *fmt, va_list args)
- {
- 	unsigned int n;
- 
--	n = vscnprintf(log->kbuf, BPF_GENERIC_TMP_LOG_SIZE, fmt, args);
-+	n = vscnprintf(log->kbuf, BPF_USER_TMP_LOG_SIZE, fmt, args);
- 
--	WARN_ONCE(n >= BPF_GENERIC_TMP_LOG_SIZE - 1,
--		  "bpf generic log truncated - local buffer too short\n");
-+	WARN_ONCE(n >= BPF_USER_TMP_LOG_SIZE - 1,
-+		  "bpf user log line truncated - local buffer too short\n");
- 
- 	n = min(log->len_total - log->len_used - 1, n);
- 	log->kbuf[n] = '\0';
-@@ -345,16 +362,18 @@ static inline void __bpf_generic_log_write(struct bpf_generic_log *log, const ch
- 		log->ubuf = NULL;
- }
- 
--__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
--				     const char *fmt, ...)
-+__printf(2, 3) void bpf_ulog_once(const struct bpf_generic_user_log *ulog,
-+				  const char *fmt, ...)
- {
-+	struct bpf_user_log log;
- 	va_list args;
- 
--	if (!log->ubuf || !log->len_total)
-+	if (!ulog->log_buf || !ulog->log_size)
- 		return;
- 
-+	bpf_ulog_init(&log, ulog);
- 	va_start(args, fmt);
--	__bpf_generic_log_write(log, fmt, args);
-+	bpf_ulog_write(&log, fmt, args);
- 	va_end(args);
- }
--EXPORT_SYMBOL_GPL(bpf_generic_log_write);
-+EXPORT_SYMBOL_GPL(bpf_ulog_once);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index e933809c0a72f..311d3f3bc11b6 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9409,13 +9409,6 @@ static const struct bpf_link_ops bpf_xdp_link_lops = {
- 	.update_prog = bpf_xdp_link_update,
- };
- 
--static inline void bpf_xdp_link_log(const union bpf_attr *attr, struct netlink_ext_ack *extack)
--{
--	const struct bpf_generic_user_log *ulog = &attr->link_create.log;
--
--	BPF_GENERIC_ULOG_WRITE(ulog, extack->_msg);
--}
--
- int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- {
- 	struct net *net = current->nsproxy->net_ns;
-@@ -9454,7 +9447,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	if (err) {
- 		link->dev = NULL;
- 		bpf_link_cleanup(&link_primer);
--		bpf_xdp_link_log(attr, &extack);
-+		bpf_ulog_once(&attr->link_create.xdp.ulog, extack._msg);
- 		goto out_put_dev;
- 	}
- 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 34fa334938ba5..b81508bf758fa 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1549,7 +1549,6 @@ union bpf_attr {
- 		};
- 		__u32		attach_type;	/* attach type */
- 		__u32		flags;		/* extra flags */
--		struct bpf_generic_user_log log; /* user log */
- 		union {
- 			__u32		target_btf_id;	/* btf_id of target to attach to */
- 			struct {
-@@ -1585,6 +1584,9 @@ union bpf_attr {
- 				__s32		priority;
- 				__u32		flags;
- 			} netfilter;
-+			struct {
-+				struct bpf_generic_user_log ulog;  /* user log */
-+			} xdp;
- 		};
- 	} link_create;
- 
--- 
-2.41.0
-
+Also worth noting - bcachefs has had large folio support for awhile now :)
