@@ -2,261 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C8E74BDED
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 16:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D467174BDF6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjGHO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 10:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S230499AbjGHO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 10:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjGHO50 (ORCPT
+        with ESMTP id S229496AbjGHO7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 10:57:26 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71867D9;
-        Sat,  8 Jul 2023 07:57:24 -0700 (PDT)
-Received: from dungeon.fi (dungeon.fi [IPv6:2a00:d880:11::2cc])
+        Sat, 8 Jul 2023 10:59:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A47DE4D;
+        Sat,  8 Jul 2023 07:58:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: kasper)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Qytf74HF5z49Psw;
-        Sat,  8 Jul 2023 17:57:19 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1688828240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dx+yZDyoZEMezjVYd3PTEK6iSdWrjTFGImAbJdiYRVE=;
-        b=BdhpdtzEd3Cu0xkFxtfzOhvqFCLAgStCVT2E+Cl9CBWJA0TmnbtuWan/5GUJX2l1NDpF03
-        h5DfCMBRDnnKTsqTEcXWS6LAj9mlQ/buizRRsfgV12QRJIqV1/GJpLdWoGpxRmFLIXmLE9
-        yNrzH75UO8q9pVyfofRl0r5+jkZq1TuMqkrrzezLN0HT/FCINrCf/YvC1AEzCIjt8koaSo
-        ef+JqCa48QNe9VORZsbKVKzHJcQxvmUWjn5xxAjLFUPj+ZwrHkdhJRUmUAn9BPQeL1BJ+V
-        /A8MZBVALvOqhl1jr//kuYQ2rAZw2WLJ23YAWJtX/zXar0oJ4KehQtVWl8qmSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1688828240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dx+yZDyoZEMezjVYd3PTEK6iSdWrjTFGImAbJdiYRVE=;
-        b=Eus036bV69xgfrnpumuM12bQkuz/cA18+0MS2pLpvM7UKuWoHjwaWfJNGuoyPaSHJAuyZv
-        6MRU2Q813JDwNha1rNDwCt6s77gtV7ZsKw6uiAYcogDwe5Iodk2QZV+zCj1Lmd6VyUuOCg
-        74g8U4CoS4vNlhWUEO/tfp3baVzqgrViF2Ak3ml5ROngn0iPIauJ6e9BZvy+h9dfvhE8mj
-        TBcDKUnZt0g2QL4M5btDLULz3osyHGU95wj7V0488GZqYMg7U93JqdjcHawGSrB8NTeGtA
-        ngImx4FjntaiMpRSaZRgfse6XHxwFwvYaQqmXfiJzpHhq4pmepT8ARcOiuICAQ==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=kasper smtp.mailfrom=kasper@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1688828240; a=rsa-sha256;
-        cv=none;
-        b=Bk2rD+wCoFfI1Wdne7kHdG5nJjwK0P4cDk8QkR+xs17okV3/3cGkAYlQ0XPkyewoSUISxr
-        QbLIITQk48mIR6yGM9bmcLa5K2BEBL3ZsMTPcfUrjO0T9i4Si5V6Zm/nDdpWmpevPnq4tJ
-        unUeRtAz5e9vFMgUSrI/S9Ew1JtdrhUL/nbyNPjSNIhMQB+6D3CdSGJBya3kL1mJHcohkW
-        LB+OpWiTrTl6dVr+AcmlXYx+sJLhFXhL1pyuMmh0LROGUKfRkdOgK22yIn4jx9go+3684n
-        Oag54yvOzJBJpjG4RHdxvK6L9EvFXDsENZVdNEbFQB9EZ2hMco4CzGKiVL23wA==
-Received: from gridbug.. (dkxv4fyyyyyyyyyyyyyby-3.rev.dnainternet.fi [IPv6:2001:14ba:44e3:8200::2])
-        by dungeon.fi (Postfix) with ESMTPSA id E7C113F57A;
-        Sat,  8 Jul 2023 17:57:17 +0300 (EEST)
-From:   Jarkko Sonninen <kasper@iki.fi>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Date:   Sat,  8 Jul 2023 17:56:50 +0300
-Message-Id: <20230708145651.1860565-1-kasper@iki.fi>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ZJGduS4z5U65T7IL@hovoldconsulting.com>
-References: <ZJGduS4z5U65T7IL@hovoldconsulting.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A061601D9;
+        Sat,  8 Jul 2023 14:58:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27E4C433C8;
+        Sat,  8 Jul 2023 14:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688828337;
+        bh=zyiqPPttHrMHlfqAeF/jgSOrl93tlfuoWtOimapizvM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pfsUDIg9r/ySf0zzLHRL9AD6n9iQl5DVGNJRrW4R6Rp5Uor9UMFlaF9upF0YpDpYr
+         jQcy1Oilm/cgDpfkDLsdidk4JzXcsAm2slJuHKtlGKWViwhnGVTAtr3epbRrqKM8m3
+         3PNo7IeCnvsyPXydNOMLx31Rb/HpVskw+hNpw61rBV7kAQ/HC3xU6GJCdkyhQmUdxQ
+         Zfx96ZbAtO2LK/COeVMLXQdSBpQAhxk58fVZrAtMwguCDZRoHBhiFjjPk5min9J/vt
+         knCxtU7vcjpcKoZpGUfxs2MqLVlBhY46YtTbXFQbGhwd+HHz+20JzyAzRzRtqn6eei
+         V/rlQPcVtlZ5A==
+Date:   Sat, 8 Jul 2023 15:58:44 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jishnu Prakash <quic_jprakash@quicinc.com>
+Cc:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linus.walleij@linaro.org>,
+        <Jonathan.Cameron@huawei.com>, <sboyd@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <quic_subbaram@quicinc.com>,
+        <quic_collinsd@quicinc.com>, <quic_kamalw@quicinc.com>,
+        <quic_jestar@quicinc.com>, <marijn.suijten@somainline.org>,
+        <andriy.shevchenko@linux.intel.com>,
+        <krzysztof.kozlowski@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang Rui" <rui.zhang@intel.com>, "Luca Weiss" <luca@z3ntu.xyz>,
+        <linux-iio@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm-owner@vger.kernel.org>
+Subject: Re: [PATCH 01/11] iio: adc: Update bindings for ADC7 name used on
+ QCOM PMICs
+Message-ID: <20230708155844.31c55ca0@jic23-huawei>
+In-Reply-To: <20230708072835.3035398-2-quic_jprakash@quicinc.com>
+References: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
+        <20230708072835.3035398-2-quic_jprakash@quicinc.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exar devices like XR21B1411 can control an RS485 transceiver by
-automatically asserting the RTS#/RS485 pin before sending data
-and deasserting it when the last stop bit has been transmitted.
-The polarity of the RST#/RS485 signal is configurable and the
-hardware also supports half-duplex turn-around delay and
-address matching mode.
+On Sat, 8 Jul 2023 12:58:25 +0530
+Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
 
-Add support for enabling and disabling RS-485 mode and
-configuring the RST#/RS485 signal polarity using the TIOCGRS485
-and TIOCSRS485 ioctls. Support for half-duplex turn-around delay
-and address matching mode are left unimplemented for now.
+> The name used initially for this version of Qualcomm Technologies, Inc.
+> PMIC ADC was ADC7, following the convention of calling the PMIC generation
+> PMIC7. However, the names were later amended internally to ADC5 Gen2 and
+> PMIC5 Gen2. In addition, the latest PMIC generation now is known as
+> PMIC5 Gen3 with ADC5 Gen3 supported on it. With this addition, it makes more
+> sense to correct the name for this version of ADCs to ADC5 Gen2 from ADC7.
+> Since this affects ADC devices across some PMICs, update the names accordingly.
+> 
+> In order to avoid breaking the existing implementations of ADC7, add
+> support for ADC5 Gen2 first now and remove the ADC7 support in a later
+> patch.
+> 
+> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+Hi Jishnu.
 
-User enables RS-485 mode by setting SER_RS485_ENABLED flag in
-struct serial_rs485 flags. User should also set either
-SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND to select the
-behaviour of the RTS#/RS485 pin. Setting SER_RS485_RTS_AFTER_SEND
-will drive RTS#/RS485 high during transmission. As this is the
-typical application described by Exar, it is selected when
-user sets neither or both flags.
+Whilst I can appreciate why you've picked this particular approach to
+deal with the renames I'm not sure it's the smoothest path - or the
+easiest to review.
 
-Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
----
-Changes in v3:
- - In this version only rs485.flags are stored to state.
- - There is no locking as only one bit of the flags is used.
- - ioctl returns -ENOIOCTLCMD as the actual error handling is in tty code.
-Changes in v4:
- - Store struct rs485 to data
- - Add mutex to protect data->rs485.
- - Implement SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND flags
- - SER_RS485_RTS_ON_SEND is the default like in serial_core.c
-Change in v5:
- - Use tty->termios_rwsem semaphore instead of own mutex
- - Set SER_RS485_RTS_AFTER_SEND as the default
- - Fix XR_GPIO_MODE_RS485_TX_H setting with SER_RS485_RTS_ON_SEND
- - Add missing __user directives
- drivers/usb/serial/xr_serial.c | 90 +++++++++++++++++++++++++++++++++-
- 1 file changed, 89 insertions(+), 1 deletion(-)
+If doing a single patch for the complete rename was too much, perhaps
+doing one header (or if it makes sense set of headers)
+at a time would be easier to read?  With a final patch doing the compatible
+addition.  Maybe let's see what other reviewers think though.
 
-diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-index 4ec7c5892b84..6a5a70e77969 100644
---- a/drivers/usb/serial/xr_serial.c
-+++ b/drivers/usb/serial/xr_serial.c
-@@ -93,6 +93,7 @@ struct xr_txrx_clk_mask {
- #define XR_GPIO_MODE_SEL_DTR_DSR	0x2
- #define XR_GPIO_MODE_SEL_RS485		0x3
- #define XR_GPIO_MODE_SEL_RS485_ADDR	0x4
-+#define XR_GPIO_MODE_RS485_TX_H		0x8
- #define XR_GPIO_MODE_TX_TOGGLE		0x100
- #define XR_GPIO_MODE_RX_TOGGLE		0x200
- 
-@@ -237,6 +238,7 @@ static const struct xr_type xr_types[] = {
- struct xr_data {
- 	const struct xr_type *type;
- 	u8 channel;			/* zero-based index or interface number */
-+	struct serial_rs485 rs485;
- };
- 
- static int xr_set_reg(struct usb_serial_port *port, u8 channel, u16 reg, u16 val)
-@@ -629,6 +631,7 @@ static void xr_set_flow_mode(struct tty_struct *tty,
- 	struct xr_data *data = usb_get_serial_port_data(port);
- 	const struct xr_type *type = data->type;
- 	u16 flow, gpio_mode;
-+	bool rs485_enabled;
- 	int ret;
- 
- 	ret = xr_get_reg_uart(port, type->gpio_mode, &gpio_mode);
-@@ -645,7 +648,17 @@ static void xr_set_flow_mode(struct tty_struct *tty,
- 	/* Set GPIO mode for controlling the pins manually by default. */
- 	gpio_mode &= ~XR_GPIO_MODE_SEL_MASK;
- 
--	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
-+	rs485_enabled = !!(data->rs485.flags & SER_RS485_ENABLED);
-+	if (rs485_enabled) {
-+		dev_dbg(&port->dev, "Enabling RS-485\n");
-+		gpio_mode |= XR_GPIO_MODE_SEL_RS485;
-+		if (data->rs485.flags & SER_RS485_RTS_ON_SEND)
-+			gpio_mode &= ~XR_GPIO_MODE_RS485_TX_H;
-+		else
-+			gpio_mode |= XR_GPIO_MODE_RS485_TX_H;
-+	}
-+
-+	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0 && !rs485_enabled) {
- 		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
- 		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
- 		flow = XR_UART_FLOW_MODE_HW;
-@@ -809,6 +822,80 @@ static void xr_cdc_set_line_coding(struct tty_struct *tty,
- 	kfree(lc);
- }
- 
-+static void xr_sanitize_serial_rs485(struct serial_rs485 *rs485)
-+{
-+	if (!(rs485->flags & SER_RS485_ENABLED)) {
-+		memset(rs485, 0, sizeof(*rs485));
-+		return;
-+	}
-+
-+	/* Select RTS after send if the user hasn't selected the mode properly */
-+	if (!!(rs485->flags & SER_RS485_RTS_ON_SEND) ==
-+	    !!(rs485->flags & SER_RS485_RTS_AFTER_SEND)) {
-+		rs485->flags |= SER_RS485_RTS_AFTER_SEND;
-+		rs485->flags &= ~SER_RS485_RTS_ON_SEND;
-+	}
-+
-+	/* Only the flags are implemented at the moment */
-+	rs485->flags &= SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
-+			SER_RS485_RTS_AFTER_SEND;
-+	rs485->delay_rts_before_send = 0;
-+	rs485->delay_rts_after_send = 0;
-+	memset(rs485->padding, 0, sizeof(rs485->padding));
-+}
-+
-+static int xr_get_rs485_config(struct tty_struct *tty,
-+			       struct serial_rs485 __user *argp)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct xr_data *data = usb_get_serial_port_data(port);
-+
-+	down_read(&tty->termios_rwsem);
-+	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485))) {
-+		up_read(&tty->termios_rwsem);
-+		return -EFAULT;
-+	}
-+	up_read(&tty->termios_rwsem);
-+
-+	return 0;
-+}
-+
-+static int xr_set_rs485_config(struct tty_struct *tty,
-+			       struct serial_rs485 __user *argp)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct xr_data *data = usb_get_serial_port_data(port);
-+	struct serial_rs485 rs485;
-+
-+	if (copy_from_user(&rs485, argp, sizeof(rs485)))
-+		return -EFAULT;
-+	xr_sanitize_serial_rs485(&rs485);
-+
-+	down_write(&tty->termios_rwsem);
-+	data->rs485 = rs485;
-+	xr_set_flow_mode(tty, port, NULL);
-+	up_write(&tty->termios_rwsem);
-+
-+	if (copy_to_user(argp, &rs485, sizeof(rs485)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+static int xr_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
-+{
-+	void __user *argp = (void __user *)arg;
-+
-+	switch (cmd) {
-+	case TIOCGRS485:
-+		return xr_get_rs485_config(tty, argp);
-+	case TIOCSRS485:
-+		return xr_set_rs485_config(tty, argp);
-+	}
-+
-+	return -ENOIOCTLCMD;
-+}
-+
- static void xr_set_termios(struct tty_struct *tty,
- 			   struct usb_serial_port *port,
- 			   const struct ktermios *old_termios)
-@@ -1010,6 +1097,7 @@ static struct usb_serial_driver xr_device = {
- 	.set_termios		= xr_set_termios,
- 	.tiocmget		= xr_tiocmget,
- 	.tiocmset		= xr_tiocmset,
-+	.ioctl			= xr_ioctl,
- 	.dtr_rts		= xr_dtr_rts
- };
- 
--- 
-2.34.1
+A few other comments inline,
+
+Jonathan
+
+
+> ---
+>  .../bindings/iio/adc/qcom,spmi-vadc.yaml      | 21 +++--
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 16 ++--
+>  .../iio/qcom,spmi-adc5-gen2-pm8350.h          | 64 +++++++++++++
+>  .../iio/qcom,spmi-adc5-gen2-pm8350b.h         | 89 +++++++++++++++++++
+>  .../iio/qcom,spmi-adc5-gen2-pmk8350.h         | 47 ++++++++++
+>  .../iio/qcom,spmi-adc5-gen2-pmr735a.h         | 29 ++++++
+>  .../iio/qcom,spmi-adc5-gen2-pmr735b.h         | 28 ++++++
+>  include/dt-bindings/iio/qcom,spmi-vadc.h      | 77 ++++++++++++++++
+>  8 files changed, 354 insertions(+), 17 deletions(-)
+>  create mode 100644 include/dt-bindings/iio/qcom,spmi-adc5-gen2-pm8350.h
+>  create mode 100644 include/dt-bindings/iio/qcom,spmi-adc5-gen2-pm8350b.h
+>  create mode 100644 include/dt-bindings/iio/qcom,spmi-adc5-gen2-pmk8350.h
+>  create mode 100644 include/dt-bindings/iio/qcom,spmi-adc5-gen2-pmr735a.h
+>  create mode 100644 include/dt-bindings/iio/qcom,spmi-adc5-gen2-pmr735b.h
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> index ad7d6fc49de5..f886977de165 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> @@ -13,7 +13,7 @@ maintainers:
+>  description: |
+>    SPMI PMIC voltage ADC (VADC) provides interface to clients to read
+>    voltage. The VADC is a 15-bit sigma-delta ADC.
+> -  SPMI PMIC5/PMIC7 voltage ADC (ADC) provides interface to clients to read
+> +  SPMI PMIC5/PMIC5 Gen2 voltage ADC (ADC) provides interface to clients to read
+>    voltage. The VADC is a 16-bit sigma-delta ADC.
+>  
+>  properties:
+> @@ -27,6 +27,7 @@ properties:
+>            - qcom,spmi-adc5
+>            - qcom,spmi-adc-rev2
+>            - qcom,spmi-adc7
+> +          - qcom,spmi-adc5-gen2
+
+Alphabetical order (roughly given currently list). So I'd stick 
+this after qcom,spmi-adc5
+
+>  
+>    reg:
+>      description: VADC base address in the SPMI PMIC register map
+> @@ -71,7 +72,7 @@ patternProperties:
+>          description: |
+>            ADC channel number.
+>            See include/dt-bindings/iio/qcom,spmi-vadc.h
+> -          For PMIC7 ADC, the channel numbers are specified separately per PMIC
+> +          For PMIC5 Gen2 ADC, the channel numbers are specified separately per PMIC
+>            in the PMIC-specific files in include/dt-bindings/iio/.
+>  
+>        label:
+> @@ -114,7 +115,7 @@ patternProperties:
+>                channel calibration. If property is not found, channel will be
+>                calibrated with 0.625V and 1.25V reference channels, also
+>                known as absolute calibration.
+> -            - For compatible property "qcom,spmi-adc5", "qcom,spmi-adc7" and
+> +            - For compatible property "qcom,spmi-adc5", "qcom,spmi-adc5-gen2" and
+>                "qcom,spmi-adc-rev2", if this property is specified VADC will use
+>                the VDD reference (1.875V) and GND for channel calibration. If
+>                property is not found, channel will be calibrated with 0V and 1.25V
+> @@ -213,7 +214,9 @@ allOf:
+>        properties:
+>          compatible:
+>            contains:
+> -            const: qcom,spmi-adc7
+> +            enum :
+> +                - qcom,spmi-adc7
+
+There is a deprecated marking for dt-bindings. Might be good to use it here.
+
+> +                - qcom,spmi-adc5-gen2
+>  
+>      then:
+>        patternProperties:
+> @@ -277,8 +280,8 @@ examples:
+>      };
+>U>;
+> +                io-channels = <&pmk8350_vadc PMK8350_ADC5_GEN2_AMUX_THM1_100K_PU>;
+>                  qcom,decimation = <340>;
+>                  qcom,ratiometric;
+>                  qcom,hw-settle-time-us = <200>;
+> @@ -251,7 +251,7 @@ examples:
+>  
+>              conn-therm@1 {
+>                  reg = <1>;
+> -                io-channels = <&pmk8350_vadc PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
+> +                io-channels = <&pmk8350_vadc PM8350_ADC5_GEN2_AMUX_THM4_100K_PU(1)>;
+>                  qcom,avg-samples = <2>;
+>                  qcom,ratiometric;
+>                  qcom,hw-settle-time-us = <200>;
+
+
 
