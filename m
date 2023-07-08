@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A27474BB84
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 05:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C6974BB85
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 05:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjGHDC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 23:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S232941AbjGHDEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 23:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjGHDC4 (ORCPT
+        with ESMTP id S229675AbjGHDET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 23:02:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09FB1FEA;
-        Fri,  7 Jul 2023 20:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=q+fKJg6HR9afiGS5ZVUkMqH6jNo2B3LjnZTFJ0ksF7M=; b=p0hZbb6jEJgI7kz5GD5aPJTIxg
-        K5qlyeCab9L4xSs9SSpGF/0EgO6mRhDnh6fMTuGwZirQheHjG1QlF5eQW1cz44VptHS+NkRdfsEgW
-        NJJ88fZhRgWzwCFs6xpd1RoiueA2g1RFFtoWWtVzgz9J+IEcVN9hfuy1Pfz3rZgdGSXpwqEQOX+aE
-        kdZhFhKKxeGag+JOx6+HhToNSPjduhdgq0HEnCLJgtESF60hImYhtoRiao63uC1W5Osk/o9CM7Kho
-        2Ix3ZXTslu4bFUDZ8N/qkOkkVVWFoTEbv8TZgE1ig0n8rTHDOA+8vNpGi19/0JkBqS0XJotkJiUnJ
-        kINsSWZw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHyDl-006Oo9-1m;
-        Sat, 08 Jul 2023 03:02:53 +0000
-Message-ID: <d1b35a5b-a061-a6c0-5898-aaaad3dd4986@infradead.org>
-Date:   Fri, 7 Jul 2023 20:02:52 -0700
+        Fri, 7 Jul 2023 23:04:19 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F68D1BDB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 20:04:18 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so28067145e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 20:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688785457; x=1691377457;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FsK2X5Mi4VaOfX4KhvaFuW1M9mUzdFAp+0gGgg3mXQM=;
+        b=RpH0HZmWgIVcQSeBvJXl/PSJNrQ8wdXr2kDeU3tw8ebfDYoia/IqFvIBFbVeb9y8IJ
+         Zcy806Hmxrt/RrSTcB8IwUlt5rebFkh+u3jFtKlmmc9L5S0Vfhto5Mao+6iar90tHb/v
+         Y1Gsm2ZJQhPJfJZ8sXMdqoN/6fYwYbPuT7K7+/9qKkZRM026OaHO0AHPNxJvLESJBafd
+         Egj9bhWJJnfKUCsDDG3cb1RecceS8WNhKWeWVlOuPAuFOQf3WkyyOH8fyfPSxCvYwtoK
+         YbYd1dRRzVcQ+1YJoNFQvjjZukVmV2+SSr/yn7bIxmaj8f5i2NVq85LJixfNy1jHe7XL
+         6k8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688785457; x=1691377457;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FsK2X5Mi4VaOfX4KhvaFuW1M9mUzdFAp+0gGgg3mXQM=;
+        b=S7bs/btiCcH21uCe4rj06S4PGqZA4ZCjtiiXQqH9WdvnirJdmEr0Yel6uv/9Usr/SA
+         8mvtjmslY+kjeIBcXvaKWx6Eb4AOmGBOUTCqPEH+MZ4Aq9mAo71cDuhuJqHH4Y+fIYO3
+         jAetRRm0cYcBCEVXsFP5wvS/yi59sbrqNn4lY0ov4sE6Gn3HaMmEywsAcVKY0e5XLmtP
+         tvOx0rOXTb4j6dbk2Nb/P2rJ+XEP9ETaa8oro+DHEjXyEZWsgJpKiSimx+02YmK3tq0I
+         Q8GJ5NEhwIU5BbFf462lMdG6Weu4lgHUYGtVVsP88cs6AtPOhPt6oE4QtNwfV4XJ2dS8
+         0b9w==
+X-Gm-Message-State: ABy/qLbT5bFYmGmLijPyXYjH+okIuUzPypsjlb9j+A92qVMyD67EI5bM
+        H0spXnlAu7ceTFXgpvK4asnwHC+OYAjM5oNw6rOd4w==
+X-Google-Smtp-Source: APBJJlHyrMBQ4oDOG1/I261/e9nCarKyLKdj6vxCkIjkby4/wtevtnk/4rpSHeC4yLj7JdHbyO85En3DatZNntn/8yw=
+X-Received: by 2002:a1c:7416:0:b0:3fb:b3aa:1c88 with SMTP id
+ p22-20020a1c7416000000b003fbb3aa1c88mr774777wmc.26.1688785456793; Fri, 07 Jul
+ 2023 20:04:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 4/4] RISC-V: mm: Document mmap changes
-Content-Language: en-US
-To:     Charlie Jenkins <charlie@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     conor@kernel.org, paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com
-References: <20230708011156.2697409-1-charlie@rivosinc.com>
- <20230708011156.2697409-5-charlie@rivosinc.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230708011156.2697409-5-charlie@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20230705114251.661-1-cuiyunhui@bytedance.com> <20230705114251.661-5-cuiyunhui@bytedance.com>
+ <20230707-brigade-myth-86ee252b2e4a@spud> <CAN3iYbP_dQOOJKLjAf+pVeYUZRBqwZBG7eq6=pR0upsjT2GpOA@mail.gmail.com>
+In-Reply-To: <CAN3iYbP_dQOOJKLjAf+pVeYUZRBqwZBG7eq6=pR0upsjT2GpOA@mail.gmail.com>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Sat, 8 Jul 2023 11:04:05 +0800
+Message-ID: <CAEEQ3wkgxagOPYrg3g8apLHHDOcAR3hFKpHA3ZQDm9PKvO1xUg@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v3 4/4] dt-bindings: firmware: Document
+ ffitbl binding
+To:     =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>
+Cc:     Conor Dooley <conor@kernel.org>, sunilvl@ventanamicro.com,
+        ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, weidong.wd@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,53 +78,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Hi Conor,
 
-On 7/7/23 18:11, Charlie Jenkins wrote:
-> The behavior of mmap is modified with this patch series, so explain the
-> changes to the mmap hint address behavior.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  Documentation/riscv/vm-layout.rst | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-> index 5462c84f4723..8141addbf888 100644
-> --- a/Documentation/riscv/vm-layout.rst
-> +++ b/Documentation/riscv/vm-layout.rst
-> @@ -133,3 +133,25 @@ RISC-V Linux Kernel SV57
->     ffffffff00000000 |  -4     GB | ffffffff7fffffff |    2 GB | modules, BPF
->     ffffffff80000000 |  -2     GB | ffffffffffffffff |    2 GB | kernel
->    __________________|____________|__________________|_________|____________________________________________________________
-> +
-> +
-> +Userspace VAs
-> +--------------------
-> +To maintain compatibility with software that relies on the VA space with a
-> +maximum of 48 bits the kernel will, by default, return virtual addresses to
-> +userspace from a 48-bit range (sv48). This default behavior is achieved by
-> +passing 0 into the hint address parameter of mmap. On CPUs with an address space
-> +smaller than sv48, the CPU maximum supported address space will be the default.
-> +
-> +Software can "opt-in" to receiving VAs from other VA space by providing
+On Sat, Jul 8, 2023 at 12:53=E2=80=AFAM =E8=91=9B=E5=A3=AB=E5=BB=BA <geshij=
+ian@bytedance.com> wrote:
+>
+>
+>
+>
+> On Sat, Jul 8, 2023 at 12:16=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
+rote:
+>>
+>> Hey,
+>>
+>> On Wed, Jul 05, 2023 at 07:42:51PM +0800, Yunhui Cui wrote:
+>> > Add the description for ffitbl subnode.
+>> >
+>> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+>> > ---
+>> >  .../devicetree/bindings/firmware/ffitbl.txt   | 27 ++++++++++++++++++=
++
+>> >  MAINTAINERS                                   |  1 +
+>> >  2 files changed, 28 insertions(+)
+>> >  create mode 100644 Documentation/devicetree/bindings/firmware/ffitbl.=
+txt
+>> >
+>> > diff --git a/Documentation/devicetree/bindings/firmware/ffitbl.txt b/D=
+ocumentation/devicetree/bindings/firmware/ffitbl.txt
+>> > new file mode 100644
+>> > index 000000000000..c42368626199
+>> > --- /dev/null
+>> > +++ b/Documentation/devicetree/bindings/firmware/ffitbl.txt
+>> > @@ -0,0 +1,27 @@
+>> > +FFI(FDT FIRMWARE INTERFACE) driver
+>> > +
+>> > +Required properties:
+>> > + - entry             : acpi or smbios root pointer, u64
+>> > + - reg                       : acpi or smbios version, u32
+>> > +
+>> > +Some bootloaders, such as Coreboot do not support EFI,
+>> > +only devicetree and some arches do not have a reserved
+>> > +address segment. Add "ffitbl" subnode to obtain ACPI RSDP
+>> > +and SMBIOS entry.
+>>
+>> Since the conversation on this stuff all seems to be going absolutely
+>> nowhere, the ACPI portion of this is intended for use on RISC-V in
+>> violation of the RISC-V ACPI specs. It also goes against the
+>> requirements of the platform spec. Quoting from [1]:
+>>
+>> | > Just so we're all on the same page, I just now asked Mark Himelstein
+>> | > of RISC-V International if there is anything in RISC-V standards tha=
+t
+>> | > requires UEFI, and the answer is a solid "no."
+>> |
+>> | Huh? Firstly, running off to invoke RVI is not productive - they don't
+>> | maintain the various operating system kernels etc.
+>> | Secondly, that does not seem to be true. The platform spec mandates UE=
+FI
+>> | for the OS-A server platform, alongside ACPI:
+>> | https://github.com/riscv/riscv-platform-specs/blob/main/riscv-platform=
+-spec.adoc#32-boot-process
+>> | and the OS-A embedded platform needs to comply with EBBR & use DT:
+>> | https://github.com/riscv/riscv-platform-specs/blob/main/riscv-platform=
+-spec.adoc#32-boot-process
+>> |
+>> | EBBR does say that systems must not provide both ACPI and DT to the OS
+>> | loader, but I am far from an expert on these kind of things & am not
+>> | sure where something like this where the DT "contains" ACPI would stan=
+d.
+>> |
+>> | The RISC-V ACPI spec also says "UEFI firmware is mandatory to support
+>> | ACPI":
+>> | https://github.com/riscv-non-isa/riscv-acpi/blob/master/riscv-acpi-gui=
+dance.adoc
+>
+>  UEFI firmware is mandatory to support ACPI and coreboot is an option to =
+support ACPI as well. i think it works well for both, I don't think UEFI an=
+d ACPI need to be binding together, each UEFI and ACPI also works well with=
+ other solutions.
 
-                                          from another VA space
-or
-                                          from other VA spaces
-I prefer the first one.
+Thanks for shijian(Nill)'s suggestions.
 
-> +a hint address to mmap. A call to mmap is guaranteed to return an address
-> +that will not override the unset left-aligned bits in the hint address,
-> +unless there is no space left in the address space. If there is no space
-> +available in the requested address space, an address in the next smallest
-> +available address space will be returned.
-> +
-> +For example, in order to obtain 48-bit VA space, a hint address greater than
-> +:code:`1 << 38` must be provided. Note that this is 38 due to sv39 userspace
-> +ending at :code:`1 << 38` and the addresses beyond this are reserved for the
-> +kernel. Similarly, to obtain 57-bit VA space addresses, a hint address greater
-> +than or equal to :code:`1 << 47` must be provided.
+Hi Conor,
+Thank you very much for your valuable comments on this set of patch
+codes, which are very helpful.
 
--- 
-~Randy
+Judging from the current specifications, maybe yes, you can NACK, but
+it's better not to rush to conclusions.
+The so-called specifications represent the ideas of FFI opponents.
+What we have to do is to discuss with them and get an effective
+consensus, so as to achieve the purpose of updating the specification.
+
+>>
+>>
+>>
+>> NAKed-by: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Cheers,
+>> Conor.
+>>
+>> [1] - https://lore.kernel.org/linux-riscv/20230707-attach-conjuror-306d9=
+67347ce@wendy/
+
+Thanks,
+Yunhui
