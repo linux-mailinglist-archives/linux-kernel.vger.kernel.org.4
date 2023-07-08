@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0764174BA72
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090E374BA6F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbjGHAHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 20:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S232724AbjGHAH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 20:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232730AbjGHAHb (ORCPT
+        with ESMTP id S232438AbjGHAHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 20:07:31 -0400
+        Fri, 7 Jul 2023 20:07:25 -0400
 Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AE7131
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 17:07:29 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso3854526e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 17:07:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A44C1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 17:07:24 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb863edcb6so4038270e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 17:07:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688774848; x=1691366848;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KE9Cw62WlLN5tGDQEG2KXlZYlpSw2T4lzA0FCYw64H0=;
-        b=OSrn/4aJz295SutPCY58T8kNFD0ZeiUDY+OYH7DijkWBlnGIEEYDVTjrphYujv8L/C
-         VpkbQYYFwXBapBTh3WJMOhE3gk8gm8Z45MHfx3iujKO35IBU3OkCH9kHst4F9nJGuHs3
-         waDSW/izGakNypnv3ecOWKb+nLA3Loxu0nsnk=
+        d=linaro.org; s=google; t=1688774843; x=1691366843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CLt63cNfTOHwnk/8YjxdfGjECIo1obJeTRgBrDNQw4g=;
+        b=TsMiWw57CK/WW1zqiQCs0o34jJvhwKzckDpp5bJRVvuXb8/gcLg2g2BuMsMiIS3u8H
+         XtsNZvF2SiMjNifAvdpoZI1pAOleYRqddKVHMMzc6MPYaAzbRIsREnEt7ifoMeYld2hH
+         nNt7pzmP1rd/P5ovrP7fiVZjBoRDBBgihyjvmCML0ajc+Ve4EgtnR1AEa1J6i0HBWewg
+         UwdZF8QrJ8LxP7tXJLlA4mb5kVlx1/q8SIaoDkqJU4LBqqbZyvCWQtdHZw3zdfUtYDtm
+         XiOe6xC3gdG1glErYbzWuL9yQ4yOl8kNj+cSR/mmZh0h1xKhzOY0g/Wm1HCCPQSkRPOG
+         Q34w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688774848; x=1691366848;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KE9Cw62WlLN5tGDQEG2KXlZYlpSw2T4lzA0FCYw64H0=;
-        b=YSd2dCpIuLx4dTop1F1EGrFv4FmddwDrDKUufFNL+6YzV1f4oS7kAAnSSZVMcOHb59
-         7lL3FgwqyCHEruS4rNwsOWZ1s9ihXLKf19WyJdFUpqaHCQtHwoMMfUxq4WeYUl4pGlr4
-         S1RT8I113+qf/g3fnFHh/x1FDY3LAeqM/N4DTEtCmcLcZy6B3vlwVFX+1JqifphcKqLy
-         zsoxAu8nIAJ9fk5jue5BWt/ysBOaVbW73qtPme5Gvyzyc6oZ/smiSayEJ++BlzTxfORz
-         vdjFHWCEj1CtPYM4oh+xycjDuMB6aSMKD5M9oDHvS8dJLjxCSvqPF1Uvh6T55zlWnQQO
-         bhYA==
-X-Gm-Message-State: ABy/qLYsH+n7PIQJmaRZlUN6g5grCQCnqQhXVR7scbNflPaZfWBiqIEm
-        s4cJoz5dWVIvx14z07+sg6Mop3NFxiE8he1t7pkEEK+1
-X-Google-Smtp-Source: APBJJlECKRLe98pWqzLUQic7jDtEclPuSrvP0iRxZttMi3Q5Hi+kl/9qlaL36U9ErC2oKc3jYbOM4g==
-X-Received: by 2002:a19:4f10:0:b0:4fb:7c40:9f97 with SMTP id d16-20020a194f10000000b004fb7c409f97mr4546991lfb.27.1688774847930;
-        Fri, 07 Jul 2023 17:07:27 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id n14-20020ac2490e000000b004f85d247069sm846761lfi.218.2023.07.07.17.07.27
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1688774843; x=1691366843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CLt63cNfTOHwnk/8YjxdfGjECIo1obJeTRgBrDNQw4g=;
+        b=i94gaug4hkw0FNPQlGNFAAnfXKL9uG1h7o1HZbMks+xwHwHKXLlTBdObgRazB/KAn8
+         ce50M4hKRDkDC+ttzImKyFS++sH0a4mH4t+4klNuvc034Mz+JPMC0P+NgX6qnmlwcM/8
+         qpIuKvy0qWknbJ9pyFn16Qjj9+CYMszE8cEXGsGqNjH05zytiozZCjm4WyACOo4x3ZR0
+         t59vhaTXGUEPFNs5IGPwJtj/2paIo8EF5DiUflyN+xiEQOrRAV9ObBqgEt+NaO/0Nffs
+         B0Nrok3Rt6Q1esXtp+j3p8OL6jEQZ35b+PSvi0Tn4cR9n0nKDn1RwbISq9x6Okx28Qvs
+         EiLw==
+X-Gm-Message-State: ABy/qLYGjx8k7cAeLhn395etRliUPE7u/u9QeMAGibvMCHXfZcRLjGbf
+        A7Jvmw/CnhvDx0LophDy6I06rQ==
+X-Google-Smtp-Source: APBJJlFiIH+YImiq0+UkzUR5N2zGiuktwPtPxkgVv/DDbfGw9WFNLBhG0plZ3szl2fD8O+goMG8VJQ==
+X-Received: by 2002:a05:6512:1310:b0:4f1:3d7d:409e with SMTP id x16-20020a056512131000b004f13d7d409emr5608203lfu.0.1688774842857;
+        Fri, 07 Jul 2023 17:07:22 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id eo25-20020a056512481900b004fb85ffc82csm853085lfb.10.2023.07.07.17.07.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 17:07:27 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so40110151fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 17:07:27 -0700 (PDT)
-X-Received: by 2002:a2e:880a:0:b0:2b6:cc93:4ecb with SMTP id
- x10-20020a2e880a000000b002b6cc934ecbmr5251360ljh.43.1688774846751; Fri, 07
- Jul 2023 17:07:26 -0700 (PDT)
+        Fri, 07 Jul 2023 17:07:22 -0700 (PDT)
+Message-ID: <a9cb7147-613e-8b1a-14c5-bbac6bb24a1a@linaro.org>
+Date:   Sat, 8 Jul 2023 03:07:21 +0300
 MIME-Version: 1.0
-References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
- <20230626-vorverlegen-setzen-c7f96e10df34@brauner> <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
- <20230626-fazit-campen-d54e428aa4d6@brauner> <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
- <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com> <ZKinHejv+xBq+gti@casper.infradead.org>
-In-Reply-To: <ZKinHejv+xBq+gti@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Jul 2023 17:07:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjJ8YP4wswYCC8X2o68vFeVzLesXbW-QdUgzzOZKaHJQw@mail.gmail.com>
-Message-ID: <CAHk-=wjJ8YP4wswYCC8X2o68vFeVzLesXbW-QdUgzzOZKaHJQw@mail.gmail.com>
-Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
- forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read side?)
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 3/5] drm/msm/dp: delete EV_HPD_INIT_SETUP
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+ <1688773943-3887-4-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1688773943-3887-4-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 at 17:00, Matthew Wilcox <willy@infradead.org> wrote:
->
-> Do we really want interruptible here rather than killable?
+On 08/07/2023 02:52, Kuogee Hsieh wrote:
+> EV_HPD_INIT_SETUP flag is used to trigger the initialization of external
+> DP host controller. Since external DP host controller initialization had
+> been incorporated into pm_runtime_resume(), this flag become obsolete.
+> Lets get rid of it.
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 12 ------------
+>   1 file changed, 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 2c5706a..44580c2 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -55,7 +55,6 @@ enum {
+>   enum {
+>   	EV_NO_EVENT,
+>   	/* hpd events */
+> -	EV_HPD_INIT_SETUP,
+>   	EV_HPD_PLUG_INT,
+>   	EV_IRQ_HPD_INT,
+>   	EV_HPD_UNPLUG_INT,
+> @@ -1119,9 +1118,6 @@ static int hpd_event_thread(void *data)
+>   		spin_unlock_irqrestore(&dp_priv->event_lock, flag);
+>   
+>   		switch (todo->event_id) {
+> -		case EV_HPD_INIT_SETUP:
+> -			dp_display_host_init(dp_priv);
+> -			break;
+>   		case EV_HPD_PLUG_INT:
+>   			dp_hpd_plug_handle(dp_priv, todo->data);
+>   			break;
+> @@ -1483,15 +1479,7 @@ void __exit msm_dp_unregister(void)
+>   
+>   void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>   {
+> -	struct dp_display_private *dp;
+> -
+> -	if (!dp_display)
+> -		return;
+> -
+> -	dp = container_of(dp_display, struct dp_display_private, dp_display);
+>   
+> -	if (!dp_display->is_edp)
+> -		dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
+>   }
 
-Yes, we actually do need to be just regular interruptible,
+Why do you keep an empty function?
 
-This is a bog-standard "IO to/from pipe" situation, which is interruptible.
+>   
+>   bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
 
-> That is, do we want SIGWINCH or SIGALRM to result in a short read?
+-- 
+With best wishes
+Dmitry
 
-Now, that's a different issue, and is actually handled by the signal
-layer: a signal that is ignored (where "ignored" includes the case of
-"default handler") will be dropped early, exactly because we don't
-want to interrupt things like tty or pipe reads when you resize the
-window.
-
-Of course, if you actually *catch* SIGWINCH, then you will get that
-short read on a window change.
-
-           Linus
