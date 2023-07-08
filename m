@@ -2,190 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BBC74BD94
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 15:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B184174BD95
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 15:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjGHNMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 09:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S230008AbjGHNQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 09:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjGHNMd (ORCPT
+        with ESMTP id S229462AbjGHNQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 09:12:33 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A64EE55
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 06:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688821952; x=1720357952;
-  h=date:from:to:cc:subject:message-id;
-  bh=OhnAeDu/8UBlMAUF+IPmagfhEqXgHcmk7OlA+XKKXRI=;
-  b=TI/Uc8jcLAdDh6adjgRdDNPdOHQyzaCOOXZITHE7jm2vLshLu8f6lzJn
-   4wT7u6fYaFrUu/d0N0b1FH/qtBi3wCPoQsvgm8xvLBbhOxa1is2A+ymYB
-   qjvmN1LvgL7X8eJ8KFut92ABZ2eCvhbmpDom5PxtaoBdvVTeXHDMhA5I5
-   RVWqkOyyDG/JrCr2CrgBuPEUc/VqIbSII3mxVqOBHRDdY7SONpQBXPkqw
-   HYMjxDlFSZHRD3sJLiD//U+SV22MFvQj7tZuOZeXfe1Ri15e5K2JvYOAZ
-   qDZ58kQ0RVCUrkZjGkRBsnOPZziQp9LkSJOr7os+5prOR/wscGeb7wj+F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10765"; a="353911251"
-X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="353911251"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2023 06:12:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10765"; a="966912433"
-X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
-   d="scan'208";a="966912433"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jul 2023 06:12:27 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qI7jf-0002j5-0h;
-        Sat, 08 Jul 2023 13:12:27 +0000
-Date:   Sat, 08 Jul 2023 21:12:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.06.21a] BUILD SUCCESS
- 933d3bf8f96d7cedf78081030e004d23aee2b56c
-Message-ID: <202307082113.Qw2fQmSh-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 8 Jul 2023 09:16:02 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456FFE55
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 06:16:01 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id I7mwqrPmVn02aI7mwqEG5C; Sat, 08 Jul 2023 15:15:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1688822158;
+        bh=MtFS4H/mvjYBQ6kD2sk3yhpdjTWzlyIwy/D4XqevP4Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=HeBBJKpw7QjGeqAKXjtW9K+A/j1qxIyP4Z1zGSbXu9RowIPmKLtfnvwiQ4OA7fYT+
+         ynZxJA4onQ2YKhyb2xx+aT2meliqLoHnzUUHi5QZy3USNLU9R9p0vcxkFUeAdvycj7
+         NvZqTPJS+7tvbnFvywGvWqICUwGihsuOJc5m2FeqkJQdL5mdY1hW20VbH5uiZlYlyV
+         0Alv1EguSOV8CKnXcxwzuD8C3uFNV5vXWtKm8l93lwbM2U3FJQEQxrWiR3syveFvca
+         2+5Jt9+YuYoMUgm9iQ6y8Kol3EeLVXZzA1UVQz36sGSJeraBfjmFBNYGehCksSPzlB
+         jCdWdxt20YoTg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 08 Jul 2023 15:15:58 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <19369234-8785-575b-ff24-9a21a9e82f0e@wanadoo.fr>
+Date:   Sat, 8 Jul 2023 15:15:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: RE: [PATCH net v2 1/2] net: ll_temac: Fix DMA resources leak
+To:     "Katakam, Harini" <harini.katakam@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonas Suhr Christensen <jsc@umbraculum.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Haoyue Xu <xuhaoyue1@hisilicon.com>,
+        huangjunxian <huangjunxian6@hisilicon.com>,
+        Wang Qing <wangqing@vivo.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Esben Haabendal <esben@geanix.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Neeli, Srinivas" <srinivas.neeli@amd.com>
+References: <20230205201130.11303-1-jsc@umbraculum.org>
+ <20230205201130.11303-2-jsc@umbraculum.org>
+ <5314e0ba3a728787299ca46a60b0a2da5e8ab23a.camel@redhat.com>
+ <135b671b1b76978fb147d5fee1e1b922e2c61f26.camel@redhat.com>
+ <20230207104204.200da48a@kernel.org>
+ <bd639016-8a9c-4479-83b4-32306ad734ac@app.fastmail.com>
+ <20230313114858.54828dda@kernel.org>
+ <BYAPR12MB47736214A6B4AAF524752A8B9EBE9@BYAPR12MB4773.namprd12.prod.outlook.com>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <BYAPR12MB47736214A6B4AAF524752A8B9EBE9@BYAPR12MB4773.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.06.21a
-branch HEAD: 933d3bf8f96d7cedf78081030e004d23aee2b56c  refscale: Fix uninitalized use of wait_queue_head_t
+Le 14/03/2023 à 06:15, Katakam, Harini a écrit :
+> Hi Jakub, Jonas,
+> 
+>> -----Original Message-----
+>> From: Jakub Kicinski <kuba@kernel.org>
+>> Sent: Tuesday, March 14, 2023 12:19 AM
+>> To: Jonas Suhr Christensen <jsc@umbraculum.org>; Katakam, Harini
+>> <harini.katakam@amd.com>
+>> Cc: Paolo Abeni <pabeni@redhat.com>; netdev@vger.kernel.org; David S.
+>> Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
+>> Michal Simek <michal.simek@xilinx.com>; Haoyue Xu
+>> <xuhaoyue1@hisilicon.com>; huangjunxian <huangjunxian6@hisilicon.com>;
+>> Wang Qing <wangqing@vivo.com>; Yang Yingliang
+>> <yangyingliang@huawei.com>; Esben Haabendal <esben@geanix.com>;
+>> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH net v2 1/2] net: ll_temac: Fix DMA resources leak
+>>
+>> On Mon, 13 Mar 2023 19:37:00 +0100 Jonas Suhr Christensen wrote:
+>>> On Tue, Feb 7, 2023, at 19:42, Jakub Kicinski wrote:
+>>>> On Tue, 07 Feb 2023 12:36:11 +0100 Paolo Abeni wrote:
+>>>>> You can either try change to phys type to __be32 (likely not
+>>>>> suitable for -net and possibly can introduce even more warnings
+>>>>> elsewhere)
+>>>>
+>>>> FWIW that seems like the best option to me as well. Let's ignore the
+>>>> sparse warning for v3 and try to switch phys to __be32 in a separate
+>>>> patch for net-next. No point adding force casts just to have to
+>>>> remove them a week later, given how prevalent the problem is.
+>>>>
+>>>>> or explicitly cast the argument.
+>>>
+>>> I no longer have access to the hardware, so I'm not rewriting the
+>>> batch. Feel free to take ownership of it and fix what's needed.
+>>
+>> Ack.
+>>
+>> Harini, are you the designated maintainer for this driver? Could you add a
+>> MAINTAINERS entry for it? I don't see one right now.
+>> And possibly pick up these patches / fix the problem, if you have the cycles?
+> 
+> Sure, Srinivas (cced) will pick up this series and send a v3.
+> I'll get back on the state of this IP/driver for the maintainers list. Will include
+> that patch in the beginning of the series as well.
+> 
+> Regards,
+> Harini
+> 
 
-elapsed time: 788m
+Hi,
 
-configs tested: 112
-configs skipped: 17
+this patch, or an updated version, has not reached -next yet.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Does someone still working on it, or did it got lost?
 
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r032-20230708   gcc  
-alpha                randconfig-r034-20230708   gcc  
-arc                                 defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                  randconfig-r043-20230708   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                     am200epdkit_defconfig   clang
-arm                                 defconfig   gcc  
-arm                      footbridge_defconfig   gcc  
-arm                         lpc18xx_defconfig   gcc  
-arm                  randconfig-r012-20230708   clang
-arm                  randconfig-r022-20230707   gcc  
-arm                  randconfig-r046-20230708   clang
-arm                        spear6xx_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r013-20230708   clang
-hexagon              randconfig-r041-20230708   clang
-hexagon              randconfig-r045-20230708   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230707   gcc  
-i386         buildonly-randconfig-r005-20230707   gcc  
-i386         buildonly-randconfig-r006-20230707   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230708   clang
-i386                 randconfig-i002-20230708   clang
-i386                 randconfig-i003-20230708   clang
-i386                 randconfig-i004-20230708   clang
-i386                 randconfig-i005-20230708   clang
-i386                 randconfig-i006-20230708   clang
-i386                 randconfig-i011-20230708   gcc  
-i386                 randconfig-i012-20230708   gcc  
-i386                 randconfig-i013-20230708   gcc  
-i386                 randconfig-i014-20230708   gcc  
-i386                 randconfig-i015-20230708   gcc  
-i386                 randconfig-i016-20230708   gcc  
-i386                 randconfig-r024-20230707   clang
-i386                 randconfig-r025-20230707   clang
-i386                 randconfig-r036-20230708   clang
-loongarch            randconfig-r005-20230708   gcc  
-m68k                             allmodconfig   gcc  
-m68k                       m5475evb_defconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r016-20230708   gcc  
-nios2                randconfig-r031-20230708   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                     akebono_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc                      mgcoge_defconfig   gcc  
-powerpc                     mpc512x_defconfig   clang
-powerpc                    mvme5100_defconfig   clang
-powerpc              randconfig-r003-20230708   clang
-powerpc                    socrates_defconfig   clang
-powerpc                     tqm8560_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r015-20230708   gcc  
-riscv                randconfig-r026-20230707   clang
-riscv                randconfig-r042-20230708   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230708   gcc  
-sh                               allmodconfig   gcc  
-sh                            hp6xx_defconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                   randconfig-r035-20230708   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r001-20230708   gcc  
-sparc                randconfig-r014-20230708   gcc  
-sparc                randconfig-r023-20230707   gcc  
-sparc64              randconfig-r004-20230708   gcc  
-sparc64              randconfig-r006-20230708   gcc  
-sparc64              randconfig-r021-20230707   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230707   gcc  
-x86_64       buildonly-randconfig-r002-20230707   gcc  
-x86_64       buildonly-randconfig-r003-20230707   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r002-20230708   clang
-x86_64               randconfig-r011-20230708   gcc  
-x86_64               randconfig-x001-20230708   gcc  
-x86_64               randconfig-x002-20230708   gcc  
-x86_64               randconfig-x003-20230708   gcc  
-x86_64               randconfig-x004-20230708   gcc  
-x86_64               randconfig-x005-20230708   gcc  
-x86_64               randconfig-x006-20230708   gcc  
-x86_64               randconfig-x011-20230708   clang
-x86_64               randconfig-x012-20230708   clang
-x86_64               randconfig-x013-20230708   clang
-x86_64               randconfig-x014-20230708   clang
-x86_64               randconfig-x015-20230708   clang
-x86_64               randconfig-x016-20230708   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+CJ
