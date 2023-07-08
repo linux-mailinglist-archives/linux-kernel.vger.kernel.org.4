@@ -2,122 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA1E74BB9E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 05:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB95F74BBA0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 05:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjGHDyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 23:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S232533AbjGHDzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 23:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGHDye (ORCPT
+        with ESMTP id S229458AbjGHDzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 23:54:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FEF1FEA;
-        Fri,  7 Jul 2023 20:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KkR6qQII6aUIOqjfcYh+jGFmxvXMfkpuLpVAT1tWvzU=; b=wDqhxdEK8D1gCf+DCso8yvWjHr
-        poJ5ezfh9CHO90JSHQ14g1EBhG1/YUu0gWZtaKa7+p0d0fWFHbt+f9ux1PnDIK8fw+5fBfqhM1aER
-        griu+BUNMlQXyVvB+K58VZX2Sm1xFq7Gtx8+RxAOYMBxTB8gVJFJWNkr21fJ8bt8bs6t498/fyAur
-        wAVbCQzHWiyn30ZtecyXUT6weD1KcB944L96I2IY6pQeH+AORcsftDPu0IdOMocY08U/RJBo9DtV0
-        hbI+8aw2RXmTw+CSmqv5s3gxPYOdl4pvZLGuVA1zkLOi9h+UPu4yiubxY4AXkoyW7VqKfUt0fZoKv
-        KQAYhDtg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qHz1a-00CcC5-Hj; Sat, 08 Jul 2023 03:54:23 +0000
-Date:   Sat, 8 Jul 2023 04:54:22 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, tytso@mit.edu,
-        bfoster@redhat.com, jack@suse.cz, andreas.gruenbacher@gmail.com,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        dhowells@redhat.com
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <ZKjd7nQxvzRDA2tK@casper.infradead.org>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
- <20230706211914.GB11476@frogsfrogsfrogs>
- <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
- <20230707091810.bamrvzcif7ncng46@moria.home.lan>
- <30661670c55601ff475f2f0698c2be2958e45c38.camel@HansenPartnership.com>
+        Fri, 7 Jul 2023 23:55:19 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8109C1FEA
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 20:55:18 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-6355e774d0aso16348076d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 20:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688788517; x=1691380517;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4TCnZ9Yp/QzfZmo6gCMRZiYF2goV1i5forJ0EUEXVqU=;
+        b=g7RF9azNYneFpUruGq9YDr0wn5usxd4szawIy9Lg6/SYNBWeoinWHFZ7BO2JI6Enki
+         tB6yKCYwNTy0IGmNI/HtlbL30Knr+Gbga60YLmWoKo/RPE0Q6hFxaXRani3ZLO60zPAx
+         17I1NwMDq9xcPcXdmBzAfgYqxh5Z4b5ju2A7fEphRNM6bQFAWovjAZFsUfQs5mTTk4QV
+         67GhjP+MatcTi/XK8gF8LpAIKY9y23sYYte2atISKLbpO1ScjJKQWweAXlllZe47NkwA
+         u8n9CfzP3tGs10u0P8kydE/QgRzfjAsX7UU1BnvVKjCB+JIA2NqWB8JCTLxMsddeo0QP
+         /hXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688788517; x=1691380517;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TCnZ9Yp/QzfZmo6gCMRZiYF2goV1i5forJ0EUEXVqU=;
+        b=fC4lvHqZorNzB2CprZvyMUO/+JsOoyKhyDBRucoKyYFAnwkShYw2QOD5GOxrNkkNT9
+         /M/VyrFfXFrYUGZZv90dGWWSEnDelcAmxlasg07eKo62V/93UPsKY1OHpzpcsF9S9ecT
+         ncGKvxomVZwyKTulWeoIi+kUUbwVorI/LM15IuDZHfKz5VvtF2GMrN9DMIw7IWj0Src6
+         YEgUB59C6SlDUhjLk+YtaaEsT5A0DJxT+uLreFMyjGxlyq7dbKPcuyOFt7zU9OqjSzZS
+         BabggrCcF2slqjiHhc7fggk/pYNDkF0q078WcpC17gGmidDRs3L4JHXuAnEKqb6vPq4n
+         NCaw==
+X-Gm-Message-State: ABy/qLaAHMu1OKdB3HmrutqQkjYii1CPgSbETaErxCUYgBWthIkVK5J2
+        cVSNV4o+vLYx/nYmQkSoAV7z9jSYP+8=
+X-Google-Smtp-Source: APBJJlEOGagFHHurWncBynYTK88uwhhhzivFeH5m1wh3fYG6q0kQtHjFzx3PJlCrHJDF0AqThpprcQ==
+X-Received: by 2002:a0c:e44f:0:b0:635:3892:a2b0 with SMTP id d15-20020a0ce44f000000b006353892a2b0mr6101298qvm.15.1688788517523;
+        Fri, 07 Jul 2023 20:55:17 -0700 (PDT)
+Received: from alolivei-thinkpadt480s.gru.csb ([2804:14c:bf20:86d6:7871:f7e9:8a15:865a])
+        by smtp.gmail.com with ESMTPSA id p8-20020a0c8c88000000b006300ff90e71sm2850435qvb.122.2023.07.07.20.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 20:55:16 -0700 (PDT)
+Date:   Sat, 8 Jul 2023 00:55:11 -0300
+From:   Alexon Oliveira <alexondunkan@gmail.com>
+To:     alexondunkan@gmail.com
+Cc:     martyn@welchs.me.uk, manohar.vanga@gmail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH] staging: vme_user: fix check alignment should match open
+ parenthesis
+Message-ID: <ZKjeHx/zqrNIqaA6@alolivei-thinkpadt480s.gru.csb>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <30661670c55601ff475f2f0698c2be2958e45c38.camel@HansenPartnership.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 12:26:19PM -0400, James Bottomley wrote:
-> On Fri, 2023-07-07 at 05:18 -0400, Kent Overstreet wrote:
-> > Christain, the hostility I'm reading is in your steady passive
-> > aggressive accusations, and your patronizing attitude. It's not
-> > professional, and it's not called for.
-> 
-> Can you not see that saying this is a huge red flag?  With you every
-> disagreement becomes, as Josef said, "a hill to die on" and you then
-> feel entitled to indulge in ad hominem attacks, like this, or be
-> dismissive or try to bury whoever raised the objection in technical
-> minutiae in the hope you can demonstrate you have a better grasp of the
-> details than they do and therefore their observation shouldn't count.
-> 
-> One of a maintainer's jobs is to nurture and build a community and
-> that's especially important at the inclusion of a new feature.  What
-> we've seen from you implies you'd build a community of little Kents
-> (basically an echo chamber of people who agree with you) and use them
-> as a platform to attack any area of the kernel you didn't agree with
-> technically (which, apparently, would be most of block and vfs with a
-> bit of mm thrown in), leading to huge divisions and infighting.  Anyone
-> who had the slightest disagreement with you would be out and would
-> likely behave in the same way you do now leading to internal community
-> schisms and more fighting on the lists.
-> 
-> We've spent years trying to improve the lists and make the community
-> welcoming.  However technically brilliant a new feature is, it can't
-> come with this sort of potential for community and reputational damage.
+Adhere to Linux kernel coding style.
 
-I don't think the lists are any better, tbh.  Yes, the LF has done a great
-job of telling people not to use "bad words" any more.  But people are
-still arseholes to each other.  They're just more subtle about it now.
-I'm not going to enumerate the ways because that's pointless.
+Reported by checkpatch:
 
-Consider this thread from Kent's point of view.  He's worked for years
-on bcachefs.  Now he's asking "What needs to happen to get this merged?"
-And instead of getting a clear answer as to the technical pieces that
-need to get fixed, various people are taking the opportunity to tell him
-he's a Bad Person.  And when he reacts to that, this is taken as more
-evidence that he's a Bad Person, rather than being a person who is in
-a stressful situation (Limbo?  Purgatory?) who is perhaps not reacting
-in the most constructive way.
+CHECK: Alignment should match open parenthesis
 
-I don't think Kent is particularly worse as a fellow developer than you
-or I or Jens, Greg, Al, Darrick, Dave, Dave, Dave, Dave, Josef or Brian.
-There are some social things which are a concern to me.  There's no
-obvious #2 or #3 to step in if Kent does get hit by the proverbial bus,
-but that's been discussed elsewhere in the thread.
+#132: FILE: drivers/staging/vme_user/vme_bridge.h:132
+#135: FILE: drivers/staging/vme_user/vme_bridge.h:135
+#139: FILE: drivers/staging/vme_user/vme_bridge.h:139
+#142: FILE: drivers/staging/vme_user/vme_bridge.h:142
+#144: FILE: drivers/staging/vme_user/vme_bridge.h:144
+#146: FILE: drivers/staging/vme_user/vme_bridge.h:146
+#148: FILE: drivers/staging/vme_user/vme_bridge.h:148
+#152: FILE: drivers/staging/vme_user/vme_bridge.h:152
+#163: FILE: drivers/staging/vme_user/vme_bridge.h:163
+#173: FILE: drivers/staging/vme_user/vme_bridge.h:173
+#175: FILE: drivers/staging/vme_user/vme_bridge.h:175
 
-Anyway, I'm in favour of bcachefs inclusion.  I think the remaining
-problems can be worked out post-merge.  I don't see Kent doing a
-drop-and-run on the codebase.  Maintaining this much code outside the
-main kernel tree is hard.  One thing I particularly like about btrfs
-compared to ntfs3 is that it doesn't use old legacy code like the buffer
-heads, which means that it doesn't add to the technical debt.  From the
-page cache point of view, it's fairly clean.  I wish it used iomap, but
-iomap would need quite a lot of new features to accommodate everything
-bcachefs wants to do.  Maybe iomap will grow those features over time.
+    Signed-off-by: Alexon Oliveira <alexondunkan@gmail.com>
+
+diff --git a/drivers/staging/vme_user/vme_bridge.h b/drivers/staging/vme_user/vme_bridge.h
+index 11df0a5e7f7b..a0d7a8db239d 100644
+--- a/drivers/staging/vme_user/vme_bridge.h
++++ b/drivers/staging/vme_user/vme_bridge.h
+@@ -128,28 +128,21 @@ struct vme_bridge {
+ 	struct mutex irq_mtx;
+
+ 	/* Slave Functions */
+-	int (*slave_get)(struct vme_slave_resource *, int *,
+-		unsigned long long *, unsigned long long *, dma_addr_t *,
+-		u32 *, u32 *);
+-	int (*slave_set)(struct vme_slave_resource *, int, unsigned long long,
+-		unsigned long long, dma_addr_t, u32, u32);
++	int (*slave_get)(struct vme_slave_resource *, int *, unsigned long long *,
++			 unsigned long long *, dma_addr_t *, u32 *, u32 *);
++	int (*slave_set)(struct vme_slave_resource *, int, unsigned long long, unsigned long long, dma_addr_t, u32, u32);
+
+ 	/* Master Functions */
+-	int (*master_get)(struct vme_master_resource *, int *,
+-		unsigned long long *, unsigned long long *, u32 *, u32 *,
+-		u32 *);
+-	int (*master_set)(struct vme_master_resource *, int,
+-		unsigned long long, unsigned long long,  u32, u32, u32);
+-	ssize_t (*master_read)(struct vme_master_resource *, void *, size_t,
+-		loff_t);
+-	ssize_t (*master_write)(struct vme_master_resource *, void *, size_t,
+-		loff_t);
+-	unsigned int (*master_rmw)(struct vme_master_resource *, unsigned int,
+-		unsigned int, unsigned int, loff_t);
++	int (*master_get)(struct vme_master_resource *, int *, unsigned long long *,
++			  unsigned long long *, u32 *, u32 *, u32 *);
++	int (*master_set)(struct vme_master_resource *, int, unsigned long long,
++			  unsigned long long,  u32, u32, u32);
++	ssize_t (*master_read)(struct vme_master_resource *, void *, size_t, loff_t);
++	ssize_t (*master_write)(struct vme_master_resource *, void *, size_t, loff_t);
++	unsigned int (*master_rmw)(struct vme_master_resource *, unsigned int, unsigned int, unsigned int, loff_t);
+
+ 	/* DMA Functions */
+-	int (*dma_list_add)(struct vme_dma_list *, struct vme_dma_attr *,
+-		struct vme_dma_attr *, size_t);
++	int (*dma_list_add)(struct vme_dma_list *, struct vme_dma_attr *, struct vme_dma_attr *, size_t);
+ 	int (*dma_list_exec)(struct vme_dma_list *);
+ 	int (*dma_list_empty)(struct vme_dma_list *);
+
+@@ -159,24 +152,19 @@ struct vme_bridge {
+
+ 	/* Location monitor functions */
+ 	int (*lm_set)(struct vme_lm_resource *, unsigned long long, u32, u32);
+-	int (*lm_get)(struct vme_lm_resource *, unsigned long long *, u32 *,
+-		u32 *);
+-	int (*lm_attach)(struct vme_lm_resource *, int,
+-			 void (*callback)(void *), void *);
++	int (*lm_get)(struct vme_lm_resource *, unsigned long long *, u32 *, u32 *);
++	int (*lm_attach)(struct vme_lm_resource *, int, void (*callback)(void *), void *);
+ 	int (*lm_detach)(struct vme_lm_resource *, int);
+
+ 	/* CR/CSR space functions */
+ 	int (*slot_get)(struct vme_bridge *);
+
+ 	/* Bridge parent interface */
+-	void *(*alloc_consistent)(struct device *dev, size_t size,
+-		dma_addr_t *dma);
+-	void (*free_consistent)(struct device *dev, size_t size,
+-		void *vaddr, dma_addr_t dma);
++	void *(*alloc_consistent)(struct device *dev, size_t size, dma_addr_t *dma);
++	void (*free_consistent)(struct device *dev, size_t size, void *vaddr, dma_addr_t dma);
+ };
+
+-void vme_bus_error_handler(struct vme_bridge *bridge,
+-			   unsigned long long address, int am);
++void vme_bus_error_handler(struct vme_bridge *bridge, unsigned long long address, int am);
+ void vme_irq_handler(struct vme_bridge *, int, int);
+
+ struct vme_bridge *vme_init_bridge(struct vme_bridge *);
