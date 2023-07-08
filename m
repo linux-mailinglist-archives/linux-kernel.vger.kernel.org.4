@@ -2,135 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531E374BD9D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 15:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB9674BDA0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 15:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjGHN0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 09:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
+        id S229773AbjGHNbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 09:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjGHN0v (ORCPT
+        with ESMTP id S229462AbjGHNbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 09:26:51 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA74BA;
-        Sat,  8 Jul 2023 06:26:50 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-66767d628e2so1892182b3a.2;
-        Sat, 08 Jul 2023 06:26:50 -0700 (PDT)
+        Sat, 8 Jul 2023 09:31:10 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2131.outbound.protection.outlook.com [40.107.237.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C377102;
+        Sat,  8 Jul 2023 06:31:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BCNVXJ2KGxA/mM9KlbS5vFF+9wQbCaj+uZxryNN/9QJ6XdGLtRY2TyShy3Q0URBdYhdSzcGnZhlOeSMp7pkFX62LvpTeXqXG32t3rajLixSVkpGZzSRqxabz8bUV7S4sdR/4aUruBINFQprVVv0egsE5khtY9tYcV+pKfac6zcqJgkNjAO8mQGk3LQJKGpaz6t+cefYVVvATXAA63gohmmLLsKtVPlbRgti+WQpIKg4ggG0SmhHVDE7F81iujPQ41c7edsNaFZv2JD77Ikxjbxs1XwjBnedkOer4t4RKPgKNr2jXJNYXoftgfN495HEEiWo6msvEa6/6txZ4SGBFxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mU0xSFHxoU3hix1B2fhewV8JVnzD/rFvILzxWUbbsbY=;
+ b=MTZlAS7S/Uy79KmcPP1+KsskWodatEJjtzn0oCZN8Wa+wvrD29ACyJy7anAMxjsPlcgSmxQY0tg8otMf5peRMeR04T3MqFVzZi0Z/wmrzG2jyBP1J5TtBQ468YKCF/+C4Vgf3YxzYUSpZxBC/NOa9bmJ+txe+6ffbAokrde2K8bW58LS4ZG/mvVIfDWafm2ZWJZoLurnbu/xhEPrh24ZhD8dd9cneyRLZo+bTRIwwkOEmF/rdA8I+Qs54jl8oltUzRm7w2udQsQHs/NqoS/fcylnA5f8ZHCPp5UB308Ko8XEVSM/3d4QYLjJjsT51tpJm4CA9quHQiSUeZYMAY5S0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688822809; x=1691414809;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qefpVYKHCZIqBOQ2CrloZdhfg0L8/Dnkq/kNB/3pkhk=;
-        b=Bh4jKRAud+SLMfpDuZvhOuWWvab4RDEKhavrxjbxVejiSrR+fMzWxPeeW1vtGyyuHF
-         kdMj1saKwfyLWfKT3mt+snIhAojrZOZDhRQjLXYCC7DYJ1iERXoJsZqngG7KIsncwBLl
-         +TcKsfFX9asYHaOui7QHrDIIQ5TW9cpAaBVmXBsJ51gZs+9Iy6fXR/mGLWs4ry/vAEMO
-         Tt6TEjpKaHzFIo5qRTXBv2DQdSkEw+mT2ngyWulwQc207jxPh2ac5QA0xeHuKIhF+Sa6
-         XzGAc/BWcGVQTF8llYXfAQoSK0d7SNKiBQ2lfGRHHic4v7ygccf/3Q9bfvdP0kmIjmqP
-         Gjfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688822809; x=1691414809;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qefpVYKHCZIqBOQ2CrloZdhfg0L8/Dnkq/kNB/3pkhk=;
-        b=NTfuqFvkVP6pcqI5thnEHOQzqPFw0o17tWJTxtsPTCcX5suJtjhUEljeh4SziF+won
-         6kpcUPHSvOizRwT5a6XZ0YluNTBB6WC9cJUFQwD+yhEQldZNMiucSbQlTDw7tRkYuIOc
-         xB4AOtU8lvVuq5DlzBk9Gl8fZOw3fPfz8LMKT7lGwS2OU8lrR6zZ2k37frCZZQ6QTCLP
-         SxF5Iopj3xkFHqD38cY2eUNhd9N+KA7fJqg7O+mqWO/PWInH1aEZ0r/xbUcOX8cvHGgY
-         jxIqQ2l0QFHDZo86snyzH5p6BMRAy3JKxxE6i++WK40A7C4QkiiGDuU3cqpjurL4do7K
-         kqEQ==
-X-Gm-Message-State: ABy/qLbdJb0xZCDtMOO2lsBTwj9bAfmkf+7WVZvuwTiXA49BGRKm8rwX
-        QcVdDCUX2BsJikdPzPHYeHE=
-X-Google-Smtp-Source: APBJJlH5vKOwcfjVTgfliHx3QT4wZqg41+dJVjnHAppMKQy7YRR6MnuCiQASypm0or5ZJF+NsXMEvA==
-X-Received: by 2002:a05:6a20:1c5:b0:12f:eb73:fc64 with SMTP id 5-20020a056a2001c500b0012feb73fc64mr4771396pzz.51.1688822809500;
-        Sat, 08 Jul 2023 06:26:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i129-20020a636d87000000b0050fa6546a45sm4364265pgc.6.2023.07.08.06.26.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 06:26:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 8 Jul 2023 06:26:47 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-Message-ID: <5d15a610-b818-4089-9ab4-3390d7cf8832@roeck-us.net>
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
-MIME-Version: 1.0
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mU0xSFHxoU3hix1B2fhewV8JVnzD/rFvILzxWUbbsbY=;
+ b=MSLGqfOWOL5FeCBOlzye6+EXLkyVo069n4cmn03MFGi3+88ynpjvv2yLDVQ7HPkwhkZf8LTKvjmuRR8wzDRAd0Hl4rsmPuM7NDWJ4CyRtI1piWq+5pySvwlUPdPSsae34iJKGH1Dtg17pW+8WVv316Q/d1S/lYdmryScQSXyDZ4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6266.namprd13.prod.outlook.com (2603:10b6:510:24d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Sat, 8 Jul
+ 2023 13:31:05 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::d23a:8c12:d561:470]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::d23a:8c12:d561:470%6]) with mapi id 15.20.6565.026; Sat, 8 Jul 2023
+ 13:31:05 +0000
+Date:   Sat, 8 Jul 2023 14:30:55 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
+        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
+        ssengar@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, stable@vger.kernel.org,
+        schakrabarti@microsoft.com
+Subject: Re: [PATCH V2 net] net: mana: Configure hwc timeout from hardware
+Message-ID: <ZKllD71/JLDreFKI@corigine.com>
+References: <1688723128-14878-1-git-send-email-schakrabarti@linux.microsoft.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1688723128-14878-1-git-send-email-schakrabarti@linux.microsoft.com>
+X-ClientProxiedBy: LO2P265CA0257.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:8a::29) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6266:EE_
+X-MS-Office365-Filtering-Correlation-Id: a13eb260-8780-4988-33a6-08db7fb793ea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NilZaf2ZYxB7aMUgagh3dnwGFJMWNmnNEm7frv4wNHZ/KuN6HfNlT6lx7R7XrIAEma5p1qj8lyRaP6Fdp6j2R+jXpOttGRdMUh5APYNjSkXfMZbHrzQIUptyrayFYVYrGb43tQiTupnJW46yo7e+f5Q/PEm+HvscpjxY7DzTFlrhDs09Jh4zXwDk+7mKtbM3xMwqjz9nFdg4sqKtqVPgO8vcDS0RJyBqtMQFAnGiNjgdQ8vptRptPSnuFj+XWv/7xad6Mzihe7tKs1UAMmRPlMVBnmz9luCGgOvhlMUB/5ACv9UyIRAeF3DjYJb1rnMl2qb45aVH9Ixis4sT9m9uXMCdtlCfy1ISO8c640KetVRX2wrsG9elkcC6X26Cc11iINERu5YGqLe6Pn9XbMLL+wiUc/gKT70FVSFez5RbmYsQMpuw1wQyTWPzPRENrMY9wF/Mbij+06EeUSRxaGAkFZi+1uxAbFLZFm+Km/EX0H1Mc54saG52ygN7w2/szft0a0PNK0xFeQJB716+paFuRUCQBlD/4F2Cc6OAGoXH0yxOTOg5X3RKI5IPGwVH8CwW0v7NMGBCgDyRRYmE5YWZnxBWUeqDjkowSmSl5UdYtr4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(39830400003)(376002)(346002)(451199021)(4326008)(44832011)(7416002)(66476007)(2906002)(66556008)(478600001)(36756003)(316002)(66946007)(6916009)(8676002)(8936002)(5660300002)(41300700001)(6512007)(86362001)(38100700002)(186003)(45080400002)(6666004)(83380400001)(6506007)(26005)(6486002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NWweubc046I03eOd7w1TVYwefxtmpAm7N80eOC8whx9KT9OyI8JaijvnmZyM?=
+ =?us-ascii?Q?Ks/lhFaavb+oFPsOHNb5GT1aRv8gbw/jnD6aIku7G/hTltpHqbMTrCcxQpWd?=
+ =?us-ascii?Q?JhHuDmKOOfyBTzEL+BAGzMpukd1WHvi9G70QNsQ5ESMomckiHtaUGT5JiDCq?=
+ =?us-ascii?Q?KS+TZPAXb1/igPkc7FL3+zgFTH9SIva6Lnm5SrvbPW24qD6kjgfjC66HbQL4?=
+ =?us-ascii?Q?V7xGUr6PuKJnxvXx3a7NDFTI4Sv+YZslpjQK9X0ADewKChaQrTsjcNlr1sO3?=
+ =?us-ascii?Q?+qtWyQvOVqizKdGj+GRllKgGF7RWR5MT6/a1OV170Vr+bDgAebQgam6hWKua?=
+ =?us-ascii?Q?JXSD+soU6D5edAnlyXkIfgw2uI1zbkAaGAR0BNa116nEdyqv7RU1eDKwI4Ri?=
+ =?us-ascii?Q?VG1rINGoIJTQuZqclW6q0p2CrhACe2921h8+CT7vxlzpBJRULEKKYG1sqoIy?=
+ =?us-ascii?Q?iVWc9twxDs5GsvM5jHUDTgTRSH937Vpl85YY+baO+vFgW1kUWrjfhpSzTZlD?=
+ =?us-ascii?Q?nIi7tAkwjwBsCbetXaqlQXtSr1KixAlxcIhqUa+ITAP0KmpBbd1AYXyLPPtY?=
+ =?us-ascii?Q?ofBcbeTs2TVTJVpalHlqimAsnRBLjTGvFYrFSi1llo8GHB8m5XkiyCLTiXEY?=
+ =?us-ascii?Q?qDRUUJrPh3HiW4oviIFL8hJaOInzDbbDiHGVw5hY2k6vvq1bDnLI4IdPMlBy?=
+ =?us-ascii?Q?cpJ8CrhuU5Me1BDRmlrqcwIaIHg4lcZVxymsfA6vOoFr6Wm5aoJ3KFNpyRx1?=
+ =?us-ascii?Q?VQxnPrX2pXPo6fZIor6aR5YTem2NUPVb4Ljht3nCNoHKVSiOKsD2lY53kaq9?=
+ =?us-ascii?Q?G3oax6a/CK3w1EkCyFUnubXX3ro6ILEgpG2MrY/jC4WeCiDZJ4RcqsduL8Qq?=
+ =?us-ascii?Q?LvWCltV1Rz9tJU712umlTGPGZYlSRhvxFQMkNs6o54EES4ZO8NqDx4frdtSI?=
+ =?us-ascii?Q?BdWK1Kbrj4IVCA3t+4ISJNqjJDweY3+oVmJ2daYIWQ8Fqjc9h6g2RhwhRcN/?=
+ =?us-ascii?Q?ITmIcjFvtI1eG8y8CwTj08uJ/5s7lmxgsiSxIvwUHwIzGmwrbGProP4LVPNz?=
+ =?us-ascii?Q?pKHWkVFneE/Su3kfpkKU8FEU8MHcFRNfKfZppX8k2g6WVD/ywIoiOGq6Pvjo?=
+ =?us-ascii?Q?Hb8rrbYk7vvjFWeXnoh0zn1daWhWPKU/EWOdLqFp4SnPVCRZrmZW5gzhVwWl?=
+ =?us-ascii?Q?5lAWhw0FrfCVplUtCURl8fT26dv/6ff992/i4esBrEkCrgDlRu1I67Q1eAZa?=
+ =?us-ascii?Q?TxAyQ1hLTnEyF0PFPZB4mByYN1xmSiuCb1yJDyShL3HR8MKBZ+YVJ2qc+bkO?=
+ =?us-ascii?Q?hgy7f8yTQD6qAmLeeyciFa3OAdBssKpmB0vtw3ERgT48X3fTiEbZQN3wB720?=
+ =?us-ascii?Q?PHMeQq2r662qOHX6L0r2jIw5swOgf9QOX8fiIfY9JLItHaRVhRglavFDjmsr?=
+ =?us-ascii?Q?nE453as+jjBH0OTae3O7lcFAG/aWonBj781VJC0KcO7uUkpJt1YGftg6w8ZP?=
+ =?us-ascii?Q?F/PHD0FO4VJ3ETTiouLW5Z65lVwzL3sjDZ39NN3jDgooKnWZZ1XVJzeODCcD?=
+ =?us-ascii?Q?QRRmxU1UESVEZYppl+PtW/HfLXqn9SiFX857K0gzcj/5zm+DcyoxbfJ1O763?=
+ =?us-ascii?Q?PQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a13eb260-8780-4988-33a6-08db7fb793ea
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2023 13:31:04.6686
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tl/4BAaZT5B23IkhJx38JxfVfdYm+ijcPDcAsxwNhwqyjKURXHcyS357ffkcUGT+Cacg5xGA1OkLKXGb/bc8VRzNbNP/7z97BZ8MV6FeItM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6266
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 06:57:04AM -0700, Guenter Roeck wrote:
-> Hi,
+On Fri, Jul 07, 2023 at 02:45:28AM -0700, Souradeep Chakrabarti wrote:
+> At present hwc timeout value is a fixed value.
+> This patch sets the hwc timeout from the hardware.
 > 
-> On Thu, Jun 01, 2023 at 11:22:17PM +0300, Sergey Shtylyov wrote:
-> > IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
-> > return -EINVAL instead.  However, the kernel code supporting SH3/4-based
-> > SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
-> > IRQ #s from 16 instead.
-> > 
-> > The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-> > indeed are using IRQ0 for the SMSC911x compatible Ethernet chip.
-> > 
-> 
-> Unfortunately it also affects all sh4 emulations in qemu, and results in
-> boot stalls with those. There isn't a relevant log to attach because there
-> is no error message - booting just stalls until the emulation is aborted.
-> 
-> Reverting this patch fixes the problem.
-> 
-> Bisect log is attached for reference. Note that bisect requires applying
-> commit 7497840d462c ("sh: Provide unxlate_dev_mem_ptr() in asm/io.h"),
-> which is also the reason why the problem was not observed earlier since
-> it was hiding behind a build failure.
-> 
-
-Since -rc1 is coming up and there has been no progress, it is time to start
-tracking this problem as regression.
-
-#regzbot ^introduced a8ac2961148e
-#regzbot title sh4: Boot stall with qemu emulations
-#regzbot ignore-activity
-
-> Guenter
-> 
+> Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
 > ---
-> # bad: [c17414a273b81fe4e34e11d69fc30cc8b1431614] Merge tag 'sh-for-v6.5-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux
-> # good: [b5641a5d8b8b14643bfe3d017d64da90a5c55479] mm: don't do validate_mm() unnecessarily and without mmap locking
-> git bisect start 'HEAD' 'b5641a5d8b8b'
-> # good: [15ac468614e5e4fee82e1eb32568f427b0e51adc] Merge tag 'media/v6.5-1' of git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media
-> git bisect good 15ac468614e5e4fee82e1eb32568f427b0e51adc
-> # good: [73a3fcdaa73200e38e38f7e8a32c9b901c5b95b5] Merge tag 'f2fs-for-6.5-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs
-> git bisect good 73a3fcdaa73200e38e38f7e8a32c9b901c5b95b5
-> # good: [6843306689aff3aea608e4d2630b2a5a0137f827] Merge tag 'net-6.5-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-> git bisect good 6843306689aff3aea608e4d2630b2a5a0137f827
-> # good: [afa92949124abc25ddab1789dd654214e2e1b040] dt-bindings: phy: cdns,salvo: add property cdns,usb2-disconnect-threshold-microvolt
-> git bisect good afa92949124abc25ddab1789dd654214e2e1b040
-> # good: [37bd215fc48ef2a399f836d62d2e4a166efb31be] phy: qualcomm: fix indentation in Makefile
-> git bisect good 37bd215fc48ef2a399f836d62d2e4a166efb31be
-> # bad: [7497840d462c8f54c4888c22ab3726a8cde4b9a2] sh: Provide unxlate_dev_mem_ptr() in asm/io.h
-> git bisect bad 7497840d462c8f54c4888c22ab3726a8cde4b9a2
-> # bad: [01658fe3d6c02992846a038c8111e70ace169295] sh: Refactor header include path addition
-> git bisect bad 01658fe3d6c02992846a038c8111e70ace169295
-> # bad: [a8ac2961148e8c720dc760f2e06627cd5c55a154] sh: Avoid using IRQ0 on SH3 and SH4
-> git bisect bad a8ac2961148e8c720dc760f2e06627cd5c55a154
-> # good: [bc9d1f0cecd2407cfb2364a7d4be2f52d1d46a9d] sh: j2: Use ioremap() to translate device tree address into kernel memory
-> git bisect good bc9d1f0cecd2407cfb2364a7d4be2f52d1d46a9d
-> # first bad commit: [a8ac2961148e8c720dc760f2e06627cd5c55a154] sh: Avoid using IRQ0 on SH3 and SH4
+> V1 -> V2:
+> * Added return check for mana_gd_query_hwc_timeout
+> * Removed dev_err from mana_gd_query_hwc_timeout
+> ---
+>  .../net/ethernet/microsoft/mana/gdma_main.c   | 30 ++++++++++++++++++-
+>  .../net/ethernet/microsoft/mana/hw_channel.c  | 25 +++++++++++++++-
+>  include/net/mana/gdma.h                       | 20 ++++++++++++-
+>  include/net/mana/hw_channel.h                 |  5 ++++
+>  4 files changed, 77 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 8f3f78b68592..949c927c3a7e 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -106,6 +106,27 @@ static int mana_gd_query_max_resources(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  
+> +static int mana_gd_query_hwc_timeout(struct pci_dev *pdev, u32 *timeout_val)
+> +{
+> +	struct gdma_context *gc = pci_get_drvdata(pdev);
+> +	struct gdma_query_hwc_timeout_req req = {};
+> +	struct gdma_query_hwc_timeout_resp resp = {};
+
+Please use reverse xmas tree - longest line to shortest - for local
+variables in Networking code.
+
+...
+
+> @@ -879,6 +900,7 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+>  	struct gdma_verify_ver_resp resp = {};
+>  	struct gdma_verify_ver_req req = {};
+> +	struct hw_channel_context *hwc = gc->hwc.driver_data;
+>  	int err;
+
+Ditto.
