@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BEC74BCDC
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391D674BCE0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjGHIk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 04:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
+        id S229828AbjGHIlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 04:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjGHIk5 (ORCPT
+        with ESMTP id S229468AbjGHIlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 04:40:57 -0400
+        Sat, 8 Jul 2023 04:41:13 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEB61FE0;
-        Sat,  8 Jul 2023 01:40:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6A268C;
+        Sat,  8 Jul 2023 01:41:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688805640;
+        s=mail; t=1688805642;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6+AqvnlESMt4eGXysB+WU7X0HzVbXxlbD86pN2OtT+U=;
-        b=JsxMJzckQmaOdeCcP31JQuVyvWP+HhcsEyUShqxfnLig35BdIwL/wTBtZWhB5LtEy097js
-        cuLkcV+mVyOazDjsDHTHtJv527lJtX/3ObpoQWYoPtp1nPQA4c1bUb0ilS2cF1Ii5kXdxK
-        japyWh109wRYEGhkst2nKHWeYYSnnc8=
+        bh=WirPH1rGCBNSwdNcVLcYapLshg/0Im7Zm/a2Plr7i4M=;
+        b=rK/oWbmBJv/Ltz0ypARywuPgkeXGSgrmc9NsjeXHTQ9BcPUDJwZ7JVLxiftY9etLvKoO7x
+        BTN8Rmm/t1HYw83LCDLCI0o8m3mO1yPHjojz2lzjedEUaFzRBV4R7whXiN1U9L/M/lt7+C
+        vEKakKwEMNOBH3p0yVtTDjFBKzOp2O8=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -35,10 +35,10 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 2/3] drm/panel: ld9040: Register a backlight device
-Date:   Sat,  8 Jul 2023 10:40:26 +0200
-Message-Id: <20230708084027.18352-3-paul@crapouillou.net>
+        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
+Subject: [PATCH v2 3/3] ARM: dts: exynos/i9100: Fix LCD screen's physical size
+Date:   Sat,  8 Jul 2023 10:40:27 +0200
+Message-Id: <20230708084027.18352-4-paul@crapouillou.net>
 In-Reply-To: <20230708084027.18352-1-paul@crapouillou.net>
 References: <20230708084027.18352-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -54,83 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register a backlight device to be able to switch between all the gamma
-levels.
+The previous values were completely bogus, and resulted in the computed
+DPI ratio being much lower than reality, causing applications and UIs to
+misbehave.
 
-v2: Remove .get_brightness() callback, use bl_get_data() and
-    backlight_get_brightness()
+The new values were measured by myself with a ruler.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the Galaxy S2")
+Cc: <stable@vger.kernel.org> # v5.8+
 ---
- drivers/gpu/drm/panel/panel-samsung-ld9040.c | 32 +++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/exynos4210-i9100.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-samsung-ld9040.c b/drivers/gpu/drm/panel/panel-samsung-ld9040.c
-index f39f999c21af..ad5ed635f592 100644
---- a/drivers/gpu/drm/panel/panel-samsung-ld9040.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-ld9040.c
-@@ -8,6 +8,7 @@
-  * Andrzej Hajda <a.hajda@samsung.com>
- */
+diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
+index 37cd4dde53e4..a9ec1f6c1dea 100644
+--- a/arch/arm/boot/dts/exynos4210-i9100.dts
++++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+@@ -207,8 +207,8 @@ lcd@0 {
+ 			power-on-delay = <10>;
+ 			reset-delay = <10>;
  
-+#include <linux/backlight.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
-@@ -310,8 +311,30 @@ static int ld9040_parse_dt(struct ld9040 *ctx)
- 	return 0;
- }
+-			panel-width-mm = <90>;
+-			panel-height-mm = <154>;
++			panel-width-mm = <56>;
++			panel-height-mm = <93>;
  
-+static int ld9040_bl_update_status(struct backlight_device *dev)
-+{
-+	struct ld9040 *ctx = bl_get_data(dev);
-+
-+	ctx->brightness = backlight_get_brightness(dev);
-+	ld9040_brightness_set(ctx);
-+
-+	return 0;
-+}
-+
-+static const struct backlight_ops ld9040_bl_ops = {
-+	.update_status  = ld9040_bl_update_status,
-+};
-+
-+static const struct backlight_properties ld9040_bl_props = {
-+	.type = BACKLIGHT_RAW,
-+	.scale = BACKLIGHT_SCALE_NON_LINEAR,
-+	.max_brightness = ARRAY_SIZE(ld9040_gammas) - 1,
-+	.brightness = ARRAY_SIZE(ld9040_gammas) - 1,
-+};
-+
- static int ld9040_probe(struct spi_device *spi)
- {
-+	struct backlight_device *bldev;
- 	struct device *dev = &spi->dev;
- 	struct ld9040 *ctx;
- 	int ret;
-@@ -323,7 +346,7 @@ static int ld9040_probe(struct spi_device *spi)
- 	spi_set_drvdata(spi, ctx);
- 
- 	ctx->dev = dev;
--	ctx->brightness = ARRAY_SIZE(ld9040_gammas) - 1;
-+	ctx->brightness = ld9040_bl_props.brightness;
- 
- 	ret = ld9040_parse_dt(ctx);
- 	if (ret < 0)
-@@ -353,6 +376,13 @@ static int ld9040_probe(struct spi_device *spi)
- 	drm_panel_init(&ctx->panel, dev, &ld9040_drm_funcs,
- 		       DRM_MODE_CONNECTOR_DPI);
- 
-+
-+	bldev = devm_backlight_device_register(dev, dev_name(dev), dev,
-+					       ctx, &ld9040_bl_ops,
-+					       &ld9040_bl_props);
-+	if (IS_ERR(bldev))
-+		return PTR_ERR(bldev);
-+
- 	drm_panel_add(&ctx->panel);
- 
- 	return 0;
+ 			display-timings {
+ 				timing {
 -- 
 2.40.1
 
