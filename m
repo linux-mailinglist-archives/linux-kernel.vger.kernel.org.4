@@ -2,166 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6B774BD46
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 12:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D982674BD84
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 14:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjGHKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 06:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S230454AbjGHMxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 08:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGHKvO (ORCPT
+        with ESMTP id S229627AbjGHMxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 06:51:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3834C1994;
-        Sat,  8 Jul 2023 03:51:12 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qyn9W2rtWzqVMd;
-        Sat,  8 Jul 2023 18:50:39 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Sat, 8 Jul 2023 18:51:09 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
-Subject: [PATCH] ring-buffer: Fix deadloop issue on reading trace_pipe
-Date:   Sun, 9 Jul 2023 06:51:44 +0800
-Message-ID: <20230708225144.3785600-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 8 Jul 2023 08:53:12 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958001991;
+        Sat,  8 Jul 2023 05:53:11 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 6DA778634E;
+        Sat,  8 Jul 2023 14:53:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1688820790;
+        bh=j1VW+YqlIr6gMFRVJdYCG+mHS0tWNFRYQxRf8AA6Y/I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Oxql7ehPge5nSg6NraVob/joMOb/2cAVw3vB0uEHQ1ScHrHed0M7PRSzq+sIPfV67
+         R8025mKCQmdpsjSbfN/8DJ1sg5XNLXuc6e2QEpGkJI/cgNF1sKjEg33HPPouYy3K4W
+         Shkb6BshWHHlHeFTDmhosGRbOeOovJsMK4hIbKDNyUrDnUuuWs7EixbfKFON/IJ/RV
+         +G/oZNo2IBw/ny1zgxBqKImVocbPPbj6kz7z6fP07zTADqgoysLPbIgCUi5FfCapLA
+         MGI0hqCQ/Ldt2aLEksXjL1BMNBkQDERKA4ZD2hQi4qpSB8tU2DZDg/JFGb5o+2Q32V
+         tM84W++UvBCDQ==
+Message-ID: <8b0ae1d1-c769-1f55-0452-4bbc62da133b@denx.de>
+Date:   Sat, 8 Jul 2023 13:07:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
+To:     Paulo Pavacic <pavacic.p@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230607151127.1542024-1-pavacic.p@gmail.com>
+ <20230607151127.1542024-4-pavacic.p@gmail.com>
+ <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com>
+ <CAO9szn00vRFm+iM1m7KgkW0WRuKyJEgVU4tVx4f5tF6KPnE=2w@mail.gmail.com>
+ <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com>
+ <CAO9szn29A0qCABG0ACni42UGpsGKLwG7OT1y_ho3DgQ0WLvfmw@mail.gmail.com>
+ <CACRpkdYXtQwmZR1u-1fwmyC_8Yq4bMkjDBcUCfuGqSz_UhXWJQ@mail.gmail.com>
+ <CAO9szn0OuKW+-JZMs3TPUHiwLCe6cUPcsUq+og64K2utMyZpqQ@mail.gmail.com>
+ <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com>
+ <CAO9szn3oTzrrwiyr91H14ep7OPUkA-SDST3CSQAQHvFFnkJWfA@mail.gmail.com>
+ <0d43e653-32cd-b25e-40fa-6f0571048467@denx.de>
+ <CAO9szn20RY3uBDceyUJ1S+gb=FN8Hd5qqMfOSbitHFyFCZ+iLg@mail.gmail.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <CAO9szn20RY3uBDceyUJ1S+gb=FN8Hd5qqMfOSbitHFyFCZ+iLg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Soft lockup occurs when reading file 'trace_pipe':
+On 7/7/23 17:26, Paulo Pavacic wrote:
+> Hello Marek,
 
-  watchdog: BUG: soft lockup - CPU#6 stuck for 22s! [cat:4488]
-  [...]
-  RIP: 0010:ring_buffer_empty_cpu+0xed/0x170
-  RSP: 0018:ffff88810dd6fc48 EFLAGS: 00000246
-  RAX: 0000000000000000 RBX: 0000000000000246 RCX: ffffffff93d1aaeb
-  RDX: ffff88810a280040 RSI: 0000000000000008 RDI: ffff88811164b218
-  RBP: ffff88811164b218 R08: 0000000000000000 R09: ffff88815156600f
-  R10: ffffed102a2acc01 R11: 0000000000000001 R12: 0000000051651901
-  R13: 0000000000000000 R14: ffff888115e49500 R15: 0000000000000000
-  [...]
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 00007f8d853c2000 CR3: 000000010dcd8000 CR4: 00000000000006e0
-  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-  Call Trace:
-   __find_next_entry+0x1a8/0x4b0
-   ? peek_next_entry+0x250/0x250
-   ? down_write+0xa5/0x120
-   ? down_write_killable+0x130/0x130
-   trace_find_next_entry_inc+0x3b/0x1d0
-   tracing_read_pipe+0x423/0xae0
-   ? tracing_splice_read_pipe+0xcb0/0xcb0
-   vfs_read+0x16b/0x490
-   ksys_read+0x105/0x210
-   ? __ia32_sys_pwrite64+0x200/0x200
-   ? switch_fpu_return+0x108/0x220
-   do_syscall_64+0x33/0x40
-   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+Hi,
 
-Through the vmcore, I found it's because in tracing_read_pipe(),
-ring_buffer_empty_cpu() found some buffer is not empty but then it
-cannot read anything due to "rb_num_of_entries() == 0" always true,
-Then it infinitely loop the procedure due to user buffer not been
-filled, see following code path:
+> čet, 6. srp 2023. u 17:26 Marek Vasut <marex@denx.de> napisao je:
+>>
+>> On 7/6/23 17:18, Paulo Pavacic wrote:
+>>> Hello Linus,
+>>>
+>>> čet, 22. lip 2023. u 10:22 Linus Walleij <linus.walleij@linaro.org> napisao je:
+>>>>
+>>>> On Wed, Jun 21, 2023 at 5:09 PM Paulo Pavacic <pavacic.p@gmail.com> wrote:
+>>>>
+>>>>> A lot of modifications to st7701 are required. I believe it would
+>>>>> result in a driver that doesn't look or work the same. e.g compare
+>>>>> delays between initialization sequences of panel-fannal-c3004 and
+>>>>> panel-st7701. I think it would be optimal to create st7701s driver and
+>>>>> have special handling for st7701s panels. If there was a flag for
+>>>>> whether panel is st7701 or st7701s it would end up looking like a
+>>>>> mess.
+>>>>
+>>>> What matters is if the original authors of the old st7701 driver are
+>>>> around and reviewing and testing patches at all. What we need is
+>>>> active maintainers. (Added Jagan, Marek & Maya).
+>>>>
+>>>> I buy the reasoning that the st7701s is perhaps substantially different
+>>>> from st7701.
+>>>>
+>>>> If st7701s is very different then I suppose it needs a separate driver,
+>>>> then all we need to to name the driver properly, i.e.
+>>>> panel-sitronix-st7701s.c.
+>>>
+>>> I had in person talk with Paul Kocialkowski and I have concluded that
+>>> this is the best solution.
+>>> I believe I should rename it to st7701s due to the hardware changes. I
+>>> would like to create V5 patch with driver renamed to st7701s.
+>>> Please let me know if you agree / disagree.
+>>
+>> If I recall it right, the ST7701 and ST7701S are basically the same
+>> chip, aren't they ?
+> 
+> I'm currently exploring all the differences. There aren't a lot of
+> differences, but there are some.
+> So far I can see that default register values are different, new
+> previously unused registers are now used and there has been some
+> reordering of how info is placed in registers [1] (data bits are in
+> different order). Moreover, instructions to some commands have been
+> changed and meaning of what data bits mean [2][3]. Also, new features
+> have been added [2]; there is now PCLKS 3 for example.
+> 
+> You can see few differences in following images. Same images were
+> attached in this mail:
+> [1] https://ibb.co/NmgbZmy - GAMACTRL_st7701.png
+> [2] https://ibb.co/G79y235 - PCLKS2.png
 
-  tracing_read_pipe() {
-    ... ...
-    waitagain:
-      tracing_wait_pipe() // 1. find non-empty buffer here
-      trace_find_next_entry_inc()  // 2. loop here try to find an entry
-        __find_next_entry()
-          ring_buffer_empty_cpu();  // 3. find non-empty buffer
-          peek_next_entry()  // 4. but peek always return NULL
-            ring_buffer_peek()
-              rb_buffer_peek()
-                rb_get_reader_page()
-                  // 5. because rb_num_of_entries() == 0 always true here
-                  //    then return NULL
-      // 6. user buffer not been filled so goto 'waitgain'
-      //    and eventually leads to an deadloop in kernel!!!
-  }
+Ouch. I wonder if this is still something that can be abstracted out 
+with some helper accessor functions like:
 
-By some analyzing, I found that when resetting ringbuffer, the 'entries'
-of its pages are not all cleared (see rb_reset_cpu()). Then when reducing
-the ringbuffer, and if some reduced pages exist dirty 'entries' data, they
-will be added into 'cpu_buffer->overrun' (see rb_remove_pages()), which
-cause wrong 'overrun' count and eventually cause the deadloop issue.
+if (model == ST7701)
+   write something
+else
+   write the other layout
 
-To fix it, we need to clear every pages in rb_reset_cpu().
-
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- kernel/trace/ring_buffer.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 834b361a4a66..14d8001140c8 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -5242,28 +5242,34 @@ unsigned long ring_buffer_size(struct trace_buffer *buffer, int cpu)
- }
- EXPORT_SYMBOL_GPL(ring_buffer_size);
- 
-+static void rb_clear_buffer_page(struct buffer_page *page)
-+{
-+	local_set(&page->write, 0);
-+	local_set(&page->entries, 0);
-+	rb_init_page(page->page);
-+	page->read = 0;
-+}
-+
- static void
- rb_reset_cpu(struct ring_buffer_per_cpu *cpu_buffer)
- {
-+	struct buffer_page *page;
-+
- 	rb_head_page_deactivate(cpu_buffer);
- 
- 	cpu_buffer->head_page
- 		= list_entry(cpu_buffer->pages, struct buffer_page, list);
--	local_set(&cpu_buffer->head_page->write, 0);
--	local_set(&cpu_buffer->head_page->entries, 0);
--	local_set(&cpu_buffer->head_page->page->commit, 0);
--
--	cpu_buffer->head_page->read = 0;
-+	rb_clear_buffer_page(cpu_buffer->head_page);
-+	list_for_each_entry(page, cpu_buffer->pages, list) {
-+		rb_clear_buffer_page(page);
-+	}
- 
- 	cpu_buffer->tail_page = cpu_buffer->head_page;
- 	cpu_buffer->commit_page = cpu_buffer->head_page;
- 
- 	INIT_LIST_HEAD(&cpu_buffer->reader_page->list);
- 	INIT_LIST_HEAD(&cpu_buffer->new_pages);
--	local_set(&cpu_buffer->reader_page->write, 0);
--	local_set(&cpu_buffer->reader_page->entries, 0);
--	local_set(&cpu_buffer->reader_page->page->commit, 0);
--	cpu_buffer->reader_page->read = 0;
-+	rb_clear_buffer_page(cpu_buffer->reader_page);
- 
- 	local_set(&cpu_buffer->entries_bytes, 0);
- 	local_set(&cpu_buffer->overrun, 0);
--- 
-2.25.1
-
+Or whether it makes sense to outright have a separate driver. The later 
+would introduce duplication, but maybe that much duplication is OK.
