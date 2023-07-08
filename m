@@ -2,142 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0417974BC82
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 09:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873CC74BC8A
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 09:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjGHHLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 03:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        id S230347AbjGHH3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 03:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGHHLF (ORCPT
+        with ESMTP id S229458AbjGHH3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 03:11:05 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5CE1FF6;
-        Sat,  8 Jul 2023 00:11:04 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-992b2249d82so342012566b.1;
-        Sat, 08 Jul 2023 00:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688800263; x=1691392263;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GvXK5oEuIY7lWNWkNWObt3ZTrcKC50SIxSS9jwfZwto=;
-        b=pQh9ovKmeP5uMdOcC4/2gCZkr5SDhnTm5223+rjPs4zzF1s1c5xpmBjDjgKZB1sWP8
-         rLBxmxzTCm8zWxsVoAq9OMyizB3Ykm/r3Tqy7uGY38dUDqcNCig6UscRly3ZlU6tHBgK
-         RZaTzvNVXReRQw6y69wwtGA1gRHvAUjl/j8fB4eaoD5FIG4vMSVmS6UKzEtLA+nWLlK5
-         jnBYt3TteqGQo7KeDvDK2vZZIO5aO3RFsZf4bNXJnV/4sRyryDb8xEI4hEtib5GHIHXV
-         2AR5oaM1KCWI+10AXKzzTkeShApsbTQO4nzZXfv87n46Lkcj6LnhrpFVdzyfsxh7CWLu
-         OJsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688800263; x=1691392263;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GvXK5oEuIY7lWNWkNWObt3ZTrcKC50SIxSS9jwfZwto=;
-        b=QgxOdkjJ1SEtgnvq8v5KMntFkI1VoF0V1pdKy4ykktqQ/VCLFXwR75KXEbAEtmgd5n
-         dLGxx9vkS4kLxJJqbwAk4JlCfFSe6y+jwDzzc4WJI3CzLDskCS3DBDzLat/TTSMV4BRk
-         /RoXjSQSND8z8WhNR3Fh2OJfm/dLUv1QbQMIiIRz5JSKY/uM2NA77HK1hKRPH1lbCeS1
-         3/SAsiCGZIHUh4hjaH9jMWhLsFgpdtTAJBYsu4H8ACnuvKq1YFDwvlhhJQdBA70Utldv
-         gpHBOamwHPFMDUmj+suizTxirEdDfdW3dIqaVo09rC6Ch8pSFrl660TGpFKIl2A9aVa3
-         eInQ==
-X-Gm-Message-State: ABy/qLYHgFc6HZO47gN2A5mN3332T6UQaCMN6zY0PECO7gYLEfwAMG0W
-        e04Zx1XwTAbubp+2QU+GRpk=
-X-Google-Smtp-Source: APBJJlGwbtOxDY4lSfhBZMb8VNQ2fXcYzhOJWKt/FjyfC+puXO0xuYEfkiaVOg6NxpvDBYU0sIrNHA==
-X-Received: by 2002:a17:907:b020:b0:974:55ea:1ad8 with SMTP id fu32-20020a170907b02000b0097455ea1ad8mr5125794ejc.63.1688800262973;
-        Sat, 08 Jul 2023 00:11:02 -0700 (PDT)
-Received: from [127.0.0.1] ([95.168.107.25])
-        by smtp.gmail.com with ESMTPSA id j17-20020a170906279100b00982a352f078sm3062166ejc.124.2023.07.08.00.11.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jul 2023 00:11:02 -0700 (PDT)
-Date:   Sat, 8 Jul 2023 09:11:02 +0200 (GMT+02:00)
-From:   =?UTF-8?Q?Paulo_Pava=C4=8Di=C4=87?= <pavacic.p@gmail.com>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Message-ID: <85d0e75d-146d-496e-a22d-3aea5298c61a@gmail.com>
-In-Reply-To: <0d43e653-32cd-b25e-40fa-6f0571048467@denx.de>
-References: <20230607151127.1542024-1-pavacic.p@gmail.com> <20230607151127.1542024-4-pavacic.p@gmail.com> <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com> <CAO9szn00vRFm+iM1m7KgkW0WRuKyJEgVU4tVx4f5tF6KPnE=2w@mail.gmail.com> <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com> <CAO9szn29A0qCABG0ACni42UGpsGKLwG7OT1y_ho3DgQ0WLvfmw@mail.gmail.com> <CACRpkdYXtQwmZR1u-1fwmyC_8Yq4bMkjDBcUCfuGqSz_UhXWJQ@mail.gmail.com> <CAO9szn0OuKW+-JZMs3TPUHiwLCe6cUPcsUq+og64K2utMyZpqQ@mail.gmail.com> <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com> <CAO9szn3oTzrrwiyr91H14ep7OPUkA-SDST3CSQAQHvFFnkJWfA@mail.gmail.com> <0d43e653-32cd-b25e-40fa-6f0571048467@denx.de>
-Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI
- panel
+        Sat, 8 Jul 2023 03:29:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD89710CE;
+        Sat,  8 Jul 2023 00:29:19 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3687BR1p018966;
+        Sat, 8 Jul 2023 07:28:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=fa4crDmWzyhVad6ao5l+sFMQ4oZ2W3OiYCbVgIJlTe4=;
+ b=EV/WYKUonpvdsvTuN2H4rqAmeIIV9NTaKqs0eAwdl6EMuduHK412AtdIaCVoAMQeZpUV
+ ei+UBUkTelEOKqzYURqaLK+LkPNj/TanoeIgYk2t+I+SvkAJ7pNCyN7/Ra0mFvYmdTGK
+ iND2MzNGyW9eVokxGLKQDqI7ter5ggqHY1BDrImqO70XRuItj91ZKLmiRqSvS1dgbxS2
+ chRjBuOywcKj+INgyQ1uQiGZq7Cn4NyNRiysaVFxqYzWMWtBnHVGefWujDUaleD/QYRZ
+ 8yT7qYqMfztVrSDo4DffVk5WDNioy8oOo96+JDhNi/lTBwPjTILMHwT9DJQ8dJVvZZkJ /w== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpyw1r6yu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 08 Jul 2023 07:28:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3687Su7V031175
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 8 Jul 2023 07:28:56 GMT
+Received: from hu-jprakash-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Sat, 8 Jul 2023 00:28:50 -0700
+From:   Jishnu Prakash <quic_jprakash@quicinc.com>
+To:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linus.walleij@linaro.org>,
+        <Jonathan.Cameron@huawei.com>, <sboyd@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <quic_subbaram@quicinc.com>,
+        <quic_collinsd@quicinc.com>, <quic_kamalw@quicinc.com>,
+        <quic_jestar@quicinc.com>, <marijn.suijten@somainline.org>,
+        <andriy.shevchenko@linux.intel.com>,
+        <krzysztof.kozlowski@linaro.org>
+CC:     <linux-iio@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-msm-owner@vger.kernel.org>,
+        Jishnu Prakash <quic_jprakash@quicinc.com>
+Subject: [PATCH 00/11] iio: adc: Add support for QCOM SPMI PMIC5 Gen3 ADC
+Date:   Sat, 8 Jul 2023 12:58:24 +0530
+Message-ID: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <85d0e75d-146d-496e-a22d-3aea5298c61a@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: A6t6Bn8aPGAJguQizCDwB6zn7eyy4FGG
+X-Proofpoint-ORIG-GUID: A6t6Bn8aPGAJguQizCDwB6zn7eyy4FGG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-08_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 clxscore=1011 lowpriorityscore=0 adultscore=0
+ phishscore=0 mlxlogscore=839 bulkscore=0 malwarescore=0 impostorscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307080065
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marek,
+PMIC5 Gen3 has a similar ADC architecture to that on PMIC5 Gen2,
+with all SW communication to ADC going through PMK8550 which
+communicates with other PMICs through PBS. The major difference is
+that the register interface used here is that of an SDAM present on
+PMK8550, rather than a dedicated ADC peripheral. There may be more than one
+SDAM used for ADC5 Gen3. Each ADC SDAM has eight channels, each of which may
+be used for either immediate reads (same functionality as previous PMIC5 and
+PMIC5 Gen2 ADC peripherals) or recurring measurements (same as PMIC5 and PMIC5
+Gen2 ADC_TM functionality). In this case, we have VADC and ADC_TM functionality
+combined into the same driver.
 
+Patches 1-5 update the name of the previous generation of PMIC5 ADC peripherals
+from ADC7 to ADC5 Gen2, as this is the correct name and it makes more sense now
+to update it, with the addition of the latest ADC5 Gen3 peripheral support.
 
-Jul 6, 2023 5:26:15 PM Marek Vasut <marex@denx.de>:
+Patches 6 and 7 add bindings and driver support respectively for ADC5 Gen3.
 
-> On 7/6/23 17:18, Paulo Pavacic wrote:
->> Hello Linus,
->> =C4=8Det, 22. lip 2023. u 10:22 Linus Walleij <linus.walleij@linaro.org>=
- napisao je:
->>>
->>> On Wed, Jun 21, 2023 at 5:09=E2=80=AFPM Paulo Pavacic <pavacic.p@gmail.=
-com> wrote:
->>>
->>>> A lot of modifications to st7701 are required. I believe it would
->>>> result in a driver that doesn't look or work the same. e.g compare
->>>> delays between initialization sequences of panel-fannal-c3004 and
->>>> panel-st7701. I think it would be optimal to create st7701s driver and
->>>> have special handling for st7701s panels. If there was a flag for
->>>> whether panel is st7701 or st7701s it would end up looking like a
->>>> mess.
->>>
->>> What matters is if the original authors of the old st7701 driver are
->>> around and reviewing and testing patches at all. What we need is
->>> active maintainers. (Added Jagan, Marek & Maya).
->>>
->>> I buy the reasoning that the st7701s is perhaps substantially different
->>> from st7701.
->>>
->>> If st7701s is very different then I suppose it needs a separate driver,
->>> then all we need to to name the driver properly, i.e.
->>> panel-sitronix-st7701s.c.
->> I had in person talk with Paul Kocialkowski and I have concluded that
->> this is the best solution.
->> I believe I should rename it to st7701s due to the hardware changes. I
->> would like to create V5 patch with driver renamed to st7701s.
->> Please let me know if you agree / disagree.
->
-> If I recall it right, the ST7701 and ST7701S are basically the same chip,=
- aren't they ?
+Patches 8-11 are for an additional change, where the QCOM ADC dt-bindings files
+are moved from dt-bindings/iio to dt-bindings/iio/adc folder, as they are
+specifically for ADC devices.
 
-I'm currently exploring all the differences. There aren't a lot of them, bu=
-t there are some.
+Jishnu Prakash (11):
+  iio: adc: Update bindings for ADC7 name used on QCOM PMICs
+  iio: adc: Update driver files for ADC7 rename for QCOM PMICs
+  ARM: dts: qcom: Update devicetree for ADC7 rename for QCOM PMICs
+  iio: adc: Update bindings to remove support for ADC7 name used on QCOM
+    PMICs
+  iio: adc: qcom-spmi-adc5: remove support for ADC7 compatible string
+  iio: adc: Add QCOM PMIC5 Gen3 ADC bindings
+  iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+  dt-bindings: iio: adc: Copy QCOM ADC bindings files
+  iio: adc: Update QCOM ADC drivers for bindings path change
+  ARM: dts: qcom: Update devicetree for QCOM ADC bindings path change
+  dt-bindings: iio: remove QCOM ADC files from iio folder
 
-So far I can see that default register values are different, previously unu=
-sed registers are now used and there has been some reordering of how info i=
-s placed in registers [1] (return value for some commands is different). E.=
-g AJ1N[1:0] has been moved from B102h to B101h [1]
+ .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  131 +-
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   19 +-
+ arch/arm64/boot/dts/qcom/pm6125.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm6150.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm660.dtsi           |    2 +-
+ arch/arm64/boot/dts/qcom/pm660l.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm8150.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm8150l.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pm8916.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8994.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pmi632.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/pmi8950.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pmk8350.dtsi         |    4 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |    2 +-
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi         |    2 +-
+ arch/arm64/boot/dts/qcom/pms405.dtsi          |    2 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts       |    4 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |    4 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |    8 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   48 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |    2 +-
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |    4 +-
+ drivers/iio/adc/Kconfig                       |   25 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/qcom-spmi-adc5-gen3.c         | 1193 +++++++++++++++++
+ drivers/iio/adc/qcom-spmi-adc5.c              |   93 +-
+ drivers/iio/adc/qcom-spmi-vadc.c              |    2 +-
+ drivers/iio/adc/qcom-vadc-common.c            |   36 +-
+ .../iio/adc/qcom,spmi-adc5-gen2-pm8350.h      |   64 +
+ .../iio/adc/qcom,spmi-adc5-gen2-pm8350b.h     |   89 ++
+ .../iio/adc/qcom,spmi-adc5-gen2-pmk8350.h     |   47 +
+ .../iio/adc/qcom,spmi-adc5-gen2-pmr735a.h     |   29 +
+ .../iio/adc/qcom,spmi-adc5-gen2-pmr735b.h     |   28 +
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550.h      |   48 +
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550b.h     |   97 ++
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h    |   20 +
+ .../iio/adc/qcom,spmi-adc5-gen3-pmk8550.h     |   54 +
+ .../iio/{ => adc}/qcom,spmi-vadc.h            |  209 ++-
+ .../dt-bindings/iio/qcom,spmi-adc7-pm8350.h   |   63 -
+ .../dt-bindings/iio/qcom,spmi-adc7-pm8350b.h  |   88 --
+ .../dt-bindings/iio/qcom,spmi-adc7-pmk8350.h  |   46 -
+ .../dt-bindings/iio/qcom,spmi-adc7-pmr735a.h  |   28 -
+ .../dt-bindings/iio/qcom,spmi-adc7-pmr735b.h  |   28 -
+ include/linux/iio/adc/qcom-vadc-common.h      |   12 +-
+ 50 files changed, 2088 insertions(+), 474 deletions(-)
+ create mode 100644 drivers/iio/adc/qcom-spmi-adc5-gen3.c
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen2-pm8350.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen2-pm8350b.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen2-pmk8350.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen2-pmr735a.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen2-pmr735b.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550b.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pmk8550.h
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (59%)
+ delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h
+ delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pm8350b.h
+ delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pmk8350.h
+ delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pmr735a.h
+ delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pmr735b.h
 
-Moreover, instructions to some commands have been changed as well as meanin=
-g of what data bits mean [2][3]. Also, new features have been added [2]; th=
-ere is now PCLKS 3 for example.
-You can see few differences in following images:
-[1]=C2=A0https://ibb.co/NmgbZmy=C2=A0- GAMACTRL_st7701.png
-[2]=C2=A0https://ibb.co/G79y235=C2=A0- PCLKS2.png
+-- 
+2.25.1
 
-P.S. this is second time I'm trying to send this e-mail so some of you migh=
-t have received e-mail with the same text twice
-
-
-Thank you for your time,
-Paulo
