@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141C774BB73
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78AA74BB75
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjGHCka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S232366AbjGHCmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjGHCk0 (ORCPT
+        with ESMTP id S230036AbjGHCmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:40:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F25170C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:40:25 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QyZHD2gyRzqTwZ;
-        Sat,  8 Jul 2023 10:39:52 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Sat, 8 Jul 2023 10:40:21 +0800
-Subject: Re: [PATCH v3 1/4] mm/hwpoison: delete all entries before traversal
- in __folio_free_raw_hwp
-To:     Jiaqi Yan <jiaqiyan@google.com>, <mike.kravetz@oracle.com>,
-        <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     <songmuchun@bytedance.com>, <shy828301@gmail.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <duenwen@google.com>, <axelrasmussen@google.com>,
-        <jthoughton@google.com>
-References: <20230707201904.953262-1-jiaqiyan@google.com>
- <20230707201904.953262-2-jiaqiyan@google.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <0be87971-543d-4d39-850e-3d9160ffa5e2@huawei.com>
-Date:   Sat, 8 Jul 2023 10:40:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 7 Jul 2023 22:42:04 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D057DBA;
+        Fri,  7 Jul 2023 19:42:00 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QyZKb6s3Hz4f3lCr;
+        Sat,  8 Jul 2023 10:41:55 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCHLaHyzKhkbSHbNQ--.51207S3;
+        Sat, 08 Jul 2023 10:41:56 +0800 (CST)
+Subject: Re: [PATCH -next v2 2/2] md/raid5-cache: fix null-ptr-deref in
+ r5l_reclaim_thread()
+To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     xni@redhat.com, logang@deltatee.com, hch@lst.de, shli@fb.com,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawwe.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230628010756.70649-1-yukuai1@huaweicloud.com>
+ <20230628010756.70649-3-yukuai1@huaweicloud.com>
+ <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
+ <e5d746d0-1d42-3d60-450b-2450f24f0915@huaweicloud.com>
+ <4690dfff-ad72-bf83-7feb-75018712eb17@huaweicloud.com>
+ <d6a6ec52-3c33-726f-1ce2-40168bfa7e27@huaweicloud.com>
+ <CAPhsuW5jy=SrWnGVPYQyLJBY3bN7uK1OnXQsh8J_ety=oieZeg@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <b1b814c5-ad92-d398-a96a-31e0243e9bc1@huaweicloud.com>
+Date:   Sat, 8 Jul 2023 10:41:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20230707201904.953262-2-jiaqiyan@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
+In-Reply-To: <CAPhsuW5jy=SrWnGVPYQyLJBY3bN7uK1OnXQsh8J_ety=oieZeg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCHLaHyzKhkbSHbNQ--.51207S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw1kXw18JFykWry3Xw1kKrg_yoW3WFg_ur
+        WYvr1DKw47uF1akan7CF1Skwn7GFW5Ja4rXrW8JF4kKrWrZrW0gF4kZ393W3y3Cw4kG3Z3
+        WrWrX3ySq3yDGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/8 4:19, Jiaqi Yan wrote:
-> Traversal on llist (e.g. llist_for_each_safe) is only safe AFTER entries
-> are deleted from the llist. Correct the way __folio_free_raw_hwp deletes
-> and frees raw_hwp_page entries in raw_hwp_list: first llist_del_all, then
-> kfree within llist_for_each_safe.
+Hi,
+
+在 2023/07/07 17:36, Song Liu 写道:
+> On Fri, Jul 7, 2023 at 5:19 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/07/07 17:16, Yu Kuai 写道:
+>>> Perhaps you means this order?
+>>>
+>>> r5l_exit_log
+>>>    flush_work(&log->disable_writeback_work)
+>>>    conf->log = NULL
+>>>    md_unregister_thread(&log->reclaim_thread)
+>>>
+>>> I think this is better indeed.
+>> Never mind, this is wrong, I got confused...
+>>
+>> Please ignore this and take a look at my original fix.
 > 
-> As of today, concurrent adding, deleting, and traversal on raw_hwp_list
-> from hugetlb.c and/or memory-failure.c are fine with each other. Note
-
-I think there's a race on freeing the raw_hwp_list between unpoison_memory and __update_and_free_hugetlb_folio:
-
-  unpoison_memory		__update_and_free_hugetlb_folio
-    				if (folio_test_hwpoison)
-    	  			    folio_clear_hugetlb_hwpoison
-    folio_free_raw_hwp		      folio_free_raw_hwp
-    folio_test_clear_hwpoison
-
-unpoison_memory and __update_and_free_hugetlb_folio can traverse and free the raw_hwp_list
-at the same time. And I believe your patch will fix the problem. Thanks.
-
-> this is guaranteed partly by the lock-free nature of llist, and partly
-> by holding hugetlb_lock and/or mf_mutex. For example, as llist_del_all
-> is lock-free with itself, folio_clear_hugetlb_hwpoison()s from
-> __update_and_free_hugetlb_folio and memory_failure won't need explicit
-> locking when freeing the raw_hwp_list. New code that manipulates
-> raw_hwp_list must be careful to ensure the concurrency correctness.
+> How about
 > 
-> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> r5l_exit_log
+>    md_unregister_thread(&log->reclaim_thread)
+>    conf->log = NULL
+>    flush_work(&log->disable_writeback_work)
+> 
+> ?
 
-Anyway, this patch looks good to me.
+This looks correct, expect that wake_up() should be moved together.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Thanks.
+I'll send a v2.
+
+Thanks,
+Kuai
+> 
+> Thanks,
+> Song
+> .
+> 
 
