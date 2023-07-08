@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8DA74BE45
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 17:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D16074BE4C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 17:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjGHPjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 11:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S229816AbjGHPvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 11:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjGHPjE (ORCPT
+        with ESMTP id S229726AbjGHPvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 11:39:04 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39524B8;
-        Sat,  8 Jul 2023 08:39:03 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1688830733tbhmnxv4
-Received: from linux-lab-host.localdomain ( [116.30.131.119])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 08 Jul 2023 23:38:52 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: ILHsT53NKPj1pTbEW3cPZlkLOwrV+fGbJKEBPIc2JzMF7eUUvTSN4H7yOyRW/
-        q6dpW6rJNwJNf6fmcyoIOQnxkgBR3KRPHTMICJC0Nn4SxSx1dsTKJM9saahEdexOS7Q4RP2
-        AdpI0AOV2AnDC+HkYFWOI8R8GuGkUy4WN/taowligDlWKPNmCR3RebTa6KnFNI8qi302goO
-        UzODrofo+Ge7Ow8LVLD2biPRl0ab1hJsTD60f/XnYKVh08+Bf1FlzFpGFcMS5ByfBSsNUgc
-        GvN1FlIT3K8LZDaJAYIXdBereDfuOYXH4LwEEikTXV5bV159dtfc5CgRF/i+Im/KzVI/Tdw
-        bKAUK9jk2e9N/zwm8TZayklWGlcXsTsQqrbgxQlbw3ehK21FFADWMfmGLA9Og==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13069921436544709072
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v2 12/12] tools/nolibc: s390/crt.h: shrink _start with _start_c
-Date:   Sat,  8 Jul 2023 23:38:48 +0800
-Message-Id: <7246cc6042073168817a6fe36d8ff3c0c508e684.1688828139.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688828139.git.falcon@tinylab.org>
-References: <cover.1688828139.git.falcon@tinylab.org>
+        Sat, 8 Jul 2023 11:51:51 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226031A8
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 08:51:48 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4Qyvrv19GnzBHXkd
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 23:51:43 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688831500; x=1691423501; bh=6UNwiye9DK9kR1UF8tjATHdsO2e
+        t5D1MCkBSWpcgjPk=; b=qVqwuhuy+AKKjx2m5T/SxpyTOUiz83/GjgpZu9+Z5JS
+        NAIatOGPcbfddj8OmUXuxFB8rT/5J2O5bI8J/8YPcvBsIbFCkk1ht2Fv9sx+3x73
+        zn2FYY0FFY+5WSLGCHbcDedvFWdcoyUS+FhUafE5XHjRUPS4hGJfYKQg06KRE/2v
+        VlOPL0OqmolOm5Qtz4QogYIFJVcScrtZC0Vyqzm+BjZu9YPJ0AhP5XArxRXY+uv9
+        owOwbwZTAcIVLM6vKjzYJ2ErGZsPo6pMkYbm9aaQ1fgajYtchcVdvzZ2cDG6ipe+
+        GNBY9flVz7V8s2Tc02jPtzwOHNxOBcYlPL5jYt4Ud1w==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9fKbQudeLmGi for <linux-kernel@vger.kernel.org>;
+        Sat,  8 Jul 2023 23:51:40 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4Qyvrr66ltzBHXkZ;
+        Sat,  8 Jul 2023 23:51:40 +0800 (CST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Sat, 08 Jul 2023 23:51:40 +0800
+From:   xuanzhenggang001@208suo.com
+To:     geert@linux-m68k.org
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] m68k: q40: prefer 'unsigned int' to bare use of 'unsigned'
+In-Reply-To: <tencent_7098E5576B2FD785B3A3B9CD6CE0643D4C07@qq.com>
+References: <tencent_7098E5576B2FD785B3A3B9CD6CE0643D4C07@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <4d862263222c7358840745c2cd0ce0fa@208suo.com>
+X-Sender: xuanzhenggang001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move most of the _start operations to _start_c().
+Fix the following warnings reported by checkpatch:
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+./arch/m68k/q40/q40ints.c:172: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
+./arch/m68k/q40/q40ints.c:211: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
+
+Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
 ---
- tools/include/nolibc/s390/crt.h | 32 ++++----------------------------
- 1 file changed, 4 insertions(+), 28 deletions(-)
+  arch/m68k/q40/q40ints.c | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/nolibc/s390/crt.h b/tools/include/nolibc/s390/crt.h
-index 8580f615d525..e247b8a37475 100644
---- a/tools/include/nolibc/s390/crt.h
-+++ b/tools/include/nolibc/s390/crt.h
-@@ -10,34 +10,10 @@
- void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
--		"lg	%r2,0(%r15)\n"		/* argument count */
--		"la	%r3,8(%r15)\n"		/* argument pointers */
--
--		"xgr	%r0,%r0\n"		/* r0 will be our NULL value */
--		/* search for envp */
--		"lgr	%r4,%r3\n"		/* start at argv */
--		"0:\n"
--		"clg	%r0,0(%r4)\n"		/* entry zero? */
--		"la	%r4,8(%r4)\n"		/* advance pointer */
--		"jnz	0b\n"			/* no -> test next pointer */
--						/* yes -> r4 now contains start of envp */
--		"larl	%r1,environ\n"
--		"stg	%r4,0(%r1)\n"
--
--		/* search for auxv */
--		"lgr	%r5,%r4\n"		/* start at envp */
--		"1:\n"
--		"clg	%r0,0(%r5)\n"		/* entry zero? */
--		"la	%r5,8(%r5)\n"		/* advance pointer */
--		"jnz	1b\n"			/* no -> test next pointer */
--		"larl	%r1,_auxv\n"		/* yes -> store value in _auxv */
--		"stg	%r5,0(%r1)\n"
--
--		"aghi	%r15,-160\n"		/* allocate new stackframe */
--		"xc	0(8,%r15),0(%r15)\n"	/* clear backchain */
--		"brasl	%r14,main\n"		/* ret value of main is arg to exit */
--		"lghi	%r1,1\n"		/* __NR_exit */
--		"svc	0\n"
-+		"lgr	%r2, %r15\n"          /* save stack pointer to %r2, as arg1 of _start_c */
-+		"aghi	%r15, -160\n"         /* allocate new stackframe                        */
-+		"xc	0(8,%r15), 0(%r15)\n" /* clear backchain                                */
-+		"brasl	%r14, _start_c\n"     /* transfer to c runtime                          */
- 	);
- 	__builtin_unreachable();
- }
--- 
-2.25.1
+diff --git a/arch/m68k/q40/q40ints.c b/arch/m68k/q40/q40ints.c
+index 127d7ecdbd49..9605d7b6cb30 100644
+--- a/arch/m68k/q40/q40ints.c
++++ b/arch/m68k/q40/q40ints.c
+@@ -169,7 +169,7 @@ void q40_sched_init (void)
+   *
+  */
 
+-struct IRQ_TABLE{ unsigned mask; int irq ;};
++struct IRQ_TABLE { unsigned int mask ; int irq ; };
+  #if 0
+  static struct IRQ_TABLE iirqs[]={
+    {Q40_IRQ_FRAME_MASK,Q40_IRQ_FRAME},
+@@ -208,7 +208,7 @@ static int aliased_irq;        /* how many times 
+inside handler ?*/
+  /* got interrupt, dispatch to ISA or keyboard/timer IRQs */
+  static void q40_irq_handler(unsigned int irq, struct pt_regs *fp)
+  {
+-    unsigned mir, mer;
++    unsigned int mir, mer;
+      int i;
+
+  //repeat:
