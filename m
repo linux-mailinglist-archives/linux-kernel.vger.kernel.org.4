@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7211274BD58
+	by mail.lfdr.de (Postfix) with ESMTP id C483474BD59
 	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 13:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjGHL1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 07:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S230031AbjGHL1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 07:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjGHL1b (ORCPT
+        with ESMTP id S229468AbjGHL1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 07:27:31 -0400
+        Sat, 8 Jul 2023 07:27:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930B11991
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 04:27:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3226F1997
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 04:27:36 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1qI65i-0002IC-OZ; Sat, 08 Jul 2023 13:27:06 +0200
+        id 1qI662-0002LD-TC; Sat, 08 Jul 2023 13:27:26 +0200
 Received: from [2a0a:edc0:0:1101:1d::54] (helo=dude05.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <afa@pengutronix.de>)
-        id 1qI65e-00CwkC-0l; Sat, 08 Jul 2023 13:27:02 +0200
+        id 1qI662-00CwkH-7G; Sat, 08 Jul 2023 13:27:26 +0200
 Received: from afa by dude05.red.stw.pengutronix.de with local (Exim 4.96)
         (envelope-from <afa@pengutronix.de>)
-        id 1qI65d-00C9j5-1g;
-        Sat, 08 Jul 2023 13:27:01 +0200
+        id 1qI662-00C9mA-0N;
+        Sat, 08 Jul 2023 13:27:26 +0200
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: imx8mm: suppress log message on probe deferral
-Date:   Sat,  8 Jul 2023 13:26:46 +0200
-Message-Id: <20230708112647.2897294-1-a.fatoum@pengutronix.de>
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] thermal: core: constify params in thermal_zone_device_register
+Date:   Sat,  8 Jul 2023 13:27:19 +0200
+Message-Id: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,39 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nvmem_cell_read_u32() may return -EPROBE_DEFER if NVMEM supplier has not
-yet been probed. Future reprobe may succeed, so printing:
+Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone
+parameters structure"), thermal_zone_device_register() allocates a copy
+of the tzp argument and callers need not explicitly manage its lifetime.
 
-  i.mx8mm_thermal 30260000.tmu: Failed to read OCOTP nvmem cell (-517).
+This means the function no longer cares about the parameter being
+mutable, so constify it.
 
-to the log is confusing. Fix this by using dev_err_probe. This also
-elevates the message from warning to error, which is more correct: The
-log message is only ever printed in probe error path and probe aborts
-afterwards, so it really warrants an error-level message.
+No functional change.
 
-Fixes: 403291648823 ("thermal/drivers/imx: Add support for loading calibration data from OCOTP")
+Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
 Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
- drivers/thermal/imx8mm_thermal.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/thermal/thermal_core.c | 4 ++--
+ include/linux/thermal.h        | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index d8005e9ec992..1f780c4a1c89 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -179,10 +179,8 @@ static int imx8mm_tmu_probe_set_calib_v1(struct platform_device *pdev,
- 	int ret;
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 842f678c1c3e..cc2b5e81c620 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1203,7 +1203,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+ struct thermal_zone_device *
+ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
+ 					void *devdata, struct thermal_zone_device_ops *ops,
+-					struct thermal_zone_params *tzp, int passive_delay,
++					const struct thermal_zone_params *tzp, int passive_delay,
+ 					int polling_delay)
+ {
+ 	struct thermal_zone_device *tz;
+@@ -1371,7 +1371,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
  
- 	ret = nvmem_cell_read_u32(&pdev->dev, "calib", &ana0);
--	if (ret) {
--		dev_warn(dev, "Failed to read OCOTP nvmem cell (%d).\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to read OCOTP nvmem cell\n");
+ struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
+ 							 void *devdata, struct thermal_zone_device_ops *ops,
+-							 struct thermal_zone_params *tzp, int passive_delay,
++							 const struct thermal_zone_params *tzp, int passive_delay,
+ 							 int polling_delay)
+ {
+ 	return thermal_zone_device_register_with_trips(type, NULL, ntrips, mask,
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 87837094d549..dee66ade89a0 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -301,14 +301,14 @@ int thermal_acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp);
+ #ifdef CONFIG_THERMAL
+ struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
+ 		void *, struct thermal_zone_device_ops *,
+-		struct thermal_zone_params *, int, int);
++		const struct thermal_zone_params *, int, int);
  
- 	writel(FIELD_PREP(TASR_BUF_VREF_MASK,
- 			  FIELD_GET(ANA0_BUF_VREF_MASK, ana0)) |
+ void thermal_zone_device_unregister(struct thermal_zone_device *);
+ 
+ struct thermal_zone_device *
+ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int, int,
+ 					void *, struct thermal_zone_device_ops *,
+-					struct thermal_zone_params *, int, int);
++					const struct thermal_zone_params *, int, int);
+ 
+ void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+ const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+@@ -348,7 +348,7 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz);
+ static inline struct thermal_zone_device *thermal_zone_device_register(
+ 	const char *type, int trips, int mask, void *devdata,
+ 	struct thermal_zone_device_ops *ops,
+-	struct thermal_zone_params *tzp,
++	const struct thermal_zone_params *tzp,
+ 	int passive_delay, int polling_delay)
+ { return ERR_PTR(-ENODEV); }
+ static inline void thermal_zone_device_unregister(
 -- 
 2.39.2
 
