@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78AA74BB75
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6B674BB77
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbjGHCmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S232679AbjGHCsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjGHCmE (ORCPT
+        with ESMTP id S229699AbjGHCsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:42:04 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D057DBA;
-        Fri,  7 Jul 2023 19:42:00 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QyZKb6s3Hz4f3lCr;
-        Sat,  8 Jul 2023 10:41:55 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCHLaHyzKhkbSHbNQ--.51207S3;
-        Sat, 08 Jul 2023 10:41:56 +0800 (CST)
-Subject: Re: [PATCH -next v2 2/2] md/raid5-cache: fix null-ptr-deref in
- r5l_reclaim_thread()
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     xni@redhat.com, logang@deltatee.com, hch@lst.de, shli@fb.com,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawwe.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230628010756.70649-1-yukuai1@huaweicloud.com>
- <20230628010756.70649-3-yukuai1@huaweicloud.com>
- <CAPhsuW500i9LEcSsAchje46b2maKdj4EVaefPtinZfdP+AqELw@mail.gmail.com>
- <e5d746d0-1d42-3d60-450b-2450f24f0915@huaweicloud.com>
- <4690dfff-ad72-bf83-7feb-75018712eb17@huaweicloud.com>
- <d6a6ec52-3c33-726f-1ce2-40168bfa7e27@huaweicloud.com>
- <CAPhsuW5jy=SrWnGVPYQyLJBY3bN7uK1OnXQsh8J_ety=oieZeg@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b1b814c5-ad92-d398-a96a-31e0243e9bc1@huaweicloud.com>
-Date:   Sat, 8 Jul 2023 10:41:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 7 Jul 2023 22:48:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7532FC9;
+        Fri,  7 Jul 2023 19:48:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 131D661AD8;
+        Sat,  8 Jul 2023 02:48:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D688C433C7;
+        Sat,  8 Jul 2023 02:48:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688784508;
+        bh=OFgQvHFx6RMj137byhZyTysi7H9gyOX5KQzGa5wUhmA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IApqL/I/c5fj1mqdS+fq65yAAz1/XBpssqSKngvwfebXxoVP02lvjVUdXGZtk7znR
+         Dx3rjjve6iUEA4HkS6Yo7jsJ56dT3RWO8dDZxQt9N9ucZU17avJSxjdCJGi1eitsYE
+         C9R6pR2RV9+A/zA/fdIERhHQm1mbFQgAZNT3fNu6M2QuizC0GUJn/4cGeSxb6cighQ
+         xgrZ0eFOEyNextrBRk1QqU9amivmTOqussHirUQW1uyVefaddXgMEagFluQmerlvXX
+         jh4TPxKYLeD16GzY23cFdIYS3RLE+wbyxLdBpbu6B5KzzEPtE5PEZqo32/k08WKYlt
+         0FbdzSm99PIdg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH v3 0/4] tracing/probes: Fix bugs in process_fetch_insn
+Date:   Sat,  8 Jul 2023 11:48:23 +0900
+Message-ID:  <168878450334.2721251.3030778817503575503.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW5jy=SrWnGVPYQyLJBY3bN7uK1OnXQsh8J_ety=oieZeg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCHLaHyzKhkbSHbNQ--.51207S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrKw1kXw18JFykWry3Xw1kKrg_yoW3WFg_ur
-        WYvr1DKw47uF1akan7CF1Skwn7GFW5Ja4rXrW8JF4kKrWrZrW0gF4kZ393W3y3Cw4kG3Z3
-        WrWrX3ySq3yDGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,42 +59,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-在 2023/07/07 17:36, Song Liu 写道:
-> On Fri, Jul 7, 2023 at 5:19 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/07/07 17:16, Yu Kuai 写道:
->>> Perhaps you means this order?
->>>
->>> r5l_exit_log
->>>    flush_work(&log->disable_writeback_work)
->>>    conf->log = NULL
->>>    md_unregister_thread(&log->reclaim_thread)
->>>
->>> I think this is better indeed.
->> Never mind, this is wrong, I got confused...
->>
->> Please ignore this and take a look at my original fix.
-> 
-> How about
-> 
-> r5l_exit_log
->    md_unregister_thread(&log->reclaim_thread)
->    conf->log = NULL
->    flush_work(&log->disable_writeback_work)
-> 
-> ?
+Here are the 3rd version of fix bugs in process_fetch_insn_*().
+The previous version is here;
 
-This looks correct, expect that wake_up() should be moved together.
+https://lore.kernel.org/all/168873724526.2687993.15242662075324919195.stgit@mhiramat.roam.corp.google.com/
 
-I'll send a v2.
+[3/4] is updated to move FAULT_STRING macro to trace_probe.h
+and use it in trace_probe.c instead of "(fault)".
 
-Thanks,
-Kuai
-> 
-> Thanks,
-> Song
-> .
-> 
+Thank you,
 
+---
+
+Masami Hiramatsu (Google) (4):
+      tracing/probes: Fix to avoid double count of the string length on the array
+      tracing/probes: Fix not to count error code to total length
+      Revert "tracing: Add "(fault)" name injection to kernel probes"
+      tracing/probes: Fix to record 0-length data_loc in fetch_store_string*() if fails
+
+
+ kernel/trace/trace.h              |    2 ++
+ kernel/trace/trace_probe.c        |    2 +-
+ kernel/trace/trace_probe_kernel.h |   29 ++++-------------------------
+ kernel/trace/trace_probe_tmpl.h   |   10 +++++-----
+ kernel/trace/trace_uprobe.c       |    3 ++-
+ 5 files changed, 14 insertions(+), 32 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
