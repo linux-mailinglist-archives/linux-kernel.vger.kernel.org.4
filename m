@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B433774BA69
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F91D74BA73
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjGHAGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 20:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S232601AbjGHAHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 20:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbjGHAG2 (ORCPT
+        with ESMTP id S232816AbjGHAHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 20:06:28 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7532123;
-        Fri,  7 Jul 2023 17:06:27 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b74e2d8c98so2257875a34.2;
-        Fri, 07 Jul 2023 17:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688774786; x=1691366786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uxQ9ORFt2KalpWVPLln/XeJlZQtOLOl2gBwuEluzJqk=;
-        b=ih/x/XN1N1IP8D9qyTD4drevI8/8TWIA770S5KgG7qcDE+qdzprHBGX1oqGrMEt8ZE
-         JSzTfGSyBRGn/OstUnawSgSa1XXD72WLa+Dl9Sga4r+/JatWMLX8SXMm3kCyU7Gw+SGw
-         owjWuWQFTxD8MpGyTsq0eQAgCXIqQyaes6pnO+bfKVCGci+i6xgyKrTivQVrNNepFXFZ
-         UwfvnbYB+CkbjCrKUG73gZ0DiRxGen+8CRlj7E9wL8ivurWIq8Ku6yhfYPlA1aLABlRE
-         ZeaO3iAdnRFmUbCQk9CMSNK86ZtoCRdeHAv1ST2Xu2croQBTb1cROTaJBEVTaYVHuwBy
-         L7kg==
+        Fri, 7 Jul 2023 20:07:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A73C1709
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 17:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688774810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ClNl+J5kZre4g9U4Ilh/C86VTLXimbatUVRVhRP/EmY=;
+        b=K4+uD5dugJ5qlg2ymE4QggX1VqesB4TTxY4GBESrG4VuWbYEWJJHfjDKyNSqcICfWaity1
+        dasYi6W/so3yMF+7ZXR7ty3purys5FECh2MiAejuXk+27sptozaDwzVyNDdsNFrdmQcZue
+        r/Z+zcgYUdr1mqE5umrNFm42sTi57dg=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-7MYZ4YfZMAuU1eHiLoUKBQ-1; Fri, 07 Jul 2023 20:06:49 -0400
+X-MC-Unique: 7MYZ4YfZMAuU1eHiLoUKBQ-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b6a64c5aa5so4313311fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 17:06:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688774786; x=1691366786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uxQ9ORFt2KalpWVPLln/XeJlZQtOLOl2gBwuEluzJqk=;
-        b=F0UOQUctJ3cZcNVluwYrcYGRmxwEG9OK79h4sS2g/NaXN/61S9t+b9difaS2UBa6ri
-         K8PsNr2dl+RpIHVaPVjUTAPMTKS7pq5ocZvXruMqo1RdP+i2y64vku86e04hWpVni4vq
-         MKEKELF6w/jkB7S6u7hnVo/mYFMZdUy2+/ZSfVdoSVC+92LXY2oVrIzedEVHiurFEJE/
-         jYqTz+Wr8dMBDCvlvI82C6JpenNZKBE63hlzhChX8VlBDWW8mQQMl7oyzBYaLg3k7Lxr
-         PBxZ00V8tA+/xavkXRx8UEzT2c4zbQoemBoWH6MwPTPvHyZN/w1f1VZoVqRdOlkxuDM6
-         8DdQ==
-X-Gm-Message-State: ABy/qLbbaGXsVPWgz8b1MQJXcsQBDDplS/tfrei6CQGuBr2VaB7jbBGW
-        d9uz2P8HWDxCGo3Y1H1SKewu1cUjRL4=
-X-Google-Smtp-Source: APBJJlH+LJYi6W8fj+k19PKYvMadG7yFuvSejenF+WQtpYGeIrYZwfvXgtsbMl+ZRQ2wzQ5k5TzNUQ==
-X-Received: by 2002:a05:6870:a68f:b0:1b3:e896:9bfa with SMTP id i15-20020a056870a68f00b001b3e8969bfamr8470718oam.25.1688774786484;
-        Fri, 07 Jul 2023 17:06:26 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:38de:2bd4:8f55:60cd])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902dac300b001b66a71a4a0sm3805403plx.32.2023.07.07.17.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 17:06:26 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 17:06:22 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh@kernel.org>, kernel@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] dt-bindings: input: touchscreen: edt-ft5x06: Add
- 'threshold' property
-Message-ID: <ZKiofhzbBD2hIzmv@google.com>
-References: <20230621093245.78130-1-o.rempel@pengutronix.de>
- <20230621093245.78130-6-o.rempel@pengutronix.de>
+        d=1e100.net; s=20221208; t=1688774807; x=1691366807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ClNl+J5kZre4g9U4Ilh/C86VTLXimbatUVRVhRP/EmY=;
+        b=eFy112oOSXn3mXmtN5uG1aSQihGj7B8er1u9ECYHZLsU+421gO6ahkXmo/M9M7LIBM
+         NH5z1QsgpfR2HwClk0f6+cxcGvzyYXnxskNoc+5PDuZc/xV1TZHxqQZxxm3jr+ghnFTS
+         IZ2LQAY4cKabfXqhZRg1O+X7xDtKbNjukUOZWUsCLHSNh0o7G9LOh1buUtBMOMoGkrmC
+         kfx2Dsk71pyYeLZLJ27gqnplLd7Cu4KGbEDKonCYXFSja8u/gV+9IYQgry8i4Zdzp6Gb
+         LrsXM/Mth6hiDn8l0zukLk9XJwpvqU1MJuHAZ+wZlVqGd2xkQKEpLnrdxKx5EaZltNGM
+         lirw==
+X-Gm-Message-State: ABy/qLZynQ88uD8QMY1PAYQXDJcVL6TYnjLqf9RRHspY/HZEKMdgp/6D
+        6StpSIPMDtCmK4bWqgQdwMMAjlxHY0FQWpucw9vA0zout7XARSmtSfZvWlbGRGmLDsPRPNgI4Qz
+        ktIAJ/YF0JvbnwtiKmlz9l85KwBrnkXzmUmhnsU1b
+X-Received: by 2002:a2e:a4af:0:b0:2b6:cd7f:5ea8 with SMTP id g15-20020a2ea4af000000b002b6cd7f5ea8mr3974260ljm.1.1688774807530;
+        Fri, 07 Jul 2023 17:06:47 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFpPr6r6JoBVvnvb4DwD31nWTUtEWSpKheU8SGmCkexh44pjRQR6+zxMEjOSNetT8JZmG/XoPxNZG9/X8BANUg=
+X-Received: by 2002:a2e:a4af:0:b0:2b6:cd7f:5ea8 with SMTP id
+ g15-20020a2ea4af000000b002b6cd7f5ea8mr3974256ljm.1.1688774807136; Fri, 07 Jul
+ 2023 17:06:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621093245.78130-6-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230630160645.3984596-1-kherbst@redhat.com> <14f2b03302c07a62cce1ec272f54727b2ad39721.camel@redhat.com>
+In-Reply-To: <14f2b03302c07a62cce1ec272f54727b2ad39721.camel@redhat.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Sat, 8 Jul 2023 02:06:36 +0200
+Message-ID: <CACO55tv_2Oisgkm+FqQ6xz91zJ8KidwFV6hMoCxHS-JYMkiFxQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/disp/g94: enable HDMI
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:32:45AM +0200, Oleksij Rempel wrote:
-> Add a new property 'threshold' to the edt-ft5x06 touchscreen binding.
-> This property allows setting the "click"-threshold in the range from 0
-> to 255. This change addresses the following dtbs_check warning:
-> imx6dl-lanmcu.dtb: touchscreen@38: 'threshold' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Fri, Jul 7, 2023 at 11:03=E2=80=AFPM Lyude Paul <lyude@redhat.com> wrote=
+:
+>
+> Reviewed-by: Lyude Paul <lyude@redhat.com>
+>
+> But seeing as I looked at this + some other patches yesterday I assume th=
+ere's
+> still more to this?
+>
 
-Applied, thank you.
+not really. All those patches are all independent and just a bunch of
+fixes. I just figured this one out a bit later.
 
--- 
-Dmitry
+> On Fri, 2023-06-30 at 18:06 +0200, Karol Herbst wrote:
+> > Cc: Ben Skeggs <bskeggs@redhat.com>
+> > Cc: Lyude Paul <lyude@redhat.com>
+> > Fixes: f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire +=
+ infoframe methods")
+> > Signed-off-by: Karol Herbst <kherbst@redhat.com>
+> > ---
+> >  drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c b/drivers/g=
+pu/drm/nouveau/nvkm/engine/disp/g94.c
+> > index a4853c4e5ee3..67ef889a0c5f 100644
+> > --- a/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
+> > +++ b/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
+> > @@ -295,6 +295,7 @@ g94_sor =3D {
+> >       .clock =3D nv50_sor_clock,
+> >       .war_2 =3D g94_sor_war_2,
+> >       .war_3 =3D g94_sor_war_3,
+> > +     .hdmi =3D &g84_sor_hdmi,
+> >       .dp =3D &g94_sor_dp,
+> >  };
+> >
+>
+> --
+> Cheers,
+>  Lyude Paul (she/her)
+>  Software Engineer at Red Hat
+>
+
