@@ -2,41 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F073374BCF1
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 11:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B3F74BCF5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 11:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjGHJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 05:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S230480AbjGHJBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 05:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHJA0 (ORCPT
+        with ESMTP id S229496AbjGHJBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 05:00:26 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099D1723
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 02:00:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VmrW6mA_1688806814;
-Received: from 172.20.10.3(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VmrW6mA_1688806814)
-          by smtp.aliyun-inc.com;
-          Sat, 08 Jul 2023 17:00:16 +0800
-Message-ID: <97875049-8df9-e041-61ca-d90723ba6e82@linux.alibaba.com>
-Date:   Sat, 8 Jul 2023 17:00:09 +0800
+        Sat, 8 Jul 2023 05:01:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7631723;
+        Sat,  8 Jul 2023 02:01:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-992acf67388so308664766b.1;
+        Sat, 08 Jul 2023 02:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688806870; x=1691398870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LsGY/iGtzaIgMwA9b3Ok3/pViuvT9eB2lCiEe6DAXmw=;
+        b=ZC9DXKQ4BCjmzF3p8pBZiMSzsDXlNUajNpgzbgfdEtdK3LaC1ilz7ERZEOO3wEXYtO
+         nedwYopczXsFZFxEDFH56U4HhmY5nnWxnzRiWbwLKPslIkGvcrut7zp8pUyBFf1lId5n
+         t+Sy72MHM4qeyZXeDmnZQiqzMVSqYXjlzIHl1tha3BDw4CVjC4BknFu1dC03RFTVkiTs
+         KqunWm00CvMHfOH655Q3VrboGu0bCWdEfUt4tqQ7Mlrf8rdHcpA+7iVyQv+orO/BOef6
+         ZFNyvFHHjxsMWN6gG5EXxKEDP4L3QsRDvTWrnbUSFuGPHmIuWV1piHPT+lOx9nbeoLla
+         d20w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688806870; x=1691398870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LsGY/iGtzaIgMwA9b3Ok3/pViuvT9eB2lCiEe6DAXmw=;
+        b=TLLGtG6TKlXAfecn4KZQ5gLROpWGt1BEN0KBzKHUmUi0v12TDIrOEinO6HPMJIODFL
+         U1cTYqCPvgFXJpYzqSGWQSsvbNPvzbQ0z71le217omS2Umf1U22jnshgXyeEmwmN2Ysw
+         jzCqjRapERz8z+o5ctUH0X+3Rpf5nJ6lVhL8GuNIYKH7/YdZVrLZhSd4cHtdtb8S7EtW
+         ULXpt02K5qz+UAp52FT4TBk4NT7/cHhl2FXs7FWh0JjRtbeTrAQic+A7B5jLPN1k/rzy
+         C2FOTgOsCkGojpforOyiZLwtn1xBbns0X0LelZQlBDJ+MCaabxNtBprHIoCPg6mksSk6
+         qkTw==
+X-Gm-Message-State: ABy/qLY1YLWQRIa0FezQ5blGh7rBXEN+1wGdWXdkiFjNUj7ABAAKB0zC
+        Hpw2Sh88zpW0Cc4jxVTZ0jM=
+X-Google-Smtp-Source: APBJJlGWA9cXPwJQzLfRKpd7yjMu6208psGsPf4ABVaoF4bcrbXZqLcg/CAKOOeOxS8x9SRa1CJCVQ==
+X-Received: by 2002:a17:906:3c46:b0:98d:d6b2:3377 with SMTP id i6-20020a1709063c4600b0098dd6b23377mr5344497ejg.30.1688806870400;
+        Sat, 08 Jul 2023 02:01:10 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id g10-20020a17090613ca00b00992ae4cf3c1sm3204313ejc.186.2023.07.08.02.01.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 02:01:09 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Charlemagne Lasse <charlemagnelasse@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH 1/2] locking/arch: Avoid variable shadowing in local_try_cmpxchg()
+Date:   Sat,  8 Jul 2023 11:00:36 +0200
+Message-ID: <20230708090048.63046-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] erofs: fix two loop issues when read page beyond EOF
-To:     Chunhai Guo <guochunhai@vivo.com>, xiang@kernel.org,
-        chao@kernel.org
-Cc:     huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230708062432.67344-1-guochunhai@vivo.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230708062432.67344-1-guochunhai@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,94 +84,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chunhai,
+Several architectures define arch_try_local_cmpxchg macro using
+internal temporary variables named ___old, __old or _old. Remove
+temporary varible in local_try_cmpxchg to avoid variable shadowing.
 
-On 2023/7/8 14:24, Chunhai Guo wrote:
-> When z_erofs_read_folio() reads a page with an offset far beyond EOF, two
-> issues may occur:
-> - z_erofs_pcluster_readmore() may take a long time to loop when the offset
->    is big enough, which is unnecessary.
->      - For example, it will loop 4691368 times and take about 27 seconds
->        with following case.
->          - offset = 19217289215
->          - inode_size = 1442672
-> - z_erofs_do_read_page() may loop infinitely due to the inappropriate
->    truncation in the below statement. Since the offset is 64 bits and
-> min_t() truncates the result to 32 bits. The solution is to replace
-> unsigned int with another 64-bit type, such as erofs_off_t.
->      cur = end - min_t(unsigned int, offset + end - map->m_la, end);
->      - For example:
->          - offset = 0x400160000
->          - end = 0x370
->          - map->m_la = 0x160370
->          - offset + end - map->m_la = 0x400000000
->          - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
+No functional change intended.
 
-Thanks for the catch!
+Fixes: d994f2c8e241 ("locking/arch: Wire up local_try_cmpxchg()")
+Reported-by: Charlemagne Lasse <charlemagnelasse@gmail.com>
+Closes: https://lore.kernel.org/lkml/CAFGhKbyxtuk=LoW-E3yLXgcmR93m+Dfo5-u9oQA_YC5Fcy_t9g@mail.gmail.com/
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jun Yi <yijun@loongson.cn>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/loongarch/include/asm/local.h | 4 ++--
+ arch/mips/include/asm/local.h      | 4 ++--
+ arch/x86/include/asm/local.h       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Could you split these two into two patches?
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 83e995b30e47..c49675852bdc 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -63,8 +63,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index 5daf6fe8e3e9..e6ae3df0349d 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -101,8 +101,8 @@ static __inline__ long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+index 56d4ef604b91..635132a12778 100644
+--- a/arch/x86/include/asm/local.h
++++ b/arch/x86/include/asm/local.h
+@@ -127,8 +127,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ /* Always has a lock prefix */
+-- 
+2.41.0
 
-how about using:
-cur = end - min_t(erofs_off_t, offend + end - map->m_la, end)
-for this?
-
-since cur and end are all [0, PAGE_SIZE - 1] for now, and
-folio_size() later.
-
->      - Expected result:
->          - cur = 0
->      - Actual result:
->          - cur = 0x370
-> 
-> Signed-off-by: Chunhai Guo <guochunhai@vivo.com>
-> ---
->   fs/erofs/zdata.c | 13 ++++++++++---
->   1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> index 5f1890e309c6..6abbd4510076 100644
-> --- a/fs/erofs/zdata.c
-> +++ b/fs/erofs/zdata.c
-> @@ -972,7 +972,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->   	struct erofs_map_blocks *const map = &fe->map;
->   	const loff_t offset = page_offset(page);
->   	bool tight = true, exclusive;
-> -	unsigned int cur, end, spiltted;
-> +	erofs_off_t cur, end;
-> +	unsigned int spiltted;
->   	int err = 0;
->   
->   	/* register locked file pages as online pages in pack */
-> @@ -1035,7 +1036,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->   	 */
->   	tight &= (fe->mode > Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
->   
-> -	cur = end - min_t(unsigned int, offset + end - map->m_la, end);
-> +	cur = end - min_t(erofs_off_t, offset + end - map->m_la, end);
->   	if (!(map->m_flags & EROFS_MAP_MAPPED)) {
->   		zero_user_segment(page, cur, end);
->   		goto next_part;
-> @@ -1841,7 +1842,7 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
->   	}
->   
->   	cur = map->m_la + map->m_llen - 1;
-> -	while (cur >= end) {
-> +	while ((cur >= end) && (cur < i_size_read(inode))) {
->   		pgoff_t index = cur >> PAGE_SHIFT;
->   		struct page *page;
->   
-> @@ -1876,6 +1877,12 @@ static int z_erofs_read_folio(struct file *file, struct folio *folio)
->   	trace_erofs_readpage(page, false);
->   	f.headoffset = (erofs_off_t)page->index << PAGE_SHIFT;
->   
-> +	/* when trying to read beyond EOF, return zero page directly */
-> +	if (f.headoffset >= i_size_read(inode)) {
-> +		zero_user_segment(page, 0, PAGE_SIZE);
-> +		return 0;
-> +	}
-Do we really need to optimize this rare case?
-I guess the follow readmore fix is enough, thoughts?
-
-
-Thanks,
-Gao Xiang
