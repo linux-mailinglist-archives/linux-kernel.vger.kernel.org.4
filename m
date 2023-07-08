@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5210674BFEB
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 01:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A437974BFF1
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 01:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjGHXKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 19:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S229670AbjGHXNs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 8 Jul 2023 19:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGHXKU (ORCPT
+        with ESMTP id S229523AbjGHXNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 19:10:20 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD81102
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 16:10:19 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-c1aad78d5b2so6468034276.0
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 16:10:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688857819; x=1691449819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bHBmqS8NwC99Z9QtRqyVciJnx9vOvvM1ypQPd7HicZU=;
-        b=aC4JvRwH236lHuuVjAmz79NEJVSGu4y/lyV+aIB63wbpLAmWiLZozzV/UUf7clKQdy
-         +r3PNew5EFTC1WrC/weTl9Rg4KI9C1loeR7rdfhvftl7bFZBvg+WX5rXFHoUHlwRccHG
-         H5roPa9rNRZpaOd/D7jMAJ7mC2TUiS4BVHWIC8SW3iTtVDYqMAaGIgWohMK2lnVNoynB
-         hJJZqyMf7CIF+Mjkeh/5GT66mCZKLJeXGdex0kJ7A1CYTZ4IW+10Kb5CuhiMT2XcDU2V
-         USI9u190+1iYAZmtXcU8yuRMzj6cmZmjxLxj2oxypX5TZLV/7cn58g+QvYRPWbGj2IG9
-         isgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688857819; x=1691449819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bHBmqS8NwC99Z9QtRqyVciJnx9vOvvM1ypQPd7HicZU=;
-        b=Jfx2atdWzthGcBAO4nuoJ84LmcrjhwwMn7Pdeo0NQxByp2aXiiX7OGkGneOnWF0CpW
-         U3g7GHgynql4/iE+etM2+BrqDrhkr05EGtZW2LrKbL5nYBrcpoam/5RKN3JpOssuIwtS
-         uxF8xjqM4u+k3XCtt1sWuNc2x0fkFsv9iB2gq4h3oBAg0Lyj6DKQZgNdzvBFT8ZwcRlM
-         RJUH0exvS2nbpI8AyNalfY2OHy57SUceKgk+DVFducJUu4SwpBhoVOvLAuA7n0FSfWcp
-         CALxsWY3XDS7kfocGrel5MCX/qVtDOY+VlyhHc4fXXsJnwL/XM4/Z2fteKcfihs2F3yF
-         0Iww==
-X-Gm-Message-State: ABy/qLb2Fz/lnTEhkYG12DkxDrrlEnb6Dfn70j+97Ts9WASzHhib0eLn
-        /hRmapRIbBP5QvPB7Bcg4MwC4vbgSjTwaM21HV9PYg==
-X-Google-Smtp-Source: APBJJlGlS5xEDkfZpc19JrLy3RDko6OpCb3oW1HWrIZs49KQqhT9ol0NyMJ1vIr071SbtX0uRyAhsa+cCc58DLTyhYY=
-X-Received: by 2002:a81:a114:0:b0:56d:2e66:bd55 with SMTP id
- y20-20020a81a114000000b0056d2e66bd55mr6858350ywg.3.1688857818674; Sat, 08 Jul
- 2023 16:10:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <b5a5626-2684-899d-874b-801e7974b17@google.com>
-In-Reply-To: <b5a5626-2684-899d-874b-801e7974b17@google.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sat, 8 Jul 2023 16:10:07 -0700
-Message-ID: <CAJuCfpGXC23r11-0jz+an01tO2BUOMpjJ93Dm3pc+EUQM=BXYg@mail.gmail.com>
-Subject: Re: [PATCH] mm: lock newly mapped VMA with corrected ordering
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        akpm@linux-foundation.org, regressions@leemhuis.info,
-        bagasdotme@gmail.com, jacobly.alt@gmail.com, willy@infradead.org,
-        liam.howlett@oracle.com, david@redhat.com, peterx@redhat.com,
-        ldufour@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
-        regressions@lists.linux.dev, stable@vger.kernel.org
+        Sat, 8 Jul 2023 19:13:46 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C757E102;
+        Sat,  8 Jul 2023 16:13:45 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1qIH7N-003hnW-Io; Sun, 09 Jul 2023 01:13:33 +0200
+Received: from dynamic-077-191-176-013.77.191.pool.telefonica.de ([77.191.176.13] helo=[192.168.1.11])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1qIH7N-003SEa-Bp; Sun, 09 Jul 2023 01:13:33 +0200
+Message-ID: <a0a0d4d06eecc9c3194afe2cee0b61ebed5e0392.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 09 Jul 2023 01:13:24 +0200
+In-Reply-To: <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
+References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+         <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+         <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
+         <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
+         <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.4 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 77.191.176.13
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 4:04=E2=80=AFPM Hugh Dickins <hughd@google.com> wrot=
-e:
->
-> Lockdep is certainly right to complain about
-> (&vma->vm_lock->lock){++++}-{3:3}, at: vma_start_write+0x2d/0x3f
->                but task is already holding lock:
-> (&mapping->i_mmap_rwsem){+.+.}-{3:3}, at: mmap_region+0x4dc/0x6db
-> Invert those to the usual ordering.
+Hello Guenter!
 
-Doh! Thanks Hugh!
-I totally forgot to run this with lockdep enabled :(
+On Sat, 2023-07-08 at 15:06 -0700, Guenter Roeck wrote:
+> On 7/8/23 13:52, Sergey Shtylyov wrote:
+> > On 7/6/23 7:38 PM, John Paul Adrian Glaubitz wrote:
+> > [...]
+> > 
+> > > > Which sh4 platforms in particular?
+> > > > 
+> > > > I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
+> > > > (physical) two days ago.
+> > > 
+> > > I gave it a try with the command line Guenter suggested and indeed the kernel locks
+> > > up right here with the patch applied and boots fine without it:
+> > > 
+> > > Creating 4 MTD partitions on "physmap-flash":
+> > > 0x000000000000-0x000000040000 : "U-Boot"
+> > > 0x000000040000-0x000000080000 : "Environment"
+> > > 0x000000080000-0x000000240000 : "Kernel"
+> > > 0x000000240000-0x000001000000 : "Flash_FS"
+> > > 8139too: 8139too Fast Ethernet driver 0.9.28
+> > > 8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
+> > > sm501-usb sm501-usb: SM501 OHCI
+> > > sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
+> > > sm501-usb sm501-usb: irq 116, io mem 0x13e40000
+> > 
+> >     I guess it was irq 100 before my patch. What if you undo the following
+> > part of my patch?
+> > 
+> 
+> No, that doesn't help.
 
->
-> Fixes: 33313a747e81 ("mm: lock newly mapped VMA which can be modified aft=
-er it becomes visible")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  mm/mmap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 84c71431a527..3eda23c9ebe7 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -2809,11 +2809,11 @@ unsigned long mmap_region(struct file *file, unsi=
-gned long addr,
->         if (vma_iter_prealloc(&vmi))
->                 goto close_and_free_vma;
->
-> +       /* Lock the VMA since it is modified after insertion into VMA tre=
-e */
-> +       vma_start_write(vma);
->         if (vma->vm_file)
->                 i_mmap_lock_write(vma->vm_file->f_mapping);
->
-> -       /* Lock the VMA since it is modified after insertion into VMA tre=
-e */
-> -       vma_start_write(vma);
->         vma_iter_store(&vmi, vma);
->         mm->map_count++;
->         if (vma->vm_file) {
-> --
-> 2.35.3
+Since the SM501 works fine with the patch on my SH7785LCR board, I assume it's
+related to the IRQ code for the r2d2 board.
+
+Looking at arch/sh/boards/mach-r2d/irq.c, there is some IRQ translation going
+on and maybe that's the part where we need to correct the offset by 16?
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
