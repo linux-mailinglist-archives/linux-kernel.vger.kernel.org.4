@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EBA74BBD1
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 06:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD56774BBD2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 06:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjGHElk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 00:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S231245AbjGHEmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 00:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjGHEli (ORCPT
+        with ESMTP id S229515AbjGHEmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 00:41:38 -0400
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193571FEA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 21:41:38 -0700 (PDT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-682ce1a507bso2735866b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 21:41:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688791297; x=1691383297;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u0VhvwbxZGAWKOUoBFRLQTEqpuP8bm9XMrOO7d52aZI=;
-        b=aAAFd+kqyY1+n+h1ui6O89HWd095vOtbdOXDX6Zu3vqUEUCWSaOnNFcP5gNCOC+z7n
-         qdzXlJtbOFS484SWCDyl27lu1mH6stdI1iTXSPo3MXH404ACMTf+JFeS+9QH7wPY9lvP
-         hqz8yZM+tjYNJw87bLHzro3v9RHZcfwgSlnlmz4wbVUKnqrnzy1elNZrQXkKNYviXTLr
-         XtM50P+sMUAeVJahi1RlXArXhMTVe3CumKByW5VktBZKB9pebvneiSyXk4obxEOqPbPm
-         EOTbId4/FbUp6mk5k4zaFEpRCEsNKIYIoMYLXaugOUdsshBrnmbpe23FU7K8bL6MQmE3
-         lJLg==
-X-Gm-Message-State: ABy/qLY/SISXhMAJod0i9EWCcByqo4RqS6k8VDPQ6KiXdQt5xN0/qw/X
-        JwkWsSR0HaJt/a12NMAC3AR8VOlC8+vvoxou8Xi1tTlb5rB0
-X-Google-Smtp-Source: APBJJlEMXRYYKZGiXeBkman76ubozY/u7l0NdVApYYVuUGWypdtb9Z5EVFtEzpZKnAzUdk5GiUSiQsInetR6tISmWxxpSUt3xtLo
+        Sat, 8 Jul 2023 00:42:18 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAA59D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 21:42:17 -0700 (PDT)
+Date:   Sat, 08 Jul 2023 04:42:08 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1688791333; x=1689050533;
+        bh=SGHmCpIwY38l448lM+eKMAiekmq1Di2RSHE3CHCAzUk=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=HSmP0U2bl14DMa5m3CMDZMhGU7lO7DqfnqUE2HPGJmTJ6svKKA2QRErqoo5dFkK1P
+         foFiyLeJ3yLCqDAvko3Lk61mZTwscFmGyRpiWOyYOhpXwfUL1mRViJunMtVv4DOn5V
+         xT62iP9uuZm1LrRV6WAePdsObMf9Dfd8z/wZ+CLD4wvYUdN8A3s9w8UeEOJ0AaucnZ
+         vgOYAb01uCGmNAEa0dEty+jVyrcFQwn5qBcHK7JhW7rQNIW8Qt4N5nXSdoU5YtothS
+         Et7zKK6mfuaPpBxNgho7weCOve6qQ8hDPytoWYakCbWTEnlIzAF4nOaqpcBdltxj0w
+         asl9vXZmp1sSQ==
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Turritopsis Dohrnii Teo En Ming <tdtem@protonmail.com>
+Cc:     "ceo@teo-en-ming-corp.com" <ceo@teo-en-ming-corp.com>
+Subject: New StackRot Linux kernel security vulnerability allows privilege escalation
+Message-ID: <eTammZ0M-lzdwQHmfZcc_W15gczvWxJwMtIqc6tFRyFF6Az70i38QtIlNovisYn_ZrNCJ3DbvlNUdI5jzpZaoBbQ-TWSLRWG0l0AgFXcZJg=@protonmail.com>
+Feedback-ID: 80245632:user:proton
 MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:194d:b0:682:5c5e:5450 with SMTP id
- s13-20020a056a00194d00b006825c5e5450mr9871192pfk.3.1688791297584; Fri, 07 Jul
- 2023 21:41:37 -0700 (PDT)
-Date:   Fri, 07 Jul 2023 21:41:37 -0700
-In-Reply-To: <20230708040455.1491-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006473ee05fff25d9c@google.com>
-Subject: Re: [syzbot] [media?] [usb?] WARNING in smsusb_start_streaming
-From:   syzbot <syzbot+a7c205f9c1168e2f1dcc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Subject: New StackRot Linux kernel security vulnerability allows privilege =
+escalation
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Good day from Singapore,
 
-Reported-and-tested-by: syzbot+a7c205f9c1168e2f1dcc@syzkaller.appspotmail.com
+I have just read about the latest security flaw in the linux kernel, StackR=
+ot. I think everyone should be aware.
 
-Tested on:
+I am sharing the following news articles so that you can perform remediatio=
+n.
 
-commit:         d5280145 Revert ".gitignore: ignore *.cover and *.mbx"
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=14150e3ca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d576750da57ebbb5
-dashboard link: https://syzkaller.appspot.com/bug?extid=a7c205f9c1168e2f1dcc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=127c479ca80000
+[1] StackRot, a new Linux Kernel privilege escalation vulnerability
+Link: https://securityaffairs.com/148231/security/stackrot-linux-kernel-pri=
+vilege-escalation-bug.html
 
-Note: testing is done by a robot and is best-effort only.
+[2] New StackRot Linux kernel flaw allows privilege escalation
+Link: https://www.bleepingcomputer.com/news/security/new-stackrot-linux-ker=
+nel-flaw-allows-privilege-escalation/
+
+Thank you.
+
+Regards,
+
+Mr. Turritopsis Dohrnii Teo En Ming
+Targeted Individual in Singapore
+Blogs:
+https://tdtemcerts.blogspot.com
+https://tdtemcerts.wordpress.com
+GIMP also stands for Government-Induced Medical Problems.
+
+
+
+
+Sent with Proton Mail secure email.
