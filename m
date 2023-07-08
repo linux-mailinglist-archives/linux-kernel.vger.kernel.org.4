@@ -2,191 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB62C74BCC4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2BF74BCC6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjGHIJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 04:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
+        id S229707AbjGHILm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 04:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjGHIJl (ORCPT
+        with ESMTP id S229458AbjGHILl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 04:09:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62F71FC6;
-        Sat,  8 Jul 2023 01:09:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28A3260202;
-        Sat,  8 Jul 2023 08:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB5A8C433C8;
-        Sat,  8 Jul 2023 08:09:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688803779;
-        bh=hMxDvTSCmpzzyFQNw140/iCDQpgewmXQyl9v5IUyvvk=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=YXllSzrD6dh7bm3E7O+yNPQgCySArB5BoefZ0+HaBR+r+LW3Xn/GoxfzCbdGKvUYH
-         KWK8h+NdoSX7r6M9RQXeVw7rpl6LPmhDX2V3J1zVyTkpcmhxvkkf12matpiponyZ+M
-         QWGyrXIFPTV5uvgCVNLHC2FRlixL/PPN1ycrYmmdyrEsrHGlGEFk05tvkBhRxglsOG
-         Bc6MuV4fwCyxMwCtskQWwAfD2bReMSyUl++5AlpVP9f86EOlKrEixjCPtro4Be4aXx
-         7kyJ9ZGizQtWNJvf/AjalMnxNql+Gkk/e2yuJ17dqGI9aeIo9t+AnusGY7L0eVzKIE
-         tC8cMmdat9qKA==
-Date:   Sat, 08 Jul 2023 09:09:36 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
-        =?UTF-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>
-CC:     sunilvl@ventanamicro.com, ardb@kernel.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, rminnich@gmail.com,
-        mark.rutland@arm.com, lpieralisi@kernel.org, rafael@kernel.org,
-        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, weidong.wd@bytedance.com
-Subject: =?US-ASCII?Q?Re=3A_=5BExternal=5D_Re=3A_=5BPATCH_v3_4/4=5D_dt-bin?= =?US-ASCII?Q?dings=3A_firmware=3A_Document_ffitbl_binding?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAEEQ3wkgxagOPYrg3g8apLHHDOcAR3hFKpHA3ZQDm9PKvO1xUg@mail.gmail.com>
-References: <20230705114251.661-1-cuiyunhui@bytedance.com> <20230705114251.661-5-cuiyunhui@bytedance.com> <20230707-brigade-myth-86ee252b2e4a@spud> <CAN3iYbP_dQOOJKLjAf+pVeYUZRBqwZBG7eq6=pR0upsjT2GpOA@mail.gmail.com> <CAEEQ3wkgxagOPYrg3g8apLHHDOcAR3hFKpHA3ZQDm9PKvO1xUg@mail.gmail.com>
-Message-ID: <FEAC0857-A90B-42EC-A426-09AF3C9F463D@kernel.org>
+        Sat, 8 Jul 2023 04:11:41 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0A41FC6;
+        Sat,  8 Jul 2023 01:11:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-992e22c09edso291002666b.2;
+        Sat, 08 Jul 2023 01:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688803899; x=1691395899;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8JsdPx2PtCEj+8E+tenBNbAlijTmNN2EqyVkNdLKfmA=;
+        b=rztSuS3v+nITm9k3tsJpLSvmzVE3zy9CxeLeSXc2C6hpHHlu2JWiOTJmiANEYXz9pa
+         iPNmy94s66MAl+pmwGTHc1dkeRYJxxQDbXmcWl6fhLsOIuSdIlWd5Bfw6O2nJGkl0U+/
+         CYuYrEq4hj9/MHupnUWYHz7Ygb+LIigJ1xJmhiWGLaBlhPq2lURUNwgb413C3KSfORZw
+         1FBMHI9eN/zKizPlb5EFvAReSLChWeiyq3/pOvs94erbRLbyUlygcSf19EZItjuW0nOI
+         KJ0/ocl1jx9c1QMuqqhkaPT80vfWEANYQOUVPEv4EuTgVONyi0KDN7TCGXv5e/po78KZ
+         F7SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688803899; x=1691395899;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8JsdPx2PtCEj+8E+tenBNbAlijTmNN2EqyVkNdLKfmA=;
+        b=bUcnoeMY4piGJZY48ju6Wvt+NPrJVu+gIqRzQAXXWcIilUkxSX12ojVGH7oCqbFWLk
+         O9nME9jlHPx+rzVDWW/9875PUulfQE6w2LsT+JgXqJQyc2Xk7sspx8+21rVHHidAfcV4
+         ajmyajA+f/4bhQwbsivBBMY1vs+LeV0DJRpWL08E5afMkKdDGL5I3L3q2CflbmCopIuf
+         xBgUC1UW5j5uBSSk1kqHRPJ/AIly93pp0EULnWaaSEb9/jmxFlwIlnziLeQ/A0bMS44X
+         9qF/mQzh6+8Fub70wJFQcCbvVODIty2rNAJRQu/FZguA7lRaW/FNchzHZFCwXQfocOey
+         ny7w==
+X-Gm-Message-State: ABy/qLbvquXMrTXvhtW2PcJsxAvn6o1or2Ckaq0emN5C5k/Rnq2Kb+1H
+        sU8s/Cs4ShPu9VJT2HsSqtVLsoKXZ2Qhrw==
+X-Google-Smtp-Source: APBJJlE4SRjJJSfqI47lKi2L1n2FIAQTgGAQPjLr+o2ro9brA/66+l23EdfRFaJ7W2iUuGXDneiVYA==
+X-Received: by 2002:a17:906:79c4:b0:982:9daf:9fcf with SMTP id m4-20020a17090679c400b009829daf9fcfmr5197948ejo.66.1688803898582;
+        Sat, 08 Jul 2023 01:11:38 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id cw23-20020a170906c79700b0098963eb0c3dsm3152939ejb.26.2023.07.08.01.11.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 01:11:38 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: [PATCH] perf/core: Use local64_try_cmpxchg in perf_swevent_set_period
+Date:   Sat,  8 Jul 2023 10:10:57 +0200
+Message-ID: <20230708081129.45915-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old
+in perf_swevent_set_period.  x86 CMPXCHG instruction returns success in ZF
+flag, so this change saves a compare after cmpxchg (and related move
+instruction in front of cmpxchg).
 
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+fails. There is no need to re-read the value in the loop.
 
-On 8 July 2023 04:04:05 IST, "=E8=BF=90=E8=BE=89=E5=B4=94" <cuiyunhui@byte=
-dance=2Ecom> wrote:
->Hi Conor,
->
->On Sat, Jul 8, 2023 at 12:53=E2=80=AFAM =E8=91=9B=E5=A3=AB=E5=BB=BA <gesh=
-ijian@bytedance=2Ecom> wrote:
->>
->>
->>
->>
->> On Sat, Jul 8, 2023 at 12:16=E2=80=AFAM Conor Dooley <conor@kernel=2Eor=
-g> wrote:
->>>
->>> Hey,
->>>
->>> On Wed, Jul 05, 2023 at 07:42:51PM +0800, Yunhui Cui wrote:
->>> > Add the description for ffitbl subnode=2E
->>> >
->>> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance=2Ecom>
->>> > ---
->>> >  =2E=2E=2E/devicetree/bindings/firmware/ffitbl=2Etxt   | 27 ++++++++=
-+++++++++++
->>> >  MAINTAINERS                                   |  1 +
->>> >  2 files changed, 28 insertions(+)
->>> >  create mode 100644 Documentation/devicetree/bindings/firmware/ffitb=
-l=2Etxt
->>> >
->>> > diff --git a/Documentation/devicetree/bindings/firmware/ffitbl=2Etxt=
- b/Documentation/devicetree/bindings/firmware/ffitbl=2Etxt
->>> > new file mode 100644
->>> > index 000000000000=2E=2Ec42368626199
->>> > --- /dev/null
->>> > +++ b/Documentation/devicetree/bindings/firmware/ffitbl=2Etxt
->>> > @@ -0,0 +1,27 @@
->>> > +FFI(FDT FIRMWARE INTERFACE) driver
->>> > +
->>> > +Required properties:
->>> > + - entry             : acpi or smbios root pointer, u64
->>> > + - reg                       : acpi or smbios version, u32
->>> > +
->>> > +Some bootloaders, such as Coreboot do not support EFI,
->>> > +only devicetree and some arches do not have a reserved
->>> > +address segment=2E Add "ffitbl" subnode to obtain ACPI RSDP
->>> > +and SMBIOS entry=2E
->>>
->>> Since the conversation on this stuff all seems to be going absolutely
->>> nowhere, the ACPI portion of this is intended for use on RISC-V in
->>> violation of the RISC-V ACPI specs=2E It also goes against the
->>> requirements of the platform spec=2E Quoting from [1]:
->>>
->>> | > Just so we're all on the same page, I just now asked Mark Himelste=
-in
->>> | > of RISC-V International if there is anything in RISC-V standards t=
-hat
->>> | > requires UEFI, and the answer is a solid "no=2E"
->>> |
->>> | Huh? Firstly, running off to invoke RVI is not productive - they don=
-'t
->>> | maintain the various operating system kernels etc=2E
->>> | Secondly, that does not seem to be true=2E The platform spec mandate=
-s UEFI
->>> | for the OS-A server platform, alongside ACPI:
->>> | https://github=2Ecom/riscv/riscv-platform-specs/blob/main/riscv-plat=
-form-spec=2Eadoc#32-boot-process
->>> | and the OS-A embedded platform needs to comply with EBBR & use DT:
->>> | https://github=2Ecom/riscv/riscv-platform-specs/blob/main/riscv-plat=
-form-spec=2Eadoc#32-boot-process
->>> |
->>> | EBBR does say that systems must not provide both ACPI and DT to the =
-OS
->>> | loader, but I am far from an expert on these kind of things & am not
->>> | sure where something like this where the DT "contains" ACPI would st=
-and=2E
->>> |
->>> | The RISC-V ACPI spec also says "UEFI firmware is mandatory to suppor=
-t
->>> | ACPI":
->>> | https://github=2Ecom/riscv-non-isa/riscv-acpi/blob/master/riscv-acpi=
--guidance=2Eadoc
->>
->>  UEFI firmware is mandatory to support ACPI and coreboot is an option t=
-o support ACPI as well=2E i think it works well for both, I don't think UEF=
-I and ACPI need to be binding together, each UEFI and ACPI also works well =
-with other solutions=2E
->
->Thanks for shijian(Nill)'s suggestions=2E
->
->Hi Conor,
->Thank you very much for your valuable comments on this set of patch
->codes, which are very helpful=2E
->
->Judging from the current specifications, maybe yes, you can NACK, but
->it's better not to rush to conclusions=2E
+No functional change intended.
 
-Naks are not permanent, I can remove it in the future if the specs change=
-=2E
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ kernel/events/core.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
->The so-called specifications represent the ideas of FFI opponents=2E
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 78ae7b6f90fd..f84e2640ea2f 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9595,16 +9595,16 @@ u64 perf_swevent_set_period(struct perf_event *event)
+ 
+ 	hwc->last_period = hwc->sample_period;
+ 
+-again:
+-	old = val = local64_read(&hwc->period_left);
+-	if (val < 0)
+-		return 0;
++	old = local64_read(&hwc->period_left);
++	do {
++		val = old;
++		if (val < 0)
++			return 0;
+ 
+-	nr = div64_u64(period + val, period);
+-	offset = nr * period;
+-	val -= offset;
+-	if (local64_cmpxchg(&hwc->period_left, old, val) != old)
+-		goto again;
++		nr = div64_u64(period + val, period);
++		offset = nr * period;
++		val -= offset;
++	} while (!local64_try_cmpxchg(&hwc->period_left, &old, val));
+ 
+ 	return nr;
+ }
+-- 
+2.41.0
 
-"So-called"? They _are_ the specs=2E
-
->What we have to do is to discuss with them and get an effective
->consensus, so as to achieve the purpose of updating the specification=2E
-
-Yes, but that needs to be done on tech-brs, not lkml=2E
-
-Thanks,
-Conor=2E
-
->
->>>
->>>
->>>
->>> NAKed-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->>>
->>> Cheers,
->>> Conor=2E
->>>
->>> [1] - https://lore=2Ekernel=2Eorg/linux-riscv/20230707-attach-conjuror=
--306d967347ce@wendy/
->
->Thanks,
->Yunhui
