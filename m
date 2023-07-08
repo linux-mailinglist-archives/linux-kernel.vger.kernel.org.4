@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D6F74BCED
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810B174BCEB
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjGHI5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 04:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S230272AbjGHI5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 04:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjGHI5f (ORCPT
+        with ESMTP id S229926AbjGHI5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Jul 2023 04:57:35 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EBE1FEE
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8A31FF0
         for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 01:57:33 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qykdf41dVzTkgk;
-        Sat,  8 Jul 2023 16:56:22 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QykfN4sfWz1FDfX;
+        Sat,  8 Jul 2023 16:57:00 +0800 (CST)
 Received: from huawei.com (10.174.151.185) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 8 Jul
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 2/8] mm: memory-failure: ensure moving HWPoison flag to the raw error pages
-Date:   Sat, 8 Jul 2023 16:57:38 +0800
-Message-ID: <20230708085744.3599311-3-linmiaohe@huawei.com>
+Subject: [PATCH 3/8] mm: memory-failure: Don't account hwpoison_filter() filtered pages
+Date:   Sat, 8 Jul 2023 16:57:39 +0800
+Message-ID: <20230708085744.3599311-4-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20230708085744.3599311-1-linmiaohe@huawei.com>
 References: <20230708085744.3599311-1-linmiaohe@huawei.com>
@@ -48,33 +48,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If hugetlb_vmemmap_optimized is enabled, folio_clear_hugetlb_hwpoison()
-called from try_memory_failure_hugetlb() won't transfer HWPoison flag to
-subpages while folio's HWPoison flag is cleared. So when trying to free
-this hugetlb page into buddy, folio_clear_hugetlb_hwpoison() is not called
-to move HWPoison flag from head page to the raw error pages even if now
-hugetlb_vmemmap_optimized is cleared. This will results in HWPoisoned page
-being used again and raw_hwp_page leak.
+mf_generic_kill_procs() will return -EOPNOTSUPP when hwpoison_filter()
+filtered dax page. In that case, action_result() isn't expected to be
+called to update mf_stats. This will results in inaccurate but benign
+memory failure handling statistics.
 
-Fixes: ac5fcde0a96a ("mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage")
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/memory-failure.c | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/memory-failure.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index d21ee27ad412..c155122e3c66 100644
+index c155122e3c66..905758af70f3 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -1913,6 +1913,8 @@ void folio_clear_hugetlb_hwpoison(struct folio *folio)
- {
- 	if (folio_test_hugetlb_raw_hwp_unreliable(folio))
- 		return;
-+	if (folio_test_hugetlb_vmemmap_optimized(folio))
-+		return;
- 	folio_clear_hwpoison(folio);
- 	folio_free_raw_hwp(folio, true);
+@@ -2101,7 +2101,8 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+ out:
+ 	/* drop pgmap ref acquired in caller */
+ 	put_dev_pagemap(pgmap);
+-	action_result(pfn, MF_MSG_DAX, rc ? MF_FAILED : MF_RECOVERED);
++	if (rc != -EOPNOTSUPP)
++		action_result(pfn, MF_MSG_DAX, rc ? MF_FAILED : MF_RECOVERED);
+ 	return rc;
  }
+ 
 -- 
 2.33.0
 
