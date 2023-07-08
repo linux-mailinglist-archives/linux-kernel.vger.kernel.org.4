@@ -2,76 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E3974BEC7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 20:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7B674BECA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 20:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjGHSnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 14:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S229894AbjGHSu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 14:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHSnR (ORCPT
+        with ESMTP id S229468AbjGHSu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 14:43:17 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440F91BB
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 11:43:16 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-785cbc5bfd2so129697239f.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 11:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688841795; x=1691433795;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RapVQawOljZ3WkdRWpTvGIEHTklNcouz9V8HkQ49kOY=;
-        b=S/biLuPzyjcK2rAd76KkOoRpnVdxP7HxFDzQ/O89UHM4CvBkWrc2FIa3BlBKIkSzdz
-         abI/yjBTaaNI516ASilB6qVznXmso+JXxyF7hmQqcqND9kLInNC6/uc+FJRKY8bXPm75
-         5Gsuytd40vrNbGtBTwNzA/swckN5ahFtaaHplMa47aysqgo/qVWBeK7jJJ8tUZQ89eDS
-         Vfianl6a78SYCz+oT2D+mnz6wq1VlVCD92/ChHmCcIV3OeYLvGmCmkfSXiCvwNWaXQSa
-         9Iy2seRSM/MwMd3cNZ4+OLt7hQQuSw/QHiSEaHqXBUpVQ+M7f+a2v9ajqn6HiKbgyjeU
-         q9Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688841795; x=1691433795;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RapVQawOljZ3WkdRWpTvGIEHTklNcouz9V8HkQ49kOY=;
-        b=OwabLSoRmKnkgymmOqoV3NTTedpCHwDLl1ixUuAF2ux/nMkzkNgO4SSSiRYxdGIwqw
-         0QJxN5Y0DtRs4LNIGSmlQJvMhXCVcI6DUxpFDB5Px+19gNFG6yRjEQFe28XWYT3qROx+
-         ewNK6fWu+rNIq6AGtkANt2nTVgr4eYsnmLhQ986ukGedfwTC9nU++vWH/BBCcufjSW8S
-         oMPox7VdmQB/wom37CNqBH+++yxI0GlPyy+MK8x7og81OtQzGjO8kekkYOmryhosAHp6
-         AR1e6sAJby4KQYQVP1L+2cXY8YVeBvAYVLGUaXofENkvjSazFbuN4/naG2XYKQSSnx+Y
-         hHeg==
-X-Gm-Message-State: ABy/qLYKYhZCLaRNartFJsjeijJVkLgukNy3zsztr9YKZTMxVkdwqkjI
-        pC6X26JGcLjRvuRG3IHMOSU8Cz27KUKdqlv6dMw=
-X-Google-Smtp-Source: APBJJlE3F0E/uwQcELY8o7infuR/i4EFeOawN69VqImaJMFRJiEKGVoxRKiEFJlN10yJr1kGDRvZWh8HrKAb/2Ko24Y=
-X-Received: by 2002:a5e:c816:0:b0:783:39e9:e05c with SMTP id
- y22-20020a5ec816000000b0078339e9e05cmr7700786iol.19.1688841795714; Sat, 08
- Jul 2023 11:43:15 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6638:2656:b0:42b:55b5:aa37 with HTTP; Sat, 8 Jul 2023
- 11:43:15 -0700 (PDT)
-Reply-To: Dr.catherine_chan@hotmail.com
-From:   catherine chan <kassymjomarttokayev15@gmail.com>
-Date:   Sat, 8 Jul 2023 20:43:15 +0200
-Message-ID: <CA+DX0WNCQJTOrOKDRMbcA6+egm3SZjSyAPGD1xswn1gTwWOcOg@mail.gmail.com>
-Subject: Re:Hello
-To:     undisclosed-recipients:;
+        Sat, 8 Jul 2023 14:50:57 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1820E46
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 11:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1688842252;
+        bh=uNaVJKuJfvJ+VV4OUJkfGKz46h22SgI0vLkd93kL/1s=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=FPHg32JLTgCaSiVGptZZkhyCnpkU7V05vcWHxQrT7zQGaxMn6MBQjtRjn+YguVzXz
+         6Mxe7QB4j+jPFO9hoti9jtvqaxARYcCg1+uRd2fDJyzAo6v9k76yTU5IyxDhn5Ff/n
+         HSZgb9bZ8k0I/Bx2SzBBiu+WjVSD2QVAwOoim2Jc=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 57CF01281321;
+        Sat,  8 Jul 2023 14:50:52 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id pRVodgcfHSJB; Sat,  8 Jul 2023 14:50:52 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1688842252;
+        bh=uNaVJKuJfvJ+VV4OUJkfGKz46h22SgI0vLkd93kL/1s=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=FPHg32JLTgCaSiVGptZZkhyCnpkU7V05vcWHxQrT7zQGaxMn6MBQjtRjn+YguVzXz
+         6Mxe7QB4j+jPFO9hoti9jtvqaxARYcCg1+uRd2fDJyzAo6v9k76yTU5IyxDhn5Ff/n
+         HSZgb9bZ8k0I/Bx2SzBBiu+WjVSD2QVAwOoim2Jc=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id B1BD51280A7D;
+        Sat,  8 Jul 2023 14:50:51 -0400 (EDT)
+Message-ID: <c5d8a017f39f95d4214ba638ecb8e41d2994cda0.camel@HansenPartnership.com>
+Subject: [GIT PULL] final round of SCSI updates for the 6.4+ merge window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 08 Jul 2023 14:50:50 -0400
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello! How are you? Please forgive me if my application is not
-acceptable by your kind person, I saw your email and I want to talk to
-you directly by mail. I would appreciate it if you could send me an
-email when you receive it.
+A few late arriving patches that missed the initial pull request.  It's
+mostly bug fixes (the dt-bindings is a fix for the initial pull).
 
-Waiting for your prompt response
-Greetings,
+The patch is available here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+
+The short changelog is:
+
+Abel Vesa (1):
+      scsi: dt-bindings: ufs: qcom: Fix ICE phandle
+
+Arnd Bergmann (1):
+      scsi: lpfc: Fix lpfc_name struct packing
+
+Azeem Shaikh (2):
+      scsi: target: tcmu: Replace strlcpy() with strscpy()
+      scsi: ncr53c8xx: Replace strlcpy() with strscpy()
+
+Damien Le Moal (1):
+      scsi: core: Simplify scsi_cdl_check_cmd()
+
+Gustavo A. R. Silva (1):
+      scsi: smartpqi: Replace one-element arrays with flexible-array members
+
+Keoseong Park (1):
+      scsi: ufs: core: Remove unused function declaration
+
+Mike Christie (1):
+      scsi: target: iblock: Quiet bool conversion warning with pr_preempt use
+
+Rong Tao (1):
+      scsi: target: docs: Remove tcm_mod_builder.py
+
+Yueh-Shun Li (1):
+      scsi: isci: Fix comment typo
+
+With diffstat:
+
+ .../devicetree/bindings/ufs/qcom,ufs.yaml          |   9 +-
+ Documentation/target/scripts.rst                   |   6 -
+ Documentation/target/tcm_mod_builder.py            | 656 ---------------------
+ drivers/scsi/isci/scu_task_context.h               |   2 +-
+ drivers/scsi/lpfc/lpfc_hw.h                        |  10 +-
+ drivers/scsi/ncr53c8xx.c                           |   2 +-
+ drivers/scsi/scsi.c                                |  37 +-
+ drivers/scsi/smartpqi/smartpqi.h                   |   4 +-
+ drivers/scsi/smartpqi/smartpqi_init.c              |   5 +-
+ drivers/target/target_core_iblock.c                |   2 +-
+ drivers/target/target_core_user.c                  |   4 +-
+ drivers/ufs/core/ufshcd-priv.h                     |   1 -
+ 12 files changed, 32 insertions(+), 706 deletions(-)
+ delete mode 100755 Documentation/target/tcm_mod_builder.py
+
+James
+
+
