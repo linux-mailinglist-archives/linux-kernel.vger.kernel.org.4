@@ -2,126 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A7874BFBD
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 00:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CA174BFC4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 00:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjGHWCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 18:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S229726AbjGHWGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 18:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGHWCx (ORCPT
+        with ESMTP id S229436AbjGHWGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 18:02:53 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D0DE4A;
-        Sat,  8 Jul 2023 15:02:51 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E322A580114;
-        Sat,  8 Jul 2023 18:02:50 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 08 Jul 2023 18:02:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688853770; x=1688860970; bh=us
-        dNVu3zHxYIxjv6CIUqKF4RVb+FJwD+QutAZ+SONzU=; b=Na9HAOrBe8T77a5nS8
-        52BWoRWX8ndJggaCp8w2hNy4K/Hx05IOEQ4yQObUd9fMIYSzLmsi2a/O6epJ5qvc
-        W1eTLx5OU8Jpuw71pSiX/7bL+A0gmS5EnPpo/ZvAQxOl34rA2JhaTspyfWvR9mew
-        LjdBY1z3zRDNj8gDVFEsrg9hI9I1rE8aXIgux5JIzDTevLhwYasC8HlujidS2Rg3
-        oeJkgsDN6rPckNAf5xIuvB3MIfc0wa1XzXyA6XJCvKOhB1PfUmFuV1F+DA/txx2C
-        TFbBrfHD+x1kG8ttvq4wr/4p9E7RxfKkXhuqHUKMqWFPPPaxDCC9Ys4dGOFy+4cQ
-        awtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688853770; x=1688860970; bh=usdNVu3zHxYIx
-        jv6CIUqKF4RVb+FJwD+QutAZ+SONzU=; b=gLSbU0FM8ylBPR+gKikOZL72bXg4z
-        IHWrM01pn4v4sFGSuTAMa0jUmx/6nKepFuAczDtUIN4J3C94mnWcSypEkGGgS2J1
-        mGy8lR05n3puher+YyQNfmzSlL2GU9mMD1DhIJTcKumAT+QtdDJ0A/u4JJJYSvZv
-        eyDq7SxbHIFPFOBMY/8d1jvV7iUaGKioK5hI2U4ZQ+D+s19Q3lbUD4T0bRHPbtp0
-        uzaetPHGfbgo4RgY/uG0DkOAY7dr+2bPrjfsd1QcQj26CDDuX3yjsA6QAA85mPbQ
-        90OruCSXhseKCEN1UWdnOGtaxese77/MFKkNpfXIkFMWubac2wkQXSo2w==
-X-ME-Sender: <xms:Ct2pZLPezmiPRfS7RQ2AziRWnbkCO-SBrt5gNWhdYahWQMDPOMj2Zw>
-    <xme:Ct2pZF_AI0vEveQXmGwcA0MiwcyMIj4X0TipjSPsUVzm2AKQHhZ4dgzRKK2VDlc-L
-    sBe8rn9UBn9wfCQ8Q>
-X-ME-Received: <xmr:Ct2pZKSaAs7H_RFpxRqD1o_ZfUCT2GYy7viKmzvZToivBmOJS_EyAFWUB--qh24exof53BrYpJc-AAI4BahUt5NntHTmLaFStPAy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvdeggddtiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhepfffhvf
-    evuffkfhggtggujgesthdtsfdttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvfeekteduudefieegtd
-    ehfeffkeeuudekheduffduffffgfegiedttefgvdfhvdenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:Ct2pZPubHhrrL27ZUQdUyldzaPvREVafRm0CCrMDuMBiyn7ohLsKuw>
-    <xmx:Ct2pZDew01A9HDNME-YLrgkhq_nkzqZ4-_qgVFPdOukg9DWnuiwx1g>
-    <xmx:Ct2pZL0NDkARbTAJPhbHqRoye-XF5eV8FUGKPEvLrjsdz-fDaYAczw>
-    <xmx:Ct2pZJ_wOCWsbTL566CZ0YC75D2q-lxQjhcAUTELBBPebJBTzY23bA>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Jul 2023 18:02:48 -0400 (EDT)
-Date:   Sat, 8 Jul 2023 16:02:47 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Leon Hwang <hffilwlqm@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
-        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Introduce user log
-Message-ID: <v76ytdfdf2sqhdufkqxzsuznandia3x4l4iyghpirxkzytngxq@uttzaebbmdjb>
-References: <20230708040750.72570-1-hffilwlqm@gmail.com>
+        Sat, 8 Jul 2023 18:06:18 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591A2E4A;
+        Sat,  8 Jul 2023 15:06:17 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-c4d1b491095so3617601276.0;
+        Sat, 08 Jul 2023 15:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688853976; x=1691445976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wXSZlFGeP1fpLBmig7AsRhQFCecsgJSjoELC00VLPeg=;
+        b=eZIj4B4l7JsIdZ1qLhUYI0uTfwBw569ErwjZaY7IluiO4nBKaPePfIqIh2tPUGeMZB
+         Y8d2Bx1wJ+jIg/S02S9Q3I1COctU08QrJFM8R5OVlpGUHP/tJgqWNiunZJbXEBzCr1kH
+         SPaeABftAYkiXfTwMeAmyJCUsCoY1xH0q36/wwVZGVtCl98zx5P64A5aMgGC//OPRLEK
+         Z+9yuLryjG5uXmH2e1y8fq08BLJY04maVbTvNu/oZs4ictG5AwxEWhUoXV10GNcM+RPa
+         NjvHbLqI2hOayXF/SFP4q/B6JsRr8q3u/pKPRb+aDFri/DJMXHX/K+KwJWvUUksFAxdu
+         a4fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688853976; x=1691445976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wXSZlFGeP1fpLBmig7AsRhQFCecsgJSjoELC00VLPeg=;
+        b=I2+a+Xdcj5Ya1zJwCn3gmqPm9N60ELbOWjItwKYpBDWnaO7IhFCGNUbOrXvLvQMIyB
+         mjzxekj2ZLk06pRW/1/iLQmGVJybSSOjruMJ6S/NDMbqSHN5unaMYGF4DvOJRAIbLAD2
+         h/Q/6KSWhCFkdhlQGfcMUm11NAD9+X2h09QqrHQUF9x1ri0W9kSt7jdwAeAzeUvNtSEG
+         jYgQLJU8kZDoBcte82ASFLFI0pbPvqNozaWwsM+GjYlf0Kt/TSaYwZX+u93Bd/5oZRBO
+         5iZxKfesWMHmv68dmnH2oz+jtbo0Ohbo8XYWRx3M0nghkFikOAwcOcoOTcswHx8kyN1/
+         Rm7Q==
+X-Gm-Message-State: ABy/qLYksMTKzBE8QlOftmNj9IL95/qjHhMYVhlUEmvqF9m3u/EBpFj2
+        SYqbYF6W6PvJntyDNi2ps2ysf7Ag6mc=
+X-Google-Smtp-Source: APBJJlHhqhibggaL5EwwFbuy64J9O6LNE1TRDxBGUvlHatip8YXsoL419y1v3ttL/lJVyGPWFXPgJg==
+X-Received: by 2002:a5b:749:0:b0:c5f:15f2:375 with SMTP id s9-20020a5b0749000000b00c5f15f20375mr7450001ybq.9.1688853976447;
+        Sat, 08 Jul 2023 15:06:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t18-20020a056902019200b00bc7c81c3cecsm1774891ybh.14.2023.07.08.15.06.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Jul 2023 15:06:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
+Date:   Sat, 8 Jul 2023 15:06:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230708040750.72570-1-hffilwlqm@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
+Content-Language: en-US
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
+ <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
+ <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
+ <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leon,
-
-On Sat, Jul 08, 2023 at 12:07:48PM +0800, Leon Hwang wrote:
-> This series introduces bpf user log to transfer error message from
-> kernel space to user space when users provide buffer to receive the
-> error message.
+On 7/8/23 13:52, Sergey Shtylyov wrote:
+> On 7/6/23 7:38 PM, John Paul Adrian Glaubitz wrote:
+> [...]
 > 
-> Especially, when to attach XDP to device, it can transfer the error
-> message along with errno from dev_xdp_attach() to user space, if error
-> happens in dev_xdp_attach().
-
-Have you considered adding a tracepoint instead? With some TP_printk()
-stuff I think you can achieve a similar result without having to do
-go through changing uapi.
-
+>>> Which sh4 platforms in particular?
+>>>
+>>> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
+>>> (physical) two days ago.
+>>
+>> I gave it a try with the command line Guenter suggested and indeed the kernel locks
+>> up right here with the patch applied and boots fine without it:
+>>
+>> Creating 4 MTD partitions on "physmap-flash":
+>> 0x000000000000-0x000000040000 : "U-Boot"
+>> 0x000000040000-0x000000080000 : "Environment"
+>> 0x000000080000-0x000000240000 : "Kernel"
+>> 0x000000240000-0x000001000000 : "Flash_FS"
+>> 8139too: 8139too Fast Ethernet driver 0.9.28
+>> 8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
+>> sm501-usb sm501-usb: SM501 OHCI
+>> sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
+>> sm501-usb sm501-usb: irq 116, io mem 0x13e40000
 > 
-> Leon Hwang (2):
->   bpf: Introduce bpf generic log
->   bpf: Introduce bpf user log
-> 
->  include/linux/bpf.h            |  3 ++
->  include/uapi/linux/bpf.h       |  8 ++++++
->  kernel/bpf/log.c               | 52 ++++++++++++++++++++++++++++++++++
->  net/core/dev.c                 |  4 ++-
->  tools/include/uapi/linux/bpf.h |  8 ++++++
->  5 files changed, 74 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: 622f876ab3ced325fe3c2363c6e9c128b7e6c73a
-> -- 
-> 2.41.0
-> 
+>     I guess it was irq 100 before my patch. What if you undo the following
+> part of my patch?
 > 
 
-Thanks,
-Daniel
+No, that doesn't help.
+
+Guenter
+
+> Index: linux/arch/sh/include/mach-common/mach/r2d.h
+> ===================================================================
+> --- linux.orig/arch/sh/include/mach-common/mach/r2d.h
+> +++ linux/arch/sh/include/mach-common/mach/r2d.h
+> @@ -47,7 +47,7 @@
+>   
+>   #define IRLCNTR1	(PA_BCR + 0)	/* Interrupt Control Register1 */
+>   
+> -#define R2D_FPGA_IRQ_BASE	100
+> +#define R2D_FPGA_IRQ_BASE	(100 + 16)
+>   
+>   #define IRQ_VOYAGER		(R2D_FPGA_IRQ_BASE + 0)
+>   #define IRQ_EXT			(R2D_FPGA_IRQ_BASE + 1)
+> 
+>> usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.04
+>> usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+>> usb usb1: Product: SM501 OHCI
+>> usb usb1: Manufacturer: Linux 6.4.0-12069-gc17414a273b8 ohci_hcd
+>> usb usb1: SerialNumber: sm501-usb
+>> hub 1-0:1.0: USB hub found
+>> hub 1-0:1.0: 2 ports detected
+>> usbcore: registered new interface driver usb-storage
+>> rtc-r9701 spi0.0: cannot read RTC register
+>> usbcore: registered new interface driver usbhid
+>> usbhid: USB HID core driver
+>> NET: Registered PF_PACKET protocol family
+>> heartbeat: version 0.1.2 loaded
+>> ata1: found unknown device (class 0)
+> [...]
+> 
+>> Adrian
+> 
+> MBR, Sergey
+
