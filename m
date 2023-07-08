@@ -2,166 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7309774BE79
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 18:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49ED74BE90
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 19:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjGHQnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 12:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S229916AbjGHRTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 13:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGHQnK (ORCPT
+        with ESMTP id S229483AbjGHRTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 12:43:10 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CD9E50;
-        Sat,  8 Jul 2023 09:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1688834584;
-        bh=eOhRCxRa33bQTogP6wXJZig9p4KuUl8R4DZju5LEYNw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CsoHrG8yuUoolQ0fir5s0wayefNertHMNkRxREmfLhljND9nXtd5tzVrkUQzzPkuX
-         1XqvH0NJg6mIWC1LQeDXt1Z1Nwyji+romTEbmkXF+3uUnHI1ZwTylFpj0wFuri5fez
-         +Lq/S9egoMONvvLFC75+ZHi4UWcbw3dIchXZHCfc=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3D22C12816A0;
-        Sat,  8 Jul 2023 12:43:04 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id AXivlkcxDbrm; Sat,  8 Jul 2023 12:43:04 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1688834582;
-        bh=eOhRCxRa33bQTogP6wXJZig9p4KuUl8R4DZju5LEYNw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=wnEP4DSuIApwJumg429Yi4gxSWfuF1Sg0oLPykmBSxaev9DXxdJ+QNH3ooFW1FxaP
-         1DZE/74XtWW5LZdXRnS4nZrb6Z1ORbNnMrBKwQhneLcJJ35OaByylMTEbE+5wgIHfD
-         HGMSk+RRyky5Fcv4BiXwM3ANqmIGs8fEU+KZKV/U=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+        Sat, 8 Jul 2023 13:19:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05EFE45;
+        Sat,  8 Jul 2023 10:19:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 579CC1281321;
-        Sat,  8 Jul 2023 12:43:01 -0400 (EDT)
-Message-ID: <f8f36ffc1360daad3df907c901144144cbcba106.camel@HansenPartnership.com>
-Subject: Re: [GIT PULL] bcachefs
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, tytso@mit.edu,
-        bfoster@redhat.com, jack@suse.cz, andreas.gruenbacher@gmail.com,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        dhowells@redhat.com
-Date:   Sat, 08 Jul 2023 12:42:59 -0400
-In-Reply-To: <ZKjd7nQxvzRDA2tK@casper.infradead.org>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
-         <20230706155602.mnhsylo3pnief2of@moria.home.lan>
-         <20230706164055.GA2306489@perftesting>
-         <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
-         <20230706211914.GB11476@frogsfrogsfrogs>
-         <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
-         <20230707091810.bamrvzcif7ncng46@moria.home.lan>
-         <30661670c55601ff475f2f0698c2be2958e45c38.camel@HansenPartnership.com>
-         <ZKjd7nQxvzRDA2tK@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F3E760DD6;
+        Sat,  8 Jul 2023 17:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4160C433C8;
+        Sat,  8 Jul 2023 17:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688836748;
+        bh=obPszca9HUUm39m5DN//rZarmmI8Vk++L/cwyjiHZIk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kI2M35eS+cw6Fn29keKYSvOWLrCP4dIqGPVPita2Ful/ophTkK5JdWM7Shte1F/ov
+         ijsAKvz9NwcqwoIQNleGAKEsl64YVPEC1fqaSEFp7DJAMoySmc9KBxGzYQc6+PV6Fe
+         rixmx0s5JOKmBJvGPgstbziv1jgbTy8t4Yj4qbWCNm2wK7kgRd4C9mYZiM4tFXDsCs
+         57AJj6IoXK62ULhit/QH516zpa91wkt7xRa86nc4DMuACVmpwLbaKJHgHsWLCK0bid
+         hldeysMHy8wXJlZLImsJnyQwW/77HkMmoUQJ5uu4WrgFZz+5Fu9d65X1g7Pavw5gLT
+         vE4xy+kl/YU/A==
+Message-ID: <0b4048d4-e80d-a80c-d16d-3fbb301cf698@kernel.org>
+Date:   Sat, 8 Jul 2023 19:19:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] proc.5: Clarify that boot arguments can be embedded in
+ image
+Content-Language: en-US
+To:     paulmck@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     mtk.manpages@gmail.com, corbet@lwn.net, akpm@linux-foundation.org,
+        ndesaulniers@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-man@vger.kernel.org
+References: <433d742b-743b-4335-878f-1ca0f45698f7@paulmck-laptop>
+ <20230704215932.c9cab0af086528e52ca0bfbb@kernel.org>
+ <d3057de8-39ca-4d2a-aa03-9134f916fac9@paulmck-laptop>
+From:   Alejandro Colomar <alx@kernel.org>
+In-Reply-To: <d3057de8-39ca-4d2a-aa03-9134f916fac9@paulmck-laptop>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0hNmHNIBNB4tyNxQxz770Y1k"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-07-08 at 04:54 +0100, Matthew Wilcox wrote:
-> On Fri, Jul 07, 2023 at 12:26:19PM -0400, James Bottomley wrote:
-> > On Fri, 2023-07-07 at 05:18 -0400, Kent Overstreet wrote:
-> > > Christain, the hostility I'm reading is in your steady passive
-> > > aggressive accusations, and your patronizing attitude. It's not
-> > > professional, and it's not called for.
-> > 
-> > Can you not see that saying this is a huge red flag?  With you
-> > every disagreement becomes, as Josef said, "a hill to die on" and
-> > you then feel entitled to indulge in ad hominem attacks, like this,
-> > or be dismissive or try to bury whoever raised the objection in
-> > technical minutiae in the hope you can demonstrate you have a
-> > better grasp of the details than they do and therefore their
-> > observation shouldn't count.
-> > 
-> > One of a maintainer's jobs is to nurture and build a community and
-> > that's especially important at the inclusion of a new feature. 
-> > What we've seen from you implies you'd build a community of little
-> > Kents (basically an echo chamber of people who agree with you) and
-> > use them as a platform to attack any area of the kernel you didn't
-> > agree with technically (which, apparently, would be most of block
-> > and vfs with a bit of mm thrown in), leading to huge divisions and
-> > infighting.  Anyone who had the slightest disagreement with you
-> > would be out and would likely behave in the same way you do now
-> > leading to internal community schisms and more fighting on the
-> > lists.
-> > 
-> > We've spent years trying to improve the lists and make the
-> > community welcoming.  However technically brilliant a new feature
-> > is, it can't come with this sort of potential for community and
-> > reputational damage.
-> 
-> I don't think the lists are any better, tbh.  Yes, the LF has done a
-> great job of telling people not to use "bad words" any more.  But
-> people are still arseholes to each other.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0hNmHNIBNB4tyNxQxz770Y1k
+Content-Type: multipart/mixed; boundary="------------EfxjfJRe60ewWmyBXc7L6Yfm";
+ protected-headers="v1"
+From: Alejandro Colomar <alx@kernel.org>
+To: paulmck@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>
+Cc: mtk.manpages@gmail.com, corbet@lwn.net, akpm@linux-foundation.org,
+ ndesaulniers@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-man@vger.kernel.org
+Message-ID: <0b4048d4-e80d-a80c-d16d-3fbb301cf698@kernel.org>
+Subject: Re: [PATCH] proc.5: Clarify that boot arguments can be embedded in
+ image
+References: <433d742b-743b-4335-878f-1ca0f45698f7@paulmck-laptop>
+ <20230704215932.c9cab0af086528e52ca0bfbb@kernel.org>
+ <d3057de8-39ca-4d2a-aa03-9134f916fac9@paulmck-laptop>
+In-Reply-To: <d3057de8-39ca-4d2a-aa03-9134f916fac9@paulmck-laptop>
 
-I don't think the LF has done much actively on the lists ... we've been
-trying to self police.
+--------------EfxjfJRe60ewWmyBXc7L6Yfm
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->   They're just more subtle about it now. I'm not going to enumerate
-> the ways because that's pointless.
+SGkgUGF1bCENCg0KT24gNy81LzIzIDIyOjMzLCBQYXVsIEUuIE1jS2VubmV5IHdyb3RlOg0K
+PiBPbiBUdWUsIEp1bCAwNCwgMjAyMyBhdCAwOTo1OTozMlBNICswOTAwLCBNYXNhbWkgSGly
+YW1hdHN1IHdyb3RlOg0KPj4gT24gRnJpLCAzMCBKdW4gMjAyMyAxNjozMzoyOCAtMDcwMA0K
+Pj4gIlBhdWwgRS4gTWNLZW5uZXkiIDxwYXVsbWNrQGtlcm5lbC5vcmc+IHdyb3RlOg0KPj4N
+Cj4+PiBXaXRoIHRoZSBhZHZlbnQgb2YgdGhlIENPTkZJR19CT09UX0NPTkZJRyBLY29uZmln
+IG9wdGlvbiwga2VybmVsIGJvb3QNCj4+PiBhcmd1bWVudHMgY2FuIG5vdyBiZSBlbWJlZGRl
+ZCBpbiB0aGUga2VybmVsIGltYWdlLCBlaXRoZXIgYXR0YWNoZWQNCj4+PiB0byB0aGUgZW5k
+IG9mIGluaXRyYW1mcyBvciBlbWJlZGRlZCBpbiB0aGUga2VybmVsIGl0c2VsZi4gIERvY3Vt
+ZW50DQo+Pj4gdGhpcyBwb3NzaWJpbGl0eSBpbiB0aGUgL3Byb2MvY21kbGluZSBlbnRyeSBv
+ZiBwcm9jLjUuDQo+Pg0KPj4gVGhhbmtzIGZvciB1cGRhdGUhDQo+Pg0KPj4gUmV2aWV3ZWQt
+Ynk6IE1hc2FtaSBIaXJhbWF0c3UgKEdvb2dsZSkgPG1oaXJhbWF0QGtlcm5lbC5vcmc+DQo+
+IA0KDQpUaGFua3MgZm9yIHRoZSByZXZpZXchICBUYWcgYWRkZWQuDQoNCj4gVGhhbmsgeW91
+LCBNYXNhbWkhDQo+IA0KPiBBZGRpbmcgQWxlamFuZHJvIGFuZCBsaW51eC1tYW4gb24gQ0Mu
+DQo+IA0KPiAJCQkJCQkJVGhhbngsIFBhdWwNCj4gDQo+Pj4gU2lnbmVkLW9mZi1ieTogUGF1
+bCBFLiBNY0tlbm5leSA8cGF1bG1ja0BrZXJuZWwub3JnPg0KPj4+IENjOiBNaWNoYWVsIEtl
+cnJpc2sgPG10ay5tYW5wYWdlc0BnbWFpbC5jb20+DQo+Pj4gQ2M6IE1hc2FtaSBIaXJhbWF0
+c3UgPG1oaXJhbWF0QGtlcm5lbC5vcmc+DQo+Pj4gQ2M6IEpvbmF0aGFuIENvcmJldCA8Y29y
+YmV0QGx3bi5uZXQ+DQo+Pj4gQ2M6IEFuZHJldyBNb3J0b24gPGFrcG1AbGludXgtZm91bmRh
+dGlvbi5vcmc+DQo+Pj4gQ2M6IE5pY2sgRGVzYXVsbmllcnMgPG5kZXNhdWxuaWVyc0Bnb29n
+bGUuY29tPg0KPj4+IENjOiBWbGFzdGltaWwgQmFia2EgPHZiYWJrYUBzdXNlLmN6Pg0KPj4+
+IENjOiBKb2hhbm5lcyBXZWluZXIgPGhhbm5lc0BjbXB4Y2hnLm9yZz4NCj4+Pg0KDQpUaGFu
+a3MhICBQYXRjaCBhcHBsaWVkLg0KDQpDaGVlcnMsDQpBbGV4DQoNCj4+PiBkaWZmIC0tZ2l0
+IGEvbWFuNS9wcm9jLjUgYi9tYW41L3Byb2MuNQ0KPj4+IGluZGV4IGM2Njg0NjIwZS4uMTQx
+YTI5ODNjIDEwMDY0NA0KPj4+IC0tLSBhL21hbjUvcHJvYy41DQo+Pj4gKysrIGIvbWFuNS9w
+cm9jLjUNCj4+PiBAQCAtMzEwMCw2ICszMTAwLDkgQEAgT2Z0ZW4gZG9uZSB2aWEgYSBib290
+IG1hbmFnZXIgc3VjaCBhcw0KPj4+ICAgLkJSIGxpbG8gKDgpDQo+Pj4gICBvcg0KPj4+ICAg
+LkJSIGdydWIgKDgpLg0KPj4+ICtBbnkgYXJndW1lbnRzIGVtYmVkZGVkIGluIHRoZSBrZXJu
+ZWwgaW1hZ2Ugb3IgaW5pdHJhbWZzIHZpYQ0KPj4+ICsuQiBDT05GSUdfQk9PVF9DT05GSUcN
+Cj4+PiArd2lsbCBhbHNvIGJlIGRpc3BsYXllZC4NCj4+PiAgIC5UUA0KPj4+ICAgLklSIC9w
+cm9jL2NvbmZpZy5neiAiIChzaW5jZSBMaW51eCAyLjYpIg0KPj4+ICAgVGhpcyBmaWxlIGV4
+cG9zZXMgdGhlIGNvbmZpZ3VyYXRpb24gb3B0aW9ucyB0aGF0IHdlcmUgdXNlZA0KPj4NCj4+
+DQo+PiAtLSANCj4+IE1hc2FtaSBIaXJhbWF0c3UgKEdvb2dsZSkgPG1oaXJhbWF0QGtlcm5l
+bC5vcmc+DQoNCi0tIA0KPGh0dHA6Ly93d3cuYWxlamFuZHJvLWNvbG9tYXIuZXMvPg0KR1BH
+IGtleSBmaW5nZXJwcmludDogQTkzNDg1OTRDRTMxMjgzQTgyNkZCREQ4RDU3NjMzRDQ0MUUy
+NUJCNQ0KDQo=
 
-Well, we can agree to differ since this isn't relevant to the main
-argument.
+--------------EfxjfJRe60ewWmyBXc7L6Yfm--
 
-> Consider this thread from Kent's point of view.  He's worked for
-> years on bcachefs.  Now he's asking "What needs to happen to get this
-> merged?" And instead of getting a clear answer as to the technical
-> pieces that need to get fixed, various people are taking the
-> opportunity to tell him he's a Bad Person.  And when he reacts to
-> that, this is taken as more evidence that he's a Bad Person, rather
-> than being a person who is in a stressful situation (Limbo? 
-> Purgatory?) who is perhaps not reacting in the most constructive way.
+--------------0hNmHNIBNB4tyNxQxz770Y1k
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-That's a bit of a straw man: I never said or implied "bad person".  I
-gave two examples, one from direct list interaction and one quoted from
-Kent of what I consider to be red flags behaviours on behalf of a
-maintainer.
+-----BEGIN PGP SIGNATURE-----
 
-> I don't think Kent is particularly worse as a fellow developer than
-> you or I or Jens, Greg, Al, Darrick, Dave, Dave, Dave, Dave, Josef or
-> Brian.
+iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmSpmoYACgkQnowa+77/
+2zLaAw/9GZ44D9oqBv/3PZ7DPzamy+1S94JAgMufrbV5SOSMXpIZhVHLSLR8CI0i
+MAV+vOp06f5lDuowwlCU/QetZK5OylyEy1G+7WuB+hY3/Qjtf7bblTDp+lrAISQn
+VyN9N/yJM1LPumsmwPwM2ifzTQ/xviTDWg4JeDAr0tE8G+R6Q42uXEfwl+F9W+sP
+6zWRWi4gPQw2/6iqZiJk5dm0M+xajjt+iFKp2z8UOaPXLDJzAWcnPozuyl8M4k5M
+/yRyzJpq3eqSAkpYzJVruMpcVcLhzh28iLOkSAH5OjNuZlxGPXbYHZCV+fUqcS7q
+XkZlgmkbahcYTMm/92jHAMvoD4YWnuPt5Ol6t0m12lvl25KfOkH+F28mp7n1YupR
+Y1TJUoc/ciVFiWBtgEY5i1pbiVqYIIEypN51QOb00CLCalyzQgD0MOPbMQgD4KiP
+ZZh3gL/Z0PRL4hRgV58U6WnWzSo55uQxCdrL6tcms1go+6PxELf1T3QCc2Jih714
+6iJ55BxnBiKCwqXOtGgZIDbKLBd4S5hZYVffFaqyaNem5srvZnNEmfeSJn00dvsh
+rSe6S4Hjvju93AgVay86dEy9Uk/92a64A6EHXc/9m167sp7hyVjmacg24M1G0Tll
+pByrjpjoCEHiWkxI0VlMfJkGN7BCtrMqDKeg/+mmL3oiwZduEDU=
+=pJ9c
+-----END PGP SIGNATURE-----
 
-I don't believe any of us have been unable to work with a fairly
-prolific contributor for 15 years ...
-
->  There are some social things which are a concern to me.  There's no
-> obvious #2 or #3 to step in if Kent does get hit by the proverbial
-> bus, but that's been discussed elsewhere in the thread.
-
-Actually, I don't think this is a problem: a new feature has no users
-and having no users, it doesn't matter if it loses its only maintainer
-because it can be excised without anyone really noticing.  The bus
-problem (or more accurately xkcd 2347 problem) commonly applies to a
-project with a lot of users but an anaemic developer community, which
-is a thing that can be grown to but doesn't happen ab initio.  The
-ordinary course for a kernel feature is single developer; hobby project
-(small community of users as developers); and eventually a non
-technical user community.  Usually the hobby project phase grows enough
-interested developers to ensure a fairly healthy developer community by
-the time it actually acquires non developer users (and quite a few of
-our features never actually get out of the hobby project phase).
-
-James
-
+--------------0hNmHNIBNB4tyNxQxz770Y1k--
