@@ -2,123 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B1574BBD6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 06:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C16D74BBE1
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 07:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjGHEqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 00:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S232607AbjGHE4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 00:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjGHEqb (ORCPT
+        with ESMTP id S229515AbjGHE4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 00:46:31 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE511FEA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 21:46:30 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-4036bd4fff1so70841cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 21:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688791589; x=1691383589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YyAMdvJktjgVZgqIlZO7YuMmEhUFKN2Y2cqBBOKqGiU=;
-        b=N00yb2y9yM9yMJ/lJ+MIeALEu4ief3j70Iy2wzbccmSEshsLeJFXNGscVhBc1wqufP
-         285RIu0byqu0sHgr1Dj/U0pcr5vyLipTY9pYyFzP4qWl/8eFLDqkKcRHLUeWepi1m9aJ
-         8/a5kA8EXvpXzu5COj4KCTv86ShSD2w4641Yil5uKyqanCGg5mIZhSG3dycSp941GKZw
-         kGncppV1z/kqlaJcwPctOCzfRsNWsMHeOFDiUMK2y4A7Odmx0xtvIz8DucxA0rWto9O7
-         bwRRjM5D+Ki+uANjMJN0tjhZleM8IDjkYofxaPlfbkKJgxmaXW88yf2ZsSMyRmwcV2iC
-         IXww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688791589; x=1691383589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YyAMdvJktjgVZgqIlZO7YuMmEhUFKN2Y2cqBBOKqGiU=;
-        b=RrVsoPtwk+lbrvHVuyHaFmnlW2tI7VXamvwJrW/+FRR4moAylAvYyjtk4TfXr+JxQ7
-         GqCQ6vv3VuyMtzeQF90rQ6/5IQPgAyFlI9w/SAJ7jsgLIp7nYhCvT/djV/+bAkCexQKl
-         KOoTHZIXoe9KcaEeo4zJeUs0lVX+N/DYjUPuy/rCUNO2j+ZQYGmZwFXKISy88u5DM9Ty
-         gTjussH3MFK92W0xvVbyShuKay51Mm93Oltsp2SWX28If6MZ38O9acyW2JNTEVkxhlQY
-         hCvwYZtgzs7/BQZmKtOzJMd/bNX5UGjcWHWSPz+lzIIaCBhJU+6Iy0ybSC+ZsG6Gdflc
-         FXGw==
-X-Gm-Message-State: ABy/qLahF+POyY1Ls5QaQ3qnIA7xFkaX23pbPnfSlQoehe7k52tL3GYZ
-        dcOlwkASSnu/tMdBYwlkzlpH3G4gR4qX3rEDaLbdUikwTVK22bUVcSGSUE0E
-X-Google-Smtp-Source: APBJJlFoC6KdctcB2dk1Nls7g98ZI12r8YIz0zdzjvddb7lswh7FUNnBgCmR0ecN/b30tq+Wsmu+35xn0ifk+G/VzcA=
-X-Received: by 2002:a05:622a:104b:b0:3f8:e0a:3e66 with SMTP id
- f11-20020a05622a104b00b003f80e0a3e66mr59202qte.3.1688791589388; Fri, 07 Jul
- 2023 21:46:29 -0700 (PDT)
+        Sat, 8 Jul 2023 00:56:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1A21992;
+        Fri,  7 Jul 2023 21:56:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64B4B60180;
+        Sat,  8 Jul 2023 04:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CAEC433C8;
+        Sat,  8 Jul 2023 04:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688792206;
+        bh=jIH7Dfx3OwyzpblB1J6hrgpIP+zaCBKcXWS7lbXyui0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qEoys0WaXmk7pNR5ZPtpF8oo5PmqL7P4as5nypl3VFH84TpNwVlXWQ5WVG4Rv7LXZ
+         AbOVffz9IcqDpV4qlWdm36jqrwLx5Flr1o+VFt0aRhSeFk0kVBZvK57tVM2nUIate9
+         AH6mvJiphww5q/EArHBI7Yr2LNZxT2jqj9nebTYO/PKgQ+a/ZjDrL3Zu3ChxRjYr+5
+         bPDCcOaZZqaV2jznUPnB1k9NooBw4EPMWr97ZoXy5i+PZOxP5Wm8TGL0bjtYMzH3wo
+         3w4tTP7E5+MWT35V2DNKh+1Lx6H/lB8Bbyf4a1tU13ogHyq4I+AYlLmRR6CA1e9GFu
+         MC2hfzX/CF7hg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 25C7DCE00A7; Fri,  7 Jul 2023 21:56:46 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 21:56:46 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Z qiang <qiang.zhang1211@gmail.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] srcu: Make srcu_might_be_idle() take early return if
+ rcu_gp_is_normal() return true
+Message-ID: <daaefdef-03d7-4681-bceb-df29d488f5c3@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230704082615.7415-1-qiang.zhang1211@gmail.com>
+ <77d16cbb-b28c-4b13-aecb-9ad787559557@paulmck-laptop>
+ <CALm+0cW6DojcxSnzf2mMXhXP-MHJ0aEvSqyh1TbtvBC4bzfsOw@mail.gmail.com>
+ <087e3da2-ffd9-4cf4-8893-73f4edc3cfba@paulmck-laptop>
+ <CALm+0cV2WdFzSaLpGodqv6idxvBSjupHPHNuK_z3r8Xya7KUuw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230707165221.4076590-1-fengwei.yin@intel.com>
-In-Reply-To: <20230707165221.4076590-1-fengwei.yin@intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 7 Jul 2023 22:45:53 -0600
-Message-ID: <CAOUHufY++PUYp3qcmX2rK5AQrgu9rPT3tYOpj=44BX4K67Znrw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/3] support large folio for mlock
-To:     Yin Fengwei <fengwei.yin@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        ryan.roberts@arm.com, shy828301@gmail.com,
-        akpm@linux-foundation.org, willy@infradead.org, david@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALm+0cV2WdFzSaLpGodqv6idxvBSjupHPHNuK_z3r8Xya7KUuw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 10:52=E2=80=AFAM Yin Fengwei <fengwei.yin@intel.com>=
- wrote:
->
-> Yu mentioned at [1] about the mlock() can't be applied to large folio.
->
-> I leant the related code and here is my understanding:
-> - For RLIMIT_MEMLOCK related, there is no problem. Becuase the
->   RLIMIT_MEMLOCK statistics is not related underneath page. That means
->   underneath page mlock or munlock doesn't impact the RLIMIT_MEMLOCK
->   statistics collection which is always correct.
->
-> - For keeping the page in RAM, there is no problem either. At least,
->   during try_to_unmap_one(), once detect the VMA has VM_LOCKED bit
->   set in vm_flags, the folio will be kept whatever the folio is
->   mlocked or not.
->
-> So the function of mlock for large folio works. But it's not optimized
-> because the page reclaim needs scan these large folio and may split
-> them.
->
-> This series identified the large folio for mlock to two types:
->   - The large folio is in VM_LOCKED VMA range
->   - The large folio cross VM_LOCKED VMA boundary
->
-> For the first type, we mlock large folio so page relcaim will skip it.
-> For the second type, we don't mlock large folio. It's allowed to be
-> picked by page reclaim and be split. So the pages not in VM_LOCKED VMA
-> range are allowed to be reclaimed/released.
+On Sat, Jul 08, 2023 at 10:11:30AM +0800, Z qiang wrote:
+> >
+> > On Fri, Jul 07, 2023 at 06:28:29PM +0800, Z qiang wrote:
+> > > >
+> > > > On Tue, Jul 04, 2023 at 04:26:15PM +0800, Zqiang wrote:
+> > > > > When invoke synchronize_srcu(), in the srcu_might_be_idle(), the current
+> > > > > CPU's sdp->lock will be acquired to check whether there are pending
+> > > > > callbacks in the sdp->srcu_cblist, if there are no pending callbacks,
+> > > > > probabilistically probe global state to decide whether to convert to
+> > > > > synchronize_srcu_expedited() call. however, for the rcupdate.rcu_normal=1
+> > > > > kernels and after the rcu_set_runtime_mode() is called, invoke the
+> > > > > rcu_gp_is_normal() is always return true, this mean that invoke the
+> > > > > synchronize_srcu_expedited() always fall back to synchronize_srcu(),
+> > > > > so there is no need to acquire sdp->lock to check sdp->srcu_cblist and
+> > > > > probe global state in srcu_might_be_idle().
+> > > > >
+> > > > > This commit therefore make srcu_might_be_idle() return immediately if the
+> > > > > rcu_gp_is_normal() return true.
+> > > > >
+> > > > > Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
+> > > > > ---
+> > > > >  kernel/rcu/srcutree.c | 2 ++
+> > > > >  1 file changed, 2 insertions(+)
+> > > > >
+> > > > > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > > > > index 20d7a238d675..aea49cb60a45 100644
+> > > > > --- a/kernel/rcu/srcutree.c
+> > > > > +++ b/kernel/rcu/srcutree.c
+> > > > > @@ -1172,6 +1172,8 @@ static bool srcu_might_be_idle(struct srcu_struct *ssp)
+> > > > >       unsigned long tlast;
+> > > > >
+> > > > >       check_init_srcu_struct(ssp);
+> > > > > +     if (rcu_gp_is_normal())
+> > > > > +             return false;
+> > > >
+> > > > Again, thank you for looking into SRCU!
+> > > >
+> > > > I am not at all enthusiastic about this one.  With this change, the name
+> > > > srcu_might_be_idle() is no longer accurate.  Yes, the name could change,
+> > > > but any name would be longer and more confusing.
+> > > >
+> > > > So unless there is a measureable benefit to this one on a production
+> > > > workload, I cannot justify taking it.
+> > > >
+> > > > Is there a measureable benefit?
+> > >
+> > > Hi, Paul
+> > >
+> > > I only find that for Preempt-RT kernel,  the rcu_normal_after_boot is
+> > > set by default:
+> > > static int rcu_normal_after_boot = IS_ENABLED(CONFIG_PREEMPT_RT);
+> > > This affects only rcu but also srcu, this make the synchronize_srcu() and
+> > > synchronize_srcu_expedited() always fall back to __synchronize_srcu(ssp, true),
+> > > this means that call the srcu_might_be_idle() is meaningless.
+> >
+> > I do understand that the current setup favors default kernel builds at
+> > runtime by a few low-cost instructions, and that your change favors,
+> > as you say, kernels built for real-time, kernels built for certain types
+> > of HPC workloads, and all kernels during a small time during boot.
+> >
+> > My question is instead whether any of this makes a measureable difference
+> > at the system level.
+> >
+> > My guess is "no, not even close", but the way to convince me otherwise
+> > would be to actually run the workload and kernels on real hardware and
+> > provide measurements showing a statistically significant difference that
+> > the workload(s) in question care(s) about.
+> >
+> > So what can you show me?
+> >
+> > And srcu_might_be_idle() is not meaningless in that situation, just
+> > ignored completely.  And that is in fact the nature and purpose of the
+> > C-language || operator.  ;-)
+> 
+> Agree with you :)
+> This make me want to ask another question,  why srcu also use
+> rcupdate.rcu_normal and rcupdate.rcu_expedited to decide expedited
+> srcu grace-period or only use normal grace-period instead of
+> generating srcu_normal and srcu_expedited?
 
-This is a sound design, which is also what I have in mind. I see the
-rationales are being spelled out in this thread, and hopefully
-everyone can be convinced.
+Because I have not yet come across a situation where it was useful for
+the one to be expedited and the other normal.
 
-> patch1 introduce API to check whether large folio is in VMA range.
-> patch2 make page reclaim/mlock_vma_folio/munlock_vma_folio support
-> large folio mlock/munlock.
-> patch3 make mlock/munlock syscall support large folio.
+But if you know of such a situation, let's talk about it.
 
-Could you tidy up the last patch a little bit? E.g., Saying "mlock the
-4K folio" is obviously not the best idea.
+							Thanx, Paul
 
-And if it's possible, make the loop just look like before, i.e.,
-
-  if (!can_mlock_entire_folio())
-    continue;
-  if (vma->vm_flags & VM_LOCKED)
-    mlock_folio_range();
-  else
-    munlock_folio_range();
-
-Thanks.
+> Thanks
+> Zqiang
+> 
+> >
+> >                                                         Thanx, Paul
+> >
+> > > Thanks
+> > > Zqiang
+> > >
+> > > >
+> > > >                                                         Thanx, Paul
+> > > >
+> > > > >       /* If the local srcu_data structure has callbacks, not idle.  */
+> > > > >       sdp = raw_cpu_ptr(ssp->sda);
+> > > > >       spin_lock_irqsave_rcu_node(sdp, flags);
+> > > > > --
+> > > > > 2.17.1
+> > > > >
