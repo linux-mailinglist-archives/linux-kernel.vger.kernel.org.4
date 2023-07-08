@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7646374BA45
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 01:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A980374BA4B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjGGX70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 19:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S232454AbjGHAAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 20:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjGGX7Y (ORCPT
+        with ESMTP id S229515AbjGHAAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 19:59:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0452114;
-        Fri,  7 Jul 2023 16:59:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65CEB61A8A;
-        Fri,  7 Jul 2023 23:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C342C433C7;
-        Fri,  7 Jul 2023 23:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688774362;
-        bh=WTd56ApkF2fKz1PpSSnKiKBr0pj8GEdOUW1JlxQoa/4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j2DETU06+q5ZvHqx28PK3xLWmURczDOHwZEvX3m3J7ML63Ryrv6z6fGVNpGjaPIOQ
-         wy4but5fBtDcnJvVj6cNlrVxFWdbxZEzCiqp4tGLWod1OntLH8dF+MevIUnWxGbzm4
-         4FD7KJaFlpL/NhlgoXLQxT0lYfmGPxLFvCXlzf8LwEAESEymBUsaSd+fUymVkZsaPt
-         9KqOaZRV60dmYf6Y/MaQF5XoeFGkbeFzxFuKIdKKKcRD++j3sDU+a5ZdP/b2810Qwb
-         OaM9uOTIH06UAZ+lPf47zIVYpXZM7qyLK8duxAIe4QlLXdwuOVkzOgc2t+uw1Ihvl2
-         68WGjdEaPM4hg==
-Date:   Fri, 7 Jul 2023 16:59:21 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     <davem@davemloft.net>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Liang Chen <liangchen.linux@gmail.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>
-Subject: Re: [PATCH v5 RFC 1/6] page_pool: frag API support for 32-bit arch
- with 64-bit DMA
-Message-ID: <20230707165921.565b1228@kernel.org>
-In-Reply-To: <20230629120226.14854-2-linyunsheng@huawei.com>
-References: <20230629120226.14854-1-linyunsheng@huawei.com>
-        <20230629120226.14854-2-linyunsheng@huawei.com>
+        Fri, 7 Jul 2023 20:00:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45366128;
+        Fri,  7 Jul 2023 17:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vrELjCRWUuWgBxG/0NmdBEll0kHxCUngDsbAfQ8U4SM=; b=SospscAnESYLmVjxT53N4kth/D
+        U3MJHJ42KyDTnes6JefBnFLdIjMF8Biw22nxOV/H74eeclvSZc4jYAYwI7iCXsYUWXZb8OtKIDr5z
+        XJEhW0sqU4ASIMp3THBnDU90JrL7xL9MZRH25KW41GnlCgoqBy56jqh77+JDi/yZ1dbsaGk0JrYmk
+        3vEEYDrl8+OczcI5ruvlLDBGcJZogg9cU5O886wYEg7FqEOVNPOVPepyJey/atA5cMjpWQcHbe6dj
+        DZg/oxCut1sFJ+2PNdjrX2LUl89baewoxeEBYtimaNWIaL/o5n5xrNzWZYYHgUUgfkeKzeWScYk3H
+        iSd3816Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qHvNF-00CTIK-1p; Sat, 08 Jul 2023 00:00:29 +0000
+Date:   Sat, 8 Jul 2023 01:00:29 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Howells <dhowells@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
+ forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read
+ side?)
+Message-ID: <ZKinHejv+xBq+gti@casper.infradead.org>
+References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
+ <20230626-vorverlegen-setzen-c7f96e10df34@brauner>
+ <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
+ <20230626-fazit-campen-d54e428aa4d6@brauner>
+ <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
+ <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +61,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 20:02:21 +0800 Yunsheng Lin wrote:
-> +		/* Return error here to avoid mlx5e_page_release_fragmented()
-> +		 * calling page_pool_defrag_page() to write to pp_frag_count
-> +		 * which is overlapped with dma_addr_upper in 'struct page' for
-> +		 * arch with PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true.
-> +		 */
-> +		if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-> +			err = -EINVAL;
-> +			goto err_free_by_rq_type;
-> +		}
+On Thu, Jul 06, 2023 at 02:56:45PM -0700, Linus Torvalds wrote:
+> +static int busy_pipe_buf_confirm(struct pipe_inode_info *pipe,
+> +				 struct pipe_buffer *buf)
+> +{
+> +	struct page *page = buf->page;
+> +
+> +	if (folio_wait_bit_interruptible(page_folio(page), PG_locked))
+> +		return -EINTR;
 
-I told you not to do this in a comment on v4.
-Keep the flag in page pool params and let the creation fail.
+Do we really want interruptible here rather than killable?  That is,
+do we want SIGWINCH or SIGALRM to result in a short read?  I assume
+it's OK to return a short read because userspace has explicitly asked
+for O_NONBLOCK and can therefore be expected to actually check the
+return value from read().
+
