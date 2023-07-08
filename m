@@ -2,117 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13C674BEF4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 21:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5318D74BEFB
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 21:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjGHTXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 15:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S229828AbjGHTeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 15:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjGHTXN (ORCPT
+        with ESMTP id S229713AbjGHTen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 15:23:13 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD26FD
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 12:23:12 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51dff848168so4005407a12.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 12:23:12 -0700 (PDT)
+        Sat, 8 Jul 2023 15:34:43 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110D11B3
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 12:34:42 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-314417861b9so3282961f8f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 12:34:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688844190; x=1691436190;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=joV2BdE7YOFZ22mdVaTCQPGn7sLlO9d89m2/O8Ni8nw=;
-        b=T2pqC72EzC/l5ocPTlE8QR8Er9U2w4UWsADfntO5p1ri/2LUBttZT8aWbBWWcrt3RK
-         iamWIuuZApdp95ZOW6KlpJPLAMPAgVdg866cttW1wX0ohDXsvoqgWS482/jgBRe1CHVF
-         DCjbOKIqCilAWeeVgKAkuChWygZqj55JlRdso=
+        d=gmail.com; s=20221208; t=1688844880; x=1691436880;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ldWBxd74R+pglDeJnUmYlGVsD0i0ZZKfyJtHQNTwXzQ=;
+        b=sVjmI/+niehvvGhOr0OrzfmxAJGLr0PGa4XQdAo4op/FETPRrGMxoZSaobvT09ZgaD
+         0tho5PCSpJUGIiKH799QaoHux4jIrEQqcd/dP3MoO6gvaXHC9ZHflkHGPHLbuQzKoni3
+         M3cCmN+sSLBawVQF40rlDO6g2S9gVB33bml1xJRO/cHKfZBZpXc2QBo9jc/+wMHi/Sxg
+         Pnq+K6f7cOq34xsgU+pkmpIa1eMo436sexFTVwxvsxd8kOr7qPpaSvJ/h5iLPIWLxFu3
+         thp1Hqcu4dzrZsQRBkQ16It2ygPTd3wi0iiPvUws3yxx8ELFznGB/PM46DU5OKXi0xxh
+         3GYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688844190; x=1691436190;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=joV2BdE7YOFZ22mdVaTCQPGn7sLlO9d89m2/O8Ni8nw=;
-        b=Su6cr/UeDdeaH5bjJZxCiOsMzEyCUNprT0d8DS+g4HjAwjafl0NN7QgfG7G9w0t655
-         YKR7y1nQfeKnC6iZvETwd23L0BSWd+drqoujc2Zzp/H6sFWngP70Tqdh5TKwEZijFMWy
-         st+gCocZ8UECAztTey9g6TfdBOYL46g7x2ZzsfvpuM5qfiMe6eDz6TakAjfNlJvzltrp
-         DbP/ymGZHABCgBDvZMCKi7Py97iPIaqPPFiKHFdS5YMKp36w2WAWdIt/Hw0RI1kryCNT
-         KgytAlW7AIBBWzw8IAi9NhMBMcwHgwY9IVXpopQolNix6C/0CtlZ745J0RfiTCv6MHjM
-         AAog==
-X-Gm-Message-State: ABy/qLaF6yB6psgTwZCCLOFQhXFlyP/rfWDkT7D0hPjRbO9h2d2UFgRU
-        FOtOvnZSTDXYoJvaPXSq3MzqrUO/dlcVor/Y4iu98NtU
-X-Google-Smtp-Source: APBJJlFzj2RUumrCP9CHjYXoRCQHD0KqF1FQMXaMWfP24/OJLczbQ7G8IzdFhCHenxVKWSPZjL12Ng==
-X-Received: by 2002:a05:6402:350:b0:51d:f589:9c7a with SMTP id r16-20020a056402035000b0051df5899c7amr5644501edw.17.1688844190558;
-        Sat, 08 Jul 2023 12:23:10 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056402150f00b0051e06693590sm3588142edw.91.2023.07.08.12.23.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jul 2023 12:23:10 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so33792645e9.3
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 12:23:10 -0700 (PDT)
-X-Received: by 2002:a5d:684c:0:b0:314:4915:689 with SMTP id
- o12-20020a5d684c000000b0031449150689mr7611320wrw.34.1688844189725; Sat, 08
- Jul 2023 12:23:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688844880; x=1691436880;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ldWBxd74R+pglDeJnUmYlGVsD0i0ZZKfyJtHQNTwXzQ=;
+        b=CzmDpwoS4Kw5aCauewEpyecSxUWeKEH8vt8vfttDlnTzIriSc8h5SNZ7WbhaThVWoN
+         17u7XUOniVtpJavNmWY7MGziXblopv24txDaRdlnpUeNo1OkY6fVb/VeQs5mbj0oLoVx
+         yNQHpGSEqEfI6YQ61bGuZJXl1Kw7M83E2QJaN9lnTb/ZwOEKYxuP6TUXI8YBq3y4/2tt
+         IiQ8gTc2J+whidD+aTq69nwbKwEy4JMuw/0vdFQqMOWaOR3XbPbcG4hnN+YszdQD3ahY
+         UK6bNgk93CpGSsEYdE/ZkeSj9Cn/A0Q+PvmQ7bx6GRX03SjnjU4WBK14NH91NMrdMY8I
+         Ncbg==
+X-Gm-Message-State: ABy/qLahhC9o1Bw3/4WCWuTYvlpnvnRHNpD7/p8Ckd00p+Rrchq8m5D9
+        zUCb3DfutdadQsCYiPUNvM0=
+X-Google-Smtp-Source: APBJJlGNcDSORY8447lyep+MwzIZdPiYkFWo0VoxirWIRMBbFz2WsbB3+sDDxjNWo7cuDUhuN0uydQ==
+X-Received: by 2002:a5d:484d:0:b0:314:15b7:20a5 with SMTP id n13-20020a5d484d000000b0031415b720a5mr7268292wrs.54.1688844880170;
+        Sat, 08 Jul 2023 12:34:40 -0700 (PDT)
+Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05600000d100b003142eb75724sm7556052wrx.24.2023.07.08.12.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 12:34:39 -0700 (PDT)
+Date:   Sat, 8 Jul 2023 20:34:38 +0100
+From:   Stafford Horne <shorne@gmail.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Evan Green <evan@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC V2 PATCH 2/9] riscv: avoid missing prototypes warning
+Message-ID: <ZKm6TqqdEWKvwnQM@antec>
+References: <20230704140924.315594-1-cleger@rivosinc.com>
+ <20230704140924.315594-3-cleger@rivosinc.com>
 MIME-Version: 1.0
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info> <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh> <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh> <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
- <2023070509-undertow-pulverize-5adc@gregkh> <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
- <20230705084906.22eee41e6e72da588fce5a48@linux-foundation.org>
- <df1d7d39-56f3-699c-0d0f-fcc8774f182e@leemhuis.info> <CAHk-=whKd05V49AbZGF=inYmhU6H_yNvvw1grWyhQfQ=9+5-VQ@mail.gmail.com>
- <20230708103936.4f6655cd0d8e8a0478509e25@linux-foundation.org>
- <CAHk-=wh498i3s+BgOF=pUOF=Qe_A0A16-mFcH2YGy+iZXvNChQ@mail.gmail.com>
- <CAJuCfpFLc1yoZm9uqRcmcwtFNGHYKyjxrc71tzXennpGB7QbYQ@mail.gmail.com>
- <CAHk-=wi-99-DyMOGywTbjRnRRC+XfpPm=r=pei4A=MEL0QDBXA@mail.gmail.com> <CAJuCfpHszCAc5hDdsxry+1xh3kz+=jsYdBCXKQez-Th9LESSZA@mail.gmail.com>
-In-Reply-To: <CAJuCfpHszCAc5hDdsxry+1xh3kz+=jsYdBCXKQez-Th9LESSZA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 8 Jul 2023 12:22:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi=+qS+5v_7mVxKWUSOKaxzC2V8N7hyFVt1qTWGM_pmAQ@mail.gmail.com>
-Message-ID: <CAHk-=wi=+qS+5v_7mVxKWUSOKaxzC2V8N7hyFVt1qTWGM_pmAQ@mail.gmail.com>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230704140924.315594-3-cleger@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Jul 2023 at 12:17, Suren Baghdasaryan <surenb@google.com> wrote:
->
-> Do you want me to disable per-VMA locks by default as well?
+On Tue, Jul 04, 2023 at 04:09:17PM +0200, Clément Léger wrote:
+> Declare handle_misaligned_store/load() functions in entry-common.h and
+> include that file in traps_misaligned.c file to avoid warnings.
+> 
+> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/entry-common.h | 3 +++
+>  arch/riscv/kernel/traps.c             | 2 --
+>  arch/riscv/kernel/traps_misaligned.c  | 1 +
+>  3 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/entry-common.h b/arch/riscv/include/asm/entry-common.h
+> index 6e4dee49d84b..58e9e2976e1b 100644
+> --- a/arch/riscv/include/asm/entry-common.h
+> +++ b/arch/riscv/include/asm/entry-common.h
+> @@ -8,4 +8,7 @@
+>  void handle_page_fault(struct pt_regs *regs);
+>  void handle_break(struct pt_regs *regs);
+>  
+> +int handle_misaligned_load(struct pt_regs *regs);
+> +int handle_misaligned_store(struct pt_regs *regs);
+> +
 
-No. I seriously believe that if the per-vma locking is so broken that
-it needs to be disabled in a development kernel, we should just admit
-failure, and revert it all.
+Would this work when CONFIG_RISCV_M_MODE is disabled?
 
-And not in a "revert it for a later attempt" kind of way.
+The handle_misaligned_load/store functions are only defined if
+CONFIG_RISCV_M_MODE is enabled.  I would expect warnings if CONFIG_RISCV_M_MODE
+is siabled.
 
-So it would be a "revert it because it added insurmountable problems
-that we couldn't figure out" thing that implies *not* trying it again
-in that form at all, and much soul-searching before somebody decides
-that they have a more maintainable model for it all.
+-Stafford
 
-If stable decides that the fixes are not back-portable, and the whole
-thing needs to be disabled for stable, that's one thing. But if we
-decide that in mainline, it's a "this was a failure" thing.
-
-           Linus
+>  #endif /* _ASM_RISCV_ENTRY_COMMON_H */
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 8c258b78c925..7fcaf2fd27a1 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -155,8 +155,6 @@ DO_ERROR_INFO(do_trap_load_misaligned,
+>  DO_ERROR_INFO(do_trap_store_misaligned,
+>  	SIGBUS, BUS_ADRALN, "Oops - store (or AMO) address misaligned");
+>  #else
+> -int handle_misaligned_load(struct pt_regs *regs);
+> -int handle_misaligned_store(struct pt_regs *regs);
+>  
+>  asmlinkage __visible __trap_section void do_trap_load_misaligned(struct pt_regs *regs)
+>  {
+> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+> index e7bfb33089c1..0cccac4822a8 100644
+> --- a/arch/riscv/kernel/traps_misaligned.c
+> +++ b/arch/riscv/kernel/traps_misaligned.c
+> @@ -12,6 +12,7 @@
+>  #include <asm/processor.h>
+>  #include <asm/ptrace.h>
+>  #include <asm/csr.h>
+> +#include <asm/entry-common.h>
+>  
+>  #define INSN_MATCH_LB			0x3
+>  #define INSN_MASK_LB			0x707f
+> -- 
+> 2.40.1
+> 
