@@ -2,40 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D0E74BB34
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 03:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C56574BB37
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 03:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjGHB4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 21:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S230414AbjGHB5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 21:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGHB4j (ORCPT
+        with ESMTP id S229890AbjGHB5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 21:56:39 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDDCC3;
-        Fri,  7 Jul 2023 18:56:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=ydzhang@linux.alibaba.com;NM=1;PH=DW;RN=7;SR=0;TI=W4_0.2.0_DEFAULT_210DF632_1688781163176_o7001c63l;
-Received: from WS-web (ydzhang@linux.alibaba.com[W4_0.2.0_DEFAULT_210DF632_1688781163176_o7001c63l]) at Sat, 08 Jul 2023 09:56:34 +0800
-Date:   Sat, 08 Jul 2023 09:56:34 +0800
-From:   "wardenjohn" <ydzhang@linux.alibaba.com>
-To:     "jpoimboe" <jpoimboe@kernel.org>
-Cc:     "jikos" <jikos@kernel.org>, "mbenes" <mbenes@suse.cz>,
-        "pmladek" <pmladek@suse.com>,
-        "joe.lawrence" <joe.lawrence@redhat.com>,
-        "live-patching" <live-patching@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Reply-To: "wardenjohn" <ydzhang@linux.alibaba.com>
-Message-ID: <931aaecf-66b1-469a-8bc3-7126871a8464.ydzhang@linux.alibaba.com>
-Subject: =?UTF-8?B?Rml4IE1BWF9TVEFDS19FTlRSSUVTIGZyb20gMTAwIHRvIDMy?=
-X-Mailer: [Alimail-Mailagent revision 85][W4_0.2.0][DEFAULT][Chrome]
+        Fri, 7 Jul 2023 21:57:37 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0544E5
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 18:57:35 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6ff1a637bso40989781fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 18:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688781454; x=1691373454;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wwkh8pKXmB000uFIXf7QzEd4TnjTv7TK1I8MwngSb1U=;
+        b=cB0DDfVlNx81Qa+CdHuaDXkowhn0UIBmUijEi6/MK4yPEa5LPrIl5HUkqW9yOfi+Mj
+         doGsz/KGFFXTl0+Ir/tAb8LAqdtRRZElhL4SOU/DiwFTJnd+1rwJrBJfQi3r4h8IkZFu
+         b4yD7Uy69SEFgGgvHrzAt542Py0zA29Z2csDRAexDnt/4HncnOS1Q6ChYc0kxyoDddgS
+         sVES9b9y1CFvAKw9wfIKtg3XD+welY86e7QwXV04tby9+P4vdcgWxuCrkl7DWxfU7HtS
+         lazyUTHet/c79kSl5R7HDO2wt/FlfM68fEOeovmZ4M5R3tWdLXXmY3RNOF6j3GmZnghL
+         3/Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688781454; x=1691373454;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wwkh8pKXmB000uFIXf7QzEd4TnjTv7TK1I8MwngSb1U=;
+        b=bBP3qr7Rz43cyBfQ7UzRnP2tKAgZjICpaOfHkrazIRO+Y1p+loeZNPlUSOW2PY/ZVs
+         WrxB7M0Wwf1NT+96osRoD63Y0LBE9gqsCHR7JkDn9e9RtGbxYMmXBsMIVOSnNWhFvQTu
+         j1zZqR/vCejFnflvdKI+wvqXgnDwcVGxpmrX9fKTC9xBbjvXVKDJYzU4TUUMdp0cZ55c
+         qChIGM++w0aP3OGCFNPbv2QDWZi9ziHqEyx0/bjiG8fwRaJ3LkCNQSNfgKqrI/hn37Ti
+         T2gFa5Gj+BlUpwPt28Q+DW0j2FR8Moot9a0JLcDtYdy7k0ThpjSd09w/fzYFqKXdPwBK
+         RoLg==
+X-Gm-Message-State: ABy/qLbmFLXEby4p1z9vWG4x09mDkMPnIQPG5xyTcwG7A1hFITzOdJvA
+        B6j834JHUOATv82GNPonv2XPng==
+X-Google-Smtp-Source: APBJJlFDVaBc1zEui+gCBg4MQrnljMQkMGLMJ5lft3Q2Ug4r1ftxh54PBw/phWz3nZmMH8jMFkZIpQ==
+X-Received: by 2002:a2e:8295:0:b0:2b6:9ab8:9031 with SMTP id y21-20020a2e8295000000b002b69ab89031mr2673029ljg.16.1688781454254;
+        Fri, 07 Jul 2023 18:57:34 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id w4-20020a2e9bc4000000b002b475f087desm1022235ljj.56.2023.07.07.18.57.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jul 2023 18:57:33 -0700 (PDT)
+Message-ID: <014ed874-6481-ba22-c3d7-4c2b082e515d@linaro.org>
+Date:   Sat, 8 Jul 2023 04:57:33 +0300
 MIME-Version: 1.0
-x-aliyun-mail-creator: W4_0.2.0_DEFAULT_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzExNC4wLjAuMCBTYWZhcmkvNTM3LjM2La
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 6/6] drm/msm/dpu: Update dev core dump to dump
+ registers of sub-blocks
+Content-Language: en-GB
+To:     Ryan McCann <quic_rmccann@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
+References: <20230622-devcoredump_patch-v5-0-67e8b66c4723@quicinc.com>
+ <20230622-devcoredump_patch-v5-6-67e8b66c4723@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230622-devcoredump_patch-v5-6-67e8b66c4723@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,25 +84,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIGZvciByZWFkaW5nIG15IHN1Z2dlc3Rpb24uIEkgZm91bmQgdGhhdCB0aGUgYXJyYXkg
-Zm9yIHRhc2sgc3RhY2sgZW50cmllcyB3aGVuCmRvaW5nIGxpdmVwYXRjaCBmdW5jdGlvbiBjaGVj
-ayBpcyB0b28gbGFyZ2Ugd2hpY2ggc2VlbXMgdG8gYmUgdW5uZWNlc3NhcnkuIFRoZXJlZm9yZSwK
-SSBzdWdnZXN0IHRvIGZpeCB0aGUgTUFYX1NUQUNLX0VOVFJJRVMgZnJvbSAxMDAgdG8gMzIuCgpU
-aGUgcGF0Y2ggaXMgYXMgZm9sbG93czoKCkZyb20gZWUyN2RhNWU2NGRhY2VkMTU5MjU3ZjU0MTcw
-YTMxMTQxZTk0MzcxMCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKRnJvbTogWW9uZ2RlIFpoYW5n
-IDx5ZHpoYW5nQGxpbnV4LmFsaWJhYmEuY29tPgpEYXRlOiBTYXQsIDggSnVsIDIwMjMgMDk6NDA6
-NTAgKzA4MDAKU3ViamVjdDogW1BBVENIXSBGaXggTUFYX1NUQUNLX0VOVFJJRVMgdG8gMzIKCldo
-ZW4gY2hlY2tpbmcgdGhlIHRhc2sgc3RhY2ssIHVzaW5nIGFuIHN0YWNrIGFycmF5IG9mIHNpemUg
-MTAwIApzZWVtcyB0byBiZSB0byBsYXJnZSBmb3IgYSB0YXNrIHN0YWNrLiBUaGVyZWZvcmUsIEkg
-c3VnZ2VzdCB0bwpjaGFuZ2UgdGhlIHN0YWNrIHNpemUgZnJvbSAxMDAgdG8gMzIuIAoKU2lnbmVk
-LW9mZi1ieTogWW9uZ2RlIFpoYW5nIDx5ZHpoYW5nQGxpbnV4LmFsaWJhYmEuY29tPgotLS0KIGtl
-cm5lbC9saXZlcGF0Y2gvdHJhbnNpdGlvbi5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5z
-ZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEva2VybmVsL2xpdmVwYXRjaC90
-cmFuc2l0aW9uLmMgYi9rZXJuZWwvbGl2ZXBhdGNoL3RyYW5zaXRpb24uYwppbmRleCBlNTRjM2Q2
-MGE5MDQuLjhkNjFjNjJiMGMyNyAxMDA2NDQKLS0tIGEva2VybmVsL2xpdmVwYXRjaC90cmFuc2l0
-aW9uLmMKKysrIGIva2VybmVsL2xpdmVwYXRjaC90cmFuc2l0aW9uLmMKQEAgLTE0LDcgKzE0LDcg
-QEAKICNpbmNsdWRlICJwYXRjaC5oIgogI2luY2x1ZGUgInRyYW5zaXRpb24uaCIKIAotI2RlZmlu
-ZSBNQVhfU1RBQ0tfRU5UUklFUyAgMTAwCisjZGVmaW5lIE1BWF9TVEFDS19FTlRSSUVTICAzMgog
-c3RhdGljIERFRklORV9QRVJfQ1BVKHVuc2lnbmVkIGxvbmdbTUFYX1NUQUNLX0VOVFJJRVNdLCBr
-bHBfc3RhY2tfZW50cmllcyk7CiAKICNkZWZpbmUgU1RBQ0tfRVJSX0JVRl9TSVpFIDEyOCAKLS0g
-CjIuMzcuMw==
+On 08/07/2023 04:24, Ryan McCann wrote:
+> Currently, the device core dump mechanism does not dump registers of
+> sub-blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Edit
+> dpu_kms_mdp_snapshot function to account for sub-blocks.
+> 
+> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 66 +++++++++++++++++++++++++++------
+>   1 file changed, 54 insertions(+), 12 deletions(-)
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 7a2787279ba0..f7199a5c45ab 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -890,6 +890,7 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
+>   	int i;
+>   	struct dpu_kms *dpu_kms;
+>   	const struct dpu_mdss_cfg *cat;
+> +	void __iomem *base;
+>   
+>   	dpu_kms = to_dpu_kms(kms);
+>   
+> @@ -903,9 +904,16 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
+>   				dpu_kms->mmio + cat->ctl[i].base, cat->ctl[i].name);
+>   
+>   	/* dump DSPP sub-blocks HW regs info */
+> -	for (i = 0; i < cat->dspp_count; i++)
+> -		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len,
+> -				dpu_kms->mmio + cat->dspp[i].base, cat->dspp[i].name);
+> +	for (i = 0; i < cat->dspp_count; i++) {
+> +		base = dpu_kms->mmio + cat->dspp[i].base;
+> +		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len, base, cat->dspp[i].name);
+> +
+> +		if (cat->dspp[i].sblk && cat->dspp[i].sblk->pcc.len > 0)
+> +			msm_disp_snapshot_add_block(disp_state, cat->dspp[i].sblk->pcc.len,
+> +						    base + cat->dspp[i].sblk->pcc.base, "%s_%s",
+> +						    cat->dspp[i].name,
+> +						    cat->dspp[i].sblk->pcc.name);
+
+Nit (no need to resend to correct this): the "%s_%s" logically fits the 
+next line, as it it related to the names rather than base address.
+
+> +	}
+>   
+>   	/* dump INTF sub-blocks HW regs info */
+>   	for (i = 0; i < cat->intf_count; i++)
+
+-- 
+With best wishes
+Dmitry
+
