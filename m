@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC3774BE71
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 18:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C168374BE74
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 18:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjGHQ0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 12:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
+        id S230154AbjGHQ22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 12:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjGHQ0F (ORCPT
+        with ESMTP id S229483AbjGHQ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 12:26:05 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFFFE4D
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 09:26:04 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-666e916b880so1303452b3a.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 09:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1688833564; x=1691425564;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n81lmkpIohF/iUaSujpw1NRiU2XjmhYlsAoXp3Ij8w0=;
-        b=XoJYhRowRtKqhr6yAj3k3G47roVPlfesolIYJyVSQ5jmBRDNulN4MnX0TSgOHGE0sI
-         eEfdbomyMeP3Vd+jM2tWEfFJXsFvzdk4ccig325fpQHhxp1pQjaOshrWNSVD5NQkDWTx
-         s/SnHLirC7MuftFSinmcvvxsv8Jm7dPm2PXsjLJtd/QSTSkkOwPvmq5DAv0eVR4blSN7
-         0ahQfSf1mjWdfPSTGzi2BrhKqh6qP681w6TjLGTBva8TQjhGORiQprYdLAgGx5xf+lTB
-         uVyeR+Tk74WTeozdvUtGIXPS9Xje10Nm01Jty2IJdsKY2Yhy/syZm2ijhUY/iRA2F5mo
-         RUNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688833564; x=1691425564;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n81lmkpIohF/iUaSujpw1NRiU2XjmhYlsAoXp3Ij8w0=;
-        b=JPfwoFJKAFzcIN6Q96oauMK264N8lB2lqsnam+dvLPWSz/3F6+aGNPduHxDIcPX6Uz
-         udeG5uZTjB9d9joAYNSZzyP3C3IkpqBEAlq1s/iJGlkJ8DwmDH3DkuF/p/X2rXaRYlHa
-         YKiDt8M5e+Wc6qnt1eHrHpnevLf7LR/p625QRUiOImb9pBoyXBGCpuJIh20nnw7fcyhW
-         qOmjHMSPNC1fTh63xv/xhdtUXMU2ojdSS43+eg8gWgQAPXhORlJqo/QKggx/8/U86Zm6
-         0wpA+M0J0injnAxDuBouMz9wFPDdsXl21eRkPTC0YXmPckiQPwkeaS/Em6/Qcx7FDCfI
-         GZEA==
-X-Gm-Message-State: ABy/qLY1QuH4azZMUoMVftpRU3o0rsV3/xIAYa4Zl5v9ezeyhHdrHcM0
-        u52lgzXl1tRQkiNDRs8l5Gqsjw==
-X-Google-Smtp-Source: APBJJlHXpNokdQddu2gwij/B247jXEox4H02oR5fN5aljXmnnk6OpDbx1BH42oQu7t47hSMyA/Yf1A==
-X-Received: by 2002:a17:902:b118:b0:1b3:c3ca:1513 with SMTP id q24-20020a170902b11800b001b3c3ca1513mr5118192plr.65.1688833563858;
-        Sat, 08 Jul 2023 09:26:03 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id ju19-20020a170903429300b001aadd0d7364sm5142121plb.83.2023.07.08.09.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 09:26:03 -0700 (PDT)
-Date:   Sat, 08 Jul 2023 09:26:03 -0700 (PDT)
-X-Google-Original-Date: Sat, 08 Jul 2023 09:26:01 PDT (-0700)
-Subject:     Re: [External] Re: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from FFI
-In-Reply-To: <CAMj1kXEkL0gF8uGcy2AjJvD-yZHmyLX9jiVVDtR+uBAYf+BfUg@mail.gmail.com>
-CC:     Dong.Wei@arm.com, Conor Dooley <conor@kernel.org>,
-        geshijian@bytedance.com, sunilvl@ventanamicro.com,
-        Conor Dooley <conor.dooley@microchip.com>, rminnich@gmail.com,
-        cuiyunhui@bytedance.com, jrtc27@jrtc27.com, kernel@esmil.dk,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, weidong.wd@bytedance.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Message-ID: <mhng-d4a8b5de-5500-43ec-867a-972d873a0759@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 8 Jul 2023 12:28:27 -0400
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D373CE50;
+        Sat,  8 Jul 2023 09:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1688833701;
+        bh=x3AUoKcSqNhyarawC1JJjkAvdYYgLViPABTAWorkKAs=;
+        h=From:To:Cc:Subject:Date;
+        b=olWwJn9WTQk117RaZtS9TqYqreb++yJWa4QLLOyQrfxB5eiG7+Ni17VfRmRmPwyPA
+         cMIR82t5q1gwbV4kmgp/jPLQA5FZs9nNRk12x/25yO1FTgGj4G/wDHeAvz2RA4e22J
+         xC7PEE8Xno9UHJJP792XY+z++f1D0d9X40wVBF2c=
+Received: from KernelDevBox.byted.org ([180.184.51.70])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id 7131229E; Sun, 09 Jul 2023 00:28:19 +0800
+X-QQ-mid: xmsmtpt1688833699ti4upo64d
+Message-ID: <tencent_C91402509924D86E026B3BB65AC0523D5609@qq.com>
+X-QQ-XMAILINFO: Md8NwmqZYy3f5vKMkllD00Acay+fZZ/cWNLpWsleYb1Y/PbBxy//MxpKCeZWMq
+         wdPVwWx/K/sp/drr4RbcKVN9fqllhk2kRKy/nqhOAmSXI6hLNSiPGqPp1VUXyV3joMYdlqOUIR41
+         lNG1IWG3JPsMTJm0Xx2SIn7bu04LrHL6CkyIVMfDCpkcRmQT7vhgKwxtVzKzCaixlAtfc/lJETbi
+         6SCWDFBnBlYDS9qAThsgmg31tSwAQ22ws+lnF59VG4xKAc+EGh04z7klr7/SXQDCcm/5w/GKTNEX
+         B1HJNICyLHbP6JLROZGXoAXc9uPeUpsETgdDKZ90QxTooRTKsUWCnDe7LsiuVqyGbQwp6b00okef
+         eMkkOCyHk6AFWu/7P+sjck0hD/hPL9PWPSrdgc1lneRGCauBr2YPfa+AgoKIFSokY1iBfN3Zqh3L
+         8ZoZmg7rvrsYWzlG1BuHydNyrofcqNbAL/4HWQGmRSHs46NKIp8mmlMd3DzTV5ZmVZYB/U2tvWf5
+         nbQetljIQeWbppmQfK564Jmxbdvlj24M3giJc2Ig3dFlXRfVEIV7gDtPwHQ+otpbxHSexCuQVkKS
+         84mTwt1Ei1I0WyB1tKAwKOIdi4q7OhXRauw8vLjF2+vTVTT7IPMA+nwBIe9eGTxfQIqsKMYFrgN2
+         tX15HQ3xW8/3s1wZvuEijMxH7/eRLjtlEmRlp/WEM5SFynajQewxidkM6VgIxnl9ttoBhpjrmf7L
+         3pm23hrU1i2f62/8U6EFt57IkMbwr00FXM/1z5ug/BmhYzN1/hJ6gvQrGpRcBm9FVZqUkVxHAQ1s
+         RiP6LLOuGv8L+ezkU5hpWYuW98XWIFun7fxJ45Z2MYujIM8mCJfrfEz57eeejx/hUgaYDXo18BJF
+         J6QSQFRtzb1MziOyjjGyYzjZs6CkOSAFq4QFUXwa6cadMtukab0SIX20wJ95gUlHwsEb2pwK1Xib
+         bTSDxnEGicX2L2Oz1/amnH47rZTn0ZsW6IXbOaPsFGblM8J52W4cjwyQRymniLaJPFQrRAdauQbF
+         nlQ5W0qQ==
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH] media: az6007: Fix null-ptr-deref in az6007_i2c_xfer()
+Date:   Sun,  9 Jul 2023 00:28:17 +0800
+X-OQ-MSGID: <20230708162817.3797791-1-zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 08 Jul 2023 01:45:27 PDT (-0700), Ard Biesheuvel wrote:
-> On Fri, 7 Jul 2023 at 18:21, Dong Wei <Dong.Wei@arm.com> wrote:
->>
->> On Arm systems today, the ACPI RSDP is found using the UEFI Configuration Table. This is true for all Arm SystemReady compliant systems: 1) SystemReady LS: LBBRv1 is using a minimal UEFI FW to load LinuxBoot, that minimal UEFI FW is producing the UEFI Configuration Table. We are working on LBBRv2. LBBRv2 is based on Coreboot loading LinuxBoot. But we do not have a way today to get CoreBoot to produce this pointer to ACPI RSDP. Arm does not support x86 E820 BIOS interface. 2) SystemReady IR: this solution uses DT rather than ACPI. 3) SystemReady ES: this solution can use UBoot or EDK2, and it requires ACPI. Since both UBoot and EDK2 support UEFI now, so ACPI RSDP can be found using the UEFI Configuration Table. 4) SystemReady SR: this solution typically uses EDK2 and requires ACPI, so no issue finding RSDP via UEFI Configuration Table.
->>
->>
->>
->> So the ACPI RSDP issue only exist if we want to remove the minimum UEFI FW and go to CoreBoot completely to load LinuxBoot. We are currently exploring how to solve that issue…
->>
->
-> Hello Dong,
->
-> This fixes the RSDP issue perhaps, but that is not the only problem. I
-> have mentioned this many times already, but let me mention it again
-> for completeness:
->
-> ACPI does not have a memory map, and ARM is much more finicky about
-> mapping memory regions with the right attributes, given that uncached
-> accesses don't snoop the caches like they do on x86. This means it is
-> essential that memory mappings constructed from AML code (which
-> doesn't provide any context pertaining to the memory type either) are
-> created with the right memory type.
->
-> Currently, the Linux/arm64 glue code for the ACPI core
-> cross-references every memory mapping created from a SystemMemory
-> OpRegion by AML code against the EFI memory map, and uses the EFI
-> memory type and attributes to infer the memory type to program into
-> the page tables. So simply providing the RSDP is *not* sufficient: on
-> arm64, more work is needed and currently, booting ACPI without a EFI
-> memory map results in SystemMemory OpRegions not working at all.
->
-> Of course, we might be able to work around that by providing a
-> 'coreboot' memory map for doing ACPI on arm64, but that results in
-> more fragmentation and an inflated validation matrix, which puts the
-> burden on the Linux subsystem maintainers to make sure that all these
-> different combinations remain supported.
->
-> AIUI, this memory type issue does not exist for RISC-V today, but I'd
-> suggest to the RISC-V maintainers to take a careful look at arm64's
-> acpi_os_ioremap() implementation and decide whether or not RISC-V
-> needs similar logic.
+In az6007_i2c_xfer, msg is controlled by user. When msg[i].buf
+is null and msg[i].len is zero, former checks on msg[i].buf would be
+passed. Malicious data finally reach az6007_i2c_xfer. If accessing
+msg[i].buf[0] without sanity check, null ptr deref would happen.
+We add check on msg[i].len to prevent crash.
 
-We've got a handful of messes around this in RISC-V already, I'd be 
-surprised if we don't need anything for ACPI.  It's probably not going 
-to show up until we're running on real platforms, though, and we're 
-going to need some M-mode interface to get it right in the long run.
+Similar commit:
+commit 0ed554fd769a
+("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+---
+ drivers/media/usb/dvb-usb-v2/az6007.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/media/usb/dvb-usb-v2/az6007.c b/drivers/media/usb/dvb-usb-v2/az6007.c
+index 2dcbb49d66da..2410054ddb2c 100644
+--- a/drivers/media/usb/dvb-usb-v2/az6007.c
++++ b/drivers/media/usb/dvb-usb-v2/az6007.c
+@@ -788,6 +788,10 @@ static int az6007_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			if (az6007_xfer_debug)
+ 				printk(KERN_DEBUG "az6007: I2C W addr=0x%x len=%d\n",
+ 				       addr, msgs[i].len);
++			if (msgs[i].len < 1) {
++				ret = -EIO;
++				goto err;
++			}
+ 			req = AZ6007_I2C_WR;
+ 			index = msgs[i].buf[0];
+ 			value = addr | (1 << 8);
+@@ -802,6 +806,10 @@ static int az6007_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			if (az6007_xfer_debug)
+ 				printk(KERN_DEBUG "az6007: I2C R addr=0x%x len=%d\n",
+ 				       addr, msgs[i].len);
++			if (msgs[i].len < 1) {
++				ret = -EIO;
++				goto err;
++			}
+ 			req = AZ6007_I2C_RD;
+ 			index = msgs[i].buf[0];
+ 			value = addr;
+-- 
+2.30.2
+
+
