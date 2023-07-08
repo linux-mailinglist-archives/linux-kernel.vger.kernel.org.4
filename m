@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706E474BC97
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 09:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCB674BC90
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 09:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbjGHH3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 03:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S231335AbjGHH3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 03:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjGHH3n (ORCPT
+        with ESMTP id S229797AbjGHH3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Jul 2023 03:29:43 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E22212C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F4D2125;
         Sat,  8 Jul 2023 00:29:38 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3687TICP028548;
-        Sat, 8 Jul 2023 07:29:18 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36872No5032041;
+        Sat, 8 Jul 2023 07:29:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=9MjsQNWdIv3lZ/n6BtCORJEwPCirEffpYln+LYLXhYQ=;
- b=YoEORpVsQd+ad7BdErjM975LWi28pRslbJtGnaQB/Hutg8PXciUKz/tCuPCPNcCk8XLo
- QE50UlH6oMzLOwrGdDKRi679vo6+PwRBts5ZI249DC0J/WHV6BZPe38wtPd/r1rfqxws
- gQtNCLbPQ+3HfgIRdKjmVp/0GXZ9h6Ml8a83DzqBs150m4/P0GrH3RYM7cqsdTV+Axf3
- 5gXJJ+Hw+s1PLYDzQQ0Rtu/3h10nR0S3SdEqwYoh6t2JuIFNYHqPqP8LC8eV2nZQuBAV
- NbAiT5YdJj8XClz7PviLKhKAxavT3bDf68TGwph0089Mj/BrjZQCp5+Mlw6jswbDB7aC 8A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpxry093y-1
+ bh=VmmoJ9c6BEdevnXDrNmLULmLQ+ujIReym3TKv47zGDk=;
+ b=mf6f0pgx3B01wZgfC7oAbpTWYWriU4rovvEQLWs8l13Ty/qJdgZfTdCS8F0D36s7juqc
+ yVJFninYIjBQXIgxWZ+OcHeIvPiumGDUcMz5fjeLZPGdlG2bWLo/si18+DW8m445zR0c
+ lachncEEJylk0BOzBK5VR/0dbtPG2g4O18ftYgjpgYn4oKG3h0j2u1QBoeAiiL8MfB1g
+ E6/izkPVBgadkX+r7gudAr/DYrM9olcxe626OOC/VWVRjTbKPFwOwuonhjsAUVw11lcW
+ at2ZdEVVAHMLi6XfDjTPRu0DH9tLSXrmQhVA3ZZKTnt5TIWlJdc/yWMBqeNOPLmDPgf1 bQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rq01dg6f8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jul 2023 07:29:18 +0000
+        Sat, 08 Jul 2023 07:29:26 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3687TI5N027559
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3687TPCg011655
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 8 Jul 2023 07:29:18 GMT
+        Sat, 8 Jul 2023 07:29:25 GMT
 Received: from hu-jprakash-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Sat, 8 Jul 2023 00:29:11 -0700
+ 15.2.1118.30; Sat, 8 Jul 2023 00:29:18 -0700
 From:   Jishnu Prakash <quic_jprakash@quicinc.com>
 To:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linus.walleij@linaro.org>,
@@ -50,14 +50,16 @@ To:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
         <krzysztof.kozlowski@linaro.org>,
         "Bjorn Andersson" <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jishnu Prakash <quic_jprakash@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>
-CC:     <linux-arm-msm-owner@vger.kernel.org>
-Subject: [PATCH 02/11] iio: adc: Update driver files for ADC7 rename for QCOM PMICs
-Date:   Sat, 8 Jul 2023 12:58:26 +0530
-Message-ID: <20230708072835.3035398-3-quic_jprakash@quicinc.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <linux-iio@vger.kernel.org>, <linux-arm-msm-owner@vger.kernel.org>,
+        "Jishnu Prakash" <quic_jprakash@quicinc.com>
+Subject: [PATCH 03/11] ARM: dts: qcom: Update devicetree for ADC7 rename for QCOM PMICs
+Date:   Sat, 8 Jul 2023 12:58:27 +0530
+Message-ID: <20230708072835.3035398-4-quic_jprakash@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
 References: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
@@ -69,16 +71,16 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Hlx1yHEIxW2vmW01Tp4u6T18VqAOLm8O
-X-Proofpoint-GUID: Hlx1yHEIxW2vmW01Tp4u6T18VqAOLm8O
+X-Proofpoint-ORIG-GUID: GSnIKhcTzNz-171yaDpGkFD0-Sg5mHeQ
+X-Proofpoint-GUID: GSnIKhcTzNz-171yaDpGkFD0-Sg5mHeQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-08_04,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- suspectscore=0 impostorscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2307080065
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1011 adultscore=0 mlxlogscore=971
+ malwarescore=0 lowpriorityscore=0 spamscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307080065
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -89,377 +91,345 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The correct name for this version of ADCs should be ADC5 Gen2
-instead of ADC7. Update the driver files for this name change.
+The name "ADC7" needs to be replaced with the name "ADC5_GEN2"
+everywhere to match the convention used for these ADC peripherals
+on Qualcomm Technologies, Inc. PMICs. Update devicetree files for
+the corresponding name change done in bindings and driver.
 
 Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
 ---
- drivers/iio/adc/qcom-spmi-adc5.c         | 93 +++++++++++++-----------
- drivers/iio/adc/qcom-vadc-common.c       | 36 ++++-----
- include/linux/iio/adc/qcom-vadc-common.h | 12 +--
- 3 files changed, 73 insertions(+), 68 deletions(-)
+ arch/arm64/boot/dts/qcom/pmk8350.dtsi         |  4 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts       |  4 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |  4 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  8 ++--
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 48 +++++++++----------
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |  2 +-
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |  4 +-
+ 7 files changed, 37 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
-index 0a4fd3a46113..3ac1ee500a67 100644
---- a/drivers/iio/adc/qcom-spmi-adc5.c
-+++ b/drivers/iio/adc/qcom-spmi-adc5.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * Copyright (c) 2018, 2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+diff --git a/arch/arm64/boot/dts/qcom/pmk8350.dtsi b/arch/arm64/boot/dts/qcom/pmk8350.dtsi
+index bc6297e7253e..149d2bb43d2d 100644
+--- a/arch/arm64/boot/dts/qcom/pmk8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/pmk8350.dtsi
+@@ -50,7 +50,7 @@ pon_resin: resin {
+ 		};
+ 
+ 		pmk8350_vadc: adc@3100 {
+-			compatible = "qcom,spmi-adc7";
++			compatible = "qcom,spmi-adc5-gen2";
+ 			reg = <0x3100>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -59,7 +59,7 @@ pmk8350_vadc: adc@3100 {
+ 		};
+ 
+ 		pmk8350_adc_tm: adc-tm@3400 {
+-			compatible = "qcom,adc-tm7";
++			compatible = "qcom,spmi-adc-tm5-gen2";
+ 			reg = <0x3400>;
+ 			interrupts = <PMK8350_SID 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+index 15222e92e3f5..bc65e6c6232f 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+@@ -7,7 +7,7 @@
+ 
+ /dts-v1/;
+ 
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmr735a.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmr735a.h>
+ #include "sc7280-idp.dtsi"
+ #include "pmr735a.dtsi"
+ 
+@@ -74,7 +74,7 @@ &nvme_3v3_regulator {
+ 
+ &pmk8350_vadc {
+ 	pmr735a-die-temp@403 {
+-		reg = <PMR735A_ADC7_DIE_TEMP>;
++		reg = <PMR735A_ADC5_GEN2_DIE_TEMP>;
+ 		label = "pmr735a_die_temp";
+ 		qcom,pre-scaling = <1 1>;
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index 21027042cf13..da413694e230 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -5,7 +5,7 @@
+  * Copyright (c) 2021, The Linux Foundation. All rights reserved.
   */
  
- #include <linux/bitops.h>
-@@ -87,7 +88,7 @@
- /* For PMIC7 */
- #define ADC_APP_SID				0x40
- #define ADC_APP_SID_MASK			GENMASK(3, 0)
--#define ADC7_CONV_TIMEOUT			msecs_to_jiffies(10)
-+#define ADC5_GEN2_CONV_TIMEOUT		msecs_to_jiffies(10)
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmk8350.h>
+ #include <dt-bindings/input/linux-event-codes.h>
+ #include "sc7280.dtsi"
+ #include "pm7325.dtsi"
+@@ -433,7 +433,7 @@ &pcie1_phy {
  
- enum adc5_cal_method {
- 	ADC5_NO_CAL = 0,
-@@ -270,7 +271,7 @@ static int adc5_configure(struct adc5_chip *adc,
- 	return adc5_write(adc, ADC5_USR_DIG_PARAM, buf, sizeof(buf));
- }
- 
--static int adc7_configure(struct adc5_chip *adc,
-+static int adc5_gen2_configure(struct adc5_chip *adc,
- 			struct adc5_channel_prop *prop)
- {
- 	int ret;
-@@ -352,7 +353,7 @@ static int adc5_do_conversion(struct adc5_chip *adc,
- 	return ret;
- }
- 
--static int adc7_do_conversion(struct adc5_chip *adc,
-+static int adc5_gen2_do_conversion(struct adc5_chip *adc,
- 			struct adc5_channel_prop *prop,
- 			struct iio_chan_spec const *chan,
- 			u16 *data_volt, u16 *data_cur)
-@@ -362,14 +363,14 @@ static int adc7_do_conversion(struct adc5_chip *adc,
- 
- 	mutex_lock(&adc->lock);
- 
--	ret = adc7_configure(adc, prop);
-+	ret = adc5_gen2_configure(adc, prop);
- 	if (ret) {
- 		dev_err(adc->dev, "ADC configure failed with %d\n", ret);
- 		goto unlock;
- 	}
- 
- 	/* No support for polling mode at present */
--	wait_for_completion_timeout(&adc->complete, ADC7_CONV_TIMEOUT);
-+	wait_for_completion_timeout(&adc->complete, ADC5_GEN2_CONV_TIMEOUT);
- 
- 	ret = adc5_read(adc, ADC5_USR_STATUS1, &status, 1);
- 	if (ret)
-@@ -416,7 +417,7 @@ static int adc5_fwnode_xlate(struct iio_dev *indio_dev,
- 	return -EINVAL;
- }
- 
--static int adc7_fwnode_xlate(struct iio_dev *indio_dev,
-+static int adc5_gen2_fwnode_xlate(struct iio_dev *indio_dev,
- 			     const struct fwnode_reference_args *iiospec)
- {
- 	struct adc5_chip *adc = iio_priv(indio_dev);
-@@ -471,12 +472,12 @@ static int adc5_read_raw(struct iio_dev *indio_dev,
- 				mask, adc5_do_conversion);
- }
- 
--static int adc7_read_raw(struct iio_dev *indio_dev,
-+static int adc5_gen2_read_raw(struct iio_dev *indio_dev,
- 			 struct iio_chan_spec const *chan, int *val, int *val2,
- 			 long mask)
- {
- 	return adc_read_raw_common(indio_dev, chan, val, val2,
--				mask, adc7_do_conversion);
-+				mask, adc5_gen2_do_conversion);
- }
- 
- static const struct iio_info adc5_info = {
-@@ -484,9 +485,9 @@ static const struct iio_info adc5_info = {
- 	.fwnode_xlate = adc5_fwnode_xlate,
- };
- 
--static const struct iio_info adc7_info = {
--	.read_raw = adc7_read_raw,
--	.fwnode_xlate = adc7_fwnode_xlate,
-+static const struct iio_info adc5_gen2_info = {
-+	.read_raw = adc5_gen2_read_raw,
-+	.fwnode_xlate = adc5_gen2_fwnode_xlate,
- };
- 
- struct adc5_channels {
-@@ -561,37 +562,37 @@ static const struct adc5_channels adc5_chans_pmic[ADC5_MAX_CHANNEL] = {
- 					SCALE_HW_CALIB_THERM_100K_PULLUP)
- };
- 
--static const struct adc5_channels adc7_chans_pmic[ADC5_MAX_CHANNEL] = {
--	[ADC7_REF_GND]		= ADC5_CHAN_VOLT("ref_gnd", 0,
-+static const struct adc5_channels adc5_gen2_chans_pmic[ADC5_MAX_CHANNEL] = {
-+	[ADC5_GEN2_REF_GND]		= ADC5_CHAN_VOLT("ref_gnd", 0,
- 					SCALE_HW_CALIB_DEFAULT)
--	[ADC7_1P25VREF]		= ADC5_CHAN_VOLT("vref_1p25", 0,
-+	[ADC5_GEN2_1P25VREF]		= ADC5_CHAN_VOLT("vref_1p25", 0,
- 					SCALE_HW_CALIB_DEFAULT)
--	[ADC7_VPH_PWR]		= ADC5_CHAN_VOLT("vph_pwr", 1,
-+	[ADC5_GEN2_VPH_PWR]		= ADC5_CHAN_VOLT("vph_pwr", 1,
- 					SCALE_HW_CALIB_DEFAULT)
--	[ADC7_VBAT_SNS]		= ADC5_CHAN_VOLT("vbat_sns", 3,
-+	[ADC5_GEN2_VBAT_SNS]		= ADC5_CHAN_VOLT("vbat_sns", 3,
- 					SCALE_HW_CALIB_DEFAULT)
--	[ADC7_DIE_TEMP]		= ADC5_CHAN_TEMP("die_temp", 0,
--					SCALE_HW_CALIB_PMIC_THERM_PM7)
--	[ADC7_AMUX_THM1_100K_PU] = ADC5_CHAN_TEMP("amux_thm1_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_AMUX_THM2_100K_PU] = ADC5_CHAN_TEMP("amux_thm2_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_AMUX_THM3_100K_PU] = ADC5_CHAN_TEMP("amux_thm3_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_AMUX_THM4_100K_PU] = ADC5_CHAN_TEMP("amux_thm4_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_AMUX_THM5_100K_PU] = ADC5_CHAN_TEMP("amux_thm5_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_AMUX_THM6_100K_PU] = ADC5_CHAN_TEMP("amux_thm6_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_GPIO1_100K_PU]	= ADC5_CHAN_TEMP("gpio1_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_GPIO2_100K_PU]	= ADC5_CHAN_TEMP("gpio2_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_GPIO3_100K_PU]	= ADC5_CHAN_TEMP("gpio3_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
--	[ADC7_GPIO4_100K_PU]	= ADC5_CHAN_TEMP("gpio4_pu2", 0,
--					SCALE_HW_CALIB_THERM_100K_PU_PM7)
-+	[ADC5_GEN2_DIE_TEMP]		= ADC5_CHAN_TEMP("die_temp", 0,
-+					SCALE_HW_CALIB_PMIC_THERM_PM5_GEN2)
-+	[ADC5_GEN2_AMUX_THM1_100K_PU] = ADC5_CHAN_TEMP("amux_thm1_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_AMUX_THM2_100K_PU] = ADC5_CHAN_TEMP("amux_thm2_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_AMUX_THM3_100K_PU] = ADC5_CHAN_TEMP("amux_thm3_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_AMUX_THM4_100K_PU] = ADC5_CHAN_TEMP("amux_thm4_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_AMUX_THM5_100K_PU] = ADC5_CHAN_TEMP("amux_thm5_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_AMUX_THM6_100K_PU] = ADC5_CHAN_TEMP("amux_thm6_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_GPIO1_100K_PU]	= ADC5_CHAN_TEMP("gpio1_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_GPIO2_100K_PU]	= ADC5_CHAN_TEMP("gpio2_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_GPIO3_100K_PU]	= ADC5_CHAN_TEMP("gpio3_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
-+	[ADC5_GEN2_GPIO4_100K_PU]	= ADC5_CHAN_TEMP("gpio4_pu2", 0,
-+					SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2)
- };
- 
- static const struct adc5_channels adc5_chans_rev2[ADC5_MAX_CHANNEL] = {
-@@ -652,7 +653,7 @@ static int adc5_get_fw_channel_data(struct adc5_chip *adc,
- 
- 	/* virtual channel number = sid << 8 | channel number */
- 
--	if (adc->data->info == &adc7_info) {
-+	if (adc->data->info == &adc5_gen2_info) {
- 		sid = chan >> ADC_CHANNEL_OFFSET;
- 		chan = chan & ADC_CHANNEL_MASK;
- 	}
-@@ -715,7 +716,7 @@ static int adc5_get_fw_channel_data(struct adc5_chip *adc,
- 		/* Digital controller >= 5.3 have hw_settle_2 option */
- 		if ((dig_version[0] >= ADC5_HW_SETTLE_DIFF_MINOR &&
- 			dig_version[1] >= ADC5_HW_SETTLE_DIFF_MAJOR) ||
--			adc->data->info == &adc7_info)
-+			adc->data->info == &adc5_gen2_info)
- 			ret = qcom_adc5_hw_settle_time_from_dt(value, data->hw_settle_2);
- 		else
- 			ret = qcom_adc5_hw_settle_time_from_dt(value, data->hw_settle_1);
-@@ -774,10 +775,10 @@ static const struct adc5_data adc5_data_pmic = {
- 				1, 2, 4, 8, 16, 32, 64, 128},
- };
- 
--static const struct adc5_data adc7_data_pmic = {
-+static const struct adc5_data adc5_gen2_data_pmic = {
- 	.full_scale_code_volt = 0x70e4,
--	.adc_chans = adc7_chans_pmic,
--	.info = &adc7_info,
-+	.adc_chans = adc5_gen2_chans_pmic,
-+	.info = &adc5_gen2_info,
- 	.decimation = (unsigned int [ADC5_DECIMATION_SAMPLES_MAX])
- 				{85, 340, 1360},
- 	.hw_settle_2 = (unsigned int [VADC_HW_SETTLE_SAMPLES_MAX])
-@@ -808,7 +809,11 @@ static const struct of_device_id adc5_match_table[] = {
- 	},
- 	{
- 		.compatible = "qcom,spmi-adc7",
--		.data = &adc7_data_pmic,
-+		.data = &adc5_gen2_data_pmic,
-+	},
-+	{
-+		.compatible = "qcom,spmi-adc5-gen2",
-+		.data = &adc5_gen2_data_pmic,
- 	},
- 	{
- 		.compatible = "qcom,spmi-adc-rev2",
-diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
-index d5209f32adb3..1f4cd3be68fa 100644
---- a/drivers/iio/adc/qcom-vadc-common.c
-+++ b/drivers/iio/adc/qcom-vadc-common.c
-@@ -100,7 +100,7 @@ static const struct vadc_map_pt adcmap_100k_104ef_104fb_1875_vref[] = {
- 	{ 46,	125000 },
- };
- 
--static const struct vadc_map_pt adcmap7_die_temp[] = {
-+static const struct vadc_map_pt adcmap5_gen2_die_temp[] = {
- 	{ 857300, 160000 },
- 	{ 820100, 140000 },
- 	{ 782500, 120000 },
-@@ -118,7 +118,7 @@ static const struct vadc_map_pt adcmap7_die_temp[] = {
- /*
-  * Resistance to temperature table for 100k pull up for NTCG104EF104.
+ &pmk8350_vadc {
+ 	pmk8350-die-temp@3 {
+-		reg = <PMK8350_ADC7_DIE_TEMP>;
++		reg = <PMK8350_ADC5_GEN2_DIE_TEMP>;
+ 		label = "pmk8350_die_temp";
+ 		qcom,pre-scaling = <1 1>;
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+index 9137db066d9e..ed26bff7432d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+@@ -11,8 +11,8 @@
+  * Copyright 2022 Google LLC.
   */
--static const struct vadc_map_pt adcmap7_100k[] = {
-+static const struct vadc_map_pt adcmap5_gen2_100k[] = {
- 	{ 4250657, -40960 },
- 	{ 3962085, -39936 },
- 	{ 3694875, -38912 },
-@@ -309,7 +309,7 @@ static int qcom_vadc_scale_hw_calib_therm(
- 				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
--static int qcom_vadc7_scale_hw_calib_therm(
-+static int qcom_vadc5_gen2_scale_hw_calib_therm(
- 				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
-@@ -325,7 +325,7 @@ static int qcom_vadc_scale_hw_calib_die_temp(
- 				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
--static int qcom_vadc7_scale_hw_calib_die_temp(
-+static int qcom_vadc5_gen2_scale_hw_calib_die_temp(
- 				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
-@@ -334,11 +334,11 @@ static struct qcom_adc5_scale_type scale_adc5_fn[] = {
- 	[SCALE_HW_CALIB_DEFAULT] = {qcom_vadc_scale_hw_calib_volt},
- 	[SCALE_HW_CALIB_THERM_100K_PULLUP] = {qcom_vadc_scale_hw_calib_therm},
- 	[SCALE_HW_CALIB_XOTHERM] = {qcom_vadc_scale_hw_calib_therm},
--	[SCALE_HW_CALIB_THERM_100K_PU_PM7] = {
--					qcom_vadc7_scale_hw_calib_therm},
-+	[SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2] = {
-+					qcom_vadc5_gen2_scale_hw_calib_therm},
- 	[SCALE_HW_CALIB_PMIC_THERM] = {qcom_vadc_scale_hw_calib_die_temp},
--	[SCALE_HW_CALIB_PMIC_THERM_PM7] = {
--					qcom_vadc7_scale_hw_calib_die_temp},
-+	[SCALE_HW_CALIB_PMIC_THERM_PM5_GEN2] = {
-+					qcom_vadc5_gen2_scale_hw_calib_die_temp},
- 	[SCALE_HW_CALIB_PM5_CHG_TEMP] = {qcom_vadc_scale_hw_chg5_temp},
- 	[SCALE_HW_CALIB_PM5_SMB_TEMP] = {qcom_vadc_scale_hw_smb_temp},
- };
-@@ -530,7 +530,7 @@ static int qcom_vadc_scale_code_voltage_factor(u16 adc_code,
- 	return (int) voltage;
- }
  
--static int qcom_vadc7_scale_hw_calib_therm(
-+static int qcom_vadc5_gen2_scale_hw_calib_therm(
- 				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
-@@ -538,15 +538,15 @@ static int qcom_vadc7_scale_hw_calib_therm(
- 	s64 resistance = adc_code;
- 	int ret, result;
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmr735a.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmk8350.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmr735a.h>
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
  
--	if (adc_code >= RATIO_MAX_ADC7)
-+	if (adc_code >= RATIO_MAX_ADC5_GEN2)
- 		return -EINVAL;
+@@ -384,13 +384,13 @@ &pm8350c_pwm {
  
- 	/* (ADC code * R_PULLUP (100Kohm)) / (full_scale_code - ADC code)*/
- 	resistance *= R_PU_100K;
--	resistance = div64_s64(resistance, RATIO_MAX_ADC7 - adc_code);
-+	resistance = div64_s64(resistance, RATIO_MAX_ADC5_GEN2 - adc_code);
+ &pmk8350_vadc {
+ 	pmk8350-die-temp@3 {
+-		reg = <PMK8350_ADC7_DIE_TEMP>;
++		reg = <PMK8350_ADC5_GEN2_DIE_TEMP>;
+ 		label = "pmk8350_die_temp";
+ 		qcom,pre-scaling = <1 1>;
+ 	};
  
--	ret = qcom_vadc_map_voltage_temp(adcmap7_100k,
--				 ARRAY_SIZE(adcmap7_100k),
-+	ret = qcom_vadc_map_voltage_temp(adcmap5_gen2_100k,
-+				 ARRAY_SIZE(adcmap5_gen2_100k),
- 				 resistance, &result);
- 	if (ret)
- 		return ret;
-@@ -595,7 +595,7 @@ static int qcom_vadc_scale_hw_calib_die_temp(
- 	return 0;
- }
+ 	pmr735a-die-temp@403 {
+-		reg = <PMR735A_ADC7_DIE_TEMP>;
++		reg = <PMR735A_ADC5_GEN2_DIE_TEMP>;
+ 		label = "pmr735a_die_temp";
+ 		qcom,pre-scaling = <1 1>;
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index 7cc3028440b6..cfd5dbbacdcb 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -7,9 +7,9 @@
+ /dts-v1/;
  
--static int qcom_vadc7_scale_hw_calib_die_temp(
-+static int qcom_vadc5_gen2_scale_hw_calib_die_temp(
- 				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
-@@ -606,7 +606,7 @@ static int qcom_vadc7_scale_hw_calib_die_temp(
- 	voltage = qcom_vadc_scale_code_voltage_factor(adc_code,
- 				prescale, data, 1);
+ #include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/iio/qcom,spmi-adc7-pm8350.h>
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmr735a.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pm8350.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmk8350.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmr735a.h>
+ #include <dt-bindings/input/gpio-keys.h>
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+@@ -747,7 +747,7 @@ &pmk8280_adc_tm {
  
--	return qcom_vadc_map_voltage_temp(adcmap7_die_temp, ARRAY_SIZE(adcmap7_die_temp),
-+	return qcom_vadc_map_voltage_temp(adcmap5_gen2_die_temp, ARRAY_SIZE(adcmap5_gen2_die_temp),
- 			voltage, result_mdec);
- }
+ 	sys-therm@0 {
+ 		reg = <0>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM1_100K_PU(1)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -755,7 +755,7 @@ sys-therm@0 {
  
-@@ -681,10 +681,10 @@ u16 qcom_adc_tm5_gen2_temp_res_scale(int temp)
- {
- 	int64_t resistance;
+ 	sys-therm@1 {
+ 		reg = <1>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM2_100K_PU(1)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM2_100K_PU(1)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -763,7 +763,7 @@ sys-therm@1 {
  
--	resistance = qcom_vadc_map_temp_voltage(adcmap7_100k,
--		ARRAY_SIZE(adcmap7_100k), temp);
-+	resistance = qcom_vadc_map_temp_voltage(adcmap5_gen2_100k,
-+		ARRAY_SIZE(adcmap5_gen2_100k), temp);
+ 	sys-therm@2 {
+ 		reg = <2>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM3_100K_PU(1)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM3_100K_PU(1)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -771,7 +771,7 @@ sys-therm@2 {
  
--	return div64_s64(resistance * RATIO_MAX_ADC7, resistance + R_PU_100K);
-+	return div64_s64(resistance * RATIO_MAX_ADC5_GEN2, resistance + R_PU_100K);
- }
- EXPORT_SYMBOL(qcom_adc_tm5_gen2_temp_res_scale);
+ 	sys-therm@3 {
+ 		reg = <3>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM4_100K_PU(1)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -779,7 +779,7 @@ sys-therm@3 {
  
-diff --git a/include/linux/iio/adc/qcom-vadc-common.h b/include/linux/iio/adc/qcom-vadc-common.h
-index aa21b032e861..a926e369a3ca 100644
---- a/include/linux/iio/adc/qcom-vadc-common.h
-+++ b/include/linux/iio/adc/qcom-vadc-common.h
-@@ -53,7 +53,7 @@
- #define ADC5_USR_DATA_CHECK			0x8000
+ 	sys-therm@4 {
+ 		reg = <4>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM1_100K_PU(3)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM1_100K_PU(3)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -787,7 +787,7 @@ sys-therm@4 {
  
- #define R_PU_100K				100000
--#define RATIO_MAX_ADC7				BIT(14)
-+#define RATIO_MAX_ADC5_GEN2			BIT(14)
+ 	sys-therm@5 {
+ 		reg = <5>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM2_100K_PU(3)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM2_100K_PU(3)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -795,7 +795,7 @@ sys-therm@5 {
  
- /*
-  * VADC_CALIB_ABSOLUTE: uses the 625mV and 1.25V as reference channels.
-@@ -95,12 +95,12 @@ struct vadc_linear_graph {
-  *	lookup table. The hardware applies offset/slope to adc code.
-  * SCALE_HW_CALIB_XOTHERM: Returns XO thermistor voltage in millidegC using
-  *	100k pullup. The hardware applies offset/slope to adc code.
-- * SCALE_HW_CALIB_THERM_100K_PU_PM7: Returns temperature in millidegC using
-- *	lookup table for PMIC7. The hardware applies offset/slope to adc code.
-+ * SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2: Returns temperature in millidegC using
-+ *	lookup table for PMIC5 Gen2. The hardware applies offset/slope to adc code.
-  * SCALE_HW_CALIB_PMIC_THERM: Returns result in milli degree's Centigrade.
-  *	The hardware applies offset/slope to adc code.
-  * SCALE_HW_CALIB_PMIC_THERM: Returns result in milli degree's Centigrade.
-- *	The hardware applies offset/slope to adc code. This is for PMIC7.
-+ *	The hardware applies offset/slope to adc code. This is for PMIC5 Gen2.
-  * SCALE_HW_CALIB_PM5_CHG_TEMP: Returns result in millidegrees for PMIC5
-  *	charger temperature.
-  * SCALE_HW_CALIB_PM5_SMB_TEMP: Returns result in millidegrees for PMIC5
-@@ -115,9 +115,9 @@ enum vadc_scale_fn_type {
- 	SCALE_HW_CALIB_DEFAULT,
- 	SCALE_HW_CALIB_THERM_100K_PULLUP,
- 	SCALE_HW_CALIB_XOTHERM,
--	SCALE_HW_CALIB_THERM_100K_PU_PM7,
-+	SCALE_HW_CALIB_THERM_100K_PU_PM5_GEN2,
- 	SCALE_HW_CALIB_PMIC_THERM,
--	SCALE_HW_CALIB_PMIC_THERM_PM7,
-+	SCALE_HW_CALIB_PMIC_THERM_PM5_GEN2,
- 	SCALE_HW_CALIB_PM5_CHG_TEMP,
- 	SCALE_HW_CALIB_PM5_SMB_TEMP,
- 	SCALE_HW_CALIB_INVALID,
+ 	sys-therm@6 {
+ 		reg = <6>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM3_100K_PU(3)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM3_100K_PU(3)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -803,7 +803,7 @@ sys-therm@6 {
+ 
+ 	sys-therm@7 {
+ 		reg = <7>;
+-		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM4_100K_PU(3)>;
++		io-channels = <&pmk8280_vadc PM8350_ADC5_GEN2_AMUX_THM4_100K_PU(3)>;
+ 		qcom,hw-settle-time-us = <200>;
+ 		qcom,avg-samples = <2>;
+ 		qcom,ratiometric;
+@@ -837,88 +837,88 @@ &pmk8280_vadc {
+ 	status = "okay";
+ 
+ 	pmic-die-temp@3 {
+-		reg = <PMK8350_ADC7_DIE_TEMP>;
++		reg = <PMK8350_ADC5_GEN2_DIE_TEMP>;
+ 		qcom,pre-scaling = <1 1>;
+ 		label = "pmk8350_die_temp";
+ 	};
+ 
+ 	xo-therm@44 {
+-		reg = <PMK8350_ADC7_AMUX_THM1_100K_PU>;
++		reg = <PMK8350_ADC5_GEN2_AMUX_THM1_100K_PU>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "pmk8350_xo_therm";
+ 	};
+ 
+ 	pmic-die-temp@103 {
+-		reg = <PM8350_ADC7_DIE_TEMP(1)>;
++		reg = <PM8350_ADC5_GEN2_DIE_TEMP(1)>;
+ 		qcom,pre-scaling = <1 1>;
+ 		label = "pmc8280_1_die_temp";
+ 	};
+ 
+ 	sys-therm@144 {
+-		reg = <PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM1_100K_PU(1)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm1";
+ 	};
+ 
+ 	sys-therm@145 {
+-		reg = <PM8350_ADC7_AMUX_THM2_100K_PU(1)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM2_100K_PU(1)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm2";
+ 	};
+ 
+ 	sys-therm@146 {
+-		reg = <PM8350_ADC7_AMUX_THM3_100K_PU(1)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM3_100K_PU(1)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm3";
+ 	};
+ 
+ 	sys-therm@147 {
+-		reg = <PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM4_100K_PU(1)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm4";
+ 	};
+ 
+ 	pmic-die-temp@303 {
+-		reg = <PM8350_ADC7_DIE_TEMP(3)>;
++		reg = <PM8350_ADC5_GEN2_DIE_TEMP(3)>;
+ 		qcom,pre-scaling = <1 1>;
+ 		label = "pmc8280_2_die_temp";
+ 	};
+ 
+ 	sys-therm@344 {
+-		reg = <PM8350_ADC7_AMUX_THM1_100K_PU(3)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM1_100K_PU(3)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm5";
+ 	};
+ 
+ 	sys-therm@345 {
+-		reg = <PM8350_ADC7_AMUX_THM2_100K_PU(3)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM2_100K_PU(3)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm6";
+ 	};
+ 
+ 	sys-therm@346 {
+-		reg = <PM8350_ADC7_AMUX_THM3_100K_PU(3)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM3_100K_PU(3)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm7";
+ 	};
+ 
+ 	sys-therm@347 {
+-		reg = <PM8350_ADC7_AMUX_THM4_100K_PU(3)>;
++		reg = <PM8350_ADC5_GEN2_AMUX_THM4_100K_PU(3)>;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,ratiometric;
+ 		label = "sys_therm8";
+ 	};
+ 
+ 	pmic-die-temp@403 {
+-		reg = <PMR735A_ADC7_DIE_TEMP>;
++		reg = <PMR735A_ADC5_GEN2_DIE_TEMP>;
+ 		qcom,pre-scaling = <1 1>;
+ 		label = "pmr735a_die_temp";
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+index a0ba535bb6c9..ae9491adaa6a 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+@@ -78,7 +78,7 @@ pmk8280_pon_resin: resin {
+ 		};
+ 
+ 		pmk8280_vadc: adc@3100 {
+-			compatible = "qcom,spmi-adc7";
++			compatible = "qcom,spmi-adc5-gen2";
+ 			reg = <0x3100>;
+ 			interrupts-extended = <&spmi_bus 0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+index e3dc49951523..52119cc1250e 100644
+--- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
++++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+@@ -9,7 +9,7 @@
+ #define PMK8350_SID 6
+ 
+ #include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
++#include <dt-bindings/iio/qcom,spmi-adc5-gen2-pmk8350.h>
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/leds/common.h>
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+@@ -517,7 +517,7 @@ &pmk8350_rtc {
+ 
+ &pmk8350_vadc {
+ 	adc-chan@644 {
+-		reg = <PMK8350_ADC7_AMUX_THM1_100K_PU>;
++		reg = <PMK8350_ADC5_GEN2_AMUX_THM1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,pre-scaling = <1 1>;
 -- 
 2.25.1
 
