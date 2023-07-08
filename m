@@ -2,135 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2BF74BCC6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB1374BCCB
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjGHILm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 04:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
+        id S229761AbjGHIXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 04:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGHILl (ORCPT
+        with ESMTP id S229723AbjGHIXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 04:11:41 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0A41FC6;
-        Sat,  8 Jul 2023 01:11:40 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-992e22c09edso291002666b.2;
-        Sat, 08 Jul 2023 01:11:40 -0700 (PDT)
+        Sat, 8 Jul 2023 04:23:11 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE321FE1
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 01:23:09 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-c4dfe2a95fbso2978684276.3
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 01:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688803899; x=1691395899;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8JsdPx2PtCEj+8E+tenBNbAlijTmNN2EqyVkNdLKfmA=;
-        b=rztSuS3v+nITm9k3tsJpLSvmzVE3zy9CxeLeSXc2C6hpHHlu2JWiOTJmiANEYXz9pa
-         iPNmy94s66MAl+pmwGTHc1dkeRYJxxQDbXmcWl6fhLsOIuSdIlWd5Bfw6O2nJGkl0U+/
-         CYuYrEq4hj9/MHupnUWYHz7Ygb+LIigJ1xJmhiWGLaBlhPq2lURUNwgb413C3KSfORZw
-         1FBMHI9eN/zKizPlb5EFvAReSLChWeiyq3/pOvs94erbRLbyUlygcSf19EZItjuW0nOI
-         KJ0/ocl1jx9c1QMuqqhkaPT80vfWEANYQOUVPEv4EuTgVONyi0KDN7TCGXv5e/po78KZ
-         F7SA==
+        d=edgeble-ai.20221208.gappssmtp.com; s=20221208; t=1688804589; x=1691396589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uRa64IiPsuM6VDFvcCCrH9MgHZysL/mfECR9wPwska8=;
+        b=Inco7shYWGwCbmGRzf9fmjkb4dyXh3+Pj0EhFpbSy0hbTaN9H/D91fZ+cHgA1l+N2M
+         nQbvEuGhuCnW/bf+Myx12mHc4zq+K9mPUfkkpNiFV03SfZeNXT0+GkPSfkgBmK2RrXxh
+         14Bh+cVOuZeFMpRNNTontYrl+K3H6fCHf0CaCX4eJi7z/d1peN0xtlrCK02WhcAk4820
+         w5Mr3LPYVhCLOedGw9/FDIUSsiOnvzUenR406zN1c2wp9PvT/uNkrN73TiObF15xdrKh
+         ZX/yxFnoeFBRdvxx6/emxyM7KvV+BFECcftHbsWGy3RthlZt6qe0BtmgRfzd3+yfnwuS
+         GQTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688803899; x=1691395899;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8JsdPx2PtCEj+8E+tenBNbAlijTmNN2EqyVkNdLKfmA=;
-        b=bUcnoeMY4piGJZY48ju6Wvt+NPrJVu+gIqRzQAXXWcIilUkxSX12ojVGH7oCqbFWLk
-         O9nME9jlHPx+rzVDWW/9875PUulfQE6w2LsT+JgXqJQyc2Xk7sspx8+21rVHHidAfcV4
-         ajmyajA+f/4bhQwbsivBBMY1vs+LeV0DJRpWL08E5afMkKdDGL5I3L3q2CflbmCopIuf
-         xBgUC1UW5j5uBSSk1kqHRPJ/AIly93pp0EULnWaaSEb9/jmxFlwIlnziLeQ/A0bMS44X
-         9qF/mQzh6+8Fub70wJFQcCbvVODIty2rNAJRQu/FZguA7lRaW/FNchzHZFCwXQfocOey
-         ny7w==
-X-Gm-Message-State: ABy/qLbvquXMrTXvhtW2PcJsxAvn6o1or2Ckaq0emN5C5k/Rnq2Kb+1H
-        sU8s/Cs4ShPu9VJT2HsSqtVLsoKXZ2Qhrw==
-X-Google-Smtp-Source: APBJJlE4SRjJJSfqI47lKi2L1n2FIAQTgGAQPjLr+o2ro9brA/66+l23EdfRFaJ7W2iUuGXDneiVYA==
-X-Received: by 2002:a17:906:79c4:b0:982:9daf:9fcf with SMTP id m4-20020a17090679c400b009829daf9fcfmr5197948ejo.66.1688803898582;
-        Sat, 08 Jul 2023 01:11:38 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id cw23-20020a170906c79700b0098963eb0c3dsm3152939ejb.26.2023.07.08.01.11.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 01:11:38 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: [PATCH] perf/core: Use local64_try_cmpxchg in perf_swevent_set_period
-Date:   Sat,  8 Jul 2023 10:10:57 +0200
-Message-ID: <20230708081129.45915-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        d=1e100.net; s=20221208; t=1688804589; x=1691396589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uRa64IiPsuM6VDFvcCCrH9MgHZysL/mfECR9wPwska8=;
+        b=hI2xuKPbk/+0Or24lZZkuMVAw5qDXCAXwWHIfDABjilFEjHBNsfAhvaPJYrmA6PO14
+         u/SMJxUIc8fgtk2Bw5L9p/ymJRyh5qKfWM0fHNCprcZknbPDPOz+ZEuL2a5EwlGHQkp+
+         tT0h6jnW9dT21mmOqJoFN+kn9/VBpYljDBHignc6NmeaZvWTWU54TWspnD4Rc1dxuOSi
+         ah/D4wfrmiXaS6mub7pv6gAV/s+SWV49w/678WgkgHZi2ClvNyTF0R5fgLlEP1nGjIOz
+         clW75afJ81vCHnBM1TB1ByPBC6edLNym4TFQTfVnsawSnS8CPoj7seywFRZ9Rydk2cxZ
+         0qvA==
+X-Gm-Message-State: ABy/qLZk5T1K5wdtdTonO+f/ZwN8qF5G7+9Pz57UpBaHKgBIUPrilk/p
+        NalhagOj/nglYrrAbdNT/PIHCE/QiNwZPl7yBAtPiQ==
+X-Google-Smtp-Source: APBJJlHV4fQNxortWcxW7ePLIgEI078Rdoj5n5kWWZvlBctClxZotj2w9tR+0lOLRwp+gme8FrDJ6Tc8RYIVhRTp8k0=
+X-Received: by 2002:a0d:dc83:0:b0:56c:f090:36eb with SMTP id
+ f125-20020a0ddc83000000b0056cf09036ebmr7620028ywe.36.1688804588831; Sat, 08
+ Jul 2023 01:23:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607151127.1542024-1-pavacic.p@gmail.com> <20230607151127.1542024-4-pavacic.p@gmail.com>
+ <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com>
+ <CAO9szn00vRFm+iM1m7KgkW0WRuKyJEgVU4tVx4f5tF6KPnE=2w@mail.gmail.com>
+ <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com>
+ <CAO9szn29A0qCABG0ACni42UGpsGKLwG7OT1y_ho3DgQ0WLvfmw@mail.gmail.com>
+ <CACRpkdYXtQwmZR1u-1fwmyC_8Yq4bMkjDBcUCfuGqSz_UhXWJQ@mail.gmail.com>
+ <CAO9szn0OuKW+-JZMs3TPUHiwLCe6cUPcsUq+og64K2utMyZpqQ@mail.gmail.com> <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com>
+In-Reply-To: <CACRpkdb5stXKb7FNk_FC-PKduCngRX3sZTbzcxN+kRskz78fuQ@mail.gmail.com>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Sat, 8 Jul 2023 13:52:57 +0530
+Message-ID: <CA+VMnFyaCWFPWszxen92qKBMX6N9g34+aMA4UCnai9KQzzuf9Q@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Paulo Pavacic <pavacic.p@gmail.com>
+Cc:     Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Vasut <marex@denx.de>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old
-in perf_swevent_set_period.  x86 CMPXCHG instruction returns success in ZF
-flag, so this change saves a compare after cmpxchg (and related move
-instruction in front of cmpxchg).
+On Thu, 22 Jun 2023 at 13:52, Linus Walleij <linus.walleij@linaro.org> wrot=
+e:
+>
+> On Wed, Jun 21, 2023 at 5:09=E2=80=AFPM Paulo Pavacic <pavacic.p@gmail.co=
+m> wrote:
+>
+> > A lot of modifications to st7701 are required. I believe it would
+> > result in a driver that doesn't look or work the same. e.g compare
+> > delays between initialization sequences of panel-fannal-c3004 and
+> > panel-st7701. I think it would be optimal to create st7701s driver and
+> > have special handling for st7701s panels. If there was a flag for
+> > whether panel is st7701 or st7701s it would end up looking like a
+> > mess.
+>
+> What matters is if the original authors of the old st7701 driver are
+> around and reviewing and testing patches at all. What we need is
+> active maintainers. (Added Jagan, Marek & Maya).
+>
+> I buy the reasoning that the st7701s is perhaps substantially different
+> from st7701.
+>
+> If st7701s is very different then I suppose it needs a separate driver,
+> then all we need to to name the driver properly, i.e.
+> panel-sitronix-st7701s.c.
 
-Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
-fails. There is no need to re-read the value in the loop.
+I agree with what Linus mentioned.
 
-No functional change intended.
+1. If the panel is designed on top of ST7701 then add driver data on
+the existing panel-st7701 driver with this panel.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- kernel/events/core.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+2. If the panel is designed on top of ST7701S - ST7701 and ST7701S are
+completely different in terms of the command set and init sequence
+then add panel-sitronix-st7701s.c
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 78ae7b6f90fd..f84e2640ea2f 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9595,16 +9595,16 @@ u64 perf_swevent_set_period(struct perf_event *event)
- 
- 	hwc->last_period = hwc->sample_period;
- 
--again:
--	old = val = local64_read(&hwc->period_left);
--	if (val < 0)
--		return 0;
-+	old = local64_read(&hwc->period_left);
-+	do {
-+		val = old;
-+		if (val < 0)
-+			return 0;
- 
--	nr = div64_u64(period + val, period);
--	offset = nr * period;
--	val -= offset;
--	if (local64_cmpxchg(&hwc->period_left, old, val) != old)
--		goto again;
-+		nr = div64_u64(period + val, period);
-+		offset = nr * period;
-+		val -= offset;
-+	} while (!local64_try_cmpxchg(&hwc->period_left, &old, val));
- 
- 	return nr;
- }
--- 
-2.41.0
+3. If the panel is designed on top ST7701S and if the commands set is
+the same as ST7701 but the init sequence is different then it is
+possible to use the existing st7701 driver with the init sequence as
+in driver data.
 
+Thanks,
+Jagan.
