@@ -2,438 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C329E74BB4E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0620E74BB49
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjGHCQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S232607AbjGHCPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbjGHCP7 (ORCPT
+        with ESMTP id S229557AbjGHCPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:15:59 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D1BE6E;
-        Fri,  7 Jul 2023 19:15:57 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3681uLH7017846;
-        Sat, 8 Jul 2023 02:15:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2023-03-30;
- bh=57Oqp850p67B2H8ioswTKbkNvCQIumeJ5PBX/N5Q9Dw=;
- b=F+S3TARsHuvP6QGWcya/wBSpwM3ZKsaAIb2bNy66WK8Dw6kJ9f/qfyQPVI2JbwQmATQc
- 1OCbSHoRwZNub5HSMBM1z0fBxq7v6V0tDSUK3QUbwEk4t8fDHBzWJPhpz50NsPycSAqZ
- /q+07QH/c3uVyGYN3vecPpUe3oqq6UjLmhXn8ghGtosXt2Cq7XWUVLvHg1r1tdLOV+pz
- A5Sttu+TY9hmvNZZyyVh6QtZe5NNnV2ojg/I61TRBzFrgYk0adjvR7GXk4SoOy1gDLsp
- PywrO2FHbILCjXPOTsZmjthDs6t2UIxsBXTDa6lr2ELpJWW42Jr/NHPvXSRa/Z7Da+22 Yg== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpfhpshxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Jul 2023 02:15:28 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3681XPNY006168;
-        Sat, 8 Jul 2023 02:15:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx87rm4h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Jul 2023 02:15:27 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3682FEKs002005;
-        Sat, 8 Jul 2023 02:15:26 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3rpx87rkuh-7;
-        Sat, 08 Jul 2023 02:15:26 +0000
-From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-To:     davem@davemloft.net
-Cc:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
-        david@fries.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, zbr@ioremap.net, brauner@kernel.org,
-        johannes@sipsolutions.net, ecree.xilinx@gmail.com, leon@kernel.org,
-        keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        anjali.k.kulkarni@oracle.com
-Subject: [PATCH v8 6/6] connector/cn_proc: Selftest for proc connector
-Date:   Fri,  7 Jul 2023 19:15:12 -0700
-Message-ID: <20230708021512.3929237-7-anjali.k.kulkarni@oracle.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230708021512.3929237-1-anjali.k.kulkarni@oracle.com>
-References: <20230708021512.3929237-1-anjali.k.kulkarni@oracle.com>
+        Fri, 7 Jul 2023 22:15:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7AFE6E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688782470;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kpy+PGb5drQmeWGSE0l67Lj4CAUJY3SUrpQEp6bMyqo=;
+        b=CRFfKgnxOo1cP3iy2qu8XFSDbNrxurz8Ld0g00Tz5N55MBWTam8Wvtc10EpLq8wj0FwfaE
+        HzztyJ057PjJviJwnDikyqpEeBDcMjfWyw+fuFoPFmCPlY92k5krHx1jP33olsBSubSo/7
+        YVgMN9V3B2UH23dh8NhFPd9Z+dd5coY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-iTbWNiJGMhGyjVPRPERf0Q-1; Fri, 07 Jul 2023 22:14:27 -0400
+X-MC-Unique: iTbWNiJGMhGyjVPRPERf0Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 799CB800962;
+        Sat,  8 Jul 2023 02:14:26 +0000 (UTC)
+Received: from darkstar.users.ipa.redhat.com (ovpn-12-59.pek2.redhat.com [10.72.12.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B20B1454142;
+        Sat,  8 Jul 2023 02:14:20 +0000 (UTC)
+Date:   Sat, 8 Jul 2023 10:15:53 +0800
+From:   Dave Young <dyoung@redhat.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        horms@kernel.org, chenjiahao16@huawei.com,
+        linux-riscv@lists.infradead.org, x86@kernel.org, bp@alien8.de
+Subject: Re: [RFC PATCH 0/4] kdump: add generic functions to simplify
+ crashkernel crashkernel in architecture
+Message-ID: <ZKjG2R8RhWmJex53@darkstar.users.ipa.redhat.com>
+References: <20230619055951.45620-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_16,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307080019
-X-Proofpoint-GUID: MQaFHNK9RnAgODYTBgcBOHFAX9MIqnvt
-X-Proofpoint-ORIG-GUID: MQaFHNK9RnAgODYTBgcBOHFAX9MIqnvt
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619055951.45620-1-bhe@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Run as ./proc_filter -f to run new filter code. Run without "-f" to run
-usual proc connector code without the new filtering code.
+On 06/19/23 at 01:59pm, Baoquan He wrote:
+> In the current arm64, crashkernel=,high support has been finished after
+> several rounds of posting and careful reviewing. The code in arm64 which
+> parses crashkernel kernel parameters firstly, then reserve memory can be
+> a good example for other ARCH to refer to.
+> 
+> Whereas in x86_64, the code mixing crashkernel parameter parsing and
+> memory reserving is twisted, and looks messy. Refactoring the code to
+> make it more readable maintainable is necessary.
+> 
+> Here, try to abstract the crashkernel parameter parsing code into a
+> generic function parse_crashkernel_generic(), and the crashkernel memory
+> reserving code into a generic function reserve_crashkernel_generic().
+> Then, in ARCH which crashkernel=,high support is needed, a simple
+> arch_reserve_crashkernel() can be added to call above two generic
+> functions. This can remove the duplicated implmentation code in each
+> ARCH, like arm64, x86_64.
 
-Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/connector/Makefile    |   6 +
- .../testing/selftests/connector/proc_filter.c | 310 ++++++++++++++++++
- 3 files changed, 317 insertions(+)
- create mode 100644 tools/testing/selftests/connector/Makefile
- create mode 100644 tools/testing/selftests/connector/proc_filter.c
+Hi Baoquan, the parse_crashkernel_common and parse_crashkernel_generic
+are confusion to me.  Thanks for the effort though.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 90a62cf75008..7c9673951f9a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -7,6 +7,7 @@ TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
- TARGETS += clone3
-+TARGETS += connector
- TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
-new file mode 100644
-index 000000000000..21c9f3a973a0
---- /dev/null
-+++ b/tools/testing/selftests/connector/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wall
-+
-+TEST_GEN_PROGS = proc_filter
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
-new file mode 100644
-index 000000000000..4fe8c6763fd8
---- /dev/null
-+++ b/tools/testing/selftests/connector/proc_filter.c
-@@ -0,0 +1,310 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <sys/types.h>
-+#include <sys/epoll.h>
-+#include <sys/socket.h>
-+#include <linux/netlink.h>
-+#include <linux/connector.h>
-+#include <linux/cn_proc.h>
-+
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <strings.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <string.h>
-+
-+#include "../kselftest.h"
-+
-+#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
-+			 sizeof(struct proc_input))
-+#define NL_MESSAGE_SIZE_NF (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
-+			 sizeof(int))
-+
-+#define MAX_EVENTS 1
-+
-+volatile static int interrupted;
-+static int nl_sock, ret_errno, tcount;
-+static struct epoll_event evn;
-+
-+static int filter;
-+
-+#ifdef ENABLE_PRINTS
-+#define Printf printf
-+#else
-+#define Printf ksft_print_msg
-+#endif
-+
-+int send_message(void *pinp)
-+{
-+	char buff[NL_MESSAGE_SIZE];
-+	struct nlmsghdr *hdr;
-+	struct cn_msg *msg;
-+
-+	hdr = (struct nlmsghdr *)buff;
-+	if (filter)
-+		hdr->nlmsg_len = NL_MESSAGE_SIZE;
-+	else
-+		hdr->nlmsg_len = NL_MESSAGE_SIZE_NF;
-+	hdr->nlmsg_type = NLMSG_DONE;
-+	hdr->nlmsg_flags = 0;
-+	hdr->nlmsg_seq = 0;
-+	hdr->nlmsg_pid = getpid();
-+
-+	msg = (struct cn_msg *)NLMSG_DATA(hdr);
-+	msg->id.idx = CN_IDX_PROC;
-+	msg->id.val = CN_VAL_PROC;
-+	msg->seq = 0;
-+	msg->ack = 0;
-+	msg->flags = 0;
-+
-+	if (filter) {
-+		msg->len = sizeof(struct proc_input);
-+		((struct proc_input *)msg->data)->mcast_op =
-+			((struct proc_input *)pinp)->mcast_op;
-+		((struct proc_input *)msg->data)->event_type =
-+			((struct proc_input *)pinp)->event_type;
-+	} else {
-+		msg->len = sizeof(int);
-+		*(int *)msg->data = *(enum proc_cn_mcast_op *)pinp;
-+	}
-+
-+	if (send(nl_sock, hdr, hdr->nlmsg_len, 0) == -1) {
-+		ret_errno = errno;
-+		perror("send failed");
-+		return -3;
-+	}
-+	return 0;
-+}
-+
-+int register_proc_netlink(int *efd, void *input)
-+{
-+	struct sockaddr_nl sa_nl;
-+	int err = 0, epoll_fd;
-+
-+	nl_sock = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
-+
-+	if (nl_sock == -1) {
-+		ret_errno = errno;
-+		perror("socket failed");
-+		return -1;
-+	}
-+
-+	bzero(&sa_nl, sizeof(sa_nl));
-+	sa_nl.nl_family = AF_NETLINK;
-+	sa_nl.nl_groups = CN_IDX_PROC;
-+	sa_nl.nl_pid    = getpid();
-+
-+	if (bind(nl_sock, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) == -1) {
-+		ret_errno = errno;
-+		perror("bind failed");
-+		return -2;
-+	}
-+
-+	epoll_fd = epoll_create1(EPOLL_CLOEXEC);
-+	if (epoll_fd < 0) {
-+		ret_errno = errno;
-+		perror("epoll_create1 failed");
-+		return -2;
-+	}
-+
-+	err = send_message(input);
-+
-+	if (err < 0)
-+		return err;
-+
-+	evn.events = EPOLLIN;
-+	evn.data.fd = nl_sock;
-+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, nl_sock, &evn) < 0) {
-+		ret_errno = errno;
-+		perror("epoll_ctl failed");
-+		return -3;
-+	}
-+	*efd = epoll_fd;
-+	return 0;
-+}
-+
-+static void sigint(int sig)
-+{
-+	interrupted = 1;
-+}
-+
-+int handle_packet(char *buff, int fd, struct proc_event *event)
-+{
-+	struct nlmsghdr *hdr;
-+
-+	hdr = (struct nlmsghdr *)buff;
-+
-+	if (hdr->nlmsg_type == NLMSG_ERROR) {
-+		perror("NLMSG_ERROR error\n");
-+		return -3;
-+	} else if (hdr->nlmsg_type == NLMSG_DONE) {
-+		event = (struct proc_event *)
-+			((struct cn_msg *)NLMSG_DATA(hdr))->data;
-+		tcount++;
-+		switch (event->what) {
-+		case PROC_EVENT_EXIT:
-+			Printf("Exit process %d (tgid %d) with code %d, signal %d\n",
-+			       event->event_data.exit.process_pid,
-+			       event->event_data.exit.process_tgid,
-+			       event->event_data.exit.exit_code,
-+			       event->event_data.exit.exit_signal);
-+			break;
-+		case PROC_EVENT_FORK:
-+			Printf("Fork process %d (tgid %d), parent %d (tgid %d)\n",
-+			       event->event_data.fork.child_pid,
-+			       event->event_data.fork.child_tgid,
-+			       event->event_data.fork.parent_pid,
-+			       event->event_data.fork.parent_tgid);
-+			break;
-+		case PROC_EVENT_EXEC:
-+			Printf("Exec process %d (tgid %d)\n",
-+			       event->event_data.exec.process_pid,
-+			       event->event_data.exec.process_tgid);
-+			break;
-+		case PROC_EVENT_UID:
-+			Printf("UID process %d (tgid %d) uid %d euid %d\n",
-+			       event->event_data.id.process_pid,
-+			       event->event_data.id.process_tgid,
-+			       event->event_data.id.r.ruid,
-+			       event->event_data.id.e.euid);
-+			break;
-+		case PROC_EVENT_GID:
-+			Printf("GID process %d (tgid %d) gid %d egid %d\n",
-+			       event->event_data.id.process_pid,
-+			       event->event_data.id.process_tgid,
-+			       event->event_data.id.r.rgid,
-+			       event->event_data.id.e.egid);
-+			break;
-+		case PROC_EVENT_SID:
-+			Printf("SID process %d (tgid %d)\n",
-+			       event->event_data.sid.process_pid,
-+			       event->event_data.sid.process_tgid);
-+			break;
-+		case PROC_EVENT_PTRACE:
-+			Printf("Ptrace process %d (tgid %d), Tracer %d (tgid %d)\n",
-+			       event->event_data.ptrace.process_pid,
-+			       event->event_data.ptrace.process_tgid,
-+			       event->event_data.ptrace.tracer_pid,
-+			       event->event_data.ptrace.tracer_tgid);
-+			break;
-+		case PROC_EVENT_COMM:
-+			Printf("Comm process %d (tgid %d) comm %s\n",
-+			       event->event_data.comm.process_pid,
-+			       event->event_data.comm.process_tgid,
-+			       event->event_data.comm.comm);
-+			break;
-+		case PROC_EVENT_COREDUMP:
-+			Printf("Coredump process %d (tgid %d) parent %d, (tgid %d)\n",
-+			       event->event_data.coredump.process_pid,
-+			       event->event_data.coredump.process_tgid,
-+			       event->event_data.coredump.parent_pid,
-+			       event->event_data.coredump.parent_tgid);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+	return 0;
-+}
-+
-+int handle_events(int epoll_fd, struct proc_event *pev)
-+{
-+	char buff[CONNECTOR_MAX_MSG_SIZE];
-+	struct epoll_event ev[MAX_EVENTS];
-+	int i, event_count = 0, err = 0;
-+
-+	event_count = epoll_wait(epoll_fd, ev, MAX_EVENTS, -1);
-+	if (event_count < 0) {
-+		ret_errno = errno;
-+		if (ret_errno != EINTR)
-+			perror("epoll_wait failed");
-+		return -3;
-+	}
-+	for (i = 0; i < event_count; i++) {
-+		if (!(ev[i].events & EPOLLIN))
-+			continue;
-+		if (recv(ev[i].data.fd, buff, sizeof(buff), 0) == -1) {
-+			ret_errno = errno;
-+			perror("recv failed");
-+			return -3;
-+		}
-+		err = handle_packet(buff, ev[i].data.fd, pev);
-+		if (err < 0)
-+			return err;
-+	}
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int epoll_fd, err;
-+	struct proc_event proc_ev;
-+	struct proc_input input;
-+
-+	signal(SIGINT, sigint);
-+
-+	if (argc > 2) {
-+		printf("Expected 0(assume no-filter) or 1 argument(-f)\n");
-+		exit(1);
-+	}
-+
-+	if (argc == 2) {
-+		if (strcmp(argv[1], "-f") == 0) {
-+			filter = 1;
-+		} else {
-+			printf("Valid option : -f (for filter feature)\n");
-+			exit(1);
-+		}
-+	}
-+
-+	if (filter) {
-+		input.event_type = PROC_EVENT_NONZERO_EXIT;
-+		input.mcast_op = PROC_CN_MCAST_LISTEN;
-+		err = register_proc_netlink(&epoll_fd, (void*)&input);
-+	} else {
-+		enum proc_cn_mcast_op op = PROC_CN_MCAST_LISTEN;
-+		err = register_proc_netlink(&epoll_fd, (void*)&op);
-+	}
-+
-+	if (err < 0) {
-+		if (err == -2)
-+			close(nl_sock);
-+		if (err == -3) {
-+			close(nl_sock);
-+			close(epoll_fd);
-+		}
-+		exit(1);
-+	}
-+
-+	while (!interrupted) {
-+		err = handle_events(epoll_fd, &proc_ev);
-+		if (err < 0) {
-+			if (ret_errno == EINTR)
-+				continue;
-+			if (err == -2)
-+				close(nl_sock);
-+			if (err == -3) {
-+				close(nl_sock);
-+				close(epoll_fd);
-+			}
-+			exit(1);
-+		}
-+	}
-+
-+	if (filter) {
-+		input.mcast_op = PROC_CN_MCAST_IGNORE;
-+		send_message((void*)&input);
-+	} else {
-+		enum proc_cn_mcast_op op = PROC_CN_MCAST_IGNORE;
-+		send_message((void*)&op);
-+	}
-+
-+	close(epoll_fd);
-+	close(nl_sock);
-+
-+	printf("Done total count: %d\n", tcount);
-+	exit(0);
-+}
--- 
-2.41.0
+I'm not sure if it will be easy or not, but ideally I think the parse
+function can be arch independent, something like a general funtion
+parse_crashkernel() which can return the whole necessary infomation of
+crashkenrel for arch code to use, for example return like
+below pseudo stucture(just a concept, may need to think more):
+
+structure crashkernel_range {
+	size,
+	range,
+	struct list_head list;
+}
+
+structure crashkernel{
+  structure crashkernel_range *range_list;
+  union {
+  	offset,
+  	low_high
+  }
+}
+
+So the arch code can just get the data of crashkernel and then check
+about the details, if it does not support low and high reservation then
+it can just ignore the option.
+
+Thoughts?
+
+> 
+> I only change the arm64 and x86_64 implementation to make use of the
+> generic functions to simplify code. Risc-v can be done very easily refer
+> to the steps in arm64 and x86_64. I leave this to Jiahao or other risc-v
+> developer since Jiahao have posted a patchset to add crashkernel=,high
+> support to risc-v.
+> 
+> This patchset is based on the latest linus's tree, and on top of below
+> patch:
+> 
+> arm64: kdump: simplify the reservation behaviour of crashkernel=,high
+>       https://git.kernel.org/arm64/c/6c4dcaddbd36
+> 
+> 
+> Baoquan He (4):
+>   kdump: rename parse_crashkernel() to parse_crashkernel_common()
+>   kdump: add generic functions to parse crashkernel and do reservation
+>   arm64: kdump: use generic interfaces to simplify crashkernel
+>     reservation code
+>   x86: kdump: use generic interfaces to simplify crashkernel reservation
+>     code
+> 
+>  arch/arm/kernel/setup.c              |   4 +-
+>  arch/arm64/Kconfig                   |   3 +
+>  arch/arm64/include/asm/kexec.h       |   8 ++
+>  arch/arm64/mm/init.c                 | 141 ++----------------------
+>  arch/ia64/kernel/setup.c             |   4 +-
+>  arch/loongarch/kernel/setup.c        |   3 +-
+>  arch/mips/cavium-octeon/setup.c      |   2 +-
+>  arch/mips/kernel/setup.c             |   4 +-
+>  arch/powerpc/kernel/fadump.c         |   5 +-
+>  arch/powerpc/kexec/core.c            |   4 +-
+>  arch/powerpc/mm/nohash/kaslr_booke.c |   4 +-
+>  arch/riscv/mm/init.c                 |   5 +-
+>  arch/s390/kernel/setup.c             |   4 +-
+>  arch/sh/kernel/machine_kexec.c       |   5 +-
+>  arch/x86/Kconfig                     |   3 +
+>  arch/x86/include/asm/kexec.h         |  32 ++++++
+>  arch/x86/kernel/setup.c              | 141 +++---------------------
+>  include/linux/crash_core.h           |  33 +++++-
+>  kernel/crash_core.c                  | 158 +++++++++++++++++++++++++--
+>  19 files changed, 274 insertions(+), 289 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+> 
+
+Thanks
+Dave
 
