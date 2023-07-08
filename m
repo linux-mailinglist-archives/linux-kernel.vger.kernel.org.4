@@ -2,176 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF29374BDC6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 16:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D491374BDC8
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 16:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjGHOSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 10:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S230454AbjGHOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 10:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHOSg (ORCPT
+        with ESMTP id S229658AbjGHOTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 10:18:36 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2079.outbound.protection.outlook.com [40.107.8.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D48F183;
-        Sat,  8 Jul 2023 07:18:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HojFrq2xJJ3eoagPmc8mJ6b3CtM9fH3nFw5v0Wo1eHanj1nnOmBDNEU+uCMHWmi5yQdP+tfo+4zLs1eOf96p8GURvIOAiaGIvgirByjF83oRSlNv6YMBNe3CTJdu6C/6TPdIusM35TnHnQAf9tTqz+n7q0tqDyu6asNRTsYpiPYsQWLyF0gYIQFbn1dJ83n0WUq152JenDW+SUHwbpWmbx8FFlCCb8YvLPXYuqGU/VNgK4/DuwQ1Fyo9uASfllpmeafH9Dlc9xooYKCjOzrh/w4q7W5Y8NkKD2uxO0BcHMMpCsKqhbVnPdXJ5KuMCfWp/chmc1eJPglG+yVXVfM3ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4bmxntlbqHaOC9BfMfdOJ8wPYK0L5P6UuBfaQwOCkTA=;
- b=YarGUrN82SmwQep9JGPvJYrcVaI3TMFP0gKTsU7C/whqmsSxUAj3RDF+8VmuHJmdA6XyVjjs/tQjtcUtqZA4zNe0dcPZJp+YSHzDy60wrzElgZnihmSsgPPsSPi6AA4h5/nwjU4hT7AiuU/FELG8ufYqITC5unjz5VH1vrVXWsliaJIrqQ6q/NSnprD1VomkR9tm4ZcokkWCP+qahNrMyxBG4F1X4HIUE4FMu8uhWDrwCr0vlW4XHzw5QpMB8jsQ+HCfCgFHrdIQT4+z7+HPNVYxAr9a8Nw64A9metQTNcUNVWTmqUdS2mMWKsdcefAYCQ8nzao69hZ94UbyDVDWnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4bmxntlbqHaOC9BfMfdOJ8wPYK0L5P6UuBfaQwOCkTA=;
- b=mFgqKVG0URVVqH7Ik0UaM9VMyhjuYtynpIZaYeHbVi9MKHohm92gPxGeEluqNzsk7BAYYDojtPpIf/Dpe7VAShgPMNg3bFJNehXs+GwzynxqgKfBAauPD1zw5GaGFHBh3hw/67qQeYQJd/cE1XKHTNUwm2v+09A31XpQqHdO/B2yDn6IWRvq+HgPLErQ77q1LD5Jk32uXx5sFka+kitfddSlE9ZvJcEuDeKmA2t6+HU4Xf7j4B0Gjzt+mgCuB2m/qV7Wz6RnE7MIw5Pi3HZprQ52ppN9305m1VZxwNyGVYxhKgEioAyUu9MibOrcFAjC3UKiuk5ij0r8HZt1WV8o7w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by VE1PR04MB7375.eurprd04.prod.outlook.com
- (2603:10a6:800:1a8::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Sat, 8 Jul
- 2023 14:18:31 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::551e:9fcf:5b65:ca5b]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::551e:9fcf:5b65:ca5b%2]) with mapi id 15.20.6565.026; Sat, 8 Jul 2023
- 14:18:31 +0000
-Message-ID: <9dabd1fc-7445-a305-6632-04f64e012648@suse.com>
-Date:   Sat, 8 Jul 2023 16:18:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] x86/retpoline,kprobes: Avoid treating rethunk as an
- indirect jump
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230705081547.25130-1-petr.pavlu@suse.com>
- <20230705081547.25130-3-petr.pavlu@suse.com>
- <20230705085857.GG462772@hirez.programming.kicks-ass.net>
- <20230705232038.3a6d03e18f7bafb14cdfed42@kernel.org>
- <20230705145017.GC4253@hirez.programming.kicks-ass.net>
- <20230706094723.6934105e03f652923796bf7e@kernel.org>
- <20230706071705.GD2833176@hirez.programming.kicks-ass.net>
- <20230706180014.06705096a594b71250ff3c94@kernel.org>
- <20230706113403.GI2833176@hirez.programming.kicks-ass.net>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20230706113403.GI2833176@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0035.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::22) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
+        Sat, 8 Jul 2023 10:19:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DE9170F;
+        Sat,  8 Jul 2023 07:19:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A962A60C98;
+        Sat,  8 Jul 2023 14:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AC5C433C7;
+        Sat,  8 Jul 2023 14:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688825956;
+        bh=obibsx/JGl5slXu0QUFvJaKyO31+ka5zkOld73J0s1E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iAQv4Djf/AZ2RglDt7xtuGmYiqhGaP1kBkO8ZvlZ6ZSsbPNW+vhRYafWEvbKiQvYM
+         TzpdN6tiSASsya0c8wI5fafINeRSS7aO+ktD8xjd4hctt0zCOKWMo3/car08LgkcJw
+         plrsU3cfen6W1vGkpVjQ6nSqVCgvShzBaJ7zGV3AvNP5FWIj+H4BKVvmDe4++aHGFv
+         DXDlfhIkF0O82U+GLw0Itfo8EasBt8nddpEfXxim6/21ZyI1oVJ5DghojnNAjOo5FS
+         kglAylaCIwPdE/1x5ikgjK/VZXbpwK3O7jG+dImGj3kD9Bs8HP7BKIfS+j5dLYulFz
+         FWu8TyaLoF3Mg==
+Date:   Sat, 8 Jul 2023 15:19:12 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Alvin =?UTF-8?B?xaBpcHJhZ2E=?= <alvin@pqrs.dk>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Marc Titinger <mtitinger@baylibre.com>,
+        Alvin =?UTF-8?B?xaBpcHJhZ2E=?= <alsi@bang-olufsen.dk>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: adc: ina2xx: avoid NULL pointer dereference on OF
+ device match
+Message-ID: <20230708151912.7f5fd378@jic23-huawei>
+In-Reply-To: <20230619141239.2257392-1-alvin@pqrs.dk>
+References: <20230619141239.2257392-1-alvin@pqrs.dk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|VE1PR04MB7375:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6defc7e9-50e7-4c89-4475-08db7fbe3498
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /1hyE+KcHy0L+v1Y+UsP/Ht/KYFh5iKTwY9ElAiziSKzfjEDkQ1h8xyXqkBcnDPXEGv7wZtrIadimxTw5iZv1SiacSVSEtMvKyTCXBAjgDh58mD06f1rnzaT54uaiU4mOaJ/145j9g8BWKXfw/F2nQyxSk7x/9YSy+ftxLGWGXA2QAesrdjsUbnLRFO4wYx4ExK0rZfrx/8I796MlgC5xuLWwsb7nqTiGplxJolqDJbPTRNMJRLY4EPO3dbH4oIMoZwhqEnnlLN008LpoGoYcvzRfnu1LcPzf2snt/4TgjUoHfjm4EpvloqyhWA8omiQEyYWt8sO3QJ8uMZqlD32CjYQE+QSWhXcQ3QZ4XOfdcpt4U/rW8d3tBUDkmRM0bcTyGbuqjZm/ZxQeFKhVDkBwKkuFf+Hc50wBKg9EArI/Pzq+IONbsUv417ZDwwO7Gbv0sGoMHadT9OmpCrPTPkRokEhNboTib63xAsSxMK9cGoyMyKOKPZ8ZCoL4bdpdsU6M/QXK2h3oJ9im9ZeUlfsWcuvzrd4EnFbG0F6NJYdldKBQi15+mm9BvdByeS5BapAlAPhvpS8h961IicKEyxQhZbfl//M1RtxYalcntDoBPkCLjg+XpQWGNz/XN+BAC2CTnslazW7HZPH1k51FK+HIQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(366004)(376002)(396003)(136003)(451199021)(110136005)(478600001)(6486002)(55236004)(53546011)(6506007)(26005)(6512007)(186003)(2906002)(41300700001)(316002)(66476007)(4326008)(66556008)(44832011)(5660300002)(7416002)(8936002)(8676002)(38100700002)(66946007)(31696002)(86362001)(36756003)(83380400001)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OHhFdkd1OEZIUEhaSGM5K1RrYzhpcThsWXhSTHlsRmt4dVRWb0hJYkJSc21k?=
- =?utf-8?B?R3NQbVFobGx5Vk45YUd1ODFGVVNqZjlqeE5JUkk1S2MyczVUNlR5ZTdMYk9N?=
- =?utf-8?B?WHA0Ym9Xam1IbnE2Zms4Nkw0VkRTK2hsY1I3Wi9XTW1nRnBJZHZMUWxhNWxB?=
- =?utf-8?B?OHdaTllMWXZaSERqcERsb1JqYkpQR2E2NUlIc3VjS1FuNmVkeUpONkpsMXRu?=
- =?utf-8?B?dCtWNGNLTkRoY0xNeCtLUm1VSDBOQXgrd0NyVkxpU1E5bVcvWThZRlJ3SG1L?=
- =?utf-8?B?L29xbFpvblNWNEZFb0JoVmZMVTBBc09sNGNpd0hWTEROMUtQZFVRWHpVaWNW?=
- =?utf-8?B?aUFFZ016bkNhT1VvUzk2a3dvOXJOc0ZhZWw0NlVTcjNxVEZKUEJsQTlyMEpp?=
- =?utf-8?B?NXJEYWRNVm9uY3RIbkYxam5ZWDNKRFlkM3RHRHIyd0JzT3RBUGJMSXZOeXBr?=
- =?utf-8?B?T29aYnRxYmlXUzJsclVhMnozSjAzZ1p0dTY4WFJzMXZkdEYzaEo1VStwOUd4?=
- =?utf-8?B?TDhoMi9XT3BxaDJGQ0lzSUUrY2RmckhxcDJ6VEhYZFBIUmR2VkRkNzRqRlFI?=
- =?utf-8?B?NHo5Mjd3Yk9PVE9rOVRCLzNkOVAxRG5UbGpKdXBpRUs5R0dHcklQZS9aY2oz?=
- =?utf-8?B?bmY1cHpEcDFKUHJVSTk5UG9MZng1UDVGZ1p1OFNDK04vdWpwRnd5Y1g2cnd6?=
- =?utf-8?B?aFpqb2p5M0FaYzd6a1g3bHBzU3kwLzlFNUMyaWFEdWpkMHV2VW1YM0JuWjMr?=
- =?utf-8?B?NVFubjc0SGRKSUlvRDJFYmZpVlByRTR3cWUrTEpZTzV1YUlEbzI5alR0ZUVu?=
- =?utf-8?B?NVlGb2ZJSXlpVkRvUmR2V1ErN2lhc2UxZWxTNkI2ckwwOCtDeVo1ckhyYU4w?=
- =?utf-8?B?MXN1VEU4L1BUanVrQmNSb0w5bUtQYys5WGxtWnRRRkFhY0dQbWEwYUJrVkRy?=
- =?utf-8?B?ME1kZG1NQUtsRkl0bVBNbTlvaVRQM1lXT2swMDhWNVRXYmExUTdPQktXbFNP?=
- =?utf-8?B?V2RwSnNVT1ZXYUFZcEtFTmJLNCs1SXk1MHRrbzJseVVjaGNDQUR1aWtiNVRE?=
- =?utf-8?B?WTVYOGRDMGJ3dXoxUFhKMTQ2dGQ5MjIrbjZkTnoyb1J1YmdYOU5sZnF1dDBy?=
- =?utf-8?B?ZWlualhUUnhKT20xZnFmS29SNllnUXNmQW4zeE83Qlh2QmgrOUNRdW9Nbzdn?=
- =?utf-8?B?TXF3YTZHQ1UxeVdTMG83WmJCbk5GbUFQaEhTUldzUTFUVkgwUmNNcUtxS01P?=
- =?utf-8?B?aUJnZzlFVVc2TFh5bjhvMC9sYWZrY0w4U05UMXkzdEQwdVdVZmVrMUtFdmRp?=
- =?utf-8?B?Nzd4VUlRRjNPY1pFcE51ZmZOWFdrYWg0VmxBTkNqb2pvcEI1U3pTMHcvbzJO?=
- =?utf-8?B?eCt4TXI2TGthL3NKSE1JOGZlcmgwQ2NncnRoSVY1MjgxcExKaFBXQW9CNllN?=
- =?utf-8?B?WHVxNzNsVXkrRWpyMjIyd002VXZ2eEVPK0ptQ1hQSk1WRnBFSW9IL2dpa1Vj?=
- =?utf-8?B?UGpkK3VFdTY0THhrNVRrS2hwTGJvZzRFNysxWktLOGU1bGZ0ckdJZ043R3Rj?=
- =?utf-8?B?S0xwRFc2QUtuSmRkVUhYUlRONjFtTFZLZ3ZVSnN1d1hHVDVZNFhtV0s4c28w?=
- =?utf-8?B?dHlZN1JFSW1QTDF2cEZtUzRzYmR0TlQ1UzZwdEZkc0lObEdwSnk2OUpGQ0hX?=
- =?utf-8?B?dkdaVThmMFR6RVJISzdrODlQZXJpZUZYNitnL3BueFp4enlxUjgrZ0hHUUN2?=
- =?utf-8?B?UHNIRm1mVURQbUdsUzcvd2NCWUNNMUR1ZTJoWVdUY2l5dVVVbDdLcmNCa3JL?=
- =?utf-8?B?NFh1cmIxZ3pGWjFhNmNRRVludkxBWlE2VlVSNjUyRmRJSk5UWXdIczRFRkZm?=
- =?utf-8?B?TktZWTdqcjY5UmVYN2d6UitybHR5bFhQSHFNMTdDZ2tRdHNqbmlxZjg3SHZh?=
- =?utf-8?B?eTY4bHFPTlMzR2N1c1RnS2hBNFNhQUpOSHdjQ3ZVUGpVWXhOSkxIMjUzeWJz?=
- =?utf-8?B?M3RaVENIQXU1Z2NIQ3MvNko5VWpwMFA5dC82OWxVeWcrTnR4OW9wY1ZENm9u?=
- =?utf-8?B?V2dUVnY3QTUrSlV3U2VBbm9uMnJmSFEzSmk4MFYwZm5aNDA1bFptRHVmY0ZL?=
- =?utf-8?Q?R/63vwKtmYTyv3WgtL1/1j8WZ?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6defc7e9-50e7-4c89-4475-08db7fbe3498
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2023 14:18:30.8958
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zfJx/d7GM94am7YNT53A4EDLGWhYR7mtzf8G+vmyNOt+neRlQu3SSN715+YTNsgZoPrpw9JH8Qwqtl8WXz9zOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7375
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/23 13:34, Peter Zijlstra wrote:
-> On Thu, Jul 06, 2023 at 06:00:14PM +0900, Masami Hiramatsu wrote:
->> On Thu, 6 Jul 2023 09:17:05 +0200
->> Peter Zijlstra <peterz@infradead.org> wrote:
->>
->>> On Thu, Jul 06, 2023 at 09:47:23AM +0900, Masami Hiramatsu wrote:
->>>
->>>>>> If I understand correctly, all indirect jump will be replaced with JMP_NOSPEC.
->>>>>> If you read the insn_jump_into_range, I onlu jecks the jump code, not call.
->>>>>> So the functions only have indirect call still allow optprobe.
->>>>>
->>>>> With the introduction of kCFI JMP_NOSPEC is no longer an equivalent to a
->>>>> C indirect jump.
->>>>
->>>> If I understand correctly, kCFI is enabled by CFI_CLANG, and clang is not
->>>> using jump-tables by default, so we can focus on gcc. In that case
->>>> current check still work, correct?
->>>
->>> IIRC clang can use jump tables, but like GCC needs RETPOLINE=n and
->>> IBT=n, so effectively nobody has them.
->>
->> So if it requires RETPOLINE=n, current __indirect_thunk_start/end checking
->> is not required, right? (that code is embraced with "#ifdef CONFIG_RETPOLINE")
-> 
-> Correct.
+On Mon, 19 Jun 2023 16:12:39 +0200
+Alvin =C5=A0ipraga <alvin@pqrs.dk> wrote:
 
-Thank you both for the explanation.
+> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>=20
+> The affected lines were resulting in a NULL pointer dereference on our
+> platform because the device tree contained the following list of
+> compatible strings:
+>=20
+>     power-sensor@40 {
+>         compatible =3D "ti,ina232", "ti,ina231";
+>         ...
+>     };
+>=20
+> Since the driver doesn't declare a compatible string "ti,ina232", the OF
+> matching succeeds on "ti,ina231". But the I2C device ID info is
+> populated via the first compatible string, cf. modalias population in
+> of_i2c_get_board_info(). Since there is no "ina232" entry in the legacy
+> I2C device ID table either, the struct i2c_device_id *id pointer in the
+> probe function is NULL.
+>=20
+> Fix this by using the already populated type variable instead, which
+> points to the proper driver data. Since the name is also wanted, add a
+> generic one to the ina2xx_config table.
+>=20
+> Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+> Fixes: c43a102e67db ("iio: ina2xx: add support for TI INA2xx Power Monito=
+rs")
 
-If I understand correctly, it means this second patch can be dropped and
-I can instead replace it with a removal of the mentioned check. That
-will also void the main motivation for the first patch but that one
-should be still at least useful to make the LTO_CLANG=y build lay out
-the code in the same way as with other configurations.
+Ouch.  We've cleaned a bunch of these up over the years but I guess this
+one got through because it did define the data in both id tables so we didn=
+'t
+notice it still assumed id was set.
 
-I will post an updated series with these changes.
+I'd forgotten this was one of the rare drivers where we have a driver in bo=
+th
+hwmon and IIO for the same devices.  So any binding update to include the n=
+ew
+part (making the fallback compatible explicit as well) would need to be in =
+the
+binding under hwmon.
 
--- Petr
+Applied this as a fix to the fixes-togreg branch of iio.git and marked it f=
+or
+stable.
+
+Thanks,
+
+Jonathan
+
+
+> ---
+>  drivers/iio/adc/ina2xx-adc.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/iio/adc/ina2xx-adc.c b/drivers/iio/adc/ina2xx-adc.c
+> index 213526c1592f..aea83f369437 100644
+> --- a/drivers/iio/adc/ina2xx-adc.c
+> +++ b/drivers/iio/adc/ina2xx-adc.c
+> @@ -124,6 +124,7 @@ static const struct regmap_config ina2xx_regmap_confi=
+g =3D {
+>  enum ina2xx_ids { ina219, ina226 };
+> =20
+>  struct ina2xx_config {
+> +	const char *name;
+>  	u16 config_default;
+>  	int calibration_value;
+>  	int shunt_voltage_lsb;	/* nV */
+> @@ -155,6 +156,7 @@ struct ina2xx_chip_info {
+> =20
+>  static const struct ina2xx_config ina2xx_config[] =3D {
+>  	[ina219] =3D {
+> +		.name =3D "ina219",
+>  		.config_default =3D INA219_CONFIG_DEFAULT,
+>  		.calibration_value =3D 4096,
+>  		.shunt_voltage_lsb =3D 10000,
+> @@ -164,6 +166,7 @@ static const struct ina2xx_config ina2xx_config[] =3D=
+ {
+>  		.chip_id =3D ina219,
+>  	},
+>  	[ina226] =3D {
+> +		.name =3D "ina226",
+>  		.config_default =3D INA226_CONFIG_DEFAULT,
+>  		.calibration_value =3D 2048,
+>  		.shunt_voltage_lsb =3D 2500,
+> @@ -996,7 +999,7 @@ static int ina2xx_probe(struct i2c_client *client)
+>  	/* Patch the current config register with default. */
+>  	val =3D chip->config->config_default;
+> =20
+> -	if (id->driver_data =3D=3D ina226) {
+> +	if (type =3D=3D ina226) {
+>  		ina226_set_average(chip, INA226_DEFAULT_AVG, &val);
+>  		ina226_set_int_time_vbus(chip, INA226_DEFAULT_IT, &val);
+>  		ina226_set_int_time_vshunt(chip, INA226_DEFAULT_IT, &val);
+> @@ -1015,7 +1018,7 @@ static int ina2xx_probe(struct i2c_client *client)
+>  	}
+> =20
+>  	indio_dev->modes =3D INDIO_DIRECT_MODE;
+> -	if (id->driver_data =3D=3D ina226) {
+> +	if (type =3D=3D ina226) {
+>  		indio_dev->channels =3D ina226_channels;
+>  		indio_dev->num_channels =3D ARRAY_SIZE(ina226_channels);
+>  		indio_dev->info =3D &ina226_info;
+> @@ -1024,7 +1027,7 @@ static int ina2xx_probe(struct i2c_client *client)
+>  		indio_dev->num_channels =3D ARRAY_SIZE(ina219_channels);
+>  		indio_dev->info =3D &ina219_info;
+>  	}
+> -	indio_dev->name =3D id->name;
+> +	indio_dev->name =3D id ? id->name : chip->config->name;
+> =20
+>  	ret =3D devm_iio_kfifo_buffer_setup(&client->dev, indio_dev,
+>  					  &ina2xx_setup_ops);
 
