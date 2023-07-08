@@ -2,158 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F94774BD68
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 14:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D512A74BD6C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 14:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjGHMDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 08:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S230183AbjGHMRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 08:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGHMDN (ORCPT
+        with ESMTP id S229627AbjGHMR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 08:03:13 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E86810EA
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 05:03:12 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-26598fc0825so422288a91.0
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 05:03:12 -0700 (PDT)
+        Sat, 8 Jul 2023 08:17:29 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB10F120;
+        Sat,  8 Jul 2023 05:17:27 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbf1b82de7so23423485e9.1;
+        Sat, 08 Jul 2023 05:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688817792; x=1691409792;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pmW+hS9M/nuHr1o+UJdiTC8iEB1m1jPftzrxBZrYbqo=;
-        b=Cgx32CzVjbgsu10mxr5sIU/3c+N6ldXoy6BzzWOBMTIGC9t2Mg4tZtwqFYZ2z7JZpL
-         EeGF6w355DMuzE85qokbs18VK9Gvqqm2Qorj24pqu8E84cO2bG2p11UShZMr3wpsCF0k
-         1WR8q8vC68MrUMmUOdtnQh2Hsi+dYU7MJIOLJA8DgGA4JjGPMFVCeKsBkySaQKPLKwsL
-         MKzDPTuDc5dgc4qLxIxAm89ois4f+C3c+M5Qb4NoYh29nDvjF0Dn8AOBYIUSm07sxQ/j
-         RESBR25MqbVD+tva7z63hUlEXq0GZAoFS8HgWibdOnNJp2FYh6N2Fqlk4HC+8qaTcGw5
-         nByg==
+        d=gmail.com; s=20221208; t=1688818646; x=1691410646;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qrwJasY3cJuEA4+eZCnOTkC6/C/i+F1wG15vTJoUGTg=;
+        b=Zb3fPI842NYI9Pnn1VdSQGtfjPgEH/6Se9Fn99r25H8BipyXFJ1sjvge760Hx8bDgH
+         bMNogKxczovu24ZofN0c7P7tyZQwgopxFiuzwc0AQXTW7uGPHKgOhQL3y4UTw6b5UH6Q
+         wnsPK2B4soVXZ8RWHRbtz1NPeM25rNFfZKHE5zX6rtz/w1EdgDC9hPcqujvBuz+xPDYJ
+         OQQl3NLZdyBELb3N6rzjWceuuGSfPJpSDNPFB6sj9SIIvV8nz5UB2QLvdiKQ9gAN4Ttq
+         dxI8pQGDcKtjhaWQS7K2v+s6W9cYDjE9eU1er2hPOx46nnsaegwCJaWbaks+FhYEdb+i
+         T+Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688817792; x=1691409792;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pmW+hS9M/nuHr1o+UJdiTC8iEB1m1jPftzrxBZrYbqo=;
-        b=QN6I6xZo7jeqxirtEkhzyjf5jRhStzL/3Tod420+2e1iElb5JwK0Fet9JSK34bh7PB
-         nXMW9Q3j/M1/lJ+zHSPiTLOidjTsC+N0dylkx9XwRLYssWjcDBOBcTePOjP9T9p+9t9B
-         8ZPFccsl6EU5lSSyoBLKhjT21W69wubNCwwgXUeac+6AE+48QkQ7163U5H3rLIA9/87n
-         W9vFmiQ7Cuy6aeHXj3aqPH6SAIoYF2H8sOaN9qksuPrfEnzI0duVY8Uh0Y1KMlSPZY0P
-         FpAmUNdMjw/KcfToHsc+U+nx0b6KDVl9VbqJBy0HUGBwoyy5GeXtWgrnBTkfst4NMbdo
-         xCOw==
-X-Gm-Message-State: ABy/qLZsOUIG9++m0buIyj1eiG/Zduj5V6KCTHpU6v5QZJTg9IEKBtiT
-        ohQBIdkdbiPypMxxQi7VE/rIDg==
-X-Google-Smtp-Source: APBJJlFRc9kwODiRcw6uSg+iVQe/4Kk5wsuH2F52nIAIw5ZGfOzMcKcldwdMs7dd4MdwFE3W7lBf7w==
-X-Received: by 2002:a17:90b:357:b0:262:ec04:4ff7 with SMTP id fh23-20020a17090b035700b00262ec044ff7mr16375949pjb.16.1688817791704;
-        Sat, 08 Jul 2023 05:03:11 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.72])
-        by smtp.gmail.com with ESMTPSA id v2-20020a17090a960200b00262e9fbd5fbsm2932101pjo.32.2023.07.08.05.03.04
+        d=1e100.net; s=20221208; t=1688818646; x=1691410646;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qrwJasY3cJuEA4+eZCnOTkC6/C/i+F1wG15vTJoUGTg=;
+        b=mIEUQ0Kg1Y1BHXaCFpwujIgmAtVJRK63Oh6963n9tPmaTelY8nsnBvGXijuS2PX5Rs
+         jTbTTTZ5/utGKc7ewtL3Xkp6ID9M0LnkraZCnTG4U9Fb0rLEheqLJaJ0npwpbkQlRi8t
+         3vo8YCG7VtX0fjNliSvQ5fOb69RVtlKcDmvo9ni5I8ZLU0FinByHI4XzCOk6lJGySZJr
+         XUvHVW5sObONhaGFUlzdb/pYjrdB8dcKi6w0trGoTcmvYQz2QsZbAJ4ei9VcWPjzo/s1
+         5SP5ddJTg8TBYk0w+yHvi1HDRYMfIlGTHWGr8IEeFA+NZMnoJByOfKGrq8NPkFL5hmfV
+         EVcQ==
+X-Gm-Message-State: ABy/qLbVuIsWPR+/JPUBXooFWtPG1H50qJPxNkf2nXMbCf/qdS5Dazmw
+        WyIjk5B8/vFr6owq0LFzKDI=
+X-Google-Smtp-Source: APBJJlF5S37/61IOUN4boRGyQ+eZbxbUsGSs3iPJnY2sKXBk7rqPV2h3cJxGNUS1K7AOv/xHI7PW6Q==
+X-Received: by 2002:a1c:770b:0:b0:3f7:c92:57a0 with SMTP id t11-20020a1c770b000000b003f70c9257a0mr7445101wmi.14.1688818645993;
+        Sat, 08 Jul 2023 05:17:25 -0700 (PDT)
+Received: from localhost.localdomain (host-95-247-100-31.retail.telecomitalia.it. [95.247.100.31])
+        by smtp.gmail.com with ESMTPSA id f17-20020adfe911000000b0031416362e23sm6889003wrm.3.2023.07.08.05.17.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 05:03:11 -0700 (PDT)
-Date:   Sat, 8 Jul 2023 17:33:01 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dong Wei <Dong.Wei@arm.com>, Conor Dooley <conor@kernel.org>,
-        =?utf-8?B?6JGb5aOr5bu6?= <geshijian@bytedance.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        ron minnich <rminnich@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "cuiyunhui@bytedance.com" <cuiyunhui@bytedance.com>,
-        "jrtc27@jrtc27.com" <jrtc27@jrtc27.com>,
-        "kernel@esmil.dk" <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "yc.hung@mediatek.com" <yc.hung@mediatek.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "allen-kh.cheng@mediatek.com" <allen-kh.cheng@mediatek.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "tinghan.shen@mediatek.com" <tinghan.shen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "weidong.wd@bytedance.com" <weidong.wd@bytedance.com>
-Subject: Re: [External] Re: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from
- FFI
-Message-ID: <ZKlQdXnPVTrYIUzb@sunil-laptop>
-References: <mhng-b66b085a-eb15-4c9b-b2aa-93ddf16ec7aa@palmer-ri-x1c9a>
- <CAP6exYKwZG=_47r0jAUFYNL5-P-SS==k6vWdKiMJ9nB0upH5Zw@mail.gmail.com>
- <20230707-attach-conjuror-306d967347ce@wendy>
- <ZKfsSsdiso0W8mW6@sunil-laptop>
- <CAN3iYbMhQU5Ng4r6_rQDnLmit1GCmheC5T49rsUP5NgHFEXsHA@mail.gmail.com>
- <ZKgLKvBoWKSxzm6r@sunil-laptop>
- <CAN3iYbOe+i4jVhz0sSQwVQ2PMB7UvaTPyN_sLtZj0uiOD2emDA@mail.gmail.com>
- <20230707-gargle-enjoyable-f9f7f87fc7ea@spud>
- <DBAPR08MB5783AED8329E38D840B7015D9C2DA@DBAPR08MB5783.eurprd08.prod.outlook.com>
- <CAMj1kXEkL0gF8uGcy2AjJvD-yZHmyLX9jiVVDtR+uBAYf+BfUg@mail.gmail.com>
+        Sat, 08 Jul 2023 05:17:25 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Deming Wang <wangdeming@inspur.com>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>
+Subject: [PATCH v3] Documentation/highmem: Add information about kmap_local_folio()
+Date:   Sat,  8 Jul 2023 14:16:18 +0200
+Message-ID: <20230708121719.8270-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXEkL0gF8uGcy2AjJvD-yZHmyLX9jiVVDtR+uBAYf+BfUg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 08, 2023 at 10:45:27AM +0200, Ard Biesheuvel wrote:
-> On Fri, 7 Jul 2023 at 18:21, Dong Wei <Dong.Wei@arm.com> wrote:
-> >
-> > On Arm systems today, the ACPI RSDP is found using the UEFI Configuration Table. This is true for all Arm SystemReady compliant systems: 1) SystemReady LS: LBBRv1 is using a minimal UEFI FW to load LinuxBoot, that minimal UEFI FW is producing the UEFI Configuration Table. We are working on LBBRv2. LBBRv2 is based on Coreboot loading LinuxBoot. But we do not have a way today to get CoreBoot to produce this pointer to ACPI RSDP. Arm does not support x86 E820 BIOS interface. 2) SystemReady IR: this solution uses DT rather than ACPI. 3) SystemReady ES: this solution can use UBoot or EDK2, and it requires ACPI. Since both UBoot and EDK2 support UEFI now, so ACPI RSDP can be found using the UEFI Configuration Table. 4) SystemReady SR: this solution typically uses EDK2 and requires ACPI, so no issue finding RSDP via UEFI Configuration Table.
-> >
-> >
-> >
-> > So the ACPI RSDP issue only exist if we want to remove the minimum UEFI FW and go to CoreBoot completely to load LinuxBoot. We are currently exploring how to solve that issue…
-> >
-> 
-> Hello Dong,
-> 
-> This fixes the RSDP issue perhaps, but that is not the only problem. I
-> have mentioned this many times already, but let me mention it again
-> for completeness:
-> 
-> ACPI does not have a memory map, and ARM is much more finicky about
-> mapping memory regions with the right attributes, given that uncached
-> accesses don't snoop the caches like they do on x86. This means it is
-> essential that memory mappings constructed from AML code (which
-> doesn't provide any context pertaining to the memory type either) are
-> created with the right memory type.
-> 
-> Currently, the Linux/arm64 glue code for the ACPI core
-> cross-references every memory mapping created from a SystemMemory
-> OpRegion by AML code against the EFI memory map, and uses the EFI
-> memory type and attributes to infer the memory type to program into
-> the page tables. So simply providing the RSDP is *not* sufficient: on
-> arm64, more work is needed and currently, booting ACPI without a EFI
-> memory map results in SystemMemory OpRegions not working at all.
-> 
-> Of course, we might be able to work around that by providing a
-> 'coreboot' memory map for doing ACPI on arm64, but that results in
-> more fragmentation and an inflated validation matrix, which puts the
-> burden on the Linux subsystem maintainers to make sure that all these
-> different combinations remain supported.
-> 
-> AIUI, this memory type issue does not exist for RISC-V today, but I'd
-> suggest to the RISC-V maintainers to take a careful look at arm64's
-> acpi_os_ioremap() implementation and decide whether or not RISC-V
-> needs similar logic.
+The differences between kmap_local_page() and kmap_local_folio() consist
+only in the first taking a pointer to a page and the second taking two
+arguments, a pointer to a folio and the byte offset within the folio which
+identifies the page.
 
-Currently, basic ACPI support is merged for RISC-V. Still many features
-including external interrupt controller support are WIP. Enhancing the
-acpi_os_ioremap() similar to arm64 version is in plan for next series.
-Bjorn had also provided this feedback.
-https://lore.kernel.org/lkml/87leidtvn9.fsf@all.your.base.are.belong.to.us/
+The two API's can be explained at the same time in the "Temporary Virtual
+Mappings" section of the Highmem's documentation.
 
-So, the issue will be applicable to RISC-V also even if the
-implementation may differ slightly.
+Add information about kmap_local_folio() in the same subsection that
+explains kmap_local_page().
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Mike Rapoport <rppt@linux.ibm.com>
+Cc: Peter Collingbourne <pcc@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Will Deacon <will@kernel.org>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+
+v2->v3:	Replaced "request" with "create". Noticed by Randy (thanks),
+	fixed by Matthew (again thanks).
+	https://lore.kernel.org/lkml/970a881a-cdaf-2568-657a-3b93b0273338@infradead.org/
+
+v1-v2:	I had Cc'ed everybody but Andrew :-( Sorry, it's now fixed.
+	In the meantime, I collected the review tags by Ira and Mike
+	(thanks to both of you). All entries are listed using a simple
+	ascending lexycographycal order based on first names.
+
+ Documentation/mm/highmem.rst | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rst
+index c964e0848702..fe68e02fc8ff 100644
+--- a/Documentation/mm/highmem.rst
++++ b/Documentation/mm/highmem.rst
+@@ -51,11 +51,14 @@ Temporary Virtual Mappings
+ The kernel contains several ways of creating temporary mappings. The following
+ list shows them in order of preference of use.
+ 
+-* kmap_local_page().  This function is used to require short term mappings.
+-  It can be invoked from any context (including interrupts) but the mappings
+-  can only be used in the context which acquired them.
+-
+-  This function should always be used, whereas kmap_atomic() and kmap() have
++* kmap_local_page(), kmap_local_folio() - These functions are used to create
++  short term mappings. They can be invoked from any context (including
++  interrupts) but the mappings can only be used in the context which acquired
++  them. The only differences between them consist in the first taking a pointer
++  to a struct page and the second taking a pointer to struct folio and the byte
++  offset within the folio which identifies the page.
++
++  These functions should always be used, whereas kmap_atomic() and kmap() have
+   been deprecated.
+ 
+   These mappings are thread-local and CPU-local, meaning that the mapping
+@@ -72,17 +75,17 @@ list shows them in order of preference of use.
+   maps of the outgoing task are saved and those of the incoming one are
+   restored.
+ 
+-  kmap_local_page() always returns a valid virtual address and it is assumed
+-  that kunmap_local() will never fail.
++  kmap_local_page(), as well as kmap_local_folio() always returns valid virtual
++  kernel addresses and it is assumed that kunmap_local() will never fail.
+ 
+-  On CONFIG_HIGHMEM=n kernels and for low memory pages this returns the
++  On CONFIG_HIGHMEM=n kernels and for low memory pages they return the
+   virtual address of the direct mapping. Only real highmem pages are
+   temporarily mapped. Therefore, users may call a plain page_address()
+   for pages which are known to not come from ZONE_HIGHMEM. However, it is
+-  always safe to use kmap_local_page() / kunmap_local().
++  always safe to use kmap_local_{page,folio}() / kunmap_local().
+ 
+-  While it is significantly faster than kmap(), for the highmem case it
+-  comes with restrictions about the pointers validity. Contrary to kmap()
++  While they are significantly faster than kmap(), for the highmem case they
++  come with restrictions about the pointers validity. Contrary to kmap()
+   mappings, the local mappings are only valid in the context of the caller
+   and cannot be handed to other contexts. This implies that users must
+   be absolutely sure to keep the use of the return address local to the
+@@ -91,7 +94,7 @@ list shows them in order of preference of use.
+   Most code can be designed to use thread local mappings. User should
+   therefore try to design their code to avoid the use of kmap() by mapping
+   pages in the same thread the address will be used and prefer
+-  kmap_local_page().
++  kmap_local_page() or kmap_local_folio().
+ 
+   Nesting kmap_local_page() and kmap_atomic() mappings is allowed to a certain
+   extent (up to KMAP_TYPE_NR) but their invocations have to be strictly ordered
+-- 
+2.41.0
+
