@@ -2,438 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0965F74BB6C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B04F74BB72
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjGHCfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S230516AbjGHCkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbjGHCev (ORCPT
+        with ESMTP id S229515AbjGHCkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:34:51 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8ED2107;
-        Fri,  7 Jul 2023 19:34:50 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3681uLHf017846;
-        Sat, 8 Jul 2023 02:34:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2023-03-30;
- bh=57Oqp850p67B2H8ioswTKbkNvCQIumeJ5PBX/N5Q9Dw=;
- b=3LpqjtkI3wbCCQVjlyFd/NsXRiIvXs1+49AUEEYKg208AwJGJjHgmau5tUocJJLLgpQC
- ONZ7q0heszL8+7v1jvG6c6ZwZ2fYs6BK1lZF72OMJWA6GQVHYA00IYd7oQq3MPSFmZ/8
- a8JORUYNxCExxOzZV6A5+63h+YFzPt/h7j9+R3L1G8llTRFxFMVBpwwX/+e0W9aUzGuX
- 4/3goT44xqHaz0AhfEZhaerQLNwsSzjhJn30v8b5LizHyDRuzDn+dOzVowgryPufMZdv
- hA182ApfJi3i4a3TaEozvxKbVrAuF+ThKlIvMsr1s7iNnMKshiA9LMIOJQS9wapuSzr8 uQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpfhpsj9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Jul 2023 02:34:28 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3681X6fu034561;
-        Sat, 8 Jul 2023 02:34:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx81h041-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Jul 2023 02:34:27 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3682YL3A033474;
-        Sat, 8 Jul 2023 02:34:27 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3rpx81h01x-7;
-        Sat, 08 Jul 2023 02:34:26 +0000
-From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-To:     davem@davemloft.net
-Cc:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
-        david@fries.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, zbr@ioremap.net, brauner@kernel.org,
-        johannes@sipsolutions.net, ecree.xilinx@gmail.com, leon@kernel.org,
-        keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        anjali.k.kulkarni@oracle.com
-Subject: [PATCH v9 6/6] connector/cn_proc: Selftest for proc connector
-Date:   Fri,  7 Jul 2023 19:34:20 -0700
-Message-ID: <20230708023420.3931239-7-anjali.k.kulkarni@oracle.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230708023420.3931239-1-anjali.k.kulkarni@oracle.com>
-References: <20230708023420.3931239-1-anjali.k.kulkarni@oracle.com>
+        Fri, 7 Jul 2023 22:40:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E48E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:40:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC18A61AD8
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 02:40:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBE7C433C7
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 02:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688784000;
+        bh=sY8fPTZmzlxchUCrv0uNB0ezlHl4rk/ktLPIerI7BcI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=quFOQ1uycLdTD7SRlNQ7V38lG1cqmqcfuNOeIVguc2aGc6dSnkvQfmLRsxg5bcOqI
+         4vMRzN9onylNTpFKNwSaurFVf7nQXpljT0iPkNvqfKzsB6DLKXhWWnRDhf8i6u1fUw
+         I4qqBsq2xASOrUNf+T12tvDceFqdRb4vYeUazU4mrAPK3c+bLH6HD+jPIMPddrOLDp
+         HJOP0iGuX0bqNL8AUxgq7ij2csPkKlGAzscR91dw2ffOn8RHo3OWRh3o+MR+3EkR+1
+         96RB02DDOSiNviwUFaEDEtPztc2ppQL+CD9el9ska4OSPE5vNn5DhTgw+gyG8uJiX3
+         eX4chUy0WUj1w==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4fb94b1423eso3900822e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 19:40:00 -0700 (PDT)
+X-Gm-Message-State: ABy/qLay+kRA1423kd4KKOb/ievTCEYk84IjPYHpb9K0QQUpDDX0u61S
+        8gfG0ek6dspWQho6O1iRUXLjExF9/N5eDx82pIk=
+X-Google-Smtp-Source: APBJJlFAge7K/MgqzqgAYeNUmlApriNbCjGxTCrG1CKjQjo4GB4VVzxqV0RN5/vZwwtZrfGgsC0oCWt4gc4lY3e5Ybk=
+X-Received: by 2002:a19:7b0c:0:b0:4fb:7447:e71a with SMTP id
+ w12-20020a197b0c000000b004fb7447e71amr4496882lfc.63.1688783998311; Fri, 07
+ Jul 2023 19:39:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_16,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- adultscore=0 mlxscore=0 spamscore=0 phishscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307080022
-X-Proofpoint-GUID: OxB2qnSV00maHcQSFIVqKS14qMjPIBkt
-X-Proofpoint-ORIG-GUID: OxB2qnSV00maHcQSFIVqKS14qMjPIBkt
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230628181926.4102448-1-yhs@fb.com>
+In-Reply-To: <20230628181926.4102448-1-yhs@fb.com>
+From:   Song Liu <song@kernel.org>
+Date:   Sat, 8 Jul 2023 10:39:44 +0800
+X-Gmail-Original-Message-ID: <CAPhsuW4LDGOtWVpqRn4zFD8j34Biq+w-LNW6f+Ac+K9kmrgSoQ@mail.gmail.com>
+Message-ID: <CAPhsuW4LDGOtWVpqRn4zFD8j34Biq+w-LNW6f+Ac+K9kmrgSoQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global functions
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Fangrui Song <maskray@google.com>, kernel-team@fb.com,
+        Leizhen <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Run as ./proc_filter -f to run new filter code. Run without "-f" to run
-usual proc connector code without the new filtering code.
+On Thu, Jun 29, 2023 at 2:19=E2=80=AFAM Yonghong Song <yhs@fb.com> wrote:
+>
+> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions"=
+)
+> stripped all function/variable suffixes started with '.' regardless
+> of whether those suffixes are generated at LTO mode or not. In fact,
+> as far as I know, in LTO mode, when a static function/variable is
+> promoted to the global scope, '.llvm.<...>' suffix is added.
+>
+> The existing mechanism breaks live patch for a LTO kernel even if
+> no <symbol>.llvm.<...> symbols are involved. For example, for the followi=
+ng
+> kernel symbols:
+>   $ grep bpf_verifier_vlog /proc/kallsyms
+>   ffffffff81549f60 t bpf_verifier_vlog
+>   ffffffff8268b430 d bpf_verifier_vlog._entry
+>   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+>   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+> '__already_done' are static variables used inside 'bpf_verifier_vlog',
+> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog=
+.'.
+> Note that the func-level to file-level static function promotion also
+> happens without LTO.
+>
+> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechani=
+sm will
+> return 4 symbols to live patch subsystem which current live patching
+> subsystem cannot handle it. With non-LTO kernel, only one symbol
+> is returned.
+>
+> In [1], we have a lengthy discussion, the suggestion is to separate two
+> cases:
+>   (1). new symbols with suffix which are generated regardless of whether
+>        LTO is enabled or not, and
+>   (2). new symbols with suffix generated only when LTO is enabled.
+>
+> The cleanup_symbol_name() should only remove suffixes for case (2).
+> Case (1) should not be changed so it can work uniformly with or without L=
+TO.
+>
+> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+> tracing should work the same way for non-LTO kernel.
+> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have t=
+he same
+> filtering pattern so both kernel and kallsyms tool have the same
+> expectation on the order of symbols.
+>
+>  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@=
+kernel.org/T/#u
+>
+> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions"=
+)
+> Reported-by: Song Liu <song@kernel.org>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
 
-Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/connector/Makefile    |   6 +
- .../testing/selftests/connector/proc_filter.c | 310 ++++++++++++++++++
- 3 files changed, 317 insertions(+)
- create mode 100644 tools/testing/selftests/connector/Makefile
- create mode 100644 tools/testing/selftests/connector/proc_filter.c
+Acked-by: Song Liu <song@kernel.org>
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 90a62cf75008..7c9673951f9a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -7,6 +7,7 @@ TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
- TARGETS += clone3
-+TARGETS += connector
- TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
-new file mode 100644
-index 000000000000..21c9f3a973a0
---- /dev/null
-+++ b/tools/testing/selftests/connector/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wall
-+
-+TEST_GEN_PROGS = proc_filter
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
-new file mode 100644
-index 000000000000..4fe8c6763fd8
---- /dev/null
-+++ b/tools/testing/selftests/connector/proc_filter.c
-@@ -0,0 +1,310 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <sys/types.h>
-+#include <sys/epoll.h>
-+#include <sys/socket.h>
-+#include <linux/netlink.h>
-+#include <linux/connector.h>
-+#include <linux/cn_proc.h>
-+
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <strings.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <string.h>
-+
-+#include "../kselftest.h"
-+
-+#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
-+			 sizeof(struct proc_input))
-+#define NL_MESSAGE_SIZE_NF (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
-+			 sizeof(int))
-+
-+#define MAX_EVENTS 1
-+
-+volatile static int interrupted;
-+static int nl_sock, ret_errno, tcount;
-+static struct epoll_event evn;
-+
-+static int filter;
-+
-+#ifdef ENABLE_PRINTS
-+#define Printf printf
-+#else
-+#define Printf ksft_print_msg
-+#endif
-+
-+int send_message(void *pinp)
-+{
-+	char buff[NL_MESSAGE_SIZE];
-+	struct nlmsghdr *hdr;
-+	struct cn_msg *msg;
-+
-+	hdr = (struct nlmsghdr *)buff;
-+	if (filter)
-+		hdr->nlmsg_len = NL_MESSAGE_SIZE;
-+	else
-+		hdr->nlmsg_len = NL_MESSAGE_SIZE_NF;
-+	hdr->nlmsg_type = NLMSG_DONE;
-+	hdr->nlmsg_flags = 0;
-+	hdr->nlmsg_seq = 0;
-+	hdr->nlmsg_pid = getpid();
-+
-+	msg = (struct cn_msg *)NLMSG_DATA(hdr);
-+	msg->id.idx = CN_IDX_PROC;
-+	msg->id.val = CN_VAL_PROC;
-+	msg->seq = 0;
-+	msg->ack = 0;
-+	msg->flags = 0;
-+
-+	if (filter) {
-+		msg->len = sizeof(struct proc_input);
-+		((struct proc_input *)msg->data)->mcast_op =
-+			((struct proc_input *)pinp)->mcast_op;
-+		((struct proc_input *)msg->data)->event_type =
-+			((struct proc_input *)pinp)->event_type;
-+	} else {
-+		msg->len = sizeof(int);
-+		*(int *)msg->data = *(enum proc_cn_mcast_op *)pinp;
-+	}
-+
-+	if (send(nl_sock, hdr, hdr->nlmsg_len, 0) == -1) {
-+		ret_errno = errno;
-+		perror("send failed");
-+		return -3;
-+	}
-+	return 0;
-+}
-+
-+int register_proc_netlink(int *efd, void *input)
-+{
-+	struct sockaddr_nl sa_nl;
-+	int err = 0, epoll_fd;
-+
-+	nl_sock = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
-+
-+	if (nl_sock == -1) {
-+		ret_errno = errno;
-+		perror("socket failed");
-+		return -1;
-+	}
-+
-+	bzero(&sa_nl, sizeof(sa_nl));
-+	sa_nl.nl_family = AF_NETLINK;
-+	sa_nl.nl_groups = CN_IDX_PROC;
-+	sa_nl.nl_pid    = getpid();
-+
-+	if (bind(nl_sock, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) == -1) {
-+		ret_errno = errno;
-+		perror("bind failed");
-+		return -2;
-+	}
-+
-+	epoll_fd = epoll_create1(EPOLL_CLOEXEC);
-+	if (epoll_fd < 0) {
-+		ret_errno = errno;
-+		perror("epoll_create1 failed");
-+		return -2;
-+	}
-+
-+	err = send_message(input);
-+
-+	if (err < 0)
-+		return err;
-+
-+	evn.events = EPOLLIN;
-+	evn.data.fd = nl_sock;
-+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, nl_sock, &evn) < 0) {
-+		ret_errno = errno;
-+		perror("epoll_ctl failed");
-+		return -3;
-+	}
-+	*efd = epoll_fd;
-+	return 0;
-+}
-+
-+static void sigint(int sig)
-+{
-+	interrupted = 1;
-+}
-+
-+int handle_packet(char *buff, int fd, struct proc_event *event)
-+{
-+	struct nlmsghdr *hdr;
-+
-+	hdr = (struct nlmsghdr *)buff;
-+
-+	if (hdr->nlmsg_type == NLMSG_ERROR) {
-+		perror("NLMSG_ERROR error\n");
-+		return -3;
-+	} else if (hdr->nlmsg_type == NLMSG_DONE) {
-+		event = (struct proc_event *)
-+			((struct cn_msg *)NLMSG_DATA(hdr))->data;
-+		tcount++;
-+		switch (event->what) {
-+		case PROC_EVENT_EXIT:
-+			Printf("Exit process %d (tgid %d) with code %d, signal %d\n",
-+			       event->event_data.exit.process_pid,
-+			       event->event_data.exit.process_tgid,
-+			       event->event_data.exit.exit_code,
-+			       event->event_data.exit.exit_signal);
-+			break;
-+		case PROC_EVENT_FORK:
-+			Printf("Fork process %d (tgid %d), parent %d (tgid %d)\n",
-+			       event->event_data.fork.child_pid,
-+			       event->event_data.fork.child_tgid,
-+			       event->event_data.fork.parent_pid,
-+			       event->event_data.fork.parent_tgid);
-+			break;
-+		case PROC_EVENT_EXEC:
-+			Printf("Exec process %d (tgid %d)\n",
-+			       event->event_data.exec.process_pid,
-+			       event->event_data.exec.process_tgid);
-+			break;
-+		case PROC_EVENT_UID:
-+			Printf("UID process %d (tgid %d) uid %d euid %d\n",
-+			       event->event_data.id.process_pid,
-+			       event->event_data.id.process_tgid,
-+			       event->event_data.id.r.ruid,
-+			       event->event_data.id.e.euid);
-+			break;
-+		case PROC_EVENT_GID:
-+			Printf("GID process %d (tgid %d) gid %d egid %d\n",
-+			       event->event_data.id.process_pid,
-+			       event->event_data.id.process_tgid,
-+			       event->event_data.id.r.rgid,
-+			       event->event_data.id.e.egid);
-+			break;
-+		case PROC_EVENT_SID:
-+			Printf("SID process %d (tgid %d)\n",
-+			       event->event_data.sid.process_pid,
-+			       event->event_data.sid.process_tgid);
-+			break;
-+		case PROC_EVENT_PTRACE:
-+			Printf("Ptrace process %d (tgid %d), Tracer %d (tgid %d)\n",
-+			       event->event_data.ptrace.process_pid,
-+			       event->event_data.ptrace.process_tgid,
-+			       event->event_data.ptrace.tracer_pid,
-+			       event->event_data.ptrace.tracer_tgid);
-+			break;
-+		case PROC_EVENT_COMM:
-+			Printf("Comm process %d (tgid %d) comm %s\n",
-+			       event->event_data.comm.process_pid,
-+			       event->event_data.comm.process_tgid,
-+			       event->event_data.comm.comm);
-+			break;
-+		case PROC_EVENT_COREDUMP:
-+			Printf("Coredump process %d (tgid %d) parent %d, (tgid %d)\n",
-+			       event->event_data.coredump.process_pid,
-+			       event->event_data.coredump.process_tgid,
-+			       event->event_data.coredump.parent_pid,
-+			       event->event_data.coredump.parent_tgid);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+	return 0;
-+}
-+
-+int handle_events(int epoll_fd, struct proc_event *pev)
-+{
-+	char buff[CONNECTOR_MAX_MSG_SIZE];
-+	struct epoll_event ev[MAX_EVENTS];
-+	int i, event_count = 0, err = 0;
-+
-+	event_count = epoll_wait(epoll_fd, ev, MAX_EVENTS, -1);
-+	if (event_count < 0) {
-+		ret_errno = errno;
-+		if (ret_errno != EINTR)
-+			perror("epoll_wait failed");
-+		return -3;
-+	}
-+	for (i = 0; i < event_count; i++) {
-+		if (!(ev[i].events & EPOLLIN))
-+			continue;
-+		if (recv(ev[i].data.fd, buff, sizeof(buff), 0) == -1) {
-+			ret_errno = errno;
-+			perror("recv failed");
-+			return -3;
-+		}
-+		err = handle_packet(buff, ev[i].data.fd, pev);
-+		if (err < 0)
-+			return err;
-+	}
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int epoll_fd, err;
-+	struct proc_event proc_ev;
-+	struct proc_input input;
-+
-+	signal(SIGINT, sigint);
-+
-+	if (argc > 2) {
-+		printf("Expected 0(assume no-filter) or 1 argument(-f)\n");
-+		exit(1);
-+	}
-+
-+	if (argc == 2) {
-+		if (strcmp(argv[1], "-f") == 0) {
-+			filter = 1;
-+		} else {
-+			printf("Valid option : -f (for filter feature)\n");
-+			exit(1);
-+		}
-+	}
-+
-+	if (filter) {
-+		input.event_type = PROC_EVENT_NONZERO_EXIT;
-+		input.mcast_op = PROC_CN_MCAST_LISTEN;
-+		err = register_proc_netlink(&epoll_fd, (void*)&input);
-+	} else {
-+		enum proc_cn_mcast_op op = PROC_CN_MCAST_LISTEN;
-+		err = register_proc_netlink(&epoll_fd, (void*)&op);
-+	}
-+
-+	if (err < 0) {
-+		if (err == -2)
-+			close(nl_sock);
-+		if (err == -3) {
-+			close(nl_sock);
-+			close(epoll_fd);
-+		}
-+		exit(1);
-+	}
-+
-+	while (!interrupted) {
-+		err = handle_events(epoll_fd, &proc_ev);
-+		if (err < 0) {
-+			if (ret_errno == EINTR)
-+				continue;
-+			if (err == -2)
-+				close(nl_sock);
-+			if (err == -3) {
-+				close(nl_sock);
-+				close(epoll_fd);
-+			}
-+			exit(1);
-+		}
-+	}
-+
-+	if (filter) {
-+		input.mcast_op = PROC_CN_MCAST_IGNORE;
-+		send_message((void*)&input);
-+	} else {
-+		enum proc_cn_mcast_op op = PROC_CN_MCAST_IGNORE;
-+		send_message((void*)&op);
-+	}
-+
-+	close(epoll_fd);
-+	close(nl_sock);
-+
-+	printf("Done total count: %d\n", tcount);
-+	exit(0);
-+}
--- 
-2.41.0
-
+> ---
+>  kernel/kallsyms.c  | 5 ++---
+>  scripts/kallsyms.c | 6 +++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> Changelogs:
+>   v1 -> v2:
+>     . add 'Reported-by: Song Liu <song@kernel.org>'
+>     . also fix in scripts/kallsyms.c.
+>
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 77747391f49b..4874508bb950 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+>          * LLVM appends various suffixes for local functions and variable=
+s that
+>          * must be promoted to global scope as part of LTO.  This can bre=
+ak
+>          * hooking of static functions with kprobes. '.' is not a valid
+> -        * character in an identifier in C. Suffixes observed:
+> +        * character in an identifier in C. Suffixes only in LLVM LTO obs=
+erved:
+>          * - foo.llvm.[0-9a-f]+
+> -        * - foo.[0-9a-f]+
+>          */
+> -       res =3D strchr(s, '.');
+> +       res =3D strstr(s, ".llvm.");
+>         if (res) {
+>                 *res =3D '\0';
+>                 return true;
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 0d2db41177b2..13af6d0ff845 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
+>          * ASCII[_]   =3D 5f
+>          * ASCII[a-z] =3D 61,7a
+>          *
+> -        * As above, replacing '.' with '\0' does not affect the main sor=
+ting,
+> -        * but it helps us with subsorting.
+> +        * As above, replacing the first '.' in ".llvm." with '\0' does n=
+ot
+> +        * affect the main sorting, but it helps us with subsorting.
+>          */
+> -       p =3D strchr(s, '.');
+> +       p =3D strstr(s, ".llvm.");
+>         if (p)
+>                 *p =3D '\0';
+>  }
+> --
+> 2.34.1
+>
