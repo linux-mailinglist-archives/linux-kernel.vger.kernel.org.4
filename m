@@ -2,84 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A302374BF65
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 23:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A7874BFBD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 00:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjGHV6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 17:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S229955AbjGHWCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 18:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGHV6i (ORCPT
+        with ESMTP id S229454AbjGHWCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 17:58:38 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6247DE4A;
-        Sat,  8 Jul 2023 14:58:36 -0700 (PDT)
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-Received: by mail.gandi.net (Postfix) with ESMTPA id 97CD4240002;
-        Sat,  8 Jul 2023 21:58:30 +0000 (UTC)
+        Sat, 8 Jul 2023 18:02:53 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D0DE4A;
+        Sat,  8 Jul 2023 15:02:51 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id E322A580114;
+        Sat,  8 Jul 2023 18:02:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sat, 08 Jul 2023 18:02:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688853770; x=1688860970; bh=us
+        dNVu3zHxYIxjv6CIUqKF4RVb+FJwD+QutAZ+SONzU=; b=Na9HAOrBe8T77a5nS8
+        52BWoRWX8ndJggaCp8w2hNy4K/Hx05IOEQ4yQObUd9fMIYSzLmsi2a/O6epJ5qvc
+        W1eTLx5OU8Jpuw71pSiX/7bL+A0gmS5EnPpo/ZvAQxOl34rA2JhaTspyfWvR9mew
+        LjdBY1z3zRDNj8gDVFEsrg9hI9I1rE8aXIgux5JIzDTevLhwYasC8HlujidS2Rg3
+        oeJkgsDN6rPckNAf5xIuvB3MIfc0wa1XzXyA6XJCvKOhB1PfUmFuV1F+DA/txx2C
+        TFbBrfHD+x1kG8ttvq4wr/4p9E7RxfKkXhuqHUKMqWFPPPaxDCC9Ys4dGOFy+4cQ
+        awtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688853770; x=1688860970; bh=usdNVu3zHxYIx
+        jv6CIUqKF4RVb+FJwD+QutAZ+SONzU=; b=gLSbU0FM8ylBPR+gKikOZL72bXg4z
+        IHWrM01pn4v4sFGSuTAMa0jUmx/6nKepFuAczDtUIN4J3C94mnWcSypEkGGgS2J1
+        mGy8lR05n3puher+YyQNfmzSlL2GU9mMD1DhIJTcKumAT+QtdDJ0A/u4JJJYSvZv
+        eyDq7SxbHIFPFOBMY/8d1jvV7iUaGKioK5hI2U4ZQ+D+s19Q3lbUD4T0bRHPbtp0
+        uzaetPHGfbgo4RgY/uG0DkOAY7dr+2bPrjfsd1QcQj26CDDuX3yjsA6QAA85mPbQ
+        90OruCSXhseKCEN1UWdnOGtaxese77/MFKkNpfXIkFMWubac2wkQXSo2w==
+X-ME-Sender: <xms:Ct2pZLPezmiPRfS7RQ2AziRWnbkCO-SBrt5gNWhdYahWQMDPOMj2Zw>
+    <xme:Ct2pZF_AI0vEveQXmGwcA0MiwcyMIj4X0TipjSPsUVzm2AKQHhZ4dgzRKK2VDlc-L
+    sBe8rn9UBn9wfCQ8Q>
+X-ME-Received: <xmr:Ct2pZKSaAs7H_RFpxRqD1o_ZfUCT2GYy7viKmzvZToivBmOJS_EyAFWUB--qh24exof53BrYpJc-AAI4BahUt5NntHTmLaFStPAy>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvdeggddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhepfffhvf
+    evuffkfhggtggujgesthdtsfdttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvfeekteduudefieegtd
+    ehfeffkeeuudekheduffduffffgfegiedttefgvdfhvdenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:Ct2pZPubHhrrL27ZUQdUyldzaPvREVafRm0CCrMDuMBiyn7ohLsKuw>
+    <xmx:Ct2pZDew01A9HDNME-YLrgkhq_nkzqZ4-_qgVFPdOukg9DWnuiwx1g>
+    <xmx:Ct2pZL0NDkARbTAJPhbHqRoye-XF5eV8FUGKPEvLrjsdz-fDaYAczw>
+    <xmx:Ct2pZJ_wOCWsbTL566CZ0YC75D2q-lxQjhcAUTELBBPebJBTzY23bA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 8 Jul 2023 18:02:48 -0400 (EDT)
+Date:   Sat, 8 Jul 2023 16:02:47 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Leon Hwang <hffilwlqm@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
+        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Introduce user log
+Message-ID: <v76ytdfdf2sqhdufkqxzsuznandia3x4l4iyghpirxkzytngxq@uttzaebbmdjb>
+References: <20230708040750.72570-1-hffilwlqm@gmail.com>
 MIME-Version: 1.0
-Date:   Sat, 08 Jul 2023 23:58:30 +0200
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] sh updates for v6.5
-In-Reply-To: <62d9d61e7d085840161c06f08b7aebfd734663fa.camel@physik.fu-berlin.de>
-References: <9a6b730fc6c8e70ff034e2e3665478ec31858c29.camel@physik.fu-berlin.de>
- <ZKba4SLzjjhHgOEs@infradead.org>
- <5c612d0b293082352df6640ac951918bfa458181.camel@physik.fu-berlin.de>
- <45f9efa9-9341-e7e4-fbe4-ec7689c714aa@omp.ru>
- <62d9d61e7d085840161c06f08b7aebfd734663fa.camel@physik.fu-berlin.de>
-Message-ID: <efaf034aaea3a5f7459b3c9081dc0665@artur-rojek.eu>
-X-Sender: contact@artur-rojek.eu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230708040750.72570-1-hffilwlqm@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-08 23:49, John Paul Adrian Glaubitz wrote:
-> Hi!
-> 
-> On Sun, 2023-07-09 at 00:25 +0300, Sergey Shtylyov wrote:
->> > However, since I am still new to kernel development, it will certainly take
->> > me a little more time until we're there. However, there is some interest
->> > in the community such as the J-Core people and Artur Rojek, so there are people
->> > who are willing to help me.
->> 
->>    Maybe we could start using the #linux-sh channel (again?) -- it's 
->> there, on
->> Libera.chat, with couple persons hanging around... :-)
-> 
-> Most SuperH/J-Core people meet in #jcore on libera these days.
-> 
-> Adrian
-I am not sure if they welcome generic SuperH chat there, but I'm lurking
-in both channels already.
+Hi Leon,
 
-Cheers,
-Artur
+On Sat, Jul 08, 2023 at 12:07:48PM +0800, Leon Hwang wrote:
+> This series introduces bpf user log to transfer error message from
+> kernel space to user space when users provide buffer to receive the
+> error message.
+> 
+> Especially, when to attach XDP to device, it can transfer the error
+> message along with errno from dev_xdp_attach() to user space, if error
+> happens in dev_xdp_attach().
+
+Have you considered adding a tracepoint instead? With some TP_printk()
+stuff I think you can achieve a similar result without having to do
+go through changing uapi.
+
+> 
+> Leon Hwang (2):
+>   bpf: Introduce bpf generic log
+>   bpf: Introduce bpf user log
+> 
+>  include/linux/bpf.h            |  3 ++
+>  include/uapi/linux/bpf.h       |  8 ++++++
+>  kernel/bpf/log.c               | 52 ++++++++++++++++++++++++++++++++++
+>  net/core/dev.c                 |  4 ++-
+>  tools/include/uapi/linux/bpf.h |  8 ++++++
+>  5 files changed, 74 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 622f876ab3ced325fe3c2363c6e9c128b7e6c73a
+> -- 
+> 2.41.0
+> 
+> 
+
+Thanks,
+Daniel
