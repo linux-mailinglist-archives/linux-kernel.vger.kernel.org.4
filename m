@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B12D74BB7B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9472774BB7E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbjGHCtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S232791AbjGHC5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbjGHCtI (ORCPT
+        with ESMTP id S229699AbjGHC5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:49:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97960212C;
-        Fri,  7 Jul 2023 19:49:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21FE261AE0;
-        Sat,  8 Jul 2023 02:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E2DC433C7;
-        Sat,  8 Jul 2023 02:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688784543;
-        bh=jw6d8p0evmmLgL+3c21Ikyeph2z5FEfOBl7kFpuv2U0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NqFJ3xRS0mFlcru88HYiqy7sqVf++U7zAEpwNji4RcRi1Zy5DwwLqbAV72a10GVkq
-         ZqXtXTsMkkmFXPdYEqcbPVPNSUnC3zEuntaSn82kRwwuzah7yxainG13YiGuVMsd9I
-         i401iT2/Nq45gVqjlXHX8Sw3Oq29RzVTXFOY27tDQKtLpUj12SC6guP8vULJJki3VM
-         mIpW8BZaNUUeFFg4Q1DgfO8mXsobxtzmTK2w/LWC97ZFIk1th0Rz0HJch0QNVlwLlL
-         ECSCXvP0aZjwOEcV7iQ+clEbGcXbq6x+rGVE7++gEwjCIMKuKtiG5PUCaeJdgq0W4o
-         Gr61VQbVUTnqg==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v3 4/4] tracing/probes: Fix to record 0-length data_loc in fetch_store_string*() if fails
-Date:   Sat,  8 Jul 2023 11:48:58 +0900
-Message-ID:  <168878453829.2721251.15110493517953858343.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-In-Reply-To:  <168878450334.2721251.3030778817503575503.stgit@mhiramat.roam.corp.google.com>
-References:  <168878450334.2721251.3030778817503575503.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
+        Fri, 7 Jul 2023 22:57:05 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567181999
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 19:57:04 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QyZcQ2khxzPk16;
+        Sat,  8 Jul 2023 10:54:46 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sat, 8 Jul 2023 10:57:01 +0800
+Subject: Re: [PATCH v3 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
+ is raw HWPOISON
+To:     Jiaqi Yan <jiaqiyan@google.com>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>
+CC:     <songmuchun@bytedance.com>, <shy828301@gmail.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <duenwen@google.com>, <axelrasmussen@google.com>,
+        <jthoughton@google.com>
+References: <20230707201904.953262-1-jiaqiyan@google.com>
+ <20230707201904.953262-3-jiaqiyan@google.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <6682284d-7ad3-9b59-687d-899f4d08d911@huawei.com>
+Date:   Sat, 8 Jul 2023 10:57:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20230707201904.953262-3-jiaqiyan@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On 2023/7/8 4:19, Jiaqi Yan wrote:
+> Add the functionality, is_raw_hwp_subpage, to tell if a subpage of a
+> hugetlb folio is a raw HWPOISON page. This functionality relies on
+> RawHwpUnreliable to be not set; otherwise hugepage's raw HWPOISON list
+> becomes meaningless.
+> 
+> is_raw_hwp_subpage needs to hold hugetlb_lock in order to synchronize
+> with __get_huge_page_for_hwpoison, who iterates and inserts an entry to
+> raw_hwp_list. llist itself doesn't ensure insertion is synchornized with
+> the iterating used by __is_raw_hwp_list. Caller can minimize the
+> overhead of lock cycles by first checking if folio / head page's
+> HWPOISON flag is set.
+> 
+> Exports this functionality to be immediately used in the read operation
+> for hugetlbfs.
+> 
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> ---
+>  include/linux/hugetlb.h | 19 +++++++++++++++++++
+>  include/linux/mm.h      |  7 +++++++
+>  mm/hugetlb.c            | 10 ++++++++++
+>  mm/memory-failure.c     | 34 ++++++++++++++++++++++++----------
+>  4 files changed, 60 insertions(+), 10 deletions(-)
+> ...
+> -static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
+> +bool __is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
+>  {
+> -	return (struct llist_head *)&folio->_hugetlb_hwpoison;
+> +	struct llist_head *raw_hwp_head;
+> +	struct raw_hwp_page *p, *tmp;
+> +	bool ret = false;
+> +
+> +	if (!folio_test_hwpoison(folio))
+> +		return false;
+> +
+> +	/*
+> +	 * When RawHwpUnreliable is set, kernel lost track of which subpages
+> +	 * are HWPOISON. So return as if ALL subpages are HWPOISONed.
+> +	 */
+> +	if (folio_test_hugetlb_raw_hwp_unreliable(folio))
+> +		return true;
+> +
+> +	raw_hwp_head = raw_hwp_list_head(folio);
+> +	llist_for_each_entry_safe(p, tmp, raw_hwp_head->first, node) {
 
-Fix to record 0-length data to data_loc in fetch_store_string*() if it fails
-to get the string data.
-Currently those expect that the data_loc is updated by store_trace_args() if
-it returns the error code. However, that does not work correctly if the
-argument is an array of strings. In that case, store_trace_args() only clears
-the first entry of the array (which may have no error) and leaves other
-entries. So it should be cleared by fetch_store_string*() itself.
-Also, 'dyndata' and 'maxlen' in store_trace_args() should be updated
-only if it is used (ret > 0 and argument is a dynamic data.)
+Since we don't free the raw_hwp_list, does llist_for_each_entry works same as llist_for_each_entry_safe?
 
-Fixes: 40b53b771806 ("tracing: probeevent: Add array type support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- kernel/trace/trace_probe_kernel.h |    6 ++----
- kernel/trace/trace_probe_tmpl.h   |    4 +---
- kernel/trace/trace_uprobe.c       |    3 ++-
- 3 files changed, 5 insertions(+), 8 deletions(-)
+> +		if (subpage == p->page) {
+> +			ret = true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return ret;
+>  }
 
-diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-index 6deae2ce34f8..37d5696ed768 100644
---- a/kernel/trace/trace_probe_kernel.h
-+++ b/kernel/trace/trace_probe_kernel.h
-@@ -55,8 +55,7 @@ fetch_store_string_user(unsigned long addr, void *dest, void *base)
- 	__dest = get_loc_data(dest, base);
- 
- 	ret = strncpy_from_user_nofault(__dest, uaddr, maxlen);
--	if (ret >= 0)
--		*(u32 *)dest = make_data_loc(ret, __dest - base);
-+	*(u32 *)dest = make_data_loc((ret >= 0) ? ret : 0, __dest - base);
- 
- 	return ret;
- }
-@@ -87,8 +86,7 @@ fetch_store_string(unsigned long addr, void *dest, void *base)
- 	 * probing.
- 	 */
- 	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
--	if (ret >= 0)
--		*(u32 *)dest = make_data_loc(ret, __dest - base);
-+	*(u32 *)dest = make_data_loc((ret >= 0) ? ret : 0, __dest - base);
- 
- 	return ret;
- }
-diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
-index ed9d57c6b041..bbad0503f166 100644
---- a/kernel/trace/trace_probe_tmpl.h
-+++ b/kernel/trace/trace_probe_tmpl.h
-@@ -267,9 +267,7 @@ store_trace_args(void *data, struct trace_probe *tp, void *rec,
- 		if (unlikely(arg->dynamic))
- 			*dl = make_data_loc(maxlen, dyndata - base);
- 		ret = process_fetch_insn(arg->code, rec, dl, base);
--		if (unlikely(ret < 0 && arg->dynamic)) {
--			*dl = make_data_loc(0, dyndata - base);
--		} else {
-+		if (unlikely(ret > 0 && arg->dynamic)) {
- 			dyndata += ret;
- 			maxlen -= ret;
- 		}
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 8b92e34ff0c8..7b47e9a2c010 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -170,7 +170,8 @@ fetch_store_string(unsigned long addr, void *dest, void *base)
- 			 */
- 			ret++;
- 		*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
--	}
-+	} else
-+		*(u32 *)dest = make_data_loc(0, (void *)dst - base);
- 
- 	return ret;
- }
+It seems there's a race between __is_raw_hwp_subpage and unpoison_memory:
+  unpoison_memory		__is_raw_hwp_subpage
+   				  if (!folio_test_hwpoison(folio)) -- hwpoison is set
+    folio_free_raw_hwp            llist_for_each_entry_safe raw_hwp_list
+      llist_del_all                 ..
+    folio_test_clear_hwpoison
+
+But __is_raw_hwp_subpage is used in hugetlbfs, unpoison_memory couldn't reach here because there's a
+folio_mapping == NULL check before folio_free_raw_hwp.
+
+Anyway, this patch looks good to me.
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Thanks.
 
