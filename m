@@ -2,70 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC52374BB56
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B5574BB64
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjGHCRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S231245AbjGHCc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjGHCR3 (ORCPT
+        with ESMTP id S229496AbjGHCcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:17:29 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937C11FE7;
-        Fri,  7 Jul 2023 19:17:28 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so1908542a91.0;
-        Fri, 07 Jul 2023 19:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688782648; x=1691374648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SXGxtWnZxEjmWeImzBLbjmzHOWkOOTwPng2O3XQMmHk=;
-        b=BOZCXbL0d8ukbWVRAvqPpROsRcuxIQhor3FlO92kfXPW2NLGczXd08YBObZpsxzuOM
-         ayRn+DUzpqM2Avo7NWvb1bMVcgnT1YqUCrmbA4Io4nMKxBhxwUwvE+ncXXLgwogqND9x
-         0qiKhu3S2TjKZDJ3ozVSa6xdFo/tgtJ7eN79YFSkTZrNRqeRcjluo6zrb8VnhGSCKWr/
-         7lnos74hPFhs58QWh7s7G4zOrS7808CIKYIpeIz2kNTK47SNHB2jQ8CFk/tVRPxFx4aT
-         4PoZ8OYG/Db8lkUhYwH5XY6fI3GHk5UPRsfWEF/xHk+dmjgrCBgeg81P5rME2ZJXeuoW
-         uG0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688782648; x=1691374648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SXGxtWnZxEjmWeImzBLbjmzHOWkOOTwPng2O3XQMmHk=;
-        b=lEIGcyRsnbEuhQGYbGVcs83X21YFo9+2g2uojdsgUJkZofDflT/OXMf61LBVIZISe/
-         kbhQYNJKaz3n3zTKAjOpIj8c/E1+8G8CDqYB7Ct+pExDcernyxV2MPM23MfwdahROJnO
-         gVBjLErs9P9jSK31OqAvCORjH4qqU3W7msSwFPjjv5ygV9y3I5HdtUsfNAxaW1KaNtQI
-         3Ot2cVegIO/h0I7oZUx9thkJZAkYtqeTJkRmgw6B9A8nddBt+dnV7fABtQD58QYcZr1t
-         XaRyw2rD6LLpHLB0gZDSy9WizCB+Cf7AP1FNuj96Gp2TAxVB+f+xJneP2dzxDtd2Vldx
-         EUnA==
-X-Gm-Message-State: ABy/qLalvO6VlY26FkzDOzG8qpferf0ltNrWlYgTqKCeKtXuYLFRYrgm
-        BeXCA7wx4J/kD2wXoWs7UeYyDu84cygNWB2cbBc=
-X-Google-Smtp-Source: APBJJlFsIRF3TW3QXD5SryFDmhkns31WHfZjDAKXQ6QSDTuOZ2eaIiGmkGzPAs8eRKFoHe3sei332C1f0l/K1Yl7jCY=
-X-Received: by 2002:a17:90a:ac0d:b0:262:ec13:d3a with SMTP id
- o13-20020a17090aac0d00b00262ec130d3amr6995449pjq.28.1688782647980; Fri, 07
- Jul 2023 19:17:27 -0700 (PDT)
+        Fri, 7 Jul 2023 22:32:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C34C8E;
+        Fri,  7 Jul 2023 19:32:51 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QyZ3J2NKhzMqGH;
+        Sat,  8 Jul 2023 10:29:32 +0800 (CST)
+Received: from huawei.com (10.174.151.185) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 8 Jul
+ 2023 10:32:46 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
+        <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
+        <shakeelb@google.com>
+CC:     <muchun.song@linux.dev>, <linux-mm@kvack.org>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH v2] mm/memcg: minor cleanup for MEM_CGROUP_ID_MAX
+Date:   Sat, 8 Jul 2023 10:33:04 +0800
+Message-ID: <20230708023304.1184111-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20230704082615.7415-1-qiang.zhang1211@gmail.com>
- <77d16cbb-b28c-4b13-aecb-9ad787559557@paulmck-laptop> <CALm+0cW6DojcxSnzf2mMXhXP-MHJ0aEvSqyh1TbtvBC4bzfsOw@mail.gmail.com>
- <087e3da2-ffd9-4cf4-8893-73f4edc3cfba@paulmck-laptop> <CAEXW_YSfMSQ=z-pEO16_jwZSYt5N+zJHFaDOxDsPNoojm1v4Sg@mail.gmail.com>
- <CAEXW_YR41AbVKncRP32sGEVApdmA2-R-2J0M-faGws38ECtsPw@mail.gmail.com>
-In-Reply-To: <CAEXW_YR41AbVKncRP32sGEVApdmA2-R-2J0M-faGws38ECtsPw@mail.gmail.com>
-From:   Z qiang <qiang.zhang1211@gmail.com>
-Date:   Sat, 8 Jul 2023 10:17:15 +0800
-Message-ID: <CALm+0cUtqWtC9XUszRuz5hLjoKv_ZY-4Oqp1OJ-jpbg1s4vgRQ@mail.gmail.com>
-Subject: Re: [PATCH] srcu: Make srcu_might_be_idle() take early return if
- rcu_gp_is_normal() return true
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,123 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 1:18=E2=80=AFAM Joel Fernandes <joel@joelfernandes.o=
-rg> wrote:
->
-> On Fri, Jul 7, 2023 at 1:16=E2=80=AFPM Joel Fernandes <joel@joelfernandes=
-.org> wrote:
-> >
-> > On Fri, Jul 7, 2023 at 12:05=E2=80=AFPM Paul E. McKenney <paulmck@kerne=
-l.org> wrote:
-> > >
-> > > On Fri, Jul 07, 2023 at 06:28:29PM +0800, Z qiang wrote:
-> > > > >
-> > > > > On Tue, Jul 04, 2023 at 04:26:15PM +0800, Zqiang wrote:
-> > > > > > When invoke synchronize_srcu(), in the srcu_might_be_idle(), th=
-e current
-> > > > > > CPU's sdp->lock will be acquired to check whether there are pen=
-ding
-> > > > > > callbacks in the sdp->srcu_cblist, if there are no pending call=
-backs,
-> > > > > > probabilistically probe global state to decide whether to conve=
-rt to
-> > > > > > synchronize_srcu_expedited() call. however, for the rcupdate.rc=
-u_normal=3D1
-> > > > > > kernels and after the rcu_set_runtime_mode() is called, invoke =
-the
-> > > > > > rcu_gp_is_normal() is always return true, this mean that invoke=
- the
-> > > > > > synchronize_srcu_expedited() always fall back to synchronize_sr=
-cu(),
-> > > > > > so there is no need to acquire sdp->lock to check sdp->srcu_cbl=
-ist and
-> > > > > > probe global state in srcu_might_be_idle().
-> > > > > >
-> > > > > > This commit therefore make srcu_might_be_idle() return immediat=
-ely if the
-> > > > > > rcu_gp_is_normal() return true.
-> > > > > >
-> > > > > > Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
-> > > > > > ---
-> > > > > >  kernel/rcu/srcutree.c | 2 ++
-> > > > > >  1 file changed, 2 insertions(+)
-> > > > > >
-> > > > > > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> > > > > > index 20d7a238d675..aea49cb60a45 100644
-> > > > > > --- a/kernel/rcu/srcutree.c
-> > > > > > +++ b/kernel/rcu/srcutree.c
-> > > > > > @@ -1172,6 +1172,8 @@ static bool srcu_might_be_idle(struct src=
-u_struct *ssp)
-> > > > > >       unsigned long tlast;
-> > > > > >
-> > > > > >       check_init_srcu_struct(ssp);
-> > > > > > +     if (rcu_gp_is_normal())
-> > > > > > +             return false;
-> > > > >
-> > > > > Again, thank you for looking into SRCU!
-> > > > >
-> > > > > I am not at all enthusiastic about this one.  With this change, t=
-he name
-> > > > > srcu_might_be_idle() is no longer accurate.  Yes, the name could =
-change,
-> > > > > but any name would be longer and more confusing.
-> > > > >
-> > > > > So unless there is a measureable benefit to this one on a product=
-ion
-> > > > > workload, I cannot justify taking it.
-> > > > >
-> > > > > Is there a measureable benefit?
-> > > >
-> > > > Hi, Paul
-> > > >
-> > > > I only find that for Preempt-RT kernel,  the rcu_normal_after_boot =
-is
-> > > > set by default:
-> > > > static int rcu_normal_after_boot =3D IS_ENABLED(CONFIG_PREEMPT_RT);
-> > > > This affects only rcu but also srcu, this make the synchronize_srcu=
-() and
-> > > > synchronize_srcu_expedited() always fall back to __synchronize_srcu=
-(ssp, true),
-> > > > this means that call the srcu_might_be_idle() is meaningless.
-> > >
-> > > I do understand that the current setup favors default kernel builds a=
-t
-> > > runtime by a few low-cost instructions, and that your change favors,
-> > > as you say, kernels built for real-time, kernels built for certain ty=
-pes
-> > > of HPC workloads, and all kernels during a small time during boot.
-> > >
-> > > My question is instead whether any of this makes a measureable differ=
-ence
-> > > at the system level.
-> > >
-> > > My guess is "no, not even close", but the way to convince me otherwis=
-e
-> > > would be to actually run the workload and kernels on real hardware an=
-d
-> > > provide measurements showing a statistically significant difference t=
-hat
-> > > the workload(s) in question care(s) about.
-> > >
-> > > So what can you show me?
-> > >
-> > > And srcu_might_be_idle() is not meaningless in that situation, just
-> > > ignored completely.  And that is in fact the nature and purpose of th=
-e
-> > > C-language || operator.  ;-)
-> >
-> > I agree with Paul, without any evidence of improvement, optimizing an
-> > obvious slow path is a NAK.
->
-> Just to clarify, when I meant improvement I meant any kind (ex. better
-> for maintenance, better performance numbers etc.). In this case, the
-> extra 2 lines does not seem to buy much AFAICS.
->
+MEM_CGROUP_ID_MAX is only used when CONFIG_MEMCG is configured. So remove
+unneeded !CONFIG_MEMCG variant. Also it's only used in mem_cgroup_alloc(),
+so move it from memcontrol.h to memcontrol.c. And further define it as:
+  #define MEM_CGROUP_ID_MAX ((1UL << MEM_CGROUP_ID_SHIFT) - 1)
+so if someone changes MEM_CGROUP_ID_SHIFT in the future, then
+MEM_CGROUP_ID_MAX will be updated accordingly, as suggested by Muchun.
 
-Agree, optimization does require performance data.
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ include/linux/memcontrol.h | 2 --
+ mm/memcontrol.c            | 1 +
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-Thanks
-Zqiang
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 5818af8eca5a..58eb7ca65699 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -61,7 +61,6 @@ struct mem_cgroup_reclaim_cookie {
+ #ifdef CONFIG_MEMCG
+ 
+ #define MEM_CGROUP_ID_SHIFT	16
+-#define MEM_CGROUP_ID_MAX	USHRT_MAX
+ 
+ struct mem_cgroup_id {
+ 	int id;
+@@ -1158,7 +1157,6 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
+ #else /* CONFIG_MEMCG */
+ 
+ #define MEM_CGROUP_ID_SHIFT	0
+-#define MEM_CGROUP_ID_MAX	0
+ 
+ static inline struct mem_cgroup *folio_memcg(struct folio *folio)
+ {
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index e8ca4bdcb03c..284396ea8a33 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5165,6 +5165,7 @@ static struct cftype mem_cgroup_legacy_files[] = {
+  * those references are manageable from userspace.
+  */
+ 
++#define MEM_CGROUP_ID_MAX	((1UL << MEM_CGROUP_ID_SHIFT) - 1)
+ static DEFINE_IDR(mem_cgroup_idr);
+ 
+ static void mem_cgroup_id_remove(struct mem_cgroup *memcg)
+-- 
+2.33.0
 
->
-> Thanks.
