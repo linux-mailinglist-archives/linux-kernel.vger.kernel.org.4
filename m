@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3252774BD01
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 11:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88ED74BD09
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 11:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGHJNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 05:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S230414AbjGHJTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 05:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjGHJNQ (ORCPT
+        with ESMTP id S229568AbjGHJTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 05:13:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8A71BC9;
-        Sat,  8 Jul 2023 02:13:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A6A360B81;
-        Sat,  8 Jul 2023 09:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4C07C433C9;
-        Sat,  8 Jul 2023 09:13:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688807593;
-        bh=GGjTgtQP0hOP9lcT9kmtL8KMc4PAiy+kzsOIS8VRKfE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VGl6gadFOPGy25lLvgossAMbSTORsXB97esuqHDqXxq86D95vDHEkv3hbd3kDIUhL
-         IhwfcToE/GdfEMV+Cy3w31RhkyXh/7wyHIGto9Egdhue2bV+CFrXOLCBST52ASw81J
-         JlNiYrTF9XpV/BwN1pa8GiDRZRz4XA7NzCWItO0tB7PcnbJwltIEOf2mzqdhE3YDWv
-         Bvl3WsA/oQYZ7PwYch1TL3vO3Jph1ECJOLgZGQJ2SGBUdPt/PyhWYedR2tWR+ueUX3
-         kgdOEFoSh126iUp5GWYKDWaACujtFjyg1T8oE7B7YQidFnVp4nthVXJ6Fi5v4q9+/0
-         q4KEAo3+vZ2pg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B3409C59A4C;
-        Sat,  8 Jul 2023 09:13:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 8 Jul 2023 05:19:03 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74291BD2;
+        Sat,  8 Jul 2023 02:19:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qyl7f58Kmz4f3nbk;
+        Sat,  8 Jul 2023 17:18:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgA30JP9KalkALTwNQ--.64171S4;
+        Sat, 08 Jul 2023 17:18:55 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     song@kernel.org, logang@deltatee.com, axboe@kernel.dk
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next v3] md/raid5-cache: fix a deadlock in r5l_exit_log()
+Date:   Sat,  8 Jul 2023 17:17:27 +0800
+Message-Id: <20230708091727.1417894-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/3] s390/ism: Fixes to client handling
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168880759372.30427.17818463512353318914.git-patchwork-notify@kernel.org>
-Date:   Sat, 08 Jul 2023 09:13:13 +0000
-References: <20230707105622.3332261-1-schnelle@linux.ibm.com>
-In-Reply-To: <20230707105622.3332261-1-schnelle@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     pabeni@redhat.com, wintera@linux.ibm.com, wenjia@linux.ibm.com,
-        jaka@linux.ibm.com, raspl@linux.ibm.com, davem@davemloft.net,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgA30JP9KalkALTwNQ--.64171S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw45Ar4DAw4UJF1kJFy5Arb_yoW8AF1Upa
+        ySqrWaq3y8uFyjvF4DC3WUCFyrCw48KryfGr15Cw4Yva4fWry8Gay8Ka409FWvyr4rtrWI
+        vFWFg34rGr10yr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Yu Kuai <yukuai3@huawei.com>
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+Commit b13015af94cf ("md/raid5-cache: Clear conf->log after finishing
+work") introduce a new problem:
 
-On Fri,  7 Jul 2023 12:56:19 +0200 you wrote:
-> Hi networking developers,
-> 
-> This is v2 of the patch previously titled "s390/ism: Detangle ISM client
-> IRQ and event forwarding". As suggested by Paolo Abeni I split the patch
-> up. While doing so I noticed another problem that was fixed by this patch
-> concerning the way the workqueues access the client structs. This means the
-> second patch turning the workqueues into simple direct calls also fixes
-> a problem. Finally I split off a third patch just for fixing
-> ism_unregister_client()s error path.
-> 
-> [...]
+// caller hold reconfig_mutex
+r5l_exit_log
+ flush_work(&log->disable_writeback_work)
+			r5c_disable_writeback_async
+			 wait_event
+			  /*
+			   * conf->log is not NULL, and mddev_trylock()
+			   * will fail, wait_event() can never pass.
+			   */
+ conf->log = NULL
 
-Here is the summary with links:
-  - [net,v2,1/3] s390/ism: Fix locking for forwarding of IRQs and events to clients
-    https://git.kernel.org/netdev/net/c/6b5c13b591d7
-  - [net,v2,2/3] s390/ism: Fix and simplify add()/remove() callback handling
-    https://git.kernel.org/netdev/net/c/76631ffa2fd2
-  - [net,v2,3/3] s390/ism: Do not unregister clients with registered DMBs
-    https://git.kernel.org/netdev/net/c/266deeea34ff
+Fix this problem by setting 'config->log' to NULL before wake_up() as it
+used to be, so that wait_event() from r5c_disable_writeback_async() can
+exist. In the meantime, move forward md_unregister_thread() so that
+null-ptr-deref this commit fixed can still be fixed.
 
-You are awesome, thank you!
+Fixes: b13015af94cf ("md/raid5-cache: Clear conf->log after finishing work")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+
+Changes in v3:
+ - Use a different solution.
+
+ drivers/md/raid5-cache.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+index 47ba7d9e81e1..2eac4a50d99b 100644
+--- a/drivers/md/raid5-cache.c
++++ b/drivers/md/raid5-cache.c
+@@ -3168,12 +3168,15 @@ void r5l_exit_log(struct r5conf *conf)
+ {
+ 	struct r5l_log *log = conf->log;
+ 
+-	/* Ensure disable_writeback_work wakes up and exits */
+-	wake_up(&conf->mddev->sb_wait);
+-	flush_work(&log->disable_writeback_work);
+ 	md_unregister_thread(&log->reclaim_thread);
+ 
++	/*
++	 * 'reconfig_mutex' is held by caller, set 'confg->log' to NULL to
++	 * ensure disable_writeback_work wakes up and exits.
++	 */
+ 	conf->log = NULL;
++	wake_up(&conf->mddev->sb_wait);
++	flush_work(&log->disable_writeback_work);
+ 
+ 	mempool_exit(&log->meta_pool);
+ 	bioset_exit(&log->bs);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
