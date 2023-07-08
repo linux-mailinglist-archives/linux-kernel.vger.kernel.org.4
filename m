@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CA174BFC4
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 00:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB57074BFD5
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 00:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjGHWGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 18:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        id S229633AbjGHWgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 18:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjGHWGS (ORCPT
+        with ESMTP id S229454AbjGHWg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 18:06:18 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591A2E4A;
-        Sat,  8 Jul 2023 15:06:17 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-c4d1b491095so3617601276.0;
-        Sat, 08 Jul 2023 15:06:17 -0700 (PDT)
+        Sat, 8 Jul 2023 18:36:29 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B851BE
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 15:36:28 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bff89873d34so3087386276.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 15:36:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688853976; x=1691445976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wXSZlFGeP1fpLBmig7AsRhQFCecsgJSjoELC00VLPeg=;
-        b=eZIj4B4l7JsIdZ1qLhUYI0uTfwBw569ErwjZaY7IluiO4nBKaPePfIqIh2tPUGeMZB
-         Y8d2Bx1wJ+jIg/S02S9Q3I1COctU08QrJFM8R5OVlpGUHP/tJgqWNiunZJbXEBzCr1kH
-         SPaeABftAYkiXfTwMeAmyJCUsCoY1xH0q36/wwVZGVtCl98zx5P64A5aMgGC//OPRLEK
-         Z+9yuLryjG5uXmH2e1y8fq08BLJY04maVbTvNu/oZs4ictG5AwxEWhUoXV10GNcM+RPa
-         NjvHbLqI2hOayXF/SFP4q/B6JsRr8q3u/pKPRb+aDFri/DJMXHX/K+KwJWvUUksFAxdu
-         a4fg==
+        d=google.com; s=20221208; t=1688855787; x=1691447787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GM81ytcQAbvY1rpHjBMQS8O2py0eRXT0atPhQXgjA54=;
+        b=Jg/dnV7WFpsjyNkLXFSJxvrYIbV5y67MbDJvmLrUOpsSl1LalBxzIJWHJrFfJSep+L
+         kfZUq9UEYRlcCIgngXW54qsHIAzed494k22aoeQDCFY4ti+EvUlIb1BGsWldwxkxHI+Z
+         T0O1rSIqZmQLXjw0ciOxBZnryw5KfH13QEmjeIwQpMHYqnDxWeFqRwsi0j+AkxhDt5Db
+         PubOIUcLGyJx197rF2uJfbZ9Yjwt9Z7yJB0/yJIrVGW9K8Wcc2dwI+q9RUKuLpMhIfMV
+         0O1pGeVudSwRXlE5gEeIlz84wqdwxg/t6UU9/nN9EWZGGgMME7nrCyrW+oIZPuLQydV4
+         +a4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688853976; x=1691445976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wXSZlFGeP1fpLBmig7AsRhQFCecsgJSjoELC00VLPeg=;
-        b=I2+a+Xdcj5Ya1zJwCn3gmqPm9N60ELbOWjItwKYpBDWnaO7IhFCGNUbOrXvLvQMIyB
-         mjzxekj2ZLk06pRW/1/iLQmGVJybSSOjruMJ6S/NDMbqSHN5unaMYGF4DvOJRAIbLAD2
-         h/Q/6KSWhCFkdhlQGfcMUm11NAD9+X2h09QqrHQUF9x1ri0W9kSt7jdwAeAzeUvNtSEG
-         jYgQLJU8kZDoBcte82ASFLFI0pbPvqNozaWwsM+GjYlf0Kt/TSaYwZX+u93Bd/5oZRBO
-         5iZxKfesWMHmv68dmnH2oz+jtbo0Ohbo8XYWRx3M0nghkFikOAwcOcoOTcswHx8kyN1/
-         Rm7Q==
-X-Gm-Message-State: ABy/qLYksMTKzBE8QlOftmNj9IL95/qjHhMYVhlUEmvqF9m3u/EBpFj2
-        SYqbYF6W6PvJntyDNi2ps2ysf7Ag6mc=
-X-Google-Smtp-Source: APBJJlHhqhibggaL5EwwFbuy64J9O6LNE1TRDxBGUvlHatip8YXsoL419y1v3ttL/lJVyGPWFXPgJg==
-X-Received: by 2002:a5b:749:0:b0:c5f:15f2:375 with SMTP id s9-20020a5b0749000000b00c5f15f20375mr7450001ybq.9.1688853976447;
-        Sat, 08 Jul 2023 15:06:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056902019200b00bc7c81c3cecsm1774891ybh.14.2023.07.08.15.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jul 2023 15:06:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
-Date:   Sat, 8 Jul 2023 15:06:13 -0700
+        d=1e100.net; s=20221208; t=1688855787; x=1691447787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GM81ytcQAbvY1rpHjBMQS8O2py0eRXT0atPhQXgjA54=;
+        b=Gk0DPMwS2lxMY9QDDCPwb6AhLQbDHEB2H5TJ57uyfEMgFwLy4GNeH3oRf1Q3kC9c7J
+         DH5e9EvyVp8pHk1N9sVoMC7BBY5yp/YXb2cJvQ+pRlajmO9FJFMpqY8ITr3UXn1ULmyR
+         cYajeGaRgLYaANFdCEzgRO3FFkwvcN32+NwLPErUIw/0Y7up8rUFicV7RYXNII1v40Uo
+         HeEwk7XZuyPlYw6bAySFxxwdP5O1XwE4KaYJpqpUOPEPCv4X2ZXRPK9K8j9GbL7VcFRV
+         GX7ZbGBkhx3W4xvVJ7ooIJyRP+3rA5roMQjOEPLjHywhs/unG5z0e4Di+5dTHbNlLAKf
+         lYgQ==
+X-Gm-Message-State: ABy/qLb0WgnR2kA8zShLtMBtWq6+4rM68KlUx5wYPNiPW4aqaukLQX47
+        j7VM1kgwugDnviSpSagItc9sidJ9EFWmsW7sS3kkkA==
+X-Google-Smtp-Source: APBJJlE9QX36fmJ1qqEKpR7UCT26mt3D5smIFQ/5C5ArBlb6gmqPuqIREas9VSsGWwWtUdtNurt1pOKbRKnjQvM5CU8=
+X-Received: by 2002:a81:7741:0:b0:570:63d3:9685 with SMTP id
+ s62-20020a817741000000b0057063d39685mr7997297ywc.25.1688855787129; Sat, 08
+ Jul 2023 15:36:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
- <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
- <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
- <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230708191212.4147700-1-surenb@google.com> <20230708191212.4147700-3-surenb@google.com>
+ <CAHk-=whhXFQj0Vwzh7bnjnLs=SSTsxyiY6jeb7ovOGnCes4aWg@mail.gmail.com>
+In-Reply-To: <CAHk-=whhXFQj0Vwzh7bnjnLs=SSTsxyiY6jeb7ovOGnCes4aWg@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Sat, 8 Jul 2023 15:36:15 -0700
+Message-ID: <CAJuCfpHuFc1P=Wo6Oy0T0u-H1B_JsbRgqhVJxY7D64ZY1zh7Cg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] fork: lock VMAs of the parent process when forking
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     akpm@linux-foundation.org, regressions@leemhuis.info,
+        bagasdotme@gmail.com, jacobly.alt@gmail.com, willy@infradead.org,
+        liam.howlett@oracle.com, david@redhat.com, peterx@redhat.com,
+        ldufour@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        regressions@lists.linux.dev, Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/23 13:52, Sergey Shtylyov wrote:
-> On 7/6/23 7:38 PM, John Paul Adrian Glaubitz wrote:
-> [...]
-> 
->>> Which sh4 platforms in particular?
->>>
->>> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
->>> (physical) two days ago.
->>
->> I gave it a try with the command line Guenter suggested and indeed the kernel locks
->> up right here with the patch applied and boots fine without it:
->>
->> Creating 4 MTD partitions on "physmap-flash":
->> 0x000000000000-0x000000040000 : "U-Boot"
->> 0x000000040000-0x000000080000 : "Environment"
->> 0x000000080000-0x000000240000 : "Kernel"
->> 0x000000240000-0x000001000000 : "Flash_FS"
->> 8139too: 8139too Fast Ethernet driver 0.9.28
->> 8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
->> sm501-usb sm501-usb: SM501 OHCI
->> sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
->> sm501-usb sm501-usb: irq 116, io mem 0x13e40000
-> 
->     I guess it was irq 100 before my patch. What if you undo the following
-> part of my patch?
-> 
+On Sat, Jul 8, 2023 at 2:18=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Sat, 8 Jul 2023 at 12:12, Suren Baghdasaryan <surenb@google.com> wrote=
+:
+> >
+> >  kernel/fork.c | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> I ended up editing your explanation a lot.
+>
+> I'm not convinced that the bug has much to do with the delayed tlb flushi=
+ng.
+>
+> I think it's more fundamental than some tlb coherence issue: our VM
+> copying simply expects to not have any unrelated concurrent page fault
+> activity, and various random internal data structures simply rely on
+> that.
+>
+> I made up an example that I'm not sure is relevant to any of the
+> particular failures, but that I think is a non-TLB case: the parent
+> 'vma->anon_vma' chain is copied by dup_mmap() in anon_vma_fork(), and
+> it's possible that the parent vma didn't have any anon_vma associated
+> with it at that point.
+>
+> But a concurrent page fault to the same vma - even *before* the page
+> tables have been copied, and when the TLB is still entirely coherent -
+> could then cause a anon_vma_prepare() on that parent vma, and
+> associate one of the pages with that anon-vma.
+>
+> Then the page table copy happens, and that page gets marked read-only
+> again, and is added to both the parent and the child vma's, but the
+> child vma never got associated with the parents new anon_vma, because
+> it didn't exist when anon_vma_fork() happened.
+>
+> Does this ever happen? I have no idea. But it would seem to be an
+> example that really has nothing to do with any TLB state, and is just
+> simply "we cannot handle concurrent page faults while we're busy
+> copying the mm".
+>
+> Again - maybe I messed up, but it really feels like the missing
+> vma_start_write() was more fundamental, and not some "TLB coherency"
+> issue.
 
-No, that doesn't help.
+Sounds plausible. I'll try to use the reproducer to verify if that's
+indeed happening here. It's likely there are multiple problematic
+scenarios due to this missing lock though.
+Thanks,
+Suren.
 
-Guenter
-
-> Index: linux/arch/sh/include/mach-common/mach/r2d.h
-> ===================================================================
-> --- linux.orig/arch/sh/include/mach-common/mach/r2d.h
-> +++ linux/arch/sh/include/mach-common/mach/r2d.h
-> @@ -47,7 +47,7 @@
->   
->   #define IRLCNTR1	(PA_BCR + 0)	/* Interrupt Control Register1 */
->   
-> -#define R2D_FPGA_IRQ_BASE	100
-> +#define R2D_FPGA_IRQ_BASE	(100 + 16)
->   
->   #define IRQ_VOYAGER		(R2D_FPGA_IRQ_BASE + 0)
->   #define IRQ_EXT			(R2D_FPGA_IRQ_BASE + 1)
-> 
->> usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.04
->> usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
->> usb usb1: Product: SM501 OHCI
->> usb usb1: Manufacturer: Linux 6.4.0-12069-gc17414a273b8 ohci_hcd
->> usb usb1: SerialNumber: sm501-usb
->> hub 1-0:1.0: USB hub found
->> hub 1-0:1.0: 2 ports detected
->> usbcore: registered new interface driver usb-storage
->> rtc-r9701 spi0.0: cannot read RTC register
->> usbcore: registered new interface driver usbhid
->> usbhid: USB HID core driver
->> NET: Registered PF_PACKET protocol family
->> heartbeat: version 0.1.2 loaded
->> ata1: found unknown device (class 0)
-> [...]
-> 
->> Adrian
-> 
-> MBR, Sergey
-
+>
+>             Linus
