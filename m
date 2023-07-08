@@ -2,82 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F1574BEEF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 21:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5AA74BEF1
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 21:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjGHTSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 15:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S230245AbjGHTW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 15:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbjGHTSh (ORCPT
+        with ESMTP id S229436AbjGHTW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 15:18:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60519C5
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 12:18:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3BB060B05
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 19:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 68558C433C8;
-        Sat,  8 Jul 2023 19:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688843915;
-        bh=VytE45UWTg3xSbX7s+3iiMrfiBiDDRMbHCAXy+7UhW4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=S0VnM1OvybCQCA3l15mWzWY7/qNwveNd22//9+W23F9EMW9Dm+rbxvRFIjy4MHwm9
-         Dhq1L6Nh0wJEDE6ps/qMsnWT2bfQvx/ayxdZRIkVnR7OK6yB/HkYy2k7Jldn+w6F4m
-         0goj+q04beFMFvlFbT86yZay6k+/hjr1/KryvTRzyFXcMDlhsNv/H23ljh3x1oT/z7
-         sf+Dh+06K04e/O6+wA+5fkwhm6eRAT35pd4eAzKIW0fsTK2PY3xJCL/qURfTm3JlfX
-         0RyKjV5FRYlLM9LTPMq6UY+rYbAOC8W4ZgepFjUojDASE9hX1T3m9aSnRIlnOu/ylq
-         oCz45A2idBBFg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53B73C4167B;
-        Sat,  8 Jul 2023 19:18:35 +0000 (UTC)
-Subject: Re: [GIT PULL] bitmap changes for v6.5-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZKG0MO5/1SgEobf5@yury-ThinkPad>
-References: <ZKG0MO5/1SgEobf5@yury-ThinkPad>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZKG0MO5/1SgEobf5@yury-ThinkPad>
-X-PR-Tracked-Remote: https://github.com:/norov/linux.git/bitmap-6.5-rc1 bitmap-6.5-rc1
-X-PR-Tracked-Commit-Id: 2a3110e3f97ddc0f53bb766797b926a35edd07e6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ad8258e87729e4337569c4b7d30cfdd4b299179d
-Message-Id: <168884391533.19389.1882342328626055665.pr-tracker-bot@kernel.org>
-Date:   Sat, 08 Jul 2023 19:18:35 +0000
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Gavin Shan <gshan@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yury Norov <yury.norov@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 8 Jul 2023 15:22:26 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C82FF
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 12:22:25 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-579ed2829a8so36464927b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 12:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688844144; x=1691436144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2FxH4Sn2IVEMSRJMI6h54/CoL9VNO3HIcD6stV0UszU=;
+        b=yZP9mqmpeQMLkFovdtEmI4WKMEtko+pAQ1BEDfa+W5OHCr7jJVo29zKlMe4dc5y4+/
+         ctYdxCnqqkyKx9WIui1Qqv5Ci88AGheDwsXz2NaxdeLoR4MDhJacff2brnbgaJOICM0/
+         FUirKv//hF+3UgB0qF4zsmJdaL2b4sPGgHQwVh5lM+8VF9WIzAMiuuZ3N12zpITmJW2P
+         bwvS7I0B45kBtMhXgHGcTY3U6QrBUujNiAIQ4YtZb+FEXhaB5xpVyoqlik6jHJ2HE/rE
+         iQRENfjy1+wSccJQm6AdI6rIf3TRZOKTIXbalO5K2RUxxGox0Tcs59Z6qdZpfnU1mAbL
+         9T/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688844144; x=1691436144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2FxH4Sn2IVEMSRJMI6h54/CoL9VNO3HIcD6stV0UszU=;
+        b=QG5afe3MNfW4CRBbBntHPj7HjTdZpZYhZ/atPFJxArve9TH83JJqRrPAvRpkluDl3P
+         +K9nLiiHpOHqRIFlPeRBYbRXZ6p5zFdP8kad/RvGGOV3lMbOQROjAfPgS/g1/VbdI+lC
+         +KujaTm/aPECHJiXAaPntr2/wuhKvQUJtfOdXdkAkGwsn/TgZ0jmqadGXF627lMZhOdQ
+         efdNQGe1dl3fEPrJcOsX8Cxq4i7x+Yrt8IHBAmW/cP2sx7MskK68pXu8meajaT2gb4cS
+         b+OZ+HCwglPx8R3KAhmnZf0bfDbQyTcBBXam9izG4K/XAWpoPhAiESebK1J2oug5ez3v
+         WJ/A==
+X-Gm-Message-State: ABy/qLaz+SBq8M+ekd3fqW4+ihhlkwoGctrS4CGuWsKVNZ5qwLm2jhy8
+        zoNYibkSc14Rs+3Ur25xXZfVUu4idqsx4cAQdC8F5g==
+X-Google-Smtp-Source: APBJJlGKL8J4JHA6mAQOwpLYAy2LOkRrcxRPz0EwZZ4kcff6g2abFfEEg9qIuCiKp4H+yMTT0PzACvox6UCyMAwV86o=
+X-Received: by 2002:a0d:dc83:0:b0:570:8482:4074 with SMTP id
+ f125-20020a0ddc83000000b0057084824074mr10341749ywe.42.1688844144270; Sat, 08
+ Jul 2023 12:22:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230708191212.4147700-1-surenb@google.com> <20230708191212.4147700-3-surenb@google.com>
+In-Reply-To: <20230708191212.4147700-3-surenb@google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Sat, 8 Jul 2023 12:22:13 -0700
+Message-ID: <CAJuCfpFBnweDUBnxEZQbqxYNtrY08C+1LxYsB_5zaMhrb=AHEg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] fork: lock VMAs of the parent process when forking
+To:     torvalds@linux-foundation.org
+Cc:     akpm@linux-foundation.org, regressions@leemhuis.info,
+        bagasdotme@gmail.com, jacobly.alt@gmail.com, willy@infradead.org,
+        liam.howlett@oracle.com, david@redhat.com, peterx@redhat.com,
+        ldufour@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        regressions@lists.linux.dev, Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 2 Jul 2023 10:30:24 -0700:
+On Sat, Jul 8, 2023 at 12:12=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> When forking a child process, parent write-protects an anonymous page
+> and COW-shares it with the child being forked using copy_present_pte().
+> Parent's TLB is flushed right before we drop the parent's mmap_lock in
+> dup_mmap(). If we get a write-fault before that TLB flush in the parent,
+> and we end up replacing that anonymous page in the parent process in
+> do_wp_page() (because, COW-shared with the child), this might lead to
+> some stale writable TLB entries targeting the wrong (old) page.
+> Similar issue happened in the past with userfaultfd (see flush_tlb_page()
+> call inside do_wp_page()).
+> Lock VMAs of the parent process when forking a child, which prevents
+> concurrent page faults during fork operation and avoids this issue.
+> This fix can potentially regress some fork-heavy workloads. Kernel build
+> time did not show noticeable regression on a 56-core machine while a
+> stress test mapping 10000 VMAs and forking 5000 times in a tight loop
+> shows ~5% regression. If such fork time regression is unacceptable,
+> disabling CONFIG_PER_VMA_LOCK should restore its performance. Further
+> optimizations are possible if this regression proves to be problematic.
 
-> https://github.com:/norov/linux.git/bitmap-6.5-rc1 bitmap-6.5-rc1
+Sending this earlier version of the patch per request from Linus and
+with his explanation here:
+https://lore.kernel.org/all/CAHk-=3Dwi-99-DyMOGywTbjRnRRC+XfpPm=3Dr=3Dpei4A=
+=3DMEL0QDBXA@mail.gmail.com/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ad8258e87729e4337569c4b7d30cfdd4b299179d
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@=
+kernel.org/
+> Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+> Closes: https://lore.kernel.org/all/b198d649-f4bf-b971-31d0-e8433ec2a34c@=
+applied-asynchrony.com/
+> Reported-by: Jacob Young <jacobly.alt@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling firs=
+t")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  kernel/fork.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index b85814e614a5..d2e12b6d2b18 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -686,6 +686,7 @@ static __latent_entropy int dup_mmap(struct mm_struct=
+ *mm,
+>         for_each_vma(old_vmi, mpnt) {
+>                 struct file *file;
+>
+> +               vma_start_write(mpnt);
+>                 if (mpnt->vm_flags & VM_DONTCOPY) {
+>                         vm_stat_account(mm, mpnt->vm_flags, -vma_pages(mp=
+nt));
+>                         continue;
+> --
+> 2.41.0.390.g38632f3daf-goog
+>
