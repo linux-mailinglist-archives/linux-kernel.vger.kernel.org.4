@@ -2,150 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA9574BA89
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B640E74BA8D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjGHAXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 20:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
+        id S229990AbjGHAa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 20:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjGHAXi (ORCPT
+        with ESMTP id S229643AbjGHAaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 20:23:38 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B293C19B2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 17:23:36 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367HVe0s027773;
-        Fri, 7 Jul 2023 17:23:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=8VfJaoTD3S6riNrU3eHMIoOoOKuPOlxtYX8oiRRzVSo=;
- b=Znfud+jXlR9PGAslk4XCexgNtOpPSbjONsd+SOnCAukP+HKfFM0ZF7Jtu6joC4t2OtA3
- tJnHhLSOyNd4l+g3S75P6QGvBOmzga4a9hu+/jUjEc8s3F5CKnUq1mDwYFzZK2H27Eyh
- B6ETFTXGQfzTDysIlTUJyK9eJd1a05il0cPv2UFdaYKis1UHrjZojuJLmyykiRVPa/tv
- SWyzeM6jnhIkvhJRzZKIqG6wauQAHiVD0cGNgfsXfYvlryabU5sJXEioQA10eB8dc4xK
- 2rg7t6ibBDh7ETwzDn/NRW67MP6FRqMSuH49wGDWp6NvJT4F2y6PgXCT7EznL7Uj9+2t iw== 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2103.outbound.protection.outlook.com [104.47.70.103])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rp07s63sf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 17:23:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PqH3xtWi3qvzR9QQakKnZuu3SK6XU1149i72T/cwZXtOudUmNM/3B879pJqmcr0sq76gzgs1PlQVQnVI/4nXC9G2SYhe7n1BqYgvKJFMThndaFh/noN1heCeIm8jVobN6MpmkRgwIuvJONSb42f+NkrI5PtHHmhpu/6E2P63ZZkNuBrBwow5o0Q6h36T30eEREuSW96eYBQvdvKhX/ty/kSALYW/9jOww7oWYDVaRr2gPLHwv6oa9xnvhkNvBWQCG0lCWL4hjFne337CJCg2VHwxmer1sIqIj2P0GGCZb+z8KndbMadDujQXCI2QJMfOlXpnEZ4oCmVVrLfbcqZKfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8VfJaoTD3S6riNrU3eHMIoOoOKuPOlxtYX8oiRRzVSo=;
- b=EwlKortSkI6WUo7Y+DkihUednggDsjaNutLAxqlbhv3jK/9/9VFv0Pjxe0NXJc0FbE5JvmuwZoNK+MHrdBixz/VGaIjEdcRb/FK/oRAtv4fqTCeddoGN4EGXcm5hkE+p9ANICXN+z7Ec4rh1JQ7U8LiX99t7V760wiyPplM2brPZC+6JN4wtIbmw5lcor8FN5YugpqiA0cFrqktoiqS6gM9nuQ3v/dTmYGhmPW462XGG5O5Qp0uLegJJHXUIFynhwdbbLS074Uxow3m/23e9slWcIklQgLUrrYVgXw8w5O2y64dj0lBSQi00DkjHJiKD/zvmL3lN0VgTr6P13nhYRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by IA1PR15MB5893.namprd15.prod.outlook.com (2603:10b6:208:3f6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.24; Sat, 8 Jul
- 2023 00:23:10 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812%7]) with mapi id 15.20.6565.025; Sat, 8 Jul 2023
- 00:23:09 +0000
-Message-ID: <233802b0-7404-1f79-39ae-385da567f657@meta.com>
-Date:   Fri, 7 Jul 2023 17:23:04 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
- functions
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Yonghong Song <yhs@fb.com>, Kees Cook <keescook@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Fangrui Song <maskray@google.com>, kernel-team@fb.com,
-        Leizhen <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "KE . LI" <like1@oppo.com>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-References: <20230628181926.4102448-1-yhs@fb.com>
- <CAKwvOdm_Cp9dF1yseTXvOOtFMsOPzCBWhfszAt0k5SXXyFyjtw@mail.gmail.com>
-Content-Language: en-US
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <CAKwvOdm_Cp9dF1yseTXvOOtFMsOPzCBWhfszAt0k5SXXyFyjtw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ClientProxiedBy: SJ0PR03CA0239.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::34) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|IA1PR15MB5893:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54ac6b94-9af4-4ec1-4368-08db7f4981ae
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Be68G6VAVHoZHcI6ZEBflXWgSA5q3Uvl4q7fNoi4bMZiQaSpO+wFbGJuA4M5xZ2w1sFXU/h3IUveS2kYrOvVsXosMEfoCRhjueTrBLZkGaG/1AsAhiwazGnnVL4zMf8wmjLxPIo/GwwIvrUczR5+zFPvwNwmAjiGAzhx9/gc/Dl8QakJmR/YpjKCWG6Wm5H9jUsyIBEK26u4FwQsexKvEwnkZqorutQ0SXnrVLcrFcosm05Wl4PjM8ELHxW71OWpiNZF1vVAUuZ3Y2UfnfZB99JIMcYpVW9dnEUTFn1sMg3MhZJb8R0tqA2IJ5JoUMcsvGCjHBgOv1Vn8rTrUBNCTlnPgBq+0n73gzLlZEBRs6Ig5ujCBbmxLrZSSjjzKX3lL3wBdNCXXsZrc5h8JHKkeeib8xjlQankQJrY+Osx2g+7Q7u63RKpnCXyc4CLQhDC528yup0ZKiI8Vnlt9CqoGFPmlhUh860D5jzqX52nTCroo8vSZeYWli9L16N082LGsbzU2vNHpJEl1ZZqbkm/LP7+B8a+dxJq6xJ3pt5k5UyrJMTk1uSRK+etC6kKRbuxkSjDe7DBEXZxCd70V8oEIj9T3JzrqBKnYvW+mUxaNo4jjd/Hi9u9YEQN6wbv6be7aVGtBRHAV7PYEBVmmIGEFg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199021)(186003)(6506007)(53546011)(83380400001)(6666004)(6486002)(31686004)(54906003)(110136005)(966005)(478600001)(2616005)(6512007)(316002)(8676002)(41300700001)(5660300002)(7416002)(66476007)(38100700002)(66946007)(66556008)(4326008)(8936002)(2906002)(86362001)(36756003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1VYMURUVEpDZGVUZWFHTWlPSnpVb3MwZlZ3eVVZeit0SEF5Z3VvRUF5Ylkw?=
- =?utf-8?B?UmdkT0YyYXNHZ25wbVZ5SUs2QWU1NXZVVVVZdWllQXh5NHJmZ2lKbFgzcnh6?=
- =?utf-8?B?b2JVVFB5N0N4dmszeXRVRkFHUG1nSFhVaDNwWllEL0JYQUhwNGJyT29UeWk2?=
- =?utf-8?B?L1E0NTlEeFZBL05uTzNwWjdwOEhGd0JDYmk3UU9naWRjdUlGbFdKTTNoOFRy?=
- =?utf-8?B?bXZqRytKRWZBUTlzQm03L2V6dy9VUkMyaHZWREw1bUpqNUJjMjA0Q1pZbmpD?=
- =?utf-8?B?UFlzbkc2YUFzVVRUdnR1bzV3STR2YXVBRm1FYlRpVHlyQ29WMlMwcjNnYnda?=
- =?utf-8?B?K0FVUE4vRjZUVUVLUmFQV1RXT1gxUzJsbEZNbm1DQ280NzB0NE1nWXNpUnkr?=
- =?utf-8?B?SWd6NHVYMUwrVlh5Q1daQkRzY0xWRTBnTTVlRG9jVEkvTStkR0l3aFFFZ01t?=
- =?utf-8?B?OS8zalhqUjBUc1VTYS9LVDFEMDVaUlowNmZDMDdFOTl1Nmk2Q1hsei83THNn?=
- =?utf-8?B?dGFMWDVaTEJKWjlKTFI2bmdxeWs4enhIR2o2cTBsT3VVVFM4ZVV1WU0vQTBw?=
- =?utf-8?B?U3NTdEZYMVFycTlGUkk1S3JHZzF3TEpJU0ZRY3hpR0FxOGlFVDlyaEpac09o?=
- =?utf-8?B?dlZzSjBEaEltZnE5azE5UWkvc1RRdTZLQWZqS3E5TkM1MnpmaWpNZHVmZ3Iw?=
- =?utf-8?B?VWlqRFlQcklsTHdLUDVNdVN0MDZkd2F6Z3hLa0V6U2lEcWY3NFNLWS9Cdi9Z?=
- =?utf-8?B?bWEwSVVjTFdtTFdmK2FnY2FkZ0hrMUowYXpUQWdWbm1kUkZobElrM0tvSUFT?=
- =?utf-8?B?eVpKRjhpYi9vN1VIa0M4cUpCdm4xemQ2bzZzbTJVeFFZY01iZHlQVzJLL2l0?=
- =?utf-8?B?OWVTL3BTaGVVNktZMDlQbGdsZWRNSi9IRWorMnhKVDlUeENnM3IvQXUwWmc3?=
- =?utf-8?B?MFFJR2Y5ampvMUYxbXE1Z1AyR0VSTHYwWjU2SHI3VDMyN0doaHNoUWFubk1i?=
- =?utf-8?B?MWdFdVlMcEhVdHN3d0xIVk5ST3hCbXFwcWxVTE1lWVl0MFBWYWwxam5ZVmcz?=
- =?utf-8?B?d05FRDFXbFE4NTdkQ09NbmhaYWtuZlo1QW1IZXhWbFowSnZENnk5WDYvcGpm?=
- =?utf-8?B?TFJsK3IrZmRGVGc2ZDlGZThBbEU4MnEyTTdsMlBrbTdMbGU2eXBwbll1TG5E?=
- =?utf-8?B?VnQ2OHFzTG1LRkMwQTZaVFBtM2Z4WkVVaHp5MFF5ZkZDQ2hkSGdVZitNM2FZ?=
- =?utf-8?B?d2NpdDBUcUIxWitmYzNDWTVhMUFLbjNBcUs1NEdmcHF5V1ZVamRSdlNwYXV0?=
- =?utf-8?B?MlZWSVAxOGxhMmVnbEpRWTJmYklnNTgzV0IxSU9tUHUzZnNqSkFIZFJaVUdq?=
- =?utf-8?B?VDZ6UnloMEJSRjU3Z1ZRcVREcnpqcG40azJGMnpoelpXR09acDNsTDZ3WWo2?=
- =?utf-8?B?eE4vZ1hXY3labXI0VFd1bmkyTmQ2TmJYR0tIMTdrT2dSOFJYajJXQzFvelJH?=
- =?utf-8?B?NWdjVWdiS2hoQlhLWXZsZlhnWDB1K0RidGhneUVLZERUVnhlbDRGcnBmN3Zp?=
- =?utf-8?B?cm9XaXNSWTRaUTVtckErNXVvYkxTbzVEMWtaQitqSDI2ZTJVdDZSUm50MXlj?=
- =?utf-8?B?U25OUEZqSWExdWt5SEloajBjb2R1bUcxbFFOcFQ3MWk0ZTVlV2ZhTzBGbEN0?=
- =?utf-8?B?TFRnSGlGMndNQ251Z0FrUlF4WHJRNnFJQnEvclhPRGlUT0lwTGJNcHo1d242?=
- =?utf-8?B?M1E0WExlS05GVSs0ZTU1TzkybjFMeUI2VUVUdGMrc0hSL3BnUXQvNndaUmNB?=
- =?utf-8?B?bFJqUERXZlBrVkMzNCtwZkV1eGxZNHZOL2hOeXRTbEVsOGk0OGRCN0kwdnBH?=
- =?utf-8?B?anJETmdLUDNSWno2OUtTNlg2cWROckxxbG4rYUNPWTJyOW1mcDFDSnBZMVQ4?=
- =?utf-8?B?enNHUFZTcjhYanlScm1zM0M0NU5DWEpMcGxIOTczRldmek8rdTJ4VnBDano5?=
- =?utf-8?B?SDBLOVpNWVZsYkNOQVNxU00yVzVkT3h4d1AxZTZvMTNwUlRTL3JjcUl4aEVo?=
- =?utf-8?B?M3pHdjhtbENJVzhqK1RnU3FDUTUxdE45aFJNSmlDOGl3RzVKQlAxb21LTm5k?=
- =?utf-8?B?VUg0ZVBsSGVXRHFscHBhdkFoU1VXUzRIdGNaMmJYOUxlaGE0WTdVRHNBb3c0?=
- =?utf-8?B?NVE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54ac6b94-9af4-4ec1-4368-08db7f4981ae
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2023 00:23:08.9610
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cXgqTBOs6zBBVTDlWJtFhsDkMrABe+Dd8M3EcamXnSNkMDvunhIr4IxCuRHgmjg6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR15MB5893
-X-Proofpoint-ORIG-GUID: qgs8qjMnYUeQHsp19hODxO1Yqfp8hhk_
-X-Proofpoint-GUID: qgs8qjMnYUeQHsp19hODxO1Yqfp8hhk_
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 7 Jul 2023 20:30:23 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8790C1991;
+        Fri,  7 Jul 2023 17:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1688776218;
+        bh=+VpZJR3o46hwfqWgWb4IXi4Xxjl642iOcNwJEJI/tk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FsFdKSEZwh+Q5vO2SgV+GdK9Ks15rH4IgBVVjTLTiGvv8+lWbKg9nwEg/rl391FGA
+         Voq4ZC5cP8AlUQiFo/zIjDsF1pTrHBPqrz/OZR9JC7kPXKkCqB352IqYNRxE+8/qTB
+         E9iajFwqjp69Nu8YbKPO8mUKHA5v9PrEKYAVN2eGdQVEptINPcvUNvl0qDKNDFfYeS
+         7KfNcx8sbJ943PXHDI+a0AfQI1F9x75j6DEJ8it5Ms37yzs9PXRk95dBJbxO+YA0yZ
+         D9jn/4GJ43ivxlMjfjcHzXDdmVKAjZBZJnKAnhsmarGOLZWSQaFZOQOB5H7os8XXrG
+         QPtc5Y4m/V/nA==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 29C2F20F4;
+        Sat,  8 Jul 2023 02:30:18 +0200 (CEST)
+Date:   Sat, 8 Jul 2023 02:30:16 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Howells <dhowells@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Pending splice(file -> FIFO) excludes all other FIFO operations
+ forever (was: ... always blocks read(FIFO), regardless of O_NONBLOCK on read
+ side?)
+Message-ID: <ltbgocygx4unco6ssoiszwsgjmztyuxkqja3omvvyqvpii6dac@5abamn33galn>
+References: <qk6hjuam54khlaikf2ssom6custxf5is2ekkaequf4hvode3ls@zgf7j5j4ubvw>
+ <20230626-vorverlegen-setzen-c7f96e10df34@brauner>
+ <4sdy3yn462gdvubecjp4u7wj7hl5aah4kgsxslxlyqfnv67i72@euauz57cr3ex>
+ <20230626-fazit-campen-d54e428aa4d6@brauner>
+ <qyohloajo5pvnql3iadez4fzgiuztmx7hgokizp546lrqw3axt@ui5s6kfizj3j>
+ <CAHk-=wgmLd78uSLU9A9NspXyTM9s6C23OVDiN2YjA-d8_S0zRg@mail.gmail.com>
+ <20230707-konsens-ruckartig-211a4fb24e27@brauner>
+ <CAHk-=whHXogGiPkGFwQQBtn364M4caVNcBTs7hLNfa_X67ouzA@mail.gmail.com>
+ <zu7gnignulf7qqnoblpzjbu6cx5xtk2qum2uqr7q52ahxjbtdx@4ergovgpfuxt>
+ <CAHk-=wjEC_Rh8+-rtEi8C45upO-Ffw=M_i1211qS_3AvWZCbOg@mail.gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-07_16,2023-07-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xd6fvopdq4tido3u"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjEC_Rh8+-rtEi8C45upO-Ffw=M_i1211qS_3AvWZCbOg@mail.gmail.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -153,127 +68,254 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--xd6fvopdq4tido3u
+Content-Type: multipart/mixed; boundary="jidelvqglewikzxp"
+Content-Disposition: inline
 
-On 7/7/23 3:27 PM, Nick Desaulniers wrote:
-> On Wed, Jun 28, 2023 at 11:19 AM Yonghong Song <yhs@fb.com> wrote:
->>
->> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
->> stripped all function/variable suffixes started with '.' regardless
->> of whether those suffixes are generated at LTO mode or not. In fact,
->> as far as I know, in LTO mode, when a static function/variable is
->> promoted to the global scope, '.llvm.<...>' suffix is added.
->>
->> The existing mechanism breaks live patch for a LTO kernel even if
->> no <symbol>.llvm.<...> symbols are involved. For example, for the following
->> kernel symbols:
->>    $ grep bpf_verifier_vlog /proc/kallsyms
->>    ffffffff81549f60 t bpf_verifier_vlog
->>    ffffffff8268b430 d bpf_verifier_vlog._entry
->>    ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
->>    ffffffff82e12a1f d bpf_verifier_vlog.__already_done
->> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
->> '__already_done' are static variables used inside 'bpf_verifier_vlog',
->> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
->> Note that the func-level to file-level static function promotion also
->> happens without LTO.
->>
->> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism will
->> return 4 symbols to live patch subsystem which current live patching
->> subsystem cannot handle it. With non-LTO kernel, only one symbol
->> is returned.
->>
->> In [1], we have a lengthy discussion, the suggestion is to separate two
->> cases:
->>    (1). new symbols with suffix which are generated regardless of whether
->>         LTO is enabled or not, and
->>    (2). new symbols with suffix generated only when LTO is enabled.
->>
->> The cleanup_symbol_name() should only remove suffixes for case (2).
->> Case (1) should not be changed so it can work uniformly with or without LTO.
->>
->> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
->> tracing should work the same way for non-LTO kernel.
->> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the same
->> filtering pattern so both kernel and kallsyms tool have the same
->> expectation on the order of symbols.
->>
->>   [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
->>
->> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
->> Reported-by: Song Liu <song@kernel.org>
->> Signed-off-by: Yonghong Song <yhs@fb.com>
-> 
-> Thanks for the patch and improving live patch with LTO.  Looking back
-> at the internal report that resulted in
-> commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-> your version was what I originally had.  I did not leave a comment as
-> to why I changed it when I sent it 2 years ago, and no longer recall
-> the reason.
-> 
-> 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Nick, thanks for the review. I am not sure how this patch could
-be merged into the mainline. I checked your patch
-    6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-and it looks like the patch was merged by Kees Cook.
+--jidelvqglewikzxp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I added Kees in the 'To' list. Kees, could you help merge
-this patch if you are okay with the change?
+On Fri, Jul 07, 2023 at 03:57:40PM -0700, Linus Torvalds wrote:
+> On Fri, 7 Jul 2023 at 15:41, Ahelenia Ziemia=C5=84ska
+> <nabijaczleweli@nabijaczleweli.xyz> wrote:
+> > (inlined by) eat_empty_buffer at fs/splice.c:594
+> Ahh, eat_empty_buffer() ends up releasing the buffer without waiting for =
+it.
+>=20
+> And the reason for that is actually somewhat interesting: we do have that
+>=20
+>         while (!pipe_readable(pipe)) {
+>              ..
+>=20
+> above it, but the logic for this all is that pipes with pipe buffers
+> are by *default* considered readable until they try to actually
+> confirm the buffer, and at that point they might say "oh, I have to
+> return -EAGAIN and set 'not_ready'".
+>=20
+> And that splice_from_pipe_next() doesn't do that.
+>=20
+> End result: it will happily free that pipe buffer that is still in the
+> process of being filled.
+>=20
+> The good news is that I think the fix is probably trivial. Something
+> like the attached?
+>=20
+> Again - NOT TESTED
+Same reproducer, backtrace attached:
+$ scripts/faddr2line vmlinux splice_from_pipe_next+0x6e
+splice_from_pipe_next+0x6e/0x180:
+pipe_buf_confirm at include/linux/pipe_fs_i.h:233
+(inlined by) eat_empty_buffer at fs/splice.c:597
+(inlined by) splice_from_pipe_next at fs/splice.c:647
 
-Thanks!
+Looks like the same place.
 
-Yonghong
+> > Besides that, this doesn't solve the original issue, inasmuch as
+> >   ./v > fifo &
+> >   head fifo &
+> >   echo zupa > fifo
+> > (where ./v splices from an empty pty to stdout; v.c attached)
+> > echo still sleeps until ./v dies, though it also succumbs to ^C now.
+> Yeah, I concentrated on just making everything interruptible,
+>=20
+> But the fact that the echo has to wait for the previous write to
+> finish is kind of fundamental. We can't just magically do writes out
+> of order. 'v' is busy writing to the fifo, we can't let some other
+> write just come in.
+(It's no longer busy writing to it when it gets killed by timeout in my
+ second example, but echo still doesn't wake up.)
 
-> 
->> ---
->>   kernel/kallsyms.c  | 5 ++---
->>   scripts/kallsyms.c | 6 +++---
->>   2 files changed, 5 insertions(+), 6 deletions(-)
->>
->> Changelogs:
->>    v1 -> v2:
->>      . add 'Reported-by: Song Liu <song@kernel.org>'
->>      . also fix in scripts/kallsyms.c.
->>
->> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
->> index 77747391f49b..4874508bb950 100644
->> --- a/kernel/kallsyms.c
->> +++ b/kernel/kallsyms.c
->> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
->>           * LLVM appends various suffixes for local functions and variables that
->>           * must be promoted to global scope as part of LTO.  This can break
->>           * hooking of static functions with kprobes. '.' is not a valid
->> -        * character in an identifier in C. Suffixes observed:
->> +        * character in an identifier in C. Suffixes only in LLVM LTO observed:
->>           * - foo.llvm.[0-9a-f]+
->> -        * - foo.[0-9a-f]+
->>           */
->> -       res = strchr(s, '.');
->> +       res = strstr(s, ".llvm.");
->>          if (res) {
->>                  *res = '\0';
->>                  return true;
->> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
->> index 0d2db41177b2..13af6d0ff845 100644
->> --- a/scripts/kallsyms.c
->> +++ b/scripts/kallsyms.c
->> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
->>           * ASCII[_]   = 5f
->>           * ASCII[a-z] = 61,7a
->>           *
->> -        * As above, replacing '.' with '\0' does not affect the main sorting,
->> -        * but it helps us with subsorting.
->> +        * As above, replacing the first '.' in ".llvm." with '\0' does not
->> +        * affect the main sorting, but it helps us with subsorting.
->>           */
->> -       p = strchr(s, '.');
->> +       p = strstr(s, ".llvm.");
->>          if (p)
->>                  *p = '\0';
->>   }
->> --
->> 2.34.1
->>
-> 
-> 
+> (We *could* make the splice in ./v not fill the whole pipe buffer, and
+> allow some other writes to fill in buffers afterwards, but at _some_
+> point you'll hit the "pipe buffers are full and busy, can't add any
+> more without waiting for them to empty").
+You are, but, well, that's also the case when the pipe is full.
+As it stands, the pipe is /empty/ and yet /no-one can write to it/.
+This is the crux of the issue at hand.
+
+(Coincidentally, you're describing what looks quite similar to pt 1.
+ from <naljsvzzemr6pjiwwcdpdsdh5vtycdr6fmi2fk2dlr4nn4kq6o@ycanbgxhslti>.)
+
+I think we got away with it for so long because most files behave
+like regular files/blockdevs and the read is always guaranteed to
+complete ~instantly, but splice is, fundamentally, /not/ writing
+the whole time because it's not /reading/ the whole time when it's
+reading an empty socket/a chardev/whatever.
+
+Or, rather: splice() from a non-seekable (non-mmap()pable?)
+fundamentally doesn't really make much sense, because you're not
+gluing a bit of the pro-verbial page cache (forgive me my term
+abuse here, you see what I'm getting at tho) to the end of the pipe,
+you're just telling the kernel to run a read()/write() loop for you.
+
+sendfile() works around this by reading and then separately writing
+to its special buffer (in the form of an anonymous process-local pipe).
+splice() just raw-dogs the read with the write lock held,
+but just doesn't check if it can do it.
+
+That's how it's, honestly, shaking out to me: someone just forgot
+a check the first time they wrote it.
+Because the precondition for "does reading directly into the pipe
+buffer make sense" is "is it directly equivalent to read(f)/write(p)",
+and that holds only for seekables.
+
+/Maybe/ for, like, sockets if there's already data, or as a special
+case similar to pipe->pipe. But then for sockets you're already
+using sendfile(), so?
+
+To that end, I'm including a patch based on
+  4f6b6c2b2f86b7878a770736bf478d8a263ff0bc
+that does just that: EINVAL.
+
+Maybe if you're worried about breaking compatibility
+(which idk if it's an issue since splice and sendfile
+ are temperamental w.r.t. what they take anyway across versions;
+ you need a read()/write() fallback anyway)
+that case could become sendfile-like by first reading into a buffer
+once then pipe->pipe splicing out of it separately.
+Though, even the usual sendfile read/write loop only works on seekables.
+
+> One thing we could possibly do is to say that we just don't accept any
+> new writes if there are old busy splices in process. So we could make
+> new writes return -EBUSY or something, I guess.
+Same logic as above applies + no-one's really expecting EBUSY +
+what /would/ you do about EBUSY in this case?
+-- >8 --
+=46rom 552d93bee8e1b8333ce84ed0ca8490f6712c5b8b Mon Sep 17 00:00:00 2001
+=46rom: =3D?UTF-8?q?Ahelenia=3D20Ziemia=3DC5=3D84ska?=3D
+ <nabijaczleweli@nabijaczleweli.xyz>
+Date: Sat, 8 Jul 2023 01:47:59 +0200
+Subject: [PATCH] splice: file->pipe: -EINVAL if file non-seekable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=3DUTF-8
+Content-Transfer-Encoding: 8bit
+
+Both the logical semantic of "tie a page from the page cache to the pipe"
+and the implemented semantic of "lock the pipe, then read into it"
+(thus holding the write lock for as as long as the read is outstanding)
+only make sense if the read is guaranteed to complete instantly.
+
+This has been a long-standing omission and, when the read doesn't
+immediately complete (because it's a tty, socket, &c.), the write lock
+=E2=80=92 which for pipes is a pipe-global mutex =E2=80=92 is held until,
+thus excluding all mutual users of the pipe, until it does.
+
+Refuse it. Use read()/write() in userspace instead of getting the kernel
+to do it for you, badly, when there's no point to doing so.
+
+Link: https://lore.kernel.org/linux-fsdevel/CAHk-=3DwjEC_Rh8+-rtEi8C45upO-F=
+fw=3DM_i1211qS_3AvWZCbOg@mail.gmail.com/t/#u
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+ fs/splice.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/fs/splice.c b/fs/splice.c
+index 004eb1c4ce31..14cf3cea1091 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -1309,6 +1309,8 @@ long do_splice(struct file *in, loff_t *off_in, struc=
+t file *out,
+ 	if (opipe) {
+ 		if (off_out)
+ 			return -ESPIPE;
++		if (!(in->f_mode & FMODE_LSEEK))
++			return -EINVAL;
+ 		if (off_in) {
+ 			if (!(in->f_mode & FMODE_PREAD))
+ 				return -EINVAL;
+--=20
+2.39.2
+
+
+--jidelvqglewikzxp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename=BUG
+
+sh-5.2# echo a | grep a > /dev/null
+[  137.724183] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[  137.726038] #PF: supervisor read access in kernel mode
+[  137.727408] #PF: error_code(0x0000) - not-present page
+[  137.728757] PGD 0 P4D 0
+[  137.729454] Oops: 0000 [#1] PREEMPT SMP PTI
+[  137.730574] CPU: 1 PID: 227 Comm: grep Not tainted 6.4.0-12317-g1b28a3c9606a-dirty #1
+[  137.732638] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+[  137.735124] RIP: 0010:splice_from_pipe_next+0x6e/0x180
+[  137.736514] Code: 80 fe 01 75 04 85 c9 75 62 8b 43 5c 44 8b 73 54 83 e8 01 44 21 f0 48 8d 14 80 48 8b 83 98 00 00 00 4c 8d 24 d0 49 8b 44 24 10 <48> 8b 00 48 85 c0 74 16
+[  137.741360] RSP: 0018:ffff93c28037fd68 EFLAGS: 00010202
+[  137.742755] RAX: 0000000000000000 RBX: ffff8ed7012bc600 RCX: 0000000000000000
+[  137.744647] RDX: 0000000000000005 RSI: 0000000000000000 RDI: ffff8ed7012bc600
+[  137.746525] RBP: ffff93c28037fde0 R08: 0000000000000001 R09: ffffffffa6228df0
+[  137.748414] R10: 0000000000018000 R11: 0000000000000000 R12: ffff8ed701e04828
+[  137.750288] R13: ffff8ed701d68000 R14: 0000000000000001 R15: ffff93c28037fde0
+[  137.752178] FS:  00007fe8d094d740(0000) GS:ffff8ed71d900000(0000) knlGS:0000000000000000
+[  137.754293] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  137.755845] CR2: 0000000000000000 CR3: 0000000002aba000 CR4: 00000000000006e0
+[  137.757734] Call Trace:
+[  137.758436]  <TASK>
+[  137.759035]  ? __die+0x1e/0x60
+[  137.759893]  ? page_fault_oops+0x17c/0x470
+[  137.760989]  ? search_module_extables+0x14/0x50
+[  137.762201]  ? exc_page_fault+0x67/0x150
+[  137.763251]  ? asm_exc_page_fault+0x26/0x30
+[  137.764378]  ? __pfx_pipe_to_null+0x10/0x10
+[  137.765494]  ? splice_from_pipe_next+0x6e/0x180
+[  137.766703]  __splice_from_pipe+0x39/0x1c0
+[  137.767807]  ? __pfx_pipe_to_null+0x10/0x10
+[  137.768922]  ? __pfx_pipe_to_null+0x10/0x10
+[  137.770039]  splice_from_pipe+0x5c/0x90
+[  137.771069]  do_splice+0x35c/0x840
+[  137.772002]  __do_splice+0x1eb/0x210
+[  137.772975]  __x64_sys_splice+0xad/0x120
+[  137.774027]  do_syscall_64+0x3e/0x90
+[  137.774999]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+[  137.776363] RIP: 0033:0x7fe8d0a58dd3
+[  137.777335] Code: 64 89 02 48 c7 c0 ff ff ff ff eb b9 66 2e 0f 1f 84 00 00 00 00 00 90 80 3d 11 18 0d 00 00 49 89 ca 74 14 b8 13 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 74
+[  137.781970] RSP: 002b:00007ffe3e611af8 EFLAGS: 00000202 ORIG_RAX: 0000000000000113
+[  137.783801] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe8d0a58dd3
+[  137.785516] RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000000
+[  137.787229] RBP: 0000558b41c02000 R08: 0000000000018000 R09: 0000000000000001
+[  137.788954] R10: 0000000000000000 R11: 0000000000000202 R12: 000000000000000a
+[  137.790666] R13: 0000558b41c02002 R14: 0000558b41c02000 R15: 0000000000000000
+[  137.792280]  </TASK>
+[  137.792767] Modules linked in:
+[  137.793445] CR2: 0000000000000000
+[  137.794224] ---[ end trace 0000000000000000 ]---
+[  137.795235] RIP: 0010:splice_from_pipe_next+0x6e/0x180
+[  137.796378] Code: 80 fe 01 75 04 85 c9 75 62 8b 43 5c 44 8b 73 54 83 e8 01 44 21 f0 48 8d 14 80 48 8b 83 98 00 00 00 4c 8d 24 d0 49 8b 44 24 10 <48> 8b 00 48 85 c0 74 16
+[  137.800291] RSP: 0018:ffff93c28037fd68 EFLAGS: 00010202
+[  137.801430] RAX: 0000000000000000 RBX: ffff8ed7012bc600 RCX: 0000000000000000
+[  137.802958] RDX: 0000000000000005 RSI: 0000000000000000 RDI: ffff8ed7012bc600
+[  137.804462] RBP: ffff93c28037fde0 R08: 0000000000000001 R09: ffffffffa6228df0
+[  137.805915] R10: 0000000000018000 R11: 0000000000000000 R12: ffff8ed701e04828
+[  137.807389] R13: ffff8ed701d68000 R14: 0000000000000001 R15: ffff93c28037fde0
+[  137.808837] FS:  00007fe8d094d740(0000) GS:ffff8ed71d900000(0000) knlGS:0000000000000000
+[  137.810467] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  137.811662] CR2: 0000000000000000 CR3: 0000000002aba000 CR4: 00000000000006e0
+
+--jidelvqglewikzxp--
+
+--xd6fvopdq4tido3u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSorhYACgkQvP0LAY0m
+WPH8ww//W6rTokyffskLV5RGrBskQ0lKYEq5xzMDYGiisQB718jRSExqKutpD1pF
+RDv4i7cw1eVp1QQk1+naQOaiNcbmYgkzdrLGJ6Fm1bdwcFby/D9lKmFgZJiIYshe
+D37T5noJBCXgzTO0j6HVXDqro6a6kBK6yz/P2ImfFHe4hzjpCquORTeSrPuMdKWt
+/RW8kf4FTtVS4mrgCHL8Oya0rkTeAwJuZC/eiz0Tacrydext0UVsGktli2h3zhO3
+/Is7XOQM8NWga4LVuY2nwdPyA7CT3k9YtudEnqqo78QdLcNLosn+gCSxPv2y6I3P
+j3s+yWrrgPD/ix+6smK2LCcU8abST8wjJkvpuUcaKsYszs4xyvJ3PjJFD1luFuzV
+QqJfBi/lhYnGKu8fsF/4CgcI3iOzD06kmeW+/UEiJKIMX/Epzv7aXxe9TYiV+cfK
+9q+x1m4dyPjFLTrg3a09uRpgjCnEwDb6FMcpg4XzNjoUFQE6yUnEN4JlKwxw1sDQ
+BEcu+mQ9pn2+Tood/bNIInvNK0PNnSfS3YEPKXN5L/Bt2w27HGGGbEeAp53CimIB
+PJaNTE4zVC0+NAeLwmCmm6wutXXHePjcHC69mzZGtWRKlQ3kOQ1FTMztQ4dXboJm
+9MjD+EH96ZtEdcBr5+mcZBMW0RSs4/XjbEIU0ztK5AkV+dRSB7Q=
+=GsCT
+-----END PGP SIGNATURE-----
+
+--xd6fvopdq4tido3u--
