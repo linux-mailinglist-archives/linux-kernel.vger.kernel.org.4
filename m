@@ -2,101 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1C374BCE8
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 10:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F073374BCF1
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 11:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjGHI5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 04:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S229852AbjGHJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 05:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjGHI5f (ORCPT
+        with ESMTP id S229496AbjGHJA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 04:57:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88F22105
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 01:57:33 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QykfQ5qvgz1FDgw;
-        Sat,  8 Jul 2023 16:57:02 +0800 (CST)
-Received: from huawei.com (10.174.151.185) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 8 Jul
- 2023 16:57:31 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH 8/8] mm: memory-failure: fix race window when trying to get hugetlb folio
-Date:   Sat, 8 Jul 2023 16:57:44 +0800
-Message-ID: <20230708085744.3599311-9-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230708085744.3599311-1-linmiaohe@huawei.com>
-References: <20230708085744.3599311-1-linmiaohe@huawei.com>
+        Sat, 8 Jul 2023 05:00:26 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099D1723
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 02:00:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VmrW6mA_1688806814;
+Received: from 172.20.10.3(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VmrW6mA_1688806814)
+          by smtp.aliyun-inc.com;
+          Sat, 08 Jul 2023 17:00:16 +0800
+Message-ID: <97875049-8df9-e041-61ca-d90723ba6e82@linux.alibaba.com>
+Date:   Sat, 8 Jul 2023 17:00:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] erofs: fix two loop issues when read page beyond EOF
+To:     Chunhai Guo <guochunhai@vivo.com>, xiang@kernel.org,
+        chao@kernel.org
+Cc:     huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230708062432.67344-1-guochunhai@vivo.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230708062432.67344-1-guochunhai@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-page_folio() is fetched before calling get_hwpoison_hugetlb_folio()
-without hugetlb_lock being held. So hugetlb page could be demoted
-before get_hwpoison_hugetlb_folio() holding hugetlb_lock but after
-page_folio() is fetched. So get_hwpoison_hugetlb_folio() will hold
-unexpected extra refcnt of hugetlb folio while leaving demoted page
-un-refcnted.
+Hi Chunhai,
 
-Fixes: 25182f05ffed ("mm,hwpoison: fix race with hugetlb page allocation")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- mm/memory-failure.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+On 2023/7/8 14:24, Chunhai Guo wrote:
+> When z_erofs_read_folio() reads a page with an offset far beyond EOF, two
+> issues may occur:
+> - z_erofs_pcluster_readmore() may take a long time to loop when the offset
+>    is big enough, which is unnecessary.
+>      - For example, it will loop 4691368 times and take about 27 seconds
+>        with following case.
+>          - offset = 19217289215
+>          - inode_size = 1442672
+> - z_erofs_do_read_page() may loop infinitely due to the inappropriate
+>    truncation in the below statement. Since the offset is 64 bits and
+> min_t() truncates the result to 32 bits. The solution is to replace
+> unsigned int with another 64-bit type, such as erofs_off_t.
+>      cur = end - min_t(unsigned int, offset + end - map->m_la, end);
+>      - For example:
+>          - offset = 0x400160000
+>          - end = 0x370
+>          - map->m_la = 0x160370
+>          - offset + end - map->m_la = 0x400000000
+>          - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 76d88d27cdbe..066bf57f2d22 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1388,8 +1388,14 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
- 	bool hugetlb = false;
- 
- 	ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, false);
--	if (hugetlb)
--		return ret;
-+	if (hugetlb) {
-+		if (folio == page_folio(page))
-+			return ret;
-+		if (ret > 0) {
-+			folio_put(folio);
-+			folio = page_folio(page);
-+		}
-+	}
- 
- 	/*
- 	 * This check prevents from calling folio_try_get() for any
-@@ -1478,8 +1484,12 @@ static int __get_unpoison_page(struct page *page)
- 	bool hugetlb = false;
- 
- 	ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, true);
--	if (hugetlb)
--		return ret;
-+	if (hugetlb) {
-+		if (folio == page_folio(page))
-+			return ret;
-+		if (ret > 0)
-+			folio_put(folio);
-+	}
- 
- 	/*
- 	 * PageHWPoisonTakenOff pages are not only marked as PG_hwpoison,
--- 
-2.33.0
+Thanks for the catch!
 
+Could you split these two into two patches?
+
+how about using:
+cur = end - min_t(erofs_off_t, offend + end - map->m_la, end)
+for this?
+
+since cur and end are all [0, PAGE_SIZE - 1] for now, and
+folio_size() later.
+
+>      - Expected result:
+>          - cur = 0
+>      - Actual result:
+>          - cur = 0x370
+> 
+> Signed-off-by: Chunhai Guo <guochunhai@vivo.com>
+> ---
+>   fs/erofs/zdata.c | 13 ++++++++++---
+>   1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index 5f1890e309c6..6abbd4510076 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -972,7 +972,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+>   	struct erofs_map_blocks *const map = &fe->map;
+>   	const loff_t offset = page_offset(page);
+>   	bool tight = true, exclusive;
+> -	unsigned int cur, end, spiltted;
+> +	erofs_off_t cur, end;
+> +	unsigned int spiltted;
+>   	int err = 0;
+>   
+>   	/* register locked file pages as online pages in pack */
+> @@ -1035,7 +1036,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+>   	 */
+>   	tight &= (fe->mode > Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
+>   
+> -	cur = end - min_t(unsigned int, offset + end - map->m_la, end);
+> +	cur = end - min_t(erofs_off_t, offset + end - map->m_la, end);
+>   	if (!(map->m_flags & EROFS_MAP_MAPPED)) {
+>   		zero_user_segment(page, cur, end);
+>   		goto next_part;
+> @@ -1841,7 +1842,7 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
+>   	}
+>   
+>   	cur = map->m_la + map->m_llen - 1;
+> -	while (cur >= end) {
+> +	while ((cur >= end) && (cur < i_size_read(inode))) {
+>   		pgoff_t index = cur >> PAGE_SHIFT;
+>   		struct page *page;
+>   
+> @@ -1876,6 +1877,12 @@ static int z_erofs_read_folio(struct file *file, struct folio *folio)
+>   	trace_erofs_readpage(page, false);
+>   	f.headoffset = (erofs_off_t)page->index << PAGE_SHIFT;
+>   
+> +	/* when trying to read beyond EOF, return zero page directly */
+> +	if (f.headoffset >= i_size_read(inode)) {
+> +		zero_user_segment(page, 0, PAGE_SIZE);
+> +		return 0;
+> +	}
+Do we really need to optimize this rare case?
+I guess the follow readmore fix is enough, thoughts?
+
+
+Thanks,
+Gao Xiang
