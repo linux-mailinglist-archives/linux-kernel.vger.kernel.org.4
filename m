@@ -2,190 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E31874BC5F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 08:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D978D74BC63
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 08:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjGHGZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 02:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
+        id S229733AbjGHGkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 02:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjGHGZi (ORCPT
+        with ESMTP id S229513AbjGHGj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 02:25:38 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2103.outbound.protection.outlook.com [40.107.117.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118071FE7
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 23:25:36 -0700 (PDT)
+        Sat, 8 Jul 2023 02:39:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC941FEA;
+        Fri,  7 Jul 2023 23:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688798398; x=1720334398;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=O+SNmx28q4In/9CQlAqK/y25QsEpB4jY3uHOZnziMuo=;
+  b=KGJKcnIH5j+9/OH8Dnjna0/ljEBSk/nhDwgKLhtn3vMKt6otkpNcUrxt
+   Zv1qAUpqkpEScjxTmJM7YOaUYSZc5ZI7623rva9fsYlHF6Dh5QbUJVrue
+   SptM/4AbDGa3sG9f6QG17O6AQ9aMj3OvLxChI6eyLimCjLrUdinoYXnaE
+   hJrOtubGHM3Z8/FB727+GqC1eYNi3CuDKQXYWolDi7UtlnKnw5JLPs60G
+   q2R4CRpatUzSjwK3UjLWNzjuQfTa5eQj3aCXdEhAGFEd4HQRP/iO62fm1
+   NvsuIBbeFO1baeupcKa6vfX7t8xQ5NbzhwtQ/NLtLwmvDZjG26a2kOW9F
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="353889294"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="353889294"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 23:39:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="810265098"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="810265098"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Jul 2023 23:39:56 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 23:39:56 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 7 Jul 2023 23:39:56 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Fri, 7 Jul 2023 23:39:56 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 7 Jul 2023 23:39:55 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RWTetpgVFFU5Ra2Ha+YqwPAfGMXsgbJUdzTltWelxciyhITa/XJybqkGgFym5Ebg5f6tBH235CoSboESeIV7VEZqGUe62jxp32qTPywNpkABYRWPjThnKCI3803HrdzFHvH1/Olkz5wRRY9TYHx5cSzX6C5V6ONJowQTolRaG4reSUF1WiHU74K4Xq3wAGce74mZ8wHrv1E9sKL4RZ0lkAzpm1GByAF+DrGCFqPIkykQI0dIAsnYk9YmLf3VAEERJtliqUnuaZt6W2h/Yza7cO/an4CuznC33wyukDtbvn8O8DoXmzjDDT4hkYouIVvRbfkCojfLoNOSSgexydW5jQ==
+ b=ewfVGB/Db4w6dKY5hAcf3ti9MQPxmbgCkcdT36R69uSFc9YCG2/BSjwzh7RvdQ7h5VoyHzPA4tar64tQuCt067+QXXQTCBLOrGsWf3bAbH2Zv86ga7CdyBJnLa+vRvYw0urWM2TyaVq4YskbVH4XDWUF7KknINH66sGOSw2jDXX24Cp95iKB0rI/qXmsGz2h8+QKt9oW09Am7wWLBsrkqATJpiN8mdiUh5b106LVtUgRk4UVms0YjbcXHjxXYSY0F7sHaINYNCGe9F4plTXE+YKppH15eKfTTatttym0YjBIyu2jeC26HLG6k9IUH2Z5BAwYGM0b2LwEmtjChWJ3Vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D5hyXC2cc1KjGWSui4/Lb6jxFgrEn2mlVSFkJ8lo3uw=;
- b=nEXs6ktm7YpUz+As5BCC8MOcwX/RMz6lW++1jyrQYuzKt5mhf7rDnNllvIfVs+Fk6u0NfKPbzg4ehVwUAlNpwYUWsDVl9MYuqGgtXRwLcPvqR0l/0ItZYba4XXPd9vJLYEV5zMzRfElJAHXagWbpjXoXe3fT2D71DaVOXbkMBAx6aJh7RgBCDqPwinToVZ9sdwT7bYLjJozGAfzK0XOkHmlrWtaulKvNe0Wdg+lAV7zR6Z8Dah4ei8CQqp5dl99p5Ia570K/bO9DbSW1+riEuKJWIYTqizwXfWy59iFzVteDTgMYanOQkGCBYIs2yyTIECA+FaTvjZ4J/Om5Y3sdzA==
+ bh=ew4T/kWyrhIwx+rYamnmfq55vhloZlEX1yz1MhTrHGg=;
+ b=eC48Rlk9gqo2sKnYvE0uYC1tVj3f7Et3eOU5YeBX0JCD1Y8rXiUio9sNS3uyUTWdD4oaxSmal5GRRCEtoqe3Z8S/PJHPVj8BemXFx8AuhSMgGWM7yGBUzKcIJ4DpRuOQeOWpV6+zGLsa0x4ddNpjoTW86sJNvUi2F8NSKbElc679eQKd3JZmir321defFt9S4M9Rdg8eUDUlOM+0FhmC7lR/Ri16myd3kAHp4Zors7p+k6w2IRdKrmy5r5sfNu0vuBsI+v9xtUDzs+9hXAsy0L9VU8DFhZnbbdMJmfLZvSN70dxKNVGTv+4beAIP6wdjMuOcsoyUSEA+PVWDwO29tg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D5hyXC2cc1KjGWSui4/Lb6jxFgrEn2mlVSFkJ8lo3uw=;
- b=RfnDyjGwPMk98Otlm+V/A6jvHPh5OZlpj0Bkq+RE1z3EsHX42n/XGBYXYFvksiG8h/7U8tkOJNKvqxHccMecbMOxd8y0KhlWf6Ye05xy9ltHrK+NhQ7cUZYyVrEQBzxmfnDmGxHzaGc04DFRTzK/G066N6yXZtgPxOEJ3wR19IedlpBD+p0AtQSXD3faiK5/UjuYjRCJgk2Qkui7YB8Vlaj5wVNCKt7KmbIYvE3KDRevL6UoleMsWn09xpQd/51AWRFpLYYAlR1ZCMSUiTmcWOgZdsuwtfhE1SWCTGweRULbCZbYDVkb66h05kV3v4j2bqCMTw8TCPirgZy/06yeTg==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TY2PR06MB3342.apcprd06.prod.outlook.com (2603:1096:404:fb::23)
- by PSAPR06MB4503.apcprd06.prod.outlook.com (2603:1096:301:8c::14) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com (2603:10b6:510:212::12)
+ by BL1PR11MB5462.namprd11.prod.outlook.com (2603:10b6:208:31e::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.26; Sat, 8 Jul
- 2023 06:25:33 +0000
-Received: from TY2PR06MB3342.apcprd06.prod.outlook.com
- ([fe80::2b85:24ad:2492:c96c]) by TY2PR06MB3342.apcprd06.prod.outlook.com
- ([fe80::2b85:24ad:2492:c96c%5]) with mapi id 15.20.6565.026; Sat, 8 Jul 2023
- 06:25:33 +0000
-From:   Chunhai Guo <guochunhai@vivo.com>
-To:     xiang@kernel.org, chao@kernel.org
-Cc:     huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Chunhai Guo <guochunhai@vivo.com>
-Subject: [PATCH] erofs: fix two loop issues when read page beyond EOF
-Date:   Sat,  8 Jul 2023 14:24:32 +0800
-Message-Id: <20230708062432.67344-1-guochunhai@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0023.apcprd02.prod.outlook.com
- (2603:1096:4:195::11) To TY2PR06MB3342.apcprd06.prod.outlook.com
- (2603:1096:404:fb::23)
+ 2023 06:39:53 +0000
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::c65d:c846:f197:3ca5]) by PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::c65d:c846:f197:3ca5%4]) with mapi id 15.20.6565.026; Sat, 8 Jul 2023
+ 06:39:52 +0000
+Date:   Sat, 8 Jul 2023 06:39:14 +0000
+From:   Matthew Brost <matthew.brost@intel.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+CC:     Danilo Krummrich <dakr@redhat.com>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <tzimmermann@suse.de>, <mripard@kernel.org>,
+        <corbet@lwn.net>, <christian.koenig@amd.com>, <bskeggs@redhat.com>,
+        <Liam.Howlett@oracle.com>, <alexdeucher@gmail.com>,
+        <ogabbay@kernel.org>, <bagasdotme@gmail.com>,
+        <willy@infradead.org>, <jason@jlekstrand.net>,
+        <dri-devel@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Donald Robson <donald.robson@imgtec.com>,
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
+ mappings
+Message-ID: <ZKkEkoHSGwICKwHf@DUT025-TGLU.fm.intel.com>
+References: <20230629222651.3196-1-dakr@redhat.com>
+ <20230629222651.3196-3-dakr@redhat.com>
+ <20230707130010.1bd5d41b@collabora.com>
+ <e92219d7-77f7-a40a-39d9-ea7afc5f3687@redhat.com>
+ <20230707145241.6ea73643@collabora.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230707145241.6ea73643@collabora.com>
+X-ClientProxiedBy: SJ0PR03CA0222.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::17) To PH7PR11MB6522.namprd11.prod.outlook.com
+ (2603:10b6:510:212::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PR06MB3342:EE_|PSAPR06MB4503:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc6bf441-165d-4a18-1938-08db7f7c2208
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6522:EE_|BL1PR11MB5462:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4824476-6ef1-45cd-f14e-08db7f7e2251
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 52RwkpjHMX47KBzbp6ThDAmhC/roiw/LiVeyt23pBX3GIy9NMvzPhf86y3o2tueqjy/h5oJvDiGvdMeYEmnTlWxPk5Qh60NHHFyoA77EIW65UOxXqGE8wzc/nIUxJxmDF9LGen9CYqUchLzcbHh5gcjX4SxW+fv+9nBHpqwgFRKuLur4PQCXId4yp+ADC1L05VvUT5Y5TPkb7oAPOme7AhO1AXNsJ3T+8OjdkysDfXLWL9xRDmD+VOB8tLgRS2v0RMDiucZM/3izn/268qVMyvEQtTZbk4p/18mjWgI1T+EoIRExSOJ+ETf2PlqhWqMEpKvpS5zRH3XTL4Kit4Z9JP/hNlrxUqpt3dzKfVqle2YEJ0Aag8uOSoJH+3PWfOREJxY4YwtqTcdilMcy7IDLjRGkFnCvw80VznnVauIQg6+3SzSifUu6Q0CcYO8TbvAMf40MEDmIiwoFQyKyctbn0A9CsELjL4uBYkBSzjP41qUy0mSfyiPAMhJB8UvPW64Oq6y+R2pRaeswLv+MnMy+fiLOiGPlrjOd1Dq3Nq8qyd00F9lEZfiAjzc7XklA0iE9A8MD3ci0HsYL19zTb5B04ZfM+kmY1RM24sun+tT4tRf0iTsVseenGMfF6qHe7YIA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3342.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(366004)(136003)(396003)(39850400004)(451199021)(41300700001)(5660300002)(6486002)(2906002)(316002)(8676002)(8936002)(4326008)(66476007)(66556008)(66946007)(36756003)(52116002)(6512007)(478600001)(107886003)(86362001)(186003)(38100700002)(2616005)(38350700002)(83380400001)(6506007)(1076003)(26005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: NH7nyKEbDygYYeQxIaXdpygY/ErwS2glzA43+SpBDxwJ3Ga37jKv6TLs4T2gMEx+a+4WvLA30CgDFvDHZim0zfBH1cYXP87+MPpbQraxursrjkJX/4mD5LugKHMXDLgelbxfd4h8okBcFX2G2HFpWL6IZTeeK15eVikgkOk0l+wD3l6k5pj0/N9NTpWk5nkI83CE5Uh8tDGb17XN5RVTz61c/NixTb0xsp2BQ1giz0RGcTTM7rSC7zpR/saH+yvIRLl35XilSxcb2pL42ctYkrPn6jUArFj9hOVWccrwlVJtzLy2DHUjw4CgitQE9SIPamkjK4ds2Dot6B6Cmq8vZ92Zc37QqabJ0kAE7fwRs37Y9idTlLbY+eWIDq7JojrsfOFmf26PcfYPm4454uxVbc6kDSoKJgLoxCXbiwKLbyIKXGRaVpwc+Fvf/OdDBKnPD81lYXBm/OJsAFxcBaNJqYpOrUmTkEUXFDekU6e8Nn4mSY1+dgla2dlqr39oIDEi5dU7HiiVvCd88Edixb3PI89fq/lw6uDSId6ACSoPITEzbPlbKRZYqKB4MdpMd0Y5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6522.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(136003)(396003)(39860400002)(451199021)(38100700002)(86362001)(54906003)(6666004)(478600001)(66946007)(6486002)(82960400001)(5660300002)(6506007)(6512007)(26005)(186003)(7416002)(316002)(8936002)(8676002)(66476007)(6916009)(66556008)(2906002)(44832011)(83380400001)(41300700001)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eAGsGzH40NzUXhkzbB12d9DTJ5aI6I03ulawyNt90nMnr+96sc3cBgkxGX+8?=
- =?us-ascii?Q?XELQQjq6eGCG4l6eiTylwyt8tv/TKWOVEQ73rep4P1nKxKuBcHUCFOBtTzU+?=
- =?us-ascii?Q?DcNCcpKGERf1pVCKnaUVCkt3YdcX58PlUeu9/iLsgF19XCFJWgpKKLz9+Eo3?=
- =?us-ascii?Q?tgpd+I0nJ3REyIYMiC5PBHzM4ek4DzFXiiXFOBxK3fy0h/8JbfXkofRH6nRX?=
- =?us-ascii?Q?EyTS2/5DbvUWTKrZ0qSMVRFkFVK0ZKetIJ4+8qYdZ3wYEjKL34SNvBvpiltG?=
- =?us-ascii?Q?ZSf2VUR9benPDhlMkJZuCdYds/sbL1aewCjrSKtIDPzY0nHzhLi1iGdsIPTP?=
- =?us-ascii?Q?7un6vU6QG9JdtBYye1N8Jr5cl/2iAsjCERzY9aNuFnYsK9xgp6Mc5Y0W7dI0?=
- =?us-ascii?Q?SxlQrD10e9kedM5KuQJqTOnOHT3Bsf650NzYoo4qgqJfPHjSV/XK5ROmB2js?=
- =?us-ascii?Q?U1Z5PMAZdk2UXR2e9QQVSWT/eGpbS7X2vBFk3WE8Ur35OjwLvYbj3WH5WJyp?=
- =?us-ascii?Q?xBQQbId6GyBYgVBGoVmCbkFPQV5gEdX294SSgjrlEjCMpsCdJtPFyJhVO0Gg?=
- =?us-ascii?Q?sCldQKZf23S4YG0jZHA7JpC0bE4E3ERtiK693Pnsq2HUyeuoNRA5oXdSUdh7?=
- =?us-ascii?Q?AOxyvKs8LJ0p4syy2hxIHfAbEfAnrPi6vblDOFFFJdMRi/7MOAuBidprGail?=
- =?us-ascii?Q?v8NF1I6vMZOZZvu1FYxh0d3ei9HkQSGHkK8XILXHBDMSA1em3buR9HoZQm6X?=
- =?us-ascii?Q?3Pu6zrdJ6VIofGrMUP5cJu2BY1zubfVfKw2/jAvQNZlUuCN8Xe4aWKMpEYec?=
- =?us-ascii?Q?HW+eDDl3lhqlkN0bRqkOsCyomJ3u/mrtk900y2AjXbXc+tFMsC1rf/hyp47L?=
- =?us-ascii?Q?3O3fQc0Hh/SFj8pSqCEkfRV+lEHYmNduYJjBa9pG3C/eBlK9QTRixwQZPm/c?=
- =?us-ascii?Q?iMyy0GJwKxMo8saPctViroTGNt8oHMlV1rprWQKWTcYM6LfsZbnPpse8xE86?=
- =?us-ascii?Q?XYtfyM79IpVc05qIEAmIntOdvI+ypCtRy4lAagtIDoLjwgxhqrqlhBjFmrXp?=
- =?us-ascii?Q?aUsxtUCzm9haZ3n+DSkP6VgwdTi/PMvs3sMZO/USvTpgqNF9Xo1Gql/NQBhR?=
- =?us-ascii?Q?JMVHxjsfucj+mZTH7f4NDBlMB++Ekg/fM+ueby0VEV+cEiucajGmVzunPjPm?=
- =?us-ascii?Q?91mNbHtZwrlSv42bP057W/nRHDU1XLhk5SV25Dute/AL9PBmn1BVc6POX5yf?=
- =?us-ascii?Q?4zEf/d1ScHwrlcgKefUTNwuhztMQ3GvcB3uajO7FJbngngUEgutS02ZxUc17?=
- =?us-ascii?Q?N9/DebyU+jQ1OsU0cO55EZ5uKnGLEQR3lUHqJXUX6KEK5IpkPnbAcNtyPATX?=
- =?us-ascii?Q?w7QcjqOQ7WTBy1GCmX2GJl/VENcHPIaBplqwegtALi+4KNoH2GdS1sM0eqNn?=
- =?us-ascii?Q?IECapZTOaB1ACLmq5OEEOaXRaiXsqsKYSakfq+oddGqhdJQEKJh/bzvOaCHr?=
- =?us-ascii?Q?PEyTIuD/1zjb9QN6QJHMKk30AuLBW81LexoNw1Cek9lOmcx/y703J2zfaodh?=
- =?us-ascii?Q?medgDs3dws3YKQWNEpTEKTUELzApaS+jG65aKdAx?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc6bf441-165d-4a18-1938-08db7f7c2208
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3342.apcprd06.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oPG22WoMd6QB5Xm3bOcKptEeZzDZhAiYvkkZ6mtMTea5hHx1z5yKPw1KiQ6+?=
+ =?us-ascii?Q?awlcRNjZDpstM2kDWnFmFzaciuRVeNLL29NJN8BiuUEOjP+JkOd4YLyzW1PH?=
+ =?us-ascii?Q?QjqrJs6EfM6VEwqcoUJJmafyYd4JxMEqB+0z6jtau4lqgPvmHSP/lQysjnzi?=
+ =?us-ascii?Q?rB4QR3vTmpdsMcNNYjNXOuywr58Z5RM2rbajFxUCtm+tgRjVBVzHe2T9PjyB?=
+ =?us-ascii?Q?VcygfwsMxM/ZmR7/rIJX215KiSPLUMVUGek5hogEb6ekEvmAcmFEji9N0VQs?=
+ =?us-ascii?Q?qcIKui63iImoPzcwUcAVokfizortY1mEetq0xPGCMbnD7g2XYS11eQwFmnQu?=
+ =?us-ascii?Q?iXiJDJxfXX4OjS2TtzTcDbKY1vKLisPzu/PxqGykkEBbwoTIbk8HpOzVUVft?=
+ =?us-ascii?Q?mR1qwEHI3oOvFrBkSfjKGWGmE+E0vLxvy6qxZ8NPyCg4QyHc8R+FiHy4APSO?=
+ =?us-ascii?Q?6pKvubd3u5cVOPesHyQNXBbGx0Zki5+fDWGbzpzD5cb7+GTzrjVLbonWBdk6?=
+ =?us-ascii?Q?QkUHtjcKzpC5FyG4jf65VbWDente6vbElk/G1cvyUEhvlEidAftB43kBUC7Z?=
+ =?us-ascii?Q?3pJL0VOdfB4btyr55U115S2xe68bpjQnacM4F7mcItU+Qjqo3JrZ5EE2ylFm?=
+ =?us-ascii?Q?XZIzmFcLejoIu9KcknqX6hmwOQhOWbNwVUtCvotqUQ57CVXpk1QfuPhsnK1Y?=
+ =?us-ascii?Q?Ao0Jt6CCvxQrz4bEEadYeDWskCtYe7Q26Tx4Nd/KUxDYlV1jxULONjh92W70?=
+ =?us-ascii?Q?K1enNBYhVXHZffC2F847+IVSwZQLxsuNYpYe2mo/Ak7OxPpiXDvJxU/lgwmL?=
+ =?us-ascii?Q?+86AyScwg68iP2q1GqZHiHjsvkrf39CIUdkfZlmXhiizFdDSDiE+jfFzT6wK?=
+ =?us-ascii?Q?k51tWVK8lYqON2oGks1tum5NIAXovQ4gHXs34C45MUUdChV3uloSNw5/yMmc?=
+ =?us-ascii?Q?SZA1wI3NhqUWcac4qsPdUExxBMY9eFuYaZFga7/8iehrdi3HWh4y6/I+7ep1?=
+ =?us-ascii?Q?oima/Hflck4gXgHdGAJKnQTpj3uJOd2exHnpqv9ozCErNvY8A1Ys6+cM9hM8?=
+ =?us-ascii?Q?beriX/nbs9FDYbWdKeVxBTOtBIGKZkQ6gQDiUXntPWyKFGiOW61Dn74H0TkS?=
+ =?us-ascii?Q?Ru6FhEZiV8ap/FDmi/F47UL9I9GTpMmlt09IpVSmGOnTtjbKaDjCeJp47H/w?=
+ =?us-ascii?Q?bfrWhU3wgQUJtgmIUPw456B05z/CUFQcDDEfDSYzgoOLUDzrPnq8Hhnq+uCc?=
+ =?us-ascii?Q?qJ8vP2rcTb3QXsKLTuMHWeTBOMXcpN9LrT6sGnYB31EHf3AifL19r6/19H64?=
+ =?us-ascii?Q?qyE6dMp6A4Vz8/6DyTu5wqMajnwNOZmmn06YhtzmoVqAS+aS7zcAyicL/pb2?=
+ =?us-ascii?Q?cOKPRAOG9Yvc8N+sLSzY38v7YQx/sUhk/s1XuQlvA83R9TA0/nli8JxwZs5K?=
+ =?us-ascii?Q?mJZD1hp9TonmtryxR0g8SY2bLvtITabog2MVVt+OtLomtXcsGiFw+tgkRmiu?=
+ =?us-ascii?Q?2jmGNUwMmJ3/PYrI4eAs1E5AO43jKl3dopC7tPELLzSyaB20TXnxCCIR7kK4?=
+ =?us-ascii?Q?KERBfxiC7lEUvrtm7WHPBZ+ygQc9Gsqbfe13T0IEVBN+GaqDRXfWZCbokGy8?=
+ =?us-ascii?Q?Vw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4824476-6ef1-45cd-f14e-08db7f7e2251
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6522.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2023 06:25:32.9775
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2023 06:39:52.4223
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pRb6DHBizRuKwg6+3Jz56Mbm8V/y6awwPVC/UT7WzdUXJQZWjiz9SBdr7JuxFeF1ymeoRxRC3lG/Eo7Iy1yQ4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4503
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: vG/y4li/jpIYoI7V1QY/b6NV+juNJ9coyNbEvCWLFvqsr/AtiJliQuKw+N9iFIkJYWbArRLF2X/DgwbR+/RahA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5462
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When z_erofs_read_folio() reads a page with an offset far beyond EOF, two
-issues may occur:
-- z_erofs_pcluster_readmore() may take a long time to loop when the offset
-  is big enough, which is unnecessary.
-    - For example, it will loop 4691368 times and take about 27 seconds
-      with following case.
-        - offset = 19217289215
-        - inode_size = 1442672
-- z_erofs_do_read_page() may loop infinitely due to the inappropriate
-  truncation in the below statement. Since the offset is 64 bits and
-min_t() truncates the result to 32 bits. The solution is to replace
-unsigned int with another 64-bit type, such as erofs_off_t.
-    cur = end - min_t(unsigned int, offset + end - map->m_la, end);
-    - For example:
-        - offset = 0x400160000
-        - end = 0x370
-        - map->m_la = 0x160370
-        - offset + end - map->m_la = 0x400000000
-        - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
-    - Expected result:
-        - cur = 0
-    - Actual result:
-        - cur = 0x370
+On Fri, Jul 07, 2023 at 02:52:41PM +0200, Boris Brezillon wrote:
+> On Fri, 7 Jul 2023 14:41:23 +0200
+> Danilo Krummrich <dakr@redhat.com> wrote:
+> 
+> > >> +	     va__ && (va__->va.addr < (end__)) && \
+> > >> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
+> > >> +	     va__ = list_next_entry(va__, rb.entry))  
+> > > 
+> > > If you define:
+> > > 
+> > > static inline struct drm_gpuva *
+> > > drm_gpuva_next(struct drm_gpuva *va)
+> > > {
+> > > 	if (va && !list_is_last(&va->rb.entry, &va->mgr->rb.list))
+> > > 		return list_next_entry(va, rb.entry);
+> > > 
+> > > 	return NULL;
+> > > } >
+> > > the for loop becomes a bit more readable:  
+> > 
+> > Yes, it would. However, I don't want it to be confused with 
+> > drm_gpuva_find_next(). Maybe I should rename the latter to something 
+> > like drm_gpuva_find_next_neighbor() then.
+> 
+> If you want to keep drm_gpuva_find_next(), feel free to rename/prefix
+> the drm_gpuva_next() function. I was just posting it as a reference.
+> 
+> > 
+> > > 
+> > > 	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)); \
+> > > 	     va__ && (va__->va.addr < (end__)); \
+> > > 	     va__ = drm_gpuva_next(va__))
+> > >   
+> > >> +
+> > >> +/**
+> > >> + * drm_gpuva_for_each_va_range_safe - iternator to safely walk over a range of
+> > >> + * &drm_gpuvas
+> > >> + * @va__: &drm_gpuva to assign to in each iteration step
+> > >> + * @next__: another &drm_gpuva to use as temporary storage
+> > >> + * @mgr__: &drm_gpuva_manager to walk over
+> > >> + * @start__: starting offset, the first gpuva will overlap this
+> > >> + * @end__: ending offset, the last gpuva will start before this (but may
+> > >> + * overlap)
+> > >> + *
+> > >> + * This iterator walks over all &drm_gpuvas in the &drm_gpuva_manager that lie
+> > >> + * between @start__ and @end__. It is implemented similarly to
+> > >> + * list_for_each_safe(), but is using the &drm_gpuva_manager's internal interval
+> > >> + * tree to accelerate the search for the starting &drm_gpuva, and hence is safe
+> > >> + * against removal of elements. It assumes that @end__ is within (or is the
+> > >> + * upper limit of) the &drm_gpuva_manager. This iterator does not skip over the
+> > >> + * &drm_gpuva_manager's @kernel_alloc_node.
+> > >> + */
+> > >> +#define drm_gpuva_for_each_va_range_safe(va__, next__, mgr__, start__, end__) \
+> > >> +	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__)), \
+> > >> +	     next__ = va ? list_next_entry(va__, rb.entry) : NULL; \
+> > >> +	     va__ && (va__->va.addr < (end__)) && \
+> > >> +	     !list_entry_is_head(va__, &(mgr__)->rb.list, rb.entry); \
+> > >> +	     va__ = next__, next__ = list_next_entry(va__, rb.entry))  
+> > > 
+> > > And this is the safe version using the drm_gpuva_next() helper:
+> > > 
+> > > 	for (va__ = drm_gpuva_find_first((mgr__), (start__), (end__) - (start__)), \
+> > > 	     next__ = drm_gpuva_next(va__); \
+> > > 	     va__ && (va__->va.addr < (end__)); \
+> > > 	     va__ = next__, next__ = drm_gpuva_next(va__))
+> > > 
+> > > Those changes fixed an invalid pointer access I had in the sm_unmap()
+> > > path.
+> > >   
+> > 
+> > Sorry you did run into this bug.
+> 
+> No worries, that's what testing/debugging/reviewing is for. And I'm glad
+> someone decided to work on this gpuva stuff so I don't have to code it
+> myself, so that's the least I can do.
 
-Signed-off-by: Chunhai Guo <guochunhai@vivo.com>
----
- fs/erofs/zdata.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+With Boris's changes this version works in Xe.
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 5f1890e309c6..6abbd4510076 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -972,7 +972,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 	struct erofs_map_blocks *const map = &fe->map;
- 	const loff_t offset = page_offset(page);
- 	bool tight = true, exclusive;
--	unsigned int cur, end, spiltted;
-+	erofs_off_t cur, end;
-+	unsigned int spiltted;
- 	int err = 0;
- 
- 	/* register locked file pages as online pages in pack */
-@@ -1035,7 +1036,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 	 */
- 	tight &= (fe->mode > Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
- 
--	cur = end - min_t(unsigned int, offset + end - map->m_la, end);
-+	cur = end - min_t(erofs_off_t, offset + end - map->m_la, end);
- 	if (!(map->m_flags & EROFS_MAP_MAPPED)) {
- 		zero_user_segment(page, cur, end);
- 		goto next_part;
-@@ -1841,7 +1842,7 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
- 	}
- 
- 	cur = map->m_la + map->m_llen - 1;
--	while (cur >= end) {
-+	while ((cur >= end) && (cur < i_size_read(inode))) {
- 		pgoff_t index = cur >> PAGE_SHIFT;
- 		struct page *page;
- 
-@@ -1876,6 +1877,12 @@ static int z_erofs_read_folio(struct file *file, struct folio *folio)
- 	trace_erofs_readpage(page, false);
- 	f.headoffset = (erofs_off_t)page->index << PAGE_SHIFT;
- 
-+	/* when trying to read beyond EOF, return zero page directly */
-+	if (f.headoffset >= i_size_read(inode)) {
-+		zero_user_segment(page, 0, PAGE_SIZE);
-+		return 0;
-+	}
-+
- 	z_erofs_pcluster_readmore(&f, NULL, true);
- 	err = z_erofs_do_read_page(&f, page);
- 	z_erofs_pcluster_readmore(&f, NULL, false);
--- 
-2.25.1
+With that:
 
+Acked-by: Matthew Brost <matthew.brost@intel.com>
+Tested-by: Matthew Brost <matthew.brost@intel.com>
