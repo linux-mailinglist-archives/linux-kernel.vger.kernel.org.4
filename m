@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE1C74BD7F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 14:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C7D74BD82
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 14:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjGHMpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 08:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        id S230370AbjGHMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 08:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjGHMpN (ORCPT
+        with ESMTP id S229627AbjGHMxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 08:45:13 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DABAEC;
-        Sat,  8 Jul 2023 05:45:12 -0700 (PDT)
-Received: from fsav313.sakura.ne.jp (fsav313.sakura.ne.jp [153.120.85.144])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 368Cj5SS073574;
-        Sat, 8 Jul 2023 21:45:06 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav313.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp);
- Sat, 08 Jul 2023 21:45:05 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 368Cj5dW073570
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 8 Jul 2023 21:45:05 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a2596c0a-ad77-d70d-0b26-5d2ff01d1857@I-love.SAKURA.ne.jp>
-Date:   Sat, 8 Jul 2023 21:45:05 +0900
+        Sat, 8 Jul 2023 08:53:06 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997C41737;
+        Sat,  8 Jul 2023 05:53:04 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id CB1F0861A1;
+        Sat,  8 Jul 2023 14:53:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1688820782;
+        bh=IvddLfxwhrH7kTVtfgBFgKokYGybU9LtMq+/etkdvbI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NHqRydq/3DWpKNfzIpfw3UKozdmCaMiozNFilkMiJMlziIeTSdMqOTMJ2cQw14JKI
+         ruGev34X1eYWi8FvOyvKSOPUidKLzZL63NBpXZ8YMMRoD/bG12sF7vF2+PeFszVewa
+         WIAsD7sgfn/VbOL4miCL8falHNw9TI+1Z5BBy2tW/oIzOOTOzpe9OrkyiNuV9rqmm0
+         6ORny8Uo/MywvdnVktK+h6squ6maxI4NBwr+B4HWjQNhilCSlTngNB/8ir03B90ami
+         PjWd/c53V7RmBPTSCi5WJGnu7QPEVyB+6oJcmTMDOvnk+2yc21FQwAYYoWGczGNQCl
+         xF0GxvbOw2lMw==
+Message-ID: <db4304f6-0d8b-5eef-38d9-f3965cdc3cba@denx.de>
+Date:   Sat, 8 Jul 2023 14:52:58 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [syzbot] [tomoyo?] [hfs?] general protection fault in
- tomoyo_check_acl (3)
+Subject: Re: [PATCH] thermal: imx8mm: suppress log message on probe deferral
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230708112647.2897294-1-a.fatoum@pengutronix.de>
 Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     syzbot <syzbot+28aaddd5a3221d7fd709@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <000000000000fcfb4a05ffe48213@google.com>
- <8bacb159-6512-b2d0-d015-a9c4f141df8b@I-love.SAKURA.ne.jp>
-In-Reply-To: <8bacb159-6512-b2d0-d015-a9c4f141df8b@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230708112647.2897294-1-a.fatoum@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/07/08 20:29, Tetsuo Handa wrote:
-> This is not a bug in TOMOYO, for booting with security=none results in crashing at other locations.
+On 7/8/23 13:26, Ahmad Fatoum wrote:
+> nvmem_cell_read_u32() may return -EPROBE_DEFER if NVMEM supplier has not
+> yet been probed. Future reprobe may succeed, so printing:
 > 
-> This might be a bug in HFS's error handling. But since there are several bugs
-> which have been added as "mm" in the last few days, let's change this as "mm".
+>    i.mx8mm_thermal 30260000.tmu: Failed to read OCOTP nvmem cell (-517).
 > 
-> #syz set subsystems: mm
+> to the log is confusing. Fix this by using dev_err_probe. This also
+> elevates the message from warning to error, which is more correct: The
+> log message is only ever printed in probe error path and probe aborts
+> afterwards, so it really warrants an error-level message.
 > 
+> Fixes: 403291648823 ("thermal/drivers/imx: Add support for loading calibration data from OCOTP")
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Bisect log says that 6.3 and 6.4 crashed similarly. Thus, assume that this is a HFS problem.
+Reviewed-by: Marek Vasut <marex@denx.de>
 
-#syz set subsystems: hfs
-
+Thanks
