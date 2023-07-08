@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABBD74BA63
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B433774BA69
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 02:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbjGHAGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 20:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S232787AbjGHAGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 20:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbjGHAGQ (ORCPT
+        with ESMTP id S232454AbjGHAG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 20:06:16 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFD3126
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jul 2023 17:06:14 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6c5ede714so45559141fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jul 2023 17:06:14 -0700 (PDT)
+        Fri, 7 Jul 2023 20:06:28 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7532123;
+        Fri,  7 Jul 2023 17:06:27 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b74e2d8c98so2257875a34.2;
+        Fri, 07 Jul 2023 17:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688774773; x=1691366773;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uOm6ONPFmI/dV+4chdGjJVecrD5MmlD4Ahx6W6/8yEc=;
-        b=sFzALzpLbJoMKAhx/sceY4MghcwmclKzQE27quEyVSGyYGdsbRROO24OlDOhvq9hq8
-         8sxzqii+IY7IHuS2vEbXUn6uCeIbOUFte0tXGKEFfHGU8wPVu7wADNRanEG+o6drAds3
-         Q4/Uy/J/Bo1tbDWvdqi+2n5Y5ww91fvi6sKyt5qEQZ2SOylx5TzIHXQ5BWmi1FaZ3Rrl
-         IIwdu/LTc53jbRwVlk9DB8w7prWdm4cYFcKk/ipoZjGMzLFnfe+iEUqDIkaIV032/8/D
-         L+mMiXtsJQsD8YYmVnJl6lKZhOJg/teks6r7P+gVVoY+S+/Nb4O6HLy8nFinbWagjAWL
-         vH/A==
+        d=gmail.com; s=20221208; t=1688774786; x=1691366786;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uxQ9ORFt2KalpWVPLln/XeJlZQtOLOl2gBwuEluzJqk=;
+        b=ih/x/XN1N1IP8D9qyTD4drevI8/8TWIA770S5KgG7qcDE+qdzprHBGX1oqGrMEt8ZE
+         JSzTfGSyBRGn/OstUnawSgSa1XXD72WLa+Dl9Sga4r+/JatWMLX8SXMm3kCyU7Gw+SGw
+         owjWuWQFTxD8MpGyTsq0eQAgCXIqQyaes6pnO+bfKVCGci+i6xgyKrTivQVrNNepFXFZ
+         UwfvnbYB+CkbjCrKUG73gZ0DiRxGen+8CRlj7E9wL8ivurWIq8Ku6yhfYPlA1aLABlRE
+         ZeaO3iAdnRFmUbCQk9CMSNK86ZtoCRdeHAv1ST2Xu2croQBTb1cROTaJBEVTaYVHuwBy
+         L7kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688774773; x=1691366773;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uOm6ONPFmI/dV+4chdGjJVecrD5MmlD4Ahx6W6/8yEc=;
-        b=TcJkrkGLqvKo6u/4XG2uX1MC7CeRRrzS3ZtAVyZRHzWXKJn/ry+qnmBjzMrKLEY2+Q
-         03d9vlxQHI+52hJECVZEjEp+LgRt/mYPyq4a0ki8GYS6O+h8pNQ6NaZ1fZ+E1aS/SP6z
-         bQAN6eBf7DFLdNmsKgNr9q+oy+SCKT9gulHdzBLInbZkZFJ7VyM+sQBO4nrSKihzMqot
-         yI/FF4NK5dGIt1TtKMB28AoLUR9ZEC/71imjpsLH/SUDNyLxcEQD2/cep8ResaCnWeVj
-         3tqD4Z7SqZybzI6RayPBh1RQIMH9IN3wm543KfddN6VeVzEXgFsz0CbBaATxbXbYzQ65
-         LshQ==
-X-Gm-Message-State: ABy/qLaLkxSG0r93+0uIaXu8Df07T+KAkIbOpWaUIKrC8LDwrWeoPR07
-        4Pe+x5e3BCLsGdL2dIPSxgatkw==
-X-Google-Smtp-Source: APBJJlHOik++wv/6w70KRSrv0bT3G7Snk21fU2xY9sNvvffzWq/fv3vPH6Vbrndhf8+kCMQIlNUieA==
-X-Received: by 2002:a2e:2e17:0:b0:2b6:cd70:2781 with SMTP id u23-20020a2e2e17000000b002b6cd702781mr2298551lju.12.1688774773242;
-        Fri, 07 Jul 2023 17:06:13 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id u20-20020a2e2e14000000b002b6c61bac2esm988436lju.92.2023.07.07.17.06.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 17:06:12 -0700 (PDT)
-Message-ID: <fc5501cf-c335-81f7-1ad7-26fdc1b6922d@linaro.org>
-Date:   Sat, 8 Jul 2023 03:06:12 +0300
+        d=1e100.net; s=20221208; t=1688774786; x=1691366786;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uxQ9ORFt2KalpWVPLln/XeJlZQtOLOl2gBwuEluzJqk=;
+        b=F0UOQUctJ3cZcNVluwYrcYGRmxwEG9OK79h4sS2g/NaXN/61S9t+b9difaS2UBa6ri
+         K8PsNr2dl+RpIHVaPVjUTAPMTKS7pq5ocZvXruMqo1RdP+i2y64vku86e04hWpVni4vq
+         MKEKELF6w/jkB7S6u7hnVo/mYFMZdUy2+/ZSfVdoSVC+92LXY2oVrIzedEVHiurFEJE/
+         jYqTz+Wr8dMBDCvlvI82C6JpenNZKBE63hlzhChX8VlBDWW8mQQMl7oyzBYaLg3k7Lxr
+         PBxZ00V8tA+/xavkXRx8UEzT2c4zbQoemBoWH6MwPTPvHyZN/w1f1VZoVqRdOlkxuDM6
+         8DdQ==
+X-Gm-Message-State: ABy/qLbbaGXsVPWgz8b1MQJXcsQBDDplS/tfrei6CQGuBr2VaB7jbBGW
+        d9uz2P8HWDxCGo3Y1H1SKewu1cUjRL4=
+X-Google-Smtp-Source: APBJJlH+LJYi6W8fj+k19PKYvMadG7yFuvSejenF+WQtpYGeIrYZwfvXgtsbMl+ZRQ2wzQ5k5TzNUQ==
+X-Received: by 2002:a05:6870:a68f:b0:1b3:e896:9bfa with SMTP id i15-20020a056870a68f00b001b3e8969bfamr8470718oam.25.1688774786484;
+        Fri, 07 Jul 2023 17:06:26 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:38de:2bd4:8f55:60cd])
+        by smtp.gmail.com with ESMTPSA id q3-20020a170902dac300b001b66a71a4a0sm3805403plx.32.2023.07.07.17.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 17:06:26 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 17:06:22 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh@kernel.org>, kernel@pengutronix.de,
+        Peng Fan <peng.fan@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] dt-bindings: input: touchscreen: edt-ft5x06: Add
+ 'threshold' property
+Message-ID: <ZKiofhzbBD2hIzmv@google.com>
+References: <20230621093245.78130-1-o.rempel@pengutronix.de>
+ <20230621093245.78130-6-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 1/5] drm/msm/dp: remove pm_runtime_xxx() from
- dp_power.c
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
- <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621093245.78130-6-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,69 +95,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/07/2023 02:52, Kuogee Hsieh wrote:
-> Since both pm_runtime_resume() and pm_runtime_suspend() are not
-> populated at dp_pm_ops. Those pm_runtime_get/put() functions within
-> dp_power.c will not have any effects in addition to increase/decrease
-> power counter.
-
-Lie.
-
-> Also pm_runtime_xxx() should be executed at top
-> layer.
-
-Why?
-
+On Wed, Jun 21, 2023 at 11:32:45AM +0200, Oleksij Rempel wrote:
+> Add a new property 'threshold' to the edt-ft5x06 touchscreen binding.
+> This property allows setting the "click"-threshold in the range from 0
+> to 255. This change addresses the following dtbs_check warning:
+> imx6dl-lanmcu.dtb: touchscreen@38: 'threshold' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dp/dp_power.c | 9 ---------
->   1 file changed, 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
-> index 5cb84ca..ed2f62a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_power.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_power.c
-> @@ -152,8 +152,6 @@ int dp_power_client_init(struct dp_power *dp_power)
->   
->   	power = container_of(dp_power, struct dp_power_private, dp_power);
->   
-> -	pm_runtime_enable(power->dev);
-> -
->   	return dp_power_clk_init(power);
->   }
->   
-> @@ -162,8 +160,6 @@ void dp_power_client_deinit(struct dp_power *dp_power)
->   	struct dp_power_private *power;
->   
->   	power = container_of(dp_power, struct dp_power_private, dp_power);
-> -
-> -	pm_runtime_disable(power->dev);
->   }
->   
->   int dp_power_init(struct dp_power *dp_power)
-> @@ -173,11 +169,7 @@ int dp_power_init(struct dp_power *dp_power)
->   
->   	power = container_of(dp_power, struct dp_power_private, dp_power);
->   
-> -	pm_runtime_get_sync(power->dev);
-> -
->   	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
-> -	if (rc)
-> -		pm_runtime_put_sync(power->dev);
->   
->   	return rc;
->   }
-> @@ -189,7 +181,6 @@ int dp_power_deinit(struct dp_power *dp_power)
->   	power = container_of(dp_power, struct dp_power_private, dp_power);
->   
->   	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
-> -	pm_runtime_put_sync(power->dev);
->   	return 0;
->   }
->   
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+
+Applied, thank you.
 
 -- 
-With best wishes
 Dmitry
-
