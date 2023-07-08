@@ -2,46 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B5574BB64
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A23374BB66
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjGHCc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S232789AbjGHCev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHCcy (ORCPT
+        with ESMTP id S232501AbjGHCer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:32:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C34C8E;
-        Fri,  7 Jul 2023 19:32:51 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QyZ3J2NKhzMqGH;
-        Sat,  8 Jul 2023 10:29:32 +0800 (CST)
-Received: from huawei.com (10.174.151.185) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 8 Jul
- 2023 10:32:46 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
-        <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
-        <shakeelb@google.com>
-CC:     <muchun.song@linux.dev>, <linux-mm@kvack.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH v2] mm/memcg: minor cleanup for MEM_CGROUP_ID_MAX
-Date:   Sat, 8 Jul 2023 10:33:04 +0800
-Message-ID: <20230708023304.1184111-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Fri, 7 Jul 2023 22:34:47 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E219C2107;
+        Fri,  7 Jul 2023 19:34:46 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3681atln015519;
+        Sat, 8 Jul 2023 02:34:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=qgT/u47236GgAP1fHuklWqeQQ/wTLt3wAKRQHjtzFEY=;
+ b=o6K75vQuEV4zx4gkNcokON//HvyE/NaR5EigjxaSHAfsBwRGK9gv7GKjoAAULh2vF4Zd
+ dSoSMiJF/ZUnAtes6D80jB2BeRbVfWadk6kewGyG9+ZnMLOHX+Nb88c0n6aTtp0g2pkD
+ 495epIsPbPxCql5EBYyWJWs1OZ4oFTgUWRKDOjuO0b0yb+x61eh8+kSDBkvyaYDefO/k
+ 5NYpXCxShTQ/8eqmxzel8US9E8CPCl5Ho6l1FjdVNAMnHU+TMKxhmFpwQqgOxYnnw/eM
+ hbug0L5iEvQ9taaFJn3pJ+2i7KNrVOyxoPLoTX6PC/e7teUcEgdO5N/hDPabRlXDX0Tw UA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpx8mg15x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Jul 2023 02:34:22 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3681X7hR034614;
+        Sat, 8 Jul 2023 02:34:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx81h027-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Jul 2023 02:34:22 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3682YL2w033474;
+        Sat, 8 Jul 2023 02:34:21 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3rpx81h01x-1;
+        Sat, 08 Jul 2023 02:34:21 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     davem@davemloft.net
+Cc:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
+        david@fries.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, zbr@ioremap.net, brauner@kernel.org,
+        johannes@sipsolutions.net, ecree.xilinx@gmail.com, leon@kernel.org,
+        keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        anjali.k.kulkarni@oracle.com
+Subject: [PATCH v9 0/6] Process connector bug fixes & enhancements
+Date:   Fri,  7 Jul 2023 19:34:14 -0700
+Message-ID: <20230708023420.3931239-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_16,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ adultscore=0 mlxscore=0 spamscore=0 phishscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307080022
+X-Proofpoint-GUID: kaOmOy8dZTXOyn2qThCZwpcY7YJM8gs5
+X-Proofpoint-ORIG-GUID: kaOmOy8dZTXOyn2qThCZwpcY7YJM8gs5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,52 +77,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MEM_CGROUP_ID_MAX is only used when CONFIG_MEMCG is configured. So remove
-unneeded !CONFIG_MEMCG variant. Also it's only used in mem_cgroup_alloc(),
-so move it from memcontrol.h to memcontrol.c. And further define it as:
-  #define MEM_CGROUP_ID_MAX ((1UL << MEM_CGROUP_ID_SHIFT) - 1)
-so if someone changes MEM_CGROUP_ID_SHIFT in the future, then
-MEM_CGROUP_ID_MAX will be updated accordingly, as suggested by Muchun.
+Oracle DB is trying to solve a performance overhead problem it has been
+facing for the past 10 years and using this patch series, we can fix this
+issue.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- include/linux/memcontrol.h | 2 --
- mm/memcontrol.c            | 1 +
- 2 files changed, 1 insertion(+), 2 deletions(-)
+Oracle DB runs on a large scale with 100000s of short lived processes,
+starting up and exiting quickly. A process monitoring DB daemon which
+tracks and cleans up after processes that have died without a proper exit
+needs notifications only when a process died with a non-zero exit code
+(which should be rare).
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 5818af8eca5a..58eb7ca65699 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -61,7 +61,6 @@ struct mem_cgroup_reclaim_cookie {
- #ifdef CONFIG_MEMCG
- 
- #define MEM_CGROUP_ID_SHIFT	16
--#define MEM_CGROUP_ID_MAX	USHRT_MAX
- 
- struct mem_cgroup_id {
- 	int id;
-@@ -1158,7 +1157,6 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
- #else /* CONFIG_MEMCG */
- 
- #define MEM_CGROUP_ID_SHIFT	0
--#define MEM_CGROUP_ID_MAX	0
- 
- static inline struct mem_cgroup *folio_memcg(struct folio *folio)
- {
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index e8ca4bdcb03c..284396ea8a33 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5165,6 +5165,7 @@ static struct cftype mem_cgroup_legacy_files[] = {
-  * those references are manageable from userspace.
-  */
- 
-+#define MEM_CGROUP_ID_MAX	((1UL << MEM_CGROUP_ID_SHIFT) - 1)
- static DEFINE_IDR(mem_cgroup_idr);
- 
- static void mem_cgroup_id_remove(struct mem_cgroup *memcg)
+Due to the pmon architecture, which is distributed, each process is
+independent and has minimal interaction with pmon. Hence fd based
+solutions to track a process's spawning and exit cannot be used. Pmon
+needs to detect the abnormal death of a process so it can cleanup after.
+Currently it resorts to checking /proc every few seconds. Other methods
+we tried like using system call to reduce the above overhead were not
+accepted upstream.
+
+With this change, we add event based filtering to proc connector module
+so that DB can only listen to the events it is interested in. A new
+event type PROC_EVENT_NONZERO_EXIT is added, which is only sent by kernel
+to a listening application when any process exiting has a non-zero exit
+status.
+
+This change will give Oracle DB substantial performance savings - it takes
+50ms to scan about 8K PIDs in /proc, about 500ms for 100K PIDs. DB does
+this check every 3 secs, so over an hour we save 10secs for 100K PIDs.
+
+With this, a client can register to listen for only exit or fork or a mix or
+all of the events. This greatly enhances performance - currently, we
+need to listen to all events, and there are 9 different types of events.
+For eg. handling 3 types of events - 8K-forks + 8K-exits + 8K-execs takes
+200ms, whereas handling 2 types - 8K-forks + 8K-exits takes about 150ms,
+and handling just one type - 8K exits takes about 70ms.
+
+Measuring the time using pidfds for monitoring 8K process exits took 4
+times longer - 200ms, as compared to 70ms using only exit notifications
+of proc connector. Hence, we cannot use pidfd for our use case.
+
+This kind of a new event could also be useful to other applications like
+Google's lmkd daemon, which needs a killed process's exit notification.
+
+This patch series is organized as follows -
+
+Patch 1 : Needed for patch 3 to work.
+Patch 2 : Needed for patch 3 to work.
+Patch 3 : Fixes some bugs in proc connector, details in the patch.
+Patch 4 : Adds event based filtering for performance enhancements.
+Patch 5 : Allow non-root users access to proc connector events.
+Patch 6 : Selftest code for proc connector.
+
+v8->v9 changes:
+- Added sha1 ("title") of reversed patch as suggested by Eric Dumazet.
+
+v7->v8 changes:
+- Fixed an issue pointed by Liam Howlett in v7.
+
+v6->v7 changes:
+- Incorporated Liam Howlett's comments on v6
+- Incorporated Kalesh Anakkur Purayil's comments
+
+v5->v6 changes:
+- Incorporated Liam Howlett's comments
+- Removed FILTER define from proc_filter.c and added a "-f" run-time
+  option to run new filter code.
+- Made proc_filter.c a selftest in tools/testing/selftests/connector
+
+v4->v5 changes:
+- Change the cover letter
+- Fix a small issue in proc_filter.c
+
+v3->v4 changes:
+- Fix comments by Jakub Kicinski to incorporate root access changes
+  within bind call of connector
+
+v2->v3 changes:
+- Fix comments by Jakub Kicinski to separate netlink (patch 2) (after
+  layering) from connector fixes (patch 3).
+- Minor fixes suggested by Jakub.
+- Add new multicast group level permissions check at netlink layer.
+  Split this into netlink & connector layers (patches 6 & 7)
+
+v1->v2 changes:
+- Fix comments by Jakub Kicinski to keep layering within netlink and
+  update kdocs.
+- Move non-root users access patch last in series so remaining patches
+  can go in first.
+
+v->v1 changes:
+- Changed commit log in patch 4 as suggested by Christian Brauner
+- Changed patch 4 to make more fine grained access to non-root users
+- Fixed warning in cn_proc.c,
+  Reported-by: kernel test robot <lkp@intel.com>
+- Fixed some existing warnings in cn_proc.c
+
+Anjali Kulkarni (6):
+  netlink: Reverse the patch which removed filtering
+  netlink: Add new netlink_release function
+  connector/cn_proc: Add filtering to fix some bugs
+  connector/cn_proc: Performance improvements
+  connector/cn_proc: Allow non-root users access
+  connector/cn_proc: Selftest for proc connector
+
+ drivers/connector/cn_proc.c                   | 111 ++++++-
+ drivers/connector/connector.c                 |  40 ++-
+ drivers/w1/w1_netlink.c                       |   6 +-
+ include/linux/connector.h                     |   8 +-
+ include/linux/netlink.h                       |   6 +
+ include/uapi/linux/cn_proc.h                  |  62 +++-
+ net/netlink/af_netlink.c                      |  33 +-
+ net/netlink/af_netlink.h                      |   4 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/connector/Makefile    |   6 +
+ .../testing/selftests/connector/proc_filter.c | 310 ++++++++++++++++++
+ 11 files changed, 545 insertions(+), 43 deletions(-)
+ create mode 100644 tools/testing/selftests/connector/Makefile
+ create mode 100644 tools/testing/selftests/connector/proc_filter.c
+
 -- 
-2.33.0
+2.41.0
 
