@@ -2,118 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840BD74BD63
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 13:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6B774BD46
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 12:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjGHLfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 07:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S229773AbjGHKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 06:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHLff (ORCPT
+        with ESMTP id S229458AbjGHKvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 07:35:35 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0060BC
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 04:35:33 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qI6Dm-0004GA-MM; Sat, 08 Jul 2023 13:35:26 +0200
-Message-ID: <df1d7d39-56f3-699c-0d0f-fcc8774f182e@leemhuis.info>
-Date:   Sat, 8 Jul 2023 13:35:25 +0200
+        Sat, 8 Jul 2023 06:51:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3834C1994;
+        Sat,  8 Jul 2023 03:51:12 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qyn9W2rtWzqVMd;
+        Sat,  8 Jul 2023 18:50:39 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sat, 8 Jul 2023 18:51:09 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH] ring-buffer: Fix deadloop issue on reading trace_pipe
+Date:   Sun, 9 Jul 2023 06:51:44 +0800
+Message-ID: <20230708225144.3785600-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-Content-Language: en-US, de-DE
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
- <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh>
- <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh>
- <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
- <2023070509-undertow-pulverize-5adc@gregkh>
- <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
- <20230705084906.22eee41e6e72da588fce5a48@linux-foundation.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20230705084906.22eee41e6e72da588fce5a48@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688816133;4ce8089e;
-X-HE-SMSGID: 1qI6Dm-0004GA-MM
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[adding Linus to the list of recipients to ensure the fix makes it into
--rc1 (and can finally be backported to -stable).
+Soft lockup occurs when reading file 'trace_pipe':
 
-Linus, here is the backstory, as I assume you haven't seen this yet:
+  watchdog: BUG: soft lockup - CPU#6 stuck for 22s! [cat:4488]
+  [...]
+  RIP: 0010:ring_buffer_empty_cpu+0xed/0x170
+  RSP: 0018:ffff88810dd6fc48 EFLAGS: 00000246
+  RAX: 0000000000000000 RBX: 0000000000000246 RCX: ffffffff93d1aaeb
+  RDX: ffff88810a280040 RSI: 0000000000000008 RDI: ffff88811164b218
+  RBP: ffff88811164b218 R08: 0000000000000000 R09: ffff88815156600f
+  R10: ffffed102a2acc01 R11: 0000000000000001 R12: 0000000051651901
+  R13: 0000000000000000 R14: ffff888115e49500 R15: 0000000000000000
+  [...]
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007f8d853c2000 CR3: 000000010dcd8000 CR4: 00000000000006e0
+  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+  Call Trace:
+   __find_next_entry+0x1a8/0x4b0
+   ? peek_next_entry+0x250/0x250
+   ? down_write+0xa5/0x120
+   ? down_write_killable+0x130/0x130
+   trace_find_next_entry_inc+0x3b/0x1d0
+   tracing_read_pipe+0x423/0xae0
+   ? tracing_splice_read_pipe+0xcb0/0xcb0
+   vfs_read+0x16b/0x490
+   ksys_read+0x105/0x210
+   ? __ia32_sys_pwrite64+0x200/0x200
+   ? switch_fpu_return+0x108/0x220
+   do_syscall_64+0x33/0x40
+   entry_SYSCALL_64_after_hwframe+0x61/0xc6
 
-CONFIG_PER_VMA_LOCK (which defaults to Y; merged for v6.4-rc1 in
-0bff0aaea03 ("x86/mm: try VMA lock-based page fault handling first"))
-sometimes causes memory corruption reported here:
-https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
-https://bugzilla.kernel.org/show_bug.cgi?id=217624
+Through the vmcore, I found it's because in tracing_read_pipe(),
+ring_buffer_empty_cpu() found some buffer is not empty but then it
+cannot read anything due to "rb_num_of_entries() == 0" always true,
+Then it infinitely loop the procedure due to user buffer not been
+filled, see following code path:
 
-The plan since early this week is to mark CONFIG_PER_VMA_LOCK as broken;
-latest patch that does this is this one afaics:
-https://lore.kernel.org/all/20230706011400.2949242-3-surenb@google.com/
+  tracing_read_pipe() {
+    ... ...
+    waitagain:
+      tracing_wait_pipe() // 1. find non-empty buffer here
+      trace_find_next_entry_inc()  // 2. loop here try to find an entry
+        __find_next_entry()
+          ring_buffer_empty_cpu();  // 3. find non-empty buffer
+          peek_next_entry()  // 4. but peek always return NULL
+            ring_buffer_peek()
+              rb_buffer_peek()
+                rb_get_reader_page()
+                  // 5. because rb_num_of_entries() == 0 always true here
+                  //    then return NULL
+      // 6. user buffer not been filled so goto 'waitgain'
+      //    and eventually leads to an deadloop in kernel!!!
+  }
 
-But that change or something similar hasn't reached you yet afaics;
-note, this is the second patch of a series with two patches]
+By some analyzing, I found that when resetting ringbuffer, the 'entries'
+of its pages are not all cleared (see rb_reset_cpu()). Then when reducing
+the ringbuffer, and if some reduced pages exist dirty 'entries' data, they
+will be added into 'cpu_buffer->overrun' (see rb_remove_pages()), which
+cause wrong 'overrun' count and eventually cause the deadloop issue.
 
-On 05.07.23 17:49, Andrew Morton wrote:
-> On Wed, 5 Jul 2023 10:51:57 +0200 "Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info> wrote:
-> 
->>>>> I'm in wait-a-few-days-mode on this.  To see if we have a backportable
->>>>> fix rather than disabling the feature in -stable.
->>
->> Andrew, how long will you remain in "wait-a-few-days-mode"? Given what
->> Greg said below and that we already had three reports I know of I'd
->> prefer if we could fix this rather sooner than later in mainline --
->> especially as Arch Linux and openSUSE Tumbleweed likely have switched to
->> 6.4.y already or will do so soon.
-> 
-> I'll send today's 2-patch series to Linus today or tomorrow.
+To fix it, we need to clear every pages in rb_reset_cpu().
 
-That afaics did not happen until now. :-(
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ kernel/trace/ring_buffer.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-This makes me regret that I did not CC Linus earlier. I always feel like
-a snitcher when I do that. But in retrospective it seems it would have
-been the right thing to do given the problem, as I suspect Linus would
-have quickly applied the patch or marked the feature as broken himself.
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 834b361a4a66..14d8001140c8 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -5242,28 +5242,34 @@ unsigned long ring_buffer_size(struct trace_buffer *buffer, int cpu)
+ }
+ EXPORT_SYMBOL_GPL(ring_buffer_size);
+ 
++static void rb_clear_buffer_page(struct buffer_page *page)
++{
++	local_set(&page->write, 0);
++	local_set(&page->entries, 0);
++	rb_init_page(page->page);
++	page->read = 0;
++}
++
+ static void
+ rb_reset_cpu(struct ring_buffer_per_cpu *cpu_buffer)
+ {
++	struct buffer_page *page;
++
+ 	rb_head_page_deactivate(cpu_buffer);
+ 
+ 	cpu_buffer->head_page
+ 		= list_entry(cpu_buffer->pages, struct buffer_page, list);
+-	local_set(&cpu_buffer->head_page->write, 0);
+-	local_set(&cpu_buffer->head_page->entries, 0);
+-	local_set(&cpu_buffer->head_page->page->commit, 0);
+-
+-	cpu_buffer->head_page->read = 0;
++	rb_clear_buffer_page(cpu_buffer->head_page);
++	list_for_each_entry(page, cpu_buffer->pages, list) {
++		rb_clear_buffer_page(page);
++	}
+ 
+ 	cpu_buffer->tail_page = cpu_buffer->head_page;
+ 	cpu_buffer->commit_page = cpu_buffer->head_page;
+ 
+ 	INIT_LIST_HEAD(&cpu_buffer->reader_page->list);
+ 	INIT_LIST_HEAD(&cpu_buffer->new_pages);
+-	local_set(&cpu_buffer->reader_page->write, 0);
+-	local_set(&cpu_buffer->reader_page->entries, 0);
+-	local_set(&cpu_buffer->reader_page->page->commit, 0);
+-	cpu_buffer->reader_page->read = 0;
++	rb_clear_buffer_page(cpu_buffer->reader_page);
+ 
+ 	local_set(&cpu_buffer->entries_bytes, 0);
+ 	local_set(&cpu_buffer->overrun, 0);
+-- 
+2.25.1
 
-So thx to this (and a handful of earlier, similar situations) I now
-fully made my peace with feeling like a snitcher (I always knew that
-it's kinda part of the position). When something in me says "Ick, this
-looks bad to my untrained eyes" I'll immediately CC Linus.
-
-Linus, if I take things to far just let me know. But I assume you get a
-lot of mails and won't mind a few more.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
