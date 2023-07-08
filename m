@@ -2,90 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4599D74BF01
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 21:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D0574BF07
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 21:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjGHTmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 15:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S230120AbjGHTxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 15:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjGHTmO (ORCPT
+        with ESMTP id S229454AbjGHTxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 15:42:14 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3455EA4
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 12:42:13 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bff27026cb0so3652646276.1
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 12:42:13 -0700 (PDT)
+        Sat, 8 Jul 2023 15:53:16 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393D1A8;
+        Sat,  8 Jul 2023 12:53:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-991c786369cso376613666b.1;
+        Sat, 08 Jul 2023 12:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688845332; x=1691437332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p4+Mach9lmHdREdY4lG7rnRYsyltEKjNy1tDSuyLngc=;
-        b=WyDa+IEtTiffPeWHVWO2qzdkJXMbVkoixl5g2Oiio+Xc5RgmDl/+4NKv/Bms/JvY91
-         Ea8FYlatqHWfN5yu11/zHTAxAEQMS3yy7iahdbV0GCIcaVA+gf9LiAKAeQJl3OcMd51r
-         1sHYJ4js0rfpGcBpvE6TbF95yVUDE8B12gn2nYBCV3LxO1bZ5B6bFVYJ9LIRwvn2YVGL
-         qJ5siqqNwKalWAOQEK/TzkYgb3k43V9HP4rK/RUwcPd6haOjOhjEl3ldtEF618o53U4p
-         ZfrcJ/K1SLyM1hT/NDjfeoetYv67/RaGtibykxFbZwYrF+eQODkqklj9XH+mU6xkPTeU
-         tAbg==
+        d=gmail.com; s=20221208; t=1688845993; x=1691437993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iVW/bBC+uKDhPQ3FjSGENdiWFw46dm/KEy0pvQHTDT4=;
+        b=bujg8cJ5hi3Moj0Y55nBBhHxVligDoOqGyu7ELw1EgLs08nGc+VK8AY23C2Tb58uY8
+         gMKcgxmv68em5r6JDmU32MSvoSv8llNmHQlLDjmZSeaRSxuy5x9yOeeZghPpjrThlzp4
+         cks8kC6AfWaw/gI5DEQNXi7MfKCqIzNOtUAWPHl+7mtTq+Q2f+JariKXCbpfABn2EN6J
+         b/xlrTGXhMlnJDNskZGMCrAv3JbuFSdSy/tqGoB/KUexfWXibfABfq5a+WQot7gAzwTo
+         yOHv6gQbDo5AnYztFUQ7GjzS4W6ZDUmcD9Z8hRWDQEbwUdUCYtCEwM0kuji5MEJ0m7/O
+         +1Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688845332; x=1691437332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p4+Mach9lmHdREdY4lG7rnRYsyltEKjNy1tDSuyLngc=;
-        b=IUp9wE4XSCQravffmXPxNU8uhXswtyfy+nykyNc6Fpe8cQTXzZSNFRIdFajTHqYiT5
-         4D7FvLePkzU8CwUtfKaw8T2Nvif80Vx13RP0JE7D45sjthjlGQuoLgA1b/gZmr2l88hm
-         K+SRM3k4lLPTGSI8gdLN87QkafMn1J9LhZ7DKeoQN/mmQGIZo9v7y5nsmVqnjc73cNMe
-         6w2t8dYRBNsXTrU40NENDJm1Jw6hFwtmTEHmE5RzjcUHj/IhGACTxmex/XPN4D4i3vhD
-         pVXkvLNAY82QR5cYcfsja3rNOuvsd6bCxq2uMsHDXpOplynnp8oFYocX8IvyZgC/EVMx
-         1uOg==
-X-Gm-Message-State: ABy/qLYjz7pEF0QtrySbaJayTsiHH+YZq4COth6MaL+ausP56zH63jpO
-        r5TJ9uWosKQdUgvsm7bo4iEMGV2DhpqqpydTJvuTPg==
-X-Google-Smtp-Source: APBJJlEHZ+EH0adEDxcnlKd156qF4LQIYNxL5d/up1So8zPv6Qcmz7Vx+oucSWoCMFYT5ihbobbETD/Hx0H9XJC2ppM=
-X-Received: by 2002:a25:7086:0:b0:b8f:5639:cb8a with SMTP id
- l128-20020a257086000000b00b8f5639cb8amr8776346ybc.9.1688845332211; Sat, 08
- Jul 2023 12:42:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688845993; x=1691437993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iVW/bBC+uKDhPQ3FjSGENdiWFw46dm/KEy0pvQHTDT4=;
+        b=QJHpjPqKSzHIZCEAljh9LyPdwsyLWZn4dvmM2nowJLbsBtn69JkaMRg7FL6hwc/+ml
+         IlF6A/Ddv8z7snW9n+e2XZfHN7JH2OG/4/n5ldqT7nPmYrkVbmuFiU0fKhJXxTpchDJ/
+         K/aA/Df1zuSAMM4yLG9gIrgDgTIz471674A72glB1y0L5U2uKLe5m1gTcymn9YlNBnAq
+         fzYYQiVjMhXFZ/WsJt9O54m3OGF/2zPw2GNBPDhFS9Cog7PbAs7wDSpKNLVHh1RzXxdM
+         LmxZ1nNSMJFOvbjxrban3r9+tmJCrAKgymEx5IvY4RZm3UQxmEgc2Axv3CR/g4UAXam6
+         dVPQ==
+X-Gm-Message-State: ABy/qLYoVabv/tGGOC3mpwv8cPaFQEVRcIU9tTHffdrWMyz3xfYdWvSx
+        ybizfgRfEvxxS/+6atYdu/k=
+X-Google-Smtp-Source: APBJJlElmJCz4iIpNX1e0yEbK+gCOYsdjagPLAiYMrYuyKy+teIi8vKCamVr85oKctgVnIoUme6Wsw==
+X-Received: by 2002:a17:906:ecae:b0:978:b94e:83dd with SMTP id qh14-20020a170906ecae00b00978b94e83ddmr5995155ejb.75.1688845992958;
+        Sat, 08 Jul 2023 12:53:12 -0700 (PDT)
+Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
+        by smtp.gmail.com with ESMTPSA id hk8-20020a170906c9c800b009821ce1ea33sm3880966ejb.7.2023.07.08.12.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 12:53:12 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] MAINTAINERS: add myself for spi-bcm63xx
+Date:   Sat,  8 Jul 2023 21:53:08 +0200
+Message-Id: <20230708195309.72767-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info> <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh> <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh> <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
- <2023070509-undertow-pulverize-5adc@gregkh> <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
- <20230705084906.22eee41e6e72da588fce5a48@linux-foundation.org>
- <df1d7d39-56f3-699c-0d0f-fcc8774f182e@leemhuis.info> <CAHk-=whKd05V49AbZGF=inYmhU6H_yNvvw1grWyhQfQ=9+5-VQ@mail.gmail.com>
- <20230708103936.4f6655cd0d8e8a0478509e25@linux-foundation.org>
- <CAHk-=wh498i3s+BgOF=pUOF=Qe_A0A16-mFcH2YGy+iZXvNChQ@mail.gmail.com>
- <CAJuCfpFLc1yoZm9uqRcmcwtFNGHYKyjxrc71tzXennpGB7QbYQ@mail.gmail.com>
- <CAHk-=wi-99-DyMOGywTbjRnRRC+XfpPm=r=pei4A=MEL0QDBXA@mail.gmail.com>
- <CAJuCfpHszCAc5hDdsxry+1xh3kz+=jsYdBCXKQez-Th9LESSZA@mail.gmail.com> <CAHk-=wi=+qS+5v_7mVxKWUSOKaxzC2V8N7hyFVt1qTWGM_pmAQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wi=+qS+5v_7mVxKWUSOKaxzC2V8N7hyFVt1qTWGM_pmAQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sat, 8 Jul 2023 12:41:58 -0700
-Message-ID: <CAJuCfpF_J+wXzjFRSO_HrzyMft2j32enWKCX0iFGmH6DM7a-rw@mail.gmail.com>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,37 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 12:23=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sat, 8 Jul 2023 at 12:17, Suren Baghdasaryan <surenb@google.com> wrote=
-:
-> >
-> > Do you want me to disable per-VMA locks by default as well?
->
-> No. I seriously believe that if the per-vma locking is so broken that
-> it needs to be disabled in a development kernel, we should just admit
-> failure, and revert it all.
->
-> And not in a "revert it for a later attempt" kind of way.
->
-> So it would be a "revert it because it added insurmountable problems
-> that we couldn't figure out" thing that implies *not* trying it again
-> in that form at all, and much soul-searching before somebody decides
-> that they have a more maintainable model for it all.
+I noticed the driver is unclaimed. Since I was the last one doing
+substantial work on it, add me as the maintainer.
 
-Got it. I hope that's not the case and so far we haven't received an
-indication that the fixes were insufficient.
+As it is only found in legacy products, mark it as "Odd Fixes"
+instead of "Maintained".
 
->
-> If stable decides that the fixes are not back-portable, and the whole
-> thing needs to be disabled for stable, that's one thing. But if we
-> decide that in mainline, it's a "this was a failure" thing.
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+v1 -> v2:
+ * fix the driver's file name
+ * include the right people
 
-The patches applied cleanly to 6.4.y stable branch the last time I
-checked, so should not be a problem.
-Thanks,
-Suren.
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
->
->            Linus
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bc201627c2e0..2594a0643e0a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4169,6 +4169,13 @@ F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+ F:	drivers/spi/spi-bcm63xx-hsspi.c
+ F:	drivers/spi/spi-bcmbca-hsspi.c
+ 
++BROADCOM BCM6348/BCM6358 SPI controller DRIVER
++M:	Jonas Gorski <jonas.gorski@gmail.com>
++L:	linux-spi@vger.kernel.org
++S:	Odd Fixes
++F:	Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
++F:	drivers/spi/spi-bcm63xx.c
++
+ BROADCOM ETHERNET PHY DRIVERS
+ M:	Florian Fainelli <f.fainelli@gmail.com>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+-- 
+2.34.1
+
