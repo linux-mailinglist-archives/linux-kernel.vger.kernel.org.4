@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EEF74BE1C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 17:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA1E74BE21
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 17:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjGHPX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 11:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S229927AbjGHPXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 11:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjGHPXX (ORCPT
+        with ESMTP id S229682AbjGHPXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 11:23:23 -0400
-Received: from out-4.mta1.migadu.com (out-4.mta1.migadu.com [95.215.58.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF870E43
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 08:23:21 -0700 (PDT)
-Date:   Sat, 8 Jul 2023 11:23:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688829799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JOmmsQd20h0V2vC6WmhrFR8UWMacra/J4pnHiQq9pxA=;
-        b=bIyqgh7L+yljJ/Yjy4eInVD+jv4A5tfpQX61SbWBMmsRbBY+jC/UgNQWqJucRik5qoC6Vo
-        ZJL61HktMnc6ECW+lx6nuSQfIFk/kIwy13JDLXtWaRStjmj8STuZJiVbP9qozW160z8O8i
-        mrVCoC2WcxSPKIlUPHYwtpXS7MFnf3M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        dchinner@redhat.com, sandeen@redhat.com, bfoster@redhat.com,
-        jack@suse.cz, andreas.gruenbacher@gmail.com, peterz@infradead.org,
-        akpm@linux-foundation.org, dhowells@redhat.com
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230708152314.lcpepguue3imrt3i@moria.home.lan>
-References: <20230706155602.mnhsylo3pnief2of@moria.home.lan>
- <20230706164055.GA2306489@perftesting>
- <20230706173819.36c67pf42ba4gmv4@moria.home.lan>
- <20230706211914.GB11476@frogsfrogsfrogs>
- <20230707-badeverbot-gekettet-19ce3c238dac@brauner>
- <20230707091810.bamrvzcif7ncng46@moria.home.lan>
- <30661670c55601ff475f2f0698c2be2958e45c38.camel@HansenPartnership.com>
- <ZKjd7nQxvzRDA2tK@casper.infradead.org>
- <20230708043136.xj4u7mhklpblomqd@moria.home.lan>
- <20230708150249.GO1178919@mit.edu>
+        Sat, 8 Jul 2023 11:23:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7665C1709;
+        Sat,  8 Jul 2023 08:23:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A5E460DBD;
+        Sat,  8 Jul 2023 15:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4FEC433CA;
+        Sat,  8 Jul 2023 15:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688829809;
+        bh=LRKuU4wR21FSTMd32UkZLDmh6O5X3KbUUhZ6esX8nWA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OkWBrDLThWtCE511INbneL4ICaMtIobUriY1mQMfu2lXzvcRX2PfFMGCt98OYWLzZ
+         vowzfrJQtvcudEafsFzuh7qui5Q1slDosfaqVyvj5dwz8nD+Ptw7jOivqV5G5bF2YA
+         N+eVP6XGo1N5oItiDUgNhfNw8EC9/GhlcxjGAD3LUE+iTmxD2siSztefUyY70safiI
+         QlPalmFDoHMVa0dPmWgo4CU6eQx+fCqhkLtMF5xj/6QS9Ix0m+CLRcc6u74Eiiz4cR
+         FNGU+yHPj1MlV2JwxWZ4RDdlKmD/2DAbjhqo9sqY1YQGqxisL970O0wed3CISh83pk
+         x1DMqMXtHUmxw==
+Date:   Sat, 8 Jul 2023 16:23:18 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jishnu Prakash <quic_jprakash@quicinc.com>
+Cc:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linus.walleij@linaro.org>,
+        <Jonathan.Cameron@huawei.com>, <sboyd@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <quic_subbaram@quicinc.com>,
+        <quic_collinsd@quicinc.com>, <quic_kamalw@quicinc.com>,
+        <quic_jestar@quicinc.com>, <marijn.suijten@somainline.org>,
+        <andriy.shevchenko@linux.intel.com>,
+        <krzysztof.kozlowski@linaro.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-arm-msm-owner@vger.kernel.org>
+Subject: Re: [PATCH 09/11] iio: adc: Update QCOM ADC drivers for bindings
+ path change
+Message-ID: <20230708162318.1e2b169f@jic23-huawei>
+In-Reply-To: <20230708072835.3035398-10-quic_jprakash@quicinc.com>
+References: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
+        <20230708072835.3035398-10-quic_jprakash@quicinc.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230708150249.GO1178919@mit.edu>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,28 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 08, 2023 at 11:02:49AM -0400, Theodore Ts'o wrote:
-> On Sat, Jul 08, 2023 at 12:31:36AM -0400, Kent Overstreet wrote:
-> > 
-> > I've long thought a more useful CoC would start with "always try to
-> > continue the technical conversation in good faith, always try to build
-> > off of what other people are saying; don't shut people down".
+On Sat, 8 Jul 2023 12:58:33 +0530
+Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+
+> Update ADC dt-bindings file paths in QCOM ADC driver files to
+> match the dt-bindings change moving the files from 'iio' to
+> 'iio/adc' folder.
 > 
-> Kent, with all due respect, do you not always follow your suggested
-> formulation that you've stated above.  That is to say, you do not
-> always assume that your conversational partner is trying to raise
-> objections in good faith. 
+> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
 
-Ted, how do you have a technical conversation with someone who refuses
-to say anything concrete, even when you ask them to elaborate on their
-objections, and instead just repeats the same vague non-answers?
+Do the move in one go.
 
-> You also want to assume that you are the smartest person in the room,
-> and if they object, they are Obviously Wrong.
+Diff rename detection will make the resulting patch more trivial
+to look at than this multistep version.
 
-Ok, now you're really reaching.
+Jonathan
 
-Anyone who's actually worked with me can tell you I am quick to consider
-other people's point of view and quick to admit when I'm wrong.
+> ---
+>  drivers/iio/adc/qcom-spmi-adc5-gen3.c | 2 +-
+>  drivers/iio/adc/qcom-spmi-adc5.c      | 2 +-
+>  drivers/iio/adc/qcom-spmi-vadc.c      | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/qcom-spmi-adc5-gen3.c b/drivers/iio/adc/qcom-spmi-adc5-gen3.c
+> index fe5515ee8451..78ece8fccbae 100644
+> --- a/drivers/iio/adc/qcom-spmi-adc5-gen3.c
+> +++ b/drivers/iio/adc/qcom-spmi-adc5-gen3.c
+> @@ -23,7 +23,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/thermal.h>
+>  
+> -#include <dt-bindings/iio/qcom,spmi-vadc.h>
+> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+>  
+>  #define ADC5_GEN3_HS				0x45
+>  #define ADC5_GEN3_HS_BUSY			BIT(7)
+> diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
+> index 6cebeaa69a75..5dfcb770d663 100644
+> --- a/drivers/iio/adc/qcom-spmi-adc5.c
+> +++ b/drivers/iio/adc/qcom-spmi-adc5.c
+> @@ -21,7 +21,7 @@
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+>  
+> -#include <dt-bindings/iio/qcom,spmi-vadc.h>
+> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+>  
+>  #define ADC5_USR_REVISION1			0x0
+>  #define ADC5_USR_STATUS1			0x8
+> diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
+> index f5c6f1f27b2c..c3602c53968a 100644
+> --- a/drivers/iio/adc/qcom-spmi-vadc.c
+> +++ b/drivers/iio/adc/qcom-spmi-vadc.c
+> @@ -20,7 +20,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/log2.h>
+>  
+> -#include <dt-bindings/iio/qcom,spmi-vadc.h>
+> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
+>  
+>  /* VADC register and bit definitions */
+>  #define VADC_REVISION2				0x1
 
-All I ask is the same courtesy.
