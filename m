@@ -2,106 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FF974BDFB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 17:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD36B74BE07
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 17:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjGHPBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 11:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S229867AbjGHPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 11:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHPBC (ORCPT
+        with ESMTP id S229727AbjGHPDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 11:01:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29A1E4D;
-        Sat,  8 Jul 2023 08:01:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EE8A60C96;
-        Sat,  8 Jul 2023 15:01:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F163CC433C8;
-        Sat,  8 Jul 2023 15:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688828460;
-        bh=CPC1Hr5I3g2dfiiYjDfqMogcGRMrPymEWhhX2UxiwvQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rgwQ3N7G3oqWyI5ilvQJ0AC8Eq7ZGEAjs9vjz/sE7U1/khXrszcZmt/keHv2yOSVs
-         nfnYJj1PctBeTOOjR0OB4XDLrTAujdfPVSD1y52Pdno8zDASuv91/6o14auRZGKeNJ
-         NTJfnSs8yMkNa6LFSAIr3ZBdJkKiI86c/RCaxLxYReX3RQzpG4ZYDqopO9uO6yZkaa
-         CivH8z4PMRx8JpPvi+utsTRNIYz1wJI+dC2b0P0Lj1fEr0OZ8P2r3tx0Ms6B65QXYL
-         X9BkwAbm3ESnJ8P6SNec1rVchCZkbyXJaVxtuyWB4xPIG8jy6+qOxBc5bH/JUtovr/
-         iEUNUMjK65ibw==
-Date:   Sat, 8 Jul 2023 16:00:48 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jishnu Prakash <quic_jprakash@quicinc.com>
-Cc:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <Jonathan.Cameron@huawei.com>, <sboyd@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <quic_subbaram@quicinc.com>,
-        <quic_collinsd@quicinc.com>, <quic_kamalw@quicinc.com>,
-        <quic_jestar@quicinc.com>, <marijn.suijten@somainline.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        <krzysztof.kozlowski@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-arm-msm-owner@vger.kernel.org>
-Subject: Re: [PATCH 05/11] iio: adc: qcom-spmi-adc5: remove support for ADC7
- compatible string
-Message-ID: <20230708160048.5a5ad01a@jic23-huawei>
-In-Reply-To: <20230708072835.3035398-6-quic_jprakash@quicinc.com>
-References: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
-        <20230708072835.3035398-6-quic_jprakash@quicinc.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sat, 8 Jul 2023 11:03:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C101E10EB
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 08:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688828557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T3GRnokqrPVaYV/THcdBGlJffY7BDH+AcPJHejmPSVM=;
+        b=bUPOe8ftgS9nqFxx2l8gM7jwZ65gPpqg/kYq/npOY6e3L8n7uZpfCL17yfqIWUrg7ySeJw
+        R8kNfgTwhWW96uyC14G/81eHqoZ5HOsp5sp1hvTaDVvyH9SSzOlUtpgbWTjgP02DE+OP49
+        LZC2b6BPz98CVMjucr2wmv4UWfqB7f0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-37-pU2jDWMSOESdFr5VVeG8AQ-1; Sat, 08 Jul 2023 11:02:36 -0400
+X-MC-Unique: pU2jDWMSOESdFr5VVeG8AQ-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-402fa256023so6088881cf.0
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 08:02:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688828556; x=1691420556;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T3GRnokqrPVaYV/THcdBGlJffY7BDH+AcPJHejmPSVM=;
+        b=TL4BY8CW3yaUFkyKCADfvAxD8o0AH03fXRF6D68aRcB04ULagynl4Yt1XyeRH5wzV6
+         h5hjGc2cCk71bJjC1Ey5u6+I7VoJK/H72vELO/vjd2Tblotk022jd8d32JkYGoS2d3aC
+         hY2uhF/SmoZespnPCUFumEZGjWCDBZHC1Th9CLXLkQbME7B2fytbmqehdDFZRDm6JQMt
+         JM4Y+Y0riPS9zcigg2m+voQcg4fszv7JsHBpdBxz2Ab5vGxDjseNnLSAFjkHgthd+WvF
+         LDeMEUkQM2pzIe1chvoEr3eNNYi7Tsu2GrOM7xAtsFJJ7cWPZCadHSvcfZEimVKxQqJo
+         HY7g==
+X-Gm-Message-State: ABy/qLYpE898O5mudDNAhKxR3TMQ53Bf1vKwVvfOKBlOR7TQMvRiyQMM
+        3G8DZvTICJ1Vl8RNods8+BXz7dzr+WoFX7tnsPoc/EnvKRpnxah/Salpfs1aKIcIwjRG5JTisDY
+        YouqpeBI98SApTGPJU6Yy83aN
+X-Received: by 2002:a05:6214:b65:b0:634:cdae:9941 with SMTP id ey5-20020a0562140b6500b00634cdae9941mr8767588qvb.0.1688828556017;
+        Sat, 08 Jul 2023 08:02:36 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGj53IzcQAPmiI/v43Lyk7eh+euAZZXrSV8HTK/l4O/V2y1GtOUmoqfRyODcRL3zSDwxMPZhQ==
+X-Received: by 2002:a05:6214:b65:b0:634:cdae:9941 with SMTP id ey5-20020a0562140b6500b00634cdae9941mr8767568qvb.0.1688828555801;
+        Sat, 08 Jul 2023 08:02:35 -0700 (PDT)
+Received: from xz-m1.local (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id i4-20020a0cf484000000b0063013c621fasm3417890qvm.68.2023.07.08.08.02.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 08:02:35 -0700 (PDT)
+Date:   Sat, 8 Jul 2023 11:02:33 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 7/8] selftests/mm: refactor uffd_poll_thread to allow
+ custom fault handlers
+Message-ID: <ZKl6ie4s/94TPCgm@xz-m1.local>
+References: <20230707215540.2324998-1-axelrasmussen@google.com>
+ <20230707215540.2324998-8-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230707215540.2324998-8-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Jul 2023 12:58:29 +0530
-Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
-
-> Now that usage of "ADC7" name has been replaced with usage of "ADC5
-> Gen2" name everywhere, remove the "qcom,spmi-adc7" compatible string.
+On Fri, Jul 07, 2023 at 02:55:39PM -0700, Axel Rasmussen wrote:
+> Previously, we had "one fault handler to rule them all", which used
+> several branches to deal with all of the scenarios required by all of
+> the various tests.
 > 
-> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-
-Nope.  Unless all your dts files are distributed with the kernel, dropping
-this breaks anyone who upgrades the kernel against an older firmware...
-
-So even after the rename, you need to keep the deprecated naming around for
-the binding side of things.
-
-Jonathan
-
-> ---
->  drivers/iio/adc/qcom-spmi-adc5.c | 4 ----
->  1 file changed, 4 deletions(-)
+> In upcoming patches, I plan to add a new test, which has its own
+> slightly different fault handling logic. Instead of continuing to add
+> cruft to the existing fault handler, let's allow tests to define custom
+> ones, separate from other tests.
 > 
-> diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
-> index 3ac1ee500a67..6cebeaa69a75 100644
-> --- a/drivers/iio/adc/qcom-spmi-adc5.c
-> +++ b/drivers/iio/adc/qcom-spmi-adc5.c
-> @@ -807,10 +807,6 @@ static const struct of_device_id adc5_match_table[] = {
->  		.compatible = "qcom,spmi-adc5",
->  		.data = &adc5_data_pmic,
->  	},
-> -	{
-> -		.compatible = "qcom,spmi-adc7",
-> -		.data = &adc5_gen2_data_pmic,
-> -	},
->  	{
->  		.compatible = "qcom,spmi-adc5-gen2",
->  		.data = &adc5_gen2_data_pmic,
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+
+Acked-by: Peter Xu <peterx@redhat.com>
+
+PS: please remember to update manpage after it lands.  I still have a plan
+to update but not yet happening; if you happen to update before mine please
+feel free to update for whatever is missing.
+
+Thanks!
+
+-- 
+Peter Xu
 
