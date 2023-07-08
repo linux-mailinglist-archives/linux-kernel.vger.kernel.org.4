@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DF474BB54
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8691D74BB5B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jul 2023 04:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbjGHCR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jul 2023 22:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S229876AbjGHCT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jul 2023 22:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjGHCRZ (ORCPT
+        with ESMTP id S229631AbjGHCTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jul 2023 22:17:25 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241FF1FEC;
-        Fri,  7 Jul 2023 19:17:17 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3681Y2M6015819;
-        Sat, 8 Jul 2023 02:16:58 GMT
+        Fri, 7 Jul 2023 22:19:25 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A541113;
+        Fri,  7 Jul 2023 19:19:24 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 368270gb019292;
+        Sat, 8 Jul 2023 02:19:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2023-03-30;
- bh=xLudJOQwmHHxcJXYtQm2YLIRiqFvl/NaHfIQCnkdntk=;
- b=VZsodJ4debLdy3aJ5JZ0cYf9vNHcxWg9t3XYTe9r5JEUWPfk3G0z0i5euxyRvenXMstb
- 0tykv1mBALbBR9ly9vUuEq9G649uqNs4hZjg+h3wEUnr0LQ4aE+52Msh6YRbk18OAZd4
- AfkX1HycglMboaBK1XE5meXz3cg5jomz35j2xtGjlkdWVQVdND5zrArANwcO4Ize/GuU
- JSOrvIrxh1SFrdmZOSPIIHetpRx6/85yXxZKlas4JDt6Ar5fZi3mzQ0tm+wV8YkIfocv
- FaC5VVwy6o9jzkQvLulXgHJFVz8YHZzMs8zXH0W4SoNkyXhrHDMChMKqEqEVPGiPOzmd nA== 
+ bh=h6DAPzFvYzPXIAaThIGiAO2Aq5ra0GTsF/O8HUcoK6s=;
+ b=ZMaSs4rclTS0orpTYnFUnPtrbZ8NkLMt//SZ+ssf/w5+YXQmL4ak5W4qMSCqu+Dvjnr8
+ 2Kv7e+XQ4Mhac5eUqhGs365L9NpKMFd9JmvRKPk6inRzLGnceQHtvDCWxzUMPon54BUY
+ 7l2hzVhwZCQBpda+ExK1o6j8uLz3KvMFq0U/LesZxQwA+YvQG5Mr+1NkHMjLLdiMNIdw
+ tcGCaaTzdGdOYkA/L83VDFMJuHZAiRI/kysWGDGgQpHrSKRkKaDSnNaWgx44REcGL2oG
+ XxLm5eGOI1YFv1ws376QkOf5RzX+8XlU5k/2vSFdCIXbqmcBUENGqFdfY+3+O+cZkqDs kA== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpx7v00wk-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpxqb00a4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Jul 2023 02:16:58 +0000
+        Sat, 08 Jul 2023 02:19:01 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3681XPIq006169;
-        Sat, 8 Jul 2023 02:15:17 GMT
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3681XmFQ006498;
+        Sat, 8 Jul 2023 02:15:19 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx87rkyc-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx87rm1c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Jul 2023 02:15:17 +0000
+        Sat, 08 Jul 2023 02:15:19 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3682FEKi002005;
-        Sat, 8 Jul 2023 02:15:17 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3682FEKk002005;
+        Sat, 8 Jul 2023 02:15:19 GMT
 Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3rpx87rkuh-2;
-        Sat, 08 Jul 2023 02:15:16 +0000
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3rpx87rkuh-3;
+        Sat, 08 Jul 2023 02:15:18 +0000
 From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 To:     davem@davemloft.net
 Cc:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
@@ -53,9 +53,9 @@ Cc:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
         keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         anjali.k.kulkarni@oracle.com
-Subject: [PATCH v8 1/6] netlink: Reverse the patch which removed filtering
-Date:   Fri,  7 Jul 2023 19:15:07 -0700
-Message-ID: <20230708021512.3929237-2-anjali.k.kulkarni@oracle.com>
+Subject: [PATCH v8 2/6] netlink: Add new netlink_release function
+Date:   Fri,  7 Jul 2023 19:15:08 -0700
+Message-ID: <20230708021512.3929237-3-anjali.k.kulkarni@oracle.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230708021512.3929237-1-anjali.k.kulkarni@oracle.com>
 References: <20230708021512.3929237-1-anjali.k.kulkarni@oracle.com>
@@ -64,12 +64,12 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-07_16,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=984
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
  adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
  definitions=main-2307080019
-X-Proofpoint-ORIG-GUID: lavYOV19F6OMKsWwnlDsnCuW7x5rEltH
-X-Proofpoint-GUID: lavYOV19F6OMKsWwnlDsnCuW7x5rEltH
+X-Proofpoint-ORIG-GUID: SeqdTCg7MRluD27__kQCnXN_pFKB31_-
+X-Proofpoint-GUID: SeqdTCg7MRluD27__kQCnXN_pFKB31_-
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -80,100 +80,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To use filtering at the connector & cn_proc layers, we need to enable
-filtering in the netlink layer. This reverses the patch which removed
-netlink filtering.
+A new function netlink_release is added in netlink_sock to store the
+protocol's release function. This is called when the socket is deleted.
+This can be supplied by the protocol via the release function in
+netlink_kernel_cfg. This is being added for the NETLINK_CONNECTOR
+protocol, so it can free it's data when socket is deleted.
 
 Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 Acked-by: Jakub Kicinski <kuba@kernel.org>
 ---
- include/linux/netlink.h  |  5 +++++
- net/netlink/af_netlink.c | 27 +++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
+ include/linux/netlink.h  | 1 +
+ net/netlink/af_netlink.c | 6 ++++++
+ net/netlink/af_netlink.h | 4 ++++
+ 3 files changed, 11 insertions(+)
 
 diff --git a/include/linux/netlink.h b/include/linux/netlink.h
-index 19c0791ed9d5..d73cfe5b6bc2 100644
+index d73cfe5b6bc2..0db4ffe6186b 100644
 --- a/include/linux/netlink.h
 +++ b/include/linux/netlink.h
-@@ -227,6 +227,11 @@ bool netlink_strict_get_check(struct sk_buff *skb);
- int netlink_unicast(struct sock *ssk, struct sk_buff *skb, __u32 portid, int nonblock);
- int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, __u32 portid,
- 		      __u32 group, gfp_t allocation);
-+int netlink_broadcast_filtered(struct sock *ssk, struct sk_buff *skb,
-+			       __u32 portid, __u32 group, gfp_t allocation,
-+			       int (*filter)(struct sock *dsk,
-+					     struct sk_buff *skb, void *data),
-+			       void *filter_data);
- int netlink_set_err(struct sock *ssk, __u32 portid, __u32 group, int code);
- int netlink_register_notifier(struct notifier_block *nb);
- int netlink_unregister_notifier(struct notifier_block *nb);
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 3a1e0fd5bf14..e75e5156e4ac 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -1432,6 +1432,8 @@ struct netlink_broadcast_data {
- 	int delivered;
- 	gfp_t allocation;
- 	struct sk_buff *skb, *skb2;
-+	int (*tx_filter)(struct sock *dsk, struct sk_buff *skb, void *data);
-+	void *tx_data;
+@@ -50,6 +50,7 @@ struct netlink_kernel_cfg {
+ 	struct mutex	*cb_mutex;
+ 	int		(*bind)(struct net *net, int group);
+ 	void		(*unbind)(struct net *net, int group);
++	void            (*release) (struct sock *sk, unsigned long *groups);
  };
  
- static void do_one_broadcast(struct sock *sk,
-@@ -1485,6 +1487,13 @@ static void do_one_broadcast(struct sock *sk,
- 			p->delivery_failure = 1;
- 		goto out;
- 	}
-+
-+	if (p->tx_filter && p->tx_filter(sk, p->skb2, p->tx_data)) {
-+		kfree_skb(p->skb2);
-+		p->skb2 = NULL;
-+		goto out;
-+	}
-+
- 	if (sk_filter(sk, p->skb2)) {
- 		kfree_skb(p->skb2);
- 		p->skb2 = NULL;
-@@ -1507,8 +1516,12 @@ static void do_one_broadcast(struct sock *sk,
- 	sock_put(sk);
- }
+ struct sock *__netlink_kernel_create(struct net *net, int unit,
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index e75e5156e4ac..383c10c6e6e3 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -677,6 +677,7 @@ static int netlink_create(struct net *net, struct socket *sock, int protocol,
+ 	struct netlink_sock *nlk;
+ 	int (*bind)(struct net *net, int group);
+ 	void (*unbind)(struct net *net, int group);
++	void (*release)(struct sock *sock, unsigned long *groups);
+ 	int err = 0;
  
--int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, u32 portid,
--		      u32 group, gfp_t allocation)
-+int netlink_broadcast_filtered(struct sock *ssk, struct sk_buff *skb,
-+			       u32 portid,
-+			       u32 group, gfp_t allocation,
-+			       int (*filter)(struct sock *dsk,
-+					     struct sk_buff *skb, void *data),
-+			       void *filter_data)
- {
- 	struct net *net = sock_net(ssk);
- 	struct netlink_broadcast_data info;
-@@ -1527,6 +1540,8 @@ int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, u32 portid,
- 	info.allocation = allocation;
- 	info.skb = skb;
- 	info.skb2 = NULL;
-+	info.tx_filter = filter;
-+	info.tx_data = filter_data;
+ 	sock->state = SS_UNCONNECTED;
+@@ -704,6 +705,7 @@ static int netlink_create(struct net *net, struct socket *sock, int protocol,
+ 	cb_mutex = nl_table[protocol].cb_mutex;
+ 	bind = nl_table[protocol].bind;
+ 	unbind = nl_table[protocol].unbind;
++	release = nl_table[protocol].release;
+ 	netlink_unlock_table();
  
- 	/* While we sleep in clone, do not allow to change socket list */
+ 	if (err < 0)
+@@ -719,6 +721,7 @@ static int netlink_create(struct net *net, struct socket *sock, int protocol,
+ 	nlk->module = module;
+ 	nlk->netlink_bind = bind;
+ 	nlk->netlink_unbind = unbind;
++	nlk->netlink_release = release;
+ out:
+ 	return err;
  
-@@ -1552,6 +1567,14 @@ int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, u32 portid,
- 	}
- 	return -ESRCH;
- }
-+EXPORT_SYMBOL(netlink_broadcast_filtered);
-+
-+int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, u32 portid,
-+		      u32 group, gfp_t allocation)
-+{
-+	return netlink_broadcast_filtered(ssk, skb, portid, group, allocation,
-+					  NULL, NULL);
-+}
- EXPORT_SYMBOL(netlink_broadcast);
+@@ -763,6 +766,8 @@ static int netlink_release(struct socket *sock)
+ 	 * OK. Socket is unlinked, any packets that arrive now
+ 	 * will be purged.
+ 	 */
++	if (nlk->netlink_release)
++		nlk->netlink_release(sk, nlk->groups);
  
- struct netlink_set_err_data {
+ 	/* must not acquire netlink_table_lock in any way again before unbind
+ 	 * and notifying genetlink is done as otherwise it might deadlock
+@@ -2091,6 +2096,7 @@ __netlink_kernel_create(struct net *net, int unit, struct module *module,
+ 		if (cfg) {
+ 			nl_table[unit].bind = cfg->bind;
+ 			nl_table[unit].unbind = cfg->unbind;
++			nl_table[unit].release = cfg->release;
+ 			nl_table[unit].flags = cfg->flags;
+ 		}
+ 		nl_table[unit].registered = 1;
+diff --git a/net/netlink/af_netlink.h b/net/netlink/af_netlink.h
+index 90a3198a9b7f..fd424cd63f31 100644
+--- a/net/netlink/af_netlink.h
++++ b/net/netlink/af_netlink.h
+@@ -42,6 +42,8 @@ struct netlink_sock {
+ 	void			(*netlink_rcv)(struct sk_buff *skb);
+ 	int			(*netlink_bind)(struct net *net, int group);
+ 	void			(*netlink_unbind)(struct net *net, int group);
++	void			(*netlink_release)(struct sock *sk,
++						   unsigned long *groups);
+ 	struct module		*module;
+ 
+ 	struct rhash_head	node;
+@@ -64,6 +66,8 @@ struct netlink_table {
+ 	struct module		*module;
+ 	int			(*bind)(struct net *net, int group);
+ 	void			(*unbind)(struct net *net, int group);
++	void                    (*release)(struct sock *sk,
++					   unsigned long *groups);
+ 	int			registered;
+ };
+ 
 -- 
 2.41.0
 
