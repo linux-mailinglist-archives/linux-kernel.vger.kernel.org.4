@@ -2,315 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825DD74C4B7
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475BF74C4BA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjGIOqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 10:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
+        id S230412AbjGIOzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 10:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjGIOqw (ORCPT
+        with ESMTP id S229535AbjGIOzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 10:46:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CEA123
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 07:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688913964;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rc5pEAkZCy2ECM6uSNrjq0WgYGvE6IB/Rm8veJW6Wi4=;
-        b=KxQD2+6dGpsfQpJcN5KMzLE2Jrnd6xU6YARY2/L37Qf+WCZK0HtjLI/yKLL4665oqYt8RK
-        22+naFM8NvWM60CCAJiGLEZD496r8FSVRGrPvFSKL1P4CpErp0S3CrBInkHYgCjcQSLj0T
-        vo28U3f1QFI2Kwr6oK1afDvc4Hh+VkI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-675-fEuXbCLKO4C9cd4RxeGziQ-1; Sun, 09 Jul 2023 10:46:02 -0400
-X-MC-Unique: fEuXbCLKO4C9cd4RxeGziQ-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7659b44990eso318367885a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 07:46:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688913962; x=1691505962;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rc5pEAkZCy2ECM6uSNrjq0WgYGvE6IB/Rm8veJW6Wi4=;
-        b=fp12zrvJNq8/xS/rDVP3WzEZ65UwINw2ZjolA0DxQhQaVlSlZMn612p60wuW2HQLEt
-         MSQDzaXTu4xeWEGHRCFt7h5IYUIyKDPnwFBmrhRaZrKmza5uGJsEelIl2sI3JSQ2mKEJ
-         7u7RZhtyoXciOPbOdBAr3xW+iBd3bVTBipGRdbJQEBvBgSYSnfWlva4uG7jicjOuA3dZ
-         +Mn6heiWONNcFvJxZ58uUbGk6ihCLyMbd/OhcvEN1QK5zw6dHFwy+fyj/S1rzrTbxult
-         KWxS59F8nCa9quV28X79Gt0LfTH+C5wgnobJaDWmgXLajoAyfpORPGHioXu3SedPbUic
-         w41w==
-X-Gm-Message-State: ABy/qLYvfr8Y5nIlCAQNJm3jfIf0PzxQLN78EwCxDKnJI2f5mxZyJgTj
-        D6eoiCwWp7jCbOLRxYzq1oPua+z+3A5E8nB24l7S+tvb7j5oTGKwcF1QYzA9h3Xzlwq6Ak5Ntwi
-        akVl2FwDvzs6h0da1Vn7eKv26
-X-Received: by 2002:a05:622a:164d:b0:401:e0b4:a946 with SMTP id y13-20020a05622a164d00b00401e0b4a946mr10017011qtj.8.1688913962274;
-        Sun, 09 Jul 2023 07:46:02 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGRaBEWc4t/nDfFSIRPOg2LQmoIdo+hOeGApPhQxZlQKyqMGftaOW+iWs0nJmA8oPuS/rZ1Tg==
-X-Received: by 2002:a05:622a:164d:b0:401:e0b4:a946 with SMTP id y13-20020a05622a164d00b00401e0b4a946mr10016996qtj.8.1688913961912;
-        Sun, 09 Jul 2023 07:46:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id bq22-20020a05622a1c1600b003f364778b2bsm3961935qtb.4.2023.07.09.07.45.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jul 2023 07:46:01 -0700 (PDT)
-Message-ID: <ea62fb9c-2ca2-ec03-6dbd-ff853930eb47@redhat.com>
-Date:   Sun, 9 Jul 2023 16:45:58 +0200
+        Sun, 9 Jul 2023 10:55:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7E1126;
+        Sun,  9 Jul 2023 07:55:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67D4F60BA4;
+        Sun,  9 Jul 2023 14:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7226EC433C8;
+        Sun,  9 Jul 2023 14:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688914533;
+        bh=4y9MrXKgJtTEJJlZHSjciMrEjHEkk2Ac2XXS2rPb57c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D2Dk2jGDPHXebYzefHz+hTMvx5pL9vp8YPyxXyQVkLvZeNRTX+vsTdNu0xqi0wYmM
+         ehPaG71PsfGRc5tpnTYDkQW1iDhSbCdnM0GBpk+YiBq1N+M7Dp4wX/7WldoREyQHgL
+         ys7YLZE8VwLODAKflKS/HY33IJFRHvZnYGLcEAKJ6KtRYcD0DroEpp5NgUKUT9CL/w
+         Wt9g4P+xUjQZSaExp+I0mhPgoRdMCqPpB+iL1R17pICp+ikYg9vMjUwi5aXXnlW+0S
+         ICm0pt8z3Wsy/2hZBpVYfd6IWpuhGVsv2azDk5dGuoXmCIYGbRa3TYkPm3S+rr24mE
+         0V96+qp13jc/g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Shigeru Yoshida <syoshida@redhat.com>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, joel@joelfernandes.org,
+        josh@joshtriplett.org, boqun.feng@gmail.com, rcu@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 1/4] rcu-tasks: Avoid pr_info() with spin lock in cblist_init_generic()
+Date:   Sun,  9 Jul 2023 10:55:27 -0400
+Message-Id: <20230709145530.512177-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH] PCI/VPD: Add runtime power management to sysfs interface
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230707151044.1311544-1-alex.williamson@redhat.com>
- <08e455b0-31a6-b379-ba8b-b9a2c0962e22@redhat.com>
- <20230709072632.30c09f1e.alex.williamson@redhat.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <20230709072632.30c09f1e.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.4.2
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+From: Shigeru Yoshida <syoshida@redhat.com>
 
-On 7/9/23 15:26, Alex Williamson wrote:
-> On Sun, 9 Jul 2023 13:50:35 +0200
-> Eric Auger <eric.auger@redhat.com> wrote:
->
->> Hi Alex,
->>
->> On 7/7/23 17:10, Alex Williamson wrote:
->>> Unlike default access to config space through sysfs, the vpd read and
->>> write function don't actively manage the runtime power management state
->>> of the device during access.  Since commit 7ab5e10eda02 ("vfio/pci: Move
->>> the unused device into low power state with runtime PM"), the vfio-pci
->>> driver will use runtime power management and release unused devices to
->>> make use of low power states.  Attempting to access VPD information in
->>> this low power state can result in incorrect information or kernel
->>> crashes depending on the system behavior.
->>>
->>> Wrap the vpd read/write bin attribute handlers in runtime PM and take
->>> into account the potential quirk to select the correct device to wake.  
->> This much improved the situation as it is more difficult to hit the
->> issue. Unfortunately after tens of attempts I was still able to hit a
->> kernel crash. The console output does not mention the VPD anymore but
->> PCI power management events (PME).
-> Does combining this with an extended D3hot wakeup for the device make
-> any difference, such as a5a6dd262469 ("PCI/PM: Extend D3hot delay for
-> NVIDIA HDA controllers")?  Thanks,
-I added
+[ Upstream commit 5fc8cbe4cf0fd34ded8045c385790c3bf04f6785 ]
 
-static void quirk_qlogic_nic_pm(struct pci_dev *dev)
-{
-        dev_info(&dev->dev, "****** %s", __func__);
-        quirk_d3hot_delay(dev, 20);
-}
-DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_QLOGIC, PCI_ANY_ID,
-                              PCI_CLASS_NETWORK_ETHERNET, 8,
-                              quirk_qlogic_nic_pm)
+pr_info() is called with rtp->cbs_gbl_lock spin lock locked.  Because
+pr_info() calls printk() that might sleep, this will result in BUG
+like below:
 
-and checked it was called, but I can still hit after 10's of iterations
+[    0.206455] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.206463]
+[    0.206464] =============================
+[    0.206464] [ BUG: Invalid wait context ]
+[    0.206465] 5.19.0-00428-g9de1f9c8ca51 #5 Not tainted
+[    0.206466] -----------------------------
+[    0.206466] swapper/0/1 is trying to lock:
+[    0.206467] ffffffffa0167a58 (&port_lock_key){....}-{3:3}, at: serial8250_console_write+0x327/0x4a0
+[    0.206473] other info that might help us debug this:
+[    0.206473] context-{5:5}
+[    0.206474] 3 locks held by swapper/0/1:
+[    0.206474]  #0: ffffffff9eb597e0 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic.constprop.0+0x14/0x1f0
+[    0.206478]  #1: ffffffff9eb579c0 (console_lock){+.+.}-{0:0}, at: _printk+0x63/0x7e
+[    0.206482]  #2: ffffffff9ea77780 (console_owner){....}-{0:0}, at: console_emit_next_record.constprop.0+0x111/0x330
+[    0.206485] stack backtrace:
+[    0.206486] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-00428-g9de1f9c8ca51 #5
+[    0.206488] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+[    0.206489] Call Trace:
+[    0.206490]  <TASK>
+[    0.206491]  dump_stack_lvl+0x6a/0x9f
+[    0.206493]  __lock_acquire.cold+0x2d7/0x2fe
+[    0.206496]  ? stack_trace_save+0x46/0x70
+[    0.206497]  lock_acquire+0xd1/0x2f0
+[    0.206499]  ? serial8250_console_write+0x327/0x4a0
+[    0.206500]  ? __lock_acquire+0x5c7/0x2720
+[    0.206502]  _raw_spin_lock_irqsave+0x3d/0x90
+[    0.206504]  ? serial8250_console_write+0x327/0x4a0
+[    0.206506]  serial8250_console_write+0x327/0x4a0
+[    0.206508]  console_emit_next_record.constprop.0+0x180/0x330
+[    0.206511]  console_unlock+0xf7/0x1f0
+[    0.206512]  vprintk_emit+0xf7/0x330
+[    0.206514]  _printk+0x63/0x7e
+[    0.206516]  cblist_init_generic.constprop.0.cold+0x24/0x32
+[    0.206518]  rcu_init_tasks_generic+0x5/0xd9
+[    0.206522]  kernel_init_freeable+0x15b/0x2a2
+[    0.206523]  ? rest_init+0x160/0x160
+[    0.206526]  kernel_init+0x11/0x120
+[    0.206527]  ret_from_fork+0x1f/0x30
+[    0.206530]  </TASK>
+[    0.207018] cblist_init_generic: Setting shift to 1 and lim to 1.
 
-[  152.788557] Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack
-ipt_REJECT nf_reject_ipv4 nft_compat nft_chain_nat nf_nat nf_conntrack
-nf_defrag_ipv6 nf_defrag_ipv4 nf
-_tables nfnetlink rpcsec_gss_krb5 nfsv4 dns_resolver nfs fscache netfs
-bridge stp llc rfkill vfat fat qedr ib_uverbs vfio_pci ib_core
-vfio_pci_core vfio_iommu_type1 crct10dif_c
-e ghash_ce vfio i2c_smbus sha1_ce ipmi_ssif ipmi_devintf nfsd
-ipmi_msghandler thunderx2_pmu auth_rpcgss nfs_acl lockd grace sunrpc
-ip_tables xfs libcrc32c sg ixgbevf ast drm_km
-s_helper qede i2c_algo_bit drm_shmem_helper qed drm ixgbe e1000e mpt3sas
-nvme nvme_core sha2_ce sha256_arm64 raid_class scsi_transport_sas
-nvme_common crc8 mdio gpio_xlp i2c_xl
-p9xx dm_mirror dm_region_hash dm_log dm_mod fuse
-[  152.854119] CPU: 112 PID: 1416 Comm: kworker/112:7 Not tainted
-6.4.0-vpd-upstream+ #57
-[  152.862024] Hardware name: GIGABYTE R181-T90-00/MT91-FS1-00, BIOS F34
-08/13/2020
-[  152.869406] Workqueue: events_freezable pci_pme_list_scan
-[  152.874810] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS
-BTYPE=--)
-[  152.881760] pc : pci_generic_config_read+0x64/0xd8
-[  152.886549] lr : pci_generic_config_read+0x28/0xd8
-[  152.891328] sp : ffff80008cb23cb0
-[  152.894630] x29: ffff80008cb23cb0 x28: 0000000000000000 x27:
-0000000000000000
-[  152.901756] x26: 0000000000000000 x25: 0000000000000001 x24:
-ffff80008cb23d76
-[  152.908881] x23: ffff000806331800 x22: 0000000000000044 x21:
-ffff80008232d4c8
-[  152.916006] x20: ffff80008cb23d24 x19: 0000000000000002 x18:
-0000000000000000
-[  152.923130] x17: 0000000000000000 x16: 0000000000000000 x15:
-0000000000000001
-[  152.930255] x14: ffffffffffffffff x13: 0000000000000000 x12:
-0101010101010101
-[  152.937379] x11: 7f7f7f7f7f7f7f7f x10: fefefefefefefeff x9 :
-ffff8000807b3938
-[  152.944504] x8 : fefefefefefefeff x7 : 0000000000000018 x6 :
-000000000000007f
-[  152.951628] x5 : 0000000000000000 x4 : ffff800090000000 x3 :
-0000000000000000
-[  152.958752] x2 : 0000000000000044 x1 : 0000000000c01044 x0 :
-ffff800090c01044
-[  152.965878] Call trace:
-[  152.968312]  pci_generic_config_read+0x64/0xd8
-[  152.972745]  pci_bus_read_config_word+0x84/0xe8
-[  152.977264]  pci_read_config_word+0x30/0x50
-[  152.981435]  pci_check_pme_status+0x70/0xa8
-[  152.985606]  pci_pme_list_scan+0x84/0x158
-[  152.989604]  process_one_work+0x1ec/0x488
-[  152.993616]  worker_thread+0x48/0x400
-[  152.997267]  kthread+0x10c/0x120
-[  153.000492]  ret_from_fork+0x10/0x20
-[  153.004063] Code: 52800000 a94153f3 a8c27bfd d65f03c0 (79400000)
-[  153.010146] ---[ end trace 0000000000000000 ]---
-[  153.014751] Kernel panic - not syncing: synchronous external abort:
-Fatal exception
-[  153.022395] SMP: stopping secondary CPUs
-[  154.081107] SMP: failed to stop secondary CPUs 112,194
-[  154.086236] Kernel Offset: 0x190000 from 0xffff800080000000
-[  154.091796] PHYS_OFFSET: 0x80000000
-[  154.095272] CPU features: 0x01800000,0a0140a1,08004203
-[  154.100398] Memory Limit: none
-[  154.103440] ---[ end Kernel panic - not syncing: synchronous external
-abort: Fatal exception ]---
+This patch moves pr_info() so that it is called without
+rtp->cbs_gbl_lock locked.
 
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+Tested-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/rcu/tasks.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Eric
-
-
-
->
-> Alex
->
->  
->> [  168.616700] CPU: 0 PID: 1409 Comm: kworker/0:5 Not tainted
->> 6.4.0-vpd-upstream+ #56
->> [  168.624257] Hardware name: GIGABYTE R181-T90-00/MT91-FS1-00, BIOS F34
->> 08/13/2020
->> [  168.631639] Workqueue: events_freezable pci_pme_list_scan
->> [  168.637032] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS
->> BTYPE=--)
->> [  168.643982] pc : pci_generic_config_read+0x64/0xd8
->> [  168.648763] lr : pci_generic_config_read+0x28/0xd8
->> [  168.653542] sp : ffff80008caebcb0
->> [  168.656844] x29: ffff80008caebcb0 x28: 0000000000000000 x27:
->> 0000000000000000
->> [  168.663969] x26: 0000000000000000 x25: 0000000000000000 x24:
->> ffff80008caebd76
->> [  168.671094] x23: ffff0008063fd800 x22: 0000000000000044 x21:
->> ffff80008232d4c8
->> [  168.678218] x20: ffff80008caebd24 x19: 0000000000000002 x18:
->> 00000000000040fc
->> [  168.685342] x17: 00000000000040f8 x16: 0000000000000000 x15:
->> 0000000000000001
->> [  168.692466] x14: ffffffffffffffff x13: 0000000000000000 x12:
->> 0101010101010101
->> [  168.699590] x11: 7f7f7f7f7f7f7f7f x10: fefefefefefefeff x9 :
->> ffff8000807b3938
->> [  168.706714] x8 : fefefefefefefeff x7 : 0000000000000018 x6 :
->> 000000000000007f
->> [  168.713838] x5 : 0000000000000000 x4 : ffff800090000000 x3 :
->> 0000000000000000
->> [  168.720962] x2 : 0000000000000044 x1 : 0000000000c00044 x0 :
->> ffff800090c00044
->> [  168.728086] Call trace:
->> [  168.730520]  pci_generic_config_read+0x64/0xd8
->> [  168.734953]  pci_bus_read_config_word+0x84/0xe8
->> [  168.739471]  pci_read_config_word+0x30/0x50
->> [  168.743642]  pci_check_pme_status+0x70/0xa8
->> [  168.747813]  pci_pme_list_scan+0x84/0x158
->> [  168.751811]  process_one_work+0x1ec/0x488
->> [  168.755810]  worker_thread+0x48/0x400
->> [  168.759461]  kthread+0x10c/0x120
->> [  168.762678]  ret_from_fork+0x10/0x20
->> [  168.766245] Code: 52800000 a94153f3 a8c27bfd d65f03c0 (79400000)
->> [  168.772326] ---[ end trace 0000000000000000 ]---
->> [  168.776931] Kernel panic - not syncing: synchronous external abort:
->> Fatal exception
->> [  168.784574] SMP: stopping secondary CPUs
->> [  169.831001] SMP: failed to stop secondary CPUs 0,199
->> [  169.835955] Kernel Offset: 0x190000 from 0xffff800080000000
->>
->>
->> Thanks
->>
->> Eric
->>> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
->>> ---
->>>  drivers/pci/vpd.c | 34 ++++++++++++++++++++++++++++++++--
->>>  1 file changed, 32 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/pci/vpd.c b/drivers/pci/vpd.c
->>> index a4fc4d0690fe..81217dd4789f 100644
->>> --- a/drivers/pci/vpd.c
->>> +++ b/drivers/pci/vpd.c
->>> @@ -275,8 +275,23 @@ static ssize_t vpd_read(struct file *filp, struct kobject *kobj,
->>>  			size_t count)
->>>  {
->>>  	struct pci_dev *dev = to_pci_dev(kobj_to_dev(kobj));
->>> +	struct pci_dev *vpd_dev = dev;
->>> +	ssize_t ret;
->>> +
->>> +	if (dev->dev_flags & PCI_DEV_FLAGS_VPD_REF_F0) {
->>> +		vpd_dev = pci_get_func0_dev(dev);
->>> +		if (!vpd_dev)
->>> +			return -ENODEV;
->>> +	}
->>> +
->>> +	pci_config_pm_runtime_get(vpd_dev);
->>> +	ret = pci_read_vpd(vpd_dev, off, count, buf);
->>> +	pci_config_pm_runtime_put(vpd_dev);
->>> +
->>> +	if (dev != vpd_dev)
->>> +		pci_dev_put(vpd_dev);
->>>  
->>> -	return pci_read_vpd(dev, off, count, buf);
->>> +	return ret;
->>>  }
->>>  
->>>  static ssize_t vpd_write(struct file *filp, struct kobject *kobj,
->>> @@ -284,8 +299,23 @@ static ssize_t vpd_write(struct file *filp, struct kobject *kobj,
->>>  			 size_t count)
->>>  {
->>>  	struct pci_dev *dev = to_pci_dev(kobj_to_dev(kobj));
->>> +	struct pci_dev *vpd_dev = dev;
->>> +	ssize_t ret;
->>> +
->>> +	if (dev->dev_flags & PCI_DEV_FLAGS_VPD_REF_F0) {
->>> +		vpd_dev = pci_get_func0_dev(dev);
->>> +		if (!vpd_dev)
->>> +			return -ENODEV;
->>> +	}
->>> +
->>> +	pci_config_pm_runtime_get(vpd_dev);
->>> +	ret = pci_write_vpd(vpd_dev, off, count, buf);
->>> +	pci_config_pm_runtime_put(vpd_dev);
->>> +
->>> +	if (dev != vpd_dev)
->>> +		pci_dev_put(vpd_dev);
->>>  
->>> -	return pci_write_vpd(dev, off, count, buf);
->>> +	return ret;
->>>  }
->>>  static BIN_ATTR(vpd, 0600, vpd_read, vpd_write, 0);
->>>    
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index 5f4fc8184dd0b..65df1aaf0ce9b 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -241,7 +241,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 	if (rcu_task_enqueue_lim < 0) {
+ 		rcu_task_enqueue_lim = 1;
+ 		rcu_task_cb_adjust = true;
+-		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
+ 	} else if (rcu_task_enqueue_lim == 0) {
+ 		rcu_task_enqueue_lim = 1;
+ 	}
+@@ -272,6 +271,10 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 		raw_spin_unlock_rcu_node(rtpcp); // irqs remain disabled.
+ 	}
+ 	raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
++
++	if (rcu_task_cb_adjust)
++		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
++
+ 	pr_info("%s: Setting shift to %d and lim to %d.\n", __func__, data_race(rtp->percpu_enqueue_shift), data_race(rtp->percpu_enqueue_lim));
+ }
+ 
+-- 
+2.39.2
 
