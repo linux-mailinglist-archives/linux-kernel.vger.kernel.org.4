@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509E774C6F4
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 20:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0D574C6F9
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 20:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjGISPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 14:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S231287AbjGISWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 14:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjGISPG (ORCPT
+        with ESMTP id S229579AbjGISWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 14:15:06 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9DCE1;
-        Sun,  9 Jul 2023 11:15:05 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51e566b1774so610571a12.1;
-        Sun, 09 Jul 2023 11:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688926504; x=1691518504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=57/DKKkczSnhAi5y9UitWkgGZTdh91iHF+xGOadtOFM=;
-        b=JqgAROm8i61wufU7LuF28KU0aXCGQddOImOAfyTB426/c17WRmkd2T9T6Anm2TvHIV
-         g6D48+umt9NmkM5YgI3n8k7yu12SNcLBLgf10KbhKVX1ebjYDKY0GALjwfBvMUNejs9J
-         uZpmNDdGumcoT+hcqy63eizDWDcV4eavXaoP+kxhX50PKCqTiYyNbymKkCxvYrXQ91XB
-         N27asGrmywii8+cJsmzgvYhgkAe4xYHXQxDwW2GMS3dXawPWzKLPt4PkaSTjPV++Ae2Y
-         Q+WLZ20K4jX4058RQlVd8ouF00vPE3TKtkGXmCsIoV2WJMhGhr31UDUk9Bdq94hc4WMj
-         HLHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688926504; x=1691518504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=57/DKKkczSnhAi5y9UitWkgGZTdh91iHF+xGOadtOFM=;
-        b=e4UjPhOA0DJ4iyNrjiL+o28vondd4TLGhQCn3SQHLzFS+wWUTi2v8ABKcm2ZDJMbmi
-         EqSLgQ6+EEqEYzgorxoN/j3ff/J2TGFT9DlY/4ku5WDcyJShshz59+j62X0XqODlKxpM
-         /mehWU02SqiIt2rJjXD/n1oS5UvOwo0bqmgjlIXmIe8ZHkG/GnWw170ZSPaS/MvqCEIw
-         d99Lr6u/Q3TygjDBMG/0hwY814IaU1hTcTAjZY8ORYWNgr4Yw20nsFqem0jRkUxVJIdh
-         P3V0I3kTd8IyR3bmF0DT18CNIO0ijBsgSzVlFD1/Uf29vSON6J9ytBR2YlGBeo+Ov7xz
-         7r/Q==
-X-Gm-Message-State: ABy/qLZi2aX1Nn9k4I0EeLX/RzZYkyFJ4tc1M9totUQlKvW6LYJzfwXB
-        422PIYBbM6aeC+ZcAJv9WRycV/znb9JVQDE2Te0=
-X-Google-Smtp-Source: APBJJlFIP798NTJcxwR8lUhj9TiP8qI9WcDYYSMIaZ7DeB5aDYU8XrCnz/MEGfHSgG8l7bba+Zi7W6//YHVXuUPnOnk=
-X-Received: by 2002:aa7:d1d9:0:b0:51e:ed6:df38 with SMTP id
- g25-20020aa7d1d9000000b0051e0ed6df38mr9224006edp.13.1688926503676; Sun, 09
- Jul 2023 11:15:03 -0700 (PDT)
+        Sun, 9 Jul 2023 14:22:35 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A466EC;
+        Sun,  9 Jul 2023 11:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1688926952; bh=/mzXwqYhhaEswyZUayjPFVq1MZwMJWSKNHX6GofhBfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kUi+Q7ng8OGkIsJEI8Eh6pFJ/y49A02iZR4+6nAyx0EB0CzH/vzOkALcZo3oHp2qB
+         wjHF8lPPVt5ozJy7UvfKktMc89wZpNXa5AzFtZ/JUoo6flsuKM7RuR9aKLmkhEd3AY
+         u85aPxxjXG2Betc7k5uuWCYCMyQayMmVZQZ75yts=
+Date:   Sun, 9 Jul 2023 20:22:31 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Message-ID: <74eddce8-4f59-40c8-bc49-38c286a3cbb0@t-8ch.de>
+References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
+ <20230630140609.263790-1-falcon@tinylab.org>
+ <20230709092947.GF9321@1wt.eu>
+ <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
+ <20230709172753.GA22287@1wt.eu>
+ <df91b1d3-2c66-4a6b-9a8a-544679bc09a8@t-8ch.de>
+ <20230709180432.GA22685@1wt.eu>
 MIME-Version: 1.0
-References: <tencent_513E2ED35A17B9569C91CF75664724C7620A@qq.com> <d60c850cbfa5a25fcf97eef724f5b701@208suo.com>
-In-Reply-To: <d60c850cbfa5a25fcf97eef724f5b701@208suo.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 9 Jul 2023 21:14:27 +0300
-Message-ID: <CAHp75VcbUOuQ9_2VL9mcs3e1x=ZOV5yd+c1U_iE24G5k-Uk7AA@mail.gmail.com>
-Subject: Re: [PATCH] efi: x86: prefer 'unsigned int' to bare use of 'unsigned'
-To:     xuanzhenggang001@208suo.com
-Cc:     ardb@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dvhart@infradead.org,
-        andy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230709180432.GA22685@1wt.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 9, 2023 at 5:20=E2=80=AFAM <xuanzhenggang001@208suo.com> wrote:
->
-> This patch fixes the following checkpatch warning:
-> arch/x86/platform/efi/efi_64.c:109: WARNING: Prefer 'unsigned int' to
-> bare use of 'unsigned'
-> arch/x86/platform/efi/efi_64.c:177: WARNING: Prefer 'unsigned int' to
-> bare use of 'unsigned'
-> arch/x86/platform/efi/efi_64.c:182: WARNING: Prefer 'unsigned int' to
-> bare use of 'unsigned'
+On 2023-07-09 20:04:32+0200, Willy Tarreau wrote:
+> On Sun, Jul 09, 2023 at 07:57:27PM +0200, Thomas Weißschuh wrote:
+> > On 2023-07-09 19:27:53+0200, Willy Tarreau wrote:
+> > > On Sun, Jul 09, 2023 at 07:10:58PM +0200, Thomas Weißschuh wrote:
+> > > > On 2023-07-09 11:29:47+0200, Willy Tarreau wrote:
+> > > > > On Fri, Jun 30, 2023 at 10:06:09PM +0800, Zhangjin Wu wrote:
+> > > > >> [..]
+> > > > > 
+> > > > > Now queued, thanks!
+> > > > > Willy
+> > > > 
+> > > > Don't we need an Ack from the fs maintainers for the patch to
+> > > > fs/proc/proc_net.c ?
+> > > > 
+> > > > Personally I expected this series to go in via the fs tree because of
+> > > > that patch.
+> > > 
+> > > Gasp! You're totally right, I confused it with a test only changing
+> > > the nolibc-test file, as the chmod_net test appeared as a dependency!
+> > > Let me drop it from the series and push again.
+> > 
+> > I think if this patch now also goes in via both the nolibc/rcu trees and
+> > the fs tree it would not be great.
+> >
+> > The best way forward would probably for you to rebase your tree on top
+> > of mainline after the fs tree has introduced both patches of the series
+> > into Linus' tree and then you can drop your copy of the test removal.
+> 
+> Yeah I agree.
+> 
+> > I want to keep both patches together because I expect the fs change to
+> > be backported and if it is backported on its own it will break
+> > nolibc-test in those trees.
+> 
+> OK but we can also fix the test regardless, and mark it for backport, no ?
 
-> -int __init efi_setup_page_tables(unsigned long pa_memmap, unsigned
-> num_pages)
-> +int __init efi_setup_page_tables(unsigned long pa_memmap, unsigned int
-> num_pages)
+That should work fine, too.
+Can you add the Fixes and Cc-stable tags in your tree and let the fs
+maintainers know?
+Or do you want me to split and resend the series?
 
-Nice, but you shouldn't just blindly do some mechanic "fixes". Now
-your patch makes differences between the function prototype and its
-implementation.
+> > But maybe I'm overthinking it, nobody is running nolibc-test on
+> > non-mainline kernels anyways and both patches can be split.
+> 
+> I agree that we shouldn't grant too much importance to this test ;-)
+> I'm regularly seeing Sasha propose them for backports and am thinking
+> "ok it cannot hurt but I'm not convinced anyone will notice the fix".
+> 
+> > If they are to be kept together and go via fs an Ack on the nolibc-test
+> > patch is probably needed, too.
+> 
+> OK. Let's first see if someone from FS agrees on the change.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Sounds good.
+
+
+Thomas
