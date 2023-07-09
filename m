@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D8574C1D7
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 12:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5043274C1F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 12:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjGIKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 06:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S230325AbjGIKqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 06:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjGIKQ7 (ORCPT
+        with ESMTP id S229773AbjGIKqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 06:16:59 -0400
+        Sun, 9 Jul 2023 06:46:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5190297;
-        Sun,  9 Jul 2023 03:16:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BFC115;
+        Sun,  9 Jul 2023 03:46:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D651F60BB1;
-        Sun,  9 Jul 2023 10:16:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44FEC433C7;
-        Sun,  9 Jul 2023 10:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688897817;
-        bh=yNhKNholsm3yNohLZid2uZuc5K4NRQyeyAY0OEKmeo4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4A560BC1;
+        Sun,  9 Jul 2023 10:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 081FDC433C8;
+        Sun,  9 Jul 2023 10:46:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688899580;
+        bh=MFSm4hfkC4hsq6p/NQ8yKPw77r5Iebg5JnxW264clgU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vh16lnBSfX/s72Imtyfpe0q78Iuak4kdbAW+DuRU3i9Hq4QaYekb5FOLv0wERLeYu
-         9IdMLxmqPEWyQno34o46dtIb/8KyMJo0MkjEsemBbY+/2GoeaMDImVps/CwPzpHXbx
-         s/j8dplo1T9zqNYbpOgl5Iv9s33JQhecCJs6JNQM=
-Date:   Sun, 9 Jul 2023 12:16:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com,
-        Qun-wei.Lin@mediatek.com, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, david@redhat.com, pcc@google.com,
-        steven.price@arm.com, ying.huang@intel.com,
-        stable-commits@vger.kernel.org
-Subject: Re: Patch "mm: call arch_swap_restore() from do_swap_page()" has
- been added to the 5.10-stable tree
-Message-ID: <2023070941-throbbing-renter-f6ef@gregkh>
-References: <2023070900-bounce-slider-afab@gregkh>
+        b=Aq+XhyMl++xTDOAJC8f8Dj1ndI5RjxdmqfBl5+8yjTu/1mhBHpbnHtDwFAvBgmgDg
+         9swwGinlU2if86dP3VzIR5zlhCEzco/URwgFO4Yz4WSgW6YLv1XHqyvwXtu6Qzzlwi
+         LXt+zTElSywFKnR/rtyGUYPsxMgiWghOCYaDhn22ya1AjygWj4Aq1Y4kG+EXXYTGPO
+         t33RpNrqh8czezbJSrFArQ9hx5/ekeLh8uFSUX6ooXAfzAz4fJ9SmlbTMOD9aUmaSy
+         /2UH6Yn+/mYroYmA5Xqo7eBISaUncDbwgyE7hM7YXVPK2sjvHJllQCXZ1qpbPD/Hog
+         WLqM9GjPhi5wg==
+Date:   Sun, 9 Jul 2023 16:16:16 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Frank Li <Frank.li@nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peng.fan@nxp.com, joy.zou@nxp.com,
+        shenwei.wang@nxp.com, imx@lists.linux.dev
+Subject: Re: [PATCH v9 12/13] dmaengine: fsl-edma: integrate v3 support
+Message-ID: <ZKqP+BNhFPswyXkB@matsya>
+References: <20230620201221.2580428-1-Frank.Li@nxp.com>
+ <20230620201221.2580428-13-Frank.Li@nxp.com>
+ <ZKemOm9OfQK8NkpL@matsya>
+ <ZKg7b/RJyCrmsQQ7@lizhi-Precision-Tower-5810>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023070900-bounce-slider-afab@gregkh>
+In-Reply-To: <ZKg7b/RJyCrmsQQ7@lizhi-Precision-Tower-5810>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -56,80 +60,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 09, 2023 at 11:44:01AM +0200, gregkh@linuxfoundation.org wrote:
+On 07-07-23, 12:21, Frank Li wrote:
+> On Fri, Jul 07, 2023 at 11:14:26AM +0530, Vinod Koul wrote:
+> > On 20-06-23, 16:12, Frank Li wrote:
+> > > +		}
+> > > +
+> > > +		fsl_chan->pd_dev = pd_chan;
+> > > +
+> > > +		pm_runtime_use_autosuspend(fsl_chan->pd_dev);
+> > > +		pm_runtime_set_autosuspend_delay(fsl_chan->pd_dev, 200);
+> > > +		pm_runtime_set_active(fsl_chan->pd_dev);
+> > > +		//pm_runtime_put_sync_suspend(fsl_chan->pd_dev);
+> > 
+> > Ouch!
+> > 
+> > Always remember to run checkpatch on your code before sending!
+> > 
 > 
-> This is a note to let you know that I've just added the patch titled
-> 
->     mm: call arch_swap_restore() from do_swap_page()
-> 
-> to the 5.10-stable tree which can be found at:
->     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-> 
-> The filename of the patch is:
->      mm-call-arch_swap_restore-from-do_swap_page.patch
-> and it can be found in the queue-5.10 subdirectory.
-> 
-> If you, or anyone else, feels it should not be added to the stable tree,
-> please let <stable@vger.kernel.org> know about it.
-> 
-> 
-> >From 6dca4ac6fc91fd41ea4d6c4511838d37f4e0eab2 Mon Sep 17 00:00:00 2001
-> From: Peter Collingbourne <pcc@google.com>
-> Date: Mon, 22 May 2023 17:43:08 -0700
-> Subject: mm: call arch_swap_restore() from do_swap_page()
-> 
-> From: Peter Collingbourne <pcc@google.com>
-> 
-> commit 6dca4ac6fc91fd41ea4d6c4511838d37f4e0eab2 upstream.
-> 
-> Commit c145e0b47c77 ("mm: streamline COW logic in do_swap_page()") moved
-> the call to swap_free() before the call to set_pte_at(), which meant that
-> the MTE tags could end up being freed before set_pte_at() had a chance to
-> restore them.  Fix it by adding a call to the arch_swap_restore() hook
-> before the call to swap_free().
-> 
-> Link: https://lkml.kernel.org/r/20230523004312.1807357-2-pcc@google.com
-> Link: https://linux-review.googlesource.com/id/I6470efa669e8bd2f841049b8c61020c510678965
-> Fixes: c145e0b47c77 ("mm: streamline COW logic in do_swap_page()")
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> Reported-by: Qun-wei Lin <Qun-wei.Lin@mediatek.com>
-> Closes: https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com/
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Acked-by: "Huang, Ying" <ying.huang@intel.com>
-> Reviewed-by: Steven Price <steven.price@arm.com>
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: <stable@vger.kernel.org>	[6.1+]
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  mm/memory.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 0ae594703021..01f39e8144ef 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3950,6 +3950,13 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  		}
->  	}
->  
-> +	/*
-> +	 * Some architectures may have to restore extra metadata to the page
-> +	 * when reading from swap. This metadata may be indexed by swap entry
-> +	 * so this must be called before swap_free().
-> +	 */
-> +	arch_swap_restore(entry, folio);
-> +
->  	/*
->  	 * Remove the swap entry and conditionally try to free up the swapcache.
->  	 * We're already holding a reference on the page but haven't mapped it
-> -- 
-> 2.41.0
-> 
-> 
-> 
-> Patches currently in stable-queue which might be from pcc@google.com are
-> 
-> queue-5.10/mm-call-arch_swap_restore-from-do_swap_page.patch
+> ./scripts/checkpatch.pl v9-0012-dmaengine-fsl-edma-integrate-v3-support.patch
+> total: 0 errors, 0 warnings, 769 lines checked
 
-Oops, my fault, does not belong in 5.10, now dropped.
+This should have been caught, strange..
+Run with --strict option?
+
+> 
+> v9-0012-dmaengine-fsl-edma-integrate-v3-support.patch has no obvious style problems and is ready for submission.
+> 
+> anyway, I will fix this.
+> 
+> Frank
+> 
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static int fsl_edma_probe(struct platform_device *pdev)
+> > >  {
+> > >  	const struct of_device_id *of_id =
+> > > @@ -234,6 +412,7 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  	struct fsl_edma_engine *fsl_edma;
+> > >  	const struct fsl_edma_drvdata *drvdata = NULL;
+> > >  	struct fsl_edma_chan *fsl_chan;
+> > > +	u32 chan_mask[2] = {0, 0};
+> > >  	struct edma_regs *regs;
+> > >  	int len, chans;
+> > >  	int ret, i;
+> > > @@ -264,8 +443,10 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  	if (IS_ERR(fsl_edma->membase))
+> > >  		return PTR_ERR(fsl_edma->membase);
+> > >  
+> > > -	fsl_edma_setup_regs(fsl_edma);
+> > > -	regs = &fsl_edma->regs;
+> > > +	if (!(drvdata->flags & FSL_EDMA_DRV_SPLIT_REG)) {
+> > > +		fsl_edma_setup_regs(fsl_edma);
+> > > +		regs = &fsl_edma->regs;
+> > > +	}
+> > >  
+> > >  	if (drvdata->flags & FSL_EDMA_DRV_HAS_DMACLK) {
+> > >  		fsl_edma->dmaclk = devm_clk_get_enabled(&pdev->dev, "dma");
+> > > @@ -275,9 +456,29 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  		}
+> > >  	}
+> > >  
+> > > +	if (drvdata->flags & FSL_EDMA_DRV_HAS_CHCLK) {
+> > > +		fsl_edma->chclk = devm_clk_get_enabled(&pdev->dev, "mp");
+> > > +		if (IS_ERR(fsl_edma->chclk)) {
+> > > +			dev_err(&pdev->dev, "Missing MP block clock.\n");
+> > > +			return PTR_ERR(fsl_edma->chclk);
+> > > +		}
+> > > +	}
+> > > +
+> > > +	ret = of_property_read_variable_u32_array(np, "dma-channel-mask", chan_mask, 1, 2);
+> > > +
+> > > +	if (ret > 0) {
+> > > +		fsl_edma->chan_masked = chan_mask[1];
+> > > +		fsl_edma->chan_masked <<= 32;
+> > > +		fsl_edma->chan_masked |= chan_mask[0];
+> > > +	}
+> > > +
+> > >  	for (i = 0; i < fsl_edma->drvdata->dmamuxs; i++) {
+> > >  		char clkname[32];
+> > >  
+> > > +		/* eDMAv3 mux register move to TCD area if ch_mux exist */
+> > > +		if (drvdata->flags & FSL_EDMA_DRV_SPLIT_REG)
+> > > +			break;
+> > > +
+> > >  		fsl_edma->muxbase[i] = devm_platform_ioremap_resource(pdev,
+> > >  								      1 + i);
+> > >  		if (IS_ERR(fsl_edma->muxbase[i])) {
+> > > @@ -297,9 +498,18 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  
+> > >  	fsl_edma->big_endian = of_property_read_bool(np, "big-endian");
+> > >  
+> > > +	if (drvdata->flags & FSL_EDMA_DRV_HAS_PD) {
+> > > +		ret = fsl_edma3_attach_pd(pdev, fsl_edma);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > > +
+> > >  	INIT_LIST_HEAD(&fsl_edma->dma_dev.channels);
+> > >  	for (i = 0; i < fsl_edma->n_chans; i++) {
+> > > -		struct fsl_edma_chan *fsl_chan = &fsl_edma->chans[i];
+> > > +		fsl_chan = &fsl_edma->chans[i];
+> > > +
+> > > +		if (fsl_edma->chan_masked & BIT(i))
+> > > +			continue;
+> > >  
+> > >  		snprintf(fsl_chan->chan_name, sizeof(fsl_chan->chan_name), "%s-CH%02d",
+> > >  							   dev_name(&pdev->dev), i);
+> > > @@ -310,8 +520,13 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  		fsl_chan->idle = true;
+> > >  		fsl_chan->dma_dir = DMA_NONE;
+> > >  		fsl_chan->vchan.desc_free = fsl_edma_free_desc;
+> > > -		fsl_chan->tcd = fsl_edma->membase + EDMA_TCD
+> > > -				+ i * sizeof(struct fsl_edma_hw_tcd);
+> > > +
+> > > +		len = (drvdata->flags & FSL_EDMA_DRV_SPLIT_REG) ?
+> > > +				offsetof(struct fsl_edma3_ch_reg, tcd) : 0;
+> > > +		fsl_chan->tcd = fsl_edma->membase
+> > > +				+ i * drvdata->chreg_space_sz + drvdata->chreg_off + len;
+> > > +
+> > > +		fsl_chan->pdev = pdev;
+> > >  		vchan_init(&fsl_chan->vchan, &fsl_edma->dma_dev);
+> > >  
+> > >  		edma_write_tcdreg(fsl_chan, 0, csr);
+> > > @@ -345,12 +560,25 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  
+> > >  	fsl_edma->dma_dev.src_addr_widths = FSL_EDMA_BUSWIDTHS;
+> > >  	fsl_edma->dma_dev.dst_addr_widths = FSL_EDMA_BUSWIDTHS;
+> > > +
+> > > +	if (drvdata->flags & FSL_EDMA_DRV_BUS_8BYTE) {
+> > > +		fsl_edma->dma_dev.src_addr_widths |= BIT(DMA_SLAVE_BUSWIDTH_8_BYTES);
+> > > +		fsl_edma->dma_dev.dst_addr_widths |= BIT(DMA_SLAVE_BUSWIDTH_8_BYTES);
+> > > +	}
+> > > +
+> > >  	fsl_edma->dma_dev.directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV);
+> > > +	if (drvdata->flags & FSL_EDMA_DRV_DEV_TO_DEV)
+> > > +		fsl_edma->dma_dev.directions |= BIT(DMA_DEV_TO_DEV);
+> > > +
+> > > +	fsl_edma->dma_dev.copy_align = drvdata->flags & FSL_EDMA_DRV_ALIGN_64BYTE ?
+> > > +					DMAENGINE_ALIGN_64_BYTES :
+> > > +					DMAENGINE_ALIGN_32_BYTES;
+> > >  
+> > > -	fsl_edma->dma_dev.copy_align = DMAENGINE_ALIGN_32_BYTES;
+> > >  	/* Per worst case 'nbytes = 1' take CITER as the max_seg_size */
+> > >  	dma_set_max_seg_size(fsl_edma->dma_dev.dev, 0x3fff);
+> > >  
+> > > +	fsl_edma->dma_dev.residue_granularity = DMA_RESIDUE_GRANULARITY_SEGMENT;
+> > > +
+> > >  	platform_set_drvdata(pdev, fsl_edma);
+> > >  
+> > >  	ret = dma_async_device_register(&fsl_edma->dma_dev);
+> > > @@ -360,7 +588,9 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	ret = of_dma_controller_register(np, fsl_edma_xlate, fsl_edma);
+> > > +	ret = of_dma_controller_register(np,
+> > > +			drvdata->flags & FSL_EDMA_DRV_SPLIT_REG ? fsl_edma3_xlate : fsl_edma_xlate,
+> > > +			fsl_edma);
+> > >  	if (ret) {
+> > >  		dev_err(&pdev->dev,
+> > >  			"Can't register Freescale eDMA of_dma. (%d)\n", ret);
+> > > @@ -369,7 +599,8 @@ static int fsl_edma_probe(struct platform_device *pdev)
+> > >  	}
+> > >  
+> > >  	/* enable round robin arbitration */
+> > > -	edma_writel(fsl_edma, EDMA_CR_ERGA | EDMA_CR_ERCA, regs->cr);
+> > > +	if (!(drvdata->flags & FSL_EDMA_DRV_SPLIT_REG))
+> > > +		edma_writel(fsl_edma, EDMA_CR_ERGA | EDMA_CR_ERCA, regs->cr);
+> > >  
+> > >  	return 0;
+> > >  }
+> > > -- 
+> > > 2.34.1
+> > 
+> > -- 
+> > ~Vinod
+
+-- 
+~Vinod
