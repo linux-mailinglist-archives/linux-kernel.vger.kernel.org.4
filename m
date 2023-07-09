@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFE874C4C8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C214474C4CB
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233090AbjGIO4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 10:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
+        id S230310AbjGIO4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 10:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjGIOz4 (ORCPT
+        with ESMTP id S233009AbjGIOz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 10:55:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E23E43;
-        Sun,  9 Jul 2023 07:55:49 -0700 (PDT)
+        Sun, 9 Jul 2023 10:55:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB1CE5D;
+        Sun,  9 Jul 2023 07:55:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE30660BCC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69BF660BFB;
+        Sun,  9 Jul 2023 14:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F07C433CC;
         Sun,  9 Jul 2023 14:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29379C433C7;
-        Sun,  9 Jul 2023 14:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688914548;
-        bh=VuzZTMQKxt1IN4NGGKlGKeYAECnDfJTl4X36BNMWVaQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hl/qtfccU61lhhCS4yRiQ8u9XQIhf1QZRoLpfUhrPDprGP+Qpw4iD6WJRHNT91/k1
-         jZirniKId2CeBqxfMvhsTBuZgONZEE0wd9Fvb2N2BbbkTBoE8GWqIh0Z0R67DmwxMb
-         yxdBNWh6zFT7VyKIBED+GGmy0kPOtg3Uz+/NlMEdzOzwsoGT5dSGO3eeZHSrwJB1T7
-         D3lHqpc15g7BuZkDUWBbjL2jGkZemOISVLO4cSZ67K/bgUjMl/siVM1PBICc18ZxfL
-         UxkJSMKeOgi7XTftpO71wk0D9AcEegOIjMW+vsT0USekoVOmujhSqd2BOCYv0RXeQ3
-         HXtZRyVGKaAFw==
+        s=k20201202; t=1688914549;
+        bh=z3A5ljEUSSZkh8GQc8qKZuVT9cEm6l5xTVXcd9Kwxgk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=n8fBsU47j+bfAmgyNVSsiXuefZ5eNPvsihCo6i0u2LqMlPwVb0Q5lQBrCtKPQ9sz4
+         9Bg4gDHvBUZX80UC1KxUaOAha/AwGXzFSMm5L0bbUTIycfoPyaD0GguJ+SRGdBThUQ
+         /KjsmksNToHlbF9XuW6iQTXA6h98xqzLklYvFRW+3V5BsJyvjojPzmVd3maCBetY9X
+         UWrhDKcS6Phr2oZjbb6eykuOmyQvcuxewtEUVHsvtk2wEV/BIi4X+lipC/76tP4twO
+         Yg6N2+/QQaZYepuAEr6qQnT7rBss9/OjO8FZpHqXfX8WhzVjD46EfPhooioPzl1qBu
+         EPrjRB3b+jHyA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shigeru Yoshida <syoshida@redhat.com>,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>, frederic@kernel.org,
         quic_neeraju@quicinc.com, joel@joelfernandes.org,
         josh@joshtriplett.org, boqun.feng@gmail.com, rcu@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 1/3] rcu-tasks: Avoid pr_info() with spin lock in cblist_init_generic()
-Date:   Sun,  9 Jul 2023 10:55:42 -0400
-Message-Id: <20230709145545.512291-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 2/3] rcu: Mark additional concurrent load from ->cpu_no_qs.b.exp
+Date:   Sun,  9 Jul 2023 10:55:43 -0400
+Message-Id: <20230709145545.512291-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230709145545.512291-1-sashal@kernel.org>
+References: <20230709145545.512291-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,87 +60,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shigeru Yoshida <syoshida@redhat.com>
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-[ Upstream commit 5fc8cbe4cf0fd34ded8045c385790c3bf04f6785 ]
+[ Upstream commit 9146eb25495ea8bfb5010192e61e3ed5805ce9ef ]
 
-pr_info() is called with rtp->cbs_gbl_lock spin lock locked.  Because
-pr_info() calls printk() that might sleep, this will result in BUG
-like below:
+The per-CPU rcu_data structure's ->cpu_no_qs.b.exp field is updated
+only on the instance corresponding to the current CPU, but can be read
+more widely.  Unmarked accesses are OK from the corresponding CPU, but
+only if interrupts are disabled, given that interrupt handlers can and
+do modify this field.
 
-[    0.206455] cblist_init_generic: Setting adjustable number of callback queues.
-[    0.206463]
-[    0.206464] =============================
-[    0.206464] [ BUG: Invalid wait context ]
-[    0.206465] 5.19.0-00428-g9de1f9c8ca51 #5 Not tainted
-[    0.206466] -----------------------------
-[    0.206466] swapper/0/1 is trying to lock:
-[    0.206467] ffffffffa0167a58 (&port_lock_key){....}-{3:3}, at: serial8250_console_write+0x327/0x4a0
-[    0.206473] other info that might help us debug this:
-[    0.206473] context-{5:5}
-[    0.206474] 3 locks held by swapper/0/1:
-[    0.206474]  #0: ffffffff9eb597e0 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic.constprop.0+0x14/0x1f0
-[    0.206478]  #1: ffffffff9eb579c0 (console_lock){+.+.}-{0:0}, at: _printk+0x63/0x7e
-[    0.206482]  #2: ffffffff9ea77780 (console_owner){....}-{0:0}, at: console_emit_next_record.constprop.0+0x111/0x330
-[    0.206485] stack backtrace:
-[    0.206486] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-00428-g9de1f9c8ca51 #5
-[    0.206488] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
-[    0.206489] Call Trace:
-[    0.206490]  <TASK>
-[    0.206491]  dump_stack_lvl+0x6a/0x9f
-[    0.206493]  __lock_acquire.cold+0x2d7/0x2fe
-[    0.206496]  ? stack_trace_save+0x46/0x70
-[    0.206497]  lock_acquire+0xd1/0x2f0
-[    0.206499]  ? serial8250_console_write+0x327/0x4a0
-[    0.206500]  ? __lock_acquire+0x5c7/0x2720
-[    0.206502]  _raw_spin_lock_irqsave+0x3d/0x90
-[    0.206504]  ? serial8250_console_write+0x327/0x4a0
-[    0.206506]  serial8250_console_write+0x327/0x4a0
-[    0.206508]  console_emit_next_record.constprop.0+0x180/0x330
-[    0.206511]  console_unlock+0xf7/0x1f0
-[    0.206512]  vprintk_emit+0xf7/0x330
-[    0.206514]  _printk+0x63/0x7e
-[    0.206516]  cblist_init_generic.constprop.0.cold+0x24/0x32
-[    0.206518]  rcu_init_tasks_generic+0x5/0xd9
-[    0.206522]  kernel_init_freeable+0x15b/0x2a2
-[    0.206523]  ? rest_init+0x160/0x160
-[    0.206526]  kernel_init+0x11/0x120
-[    0.206527]  ret_from_fork+0x1f/0x30
-[    0.206530]  </TASK>
-[    0.207018] cblist_init_generic: Setting shift to 1 and lim to 1.
+Unfortunately, although the load from rcu_preempt_deferred_qs() is always
+carried out from the corresponding CPU, interrupts are not necessarily
+disabled.  This commit therefore upgrades this load to READ_ONCE.
 
-This patch moves pr_info() so that it is called without
-rtp->cbs_gbl_lock locked.
+Similarly, the diagnostic access from synchronize_rcu_expedited_wait()
+might run with interrupts disabled and from some other CPU.  This commit
+therefore marks this load with data_race().
 
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-Tested-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Finally, the C-language access in rcu_preempt_ctxt_queue() is OK as
+is because interrupts are disabled and this load is always from the
+corresponding CPU.  This commit adds a comment giving the rationale for
+this access being safe.
+
+This data race was reported by KCSAN.  Not appropriate for backporting
+due to failure being unlikely.
+
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/tasks.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/rcu/tree_exp.h    | 2 +-
+ kernel/rcu/tree_plugin.h | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index c8409601fec38..74da2ecfbfa65 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -233,7 +233,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
- 	if (rcu_task_enqueue_lim < 0) {
- 		rcu_task_enqueue_lim = 1;
- 		rcu_task_cb_adjust = true;
--		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
- 	} else if (rcu_task_enqueue_lim == 0) {
- 		rcu_task_enqueue_lim = 1;
- 	}
-@@ -264,6 +263,10 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
- 		raw_spin_unlock_rcu_node(rtpcp); // irqs remain disabled.
- 	}
- 	raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
-+
-+	if (rcu_task_cb_adjust)
-+		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
-+
- 	pr_info("%s: Setting shift to %d and lim to %d.\n", __func__, data_race(rtp->percpu_enqueue_shift), data_race(rtp->percpu_enqueue_lim));
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index e25321dbb068e..aa3ec3c3b9f75 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -641,7 +641,7 @@ static void synchronize_rcu_expedited_wait(void)
+ 					"O."[!!cpu_online(cpu)],
+ 					"o."[!!(rdp->grpmask & rnp->expmaskinit)],
+ 					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
+-					"D."[!!(rdp->cpu_no_qs.b.exp)]);
++					"D."[!!data_race(rdp->cpu_no_qs.b.exp)]);
+ 			}
+ 		}
+ 		pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index e3142ee35fc6a..044026abfdd7f 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -257,6 +257,8 @@ static void rcu_preempt_ctxt_queue(struct rcu_node *rnp, struct rcu_data *rdp)
+ 	 * GP should not be able to end until we report, so there should be
+ 	 * no need to check for a subsequent expedited GP.  (Though we are
+ 	 * still in a quiescent state in any case.)
++	 *
++	 * Interrupts are disabled, so ->cpu_no_qs.b.exp cannot change.
+ 	 */
+ 	if (blkd_state & RCU_EXP_BLKD && rdp->cpu_no_qs.b.exp)
+ 		rcu_report_exp_rdp(rdp);
+@@ -941,7 +943,7 @@ notrace void rcu_preempt_deferred_qs(struct task_struct *t)
+ {
+ 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+ 
+-	if (rdp->cpu_no_qs.b.exp)
++	if (READ_ONCE(rdp->cpu_no_qs.b.exp))
+ 		rcu_report_exp_rdp(rdp);
  }
  
 -- 
