@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CC574C848
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBF174C851
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGIVAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 17:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S229766AbjGIVNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 17:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjGIVAq (ORCPT
+        with ESMTP id S229534AbjGIVNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 17:00:46 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B811C;
-        Sun,  9 Jul 2023 14:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688936443; bh=i/i0SbwFNl82wivugo29PcbwTwUwrR/WslbHxkZwClc=;
+        Sun, 9 Jul 2023 17:13:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63343118;
+        Sun,  9 Jul 2023 14:13:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00A1660C40;
+        Sun,  9 Jul 2023 21:13:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AD5C433C7;
+        Sun,  9 Jul 2023 21:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688937213;
+        bh=pKIENcFMfmHWW0aomrKnw7J0Z58D77T1uCoJfi49OBU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BBUa/fdWIVhuEbJc5lYvH7nntb+LPgf/20rNY6UZ5Ua8pCZvcbl83VnBTUn3XQp6f
-         02s8ILkEQfo+lz0BBHEB/O2ZcsV+UcQ92zMXsVV2h8u4kzuwIZwJKsCbHGSjfLJTYC
-         E/3t5QYDNeW9CszN8j8A0BIixIfGEWgPdMWAT/kY=
-Date:   Sun, 9 Jul 2023 23:00:40 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
-Message-ID: <90fdd255-32f4-4caf-90ff-06456b53dac3@t-8ch.de>
-References: <cover.1688828139.git.falcon@tinylab.org>
- <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
- <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
+        b=TavIYhZq/WQcEHW6q2SSirWjPCfxH/RVgTPrZkH8RijsFM7ewlis3aoa8YPmZ9RLY
+         Uel8TDEeQbSMWmWg8s+7tQaGchtExsEexGzpBYEi3FF+0pK0338VxddLPDbXsLCT1T
+         Hg/4SrZ1XMwtigKhok2/BlGZGbEWFYcn+J/mHZxFZ3suIv+CQMO9IXDCLUFpK9N4se
+         WL/W7S721STlbO5615JvD+zgJEBS9XnE1/4WJdQyUT9CfZfm0TtH1zugEjbyeqfUZM
+         P1ZR5NEV1d8iCp1PBcdXF9pqTlvL805BeNGTK6/mLgjMvQpvBfBPRe7Na91h7kmGRx
+         h2/L+rjgTLo/g==
+Date:   Sun, 9 Jul 2023 22:13:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, will@kernel.org,
+        james.morse@arm.com, mark.rutland@arm.com, amit.kachhap@arm.com,
+        maz@kernel.org, anshuman.khandual@arm.com, joey.gouly@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.4 07/12] arm64: cpufeature: detect FEAT_HCX
+Message-ID: <ZKsi+UOdjlmDnhdj@finisterre.sirena.org.uk>
+References: <20230702195057.1787686-1-sashal@kernel.org>
+ <20230702195057.1787686-7-sashal@kernel.org>
+ <b37a9f79-97a8-4f74-a25c-b51128fbc9bb@sirena.org.uk>
+ <ZKrKjS7sDFxhKoJT@sashalap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+qXkK1XcJkg4nect"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZKrKjS7sDFxhKoJT@sashalap>
+X-Cookie: Slow day.  Practice crawling.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-09 20:49:10+0200, Thomas Weißschuh wrote:
-> On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
 
-> [..]
+--+qXkK1XcJkg4nect
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > ---
-> >  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 44 insertions(+)
-> > 
-> > diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-> > index 221b7c5346ca..b269294e9664 100644
-> > --- a/tools/include/nolibc/crt.h
-> > +++ b/tools/include/nolibc/crt.h
-> > @@ -13,4 +13,48 @@
+On Sun, Jul 09, 2023 at 10:56:13AM -0400, Sasha Levin wrote:
+> On Mon, Jul 03, 2023 at 12:51:57PM +0100, Mark Brown wrote:
+> > On Sun, Jul 02, 2023 at 03:50:52PM -0400, Sasha Levin wrote:
 
-> [..]
+> > > KVM currently relies on the register being present on all CPUs (or
+> > > none), so the kernel will panic if that is not the case. Fortunately no
+> > > such systems currently exist, but this can be revisited if they appear.
+> > > Note that the kernel will not panic if CONFIG_KVM is disabled.
 
-> >  const unsigned long *_auxv __attribute__((weak));
-> >  
-> > +int main(int argc, char *argv[], char **envp);
-> 
-> This will lead to conflicting declarations if the users use a different
-> signature. I'm not (yet?) sure how to work around this.
-> 
-> Also how is the case handled where main() returns "void"?
-> I'm not sure how this is currently handled or if the compiler takes core
-> of returning 0 in this case.
+> > This is a new feature, it's not clear why we'd backport it (especially
+> > since it's a new feature which is a dependency for other features rather
+> > than something that people can use outside of the kernel)?
 
-I looked into this some more.
+> The second paragraph (above) suggested it should be.
 
-The diff below allows it to accept different signatures for main().
-(Maybe you can improve the naming)
+That's saying that the code won't work properly on systems where some
+but not all of the CPUs support the feature.  Note that the changelog
+says nothing about fixing any issue here.
 
-Implicit return values seem to be handled by the compiler automatically.
-In C89 mode we get garbage values, in C2X/C23 we get zero.
-As per the respective C specs.
+--+qXkK1XcJkg4nect
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
-index b269294e9664..dba40bc9413f 100644
---- a/tools/include/nolibc/crt.h
-+++ b/tools/include/nolibc/crt.h
-@@ -13,7 +13,6 @@
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
--int main(int argc, char *argv[], char **envp);
- static void exit(int);
- 
- void _start_c(long *sp)
-@@ -21,6 +20,7 @@ void _start_c(long *sp)
- 	int argc, i;
- 	char **argv;
- 	char **envp;
-+	int _nolibc_main_alias(int, char**, char**) __asm__("main");
- 
- 	/*
- 	 * sp  :  argc          <-- argument count, required by main()
-@@ -54,7 +54,7 @@ void _start_c(long *sp)
- 	_auxv = (void *)(envp + i + 1);
- 
- 	/* go to application */
--	exit(main(argc, argv, envp));
-+	exit(_nolibc_main_alias(argc, argv, envp));
- }
- 
- #endif /* _NOLIBC_CRT_H */
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSrIvgACgkQJNaLcl1U
+h9AASgf/VUrMTlXCkMU4qomOSAYkBpeDf7op2KUSgZUUHu5rDYjCyxTgwqmtfnE2
++P4vQIovegrMJBKbupm80uqadBMfxS2kH/yT4BuIBzVTuuR9kSRZeuXaBTtXQxZc
+Ha4rsOYJ3bXeoMkGLIJrS6UPUfULg406ccC39LFf1fOZd6YWG2iLM5Z2Z7+szL5D
+AiYc6uOS3onLDcUGH/gpoxH5rGbzrFqvgxW9w90H9UgLIoZHFLrorKAuCG20vc7m
+D6MMY+DrAiEGdOvpI7CCUPmXZAVpdceLYrAPaRAs5JBLIK0Q4OCWQNK0kjebqv8p
+WQWjjUQ57C3uXR4IHyRid7q3EJ1w1Q==
+=dQnC
+-----END PGP SIGNATURE-----
+
+--+qXkK1XcJkg4nect--
