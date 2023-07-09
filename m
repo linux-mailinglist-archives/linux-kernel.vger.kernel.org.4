@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F6A74C420
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 14:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D361074C42E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 14:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjGIMfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 08:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S230325AbjGIMkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 08:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjGIMfN (ORCPT
+        with ESMTP id S229535AbjGIMj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 08:35:13 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBCC12A
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 05:35:11 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QzRRb3ZLWzBJBg0
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 20:35:07 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688906107; x=1691498108; bh=mjXTHNdHAU+xS5sfdZYN0S62k7a
-        JHZJWnjIbQuU5p7A=; b=oWuCm1q/QTLpYYbNzAAN8Jxv6YUE0bOSrxULpz9lrmc
-        hX4qTLv2X65rAVMrn+O+atPYlJfT6zHg0s4rWsxoht9GzUAdmb57/RBN2PlTAZ98
-        +PnidPMY+aI8Z0ABqrrscQSEPHXtytBlrPF1iL/pB4z+O31XRuIvpBChFKpm4qUM
-        afIRfzIVeAQV4lK/aiSie/5cn99D77CUp6D21A5+iZNmJ3/7Qlf03F9EFH/PQXtw
-        5a9RDN7puQLZufkNPjUKTsaeNhgq5IZMmVqRqdD2wXqgPLuXYbxd4naehbNnVvDO
-        EMhf1blJziCiU0IZtj7DBXlcb1YhAIEOx1TGTcJc0lQ==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1EB2A-I8HSDU for <linux-kernel@vger.kernel.org>;
-        Sun,  9 Jul 2023 20:35:07 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QzRRZ6c6lzBHXkb;
-        Sun,  9 Jul 2023 20:35:06 +0800 (CST)
+        Sun, 9 Jul 2023 08:39:59 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A8D130;
+        Sun,  9 Jul 2023 05:39:59 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d9443c01a7336-1b8b2b60731so15055515ad.2;
+        Sun, 09 Jul 2023 05:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688906398; x=1691498398;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AunKTef2eVoQgdM8wyqDnspSjgv/YIQnYn6ve6LmJII=;
+        b=DlennG7Y4GQFlVxQjTnTSmmMBJD2potTQ8oqXI3hJyqMdd12UB8A4NhzXtZ83D7Q2j
+         DUa0vbOdQMFGtlu2JzcVhrk+IIUE7x5SBKqkPgGSThLlfPXGKe++HivBdKd/8m5+8DUt
+         rO2rKcwlXEGCLRlT3XbRvr5jFhmVk2s8xCpJEijniNe47NOa4cSCSfhKP3a4ZdpdmTYL
+         tRUBTYXp+wy1L1U5DMbpNc3fPtcXlLI1ceI6qPoFLFiwj59Cxws3/Z10f6CuTtQDy5Cl
+         B+qQ9k76XZuFIOwcviNiKGwcKjeBbp+vTQPV1s46ixATK3SLwFjTedxrqLYhEMcQ1SB4
+         Kglg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688906398; x=1691498398;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AunKTef2eVoQgdM8wyqDnspSjgv/YIQnYn6ve6LmJII=;
+        b=ZAi4l2gYhNDvqBMmV8rHDb5BZ0hSBPi/CefhzrGKm7WEwBeqqjr1DeqsSPkg9R1r5R
+         CqogLvd4zcjsLIlrrfZ7/JxJNUtoYG8O94HZmJ9OMlwU9zfkYZBqVWK4Y/gX6WHWBIaC
+         isDdN7ruEfokqo35ixcHRaWpoYxpP9CgfNon3WZDfiUQDyjFCNIVa22/No3VG+ExhBfH
+         tONuu0a5/mbOwTWPrn+MG0c2ofwUAKIghQ2q+OnHylpjL4LdcYZMCKSjAvWszudMwozA
+         VkMk0WWwTLuVUx2HAdBJF//CTmSDO1qMhm4wO1fGzZD8zXepjH7YyP3e53ivasgSDeX5
+         J4iA==
+X-Gm-Message-State: ABy/qLasTQ7xtkr+ZRbUcqgVLsem4fojAsBlOHg8nRMQzf1db9I9uW1p
+        F3wIPwjDduKPhyXMH6SQ+cOL3vLA8scTJiGr
+X-Google-Smtp-Source: APBJJlEVymbZm7XdprX4gfU/SLXEpyNTedwLKgASfuNwnbJeSLXzAJ7NQOqdPHGELnD+00BxMx2s7Q==
+X-Received: by 2002:a17:902:b58c:b0:1b8:94e9:e7cb with SMTP id a12-20020a170902b58c00b001b894e9e7cbmr7359068pls.21.1688906398236;
+        Sun, 09 Jul 2023 05:39:58 -0700 (PDT)
+Received: from ?IPv6:2409:8a55:301b:e120:1523:3ecb:e154:8f22? ([2409:8a55:301b:e120:1523:3ecb:e154:8f22])
+        by smtp.gmail.com with ESMTPSA id d17-20020a170903231100b001b3d0aff88fsm6249708plh.109.2023.07.09.05.39.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jul 2023 05:39:57 -0700 (PDT)
+Subject: Re: [PATCH v5 RFC 1/6] page_pool: frag API support for 32-bit arch
+ with 64-bit DMA
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Liang Chen <liangchen.linux@gmail.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org
+References: <20230629120226.14854-1-linyunsheng@huawei.com>
+ <20230629120226.14854-2-linyunsheng@huawei.com>
+ <20230707165921.565b1228@kernel.org>
+From:   Yunsheng Lin <yunshenglin0825@gmail.com>
+Message-ID: <81a8b412-f2b5-fac9-caa4-149d5bf71510@gmail.com>
+Date:   Sun, 9 Jul 2023 20:39:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Date:   Sun, 09 Jul 2023 20:35:06 +0800
-From:   xuanzhenggang001@208suo.com
-To:     ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de
-Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sh: heartbeat: prefer 'unsigned int' to bare use of
- 'unsigned'
-In-Reply-To: <20230709123329.33674-1-denghuilong@cdjrlc.com>
-References: <20230709123329.33674-1-denghuilong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <7554aadc5afb915ee1065cea56053cb6@208suo.com>
-X-Sender: xuanzhenggang001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20230707165921.565b1228@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following warnings reported by checkpatch:
+On 2023/7/8 7:59, Jakub Kicinski wrote:
+> On Thu, 29 Jun 2023 20:02:21 +0800 Yunsheng Lin wrote:
+>> +		/* Return error here to avoid mlx5e_page_release_fragmented()
+>> +		 * calling page_pool_defrag_page() to write to pp_frag_count
+>> +		 * which is overlapped with dma_addr_upper in 'struct page' for
+>> +		 * arch with PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true.
+>> +		 */
+>> +		if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
+>> +			err = -EINVAL;
+>> +			goto err_free_by_rq_type;
+>> +		}
+> 
+> I told you not to do this in a comment on v4.
+> Keep the flag in page pool params and let the creation fail.
 
-arch/sh/drivers/heartbeat.c:33: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
-arch/sh/drivers/heartbeat.c:62: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
+There seems to be naming disagreement in the previous discussion,
+The simplest way seems to be reuse the
+PAGE_POOL_DMA_USE_PP_FRAG_COUNT and do the checking in the driver
+without introducing new macro or changing macro name.
 
-Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
----
-  arch/sh/drivers/heartbeat.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
+Let's be more specific about what is your suggestion here:
+Do you mean keep the PP_FLAG_PAGE_FRAG flag and keep the below
+checking in page_pool_init(), right?
+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT &&
+	    pool->p.flags & PP_FLAG_PAGE_FRAG)
+		return -EINVAL;
 
-diff --git a/arch/sh/drivers/heartbeat.c b/arch/sh/drivers/heartbeat.c
-index 24391b444b28..07f04ed0d517 100644
---- a/arch/sh/drivers/heartbeat.c
-+++ b/arch/sh/drivers/heartbeat.c
-@@ -30,7 +30,7 @@
-  static unsigned char default_bit_pos[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+Isn't it confusing to still say page frag is not supported
+for PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true case when this
+patch will now add support for it, at least from API POV, the
+page_pool_alloc_frag() is always supported now.
 
-  static inline void heartbeat_toggle_bit(struct heartbeat_data *hd,
--                    unsigned bit, unsigned int inverted)
-+                    unsigned int bit, unsigned int inverted)
-  {
-      unsigned int new;
+Maybe remove the PP_FLAG_PAGE_FRAG and add a new macro named
+PP_FLAG_PAGE_SPLIT_IN_DRIVER, and do the checking as before in
+page_pool_init() like below?
+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT &&
+	    pool->p.flags & PP_FLAG_PAGE_SPLIT_IN_DRIVER)
+		return -EINVAL;
 
-@@ -59,7 +59,7 @@ static inline void heartbeat_toggle_bit(struct 
-heartbeat_data *hd,
-  static void heartbeat_timer(struct timer_list *t)
-  {
-      struct heartbeat_data *hd = from_timer(hd, t, timer);
--    static unsigned bit = 0, up = 1;
-+    static unsigned int bit = 0, up = 1;
-
-      heartbeat_toggle_bit(hd, bit, hd->flags & HEARTBEAT_INVERTED);
+Or any better suggestion? 
