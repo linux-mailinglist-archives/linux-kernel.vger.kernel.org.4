@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF16E74C192
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 10:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7958074C193
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 10:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjGIITR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 04:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S230032AbjGIIU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 04:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjGIITP (ORCPT
+        with ESMTP id S229777AbjGIIUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 04:19:15 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF43FC
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 01:19:11 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B2C2D1EC08EA;
-        Sun,  9 Jul 2023 10:19:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1688890749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=6lnx5Yqkr3KJe61meMdkwtLtbwfbWLg5/0usZ+5XhnE=;
-        b=F3GDfL4QGYBAHSGlDKWeHAd9pQSQLwWoznIcfiNL37SHSpQVGper/XrItOqofj5mOtLXZB
-        IG2JCQmRbx0vk1SO90pik1puMOCNFgFooJEPJjbjuXmknasOFbbUTleDeDBd1Yl3x6l1+5
-        /8J7QB02OPwnx66KYlTHri2aT/wAjOQ=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id O27_wu_N6raP; Sun,  9 Jul 2023 08:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1688890747; bh=6lnx5Yqkr3KJe61meMdkwtLtbwfbWLg5/0usZ+5XhnE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XSKXPOk7l4LDB3d4h6huiLUeLAAw1Mz478XSSRrQfd3VHLftfbhd6gGoorvk3mpF5
-         j2C8Pp0XxXX4Y2+98swy4aaMUkwtapsdnWWBzndU4U59AmVuFogNJCgN1sZ5PTmrHN
-         d1VCIniI/88veOizftrcbQD5HSy2CzmqqDivuUwpZXwUAjVl9r7IPSB2yz0h4xVPhQ
-         /oKIjxyFZinPZjnj12TDXMjd2ENTy2a8wdleNQvBdEM+mJ8QJf0killA+MidT9seu1
-         YBBIOU5wDq5p/PkNASVqCW8L8rDxMY94CTkTh4Mls0J1Q38Zwv7Qq0pREGGIliWyD5
-         wZVl54RMDXJFheEDdRb9XPMfP1Txx+gI0ybugTKsmfkhZjq/mu0Lsga8K7CrRfzg8d
-         BSh0d8gfLo3KHuZGPXao3kMpVAj3/bqU3YSCzzCgstSmm+YxpXTd0ZR4wogZYrU0lr
-         4ND95ga3aZXRcJljz3eYgnAQUWgALL/7Ju7FCNblwa6cRR5n/wcIAQkhnl1h1OvgSY
-         jTKD7hpn7HJLw5I+ziPFeqfo3ksC+xtsgpKUmvdWbiyzzdn0k1bE7W0R2/j3whjRyH
-         KQmE34bC75dk920x3vQ9MmTLYyfQo+SB8L9In8R5VdRRommlHjzDLlLx6kRqylOLvN
-         e3J5/ZFe/s3CflomjNbTRxhk=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        Sun, 9 Jul 2023 04:20:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DC0FC
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 01:20:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 45AD640E0033;
-        Sun,  9 Jul 2023 08:19:04 +0000 (UTC)
-Date:   Sun, 9 Jul 2023 10:19:03 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] objtool/urgent for v6.5-rc1
-Message-ID: <20230709081903.GCZKptd16D1sbcDoIy@fat_crate.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF89160B70
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 08:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46702C433C7;
+        Sun,  9 Jul 2023 08:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688890853;
+        bh=I8R+e/AAUuqNEbVd6UzBpHn7jDKuv7X8YUUb0tnS7+A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hU10ZRNS497/V2uyjvu0OgAoBTd+XHmHWVDABO/3a7KNqg/Sjj1TNPeFC95YQlMV2
+         lp+gTm5DWucvYMs3ewF8dYDQHiweMJl87Uxa5b9yyitMFiMBHxiM58VcLHju0Hn2x4
+         RQXBYJ4OnP+nic+GQQxUrSLgJqObRXkgZqre3buPd2fpt3xQReMUQK6RON+NL6b/IN
+         rY4PFqRHRlvJRxVq+FepoviNV3T3YqQLoa/9gbStruSw9CtMqzrQCc++e7WxNz/TV+
+         IiQrxL5DIX7/9naq8mTKiUIMExljV4HfHTTubR0vkttFKw/Syb9dJqYA3znBuFmIA9
+         RlQbueQmjlW1A==
+Received: from 84-53-99-172.bbserv.nl ([84.53.99.172] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qIPf0-00BW8D-Lj;
+        Sun, 09 Jul 2023 09:20:50 +0100
+Date:   Sun, 09 Jul 2023 09:20:45 +0100
+Message-ID: <877cr98pia.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?IkNodW5odWkgTGkgKOadjuaYpei+iSki?= 
+        <chunhui.li@mediatek.com>
+Cc:     "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?IkhhbmtzIENoZW4gKOqQ?= =?UTF-8?B?j+KUqaIpIg==?= 
+        <Hanks.Chen@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?IkNoZW5nLVl1aCBXdSAohemSpvSSiZtJKSI=?= 
+        <Cheng-Yuh.Wu@mediatek.com>
+Subject: Re: [PATCH] irqchip/gic-v3: Workaround for GIC-700 erratum 2941627
+In-Reply-To: <ed3c5fe3f7ed42d58d98e77b3513d6eabf2ad6cd.camel@mediatek.com>
+References: <ed3c5fe3f7ed42d58d98e77b3513d6eabf2ad6cd.camel@mediatek.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 84.53.99.172
+X-SA-Exim-Rcpt-To: chunhui.li@mediatek.com, lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org, Hanks.Chen@mediatek.com, linux-kernel@vger.kernel.org, Cheng-Yuh.Wu@mediatek.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,39 +75,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 07 Jul 2023 13:14:30 +0100,
+"Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediatek.com> wrote:
+>=20
+> Tested-by: Chunhui Li <chunhui.li@mediatek.com>
 
-please pull a single urgent objtool fix for 6.5-rc1.
+You seem to have tested the initial version. but there's a v2 already
+posted as a reply to the initial one. Can you please give that one a
+go instead?
 
-Thx.
+Thanks,
 
----
+	M.
 
-The following changes since commit 6f612579be9d0ff527ca2e517e10bfaf08cc1860:
-
-  Merge tag 'objtool-core-2023-06-27' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2023-06-27 15:05:41 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/objtool_urgent_for_v6.5_rc1
-
-for you to fetch changes up to cc592643a3ea1b2231628fb414dee203633a11c0:
-
-  objtool: Remove btrfs_assertfail() from the noreturn exceptions list (2023-06-28 11:21:50 +0200)
-
-----------------------------------------------------------------
-- Fix a post-merge semantic conflict due to btrfs_assertfail() not being
-  a noreturn function anymore
-
-----------------------------------------------------------------
-Ingo Molnar (1):
-      objtool: Remove btrfs_assertfail() from the noreturn exceptions list
-
- tools/objtool/noreturns.h | 1 -
- 1 file changed, 1 deletion(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--=20
+Without deviation from the norm, progress is not possible.
