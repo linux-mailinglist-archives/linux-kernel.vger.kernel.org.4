@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CCC74C4D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C1974C4DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjGIPGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S230306AbjGIPGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjGIPGB (ORCPT
+        with ESMTP id S229840AbjGIPGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:06:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F759114;
-        Sun,  9 Jul 2023 08:06:00 -0700 (PDT)
+        Sun, 9 Jul 2023 11:06:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C706A114;
+        Sun,  9 Jul 2023 08:06:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B976360BA4;
-        Sun,  9 Jul 2023 15:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C0DC433C7;
-        Sun,  9 Jul 2023 15:05:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4937D60BC5;
+        Sun,  9 Jul 2023 15:06:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEFBBC433C7;
+        Sun,  9 Jul 2023 15:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915159;
-        bh=AyNeNogCBIC772ZmemM2LWwp3YwYOYQMQ5yPK0ZV3Cc=;
+        s=k20201202; t=1688915162;
+        bh=onUljqbzwvoRTef2nl7sogRiWahBe5louUfWmy4pTKY=;
         h=From:To:Cc:Subject:Date:From;
-        b=nT1yvN82au39MyeLgBL4iXT5GYPbmKF0wG0lel74EVcXZT9W5sikZsJoIdJDSqXmi
-         Mf5bPFXZDCPFlQfZKM/3N7JxPnenm084r8FbJvvGzr3+ZhSN1RixxsSWoxsN95k4Rn
-         RW0Q+Lm/sTKbD6uXdZ/Rnn1oU0dEyOPTINlAQoadobMfmA7J4DdQQVhJ+BDaRjMRUG
-         cFqq50rA7s1c6/kcoh8LI+HdixPy8GVFZ5yECQLNBW7PNS4HZMj5gWD2THeek8orFj
-         9LiM5ZSRT+t/WlWt6mLnwOE95AUUJPGrHAuFWL7Blx97j3RA6fozBxvkJQZZ/yrpR1
-         gXLS5TAVajv/A==
+        b=jk6v04ObjYXfDwXFx9RUD401+ZLnC5IZZsUuzc6A+Lm1Pe79E8N4qsrcozzzMnZW/
+         xmJv415mIaI/pePfNjuDsHRGkB1/BH1t4WwiJHzSaykb3zB0Xey8dGlcJcqK7Dv50n
+         EC5+uQeJr4IhHNJb+/7N74tujMs+J+W9OscctOyQ+Fz+dBidQ8YYf1Pfe+pU6rJ1a2
+         CdcHdaaomuiM43u06H1+Pw3STrVWrQ+kjPSxSA2Vrart53JJt9qqcDahJ+hA4J1pGA
+         5tLB6OQ5OZ+tMCF0WJXHtJMceNsMz6dpZhscsQaFVT06/1QmCFFjCOaaqy2iSv/+Za
+         c9PEKGCocyeog==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yicong Yang <yangyicong@hisilicon.com>,
@@ -40,14 +40,14 @@ Cc:     Yicong Yang <yangyicong@hisilicon.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
         juri.lelli@redhat.com
-Subject: [PATCH AUTOSEL 6.4] sched/fair: Don't balance task to its current running CPU
-Date:   Sun,  9 Jul 2023 11:05:55 -0400
-Message-Id: <20230709150556.512599-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3] sched/fair: Don't balance task to its current running CPU
+Date:   Sun,  9 Jul 2023 11:05:59 -0400
+Message-Id: <20230709150559.512625-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.2
+X-stable-base: Linux 6.3.12
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -135,10 +135,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f558844..0128dc9344ccf 100644
+index ed89be0aa6503..0e263417d7f93 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -10744,7 +10744,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+@@ -10683,7 +10683,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
  		.sd		= sd,
  		.dst_cpu	= this_cpu,
  		.dst_rq		= this_rq,
