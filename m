@@ -2,181 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760C674C070
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC02474C076
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjGICqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 22:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S229949AbjGICtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 22:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGICqB (ORCPT
+        with ESMTP id S229894AbjGICtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 22:46:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C30E43;
-        Sat,  8 Jul 2023 19:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=kScoLng5YFNBErHSexheuj/gXT92kmX2io+vy4xr8rM=; b=PsMUpS186cZHQRQgwfdKjLfJaX
-        MAf7f9B1u/aXkeb/zojz6CD+TnJa0HqpXDmu8Vpbvk9jHYJehmIr0jU8qd3k1hkA7PitP98NQ+vvp
-        JxhNKaz/eH7PE6yS+gBvCYKGCVqciRGaIRJYGebsHLf1T2FPzgdh9w5WkwhOx6Pc+TfROtcY9AtUQ
-        mCiuO78NEKeL/IeiJtkK1KvEiqnKJyunCyhMPv8iDBHqMzo8VDx4+DTKzaxT16AxPv28FoFqPceBz
-        8rCgIthiWHkiaR4XVslEU8BpUXyWssYqC2XBeXRq1W6mbxZoliz0o4xACjbPXtXFMgZ5w8KK168Ka
-        ZBqg7aNg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIKQt-008BoB-0h;
-        Sun, 09 Jul 2023 02:45:55 +0000
-Message-ID: <2f6ffd1c-a756-b7b8-bba4-77c2308f26b9@infradead.org>
-Date:   Sat, 8 Jul 2023 19:45:53 -0700
+        Sat, 8 Jul 2023 22:49:20 -0400
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAC8E48
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 19:49:19 -0700 (PDT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b8ad356f6fso36876465ad.3
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 19:49:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688870959; x=1691462959;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t48dt0gbHoYlD6zQ7nPtF/7kcwYP/QK/Spyg3zZplME=;
+        b=MbbGv8xvNtuYjwjcfbrZfrgq3Tvj1WuWQmNtrjhB7iNA3ODL3gib2sDhr6zRhQHfIf
+         zPdZzsSNRnA6SlomOO5iOE6zZB4MfkxZoza2UO3sVjVmaTb0KdeRx0wKe71eziv9teNf
+         1CowWRhxXpZIx25BFLM/mWUshQfkNtc/GWQM0wVTM/JGDuSZmGBLnYif1n24D7zmx2ZZ
+         Q9DyAxmYofeAi0bq6/RAk9qJoFR4hTkSzU3Pj0XEJyIGi+B6xsC5p/XXCldoOY2wMcFJ
+         lWP5kEy4nguSCxOJcYY4YVcGd7HU8sKMIHTZF+PbHn1Ut2fv1IG+MYsVo/OBBpVcTKRy
+         9a+g==
+X-Gm-Message-State: ABy/qLZun0Zk5a6QfrOhapR+rpwTTLDmtMwk3Xn8UEktWxupsE1Ed7Pv
+        CMhfgMZE1h6Igg6XRJn0yhIuaeMxcgPm8V9eJjvU26XiE9Nm
+X-Google-Smtp-Source: APBJJlFJkrHvXVTRO6Vtonj5SuXcoJVj5y3+IwOSzRZo5PV3XTSrQZsZ+7qCQoXA6bVHCCkEvjM7TQxWW6qiRIEFhaIbbBR0ziYD
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: Build regressions/improvements in v6.4 (wireless/airo)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
- <20230626081950.2090627-1-geert@linux-m68k.org>
- <39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org>
-Content-Language: en-US
-In-Reply-To: <39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:903:2607:b0:1b8:a92f:2618 with SMTP id
+ jd7-20020a170903260700b001b8a92f2618mr8197792plb.10.1688870959528; Sat, 08
+ Jul 2023 19:49:19 -0700 (PDT)
+Date:   Sat, 08 Jul 2023 19:49:19 -0700
+In-Reply-To: <0000000000006d817e05f85cd6a8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009d4169060004e98c@google.com>
+Subject: Re: [syzbot] [nfc?] UBSAN: shift-out-of-bounds in nci_activate_target
+From:   syzbot <syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com>
+To:     anupnewsmail@gmail.com, bongsu.jeon@samsung.com,
+        davem@davemloft.net, edumazet@google.com, hdanton@sina.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+syzbot has bisected this issue to:
 
-[+ Adrian]
+commit e624e6c3e777fb3dfed036b9da4d433aee3608a5
+Author: Bongsu Jeon <bongsu.jeon@samsung.com>
+Date:   Wed Jan 27 13:08:28 2021 +0000
 
-On 6/26/23 01:24, Geert Uytterhoeven wrote:
-> On Mon, 26 Jun 2023, Geert Uytterhoeven wrote:
->> JFYI, when comparing v6.4[1] to v6.4-rc7[3], the summaries are:
->>  - build errors: +1/-0
-> 
->   + /kisskb/src/drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]:  => 6163:45
+    nfc: Add a virtual nci device driver
 
-I cannot reproduce this build error. (I don't doubt the problem, just having a problem
-making it happen for me.)
-I have tried it with gcc-11.1.0, gcc-11.3.0, and gcc-13.1.0.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12b7b56ca80000
+start commit:   a452483508d7 Merge tag 's390-6.5-2' of git://git.kernel.or..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11b7b56ca80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b7b56ca80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7df0cabaf5becfdc
+dashboard link: https://syzkaller.appspot.com/bug?extid=0839b78e119aae1fec78
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123fc664a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12003f4aa80000
 
-I'm surprised that this is the only instance that gcc found/warned about.
+Reported-by: syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com
+Fixes: e624e6c3e777 ("nfc: Add a virtual nci device driver")
 
-I have a patch for this one instance, but there are 40+ instances of
-	readStatusRid()
-	readConfigRid()
-	readSsidRid()
-	readStatsRid()
-	readCapabilityRid()
-that don't check the return status of the function calls.
-
-I suppose that a patch can quieten the compiler error/warning, but given
-the 40+ other problems, it won't make the driver any noticeably better IMO.
-
-And the there is the general problem of not being able to build sh* cleanly any way.
-(See all of the other build issues in
-  http://kisskb.ellerman.id.au/kisskb/buildresult/14948832/
-.)
-
-Adrian, what toolchain do you use for arch/sh/ builds?
-
-
-> sh4-gcc11/sh-allmodconfig
-> seen before
-> 
-> This is actually a real issue, and it's been here since basically forever.
-> 
-> drivers/net/wireless/cisco/airo.c:
-> 
->     static int airo_get_rate(struct net_device *dev,
->                              struct iw_request_info *info,
->                              union iwreq_data *wrqu,
->                              char *extra)
->     {
->             struct iw_param *vwrq = &wrqu->bitrate;
->             struct airo_info *local = dev->ml_priv;
->             StatusRid status_rid;           /* Card status info */
-> 
->             readStatusRid(local, &status_rid, 1);
-> 
-> ==>         vwrq->value = le16_to_cpu(status_rid.currentXmitRate) * 500000;
->             ...
->     }
-> 
->     static int readStatusRid(struct airo_info *ai, StatusRid *statr, int lock)
->     {
->             return PC4500_readrid(ai, RID_STATUS, statr, sizeof(*statr), lock);
->     }
-> 
->     static int PC4500_readrid(struct airo_info *ai, u16 rid, void *pBuf, int len, int lock)
->     {
->             u16 status;
->             int rc = SUCCESS;
-> 
->             if (lock) {
->                     if (down_interruptible(&ai->sem))
->                             return ERROR;
-> 
-> pBuf output buffer contents not initialized.
-> 
->             }
->             ...
->     }
-> 
-> 
->> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6995e2de6891c724bfeb2db33d7b87775f913ad1/ (all 160 configs)
->> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/45a3e24f65e90a047bef86f927ebdc4c710edaa1/ (all 160 configs)
-
-I appreciate the synopsis.  Here's a patch.  WDYT?
-Thanks.
----
-From: Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] wifi: airo: avoid uninitialized warning in airo_get_rate()
-
-Quieten a gcc (11.3.0) build error or warning by checking the function
-call status and returning -EIO if the function call failed.
-This is similar to what several other wireless drivers do for the
-SIOCGIWRATE ioctl call.
-
-drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: lore.kernel.org/r/39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: linux-wireless@vger.kernel.org
----
- drivers/net/wireless/cisco/airo.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff -- a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
---- a/drivers/net/wireless/cisco/airo.c
-+++ b/drivers/net/wireless/cisco/airo.c
-@@ -6157,8 +6157,11 @@ static int airo_get_rate(struct net_devi
- 	struct iw_param *vwrq = &wrqu->bitrate;
- 	struct airo_info *local = dev->ml_priv;
- 	StatusRid status_rid;		/* Card status info */
-+	int ret;
- 
--	readStatusRid(local, &status_rid, 1);
-+	ret = readStatusRid(local, &status_rid, 1);
-+	if (ret)
-+		return -EIO;
- 
- 	vwrq->value = le16_to_cpu(status_rid.currentXmitRate) * 500000;
- 	/* If more than one rate, set auto */
-
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
