@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D51A74C064
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278C674C06C
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjGICVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 22:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S229867AbjGICak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 22:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGICVy (ORCPT
+        with ESMTP id S229437AbjGICai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 22:21:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E64D3;
-        Sat,  8 Jul 2023 19:21:50 -0700 (PDT)
+        Sat, 8 Jul 2023 22:30:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A16E48;
+        Sat,  8 Jul 2023 19:30:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C9B360B6D;
-        Sun,  9 Jul 2023 02:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC758C433C7;
-        Sun,  9 Jul 2023 02:21:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39ABF60B33;
+        Sun,  9 Jul 2023 02:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F75AC433D9;
+        Sun,  9 Jul 2023 02:30:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688869308;
-        bh=UmrFF+XDF6SC1pFdHEgExTSMmKr5o6ffllbQ1WUEbj0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MTLmIcBa5l+iltAZ7P7YoQ/4lMJO8LNT1IMQ57sKDHmWwWl8t7yVBOgJzUPwUug1B
-         YLElHbknzVX0D/MlIhZzykoeRyGOxRjkc1Bgq8QQnE8wD83OlNUROBIm1gBu2SWCAO
-         bH44BjE9+zvPR05Sst5A3UbAcZAKptv6qf/slv0UDVsTvnY072BCL6BTtdzWvJWm1y
-         f+cYbz/hAtBLDUy5CAv/kGeoKqHzNDBrc7xbF+o9XiE4FPrvwtLH2Fp50ruejqlMAB
-         RLopefSRM4/hs+mb/E4iEmK74+0NirZkjIBdY6O99JAFj5zHSInEEDJ+ztz62LuiTe
-         ZN2n3IS0qGQMQ==
-Date:   Sat, 8 Jul 2023 19:25:25 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     neil.armstrong@linaro.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
- genpd dir
-Message-ID: <deyyt5r2wkxo7ily434gl3wudls2sbinkmnehssqshwnbzmlwf@lmqskj6zwfu2>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-4-ulf.hansson@linaro.org>
- <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
- <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
- <1496b9c1-289a-c354-f0ae-e14fd4c9bcfa@linaro.org>
- <CAPDyKFr7Mqy5bisLcxcA_iEGWqL8SFt2mDDng7zYEaTD1vNisA@mail.gmail.com>
+        s=k20201202; t=1688869836;
+        bh=ExIY4X1/6WBZDcceYJulXe9AXws94ZhD3WBbuCHUE6E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Nac9IehWe3mHd7f4j/uWewTT/i+BFlYKfZ7gn5k9QJ9U3xityI4bJX9ZdXhOhbtn5
+         KTThX7ukwtNQCwv8P92YbIzux18NeIqXeNAP0ZSx+StByIr1piST8ZCbolBb1FnO0V
+         4TlYUvp27unXCEnzaLZvJTVtFuvWsG9G3LN5Uk+hhA1ztWrWPnRW3e5uliMyOLBVbq
+         XQXxCKKt+h8HovFU6s3NRY87n4MApHwoPIutnH0+WQ/HSDbD0KFEc/zfPVamMBdQsF
+         +0g+kU/G3mLejCoZnrNCxPwdnfKEnCvJ6zS/xqrJOx9j3u3+1ha9DmRYZ2q48aAI9L
+         mJuRm+SKqSf9A==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-9922d6f003cso438056866b.0;
+        Sat, 08 Jul 2023 19:30:36 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZV5gTxzOkvl427ciWTsEkXXkK68StNRbDW/8r9zM4Q5b5vdEru
+        WaXWFgxvPSBOngErmAo8+tEVwSVy0sVX7Bo0ZMI=
+X-Google-Smtp-Source: APBJJlF+0ioRn75qNrO9bVL/zSUpGN/gURCXjEqGnwflHc3JbebPSMWPoOFD6j8qvVU2qPB/tccSjcTMfsMyHi84C1U=
+X-Received: by 2002:a17:906:4307:b0:992:c5ad:18bc with SMTP id
+ j7-20020a170906430700b00992c5ad18bcmr7156335ejm.70.1688869834776; Sat, 08 Jul
+ 2023 19:30:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFr7Mqy5bisLcxcA_iEGWqL8SFt2mDDng7zYEaTD1vNisA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230702025708.784106-1-guoren@kernel.org> <20230704164003.GB83892@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230704164003.GB83892@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 9 Jul 2023 10:30:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
+Message-ID: <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
+        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,135 +71,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 05:27:39PM +0200, Ulf Hansson wrote:
-> On Fri, 7 Jul 2023 at 17:12, <neil.armstrong@linaro.org> wrote:
+On Wed, Jul 5, 2023 at 12:40=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > On 07/07/2023 16:54, Ulf Hansson wrote:
-> > > On Fri, 7 Jul 2023 at 16:42, Neil Armstrong <neil.armstrong@linaro.org> wrote:
-> > >>
-> > >> Hi,
-> > >>
-> > >> On 07/07/2023 16:04, Ulf Hansson wrote:
-> > >>> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> > >>> Cc: Kevin Hilman <khilman@baylibre.com>
-> > >>> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> > >>> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > >>> Cc: <linux-amlogic@lists.infradead.org>
-> > >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > >>> ---
-> > >>>    MAINTAINERS                                        | 1 +
-> > >>>    drivers/genpd/Makefile                             | 1 +
-> > >>>    drivers/genpd/amlogic/Makefile                     | 4 ++++
-> > >>>    drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
-> > >>>    drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
-> > >>>    drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
-> > >>>    drivers/soc/Makefile                               | 1 -
-> > >>>    drivers/soc/amlogic/Makefile                       | 3 ---
-> > >>>    8 files changed, 6 insertions(+), 4 deletions(-)
-> > >>>    create mode 100644 drivers/genpd/amlogic/Makefile
-> > >>>    rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
-> > >>>    rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
-> > >>>    rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
-> > >>>
-> > >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> > >>> index 588769fab516..9b8c9ae2375d 100644
-> > >>> --- a/MAINTAINERS
-> > >>> +++ b/MAINTAINERS
-> > >>> @@ -1843,6 +1843,7 @@ F:      Documentation/devicetree/bindings/phy/amlogic*
-> > >>>    F:  arch/arm/boot/dts/amlogic/
-> > >>>    F:  arch/arm/mach-meson/
-> > >>>    F:  arch/arm64/boot/dts/amlogic/
-> > >>> +F:   drivers/genpd/amlogic/
-> > >>>    F:  drivers/mmc/host/meson*
-> > >>>    F:  drivers/phy/amlogic/
-> > >>>    F:  drivers/pinctrl/meson/
-> > >>> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> > >>> index a2d5b2095915..cdba3b9f0c75 100644
-> > >>> --- a/drivers/genpd/Makefile
-> > >>> +++ b/drivers/genpd/Makefile
-> > >>> @@ -1,2 +1,3 @@
-> > >>>    # SPDX-License-Identifier: GPL-2.0-only
-> > >>>    obj-y                                       += actions/
-> > >>> +obj-y                                        += amlogic/
-> > >>> diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
-> > >>> new file mode 100644
-> > >>> index 000000000000..3d58abd574f9
-> > >>> --- /dev/null
-> > >>> +++ b/drivers/genpd/amlogic/Makefile
-> > >>> @@ -0,0 +1,4 @@
-> > >>> +# SPDX-License-Identifier: GPL-2.0-only
-> > >>> +obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
-> > >>> +obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
-> > >>> +obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
-> > >>> diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
-> > >>> similarity index 100%
-> > >>> rename from drivers/soc/amlogic/meson-ee-pwrc.c
-> > >>> rename to drivers/genpd/amlogic/meson-ee-pwrc.c
-> > >>> diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
-> > >>> similarity index 100%
-> > >>> rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
-> > >>> rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
-> > >>> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
-> > >>> similarity index 100%
-> > >>> rename from drivers/soc/amlogic/meson-secure-pwrc.c
-> > >>> rename to drivers/genpd/amlogic/meson-secure-pwrc.c
-> > >>> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> > >>> index 3b0f9fb3b5c8..dc93e1762ca7 100644
-> > >>> --- a/drivers/soc/Makefile
-> > >>> +++ b/drivers/soc/Makefile
-> > >>> @@ -23,7 +23,6 @@ obj-y                               += mediatek/
-> > >>>    obj-y                               += microchip/
-> > >>>    obj-y                               += nuvoton/
-> > >>>    obj-y                               += pxa/
-> > >>> -obj-y                                += amlogic/
-> > >>>    obj-y                               += qcom/
-> > >>>    obj-y                               += renesas/
-> > >>>    obj-y                               += rockchip/
-> > >>> diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
-> > >>> index 7b8c5d323f5c..c25f835e6a26 100644
-> > >>> --- a/drivers/soc/amlogic/Makefile
-> > >>> +++ b/drivers/soc/amlogic/Makefile
-> > >>> @@ -2,7 +2,4 @@
-> > >>>    obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
-> > >>>    obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
-> > >>>    obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
-> > >>> -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
-> > >>>    obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
-> > >>> -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
-> > >>> -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
-> > >>
-> > >> I've a few changes for v6.6, how shall we handle that ?
-> > >
-> > > I think we should continue to use the soc tree until v6.6-rc1 (or if
-> > > Arnd have some other ideas), there are some more thoughts around this
-> > > in the cover letter.
-> > >
-> > > Beyond v6.6-rc1 I plan to help with maintenance in practice  and run
-> > > my own separate git tree.
+> > The irqentry_nmi_enter/exit would force the current context into in_int=
+errupt.
+> > That would trigger the kernel to dead panic, but the kdb still needs "e=
+break" to
+> > debug the kernel.
 > >
-> > If it helps I can send you a PR with only the pwrc changes you can merge
-> > before applying this serie.
-> 
-> Right, that could be a good idea, but let's defer to Arnd before we
-> agree on the way forward.
-> 
+> > Move irqentry_nmi_enter/exit to exception_enter/exit could correct hand=
+le_break
+> > of the kernel side.
+>
+> This doesn't explain much if anything :/
+>
+> I'm confused (probably because I don't know RISC-V very well), what's
+> EBREAK and how does it happen?
+EBREAK is just an instruction of riscv which would rise breakpoint exceptio=
+n.
 
-How about sharing an immutable branch/tag with patch 1, then each one of
-us can merge that together with the soc-specific change, followed by any
-subsequent patches - leading up to the next merge window.
 
-Stephen will have a merge conflict in drivers/genpd/Makefile as each
-soc-specific addition comes in, and Arnd will see this conflict too. But
-this is going to be extremely trivial. But apart from this, there will
-not be any conflicts or additional branching constraints for us...
+>
+> Specifically, if EBREAK can happen inside an local_irq_disable() region,
+> then the below change is actively wrong. Any exception/interrupt that
+> can happen while local_irq_disable() must be treated like an NMI.
+When the ebreak happend out of local_irq_disable region, but
+__nmi_enter forces handle_break() into in_interupt() state. So how
+about:
 
-Regards,
-Bjorn
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index f910dfccbf5d..69f7043a98b9 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -18,6 +18,7 @@
+ #include <linux/irq.h>
+ #include <linux/kexec.h>
+ #include <linux/entry-common.h>
++#include <linux/context_tracking.h>
 
-> Kind regards
-> Uffe
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+ #include <asm/asm-prototypes.h>
+ #include <asm/bug.h>
+@@ -285,12 +286,18 @@ asmlinkage __visible __trap_section void
+do_trap_break(struct pt_regs *regs)
+                handle_break(regs);
+
+                irqentry_exit_to_user_mode(regs);
+-       } else {
++       } else if (in_interrupt()){
+                irqentry_state_t state =3D irqentry_nmi_enter(regs);
+
+                handle_break(regs);
+
+                irqentry_nmi_exit(regs, state);
++       } else {
++               enum ctx_state prev_state =3D exception_enter();
++
++               handle_break(regs);
++
++               exception_exit(prev_state);
+        }
+ }
+
+
+>
+> If that makes kdb unhappy, fix kdb.
+>
+> > Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
+> > Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  arch/riscv/kernel/traps.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index efc6b649985a..ed0eb9452f9e 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -18,6 +18,7 @@
+> >  #include <linux/irq.h>
+> >  #include <linux/kexec.h>
+> >  #include <linux/entry-common.h>
+> > +#include <linux/context_tracking.h>
+> >
+> >  #include <asm/asm-prototypes.h>
+> >  #include <asm/bug.h>
+> > @@ -257,11 +258,11 @@ asmlinkage __visible __trap_section void do_trap_=
+break(struct pt_regs *regs)
+> >
+> >               irqentry_exit_to_user_mode(regs);
+> >       } else {
+> > -             irqentry_state_t state =3D irqentry_nmi_enter(regs);
+> > +             enum ctx_state prev_state =3D exception_enter();
+> >
+> >               handle_break(regs);
+> >
+> > -             irqentry_nmi_exit(regs, state);
+> > +             exception_exit(prev_state);
+> >       }
+> >  }
+> >
+> > --
+> > 2.36.1
+> >
+
+
+
+--
+Best Regards
+ Guo Ren
