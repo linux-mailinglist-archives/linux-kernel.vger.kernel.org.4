@@ -2,109 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D512F74C477
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 15:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3526174C48A
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjGIN7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 09:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S232947AbjGIOCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 10:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjGIN7u (ORCPT
+        with ESMTP id S230091AbjGIOCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 09:59:50 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7771118
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 06:59:44 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QzTK94tylzBJBgF
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 21:59:41 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688911181; x=1691503182; bh=XC2qRso5yr3ArD1O8ps0Wm+4qpk
-        guIyDAXINZk+B5kI=; b=yczk9CDG35PSKq/mIbDf98zLT7sAgybx21LtojWHkvk
-        PHN7C9FhjmX8kyNamBy3iQXyCoinm0atjqf1M5d7ChSh+Y5RETNR3cjilgMLHhou
-        lijFjtau8frR4JVnIwBsPPa03dkm58y3or37EUJfzYdKd3Zj093nW5Q+aRUiMn8r
-        b7KtMJENsLjH+ImBzl7D5LyCPeavW7278zXHdgRvmwhyqYzjn4q29XxPnAGc6Z6s
-        cdzauZUxmZ1L7+Pb1bkuSSYBhNhHzyy+uOhPr+09/hVuy7I9KX0x0zGeHqMUHV16
-        6UJA/BAlV6GyPME1MeLiyoAVlK+LweEiILuRP6CenGA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6guwKLcS819t for <linux-kernel@vger.kernel.org>;
-        Sun,  9 Jul 2023 21:59:41 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QzTK92Nx0zBHXkb;
-        Sun,  9 Jul 2023 21:59:41 +0800 (CST)
+        Sun, 9 Jul 2023 10:02:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFF397;
+        Sun,  9 Jul 2023 07:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1688911368; x=1689516168; i=rwarsow@gmx.de;
+ bh=A10VahtUSlruQolJWv7H2HXJIC9L1XPgk95ZAOCM6bs=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+ b=tCegJ9EMQQOm5eCTyDRN+yuRaa5STvASYWb1Oat6HaoJdwdYmYv+d2oFt9W0vWsuD+4QaKe
+ lcElDQbmvaWA0a2J/UPFLAEf6SAVPRoLF09d8OHBSaORanr91qYFQF1qTraoMJTngwGeRinqL
+ xJGE6kaH07+sT8qpI6Mrc/QR9xnD6/djOP6KG1ZZXt8s/NdcBxA+H8yNh1zhOXe0ZH/wVCvUH
+ 2/lW0moDJVKeWFmEJeQ/TKFF7huuSfxkrw+64mH0QPKPWEuP59mpHQhE2BSMIAm3WjlXjQqhb
+ SxjcIEEBDoV73d9+Wi59qlOvE15jUWSJ7UalR69XTxKi0vb64LMg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.35.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MoO24-1pcVM03Chs-00opmM; Sun, 09
+ Jul 2023 16:02:48 +0200
+Message-ID: <aeef7dfa-13de-b312-8746-6ee66c2f851f@gmx.de>
+Date:   Sun, 9 Jul 2023 16:02:48 +0200
 MIME-Version: 1.0
-Date:   Sun, 09 Jul 2023 21:59:41 +0800
-From:   xuanzhenggang001@208suo.com
-To:     tony@atomide.com
-Cc:     linux@armlinux.org.uk, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: OMAP2+: prefer 'unsigned int' to bare use of 'unsigned'
-In-Reply-To: <20230709135705.59832-1-denghuilong@cdjrlc.com>
-References: <20230709135705.59832-1-denghuilong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <7efba6a4aae52649aa05756263c0a955@208suo.com>
-X-Sender: xuanzhenggang001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE, en-US
+Subject: Re: [PATCH 6.4 0/8] 6.4.3-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:on2LAspDD3oErUNNWsl1RVPxbGgo7u8a7kJghWMgZEJ8YoJolIu
+ WxLk7OBsAhLB96odUWV829EyXVDDkgS4pnBIxhnB9ELYuTugZruR+zRN3JHgc4NNkzEu76E
+ WYlBJX6DWi3YzDPzTNuR61KAgDpKXJM1ttmG5WITn9gzqWCAElPgZwMpPrJtECGX5sDZi3H
+ DrtoBmD/3RlXkWropT2tw==
+UI-OutboundReport: notjunk:1;M01:P0:uPd8k2HADdU=;aXoi6k798EYERxl9p9THeHLB4jD
+ DvVZF/++uiJpQPZMXTHhfjc8iR8w5CRinRy6c0RgAYd8ilI0QL3dXiFtWNEFm8F/NSN0cxf3B
+ n2i/nZnqFKisewuC3NeIZJMhdzncnsk4lop+qBsL7qmyLQt4Qb/2dg285ocJ6mdTxmWekzuZi
+ WA5Gi0e8liLMohfwePcuek/8FigG0xFwqcDKPaRl3CfvnCYz60d9uoe/5aoBjRPW3jV3fWOXF
+ KtffdQyXrpLapaUvAF9WsBFk4YmrDyHjivpRr/DyyWttpxzW6UxMNrz2xvTMoOw04i7OvN07N
+ 6wyKOZVmbEDjtp9yIXGcK9TVBc6SA5LFAfX4ANVH7HyihoOGfgQEjw9wMeneAn3DuIUb4tFhM
+ Dlx87xexVoEAfuzuq79v2CwtG3S00jQgpK/hJnmoBu5UFLdCBb0kRhwy+fB1T8AvPr9oVc6vi
+ baTLlnq7VHoi1uOp3nNX4cfS3ibW70/qtmna2Z/429dADB7hQsBZ2sggfAWIKmgJ9SAjF01lS
+ KQcVtVvuuLkAKLpujjR8Hi10gOH1G8pqVhRkupwmeT/WBg9FjWUjqRM29047IV4VbkVumFqSc
+ eHqOHnqG7ZxJaT0td1WrKwLtc0CW5ux++QJXySlcLyo2f0ohuzVjo5jhqoZs161vYyCciOE0R
+ oN3TXokibfeDIn8rFGC6QvZcq9w+uOCjmLMXYt1j3oG+hQoWPd6VczEowh0MvqKjZ1p81N0kQ
+ LLn7WOXl5iijIjeaefnLWWdOi5ahKe4Zj6QxbKcis5KwPTsJwkGB/Yaxx5VrQLjOplRvKY2Re
+ A08M1i77yNCH/6XI+P6ZtE6L538gcTf5qwAgSwp1pq1/sEUyrAINB/SWpZ8Wf6cCglekxk2bz
+ +CSuIcd3NNKggdyxgGtitNER/j1pjs3uk897iPp5MmjncUrZuX5Jh75MlrHBSNxJVUFl/DZWg
+ jhwd4c0OA1YZXoqkAlnGXfUcdL0=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/arm/mach-omap2/display.c:73: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
-arch/arm/mach-omap2/display.c:111: WARNING: Prefer 'unsigned int' to 
-bare use of 'unsigned'
-arch/arm/mach-omap2/display.c:119: WARNING: Prefer 'unsigned int' to 
-bare use of 'unsigned'
+Hi Greg
 
-Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
----
-  arch/arm/mach-omap2/display.c | 6 +++---
-  1 file changed, 3 insertions(+), 3 deletions(-)
+6.4.3-rc1
 
-diff --git a/arch/arm/mach-omap2/display.c 
-b/arch/arm/mach-omap2/display.c
-index dbec3bb9fbf4..c7a39d497e47 100644
---- a/arch/arm/mach-omap2/display.c
-+++ b/arch/arm/mach-omap2/display.c
-@@ -70,7 +70,7 @@ static struct platform_device omap_display_device = {
+compiles, boots and runs here on x86_64
+(Intel Rocket Lake, i5-11400)
 
-  static struct regmap *omap4_dsi_mux_syscon;
+Thanks
 
--static int omap4_dsi_mux_pads(int dsi_id, unsigned lanes)
-+static int omap4_dsi_mux_pads(int dsi_id, unsigned int lanes)
-  {
-      u32 enable_mask, enable_shift;
-      u32 pipd_mask, pipd_shift;
-@@ -108,7 +108,7 @@ static int omap4_dsi_mux_pads(int dsi_id, unsigned 
-lanes)
-      return 0;
-  }
-
--static int omap_dsi_enable_pads(int dsi_id, unsigned lane_mask)
-+static int omap_dsi_enable_pads(int dsi_id, unsigned int lane_mask)
-  {
-      if (cpu_is_omap44xx())
-          return omap4_dsi_mux_pads(dsi_id, lane_mask);
-@@ -116,7 +116,7 @@ static int omap_dsi_enable_pads(int dsi_id, unsigned 
-lane_mask)
-      return 0;
-  }
-
--static void omap_dsi_disable_pads(int dsi_id, unsigned lane_mask)
-+static void omap_dsi_disable_pads(int dsi_id, unsigned int lane_mask)
-  {
-      if (cpu_is_omap44xx())
-          omap4_dsi_mux_pads(dsi_id, 0);
+Tested-by: Ronald Warsow <rwarsow@gmx.de
