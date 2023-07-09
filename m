@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E820E74C847
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CC574C848
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjGIVAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 17:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S230119AbjGIVAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 17:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjGIVAA (ORCPT
+        with ESMTP id S229884AbjGIVAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 17:00:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76C4118
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 13:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688936398; x=1720472398;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KloZCkYP5B/AWtYp/xV0r+yGiPoNmALbfjg2j3dh/eY=;
-  b=KM7HwFLkS9HHL2H3WfIgOerv0Zs5r9xu4mbY/mPSb0Db2jZUFVwh2NuO
-   SIcePLt2sDqRIKM4YA3LDYMo5q+KFeWP1P7LGe9i1QDJtaePgEvbwA+M1
-   ppQj7XdYiX3T+fthVFQbySaMqZDeHxurMCTWY5A0xow9ge+6ac08B+kw0
-   +Te1thTiISrHtMiEAwGu1Ksf33lEEaGk4nGnB4+YaMfRJ1mu/Ririf3dV
-   HUcppRp+ySQ2FEh11H4SFuMcf/arz0zy4E+HcoD9x0gFi6Ndcx9038sH/
-   ea/KPIPfpNRCoLGN2uaQ9E+oG6uMN5yXLQPJhr8YRFxeTdjhJhenmSojV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="430277442"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="430277442"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 13:59:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="785920609"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="785920609"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Jul 2023 13:59:56 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qIbVb-0003Ng-2A;
-        Sun, 09 Jul 2023 20:59:55 +0000
-Date:   Mon, 10 Jul 2023 04:59:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shenghao Ding <13916275206@139.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: {standard input}:866: Error: value -148 out of range
-Message-ID: <202307100413.lPlgpaPd-lkp@intel.com>
+        Sun, 9 Jul 2023 17:00:46 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B811C;
+        Sun,  9 Jul 2023 14:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1688936443; bh=i/i0SbwFNl82wivugo29PcbwTwUwrR/WslbHxkZwClc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BBUa/fdWIVhuEbJc5lYvH7nntb+LPgf/20rNY6UZ5Ua8pCZvcbl83VnBTUn3XQp6f
+         02s8ILkEQfo+lz0BBHEB/O2ZcsV+UcQ92zMXsVV2h8u4kzuwIZwJKsCbHGSjfLJTYC
+         E/3t5QYDNeW9CszN8j8A0BIixIfGEWgPdMWAT/kY=
+Date:   Sun, 9 Jul 2023 23:00:40 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
+Message-ID: <90fdd255-32f4-4caf-90ff-06456b53dac3@t-8ch.de>
+References: <cover.1688828139.git.falcon@tinylab.org>
+ <ccc8c9b850c03ef236ab05e919fea2bf9af2556a.1688828139.git.falcon@tinylab.org>
+ <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c192ac7357683f78c2e6d6e75adfcc29deb8c4ae
-commit: ef3bcde75d06d65f78ba38a30d5a87fb83a5cdae ASoC: tas2781: Add tas2781 driver
-date:   3 weeks ago
-config: m68k-randconfig-r015-20230710 (https://download.01.org/0day-ci/archive/20230710/202307100413.lPlgpaPd-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230710/202307100413.lPlgpaPd-lkp@intel.com/reproduce)
+On 2023-07-09 20:49:10+0200, Thomas Weißschuh wrote:
+> On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307100413.lPlgpaPd-lkp@intel.com/
+> [..]
 
-All errors (new ones prefixed by >>):
+> > ---
+> >  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> > 
+> > diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+> > index 221b7c5346ca..b269294e9664 100644
+> > --- a/tools/include/nolibc/crt.h
+> > +++ b/tools/include/nolibc/crt.h
+> > @@ -13,4 +13,48 @@
 
-   {standard input}: Assembler messages:
->> {standard input}:866: Error: value -148 out of range
->> {standard input}:866: Error: value of ffffff6c too large for field of 1 byte at 0000043b
+> [..]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >  const unsigned long *_auxv __attribute__((weak));
+> >  
+> > +int main(int argc, char *argv[], char **envp);
+> 
+> This will lead to conflicting declarations if the users use a different
+> signature. I'm not (yet?) sure how to work around this.
+> 
+> Also how is the case handled where main() returns "void"?
+> I'm not sure how this is currently handled or if the compiler takes core
+> of returning 0 in this case.
+
+I looked into this some more.
+
+The diff below allows it to accept different signatures for main().
+(Maybe you can improve the naming)
+
+Implicit return values seem to be handled by the compiler automatically.
+In C89 mode we get garbage values, in C2X/C23 we get zero.
+As per the respective C specs.
+
+
+diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+index b269294e9664..dba40bc9413f 100644
+--- a/tools/include/nolibc/crt.h
++++ b/tools/include/nolibc/crt.h
+@@ -13,7 +13,6 @@
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+-int main(int argc, char *argv[], char **envp);
+ static void exit(int);
+ 
+ void _start_c(long *sp)
+@@ -21,6 +20,7 @@ void _start_c(long *sp)
+ 	int argc, i;
+ 	char **argv;
+ 	char **envp;
++	int _nolibc_main_alias(int, char**, char**) __asm__("main");
+ 
+ 	/*
+ 	 * sp  :  argc          <-- argument count, required by main()
+@@ -54,7 +54,7 @@ void _start_c(long *sp)
+ 	_auxv = (void *)(envp + i + 1);
+ 
+ 	/* go to application */
+-	exit(main(argc, argv, envp));
++	exit(_nolibc_main_alias(argc, argv, envp));
+ }
+ 
+ #endif /* _NOLIBC_CRT_H */
