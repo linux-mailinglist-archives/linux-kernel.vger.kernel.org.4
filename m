@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336C074C874
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A252E74C87B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjGIVsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 17:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S230014AbjGIVvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 17:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjGIVs2 (ORCPT
+        with ESMTP id S229680AbjGIVvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 17:48:28 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9B0124
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 14:48:25 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b71ae5fa2fso8601231fa.0
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 14:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688939304; x=1691531304;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBr3pmqtFJ0mBgHUUMTs1QAvH5gPXD+Zu0MIiua0TDc=;
-        b=Ykfs96UVx4AdWvx6+BrUwdWVZYn6+reTEGJZ3oNUurA7amzeluWpisy57oj5knduxO
-         vxABXSzx2F7nPyz2TBllcF28zaP+dHm8MZX84W+yKla+sXJu/Dvsh7xipikGaLEfrN9c
-         gRbY33gzooKHvPLrhhmBE4pQFSUobt2sti0veOFn2dW/U2vFxj7e/4mJ1thspD45L/Jw
-         Vn8EiNpRIo6VfaQofZkukbmdqE28zJkIbovycBdrqG7LtoeuAmD5MywvG8+BFaQISFxl
-         cd2X8ocvKze6lGy4gQ2SFoDGtTmuwQqEqgo2p1ytju0fS7TKg1GcBS+c5Sb3gWXolZWj
-         e0MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688939304; x=1691531304;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SBr3pmqtFJ0mBgHUUMTs1QAvH5gPXD+Zu0MIiua0TDc=;
-        b=Np+RP9wQJtwTsA+3ZhFnnyocs6WSg3UKZ5LFTqWqc7Qw8iWGWxDONun7bkLc1Y88wY
-         SNbzpw97hy1ayNGEgrVuXXY2XUY0K8Zzu54sAm6Xyx64sDAVuc8yih+3ihklEYEKih/d
-         /T6UfAgqfr8OK13ZvuOJ4D3eqjNopEJv08XtdDIpDWDiAka2IIugkNbbOKP2R0UfItnH
-         TTdXykW95JqWHtSBC8j8TYgJqLsHTiNR2iOPz/Mhnz7zM3M9w3Jsx7eI2QqleLnCs5qW
-         4i1Lixr5Z4evupRX6uPVuo/bazTTU6+aqd9zPAVDAztvR0oysK+APPTirKULIfI60si8
-         DnYQ==
-X-Gm-Message-State: ABy/qLaFIZ490mzhwZ2jDLJcOcE26Xw2atGX4lsGOVGlPodcuj3TTcpa
-        rqlcZYatvrg0ZR3Ym5JfaoIapg==
-X-Google-Smtp-Source: APBJJlHrDVuZizdmq9QzcXLhbnLwg1wobW1fIyufqm+mVm/Wj/b5W0ljPEVY0LZWy49YNatg0Uu83g==
-X-Received: by 2002:a05:6512:3707:b0:4fb:8df5:8919 with SMTP id z7-20020a056512370700b004fb8df58919mr7378890lfr.23.1688939303958;
-        Sun, 09 Jul 2023 14:48:23 -0700 (PDT)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id x23-20020ac25dd7000000b004faf6a87d63sm1454243lfq.38.2023.07.09.14.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jul 2023 14:48:23 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 09 Jul 2023 23:48:19 +0200
-Subject: [PATCH v5] dt-bindings: MFD: Convert STMPE to YAML schema
+        Sun, 9 Jul 2023 17:51:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084ABEE;
+        Sun,  9 Jul 2023 14:51:09 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 369LoqsD006096;
+        Sun, 9 Jul 2023 21:50:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=//hNLQCxQJojF0Z4grwBRq1Jh4qS7v4et90KGoyFSvs=;
+ b=iCCGMdQMpzGb/cRyT0omvIye65FQbG6Mm7rNyFss/FhrJtg3gXt8/x0h54VNjwUN+N43
+ 1kTdGzBRCe5LsCMW+g6WE9xRfZdeDumVJLV48yYQK54ZziHBjVgsunqO0rK4Jt/GB+53
+ GhnEyvGlAtYVkfeDtFAPu9wV14/PWbdv95XkR3sxfaeuRrKnNxPrmxpQIhmAeq4pr6f6
+ VlalzE8njy8hx20VPSnp1jCm55jKLq8F7uw8/2le0bgv0/SJDXekyAffcKPJwcm2GrSw
+ LInvGua/d1Vwm+iyQekzjnTdIsztRKDBdIT1t55xeUY6zu7qAajBzlXx33EwYULtvTDT pg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpxry2565-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jul 2023 21:50:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 369LopR2028736
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 9 Jul 2023 21:50:51 GMT
+Received: from akhilpo-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Sun, 9 Jul 2023 14:50:47 -0700
+Date:   Mon, 10 Jul 2023 03:20:44 +0530
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jordan Crouse <jorcrous@amazon.com>
+CC:     <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
+        <linux-arm-msm@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        David Airlie <airlied@gmail.com>
+Subject: Re: [Freedreno] [PATCH] drm/msm: Check for the GPU IOMMU during bind
+Message-ID: <2xnvyjlwuxft2uk2pirlbvbrg7krcb4alz7yyna72g4t2qrrfm@qtawbelv3n4l>
+References: <20230309222049.4180579-1-jorcrous@amazon.com>
+ <d73f6733-e605-0cf8-7909-8cced6e3b70d@linaro.org>
+ <20230707150307.vb4otu5e6hwoadyf@amazon.com>
+ <cc153fa9-b9e0-f714-ce5b-1a4a0cb55cc7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230709-stmpe-dt-bindings-v5-1-34a3d6ee1e57@linaro.org>
-X-B4-Tracking: v=1; b=H4sIACIrq2QC/4XOzwrCMAwG8FeRnq1sbffPk+8hHrIm3QLaSTuGM
- vbudjsIIujxS/h+ySwiBaYojrtZBJo48uBTKPY7YXvwHUnGlIXKlM6MKmUcb3eSOMqWPbLvorT
- aVA1ilYOqReq1EEm2Abzt1+a78ITbdd3fAzl+bDfPl5R7juMQntsLk1qnv65NSmZSubqA3DlnE
- U5X9hCGwxA6sXKT/kvoRBDYHCtdkqnrL8L8JUwidOkQC41NkzcfxLIsL8v5GSdZAQAA
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.3
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cc153fa9-b9e0-f714-ce5b-1a4a0cb55cc7@linaro.org>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 0kHMDWBrY4vwMO9XHyagsCFiCcJgcAQk
+X-Proofpoint-GUID: 0kHMDWBrY4vwMO9XHyagsCFiCcJgcAQk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-09_16,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1011
+ suspectscore=0 impostorscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307090206
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -86,594 +88,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts the STMPE MFD device tree bindings to the YAML
-schema.
+On Fri, Jul 07, 2023 at 08:27:18PM +0300, Dmitry Baryshkov wrote:
+> 
+> On 07/07/2023 18:03, Jordan Crouse wrote:
+> > On Thu, Jul 06, 2023 at 09:55:13PM +0300, Dmitry Baryshkov wrote:
+> > > 
+> > > On 10/03/2023 00:20, Jordan Crouse wrote:
+> > > > While booting with amd,imageon on a headless target the GPU probe was
+> > > > failing with -ENOSPC in get_pages() from msm_gem.c.
+> > > > 
+> > > > Investigation showed that the driver was using the default 16MB VRAM
+> > > > carveout because msm_use_mmu() was returning false since headless devices
+> > > > use a dummy parent device. Avoid this by extending the existing is_a2xx
+> > > > priv member to check the GPU IOMMU state on all platforms and use that
+> > > > check in msm_use_mmu().
+> > > > 
+> > > > This works for memory allocations but it doesn't prevent the VRAM carveout
+> > > > from being created because that happens before we have a chance to check
+> > > > the GPU IOMMU state in adreno_bind.
+> > > > 
+> > > > There are a number of possible options to resolve this but none of them are
+> > > > very clean. The easiest way is to likely specify vram=0 as module parameter
+> > > > on headless devices so that the memory doesn't get wasted.
+> > > 
+> > > This patch was on my plate for quite a while, please excuse me for
+> > > taking it so long.
+> > 
+> > No worries. I'm also chasing a bunch of other stuff too.
+> > 
+> > > I see the following problem with the current code. We have two different
+> > > instances than can access memory: MDP/DPU and GPU. And each of them can
+> > > either have or miss the MMU.
+> > > 
+> > > For some time I toyed with the idea of determining whether the allocated
+> > > BO is going to be used by display or by GPU, but then I abandoned it. We
+> > > can have display BOs being filled by GPU, so handling it this way would
+> > > complicate things a lot.
+> > > 
+> > > This actually rings a tiny bell in my head with the idea of splitting
+> > > the display and GPU parts to two different drivers, but I'm not sure
+> > > what would be the overall impact.
+> > 
+> > As I now exclusively work on headless devices I would be 100% for this,
+> > but I'm sure that our laptop friends might not agree :)
+> 
+> I do not know here. This is probably a question to Rob, as he better
+> understands the interaction between GPU and display parts of the userspace.
 
-Reference the existing schema for the ADC, just define the
-other subnode schemas directly in the MFD schema.
+I fully support this if it is feasible.
 
-Add two examples so we have examples covering both the simple
-GPIO expander and the more complex with ADC and touchscreen.
+In our architecture, display and GPU are completely independent subsystems.
+Like Jordan mentioned, there are IOT products without display. And I wouldn't
+be surprised if there is a product with just display and uses software rendering.
 
-Some in-tree users do not follow the naming conventions for nodes
-so these DTS files need to be augmented to use proper node names
-like "adc", "pwm", "gpio", "keyboard-controller" etc before the
-bindings take effect on them.
+-Akhil
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-This adds the missing GPIO bindings for the STMPE port expander
-and converts the existing MFD binding to YAML.
-
-I suppose Lee can merge this when he's happy with it.
----
-Changes in v5:
-- Rebase on v6.5-rc1 meaning GPIO binding is merged
-  upstream and can be dropped.
-- Link to v4: https://lore.kernel.org/r/20230426-stmpe-dt-bindings-v4-0-36fdd53d9919@linaro.org
-
-Changes in v4:
-- Make the GPIO bindings a conversion: there were some old
-  text bindings for the STMPE GPIO, we now delete them as
-  part of the patch.
-- I expect Lee or the DT binding tree to pick both patches.
-- Link to v3: https://lore.kernel.org/r/20230426-stmpe-dt-bindings-v3-0-eac1d736e488@linaro.org
-
-Changes in v3:
-- Update to review feedback
-- Collected some ack/review tags
-- Link to v2: https://lore.kernel.org/r/20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org
-
-Changes in v2:
-- Split off a separate GPIO binding
-- Updated the MFD binding according to feedback
----
-ChangeLog v4->v5:
-- Rebase on v6.5-rc1
-ChangeLog v3->v4:
-- No changes.
-ChangeLog v2->v3:
-- Drop the required pwm properties already required by the
-  template pwm schema.
-- Add the number of PWM cells as const.
-ChangeLog v1->v2:
-- Split off the GPIO bindings to their own schema, as the old
-  bindings didn't even have any GPIO bindings. Put the GPIO
-  schema before this schema so we can use GPIO in the examples.
-- Drop nodename and pattern as STMPE is not a generic name.
-- Add maxItems to the resets.
-- Make wakeup-source just :true, as it is a generic property.
-- Move unevaluatedProperties for subnodes right before properties
-  as requested.
-- Name devices "port-expander" in the examples.
-- Use lowercase hex in line init.
----
- .../devicetree/bindings/input/stmpe-keypad.txt     |  41 ---
- .../bindings/input/touchscreen/stmpe.txt           | 108 --------
- .../devicetree/bindings/mfd/st,stmpe.yaml          | 297 +++++++++++++++++++++
- Documentation/devicetree/bindings/mfd/stmpe.txt    |  42 ---
- 4 files changed, 297 insertions(+), 191 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/input/stmpe-keypad.txt b/Documentation/devicetree/bindings/input/stmpe-keypad.txt
-deleted file mode 100644
-index 12bb771d66d4..000000000000
---- a/Documentation/devicetree/bindings/input/stmpe-keypad.txt
-+++ /dev/null
-@@ -1,41 +0,0 @@
--* STMPE Keypad
--
--Required properties:
-- - compatible               : "st,stmpe-keypad"
-- - linux,keymap             : See ./matrix-keymap.txt
--
--Optional properties:
-- - debounce-interval        : Debouncing interval time in milliseconds
-- - st,scan-count            : Scanning cycles elapsed before key data is updated
-- - st,no-autorepeat         : If specified device will not autorepeat
-- - keypad,num-rows          : See ./matrix-keymap.txt
-- - keypad,num-columns       : See ./matrix-keymap.txt
--
--Example:
--
--	stmpe_keypad {
--		compatible = "st,stmpe-keypad";
--
--		debounce-interval = <64>;
--		st,scan-count = <8>;
--		st,no-autorepeat;
--
--		linux,keymap = <0x205006b
--				0x4010074
--				0x3050072
--				0x1030004
--				0x502006a
--				0x500000a
--				0x5008b
--				0x706001c
--				0x405000b
--				0x6070003
--				0x3040067
--				0x303006c
--				0x60400e7
--				0x602009e
--				0x4020073
--				0x5050002
--				0x4030069
--				0x3020008>;
--	};
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt b/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
-deleted file mode 100644
-index 238b51555c04..000000000000
---- a/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
-+++ /dev/null
-@@ -1,108 +0,0 @@
--STMPE Touchscreen
------------------
--
--Required properties:
-- - compatible: "st,stmpe-ts"
--
--Optional properties:
--- st,ave-ctrl		: Sample average control
--				0 -> 1 sample
--				1 -> 2 samples
--				2 -> 4 samples
--				3 -> 8 samples
--- st,touch-det-delay	: Touch detect interrupt delay (recommended is 3)
--				0 -> 10 us
--				1 -> 50 us
--				2 -> 100 us
--				3 -> 500 us
--				4 -> 1 ms
--				5 -> 5 ms
--				6 -> 10 ms
--				7 -> 50 ms
--- st,settling		: Panel driver settling time (recommended is 2)
--				0 -> 10 us
--				1 -> 100 us
--				2 -> 500 us
--				3 -> 1 ms
--				4 -> 5 ms
--				5 -> 10 ms
--				6 -> 50 ms
--				7 -> 100 ms
--- st,fraction-z		: Length of the fractional part in z (recommended is 7)
--			  (fraction-z ([0..7]) = Count of the fractional part)
--- st,i-drive		: current limit value of the touchscreen drivers
--				0 -> 20 mA (typical 35mA max)
--				1 -> 50 mA (typical 80 mA max)
--
--Optional properties common with MFD (deprecated):
-- - st,sample-time	: ADC conversion time in number of clock.
--				0 -> 36 clocks
--				1 -> 44 clocks
--				2 -> 56 clocks
--				3 -> 64 clocks
--				4 -> 80 clocks (recommended)
--				5 -> 96 clocks
--				6 -> 124 clocks
-- - st,mod-12b		: ADC Bit mode
--				0 -> 10bit ADC
--				1 -> 12bit ADC
-- - st,ref-sel		: ADC reference source
--				0 -> internal
--				1 -> external
-- - st,adc-freq		: ADC Clock speed
--				0 -> 1.625 MHz
--				1 -> 3.25 MHz
--				2 || 3 -> 6.5 MHz
--
--Node should be child node of stmpe node to which it belongs.
--
--Note that common ADC settings of stmpe_touchscreen (child) will take precedence
--over the settings done in MFD.
--
--Example:
--
--stmpe811@41 {
--	compatible = "st,stmpe811";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_touch_int>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--	reg = <0x41>;
--	interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
--	interrupt-parent = <&gpio4>;
--	interrupt-controller;
--	id = <0>;
--	blocks = <0x5>;
--	irq-trigger = <0x1>;
--	/* Common ADC settings */
--	/* 3.25 MHz ADC clock speed */
--	st,adc-freq = <1>;
--	/* 12-bit ADC */
--	st,mod-12b = <1>;
--	/* internal ADC reference */
--	st,ref-sel = <0>;
--	/* ADC converstion time: 80 clocks */
--	st,sample-time = <4>;
--
--	stmpe_touchscreen {
--		compatible = "st,stmpe-ts";
--		reg = <0>;
--		/* 8 sample average control */
--		st,ave-ctrl = <3>;
--		/* 5 ms touch detect interrupt delay */
--		st,touch-det-delay = <5>;
--		/* 1 ms panel driver settling time */
--		st,settling = <3>;
--		/* 7 length fractional part in z */
--		st,fraction-z = <7>;
--		/*
--		 * 50 mA typical 80 mA max touchscreen drivers
--		 * current limit value
--		 */
--		st,i-drive = <1>;
--	};
--	stmpe_adc {
--		compatible = "st,stmpe-adc";
--		st,norequest-mask = <0x0F>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-new file mode 100644
-index 000000000000..b77cc3f3075d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-@@ -0,0 +1,297 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/st,stmpe.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectonics Port Expander (STMPE)
-+
-+description: STMicroelectronics Port Expander (STMPE) is a series of slow
-+  bus controllers for various expanded peripherals such as GPIO, keypad,
-+  touchscreen, ADC, PWM or rotator. It can contain one or several different
-+  peripherals connected to SPI or I2C.
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stmpe601
-+      - st,stmpe801
-+      - st,stmpe811
-+      - st,stmpe1600
-+      - st,stmpe1601
-+      - st,stmpe2401
-+      - st,stmpe2403
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  vcc-supply: true
-+
-+  vio-supply: true
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  st,autosleep-timeout:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 4, 16, 32, 64, 128, 256, 512, 1024 ]
-+    description: Time idle before going to automatic sleep to save power
-+
-+  st,sample-time:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1, 2, 3, 4, 5, 6 ]
-+    description: |
-+      Sample time per iteration
-+      0 = 36 clock ticks
-+      1 = 44 clock ticks
-+      2 = 56 clock ticks
-+      3 = 64 clock ticks
-+      4 = 80 clock ticks - recommended
-+      5 = 96 clock ticks
-+      6 = 124 clock ticks
-+
-+  st,mod-12b:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1 ]
-+    description: ADC bit mode 0 = 10bit ADC, 1 = 12bit ADC
-+
-+  st,ref-sel:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1 ]
-+    description: ADC reference source 0 = internal, 1 = external
-+
-+  st,adc-freq:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1, 2, 3 ]
-+    description: |
-+      ADC clock speed
-+      0 = 1.625 MHz
-+      1 = 3.25 MHz
-+      2, 3 = 6.5 MHz
-+
-+  adc:
-+    type: object
-+    $ref: /schemas/iio/adc/st,stmpe-adc.yaml#
-+
-+  gpio:
-+    type: object
-+    $ref: /schemas/gpio/st,stmpe-gpio.yaml#
-+
-+  keyboard-controller:
-+    type: object
-+    $ref: /schemas/input/matrix-keymap.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: st,stmpe-keypad
-+
-+      debounce-interval:
-+        description: Debouncing interval in milliseconds
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      st,no-autorepeat:
-+        description: If present, the keys will not autorepeat when pressed
-+        $ref: /schemas/types.yaml#/definitions/flag
-+
-+      st,scan-count:
-+        description: Scanning cycles elapsed before key data is updated
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+    required:
-+      - compatible
-+      - linux,keymap
-+
-+  pwm:
-+    type: object
-+    $ref: /schemas/pwm/pwm.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: st,stmpe-pwm
-+
-+      "#pwm-cells":
-+        const: 2
-+
-+  touchscreen:
-+    type: object
-+    $ref: /schemas/input/touchscreen/touchscreen.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: st,stmpe-ts
-+
-+      st,ave-ctrl:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3 ]
-+        description: |
-+          Sample average control
-+          0 = 1 sample
-+          1 = 2 samples
-+          2 = 4 samples
-+          3 = 8 samples
-+
-+      st,touch-det-delay:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+        description: |
-+          Touch detection delay
-+          0 = 10 us
-+          1 = 50 us
-+          2 = 100 us
-+          3 = 500 us - recommended
-+          4 = 1 ms
-+          5 = 5 ms
-+          6 = 10 ms
-+          7 = 50 ms
-+
-+      st,settling:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+        description: |
-+          Panel driver settling time
-+          0 = 10 us
-+          1 = 100 us
-+          2 = 500 us - recommended
-+          3 = 1 ms
-+          4 = 5 ms
-+          5 = 10 ms
-+          6 = 50 ms
-+          7 = 100 ms
-+
-+      st,fraction-z:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+        description: Length of the fractional part in z, recommended is 7
-+          (fraction-z ([0..7]) = Count of the fractional part)
-+
-+      st,i-drive:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1 ]
-+        description: |
-+          current limit value of the touchscreen drivers
-+          0 = 20 mA (typical 35 mA max)
-+          1 = 50 mA (typical 80 mA max)
-+
-+    required:
-+      - compatible
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/input/input.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      port-expander@43 {
-+        compatible = "st,stmpe2401";
-+        reg = <0x43>;
-+        reset-gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
-+        interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
-+        interrupt-parent = <&gpio>;
-+        vcc-supply = <&db8500_vsmps2_reg>;
-+        vio-supply = <&db8500_vsmps2_reg>;
-+        wakeup-source;
-+        st,autosleep-timeout = <1024>;
-+
-+        gpio {
-+          compatible = "st,stmpe-gpio";
-+          gpio-controller;
-+          #gpio-cells = <2>;
-+          interrupt-controller;
-+          #interrupt-cells = <2>;
-+          st,norequest-mask = <0xf0f002>;
-+        };
-+
-+        keyboard-controller {
-+          compatible = "st,stmpe-keypad";
-+          debounce-interval = <64>;
-+          st,scan-count = <8>;
-+          st,no-autorepeat;
-+          keypad,num-rows = <8>;
-+          keypad,num-columns = <8>;
-+          linux,keymap = <
-+              MATRIX_KEY(0x00, 0x00, KEY_1)
-+              MATRIX_KEY(0x00, 0x01, KEY_2)
-+              MATRIX_KEY(0x00, 0x02, KEY_3)
-+              MATRIX_KEY(0x00, 0x03, KEY_4)
-+              MATRIX_KEY(0x00, 0x04, KEY_5)
-+              MATRIX_KEY(0x00, 0x05, KEY_6)
-+              MATRIX_KEY(0x00, 0x06, KEY_7)
-+              MATRIX_KEY(0x00, 0x07, KEY_8)
-+              MATRIX_KEY(0x00, 0x08, KEY_9)
-+              MATRIX_KEY(0x00, 0x09, KEY_0)
-+          >;
-+        };
-+
-+        pwm {
-+          compatible = "st,stmpe-pwm";
-+          #pwm-cells = <2>;
-+        };
-+      };
-+
-+      port-expander@41 {
-+        compatible = "st,stmpe811";
-+        reg = <0x41>;
-+        interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
-+        interrupt-parent = <&gpio>;
-+        st,adc-freq = <1>;
-+        st,mod-12b = <1>;
-+        st,ref-sel = <0>;
-+        st,sample-time = <4>;
-+
-+        adc {
-+          compatible = "st,stmpe-adc";
-+          st,norequest-mask = <0x0f>;
-+          #io-channel-cells = <1>;
-+        };
-+
-+        gpio {
-+          compatible = "st,stmpe-gpio";
-+          gpio-controller;
-+          #gpio-cells = <2>;
-+          interrupt-controller;
-+          #interrupt-cells = <2>;
-+        };
-+
-+        pwm {
-+          compatible = "st,stmpe-pwm";
-+          #pwm-cells = <2>;
-+        };
-+
-+        touchscreen {
-+          compatible = "st,stmpe-ts";
-+          st,ave-ctrl = <3>;
-+          st,touch-det-delay = <5>;
-+          st,settling = <3>;
-+          st,fraction-z = <7>;
-+          st,i-drive = <1>;
-+        };
-+      };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/mfd/stmpe.txt b/Documentation/devicetree/bindings/mfd/stmpe.txt
-deleted file mode 100644
-index d4408a417193..000000000000
---- a/Documentation/devicetree/bindings/mfd/stmpe.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--* ST Microelectronics STMPE Multi-Functional Device
--
--STMPE is an MFD device which may expose the following inbuilt devices: gpio,
--keypad, touchscreen, adc, pwm, rotator.
--
--Required properties:
-- - compatible			: "st,stmpe[610|801|811|1600|1601|2401|2403]"
-- - reg				: I2C/SPI address of the device
--
--Optional properties:
-- - interrupts			: The interrupt outputs from the controller
-- - interrupt-controller		: Marks the device node as an interrupt controller
-- - wakeup-source		: Marks the input device as wakable
-- - st,autosleep-timeout		: Valid entries (ms); 4, 16, 32, 64, 128, 256, 512 and 1024
-- - irq-gpio			: If present, which GPIO to use for event IRQ
--
--Optional properties for devices with touch and ADC (STMPE811|STMPE610):
-- - st,sample-time		: ADC conversion time in number of clock.
--					0 -> 36 clocks		4 -> 80 clocks (recommended)
--					1 -> 44 clocks		5 -> 96 clocks
--					2 -> 56 clocks		6 -> 124 clocks
--					3 -> 64 clocks
-- - st,mod-12b			: ADC Bit mode
--					0 -> 10bit ADC		1 -> 12bit ADC
-- - st,ref-sel			: ADC reference source
--					0 -> internal		1 -> external
-- - st,adc-freq			: ADC Clock speed
--					0 -> 1.625 MHz		2 || 3 -> 6.5 MHz
--					1 -> 3.25 MHz
--
--Example:
--
--	stmpe1601: stmpe1601@40 {
--		compatible = "st,stmpe1601";
--		reg = <0x40>;
--		interrupts = <26 0x4>;
--		interrupt-parent = <&gpio6>;
--		interrupt-controller;
--
--		wakeup-source;
--		st,autosleep-timeout = <1024>;
--	};
-
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230426-stmpe-dt-bindings-c3479dd71a28
-
-Best regards,
--- 
-Linus Walleij <linus.walleij@linaro.org>
-
+> 
+> > 
+> > > More on the msm_use_mmu() below.
+> > > 
+> > > > 
+> > > > Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
+> > > > ---
+> > > > 
+> > > >    drivers/gpu/drm/msm/adreno/adreno_device.c | 6 +++++-
+> > > >    drivers/gpu/drm/msm/msm_drv.c              | 7 +++----
+> > > >    drivers/gpu/drm/msm/msm_drv.h              | 2 +-
+> > > >    3 files changed, 9 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > > > index 36f062c7582f..4f19da28f80f 100644
+> > > > --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > > > +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > > > @@ -539,7 +539,11 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
+> > > >        DBG("Found GPU: %u.%u.%u.%u", config.rev.core, config.rev.major,
+> > > >                config.rev.minor, config.rev.patchid);
+> > > > 
+> > > > -     priv->is_a2xx = config.rev.core == 2;
+> > > > +     /*
+> > > > +      * A2xx has a built in IOMMU and all other IOMMU enabled targets will
+> > > > +      * have an ARM IOMMU attached
+> > > > +      */
+> > > > +     priv->has_gpu_iommu = config.rev.core == 2 || device_iommu_mapped(dev);
+> > > >        priv->has_cached_coherent = config.rev.core >= 6;
+> > > > 
+> > > >        gpu = info->init(drm);
+> > > > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> > > > index aca48c868c14..a125a351ec90 100644
+> > > > --- a/drivers/gpu/drm/msm/msm_drv.c
+> > > > +++ b/drivers/gpu/drm/msm/msm_drv.c
+> > > > @@ -318,11 +318,10 @@ bool msm_use_mmu(struct drm_device *dev)
+> > > >        struct msm_drm_private *priv = dev->dev_private;
+> > > > 
+> > > >        /*
+> > > > -      * a2xx comes with its own MMU
+> > > > -      * On other platforms IOMMU can be declared specified either for the
+> > > > -      * MDP/DPU device or for its parent, MDSS device.
+> > > > +      * Return true if the GPU or the MDP/DPU or parent MDSS device has an
+> > > > +      * IOMMU
+> > > >         */
+> > > > -     return priv->is_a2xx ||
+> > > > +     return priv->has_gpu_iommu ||
+> > > >                device_iommu_mapped(dev->dev) ||
+> > > >                device_iommu_mapped(dev->dev->parent);
+> > > 
+> > > I have a generic feeling that both old an new code is not fully correct.
+> > > Please correct me if I'm wrong:
+> > > 
+> > > We should be using VRAM, if either of the blocks can not use remapped
+> > > memory. So this should have been:
+> > > 
+> > > bool msm_use_mmu()
+> > > {
+> > >   if (!gpu_has_iommu)
+> > >     return false;
+> > > 
+> > >   if (have_display_part && !display_has_mmu())
+> > >     return false;
+> > > 
+> > >   return true;
+> > > }
+> > > 
+> > > What do you think.
+> > 
+> > I would have to see (and try) the real code but that seems like it might
+> > be reasonable.
+> 
+> Sure, let me craft it then.
+> 
+> > I would like to hear from some of the a2xx users too
+> > because this mostly affects them. On 3xx and newer you've always had the
+> > option of not having a MMU for GPU or display but I can't think of any
+> > use cases where you wouldn't want it.
+> 
+> msm8974 doesn't have (working) IOMMU driver. I also think there was an issue
+> somewhere around sdm630/660. And the wonderful msm8992/4, IIRC, also don't
+> have one.
+> 
+> Also the headless mode was quite useful for bringing up platforms, as it
+> allowed us to test GPU separately (and ofc. in some cases even w/o MMU).
+> 
+> I have both a2xx (only iMX for now) and a3xx for the tests here, on my desk.
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
