@@ -2,144 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0D174C860
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357E574C867
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 23:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjGIVSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 17:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S229739AbjGIVaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 17:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjGIVSH (ORCPT
+        with ESMTP id S229500AbjGIVaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 17:18:07 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74C3124;
-        Sun,  9 Jul 2023 14:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1688937483;
-        bh=kUuLnBpZagTGgZtfp6+QNMKvlzerXhW/GswEr/rGnGU=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=oQJndrWXNLPFkfEsbCL20lQD4wIQAtsXltvpk2M1oDAu91Vhs/CgoEFb/LiQWtiWu
-         tREFnKhizlmZM6UoZFXx2d37OZpm6dxxLwv9cFHl+0a0Wn/nnM0bpOpD3p9UkEyej3
-         eF0q5GAd7UqtqL+UeDEi1ohKdwcVWmNJKrA3p1y0=
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Sun, 09 Jul 2023 23:18:00 +0200
-Subject: [PATCH v2 3/3] dyndbg: add source filename to prefix
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230709-dyndbg-filename-v2-3-fd83beef0925@weissschuh.net>
-References: <20230709-dyndbg-filename-v2-0-fd83beef0925@weissschuh.net>
-In-Reply-To: <20230709-dyndbg-filename-v2-0-fd83beef0925@weissschuh.net>
-To:     Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688937480; l=3618;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=kUuLnBpZagTGgZtfp6+QNMKvlzerXhW/GswEr/rGnGU=;
- b=0WOHyfoM7dB2NU4GYhRWg43mpN/12HWhB5REzdPm0u9Kq+9flHZjYLLM2bPyiaoJWhqhq4z6h
- UJaqZ/JjgUaCuXm9GZ0N2ZF4xKcciDn6lFz9CJ9jrI4i1u0tplDQoRF
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 9 Jul 2023 17:30:00 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C497123
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 14:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688938199; x=1720474199;
+  h=date:from:to:cc:subject:message-id;
+  bh=f1BrwYSMNjkVVV/EOmPQt6Y8X8LATUJ4UsAQGB8JaKQ=;
+  b=Wtv0iD3Mmk7LZFXo4MyWlePRkDxP2J3CmWKpnowZbdQWWFlxyUoA4KTw
+   NVsE+5rDzxWssKeIrLsd6l8jsek3MdD5zkFQiI+6AgwT4IEfeKWkUi69u
+   exOKnxsmiaeCo9wfaqRT8camNpdazVCPONfPb+Xf1MRdlVbTAdMQoYFfF
+   fgJ2OEtV5pHWya+1FC7wmmG4W6uhKyqxDU2ldp9BRvblp+xZT4WYiMJ9a
+   parZY/m0CwmMGKBM+PDjWIlT9G//3WpmlNlMaZCrKdHjFGcy7QxbIyR06
+   HDfQSmIdig+GCDxFfWcgo4hPnu7Fp0DOLcM0vc1RP30O9fV/ZNFBBsenE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="343803391"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="343803391"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 14:29:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="790590673"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="790590673"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Jul 2023 14:29:57 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qIbye-0003Og-2E;
+        Sun, 09 Jul 2023 21:29:56 +0000
+Date:   Mon, 10 Jul 2023 05:29:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ ac442f6a364dd23bc08086f07b4bc4ef8476a9fe
+Message-ID: <202307100508.haj4Sep2-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Printing the line number without the file is of limited usefulness.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: ac442f6a364dd23bc08086f07b4bc4ef8476a9fe  Merge branch into tip/master: 'x86/core'
 
-Knowing the filename also makes it also easier to relate the logged
-information to the controlfile.
+elapsed time: 725m
 
-Example:
+configs tested: 119
+configs skipped: 9
 
-    # modprobe test_dynamic_debug
-    # echo 'file test_dynamic_debug.c =pfsl' > /proc/dynamic_debug/control
-    # echo 1 > /sys/module/test_dynamic_debug/parameters/do_prints
-    # dmesg | tail -2
-    [   71.802212] do_cats:lib/test_dynamic_debug.c:103: test_dd: doing categories
-    [   71.802227] do_levels:lib/test_dynamic_debug.c:123: test_dd: doing levels
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Acked-by: Jim Cromie <jim.cromie@gmail.com>
-Acked-by: Jason Baron <jbaron@akamai.com>
----
- Documentation/admin-guide/dynamic-debug-howto.rst | 5 +++--
- include/linux/dynamic_debug.h                     | 4 +++-
- lib/dynamic_debug.c                               | 4 ++++
- 3 files changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
-index 8dc668cc1216..0b3d39c610d9 100644
---- a/Documentation/admin-guide/dynamic-debug-howto.rst
-+++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -216,13 +216,14 @@ The flags are::
-   t    Include thread ID, or <intr>
-   m    Include module name
-   f    Include the function name
-+  s    Include the source file name
-   l    Include line number
- 
- For ``print_hex_dump_debug()`` and ``print_hex_dump_bytes()``, only
- the ``p`` flag has meaning, other flags are ignored.
- 
--Note the regexp ``^[-+=][flmpt_]+$`` matches a flags specification.
--To clear all flags at once, use ``=_`` or ``-flmpt``.
-+Note the regexp ``^[-+=][fslmpt_]+$`` matches a flags specification.
-+To clear all flags at once, use ``=_`` or ``-fslmpt``.
- 
- 
- Debug messages during Boot Process
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 061dd84d09f3..4fcbf4d4fd0a 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -37,10 +37,12 @@ struct _ddebug {
- #define _DPRINTK_FLAGS_INCL_FUNCNAME	(1<<2)
- #define _DPRINTK_FLAGS_INCL_LINENO	(1<<3)
- #define _DPRINTK_FLAGS_INCL_TID		(1<<4)
-+#define _DPRINTK_FLAGS_INCL_SOURCENAME	(1<<5)
- 
- #define _DPRINTK_FLAGS_INCL_ANY		\
- 	(_DPRINTK_FLAGS_INCL_MODNAME | _DPRINTK_FLAGS_INCL_FUNCNAME |\
--	 _DPRINTK_FLAGS_INCL_LINENO  | _DPRINTK_FLAGS_INCL_TID)
-+	 _DPRINTK_FLAGS_INCL_LINENO  | _DPRINTK_FLAGS_INCL_TID |\
-+	 _DPRINTK_FLAGS_INCL_SOURCENAME)
- 
- #if defined DEBUG
- #define _DPRINTK_FLAGS_DEFAULT _DPRINTK_FLAGS_PRINT
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 166229dfe171..6fba6423cc10 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -92,6 +92,7 @@ static const struct { unsigned flag:8; char opt_char; } opt_array[] = {
- 	{ _DPRINTK_FLAGS_PRINT, 'p' },
- 	{ _DPRINTK_FLAGS_INCL_MODNAME, 'm' },
- 	{ _DPRINTK_FLAGS_INCL_FUNCNAME, 'f' },
-+	{ _DPRINTK_FLAGS_INCL_SOURCENAME, 's' },
- 	{ _DPRINTK_FLAGS_INCL_LINENO, 'l' },
- 	{ _DPRINTK_FLAGS_INCL_TID, 't' },
- 	{ _DPRINTK_FLAGS_NONE, '_' },
-@@ -836,6 +837,9 @@ static char *__dynamic_emit_prefix(const struct _ddebug *desc, char *buf)
- 	if (desc->flags & _DPRINTK_FLAGS_INCL_FUNCNAME)
- 		pos += snprintf(buf + pos, remaining(pos), "%s:",
- 				desc->function);
-+	if (desc->flags & _DPRINTK_FLAGS_INCL_SOURCENAME)
-+		pos += snprintf(buf + pos, remaining(pos), "%s:",
-+				trim_prefix(desc->filename));
- 	if (desc->flags & _DPRINTK_FLAGS_INCL_LINENO)
- 		pos += snprintf(buf + pos, remaining(pos), "%d:",
- 				desc->lineno);
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              alldefconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230709   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         axm55xx_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                       imx_v4_v5_defconfig   clang
+arm                        neponset_defconfig   clang
+arm                  randconfig-r002-20230709   clang
+arm                  randconfig-r004-20230709   clang
+arm                  randconfig-r046-20230709   gcc  
+arm                         s5pv210_defconfig   clang
+arm                           stm32_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r025-20230709   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r033-20230709   gcc  
+hexagon              randconfig-r041-20230709   clang
+hexagon              randconfig-r045-20230709   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230709   gcc  
+i386         buildonly-randconfig-r005-20230709   gcc  
+i386         buildonly-randconfig-r006-20230709   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230709   gcc  
+i386                 randconfig-i002-20230709   gcc  
+i386                 randconfig-i003-20230709   gcc  
+i386                 randconfig-i004-20230709   gcc  
+i386                 randconfig-i005-20230709   gcc  
+i386                 randconfig-i006-20230709   gcc  
+i386                 randconfig-i011-20230709   clang
+i386                 randconfig-i012-20230709   clang
+i386                 randconfig-i013-20230709   clang
+i386                 randconfig-i014-20230709   clang
+i386                 randconfig-i015-20230709   clang
+i386                 randconfig-i016-20230709   clang
+i386                 randconfig-r001-20230709   gcc  
+i386                 randconfig-r005-20230709   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+microblaze           randconfig-r003-20230709   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ci20_defconfig   gcc  
+mips                           gcw0_defconfig   gcc  
+mips                           jazz_defconfig   gcc  
+mips                        maltaup_defconfig   clang
+nios2                               defconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r012-20230709   gcc  
+parisc               randconfig-r022-20230709   gcc  
+parisc               randconfig-r024-20230709   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      cm5200_defconfig   gcc  
+powerpc               mpc834x_itxgp_defconfig   clang
+powerpc              randconfig-r006-20230709   gcc  
+powerpc              randconfig-r021-20230709   clang
+powerpc              randconfig-r036-20230709   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230709   clang
+riscv                          rv32_defconfig   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230709   clang
+sh                               allmodconfig   gcc  
+sh                        apsh4ad0a_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                   randconfig-r035-20230709   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r014-20230709   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r034-20230709   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230709   gcc  
+x86_64       buildonly-randconfig-r002-20230709   gcc  
+x86_64       buildonly-randconfig-r003-20230709   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230709   clang
+x86_64               randconfig-x002-20230709   clang
+x86_64               randconfig-x003-20230709   clang
+x86_64               randconfig-x004-20230709   clang
+x86_64               randconfig-x005-20230709   clang
+x86_64               randconfig-x006-20230709   clang
+x86_64               randconfig-x011-20230709   gcc  
+x86_64               randconfig-x012-20230709   gcc  
+x86_64               randconfig-x013-20230709   gcc  
+x86_64               randconfig-x014-20230709   gcc  
+x86_64               randconfig-x015-20230709   gcc  
+x86_64               randconfig-x016-20230709   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r016-20230709   gcc  
+xtensa               randconfig-r031-20230709   gcc  
 
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
