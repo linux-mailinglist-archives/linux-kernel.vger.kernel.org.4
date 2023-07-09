@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0674474C555
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA32674C54D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbjGIPPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S233242AbjGIPPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbjGIPPD (ORCPT
+        with ESMTP id S233110AbjGIPOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:15:03 -0400
+        Sun, 9 Jul 2023 11:14:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBC71BE;
-        Sun,  9 Jul 2023 08:14:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE91FD8;
+        Sun,  9 Jul 2023 08:14:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BBD360C13;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E209660C17;
+        Sun,  9 Jul 2023 15:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC79C433C9;
         Sun,  9 Jul 2023 15:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAE5C433C8;
-        Sun,  9 Jul 2023 15:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915657;
-        bh=/rno5ne+sKJjosGqkgyrU/dv8tH/5zQ/xDXZ8DfHoG4=;
+        s=k20201202; t=1688915658;
+        bh=CD2lK8E/W6ZnWeWOc+3c8JjIDvvqhN1z8hw73ASqT5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zl9I92LLgMIJjG/NJgCaeLwq9ABxATqiJhAzd5smam6mJ+i/G1INegNbR0trqoy5M
-         KhYiZO75p6dGhDjMbMFAeMNzAmcBP+I8UJ7sRVnB3+rz82+iEgYSzQZxf5RussCGyV
-         P40RIbZLqS0e6nV0FCpDHUAM4vLg5kKahI/rzLgL+jXrzX9R2kiEuv+8/pr2Bfgfjk
-         v9lgWog1jg1D7S8E50XCC2Bbpasrt+0Ax80ZOc3puLi7LYUOApRT8RwEqBGsBU/AZ5
-         +7UFeZiB9Xb4z4qU9QOONKJEzsifjoMzL8XkWfw2rX74dHnIP23gckNzFA1LpvEkEY
-         f6dJzhBC90qyg==
+        b=lfnR99q7QItdk593iqluBVfJ5HiMDmdeyNmP09pLfDh82o6Md5hDm/AEDX9hCvGRI
+         bnZ3jhxPbgMVNO0DUBqOrSvzB3qCnLuJMvwZHIzILtSS7tgcRuN5iteDNIXaPJ2PpS
+         oGXv/jhl5XPKxcEtH7nw9hXsiGdQKspjOzK5I7O4brfHHgdtJ7uZop/KdSergtvOja
+         vqeb6UhZkxKsBuZg2ynZ6LnfGHPzRMUZljHTDnx25E22yw33cN43xaDytsMP1Vw8uk
+         gY4t4oRRnwZE7MZW8SPVJEOhkGdN+Vq9t3S0x242HLdQ6XbIYaXeAgHT4EkSv2qvzh
+         aLDPpjK12R29Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Balamurugan S <quic_bselvara@quicinc.com>,
+Cc:     P Praneesh <quic_ppranees@quicinc.com>,
+        Aditya Kumar Singh <quic_adisi@quicinc.com>,
         Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        ath12k@lists.infradead.org, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 12/22] wifi: ath12k: Avoid NULL pointer access during management transmit cleanup
-Date:   Sun,  9 Jul 2023 11:13:46 -0400
-Message-Id: <20230709151356.513279-12-sashal@kernel.org>
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 13/22] wifi: ath11k: fix memory leak in WMI firmware stats
+Date:   Sun,  9 Jul 2023 11:13:47 -0400
+Message-Id: <20230709151356.513279-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151356.513279-1-sashal@kernel.org>
 References: <20230709151356.513279-1-sashal@kernel.org>
@@ -60,38 +61,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Balamurugan S <quic_bselvara@quicinc.com>
+From: P Praneesh <quic_ppranees@quicinc.com>
 
-[ Upstream commit 054b5580a36e435692c203c19abdcb9f7734320e ]
+[ Upstream commit 6aafa1c2d3e3fea2ebe84c018003f2a91722e607 ]
 
-Currently 'ar' reference is not added in skb_cb.
-Though this is generally not used during transmit completion
-callbacks, on interface removal the remaining idr cleanup callback
-uses the ar pointer from skb_cb from management txmgmt_idr. Hence fill them
-during transmit call for proper usage to avoid NULL pointer dereference.
+Memory allocated for firmware pdev, vdev and beacon statistics
+are not released during rmmod.
 
-Tested-on: QCN9274 hw2.0 PCI WLAN.WBE.1.0.1-00029-QCAHKSWPL_SILICONZ-1
+Fix it by calling ath11k_fw_stats_free() function before hardware
+unregister.
 
-Signed-off-by: Balamurugan S <quic_bselvara@quicinc.com>
+While at it, avoid calling ath11k_fw_stats_free() while processing
+the firmware stats received in the WMI event because the local list
+is getting spliced and reinitialised and hence there are no elements
+in the list after splicing.
+
+Tested-on: QCN9074 hw1.0 PCI WLAN.HK.2.7.0.1-01744-QCAHKSWPL_SILICONZ-1
+
+Signed-off-by: P Praneesh <quic_ppranees@quicinc.com>
+Signed-off-by: Aditya Kumar Singh <quic_adisi@quicinc.com>
 Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230518071046.14337-1-quic_bselvara@quicinc.com
+Link: https://lore.kernel.org/r/20230606091128.14202-1-quic_adisi@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath12k/mac.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/ath/ath11k/mac.c | 1 +
+ drivers/net/wireless/ath/ath11k/wmi.c | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath12k/mac.c b/drivers/net/wireless/ath/ath12k/mac.c
-index bf7e5b6977b27..ff9f9c84129bc 100644
---- a/drivers/net/wireless/ath/ath12k/mac.c
-+++ b/drivers/net/wireless/ath/ath12k/mac.c
-@@ -4366,6 +4366,7 @@ static int ath12k_mac_mgmt_tx_wmi(struct ath12k *ar, struct ath12k_vif *arvif,
- 	int buf_id;
- 	int ret;
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 850ef35c1f75e..07efd48795d33 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -9349,6 +9349,7 @@ void ath11k_mac_destroy(struct ath11k_base *ab)
+ 		if (!ar)
+ 			continue;
  
-+	ATH12K_SKB_CB(skb)->ar = ar;
- 	spin_lock_bh(&ar->txmgmt_idr_lock);
- 	buf_id = idr_alloc(&ar->txmgmt_idr, skb, 0,
- 			   ATH12K_TX_MGMT_NUM_PENDING_MAX, GFP_ATOMIC);
++		ath11k_fw_stats_free(&ar->fw_stats);
+ 		ieee80211_free_hw(ar->hw);
+ 		pdev->ar = NULL;
+ 	}
+diff --git a/drivers/net/wireless/ath/ath11k/wmi.c b/drivers/net/wireless/ath/ath11k/wmi.c
+index b3a7d7bfe17c2..68fbddfd428a6 100644
+--- a/drivers/net/wireless/ath/ath11k/wmi.c
++++ b/drivers/net/wireless/ath/ath11k/wmi.c
+@@ -7590,6 +7590,11 @@ static void ath11k_update_stats_event(struct ath11k_base *ab, struct sk_buff *sk
+ 	rcu_read_unlock();
+ 	spin_unlock_bh(&ar->data_lock);
+ 
++	/* Since the stats's pdev, vdev and beacon list are spliced and reinitialised
++	 * at this point, no need to free the individual list.
++	 */
++	return;
++
+ free:
+ 	ath11k_fw_stats_free(&stats);
+ }
 -- 
 2.39.2
 
