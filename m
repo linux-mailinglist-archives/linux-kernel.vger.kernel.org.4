@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C674C06C
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E66874C067
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjGICak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 22:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S229763AbjGICac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 22:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGICai (ORCPT
+        with ESMTP id S229437AbjGICaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 22:30:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A16E48;
-        Sat,  8 Jul 2023 19:30:37 -0700 (PDT)
+        Sat, 8 Jul 2023 22:30:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4482D3;
+        Sat,  8 Jul 2023 19:30:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39ABF60B33;
-        Sun,  9 Jul 2023 02:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F75AC433D9;
-        Sun,  9 Jul 2023 02:30:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4718960B33;
+        Sun,  9 Jul 2023 02:30:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512C8C433C7;
+        Sun,  9 Jul 2023 02:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688869836;
-        bh=ExIY4X1/6WBZDcceYJulXe9AXws94ZhD3WBbuCHUE6E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Nac9IehWe3mHd7f4j/uWewTT/i+BFlYKfZ7gn5k9QJ9U3xityI4bJX9ZdXhOhbtn5
-         KTThX7ukwtNQCwv8P92YbIzux18NeIqXeNAP0ZSx+StByIr1piST8ZCbolBb1FnO0V
-         4TlYUvp27unXCEnzaLZvJTVtFuvWsG9G3LN5Uk+hhA1ztWrWPnRW3e5uliMyOLBVbq
-         XQXxCKKt+h8HovFU6s3NRY87n4MApHwoPIutnH0+WQ/HSDbD0KFEc/zfPVamMBdQsF
-         +0g+kU/G3mLejCoZnrNCxPwdnfKEnCvJ6zS/xqrJOx9j3u3+1ha9DmRYZ2q48aAI9L
-         mJuRm+SKqSf9A==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-9922d6f003cso438056866b.0;
-        Sat, 08 Jul 2023 19:30:36 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZV5gTxzOkvl427ciWTsEkXXkK68StNRbDW/8r9zM4Q5b5vdEru
-        WaXWFgxvPSBOngErmAo8+tEVwSVy0sVX7Bo0ZMI=
-X-Google-Smtp-Source: APBJJlF+0ioRn75qNrO9bVL/zSUpGN/gURCXjEqGnwflHc3JbebPSMWPoOFD6j8qvVU2qPB/tccSjcTMfsMyHi84C1U=
-X-Received: by 2002:a17:906:4307:b0:992:c5ad:18bc with SMTP id
- j7-20020a170906430700b00992c5ad18bcmr7156335ejm.70.1688869834776; Sat, 08 Jul
- 2023 19:30:34 -0700 (PDT)
+        s=k20201202; t=1688869828;
+        bh=ItIXstYBIf26ydCVUwNTGQ8bzQETS0wWyOugToWg6xI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rljtrtr6N1Xg7x+eEkOzkkjBTpfqiPR4gddlslCXE5hpN5FsiP7h8xeap44eWqx7D
+         jzIcl1iLR7Li9APPIOpJX3KG/0FcUGDM+/TbcejzQVXKJpZpkkyfbzC+CnHsWC15pK
+         LWqkJMdMOi4wX/qzJY6ZrnGjE8x57EyFcHyWYvJeRrgZLbveMHDhpwIKIhnCaL9p9X
+         F+HoGbug16qmmnB/iPxbKnCwEjJGtHnZtuc7EV35Aj8uBpNd548gdqyVa4OJICoGGf
+         V8y4mEfYhbSEaRcPCYy4LzXJbnUeZeHAHEByytT01QrAm5S0EsSKac3C2bW0KJMnJZ
+         ShuMY4wtatn+g==
+Date:   Sat, 8 Jul 2023 19:34:05 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/5] drm/msm/dp: remove pm_runtime_xxx() from
+ dp_power.c
+Message-ID: <fiq6zjzptjdnktdcofyqpaqf2gmddvkschebp7imlmfxatew3x@iaptll3dzfuf>
+References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+ <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-References: <20230702025708.784106-1-guoren@kernel.org> <20230704164003.GB83892@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230704164003.GB83892@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 9 Jul 2023 10:30:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
-Message-ID: <CAJF2gTTc0Gyo=K-0dCW6wu7q=Wq34hgTB69qJ7VSF_KAgKhavA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,117 +63,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 12:40=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > The irqentry_nmi_enter/exit would force the current context into in_int=
-errupt.
-> > That would trigger the kernel to dead panic, but the kdb still needs "e=
-break" to
-> > debug the kernel.
-> >
-> > Move irqentry_nmi_enter/exit to exception_enter/exit could correct hand=
-le_break
-> > of the kernel side.
->
-> This doesn't explain much if anything :/
->
-> I'm confused (probably because I don't know RISC-V very well), what's
-> EBREAK and how does it happen?
-EBREAK is just an instruction of riscv which would rise breakpoint exceptio=
-n.
+On Fri, Jul 07, 2023 at 04:52:19PM -0700, Kuogee Hsieh wrote:
+> Since both pm_runtime_resume() and pm_runtime_suspend() are not
+> populated at dp_pm_ops. Those pm_runtime_get/put() functions within
+> dp_power.c will not have any effects in addition to increase/decrease
+> power counter. Also pm_runtime_xxx() should be executed at top
+> layer.
+> 
 
+Getting/putting the runtime PM state affects the vote for the GDSC. So I
+would suggest that you move this after patch 2, to not create a gap in
+the git history of lacking GDSC votes.
 
->
-> Specifically, if EBREAK can happen inside an local_irq_disable() region,
-> then the below change is actively wrong. Any exception/interrupt that
-> can happen while local_irq_disable() must be treated like an NMI.
-When the ebreak happend out of local_irq_disable region, but
-__nmi_enter forces handle_break() into in_interupt() state. So how
-about:
+Regards,
+Bjorn
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index f910dfccbf5d..69f7043a98b9 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -18,6 +18,7 @@
- #include <linux/irq.h>
- #include <linux/kexec.h>
- #include <linux/entry-common.h>
-+#include <linux/context_tracking.h>
-
- #include <asm/asm-prototypes.h>
- #include <asm/bug.h>
-@@ -285,12 +286,18 @@ asmlinkage __visible __trap_section void
-do_trap_break(struct pt_regs *regs)
-                handle_break(regs);
-
-                irqentry_exit_to_user_mode(regs);
--       } else {
-+       } else if (in_interrupt()){
-                irqentry_state_t state =3D irqentry_nmi_enter(regs);
-
-                handle_break(regs);
-
-                irqentry_nmi_exit(regs, state);
-+       } else {
-+               enum ctx_state prev_state =3D exception_enter();
-+
-+               handle_break(regs);
-+
-+               exception_exit(prev_state);
-        }
- }
-
-
->
-> If that makes kdb unhappy, fix kdb.
->
-> > Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
-> > Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: stable@vger.kernel.org
-> > ---
-> >  arch/riscv/kernel/traps.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index efc6b649985a..ed0eb9452f9e 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/irq.h>
-> >  #include <linux/kexec.h>
-> >  #include <linux/entry-common.h>
-> > +#include <linux/context_tracking.h>
-> >
-> >  #include <asm/asm-prototypes.h>
-> >  #include <asm/bug.h>
-> > @@ -257,11 +258,11 @@ asmlinkage __visible __trap_section void do_trap_=
-break(struct pt_regs *regs)
-> >
-> >               irqentry_exit_to_user_mode(regs);
-> >       } else {
-> > -             irqentry_state_t state =3D irqentry_nmi_enter(regs);
-> > +             enum ctx_state prev_state =3D exception_enter();
-> >
-> >               handle_break(regs);
-> >
-> > -             irqentry_nmi_exit(regs, state);
-> > +             exception_exit(prev_state);
-> >       }
-> >  }
-> >
-> > --
-> > 2.36.1
-> >
-
-
-
---
-Best Regards
- Guo Ren
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_power.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
+> index 5cb84ca..ed2f62a 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_power.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_power.c
+> @@ -152,8 +152,6 @@ int dp_power_client_init(struct dp_power *dp_power)
+>  
+>  	power = container_of(dp_power, struct dp_power_private, dp_power);
+>  
+> -	pm_runtime_enable(power->dev);
+> -
+>  	return dp_power_clk_init(power);
+>  }
+>  
+> @@ -162,8 +160,6 @@ void dp_power_client_deinit(struct dp_power *dp_power)
+>  	struct dp_power_private *power;
+>  
+>  	power = container_of(dp_power, struct dp_power_private, dp_power);
+> -
+> -	pm_runtime_disable(power->dev);
+>  }
+>  
+>  int dp_power_init(struct dp_power *dp_power)
+> @@ -173,11 +169,7 @@ int dp_power_init(struct dp_power *dp_power)
+>  
+>  	power = container_of(dp_power, struct dp_power_private, dp_power);
+>  
+> -	pm_runtime_get_sync(power->dev);
+> -
+>  	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
+> -	if (rc)
+> -		pm_runtime_put_sync(power->dev);
+>  
+>  	return rc;
+>  }
+> @@ -189,7 +181,6 @@ int dp_power_deinit(struct dp_power *dp_power)
+>  	power = container_of(dp_power, struct dp_power_private, dp_power);
+>  
+>  	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
+> -	pm_runtime_put_sync(power->dev);
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.7.4
+> 
