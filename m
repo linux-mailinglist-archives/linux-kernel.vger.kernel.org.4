@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF44E74C59C
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA15774C59F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbjGIPRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S233574AbjGIPRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232985AbjGIPPt (ORCPT
+        with ESMTP id S233564AbjGIPQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:15:49 -0400
+        Sun, 9 Jul 2023 11:16:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB01C18F;
-        Sun,  9 Jul 2023 08:15:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D202E26B5;
+        Sun,  9 Jul 2023 08:15:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80CF360C09;
-        Sun,  9 Jul 2023 15:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E9FC433C9;
-        Sun,  9 Jul 2023 15:15:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD8B060BFA;
+        Sun,  9 Jul 2023 15:15:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB30C433CD;
+        Sun,  9 Jul 2023 15:15:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915705;
-        bh=xbH6wIwOZG5M2DaP0ZJgalD+ZaD9fshGC5PX0Sdww5I=;
+        s=k20201202; t=1688915710;
+        bh=tuiAPWSGsj8CpKlD4MIYlrZCU2z67dmDNxy4V+3MrIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kXpJxJPd0BDQz2GfcjEcAO2Or0OLnnmiKwHUc/SwDSaGZOfX0JEkevBah/02x2E/k
-         5hbdLPkADcPH6g29iriRKww9AChQU827rvsOoPCv+L/T4IB88Xrp98HKszeZqo3H6e
-         gXy1lnKJTxFGzh4iYUSmSbOXKA5NvWcoMnjd37uNl3I+bCfLZBJIzEzD2NRqrR+nZ5
-         O25D9QZL8+PAee+FUuzfEkmJsC42caV4vgsnxLhwL6bZMUqg+x6vQisMwwxW2IP5Hl
-         LPUOsdEhWI6YNJEO1nLG7xy4S+ZKfmvHOhWsBQoqhaqnaNpmm2pzoCh8IybNWIsc+r
-         t/DSrU+qKqQnw==
+        b=P/+5R8OwQ/My/fN8JP/Ir75T5FwFpmC/UgT53e5VBIKUYRDLkF+Is6jEM9STwOb2S
+         4ePiBZcNWTOBGVk7PdfKiz14jZR7R8aPo+23Au8z2zzL1otbdGNKQSZL8JiZY1BKhw
+         sg2BWnbeVFOWOhBZUq3rtGljp1akV8sdxHgfuivT4bAH1/0VkEkldMW7xTeL6ZP3Hi
+         RUFufv6RZvX+7Skce5ucADoFoSKe6KpO7WUHMnUOVPCPhcsfLpt9nJ7+3lOGa85RR7
+         Af5+38eki2CAXbej5fRJhQ3oqQdYB/JBs5GcYIGZWi/H7BrksTASeJRS6gNBKoUS7m
+         IZyZo6tzJWh3w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Simon Horman <simon.horman@corigine.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
+Cc:     Petr Oros <poros@redhat.com>,
+        Pavan Chebbi <pavan.chebbi@broadcom.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, kgugala@antmicro.com,
-        mholenko@antmicro.com, joel@jms.id.au, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 11/18] net: ethernet: litex: add support for 64 bit stats
-Date:   Sun,  9 Jul 2023 11:14:39 -0400
-Message-Id: <20230709151446.513549-11-sashal@kernel.org>
+        edumazet@google.com, pabeni@redhat.com, jiri@resnulli.us,
+        jacob.e.keller@intel.com, moshe@nvidia.com,
+        michal.wilczynski@intel.com, vikas.gupta@broadcom.com,
+        shayd@nvidia.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 12/18] devlink: report devlink_port_type_warn source device
+Date:   Sun,  9 Jul 2023 11:14:40 -0400
+Message-Id: <20230709151446.513549-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151446.513549-1-sashal@kernel.org>
 References: <20230709151446.513549-1-sashal@kernel.org>
@@ -63,80 +64,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+From: Petr Oros <poros@redhat.com>
 
-[ Upstream commit 18da174d865a87d47d2f33f5b0a322efcf067728 ]
+[ Upstream commit a52305a81d6bb74b90b400dfa56455d37872fe4b ]
 
-Implement 64 bit per cpu stats to fix the overflow of netdev->stats
-on 32 bit platforms. To simplify the code, we use net core
-pcpu_sw_netstats infrastructure. One small drawback is some memory
-overhead because litex uses just one queue, but we allocate the
-counters per cpu.
+devlink_port_type_warn is scheduled for port devlink and warning
+when the port type is not set. But from this warning it is not easy
+found out which device (driver) has no devlink port set.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Acked-by: Gabriel Somlo <gsomlo@gmail.com>
-Link: https://lore.kernel.org/r/20230614162035.300-1-jszhang@kernel.org
+[ 3709.975552] Type was not set for devlink port.
+[ 3709.975579] WARNING: CPU: 1 PID: 13092 at net/devlink/leftover.c:6775 devlink_port_type_warn+0x11/0x20
+[ 3709.993967] Modules linked in: openvswitch nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nfnetlink bluetooth rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache netfs vhost_net vhost vhost_iotlb tap tun bridge stp llc qrtr intel_rapl_msr intel_rapl_common i10nm_edac nfit libnvdimm x86_pkg_temp_thermal mlx5_ib intel_powerclamp coretemp dell_wmi ledtrig_audio sparse_keymap ipmi_ssif kvm_intel ib_uverbs rfkill ib_core video kvm iTCO_wdt acpi_ipmi intel_vsec irqbypass ipmi_si iTCO_vendor_support dcdbas ipmi_devintf mei_me ipmi_msghandler rapl mei intel_cstate isst_if_mmio isst_if_mbox_pci dell_smbios intel_uncore isst_if_common i2c_i801 dell_wmi_descriptor wmi_bmof i2c_smbus intel_pch_thermal pcspkr acpi_power_meter xfs libcrc32c sd_mod sg nvme_tcp mgag200 i2c_algo_bit nvme_fabrics drm_shmem_helper drm_kms_helper nvme syscopyarea ahci sysfillrect sysimgblt nvme_core fb_sys_fops crct10dif_pclmul libahci mlx5_core sfc crc32_pclmul nvme_common drm
+[ 3709.994030]  crc32c_intel mtd t10_pi mlxfw libata tg3 mdio megaraid_sas psample ghash_clmulni_intel pci_hyperv_intf wmi dm_multipath sunrpc dm_mirror dm_region_hash dm_log dm_mod be2iscsi bnx2i cnic uio cxgb4i cxgb4 tls libcxgbi libcxgb qla4xxx iscsi_boot_sysfs iscsi_tcp libiscsi_tcp libiscsi scsi_transport_iscsi fuse
+[ 3710.108431] CPU: 1 PID: 13092 Comm: kworker/1:1 Kdump: loaded Not tainted 5.14.0-319.el9.x86_64 #1
+[ 3710.108435] Hardware name: Dell Inc. PowerEdge R750/0PJ80M, BIOS 1.8.2 09/14/2022
+[ 3710.108437] Workqueue: events devlink_port_type_warn
+[ 3710.108440] RIP: 0010:devlink_port_type_warn+0x11/0x20
+[ 3710.108443] Code: 84 76 fe ff ff 48 c7 03 20 0e 1a ad 31 c0 e9 96 fd ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 48 c7 c7 18 24 4e ad e8 ef 71 62 ff <0f> 0b c3 cc cc cc cc 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 f6 87
+[ 3710.108445] RSP: 0018:ff3b6d2e8b3c7e90 EFLAGS: 00010282
+[ 3710.108447] RAX: 0000000000000000 RBX: ff366d6580127080 RCX: 0000000000000027
+[ 3710.108448] RDX: 0000000000000027 RSI: 00000000ffff86de RDI: ff366d753f41f8c8
+[ 3710.108449] RBP: ff366d658ff5a0c0 R08: ff366d753f41f8c0 R09: ff3b6d2e8b3c7e18
+[ 3710.108450] R10: 0000000000000001 R11: 0000000000000023 R12: ff366d753f430600
+[ 3710.108451] R13: ff366d753f436900 R14: 0000000000000000 R15: ff366d753f436905
+[ 3710.108452] FS:  0000000000000000(0000) GS:ff366d753f400000(0000) knlGS:0000000000000000
+[ 3710.108453] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3710.108454] CR2: 00007f1c57bc74e0 CR3: 000000111d26a001 CR4: 0000000000773ee0
+[ 3710.108456] PKRU: 55555554
+[ 3710.108457] Call Trace:
+[ 3710.108458]  <TASK>
+[ 3710.108459]  process_one_work+0x1e2/0x3b0
+[ 3710.108466]  ? rescuer_thread+0x390/0x390
+[ 3710.108468]  worker_thread+0x50/0x3a0
+[ 3710.108471]  ? rescuer_thread+0x390/0x390
+[ 3710.108473]  kthread+0xdd/0x100
+[ 3710.108477]  ? kthread_complete_and_exit+0x20/0x20
+[ 3710.108479]  ret_from_fork+0x1f/0x30
+[ 3710.108485]  </TASK>
+[ 3710.108486] ---[ end trace 1b4b23cd0c65d6a0 ]---
+
+After patch:
+[  402.473064] ice 0000:41:00.0: Type was not set for devlink port.
+[  402.473064] ice 0000:41:00.1: Type was not set for devlink port.
+
+Signed-off-by: Petr Oros <poros@redhat.com>
+Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20230615095447.8259-1-poros@redhat.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/litex/litex_liteeth.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ net/core/devlink.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/litex/litex_liteeth.c b/drivers/net/ethernet/litex/litex_liteeth.c
-index 35f24e0f09349..ffa96059079c6 100644
---- a/drivers/net/ethernet/litex/litex_liteeth.c
-+++ b/drivers/net/ethernet/litex/litex_liteeth.c
-@@ -78,8 +78,7 @@ static int liteeth_rx(struct net_device *netdev)
- 	memcpy_fromio(data, priv->rx_base + rx_slot * priv->slot_size, len);
- 	skb->protocol = eth_type_trans(skb, netdev);
+diff --git a/net/core/devlink.c b/net/core/devlink.c
+index 2aa77d4b80d0a..5a4a4b34ac15c 100644
+--- a/net/core/devlink.c
++++ b/net/core/devlink.c
+@@ -9826,7 +9826,10 @@ EXPORT_SYMBOL_GPL(devlink_free);
  
--	netdev->stats.rx_packets++;
--	netdev->stats.rx_bytes += len;
-+	dev_sw_netstats_rx_add(netdev, len);
- 
- 	return netif_rx(skb);
- 
-@@ -185,8 +184,7 @@ static netdev_tx_t liteeth_start_xmit(struct sk_buff *skb,
- 	litex_write16(priv->base + LITEETH_READER_LENGTH, skb->len);
- 	litex_write8(priv->base + LITEETH_READER_START, 1);
- 
--	netdev->stats.tx_bytes += skb->len;
--	netdev->stats.tx_packets++;
-+	dev_sw_netstats_tx_add(netdev, 1, skb->len);
- 
- 	priv->tx_slot = (priv->tx_slot + 1) % priv->num_tx_slots;
- 	dev_kfree_skb_any(skb);
-@@ -194,9 +192,17 @@ static netdev_tx_t liteeth_start_xmit(struct sk_buff *skb,
- 	return NETDEV_TX_OK;
+ static void devlink_port_type_warn(struct work_struct *work)
+ {
+-	WARN(true, "Type was not set for devlink port.");
++	struct devlink_port *port = container_of(to_delayed_work(work),
++						 struct devlink_port,
++						 type_warn_dw);
++	dev_warn(port->devlink->dev, "Type was not set for devlink port.");
  }
  
-+static void
-+liteeth_get_stats64(struct net_device *netdev, struct rtnl_link_stats64 *stats)
-+{
-+	netdev_stats_to_stats64(stats, &netdev->stats);
-+	dev_fetch_sw_netstats(stats, netdev->tstats);
-+}
-+
- static const struct net_device_ops liteeth_netdev_ops = {
- 	.ndo_open		= liteeth_open,
- 	.ndo_stop		= liteeth_stop,
-+	.ndo_get_stats64	= liteeth_get_stats64,
- 	.ndo_start_xmit         = liteeth_start_xmit,
- };
- 
-@@ -242,6 +248,11 @@ static int liteeth_probe(struct platform_device *pdev)
- 	priv->netdev = netdev;
- 	priv->dev = &pdev->dev;
- 
-+	netdev->tstats = devm_netdev_alloc_pcpu_stats(&pdev->dev,
-+						      struct pcpu_sw_netstats);
-+	if (!netdev->tstats)
-+		return -ENOMEM;
-+
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return irq;
+ static bool devlink_port_type_should_warn(struct devlink_port *devlink_port)
 -- 
 2.39.2
 
