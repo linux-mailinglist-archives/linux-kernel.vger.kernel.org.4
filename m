@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E74874C638
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD9774C63F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbjGIPcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S230399AbjGIPmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbjGIPbx (ORCPT
+        with ESMTP id S229868AbjGIPmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:31:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B341BDB
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 08:31:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 9 Jul 2023 11:42:39 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB297CE
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 08:42:38 -0700 (PDT)
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8389060BCC
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 15:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD09C433CA
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 15:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688916670;
-        bh=sJQ626PfB3mNnXp3+jOn70AE5kQgiQFZoWeqyBTfR5o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HYkcapqJ1hUrPmtEVi8ILMANPAhf0Z9h3xTi8Hvg5JRI7AXTI4FfNVd059sWMRwNL
-         /9mkhVXdurtS5OKvy9bzkeAyGy/bm0aHVGdDrNTCWEeMABqhDM3N/IVR+YaMHVoEG+
-         ctskZ/FVDfh+BXmN/d39hEttkahCmuLuw59DCW3atyPN0y5f4NdH+4TxgCYfsBJL+s
-         MEo20PnMer/0vJ3M5nbEjhLrhZJAuLGxaIImoyUqWmRR4jNBFqiGUQujR/BxKNlJ7D
-         zk0tDIfOEHKKRmfV3h5HIwqGpcmKPjNEiSbPZ3+2IXRCnlpQa7zhy2kseOl1SUIA2F
-         wSBLbYLCI1g3Q==
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so3918127f8f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 08:31:10 -0700 (PDT)
-X-Gm-Message-State: ABy/qLYVuxIaBPlTZqjRMr6Paii8oXBAzvgIWyB/l7ch5sc8tefY5AZk
-        yhGygAHxPW0Ys4G1a5bTr+HaStURlEZ8mpjFhj8=
-X-Google-Smtp-Source: APBJJlEYmFhvnAuchoWHaiYQQ6v9RXtZhF0CprZCfzIiQe88fn/aqQylldopjq5cdoOm8yuKLEEj4TbZ8ximqK+hB5I=
-X-Received: by 2002:a5d:6b49:0:b0:314:327:2ece with SMTP id
- x9-20020a5d6b49000000b0031403272ecemr8688188wrw.61.1688916669116; Sun, 09 Jul
- 2023 08:31:09 -0700 (PDT)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 34F333F179
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 15:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688917356;
+        bh=eQ2Re41328Au+efAy/olTNwiwLMQnq+SolRCbI7Z9nk=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=FCuyp/ShQ8vSKQQGhljoTEWQaLR9FlKddB8nGHmXMFIxkKlIDoiwiGbVhRUyZ7VYQ
+         PedCf9Q21jQx/SiXtfugr0dYRbq1pJLpw1x8Og7DchvGwLzdoOpaNP5U6SyDWgRnAy
+         4HnX7hLB5HWcavvmZvd/edUO/WesC1tLVNJShegsgcDIZaQAc9j9/cl/QxqTSRLCkG
+         lV1r3BRFNIX/vkJPg/ltw851g/cdEVNTUrU0REPH6lq7QhLix386n1EsCu2DXZB6y8
+         DghZxMKY865L4WxsJzZAs+wsJZXkb7wqcknkFyRTiDUtXsmATAyueGT70irbOgXMqU
+         TBb66hWi++9Ng==
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-55bf3002ac7so5481404a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 08:42:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688917354; x=1691509354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eQ2Re41328Au+efAy/olTNwiwLMQnq+SolRCbI7Z9nk=;
+        b=QJpRQ1WBF2GsCr1x+DYQ6FcPTzbH6yu/ypHGHOyIXkG2JdHIuXPIdwo6xp7pGlPirO
+         aLoXbiCK5UOBmpxn35W8EJo12fShl2J/IKQZwAMOtwDKg/sFmqfbXijDDzA434B1fg4+
+         hlhHFVxOnE3ewxh+PxBV4swJ9N4WkozHasxCSHNkJeFjAyU2TDnhlnR4wsaa1K+qyON5
+         9VjASGqPx5tjUO+NNgg5GtwKQv5jx28t5O8N7X3G6HJaVZnrzfFQoK+obxK9Cz/mYacY
+         VD77OdHIvJrHDELS9ZbXVPMQXhNgn3+y7vxefYLypNXzXuv+do9jop5qYxHGopV8pLya
+         LESQ==
+X-Gm-Message-State: ABy/qLbfdYty+scyKzur1zXP0NK5Vv1locfDSs+er3jTnFLuS0EHKZ8M
+        c831kJ73RLyvkh8JBJNy/0jlHx8YmPMARkVmu8y1qypffPQMjT/hpwjhz9NXSt/vzmCrLTqZ3K5
+        i30A5H7yGrFhFse33kLFpQ850P19iPtxcWe7blcUDEbOL4bC3/VyUbadSxQ==
+X-Received: by 2002:a17:90a:2e82:b0:263:e814:5d0f with SMTP id r2-20020a17090a2e8200b00263e8145d0fmr10758230pjd.41.1688917354214;
+        Sun, 09 Jul 2023 08:42:34 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGsEg78pL43U82H6CgYr3QEPQ95eRNBYMptmzATWoIDcYOp+ZNDxNuLrDhBOrn8grnrP2mD7D2In1uL+SWZ4VI=
+X-Received: by 2002:a17:90a:2e82:b0:263:e814:5d0f with SMTP id
+ r2-20020a17090a2e8200b00263e8145d0fmr10758218pjd.41.1688917353874; Sun, 09
+ Jul 2023 08:42:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <MEYP282MB2597CD6E861D659E3218148DD933A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
-In-Reply-To: <MEYP282MB2597CD6E861D659E3218148DD933A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 9 Jul 2023 23:30:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5P_NgJ5kTQ1iO-eL577D=-COjEZ6u9_OgvrHpWJLqsXw@mail.gmail.com>
-Message-ID: <CAAhV-H5P_NgJ5kTQ1iO-eL577D=-COjEZ6u9_OgvrHpWJLqsXw@mail.gmail.com>
-Subject: Re: [PATCH] loongarch: Make CONFIG_CMDLINE work with
- CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER
-To:     Dong Zhihong <donmor3000@hotmail.com>
-Cc:     kernel@xen0n.name, ardb@kernel.org, tangyouling@loongson.cn,
-        zhoubinbin@loongson.cn, yangtiezhu@loongson.cn, tglx@linutronix.de,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230703162509.77828-1-koba.ko@canonical.com> <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
+ <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAJB-X+UB+eYoYOOVH2bqnnVEJcLrxaj5A7-zyfgBM7hOf4y8zw@mail.gmail.com>
+ <SJ1PR11MB608383A5841E4AE8D3A64B79FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAJB-X+VFYyTiQ7yhX=Z8-Q4QW-GMsGXMuEWxLjuoZ1aDB98qXg@mail.gmail.com>
+ <SJ1PR11MB60832C7FFEF98EE33F255B9DFC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CY8PR11MB713495A12DE47EDC3B7C5E20892CA@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <CAJB-X+X_KW=T4WOe2AS3SFFQKjt7VcQRFUCGYFcjipi5-aXdrw@mail.gmail.com> <CY8PR11MB71346D8945AAC57D3614CBE2892DA@CY8PR11MB7134.namprd11.prod.outlook.com>
+In-Reply-To: <CY8PR11MB71346D8945AAC57D3614CBE2892DA@CY8PR11MB7134.namprd11.prod.outlook.com>
+From:   Koba Ko <koba.ko@canonical.com>
+Date:   Sun, 9 Jul 2023 23:42:22 +0800
+Message-ID: <CAJB-X+Xe9H0O=-2o3hL+pz=aGdSRYX+hD0bAxUS11CZDRVZLKg@mail.gmail.com>
+Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 9, 2023 at 9:33=E2=80=AFPM Dong Zhihong <donmor3000@hotmail.com=
-> wrote:
+On Fri, Jul 7, 2023 at 11:34=E2=80=AFAM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
+wrote:
 >
-> This patch tends to fix broken CONFIG_CMDLINE, which is not working with
-> CONFIG_CMDLINE_EXTEND or CONFIG_CMDLINE_BOOTLOADER. Some code is absent i=
-n
-> arch/loongarch/kernel/setup.c, which should handle built-in command lines
-> in CONFIG_CMDLINE. The absence of such code causes CONFIG_CMDLINE not
-> working if CONFIG_CMDLINE_EXTEND or CONFIG_CMDLINE_BOOTLOADER is set to Y=
-.
-> CONFIG_CMDLINE_FORCE is not affected.
-How to reproduce? If you use UEFI firmware, this is handled in
-drivers/firmware/efi/libstub/efi-stub.c; if you use non-UEFI firmware,
-this is handled in drivers/of/fdt.c.
+> > From: Koba Ko <koba.ko@canonical.com>
+> > Sent: Friday, July 7, 2023 1:41 AM
+> > To: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>
+> > ...
+> > > I made a patch below to skip all these absent memory controllers
+> > > https://lore.kernel.org/linux-edac/20230706134216.37044-1-qiuxu.zhuo@=
+i
+> > > ntel.com/T/#u @Koba Ko, could you please verify the patch from the
+> > > link above on your workstation? Thanks!
+> >
+> > Here's dmesg patched(Ref. 1). didn't find the previous message, `EDAC
+> > DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffffffff)`
+> >
+> > Ref. 1,
+> > https://drive.google.com/drive/folders/1xym9JgZZgaJ3EqtP4ccRcVeQYoJKmV
+> > lp?usp=3Dsharing
+>
+> Thanks for the verification.
+> Your log showed that the patch worked well.
 
-Huacai
+please,
+tested-by: koba.ko@canonical.com
 >
-> Signed-off-by: Dong Zhihong <donmor3000@hotmail.com>
-> ---
->  arch/loongarch/kernel/setup.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.=
-c
-> index 78a00359bde3..504218b94879 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -335,6 +335,22 @@ static void __init bootcmdline_init(char **cmdline_p=
-)
->         }
->  #endif
->
-> +#ifdef CONFIG_CMDLINE
-> +       /*
-> +        * If CONFIG_CMDLINE_BOOTLOADER is enabled then we use thei built=
--in
-> +        * command line if no command line given, or we append given comm=
-and
-> +        * line to the built-in one if CONFIG_CMDLINE_EXTEND is enabled.
-> +        */
-> +       if (IS_ENABLED(CONFIG_CMDLINE_EXTEND)) {
-> +               strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_S=
-IZE);
-> +               strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
-> +               strlcat(boot_command_line, init_command_line, COMMAND_LIN=
-E_SIZE);
-> +       }
-> +
-> +       if (IS_ENABLED(CONFIG_CMDLINE_BOOTLOADER) && !boot_command_line[0=
-])
-> +               strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_S=
-IZE);
-> +#endif
-> +
->  out:
->         *cmdline_p =3D boot_command_line;
->  }
-> --
-> 2.25.1
->
->
+> -Qiuxu
