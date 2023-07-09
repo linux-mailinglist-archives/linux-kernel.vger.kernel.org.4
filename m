@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF8574C5C2
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E480474C58E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbjGIPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S230114AbjGIPRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbjGIPS2 (ORCPT
+        with ESMTP id S233156AbjGIPPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:18:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A8A272A;
-        Sun,  9 Jul 2023 08:16:01 -0700 (PDT)
+        Sun, 9 Jul 2023 11:15:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D712691;
+        Sun,  9 Jul 2023 08:14:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 464DD60C01;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1F8E60C1E;
+        Sun,  9 Jul 2023 15:14:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29DCAC43391;
         Sun,  9 Jul 2023 15:14:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB18C433CB;
-        Sun,  9 Jul 2023 15:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915693;
-        bh=s/Cb8Zm+6Qly1ZMy/ulzm3Pf5rMTvuUA8VEfjYDv+pQ=;
+        s=k20201202; t=1688915695;
+        bh=cYERX19L3V+eUJUB67jPFLLDmLp9pyRhGPVzzYToiIw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nyn/YpOsg5LQ5nK6pKEHK7ZhI36mOhQPWp1ODyz31GwVa3sxv+A1sjAhg2rf+uvK8
-         kA+VpEEkjg33OsBhBJOcuM7xmSLqdk8SLvRt6J6xlkuvMo91gkvG3z/pMYZ2u8ECBW
-         PXm9hF4DolcEBg27+6fvWyp+l8JVtp3i/6qcgQ7XlqiuBA/29Pke2CEuAu2UuVgoZ0
-         HYSjcyu0W5jcCUM4aLFS5Aayl3ql67xHR1F50tA68bdOxI51A5lxTQj0BMOXOI1fDp
-         XHKxORIzeIRli3r/vpvSfaADHXLIAR6qQuyaLxvuJ53+GuXsOwGU1fs75O2bRPLa0J
-         H7cwNpDscLfKg==
+        b=mUQtom4w/vBlZCJ09IHYL8khv/OJxssPbEbC2AyiD/28WyblRN4hiTLI06X0gMZ6e
+         EE7N2trlW5oDWy79dIpUajIlld0oTTrnh6qjwQn5o/JYU/TI7/DK8VjN7hEP+3x5eR
+         OKyh813P9d/5M8LzQcXNBLRIX+GYnJ7gK/B+RRYdm5fMnX9j62Vz7WOx8iQk0dhQix
+         O9kO+ls1jCvW+btM0zNDfHmEDWJyLW3+rpSiBQWtgiZ0+rZ9c7EdMtaWAeKXe2Los0
+         rGFvXxa1xibwqyNZpQlhxNAuVFelNG7lbE55Av7tQ30NjxQoo+w0ZW5FMvF1+dXFAb
+         cg9f2G50G2yKw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 03/18] wifi: rtw89: 8851be: add 8851BE PCI entry and fill PCI capabilities
-Date:   Sun,  9 Jul 2023 11:14:31 -0400
-Message-Id: <20230709151446.513549-3-sashal@kernel.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, andi.shyti@kernel.org,
+        broonie@kernel.org, krzysztof.kozlowski@linaro.org,
+        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.1 04/18] spi: s3c64xx: change polling mode to optional
+Date:   Sun,  9 Jul 2023 11:14:32 -0400
+Message-Id: <20230709151446.513549-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151446.513549-1-sashal@kernel.org>
 References: <20230709151446.513549-1-sashal@kernel.org>
@@ -58,114 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ping-Ke Shih <pkshih@realtek.com>
+From: Jaewon Kim <jaewon02.kim@samsung.com>
 
-[ Upstream commit 99ff8da56322cda9eb9b37021e27b127c2d1cad8 ]
+[ Upstream commit d1a7718ee8dbcc488d3243d52e19c755123e0024 ]
 
-Add PCI entry to 8851BE with its device ID 10ec:b851, also fill PCI info
-according to its capabilities.
+Previously, Polling mode was supported as quirk for SOC without DMA.
+To provide more flexible support for polling mode, it changed to polling
+mode when the 'dmas' property is not present in the devicetree, rather than
+using a quirk.
 
-Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20230421024551.29994-3-pkshih@realtek.com
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org
+Link: https://lore.kernel.org/r/20230502062813.112434-2-jaewon02.kim@samsung.com
+Signed-off-by: Mark Brown <broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/realtek/rtw89/rtw8851be.c    | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
- create mode 100644 drivers/net/wireless/realtek/rtw89/rtw8851be.c
+ drivers/spi/spi-s3c64xx.c                 | 4 ++--
+ include/linux/platform_data/spi-s3c64xx.h | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtw89/rtw8851be.c b/drivers/net/wireless/realtek/rtw89/rtw8851be.c
-new file mode 100644
-index 0000000000000..0f7711c50bd15
---- /dev/null
-+++ b/drivers/net/wireless/realtek/rtw89/rtw8851be.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+/* Copyright(c) 2022-2023  Realtek Corporation
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+
-+#include "pci.h"
-+#include "reg.h"
-+#include "rtw8851b.h"
-+
-+static const struct rtw89_pci_info rtw8851b_pci_info = {
-+	.txbd_trunc_mode	= MAC_AX_BD_TRUNC,
-+	.rxbd_trunc_mode	= MAC_AX_BD_TRUNC,
-+	.rxbd_mode		= MAC_AX_RXBD_PKT,
-+	.tag_mode		= MAC_AX_TAG_MULTI,
-+	.tx_burst		= MAC_AX_TX_BURST_2048B,
-+	.rx_burst		= MAC_AX_RX_BURST_128B,
-+	.wd_dma_idle_intvl	= MAC_AX_WD_DMA_INTVL_256NS,
-+	.wd_dma_act_intvl	= MAC_AX_WD_DMA_INTVL_256NS,
-+	.multi_tag_num		= MAC_AX_TAG_NUM_8,
-+	.lbc_en			= MAC_AX_PCIE_ENABLE,
-+	.lbc_tmr		= MAC_AX_LBC_TMR_2MS,
-+	.autok_en		= MAC_AX_PCIE_DISABLE,
-+	.io_rcy_en		= MAC_AX_PCIE_DISABLE,
-+	.io_rcy_tmr		= MAC_AX_IO_RCY_ANA_TMR_6MS,
-+
-+	.init_cfg_reg		= R_AX_PCIE_INIT_CFG1,
-+	.txhci_en_bit		= B_AX_TXHCI_EN,
-+	.rxhci_en_bit		= B_AX_RXHCI_EN,
-+	.rxbd_mode_bit		= B_AX_RXBD_MODE,
-+	.exp_ctrl_reg		= R_AX_PCIE_EXP_CTRL,
-+	.max_tag_num_mask	= B_AX_MAX_TAG_NUM,
-+	.rxbd_rwptr_clr_reg	= R_AX_RXBD_RWPTR_CLR,
-+	.txbd_rwptr_clr2_reg	= 0,
-+	.dma_stop1		= {R_AX_PCIE_DMA_STOP1, B_AX_TX_STOP1_MASK_V1},
-+	.dma_stop2		= {0},
-+	.dma_busy1		= {R_AX_PCIE_DMA_BUSY1, DMA_BUSY1_CHECK_V1},
-+	.dma_busy2_reg		= 0,
-+	.dma_busy3_reg		= R_AX_PCIE_DMA_BUSY1,
-+
-+	.rpwm_addr		= R_AX_PCIE_HRPWM,
-+	.cpwm_addr		= R_AX_CPWM,
-+	.tx_dma_ch_mask		= BIT(RTW89_TXCH_ACH4) | BIT(RTW89_TXCH_ACH5) |
-+				  BIT(RTW89_TXCH_ACH6) | BIT(RTW89_TXCH_ACH7) |
-+				  BIT(RTW89_TXCH_CH10) | BIT(RTW89_TXCH_CH11),
-+	.bd_idx_addr_low_power	= NULL,
-+	.dma_addr_set		= &rtw89_pci_ch_dma_addr_set,
-+	.bd_ram_table		= &rtw89_bd_ram_table_single,
-+
-+	.ltr_set		= rtw89_pci_ltr_set,
-+	.fill_txaddr_info	= rtw89_pci_fill_txaddr_info,
-+	.config_intr_mask	= rtw89_pci_config_intr_mask,
-+	.enable_intr		= rtw89_pci_enable_intr,
-+	.disable_intr		= rtw89_pci_disable_intr,
-+	.recognize_intrs	= rtw89_pci_recognize_intrs,
-+};
-+
-+static const struct rtw89_driver_info rtw89_8851be_info = {
-+	.chip = &rtw8851b_chip_info,
-+	.bus = {
-+		.pci = &rtw8851b_pci_info,
-+	},
-+};
-+
-+static const struct pci_device_id rtw89_8851be_id_table[] = {
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_REALTEK, 0xb851),
-+		.driver_data = (kernel_ulong_t)&rtw89_8851be_info,
-+	},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(pci, rtw89_8851be_id_table);
-+
-+static struct pci_driver rtw89_8851be_driver = {
-+	.name		= "rtw89_8851be",
-+	.id_table	= rtw89_8851be_id_table,
-+	.probe		= rtw89_pci_probe,
-+	.remove		= rtw89_pci_remove,
-+	.driver.pm	= &rtw89_pm_ops,
-+};
-+module_pci_driver(rtw89_8851be_driver);
-+
-+MODULE_AUTHOR("Realtek Corporation");
-+MODULE_DESCRIPTION("Realtek 802.11ax wireless 8851BE driver");
-+MODULE_LICENSE("Dual BSD/GPL");
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 71d324ec9a70a..66ac94022a1ba 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -19,7 +19,6 @@
+ #include <linux/platform_data/spi-s3c64xx.h>
+ 
+ #define MAX_SPI_PORTS		12
+-#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
+ #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
+ #define AUTOSUSPEND_TIMEOUT	2000
+ 
+@@ -116,7 +115,7 @@
+ #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+ 
+ #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+-#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
++#define is_polling(x)	(x->cntrlr_info->polling)
+ 
+ #define RXBUSY    (1<<2)
+ #define TXBUSY    (1<<3)
+@@ -1068,6 +1067,7 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
+ 	}
+ 
+ 	sci->no_cs = of_property_read_bool(dev->of_node, "no-cs-readback");
++	sci->polling = !of_property_present(dev->of_node, "dmas");
+ 
+ 	return sci;
+ }
+diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
+index 5df1ace6d2c98..cb7b8ddc899fb 100644
+--- a/include/linux/platform_data/spi-s3c64xx.h
++++ b/include/linux/platform_data/spi-s3c64xx.h
+@@ -35,6 +35,7 @@ struct s3c64xx_spi_info {
+ 	int src_clk_nr;
+ 	int num_cs;
+ 	bool no_cs;
++	bool polling;
+ 	int (*cfg_gpio)(void);
+ };
+ 
 -- 
 2.39.2
 
