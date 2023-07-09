@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B54D74C505
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B608774C507
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbjGIPNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
+        id S233068AbjGIPNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjGIPNV (ORCPT
+        with ESMTP id S232986AbjGIPN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:13:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3847E1B3;
-        Sun,  9 Jul 2023 08:13:14 -0700 (PDT)
+        Sun, 9 Jul 2023 11:13:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6044E4A;
+        Sun,  9 Jul 2023 08:13:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5484460BC5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A4E60BEC;
+        Sun,  9 Jul 2023 15:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335E2C433C8;
         Sun,  9 Jul 2023 15:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B5DC433C7;
-        Sun,  9 Jul 2023 15:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915592;
-        bh=jAp8mWG+a5X5KuvI4qyYtYYgwdNfhGImxiJ+pfJksXs=;
+        s=k20201202; t=1688915594;
+        bh=uXdrSOZeeHVieKI5DkfEOklZyWMsP5TuvjKoqA0mSlI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WqF1PuVhtEB2DJ4ZIPMYmA/HM0HPgN5zOgi1ynhC/HdgU7R1rPlRscvNAo0BCKBM8
-         fn2PYZ9NiqYjN+1+GABDAXrAs2DtjOqDWMRrWX9gFWfDs/49MNffTObzGmgITbxviB
-         g2QoKEKBnSFKqZAA7oivdgjdlmOR1Y5gwp4Y5DncdHVbtNIBdTwHkXzpssMrQeYlVk
-         9D+fN4QZhEUkY7ql/2jMVXQWnR709KIsdAQ5SYPztpHKxR4tDRc5vdHK579CDtjtUU
-         b2fGRTLK19c3z+1gcDKcuyMhRh8k4dk+rTX3qISTuQ7Ozrjs1+R9VKmpZeZ5bPneLD
-         j0GAoSJlzmqPQ==
+        b=Y/48jTefdwjSO2fcLN2aJf36tzTFKK59h0mY/A1dGyuBeu+hHtHRsDF+UzpryCDjA
+         YBKnonvhN3OlFbOUFyRjqkwxEySYoo12Qd7p8oBZdn3YADxpuPEqrw2rWGp00ZJ6dh
+         0F+akPARq84FJZCK2k+v7E3hgfaRT9HrAZNhDLoPjyHbabVgw8sKSorz3qk/j5OgMO
+         9qSaagPDkSbOhUEtQW36TjKatM9OPaYDAOrSC75Fj1KQqyVvFXUDSqm3KfHsSwsCgG
+         LzHNDG8OufSjWC2Xknbd8VljGB6R1+GSY/a6McaJYEOMLkTxUg5y2DeVjLV9dahi8G
+         D8kJZkLGutfrQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        tony0620emma@gmail.com, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 09/26] wifi: rtw88: sdio: Check the HISR RX_REQUEST bit in rtw_sdio_rx_isr()
-Date:   Sun,  9 Jul 2023 11:12:38 -0400
-Message-Id: <20230709151255.512931-9-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>,
+        syzbot+958967f249155967d42a@syzkaller.appspotmail.com,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, martin.lau@linux.dev,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 10/26] bpf: Silence a warning in btf_type_id_size()
+Date:   Sun,  9 Jul 2023 11:12:39 -0400
+Message-Id: <20230709151255.512931-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -60,91 +62,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit e967229ead0e6c5047a1cfd5a0db58ceb930800b ]
+[ Upstream commit e6c2f594ed961273479505b42040782820190305 ]
 
-rtw_sdio_rx_isr() is responsible for receiving data from the wifi chip
-and is called from the SDIO interrupt handler when the interrupt status
-register (HISR) has the RX_REQUEST bit set. After the first batch of
-data has been processed by the driver the wifi chip may have more data
-ready to be read, which is managed by a loop in rtw_sdio_rx_isr().
+syzbot reported a warning in [1] with the following stacktrace:
+  WARNING: CPU: 0 PID: 5005 at kernel/bpf/btf.c:1988 btf_type_id_size+0x2d9/0x9d0 kernel/bpf/btf.c:1988
+  ...
+  RIP: 0010:btf_type_id_size+0x2d9/0x9d0 kernel/bpf/btf.c:1988
+  ...
+  Call Trace:
+   <TASK>
+   map_check_btf kernel/bpf/syscall.c:1024 [inline]
+   map_create+0x1157/0x1860 kernel/bpf/syscall.c:1198
+   __sys_bpf+0x127f/0x5420 kernel/bpf/syscall.c:5040
+   __do_sys_bpf kernel/bpf/syscall.c:5162 [inline]
+   __se_sys_bpf kernel/bpf/syscall.c:5160 [inline]
+   __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5160
+   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+   entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-It turns out that there are cases where the RX buffer length (from the
-REG_SDIO_RX0_REQ_LEN register) does not match the data we receive. The
-following two cases were observed with a RTL8723DS card:
-- RX length is smaller than the total packet length including overhead
-  and actual data bytes (whose length is part of the buffer we read from
-  the wifi chip and is stored in rtw_rx_pkt_stat.pkt_len). This can
-  result in errors like:
-    skbuff: skb_over_panic: text:ffff8000011924ac len:3341 put:3341
-  (one case observed was: RX buffer length = 1536 bytes but
-   rtw_rx_pkt_stat.pkt_len = 1546 bytes, this is not valid as it means
-   we need to read beyond the end of the buffer)
-- RX length looks valid but rtw_rx_pkt_stat.pkt_len is zero
+With the following btf
+  [1] DECL_TAG 'a' type_id=4 component_idx=-1
+  [2] PTR '(anon)' type_id=0
+  [3] TYPE_TAG 'a' type_id=2
+  [4] VAR 'a' type_id=3, linkage=static
+and when the bpf_attr.btf_key_type_id = 1 (DECL_TAG),
+the following WARN_ON_ONCE in btf_type_id_size() is triggered:
+  if (WARN_ON_ONCE(!btf_type_is_modifier(size_type) &&
+                   !btf_type_is_var(size_type)))
+          return NULL;
 
-Check if the RX_REQUEST is set in the HISR register for each iteration
-inside rtw_sdio_rx_isr(). This mimics what the RTL8723DS vendor driver
-does and makes the driver only read more data if the RX_REQUEST bit is
-set (which seems to be a way for the card's hardware or firmware to
-tell the host that data is ready to be processed).
+Note that 'return NULL' is the correct behavior as we don't want
+a DECL_TAG type to be used as a btf_{key,value}_type_id even
+for the case like 'DECL_TAG -> STRUCT'. So there
+is no correctness issue here, we just want to silence warning.
 
-For RTW_WCPU_11AC chips this check is not needed. The RTL8822BS vendor
-driver for example states that this check is unnecessary (but still uses
-it) and the RTL8822CS drops this check entirely.
+To silence the warning, I added DECL_TAG as one of kinds in
+btf_type_nosize() which will cause btf_type_id_size() returning
+NULL earlier without the warning.
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20230522202425.1827005-2-martin.blumenstingl@googlemail.com
+  [1] https://lore.kernel.org/bpf/000000000000e0df8d05fc75ba86@google.com/
+
+Reported-by: syzbot+958967f249155967d42a@syzkaller.appspotmail.com
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20230530205029.264910-1-yhs@fb.com
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtw88/sdio.c | 24 ++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ kernel/bpf/btf.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtw88/sdio.c b/drivers/net/wireless/realtek/rtw88/sdio.c
-index 06fce7c3addaa..2c1fb2dabd40a 100644
---- a/drivers/net/wireless/realtek/rtw88/sdio.c
-+++ b/drivers/net/wireless/realtek/rtw88/sdio.c
-@@ -998,9 +998,9 @@ static void rtw_sdio_rxfifo_recv(struct rtw_dev *rtwdev, u32 rx_len)
- 
- static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
- {
--	u32 rx_len, total_rx_bytes = 0;
-+	u32 rx_len, hisr, total_rx_bytes = 0;
- 
--	while (total_rx_bytes < SZ_64K) {
-+	do {
- 		if (rtw_chip_wcpu_11n(rtwdev))
- 			rx_len = rtw_read16(rtwdev, REG_SDIO_RX0_REQ_LEN);
- 		else
-@@ -1012,7 +1012,25 @@ static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
- 		rtw_sdio_rxfifo_recv(rtwdev, rx_len);
- 
- 		total_rx_bytes += rx_len;
--	}
-+
-+		if (rtw_chip_wcpu_11n(rtwdev)) {
-+			/* Stop if no more RX requests are pending, even if
-+			 * rx_len could be greater than zero in the next
-+			 * iteration. This is needed because the RX buffer may
-+			 * already contain data while either HW or FW are not
-+			 * done filling that buffer yet. Still reading the
-+			 * buffer can result in packets where
-+			 * rtw_rx_pkt_stat.pkt_len is zero or points beyond the
-+			 * end of the buffer.
-+			 */
-+			hisr = rtw_read32(rtwdev, REG_SDIO_HISR);
-+		} else {
-+			/* RTW_WCPU_11AC chips have improved hardware or
-+			 * firmware and can use rx_len unconditionally.
-+			 */
-+			hisr = REG_SDIO_HISR_RX_REQUEST;
-+		}
-+	} while (total_rx_bytes < SZ_64K && hisr & REG_SDIO_HISR_RX_REQUEST);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 72b32b7cd9cd9..b88d30cf2ec4f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -485,25 +485,26 @@ static bool btf_type_is_fwd(const struct btf_type *t)
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_FWD;
  }
  
- static void rtw_sdio_handle_interrupt(struct sdio_func *sdio_func)
+-static bool btf_type_nosize(const struct btf_type *t)
++static bool btf_type_is_datasec(const struct btf_type *t)
+ {
+-	return btf_type_is_void(t) || btf_type_is_fwd(t) ||
+-	       btf_type_is_func(t) || btf_type_is_func_proto(t);
++	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
+ }
+ 
+-static bool btf_type_nosize_or_null(const struct btf_type *t)
++static bool btf_type_is_decl_tag(const struct btf_type *t)
+ {
+-	return !t || btf_type_nosize(t);
++	return BTF_INFO_KIND(t->info) == BTF_KIND_DECL_TAG;
+ }
+ 
+-static bool btf_type_is_datasec(const struct btf_type *t)
++static bool btf_type_nosize(const struct btf_type *t)
+ {
+-	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
++	return btf_type_is_void(t) || btf_type_is_fwd(t) ||
++	       btf_type_is_func(t) || btf_type_is_func_proto(t) ||
++	       btf_type_is_decl_tag(t);
+ }
+ 
+-static bool btf_type_is_decl_tag(const struct btf_type *t)
++static bool btf_type_nosize_or_null(const struct btf_type *t)
+ {
+-	return BTF_INFO_KIND(t->info) == BTF_KIND_DECL_TAG;
++	return !t || btf_type_nosize(t);
+ }
+ 
+ static bool btf_type_is_decl_tag_target(const struct btf_type *t)
 -- 
 2.39.2
 
