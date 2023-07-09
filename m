@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D59C74C634
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9870774C5DF
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbjGIPbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S233865AbjGIPU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjGIPbV (ORCPT
+        with ESMTP id S233601AbjGIPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:31:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66352B7;
-        Sun,  9 Jul 2023 08:30:51 -0700 (PDT)
+        Sun, 9 Jul 2023 11:19:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12223584;
+        Sun,  9 Jul 2023 08:16:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C92A60C01;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7244B60C41;
+        Sun,  9 Jul 2023 15:16:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BFFAC433CB;
         Sun,  9 Jul 2023 15:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC47EC433C7;
-        Sun,  9 Jul 2023 15:16:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915802;
-        bh=6v/IFeuYC6RkNIxMW8tpxe6/qo0FAIgF1YGp+FB5FzA=;
+        s=k20201202; t=1688915803;
+        bh=SRu7SYUS9UZrnTbsJYulHWPIpGYna0or8x9wNP6jfUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ty3UDUeibnE255/q/rGglqo8lSYo8zHcNRNLnzDuueKTddh9jzxEQDJG4gSiHrBlV
-         L8TiTrNZFtSo+dHGxDQlCCZSAacf1C+W+BVF96MLf3t04rwqLHeFMl7GaeqlbvkYNH
-         rJxewgdPxCxh7I/gQzT/U8izhu/do3LRtCOdapoi+ezNY+aWld/o8oMDOuTOYvUxFJ
-         uIoxaaujPz5tYG2rdurecKQ72nQOhS0sa89zomIPNVq+B9mnt1wt/40lDPAZP18KzI
-         XvrawusP/LmsG9xRBsQTp3Tj+aguH0/d7lnAGsacbREvLnTEmQSQygXb8uDnVpF1vn
-         Merpmi8An6Qag==
+        b=fr3u6O9cH/xVXe90tuekgfdojnEn2cRrrAYHpC69iksA665Emczx2zpz7WbjSnfzz
+         RuADS+EUgKFJ6mJkje2xzJfAB3/Wg18JEyPmvf5LCPJhQ0bfz8vyf6CajBOITMu9yd
+         dQZ5DTvHT8Qr3JAEfyyyBmoECyIdf/6DkffArHGBNxLR5Oujl/kD2SlR1QQoTHjrM1
+         07C5qxycjIzLpj+xga1SC5DkgIg8EXYYqw+WoR2HDh0x2XAbSIZuRoGK5i+4xgUsYt
+         pLaO1T5Gj+liri6ns7M8qknmOD6ogUNPjkjAjtXNPsrlaMBQT0SUPYmfNAjJdAYqEL
+         D6RkYRafhNTlQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Roee Goldfiner <roee.h.goldfiner@intel.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        miriam.rachel.korenblit@intel.com, avraham.stern@intel.com,
-        benjamin.berg@intel.com, jtornosm@redhat.com,
-        linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 4/5] wifi: iwlwifi: mvm: avoid baid size integer overflow
-Date:   Sun,  9 Jul 2023 11:16:29 -0400
-Message-Id: <20230709151632.514098-4-sashal@kernel.org>
+Cc:     Ying Hsu <yinghsu@chromium.org>,
+        Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, jesse.brandeburg@intel.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 5/5] igb: Fix igb_down hung on surprise removal
+Date:   Sun,  9 Jul 2023 11:16:30 -0400
+Message-Id: <20230709151632.514098-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151632.514098-1-sashal@kernel.org>
 References: <20230709151632.514098-1-sashal@kernel.org>
@@ -63,45 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Ying Hsu <yinghsu@chromium.org>
 
-[ Upstream commit 1a528ab1da324d078ec60283c34c17848580df24 ]
+[ Upstream commit 004d25060c78fc31f66da0fa439c544dda1ac9d5 ]
 
-Roee reported various hard-to-debug crashes with pings in
-EHT aggregation scenarios. Enabling KASAN showed that we
-access the BAID allocation out of bounds, and looking at
-the code a bit shows that since the reorder buffer entry
-(struct iwl_mvm_reorder_buf_entry) is 128 bytes if debug
-such as lockdep is enabled, then staring from an agg size
-512 we overflow the size calculation, and allocate a much
-smaller structure than we should, causing slab corruption
-once we initialize this.
+In a setup where a Thunderbolt hub connects to Ethernet and a display
+through USB Type-C, users may experience a hung task timeout when they
+remove the cable between the PC and the Thunderbolt hub.
+This is because the igb_down function is called multiple times when
+the Thunderbolt hub is unplugged. For example, the igb_io_error_detected
+triggers the first call, and the igb_remove triggers the second call.
+The second call to igb_down will block at napi_synchronize.
+Here's the call trace:
+    __schedule+0x3b0/0xddb
+    ? __mod_timer+0x164/0x5d3
+    schedule+0x44/0xa8
+    schedule_timeout+0xb2/0x2a4
+    ? run_local_timers+0x4e/0x4e
+    msleep+0x31/0x38
+    igb_down+0x12c/0x22a [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    __igb_close+0x6f/0x9c [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    igb_close+0x23/0x2b [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    __dev_close_many+0x95/0xec
+    dev_close_many+0x6e/0x103
+    unregister_netdevice_many+0x105/0x5b1
+    unregister_netdevice_queue+0xc2/0x10d
+    unregister_netdev+0x1c/0x23
+    igb_remove+0xa7/0x11c [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    pci_device_remove+0x3f/0x9c
+    device_release_driver_internal+0xfe/0x1b4
+    pci_stop_bus_device+0x5b/0x7f
+    pci_stop_bus_device+0x30/0x7f
+    pci_stop_bus_device+0x30/0x7f
+    pci_stop_and_remove_bus_device+0x12/0x19
+    pciehp_unconfigure_device+0x76/0xe9
+    pciehp_disable_slot+0x6e/0x131
+    pciehp_handle_presence_or_link_change+0x7a/0x3f7
+    pciehp_ist+0xbe/0x194
+    irq_thread_fn+0x22/0x4d
+    ? irq_thread+0x1fd/0x1fd
+    irq_thread+0x17b/0x1fd
+    ? irq_forced_thread_fn+0x5f/0x5f
+    kthread+0x142/0x153
+    ? __irq_get_irqchip_state+0x46/0x46
+    ? kthread_associate_blkcg+0x71/0x71
+    ret_from_fork+0x1f/0x30
 
-Fix this by simply using u32 instead of u16.
+In this case, igb_io_error_detected detaches the network interface
+and requests a PCIE slot reset, however, the PCIE reset callback is
+not being invoked and thus the Ethernet connection breaks down.
+As the PCIE error in this case is a non-fatal one, requesting a
+slot reset can be avoided.
+This patch fixes the task hung issue and preserves Ethernet
+connection by ignoring non-fatal PCIE errors.
 
-Reported-by: Roee Goldfiner <roee.h.goldfiner@intel.com>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20230620125813.f428c856030d.I2c2bb808e945adb71bc15f5b2bac2d8957ea90eb@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+Tested-by: Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Link: https://lore.kernel.org/r/20230620174732.4145155-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/sta.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/igb/igb_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
-index 373ace38edab7..83883ce7f55dc 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
-@@ -2237,7 +2237,7 @@ int iwl_mvm_sta_rx_agg(struct iwl_mvm *mvm, struct ieee80211_sta *sta,
- 	}
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 6f9d563deb6ba..be51179089852 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -9059,6 +9059,11 @@ static pci_ers_result_t igb_io_error_detected(struct pci_dev *pdev,
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
  
- 	if (iwl_mvm_has_new_rx_api(mvm) && start) {
--		u16 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
-+		u32 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
++	if (state == pci_channel_io_normal) {
++		dev_warn(&pdev->dev, "Non-correctable non-fatal error reported.\n");
++		return PCI_ERS_RESULT_CAN_RECOVER;
++	}
++
+ 	netif_device_detach(netdev);
  
- 		/* sparse doesn't like the __align() so don't check */
- #ifndef __CHECKER__
+ 	if (state == pci_channel_io_perm_failure)
 -- 
 2.39.2
 
