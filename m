@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C034A74C6C8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 19:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD61B74C6C9
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 19:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjGIRii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 13:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S230298AbjGIRiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 13:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjGIRig (ORCPT
+        with ESMTP id S230311AbjGIRix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 13:38:36 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F23EFC
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 10:38:34 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so59401861fa.1
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 10:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688924313; x=1691516313;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uKdFK7UFqnvYacu1+A6rrJuMR3ECAGc1EkArluB3bgk=;
-        b=EIkf7oR5mHW9ET9xqLGWmH4Ta4buPeq5JYwnaGxV7KgwHJhjiZAAn+pwWuKxkK85er
-         FHdhAaPDbMalggKP+KMlk2RZeNPqNfSdPHxXe7wGgQjX7+aEWFxH2Yi8mYkh0G7Uz8vf
-         GaF5eP91LxL2tP0QIV4ylOgkaw/q8hietq+8CT2P3ofhn9Q8DDgPBA+TGNcjdWm4eoa2
-         ZOuKYZ0V+IbiqZ0S9eBkUstRhJfMMuGgZPtnhfI2j8fHE3ErWA8S9kel41lJGl3d5Pgb
-         t6JSpp4glxoK1C2ESCIMLEliDRw+HAkoWo12C/LvTKHWZFv9rmegd8+77qRq6dHcXXoj
-         +NpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688924313; x=1691516313;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uKdFK7UFqnvYacu1+A6rrJuMR3ECAGc1EkArluB3bgk=;
-        b=kAEO+q676dcdgZNEm4LU/2yHnbFSfrfFT3R7E9mK2o1qZa9QKtKVTTPL8wu8e942yE
-         gPkyasByd9G+Ysm1SOB4KDr8Hf/tAlBi8qfC4ZHu3NRWkQ2IXWWWRK/0AsKxJTzXD1jq
-         flcN7BhyoZYBRxhp+NEY68Z6tP/XsZ2ioHxVlC0Rcx4xLXnS5MprM+3A9uwKRchlg+u0
-         I4gmtmFpl1vGJgOseXgR8AWQL7O5oIorcMWgIH+m5kH5lvkirZQgFn8+hr+V4Jz300ic
-         QSvMUZflpzDIfUhKD+73Xg0j9cLzFyYmXGnwQOXZPC7AZGKRSZSEQrAHchsbLo/so2SN
-         XiwQ==
-X-Gm-Message-State: ABy/qLaQYJPTrpbcSiTWmCJmISeciPP8mczYtqJhC2bjQ1lUVa3aB+gH
-        OTpzCWlPyCsX+I/3x1ZcDkkPpg==
-X-Google-Smtp-Source: APBJJlHNb+8tglQs8vHY4lZ2CClvauiq1wbcrsR8u43ZfraYF4Na+06BhXn1BYHVWuszx3GTUShS9A==
-X-Received: by 2002:a2e:b166:0:b0:2b7:117:e54 with SMTP id a6-20020a2eb166000000b002b701170e54mr8428516ljm.4.1688924312739;
-        Sun, 09 Jul 2023 10:38:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id l25-20020a1709066b9900b009894b476310sm5014978ejr.163.2023.07.09.10.38.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jul 2023 10:38:32 -0700 (PDT)
-Message-ID: <3b417e21-1726-a026-cd53-e68cc49b56fc@linaro.org>
-Date:   Sun, 9 Jul 2023 19:38:29 +0200
+        Sun, 9 Jul 2023 13:38:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EC1106
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 10:38:50 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F16B1EC095B;
+        Sun,  9 Jul 2023 19:38:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1688924329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ZIkpstv09ZKhZyWLWFz/FSqHjFx+e70Btrkc+S+Dxe8=;
+        b=Ci6D9Pj19ZObwexiIBMy/5H2C0noiQ0j0oLeCK/zh3Co/m39DxPVnmJZxuyKlJxDMqVmXs
+        3fm4siYPMPw816FhL2hO5ETpVWJQ7lA+ca76HenRsnph70g0IiVOzGK1nAoeLtHoSefjzl
+        0zvbWrxgrohwIOf10giljZfxLjXE0EE=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id SwNqaHvRmjj7; Sun,  9 Jul 2023 17:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1688924326; bh=ZIkpstv09ZKhZyWLWFz/FSqHjFx+e70Btrkc+S+Dxe8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yq00ATmzBggX7uKqIs0xhzeLLkf2V9pBRbDF6lrf1lgEXQ6cbBTgIblRsszxcArKq
+         qCRgGfflzthZ7l3Tgz795oHWWMG/Sw7YedlENyrToaWuSPQCs2cVU1cZuarIHXgKNF
+         D8FAN+TeQCV5OLr69IykMqhpSaKiB26uL3oFgs9tfNIPacEPIgSB86UV/EjuusN5yW
+         oV1opdJ4OmbzdhUikrx9ohbshKUuQ2t9kb0c7nhUIqHDgJiUbuHOze9uEfMe5zxG39
+         58i8qYSHpJMmW2uwjV9qrbswHPMh4SgDh1RHh5v4QBCair2UtgJ5bpPCxKBfEZ1r9a
+         MWjnOSmk2GPphlmuldSjTWzF3FYaJnyNz8bljFIGoCN8jY/8lDCT2FUQI7PZ8lEMrd
+         a6rqLdqawITNLA1MyBS5IqkdjofEXGG7KP+AyTcNQyr9yozIQBWxPjPot3zYrcgXJd
+         RWdqqrmzsRIw0cuWLmJxHB4pN3iqah7SOyyP0WpWHtHk3C9IjpHpIH7uWXPK9zCUtD
+         hU2btcTsPTDbaMt4Bdh/B4cJHxTxSB91HSD2RM8vciXVsksQHPChXcF4/T+ACvsUf/
+         hoqtNgHJkuMQit/PrRY44w7M3Yc9lAtR1/P/RX2RLhsE96w82M9HbzRhfOnLfTB0lO
+         sRtEJOehJu5jxa3dXetyN2cA=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18F0C40E01D0;
+        Sun,  9 Jul 2023 17:38:43 +0000 (UTC)
+Date:   Sun, 9 Jul 2023 19:38:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] objtool/urgent for v6.5-rc1
+Message-ID: <20230709173838.GEZKrwnm5LFMIfyosG@fat_crate.local>
+References: <20230709081903.GCZKptd16D1sbcDoIy@fat_crate.local>
+ <CAHk-=wiY8nehcZfNA6vo_vws7TqvwcDrPNt6_McqkHXs4zbuNw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 05/11] iio: adc: qcom-spmi-adc5: remove support for ADC7
- compatible string
-Content-Language: en-US
-To:     Jishnu Prakash <quic_jprakash@quicinc.com>, agross@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linus.walleij@linaro.org, Jonathan.Cameron@huawei.com,
-        sboyd@kernel.org, dmitry.baryshkov@linaro.org,
-        quic_subbaram@quicinc.com, quic_collinsd@quicinc.com,
-        quic_kamalw@quicinc.com, quic_jestar@quicinc.com,
-        marijn.suijten@somainline.org, andriy.shevchenko@linux.intel.com,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org
-Cc:     linux-arm-msm-owner@vger.kernel.org
-References: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
- <20230708072835.3035398-6-quic_jprakash@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230708072835.3035398-6-quic_jprakash@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiY8nehcZfNA6vo_vws7TqvwcDrPNt6_McqkHXs4zbuNw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/07/2023 09:28, Jishnu Prakash wrote:
-> Now that usage of "ADC7" name has been replaced with usage of "ADC5
-> Gen2" name everywhere, remove the "qcom,spmi-adc7" compatible string.
-> 
-> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-> ---
->  drivers/iio/adc/qcom-spmi-adc5.c | 4 ----
+On Sun, Jul 09, 2023 at 10:20:39AM -0700, Linus Torvalds wrote:
+> I had actually applied this directly last week already, since it was I
+> who had missed the semantic conflict.
+>
+> See commit 06697ca69bca ("objtool: Remove btrfs_assertfail() from the
+> noreturn exceptions list").
 
-Your patchset is not bisectable. Neither this patch nor cover letter
-marked this. This is not correct and will lead to broken kernels.
+Ah ok, for some reason that branch didn't get zapped in tip, hinting at
+it needing to be sent.
 
-Even if not considering bisectability, this basically breaks the ABI
-without any explanation and rationale.
+> Your pull request would obviously merge cleanly, but I'll just skip it
+> as "nothing new".
 
-Breaking ABI just because you want to rename something, is not the way
-to go, so NAK. Sorry.
+Right, no need for that.
 
-Best regards,
-Krzysztof
+I've reset the tip branch and thus zapped the commit.
 
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
