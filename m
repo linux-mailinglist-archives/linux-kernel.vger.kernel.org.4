@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A9374C513
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6437774C516
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbjGIPOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S233144AbjGIPOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjGIPNq (ORCPT
+        with ESMTP id S233039AbjGIPNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:13:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A07F1709;
-        Sun,  9 Jul 2023 08:13:22 -0700 (PDT)
+        Sun, 9 Jul 2023 11:13:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC6E1997;
+        Sun,  9 Jul 2023 08:13:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3DD060C1A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0377C60C01;
+        Sun,  9 Jul 2023 15:13:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2727C433CB;
         Sun,  9 Jul 2023 15:13:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56163C433CD;
-        Sun,  9 Jul 2023 15:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915600;
-        bh=y6bziz/MvdQ+aDDDtJgCjPL8YGD7r7BVYP/dHYkzrrk=;
+        s=k20201202; t=1688915601;
+        bh=hCkuT5beDrZIJ2wWaJoikeQdkijfyUCkg38TlOIYmcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D1ZGavs5GB8A60bFSMtqW1Ie1E1mhZ5H7Q1gBLxknh+F3VjVgbqanzRsGM2K132ZJ
-         EpbZMCSPFsniYYPVqD0lOkJIgy/x4O155H59GCgQowNC/wo5jYZu+IK0nB5lPaB2R1
-         Bm3FxrYJ1wFhz7kBtXUkX05VGLCtLXQP85eHyaHFtYjkDzBRzs7KvqFRrTFNt4O40R
-         LXxS2lM5VncTBUEvbZNPAR9Mfe2Dh4S1E7GJO5laHmZn1hKUZpGWyVyQnULs7C8jHJ
-         WrmkjlnLR6F+jTYLHwH347pYzRHe5YGOCwEZCQezeY3pWI9u9MXsl/GNhO1rK9/0nD
-         9ERcTq3GD26qQ==
+        b=hyu5bWPWWVLc0a0WEwIDRW7/TxThstcwjoAbUiBWPsUveXh3wNWeiKTNS49bCfJ9v
+         vXj448JP4x99D2GpueaJ4d5vfJHt+j8WX+i0r/5ChB1Ubrhp/INWwSFZwI9GgG7znk
+         s7OTW9fzhtBirIhW99zvb0U8byxCPTTqweFgJgU8mDy3ynSJrg5BDjYFNprfe5fKmp
+         KvvvvYx/3TEQE28h8WHXg/KnO0d7KJiaqm/sJCVtflGir9amXfo3fNI/cNWM25uEg0
+         V0RXym/jb4hkmVb5qDytkt1FUtwp3cTVbnHdryoFBGaD5ZgruD+bmU44PXFSczs0++
+         OYU+e2tfp7Aqw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Abe Kohandel <abe.kohandel@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, fancer.lancer@gmail.com,
-        linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 14/26] spi: dw: Add compatible for Intel Mount Evans SoC
-Date:   Sun,  9 Jul 2023 11:12:43 -0400
-Message-Id: <20230709151255.512931-14-sashal@kernel.org>
+Cc:     Balamurugan S <quic_bselvara@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        ath12k@lists.infradead.org, linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 15/26] wifi: ath12k: Avoid NULL pointer access during management transmit cleanup
+Date:   Sun,  9 Jul 2023 11:12:44 -0400
+Message-Id: <20230709151255.512931-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -61,79 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abe Kohandel <abe.kohandel@intel.com>
+From: Balamurugan S <quic_bselvara@quicinc.com>
 
-[ Upstream commit 0760d5d0e9f0c0e2200a0323a61d1995bb745dee ]
+[ Upstream commit 054b5580a36e435692c203c19abdcb9f7734320e ]
 
-The Intel Mount Evans SoC's Integrated Management Complex uses the SPI
-controller for access to a NOR SPI FLASH. However, the SoC doesn't
-provide a mechanism to override the native chip select signal.
+Currently 'ar' reference is not added in skb_cb.
+Though this is generally not used during transmit completion
+callbacks, on interface removal the remaining idr cleanup callback
+uses the ar pointer from skb_cb from management txmgmt_idr. Hence fill them
+during transmit call for proper usage to avoid NULL pointer dereference.
 
-This driver doesn't use DMA for memory operations when a chip select
-override is not provided due to the native chip select timing behavior.
-As a result no DMA configuration is done for the controller and this
-configuration is not tested.
+Tested-on: QCN9274 hw2.0 PCI WLAN.WBE.1.0.1-00029-QCAHKSWPL_SILICONZ-1
 
-The controller also has an errata where a full TX FIFO can result in
-data corruption. The suggested workaround is to never completely fill
-the FIFO. The TX FIFO has a size of 32 so the fifo_len is set to 31.
-
-Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20230606145402.474866-2-abe.kohandel@intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Balamurugan S <quic_bselvara@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20230518071046.14337-1-quic_bselvara@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-dw-mmio.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/net/wireless/ath/ath12k/mac.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 15f5e9cb54ad4..5a38cb09a650d 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -236,6 +236,31 @@ static int dw_spi_intel_init(struct platform_device *pdev,
- 	return 0;
- }
+diff --git a/drivers/net/wireless/ath/ath12k/mac.c b/drivers/net/wireless/ath/ath12k/mac.c
+index ee792822b4113..58acfe8fdf8c0 100644
+--- a/drivers/net/wireless/ath/ath12k/mac.c
++++ b/drivers/net/wireless/ath/ath12k/mac.c
+@@ -4425,6 +4425,7 @@ static int ath12k_mac_mgmt_tx_wmi(struct ath12k *ar, struct ath12k_vif *arvif,
+ 	int buf_id;
+ 	int ret;
  
-+/*
-+ * The Intel Mount Evans SoC's Integrated Management Complex uses the
-+ * SPI controller for access to a NOR SPI FLASH. However, the SoC doesn't
-+ * provide a mechanism to override the native chip select signal.
-+ *
-+ * This driver doesn't use DMA for memory operations when a chip select
-+ * override is not provided due to the native chip select timing behavior.
-+ * As a result no DMA configuration is done for the controller and this
-+ * configuration is not tested.
-+ */
-+static int dw_spi_mountevans_imc_init(struct platform_device *pdev,
-+				      struct dw_spi_mmio *dwsmmio)
-+{
-+	/*
-+	 * The Intel Mount Evans SoC's Integrated Management Complex DW
-+	 * apb_ssi_v4.02a controller has an errata where a full TX FIFO can
-+	 * result in data corruption. The suggested workaround is to never
-+	 * completely fill the FIFO. The TX FIFO has a size of 32 so the
-+	 * fifo_len is set to 31.
-+	 */
-+	dwsmmio->dws.fifo_len = 31;
-+
-+	return 0;
-+}
-+
- static int dw_spi_canaan_k210_init(struct platform_device *pdev,
- 				   struct dw_spi_mmio *dwsmmio)
- {
-@@ -405,6 +430,10 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_hssi_init},
- 	{ .compatible = "intel,keembay-ssi", .data = dw_spi_intel_init},
- 	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
-+	{
-+		.compatible = "intel,mountevans-imc-ssi",
-+		.data = dw_spi_mountevans_imc_init,
-+	},
- 	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
- 	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
- 	{ .compatible = "amd,pensando-elba-spi", .data = dw_spi_elba_init},
++	ATH12K_SKB_CB(skb)->ar = ar;
+ 	spin_lock_bh(&ar->txmgmt_idr_lock);
+ 	buf_id = idr_alloc(&ar->txmgmt_idr, skb, 0,
+ 			   ATH12K_TX_MGMT_NUM_PENDING_MAX, GFP_ATOMIC);
 -- 
 2.39.2
 
