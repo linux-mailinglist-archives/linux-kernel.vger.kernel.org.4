@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95F074C5D4
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21BC74C62B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbjGIPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S233900AbjGIP2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbjGIPTZ (ORCPT
+        with ESMTP id S234142AbjGIP2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:19:25 -0400
+        Sun, 9 Jul 2023 11:28:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C84A2696;
-        Sun,  9 Jul 2023 08:16:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F61E5A;
+        Sun,  9 Jul 2023 08:26:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7761660C20;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75B2360BCC;
+        Sun,  9 Jul 2023 15:15:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B253C43140;
         Sun,  9 Jul 2023 15:15:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B84C433CD;
-        Sun,  9 Jul 2023 15:15:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915737;
-        bh=Iv1BFatToubikTkhf2czmBwhaxZ6c5DrTdzQrwkrpsc=;
+        s=k20201202; t=1688915739;
+        bh=DcHNOKzRsqyQOfkJEWMWECb/hJG1ZxyybIdCa5wceEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j5E+idJxqKYTrmOfpt7mwQJgyXmN+s79e/paLu/x62r92UCbBz1nmfvR09F90cYcm
-         +3nieeOaLzWyfaFSYno8O6T/g89cWkA06mQOylFVYbPE5kQe2LvG/AWrgeQw9s2nXN
-         tzzm7kUo39xX/GENc8gYDLC9KokGbxtKaecgQUkHGv2fjrDEpEE78wThdmVu9r5+gt
-         7EZ8LgU4NZuok0Y4F9H4mMFwz0h9LtwihdspVFQpHV0LeEeiI4zhdFAUvvhnLweZpO
-         Mr1qNpN/lk0SBZSnEmhMtXtaEaAvEMbEa2JT59rrDNzC6jSC9BJDzbe3Zdq1XKjuAH
-         j7pHBH0Y54lQQ==
+        b=M4KN7S5GCTfMDp16nh2sTCy3dEZShRjQ08Sbj4IJE0QHKtuYSQYuMhcwnCjnv0kG2
+         BvaHluyG1YTK0Vn7iR/FgDBCdRqfnt1Rn25jApukQx3jn379rpNh2LC3w5zXCCi0oW
+         ndvwCbdB2IIAnuVG86+xUECOdcFox5qosktg4I3N476jTm/ZCJPX6qBbAKzqU4oA5K
+         iSXmFZYXX88rUjmj81t59S2qjXUH7UOu8LiBZnUymt84qLrnAV6T+VuofOYd3WIK6n
+         QCYXT3NGM2EOPKIivVqxC0nLYsezPEB+nXTfkANdE32gcwqQ9uD8q6vihwPvGi2iTZ
+         lkcGw+T+AR1uw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Aditi Ghag <aditi.ghag@isovalent.com>,
-        Yonghong Song <yhs@meta.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 04/10] bpf: tcp: Avoid taking fast sock lock in iterator
-Date:   Sun,  9 Jul 2023 11:15:22 -0400
-Message-Id: <20230709151528.513775-4-sashal@kernel.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 05/10] net: ethernet: litex: add support for 64 bit stats
+Date:   Sun,  9 Jul 2023 11:15:23 -0400
+Message-Id: <20230709151528.513775-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151528.513775-1-sashal@kernel.org>
 References: <20230709151528.513775-1-sashal@kernel.org>
@@ -63,150 +63,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditi Ghag <aditi.ghag@isovalent.com>
+From: Jisheng Zhang <jszhang@kernel.org>
 
-[ Upstream commit 9378096e8a656fb5c4099b26b1370c56f056eab9 ]
+[ Upstream commit 18da174d865a87d47d2f33f5b0a322efcf067728 ]
 
-This is a preparatory commit to replace `lock_sock_fast` with
-`lock_sock`,and facilitate BPF programs executed from the TCP sockets
-iterator to be able to destroy TCP sockets using the bpf_sock_destroy
-kfunc (implemented in follow-up commits).
+Implement 64 bit per cpu stats to fix the overflow of netdev->stats
+on 32 bit platforms. To simplify the code, we use net core
+pcpu_sw_netstats infrastructure. One small drawback is some memory
+overhead because litex uses just one queue, but we allocate the
+counters per cpu.
 
-Previously, BPF TCP iterator was acquiring the sock lock with BH
-disabled. This led to scenarios where the sockets hash table bucket lock
-can be acquired with BH enabled in some path versus disabled in other.
-In such situation, kernel issued a warning since it thinks that in the
-BH enabled path the same bucket lock *might* be acquired again in the
-softirq context (BH disabled), which will lead to a potential dead lock.
-Since bpf_sock_destroy also happens in a process context, the potential
-deadlock warning is likely a false alarm.
-
-Here is a snippet of annotated stack trace that motivated this change:
-
-```
-
-Possible interrupt unsafe locking scenario:
-
-      CPU0                    CPU1
-      ----                    ----
- lock(&h->lhash2[i].lock);
-                              local_bh_disable();
-                              lock(&h->lhash2[i].lock);
-kernel imagined possible scenario:
-  local_bh_disable();  /* Possible softirq */
-  lock(&h->lhash2[i].lock);
-*** Potential Deadlock ***
-
-process context:
-
-lock_acquire+0xcd/0x330
-_raw_spin_lock+0x33/0x40
-------> Acquire (bucket) lhash2.lock with BH enabled
-__inet_hash+0x4b/0x210
-inet_csk_listen_start+0xe6/0x100
-inet_listen+0x95/0x1d0
-__sys_listen+0x69/0xb0
-__x64_sys_listen+0x14/0x20
-do_syscall_64+0x3c/0x90
-entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-bpf_sock_destroy run from iterator:
-
-lock_acquire+0xcd/0x330
-_raw_spin_lock+0x33/0x40
-------> Acquire (bucket) lhash2.lock with BH disabled
-inet_unhash+0x9a/0x110
-tcp_set_state+0x6a/0x210
-tcp_abort+0x10d/0x200
-bpf_prog_6793c5ca50c43c0d_iter_tcp6_server+0xa4/0xa9
-bpf_iter_run_prog+0x1ff/0x340
-------> lock_sock_fast that acquires sock lock with BH disabled
-bpf_iter_tcp_seq_show+0xca/0x190
-bpf_seq_read+0x177/0x450
-
-```
-
-Also, Yonghong reported a deadlock for non-listening TCP sockets that
-this change resolves. Previously, `lock_sock_fast` held the sock spin
-lock with BH which was again being acquired in `tcp_abort`:
-
-```
-watchdog: BUG: soft lockup - CPU#0 stuck for 86s! [test_progs:2331]
-RIP: 0010:queued_spin_lock_slowpath+0xd8/0x500
-Call Trace:
- <TASK>
- _raw_spin_lock+0x84/0x90
- tcp_abort+0x13c/0x1f0
- bpf_prog_88539c5453a9dd47_iter_tcp6_client+0x82/0x89
- bpf_iter_run_prog+0x1aa/0x2c0
- ? preempt_count_sub+0x1c/0xd0
- ? from_kuid_munged+0x1c8/0x210
- bpf_iter_tcp_seq_show+0x14e/0x1b0
- bpf_seq_read+0x36c/0x6a0
-
-bpf_iter_tcp_seq_show
-   lock_sock_fast
-     __lock_sock_fast
-       spin_lock_bh(&sk->sk_lock.slock);
-	/* * Fast path return with bottom halves disabled and * sock::sk_lock.slock held.* */
-
- ...
- tcp_abort
-   local_bh_disable();
-   spin_lock(&((sk)->sk_lock.slock)); // from bh_lock_sock(sk)
-
-```
-
-With the switch to `lock_sock`, it calls `spin_unlock_bh` before returning:
-
-```
-lock_sock
-    lock_sock_nested
-       spin_lock_bh(&sk->sk_lock.slock);
-       :
-       spin_unlock_bh(&sk->sk_lock.slock);
-```
-
-Acked-by: Yonghong Song <yhs@meta.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
-Link: https://lore.kernel.org/r/20230519225157.760788-2-aditi.ghag@isovalent.com
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Acked-by: Gabriel Somlo <gsomlo@gmail.com>
+Link: https://lore.kernel.org/r/20230614162035.300-1-jszhang@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_ipv4.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/litex/litex_liteeth.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index db05ab4287e30..9ac6bca83fadb 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2941,7 +2941,6 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
- 	struct bpf_iter_meta meta;
- 	struct bpf_prog *prog;
- 	struct sock *sk = v;
--	bool slow;
- 	uid_t uid;
- 	int ret;
+diff --git a/drivers/net/ethernet/litex/litex_liteeth.c b/drivers/net/ethernet/litex/litex_liteeth.c
+index 5bb1cc8a2ce13..7b39b910e4a14 100644
+--- a/drivers/net/ethernet/litex/litex_liteeth.c
++++ b/drivers/net/ethernet/litex/litex_liteeth.c
+@@ -78,8 +78,7 @@ static int liteeth_rx(struct net_device *netdev)
+ 	memcpy_fromio(data, priv->rx_base + rx_slot * priv->slot_size, len);
+ 	skb->protocol = eth_type_trans(skb, netdev);
  
-@@ -2949,7 +2948,7 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
- 		return 0;
+-	netdev->stats.rx_packets++;
+-	netdev->stats.rx_bytes += len;
++	dev_sw_netstats_rx_add(netdev, len);
  
- 	if (sk_fullsock(sk))
--		slow = lock_sock_fast(sk);
-+		lock_sock(sk);
+ 	return netif_rx(skb);
  
- 	if (unlikely(sk_unhashed(sk))) {
- 		ret = SEQ_SKIP;
-@@ -2973,7 +2972,7 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
+@@ -184,8 +183,7 @@ static int liteeth_start_xmit(struct sk_buff *skb, struct net_device *netdev)
+ 	litex_write16(priv->base + LITEETH_READER_LENGTH, skb->len);
+ 	litex_write8(priv->base + LITEETH_READER_START, 1);
  
- unlock:
- 	if (sk_fullsock(sk))
--		unlock_sock_fast(sk, slow);
-+		release_sock(sk);
- 	return ret;
+-	netdev->stats.tx_bytes += skb->len;
+-	netdev->stats.tx_packets++;
++	dev_sw_netstats_tx_add(netdev, 1, skb->len);
  
+ 	priv->tx_slot = (priv->tx_slot + 1) % priv->num_tx_slots;
+ 	dev_kfree_skb_any(skb);
+@@ -193,9 +191,17 @@ static int liteeth_start_xmit(struct sk_buff *skb, struct net_device *netdev)
+ 	return NETDEV_TX_OK;
  }
+ 
++static void
++liteeth_get_stats64(struct net_device *netdev, struct rtnl_link_stats64 *stats)
++{
++	netdev_stats_to_stats64(stats, &netdev->stats);
++	dev_fetch_sw_netstats(stats, netdev->tstats);
++}
++
+ static const struct net_device_ops liteeth_netdev_ops = {
+ 	.ndo_open		= liteeth_open,
+ 	.ndo_stop		= liteeth_stop,
++	.ndo_get_stats64	= liteeth_get_stats64,
+ 	.ndo_start_xmit         = liteeth_start_xmit,
+ };
+ 
+@@ -241,6 +247,11 @@ static int liteeth_probe(struct platform_device *pdev)
+ 	priv->netdev = netdev;
+ 	priv->dev = &pdev->dev;
+ 
++	netdev->tstats = devm_netdev_alloc_pcpu_stats(&pdev->dev,
++						      struct pcpu_sw_netstats);
++	if (!netdev->tstats)
++		return -ENOMEM;
++
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+ 		dev_err(&pdev->dev, "Failed to get IRQ %d\n", irq);
 -- 
 2.39.2
 
