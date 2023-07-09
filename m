@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB42474C0B6
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 05:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575AF74C0BF
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 05:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjGIDoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 23:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S229868AbjGIDsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 23:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGIDow (ORCPT
+        with ESMTP id S229885AbjGIDsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 23:44:52 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EC7E48;
-        Sat,  8 Jul 2023 20:44:48 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-553ad54d3c6so2289133a12.1;
-        Sat, 08 Jul 2023 20:44:48 -0700 (PDT)
+        Sat, 8 Jul 2023 23:48:12 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0026AE4A
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 20:48:10 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b702319893so50571381fa.3
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 20:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688874288; x=1691466288;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+iFlYWKemOtEJ+o4zoGBP/4XhvOtPNzNtMX13qsZ7Ho=;
-        b=TGv3R7UtpYdZ6ud7sapSX90OE9/4o3FPVIEObxwH4M1A1vlt/xSncGLOcybLjuA7Ii
-         cP5VetquJsqdd6pRPl3kLt2Qr3rdvUyxoeIsIsKKj96V+BKfceRKAlos8X9eLn5FOK9E
-         0/VbW+GXg4/jLM8WUISQUhJigdZCPIytJYlyZnTRaHlgic+KxNVH+ee9sAxxS690+3pl
-         VCwp21kehVycj7gyPF7Mw571Qhvpqa0baNbfNrovSRaTewhWyh1L7K1ibCzHkUTf84DI
-         8rzx4PV1six9aKqvHCJLYz5sdgUsrPjO89vOGNaAHoo5fJO10G9V6lnJ8DObJNXqyM/T
-         Mb9A==
+        d=linaro.org; s=google; t=1688874489; x=1691466489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lHMHHcNuRvKs17O5H9Ea+cH4a86VTRSbAhgkLKrkiBM=;
+        b=vp32x5VTHQHEMvKnz68U6vXivWdMI6qh1B3mkwEWZO+uI4ak8cCtUuP/XpJ+iC1Nfp
+         ++Aa1ry13ZwNVGM0fWqZTwtLYGxfJ6wk7+ctjP18PA9E59UYzK3mhm8rygS1aR3Fc2Y3
+         eUCvcFaRaWZy6RNgDx9aLU7qxRM7I89SjFtGlke45GhPtFHVu2mZC6XsBgdKv2CEuC9P
+         zfeoF2t8uAmgB4ABvIofkkEh9n1xw9NE1Dhga2MQkE/Ikjx15lAC9qF7fojUKc/+l3vR
+         t+baHeTQpMY3S27fAOACVBZPG5BY+foLLygVw2wKOPnxvcG4lW9omjltYZ8sFO9dotuj
+         g6EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688874288; x=1691466288;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+iFlYWKemOtEJ+o4zoGBP/4XhvOtPNzNtMX13qsZ7Ho=;
-        b=H8eMYrz8fteY2M+Jgz7Evh8k2DrJ4tcWKO0hcWMTO+5tzI0BqrJ/YWvjyb5lpcnmtX
-         Wxlckuf9Skf+wZtPORKwcKVU3cBQ20pKw9Bh/3YhJIeYjSoMqRoX+0ZkyMldLEfDKwsG
-         obmZwNaLRGQJlwtPtFdRfdfucRjpAUQwOZ7g5z+I+DC/7oDanxOyRbEkz5gSCyK2k/xo
-         EsCJGH9jxiNvFWngAKVu52tZTRoZ0l8UZGOAblVwcj7HTXzkE8BStP0npZdRiWrVwYW+
-         vpdkvPKIR52tTqBp2XhxctLavpzp2xD5e1qLI4PDpdDj/c09Mq3zMnRvl20xVjolk6pH
-         RbpA==
-X-Gm-Message-State: ABy/qLYkR0BFqQ6tdCi0l+WFQVx3ALthPpwFp7OH+PuAciErNDnEznJP
-        EA58eJMa/2IUzT+yEkqCwQw=
-X-Google-Smtp-Source: APBJJlE7WNYmqWCVTIsQ7r0BsyzBvmwL/T0a2gEbtZ5mB1GpwGtwx+BS/maHiyJjaOCMFpm7t1q/0Q==
-X-Received: by 2002:a17:90b:ecd:b0:263:a6a:49b8 with SMTP id gz13-20020a17090b0ecd00b002630a6a49b8mr6667141pjb.3.1688874288056;
-        Sat, 08 Jul 2023 20:44:48 -0700 (PDT)
-Received: from [192.168.1.12] (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
-        by smtp.gmail.com with ESMTPSA id k14-20020a17090a590e00b0025e7f7b46c3sm3649566pji.25.2023.07.08.20.44.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jul 2023 20:44:47 -0700 (PDT)
-Message-ID: <b40831db-1a64-6fa6-ddcb-d33068882e90@gmail.com>
-Date:   Sun, 9 Jul 2023 11:44:42 +0800
+        d=1e100.net; s=20221208; t=1688874489; x=1691466489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lHMHHcNuRvKs17O5H9Ea+cH4a86VTRSbAhgkLKrkiBM=;
+        b=hfa/Be5DPzFRuFP86vRA9yIGR8tm3D2KPzf1PA0Xq9/Uv9+BkHIvejjG0NJLoQMRgU
+         6C3mUdnZj3oXRJzKL2BdtfyFIWpLTN7epBLl79GM3CyarkEq9vlk6JRSI+uLxEfu1Zoy
+         6jUyGco78omTTdksCw3m3EUOHRcKSRPryGYkw5iXbP6ednUgnJn3EhiCHXWTBirIH+Hl
+         X72zZlWFyWmP8npnORaPTw3j3vnCbTSG1uBZ+TgsNgx5nwZxdbevaEJrLee8/sx6UfKl
+         sJlxWzgs5WiRtd2O3Gp0O2OL1rmjFQ/FRn0Cx299S54IdB52rcjmNG/l7xCcCQz4DQhQ
+         6J3A==
+X-Gm-Message-State: ABy/qLbaeT3CztUJXO7aZhuqFNOLO1VVKBBssgfLV+kvm0U59K8+sHTP
+        bL9+R2wlx5aO7vbgmw3ICctTlA==
+X-Google-Smtp-Source: APBJJlErrQQeAWc9qzYKimAILyOV7ytsRAPqBiJVXTpxGOXdF2oRl7XwOeQycxATBQcYP6Fjlcus6w==
+X-Received: by 2002:a2e:94c3:0:b0:2b6:dc84:b93e with SMTP id r3-20020a2e94c3000000b002b6dc84b93emr6513320ljh.21.1688874489036;
+        Sat, 08 Jul 2023 20:48:09 -0700 (PDT)
+Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
+        by smtp.gmail.com with ESMTPSA id u23-20020a2e9b17000000b002b70206cd45sm1398633lji.90.2023.07.08.20.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jul 2023 20:48:08 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/2] usb: typec: qcom-pmic-typec: enable DP support
+Date:   Sun,  9 Jul 2023 06:48:06 +0300
+Message-Id: <20230709034808.4049383-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Introduce user log
-Content-Language: en-US
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
-        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230708040750.72570-1-hffilwlqm@gmail.com>
- <v76ytdfdf2sqhdufkqxzsuznandia3x4l4iyghpirxkzytngxq@uttzaebbmdjb>
-From:   Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <v76ytdfdf2sqhdufkqxzsuznandia3x4l4iyghpirxkzytngxq@uttzaebbmdjb>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+To enable DisplayPort on the platforms supported by qcom-pmic-typec
+driver, we need to register a corresponding drm_bridge for this device
+and also be able to send the OOB hotplug event to the corresponding DRM
+connector. All this is implemented by [1], but there is no direct
+dependency on that patchset.
 
+[1] https://patchwork.freedesktop.org/series/120393/
 
-On 2023/7/9 06:02, Daniel Xu wrote:
-> Hi Leon,
-> 
-> On Sat, Jul 08, 2023 at 12:07:48PM +0800, Leon Hwang wrote:
->> This series introduces bpf user log to transfer error message from
->> kernel space to user space when users provide buffer to receive the
->> error message.
->>
->> Especially, when to attach XDP to device, it can transfer the error
->> message along with errno from dev_xdp_attach() to user space, if error
->> happens in dev_xdp_attach().
-> 
-> Have you considered adding a tracepoint instead? With some TP_printk()
-> stuff I think you can achieve a similar result without having to do
-> go through changing uapi.
+Dmitry Baryshkov (2):
+  usb: typec: altmodes/displayport: add support for embedded DP cases
+  usb: typec: qcom-pmic-typec: register drm_bridge
 
-If just for dev_xdp_attach(), I think netlink approach is better than
-tracepoint approach.
+ drivers/usb/typec/altmodes/displayport.c      |  5 +++-
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 25 +++++++++++++++++++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-As for BPF syscall, error message along with errno through uapi is a
-good UX, like "create link: invalid argument (Invalid XDP flags for BPF
-link attachment)" when failed to attach XDP to a device. Hence, users
-are able to know the error details instead of -EINVAL or "invalid
-argument" only.
-
-Furthermore, as for other BPF syscall subcommands, we are able to
-provide error message along with errno by bpf_ulog_once(&attr->xxx.ulog,
-"An error").
+-- 
+2.39.2
 
