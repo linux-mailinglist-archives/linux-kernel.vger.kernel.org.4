@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342F174C0F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 06:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D3074C0F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 06:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjGIEgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 00:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S230106AbjGIEj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 00:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjGIEgl (ORCPT
+        with ESMTP id S229777AbjGIEjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 00:36:41 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EF61B1;
-        Sat,  8 Jul 2023 21:36:39 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qIM9x-0002mt-1c; Sun, 09 Jul 2023 06:36:33 +0200
-Message-ID: <ac957af4-f265-3ba0-0373-3a71d134a57e@leemhuis.info>
-Date:   Sun, 9 Jul 2023 06:36:32 +0200
+        Sun, 9 Jul 2023 00:39:24 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820A5B6;
+        Sat,  8 Jul 2023 21:39:23 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fba86f069bso5154046e87.3;
+        Sat, 08 Jul 2023 21:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688877562; x=1691469562;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wKe5r1gQ6s1Ey9/fn+Twfv7UiGM4dBpxhjxuitBrABM=;
+        b=CYY8hWw3F+AjKemNEUbJzoooZCZvy5OR9kdGSeTiaobLNuusIyEkL7S0081BbeMnib
+         0b6bQMBqpw9I/mtHG2Okw9YRVvRYRQ2QLDVz947Kh5Nks35vWo/6Cx85RA5JyqoxaEny
+         sVw+q0h/ZfTcs7TJ/0O0Kb3T2YwJuYkhWfz4ZSdg6A8oVJ6dVX1Z/UZvz3OPqP9+ek64
+         ZhoUfj1+HXC+aSorm5kOXDCBA2oyH2XsAyaTmFYh4PveqagIK7sz5lnjTgrdpQXX7d2/
+         eNhYZqd84wkZSKiife5j2RJ8fcSnAv57fl4Qk1muCneD3zsD+35ZKYEiLraiaPGMik1W
+         xvOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688877562; x=1691469562;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wKe5r1gQ6s1Ey9/fn+Twfv7UiGM4dBpxhjxuitBrABM=;
+        b=SZvuPtmuv6mvHQpY7o8DtLZluh9s3KeAstsAzqP9Pr1aJ1air0YOq8BFpc3ogV46Sw
+         oK5JvDPLAHcxTFccwKQ0ZHN5tHpd9PcnERDUk36G00kdOwUNrttkDWkFgtBu7UsONsjt
+         B0gK6jSys8/Wd8RT1m40tEXAIZ+HMMClwSJ4wwLq+q5MPDZZ1BfbhccVC3GyoOUEE+PM
+         BZiOnzghw2eF+ah8rPySCIrxV3Nj4X39J4Hxm7SRlwPIsu2JAemZEiBglkpyugBFOVjy
+         a9FTkvP+Lhmdw2kl0yl/8nskUqzE4oFkq0zFiRJI2IbS/AlOA7rKMq9xFLlQlBK8eizG
+         IUfQ==
+X-Gm-Message-State: ABy/qLYSWDuqO04KNS8JiaOsbq9xjH2OtLtvZoLS2weaedVwUJZWbH4q
+        0dDAvEWblD0Q0HtofIzFSss4OJLRYuZt2H+16cKJlu3KqxY=
+X-Google-Smtp-Source: APBJJlFVFpsoJvbQX1IbloX7CIMWuRW6aa4+6zIu2+kNh/iMPVwASFCofJexSC58earMPlmkTIoHUB5vp96bESes1/M=
+X-Received: by 2002:a05:6512:3157:b0:4f8:7617:6445 with SMTP id
+ s23-20020a056512315700b004f876176445mr6577459lfi.48.1688877561411; Sat, 08
+ Jul 2023 21:39:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: 3 more broken Zaurii - SL-5600, A300, C700
-Content-Language: en-US, de-DE
-To:     Andrew Lunn <andrew@lunn.ch>, Ross Maynard <bids.7405@bigpond.com>
-Cc:     Dave Jones <davej@codemonkey.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
- <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
- <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
- <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
- <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
- <14fd48c8-3955-c933-ab6f-329e54da090f@bigpond.com>
- <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688877399;eabebbaa;
-X-HE-SMSGID: 1qIM9x-0002mt-1c
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 8 Jul 2023 23:39:10 -0500
+Message-ID: <CAH2r5mv9U44-ypmJam9KTWNky=8+TOPsv=cdWj3sRd6DPjhU1Q@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,21 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.07.23 22:49, Andrew Lunn wrote:
->> Could someone please submit the patch for me?
-> 
-> You are not far from it yourself.
-> 
-> I've not followed the history here. Did it never work, or has it
-> worked in the past, and then at some point broke?
-> 
-> If it never worked, this would be classed as new development, and so
-> the patch should be for net-next. If it did work, but at some point in
-> time it stopped working, then it is for net.
-> [...]
+Please pull the following changes since commit
+a507db1d8fdc39802415e4d2ef6d1aecd67927fa:
 
-To chime in here: I most agree, but FWIW, it broke more than a decade
-ago in v3.0, so maybe this is better suited for net-next. But of course
-that up to the -net maintainers.
+  Merge tag '6.5-rc-smb3-client-fixes-part1' of
+git://git.samba.org/sfrench/cifs-2.6 (2023-06-30 22:00:28 -0700)
 
-Ciao, Thorsten
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.5-rc-smb3-client-fixes-part2
+
+for you to fetch changes up to d14de8067e3f9653cdef5a094176d00f3260ab20:
+
+  cifs: Add a laundromat thread for cached directories (2023-07-05
+22:36:07 -0500)
+
+----------------------------------------------------------------
+3 smb3 client fixes;
+- fix potential use after free in unmount
+- minor cleanup fix
+- add worker to cleanup stale directory leases
+
+Not included in this P/R is the follow on patch to allow this timeout
+to be configurable at mount (is being tested), as are a pair of fixes
+for some cases where stale metadata can be incorrectly used, and a fix
+for O_DIRECT is also not included (still being tested).
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      smb: client: remove redundant pointer 'server'
+
+Ronnie Sahlberg (1):
+      cifs: Add a laundromat thread for cached directories
+
+Winston Wen (1):
+      cifs: fix session state transition to avoid use-after-free issue
+
+ fs/smb/client/cached_dir.c | 67
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ fs/smb/client/cached_dir.h |  1 +
+ fs/smb/client/connect.c    |  7 ++++---
+ fs/smb/client/dfs.c        |  2 --
+ 4 files changed, 72 insertions(+), 5 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve
