@@ -2,46 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35A874C676
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 19:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03B374C69C
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 19:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjGIRCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 13:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S230203AbjGIRWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 13:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIRCQ (ORCPT
+        with ESMTP id S229818AbjGIRWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 13:02:16 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED2DD
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 10:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=MYL8Dzx8oc+g3T8tMzOM72r7kEsw5MHr2MLIzYudHnE=; b=AtwdZ49v2FkuNE7VHd1FBKFuUl
-        OZOrKcsFHzMjFhVfZVcjYYcGq5GcDMHSyjlcpEY3Axk6LLrTYtncMwr+2NcXgc7eskb2/B3aupPfV
-        wUpbc89g2LamyJRvTLk+Bc8CxRWre6ftDap+IcChXEIsIIp0nY0pG72aHMytjChtL8H2HBMGnGwDu
-        1QN9rkK/nHgvgSfXxBpvC+pFn9Rk67EfTdBxh9mj946vw+VEUU26+UOCT4vL+TNNFfsdOQj+M6ewd
-        W5DOuf2xvm1BRb+esndsSxsdDlvwmGoxGC1YBpQpmhS4mBynjZX+Jhib8f7NVi0fP1zHJHKimnj8+
-        qg+4Mvww==;
-Received: from 2a02-8389-2341-5b80-39d3-4735-9a3c-88d8.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:39d3:4735:9a3c:88d8] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIXnZ-009T7k-1p;
-        Sun, 09 Jul 2023 17:02:14 +0000
-Date:   Sun, 9 Jul 2023 19:02:08 +0200
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Subject: [GIT PULL] dma-mapping fixes for Linux 6.5
-Message-ID: <ZKroEFssSwC0Lnn8@infradead.org>
+        Sun, 9 Jul 2023 13:22:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F36C7
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 10:22:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D175860BE9
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 17:22:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E73C433C8;
+        Sun,  9 Jul 2023 17:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688923326;
+        bh=vZxIGTzVbwcqJEpX1J2uB8CrfifoX/MNcXdkuR8ow00=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JkH3fUUUPHirWS/4X6it5XAu38JodUVCorxx1HowQl5sD9liWtwcdWQ3ojCkBkL0r
+         LV4Pr4GE4JFf54njCfxSvdetzRRn3njV3UHphD0f9XESXFG3UclpqtgLgCRu4RtON+
+         fG0Dt1Ab95uAvJb8NgpZiYQBcASkSuwAD9LQDbd9iyjBSNkZfIb1g+6ZS4HBPLWC6P
+         FIS0OVVFiSm3VmGi5Bh/EPSoIMIERbxpVYOSgLKfxVQerCNZWKaG9ujHu80EwcHXuX
+         8j4srxtX7O+GHye7yqMcwN2Obt9jXj4DKhCRXn9D+zz43ZDTLWmDs0ReEPji9B6sOw
+         w6k7o4iGl0wgw==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] riscv: mm: fix truncates issue on RV32
+Date:   Mon, 10 Jul 2023 01:10:36 +0800
+Message-Id: <20230709171036.1906-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,27 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 0a2f6372a43ff5e948b8b10be34d4473f6c2ef6c:
+lkp reports below sparse warning when building for RV32:
+arch/riscv/mm/init.c:1204:48: sparse: warning: cast truncates bits from
+constant value (100000000 becomes 0)
 
-  drm/nouveau: stop using is_swiotlb_active (2023-06-07 15:11:26 +0200)
+IMO, the reason we didn't see this truncates bug in real world is "0"
+means MEMBLOCK_ALLOC_ACCESSIBLE in memblock and there's no RV32 HW
+with more than 4GB memory.
 
-are available in the Git repository at:
+Fix it anyway to make sparse happy.
 
-  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-6.5-2023-07-09
+Fixes: decf89f86ecd ("riscv: try to allocate crashkern region from 32bit addressible memory")
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306080034.SLiCiOMn-lkp@intel.com/
+---
+ arch/riscv/mm/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-for you to fetch changes up to 8ac04063354a01a484d2e55d20ed1958aa0d3392:
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 70fb31960b63..9ce504737d18 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -1346,7 +1346,7 @@ static void __init reserve_crashkernel(void)
+ 	 */
+ 	crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
+ 					       search_start,
+-					       min(search_end, (unsigned long) SZ_4G));
++					       min(search_end, (unsigned long)(SZ_4G - 1)));
+ 	if (crash_base == 0) {
+ 		/* Try again without restricting region to 32bit addressible memory */
+ 		crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
+-- 
+2.40.1
 
-  swiotlb: reduce the number of areas to match actual memory pool size (2023-06-29 07:10:28 +0200)
-
-----------------------------------------------------------------
-dma-mapping fixes for Linux 6.5
-
- - swiotlb area sizing fixes (Petr Tesarik)
-
-----------------------------------------------------------------
-Petr Tesarik (2):
-      swiotlb: always set the number of areas before allocating the pool
-      swiotlb: reduce the number of areas to match actual memory pool size
-
- kernel/dma/swiotlb.c | 46 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 35 insertions(+), 11 deletions(-)
