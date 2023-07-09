@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB3874C5FE
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3327274C5C3
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbjGIPVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S233763AbjGIPTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbjGIPVT (ORCPT
+        with ESMTP id S233774AbjGIPSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:21:19 -0400
+        Sun, 9 Jul 2023 11:18:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C2A3C10;
-        Sun,  9 Jul 2023 08:17:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2797C26BF;
+        Sun,  9 Jul 2023 08:15:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1B8160BFB;
-        Sun,  9 Jul 2023 15:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E91EC433C8;
-        Sun,  9 Jul 2023 15:15:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0799960C2B;
+        Sun,  9 Jul 2023 15:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A392EC433CC;
+        Sun,  9 Jul 2023 15:15:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915755;
-        bh=HNcLdJT+rGUMH2QEx9FvKd4oupmDsOo1k5N5Y0hlCqw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F70v8wDPiuoAbv+QRRpWfTSXi3j3Pmkw0zNqL0+b07vtM92LlLoYSVZHUWTuEHdcr
-         AkhdwlsOX7qPQ+JhwB8zud/R2d2JrgLncjAN6mP+p1/H88p+WgwxdymgUq/zZ2p05q
-         7f0GVy1XIL+tf5ZIUaNTvjfQ27mcqocRyIdRE2QVIqFTaV+VGYDcjTKhBYLM2LRSv7
-         LxtSDCVT/b5v/XlJc7WiX+ACvJO0oFmUouxFJXU57wbWMsemHlTavy+Iwm4mtfsfXZ
-         GGJ76leZeC/9cf+qneG6wogAPlwDXpoxjVaQ/Kr6mRvlEjlpyhcqoCcwvtUkw80Kwa
-         NWzH7N0j48MAQ==
+        s=k20201202; t=1688915758;
+        bh=sPSF83Pa+6iysooxDfu1G5Cy7aII/KTDm7x39lE4rhA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iXypVHig1/+oCxtqkMeNhwNKdNEN9K2x7LMxJQred1LgGC3lRaiFsPyiULBSrYlWP
+         x/kyBTUjfWgi6MJ+pZRbkHc82455dtAiILTUYDgCu2lsCGjeFK0qVlI9b14YfeYvhf
+         fUzbksGLSkNOCFsQTE46MSgk1hgo/l8aXRIdGA21rC+TX1M0HW+zEbGgl9vPteKK/F
+         YPcRusGbN/VFeES2Vp29WPK7coxSNc81BNxEJ/coAwPpHgy+XdH6GiU2TLwLivg3MO
+         /YY1jiudOl4VJdunb7jp1P4bJmKSR9OXEWEnrA37kJIpVxtGSYfg7dz7yxtiKtVTES
+         G5ftsSvgkQwPQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hao Chen <chenhao418@huawei.com>,
-        kernel test robot <lkp@intel.com>,
-        Hao Lan <lanhao@huawei.com>, Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, yisen.zhuang@huawei.com,
-        salil.mehta@huawei.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, guoren@kernel.org, huangguangbin2@huawei.com,
-        netdev@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 10/10] net: hns3: fix strncpy() not using dest-buf length as length issue
-Date:   Sun,  9 Jul 2023 11:15:28 -0400
-Message-Id: <20230709151528.513775-10-sashal@kernel.org>
+Cc:     Maxime Bizon <mbizon@freebox.fr>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 1/7] wifi: ath11k: fix registration of 6Ghz-only phy without the full channel range
+Date:   Sun,  9 Jul 2023 11:15:49 -0400
+Message-Id: <20230709151555.513910-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230709151528.513775-1-sashal@kernel.org>
-References: <20230709151528.513775-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.120
+X-stable-base: Linux 5.10.186
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -63,138 +58,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Chen <chenhao418@huawei.com>
+From: Maxime Bizon <mbizon@freebox.fr>
 
-[ Upstream commit 1cf3d5567f273a8746d1bade00633a93204f80f0 ]
+[ Upstream commit e2ceb1de2f83aafd8003f0b72dfd4b7441e97d14 ]
 
-Now, strncpy() in hns3_dbg_fill_content() use src-length as copy-length,
-it may result in dest-buf overflow.
+Because of what seems to be a typo, a 6Ghz-only phy for which the BDF
+does not allow the 7115Mhz channel will fail to register:
 
-This patch is to fix intel compile warning for csky-linux-gcc (GCC) 12.1.0
-compiler.
+  WARNING: CPU: 2 PID: 106 at net/wireless/core.c:907 wiphy_register+0x914/0x954
+  Modules linked in: ath11k_pci sbsa_gwdt
+  CPU: 2 PID: 106 Comm: kworker/u8:5 Not tainted 6.3.0-rc7-next-20230418-00549-g1e096a17625a-dirty #9
+  Hardware name: Freebox V7R Board (DT)
+  Workqueue: ath11k_qmi_driver_event ath11k_qmi_driver_event_work
+  pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  pc : wiphy_register+0x914/0x954
+  lr : ieee80211_register_hw+0x67c/0xc10
+  sp : ffffff800b123aa0
+  x29: ffffff800b123aa0 x28: 0000000000000000 x27: 0000000000000000
+  x26: 0000000000000000 x25: 0000000000000006 x24: ffffffc008d51418
+  x23: ffffffc008cb0838 x22: ffffff80176c2460 x21: 0000000000000168
+  x20: ffffff80176c0000 x19: ffffff80176c03e0 x18: 0000000000000014
+  x17: 00000000cbef338c x16: 00000000d2a26f21 x15: 00000000ad6bb85f
+  x14: 0000000000000020 x13: 0000000000000020 x12: 00000000ffffffbd
+  x11: 0000000000000208 x10: 00000000fffffdf7 x9 : ffffffc009394718
+  x8 : ffffff80176c0528 x7 : 000000007fffffff x6 : 0000000000000006
+  x5 : 0000000000000005 x4 : ffffff800b304284 x3 : ffffff800b304284
+  x2 : ffffff800b304d98 x1 : 0000000000000000 x0 : 0000000000000000
+  Call trace:
+   wiphy_register+0x914/0x954
+   ieee80211_register_hw+0x67c/0xc10
+   ath11k_mac_register+0x7c4/0xe10
+   ath11k_core_qmi_firmware_ready+0x1f4/0x570
+   ath11k_qmi_driver_event_work+0x198/0x590
+   process_one_work+0x1b8/0x328
+   worker_thread+0x6c/0x414
+   kthread+0x100/0x104
+   ret_from_fork+0x10/0x20
+  ---[ end trace 0000000000000000 ]---
+  ath11k_pci 0002:01:00.0: ieee80211 registration failed: -22
+  ath11k_pci 0002:01:00.0: failed register the radio with mac80211: -22
+  ath11k_pci 0002:01:00.0: failed to create pdev core: -22
 
-The warning reports as below:
-
-hclge_debugfs.c:92:25: warning: 'strncpy' specified bound depends on
-the length of the source argument [-Wstringop-truncation]
-
-strncpy(pos, items[i].name, strlen(items[i].name));
-
-hclge_debugfs.c:90:25: warning: 'strncpy' output truncated before
-terminating nul copying as many bytes from a string as its length
-[-Wstringop-truncation]
-
-strncpy(pos, result[i], strlen(result[i]));
-
-strncpy() use src-length as copy-length, it may result in
-dest-buf overflow.
-
-So,this patch add some values check to avoid this issue.
-
-Signed-off-by: Hao Chen <chenhao418@huawei.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/lkml/202207170606.7WtHs9yS-lkp@intel.com/T/
-Signed-off-by: Hao Lan <lanhao@huawei.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20230421145445.2612280-1-mbizon@freebox.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/hisilicon/hns3/hns3_debugfs.c    | 31 ++++++++++++++-----
- .../hisilicon/hns3/hns3pf/hclge_debugfs.c     | 29 ++++++++++++++---
- 2 files changed, 48 insertions(+), 12 deletions(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-index 3158c08a3aa9c..ff931b8ef569e 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-@@ -388,19 +388,36 @@ static void hns3_dbg_fill_content(char *content, u16 len,
- 				  const struct hns3_dbg_item *items,
- 				  const char **result, u16 size)
- {
-+#define HNS3_DBG_LINE_END_LEN	2
- 	char *pos = content;
-+	u16 item_len;
- 	u16 i;
- 
-+	if (!len) {
-+		return;
-+	} else if (len <= HNS3_DBG_LINE_END_LEN) {
-+		*pos++ = '\0';
-+		return;
-+	}
-+
- 	memset(content, ' ', len);
--	for (i = 0; i < size; i++) {
--		if (result)
--			strncpy(pos, result[i], strlen(result[i]));
--		else
--			strncpy(pos, items[i].name, strlen(items[i].name));
-+	len -= HNS3_DBG_LINE_END_LEN;
- 
--		pos += strlen(items[i].name) + items[i].interval;
-+	for (i = 0; i < size; i++) {
-+		item_len = strlen(items[i].name) + items[i].interval;
-+		if (len < item_len)
-+			break;
-+
-+		if (result) {
-+			if (item_len < strlen(result[i]))
-+				break;
-+			strscpy(pos, result[i], strlen(result[i]));
-+		} else {
-+			strscpy(pos, items[i].name, strlen(items[i].name));
-+		}
-+		pos += item_len;
-+		len -= item_len;
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 67faf62999ded..3170c54c97b74 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -6044,7 +6044,7 @@ static int ath11k_mac_setup_channels_rates(struct ath11k *ar,
  	}
--
- 	*pos++ = '\n';
- 	*pos++ = '\0';
- }
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
-index 9cda8b3562b89..9d064efdfd59f 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
-@@ -81,16 +81,35 @@ static void hclge_dbg_fill_content(char *content, u16 len,
- 				   const struct hclge_dbg_item *items,
- 				   const char **result, u16 size)
- {
-+#define HCLGE_DBG_LINE_END_LEN	2
- 	char *pos = content;
-+	u16 item_len;
- 	u16 i;
  
-+	if (!len) {
-+		return;
-+	} else if (len <= HCLGE_DBG_LINE_END_LEN) {
-+		*pos++ = '\0';
-+		return;
-+	}
-+
- 	memset(content, ' ', len);
-+	len -= HCLGE_DBG_LINE_END_LEN;
-+
- 	for (i = 0; i < size; i++) {
--		if (result)
--			strncpy(pos, result[i], strlen(result[i]));
--		else
--			strncpy(pos, items[i].name, strlen(items[i].name));
--		pos += strlen(items[i].name) + items[i].interval;
-+		item_len = strlen(items[i].name) + items[i].interval;
-+		if (len < item_len)
-+			break;
-+
-+		if (result) {
-+			if (item_len < strlen(result[i]))
-+				break;
-+			strscpy(pos, result[i], strlen(result[i]));
-+		} else {
-+			strscpy(pos, items[i].name, strlen(items[i].name));
-+		}
-+		pos += item_len;
-+		len -= item_len;
- 	}
- 	*pos++ = '\n';
- 	*pos++ = '\0';
+ 	if (supported_bands & WMI_HOST_WLAN_5G_CAP) {
+-		if (reg_cap->high_5ghz_chan >= ATH11K_MAX_6G_FREQ) {
++		if (reg_cap->high_5ghz_chan >= ATH11K_MIN_6G_FREQ) {
+ 			channels = kmemdup(ath11k_6ghz_channels,
+ 					   sizeof(ath11k_6ghz_channels), GFP_KERNEL);
+ 			if (!channels) {
 -- 
 2.39.2
 
