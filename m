@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DFD74C66D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 18:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3BD74C671
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 18:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjGIQcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 12:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S230373AbjGIQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 12:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIQcH (ORCPT
+        with ESMTP id S229534AbjGIQjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 12:32:07 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57888D1
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 09:32:06 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51e2a6a3768so4637013a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 09:32:06 -0700 (PDT)
+        Sun, 9 Jul 2023 12:39:10 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93A8102
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 09:39:08 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b701dee4bfso58815781fa.0
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 09:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688920325; x=1691512325;
+        d=linux-foundation.org; s=google; t=1688920747; x=1691512747;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6q+aOy2r+flgQCJZwvu7LKyLs8yIYN/+XSC8dA1GdM=;
-        b=gAn+QFrFr5ulawjYCYTO7VmTQzHU5lgWSC5NEnzugmdYhNVwnmToW+MQ4reDvuq6l7
-         PzP2nnDKMv8tyPbAMBaFVMjpeYKtX/i/KRcWvIp4fd9RpwmjkD31sHkkt+5HXaKSjBzT
-         4EDltBMvryK/qN2k9UurMRUANtYKeMK9ETJQ8=
+        bh=Q+VjU6ekC7fLbsWjPDFo7psEkQqUyoVl0DnTxnNmjzI=;
+        b=NS98ciIeNWIjnY+RV1iWqTaoshb480OTVA7Mjxj+FXbnVcbFY1E/JZQ76coDxy7EM9
+         R5ah2Q00jJgn8S48wPCDQbe2A1VDR5sS0Eua41mJVUuN/YWZLk87N7U01aMvvCoKJj4B
+         pc051saVlZpg63qRiR+98UgP4THA9nS/ZEWU4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688920325; x=1691512325;
+        d=1e100.net; s=20221208; t=1688920747; x=1691512747;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=t6q+aOy2r+flgQCJZwvu7LKyLs8yIYN/+XSC8dA1GdM=;
-        b=coHFKc5tkGaAU+eRjF1+ePVhZzHKd1pwEgwSDjsLwbXKyyrgkKiJwIEB3G6huF8dt2
-         9NfqipYXXKHYMUcZBuVOb58uiYMdeSgVQfWyaQ78cLUB1YK+LJHh+mrs9yN4RwY6Jcgf
-         /ujA3cHef+n+Y6p0z/hiHx6Xs6qukoUGsUA2enDRYHmuFs7BB558ctBTQaBse6m6bye2
-         8ygsosXgGyGWBxvjUVa+D+D6971P+iNdsKW8EmZ/KxmRc33DNlRrAQtNViyCPRBBe5qP
-         PeI1gVZjUGaeRIhUsrQSQUU2RvSXsXrllkRwGzaaa6uA9UrYplyUR44Y6U5N7Ulcidnt
-         ux0A==
-X-Gm-Message-State: ABy/qLbe/XlS6Qjv1eLYdl2+JhBTltWDRP/6fPqYl6l2kN4pBbvt51UA
-        3UBo2pPm3ri2aLA7rugz1dr7i0tJMuSo+niZWUO78S5j
-X-Google-Smtp-Source: APBJJlEtr5hsrWH/5Qq5OhFgz/mltRuoLjej38rvM8Li2M+xHQo1+4at9cjIEtyHPRrb2pr6MX1cgg==
-X-Received: by 2002:a05:6402:481:b0:51d:f589:9cbd with SMTP id k1-20020a056402048100b0051df5899cbdmr8441477edv.39.1688920324748;
-        Sun, 09 Jul 2023 09:32:04 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id i15-20020a170906264f00b009893650453fsm4995539ejc.173.2023.07.09.09.32.04
+        bh=Q+VjU6ekC7fLbsWjPDFo7psEkQqUyoVl0DnTxnNmjzI=;
+        b=ZI2LpLEkGBhLfsgrh6d86Hi0LYW1KZ+yhEU7IRA6XWXTLJ8OsTqowib+XBzQw5UUU1
+         pDrKFgliFWiAcY41HHQfEv2XmfBXWvr9c1hq0JW7RlyjUw44krs9nQ92CjpiVfq9XVzj
+         ES4JrYE/iB5lhMIEUCDluxXxtEpVYXJtas4wuoCok5txTPE+LNjDojTvV2ruYBxYD3T1
+         OoQ8RL2T66OkWl+AT+7c3AEZClXDsI4I5e6wekBWJ9NmGzFuhg8+IJtyvLSLJrJEK2Z8
+         AINnhEE86AqHr4Oj+YUhZ3q62tZ4rn24vS5sU+oTVyGGOBd5C/vrDQnOeJtX7ndCgiPp
+         x6LQ==
+X-Gm-Message-State: ABy/qLYdsh8pLmdeofbwOhNKk+dIUD1vQ8Akq/UuS0wHhjmew/km5GX+
+        Q/r+KRtxWJZqrcjTglIpkUPzEg8dRvPDKgQwQPDatyAh
+X-Google-Smtp-Source: APBJJlGebOaXdmgFPYaHuNyCaS/NloUCtB8NQAwsgURjCE1sqi2MY9jG+9vLpe3XvhLUR0N0tdyQgg==
+X-Received: by 2002:a2e:3c14:0:b0:2b6:cff1:cd1c with SMTP id j20-20020a2e3c14000000b002b6cff1cd1cmr8208121lja.34.1688920746924;
+        Sun, 09 Jul 2023 09:39:06 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id u15-20020a2e854f000000b002b6995f38a2sm1543593ljj.100.2023.07.09.09.39.06
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jul 2023 09:32:04 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3141c3a7547so3756925f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 09:32:04 -0700 (PDT)
-X-Received: by 2002:a5d:54c2:0:b0:313:f22c:7549 with SMTP id
- x2-20020a5d54c2000000b00313f22c7549mr8377726wrv.66.1688920324114; Sun, 09 Jul
- 2023 09:32:04 -0700 (PDT)
+        Sun, 09 Jul 2023 09:39:06 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so5343110e87.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 09:39:06 -0700 (PDT)
+X-Received: by 2002:a05:6512:2521:b0:4fb:c0b5:63d4 with SMTP id
+ be33-20020a056512252100b004fbc0b563d4mr8466079lfb.43.1688920745736; Sun, 09
+ Jul 2023 09:39:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <b533071f38804247f06da9e52a04f15cce7a3836.camel@intel.com> <a4265090-d6b8-b185-a400-b09b27a347cc@leemhuis.info>
-In-Reply-To: <a4265090-d6b8-b185-a400-b09b27a347cc@leemhuis.info>
+References: <ZKor+IDTZ8OR/Xu9@athena.kudzu.us>
+In-Reply-To: <ZKor+IDTZ8OR/Xu9@athena.kudzu.us>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 9 Jul 2023 09:31:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg23SdKRcn2W+BWWEfJ2Efp0sreJx9=iw0AsUPjW3qznw@mail.gmail.com>
-Message-ID: <CAHk-=wg23SdKRcn2W+BWWEfJ2Efp0sreJx9=iw0AsUPjW3qznw@mail.gmail.com>
-Subject: Re: [Regression][BISECTED] kernel boot hang after 19898ce9cf8a
- ("wifi: iwlwifi: split 22000.c into multiple files")
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "Greenman, Gregory" <gregory.greenman@intel.com>,
-        "Berg, Johannes" <johannes.berg@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "Baruch, Yaara" <yaara.baruch@intel.com>,
-        "Ben Ami, Golan" <golan.ben.ami@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
+Date:   Sun, 9 Jul 2023 09:38:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh81m71ge+8JW7ShXXVf0Oks16G4kqP0rW+moLZH+GR7Q@mail.gmail.com>
+Message-ID: <CAHk-=wh81m71ge+8JW7ShXXVf0Oks16G4kqP0rW+moLZH+GR7Q@mail.gmail.com>
+Subject: Re: [GIT PULL] NTB bug fixes for 6.5
+To:     Jon Mason <jdmason@kudzu.us>
+Cc:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -88,40 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jul 2023 at 03:55, Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
+On Sat, 8 Jul 2023 at 20:39, Jon Mason <jdmason@kudzu.us> wrote:
 >
-> [CCing the regression list, netdev, the net maintainers, and Linus;
-> Johannes and Kalle as well, but just for the record, they afaik are
-> unavailable]
+> Here are a few NTB bug fixes for 6.5.  Please consider pulling them.
 
-So I will release rc1 with this issue, but remind me - if it hasn't
-had any traction next week and the radio silence continues, I'll just
-revert it all.
+These have clearly not been in linux-next. They have commit dates from
+yesterday, and feel very much like a "rush to get in before the merge
+window closes".
 
-From a quick look, "revert it all" ends up being
+I've pulled this, but don't do this again.
 
-  fd006d60e833: "wifi: iwlwifi: remove support of A0 version of FM RF"
-  a701177bd4bc: "wifi: iwlwifi: cfg: clean up Bz module firmware lines"
-  f4daceae4087: "wifi: iwlwifi: pcie: add device id 51F1 for killer 1675"
-  399762de769c: "wifi: iwlwifi: bump FW API to 83 for AX/BZ/SC devices"
-  31aeae2446d5: "wifi: iwlwifi: cfg: remove trailing dash from FW_PRE constants"
-  ecf11f4e4950: "wifi: iwlwifi: also unify Ma device configurations"
-  bfed356b4fc4: "wifi: iwlwifi: also unify Sc device configurations"
-  3fd31289d5de: "wifi: iwlwifi: unify Bz/Gl device configurations"
-  e3597e28a2fa: "wifi: iwlwifi: pcie: also drop jacket from info macro"
-  0f21d7d56083: "wifi: iwlwifi: remove support for *nJ devices"
-  c648e926d021: "wifi: iwlwifi: don't load old firmware for 22000"
-  a7de384c9399: "wifi: iwlwifi: don't load old firmware for ax210"
-  a13707f7c845: "wifi: iwlwifi: don't load old firmware for Bz"
-  508b4a1baeb3: "wifi: iwlwifi: don't load old firmware for Sc"
-  5afe98b2e299: "wifi: iwlwifi: give Sc devices their own family"
-  19898ce9cf8a: "wifi: iwlwifi: split 22000.c into multiple files"
-
-since clearly nothing seems to be happening on this front, and summer
-vacations are only going to get worse.
-
-But we'll give it another week. In August huge chunks of Europe will
-go on vacation.
-
-                    Linus
+                 Linus
