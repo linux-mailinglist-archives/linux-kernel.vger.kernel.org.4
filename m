@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9870774C5DF
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0607C74C5EB
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbjGIPU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S233909AbjGIPUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbjGIPTc (ORCPT
+        with ESMTP id S233721AbjGIPUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:19:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12223584;
-        Sun,  9 Jul 2023 08:16:53 -0700 (PDT)
+        Sun, 9 Jul 2023 11:20:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8F35B0;
+        Sun,  9 Jul 2023 08:17:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7244B60C41;
-        Sun,  9 Jul 2023 15:16:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BFFAC433CB;
-        Sun,  9 Jul 2023 15:16:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BC3660C53;
+        Sun,  9 Jul 2023 15:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDBB8C433CB;
+        Sun,  9 Jul 2023 15:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915803;
-        bh=SRu7SYUS9UZrnTbsJYulHWPIpGYna0or8x9wNP6jfUI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fr3u6O9cH/xVXe90tuekgfdojnEn2cRrrAYHpC69iksA665Emczx2zpz7WbjSnfzz
-         RuADS+EUgKFJ6mJkje2xzJfAB3/Wg18JEyPmvf5LCPJhQ0bfz8vyf6CajBOITMu9yd
-         dQZ5DTvHT8Qr3JAEfyyyBmoECyIdf/6DkffArHGBNxLR5Oujl/kD2SlR1QQoTHjrM1
-         07C5qxycjIzLpj+xga1SC5DkgIg8EXYYqw+WoR2HDh0x2XAbSIZuRoGK5i+4xgUsYt
-         pLaO1T5Gj+liri6ns7M8qknmOD6ogUNPjkjAjtXNPsrlaMBQT0SUPYmfNAjJdAYqEL
-         D6RkYRafhNTlQ==
+        s=k20201202; t=1688915808;
+        bh=s/Cb8Zm+6Qly1ZMy/ulzm3Pf5rMTvuUA8VEfjYDv+pQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=d88zhq0Gw/K1B/+0fTHq6QY/oCZS+eKAtFTjGP/MIh5KWi9YwOZHaAGW4lT48Ina0
+         GW41MP7lGdrdXEziDOk0sk16ZSUfBNbv4Fr75w06RfZQizRnndB+xyFUQN6l3NVCAZ
+         z4GvV57SNa20cqiBWEflr4LPTCSwxbdawKaRJaJYvoLypzDOkmYiQjCRZmYKl/yKvT
+         IFQ6Jc/mE6LuFsxABWWe//6SjKsCXZ6ErS9VZqDVHybX85MMfuYOOaBrj7GvBsSsVE
+         1c1MWLM9GD3rLus66vwgtyS4G//Bnr7BHNOT9MzM2wa+jrYG8+spGCNYmD95Q9XCzN
+         YWhrWJ819vh7Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ying Hsu <yinghsu@chromium.org>,
-        Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, jesse.brandeburg@intel.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 5/5] igb: Fix igb_down hung on surprise removal
-Date:   Sun,  9 Jul 2023 11:16:30 -0400
-Message-Id: <20230709151632.514098-5-sashal@kernel.org>
+Cc:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 1/4] wifi: rtw89: 8851be: add 8851BE PCI entry and fill PCI capabilities
+Date:   Sun,  9 Jul 2023 11:16:41 -0400
+Message-Id: <20230709151645.514172-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230709151632.514098-1-sashal@kernel.org>
-References: <20230709151632.514098-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.288
+X-stable-base: Linux 4.14.320
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -64,87 +56,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ying Hsu <yinghsu@chromium.org>
+From: Ping-Ke Shih <pkshih@realtek.com>
 
-[ Upstream commit 004d25060c78fc31f66da0fa439c544dda1ac9d5 ]
+[ Upstream commit 99ff8da56322cda9eb9b37021e27b127c2d1cad8 ]
 
-In a setup where a Thunderbolt hub connects to Ethernet and a display
-through USB Type-C, users may experience a hung task timeout when they
-remove the cable between the PC and the Thunderbolt hub.
-This is because the igb_down function is called multiple times when
-the Thunderbolt hub is unplugged. For example, the igb_io_error_detected
-triggers the first call, and the igb_remove triggers the second call.
-The second call to igb_down will block at napi_synchronize.
-Here's the call trace:
-    __schedule+0x3b0/0xddb
-    ? __mod_timer+0x164/0x5d3
-    schedule+0x44/0xa8
-    schedule_timeout+0xb2/0x2a4
-    ? run_local_timers+0x4e/0x4e
-    msleep+0x31/0x38
-    igb_down+0x12c/0x22a [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    __igb_close+0x6f/0x9c [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    igb_close+0x23/0x2b [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    __dev_close_many+0x95/0xec
-    dev_close_many+0x6e/0x103
-    unregister_netdevice_many+0x105/0x5b1
-    unregister_netdevice_queue+0xc2/0x10d
-    unregister_netdev+0x1c/0x23
-    igb_remove+0xa7/0x11c [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    pci_device_remove+0x3f/0x9c
-    device_release_driver_internal+0xfe/0x1b4
-    pci_stop_bus_device+0x5b/0x7f
-    pci_stop_bus_device+0x30/0x7f
-    pci_stop_bus_device+0x30/0x7f
-    pci_stop_and_remove_bus_device+0x12/0x19
-    pciehp_unconfigure_device+0x76/0xe9
-    pciehp_disable_slot+0x6e/0x131
-    pciehp_handle_presence_or_link_change+0x7a/0x3f7
-    pciehp_ist+0xbe/0x194
-    irq_thread_fn+0x22/0x4d
-    ? irq_thread+0x1fd/0x1fd
-    irq_thread+0x17b/0x1fd
-    ? irq_forced_thread_fn+0x5f/0x5f
-    kthread+0x142/0x153
-    ? __irq_get_irqchip_state+0x46/0x46
-    ? kthread_associate_blkcg+0x71/0x71
-    ret_from_fork+0x1f/0x30
+Add PCI entry to 8851BE with its device ID 10ec:b851, also fill PCI info
+according to its capabilities.
 
-In this case, igb_io_error_detected detaches the network interface
-and requests a PCIE slot reset, however, the PCIE reset callback is
-not being invoked and thus the Ethernet connection breaks down.
-As the PCIE error in this case is a non-fatal one, requesting a
-slot reset can be avoided.
-This patch fixes the task hung issue and preserves Ethernet
-connection by ignoring non-fatal PCIE errors.
-
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-Tested-by: Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/20230620174732.4145155-1-anthony.l.nguyen@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20230421024551.29994-3-pkshih@realtek.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../net/wireless/realtek/rtw89/rtw8851be.c    | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 drivers/net/wireless/realtek/rtw89/rtw8851be.c
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 6f9d563deb6ba..be51179089852 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -9059,6 +9059,11 @@ static pci_ers_result_t igb_io_error_detected(struct pci_dev *pdev,
- 	struct net_device *netdev = pci_get_drvdata(pdev);
- 	struct igb_adapter *adapter = netdev_priv(netdev);
- 
-+	if (state == pci_channel_io_normal) {
-+		dev_warn(&pdev->dev, "Non-correctable non-fatal error reported.\n");
-+		return PCI_ERS_RESULT_CAN_RECOVER;
-+	}
+diff --git a/drivers/net/wireless/realtek/rtw89/rtw8851be.c b/drivers/net/wireless/realtek/rtw89/rtw8851be.c
+new file mode 100644
+index 0000000000000..0f7711c50bd15
+--- /dev/null
++++ b/drivers/net/wireless/realtek/rtw89/rtw8851be.c
+@@ -0,0 +1,86 @@
++// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
++/* Copyright(c) 2022-2023  Realtek Corporation
++ */
 +
- 	netif_device_detach(netdev);
- 
- 	if (state == pci_channel_io_perm_failure)
++#include <linux/module.h>
++#include <linux/pci.h>
++
++#include "pci.h"
++#include "reg.h"
++#include "rtw8851b.h"
++
++static const struct rtw89_pci_info rtw8851b_pci_info = {
++	.txbd_trunc_mode	= MAC_AX_BD_TRUNC,
++	.rxbd_trunc_mode	= MAC_AX_BD_TRUNC,
++	.rxbd_mode		= MAC_AX_RXBD_PKT,
++	.tag_mode		= MAC_AX_TAG_MULTI,
++	.tx_burst		= MAC_AX_TX_BURST_2048B,
++	.rx_burst		= MAC_AX_RX_BURST_128B,
++	.wd_dma_idle_intvl	= MAC_AX_WD_DMA_INTVL_256NS,
++	.wd_dma_act_intvl	= MAC_AX_WD_DMA_INTVL_256NS,
++	.multi_tag_num		= MAC_AX_TAG_NUM_8,
++	.lbc_en			= MAC_AX_PCIE_ENABLE,
++	.lbc_tmr		= MAC_AX_LBC_TMR_2MS,
++	.autok_en		= MAC_AX_PCIE_DISABLE,
++	.io_rcy_en		= MAC_AX_PCIE_DISABLE,
++	.io_rcy_tmr		= MAC_AX_IO_RCY_ANA_TMR_6MS,
++
++	.init_cfg_reg		= R_AX_PCIE_INIT_CFG1,
++	.txhci_en_bit		= B_AX_TXHCI_EN,
++	.rxhci_en_bit		= B_AX_RXHCI_EN,
++	.rxbd_mode_bit		= B_AX_RXBD_MODE,
++	.exp_ctrl_reg		= R_AX_PCIE_EXP_CTRL,
++	.max_tag_num_mask	= B_AX_MAX_TAG_NUM,
++	.rxbd_rwptr_clr_reg	= R_AX_RXBD_RWPTR_CLR,
++	.txbd_rwptr_clr2_reg	= 0,
++	.dma_stop1		= {R_AX_PCIE_DMA_STOP1, B_AX_TX_STOP1_MASK_V1},
++	.dma_stop2		= {0},
++	.dma_busy1		= {R_AX_PCIE_DMA_BUSY1, DMA_BUSY1_CHECK_V1},
++	.dma_busy2_reg		= 0,
++	.dma_busy3_reg		= R_AX_PCIE_DMA_BUSY1,
++
++	.rpwm_addr		= R_AX_PCIE_HRPWM,
++	.cpwm_addr		= R_AX_CPWM,
++	.tx_dma_ch_mask		= BIT(RTW89_TXCH_ACH4) | BIT(RTW89_TXCH_ACH5) |
++				  BIT(RTW89_TXCH_ACH6) | BIT(RTW89_TXCH_ACH7) |
++				  BIT(RTW89_TXCH_CH10) | BIT(RTW89_TXCH_CH11),
++	.bd_idx_addr_low_power	= NULL,
++	.dma_addr_set		= &rtw89_pci_ch_dma_addr_set,
++	.bd_ram_table		= &rtw89_bd_ram_table_single,
++
++	.ltr_set		= rtw89_pci_ltr_set,
++	.fill_txaddr_info	= rtw89_pci_fill_txaddr_info,
++	.config_intr_mask	= rtw89_pci_config_intr_mask,
++	.enable_intr		= rtw89_pci_enable_intr,
++	.disable_intr		= rtw89_pci_disable_intr,
++	.recognize_intrs	= rtw89_pci_recognize_intrs,
++};
++
++static const struct rtw89_driver_info rtw89_8851be_info = {
++	.chip = &rtw8851b_chip_info,
++	.bus = {
++		.pci = &rtw8851b_pci_info,
++	},
++};
++
++static const struct pci_device_id rtw89_8851be_id_table[] = {
++	{
++		PCI_DEVICE(PCI_VENDOR_ID_REALTEK, 0xb851),
++		.driver_data = (kernel_ulong_t)&rtw89_8851be_info,
++	},
++	{},
++};
++MODULE_DEVICE_TABLE(pci, rtw89_8851be_id_table);
++
++static struct pci_driver rtw89_8851be_driver = {
++	.name		= "rtw89_8851be",
++	.id_table	= rtw89_8851be_id_table,
++	.probe		= rtw89_pci_probe,
++	.remove		= rtw89_pci_remove,
++	.driver.pm	= &rtw89_pm_ops,
++};
++module_pci_driver(rtw89_8851be_driver);
++
++MODULE_AUTHOR("Realtek Corporation");
++MODULE_DESCRIPTION("Realtek 802.11ax wireless 8851BE driver");
++MODULE_LICENSE("Dual BSD/GPL");
 -- 
 2.39.2
 
