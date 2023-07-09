@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8F074C434
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 14:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E64A74C437
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 14:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjGIMvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 08:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S230396AbjGIMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 08:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIMvB (ORCPT
+        with ESMTP id S229534AbjGIMy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 08:51:01 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082CDB9;
-        Sun,  9 Jul 2023 05:50:59 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.81.79) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sun, 9 Jul 2023
- 15:50:49 +0300
-Subject: Re: [PATCH] [RFT] sh: mach-r2d: Handle virq offset in cascaded IRL
- demux
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-CC:     <linux-sh@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <2c99d5df41c40691f6c407b7b6a040d406bc81ac.1688901306.git.geert+renesas@glider.be>
- <d92853f1a37158d37fefcc84b59efae9b0fb903b.camel@physik.fu-berlin.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <ef715abc-6be4-6473-15a1-05069b23bdc1@omp.ru>
-Date:   Sun, 9 Jul 2023 15:50:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 9 Jul 2023 08:54:26 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CC5FA;
+        Sun,  9 Jul 2023 05:54:25 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 41be03b00d2f7-55ba5fae2e6so2731888a12.0;
+        Sun, 09 Jul 2023 05:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688907265; x=1691499265;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sGZmmOl1FsGK0XVrg4lrILRSKoiMtyDf5QqOBufcTk8=;
+        b=pa78NO19VJU0hfjXLm/WOppyi7wF2HN3q/P1z4MR4y1MPBiQoEGNhIoKmg5Y26v2Lk
+         tzXzHe0bVi/p7qFPogf1m/98ZRABv3phT3idqtP+YTLNGr3eIAFtHKarr/vabWeA6ZaC
+         L2SLxBJzf1D6EhmdWfqSXZckPZRpQE+sXH3P8YFSnFqbqGKJemsNUmKVsYNdwjNDjpRp
+         kF/oSf836+VLzPEsMXonI069aKf+3oxZak0E2X2gXbV/Ko93A/5z8C6+N4GD0lOpr9jK
+         VHgwDtSWRZBq5vWwRiDXV0Ko/G9sD4uS933X4DqUa1p+8CQW0XZjbJqs7VHKi2MHOWhn
+         qLJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688907265; x=1691499265;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sGZmmOl1FsGK0XVrg4lrILRSKoiMtyDf5QqOBufcTk8=;
+        b=XDNuRkpeKIf3eTogHojd99I114ZGR+MD1HcNLgBuwBnMIvOwas+789qFG+E2U0YgaS
+         3EGg/G15yTCghG6hVPmQzrZ7Djki0HuamsFjntxG6KYmCbXK7zitWUhQiSX0p1sf85Jp
+         zWKbFnw9gkj08SsFVnyaEB7M5DJUZIyMyH/MYMQoxrpDUe3kj5fbHFMU8h7dDhcM1A1p
+         OIE51P+jgOXN1sADJwWqNfUoieKzJOCH7ZZo8JXM5bqAbaa7oHK7Zb99Fw8AbCfarHeS
+         fHs41baTIznEuRkeZEaIR8v7TjwEBBm9s5jIH58h5jYVCSY/sN9tAFeyBwMiPuajEu7d
+         /UoA==
+X-Gm-Message-State: ABy/qLba94X6b9uYha/IaayG0k4doPijO6e9ikDN1v1HWFzIozgwA2Ip
+        Lm8YSMyn/dM5w0CY+JP8kTDJXql83YM5JAd8
+X-Google-Smtp-Source: APBJJlGgQXbWmNuZ1ajt8RaldUOhJZFcYMSp/AYTxaC8PhacE1gg0fwXoTZZ+5VOAEDxdqvIn/7ExA==
+X-Received: by 2002:a17:902:f809:b0:1b8:b29e:b47b with SMTP id ix9-20020a170902f80900b001b8b29eb47bmr9541521plb.44.1688907264943;
+        Sun, 09 Jul 2023 05:54:24 -0700 (PDT)
+Received: from ?IPv6:2409:8a55:301b:e120:1523:3ecb:e154:8f22? ([2409:8a55:301b:e120:1523:3ecb:e154:8f22])
+        by smtp.gmail.com with ESMTPSA id iz2-20020a170902ef8200b001b523714ed5sm6251273plb.252.2023.07.09.05.54.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jul 2023 05:54:24 -0700 (PDT)
+Subject: Re: [PATCH v5 RFC 1/6] page_pool: frag API support for 32-bit arch
+ with 64-bit DMA
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Liang Chen <liangchen.linux@gmail.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org
+References: <20230629120226.14854-1-linyunsheng@huawei.com>
+ <20230629120226.14854-2-linyunsheng@huawei.com>
+ <20230707170157.12727e44@kernel.org>
+From:   Yunsheng Lin <yunshenglin0825@gmail.com>
+Message-ID: <3d973088-4881-0863-0207-36d61b4505ec@gmail.com>
+Date:   Sun, 9 Jul 2023 20:54:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <d92853f1a37158d37fefcc84b59efae9b0fb903b.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.81.79]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 07/09/2023 12:27:06
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 178491 [Jul 07 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.79 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.79 in (user) dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: git.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.79
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/09/2023 12:34:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/9/2023 8:24:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20230707170157.12727e44@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/9/23 2:58 PM, John Paul Adrian Glaubitz wrote:
-[...]
->> diff --git a/arch/sh/boards/mach-r2d/irq.c b/arch/sh/boards/mach-r2d/irq.c
->> index e34f81e9ae813b8d..c37b40398c5bc83e 100644
->> --- a/arch/sh/boards/mach-r2d/irq.c
->> +++ b/arch/sh/boards/mach-r2d/irq.c
->> @@ -117,10 +117,10 @@ static unsigned char irl2irq[R2D_NR_IRL];
->>  
->>  int rts7751r2d_irq_demux(int irq)
->>  {
->> -	if (irq >= R2D_NR_IRL || irq < 0 || !irl2irq[irq])
->> +	if (irq >= 16 + R2D_NR_IRL || irq < 16 || !irl2irq[irq - 16])
->>  		return irq;
->>  
->> -	return irl2irq[irq];
->> +	return irl2irq[irq - 16];
->>  }
->>  
->>  /*
+On 2023/7/8 8:01, Jakub Kicinski wrote:
+> On Thu, 29 Jun 2023 20:02:21 +0800 Yunsheng Lin wrote:
+>> -#include <linux/dma-direction.h>
+>> +#include <linux/dma-mapping.h>
 > 
-> Btw, I think this needs to be adjusted to test for "ret <= 0" since IRQs cannot
-> be zero anymore, correct?
+> And the include is still here, too, eh..
+
+In V4, it has:
+
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -33,6 +33,7 @@ 
+ #include <linux/mm.h> /* Needed by ptr_ring */
+ #include <linux/ptr_ring.h>
+ #include <linux/dma-direction.h>
++#include <linux/dma-mapping.h>
+
+As dma_get_cache_alignment() defined in dma-mapping.h is used
+here, so we need to include dma-mapping.h.
+
+I though the agreement is that this patch only remove the
+"#include <linux/dma-direction.h>" as we dma-mapping.h has included
+dma-direction.h.
+
+And Alexander will work on excluding page_pool.h from skbuff.h
+https://lore.kernel.org/all/09842498-b3ba-320d-be8d-348b85e8d525@intel.com/
+
+Did I miss something obvious here？ Or there is better way to do it
+than the method discussed in the above thread?
+
 > 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/mfd/sm501.c#n1389
-
-   No, just ignore IRQ0 from now on, it can't be returned. Else you'd just complicate
-your code as you'd have to add a separate check for IRQ0 in order to return -EINVAL
-in this case (you can't return 0 from probe in case of ret == 0 as that would mean
-successful probe when it's not).  My patch to platfrom_get_irq() ensures that IRQ0
-check in its users is never needed, in order to avoid the (badly scaling) checks)...
-
-> Adrian
-
-MBR, Sergey
