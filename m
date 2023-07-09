@@ -2,106 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E239F74C1D1
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 12:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0F474C1D4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 12:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjGIKHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 06:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S230283AbjGIKMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 06:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjGIKHL (ORCPT
+        with ESMTP id S229593AbjGIKMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 06:07:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310C6183;
-        Sun,  9 Jul 2023 03:07:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Sun, 9 Jul 2023 06:12:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C89E183
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 03:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688897475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ov3JfUvGcvY/gub0yO+OM0+NYIpkg7qweTL0CdVo1Bg=;
+        b=LTh6O/xkWknHaC0P18iaXHUP+UG92d5hcDc6VtZxcK2NydcKg2a0InyF3zfASUtIwRHgP8
+        OU59SWSWdiZOTYUuxOdUWx9Ks3Q+gqOwYi7djQgtOih0ZpKO4hS8zDMiy3XU/Qfhs9LWWa
+        2+45PsDGxODbFAtCM8XCAERu+HZ3QsM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-ZPfXDT6uPQy1mNFrnfZTpw-1; Sun, 09 Jul 2023 06:11:12 -0400
+X-MC-Unique: ZPfXDT6uPQy1mNFrnfZTpw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC39660BB8;
-        Sun,  9 Jul 2023 10:07:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C42C433C8;
-        Sun,  9 Jul 2023 10:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688897229;
-        bh=YiC7vsFEwKb4652ST6mgQTuJ5tIJjs2WjiDvNytTSkA=;
-        h=From:Date:Subject:To:Cc:From;
-        b=ak8eYXRykzYaZ+CT8VZ16gkWxFdhtbScVb+ZvC9HD/YYtk7Y7Ym8SSnrUmiZZdP90
-         Grkri2piYNGS6NTkkTpqtQf2tcJcSEDg4uT9ElY7Zj96SfVLtUAG4jTk9G6EMZcq6X
-         yoGbUxvPH+wsT8T1KmBO0PyGaaqecFCL2KXoeUUCat2kcGT3FSxSpj55iOfYJd3r+0
-         rCT2YVHSEWIynhea7+1uTQPDqjDJvYd9GBJ2pxMc9Db0ni3ENEVSmyA7xm84AypmCE
-         ykaA8oK/tFP97AGaJ6kSpf3gtrJdzaQklNpCZ52QvAFQ5o0vaHv0K7q/DUAYi8Ruf6
-         ejR5JGuAeOAdg==
-From:   Benjamin Tissoires <bentiss@kernel.org>
-Date:   Sun, 09 Jul 2023 12:06:56 +0200
-Subject: [PATCH] selftests: hid: fix vmtests.sh not running make headers
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D9DC104458E;
+        Sun,  9 Jul 2023 10:11:11 +0000 (UTC)
+Received: from localhost (ovpn-12-38.pek2.redhat.com [10.72.12.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0119D111F3CB;
+        Sun,  9 Jul 2023 10:11:09 +0000 (UTC)
+Date:   Sun, 9 Jul 2023 18:11:06 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
+        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, deller@gmx.de,
+        nathan@kernel.org, glaubitz@physik.fu-berlin.de,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org
+Subject: Re: [PATCH v7 09/19] openrisc: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZKqHuhNt7ElIqaqe@MiWiFi-R3L-srv>
+References: <20230620131356.25440-1-bhe@redhat.com>
+ <20230620131356.25440-10-bhe@redhat.com>
+ <ZKiu1hjMPHRTYBLy@antec>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230709-fix-selftests-v1-1-57d0878114cc@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAL+GqmQC/1WNSwqEQAxEryJZTyC2Cz9XERf9SWtAeoaODIJ4d
- 1t3Ll9VPeoA5SysMFQHZP6LyjcVqD8V+MWmmVFCYTBkGmqpxyg7Kq9xY90UfefIhRjrYAiK46w
- yumyTX27rNb77X+aSPX/jdJ4XvvrwRn8AAAA=
-To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688897227; l=1238;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=YiC7vsFEwKb4652ST6mgQTuJ5tIJjs2WjiDvNytTSkA=;
- b=i8Cad3ZOWxNgSbxUlrlETAV29S0Wk04029Ut4MMM0wYaxWf3haJ9O8kHyIOWA3MVyaNT9lKm0
- yPkRH7D2akoAKHeeRzPYxjnuMgEpBWOSOZQg/HRyIirjpMVbcU5OC3y
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKiu1hjMPHRTYBLy@antec>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to commit 01d6c48a828b ("Documentation: kselftest:
-"make headers" is a prerequisite"), running the kselftests requires
-to run "make headers" first.
+On 07/08/23 at 01:33am, Stafford Horne wrote:
+> On Tue, Jun 20, 2023 at 09:13:46PM +0800, Baoquan He wrote:
+> > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
+> > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
+> > and iounmap() are all visible and available to arch. Arch needs to
+> > provide wrapper functions to override the generic versions if there's
+> > arch specific handling in its ioremap_prot(), ioremap() or iounmap().
+> > This change will simplify implementation by removing duplicated codes
+> > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
+> > functioality as before.
+> > 
+> > For openrisc, the current ioremap() and iounmap() are the same as
+> > generic version. After taking GENERIC_IOREMAP way, the old ioremap()
+> > and iounmap() can be completely removed.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Cc: openrisc@lists.librecores.org
+> > ---
+> >  arch/openrisc/Kconfig          |  1 +
+> >  arch/openrisc/include/asm/io.h | 11 ++++----
+> >  arch/openrisc/mm/ioremap.c     | 49 ----------------------------------
+> >  3 files changed, 7 insertions(+), 54 deletions(-)
+> > 
+> > diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+> > index c7f282f60f64..fd9bb76a610b 100644
+> > --- a/arch/openrisc/Kconfig
+> > +++ b/arch/openrisc/Kconfig
+> > @@ -21,6 +21,7 @@ config OPENRISC
+> >  	select GENERIC_IRQ_PROBE
+> >  	select GENERIC_IRQ_SHOW
+> >  	select GENERIC_PCI_IOMAP
+> > +	select GENERIC_IOREMAP
+> >  	select GENERIC_CPU_DEVICES
+> >  	select HAVE_PCI
+> >  	select HAVE_UID16
+> > diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
+> > index ee6043a03173..5a6f0f16a5ce 100644
+> > --- a/arch/openrisc/include/asm/io.h
+> > +++ b/arch/openrisc/include/asm/io.h
+> > @@ -15,6 +15,8 @@
+> >  #define __ASM_OPENRISC_IO_H
+> >  
+> >  #include <linux/types.h>
+> > +#include <asm/pgalloc.h>
+> > +#include <asm/pgtable.h>
+> >  
+> >  /*
+> >   * PCI: We do not use IO ports in OpenRISC
+> > @@ -27,11 +29,10 @@
+> >  #define PIO_OFFSET		0
+> >  #define PIO_MASK		0
+> >  
+> > -#define ioremap ioremap
+> > -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
+> > -
+> > -#define iounmap iounmap
+> > -extern void iounmap(volatile void __iomem *addr);
+> > +/*
+> > + * I/O memory mapping functions.
+> > + */
+> > +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
+> >  
+> >  #include <asm-generic/io.h>
+> >  
+> > diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
+> > index cdbcc7e73684..91c8259d4b7e 100644
+> > --- a/arch/openrisc/mm/ioremap.c
+> > +++ b/arch/openrisc/mm/ioremap.c
+> > @@ -22,55 +22,6 @@
+> >  
+> >  extern int mem_init_done;
+> >  
+> > -/*
+> > - * Remap an arbitrary physical address space into the kernel virtual
+> > - * address space. Needed when the kernel wants to access high addresses
+> > - * directly.
+> > - *
+> > - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
+> > - * have to convert them into an offset in a page-aligned mapping, but the
+> > - * caller shouldn't need to know that small detail.
+> > - */
+> > -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+> > -{
+> > -	phys_addr_t p;
+> > -	unsigned long v;
+> > -	unsigned long offset, last_addr;
+> > -	struct vm_struct *area = NULL;
+> > -
+> > -	/* Don't allow wraparound or zero size */
+> > -	last_addr = addr + size - 1;
+> > -	if (!size || last_addr < addr)
+> > -		return NULL;
+> > -
+> > -	/*
+> > -	 * Mappings have to be page-aligned
+> > -	 */
+> > -	offset = addr & ~PAGE_MASK;
+> > -	p = addr & PAGE_MASK;
+> > -	size = PAGE_ALIGN(last_addr + 1) - p;
+> > -
+> > -	area = get_vm_area(size, VM_IOREMAP);
+> > -	if (!area)
+> > -		return NULL;
+> > -	v = (unsigned long)area->addr;
+> > -
+> > -	if (ioremap_page_range(v, v + size, p,
+> > -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
+> > -		vfree(area->addr);
+> > -		return NULL;
+> > -	}
+> > -
+> > -	return (void __iomem *)(offset + (char *)v);
+> > -}
+> > -EXPORT_SYMBOL(ioremap);
+> > -
+> > -void iounmap(volatile void __iomem *addr)
+> > -{
+> > -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
+> > -}
+> > -EXPORT_SYMBOL(iounmap);
+> > -
+> 
+> Hello,
+> 
+> Thanks for the patch, I was able to test this booting openrisc and running a few
+> glibc tests and see no issues.  Also the code cleanup looks good to me.
+> 
+> Acked-by: Stafford Horne <shorne@gmail.com>
 
-Do that in "vmtest.sh" as well to fix the HID CI.
+Thanks a lot, Stafford. 
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
-Looks like the new master branch (v6.5-rc1) broke my CI.
+I later posted v8 to add update for hexagon and s390, this is the link:
+https://lore.kernel.org/all/20230706154520.11257-10-bhe@redhat.com/T/#u
 
-And given that `make headers` is now a requisite to run the kselftests,
-also include that command in vmtests.sh.
-
-Broken CI job: https://gitlab.freedesktop.org/bentiss/hid/-/jobs/44704436
-Fixed CI job: https://gitlab.freedesktop.org/bentiss/hid/-/jobs/45151040
----
- tools/testing/selftests/hid/vmtest.sh | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/hid/vmtest.sh b/tools/testing/selftests/hid/vmtest.sh
-index 681b906b4853..4da48bf6b328 100755
---- a/tools/testing/selftests/hid/vmtest.sh
-+++ b/tools/testing/selftests/hid/vmtest.sh
-@@ -79,6 +79,7 @@ recompile_kernel()
- 	cd "${kernel_checkout}"
- 
- 	${make_command} olddefconfig
-+	${make_command} headers
- 	${make_command}
- }
- 
-
----
-base-commit: 0e382fa72bbf0610be40af9af9b03b0cd149df82
-change-id: 20230709-fix-selftests-c8b0bdff1d20
-
-Best regards,
--- 
-Benjamin Tissoires <bentiss@kernel.org>
+Thanks
 
