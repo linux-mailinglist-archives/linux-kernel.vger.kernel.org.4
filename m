@@ -2,113 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D3074C0F5
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 06:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276C874C108
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 07:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjGIEj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 00:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S229941AbjGIFEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 01:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjGIEjY (ORCPT
+        with ESMTP id S229828AbjGIFET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 00:39:24 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820A5B6;
-        Sat,  8 Jul 2023 21:39:23 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fba86f069bso5154046e87.3;
-        Sat, 08 Jul 2023 21:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688877562; x=1691469562;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wKe5r1gQ6s1Ey9/fn+Twfv7UiGM4dBpxhjxuitBrABM=;
-        b=CYY8hWw3F+AjKemNEUbJzoooZCZvy5OR9kdGSeTiaobLNuusIyEkL7S0081BbeMnib
-         0b6bQMBqpw9I/mtHG2Okw9YRVvRYRQ2QLDVz947Kh5Nks35vWo/6Cx85RA5JyqoxaEny
-         sVw+q0h/ZfTcs7TJ/0O0Kb3T2YwJuYkhWfz4ZSdg6A8oVJ6dVX1Z/UZvz3OPqP9+ek64
-         ZhoUfj1+HXC+aSorm5kOXDCBA2oyH2XsAyaTmFYh4PveqagIK7sz5lnjTgrdpQXX7d2/
-         eNhYZqd84wkZSKiife5j2RJ8fcSnAv57fl4Qk1muCneD3zsD+35ZKYEiLraiaPGMik1W
-         xvOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688877562; x=1691469562;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wKe5r1gQ6s1Ey9/fn+Twfv7UiGM4dBpxhjxuitBrABM=;
-        b=SZvuPtmuv6mvHQpY7o8DtLZluh9s3KeAstsAzqP9Pr1aJ1air0YOq8BFpc3ogV46Sw
-         oK5JvDPLAHcxTFccwKQ0ZHN5tHpd9PcnERDUk36G00kdOwUNrttkDWkFgtBu7UsONsjt
-         B0gK6jSys8/Wd8RT1m40tEXAIZ+HMMClwSJ4wwLq+q5MPDZZ1BfbhccVC3GyoOUEE+PM
-         BZiOnzghw2eF+ah8rPySCIrxV3Nj4X39J4Hxm7SRlwPIsu2JAemZEiBglkpyugBFOVjy
-         a9FTkvP+Lhmdw2kl0yl/8nskUqzE4oFkq0zFiRJI2IbS/AlOA7rKMq9xFLlQlBK8eizG
-         IUfQ==
-X-Gm-Message-State: ABy/qLYSWDuqO04KNS8JiaOsbq9xjH2OtLtvZoLS2weaedVwUJZWbH4q
-        0dDAvEWblD0Q0HtofIzFSss4OJLRYuZt2H+16cKJlu3KqxY=
-X-Google-Smtp-Source: APBJJlFVFpsoJvbQX1IbloX7CIMWuRW6aa4+6zIu2+kNh/iMPVwASFCofJexSC58earMPlmkTIoHUB5vp96bESes1/M=
-X-Received: by 2002:a05:6512:3157:b0:4f8:7617:6445 with SMTP id
- s23-20020a056512315700b004f876176445mr6577459lfi.48.1688877561411; Sat, 08
- Jul 2023 21:39:21 -0700 (PDT)
+        Sun, 9 Jul 2023 01:04:19 -0400
+Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA9FFE;
+        Sat,  8 Jul 2023 22:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1688879053;
+        bh=2w9Ob3VPQ9Os5ZjD5baI+SINI6IqLXe9l6ekBIWOX74=;
+        h=From:To:Cc:Subject:Date;
+        b=q6vYX9LBGG98Ceo8dv2JLWHjRaa5igrg/ZYqY50QV6qhc765u2LUZDSXz3npaseAj
+         2Wuu9D0VaeLkwj2xl9aIjrVjH5GghXU5vlI7FEG1osaWavQrcHHeXgpxyJoDIRj7gu
+         tBRzeyen2Um8tGJlYI94y6kWQ8Q75ShOiRt+t9LQ=
+Received: from KernelDevBox.byted.org ([180.184.84.173])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id 10B11A2A; Sun, 09 Jul 2023 13:04:11 +0800
+X-QQ-mid: xmsmtpt1688879051t9yovwwoe
+Message-ID: <tencent_161EA00A19A8A6122237C3B5075B21606C08@qq.com>
+X-QQ-XMAILINFO: N2/jAoEINgTTLn4HqVv2yRmX5fLfUezUspKpN+B5r0NLI3YPSFq7IcK0iQyY9W
+         tdRJ6EMYsHTy/S+kAWQJnqXc/IUAKWHPxHGb4A2Gh1hpkEengPWb5pKbK2J8wiXCTvgVq351iM27
+         Db5Ty3FfbKF21tn6sgkl3kMWi/nnlbGeVoqAJrxUVD0/fneLTf4VLWI1Hj6k1J/IpUzZ1oihLpM3
+         +d6nLIxixXjC6iRaEQ8jTNlUdDpOHLHBGXrbcoxRxxngqZ5Q5NnVCWai/oqfpE6ut2P3Q1ewLwBD
+         B4N+UOrHGT9gy9sJ5Stgcyb6paFu3eVXNBDl14XUZYHdppm6hm9RPJzOKnijyU5TxJQ2KbbV5rZp
+         Pkr32sIfIx+saN4UU3bVI69xDgUoYBfX68sh0deHYqYIDrO9hjgaNEPMOFNo3GCAkYwAjECUtydH
+         F4UXNyZXaW8py7MfVzCIGJdwyTzs539vTgHlJ4C4iW+dJHaqB6A99nO1gApzhy1RUsD0WxJZSWzU
+         j1kB0cJqGoVx0howdEXw8rmmydNJcjLRdjgIHaXLWqRN8veDJ7SOSqEqHIn/JOSjyTNxUCffqMT5
+         tE4Ht6j+ZcmYsA153evQOevnRt3c4/sqWFftQMNqraw17QRMNJtysrES3WKPhXiXJRg0wGphIKLT
+         hrVjz7zOJL8yYvOU8OaDLjgVHnWbM/VV4GGOoNq86kLmRY81B4YHj2uG5ZHO3ulO5BqdI8xlnwtv
+         heC4b9JGehXT0nbUWqSi8nNOkSRv16TeWemI7REhmvqez43abJpDIiV3yxd63cD8Hua3Greun6a6
+         rbbtDrREBXEDp6cWqNAA+Jc+FHqQfovsR2TSbFO3PI2/IA1F2t1EUB2eM/XWR2Yo0F90AziXH18N
+         y64Z8SV2rsOW0OE872e7dp+zmlk8Q+lEIGwJ4nnQSj97qbcIQfWCjfkexggLPypNsPt1ca2zzfGZ
+         RGHYO7eTFEKDz1HRZwrnWMo/9hXY1C8p2VFJ/p+vDtSdohOkNSHwRpbsSYUCaE
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH] media: dvb-usb: opera1: fix uninit-value in dvb_usb_adapter_dvb_init
+Date:   Sun,  9 Jul 2023 13:04:09 +0800
+X-OQ-MSGID: <20230709050409.717720-1-zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 8 Jul 2023 23:39:10 -0500
-Message-ID: <CAH2r5mv9U44-ypmJam9KTWNky=8+TOPsv=cdWj3sRd6DPjhU1Q@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-a507db1d8fdc39802415e4d2ef6d1aecd67927fa:
+If opera1_xilinx_rw fails, the mac address is not initialized.
+And opera1_read_mac_address does not handle this failure, which leads to
+the uninit-value in dvb_usb_adapter_dvb_init.
 
-  Merge tag '6.5-rc-smb3-client-fixes-part1' of
-git://git.samba.org/sfrench/cifs-2.6 (2023-06-30 22:00:28 -0700)
+Fix this by handling the failure of opera1_xilinx_rw.
 
-are available in the Git repository at:
+Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+---
+ drivers/media/usb/dvb-usb/opera1.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.5-rc-smb3-client-fixes-part2
-
-for you to fetch changes up to d14de8067e3f9653cdef5a094176d00f3260ab20:
-
-  cifs: Add a laundromat thread for cached directories (2023-07-05
-22:36:07 -0500)
-
-----------------------------------------------------------------
-3 smb3 client fixes;
-- fix potential use after free in unmount
-- minor cleanup fix
-- add worker to cleanup stale directory leases
-
-Not included in this P/R is the follow on patch to allow this timeout
-to be configurable at mount (is being tested), as are a pair of fixes
-for some cases where stale metadata can be incorrectly used, and a fix
-for O_DIRECT is also not included (still being tested).
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      smb: client: remove redundant pointer 'server'
-
-Ronnie Sahlberg (1):
-      cifs: Add a laundromat thread for cached directories
-
-Winston Wen (1):
-      cifs: fix session state transition to avoid use-after-free issue
-
- fs/smb/client/cached_dir.c | 67
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- fs/smb/client/cached_dir.h |  1 +
- fs/smb/client/connect.c    |  7 ++++---
- fs/smb/client/dfs.c        |  2 --
- 4 files changed, 72 insertions(+), 5 deletions(-)
-
-
+diff --git a/drivers/media/usb/dvb-usb/opera1.c b/drivers/media/usb/dvb-usb/opera1.c
+index 98b2177667d2..d269f8bb2dee 100644
+--- a/drivers/media/usb/dvb-usb/opera1.c
++++ b/drivers/media/usb/dvb-usb/opera1.c
+@@ -439,9 +439,14 @@ MODULE_DEVICE_TABLE(usb, opera1_table);
+ 
+ static int opera1_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
+ {
++	int ret;
+ 	u8 command[] = { READ_MAC_ADDR };
+-	opera1_xilinx_rw(d->udev, 0xb1, 0xa0, command, 1, OPERA_WRITE_MSG);
+-	opera1_xilinx_rw(d->udev, 0xb1, 0xa1, mac, 6, OPERA_READ_MSG);
++	ret = opera1_xilinx_rw(d->udev, 0xb1, 0xa0, command, 1, OPERA_WRITE_MSG);
++	if (ret)
++		return ret;
++	ret = opera1_xilinx_rw(d->udev, 0xb1, 0xa1, mac, 6, OPERA_READ_MSG);
++	if (ret)
++		return ret;
+ 	return 0;
+ }
+ static int opera1_xilinx_load_firmware(struct usb_device *dev,
 -- 
-Thanks,
+2.30.2
 
-Steve
