@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F7174C565
+	by mail.lfdr.de (Postfix) with ESMTP id 2E40674C564
 	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbjGIPQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S233527AbjGIPP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbjGIPPQ (ORCPT
+        with ESMTP id S233317AbjGIPPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:15:16 -0400
+        Sun, 9 Jul 2023 11:15:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B901A2680;
-        Sun,  9 Jul 2023 08:14:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B4FE58;
+        Sun,  9 Jul 2023 08:14:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85CBC60BFB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CEB660C23;
+        Sun,  9 Jul 2023 15:14:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF95C433C8;
         Sun,  9 Jul 2023 15:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7FCC433C7;
-        Sun,  9 Jul 2023 15:14:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915679;
-        bh=djANkZTSu25obuYar9XTJizEMPBZ43FSY2Siql9GtcI=;
+        s=k20201202; t=1688915681;
+        bh=cKYad/radGQwt3JJ+AcHq02Fx0GMduHtVccg5yj8h/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0K0arVaI0J6vGhTJlfimE3utvexDgk98l6hXPmJKSwvj8gTao6OVQoIYvgTWdLn/
-         ImkewbPGCh1yxmtipdhccX38W1rYIDo2f+3cS23ptQhCP2XaiwrOAUOwvly2coGHm/
-         1qFP3aisvbMXJNERbuVEsNID7x1MVkekodX5KKIaMfUI1Qz7iMAayTJx4V21JVFZk1
-         GI4pDQ6hjz5Os+X4C2c09zpSjqS5xsLrilDGquOTaryZqaFFmQr44+s1ePtyVKu1BR
-         yobdOTBrKSh+Z40sPtcFApKtMyjkqCocP0gzm9T31/LM+YqMO/faUES92CDcTGfQZx
-         tv1xMPeIJAIxw==
+        b=dgWnqxcxoXRfBFseyV8Sz0CFrMPUXasyDtagmxClVlCo9+o7b9+d1Pw0f8ZzR135x
+         s9dtvZPs81S9+ZfKh5jXkZ77GvI/jZdinFDfwh+qOW8WauGY7VswnL+mHbR/QgNWsg
+         8iOB2gnd6WFDH0XYEMwqSYPS+yG7y6p3QeqgSE4XLQ8T+zNbdEG+Hr0So7oieBhxdQ
+         EhALi7phT29AAZflYBH8dKwUZKd5T2I0/ssx8SI9t6y3myF47wjCvmKj+wSP0E4oAX
+         Kd8cdnG6hTmbg0pXzUY3etpodxNiCynrP4gh/nbYTIvNL3fIxxsmgwriYNJIi7LVyc
+         3ggxwkZz7QtSw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yi Kuo <yi@yikuo.dev>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        mukesh.sisodiya@intel.com, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 20/22] wifi: iwlwifi: pcie: add device id 51F1 for killer 1675
-Date:   Sun,  9 Jul 2023 11:13:54 -0400
-Message-Id: <20230709151356.513279-20-sashal@kernel.org>
+Cc:     Ying Hsu <yinghsu@chromium.org>,
+        Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, jesse.brandeburg@intel.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 21/22] igb: Fix igb_down hung on surprise removal
+Date:   Sun,  9 Jul 2023 11:13:55 -0400
+Message-Id: <20230709151356.513279-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151356.513279-1-sashal@kernel.org>
 References: <20230709151356.513279-1-sashal@kernel.org>
@@ -61,36 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yi Kuo <yi@yikuo.dev>
+From: Ying Hsu <yinghsu@chromium.org>
 
-[ Upstream commit f4daceae4087bbb3e9a56044b44601d520d009d2 ]
+[ Upstream commit 004d25060c78fc31f66da0fa439c544dda1ac9d5 ]
 
-Intel Killer AX1675i/s with device id 51f1 would show
-"No config found for PCI dev 51f1/1672" in dmesg and refuse to work.
-Add the new device id 51F1 for 1675i/s to fix the issue.
+In a setup where a Thunderbolt hub connects to Ethernet and a display
+through USB Type-C, users may experience a hung task timeout when they
+remove the cable between the PC and the Thunderbolt hub.
+This is because the igb_down function is called multiple times when
+the Thunderbolt hub is unplugged. For example, the igb_io_error_detected
+triggers the first call, and the igb_remove triggers the second call.
+The second call to igb_down will block at napi_synchronize.
+Here's the call trace:
+    __schedule+0x3b0/0xddb
+    ? __mod_timer+0x164/0x5d3
+    schedule+0x44/0xa8
+    schedule_timeout+0xb2/0x2a4
+    ? run_local_timers+0x4e/0x4e
+    msleep+0x31/0x38
+    igb_down+0x12c/0x22a [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    __igb_close+0x6f/0x9c [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    igb_close+0x23/0x2b [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    __dev_close_many+0x95/0xec
+    dev_close_many+0x6e/0x103
+    unregister_netdevice_many+0x105/0x5b1
+    unregister_netdevice_queue+0xc2/0x10d
+    unregister_netdev+0x1c/0x23
+    igb_remove+0xa7/0x11c [igb 6615058754948bfde0bf01429257eb59f13030d4]
+    pci_device_remove+0x3f/0x9c
+    device_release_driver_internal+0xfe/0x1b4
+    pci_stop_bus_device+0x5b/0x7f
+    pci_stop_bus_device+0x30/0x7f
+    pci_stop_bus_device+0x30/0x7f
+    pci_stop_and_remove_bus_device+0x12/0x19
+    pciehp_unconfigure_device+0x76/0xe9
+    pciehp_disable_slot+0x6e/0x131
+    pciehp_handle_presence_or_link_change+0x7a/0x3f7
+    pciehp_ist+0xbe/0x194
+    irq_thread_fn+0x22/0x4d
+    ? irq_thread+0x1fd/0x1fd
+    irq_thread+0x17b/0x1fd
+    ? irq_forced_thread_fn+0x5f/0x5f
+    kthread+0x142/0x153
+    ? __irq_get_irqchip_state+0x46/0x46
+    ? kthread_associate_blkcg+0x71/0x71
+    ret_from_fork+0x1f/0x30
 
-Signed-off-by: Yi Kuo <yi@yikuo.dev>
-Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20230621130444.ee224675380b.I921c905e21e8d041ad808def8f454f27b5ebcd8b@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+In this case, igb_io_error_detected detaches the network interface
+and requests a PCIE slot reset, however, the PCIE reset callback is
+not being invoked and thus the Ethernet connection breaks down.
+As the PCIE error in this case is a non-fatal one, requesting a
+slot reset can be avoided.
+This patch fixes the task hung issue and preserves Ethernet
+connection by ignoring non-fatal PCIE errors.
+
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+Tested-by: Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Link: https://lore.kernel.org/r/20230620174732.4145155-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/intel/igb/igb_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-index 8f053054e0818..51808dc08eab8 100644
---- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-@@ -681,6 +681,8 @@ static const struct iwl_dev_info iwl_dev_info_table[] = {
- 	IWL_DEV_INFO(0x2726, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
- 	IWL_DEV_INFO(0x51F0, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
- 	IWL_DEV_INFO(0x51F0, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
-+	IWL_DEV_INFO(0x51F1, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
-+	IWL_DEV_INFO(0x51F1, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
- 	IWL_DEV_INFO(0x54F0, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
- 	IWL_DEV_INFO(0x54F0, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
- 	IWL_DEV_INFO(0x7A70, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index f2f9f81c123b8..c1891e03b8e91 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -9586,6 +9586,11 @@ static pci_ers_result_t igb_io_error_detected(struct pci_dev *pdev,
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+ 
++	if (state == pci_channel_io_normal) {
++		dev_warn(&pdev->dev, "Non-correctable non-fatal error reported.\n");
++		return PCI_ERS_RESULT_CAN_RECOVER;
++	}
++
+ 	netif_device_detach(netdev);
+ 
+ 	if (state == pci_channel_io_perm_failure)
 -- 
 2.39.2
 
