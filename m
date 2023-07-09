@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA32674C54D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAD374C55D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbjGIPPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S233397AbjGIPPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233110AbjGIPOw (ORCPT
+        with ESMTP id S233403AbjGIPPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:14:52 -0400
+        Sun, 9 Jul 2023 11:15:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE91FD8;
-        Sun,  9 Jul 2023 08:14:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52527E5A;
+        Sun,  9 Jul 2023 08:14:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E209660C17;
-        Sun,  9 Jul 2023 15:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC79C433C9;
-        Sun,  9 Jul 2023 15:14:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D330260C04;
+        Sun,  9 Jul 2023 15:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578BDC433C8;
+        Sun,  9 Jul 2023 15:14:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915658;
-        bh=CD2lK8E/W6ZnWeWOc+3c8JjIDvvqhN1z8hw73ASqT5c=;
+        s=k20201202; t=1688915664;
+        bh=V9tsOpSCYIA4Vuhac+vGUHs11DEQjZn7b/T/TAOvcGM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lfnR99q7QItdk593iqluBVfJ5HiMDmdeyNmP09pLfDh82o6Md5hDm/AEDX9hCvGRI
-         bnZ3jhxPbgMVNO0DUBqOrSvzB3qCnLuJMvwZHIzILtSS7tgcRuN5iteDNIXaPJ2PpS
-         oGXv/jhl5XPKxcEtH7nw9hXsiGdQKspjOzK5I7O4brfHHgdtJ7uZop/KdSergtvOja
-         vqeb6UhZkxKsBuZg2ynZ6LnfGHPzRMUZljHTDnx25E22yw33cN43xaDytsMP1Vw8uk
-         gY4t4oRRnwZE7MZW8SPVJEOhkGdN+Vq9t3S0x242HLdQ6XbIYaXeAgHT4EkSv2qvzh
-         aLDPpjK12R29Q==
+        b=YCJbvYqdFnW+1SFgZ/Sy+7DHL6YnYPqANv6iTkfudM0gF1+5pcV9wclwdKIUcPM0I
+         SEzfNk0m1ERBmtBwbXhzYyxju9IcLw6zE60p2VtGjVPddFKauY0QRAEhtk9aZR2glc
+         s/wtj7nrQ+tx4y45uxFJ5kjIhvQjcP0nzZA34HQwyaRvKS5CjbsTlstqvFa9Kpzz5y
+         Rnc8b+KKuoEchfFeV7EPW1dsFcmgiFPte3zHcI0vN/TAcU7x9/tGZVTHBELiOkIaIn
+         gLQeTrXTugjzKHtMqS5vzn248ckLIMBi5Vtvm67xnsujKtwcknmppjF+D6fSGqbVoI
+         SXUH414NIqudg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     P Praneesh <quic_ppranees@quicinc.com>,
-        Aditya Kumar Singh <quic_adisi@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+Cc:     Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 13/22] wifi: ath11k: fix memory leak in WMI firmware stats
-Date:   Sun,  9 Jul 2023 11:13:47 -0400
-Message-Id: <20230709151356.513279-13-sashal@kernel.org>
+        avraham.stern@intel.com, ilan.peer@intel.com,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 14/22] wifi: iwlwifi: mvm: fix potential array out of bounds access
+Date:   Sun,  9 Jul 2023 11:13:48 -0400
+Message-Id: <20230709151356.513279-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151356.513279-1-sashal@kernel.org>
 References: <20230709151356.513279-1-sashal@kernel.org>
@@ -61,61 +61,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: P Praneesh <quic_ppranees@quicinc.com>
+From: Gregory Greenman <gregory.greenman@intel.com>
 
-[ Upstream commit 6aafa1c2d3e3fea2ebe84c018003f2a91722e607 ]
+[ Upstream commit 637452360ecde9ac972d19416e9606529576b302 ]
 
-Memory allocated for firmware pdev, vdev and beacon statistics
-are not released during rmmod.
+Account for IWL_SEC_WEP_KEY_OFFSET when needed while verifying
+key_len size in iwl_mvm_sec_key_add().
 
-Fix it by calling ath11k_fw_stats_free() function before hardware
-unregister.
-
-While at it, avoid calling ath11k_fw_stats_free() while processing
-the firmware stats received in the WMI event because the local list
-is getting spliced and reinitialised and hence there are no elements
-in the list after splicing.
-
-Tested-on: QCN9074 hw1.0 PCI WLAN.HK.2.7.0.1-01744-QCAHKSWPL_SILICONZ-1
-
-Signed-off-by: P Praneesh <quic_ppranees@quicinc.com>
-Signed-off-by: Aditya Kumar Singh <quic_adisi@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230606091128.14202-1-quic_adisi@quicinc.com
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230613155501.f193b7493a93.I6948ba625b9318924b96a5e22602ac75d2bd0125@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 1 +
- drivers/net/wireless/ath/ath11k/wmi.c | 5 +++++
- 2 files changed, 6 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 850ef35c1f75e..07efd48795d33 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -9349,6 +9349,7 @@ void ath11k_mac_destroy(struct ath11k_base *ab)
- 		if (!ar)
- 			continue;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c b/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c
+index e27c893502f70..de288e048b2c7 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+ /*
+- * Copyright (C) 2022 Intel Corporation
++ * Copyright (C) 2022 - 2023 Intel Corporation
+  */
+ #include <linux/kernel.h>
+ #include <net/mac80211.h>
+@@ -113,9 +113,14 @@ int iwl_mvm_sec_key_add(struct iwl_mvm *mvm,
+ 		.u.add.key_flags = cpu_to_le32(key_flags),
+ 		.u.add.tx_seq = cpu_to_le64(atomic64_read(&keyconf->tx_pn)),
+ 	};
++	int max_key_len = sizeof(cmd.u.add.key);
+ 	int ret;
  
-+		ath11k_fw_stats_free(&ar->fw_stats);
- 		ieee80211_free_hw(ar->hw);
- 		pdev->ar = NULL;
- 	}
-diff --git a/drivers/net/wireless/ath/ath11k/wmi.c b/drivers/net/wireless/ath/ath11k/wmi.c
-index b3a7d7bfe17c2..68fbddfd428a6 100644
---- a/drivers/net/wireless/ath/ath11k/wmi.c
-+++ b/drivers/net/wireless/ath/ath11k/wmi.c
-@@ -7590,6 +7590,11 @@ static void ath11k_update_stats_event(struct ath11k_base *ab, struct sk_buff *sk
- 	rcu_read_unlock();
- 	spin_unlock_bh(&ar->data_lock);
- 
-+	/* Since the stats's pdev, vdev and beacon list are spliced and reinitialised
-+	 * at this point, no need to free the individual list.
-+	 */
-+	return;
+-	if (WARN_ON(keyconf->keylen > sizeof(cmd.u.add.key)))
++	if (keyconf->cipher == WLAN_CIPHER_SUITE_WEP40 ||
++	    keyconf->cipher == WLAN_CIPHER_SUITE_WEP104)
++		max_key_len -= IWL_SEC_WEP_KEY_OFFSET;
 +
- free:
- 	ath11k_fw_stats_free(&stats);
- }
++	if (WARN_ON(keyconf->keylen > max_key_len))
+ 		return -EINVAL;
+ 
+ 	if (keyconf->cipher == WLAN_CIPHER_SUITE_WEP40 ||
 -- 
 2.39.2
 
