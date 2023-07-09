@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BE874C14F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 08:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CF674C157
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 08:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjGIGup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 02:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S230430AbjGIGzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 02:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjGIGun (ORCPT
+        with ESMTP id S229535AbjGIGzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 02:50:43 -0400
-X-Greylist: delayed 460 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Jul 2023 23:50:41 PDT
-Received: from out203-205-251-36.mail.qq.com (out203-205-251-36.mail.qq.com [203.205.251.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B7DF4
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 23:50:41 -0700 (PDT)
+        Sun, 9 Jul 2023 02:55:09 -0400
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D76194;
+        Sat,  8 Jul 2023 23:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688885439;
-        bh=tuqL83ggHiBrgm7wdRGtAfEK9cuBv6+QOt3TztaqU4w=;
+        s=s201512; t=1688885698;
+        bh=RYnRkhoiWyoPGBS8qvwcJycA+ytn5C6WTnj7Eo5dpTU=;
         h=From:To:Cc:Subject:Date;
-        b=S+eMIb5+IgGH3bfc3QVs89te3/90hiAI0mM8pb/BDnRD1ISz8eYHoubFtCpX7Ke7u
-         +6V/vgJgRstntuov62C4n0fpxBd9oq5P/rDFOtb8g7xX0kEAqM6LQqs3SbyrrpiwHx
-         ofWMF+soa9kiSMD0mjVSsq7HJGx9oeLbsDNifAnk=
-Received: from linkpc.nju.edu.cn ([58.213.8.104])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id C4E90C60; Sun, 09 Jul 2023 14:49:14 +0800
-X-QQ-mid: xmsmtpt1688885354tfvoegbls
-Message-ID: <tencent_54C2A2746A83BA29EE92248CE9683F0C6509@qq.com>
-X-QQ-XMAILINFO: OBjl3voOPnzhg1GUojRXhnKaYr9GA3dnRrjrkLCZKnqt6fSLSRmyYwpHrz1n3I
-         k5wDLsiVaLh1GDVENuHYHRxphxmw3jrO1bLh8UZK7eKdF/+7FRn1lzDOgDpTyx7lxFe3APAaA1D4
-         /l+15Y8Zc1KhqqTbyp/VoW23QyCVVQlNpYADE+fQK1DyqV40kSOty4zwkmQJx5JJVnKu6IPAziB3
-         wc6Z1tNr6Ai87L+aQ6UF15crmRH64ADuuKubvLPjq/3n9I3f6iMW+Kz36ZVveTVeBvsncQkpMocw
-         TNQAodYeyMZND4qq+5dJF/v/4XCbsoJSs/tcACR5xJwkEf2dK5YwIffp1f2DEiQfWHsVWOJKfU+y
-         Co5M2KrBkXcUilDfW2M4sgwb1qAdRfEjXw1qYXy/pM6NyQ4dG0cIJxHYWZe2coS+kn232GzE0lGl
-         88qg5DAE0iL3n5MVM1XbCSldH+sfpTayE6Hwdhbb0BE/loWAuY70hADbb9wx0D5g2jh1thufhIeF
-         7ZtajibiZq9qZZf8XApwXwCYC19RsLsVyPJlDawfwbcUC31fnLBi6cFQ0mLbj1gSSOHOyDU/CqGA
-         RitCx+BXcB0MDmgFf5okaTy9+j6qvcqqHe/zB6XMX/8Ff1VYB2nu0T1JgiWsd1rG8zcG7gw1GD7+
-         Db/49OFrQz9cCrnxFRye3FT9mvS+E91oylj/H7I1hfgVdoCzJOAafC3NBxvz3+q27TmLGDopoU79
-         rrI/k+M/d21BjwS214FrwQuPA50UFEj39QXSe8IYyGB3j9jvLPYULeVANj1nvmLHfGSa+83+WmaF
-         cCTgirFSRcQVfz+LPYXuv/r9MDFkuboV+S5l/XFllO9iDMqz3IxO/XJL6xxcH/6kwYwaJPRc3qO7
-         g7mbHlVxciAN60uFUTK+7UwXkTtkEg0iQVF4+gmuM1I19Nu0rtZNP1axQIIE5Z/G9yACNJmmzct8
-         Fr0L3UytsCxl1bkHz7Wn7m4Rma4Iin9Ih5H6jlb0S98EHfpR2EjbLhQLcLm6Z0KMWcqMjFMI2LAM
-         JeAxDQ8hYPFJnM112Dj5GstwRbkzBpm8KRJjb5Uw==
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-From:   Linke Li <lilinke99@foxmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        Linke Li <lilinke99@gmail.com>
-Subject: [PATCH] MIPS: Fix undefined behavior in PAGE_MASK calculation
-Date:   Sun,  9 Jul 2023 14:49:12 +0800
-X-OQ-MSGID: <20230709064912.384862-1-lilinke99@foxmail.com>
+        b=sMqGuhMbvQghEJKme7cguoZfCY5k3AZxQX4EByRz1cbztENQOhWfFDLrqHJuyCqTP
+         gpDAat4+mRTBsjD7wWa8L69F+Fy8zPGBT4Zs/cnrxM6y12/6Gqo1UNcfFF9Ywl5M1v
+         lALrfd1tSK7PGHgQUdPf08GiXWxY5a8LgO9vdKzM=
+Received: from localhost.localdomain ([101.204.11.166])
+        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+        id DB52CCC2; Sun, 09 Jul 2023 14:54:53 +0800
+X-QQ-mid: xmsmtpt1688885693tz3hyo0pa
+Message-ID: <tencent_7588DFD1F365950A757310D764517A14B306@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTCJvJTNp4omwklKlrOQIfCb8xnUYbHI7xHSo18zpysdANv1MuoS
+         8ynPsLYwvLhHBy59rNSftYnoq8OrtdHIm4a1FWeoKhw1abB22J43xobsIlmtooTlUwfqV6B6/9kH
+         WGI5BUNQfYK0Y8iRpVQTjXqSL2Hh4NmanTIZcWxvJ5b785rr5PHekI287zrH2qvDG4AnwaMYCi7M
+         +fUBDMsG6BsEGikYW6pVpH/ZTwzChOrc7u94vI7KqCKHN6VynnB+FZi15PIlWpp8FUivo2N+0ksm
+         ZtWKuhVJN+x1+9EBCsY81ns+nfMUVCrBgPOTDK0sNv32zbY00TTJErM0VNt+LWxcZNjqbG6zzXYI
+         q02xcu6DsNGQIYtjbTWkOfcR+LRu+pB7m8aGeAXQeB/ixe9D2x4flG8c7uqwNQ3wouSo73fW8Ok+
+         ENIkuT1fXyPO6Lt9ncRHTqTSSIH50u4cRVKMc4/+TSPlS9ODI5n3KUrUr8y/3DbChHgz69ocmyqD
+         rdfEb+EUwXKjblf3p5rid+vrEPDOjyPGO6RDr0FiH9CCy8ERFC4zFvTG4j0AmAtBlffj1NlSZ6o6
+         YTgS80I/YzOpsZK839xESjexl46KUL5sIgqfo7c2ZrhRtgP++ApS8fyqkjtAZyRZwiGWDqIz+Rem
+         2xwGaVYExi/Z07gxlaAx1hc8G7pWvRbS7Ez8dkeO+tCsxMSwSsd0nQ88gREHjytEKvhBedNj4YgG
+         YP2hkwaKwKBexZpTU3dg3TX8w7rTPWNrbTcAt6F01Gcj/Fu5mjSdwxEoXVZ2YiutQLNixRGfu3i4
+         l1YWGJersjNDMgAjsaAnVONQZl4vNxAsI194qZabDIOLSNJBpTuScEKcxLQ4OyNUxiGxk+LmFe5T
+         HsR4jFLwv++hAYQysNNrI0HQ9AGC+xHXDJnPhwdAeda/3zB8uBFJH+7qRkwPXDwQHzbAD/y8FP86
+         A++qR9cmquuO1H5+7qKMotx7MeRSu3EdV9cm0OwFgtX/JzW3hVDdSMwrwcR9z4
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+From:   wenyang.linux@foxmail.com
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] eventfd: avoid overflow to ULLONG_MAX when ctx->count is 0
+Date:   Sun,  9 Jul 2023 14:54:51 +0800
+X-OQ-MSGID: <20230709065451.107710-1-wenyang.linux@foxmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linke Li <lilinke99@gmail.com>
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-Make PAGE_MASK an unsigned long, like it is on x86, to avoid:
+For eventfd with flag EFD_SEMAPHORE, when its ctx->count is 0, calling
+eventfd_ctx_do_read will cause ctx->count to overflow to ULLONG_MAX.
 
-../arch/mips/include/asm/ginvt.h:44:20: warning: shifting a negative signed value is undefined [-Wshift-negative-value]
-        addr &= PAGE_MASK << 1;
-
-In the MIPS architecture, the PAGE_MASK definition in arch/mips/include/asm/page.h leads to
-shifting a negative signed value, which is undefined according to the language specification.
-To address this issue, the PAGE_MASK definition is modified to be unsigned long and ensure
-well-defined behavior.
-
-Signed-off-by: Linke Li <lilinke99@gmail.com>
+Fixes: cb289d6244a3 ("eventfd - allow atomic read and waitqueue remove")
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Dylan Yudaken <dylany@fb.com>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 ---
- arch/mips/include/asm/page.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/eventfd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
-index 5978a8dfb917..3061a5586954 100644
---- a/arch/mips/include/asm/page.h
-+++ b/arch/mips/include/asm/page.h
-@@ -33,7 +33,7 @@
- #define PAGE_SHIFT	16
- #endif
- #define PAGE_SIZE	(_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~((1 << PAGE_SHIFT) - 1))
-+#define PAGE_MASK	(~(PAGE_SIZE - 1))
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index 8aa36cd37351..10a101df19cd 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -189,7 +189,7 @@ void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64 *cnt)
+ {
+ 	lockdep_assert_held(&ctx->wqh.lock);
  
- /*
-  * This is used for calculating the real page sizes
+-	*cnt = (ctx->flags & EFD_SEMAPHORE) ? 1 : ctx->count;
++	*cnt = ((ctx->flags & EFD_SEMAPHORE) && ctx->count) ? 1 : ctx->count;
+ 	ctx->count -= *cnt;
+ }
+ EXPORT_SYMBOL_GPL(eventfd_ctx_do_read);
+@@ -269,6 +269,8 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 		return -EFAULT;
+ 	if (ucnt == ULLONG_MAX)
+ 		return -EINVAL;
++	if ((ctx->flags & EFD_SEMAPHORE) && !ucnt)
++		return -EINVAL;
+ 	spin_lock_irq(&ctx->wqh.lock);
+ 	res = -EAGAIN;
+ 	if (ULLONG_MAX - ctx->count > ucnt)
 -- 
 2.25.1
 
