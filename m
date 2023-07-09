@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7822A74C52A
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2665D74C52D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjGIPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S232922AbjGIPOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbjGIPOU (ORCPT
+        with ESMTP id S233204AbjGIPO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:14:20 -0400
+        Sun, 9 Jul 2023 11:14:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894BC10C0;
-        Sun,  9 Jul 2023 08:13:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBAA10CE;
+        Sun,  9 Jul 2023 08:13:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E90D60C19;
-        Sun,  9 Jul 2023 15:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D80FC433C8;
-        Sun,  9 Jul 2023 15:13:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5507C60BFB;
+        Sun,  9 Jul 2023 15:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8607C433C8;
+        Sun,  9 Jul 2023 15:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915626;
-        bh=8X9HU6QLOwEvITmBZFPYMEvUSnusd+veEMbJ68J0t6I=;
+        s=k20201202; t=1688915629;
+        bh=82O17sxXXzuPYLGcWF4tN/DycdJSlQkvD6RvlBq4FhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lvk8+YhCii2WyycnrE/gBDh7dZYnR03LlOVY9ywoseOI3bTYJdM9G+P7okvhSnWUU
-         IkJ1te6Ng9Gq//hGj9jl0dtYVUcpn3Qdcpk4tXNi4/r7Vl3iqhrTu7St5ANYU9RdoS
-         1WM+MTGVZlB285zi0dOmHQvfZWvbKqN17OtLnJqzs36DECAZzPBUfo4rlrNeli4ACX
-         kqwaqQ3EijLKsMlHlQERzMPk0bAdEEZ+5ThxuKjXacgmDXXgeGPnMqkWfNwqXcYtGm
-         0RiS6g5yJiyUjfX3JMFZE0uMV0Dm0nhX6mXNfEiJORbKmWxPkkYw00u4z+I/Ajxa6H
-         9Pu9jZhA8WItg==
+        b=aLfMjxEyjknDa3oLrCBEuRbb98okm0qrZIAd7r3zCM+dOPEGRRQSHPuXW97ZDKzpM
+         PSfaex5UctVC8ymAfPhM6RlFZRn4C7mLPaeUVEl81xCMK+LAHA2vSYlRl4YB8KM9kc
+         DHZdqViKOgTwIak4L4DI0fy3VusxuT0rJwnwCTDEQ/91/UI29bGnCzCahPfeCFi1wE
+         x+CXbLXmWO7LD0ndEIEzpGjP8mXNjm73YyylkndPQKVX5yQOd8eL2dbhX8upcjva46
+         MzONvp7rsvizq+/s83wRUcMdvFY3ctKbZz9XiLDwvmZh3BlMzQcp3cscRmJ22dHR/F
+         VSQ6c0DeR6ygg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Roee Goldfiner <roee.h.goldfiner@intel.com>,
+Cc:     Yi Kuo <yi@yikuo.dev>,
         Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        miriam.rachel.korenblit@intel.com, avraham.stern@intel.com,
-        benjamin.berg@intel.com, jtornosm@redhat.com,
-        linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 23/26] wifi: iwlwifi: mvm: avoid baid size integer overflow
-Date:   Sun,  9 Jul 2023 11:12:52 -0400
-Message-Id: <20230709151255.512931-23-sashal@kernel.org>
+        mukesh.sisodiya@intel.com, linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 24/26] wifi: iwlwifi: pcie: add device id 51F1 for killer 1675
+Date:   Sun,  9 Jul 2023 11:12:53 -0400
+Message-Id: <20230709151255.512931-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -63,45 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Yi Kuo <yi@yikuo.dev>
 
-[ Upstream commit 1a528ab1da324d078ec60283c34c17848580df24 ]
+[ Upstream commit f4daceae4087bbb3e9a56044b44601d520d009d2 ]
 
-Roee reported various hard-to-debug crashes with pings in
-EHT aggregation scenarios. Enabling KASAN showed that we
-access the BAID allocation out of bounds, and looking at
-the code a bit shows that since the reorder buffer entry
-(struct iwl_mvm_reorder_buf_entry) is 128 bytes if debug
-such as lockdep is enabled, then staring from an agg size
-512 we overflow the size calculation, and allocate a much
-smaller structure than we should, causing slab corruption
-once we initialize this.
+Intel Killer AX1675i/s with device id 51f1 would show
+"No config found for PCI dev 51f1/1672" in dmesg and refuse to work.
+Add the new device id 51F1 for 1675i/s to fix the issue.
 
-Fix this by simply using u32 instead of u16.
-
-Reported-by: Roee Goldfiner <roee.h.goldfiner@intel.com>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Yi Kuo <yi@yikuo.dev>
 Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20230620125813.f428c856030d.I2c2bb808e945adb71bc15f5b2bac2d8957ea90eb@changeid
+Link: https://lore.kernel.org/r/20230621130444.ee224675380b.I921c905e21e8d041ad808def8f454f27b5ebcd8b@changeid
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/sta.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
-index 05a54a69c1357..2daf97ad6a184 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
-@@ -2882,7 +2882,7 @@ int iwl_mvm_sta_rx_agg(struct iwl_mvm *mvm, struct ieee80211_sta *sta,
- 	}
- 
- 	if (iwl_mvm_has_new_rx_api(mvm) && start) {
--		u16 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
-+		u32 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
- 
- 		/* sparse doesn't like the __align() so don't check */
- #ifndef __CHECKER__
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+index e9fe6cea891aa..e086664a4eaca 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+@@ -684,6 +684,8 @@ static const struct iwl_dev_info iwl_dev_info_table[] = {
+ 	IWL_DEV_INFO(0x2726, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
+ 	IWL_DEV_INFO(0x51F0, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
+ 	IWL_DEV_INFO(0x51F0, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
++	IWL_DEV_INFO(0x51F1, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
++	IWL_DEV_INFO(0x51F1, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
+ 	IWL_DEV_INFO(0x54F0, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
+ 	IWL_DEV_INFO(0x54F0, 0x1672, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675i_name),
+ 	IWL_DEV_INFO(0x7A70, 0x1671, iwlax211_2ax_cfg_so_gf_a0, iwl_ax211_killer_1675s_name),
 -- 
 2.39.2
 
