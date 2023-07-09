@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1B774C4A0
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555D374C4A5
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbjGIOGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 10:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S232822AbjGIOId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 10:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIOG3 (ORCPT
+        with ESMTP id S229534AbjGIOIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 10:06:29 -0400
+        Sun, 9 Jul 2023 10:08:32 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D0E97;
-        Sun,  9 Jul 2023 07:06:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC02297;
+        Sun,  9 Jul 2023 07:08:29 -0700 (PDT)
 Received: from i53875a50.versanet.de ([83.135.90.80] helo=phil.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <heiko.stuebner@vrull.eu>)
-        id 1qIV3J-0002bh-B1; Sun, 09 Jul 2023 16:06:17 +0200
-From:   Heiko Stuebner <heiko.stuebner@vrull.eu>
+        (envelope-from <heiko@sntech.de>)
+        id 1qIV5G-0002cH-Mi; Sun, 09 Jul 2023 16:08:18 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -36,17 +36,17 @@ Cc:     Samuel Ortiz <sameo@rivosinc.com>, linux@rivosinc.com,
         Evan Green <evan@rivosinc.com>, devicetree@vger.kernel.org,
         Samuel Ortiz <sameo@rivosinc.com>
 Subject: Re: [PATCH v3 4/4] RISC-V: Implement archrandom when Zkr is available
-Date:   Sun, 09 Jul 2023 16:06:16 +0200
-Message-ID: <3566075.R56niFO833@phil>
+Date:   Sun, 09 Jul 2023 16:08:17 +0200
+Message-ID: <1902759.taCxCBeP46@phil>
 In-Reply-To: <20230709115549.2666557-5-sameo@rivosinc.com>
 References: <20230709115549.2666557-1-sameo@rivosinc.com>
  <20230709115549.2666557-5-sameo@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
