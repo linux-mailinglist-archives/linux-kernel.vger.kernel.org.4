@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B4C74C114
+	by mail.lfdr.de (Postfix) with ESMTP id 6D38174C112
 	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 07:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjGIFQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 01:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S230365AbjGIFQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 01:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjGIFQq (ORCPT
+        with ESMTP id S230347AbjGIFQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 01:16:46 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC84E40;
-        Sat,  8 Jul 2023 22:16:45 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d2e1a72fcca58-666ecf9a081so2840212b3a.2;
-        Sat, 08 Jul 2023 22:16:45 -0700 (PDT)
+        Sun, 9 Jul 2023 01:16:49 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D6F102;
+        Sat,  8 Jul 2023 22:16:48 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d9443c01a7336-1b8b4749013so24936295ad.2;
+        Sat, 08 Jul 2023 22:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688879804; x=1691471804;
+        d=gmail.com; s=20221208; t=1688879808; x=1691471808;
         h=content-transfer-encoding:content-language:in-reply-to:mime-version
          :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ztnp1qTer1IaWaOObtyfdo8muim3ULQZOmol0cBsgFo=;
-        b=IsgnDEPrWv2qRNJgNRsVo8hNkyVbhR4y/lQoM5aXev+JVsfWrzOlmuqSFm45QBgJ8R
-         6tkBuQZRIooyMTUjcoEjpg7QgA8qgnth8KEaXac8CIVHISlQqaJHMSE+eUB3cuP/MW6Q
-         aDK7U9HJHKaztcZa0wu0XWkyNSR3vEbtAZfH07pzExxQD+2AfL/pNPCQrFZRk+yB2P/K
-         k2RSyMaC5n1SIx1fvr9sE9VvPDivv2AfEfA5sZuVwvq5GaJYnIE4I52sNLmVawpLK4iu
-         XibGU11vQEo9T1aMS7xj6lou+AeoQMlIfzf1THbJWKm0plNF5GUYez1Wpr51kxLybivP
-         MrbQ==
+        bh=f5IT/4pg2ojRd4xm57HWhrEgHwR41enNj19n7FJ7HSQ=;
+        b=M6th2hcmP2yhN28ewtB2KAsywav6oXtLYTfObWDIyUVcRH2JmHoSX1GBNT9Y1MGboT
+         J0N7FaO9RXNehWOtIMbDhoR9TsIa9I8tn5QDTddEiT9xncgyfG8OQYR0NHEyIY5IrydX
+         FcDOJ6+ymOJJyn7Q7pVgednnypGlgfZA1iwTnJVm9yERN1cWUe6+IPg0ujcWZZj41y/z
+         OQpxZVXY8R1sYRGDBaPwe6LS1YUECU73KOYvqvOXOZvFU1lHIMRZuUPBAXv4EwvfZkLE
+         qS884K9+hv8H8TlAWP2plkTb6yGqpj16ear8ie/CXrj7J3+dgvoQtDU4Kml+0YzrRgiY
+         qYhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688879804; x=1691471804;
+        d=1e100.net; s=20221208; t=1688879808; x=1691471808;
         h=content-transfer-encoding:content-language:in-reply-to:mime-version
          :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ztnp1qTer1IaWaOObtyfdo8muim3ULQZOmol0cBsgFo=;
-        b=ObV0O+6P0Q/6VdCglXYV9H+05ZkJ+q6TNuu/E8ihM9xlEXPGYRsIfpfE47IMDg27oz
-         3CiD7OrriV2/H085R9eKnLH69ddeOdlXLYQPuFMfVFT49arYpzpptY1j/afyL9rDGjfm
-         xN4+ONbj+dXEAMpvDyOFpyVXg6AXZQ9pvCD7qyFnjaODQrayullL3vW6Rvi0YG50j7oM
-         UD6h+quedWDrk866+Sy1P6XXcfpqVIf8cprRG9blCW1aJOGksvaztoGbjmtUiPuYkEWv
-         ozjI1YQdaOAMI0HyuZsWKODVwZU6V8S8646E4Bu9i7S/HvXSPmE4O28k5AH1ASPNzXLI
-         bp4w==
-X-Gm-Message-State: ABy/qLZ8hFMbgt1Et6YduHLv66xXrTG5EzPk9YRpnm9oaYq7uPnL6Rfx
-        42Wt9O/+fGtNF70FzVJM8rMqJpWUcWrr9fRzCG0=
-X-Google-Smtp-Source: APBJJlGdQ+mZwEX7hoR7kwbuM2LjVWZ2BiFPsOtvISNt912jjNntEHQo8YA+l89fvmmiQE4Ea48isQ==
-X-Received: by 2002:a05:6a20:3d85:b0:12c:9100:362f with SMTP id s5-20020a056a203d8500b0012c9100362fmr12083123pzi.4.1688879804232;
-        Sat, 08 Jul 2023 22:16:44 -0700 (PDT)
+        bh=f5IT/4pg2ojRd4xm57HWhrEgHwR41enNj19n7FJ7HSQ=;
+        b=cUDKrFRLOL0nbkjJc+nSR9XIlrNin5XUhSD16V1rdzswITgFbHLLRwrmlDm3CKPt4F
+         Z095OtgtUjx6cJdR9lflz4R7+05kf1keqwuXvZxM82H4Q568Ylm7IhLxyTR7A46aycnd
+         fXsGecytcFT1Q0ZiptqANtihQRMWdqUYdSJ7RatZ4TS/aTTCoaa41F/7Rgm1Kz6XGes3
+         xnJiSWbzizZBNl+JkxdCzlVlukT4jLvLgrTDOpYBcMu8YG1rUrVob7X8Oi8nY2iR65Ag
+         t6GRkKXk7K82dHTXa0Xnhc7fHXoIHL8Un4AQL5wVggrfTifdnEcBr3zx4q0MLktmDmW8
+         IuZg==
+X-Gm-Message-State: ABy/qLYOt0JlXl1c24QhKBGPEaGS+jgFd0y/wMC8pKOaC1N5Uj/F9M1Y
+        slSml8jeZdmJegDucW2Eh0BVhZgC7WsxMXTrhXA=
+X-Google-Smtp-Source: APBJJlEvHN3XmnInifh1UC3s8BpriGfww6vlI8aI3/l8lfEJntt8m/UB1LDbt6hPZDlePX07akcwpQ==
+X-Received: by 2002:a17:902:d507:b0:1b9:d335:2216 with SMTP id b7-20020a170902d50700b001b9d3352216mr4003737plg.20.1688879807819;
+        Sat, 08 Jul 2023 22:16:47 -0700 (PDT)
 Received: from ?IPv6:2409:8a55:301b:e120:1523:3ecb:e154:8f22? ([2409:8a55:301b:e120:1523:3ecb:e154:8f22])
-        by smtp.gmail.com with ESMTPSA id b18-20020aa78712000000b0066684d8115bsm5134939pfo.178.2023.07.08.22.16.40
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b001ab12ccc2a7sm5669261pli.98.2023.07.08.22.16.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jul 2023 22:16:43 -0700 (PDT)
-Subject: Re: [PATCH RFC net-next v4 5/9] libie: add Rx buffer management (via
- Page Pool)
+        Sat, 08 Jul 2023 22:16:47 -0700 (PDT)
+Subject: Re: [PATCH RFC net-next v4 6/9] iavf: switch to Page Pool
 To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
         Yunsheng Lin <linyunsheng@huawei.com>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -68,16 +67,16 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
         intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
 References: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
- <20230705155551.1317583-6-aleksander.lobakin@intel.com>
- <138b94a7-c186-bdd9-e073-2794760c9454@huawei.com>
- <09a9a9ef-cf77-3b60-2845-94595a42cf3e@intel.com>
+ <20230705155551.1317583-7-aleksander.lobakin@intel.com>
+ <6b8bc66f-8a02-b6b4-92cc-f8aaf067abd8@huawei.com>
+ <bc495d87-3968-495f-c672-bf1bab38524a@intel.com>
 From:   Yunsheng Lin <yunshenglin0825@gmail.com>
-Message-ID: <71a8bab4-1a1d-cb1a-d75c-585a14c6fb2e@gmail.com>
-Date:   Sun, 9 Jul 2023 13:16:33 +0800
+Message-ID: <4946b9df-66ea-d184-b97c-0ba687e41df8@gmail.com>
+Date:   Sun, 9 Jul 2023 13:16:39 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <09a9a9ef-cf77-3b60-2845-94595a42cf3e@intel.com>
+In-Reply-To: <bc495d87-3968-495f-c672-bf1bab38524a@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -91,107 +90,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/7 0:28, Alexander Lobakin wrote:
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Thu, 6 Jul 2023 20:47:28 +0800
-> 
->> On 2023/7/5 23:55, Alexander Lobakin wrote:
->>
->>> +/**
->>> + * libie_rx_page_pool_create - create a PP with the default libie settings
->>> + * @napi: &napi_struct covering this PP (no usage outside its poll loops)
->>> + * @size: size of the PP, usually simply Rx queue len
->>> + *
->>> + * Returns &page_pool on success, casted -errno on failure.
->>> + */
->>> +struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
->>> +					    u32 size)
->>> +{
->>> +	struct page_pool_params pp = {
->>> +		.flags		= PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
->>> +		.order		= LIBIE_RX_PAGE_ORDER,
->>> +		.pool_size	= size,
->>> +		.nid		= NUMA_NO_NODE,
->>> +		.dev		= napi->dev->dev.parent,
->>> +		.napi		= napi,
->>> +		.dma_dir	= DMA_FROM_DEVICE,
->>> +		.offset		= LIBIE_SKB_HEADROOM,
->>
->> I think it worth mentioning that the '.offset' is not really accurate
->> when the page is split, as we do not really know what is the offset of
->> the frag of a page except for the first frag.
-> 
-> Yeah, this is read as "offset from the start of the page or frag to the
-> actual frame start, i.e. its Ethernet header" or "this is just
-> xdp->data - xdp->data_hard_start".
+On 2023/7/7 0:38, Alexander Lobakin wrote:
 
-So the problem seems to be if most of drivers have a similar reading as
-libie does here, as .offset seems to have a clear semantics which is used
-to skip dma sync operation for buffer range that is not touched by the
-dma operation. Even if it happens to have the same value of "offset from
-the start of the page or frag to the actual frame start", I am not sure
-it is future-proofing to reuse it.
-
-When page frag is added, I didn't really give much thought about that as
-we use it in a cache coherent system.
-It seems we might need to extend or update that semantics if we really want
-to skip dma sync operation for all the buffer ranges that are not touched
-by the dma operation for page split case.
-Or Skipping dma sync operation for all untouched ranges might not be worth
-the effort, because it might need a per frag dma sync operation, which is
-more costly than a batched per page dma sync operation. If it is true, page
-pool already support that currently as my understanding, because the dma
-sync operation is only done when the last frag is released/freed.
-
-> 
+...
+ 
 >>
->>> +	};
->>> +	size_t truesize;
+>>>  /**
+>>> @@ -766,13 +742,19 @@ void iavf_free_rx_resources(struct iavf_ring *rx_ring)
+>>>   **/
+>>>  int iavf_setup_rx_descriptors(struct iavf_ring *rx_ring)
+>>>  {
+>>> -	struct device *dev = rx_ring->dev;
+>>> -	int bi_size;
+>>> +	struct page_pool *pool;
 >>> +
->>> +	pp.max_len = libie_rx_sync_len(napi->dev, pp.offset);
+>>> +	pool = libie_rx_page_pool_create(&rx_ring->q_vector->napi,
+>>> +					 rx_ring->count);
+>>
+>> If a page is able to be spilt between more than one desc, perhaps the
+>> prt_ring size does not need to be as big as rx_ring->count.
+> 
+> But we doesn't know in advance, right? Esp. given that it's hidden in
+> the lib. But anyway, you can only assume that in regular cases if you
+> always allocate frags of the same size, PP will split pages when 2+
+> frags can fit there or return the whole page otherwise, but who knows
+> what might happen.
 
-As mentioned above, if we depend on the last released/freed frag to do the
-dma sync, the pp.max_len might need to cover all the frag.
+It seems intel driver is able to know the size of memory it needs when
+creating the ring/queue/napi/pp, maybe the driver only tell the libie
+how many descs does it use for queue, and libie can adjust it accordingly?
 
+> BTW, with recent recycling optimization, most of recycling is done
+> directly through cache, not ptr_ring. So I'd even say it's safe to start
+> creating smaller ptr_rings in the drivers.
+
+The problem is that we may use more memory than before for certain case
+if we don't limit the size of ptr_ring, unless we can ensure all of
+recycling is done directly through cache, not ptr_ring.
+
+> 
+>>
+>>> +	if (IS_ERR(pool))
+>>> +		return PTR_ERR(pool);
 >>> +
->>> +	/* "Wanted" truesize, passed to page_pool_dev_alloc() */
->>> +	truesize = roundup_pow_of_two(SKB_HEAD_ALIGN(pp.offset + pp.max_len));
->>> +	pp.init_arg = (void *)truesize;
+>>> +	rx_ring->pp = pool;
+> 
+> [...]
+> 
+>>>  	/* build an skb around the page buffer */
+>>> -	skb = napi_build_skb(va - IAVF_SKB_PAD, truesize);
+>>> -	if (unlikely(!skb))
+>>> +	skb = napi_build_skb(va, rx_buffer->truesize);
+>>> +	if (unlikely(!skb)) {
+>>> +		page_pool_put_page(page->pp, page, size, true);
 >>
->> I am not sure if it is correct to use pp.init_arg here, as it is supposed to
->> be used along with init_callback. And if we want to change the implemetation
+>> Isn't it more correct to call page_pool_put_full_page() here?
+>> as we do not know which frag is used for the rx_buffer, and depend
+>> on the last released frag to do the syncing, maybe I should mention
+>> that in Documentation/networking/page_pool.rst.
 > 
-> I know. I abused it to save 1 function argument :p It's safe since I
-> don't use init_callback (not an argument).
-> I was thinking also of having a union in PP params or even a new field
-> like "wanted true size", so that your function could even take values
-> from there in certain cases (e.g. if I pass 0 as parameter).
-> 
->> of init_callback, we may stuck with it as the driver is using it very
->> differently here.
->>
->> Is it possible to pass the 'wanted true size' by adding a parameter for
->> libie_rx_alloc()?
-> 
-> Yes, or I could store it somewhere on the ring, but looks uglier =\ This
-> one does as well to some degree, but at least hidden in the library and
-> doesn't show up in the drivers :D
+> Ooof, maybe. My first try with PP frags. So when we use frags, we always
+> must use _full_page() / p.max_len instead of the actual frame size?
 
-It seems most hw driver know the size of memory it needs when creating
-the ring/queue, setting the frag size and deciding how many is a page
-split into before allocation seems like a possible future optimization.
-
-For now, it would be better to add helper to acess pp.init_arg at least
-instead of acess pp.init_arg directly to make it more obvious and make
-the future optimization more easier.
+Currently, _full_page() / p.max_len must be used to ensure the correct
+dma sync operation.
+But as mentioned in the previous patch, it might be about what is the
+semantics of dma sync operation for page split case.
 
 > 
->>
->>> +
->>> +	return page_pool_create(&pp);
->>> +}
->>> +EXPORT_SYMBOL_NS_GPL(libie_rx_page_pool_create, LIBIE);
-> 
-> Thanks,
-> Olek
-
