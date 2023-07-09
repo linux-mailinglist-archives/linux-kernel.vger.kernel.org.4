@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD31C74C56C
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311A074C522
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbjGIPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S232984AbjGIPOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbjGIPPG (ORCPT
+        with ESMTP id S233189AbjGIPOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:15:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594AFE7C;
-        Sun,  9 Jul 2023 08:14:37 -0700 (PDT)
+        Sun, 9 Jul 2023 11:14:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EC0E45;
+        Sun,  9 Jul 2023 08:13:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0301C60B83;
-        Sun,  9 Jul 2023 15:13:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56345C433BF;
-        Sun,  9 Jul 2023 15:13:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5160460C0F;
+        Sun,  9 Jul 2023 15:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4E8C43391;
+        Sun,  9 Jul 2023 15:13:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915614;
-        bh=ByswGXSEfepnt22Sp0U1BZpVzkWaNzOYVSpgMCOTl4Y=;
+        s=k20201202; t=1688915617;
+        bh=LH2hwoUFKM2bcWoEr3Ue+OY/SGHBF6JkUd2BHQ0tcIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B0M4T3PeEiHJavRGT/OFgPVuQ2oHjFJUbSenbkP75yNB9PJlx5SNerGyC1T1BWfms
-         TpWLs7dghEyJXTmvPtSCW4tRAQcEwNsBMwTy5hfWJ6aCaJ/iKlPVBTErhUnozjV9Fh
-         r1YVdG+v3qxclpVurAME10WdPCMKoSw09r8f5CsZhfJfuVX4z+6oXwVntvBSrr/aCm
-         iGWeQg/p2Vz8+yzNS7WsxgnFr8aryYtMGf/raVUEGvphaH7/XaoABhEqycaQ5jGYMD
-         jAkuDoDJ2QLmFOaZvgzR/rNy4RG5783OgxkRLgQMHn5NR/fJPwV2GXdUajEUwnLakY
-         BHT2GY9xfETZA==
+        b=ahWir//vbjRqGSMU/6bD+fL+CSG9eefXn/CpY0w1gxXIWc7WXcW5t2IEh0Qv4F+lj
+         Lc6XiNkqW5K4mgioeqN/oJ+aM68hd58fjt9r6T8U1goQD2Bf9HsoJ0gSG8OzxnTs+K
+         YCRJE7BCpuqiH1DzG/XjZfVYXJHmkDcRu9+aKn98w3P9+CK67hcB4D0qOGSc0zLLcZ
+         zI9XVUfhjZaI0bW1N7TJ/+g4hV+jVT2zzoJkpcxhe+JD5A+kDCj+B13lJTnOephKq3
+         MhhQDTcvv97RTg50IDWumFHMtQ3z6lXsOnfhm2jbmLNeBX277XqeH1Rn/PGyCYOjaK
+         JsWqOObMzX3fg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Petr Oros <poros@redhat.com>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 19/26] devlink: report devlink_port_type_warn source device
-Date:   Sun,  9 Jul 2023 11:12:48 -0400
-Message-Id: <20230709151255.512931-19-sashal@kernel.org>
+Cc:     Mukesh Sisodiya <mukesh.sisodiya@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 20/26] wifi: iwlwifi: mvm: Add NULL check before dereferencing the pointer
+Date:   Sun,  9 Jul 2023 11:12:49 -0400
+Message-Id: <20230709151255.512931-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -62,75 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Oros <poros@redhat.com>
+From: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
 
-[ Upstream commit a52305a81d6bb74b90b400dfa56455d37872fe4b ]
+[ Upstream commit 7dd50fd5478056929a012c6bf8b3c6f87c7e9e87 ]
 
-devlink_port_type_warn is scheduled for port devlink and warning
-when the port type is not set. But from this warning it is not easy
-found out which device (driver) has no devlink port set.
+While vif pointers are protected by the corresponding "*active"
+fields, static checkers can get confused sometimes. Add an explicit
+check.
 
-[ 3709.975552] Type was not set for devlink port.
-[ 3709.975579] WARNING: CPU: 1 PID: 13092 at net/devlink/leftover.c:6775 devlink_port_type_warn+0x11/0x20
-[ 3709.993967] Modules linked in: openvswitch nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nfnetlink bluetooth rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache netfs vhost_net vhost vhost_iotlb tap tun bridge stp llc qrtr intel_rapl_msr intel_rapl_common i10nm_edac nfit libnvdimm x86_pkg_temp_thermal mlx5_ib intel_powerclamp coretemp dell_wmi ledtrig_audio sparse_keymap ipmi_ssif kvm_intel ib_uverbs rfkill ib_core video kvm iTCO_wdt acpi_ipmi intel_vsec irqbypass ipmi_si iTCO_vendor_support dcdbas ipmi_devintf mei_me ipmi_msghandler rapl mei intel_cstate isst_if_mmio isst_if_mbox_pci dell_smbios intel_uncore isst_if_common i2c_i801 dell_wmi_descriptor wmi_bmof i2c_smbus intel_pch_thermal pcspkr acpi_power_meter xfs libcrc32c sd_mod sg nvme_tcp mgag200 i2c_algo_bit nvme_fabrics drm_shmem_helper drm_kms_helper nvme syscopyarea ahci sysfillrect sysimgblt nvme_core fb_sys_fops crct10dif_pclmul libahci mlx5_core sfc crc32_pclmul nvme_common drm
-[ 3709.994030]  crc32c_intel mtd t10_pi mlxfw libata tg3 mdio megaraid_sas psample ghash_clmulni_intel pci_hyperv_intf wmi dm_multipath sunrpc dm_mirror dm_region_hash dm_log dm_mod be2iscsi bnx2i cnic uio cxgb4i cxgb4 tls libcxgbi libcxgb qla4xxx iscsi_boot_sysfs iscsi_tcp libiscsi_tcp libiscsi scsi_transport_iscsi fuse
-[ 3710.108431] CPU: 1 PID: 13092 Comm: kworker/1:1 Kdump: loaded Not tainted 5.14.0-319.el9.x86_64 #1
-[ 3710.108435] Hardware name: Dell Inc. PowerEdge R750/0PJ80M, BIOS 1.8.2 09/14/2022
-[ 3710.108437] Workqueue: events devlink_port_type_warn
-[ 3710.108440] RIP: 0010:devlink_port_type_warn+0x11/0x20
-[ 3710.108443] Code: 84 76 fe ff ff 48 c7 03 20 0e 1a ad 31 c0 e9 96 fd ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 48 c7 c7 18 24 4e ad e8 ef 71 62 ff <0f> 0b c3 cc cc cc cc 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 f6 87
-[ 3710.108445] RSP: 0018:ff3b6d2e8b3c7e90 EFLAGS: 00010282
-[ 3710.108447] RAX: 0000000000000000 RBX: ff366d6580127080 RCX: 0000000000000027
-[ 3710.108448] RDX: 0000000000000027 RSI: 00000000ffff86de RDI: ff366d753f41f8c8
-[ 3710.108449] RBP: ff366d658ff5a0c0 R08: ff366d753f41f8c0 R09: ff3b6d2e8b3c7e18
-[ 3710.108450] R10: 0000000000000001 R11: 0000000000000023 R12: ff366d753f430600
-[ 3710.108451] R13: ff366d753f436900 R14: 0000000000000000 R15: ff366d753f436905
-[ 3710.108452] FS:  0000000000000000(0000) GS:ff366d753f400000(0000) knlGS:0000000000000000
-[ 3710.108453] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3710.108454] CR2: 00007f1c57bc74e0 CR3: 000000111d26a001 CR4: 0000000000773ee0
-[ 3710.108456] PKRU: 55555554
-[ 3710.108457] Call Trace:
-[ 3710.108458]  <TASK>
-[ 3710.108459]  process_one_work+0x1e2/0x3b0
-[ 3710.108466]  ? rescuer_thread+0x390/0x390
-[ 3710.108468]  worker_thread+0x50/0x3a0
-[ 3710.108471]  ? rescuer_thread+0x390/0x390
-[ 3710.108473]  kthread+0xdd/0x100
-[ 3710.108477]  ? kthread_complete_and_exit+0x20/0x20
-[ 3710.108479]  ret_from_fork+0x1f/0x30
-[ 3710.108485]  </TASK>
-[ 3710.108486] ---[ end trace 1b4b23cd0c65d6a0 ]---
-
-After patch:
-[  402.473064] ice 0000:41:00.0: Type was not set for devlink port.
-[  402.473064] ice 0000:41:00.1: Type was not set for devlink port.
-
-Signed-off-by: Petr Oros <poros@redhat.com>
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-Link: https://lore.kernel.org/r/20230615095447.8259-1-poros@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230614154951.78749ae91fb5.Id3c05d13eeee6638f0930f750e93fb928d5c9dee@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/devlink/leftover.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/power.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/net/devlink/leftover.c b/net/devlink/leftover.c
-index cd02549680767..790e61b2a9404 100644
---- a/net/devlink/leftover.c
-+++ b/net/devlink/leftover.c
-@@ -6772,7 +6772,10 @@ void devlink_notify_unregister(struct devlink *devlink)
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/power.c b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
+index ac1dae52556f8..19839cc44eb3d 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
+@@ -647,30 +647,32 @@ static void iwl_mvm_power_set_pm(struct iwl_mvm *mvm,
+ 		return;
  
- static void devlink_port_type_warn(struct work_struct *work)
- {
--	WARN(true, "Type was not set for devlink port.");
-+	struct devlink_port *port = container_of(to_delayed_work(work),
-+						 struct devlink_port,
-+						 type_warn_dw);
-+	dev_warn(port->devlink->dev, "Type was not set for devlink port.");
- }
+ 	/* enable PM on bss if bss stand alone */
+-	if (vifs->bss_active && !vifs->p2p_active && !vifs->ap_active) {
++	if (bss_mvmvif && vifs->bss_active && !vifs->p2p_active &&
++	    !vifs->ap_active) {
+ 		bss_mvmvif->pm_enabled = true;
+ 		return;
+ 	}
  
- static bool devlink_port_type_should_warn(struct devlink_port *devlink_port)
+ 	/* enable PM on p2p if p2p stand alone */
+-	if (vifs->p2p_active && !vifs->bss_active && !vifs->ap_active) {
++	if (p2p_mvmvif && vifs->p2p_active && !vifs->bss_active &&
++	    !vifs->ap_active) {
+ 		p2p_mvmvif->pm_enabled = true;
+ 		return;
+ 	}
+ 
+-	if (vifs->bss_active && vifs->p2p_active)
++	if (p2p_mvmvif && bss_mvmvif && vifs->bss_active && vifs->p2p_active)
+ 		client_same_channel =
+ 			iwl_mvm_have_links_same_channel(bss_mvmvif, p2p_mvmvif);
+ 
+-	if (vifs->bss_active && vifs->ap_active)
++	if (bss_mvmvif && ap_mvmvif && vifs->bss_active && vifs->ap_active)
+ 		ap_same_channel =
+ 			iwl_mvm_have_links_same_channel(bss_mvmvif, ap_mvmvif);
+ 
+ 	/* clients are not stand alone: enable PM if DCM */
+ 	if (!(client_same_channel || ap_same_channel)) {
+-		if (vifs->bss_active)
++		if (bss_mvmvif && vifs->bss_active)
+ 			bss_mvmvif->pm_enabled = true;
+-		if (vifs->p2p_active)
++		if (p2p_mvmvif && vifs->p2p_active)
+ 			p2p_mvmvif->pm_enabled = true;
+ 		return;
+ 	}
 -- 
 2.39.2
 
