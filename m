@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144E774C629
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F205174C5E0
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbjGIP2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S233835AbjGIPU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbjGIP2N (ORCPT
+        with ESMTP id S233829AbjGIPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:28:13 -0400
+        Sun, 9 Jul 2023 11:19:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BFBE60;
-        Sun,  9 Jul 2023 08:26:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CA63583;
+        Sun,  9 Jul 2023 08:16:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90C7260BFF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4513660C2B;
+        Sun,  9 Jul 2023 15:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C50C433CD;
         Sun,  9 Jul 2023 15:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BF6C433C8;
-        Sun,  9 Jul 2023 15:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915795;
-        bh=s/Cb8Zm+6Qly1ZMy/ulzm3Pf5rMTvuUA8VEfjYDv+pQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Yd3vTNOb9LSC9LpeJ33lSmNRcYeLdPI+LwzioE9dp6TiEPsnX/82r8Yy2HkhrR4bq
-         RTn217tbG+Z2kZmXjgYjGF7zJ5KkbMmOwbc2FGWA+nwbsXRPmZ9cxd1/2hqD3aT/Ib
-         SJtTtnBbtq4nV4Tasap0v6ZWXFvZpySDSmCjEkeSiyESs4MFv3fPpb5y3UyRaACEvF
-         +WlZD3OkMIcMxJM57/fMHqAvdyzT3NTEn7oBJavB6FbIu4Q7QqpI43WZyUWmfQmijM
-         eq8y0khJ968+iCxfka1fyc9HXrN2OxNSoJHkcaWOeJfEZ4v+zyNf2la4vSsOlr0oWz
-         vPEtUiXuBsScg==
+        s=k20201202; t=1688915796;
+        bh=9rSVqdKcxx7I835Y7LAo46+7GLpjCTaOzwiFWPXuui4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nrRSfALM0OEcCptNqwbeSdRcJ4M2pMQTnz16RY45ns2jZm6xsms/Aav1/iQK2ZFNd
+         W2tnlOKibJLTM+r0M094BkmJDvarSaW7TxnC6YJtWMYLJbdfKMO2mcN/wXn4fJtAVC
+         h5XiEiXuObvjIabpUmOodIjQkwAGGaqtnKd8rv4+CEgXqvB4PYsa4dGdsvKJLP2Kbk
+         E3+nEr1SwtPmdK3tH61oTrpJpRTUvYoPvHBh5KR0SpPhiin80bQ+g2sBJfoLJiJxDZ
+         2fIZaBfOmxFcuEs8C0tnqDyrwilzOJ7VfM/yXOjFjM4veU5Mm8PkNn+oZe0lhXF9t7
+         rWGsjsn60ZjkQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 1/5] wifi: rtw89: 8851be: add 8851BE PCI entry and fill PCI capabilities
-Date:   Sun,  9 Jul 2023 11:16:26 -0400
-Message-Id: <20230709151632.514098-1-sashal@kernel.org>
+Cc:     Martin KaFai Lau <martin.lau@kernel.org>,
+        syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, martin.lau@linux.dev,
+        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 2/5] bpf: Address KCSAN report on bpf_lru_list
+Date:   Sun,  9 Jul 2023 11:16:27 -0400
+Message-Id: <20230709151632.514098-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230709151632.514098-1-sashal@kernel.org>
+References: <20230709151632.514098-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,114 +62,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ping-Ke Shih <pkshih@realtek.com>
+From: Martin KaFai Lau <martin.lau@kernel.org>
 
-[ Upstream commit 99ff8da56322cda9eb9b37021e27b127c2d1cad8 ]
+[ Upstream commit ee9fd0ac3017c4313be91a220a9ac4c99dde7ad4 ]
 
-Add PCI entry to 8851BE with its device ID 10ec:b851, also fill PCI info
-according to its capabilities.
+KCSAN reported a data-race when accessing node->ref.
+Although node->ref does not have to be accurate,
+take this chance to use a more common READ_ONCE() and WRITE_ONCE()
+pattern instead of data_race().
 
-Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20230421024551.29994-3-pkshih@realtek.com
+There is an existing bpf_lru_node_is_ref() and bpf_lru_node_set_ref().
+This patch also adds bpf_lru_node_clear_ref() to do the
+WRITE_ONCE(node->ref, 0) also.
+
+==================================================================
+BUG: KCSAN: data-race in __bpf_lru_list_rotate / __htab_lru_percpu_map_update_elem
+
+write to 0xffff888137038deb of 1 bytes by task 11240 on cpu 1:
+__bpf_lru_node_move kernel/bpf/bpf_lru_list.c:113 [inline]
+__bpf_lru_list_rotate_active kernel/bpf/bpf_lru_list.c:149 [inline]
+__bpf_lru_list_rotate+0x1bf/0x750 kernel/bpf/bpf_lru_list.c:240
+bpf_lru_list_pop_free_to_local kernel/bpf/bpf_lru_list.c:329 [inline]
+bpf_common_lru_pop_free kernel/bpf/bpf_lru_list.c:447 [inline]
+bpf_lru_pop_free+0x638/0xe20 kernel/bpf/bpf_lru_list.c:499
+prealloc_lru_pop kernel/bpf/hashtab.c:290 [inline]
+__htab_lru_percpu_map_update_elem+0xe7/0x820 kernel/bpf/hashtab.c:1316
+bpf_percpu_hash_update+0x5e/0x90 kernel/bpf/hashtab.c:2313
+bpf_map_update_value+0x2a9/0x370 kernel/bpf/syscall.c:200
+generic_map_update_batch+0x3ae/0x4f0 kernel/bpf/syscall.c:1687
+bpf_map_do_batch+0x2d9/0x3d0 kernel/bpf/syscall.c:4534
+__sys_bpf+0x338/0x810
+__do_sys_bpf kernel/bpf/syscall.c:5096 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:5094 [inline]
+__x64_sys_bpf+0x43/0x50 kernel/bpf/syscall.c:5094
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff888137038deb of 1 bytes by task 11241 on cpu 0:
+bpf_lru_node_set_ref kernel/bpf/bpf_lru_list.h:70 [inline]
+__htab_lru_percpu_map_update_elem+0x2f1/0x820 kernel/bpf/hashtab.c:1332
+bpf_percpu_hash_update+0x5e/0x90 kernel/bpf/hashtab.c:2313
+bpf_map_update_value+0x2a9/0x370 kernel/bpf/syscall.c:200
+generic_map_update_batch+0x3ae/0x4f0 kernel/bpf/syscall.c:1687
+bpf_map_do_batch+0x2d9/0x3d0 kernel/bpf/syscall.c:4534
+__sys_bpf+0x338/0x810
+__do_sys_bpf kernel/bpf/syscall.c:5096 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:5094 [inline]
+__x64_sys_bpf+0x43/0x50 kernel/bpf/syscall.c:5094
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+value changed: 0x01 -> 0x00
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 11241 Comm: syz-executor.3 Not tainted 6.3.0-rc7-syzkaller-00136-g6a66fdd29ea1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+==================================================================
+
+Reported-by: syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20230511043748.1384166-1-martin.lau@linux.dev
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/realtek/rtw89/rtw8851be.c    | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
- create mode 100644 drivers/net/wireless/realtek/rtw89/rtw8851be.c
+ kernel/bpf/bpf_lru_list.c | 21 +++++++++++++--------
+ kernel/bpf/bpf_lru_list.h |  7 ++-----
+ 2 files changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtw89/rtw8851be.c b/drivers/net/wireless/realtek/rtw89/rtw8851be.c
-new file mode 100644
-index 0000000000000..0f7711c50bd15
---- /dev/null
-+++ b/drivers/net/wireless/realtek/rtw89/rtw8851be.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+/* Copyright(c) 2022-2023  Realtek Corporation
-+ */
+diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+index 9b5eeff72fd37..39a0e768adc39 100644
+--- a/kernel/bpf/bpf_lru_list.c
++++ b/kernel/bpf/bpf_lru_list.c
+@@ -44,7 +44,12 @@ static struct list_head *local_pending_list(struct bpf_lru_locallist *loc_l)
+ /* bpf_lru_node helpers */
+ static bool bpf_lru_node_is_ref(const struct bpf_lru_node *node)
+ {
+-	return node->ref;
++	return READ_ONCE(node->ref);
++}
 +
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+
-+#include "pci.h"
-+#include "reg.h"
-+#include "rtw8851b.h"
-+
-+static const struct rtw89_pci_info rtw8851b_pci_info = {
-+	.txbd_trunc_mode	= MAC_AX_BD_TRUNC,
-+	.rxbd_trunc_mode	= MAC_AX_BD_TRUNC,
-+	.rxbd_mode		= MAC_AX_RXBD_PKT,
-+	.tag_mode		= MAC_AX_TAG_MULTI,
-+	.tx_burst		= MAC_AX_TX_BURST_2048B,
-+	.rx_burst		= MAC_AX_RX_BURST_128B,
-+	.wd_dma_idle_intvl	= MAC_AX_WD_DMA_INTVL_256NS,
-+	.wd_dma_act_intvl	= MAC_AX_WD_DMA_INTVL_256NS,
-+	.multi_tag_num		= MAC_AX_TAG_NUM_8,
-+	.lbc_en			= MAC_AX_PCIE_ENABLE,
-+	.lbc_tmr		= MAC_AX_LBC_TMR_2MS,
-+	.autok_en		= MAC_AX_PCIE_DISABLE,
-+	.io_rcy_en		= MAC_AX_PCIE_DISABLE,
-+	.io_rcy_tmr		= MAC_AX_IO_RCY_ANA_TMR_6MS,
-+
-+	.init_cfg_reg		= R_AX_PCIE_INIT_CFG1,
-+	.txhci_en_bit		= B_AX_TXHCI_EN,
-+	.rxhci_en_bit		= B_AX_RXHCI_EN,
-+	.rxbd_mode_bit		= B_AX_RXBD_MODE,
-+	.exp_ctrl_reg		= R_AX_PCIE_EXP_CTRL,
-+	.max_tag_num_mask	= B_AX_MAX_TAG_NUM,
-+	.rxbd_rwptr_clr_reg	= R_AX_RXBD_RWPTR_CLR,
-+	.txbd_rwptr_clr2_reg	= 0,
-+	.dma_stop1		= {R_AX_PCIE_DMA_STOP1, B_AX_TX_STOP1_MASK_V1},
-+	.dma_stop2		= {0},
-+	.dma_busy1		= {R_AX_PCIE_DMA_BUSY1, DMA_BUSY1_CHECK_V1},
-+	.dma_busy2_reg		= 0,
-+	.dma_busy3_reg		= R_AX_PCIE_DMA_BUSY1,
-+
-+	.rpwm_addr		= R_AX_PCIE_HRPWM,
-+	.cpwm_addr		= R_AX_CPWM,
-+	.tx_dma_ch_mask		= BIT(RTW89_TXCH_ACH4) | BIT(RTW89_TXCH_ACH5) |
-+				  BIT(RTW89_TXCH_ACH6) | BIT(RTW89_TXCH_ACH7) |
-+				  BIT(RTW89_TXCH_CH10) | BIT(RTW89_TXCH_CH11),
-+	.bd_idx_addr_low_power	= NULL,
-+	.dma_addr_set		= &rtw89_pci_ch_dma_addr_set,
-+	.bd_ram_table		= &rtw89_bd_ram_table_single,
-+
-+	.ltr_set		= rtw89_pci_ltr_set,
-+	.fill_txaddr_info	= rtw89_pci_fill_txaddr_info,
-+	.config_intr_mask	= rtw89_pci_config_intr_mask,
-+	.enable_intr		= rtw89_pci_enable_intr,
-+	.disable_intr		= rtw89_pci_disable_intr,
-+	.recognize_intrs	= rtw89_pci_recognize_intrs,
-+};
-+
-+static const struct rtw89_driver_info rtw89_8851be_info = {
-+	.chip = &rtw8851b_chip_info,
-+	.bus = {
-+		.pci = &rtw8851b_pci_info,
-+	},
-+};
-+
-+static const struct pci_device_id rtw89_8851be_id_table[] = {
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_REALTEK, 0xb851),
-+		.driver_data = (kernel_ulong_t)&rtw89_8851be_info,
-+	},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(pci, rtw89_8851be_id_table);
-+
-+static struct pci_driver rtw89_8851be_driver = {
-+	.name		= "rtw89_8851be",
-+	.id_table	= rtw89_8851be_id_table,
-+	.probe		= rtw89_pci_probe,
-+	.remove		= rtw89_pci_remove,
-+	.driver.pm	= &rtw89_pm_ops,
-+};
-+module_pci_driver(rtw89_8851be_driver);
-+
-+MODULE_AUTHOR("Realtek Corporation");
-+MODULE_DESCRIPTION("Realtek 802.11ax wireless 8851BE driver");
-+MODULE_LICENSE("Dual BSD/GPL");
++static void bpf_lru_node_clear_ref(struct bpf_lru_node *node)
++{
++	WRITE_ONCE(node->ref, 0);
+ }
+ 
+ static void bpf_lru_list_count_inc(struct bpf_lru_list *l,
+@@ -92,7 +97,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
+ 
+ 	bpf_lru_list_count_inc(l, tgt_type);
+ 	node->type = tgt_type;
+-	node->ref = 0;
++	bpf_lru_node_clear_ref(node);
+ 	list_move(&node->list, &l->lists[tgt_type]);
+ }
+ 
+@@ -113,7 +118,7 @@ static void __bpf_lru_node_move(struct bpf_lru_list *l,
+ 		bpf_lru_list_count_inc(l, tgt_type);
+ 		node->type = tgt_type;
+ 	}
+-	node->ref = 0;
++	bpf_lru_node_clear_ref(node);
+ 
+ 	/* If the moving node is the next_inactive_rotation candidate,
+ 	 * move the next_inactive_rotation pointer also.
+@@ -356,7 +361,7 @@ static void __local_list_add_pending(struct bpf_lru *lru,
+ 	*(u32 *)((void *)node + lru->hash_offset) = hash;
+ 	node->cpu = cpu;
+ 	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
+-	node->ref = 0;
++	bpf_lru_node_clear_ref(node);
+ 	list_add(&node->list, local_pending_list(loc_l));
+ }
+ 
+@@ -422,7 +427,7 @@ static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+ 	if (!list_empty(free_list)) {
+ 		node = list_first_entry(free_list, struct bpf_lru_node, list);
+ 		*(u32 *)((void *)node + lru->hash_offset) = hash;
+-		node->ref = 0;
++		bpf_lru_node_clear_ref(node);
+ 		__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);
+ 	}
+ 
+@@ -525,7 +530,7 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
+ 		}
+ 
+ 		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
+-		node->ref = 0;
++		bpf_lru_node_clear_ref(node);
+ 		list_move(&node->list, local_free_list(loc_l));
+ 
+ 		raw_spin_unlock_irqrestore(&loc_l->lock, flags);
+@@ -571,7 +576,7 @@ static void bpf_common_lru_populate(struct bpf_lru *lru, void *buf,
+ 
+ 		node = (struct bpf_lru_node *)(buf + node_offset);
+ 		node->type = BPF_LRU_LIST_T_FREE;
+-		node->ref = 0;
++		bpf_lru_node_clear_ref(node);
+ 		list_add(&node->list, &l->lists[BPF_LRU_LIST_T_FREE]);
+ 		buf += elem_size;
+ 	}
+@@ -597,7 +602,7 @@ static void bpf_percpu_lru_populate(struct bpf_lru *lru, void *buf,
+ 		node = (struct bpf_lru_node *)(buf + node_offset);
+ 		node->cpu = cpu;
+ 		node->type = BPF_LRU_LIST_T_FREE;
+-		node->ref = 0;
++		bpf_lru_node_clear_ref(node);
+ 		list_add(&node->list, &l->lists[BPF_LRU_LIST_T_FREE]);
+ 		i++;
+ 		buf += elem_size;
+diff --git a/kernel/bpf/bpf_lru_list.h b/kernel/bpf/bpf_lru_list.h
+index 7d4f89b7cb841..08da78b59f0b9 100644
+--- a/kernel/bpf/bpf_lru_list.h
++++ b/kernel/bpf/bpf_lru_list.h
+@@ -66,11 +66,8 @@ struct bpf_lru {
+ 
+ static inline void bpf_lru_node_set_ref(struct bpf_lru_node *node)
+ {
+-	/* ref is an approximation on access frequency.  It does not
+-	 * have to be very accurate.  Hence, no protection is used.
+-	 */
+-	if (!node->ref)
+-		node->ref = 1;
++	if (!READ_ONCE(node->ref))
++		WRITE_ONCE(node->ref, 1);
+ }
+ 
+ int bpf_lru_init(struct bpf_lru *lru, bool percpu, u32 hash_offset,
 -- 
 2.39.2
 
