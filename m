@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F81374C526
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7822A74C52A
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbjGIPO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S230115AbjGIPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjGIPOO (ORCPT
+        with ESMTP id S233206AbjGIPOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:14:14 -0400
+        Sun, 9 Jul 2023 11:14:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF71E48;
-        Sun,  9 Jul 2023 08:13:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894BC10C0;
+        Sun,  9 Jul 2023 08:13:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AFE960C04;
-        Sun,  9 Jul 2023 15:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1AD7C433C9;
-        Sun,  9 Jul 2023 15:13:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E90D60C19;
+        Sun,  9 Jul 2023 15:13:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D80FC433C8;
+        Sun,  9 Jul 2023 15:13:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915622;
-        bh=6e21b8Qble0eAKgTcaa4a5gWpmGf3lLsAXg66FM61Ig=;
+        s=k20201202; t=1688915626;
+        bh=8X9HU6QLOwEvITmBZFPYMEvUSnusd+veEMbJ68J0t6I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zbv6dMuZh74b9tBFo5baThkU9Vgsp6oxyW5NFWl0S+Mi5+4pgcRDwhRxOPNFPkqWu
-         ZQhU+UGqOwte+ARhQ1B0189QLf6alpFFTcGwdIvH1Ce5S1yC+gROVpWc6pZ8u7SdJf
-         iMR+gdnmQeADgUfDiw7GP33qIcebWcFKfEHy8odewejlpbsGu5QyCYNBI0iFIgzx8u
-         QspLRWNF97lvmyR17ssKn2Vs69RC6oy3QJ6ixjZ7qsNcZqfIyJkOSJHRGnJVQwKm1R
-         z0QXeqF4HTe7FUcpw1GpFM9wMtHXsKzKfNn8RxWG029RMYPD3EoApr1xYyz9o4bfju
-         1v/ZqFkABTK0w==
+        b=Lvk8+YhCii2WyycnrE/gBDh7dZYnR03LlOVY9ywoseOI3bTYJdM9G+P7okvhSnWUU
+         IkJ1te6Ng9Gq//hGj9jl0dtYVUcpn3Qdcpk4tXNi4/r7Vl3iqhrTu7St5ANYU9RdoS
+         1WM+MTGVZlB285zi0dOmHQvfZWvbKqN17OtLnJqzs36DECAZzPBUfo4rlrNeli4ACX
+         kqwaqQ3EijLKsMlHlQERzMPk0bAdEEZ+5ThxuKjXacgmDXXgeGPnMqkWfNwqXcYtGm
+         0RiS6g5yJiyUjfX3JMFZE0uMV0Dm0nhX6mXNfEiJORbKmWxPkkYw00u4z+I/Ajxa6H
+         9Pu9jZhA8WItg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mukesh Sisodiya <mukesh.sisodiya@intel.com>,
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Roee Goldfiner <roee.h.goldfiner@intel.com>,
         Gregory Greenman <gregory.greenman@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        miriam.rachel.korenblit@intel.com, avraham.stern@intel.com,
+        benjamin.berg@intel.com, jtornosm@redhat.com,
         linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 22/26] wifi: iwlwifi: Add support for new PCI Id
-Date:   Sun,  9 Jul 2023 11:12:51 -0400
-Message-Id: <20230709151255.512931-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.4 23/26] wifi: iwlwifi: mvm: avoid baid size integer overflow
+Date:   Sun,  9 Jul 2023 11:12:52 -0400
+Message-Id: <20230709151255.512931-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -61,41 +63,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 35bd6f1d043d089fcb60450e1287cc65f0095787 ]
+[ Upstream commit 1a528ab1da324d078ec60283c34c17848580df24 ]
 
-Add support for the PCI Id 51F1 without IMR support.
+Roee reported various hard-to-debug crashes with pings in
+EHT aggregation scenarios. Enabling KASAN showed that we
+access the BAID allocation out of bounds, and looking at
+the code a bit shows that since the reorder buffer entry
+(struct iwl_mvm_reorder_buf_entry) is 128 bytes if debug
+such as lockdep is enabled, then staring from an agg size
+512 we overflow the size calculation, and allocate a much
+smaller structure than we should, causing slab corruption
+once we initialize this.
 
-Signed-off-by: Mukesh Sisodiya <mukesh.sisodiya@intel.com>
+Fix this by simply using u32 instead of u16.
+
+Reported-by: Roee Goldfiner <roee.h.goldfiner@intel.com>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20230620125813.9800e652e789.Ic06a085832ac3f988c8ef07d856c8e281563295d@changeid
+Link: https://lore.kernel.org/r/20230620125813.f428c856030d.I2c2bb808e945adb71bc15f5b2bac2d8957ea90eb@changeid
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/pcie/drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/mvm/sta.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-index 79115eb1c2852..e9fe6cea891aa 100644
---- a/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
-@@ -495,6 +495,7 @@ static const struct pci_device_id iwl_hw_card_ids[] = {
- 	{IWL_PCI_DEVICE(0x7AF0, PCI_ANY_ID, iwl_so_trans_cfg)},
- 	{IWL_PCI_DEVICE(0x51F0, PCI_ANY_ID, iwl_so_long_latency_trans_cfg)},
- 	{IWL_PCI_DEVICE(0x51F1, PCI_ANY_ID, iwl_so_long_latency_imr_trans_cfg)},
-+	{IWL_PCI_DEVICE(0x51F1, PCI_ANY_ID, iwl_so_long_latency_trans_cfg)},
- 	{IWL_PCI_DEVICE(0x54F0, PCI_ANY_ID, iwl_so_long_latency_trans_cfg)},
- 	{IWL_PCI_DEVICE(0x7F70, PCI_ANY_ID, iwl_so_trans_cfg)},
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
+index 05a54a69c1357..2daf97ad6a184 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
+@@ -2882,7 +2882,7 @@ int iwl_mvm_sta_rx_agg(struct iwl_mvm *mvm, struct ieee80211_sta *sta,
+ 	}
  
-@@ -544,6 +545,7 @@ static const struct iwl_dev_info iwl_dev_info_table[] = {
- 	IWL_DEV_INFO(0x51F0, 0x1551, iwl9560_2ac_cfg_soc, iwl9560_killer_1550i_160_name),
- 	IWL_DEV_INFO(0x51F0, 0x1691, iwlax411_2ax_cfg_so_gf4_a0, iwl_ax411_killer_1690s_name),
- 	IWL_DEV_INFO(0x51F0, 0x1692, iwlax411_2ax_cfg_so_gf4_a0, iwl_ax411_killer_1690i_name),
-+	IWL_DEV_INFO(0x51F1, 0x1692, iwlax411_2ax_cfg_so_gf4_a0, iwl_ax411_killer_1690i_name),
- 	IWL_DEV_INFO(0x54F0, 0x1691, iwlax411_2ax_cfg_so_gf4_a0, iwl_ax411_killer_1690s_name),
- 	IWL_DEV_INFO(0x54F0, 0x1692, iwlax411_2ax_cfg_so_gf4_a0, iwl_ax411_killer_1690i_name),
- 	IWL_DEV_INFO(0x7A70, 0x1691, iwlax411_2ax_cfg_so_gf4_a0, iwl_ax411_killer_1690s_name),
+ 	if (iwl_mvm_has_new_rx_api(mvm) && start) {
+-		u16 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
++		u32 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
+ 
+ 		/* sparse doesn't like the __align() so don't check */
+ #ifndef __CHECKER__
 -- 
 2.39.2
 
