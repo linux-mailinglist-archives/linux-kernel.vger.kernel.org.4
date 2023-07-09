@@ -2,201 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450BF74C456
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 15:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B277A74C458
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 15:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjGIN0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 09:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S231602AbjGIN1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 09:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjGIN0X (ORCPT
+        with ESMTP id S229853AbjGIN12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 09:26:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363FE101;
-        Sun,  9 Jul 2023 06:26:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=UUVnyAHsJ8ay/cWCtC8cHLuCNMKzvm5P64rfEb8sihg=; b=R2G/4d7Ra7Iu5NtGcC3ZfkOdrr
-        Nl75slqy9mi6rlir37MOic6xbxPn19i81Y2mjL8brpeZaD9yNqlvkPAJc97FiVTu4UNPMY65w2AHe
-        EOKlj1lT/kHmk5ra8YH5Ss5XXABcbc6sx7dFPYYrS/1OkQg9gKWOg7JeZo9hut2yl2NYtdNTmG5q7
-        7MXXnjJ0jKDPe6w5sUDriJOaX17RaidPiGm6QfkI9ZrM85ndhUAMIkLefeoYv4Nrwi5Ho0lo9Ztfg
-        FvoYF8xTXCP9OAee9WiRFt5kuftACXwZiYZGzFzlR1IBRyI7gRutt06FBLP8w7fuf7e55odgrnD2J
-        kXoAIwCg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIUQf-0099yo-0x;
-        Sun, 09 Jul 2023 13:26:21 +0000
-Message-ID: <dd993aaa-5481-b621-9009-d02f9e449f98@infradead.org>
-Date:   Sun, 9 Jul 2023 06:26:20 -0700
+        Sun, 9 Jul 2023 09:27:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF38F1B1
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 06:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688909196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=saPUZom1S7Vq5poJ/JT7lclgtW5GwCJfHALTIcQlO6M=;
+        b=VaufHE5yPOJyPSyL1mH7Gvy00IW6WSOi3yRa6c+20GDWjOOZ3U0nhS774bJY1mcbQr0TKn
+        9rX601PquBr+nNUoX7Ee7rKO+WYpmWMG3WATal+1gdA0ovGcF96nQUkJk4QuJAktLupUb5
+        0smE4wxzQXB+tc1t0uTcP3m6CBIT6u0=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-502-feFgITG2NY6gEKoI8Z_mgg-1; Sun, 09 Jul 2023 09:26:35 -0400
+X-MC-Unique: feFgITG2NY6gEKoI8Z_mgg-1
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3461839c45cso12566925ab.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 06:26:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688909194; x=1691501194;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=saPUZom1S7Vq5poJ/JT7lclgtW5GwCJfHALTIcQlO6M=;
+        b=DeRh2Jx8OtIcPy/c4wDe2wOynGk9Yo98J2JDvbwryvt/lEPb7tomJGvPCZDBrLzMy6
+         gTDvVSCgjcIyDhLLK661Nv4vU7lHRPF9AcrryJAMZA1Fsdacr0DAX071RoYubs+GYMvm
+         JJHFvJOaomtvDupGYJMmdFq+Hyvo7rfp9ZFYc95B7GEkuzeb9l3u5Y2q9l685z8wt21R
+         aPKe7Vds/2KGJyu4a/BhcSXVBZbu1YYzcedQrQGLRVKN2mTcl6/y2DCNCukeD3lIwlix
+         5j83A8L4X7RLzb1IvAG/7QvNGqmXzKlUd1RMhx3BmlBAXqaf20mPRluRWFsHDZM8AOA+
+         INUg==
+X-Gm-Message-State: ABy/qLYVzhrhZTDFBltYVPEECKG3PmLEs+WUMMvtvlOQzMWtJuesoKTp
+        7qciL18Hou3IBHlWc7UmdnjmNr7mYEkY2rUTC+SCV+P8JLhWybadZQJIsZG3ealfwarAgYLsFg6
+        1dzBB5Va7YvM+MErAu7mrwnJIBmVFMN9G
+X-Received: by 2002:a6b:fb09:0:b0:783:31bf:7d8b with SMTP id h9-20020a6bfb09000000b0078331bf7d8bmr9730710iog.4.1688909194247;
+        Sun, 09 Jul 2023 06:26:34 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFTCQi1N/cvDza7CRE0btiw06JUcKoaJmK+rRo1cRrC8EJ7hNFO1MGmLKR1u/z+2Wz+rVuqKQ==
+X-Received: by 2002:a6b:fb09:0:b0:783:31bf:7d8b with SMTP id h9-20020a6bfb09000000b0078331bf7d8bmr9730699iog.4.1688909193993;
+        Sun, 09 Jul 2023 06:26:33 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id em23-20020a0566384db700b0042b1dd89b0bsm2586233jab.155.2023.07.09.06.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jul 2023 06:26:33 -0700 (PDT)
+Date:   Sun, 9 Jul 2023 07:26:32 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Eric Auger <eric.auger@redhat.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/VPD: Add runtime power management to sysfs
+ interface
+Message-ID: <20230709072632.30c09f1e.alex.williamson@redhat.com>
+In-Reply-To: <08e455b0-31a6-b379-ba8b-b9a2c0962e22@redhat.com>
+References: <20230707151044.1311544-1-alex.williamson@redhat.com>
+        <08e455b0-31a6-b379-ba8b-b9a2c0962e22@redhat.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Build regressions/improvements in v6.4 (wireless/airo)
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        linux-wireless@vger.kernel.org,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
- <20230626081950.2090627-1-geert@linux-m68k.org>
- <39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org>
- <2f6ffd1c-a756-b7b8-bba4-77c2308f26b9@infradead.org>
- <CAMuHMdU30BzfzQ=xEDFCd2bXG=VD68sQz-60Ok8GethLsnEH8A@mail.gmail.com>
- <5037d22d-cc63-d8af-70a9-3c793f07fce2@infradead.org>
- <CAMuHMdX4xVkdViy1Eq7N43uD_iWp3yS6qkiCbp9+frLHsTA_fg@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAMuHMdX4xVkdViy1Eq7N43uD_iWp3yS6qkiCbp9+frLHsTA_fg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 9 Jul 2023 13:50:35 +0200
+Eric Auger <eric.auger@redhat.com> wrote:
 
+> Hi Alex,
+>=20
+> On 7/7/23 17:10, Alex Williamson wrote:
+> > Unlike default access to config space through sysfs, the vpd read and
+> > write function don't actively manage the runtime power management state
+> > of the device during access.  Since commit 7ab5e10eda02 ("vfio/pci: Move
+> > the unused device into low power state with runtime PM"), the vfio-pci
+> > driver will use runtime power management and release unused devices to
+> > make use of low power states.  Attempting to access VPD information in
+> > this low power state can result in incorrect information or kernel
+> > crashes depending on the system behavior.
+> >
+> > Wrap the vpd read/write bin attribute handlers in runtime PM and take
+> > into account the potential quirk to select the correct device to wake. =
+=20
+>=20
+> This much improved the situation as it is more difficult to hit the
+> issue. Unfortunately after tens of attempts I was still able to hit a
+> kernel crash. The console output does not mention the VPD anymore but
+> PCI power management events (PME).
 
-On 7/9/23 06:23, Geert Uytterhoeven wrote:
-> Hi Randy,
-> 
-> On Sun, Jul 9, 2023 at 3:12 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->> On 7/9/23 01:27, Geert Uytterhoeven wrote:
->>> On Sun, Jul 9, 2023 at 4:46 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>>> On 6/26/23 01:24, Geert Uytterhoeven wrote:
->>>>> On Mon, 26 Jun 2023, Geert Uytterhoeven wrote:
->>>>>> JFYI, when comparing v6.4[1] to v6.4-rc7[3], the summaries are:
->>>>>>  - build errors: +1/-0
->>>>>
->>>>>   + /kisskb/src/drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]:  => 6163:45
->>>>
->>>> I cannot reproduce this build error. (I don't doubt the problem, just having a problem
->>>> making it happen for me.)
->>>> I have tried it with gcc-11.1.0, gcc-11.3.0, and gcc-13.1.0.
->>>
->>> Which is similar to kisskb, using sh4-linux-gcc (GCC) 11.3.0...
->>>
->>>> I'm surprised that this is the only instance that gcc found/warned about.
->>>
->>> Indeed.
->>>
->>>>
->>>> I have a patch for this one instance, but there are 40+ instances of
->>>>         readStatusRid()
->>>>         readConfigRid()
->>>>         readSsidRid()
->>>>         readStatsRid()
->>>>         readCapabilityRid()
->>>> that don't check the return status of the function calls.
->>>>
->>>> I suppose that a patch can quieten the compiler error/warning, but given
->>>> the 40+ other problems, it won't make the driver any noticeably better IMO.
->>>
->>> Indeed...
->>>
->>>>> sh4-gcc11/sh-allmodconfig
->>>>> seen before
->>>>>
->>>>> This is actually a real issue, and it's been here since basically forever.
->>>>>
->>>>> drivers/net/wireless/cisco/airo.c:
->>>>>
->>>>>     static int airo_get_rate(struct net_device *dev,
->>>>>                              struct iw_request_info *info,
->>>>>                              union iwreq_data *wrqu,
->>>>>                              char *extra)
->>>>>     {
->>>>>             struct iw_param *vwrq = &wrqu->bitrate;
->>>>>             struct airo_info *local = dev->ml_priv;
->>>>>             StatusRid status_rid;           /* Card status info */
->>>>>
->>>>>             readStatusRid(local, &status_rid, 1);
->>>>>
->>>>> ==>         vwrq->value = le16_to_cpu(status_rid.currentXmitRate) * 500000;
->>>>>             ...
->>>>>     }
->>>>>
->>>>>     static int readStatusRid(struct airo_info *ai, StatusRid *statr, int lock)
->>>>>     {
->>>>>             return PC4500_readrid(ai, RID_STATUS, statr, sizeof(*statr), lock);
->>>>>     }
->>>>>
->>>>>     static int PC4500_readrid(struct airo_info *ai, u16 rid, void *pBuf, int len, int lock)
->>>>>     {
->>>>>             u16 status;
->>>>>             int rc = SUCCESS;
->>>>>
->>>>>             if (lock) {
->>>>>                     if (down_interruptible(&ai->sem))
->>>>>                             return ERROR;
->>>>>
->>>>> pBuf output buffer contents not initialized.
->>>>>
->>>>>             }
->>>>>             ...
->>>>>     }
->>>>>
->>>>>
->>>>>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6995e2de6891c724bfeb2db33d7b87775f913ad1/ (all 160 configs)
->>>>>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/45a3e24f65e90a047bef86f927ebdc4c710edaa1/ (all 160 configs)
->>>>
->>>> I appreciate the synopsis.  Here's a patch.  WDYT?
->>>> ---
->>>> From: Randy Dunlap <rdunlap@infradead.org>
->>>> Subject: [PATCH] wifi: airo: avoid uninitialized warning in airo_get_rate()
->>>>
->>>> Quieten a gcc (11.3.0) build error or warning by checking the function
->>>> call status and returning -EIO if the function call failed.
->>>> This is similar to what several other wireless drivers do for the
->>>> SIOCGIWRATE ioctl call.
->>>>
->>>> drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]
->>>>
->>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>>> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
->>>> Link: lore.kernel.org/r/39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org
->>>> Cc: Kalle Valo <kvalo@kernel.org>
->>>> Cc: linux-wireless@vger.kernel.org
->>>> ---
->>>>  drivers/net/wireless/cisco/airo.c |    5 ++++-
->>>>  1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff -- a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
->>>> --- a/drivers/net/wireless/cisco/airo.c
->>>> +++ b/drivers/net/wireless/cisco/airo.c
->>>> @@ -6157,8 +6157,11 @@ static int airo_get_rate(struct net_devi
->>>>         struct iw_param *vwrq = &wrqu->bitrate;
->>>>         struct airo_info *local = dev->ml_priv;
->>>>         StatusRid status_rid;           /* Card status info */
->>>> +       int ret;
->>>>
->>>> -       readStatusRid(local, &status_rid, 1);
->>>> +       ret = readStatusRid(local, &status_rid, 1);
->>>> +       if (ret)
->>>> +               return -EIO;
->>>
->>> That's about the best we can do without further surgery.
->>> E.g. PC4500_readrid() should return a proper error code instead of
->>> just ERROR/SUCCESS.
->>> The case gcc complains about is when lock = 1 and the call to
->>> down_interruptible() fails, for which -EBUSY would be appropriate.
->>
->> Yes, I saw that return value as one of the options.
->> I'll change it to that and submit it.
-> 
-> Unfortunately that is not the only possible failure mode.
-> But it is the one where gcc can _prove_ the output buffer is not initialized ;-)
-> 
-> OMG, PC4500_readrid() can also read from the passed buffer...
+Does combining this with an extended D3hot wakeup for the device make
+any difference, such as a5a6dd262469 ("PCI/PM: Extend D3hot delay for
+NVIDIA HDA controllers")?  Thanks,
 
-Yes, such messy fun. :(
+Alex
 
--- 
-~Randy
+=20
+> [=C2=A0 168.616700] CPU: 0 PID: 1409 Comm: kworker/0:5 Not tainted
+> 6.4.0-vpd-upstream+ #56
+> [=C2=A0 168.624257] Hardware name: GIGABYTE R181-T90-00/MT91-FS1-00, BIOS=
+ F34
+> 08/13/2020
+> [=C2=A0 168.631639] Workqueue: events_freezable pci_pme_list_scan
+> [=C2=A0 168.637032] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS
+> BTYPE=3D--)
+> [=C2=A0 168.643982] pc : pci_generic_config_read+0x64/0xd8
+> [=C2=A0 168.648763] lr : pci_generic_config_read+0x28/0xd8
+> [=C2=A0 168.653542] sp : ffff80008caebcb0
+> [=C2=A0 168.656844] x29: ffff80008caebcb0 x28: 0000000000000000 x27:
+> 0000000000000000
+> [=C2=A0 168.663969] x26: 0000000000000000 x25: 0000000000000000 x24:
+> ffff80008caebd76
+> [=C2=A0 168.671094] x23: ffff0008063fd800 x22: 0000000000000044 x21:
+> ffff80008232d4c8
+> [=C2=A0 168.678218] x20: ffff80008caebd24 x19: 0000000000000002 x18:
+> 00000000000040fc
+> [=C2=A0 168.685342] x17: 00000000000040f8 x16: 0000000000000000 x15:
+> 0000000000000001
+> [=C2=A0 168.692466] x14: ffffffffffffffff x13: 0000000000000000 x12:
+> 0101010101010101
+> [=C2=A0 168.699590] x11: 7f7f7f7f7f7f7f7f x10: fefefefefefefeff x9 :
+> ffff8000807b3938
+> [=C2=A0 168.706714] x8 : fefefefefefefeff x7 : 0000000000000018 x6 :
+> 000000000000007f
+> [=C2=A0 168.713838] x5 : 0000000000000000 x4 : ffff800090000000 x3 :
+> 0000000000000000
+> [=C2=A0 168.720962] x2 : 0000000000000044 x1 : 0000000000c00044 x0 :
+> ffff800090c00044
+> [=C2=A0 168.728086] Call trace:
+> [=C2=A0 168.730520]=C2=A0 pci_generic_config_read+0x64/0xd8
+> [=C2=A0 168.734953]=C2=A0 pci_bus_read_config_word+0x84/0xe8
+> [=C2=A0 168.739471]=C2=A0 pci_read_config_word+0x30/0x50
+> [=C2=A0 168.743642]=C2=A0 pci_check_pme_status+0x70/0xa8
+> [=C2=A0 168.747813]=C2=A0 pci_pme_list_scan+0x84/0x158
+> [=C2=A0 168.751811]=C2=A0 process_one_work+0x1ec/0x488
+> [=C2=A0 168.755810]=C2=A0 worker_thread+0x48/0x400
+> [=C2=A0 168.759461]=C2=A0 kthread+0x10c/0x120
+> [=C2=A0 168.762678]=C2=A0 ret_from_fork+0x10/0x20
+> [=C2=A0 168.766245] Code: 52800000 a94153f3 a8c27bfd d65f03c0 (79400000)
+> [=C2=A0 168.772326] ---[ end trace 0000000000000000 ]---
+> [=C2=A0 168.776931] Kernel panic - not syncing: synchronous external abor=
+t:
+> Fatal exception
+> [=C2=A0 168.784574] SMP: stopping secondary CPUs
+> [=C2=A0 169.831001] SMP: failed to stop secondary CPUs 0,199
+> [=C2=A0 169.835955] Kernel Offset: 0x190000 from 0xffff800080000000
+>=20
+>=20
+> Thanks
+>=20
+> Eric
+> >
+> > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+> > ---
+> >  drivers/pci/vpd.c | 34 ++++++++++++++++++++++++++++++++--
+> >  1 file changed, 32 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/pci/vpd.c b/drivers/pci/vpd.c
+> > index a4fc4d0690fe..81217dd4789f 100644
+> > --- a/drivers/pci/vpd.c
+> > +++ b/drivers/pci/vpd.c
+> > @@ -275,8 +275,23 @@ static ssize_t vpd_read(struct file *filp, struct =
+kobject *kobj,
+> >  			size_t count)
+> >  {
+> >  	struct pci_dev *dev =3D to_pci_dev(kobj_to_dev(kobj));
+> > +	struct pci_dev *vpd_dev =3D dev;
+> > +	ssize_t ret;
+> > +
+> > +	if (dev->dev_flags & PCI_DEV_FLAGS_VPD_REF_F0) {
+> > +		vpd_dev =3D pci_get_func0_dev(dev);
+> > +		if (!vpd_dev)
+> > +			return -ENODEV;
+> > +	}
+> > +
+> > +	pci_config_pm_runtime_get(vpd_dev);
+> > +	ret =3D pci_read_vpd(vpd_dev, off, count, buf);
+> > +	pci_config_pm_runtime_put(vpd_dev);
+> > +
+> > +	if (dev !=3D vpd_dev)
+> > +		pci_dev_put(vpd_dev);
+> > =20
+> > -	return pci_read_vpd(dev, off, count, buf);
+> > +	return ret;
+> >  }
+> > =20
+> >  static ssize_t vpd_write(struct file *filp, struct kobject *kobj,
+> > @@ -284,8 +299,23 @@ static ssize_t vpd_write(struct file *filp, struct=
+ kobject *kobj,
+> >  			 size_t count)
+> >  {
+> >  	struct pci_dev *dev =3D to_pci_dev(kobj_to_dev(kobj));
+> > +	struct pci_dev *vpd_dev =3D dev;
+> > +	ssize_t ret;
+> > +
+> > +	if (dev->dev_flags & PCI_DEV_FLAGS_VPD_REF_F0) {
+> > +		vpd_dev =3D pci_get_func0_dev(dev);
+> > +		if (!vpd_dev)
+> > +			return -ENODEV;
+> > +	}
+> > +
+> > +	pci_config_pm_runtime_get(vpd_dev);
+> > +	ret =3D pci_write_vpd(vpd_dev, off, count, buf);
+> > +	pci_config_pm_runtime_put(vpd_dev);
+> > +
+> > +	if (dev !=3D vpd_dev)
+> > +		pci_dev_put(vpd_dev);
+> > =20
+> > -	return pci_write_vpd(dev, off, count, buf);
+> > +	return ret;
+> >  }
+> >  static BIN_ATTR(vpd, 0600, vpd_read, vpd_write, 0);
+> >   =20
+>=20
+
