@@ -2,128 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661F174C43E
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 14:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0C574C441
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 15:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjGIM7k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 9 Jul 2023 08:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S230284AbjGINJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 09:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIM7i (ORCPT
+        with ESMTP id S229450AbjGINJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 08:59:38 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F02BA6;
-        Sun,  9 Jul 2023 05:59:37 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qIU0j-002DQ5-7d; Sun, 09 Jul 2023 14:59:33 +0200
-Received: from dynamic-077-191-183-238.77.191.pool.telefonica.de ([77.191.183.238] helo=[192.168.1.11])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qIU0j-001Dzs-0b; Sun, 09 Jul 2023 14:59:33 +0200
-Message-ID: <8c075658d00953ecb4383e1910c7b04fdaf870dd.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sh: hd64461: fix virq offsets
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 09 Jul 2023 14:59:24 +0200
-In-Reply-To: <2c57d9cc03b6a430234c0016bf78fa22@artur-rojek.eu>
-References: <20230709121311.211720-1-contact@artur-rojek.eu>
-         <bb896c311151f8ccc7d3e919877641a5e9fbb3ff.camel@physik.fu-berlin.de>
-         <2c57d9cc03b6a430234c0016bf78fa22@artur-rojek.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.4 
+        Sun, 9 Jul 2023 09:09:20 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77A0132;
+        Sun,  9 Jul 2023 06:09:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=ydzhang@linux.alibaba.com;NM=1;PH=DW;RN=8;SR=0;TI=W4_0.2.0_DEFAULT_210DC2C5_1688899510528_o7001c987;
+Received: from WS-web (ydzhang@linux.alibaba.com[W4_0.2.0_DEFAULT_210DC2C5_1688899510528_o7001c987]) at Sun, 09 Jul 2023 21:09:14 +0800
+Date:   Sun, 09 Jul 2023 21:09:14 +0800
+From:   "wardenjohn" <ydzhang@linux.alibaba.com>
+To:     "Bagas Sanjaya" <bagasdotme@gmail.com>
+Cc:     "jpoimboe" <jpoimboe@kernel.org>, "jikos" <jikos@kernel.org>,
+        "mbenes" <mbenes@suse.cz>, "pmladek" <pmladek@suse.com>,
+        "joe.lawrence" <joe.lawrence@redhat.com>,
+        "Kernel Live Patching" <live-patching@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Reply-To: "wardenjohn" <ydzhang@linux.alibaba.com>
+Message-ID: <b0ed2a6d-c91b-4c72-9cfc-4900f3a37d82.ydzhang@linux.alibaba.com>
+Subject: =?UTF-8?B?UmU6IEZpeCBNQVhfU1RBQ0tfRU5UUklFUyBmcm9tIDEwMCB0byAzMg==?=
+X-Mailer: [Alimail-Mailagent revision 85][W4_0.2.0][DEFAULT][Chrome]
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 77.191.183.238
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <931aaecf-66b1-469a-8bc3-7126871a8464.ydzhang@linux.alibaba.com>,<ZKpqpamE89nvgslC@debian.me>
+x-aliyun-mail-creator: W4_0.2.0_DEFAULT_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzExNC4wLjAuMCBTYWZhcmkvNTM3LjM2La
+In-Reply-To: <ZKpqpamE89nvgslC@debian.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On Sun, 2023-07-09 at 14:56 +0200, Artur Rojek wrote:
-> On 2023-07-09 14:48, John Paul Adrian Glaubitz wrote:
-> > Hi Artur!
-> > 
-> > On Sun, 2023-07-09 at 14:13 +0200, Artur Rojek wrote:
-> > > A recent change to start counting SuperH IRQ #s from 16 breaks support
-> > > for the Hitachi HD64461 companion chip.
-> > > 
-> > > Move the offchip IRQ base and HD64461 IRQ # by 16 in order to
-> > > accommodate for the new virq numbering rules.
-> > > 
-> > > Fixes: a8ac2961148e ("sh: Avoid using IRQ0 on SH3 and SH4")
-> > > Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-> > > ---
-> > >  arch/sh/cchips/Kconfig        | 4 ++--
-> > >  arch/sh/include/asm/hd64461.h | 2 +-
-> > >  2 files changed, 3 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/arch/sh/cchips/Kconfig b/arch/sh/cchips/Kconfig
-> > > index efde2edb5627..9659a0bc58de 100644
-> > > --- a/arch/sh/cchips/Kconfig
-> > > +++ b/arch/sh/cchips/Kconfig
-> > > @@ -29,9 +29,9 @@ endchoice
-> > >  config HD64461_IRQ
-> > >  	int "HD64461 IRQ"
-> > >  	depends on HD64461
-> > > -	default "36"
-> > > +	default "52"
-> > >  	help
-> > > -	  The default setting of the HD64461 IRQ is 36.
-> > > +	  The default setting of the HD64461 IRQ is 52.
-> > > 
-> > >  	  Do not change this unless you know what you are doing.
-> > > 
-> > > diff --git a/arch/sh/include/asm/hd64461.h 
-> > > b/arch/sh/include/asm/hd64461.h
-> > > index afb24cb034b1..6d85db6cf54b 100644
-> > > --- a/arch/sh/include/asm/hd64461.h
-> > > +++ b/arch/sh/include/asm/hd64461.h
-> > > @@ -229,7 +229,7 @@
-> > >  #define	HD64461_NIMR		HD64461_IO_OFFSET(0x5002)
-> > > 
-> > >  #define	HD64461_IRQBASE		OFFCHIP_IRQ_BASE
-> > > -#define	OFFCHIP_IRQ_BASE	64
-> > > +#define	OFFCHIP_IRQ_BASE	80
-> > >  #define	HD64461_IRQ_NUM		16
-> > > 
-> > >  #define	HD64461_IRQ_UART	(HD64461_IRQBASE+5)
-> > 
-> > I think it would be better to write this as (64 + 16) for consistency
-> > with the other changes made by Sergey.
->
-> Sure, I will send v2 with this change, although the same can't be
-> applied to HD64461_IRQ value above, so some inconsistency will exist
-> either way.
-> 
-
-That's okay, that's the user-facing part ;-).
-
-Btw, did you verify that the default assigned IRQ is actually changed from
-36 to 52 when the machine boots?
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+T0ssIEkgd2lsbCByZXN1Ym1pdCB0aGUgcGF0Y2ggYnkgZ2l0LXNlbmQtZW1haWwoMSkgaW5zdGVh
+ZC4gOikKCkJ1dCBJIHdhbnQgYXNrIGhvdyBjYW4gSSBwcm92aWRlIHRoZSBMaW5rIHRvIGRpc2N1
+c3Npb24/CkFuZCB3aGF0IGlzIHYyIHBhdGNoPwpJIGFtIHNvcnJ5IHRoYXQgaXQgaXMgbXkgZmly
+c3QgdGltZSB0byBqb2luIHRoZSBrZXJuZWwgZGlzY3Vzc2lvbi4gCgpJIGFtIGxvb2tpbmcgZm9y
+d2FyZCB0byBnZXQgdGhlIGd1aWRhbmNlIGZyb20geW91LiBUaGFua3MhCgpUaGUgcmVhc29uIG9m
+IHJlZHVjaW5nIE1BWF9TVEFDS19FTlRSSUVTIGZyb20gMTAwIHRvIDMyIGlzIGFzIGZvbGxvd3M6
+CkluIG15IGRhaWx5IHdvcmssIEkgZm91bmQgdGhhdCBhbGwgdGhlIGZ1bmN0aW9uIHN0YWNrIHdp
+bGwgbm90IGFjaGlldmUgdGhlIG51bWJlciBvZiAzMi4KVGhlcmVmb3JlLCBzZXR0aW5nIHRoZSBh
+cnJheSBvZiAxMDAgbWF5IGJlIGEgd2FzdGUgb2Yga2VybmVsIG1lbW9yeS4gVGhlcmVmb3JlLCBJ
+IHN1Z2dlc3QKdG8gcmVkdWNlIHRoZSBudW1iZXIgb2YgZW50cmllcyBvZiB0aGUgc3RhY2sgZW50
+cmllcyBmcm9tIDEwMCB0byAzMi4KCkhlcmUgaXMgYW4gZXhhbXBsZSBvZiB0aGUgY2FsbCB0cmFj
+ZToKWzIwNDA5LjUwNTYwMl0gIFs8ZmZmZmZmZmY4MTE2ODg2MT5dIGdyb3VwX3NjaGVkX291dCsw
+eDYxLzB4YjAKWzIwNDA5LjUxNDc5MV0gIFs8ZmZmZmZmZmY4MTE2OGJmZD5dIGN0eF9zY2hlZF9v
+dXQrMHhhZC8weGYwClsyMDQwOS41MjAzMDddICBbPGZmZmZmZmZmODExNmEwM2Q+XSBfX3BlcmZf
+aW5zdGFsbF9pbl9jb250ZXh0KzB4YmQvMHgxYjAKWzIwNDA5LjUyNjk1Ml0gIFs8ZmZmZmZmZmY4
+MTE2NDliMD5dIHJlbW90ZV9mdW5jdGlvbisweDQwLzB4NTAKWzIwNDA5LjUzMjY0NF0gIFs8ZmZm
+ZmZmZmY4MTBmMTY2Nj5dIGdlbmVyaWNfZXhlY19zaW5nbGUrMHgxNTYvMHgxYTAKWzIwNDA5LjUz
+ODg2NF0gIFs8ZmZmZmZmZmY4MTE2NDk3MD5dID8gcGVyZl9ldmVudF9zZXRfb3V0cHV0KzB4MTkw
+LzB4MTkwClsyMDQwOS41NDU0MjVdICBbPGZmZmZmZmZmODEwZjE3MGY+XSBzbXBfY2FsbF9mdW5j
+dGlvbl9zaW5nbGUrMHg1Zi8weGEwClsyMDQwOS41NTE4OTVdICBbPGZmZmZmZmZmODExZjVlNzA+
+XSA/IGFsbG9jX2ZpbGUrMHhhMC8weGYwClsyMDQwOS41NTczMjZdICBbPGZmZmZmZmZmODExNjM1
+MjM+XSB0YXNrX2Z1bmN0aW9uX2NhbGwrMHg1My8weDgwClsyMDQwOS41NjMyNzRdICBbPGZmZmZm
+ZmZmODExNjlmODA+XSA/IHBlcmZfY3B1X2hydGltZXJfaGFuZGxlcisweDFiMC8weDFiMApbMjA0
+MDkuNTcwMDg5XSAgWzxmZmZmZmZmZjgxMTY2Njg4Pl0gcGVyZl9pbnN0YWxsX2luX2NvbnRleHQr
+MHg3OC8weDEyMApbMjA0MDkuNTc2NTU4XSAgWzxmZmZmZmZmZjgxMTZkYTU0Pl0gU1lTQ19wZXJm
+X2V2ZW50X29wZW4rMHg3OTQvMHhhNDAKWzIwNDA5LjU4Mjg1Ml0gIFs8ZmZmZmZmZmY4MTE2ZTE2
+OT5dIFN5U19wZXJmX2V2ZW50X29wZW4rMHg5LzB4MTAKWzIwNDA5LjU4ODgwM10gIFs8ZmZmZmZm
+ZmY4MTY2YmYzZD5dIHN5c3RlbV9jYWxsX2Zhc3RwYXRoKzB4MTYvMHgxYgpbMjA0MDkuNTk0OTI2
+XSAgWzxmZmZmZmZmZjgxNjZiZGRkPl0gPyBzeXN0ZW1fY2FsbF9hZnRlcl9zd2FwZ3MrMHhjYS8w
+eDIxNAoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tCkZyb206QmFnYXMgU2FuamF5YSA8YmFnYXNkb3RtZUBnbWFpbC5jb20+
+ClNlbmQgVGltZToyMDIz5bm0N+aciDnml6Uo5pif5pyf5pelKSAxNjowNwpUbzp3YXJkZW5qb2hu
+IDx5ZHpoYW5nQGxpbnV4LmFsaWJhYmEuY29tPgpDYzpqcG9pbWJvZSA8anBvaW1ib2VAa2VybmVs
+Lm9yZz47IGppa29zIDxqaWtvc0BrZXJuZWwub3JnPjsgbWJlbmVzIDxtYmVuZXNAc3VzZS5jej47
+IHBtbGFkZWsgPHBtbGFkZWtAc3VzZS5jb20+OyBqb2UubGF3cmVuY2UgPGpvZS5sYXdyZW5jZUBy
+ZWRoYXQuY29tPjsgS2VybmVsIExpdmUgUGF0Y2hpbmcgPGxpdmUtcGF0Y2hpbmdAdmdlci5rZXJu
+ZWwub3JnPjsgTGludXggS2VybmVsIE1haWxpbmcgTGlzdCA8bGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZz4KU3ViamVjdDpSZTogRml4IE1BWF9TVEFDS19FTlRSSUVTIGZyb20gMTAwIHRvIDMy
+CgoKT24gU2F0LCBKdWwgMDgsIDIwMjMgYXQgMDk6NTY6MzRBTSArMDgwMCwgd2FyZGVuam9obiB3
+cm90ZToKPiBUaGFua3MgZm9yIHJlYWRpbmcgbXkgc3VnZ2VzdGlvbi4gSSBmb3VuZCB0aGF0IHRo
+ZSBhcnJheSBmb3IgdGFzayBzdGFjayBlbnRyaWVzIHdoZW4KPiBkb2luZyBsaXZlcGF0Y2ggZnVu
+Y3Rpb24gY2hlY2sgaXMgdG9vIGxhcmdlIHdoaWNoIHNlZW1zIHRvIGJlIHVubmVjZXNzYXJ5LiBU
+aGVyZWZvcmUsCj4gSSBzdWdnZXN0IHRvIGZpeCB0aGUgTUFYX1NUQUNLX0VOVFJJRVMgZnJvbSAx
+MDAgdG8gMzIuCgpDYW4geW91IHByb3ZpZGUgTGluazogdG8gdGhlIGRpc2N1c3Npb24/IFlldCwg
+SSBndWVzcyB0aGlzIGlzIHNvbWVob3cKdjIgcGF0Y2guCgo+IAo+IFRoZSBwYXRjaCBpcyBhcyBm
+b2xsb3dzOgo+IAo+IEZyb20gZWUyN2RhNWU2NGRhY2VkMTU5MjU3ZjU0MTcwYTMxMTQxZTk0Mzcx
+MCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiBGcm9tOiBZb25nZGUgWmhhbmcgPHlkemhhbmdA
+bGludXguYWxpYmFiYS5jb20+Cj4gRGF0ZTogU2F0LCA4IEp1bCAyMDIzIDA5OjQwOjUwICswODAw
+Cj4gU3ViamVjdDogW1BBVENIXSBGaXggTUFYX1NUQUNLX0VOVFJJRVMgdG8gMzIKPiAKPiBXaGVu
+IGNoZWNraW5nIHRoZSB0YXNrIHN0YWNrLCB1c2luZyBhbiBzdGFjayBhcnJheSBvZiBzaXplIDEw
+MCAKPiBzZWVtcyB0byBiZSB0byBsYXJnZSBmb3IgYSB0YXNrIHN0YWNrLiBUaGVyZWZvcmUsIEkg
+c3VnZ2VzdCB0bwo+IGNoYW5nZSB0aGUgc3RhY2sgc2l6ZSBmcm9tIDEwMCB0byAzMi4gCgpXaHkg
+aXMgTUFYX1NUQUNLX0VOVFJJRVM9MTAwIG92ZXJraWxsPyBBbmQgd2h5IGRvIHlvdSByZWR1Y2Ug
+aXQ/Cgo+IAo+IFNpZ25lZC1vZmYtYnk6IFlvbmdkZSBaaGFuZyA8eWR6aGFuZ0BsaW51eC5hbGli
+YWJhLmNvbT4KPiAtLS0KPiAga2VybmVsL2xpdmVwYXRjaC90cmFuc2l0aW9uLmMgfCAyICstCj4g
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYg
+LS1naXQgYS9rZXJuZWwvbGl2ZXBhdGNoL3RyYW5zaXRpb24uYyBiL2tlcm5lbC9saXZlcGF0Y2gv
+dHJhbnNpdGlvbi5jCj4gaW5kZXggZTU0YzNkNjBhOTA0Li44ZDYxYzYyYjBjMjcgMTAwNjQ0Cj4g
+LS0tIGEva2VybmVsL2xpdmVwYXRjaC90cmFuc2l0aW9uLmMKPiArKysgYi9rZXJuZWwvbGl2ZXBh
+dGNoL3RyYW5zaXRpb24uYwo+IEBAIC0xNCw3ICsxNCw3IEBACj4gICNpbmNsdWRlICJwYXRjaC5o
+Igo+ICAjaW5jbHVkZSAidHJhbnNpdGlvbi5oIgo+ICAKPiAtI2RlZmluZSBNQVhfU1RBQ0tfRU5U
+UklFUyAgMTAwCj4gKyNkZWZpbmUgTUFYX1NUQUNLX0VOVFJJRVMgIDMyCj4gIHN0YXRpYyBERUZJ
+TkVfUEVSX0NQVSh1bnNpZ25lZCBsb25nW01BWF9TVEFDS19FTlRSSUVTXSwga2xwX3N0YWNrX2Vu
+dHJpZXMpOwo+ICAKPiAgI2RlZmluZSBTVEFDS19FUlJfQlVGX1NJWkUgMTI4IAoKWW91ciBwYXRj
+aCBpcyBNSU1FJ2QsIHBsZWFzZSBzdWJtaXQgaXQgd2l0aCBnaXQtc2VuZC1lbWFpbCgxKSBpbnN0
+ZWFkLgoKVGhhbmtzLgoKLS0gCkFuIG9sZCBtYW4gZG9sbC4uLiBqdXN0IHdoYXQgSSBhbHdheXMg
+d2FudGVkISAtIENsYXJh
