@@ -2,136 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB0B74C09D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 05:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB42474C0B6
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 05:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjGIDjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 23:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
+        id S229868AbjGIDoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 23:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjGIDjj (ORCPT
+        with ESMTP id S229437AbjGIDow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 23:39:39 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7415E48
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 20:39:37 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-57722942374so41816687b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 20:39:37 -0700 (PDT)
+        Sat, 8 Jul 2023 23:44:52 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EC7E48;
+        Sat,  8 Jul 2023 20:44:48 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-553ad54d3c6so2289133a12.1;
+        Sat, 08 Jul 2023 20:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kudzu-us.20221208.gappssmtp.com; s=20221208; t=1688873977; x=1691465977;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+        d=gmail.com; s=20221208; t=1688874288; x=1691466288;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n1fU2t9XQczKV/Hvo75uiH0sKLlUKJdf3lezyiHAZB0=;
-        b=mP4ws4u7XtIlxU1j3KgNIVYaebpYSC5mz6tHBRkFF1FCSkQNlD5Qo++0Ofbezmw79V
-         QgTrO/d7WhnFAXJS1UalPJQCYX+pANQG+lKThTqAbXno30y0gbqSgGOHIWG3AYfvLSc/
-         awsP+XxNGHyF/qlYsbrz+wPCG4YBgjuz9Qp+7hcZXcD0rGgmBan8QLD/ieRw1M0COkIB
-         ZBwSIB9xGs8HzaZ3Neg46ihZhfTcypB8pZY4HS8WzkzDO0bgyDehgxYPlYeAhFWpYUqq
-         zZClhHW5Ve9pZOjzKxomrAul0Shd/odRhPeCAZp8cZfUIW+Z84Uk3g5WIFFOM07pb3Ts
-         q2Tg==
+        bh=+iFlYWKemOtEJ+o4zoGBP/4XhvOtPNzNtMX13qsZ7Ho=;
+        b=TGv3R7UtpYdZ6ud7sapSX90OE9/4o3FPVIEObxwH4M1A1vlt/xSncGLOcybLjuA7Ii
+         cP5VetquJsqdd6pRPl3kLt2Qr3rdvUyxoeIsIsKKj96V+BKfceRKAlos8X9eLn5FOK9E
+         0/VbW+GXg4/jLM8WUISQUhJigdZCPIytJYlyZnTRaHlgic+KxNVH+ee9sAxxS690+3pl
+         VCwp21kehVycj7gyPF7Mw571Qhvpqa0baNbfNrovSRaTewhWyh1L7K1ibCzHkUTf84DI
+         8rzx4PV1six9aKqvHCJLYz5sdgUsrPjO89vOGNaAHoo5fJO10G9V6lnJ8DObJNXqyM/T
+         Mb9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688873977; x=1691465977;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+        d=1e100.net; s=20221208; t=1688874288; x=1691466288;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n1fU2t9XQczKV/Hvo75uiH0sKLlUKJdf3lezyiHAZB0=;
-        b=BHSM8pkoawb65Jz/i+2QBS6orXPxzo9aB+iwA71XIRhKAJCwBTShWDWYKd4mzC7o/u
-         WaMLi7k93yIpiD8GnIPz4qiG6zPF4YymKsQBUer32VlSq0Btof3zqK4KUJrUwHSznAmg
-         IJJ/qqghnM1CMyuNuWNBAsMMo6YPpKQ4x5Kvl9O2bK6ng8Ze7frO3S2xY7jVrMPWcxIi
-         HqhN8Xf10GL/BnnurKxeHwJyv40FmNLLQuXaAzUvYai4Kmza2ERjTatjbxU8YSSkRgxW
-         6KLgGjQqo50FstQjzxB6qOj/erq9/vuBTsF27kNd32WHnjp7w0Mb6Xk+lXCwfmuEQgzI
-         XYCA==
-X-Gm-Message-State: ABy/qLbJlQ3V4xpCLBTN6u7123Yr0hH78oLNlakqYylA412QlPfKI8oV
-        Py68jFxv5TO2Qa6k009pkjiHuw==
-X-Google-Smtp-Source: APBJJlE0Al+OcmU4Bk/ZtvYH0kdhTFvOEuqR4jF4SK6TdZ3rZ+4J4p8v+BNiS919/PaiCM6nVwrlmg==
-X-Received: by 2002:a0d:eb55:0:b0:56d:330d:86e2 with SMTP id u82-20020a0deb55000000b0056d330d86e2mr9445713ywe.28.1688873977132;
-        Sat, 08 Jul 2023 20:39:37 -0700 (PDT)
-Received: from localhost ([2605:a601:a600:7900:8ac9:b3ff:febf:a2f8])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05620a13ea00b0076706e76e75sm3350092qkl.79.2023.07.08.20.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 20:39:36 -0700 (PDT)
-From:   Jon Mason <jdmason@kudzu.us>
-X-Google-Original-From: Jon Mason <jdm@athena.kudzu.us>
-Date:   Sat, 8 Jul 2023 23:39:36 -0400
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com
-Subject: [GIT PULL] NTB bug fixes for 6.5
-Message-ID: <ZKor+IDTZ8OR/Xu9@athena.kudzu.us>
+        bh=+iFlYWKemOtEJ+o4zoGBP/4XhvOtPNzNtMX13qsZ7Ho=;
+        b=H8eMYrz8fteY2M+Jgz7Evh8k2DrJ4tcWKO0hcWMTO+5tzI0BqrJ/YWvjyb5lpcnmtX
+         Wxlckuf9Skf+wZtPORKwcKVU3cBQ20pKw9Bh/3YhJIeYjSoMqRoX+0ZkyMldLEfDKwsG
+         obmZwNaLRGQJlwtPtFdRfdfucRjpAUQwOZ7g5z+I+DC/7oDanxOyRbEkz5gSCyK2k/xo
+         EsCJGH9jxiNvFWngAKVu52tZTRoZ0l8UZGOAblVwcj7HTXzkE8BStP0npZdRiWrVwYW+
+         vpdkvPKIR52tTqBp2XhxctLavpzp2xD5e1qLI4PDpdDj/c09Mq3zMnRvl20xVjolk6pH
+         RbpA==
+X-Gm-Message-State: ABy/qLYkR0BFqQ6tdCi0l+WFQVx3ALthPpwFp7OH+PuAciErNDnEznJP
+        EA58eJMa/2IUzT+yEkqCwQw=
+X-Google-Smtp-Source: APBJJlE7WNYmqWCVTIsQ7r0BsyzBvmwL/T0a2gEbtZ5mB1GpwGtwx+BS/maHiyJjaOCMFpm7t1q/0Q==
+X-Received: by 2002:a17:90b:ecd:b0:263:a6a:49b8 with SMTP id gz13-20020a17090b0ecd00b002630a6a49b8mr6667141pjb.3.1688874288056;
+        Sat, 08 Jul 2023 20:44:48 -0700 (PDT)
+Received: from [192.168.1.12] (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
+        by smtp.gmail.com with ESMTPSA id k14-20020a17090a590e00b0025e7f7b46c3sm3649566pji.25.2023.07.08.20.44.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Jul 2023 20:44:47 -0700 (PDT)
+Message-ID: <b40831db-1a64-6fa6-ddcb-d33068882e90@gmail.com>
+Date:   Sun, 9 Jul 2023 11:44:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Introduce user log
+Content-Language: en-US
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
+        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230708040750.72570-1-hffilwlqm@gmail.com>
+ <v76ytdfdf2sqhdufkqxzsuznandia3x4l4iyghpirxkzytngxq@uttzaebbmdjb>
+From:   Leon Hwang <hffilwlqm@gmail.com>
+In-Reply-To: <v76ytdfdf2sqhdufkqxzsuznandia3x4l4iyghpirxkzytngxq@uttzaebbmdjb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
-Here are a few NTB bug fixes for 6.5.  Please consider pulling them.
-
-Thanks,
-Jon
 
 
+On 2023/7/9 06:02, Daniel Xu wrote:
+> Hi Leon,
+> 
+> On Sat, Jul 08, 2023 at 12:07:48PM +0800, Leon Hwang wrote:
+>> This series introduces bpf user log to transfer error message from
+>> kernel space to user space when users provide buffer to receive the
+>> error message.
+>>
+>> Especially, when to attach XDP to device, it can transfer the error
+>> message along with errno from dev_xdp_attach() to user space, if error
+>> happens in dev_xdp_attach().
+> 
+> Have you considered adding a tracepoint instead? With some TP_printk()
+> stuff I think you can achieve a similar result without having to do
+> go through changing uapi.
 
-The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
+If just for dev_xdp_attach(), I think netlink approach is better than
+tracepoint approach.
 
-  Linux 6.4 (2023-06-25 16:29:58 -0700)
+As for BPF syscall, error message along with errno through uapi is a
+good UX, like "create link: invalid argument (Invalid XDP flags for BPF
+link attachment)" when failed to attach XDP to a device. Hence, users
+are able to know the error details instead of -EINVAL or "invalid
+argument" only.
 
-are available in the Git repository at:
+Furthermore, as for other BPF syscall subcommands, we are able to
+provide error message along with errno by bpf_ulog_once(&attr->xxx.ulog,
+"An error").
 
-  https://github.com/jonmason/ntb tags/ntb-6.5
-
-for you to fetch changes up to bff6efc54bd0e27a332eb733525d7f698fd4a5b7:
-
-  ntb: hw: amd: Fix debugfs_create_dir error checking (2023-07-08 13:55:44 -0400)
-
-----------------------------------------------------------------
-Fixes for pci_clean_master, error handling in driver inits, and various
-other issues/bugs.
-
-----------------------------------------------------------------
-Anup Sharma (1):
-      ntb: hw: amd: Fix debugfs_create_dir error checking
-
-Bjorn Helgaas (1):
-      ntb: idt: drop redundant pci_enable_pcie_error_reporting()
-
-Cai Huoqing (3):
-      ntb_hw_amd: Remove redundant pci_clear_master
-      ntb: epf: Remove redundant pci_clear_master
-      ntb: intel: Remove redundant pci_clear_master
-
-Geoff Levand (2):
-      ntb_netdev: Fix module_init problem
-      ntb.rst: Fix copy and paste error
-
-Jiasheng Jiang (1):
-      NTB: ntb_tool: Add check for devm_kcalloc
-
-Palmer Dabbelt (1):
-      MAINTAINERS: git://github -> https://github.com for jonmason
-
-Yang Yingliang (1):
-      NTB: ntb_transport: fix possible memory leak while device_register() fails
-
-Yuan Can (3):
-      ntb: idt: Fix error handling in idt_pci_driver_init()
-      NTB: amd: Fix error handling in amd_ntb_pci_driver_init()
-      ntb: intel: Fix error handling in intel_ntb_pci_driver_init()
-
-ruanjinjie (1):
-      NTB: EPF: fix possible memory leak in pci_vntb_probe()
-
- Documentation/driver-api/ntb.rst              |  4 ++--
- MAINTAINERS                                   |  2 +-
- drivers/net/ntb_netdev.c                      |  2 +-
- drivers/ntb/hw/amd/ntb_hw_amd.c               | 11 +++++++----
- drivers/ntb/hw/epf/ntb_hw_epf.c               | 12 ++++--------
- drivers/ntb/hw/idt/ntb_hw_idt.c               | 24 +++++++++++-------------
- drivers/ntb/hw/intel/ntb_hw_gen1.c            |  9 ++++++---
- drivers/ntb/ntb_transport.c                   |  2 +-
- drivers/ntb/test/ntb_tool.c                   |  2 ++
- drivers/pci/endpoint/functions/pci-epf-vntb.c |  1 +
- 10 files changed, 36 insertions(+), 33 deletions(-)
