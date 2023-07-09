@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E66874C067
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760C674C070
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjGICac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 22:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S229873AbjGICqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 22:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGICaa (ORCPT
+        with ESMTP id S229437AbjGICqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 22:30:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4482D3;
-        Sat,  8 Jul 2023 19:30:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4718960B33;
-        Sun,  9 Jul 2023 02:30:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512C8C433C7;
-        Sun,  9 Jul 2023 02:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688869828;
-        bh=ItIXstYBIf26ydCVUwNTGQ8bzQETS0wWyOugToWg6xI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rljtrtr6N1Xg7x+eEkOzkkjBTpfqiPR4gddlslCXE5hpN5FsiP7h8xeap44eWqx7D
-         jzIcl1iLR7Li9APPIOpJX3KG/0FcUGDM+/TbcejzQVXKJpZpkkyfbzC+CnHsWC15pK
-         LWqkJMdMOi4wX/qzJY6ZrnGjE8x57EyFcHyWYvJeRrgZLbveMHDhpwIKIhnCaL9p9X
-         F+HoGbug16qmmnB/iPxbKnCwEjJGtHnZtuc7EV35Aj8uBpNd548gdqyVa4OJICoGGf
-         V8y4mEfYhbSEaRcPCYy4LzXJbnUeZeHAHEByytT01QrAm5S0EsSKac3C2bW0KJMnJZ
-         ShuMY4wtatn+g==
-Date:   Sat, 8 Jul 2023 19:34:05 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] drm/msm/dp: remove pm_runtime_xxx() from
- dp_power.c
-Message-ID: <fiq6zjzptjdnktdcofyqpaqf2gmddvkschebp7imlmfxatew3x@iaptll3dzfuf>
-References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
- <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
+        Sat, 8 Jul 2023 22:46:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C30E43;
+        Sat,  8 Jul 2023 19:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=kScoLng5YFNBErHSexheuj/gXT92kmX2io+vy4xr8rM=; b=PsMUpS186cZHQRQgwfdKjLfJaX
+        MAf7f9B1u/aXkeb/zojz6CD+TnJa0HqpXDmu8Vpbvk9jHYJehmIr0jU8qd3k1hkA7PitP98NQ+vvp
+        JxhNKaz/eH7PE6yS+gBvCYKGCVqciRGaIRJYGebsHLf1T2FPzgdh9w5WkwhOx6Pc+TfROtcY9AtUQ
+        mCiuO78NEKeL/IeiJtkK1KvEiqnKJyunCyhMPv8iDBHqMzo8VDx4+DTKzaxT16AxPv28FoFqPceBz
+        8rCgIthiWHkiaR4XVslEU8BpUXyWssYqC2XBeXRq1W6mbxZoliz0o4xACjbPXtXFMgZ5w8KK168Ka
+        ZBqg7aNg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qIKQt-008BoB-0h;
+        Sun, 09 Jul 2023 02:45:55 +0000
+Message-ID: <2f6ffd1c-a756-b7b8-bba4-77c2308f26b9@infradead.org>
+Date:   Sat, 8 Jul 2023 19:45:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: Build regressions/improvements in v6.4 (wireless/airo)
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+References: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
+ <20230626081950.2090627-1-geert@linux-m68k.org>
+ <39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org>
+Content-Language: en-US
+In-Reply-To: <39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,68 +57,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 04:52:19PM -0700, Kuogee Hsieh wrote:
-> Since both pm_runtime_resume() and pm_runtime_suspend() are not
-> populated at dp_pm_ops. Those pm_runtime_get/put() functions within
-> dp_power.c will not have any effects in addition to increase/decrease
-> power counter. Also pm_runtime_xxx() should be executed at top
-> layer.
-> 
+Hi Geert,
 
-Getting/putting the runtime PM state affects the vote for the GDSC. So I
-would suggest that you move this after patch 2, to not create a gap in
-the git history of lacking GDSC votes.
+[+ Adrian]
 
-Regards,
-Bjorn
+On 6/26/23 01:24, Geert Uytterhoeven wrote:
+> On Mon, 26 Jun 2023, Geert Uytterhoeven wrote:
+>> JFYI, when comparing v6.4[1] to v6.4-rc7[3], the summaries are:
+>>  - build errors: +1/-0
+> 
+>   + /kisskb/src/drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]:  => 6163:45
 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_power.c | 9 ---------
->  1 file changed, 9 deletions(-)
+I cannot reproduce this build error. (I don't doubt the problem, just having a problem
+making it happen for me.)
+I have tried it with gcc-11.1.0, gcc-11.3.0, and gcc-13.1.0.
+
+I'm surprised that this is the only instance that gcc found/warned about.
+
+I have a patch for this one instance, but there are 40+ instances of
+	readStatusRid()
+	readConfigRid()
+	readSsidRid()
+	readStatsRid()
+	readCapabilityRid()
+that don't check the return status of the function calls.
+
+I suppose that a patch can quieten the compiler error/warning, but given
+the 40+ other problems, it won't make the driver any noticeably better IMO.
+
+And the there is the general problem of not being able to build sh* cleanly any way.
+(See all of the other build issues in
+  http://kisskb.ellerman.id.au/kisskb/buildresult/14948832/
+.)
+
+Adrian, what toolchain do you use for arch/sh/ builds?
+
+
+> sh4-gcc11/sh-allmodconfig
+> seen before
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
-> index 5cb84ca..ed2f62a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_power.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_power.c
-> @@ -152,8 +152,6 @@ int dp_power_client_init(struct dp_power *dp_power)
->  
->  	power = container_of(dp_power, struct dp_power_private, dp_power);
->  
-> -	pm_runtime_enable(power->dev);
-> -
->  	return dp_power_clk_init(power);
->  }
->  
-> @@ -162,8 +160,6 @@ void dp_power_client_deinit(struct dp_power *dp_power)
->  	struct dp_power_private *power;
->  
->  	power = container_of(dp_power, struct dp_power_private, dp_power);
-> -
-> -	pm_runtime_disable(power->dev);
->  }
->  
->  int dp_power_init(struct dp_power *dp_power)
-> @@ -173,11 +169,7 @@ int dp_power_init(struct dp_power *dp_power)
->  
->  	power = container_of(dp_power, struct dp_power_private, dp_power);
->  
-> -	pm_runtime_get_sync(power->dev);
-> -
->  	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
-> -	if (rc)
-> -		pm_runtime_put_sync(power->dev);
->  
->  	return rc;
->  }
-> @@ -189,7 +181,6 @@ int dp_power_deinit(struct dp_power *dp_power)
->  	power = container_of(dp_power, struct dp_power_private, dp_power);
->  
->  	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
-> -	pm_runtime_put_sync(power->dev);
->  	return 0;
->  }
->  
-> -- 
-> 2.7.4
+> This is actually a real issue, and it's been here since basically forever.
 > 
+> drivers/net/wireless/cisco/airo.c:
+> 
+>     static int airo_get_rate(struct net_device *dev,
+>                              struct iw_request_info *info,
+>                              union iwreq_data *wrqu,
+>                              char *extra)
+>     {
+>             struct iw_param *vwrq = &wrqu->bitrate;
+>             struct airo_info *local = dev->ml_priv;
+>             StatusRid status_rid;           /* Card status info */
+> 
+>             readStatusRid(local, &status_rid, 1);
+> 
+> ==>         vwrq->value = le16_to_cpu(status_rid.currentXmitRate) * 500000;
+>             ...
+>     }
+> 
+>     static int readStatusRid(struct airo_info *ai, StatusRid *statr, int lock)
+>     {
+>             return PC4500_readrid(ai, RID_STATUS, statr, sizeof(*statr), lock);
+>     }
+> 
+>     static int PC4500_readrid(struct airo_info *ai, u16 rid, void *pBuf, int len, int lock)
+>     {
+>             u16 status;
+>             int rc = SUCCESS;
+> 
+>             if (lock) {
+>                     if (down_interruptible(&ai->sem))
+>                             return ERROR;
+> 
+> pBuf output buffer contents not initialized.
+> 
+>             }
+>             ...
+>     }
+> 
+> 
+>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6995e2de6891c724bfeb2db33d7b87775f913ad1/ (all 160 configs)
+>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/45a3e24f65e90a047bef86f927ebdc4c710edaa1/ (all 160 configs)
+
+I appreciate the synopsis.  Here's a patch.  WDYT?
+Thanks.
+---
+From: Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] wifi: airo: avoid uninitialized warning in airo_get_rate()
+
+Quieten a gcc (11.3.0) build error or warning by checking the function
+call status and returning -EIO if the function call failed.
+This is similar to what several other wireless drivers do for the
+SIOCGIWRATE ioctl call.
+
+drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Link: lore.kernel.org/r/39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: linux-wireless@vger.kernel.org
+---
+ drivers/net/wireless/cisco/airo.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff -- a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
+--- a/drivers/net/wireless/cisco/airo.c
++++ b/drivers/net/wireless/cisco/airo.c
+@@ -6157,8 +6157,11 @@ static int airo_get_rate(struct net_devi
+ 	struct iw_param *vwrq = &wrqu->bitrate;
+ 	struct airo_info *local = dev->ml_priv;
+ 	StatusRid status_rid;		/* Card status info */
++	int ret;
+ 
+-	readStatusRid(local, &status_rid, 1);
++	ret = readStatusRid(local, &status_rid, 1);
++	if (ret)
++		return -EIO;
+ 
+ 	vwrq->value = le16_to_cpu(status_rid.currentXmitRate) * 500000;
+ 	/* If more than one rate, set auto */
+
+
