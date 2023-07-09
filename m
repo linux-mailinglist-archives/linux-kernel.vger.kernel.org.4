@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4390274C26D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 13:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4575274C203
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 13:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjGILU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 07:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S230356AbjGILO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 07:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjGILUY (ORCPT
+        with ESMTP id S229773AbjGILO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 07:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B33BB5;
-        Sun,  9 Jul 2023 04:20:23 -0700 (PDT)
+        Sun, 9 Jul 2023 07:14:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB10212A;
+        Sun,  9 Jul 2023 04:14:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7E3160BA4;
-        Sun,  9 Jul 2023 11:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FEA8C433C8;
-        Sun,  9 Jul 2023 11:20:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A38060BC6;
+        Sun,  9 Jul 2023 11:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D2AC433C8;
+        Sun,  9 Jul 2023 11:14:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688901622;
-        bh=6zncnkh3oAJMqekHpVaKai3KYrNOe/JiEDlSOQ6ezJ0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aCv3fdQ+k3dmrC4qk/p4Hq5xMSjaxJBJL5OwbTL8VGBED4yARBENu/8Eaa0q0FeQX
-         lWf+IRui9zZ8w2ML1xTLd4Q0SsaMheBnN6i5yn+VFHXqXdzLenc12+LvfTHubKIhQ3
-         jnuu1A89QFAS5Xj0tkhu8kSRloT3tn5bDPERpfp4=
+        s=korg; t=1688901264;
+        bh=6NG0UDJmojKsjSjmW5IQPJUwWL5kB0Z5e43SQ5ydKCw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i9brZNQi1EBxa9c4j6iveBU9uZINqjfpsqFHdlqccjC9sRRNKs9RGgnj4e4McPv3R
+         D6TAVoNhg5nDprv7becVG2lySfF5w0Ut5JMWTaXUHjyEuh2BMYUuzFtzzjMHqw2XAj
+         5Bog3VH8G76hw/kiPZWKefQHRNm8XAI8a2mvWqlM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.3 085/431] sctp: add bpf_bypass_getsockopt proto callback
-Date:   Sun,  9 Jul 2023 13:10:33 +0200
-Message-ID: <20230709111453.143501955@linuxfoundation.org>
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+Subject: [PATCH 6.4 0/8] 6.4.3-rc1 review
+Date:   Sun,  9 Jul 2023 13:14:06 +0200
+Message-ID: <20230709111345.297026264@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230709111451.101012554@linuxfoundation.org>
-References: <20230709111451.101012554@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.3-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-6.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 6.4.3-rc1
+X-KernelTest-Deadline: 2023-07-11T11:13+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -63,93 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+This is the start of the stable review cycle for the 6.4.3 release.
+There are 8 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit 2598619e012cee5273a2821441b9a051ad931249 ]
+Responses should be made by Tue, 11 Jul 2023 11:13:33 +0000.
+Anything received after that time might be too late.
 
-Implement ->bpf_bypass_getsockopt proto callback and filter out
-SCTP_SOCKOPT_PEELOFF, SCTP_SOCKOPT_PEELOFF_FLAGS and SCTP_SOCKOPT_CONNECTX3
-socket options from running eBPF hook on them.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.3-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.4.y
+and the diffstat can be found below.
 
-SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS options do fd_install(),
-and if BPF_CGROUP_RUN_PROG_GETSOCKOPT hook returns an error after success of
-the original handler sctp_getsockopt(...), userspace will receive an error
-from getsockopt syscall and will be not aware that fd was successfully
-installed into a fdtable.
+thanks,
 
-As pointed by Marcelo Ricardo Leitner it seems reasonable to skip
-bpf getsockopt hook for SCTP_SOCKOPT_CONNECTX3 sockopt too.
-Because internaly, it triggers connect() and if error is masked
-then userspace will be confused.
+greg k-h
 
-This patch was born as a result of discussion around a new SCM_PIDFD interface:
-https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+-------------
+Pseudo-Shortlog of commits:
 
-Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: Xin Long <lucien.xin@gmail.com>
-Cc: linux-sctp@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Acked-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/sctp/socket.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 6.4.3-rc1
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 218e0982c3707..0932cbf568ee9 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -8280,6 +8280,22 @@ static int sctp_getsockopt(struct sock *sk, int level, int optname,
- 	return retval;
- }
- 
-+static bool sctp_bpf_bypass_getsockopt(int level, int optname)
-+{
-+	if (level == SOL_SCTP) {
-+		switch (optname) {
-+		case SCTP_SOCKOPT_PEELOFF:
-+		case SCTP_SOCKOPT_PEELOFF_FLAGS:
-+		case SCTP_SOCKOPT_CONNECTX3:
-+			return true;
-+		default:
-+			return false;
-+		}
-+	}
-+
-+	return false;
-+}
-+
- static int sctp_hash(struct sock *sk)
- {
- 	/* STUB */
-@@ -9649,6 +9665,7 @@ struct proto sctp_prot = {
- 	.shutdown    =	sctp_shutdown,
- 	.setsockopt  =	sctp_setsockopt,
- 	.getsockopt  =	sctp_getsockopt,
-+	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
- 	.sendmsg     =	sctp_sendmsg,
- 	.recvmsg     =	sctp_recvmsg,
- 	.bind        =	sctp_bind,
-@@ -9704,6 +9721,7 @@ struct proto sctpv6_prot = {
- 	.shutdown	= sctp_shutdown,
- 	.setsockopt	= sctp_setsockopt,
- 	.getsockopt	= sctp_getsockopt,
-+	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
- 	.sendmsg	= sctp_sendmsg,
- 	.recvmsg	= sctp_recvmsg,
- 	.bind		= sctp_bind,
--- 
-2.39.2
+Suren Baghdasaryan <surenb@google.com>
+    fork: lock VMAs of the parent process when forking, again
 
+Suren Baghdasaryan <surenb@google.com>
+    fork: lock VMAs of the parent process when forking
+
+Liu Shixin <liushixin2@huawei.com>
+    bootmem: remove the vmemmap pages from kmemleak in free_bootmem_page
+
+Peter Collingbourne <pcc@google.com>
+    mm: call arch_swap_restore() from do_swap_page()
+
+Hugh Dickins <hughd@google.com>
+    mm: lock newly mapped VMA with corrected ordering
+
+Suren Baghdasaryan <surenb@google.com>
+    mm: lock newly mapped VMA which can be modified after it becomes visible
+
+Suren Baghdasaryan <surenb@google.com>
+    mm: lock a vma before stack expansion
+
+Suren Baghdasaryan <surenb@google.com>
+    mm: disable CONFIG_PER_VMA_LOCK until its fixed
+
+
+-------------
+
+Diffstat:
+
+ Makefile                     | 4 ++--
+ include/linux/bootmem_info.h | 2 ++
+ kernel/fork.c                | 7 +++++++
+ mm/Kconfig                   | 3 ++-
+ mm/memory.c                  | 7 +++++++
+ mm/mmap.c                    | 6 ++++++
+ 6 files changed, 26 insertions(+), 3 deletions(-)
 
 
