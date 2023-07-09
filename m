@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B2974C5D1
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93CF74C5E1
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbjGIPTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S233839AbjGIPUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbjGIPTL (ORCPT
+        with ESMTP id S233810AbjGIPT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:19:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF030DE;
-        Sun,  9 Jul 2023 08:16:33 -0700 (PDT)
+        Sun, 9 Jul 2023 11:19:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F98AC2;
+        Sun,  9 Jul 2023 08:16:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BFD760C21;
-        Sun,  9 Jul 2023 15:16:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C6CC433CB;
-        Sun,  9 Jul 2023 15:16:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C33A60C3A;
+        Sun,  9 Jul 2023 15:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A14C433C7;
+        Sun,  9 Jul 2023 15:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915784;
-        bh=BmgDoqmmR/0aTtaSlsk8FtTiOkTJEmegsMp0yEKSxUg=;
+        s=k20201202; t=1688915788;
+        bh=xAjnnjtKgsqBNirUt8fPoThn3ipjvoEV7IxJoqGNg0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oYxxrO3Z8JB6gZGKZvCq4+9pRBT3bpOe826anISI+FQuNx+QnmCAGEqk/uvD/FfQT
-         2ONRQnozCNUqNRnlD8KsVpetKoLU0Kgfw5o1KhBLZ2tD0wt1/+P1Q6JYpcREy1ph8Z
-         ZjThr4HsywFPYTjd3CRbM4D5v/kRw9VzJIszctnr0WP85SwShBw/Gn68IKLgaoz2jy
-         RtVR5qXLXFfx31nkzcG5BXn/MRYHUwUuY/B50OVE1AegxMlMVPfDKK+r1Hww1S5oOC
-         f7xi5rEjWxMFTLEbFdl3dU7LthQWFskigm4XGCvR4ZhLZa+vmKrCxPrhEUA7ookiSS
-         izZd1H9VXqvCw==
+        b=cQsPgW8eCf2TL+nbapHiyFQ5a339EdphENpsMVgzHiFglzbJLDBDOQKrUijjwBDpb
+         izt+9C8UhNecx6z+16UAYyF41c7ShtDJ4z7KrRtFPL2SPWKH0rwN628fWO29TIB7ir
+         yf/owpn7v5vVx6DBmLYP3tP8WN9KSLAMkc8YgA5yBKyh2Jc2H3t7fBotBTogPbXGf+
+         /Xj8dfUc9Z4HKDMPQq2V4Q6vsJoX9dVGGDvaj+vuAggDHNYIsq2WEV+G7gpnX67wTZ
+         3Rc3r6yMdF1gu2G5VXrcijxCVF7eZEbrE4PrS4kBVyRHs4KmeD0saGmVg0nhG8EEIc
+         ZrCRIlOvU1Dnw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Simon Horman <simon.horman@corigine.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>, johannes@sipsolutions.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 4/6] wifi: wext-core: Fix -Wstringop-overflow warning in ioctl_standard_iw_point()
-Date:   Sun,  9 Jul 2023 11:16:11 -0400
-Message-Id: <20230709151615.514009-4-sashal@kernel.org>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Roee Goldfiner <roee.h.goldfiner@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
+        miriam.rachel.korenblit@intel.com, avraham.stern@intel.com,
+        benjamin.berg@intel.com, jtornosm@redhat.com,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 5/6] wifi: iwlwifi: mvm: avoid baid size integer overflow
+Date:   Sun,  9 Jul 2023 11:16:12 -0400
+Message-Id: <20230709151615.514009-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151615.514009-1-sashal@kernel.org>
 References: <20230709151615.514009-1-sashal@kernel.org>
@@ -63,68 +63,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 71e7552c90db2a2767f5c17c7ec72296b0d92061 ]
+[ Upstream commit 1a528ab1da324d078ec60283c34c17848580df24 ]
 
--Wstringop-overflow is legitimately warning us about extra_size
-pontentially being zero at some point, hence potenially ending
-up _allocating_ zero bytes of memory for extra pointer and then
-trying to access such object in a call to copy_from_user().
+Roee reported various hard-to-debug crashes with pings in
+EHT aggregation scenarios. Enabling KASAN showed that we
+access the BAID allocation out of bounds, and looking at
+the code a bit shows that since the reorder buffer entry
+(struct iwl_mvm_reorder_buf_entry) is 128 bytes if debug
+such as lockdep is enabled, then staring from an agg size
+512 we overflow the size calculation, and allocate a much
+smaller structure than we should, causing slab corruption
+once we initialize this.
 
-Fix this by adding a sanity check to ensure we never end up
-trying to allocate zero bytes of data for extra pointer, before
-continue executing the rest of the code in the function.
+Fix this by simply using u32 instead of u16.
 
-Address the following -Wstringop-overflow warning seen when built
-m68k architecture with allyesconfig configuration:
-                 from net/wireless/wext-core.c:11:
-In function '_copy_from_user',
-    inlined from 'copy_from_user' at include/linux/uaccess.h:183:7,
-    inlined from 'ioctl_standard_iw_point' at net/wireless/wext-core.c:825:7:
-arch/m68k/include/asm/string.h:48:25: warning: '__builtin_memset' writing 1 or more bytes into a region of size 0 overflows the destination [-Wstringop-overflow=]
-   48 | #define memset(d, c, n) __builtin_memset(d, c, n)
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/uaccess.h:153:17: note: in expansion of macro 'memset'
-  153 |                 memset(to + (n - res), 0, res);
-      |                 ^~~~~~
-In function 'kmalloc',
-    inlined from 'kzalloc' at include/linux/slab.h:694:9,
-    inlined from 'ioctl_standard_iw_point' at net/wireless/wext-core.c:819:10:
-include/linux/slab.h:577:16: note: at offset 1 into destination object of size 0 allocated by '__kmalloc'
-  577 |         return __kmalloc(size, flags);
-      |                ^~~~~~~~~~~~~~~~~~~~~~
-
-This help with the ongoing efforts to globally enable
--Wstringop-overflow.
-
-Link: https://github.com/KSPP/linux/issues/315
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/ZItSlzvIpjdjNfd8@work
+Reported-by: Roee Goldfiner <roee.h.goldfiner@intel.com>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20230620125813.f428c856030d.I2c2bb808e945adb71bc15f5b2bac2d8957ea90eb@changeid
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/wireless/wext-core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/mvm/sta.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
-index 76a80a41615be..a57f54bc0e1a7 100644
---- a/net/wireless/wext-core.c
-+++ b/net/wireless/wext-core.c
-@@ -796,6 +796,12 @@ static int ioctl_standard_iw_point(struct iw_point *iwp, unsigned int cmd,
- 		}
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
+index a3255100e3fee..7befb92b5159c 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/sta.c
+@@ -2557,7 +2557,7 @@ int iwl_mvm_sta_rx_agg(struct iwl_mvm *mvm, struct ieee80211_sta *sta,
  	}
  
-+	/* Sanity-check to ensure we never end up _allocating_ zero
-+	 * bytes of data for extra.
-+	 */
-+	if (extra_size <= 0)
-+		return -EFAULT;
-+
- 	/* kzalloc() ensures NULL-termination for essid_compat. */
- 	extra = kzalloc(extra_size, GFP_KERNEL);
- 	if (!extra)
+ 	if (iwl_mvm_has_new_rx_api(mvm) && start) {
+-		u16 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
++		u32 reorder_buf_size = buf_size * sizeof(baid_data->entries[0]);
+ 
+ 		/* sparse doesn't like the __align() so don't check */
+ #ifndef __CHECKER__
 -- 
 2.39.2
 
