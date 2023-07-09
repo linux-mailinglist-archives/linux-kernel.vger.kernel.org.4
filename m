@@ -2,88 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A9474C6E3
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 19:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942F074C6E8
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 20:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjGIR5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 13:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S231228AbjGISAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 14:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGIR5b (ORCPT
+        with ESMTP id S229658AbjGISAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 13:57:31 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73E7107;
-        Sun,  9 Jul 2023 10:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688925448; bh=Yeqvl1fI5q4/Mhyqlq1w3sWXjYf5HAw/nLZWU2LZPkM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KzaH2+qdv5/L13m5Gi+0trHddrqvAOxoztQN7Jl42x9VE2kwPlqVdkOMI4RjUZgYU
-         pE8DutNDECaHMRnfhyXOSzXkbZ2PgR12ICgAtz8JfVnIQsLeZjxlv6loWolYvKC+pm
-         xd3w95aHCkuIBRqeuCC2wH0nkPAEu3cgoDS2xtEY=
-Date:   Sun, 9 Jul 2023 19:57:27 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
-Message-ID: <df91b1d3-2c66-4a6b-9a8a-544679bc09a8@t-8ch.de>
-References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
- <20230630140609.263790-1-falcon@tinylab.org>
- <20230709092947.GF9321@1wt.eu>
- <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
- <20230709172753.GA22287@1wt.eu>
+        Sun, 9 Jul 2023 14:00:14 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F29114
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 11:00:12 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c5c8d00ced3so4488991276.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 11:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688925611; x=1691517611;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u4DBsm9V7fTDvKx918DKQDmxOgvOJF74sUuwO0ox2Ec=;
+        b=vxRgIcDZCdKysN9u5e/P0Mk+1qTauAmLbQGUgHGKEnTrrVjVfF8aRQgXNkdpwNKtso
+         z8OW1HHfk+BP9+3b0NYGgmo1cqC1dNep8cPJs0DCf5IEpOOl2YUrPVFZ3c6yFCuGZy4i
+         SVHYFmCtbVn9/s2hoZJ49WHlQH59W90pfh9lA/eb/+pugtDqnZJc/0IJahTTiqaY4Vzk
+         1WrlPZDLO5SgPrk6xtqbFrFD6MccqYfdC9JgfnhpS9uXoCHuwqdGVsGecaY9zjvID2l4
+         PyqhTrEHJkApgYxcRt6QgGsaPi7YlwCJmtJ/KwTYz07w+dIONIm5ui/y8eKvNjaOtX+M
+         Syrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688925611; x=1691517611;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u4DBsm9V7fTDvKx918DKQDmxOgvOJF74sUuwO0ox2Ec=;
+        b=BJtrFYXxN9viumqyfqn+MLgEYjt3VdhTGz8d3pm5ou/Km0nBjvZgZU4aoIw8ZnhUn/
+         R8Zak3SRTmdw7Zkm+/etjhkZH+SFtgtIdkdlmrw7F4ww4AlcnvZx+Am182/BGTAC0awD
+         NRGDQc7l/yP5nZqUCuu15c7U5ypsQz/oH7eWTc8nASN9H2j3De+wE3Z5vXpF1659CCe8
+         k0kO76IIf4tFb2+tbsAzbUjZ4icW8Rs/WOx9yBnhcJCcAA8cYwu/CPbZuRDikw1vxBKc
+         +FQTeAqz4GFAih29AqfPDoj+9Lx1JH/RdpoYHlqpPi7+WctEh8T9jWxS9nfLKGZCV0Et
+         Vaow==
+X-Gm-Message-State: ABy/qLYWhFbTnMzMFrX3PWgAt1oZgojbhhIFSh11JksgkVoiAE4Ggxmn
+        xiIyfoe1OyLa5p65BQA0Lp+e5hcj0QxL+VqeBZLWlw==
+X-Google-Smtp-Source: APBJJlEWXBHCrZHA3JCHjoudX7Ecgk5TDBCrrA3oUgTtzhr9PEaNnulSiA1S6XZKAEopv26+3p9AtmwqEhS9liy+4l4=
+X-Received: by 2002:a81:92d3:0:b0:579:f8f2:b5b5 with SMTP id
+ j202-20020a8192d3000000b00579f8f2b5b5mr9459703ywg.41.1688925611714; Sun, 09
+ Jul 2023 11:00:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230709172753.GA22287@1wt.eu>
+References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+ <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
+ <fc5501cf-c335-81f7-1ad7-26fdc1b6922d@linaro.org> <72cb729b-a9d3-3e5b-c70a-0761f47a6779@quicinc.com>
+In-Reply-To: <72cb729b-a9d3-3e5b-c70a-0761f47a6779@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 9 Jul 2023 21:00:00 +0300
+Message-ID: <CAA8EJpqKVBKRpFs=sS2rwrJpDP22sNrd00kCYm-b_ZB96O=s5g@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v1 1/5] drm/msm/dp: remove pm_runtime_xxx()
+ from dp_power.c
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marijn.suijten@somainline.org, quic_jesszhan@quicinc.com,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+On Sun, 9 Jul 2023 at 20:22, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>
+>
+>
+> On 7/7/2023 5:06 PM, Dmitry Baryshkov wrote:
+> > On 08/07/2023 02:52, Kuogee Hsieh wrote:
+> >> Since both pm_runtime_resume() and pm_runtime_suspend() are not
+> >> populated at dp_pm_ops. Those pm_runtime_get/put() functions within
+> >> dp_power.c will not have any effects in addition to increase/decrease
+> >> power counter.
+> >
+> > Lie.
+> >
+>
+> Even if the commit text is incorrect, review comments like this are not
+> helping the patch nor the author and will just get ignored anyway.
 
-On 2023-07-09 19:27:53+0200, Willy Tarreau wrote:
-> On Sun, Jul 09, 2023 at 07:10:58PM +0200, Thomas Weißschuh wrote:
-> > On 2023-07-09 11:29:47+0200, Willy Tarreau wrote:
-> > > On Fri, Jun 30, 2023 at 10:06:09PM +0800, Zhangjin Wu wrote:
-> > >> [..]
-> > > 
-> > > Now queued, thanks!
-> > > Willy
-> > 
-> > Don't we need an Ack from the fs maintainers for the patch to
-> > fs/proc/proc_net.c ?
-> > 
-> > Personally I expected this series to go in via the fs tree because of
-> > that patch.
-> 
-> Gasp! You're totally right, I confused it with a test only changing
-> the nolibc-test file, as the chmod_net test appeared as a dependency!
-> Let me drop it from the series and push again.
+The review comment might be overreacting, excuse me. I was really
+impressed by the commit message, which contradicts the basic source
+code. pm_runtime_get() does a lot more than just increasing the power
+counter.
 
-I think if this patch now also goes in via both the nolibc/rcu trees and
-the fs tree it would not be great.
+> >> Also pm_runtime_xxx() should be executed at top
+> >> layer.
+> >
+> > Why?
+> >
+>
+> I guess he meant to centralize this around dp_display.c. Will elaborate
+> while posting the next rev.
+>
+> >>
+> >> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> >> ---
+> >>   drivers/gpu/drm/msm/dp/dp_power.c | 9 ---------
+> >>   1 file changed, 9 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/dp/dp_power.c
+> >> b/drivers/gpu/drm/msm/dp/dp_power.c
+> >> index 5cb84ca..ed2f62a 100644
+> >> --- a/drivers/gpu/drm/msm/dp/dp_power.c
+> >> +++ b/drivers/gpu/drm/msm/dp/dp_power.c
+> >> @@ -152,8 +152,6 @@ int dp_power_client_init(struct dp_power *dp_power)
+> >>       power = container_of(dp_power, struct dp_power_private, dp_power);
+> >> -    pm_runtime_enable(power->dev);
+> >> -
+> >>       return dp_power_clk_init(power);
+> >>   }
+> >> @@ -162,8 +160,6 @@ void dp_power_client_deinit(struct dp_power
+> >> *dp_power)
+> >>       struct dp_power_private *power;
+> >>       power = container_of(dp_power, struct dp_power_private, dp_power);
+> >> -
+> >> -    pm_runtime_disable(power->dev);
+> >>   }
+> >>   int dp_power_init(struct dp_power *dp_power)
+> >> @@ -173,11 +169,7 @@ int dp_power_init(struct dp_power *dp_power)
+> >>       power = container_of(dp_power, struct dp_power_private, dp_power);
+> >> -    pm_runtime_get_sync(power->dev);
+> >> -
+> >>       rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
+> >> -    if (rc)
+> >> -        pm_runtime_put_sync(power->dev);
+> >>       return rc;
+> >>   }
+> >> @@ -189,7 +181,6 @@ int dp_power_deinit(struct dp_power *dp_power)
+> >>       power = container_of(dp_power, struct dp_power_private, dp_power);
+> >>       dp_power_clk_enable(dp_power, DP_CORE_PM, false);
+> >> -    pm_runtime_put_sync(power->dev);
+> >>       return 0;
+> >>   }
+> >
 
-The best way forward would probably for you to rebase your tree on top
-of mainline after the fs tree has introduced both patches of the series
-into Linus' tree and then you can drop your copy of the test removal.
 
-I want to keep both patches together because I expect the fs change to
-be backported and if it is backported on its own it will break
-nolibc-test in those trees.
 
-But maybe I'm overthinking it, nobody is running nolibc-test on
-non-mainline kernels anyways and both patches can be split.
-
-If they are to be kept together and go via fs an Ack on the nolibc-test
-patch is probably needed, too.
-
-Thomas
+-- 
+With best wishes
+Dmitry
