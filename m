@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555D374C4A5
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2D974C4A7
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 16:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbjGIOId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 10:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S232970AbjGIOIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 10:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGIOIc (ORCPT
+        with ESMTP id S230479AbjGIOIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 10:08:32 -0400
+        Sun, 9 Jul 2023 10:08:45 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC02297;
-        Sun,  9 Jul 2023 07:08:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA266130;
+        Sun,  9 Jul 2023 07:08:43 -0700 (PDT)
 Received: from i53875a50.versanet.de ([83.135.90.80] helo=phil.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1qIV5G-0002cH-Mi; Sun, 09 Jul 2023 16:08:18 +0200
+        id 1qIV5S-0002ca-PI; Sun, 09 Jul 2023 16:08:30 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -35,12 +35,13 @@ Cc:     Samuel Ortiz <sameo@rivosinc.com>, linux@rivosinc.com,
         =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
         Evan Green <evan@rivosinc.com>, devicetree@vger.kernel.org,
         Samuel Ortiz <sameo@rivosinc.com>
-Subject: Re: [PATCH v3 4/4] RISC-V: Implement archrandom when Zkr is available
-Date:   Sun, 09 Jul 2023 16:08:17 +0200
-Message-ID: <1902759.taCxCBeP46@phil>
-In-Reply-To: <20230709115549.2666557-5-sameo@rivosinc.com>
+Subject: Re: [PATCH v3 2/4] dt-bindings: riscv: Document the 1.0 scalar cryptography
+ extensions
+Date:   Sun, 09 Jul 2023 16:08:29 +0200
+Message-ID: <45649233.fMDQidcC6G@phil>
+In-Reply-To: <20230709115549.2666557-3-sameo@rivosinc.com>
 References: <20230709115549.2666557-1-sameo@rivosinc.com>
- <20230709115549.2666557-5-sameo@rivosinc.com>
+ <20230709115549.2666557-3-sameo@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -53,41 +54,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 9. Juli 2023, 13:55:46 CEST schrieb Samuel Ortiz:
-> The Zkr extension is ratified and provides 16 bits of entropy seed when
-> reading the SEED CSR.
+Am Sonntag, 9. Juli 2023, 13:55:44 CEST schrieb Samuel Ortiz:
+> The RISC-V cryptography extensions define a set of instructions, CSR
+> definitions, architectural interfaces and also extension shorthands for
+> running scalar and vector based cryptography operations on RISC-V
+> systems.
 > 
-> We can implement arch_get_random_seed_longs() by doing multiple csrrw to
-> that CSR and filling an unsigned long with valid entropy bits.
+> This documents all the dt-bindings for the scalar cryptography
+> extensions, including the Zk, Zkn and Zks shorthands.
 > 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
-> ---
 
-> +static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
-> +{
-> +	if (!max_longs)
-> +		return 0;
-> +
-> +	/*
-> +	 * If Zkr is supported and csr_seed_long succeeds, we return one long
-> +	 * worth of entropy.
-> +	 */
-> +	if (riscv_has_extension_likely(RISCV_ISA_EXT_ZKR) && csr_seed_long(v))
-
-While this whole thing looks really nice, I don't think you can only
-check the ZKR existence though.
-
-To access the seed csr from supervisor-mode, it looks like the SSEED
-bit in the mseccfg register also needs to be set by firmware.
-And in the kernel we will likely need to check this setting somehow
-before enabling access.
-
-At least my qemu fails with an illegal instruction otherwise during the
-early random seed initialization.
-
-
-Heiko
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
 
 
