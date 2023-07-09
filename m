@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E519B74C083
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 04:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD01174C08A
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 05:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjGIC62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 22:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        id S230008AbjGIDFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 23:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjGIC61 (ORCPT
+        with ESMTP id S229604AbjGIDFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 22:58:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFDCE45
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jul 2023 19:58:26 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b9c5e07c1bso14544915ad.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jul 2023 19:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688871506; x=1691463506;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YvrbRcVf34QYRGEvOeb8o51NnBzvGljIM/+6H4RQmnw=;
-        b=BPkvaOK838go+G1HrQkX+Mx/IWl3EGU9AzamBueyGmEcC/mlSfa4//V2xYwFAA+fiK
-         nTURG163tncGV6yHgRR74VZHTH6SlBDQovphq34eEEMZtlCimq9fS+6s3tJmUdJr6Tmz
-         CqawMCutSOUCunelVTVmJJKLy8XgSPG9MCKjw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688871506; x=1691463506;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YvrbRcVf34QYRGEvOeb8o51NnBzvGljIM/+6H4RQmnw=;
-        b=bxiUFg22LsPt9eQNcHA2FR9mCukTw0EHlulTlaUM0brhpX6Eh80DOq/xX1G2Ajkzcp
-         haXh68nrHANOR44IFrJY7JS6Q3pdhEeF/T5vLlboqLY2wx6m2RB7nMTxX/or04siSFnM
-         HjR6p1QHZnPOgD8sZVwAxq9yD5pLl3V0ETbOSQUvu/0OcsyclaLUzxmyP0x5rrB6GXDN
-         0IS7uek4R7bUT+AFuDiTAj1myseqJxUhi5o5BW3ymZizeH23cb9yMLbcJBr8ZY3zaFY+
-         a+lxedxzzpK9N9Ef5iaPv0ARYFLmIoqqzxy3uBGMLytXFJ7bi+9ukt4qW7O1QB5YI8zh
-         MQkQ==
-X-Gm-Message-State: ABy/qLYLgpnUfOJXnqGYBJdZWmumBNhYqHua8HGdZuqvvu6s67ifZhVL
-        f48yZvTgMGZ8y7fvA3b/SYCSGA==
-X-Google-Smtp-Source: APBJJlEbpU/NZCFkTgjjdaIt5zrIa2eMKgYl6thtBD0RkTksPKzcNAdlx+T295cYcg2D75rapKC4og==
-X-Received: by 2002:a17:902:b713:b0:1b8:903d:8dd0 with SMTP id d19-20020a170902b71300b001b8903d8dd0mr8567304pls.32.1688871505848;
-        Sat, 08 Jul 2023 19:58:25 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:42f3:1eb:4d14:e45a])
-        by smtp.gmail.com with ESMTPSA id m21-20020a170902bb9500b001b864add154sm5545981pls.154.2023.07.08.19.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jul 2023 19:58:25 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH] zsmalloc: remove obj_tagged()
-Date:   Sun,  9 Jul 2023 11:56:26 +0900
-Message-ID: <20230709025817.3842416-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+        Sat, 8 Jul 2023 23:05:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F3EE45;
+        Sat,  8 Jul 2023 20:05:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 871E960B71;
+        Sun,  9 Jul 2023 03:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9551DC433C8;
+        Sun,  9 Jul 2023 03:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688871945;
+        bh=08EVmP95gtwfBvBvf6xxIOPQOkRYHfw+hhVlKAXhPhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=inXkCeyHCc34IDnkW4Pc0dD5aKeFLWN6Bs8x+hB+vQAaNpbXqDkUwZnTLGVl2PmsB
+         jrlfSV1ZOg8U6MMd4gcc/AEDRjxZoiOa4WwqFut+fkixQS71kXlwWLJh+bQ+Gg4e0I
+         baAYm/HPudMAtNqR6PxT+4AhHTVvGXNJFlwMPBWDH7fYgtZYQyAqAUeE3Se7z+GGFP
+         d6AyQMLo3NQdhXMcBcI9zfQ3KAjkEU/rifgdCJDglNtU/E4riBBefi6atN3WF46CJ8
+         9GBWeEm5hg7X0yE27WOTCqqEe282KvNXEDlN7p1wN7+Sntk5ra5U8oTI2WaFwTAj0R
+         xM1ahitvcNV+g==
+Date:   Sat, 8 Jul 2023 20:09:22 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] drm/msm/dp: move relevant dp initialization code
+ from bind() to probe()
+Message-ID: <n7jye2t2k3l7hxxsta6muk2fsjlufxsmtcbtna4fovpgdozlsi@qzvw6cj3ejih>
+References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+ <1688773943-3887-5-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688773943-3887-5-git-send-email-quic_khsieh@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -67,94 +63,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-obj_tagged() is not needed at this point, because objects can
-only have one tag: OBJ_ALLOCATED_TAG. We needed obj_tagged()
-for the zsmalloc LRU implementation, which has now been
-removed. Simplify zsmalloc code and revert to the previous
-implementation that was in place before the zsmalloc LRU series.
+On Fri, Jul 07, 2023 at 04:52:22PM -0700, Kuogee Hsieh wrote:
+> In preparation of moving edp of_dp_aux_populate_bus() to
+> dp_display_probe(), move dp_display_request_irq(),
+> dp->parser->parse() and dp_power_client_init() to dp_display_probe()
+> too.
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 48 +++++++++++++++++--------------------
+>  drivers/gpu/drm/msm/dp/dp_display.h |  1 -
+>  2 files changed, 22 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 44580c2..185f1eb 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -290,12 +290,6 @@ static int dp_display_bind(struct device *dev, struct device *master,
+>  		goto end;
+>  	}
+>  
+> -	rc = dp_power_client_init(dp->power);
+> -	if (rc) {
+> -		DRM_ERROR("Power client create failed\n");
+> -		goto end;
+> -	}
+> -
+>  	rc = dp_register_audio_driver(dev, dp->audio);
+>  	if (rc) {
+>  		DRM_ERROR("Audio registration Dp failed\n");
+> @@ -752,6 +746,12 @@ static int dp_init_sub_modules(struct dp_display_private *dp)
+>  		goto error;
+>  	}
+>  
+> +	rc = dp->parser->parse(dp->parser);
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- mm/zsmalloc.c | 29 +++++++----------------------
- 1 file changed, 7 insertions(+), 22 deletions(-)
+Today dp_init_sub_modules() just allocates memory for all the modules
+and ties them together. While I don't fancy this way of structuring
+device drivers in Linux, I think it's reasonable to retain that design
+for now, and perform the parsing and power initialization in
+dp_display_probe().
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 84beadc088b8..32f5bc4074df 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -795,8 +795,8 @@ static unsigned long handle_to_obj(unsigned long handle)
- 	return *(unsigned long *)handle;
- }
- 
--static bool obj_tagged(struct page *page, void *obj, unsigned long *phandle,
--		int tag)
-+static inline bool obj_allocated(struct page *page, void *obj,
-+				 unsigned long *phandle)
- {
- 	unsigned long handle;
- 	struct zspage *zspage = get_zspage(page);
-@@ -807,7 +807,7 @@ static bool obj_tagged(struct page *page, void *obj, unsigned long *phandle,
- 	} else
- 		handle = *(unsigned long *)obj;
- 
--	if (!(handle & tag))
-+	if (!(handle & OBJ_ALLOCATED_TAG))
- 		return false;
- 
- 	/* Clear all tags before returning the handle */
-@@ -815,11 +815,6 @@ static bool obj_tagged(struct page *page, void *obj, unsigned long *phandle,
- 	return true;
- }
- 
--static inline bool obj_allocated(struct page *page, void *obj, unsigned long *phandle)
--{
--	return obj_tagged(page, obj, phandle, OBJ_ALLOCATED_TAG);
--}
--
- static void reset_page(struct page *page)
- {
- 	__ClearPageMovable(page);
-@@ -1551,11 +1546,11 @@ static void zs_object_copy(struct size_class *class, unsigned long dst,
- }
- 
- /*
-- * Find object with a certain tag in zspage from index object and
-+ * Find alloced object in zspage from index object and
-  * return handle.
-  */
--static unsigned long find_tagged_obj(struct size_class *class,
--					struct page *page, int *obj_idx, int tag)
-+static unsigned long find_alloced_obj(struct size_class *class,
-+				      struct page *page, int *obj_idx)
- {
- 	unsigned int offset;
- 	int index = *obj_idx;
-@@ -1566,7 +1561,7 @@ static unsigned long find_tagged_obj(struct size_class *class,
- 	offset += class->size * index;
- 
- 	while (offset < PAGE_SIZE) {
--		if (obj_tagged(page, addr + offset, &handle, tag))
-+		if (obj_allocated(page, addr + offset, &handle))
- 			break;
- 
- 		offset += class->size;
-@@ -1580,16 +1575,6 @@ static unsigned long find_tagged_obj(struct size_class *class,
- 	return handle;
- }
- 
--/*
-- * Find alloced object in zspage from index object and
-- * return handle.
-- */
--static unsigned long find_alloced_obj(struct size_class *class,
--					struct page *page, int *obj_idx)
--{
--	return find_tagged_obj(class, page, obj_idx, OBJ_ALLOCATED_TAG);
--}
--
- static void migrate_zspage(struct zs_pool *pool, struct zspage *src_zspage,
- 			   struct zspage *dst_zspage)
- {
--- 
-2.41.0.255.g8b1d071c50-goog
+> +	if (rc) {
+> +		DRM_ERROR("device tree parsing failed\n");
+> +		goto error;
+> +	}
+> +
+>  	dp->catalog = dp_catalog_get(dev, &dp->parser->io);
+>  	if (IS_ERR(dp->catalog)) {
+>  		rc = PTR_ERR(dp->catalog);
+> @@ -768,6 +768,12 @@ static int dp_init_sub_modules(struct dp_display_private *dp)
+>  		goto error;
+>  	}
+>  
+> +	rc = dp_power_client_init(dp->power);
+> +	if (rc) {
+> +		DRM_ERROR("Power client create failed\n");
+> +		goto error;
+> +	}
+> +
+>  	dp->aux = dp_aux_get(dev, dp->catalog, dp->dp_display.is_edp);
+>  	if (IS_ERR(dp->aux)) {
+>  		rc = PTR_ERR(dp->aux);
+> @@ -1196,26 +1202,20 @@ static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+>  	return ret;
+>  }
+>  
+> -int dp_display_request_irq(struct msm_dp *dp_display)
+> +static int dp_display_request_irq(struct dp_display_private *dp)
+>  {
+>  	int rc = 0;
+> -	struct dp_display_private *dp;
+> -
+> -	if (!dp_display) {
+> -		DRM_ERROR("invalid input\n");
+> -		return -EINVAL;
+> -	}
 
+Love this, but it's unrelated to the rest of the patch.
+
+> -
+> -	dp = container_of(dp_display, struct dp_display_private, dp_display);
+> +	struct device *dev = &dp->pdev->dev;
+>  
+> -	dp->irq = irq_of_parse_and_map(dp->pdev->dev.of_node, 0);
+>  	if (!dp->irq) {
+> -		DRM_ERROR("failed to get irq\n");
+> -		return -EINVAL;
+> +		dp->irq = irq_of_parse_and_map(dp->pdev->dev.of_node, 0);
+> +		if (!dp->irq) {
+> +			DRM_ERROR("failed to get irq\n");
+> +			return -EINVAL;
+> +		}
+>  	}
+>  
+> -	rc = devm_request_irq(dp_display->drm_dev->dev, dp->irq,
+> -			dp_display_irq_handler,
+> +	rc = devm_request_irq(dev, dp->irq, dp_display_irq_handler,
+
+This is fixing a bug where currently the dp_display_irq_handler()
+registration is tied to the DPU device's life cycle, while depending on
+resources that are released as the DP device is torn down.
+
+It would be nice if this was not hidden in a patch that claims to just
+move calls around.
+
+Regards,
+Bjorn
+
+>  			IRQF_TRIGGER_HIGH, "dp_display_isr", dp);
+>  	if (rc < 0) {
+>  		DRM_ERROR("failed to request IRQ%u: %d\n",
+> @@ -1290,6 +1290,8 @@ static int dp_display_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, &dp->dp_display);
+>  
+> +	dp_display_request_irq(dp);
+> +
+>  	rc = component_add(&pdev->dev, &dp_display_comp_ops);
+>  	if (rc) {
+>  		DRM_ERROR("component add failed, rc=%d\n", rc);
+> @@ -1574,12 +1576,6 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>  
+>  	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
+>  
+> -	ret = dp_display_request_irq(dp_display);
+> -	if (ret) {
+> -		DRM_ERROR("request_irq failed, ret=%d\n", ret);
+> -		return ret;
+> -	}
+> -
+>  	ret = dp_display_get_next_bridge(dp_display);
+>  	if (ret)
+>  		return ret;
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+> index 1e9415a..b3c08de 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+> @@ -35,7 +35,6 @@ struct msm_dp {
+>  int dp_display_set_plugged_cb(struct msm_dp *dp_display,
+>  		hdmi_codec_plugged_cb fn, struct device *codec_dev);
+>  int dp_display_get_modes(struct msm_dp *dp_display);
+> -int dp_display_request_irq(struct msm_dp *dp_display);
+>  bool dp_display_check_video_test(struct msm_dp *dp_display);
+>  int dp_display_get_test_bpp(struct msm_dp *dp_display);
+>  void dp_display_signal_audio_start(struct msm_dp *dp_display);
+> -- 
+> 2.7.4
+> 
