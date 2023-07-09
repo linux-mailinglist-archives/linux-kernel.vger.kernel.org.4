@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7571E74C534
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A8974C53C
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjGIPO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S233207AbjGIPPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbjGIPOf (ORCPT
+        with ESMTP id S233268AbjGIPOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:14:35 -0400
+        Sun, 9 Jul 2023 11:14:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472411731;
-        Sun,  9 Jul 2023 08:14:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B3E19B7;
+        Sun,  9 Jul 2023 08:14:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54EC460C1F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B997260C23;
+        Sun,  9 Jul 2023 15:14:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3045BC433C8;
         Sun,  9 Jul 2023 15:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB19BC433CB;
-        Sun,  9 Jul 2023 15:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915639;
-        bh=0eFe3KRCvz+ys88CHld0g81ComcntN9akzS7FOdbrYw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SMt4UKXMWpyTlWR1aB3VKFtP2FpUdVf86PdSAUySz2iH8qKBB3PsW9aefC+SshKl1
-         HQHIU7QFPdgb7j03e9e2APfqdI17E3NSEUL/ItPLUTGFHAo1wUweFgN7DCpUlkBU86
-         OCX5TS4LRH7Si9gzyb+juRlS98toxDgVUoxVLCitZzSCxFlAOUSsWakLfvDfF37//Q
-         AbEVbczPdUrm61/Bi5G6s2Ee5SluenS6BbF6z5C1CDY4LOQBZw257dLaNf+/19EPU7
-         D/xxa+N5K7BZNep5oHLHEniOHyFqW9u6oE/Hr319vartUy/2jkQfE9PEdpdd7ZXUsB
-         YIy+92ti05etQ==
+        s=k20201202; t=1688915641;
+        bh=Aesp4GTSsA1CjPjXVz0rW/ftouvK6fmZazcFgRA9MIw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NwXc1q2NipC1KXnWvioHiZE9xHVx7sM1tUf1Xo8Rumis221N4WeGVfoEX92A+i9sg
+         MRwrgMxfsjFjetufmrEAJE+WOrq3HNBAi6n2UsBmSl0iiD+YvJoaekoUpwYkJJunjd
+         fbewSIh9seeke/Sw9IfpoQd6LMuHY+4+ZzvnmTGgV/Pwa5BuHkjULyFwXex3P3HtwV
+         LMR/xbpi2PBB/Izs2KGBpeMvz+gMfn6g3FQOBSSt03b3wXsy/fOQKt72CIFyHAVt8W
+         Tdi2NhKJsXE9kaeTcQWtsd2H9Q+ZiuP7RxCgyTdUmFOFGnB7mnUOzRVKQ/TSffbRWa
+         ZeTXfFn/GDmCQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maxime Bizon <mbizon@freebox.fr>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 01/22] wifi: ath11k: fix registration of 6Ghz-only phy without the full channel range
-Date:   Sun,  9 Jul 2023 11:13:35 -0400
-Message-Id: <20230709151356.513279-1-sashal@kernel.org>
+Cc:     Kui-Feng Lee <thinker.li@gmail.com>,
+        Kui-Feng Lee <kuifeng@meta.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 02/22] bpf: Print a warning only if writing to unprivileged_bpf_disabled.
+Date:   Sun,  9 Jul 2023 11:13:36 -0400
+Message-Id: <20230709151356.513279-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230709151356.513279-1-sashal@kernel.org>
+References: <20230709151356.513279-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,68 +61,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Bizon <mbizon@freebox.fr>
+From: Kui-Feng Lee <thinker.li@gmail.com>
 
-[ Upstream commit e2ceb1de2f83aafd8003f0b72dfd4b7441e97d14 ]
+[ Upstream commit fedf99200ab086c42a572fca1d7266b06cdc3e3f ]
 
-Because of what seems to be a typo, a 6Ghz-only phy for which the BDF
-does not allow the 7115Mhz channel will fail to register:
+Only print the warning message if you are writing to
+"/proc/sys/kernel/unprivileged_bpf_disabled".
 
-  WARNING: CPU: 2 PID: 106 at net/wireless/core.c:907 wiphy_register+0x914/0x954
-  Modules linked in: ath11k_pci sbsa_gwdt
-  CPU: 2 PID: 106 Comm: kworker/u8:5 Not tainted 6.3.0-rc7-next-20230418-00549-g1e096a17625a-dirty #9
-  Hardware name: Freebox V7R Board (DT)
-  Workqueue: ath11k_qmi_driver_event ath11k_qmi_driver_event_work
-  pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  pc : wiphy_register+0x914/0x954
-  lr : ieee80211_register_hw+0x67c/0xc10
-  sp : ffffff800b123aa0
-  x29: ffffff800b123aa0 x28: 0000000000000000 x27: 0000000000000000
-  x26: 0000000000000000 x25: 0000000000000006 x24: ffffffc008d51418
-  x23: ffffffc008cb0838 x22: ffffff80176c2460 x21: 0000000000000168
-  x20: ffffff80176c0000 x19: ffffff80176c03e0 x18: 0000000000000014
-  x17: 00000000cbef338c x16: 00000000d2a26f21 x15: 00000000ad6bb85f
-  x14: 0000000000000020 x13: 0000000000000020 x12: 00000000ffffffbd
-  x11: 0000000000000208 x10: 00000000fffffdf7 x9 : ffffffc009394718
-  x8 : ffffff80176c0528 x7 : 000000007fffffff x6 : 0000000000000006
-  x5 : 0000000000000005 x4 : ffffff800b304284 x3 : ffffff800b304284
-  x2 : ffffff800b304d98 x1 : 0000000000000000 x0 : 0000000000000000
-  Call trace:
-   wiphy_register+0x914/0x954
-   ieee80211_register_hw+0x67c/0xc10
-   ath11k_mac_register+0x7c4/0xe10
-   ath11k_core_qmi_firmware_ready+0x1f4/0x570
-   ath11k_qmi_driver_event_work+0x198/0x590
-   process_one_work+0x1b8/0x328
-   worker_thread+0x6c/0x414
-   kthread+0x100/0x104
-   ret_from_fork+0x10/0x20
-  ---[ end trace 0000000000000000 ]---
-  ath11k_pci 0002:01:00.0: ieee80211 registration failed: -22
-  ath11k_pci 0002:01:00.0: failed register the radio with mac80211: -22
-  ath11k_pci 0002:01:00.0: failed to create pdev core: -22
+The kernel may print an annoying warning when you read
+"/proc/sys/kernel/unprivileged_bpf_disabled" saying
 
-Signed-off-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20230421145445.2612280-1-mbizon@freebox.fr
+  WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible
+  via Spectre v2 BHB attacks!
+
+However, this message is only meaningful when the feature is
+disabled or enabled.
+
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20230502181418.308479-1-kuifeng@meta.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/syscall.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 110a38cce0a71..850ef35c1f75e 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -8778,7 +8778,7 @@ static int ath11k_mac_setup_channels_rates(struct ath11k *ar,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index adc83cb82f379..4ae74b8ded867 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5314,7 +5314,8 @@ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 		*(int *)table->data = unpriv_enable;
  	}
  
- 	if (supported_bands & WMI_HOST_WLAN_5G_CAP) {
--		if (reg_cap->high_5ghz_chan >= ATH11K_MAX_6G_FREQ) {
-+		if (reg_cap->high_5ghz_chan >= ATH11K_MIN_6G_FREQ) {
- 			channels = kmemdup(ath11k_6ghz_channels,
- 					   sizeof(ath11k_6ghz_channels), GFP_KERNEL);
- 			if (!channels) {
+-	unpriv_ebpf_notify(unpriv_enable);
++	if (write)
++		unpriv_ebpf_notify(unpriv_enable);
+ 
+ 	return ret;
+ }
 -- 
 2.39.2
 
