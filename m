@@ -2,99 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276C874C108
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 07:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B4C74C114
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 07:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjGIFEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 01:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S230337AbjGIFQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 01:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjGIFET (ORCPT
+        with ESMTP id S229828AbjGIFQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 01:04:19 -0400
-Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA9FFE;
-        Sat,  8 Jul 2023 22:04:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688879053;
-        bh=2w9Ob3VPQ9Os5ZjD5baI+SINI6IqLXe9l6ekBIWOX74=;
-        h=From:To:Cc:Subject:Date;
-        b=q6vYX9LBGG98Ceo8dv2JLWHjRaa5igrg/ZYqY50QV6qhc765u2LUZDSXz3npaseAj
-         2Wuu9D0VaeLkwj2xl9aIjrVjH5GghXU5vlI7FEG1osaWavQrcHHeXgpxyJoDIRj7gu
-         tBRzeyen2Um8tGJlYI94y6kWQ8Q75ShOiRt+t9LQ=
-Received: from KernelDevBox.byted.org ([180.184.84.173])
-        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
-        id 10B11A2A; Sun, 09 Jul 2023 13:04:11 +0800
-X-QQ-mid: xmsmtpt1688879051t9yovwwoe
-Message-ID: <tencent_161EA00A19A8A6122237C3B5075B21606C08@qq.com>
-X-QQ-XMAILINFO: N2/jAoEINgTTLn4HqVv2yRmX5fLfUezUspKpN+B5r0NLI3YPSFq7IcK0iQyY9W
-         tdRJ6EMYsHTy/S+kAWQJnqXc/IUAKWHPxHGb4A2Gh1hpkEengPWb5pKbK2J8wiXCTvgVq351iM27
-         Db5Ty3FfbKF21tn6sgkl3kMWi/nnlbGeVoqAJrxUVD0/fneLTf4VLWI1Hj6k1J/IpUzZ1oihLpM3
-         +d6nLIxixXjC6iRaEQ8jTNlUdDpOHLHBGXrbcoxRxxngqZ5Q5NnVCWai/oqfpE6ut2P3Q1ewLwBD
-         B4N+UOrHGT9gy9sJ5Stgcyb6paFu3eVXNBDl14XUZYHdppm6hm9RPJzOKnijyU5TxJQ2KbbV5rZp
-         Pkr32sIfIx+saN4UU3bVI69xDgUoYBfX68sh0deHYqYIDrO9hjgaNEPMOFNo3GCAkYwAjECUtydH
-         F4UXNyZXaW8py7MfVzCIGJdwyTzs539vTgHlJ4C4iW+dJHaqB6A99nO1gApzhy1RUsD0WxJZSWzU
-         j1kB0cJqGoVx0howdEXw8rmmydNJcjLRdjgIHaXLWqRN8veDJ7SOSqEqHIn/JOSjyTNxUCffqMT5
-         tE4Ht6j+ZcmYsA153evQOevnRt3c4/sqWFftQMNqraw17QRMNJtysrES3WKPhXiXJRg0wGphIKLT
-         hrVjz7zOJL8yYvOU8OaDLjgVHnWbM/VV4GGOoNq86kLmRY81B4YHj2uG5ZHO3ulO5BqdI8xlnwtv
-         heC4b9JGehXT0nbUWqSi8nNOkSRv16TeWemI7REhmvqez43abJpDIiV3yxd63cD8Hua3Greun6a6
-         rbbtDrREBXEDp6cWqNAA+Jc+FHqQfovsR2TSbFO3PI2/IA1F2t1EUB2eM/XWR2Yo0F90AziXH18N
-         y64Z8SV2rsOW0OE872e7dp+zmlk8Q+lEIGwJ4nnQSj97qbcIQfWCjfkexggLPypNsPt1ca2zzfGZ
-         RGHYO7eTFEKDz1HRZwrnWMo/9hXY1C8p2VFJ/p+vDtSdohOkNSHwRpbsSYUCaE
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] media: dvb-usb: opera1: fix uninit-value in dvb_usb_adapter_dvb_init
-Date:   Sun,  9 Jul 2023 13:04:09 +0800
-X-OQ-MSGID: <20230709050409.717720-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 9 Jul 2023 01:16:46 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC84E40;
+        Sat,  8 Jul 2023 22:16:45 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id d2e1a72fcca58-666ecf9a081so2840212b3a.2;
+        Sat, 08 Jul 2023 22:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688879804; x=1691471804;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ztnp1qTer1IaWaOObtyfdo8muim3ULQZOmol0cBsgFo=;
+        b=IsgnDEPrWv2qRNJgNRsVo8hNkyVbhR4y/lQoM5aXev+JVsfWrzOlmuqSFm45QBgJ8R
+         6tkBuQZRIooyMTUjcoEjpg7QgA8qgnth8KEaXac8CIVHISlQqaJHMSE+eUB3cuP/MW6Q
+         aDK7U9HJHKaztcZa0wu0XWkyNSR3vEbtAZfH07pzExxQD+2AfL/pNPCQrFZRk+yB2P/K
+         k2RSyMaC5n1SIx1fvr9sE9VvPDivv2AfEfA5sZuVwvq5GaJYnIE4I52sNLmVawpLK4iu
+         XibGU11vQEo9T1aMS7xj6lou+AeoQMlIfzf1THbJWKm0plNF5GUYez1Wpr51kxLybivP
+         MrbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688879804; x=1691471804;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ztnp1qTer1IaWaOObtyfdo8muim3ULQZOmol0cBsgFo=;
+        b=ObV0O+6P0Q/6VdCglXYV9H+05ZkJ+q6TNuu/E8ihM9xlEXPGYRsIfpfE47IMDg27oz
+         3CiD7OrriV2/H085R9eKnLH69ddeOdlXLYQPuFMfVFT49arYpzpptY1j/afyL9rDGjfm
+         xN4+ONbj+dXEAMpvDyOFpyVXg6AXZQ9pvCD7qyFnjaODQrayullL3vW6Rvi0YG50j7oM
+         UD6h+quedWDrk866+Sy1P6XXcfpqVIf8cprRG9blCW1aJOGksvaztoGbjmtUiPuYkEWv
+         ozjI1YQdaOAMI0HyuZsWKODVwZU6V8S8646E4Bu9i7S/HvXSPmE4O28k5AH1ASPNzXLI
+         bp4w==
+X-Gm-Message-State: ABy/qLZ8hFMbgt1Et6YduHLv66xXrTG5EzPk9YRpnm9oaYq7uPnL6Rfx
+        42Wt9O/+fGtNF70FzVJM8rMqJpWUcWrr9fRzCG0=
+X-Google-Smtp-Source: APBJJlGdQ+mZwEX7hoR7kwbuM2LjVWZ2BiFPsOtvISNt912jjNntEHQo8YA+l89fvmmiQE4Ea48isQ==
+X-Received: by 2002:a05:6a20:3d85:b0:12c:9100:362f with SMTP id s5-20020a056a203d8500b0012c9100362fmr12083123pzi.4.1688879804232;
+        Sat, 08 Jul 2023 22:16:44 -0700 (PDT)
+Received: from ?IPv6:2409:8a55:301b:e120:1523:3ecb:e154:8f22? ([2409:8a55:301b:e120:1523:3ecb:e154:8f22])
+        by smtp.gmail.com with ESMTPSA id b18-20020aa78712000000b0066684d8115bsm5134939pfo.178.2023.07.08.22.16.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Jul 2023 22:16:43 -0700 (PDT)
+Subject: Re: [PATCH RFC net-next v4 5/9] libie: add Rx buffer management (via
+ Page Pool)
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        David Christensen <drc@linux.vnet.ibm.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+References: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
+ <20230705155551.1317583-6-aleksander.lobakin@intel.com>
+ <138b94a7-c186-bdd9-e073-2794760c9454@huawei.com>
+ <09a9a9ef-cf77-3b60-2845-94595a42cf3e@intel.com>
+From:   Yunsheng Lin <yunshenglin0825@gmail.com>
+Message-ID: <71a8bab4-1a1d-cb1a-d75c-585a14c6fb2e@gmail.com>
+Date:   Sun, 9 Jul 2023 13:16:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <09a9a9ef-cf77-3b60-2845-94595a42cf3e@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If opera1_xilinx_rw fails, the mac address is not initialized.
-And opera1_read_mac_address does not handle this failure, which leads to
-the uninit-value in dvb_usb_adapter_dvb_init.
+On 2023/7/7 0:28, Alexander Lobakin wrote:
+> From: Yunsheng Lin <linyunsheng@huawei.com>
+> Date: Thu, 6 Jul 2023 20:47:28 +0800
+> 
+>> On 2023/7/5 23:55, Alexander Lobakin wrote:
+>>
+>>> +/**
+>>> + * libie_rx_page_pool_create - create a PP with the default libie settings
+>>> + * @napi: &napi_struct covering this PP (no usage outside its poll loops)
+>>> + * @size: size of the PP, usually simply Rx queue len
+>>> + *
+>>> + * Returns &page_pool on success, casted -errno on failure.
+>>> + */
+>>> +struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
+>>> +					    u32 size)
+>>> +{
+>>> +	struct page_pool_params pp = {
+>>> +		.flags		= PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
+>>> +		.order		= LIBIE_RX_PAGE_ORDER,
+>>> +		.pool_size	= size,
+>>> +		.nid		= NUMA_NO_NODE,
+>>> +		.dev		= napi->dev->dev.parent,
+>>> +		.napi		= napi,
+>>> +		.dma_dir	= DMA_FROM_DEVICE,
+>>> +		.offset		= LIBIE_SKB_HEADROOM,
+>>
+>> I think it worth mentioning that the '.offset' is not really accurate
+>> when the page is split, as we do not really know what is the offset of
+>> the frag of a page except for the first frag.
+> 
+> Yeah, this is read as "offset from the start of the page or frag to the
+> actual frame start, i.e. its Ethernet header" or "this is just
+> xdp->data - xdp->data_hard_start".
 
-Fix this by handling the failure of opera1_xilinx_rw.
+So the problem seems to be if most of drivers have a similar reading as
+libie does here, as .offset seems to have a clear semantics which is used
+to skip dma sync operation for buffer range that is not touched by the
+dma operation. Even if it happens to have the same value of "offset from
+the start of the page or frag to the actual frame start", I am not sure
+it is future-proofing to reuse it.
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/media/usb/dvb-usb/opera1.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+When page frag is added, I didn't really give much thought about that as
+we use it in a cache coherent system.
+It seems we might need to extend or update that semantics if we really want
+to skip dma sync operation for all the buffer ranges that are not touched
+by the dma operation for page split case.
+Or Skipping dma sync operation for all untouched ranges might not be worth
+the effort, because it might need a per frag dma sync operation, which is
+more costly than a batched per page dma sync operation. If it is true, page
+pool already support that currently as my understanding, because the dma
+sync operation is only done when the last frag is released/freed.
 
-diff --git a/drivers/media/usb/dvb-usb/opera1.c b/drivers/media/usb/dvb-usb/opera1.c
-index 98b2177667d2..d269f8bb2dee 100644
---- a/drivers/media/usb/dvb-usb/opera1.c
-+++ b/drivers/media/usb/dvb-usb/opera1.c
-@@ -439,9 +439,14 @@ MODULE_DEVICE_TABLE(usb, opera1_table);
- 
- static int opera1_read_mac_address(struct dvb_usb_device *d, u8 mac[6])
- {
-+	int ret;
- 	u8 command[] = { READ_MAC_ADDR };
--	opera1_xilinx_rw(d->udev, 0xb1, 0xa0, command, 1, OPERA_WRITE_MSG);
--	opera1_xilinx_rw(d->udev, 0xb1, 0xa1, mac, 6, OPERA_READ_MSG);
-+	ret = opera1_xilinx_rw(d->udev, 0xb1, 0xa0, command, 1, OPERA_WRITE_MSG);
-+	if (ret)
-+		return ret;
-+	ret = opera1_xilinx_rw(d->udev, 0xb1, 0xa1, mac, 6, OPERA_READ_MSG);
-+	if (ret)
-+		return ret;
- 	return 0;
- }
- static int opera1_xilinx_load_firmware(struct usb_device *dev,
--- 
-2.30.2
+> 
+>>
+>>> +	};
+>>> +	size_t truesize;
+>>> +
+>>> +	pp.max_len = libie_rx_sync_len(napi->dev, pp.offset);
+
+As mentioned above, if we depend on the last released/freed frag to do the
+dma sync, the pp.max_len might need to cover all the frag.
+
+>>> +
+>>> +	/* "Wanted" truesize, passed to page_pool_dev_alloc() */
+>>> +	truesize = roundup_pow_of_two(SKB_HEAD_ALIGN(pp.offset + pp.max_len));
+>>> +	pp.init_arg = (void *)truesize;
+>>
+>> I am not sure if it is correct to use pp.init_arg here, as it is supposed to
+>> be used along with init_callback. And if we want to change the implemetation
+> 
+> I know. I abused it to save 1 function argument :p It's safe since I
+> don't use init_callback (not an argument).
+> I was thinking also of having a union in PP params or even a new field
+> like "wanted true size", so that your function could even take values
+> from there in certain cases (e.g. if I pass 0 as parameter).
+> 
+>> of init_callback, we may stuck with it as the driver is using it very
+>> differently here.
+>>
+>> Is it possible to pass the 'wanted true size' by adding a parameter for
+>> libie_rx_alloc()?
+> 
+> Yes, or I could store it somewhere on the ring, but looks uglier =\ This
+> one does as well to some degree, but at least hidden in the library and
+> doesn't show up in the drivers :D
+
+It seems most hw driver know the size of memory it needs when creating
+the ring/queue, setting the frag size and deciding how many is a page
+split into before allocation seems like a possible future optimization.
+
+For now, it would be better to add helper to acess pp.init_arg at least
+instead of acess pp.init_arg directly to make it more obvious and make
+the future optimization more easier.
+
+> 
+>>
+>>> +
+>>> +	return page_pool_create(&pp);
+>>> +}
+>>> +EXPORT_SYMBOL_NS_GPL(libie_rx_page_pool_create, LIBIE);
+> 
+> Thanks,
+> Olek
 
