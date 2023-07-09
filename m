@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88F774C521
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073A574C568
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 17:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbjGIPOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 11:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S233145AbjGIPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 11:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbjGIPOG (ORCPT
+        with ESMTP id S233296AbjGIPPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 11:14:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307041BB;
-        Sun,  9 Jul 2023 08:13:36 -0700 (PDT)
+        Sun, 9 Jul 2023 11:15:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC81F2130;
+        Sun,  9 Jul 2023 08:14:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DBC160BC9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 771E360BC5;
+        Sun,  9 Jul 2023 15:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6A1C433CD;
         Sun,  9 Jul 2023 15:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7F6C433C7;
-        Sun,  9 Jul 2023 15:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915611;
-        bh=sB+XtJAYpsxpgs8eSEbivLDZHx106L5FQ9mAbaQJbvE=;
+        s=k20201202; t=1688915612;
+        bh=xbH6wIwOZG5M2DaP0ZJgalD+ZaD9fshGC5PX0Sdww5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YqtOpYBtCVs8ntmAofPDLeI249mW/4gBC72w61uj3z897T228Eqhq8zsy4sJvu5uy
-         RnR4MxSwer9PrW7/W2VO7CPASPYA9CukSD/Oyjc2qUuluyhr86IHeRHVwo2LeVavC4
-         VwzZGrgB4zUTDI7ZSkY/MhMUqmmnSXFD8uxgZolqvrIEwXTuUidXflAcP5fY4bHUnm
-         MnydT5t9Q6hzrL9kGanQHO6JMuhHi6E0AXr2Mr0ddlUiEZz3cZZjNT0GImh+QP4Qyh
-         4unEh9LOSzmzCuY/DrG8k3zkJctpUzznEaTxKNYfCUeBLsrHS9kcQIlhykmjX4i02p
-         tFEJF0WNadgpQ==
+        b=tNymb0P0AGiSeunM3eJkn9ZXzWXvHAR/MerJC1ktxyYQjiQxG+2EUY+VegixKfxLu
+         YggQ8+tg+hkddBgHq/8QlLA30L9kgTG0V7MhxQjJH+dm/SH1b2AL2Au4KPxusFV8Ue
+         5iDWLmXq1JlNy2srRSJURxJFjPWq3GusZQ1oDz9+k6i7U20bwAvcmyBocdf1PBen2C
+         /IDmjWoQdJmlL3HRVDEyxBD2jPqcf/TKse0FpvJasX80TQg0S+kK+gaBs9zEaCJ10R
+         jZNXYykYm0vE85cRuI06AdUmCvFE1e+FovsEU5w+pQgsVQrPdvZqteeL/L0J8cxCqc
+         o8E2TUQhVaQXw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gregory Greenman <gregory.greenman@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>, kvalo@kernel.org,
-        ilan.peer@intel.com, avraham.stern@intel.com,
-        linux-wireless@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 17/26] wifi: iwlwifi: mvm: fix potential array out of bounds access
-Date:   Sun,  9 Jul 2023 11:12:46 -0400
-Message-Id: <20230709151255.512931-17-sashal@kernel.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 18/26] net: ethernet: litex: add support for 64 bit stats
+Date:   Sun,  9 Jul 2023 11:12:47 -0400
+Message-Id: <20230709151255.512931-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
 References: <20230709151255.512931-1-sashal@kernel.org>
@@ -61,49 +63,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gregory Greenman <gregory.greenman@intel.com>
+From: Jisheng Zhang <jszhang@kernel.org>
 
-[ Upstream commit 637452360ecde9ac972d19416e9606529576b302 ]
+[ Upstream commit 18da174d865a87d47d2f33f5b0a322efcf067728 ]
 
-Account for IWL_SEC_WEP_KEY_OFFSET when needed while verifying
-key_len size in iwl_mvm_sec_key_add().
+Implement 64 bit per cpu stats to fix the overflow of netdev->stats
+on 32 bit platforms. To simplify the code, we use net core
+pcpu_sw_netstats infrastructure. One small drawback is some memory
+overhead because litex uses just one queue, but we allocate the
+counters per cpu.
 
-Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
-Link: https://lore.kernel.org/r/20230613155501.f193b7493a93.I6948ba625b9318924b96a5e22602ac75d2bd0125@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Acked-by: Gabriel Somlo <gsomlo@gmail.com>
+Link: https://lore.kernel.org/r/20230614162035.300-1-jszhang@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/litex/litex_liteeth.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c b/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c
-index 8853821b37168..1e659bd07392a 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
- /*
-- * Copyright (C) 2022 Intel Corporation
-+ * Copyright (C) 2022 - 2023 Intel Corporation
-  */
- #include <linux/kernel.h>
- #include <net/mac80211.h>
-@@ -179,9 +179,14 @@ int iwl_mvm_sec_key_add(struct iwl_mvm *mvm,
- 		.u.add.key_flags = cpu_to_le32(key_flags),
- 		.u.add.tx_seq = cpu_to_le64(atomic64_read(&keyconf->tx_pn)),
- 	};
-+	int max_key_len = sizeof(cmd.u.add.key);
- 	int ret;
+diff --git a/drivers/net/ethernet/litex/litex_liteeth.c b/drivers/net/ethernet/litex/litex_liteeth.c
+index 35f24e0f09349..ffa96059079c6 100644
+--- a/drivers/net/ethernet/litex/litex_liteeth.c
++++ b/drivers/net/ethernet/litex/litex_liteeth.c
+@@ -78,8 +78,7 @@ static int liteeth_rx(struct net_device *netdev)
+ 	memcpy_fromio(data, priv->rx_base + rx_slot * priv->slot_size, len);
+ 	skb->protocol = eth_type_trans(skb, netdev);
  
--	if (WARN_ON(keyconf->keylen > sizeof(cmd.u.add.key)))
-+	if (keyconf->cipher == WLAN_CIPHER_SUITE_WEP40 ||
-+	    keyconf->cipher == WLAN_CIPHER_SUITE_WEP104)
-+		max_key_len -= IWL_SEC_WEP_KEY_OFFSET;
+-	netdev->stats.rx_packets++;
+-	netdev->stats.rx_bytes += len;
++	dev_sw_netstats_rx_add(netdev, len);
+ 
+ 	return netif_rx(skb);
+ 
+@@ -185,8 +184,7 @@ static netdev_tx_t liteeth_start_xmit(struct sk_buff *skb,
+ 	litex_write16(priv->base + LITEETH_READER_LENGTH, skb->len);
+ 	litex_write8(priv->base + LITEETH_READER_START, 1);
+ 
+-	netdev->stats.tx_bytes += skb->len;
+-	netdev->stats.tx_packets++;
++	dev_sw_netstats_tx_add(netdev, 1, skb->len);
+ 
+ 	priv->tx_slot = (priv->tx_slot + 1) % priv->num_tx_slots;
+ 	dev_kfree_skb_any(skb);
+@@ -194,9 +192,17 @@ static netdev_tx_t liteeth_start_xmit(struct sk_buff *skb,
+ 	return NETDEV_TX_OK;
+ }
+ 
++static void
++liteeth_get_stats64(struct net_device *netdev, struct rtnl_link_stats64 *stats)
++{
++	netdev_stats_to_stats64(stats, &netdev->stats);
++	dev_fetch_sw_netstats(stats, netdev->tstats);
++}
 +
-+	if (WARN_ON(keyconf->keylen > max_key_len))
- 		return -EINVAL;
+ static const struct net_device_ops liteeth_netdev_ops = {
+ 	.ndo_open		= liteeth_open,
+ 	.ndo_stop		= liteeth_stop,
++	.ndo_get_stats64	= liteeth_get_stats64,
+ 	.ndo_start_xmit         = liteeth_start_xmit,
+ };
  
- 	if (WARN_ON(!sta_mask))
+@@ -242,6 +248,11 @@ static int liteeth_probe(struct platform_device *pdev)
+ 	priv->netdev = netdev;
+ 	priv->dev = &pdev->dev;
+ 
++	netdev->tstats = devm_netdev_alloc_pcpu_stats(&pdev->dev,
++						      struct pcpu_sw_netstats);
++	if (!netdev->tstats)
++		return -ENOMEM;
++
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+ 		return irq;
 -- 
 2.39.2
 
