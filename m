@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB1A74C443
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 15:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F87274C445
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 15:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjGINKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 09:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S231201AbjGINKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 09:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGINKE (ORCPT
+        with ESMTP id S231293AbjGINK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 09:10:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102D3FA;
-        Sun,  9 Jul 2023 06:10:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=gexUvKKIc9oDoq/NsirfrhorBTnN0Cb1DAtE70BoWvM=; b=ag36sDrMwjfnkB3dAcxl63zNfz
-        gJ6ykzI0aQN221xWuTFehjev7jovx15LwGm3lvAkKQQ7749MbzKFquJ1KY4AzW/Py4JIDOnzl2UW2
-        /t4HEzsg3lMPO9MTflpcZRBFeq4JGZ0b72DjMB55Rk6b1PADrfJGB1MIkvWV7PO4YQlJ6UzWS09gb
-        eGQHmImlU6JwPLd9oETxROD3tV7P2akXvdZPUJ+a5/zPutGjMqtHExWiN/Iwv6ufg6Nnfs9AUaAdF
-        F22TSBUdaUDouBBtFnWRxAZhXAmSnaem/rMnEFPANKFvqe52PJPim2giwc+uZfRYhzZREFIalqbn6
-        daNjYc8g==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIUAk-0098nP-2j;
-        Sun, 09 Jul 2023 13:09:54 +0000
-Message-ID: <93529a87-f794-8c51-7963-66277ef5e1d6@infradead.org>
-Date:   Sun, 9 Jul 2023 06:09:51 -0700
+        Sun, 9 Jul 2023 09:10:29 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5181AB
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 06:10:27 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:5bb:109a:ec27:6093])
+        by albert.telenet-ops.be with bizsmtp
+        id K1AQ2A0051ycx4f061AQW7; Sun, 09 Jul 2023 15:10:25 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qIUB9-000xGt-3T;
+        Sun, 09 Jul 2023 15:10:24 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qIUBE-003a1C-Cm;
+        Sun, 09 Jul 2023 15:10:24 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] [RFC] sh: highlander: Handle virq offset in cascaded IRL demux
+Date:   Sun,  9 Jul 2023 15:10:23 +0200
+Message-Id: <4fcb0d08a2b372431c41e04312742dc9e41e1be4.1688908186.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Build regressions/improvements in v6.4 (wireless/airo)
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
-References: <CAHk-=wi7fwNWfqj-QQqEfZTUOB4bbKT8QiEUDHoPk0ecuYA7cA@mail.gmail.com>
- <20230626081950.2090627-1-geert@linux-m68k.org>
- <39abf2c7-24a-f167-91da-ed4c5435d1c4@linux-m68k.org>
- <2f6ffd1c-a756-b7b8-bba4-77c2308f26b9@infradead.org>
- <300ea73d06587f493a2eeb962e5f62776f3676ac.camel@physik.fu-berlin.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <300ea73d06587f493a2eeb962e5f62776f3676ac.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Take into account the virq offset when translating cascaded IRL
+interrupts.
 
+Fixes: a8ac2961148e8c72 ("sh: Avoid using IRQ0 on SH3 and SH4")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Compile-tested only, but the fix is identical to the fix for rts7751r2d.
+---
+ arch/sh/boards/mach-highlander/setup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 7/9/23 00:38, John Paul Adrian Glaubitz wrote:
-> Hi Randy!
-> 
-> On Sat, 2023-07-08 at 19:45 -0700, Randy Dunlap wrote:
->> Adrian, what toolchain do you use for arch/sh/ builds?
-> 
-> I'm currently using the sh4 toolchain from here:
-> 
->> https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.1.0/
-
-I use the crosstools from there also.
-
-How do you avoid the build errors as listed here?
-  http://kisskb.ellerman.id.au/kisskb/buildresult/14948832/
-
-thanks.
-
+diff --git a/arch/sh/boards/mach-highlander/setup.c b/arch/sh/boards/mach-highlander/setup.c
+index 533393d779c2b97f..a821a1b155473d93 100644
+--- a/arch/sh/boards/mach-highlander/setup.c
++++ b/arch/sh/boards/mach-highlander/setup.c
+@@ -389,10 +389,10 @@ static unsigned char irl2irq[HL_NR_IRL];
+ 
+ static int highlander_irq_demux(int irq)
+ {
+-	if (irq >= HL_NR_IRL || irq < 0 || !irl2irq[irq])
++	if (irq >= 16 + HL_NR_IRL || irq < 16 || !irl2irq[irq - 16])
+ 		return irq;
+ 
+-	return irl2irq[irq];
++	return irl2irq[irq - 16];
+ }
+ 
+ static void __init highlander_init_irq(void)
 -- 
-~Randy
+2.34.1
+
