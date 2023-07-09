@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D8E74C367
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 13:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8213E74C3DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 13:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGILcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 07:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S233034AbjGILli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 07:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbjGILcK (ORCPT
+        with ESMTP id S229791AbjGILlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 07:32:10 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B3EE6E
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 04:31:57 -0700 (PDT)
-Received: from i53875a50.versanet.de ([83.135.90.80] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko.stuebner@vrull.eu>)
-        id 1qISds-00021M-E1; Sun, 09 Jul 2023 13:31:52 +0200
-From:   Heiko Stuebner <heiko.stuebner@vrull.eu>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     Samuel Ortiz <sameo@rivosinc.com>, linux@rivosinc.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kernel@vger.kernel.org,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
-        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>,
-        Samuel Ortiz <sameo@rivosinc.com>
-Subject: Re: [PATCH v2 2/3] RISC-V: hwprobe: Expose Zbc and the scalar crypto
- extensions
-Date:   Sun, 09 Jul 2023 13:31:51 +0200
-Message-ID: <3506917.iIbC2pHGDl@phil>
-In-Reply-To: <20230628131442.3022772-3-sameo@rivosinc.com>
-References: <20230628131442.3022772-1-sameo@rivosinc.com>
- <20230628131442.3022772-3-sameo@rivosinc.com>
+        Sun, 9 Jul 2023 07:41:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF6DBA;
+        Sun,  9 Jul 2023 04:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fIXPzfpDnl12CuFsfRY5j0Rj2DrqlsOG4+dLIdpRFxg=; b=OzogSOZmCXUCp5ZR5+BkWIiuEP
+        3fX9JvHGZFWBonRWhfURn/l5iVc+fu65rMnzGKZLfKXxhzyrDOK4UNs8J3IBdFiJTk93XNtWZIOa2
+        1j+Yil5vsY33aAAeQkyxTaQNpHjffygqcQU9MkbRi10DjVvzSrvFDKyF1AMVDEn9Uj5Aa8IAs7oR/
+        OAAvAG8cFCx+2olFtU7YtchRDAKErstNtwNeYX9KZibU2ic0Wd0jsqHxFjijPuZGvPYeDsck2mjp2
+        Aanp37zSKKs7Ra3sgxYsz//cEL3/TNF2CXBk1P0SKPtMiLXTNRk0xH+RSMObabF1PfHqE/OR3jcr7
+        n9KmMirg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qISn7-00DhEf-Ue; Sun, 09 Jul 2023 11:41:25 +0000
+Date:   Sun, 9 Jul 2023 12:41:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linke Li <lilinke99@foxmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, Linke Li <lilinke99@gmail.com>
+Subject: Re: [PATCH] isofs: fix undefined behavior in iso_date()
+Message-ID: <ZKqc5Uj14C7ST21K@casper.infradead.org>
+References: <tencent_4D921A8D1F69E70C85C28875DC829E28EC09@qq.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_4D921A8D1F69E70C85C28875DC829E28EC09@qq.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 28. Juni 2023, 15:14:34 CEST schrieb Samuel Ortiz:
-> Zbc was missing from a previous Bit-Manipulation extension hwprobe
-> patch.
+On Sun, Jul 09, 2023 at 02:42:55PM +0800, Linke Li wrote:
+> From: Linke Li <lilinke99@gmail.com>
 > 
-> Add all scalar crypto extensions bits, and define a macro for setting
-> the hwprobe key/pair in a more readable way.
-> 
-> Reviewed-by: Evan Green <evan@rivosinc.com>
-> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+> Fix undefined behavior in the code by properly handling the left shift operaion.
+> Instead of left-shifting a negative value, explicitly cast -1 to an unsigned int
+> before the shift. This ensures well defined behavior and resolves any potential
+> issues.
 
-Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+This certainly fixes the problem, but wouldn't it be easier to get the
+compiler to do the work for us?
 
+#include <stdio.h>
 
+int f(unsigned char *p)
+{
+	return (signed char)p[0];
+}
 
+int main(void)
+{
+	unsigned char x = 0xa5;
+
+	printf("%d\n", f(&x));
+
+	return 0;
+}
+
+prints -91.
