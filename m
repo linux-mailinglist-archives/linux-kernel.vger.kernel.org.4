@@ -2,132 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBFB74C028
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 02:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2A974C032
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jul 2023 02:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjGIA2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jul 2023 20:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S229657AbjGIAk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jul 2023 20:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGIA2M (ORCPT
+        with ESMTP id S229436AbjGIAk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jul 2023 20:28:12 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38F0102;
-        Sat,  8 Jul 2023 17:28:10 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57045429f76so39165407b3.0;
-        Sat, 08 Jul 2023 17:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688862490; x=1691454490;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7OBSPXfN1Pwv2ZSkij5y8Bia7PAEVNCyrq8cTcnAzz8=;
-        b=GBYuHJ3qX9Db1V2m3ArmLdt2PzyjFxEXmWiZZFP06if3FzDFk/ztg3PracHa3wXbiB
-         oSTCjgawNbQePrj+VaiC4pCPEkOyRNefpxsu2YTFSUaa+0BnSAQIXlTvLq3dlVNSfUIM
-         P8LhE3JA5pJf4x4tNxZn3KsFB6yIagBxEmlArH7yHaE5zMcKKm9ec/r+YHT67w3nAAMw
-         hvi+2R8nEaIOxSiE/qLgPfxwm+tQA2dK9spX10TnDy/vKG/Vv99j2I76tfLz5Cbn//hk
-         bcIhG5SQd7v62PQvHoTbi9q+f3w1LGYlKpxS9pWROngEpW6C2SuFcpIvhF/cWEmumxL7
-         Ntfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688862490; x=1691454490;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OBSPXfN1Pwv2ZSkij5y8Bia7PAEVNCyrq8cTcnAzz8=;
-        b=ctl9KbojJy8jDPJKAfVXxTsTKFa8uoI3Y300qALeUJSxO2H923KTYIKQx7pA7FHIMf
-         jMaukZ++h1XNNtQ2fq0Uyz8qY1H9XiqLfG/WArwysGAbv1G1axJU8XB6ngiCE73SDehm
-         JiKsCqY97qbIt8vptqaF3WhDKqUy8X+pfK1KsUPVSptcZFWFAdV9iE5h6s0PAUxtbpby
-         28NrSqUmCMlen21aKuztkdvuytbMwIkQs3lu3dp+Bp5gFoRqHrPLFxfDuWxqdg9O4FeQ
-         XRdVgZxjztDOqzMV6OKJxPjY/82B/enK2Kky2xSxHx64Xeq9L/HnhIQnQwbaL/9dxtqt
-         +JMw==
-X-Gm-Message-State: ABy/qLZ0BccMG9nMoj5Ed379cKxO3KUbPgX80GupKMWQgLgG6hGMvwio
-        FOMmr71ROLdMPDyDi5+E6V4=
-X-Google-Smtp-Source: APBJJlF+uPkNeiVHtJk05sQ2le3v4mjYkvSUKvER1ZcZtKSkOVD8hFPl3vN7wxtgtoELC6150mu08g==
-X-Received: by 2002:a81:a001:0:b0:577:f47:3d92 with SMTP id x1-20020a81a001000000b005770f473d92mr8503372ywg.23.1688862490031;
-        Sat, 08 Jul 2023 17:28:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p4-20020a815b04000000b005702bfb19bfsm2129105ywb.130.2023.07.08.17.28.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jul 2023 17:28:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0858aeb0-0310-7eb2-dec2-8e7ad3c90d94@roeck-us.net>
-Date:   Sat, 8 Jul 2023 17:28:07 -0700
+        Sat, 8 Jul 2023 20:40:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE78198;
+        Sat,  8 Jul 2023 17:40:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A580960B50;
+        Sun,  9 Jul 2023 00:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B875C433C7;
+        Sun,  9 Jul 2023 00:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688863255;
+        bh=KWpxpNQo+2byrd2KGGBbuZGpodW4wrvCveqWOHgsQt4=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=sMLZXLXe3e4RgENUHt0Ecwo3NgZYQ0PGe82lva4Y/l62//gRbZJmvsOAFZflvAOCZ
+         yvfFvjwcvGgbt9u8NJTTTrYfGtKjt0CRm3KhINOEcSr48eRN+Yj1pXUWnpv8U+MSBT
+         pSNSuIhWorvAoG+aDQ8q3o8nxRVzQUJcqgc1YKpvFyh5Jn7bi6x/yCi2R1tkt6XxoL
+         zS3wqngnQy5r0bWGlCEzaHjTw8vRW3Y4plQ6SklrEp3K7aEVN227UTgNwhuj6XRta0
+         Q4nELNC+BqN/nYynXNfH11Q1Zck0W0FoLOCa5yKUP4EWUEDO2aknhC8lkj8n0RGm8e
+         WRRsvKl6m2A9Q==
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6b91e21365aso1009666a34.1;
+        Sat, 08 Jul 2023 17:40:54 -0700 (PDT)
+X-Gm-Message-State: ABy/qLYsjQS4PoCvsYCnbWJijsCscHdlBITVhAGC42VBXicDD66ebO+F
+        Y0E/cIYW1obUZT18i5p6sWAOKsJKjwVP+VKr6bs=
+X-Google-Smtp-Source: APBJJlGlo4zJHRJACYghPZr+CipHbVKjMI3FQTPJG0qd/b3Q8AsURiFe3bND7qhgCuH5lkTNBNWcI33VbGo+xN03yX0=
+X-Received: by 2002:a05:6808:1490:b0:3a3:7eb8:bbb with SMTP id
+ e16-20020a056808149000b003a37eb80bbbmr8435569oiw.47.1688863254118; Sat, 08
+ Jul 2023 17:40:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
- <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
- <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
- <cd1caa5d-fbd8-c3fe-29e9-b848ddd5634c@omp.ru>
- <1178f8d0-be70-c088-ee6a-8b421b290624@roeck-us.net>
- <a0a0d4d06eecc9c3194afe2cee0b61ebed5e0392.camel@physik.fu-berlin.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-In-Reply-To: <a0a0d4d06eecc9c3194afe2cee0b61ebed5e0392.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:ac9:7814:0:b0:4e8:f6ff:2aab with HTTP; Sat, 8 Jul 2023
+ 17:40:53 -0700 (PDT)
+In-Reply-To: <d5fbf1cc-9b79-5fbb-a109-87679caffcc4@talpey.com>
+References: <20230704074057.1162-1-machel@vivo.com> <CAKYAXd85gpb2xzPEm8BJV6gsff3p-8b4Aj_rOaEvU=+n43SgBQ@mail.gmail.com>
+ <d5fbf1cc-9b79-5fbb-a109-87679caffcc4@talpey.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Sun, 9 Jul 2023 09:40:53 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_0NyHYEKvsh5RSLQMsLFBRddaSJzGFBi9veh3qoCp4tQ@mail.gmail.com>
+Message-ID: <CAKYAXd_0NyHYEKvsh5RSLQMsLFBRddaSJzGFBi9veh3qoCp4tQ@mail.gmail.com>
+Subject: Re: [PATCH v1] fs:smb:Fix unsigned expression compared with zero
+To:     Tom Talpey <tom@talpey.com>
+Cc:     Wang Ming <machel@vivo.com>, Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/23 16:13, John Paul Adrian Glaubitz wrote:
-> Hello Guenter!
-> 
-> On Sat, 2023-07-08 at 15:06 -0700, Guenter Roeck wrote:
->> On 7/8/23 13:52, Sergey Shtylyov wrote:
->>> On 7/6/23 7:38 PM, John Paul Adrian Glaubitz wrote:
->>> [...]
+2023-07-04 22:58 GMT+09:00, Tom Talpey <tom@talpey.com>:
+> On 7/4/2023 4:58 AM, Namjae Jeon wrote:
+>> 2023-07-04 16:40 GMT+09:00, Wang Ming <machel@vivo.com>:
+>>> The return value of the ksmbd_vfs_getcasexattr() is signed.
+>>> However, the return value is being assigned to an unsigned
+>>> variable and subsequently recasted, causing warnings. Use
+>>> a signed type.
 >>>
->>>>> Which sh4 platforms in particular?
->>>>>
->>>>> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
->>>>> (physical) two days ago.
->>>>
->>>> I gave it a try with the command line Guenter suggested and indeed the kernel locks
->>>> up right here with the patch applied and boots fine without it:
->>>>
->>>> Creating 4 MTD partitions on "physmap-flash":
->>>> 0x000000000000-0x000000040000 : "U-Boot"
->>>> 0x000000040000-0x000000080000 : "Environment"
->>>> 0x000000080000-0x000000240000 : "Kernel"
->>>> 0x000000240000-0x000001000000 : "Flash_FS"
->>>> 8139too: 8139too Fast Ethernet driver 0.9.28
->>>> 8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
->>>> sm501-usb sm501-usb: SM501 OHCI
->>>> sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
->>>> sm501-usb sm501-usb: irq 116, io mem 0x13e40000
->>>
->>>      I guess it was irq 100 before my patch. What if you undo the following
->>> part of my patch?
->>>
+>>> Signed-off-by: Wang Ming <machel@vivo.com>
+>> Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 >>
->> No, that doesn't help.
-> 
-> Since the SM501 works fine with the patch on my SH7785LCR board, I assume it's
-> related to the IRQ code for the r2d2 board.
-> 
-> Looking at arch/sh/boards/mach-r2d/irq.c, there is some IRQ translation going
-> on and maybe that's the part where we need to correct the offset by 16?
-> 
+>> Thanks for your patch!
+>>
+>
+> FYI, this is missing my previous Acked-by. The updated changelog
+> otherwise looks good.
+Applied it with your acked-by tag to #ksmbd-for-next-next.
 
-I don't know the sh code at all. I only know that the sh4 qemu emulation
-(both little and big endian) is broken since your patch has been applied.
-Everything else would be just wild guesses from my side.
-
-Guenter
-
+Thanks!
+>
+> Tom.
+>
