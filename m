@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956BE74DC90
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5EC74DCA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjGJRfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
+        id S230471AbjGJRkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjGJRfB (ORCPT
+        with ESMTP id S230397AbjGJRkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:35:01 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB9FE9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:35:00 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-563439ea4a2so3328445eaf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689010499; x=1691602499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7lNLHcBXTtApGxZhppUoQis59G42kvHVFKXqqsERN5w=;
-        b=Tie9dyVfcJItKBW5qwyLx0wwlrCJW7b1aqOZhRFL+u91onLNcZCco4Sigd/T83inz9
-         6b6RviZqnZiD3MFiWPU83Kid6khe0q/gdyWy7bxD7mxX+ErLQCZCn8/DxQOdrkhi3Khq
-         aPVuOTcqPKI4+wu53FlVyllNIaZ9FMurrSfy/i+lKX1SVE0F02Xjca4CQEEdW531c5FD
-         r1oSLMUD3ut0o+0OEteag1xrwj5ehZHNjaeZZH+MjbPGcE6qnUFzTVLNJ3SWAN8PMMr2
-         NHBFd7APIqj81WND+j3/ErI1n/UHgHCtu9VGnwRi2MTEWA0WckFuHBQuDbZii9uzuxsH
-         8D7g==
+        Mon, 10 Jul 2023 13:40:20 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBA8135;
+        Mon, 10 Jul 2023 10:40:17 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-78362f57500so243177639f.3;
+        Mon, 10 Jul 2023 10:40:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689010499; x=1691602499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7lNLHcBXTtApGxZhppUoQis59G42kvHVFKXqqsERN5w=;
-        b=fjFJDhQ/ZD5kuk8a0daD/FurfzNC3qFnFMFkHLAa44BXY56CxGJzV2Qe81CEzvESw2
-         0io4rg8VbYQfGkOQeBb9I4N8/i7Qk86ME9ufuVmUnkMPalrL1pLvJ0gE3c43x7dqFrk4
-         AvIwi/cu5nc45YwFD8CaT8WolD4V7pEmapMGSnjoTj8n+rH78iHyk6UeGmAL9GWQCc2p
-         NLMoAIeWUe1tjgB3QlZS3fmPmxT6+JjkzZkJzaKXLN8awR/TMe2GexFwlgHUura2YH2w
-         3EidHaS5VFtoh7R2BBJkPz4fajtq0w+P3i8cJu0xLXbi5F0YC7zGCPi0flw+IXDqZggq
-         CnHA==
-X-Gm-Message-State: ABy/qLanl0GZnzYRl5LDpPZpnglxpeOwYH8Httbpt5fePUa/ShMmIb0K
-        uzVvUVKj2MmeFJd1P+B7H875zER4fFMc02n+cps=
-X-Google-Smtp-Source: APBJJlHnXQlhaJFZ9BvVHmlWPcKunuDRQ7cebzO5QwL/a9uYmG/n3mKcEidNp0WncN8mcAFEKm1oErNLqJieuBbSXEg=
-X-Received: by 2002:a05:6808:1a1e:b0:3a3:6283:ce94 with SMTP id
- bk30-20020a0568081a1e00b003a36283ce94mr12747718oib.44.1689010499346; Mon, 10
- Jul 2023 10:34:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689010816; x=1691602816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pJ0X7LH8Y32+25vFKtVfefQZ8VxfYOg+I+aDeHwgaRg=;
+        b=ea8pNLA3H378zc+JylHhCzz6ZFAycmOCxxiA3R46VYh9UVYdBjav9B7keAQbvCsXbK
+         ynSNLKnHOMpgvb429xybA/nVdXVeu79Ok+Ln7iLybDTmtJlYIhZlDGUAl9FawZINC+8u
+         C+lyPZrriz/I1KEKRIkUiYBSFY1D+oZjdhClZBOnD8N+g+IbwoyAcZjl4kwBH0A9QpOV
+         HUIc7clL0+nBdrjGOvEUDx+0V97Z/jluph3uANqCwCs0muSCe6l9u3lwkE2CN0e5bGDN
+         kJQdDrffWnwo2b3XjPfzseM8ruUmxz7WrdYfGyY5B4i+anzA0jBNt04xykLEIbLfzNPd
+         GrlA==
+X-Gm-Message-State: ABy/qLZIe+XDfVCE/NQLsr9B+A3I03tv38TKIVYSoaQJ38gkSAGpFAa5
+        tTByAbXOH5x8T2OnZwsETg==
+X-Google-Smtp-Source: APBJJlE0oA73gYUIwMelcM8z0408U22yjSo8RUGJb2rqGjtGdswxkKCC9nABPtEoktryHkXAAacu7A==
+X-Received: by 2002:a92:4b08:0:b0:33b:dcbf:e711 with SMTP id m8-20020a924b08000000b0033bdcbfe711mr15060887ilg.8.1689010816389;
+        Mon, 10 Jul 2023 10:40:16 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w18-20020a029692000000b0042036f06b24sm3449146jai.163.2023.07.10.10.40.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 10:40:15 -0700 (PDT)
+Received: (nullmailer pid 2291150 invoked by uid 1000);
+        Mon, 10 Jul 2023 17:40:13 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Rowand <frowand.list@gmail.com>,
+        Michal Suchanek <msuchanek@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        stable@vger.kernel.org, Cyril Brulebois <cyril@debamax.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] of: Preserve "of-display" device name for compatibility
+Date:   Mon, 10 Jul 2023 11:40:07 -0600
+Message-Id: <20230710174007.2291013-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230710091057.64085-1-xujianghui@cdjrlc.com> <3a541f425a1ab6d2664a6d74cc4c3a51@208suo.com>
-In-Reply-To: <3a541f425a1ab6d2664a6d74cc4c3a51@208suo.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 10 Jul 2023 13:34:48 -0400
-Message-ID: <CADnq5_NHYsquFpZre8hfsJKibEjyEooTGCigBWsfSA7OCEPc=w@mail.gmail.com>
-Subject: Re: [PATCH] drm/radeon: ERROR: "(foo*)" should be "(foo *)"
-To:     sunran001@208suo.com
-Cc:     airlied@gmail.com, daniel@ffwll.ch, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks.  I've applied all the patches you sent out, but all
-of them had whitespace problems.  Please double check your mailer on
-any future submissions.
+Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique"),
+as spotted by Frédéric Bonnard, the historical "of-display" device is
+gone: the updated logic creates "of-display.0" instead, then as many
+"of-display.N" as required.
 
-Thanks,
+This means that offb no longer finds the expected device, which prevents
+the Debian Installer from setting up its interface, at least on ppc64el.
 
-Alex
+Fix this by keeping "of-display" for the first device and "of-display.N"
+for subsequent devices.
 
-On Mon, Jul 10, 2023 at 6:03=E2=80=AFAM <sunran001@208suo.com> wrote:
->
-> Fix five occurrences of the checkpatch.pl error:
-> ERROR: "(foo*)" should be "(foo *)"
->
-> Signed-off-by: Ran Sun <sunran001@208suo.com>
-> ---
->   drivers/gpu/drm/radeon/radeon_kms.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_kms.c
-> b/drivers/gpu/drm/radeon/radeon_kms.c
-> index e0214cf1b43b..a16590c6247f 100644
-> --- a/drivers/gpu/drm/radeon/radeon_kms.c
-> +++ b/drivers/gpu/drm/radeon/radeon_kms.c
-> @@ -444,7 +444,7 @@ int radeon_info_ioctl(struct drm_device *dev, void
-> *data, struct drm_file *filp)
->               DRM_DEBUG_KMS("timestamp is r6xx+ only!\n");
->               return -EINVAL;
->           }
-> -        value =3D (uint32_t*)&value64;
-> +        value =3D (uint32_t *)&value64;
->           value_size =3D sizeof(uint64_t);
->           value64 =3D radeon_get_gpu_clock_counter(rdev);
->           break;
-> @@ -543,18 +543,18 @@ int radeon_info_ioctl(struct drm_device *dev, void
-> *data, struct drm_file *filp)
->           *value =3D rdev->vce.fb_version;
->           break;
->       case RADEON_INFO_NUM_BYTES_MOVED:
-> -        value =3D (uint32_t*)&value64;
-> +        value =3D (uint32_t *)&value64;
->           value_size =3D sizeof(uint64_t);
->           value64 =3D atomic64_read(&rdev->num_bytes_moved);
->           break;
->       case RADEON_INFO_VRAM_USAGE:
-> -        value =3D (uint32_t*)&value64;
-> +        value =3D (uint32_t *)&value64;
->           value_size =3D sizeof(uint64_t);
->           man =3D ttm_manager_type(&rdev->mman.bdev, TTM_PL_VRAM);
->           value64 =3D ttm_resource_manager_usage(man);
->           break;
->       case RADEON_INFO_GTT_USAGE:
-> -        value =3D (uint32_t*)&value64;
-> +        value =3D (uint32_t *)&value64;
->           value_size =3D sizeof(uint64_t);
->           man =3D ttm_manager_type(&rdev->mman.bdev, TTM_PL_TT);
->           value64 =3D ttm_resource_manager_usage(man);
-> @@ -614,7 +614,7 @@ int radeon_info_ioctl(struct drm_device *dev, void
-> *data, struct drm_file *filp)
->           DRM_DEBUG_KMS("Invalid request %d\n", info->request);
->           return -EINVAL;
->       }
-> -    if (copy_to_user(value_ptr, (char*)value, value_size)) {
-> +    if (copy_to_user(value_ptr, (char *)value, value_size)) {
->           DRM_ERROR("copy_to_user %s:%u\n", __func__, __LINE__);
->           return -EFAULT;
->       }
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217328
+Link: https://bugs.debian.org/1033058
+Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
+Cc: stable@vger.kernel.org
+Cc: Cyril Brulebois <cyril@debamax.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Helge Deller <deller@gmx.de>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/of/platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 051e29b7ad2b..0c3475e7d2ff 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -552,7 +552,7 @@ static int __init of_platform_default_populate_init(void)
+ 			if (!of_get_property(node, "linux,opened", NULL) ||
+ 			    !of_get_property(node, "linux,boot-display", NULL))
+ 				continue;
+-			dev = of_platform_device_create(node, "of-display.0", NULL);
++			dev = of_platform_device_create(node, "of-display", NULL);
+ 			of_node_put(node);
+ 			if (WARN_ON(!dev))
+ 				return -ENOMEM;
+-- 
+2.40.1
+
