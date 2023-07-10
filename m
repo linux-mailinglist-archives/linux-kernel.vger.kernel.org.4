@@ -2,212 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7372774D0A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B13B74D0AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjGJIzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
+        id S231164AbjGJIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjGJIzU (ORCPT
+        with ESMTP id S231977AbjGJIzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:55:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B50BEC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:55:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F42112B;
-        Mon, 10 Jul 2023 01:56:00 -0700 (PDT)
-Received: from [10.57.77.63] (unknown [10.57.77.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94C3E3F740;
-        Mon, 10 Jul 2023 01:55:16 -0700 (PDT)
-Message-ID: <6c2f3127-9334-85ba-48f6-83a9c87abde0@arm.com>
-Date:   Mon, 10 Jul 2023 09:55:14 +0100
+        Mon, 10 Jul 2023 04:55:37 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C063EC3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:55:35 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b701e1c80fso61581071fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:55:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688979334; x=1691571334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yn9ioLNwEgAe0GJRu4yxWz0XbMvGtpC919vku2LmRu4=;
+        b=FlzVImcE4J5Y7YSTzYuyGCbRicW0KB3qKsGvjoU8PQ0R4leQk/PcmX8CTdF6m+2s4H
+         vCVuFkamxEX2swHPAINA66ayYIKUC7MC0IPOGd874mgKnuey/7lkYXAI1KCtSJocLmpl
+         m+de3Bx80f6tout5/MvTvg2JSwXrAKNHlXzutUNUtYUmCDEIrREd8MYwbbGEeDUAlONi
+         jOUE48BKU4CtjaSjZXGsq0ADM7spH7d/s1rOq5OWD9Ti64TfQud+kAVVFkNwZHlRSPJz
+         lzZknudmSWRe+YPoIYGAJ+9z8j2O2FwWH4T2KnQv40RQvnmWX754+zsll9n1HkFyXjjy
+         zPqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688979334; x=1691571334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yn9ioLNwEgAe0GJRu4yxWz0XbMvGtpC919vku2LmRu4=;
+        b=Kxww/A0QnChp/QIBUwtuF5NalbpXzYOaC9bQJTldco4PvPc86SA1QMy7BA3lOiTn60
+         qYE9LpasfzIOqMDUAU9twct4yGnzChAgvDztZi16WRo3qk6bRWleRDI2rMIHQSFSiStM
+         PjhOmjTHq6S+fB3IiVRFjttzfQ8UQmzFB4vOo5lmF3fW5h+bF8h9ZGJyVNS1so/EwNKj
+         Upwgq7mbl3sm+zQLVIgdzQqjq7LrskCCIyNjoS6wA0RaGq0dfPDMtT0bvfPZ9Cw4tDoU
+         QhxCytfQjwZ2lu/yl53xBbZQANoODxksc+gnmWggwWi6CecdqMF8CVaVC+x6vYdWclvk
+         VG5g==
+X-Gm-Message-State: ABy/qLYNhydguZQhp0PvtzZKUEBznIYck7vv1tAlqGCjIaqoh2IE7ZXy
+        Pjb3HMD3cB0FoHpcx3lqtkvi2A==
+X-Google-Smtp-Source: APBJJlHf6M7nrwzpmLVNv3eHxsbeIXrb/TI4xh1WONMNAfVQ84+jVpvqnsf2XyHfPXAhMcBR2Mg56g==
+X-Received: by 2002:a2e:9206:0:b0:2b6:ba00:f733 with SMTP id k6-20020a2e9206000000b002b6ba00f733mr8666371ljg.18.1688979333800;
+        Mon, 10 Jul 2023 01:55:33 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id k12-20020a7bc30c000000b003fba92fad35sm9677016wmj.26.2023.07.10.01.55.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 01:55:33 -0700 (PDT)
+Message-ID: <6d3f24a4-ae70-49eb-6e41-86baa1db6bed@linaro.org>
+Date:   Mon, 10 Jul 2023 10:55:32 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Zhu <alexlzhu@fb.com>
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-5-ryan.roberts@arm.com>
- <87edlkgnfa.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <44e60630-5e9d-c8df-ab79-cb0767de680e@arm.com>
- <524bacd2-4a47-2b8b-6685-c46e31a01631@redhat.com>
- <ZKgZrNuxuq4ACvIb@casper.infradead.org>
- <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
- <9dd036a8-9ba3-0cc4-b791-cb3178237728@arm.com>
- <87y1jofoyi.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <87y1jofoyi.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V5] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
+Content-Language: en-US
+To:     Di Shen <di.shen@unisoc.com>, lukasz.luba@arm.com,
+        rafael@kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, orsonzhai@gmail.com, zhanglyra@gmail.com
+References: <20230710033234.28641-1-di.shen@unisoc.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230710033234.28641-1-di.shen@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2023 04:03, Huang, Ying wrote:
-> Ryan Roberts <ryan.roberts@arm.com> writes:
+On 10/07/2023 05:32, Di Shen wrote:
+> When the thermal trip point is changed, the governor should
+> be reset so that the policy algorithm can be updated to adapt
+> to the new trip point.
 > 
->> On 07/07/2023 15:07, David Hildenbrand wrote:
->>> On 07.07.23 15:57, Matthew Wilcox wrote:
->>>> On Fri, Jul 07, 2023 at 01:29:02PM +0200, David Hildenbrand wrote:
->>>>> On 07.07.23 11:52, Ryan Roberts wrote:
->>>>>> On 07/07/2023 09:01, Huang, Ying wrote:
->>>>>>> Although we can use smaller page order for FLEXIBLE_THP, it's hard to
->>>>>>> avoid internal fragmentation completely.  So, I think that finally we
->>>>>>> will need to provide a mechanism for the users to opt out, e.g.,
->>>>>>> something like "always madvise never" via
->>>>>>> /sys/kernel/mm/transparent_hugepage/enabled.  I'm not sure whether it's
->>>>>>> a good idea to reuse the existing interface of THP.
->>>>>>
->>>>>> I wouldn't want to tie this to the existing interface, simply because that
->>>>>> implies that we would want to follow the "always" and "madvise" advice too;
->>>>>> That
->>>>>> means that on a thp=madvise system (which is certainly the case for android and
->>>>>> other client systems) we would have to disable large anon folios for VMAs that
->>>>>> haven't explicitly opted in. That breaks the intention that this should be an
->>>>>> invisible performance boost. I think it's important to set the policy for
->>>>>> use of
->>>>>
->>>>> It will never ever be a completely invisible performance boost, just like
->>>>> ordinary THP.
->>>>>
->>>>> Using the exact same existing toggle is the right thing to do. If someone
->>>>> specify "never" or "madvise", then do exactly that.
->>>>>
->>>>> It might make sense to have more modes or additional toggles, but
->>>>> "madvise=never" means no memory waste.
->>>>
->>>> I hate the existing mechanisms.  They are an abdication of our
->>>> responsibility, and an attempt to blame the user (be it the sysadmin
->>>> or the programmer) of our code for using it wrongly.  We should not
->>>> replicate this mistake.
->>>
->>> I don't agree regarding the programmer responsibility. In some cases the
->>> programmer really doesn't want to get more memory populated than requested --
->>> and knows exactly why setting MADV_NOHUGEPAGE is the right thing to do.
->>>
->>> Regarding the madvise=never/madvise/always (sys admin decision), memory waste
->>> (and nailing down bugs or working around them in customer setups) have been very
->>> good reasons to let the admin have a word.
->>>
->>>>
->>>> Our code should be auto-tuning.  I posted a long, detailed outline here:
->>>> https://lore.kernel.org/linux-mm/Y%2FU8bQd15aUO97vS@casper.infradead.org/
->>>>
->>>
->>> Well, "auto-tuning" also should be perfect for everybody, but once reality
->>> strikes you know it isn't.
->>>
->>> If people don't feel like using THP, let them have a word. The "madvise" config
->>> option is probably more controversial. But the "always vs. never" absolutely
->>> makes sense to me.
->>>
->>>>> I remember I raised it already in the past, but you *absolutely* have to
->>>>> respect the MADV_NOHUGEPAGE flag. There is user space out there (for
->>>>> example, userfaultfd) that doesn't want the kernel to populate any
->>>>> additional page tables. So if you have to respect that already, then also
->>>>> respect MADV_HUGEPAGE, simple.
->>>>
->>>> Possibly having uffd enabled on a VMA should disable using large folios,
->>>
->>> There are cases where we enable uffd *after* already touching memory (postcopy
->>> live migration in QEMU being the famous example). That doesn't fly.
->>>
->>>> I can get behind that.  But the notion that userspace knows what it's
->>>> doing ... hahaha.  Just ignore the madvise flags.  Userspace doesn't
->>>> know what it's doing.
->>>
->>> If user space sets MADV_NOHUGEPAGE, it exactly knows what it is doing ... in
->>> some cases. And these include cases I care about messing with sparse VM memory :)
->>>
->>> I have strong opinions against populating more than required when user space set
->>> MADV_NOHUGEPAGE.
->>
->> I can see your point about honouring MADV_NOHUGEPAGE, so think that it is
->> reasonable to fallback to allocating an order-0 page in a VMA that has it set.
->> The app has gone out of its way to explicitly set it, after all.
->>
->> I think the correct behaviour for the global thp controls (cmdline and sysfs)
->> are less obvious though. I could get on board with disabling large anon folios
->> globally when thp="never". But for other situations, I would prefer to keep
->> large anon folios enabled (treat "madvise" as "always"),
+> 1.Thermal governor is working for the passive trip point or active
+> trip point. Therefore, when the trip point is changed it should
+> reset the governor only for passic/active trip points.
 > 
-> If we have some mechanism to auto-tune the large folios usage, for
-> example, detect the internal fragmentation and split the large folio,
-> then we can use thp="always" as default configuration.  If my memory
-> were correct, this is what Johannes and Alexander is working on.
-
-Could you point me to that work? I'd like to understand what the mechanism is.
-The other half of my work aims to use arm64's pte "contiguous bit" to tell the
-HW that a span of PTEs share the same mapping and is therefore coalesced into a
-single TLB entry. The side effect of this, however, is that we only have a
-single access and dirty bit for the whole contpte extent. So I'd like to avoid
-any mechanism that relies on getting access/dirty at the base page granularity
-for a large folio.
-
+> 2.For "power_allocator" governor reset, the parameters of pid
+> controller and the states of power cooling devices should be reset.
 > 
->> with the argument that
->> their order is much smaller than traditional THP and therefore the internal
->> fragmentation is significantly reduced.
+> 2.1
+> The IPA controls temperature using PID mechanism. It is a closed-
+> loop feedback monitoring system. It uses the gap between target
+> temperature and current temperature which says "error" as the
+> input of the PID controller:
 > 
-> Do you have any data for this?
-
-Some; its partly based on intuition that the smaller the allocation unit, the
-smaller the internal fragmentation. And partly on peak memory usage data I've
-collected for the benchmarks I'm running, comparing baseline-4k kernel with
-baseline-16k and baseline-64 kernels along with a 4k kernel that supports large
-anon folios (I appreciate that's not exactly what we are talking about here, and
-it's not exactly an extensive set of results!):
-
-
-Kernel Compliation with 8 Jobs:
-| kernel        |   peak |
-|:--------------|-------:|
-| baseline-4k   |   0.0% |
-| anonfolio     |   0.1% |
-| baseline-16k  |   6.3% |
-| baseline-64k  |  28.1% |
-
-
-Kernel Compliation with 80 Jobs:
-| kernel        |   peak |
-|:--------------|-------:|
-| baseline-4k   |   0.0% |
-| anonfolio     |   1.7% |
-| baseline-16k  |   2.6% |
-| baseline-64k  |  12.3% |
-
-
-
+> err = desired_temperature - current_temperature
+> P_max =
+> k_p * err + k_i * err_integral + k_d * diff_err + sustainable_power
 > 
->> I really don't want to end up with user
->> space ever having to opt-in (with MADV_HUGEPAGE) to see the benefits of large
->> anon folios.
->>
->> I still feel that it would be better for the thp and large anon folio controls
->> to be independent though - what's the argument for tying them together?
->>
+> That algorithm can 'learn' from the 'observed' in the past reaction
+> for it's control decisions and accumulates that information in the
+> I(Integral) part so that it can conpensate for those 'learned'
+> mistakes.
 > 
-> Best Regards,
-> Huang, Ying
+> Based on the above, the most important is the desired temperature
+> comes from the trip point. When the trip point is changed, all the
+> previous learned errors won't help for the IPA. So the pid parameters
+> should be reset for IPA governor reset.
 > 
+> 2.2
+> Other wise, the cooling devices should also be reset when the trip
+> point is changed.
+> 
+> This patch adds an ops for the thermal_governor structure to reset
+> the governor and give the 'reset' function definition for power
+> allocator. The ops is called when the trip points are changed via
+> sysfs interface.
+> 
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> ---
+>   drivers/thermal/gov_power_allocator.c | 9 +++++++++
+>   drivers/thermal/thermal_trip.c        | 5 +++++
+>   include/linux/thermal.h               | 3 +++
+>   3 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 8642f1096b91..8d17a10671e4 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -729,10 +729,19 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+>   	return allocate_power(tz, trip.temperature);
+>   }
+>   
+> +static void power_allocator_reset(struct thermal_zone_device *tz)
+> +{
+> +	struct power_allocator_params *params = tz->governor_data;
+> +
+> +	reset_pid_controller(params);
+> +	allow_maximum_power(tz, true);
+
+Do you really want to allow the maximum power? What about if the trip 
+temperature is decreased ?
+
+You want maximum power only if the mitigation ends.
+
+> +}
+> +
+>   static struct thermal_governor thermal_gov_power_allocator = {
+>   	.name		= "power_allocator",
+>   	.bind_to_tz	= power_allocator_bind,
+>   	.unbind_from_tz	= power_allocator_unbind,
+>   	.throttle	= power_allocator_throttle,
+> +	.reset		= power_allocator_reset,
+>   };
+>   THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+> index 907f3a4d7bc8..13bbe029c6ab 100644
+> --- a/drivers/thermal/thermal_trip.c
+> +++ b/drivers/thermal/thermal_trip.c
+> @@ -173,6 +173,11 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+>   	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
+>   		tz->trips[trip_id] = *trip;
+>   
+> +	/* Reset the governor only when the trip type is active or passive. */
+> +	ret = (trip->type == THERMAL_TRIP_PASSIVE || trip->type == THERMAL_TRIP_ACTIVE);
+
+Actually we have the trip points:
+
+ACTIVE, PASSIVE, HOT and CRITICAL
+
+The last two ones should not be writable.
+
+Instead of this test, it would be cleaner to only make the ACTIVE and 
+PASSIVE trip point writable when the CONFIG_THERMAL_WRITABLE_TRIPS 
+option is set. Consequently, other trip points won't be writable and 
+this test can go away as set_trip will be protected by a RO sysfs file 
+property.
+
+> +	if (ret && t.temperature != trip->temperature && tz->governor && tz->governor->reset)
+
+The temperature test is duplicated because it is already done in the 
+block before.
+
+> +		tz->governor->reset(tz);
+> +
+>   	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+>   				      trip->temperature, trip->hysteresis);
+>   
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 87837094d549..d27d053319bf 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -197,6 +197,8 @@ struct thermal_zone_device {
+>    *			thermal zone.
+>    * @throttle:	callback called for every trip point even if temperature is
+>    *		below the trip point temperature
+> + * @reset:	callback called for governor reset
+> + *
+>    * @governor_list:	node in thermal_governor_list (in thermal_core.c)
+>    */
+>   struct thermal_governor {
+> @@ -204,6 +206,7 @@ struct thermal_governor {
+>   	int (*bind_to_tz)(struct thermal_zone_device *tz);
+>   	void (*unbind_from_tz)(struct thermal_zone_device *tz);
+>   	int (*throttle)(struct thermal_zone_device *tz, int trip);
+> +	void (*reset)(struct thermal_zone_device *tz);
+>   	struct list_head	governor_list;
+>   };
+>   
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
