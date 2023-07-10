@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71FD74DB3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4BC74DB3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjGJQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S230155AbjGJQib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjGJQhb (ORCPT
+        with ESMTP id S229641AbjGJQia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:37:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA80AB;
-        Mon, 10 Jul 2023 09:37:30 -0700 (PDT)
+        Mon, 10 Jul 2023 12:38:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C021E8;
+        Mon, 10 Jul 2023 09:38:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF80E61119;
-        Mon, 10 Jul 2023 16:37:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D99EC433C7;
-        Mon, 10 Jul 2023 16:37:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21B6F61063;
+        Mon, 10 Jul 2023 16:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B7FC433C8;
+        Mon, 10 Jul 2023 16:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689007048;
-        bh=JA1EquXrPGxoYRpIsacqXDoz6GpwP+8rSYei9H/PT+g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jB5VXSU+47cERawOBFzpTrJGdh8LObqXzP/8hseYON/hlIPEtVc4Kfu6N46xRQ/0z
-         JplRS+fc9gs/ffoFNdFEt6pmbhnArByt8QSSCcPI4XaKHCmO6jv61yRLrtxP3+KjNQ
-         YKeCi+wV0YjlXrpynm30HUY2P1JpWe+phceBCHoZ4J3d83wzDQcBu4fN+BDR9bj3nv
-         WTqgrLSHvZFM8Cj6UNcEuwfIpoWR4A6PKUhuP/b4EffXjBwQpnmxQUBaNVAAxU9JqR
-         fjS2COpGeO6Lh6/lR2luEBNsllr4NhHOQuuS5FsI6Uqll2UGgpPl3X97Ek6667CFH/
-         NdJQYmI7ONPOg==
-Date:   Tue, 11 Jul 2023 01:37:23 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Zehao Zhang <zhangzehao@vivo.com>
-Cc:     linkinjeon@kernel.org, sj1557.seo@samsung.com, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] exfat: Add ftrace support for exfat and add some
- tracepoints
-Message-Id: <20230711013723.1b677cae2870bd509f77babd@kernel.org>
-In-Reply-To: <20230710092559.19087-1-zhangzehao@vivo.com>
-References: <20230710092559.19087-1-zhangzehao@vivo.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        s=k20201202; t=1689007108;
+        bh=Fxz8+nz1c9dZXZma3dpEF6OCZwk8mfyDi3Fn7q3yb6c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r2rwe0dIJi6Odn6hhVbJn1ebHX7biXrlxpuc0rCtXdGislVv1WZL5Z0eaYB/1/VAO
+         jbEFVocdwTH5AbDrGDNU0yb8jnSHxLWaTtKIGwa4t+VOMvitXWNLvQY4ReGCAtrBBY
+         8zPb6834EEx4wm7vrDaggdezvdjB80uNotA/WUMyMz4MIbuW0ce5DlVn8wER3I+akK
+         XwQyl1JMUwZhp9WQLHX41GNosgYFyByvy/Zs2J7hhDOJNpoiNBPBgaSa9MG/i8pz6J
+         hlCietG1zatWWEDU+qLnfwvOHQ9ZBL1VI/fy1VVMKOD9e7L9R9ZqBM3XH2ebR/i1Tp
+         CqEC41blvM9SA==
+Date:   Mon, 10 Jul 2023 17:38:23 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Huqiang Qin <huqiang.qin@amlogic.com>
+Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        brgl@bgdev.pl, andy@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] dt-bindings: gpio: Add a header file for Amlogic
+ C3 SoCs
+Message-ID: <20230710-maybe-mantis-e647d94fd13a@spud>
+References: <20230710042812.2007928-1-huqiang.qin@amlogic.com>
+ <20230710042812.2007928-2-huqiang.qin@amlogic.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="j5AdCmeQS6DzLf1m"
+Content-Disposition: inline
+In-Reply-To: <20230710042812.2007928-2-huqiang.qin@amlogic.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,361 +63,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 17:25:59 +0800
-Zehao Zhang <zhangzehao@vivo.com> wrote:
 
-> Add ftrace support for exFAT file system,
-> and add some tracepoints:
-> exfat_read_folio(), exfat_writepages(), exfat_write_begin(),
-> exfat_write_end(), exfat_lookup_start(), exfat_lookup_end()
-> 
-> exfat_read_folio():
-> shows the dev number, inode and the folio index.
-> 
-> exfat_writepages():
-> shows the inode and fields in struct writeback_control.
-> 
-> exfat_write_begin():
-> shows the inode, file position offset and length.
-> 
-> exfat_write_end():
-> shows the inode, file position offset, bytes write to page
-> and bytes copied from user.
-> 
-> exfat_lookup_start():
-> shows the target inode, dentry and flags.
-> 
-> exfat_lookup_end():
-> shows the target inode, dentry and err code.
+--j5AdCmeQS6DzLf1m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It seems like most of them are address_space_operations' operators.
-Is that OK to define those events (~= user exposed interface) from
-exFAT filesystem? I wonder why we can not make a generic VFS events
-for those. (Or all FS-wide generic events).
-
-Thank you,
-
-> 
-> Signed-off-by: Zehao Zhang <zhangzehao@vivo.com>
+On Mon, Jul 10, 2023 at 12:28:11PM +0800, Huqiang Qin wrote:
+> Add dt-binding and related header file for Amlogic C3 GPIO.
+>=20
+> Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
 > ---
->  MAINTAINERS                  |   1 +
->  fs/exfat/inode.c             |  16 +++
->  fs/exfat/namei.c             |  10 +-
->  include/trace/events/exfat.h | 192 +++++++++++++++++++++++++++++++++++
->  4 files changed, 218 insertions(+), 1 deletion(-)
->  create mode 100644 include/trace/events/exfat.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4f115c355a41..fbe1caa61a38 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7752,6 +7752,7 @@ L:	linux-fsdevel@vger.kernel.org
->  S:	Maintained
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
->  F:	fs/exfat/
-> +F:	include/trace/events/exfat.h
->  
->  EXT2 FILE SYSTEM
->  M:	Jan Kara <jack@suse.com>
-> diff --git a/fs/exfat/inode.c b/fs/exfat/inode.c
-> index 481dd338f2b8..48fec3fa10af 100644
-> --- a/fs/exfat/inode.c
-> +++ b/fs/exfat/inode.c
-> @@ -17,6 +17,9 @@
->  #include "exfat_raw.h"
->  #include "exfat_fs.h"
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/exfat.h>
-> +
->  int __exfat_write_inode(struct inode *inode, int sync)
->  {
->  	unsigned long long on_disk_size;
-> @@ -335,6 +338,10 @@ static int exfat_get_block(struct inode *inode, sector_t iblock,
->  
->  static int exfat_read_folio(struct file *file, struct folio *folio)
->  {
-> +	struct inode *inode = folio->mapping->host;
-> +
-> +	trace_exfat_read_folio(inode, folio);
-> +
->  	return mpage_read_folio(folio, exfat_get_block);
->  }
->  
-> @@ -346,6 +353,10 @@ static void exfat_readahead(struct readahead_control *rac)
->  static int exfat_writepages(struct address_space *mapping,
->  		struct writeback_control *wbc)
->  {
-> +	struct inode *inode = mapping->host;
-> +
-> +	trace_exfat_writepages(inode, wbc);
-> +
->  	return mpage_writepages(mapping, wbc, exfat_get_block);
->  }
->  
-> @@ -364,6 +375,7 @@ static int exfat_write_begin(struct file *file, struct address_space *mapping,
->  		loff_t pos, unsigned int len,
->  		struct page **pagep, void **fsdata)
->  {
-> +	struct inode *inode = mapping->host;
->  	int ret;
->  
->  	*pagep = NULL;
-> @@ -371,6 +383,8 @@ static int exfat_write_begin(struct file *file, struct address_space *mapping,
->  			       exfat_get_block,
->  			       &EXFAT_I(mapping->host)->i_size_ondisk);
->  
-> +	trace_exfat_write_begin(inode, pos, len);
-> +
->  	if (ret < 0)
->  		exfat_write_failed(mapping, pos+len);
->  
-> @@ -394,6 +408,8 @@ static int exfat_write_end(struct file *file, struct address_space *mapping,
->  		return -EIO;
->  	}
->  
-> +	trace_exfat_write_end(inode, pos, len, copied);
-> +
->  	if (err < len)
->  		exfat_write_failed(mapping, pos+len);
->  
-> diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-> index e0ff9d156f6f..f4f36de4ca0d 100644
-> --- a/fs/exfat/namei.c
-> +++ b/fs/exfat/namei.c
-> @@ -12,6 +12,8 @@
->  #include "exfat_raw.h"
->  #include "exfat_fs.h"
->  
-> +#include <trace/events/exfat.h>
-> +
->  static inline unsigned long exfat_d_version(struct dentry *dentry)
->  {
->  	return (unsigned long) dentry->d_fsdata;
-> @@ -707,6 +709,8 @@ static struct dentry *exfat_lookup(struct inode *dir, struct dentry *dentry,
->  	loff_t i_pos;
->  	mode_t i_mode;
->  
-> +	trace_exfat_lookup_start(dir, dentry, flags);
-> +
->  	mutex_lock(&EXFAT_SB(sb)->s_lock);
->  	err = exfat_find(dir, &dentry->d_name, &info);
->  	if (err) {
-> @@ -766,7 +770,11 @@ static struct dentry *exfat_lookup(struct inode *dir, struct dentry *dentry,
->  	if (!inode)
->  		exfat_d_version_set(dentry, inode_query_iversion(dir));
->  
-> -	return d_splice_alias(inode, dentry);
-> +	alias = d_splice_alias(inode, dentry);
-> +	trace_exfat_lookup_end(dir, !IS_ERR_OR_NULL(alias) ? alias : dentry,
-> +			IS_ERR(alias) ? PTR_ERR(alias) : err);
-> +
-> +	return alias;
->  unlock:
->  	mutex_unlock(&EXFAT_SB(sb)->s_lock);
->  	return ERR_PTR(err);
-> diff --git a/include/trace/events/exfat.h b/include/trace/events/exfat.h
+>  .../pinctrl/amlogic,meson-pinctrl-a1.yaml     |  1 +
+>  include/dt-bindings/gpio/amlogic-c3-gpio.h    | 72 +++++++++++++++++++
+>  2 files changed, 73 insertions(+)
+>  create mode 100644 include/dt-bindings/gpio/amlogic-c3-gpio.h
+>=20
+> diff --git a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinc=
+trl-a1.yaml b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinct=
+rl-a1.yaml
+> index 99080c9eaac3..e019b6aa6ca3 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-a1.=
+yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl-a1.=
+yaml
+> @@ -17,6 +17,7 @@ properties:
+>      enum:
+>        - amlogic,meson-a1-periphs-pinctrl
+>        - amlogic,meson-s4-periphs-pinctrl
+> +      - amlogic,c3-periphs-pinctrl
+
+Alphanumerical order here perhaps?
+
+>  required:
+>    - compatible
+> diff --git a/include/dt-bindings/gpio/amlogic-c3-gpio.h b/include/dt-bind=
+ings/gpio/amlogic-c3-gpio.h
 > new file mode 100644
-> index 000000000000..67ac91c75cc6
+> index 000000000000..75c8da6f505f
 > --- /dev/null
-> +++ b/include/trace/events/exfat.h
-> @@ -0,0 +1,192 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM exfat
-> +
-> +#if !defined(_TRACE_EXFAT_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_EXFAT_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +#define EXFAT_I(inode)	(container_of(inode, struct exfat_inode_info, vfs_inode))
-> +
-> +#define show_dev(dev)		(MAJOR(dev), MINOR(dev))
-> +#define show_dev_ino(entry)	(show_dev(entry->dev), (unsigned long)entry->ino)
-> +
-> +
-> +TRACE_EVENT(exfat_write_begin,
-> +	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len),
-> +
-> +	TP_ARGS(inode, pos, len),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t,        dev)
-> +		__field(ino_t,        ino)
-> +		__field(loff_t,       pos)
-> +		__field(unsigned int, len)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->dev    = inode->i_sb->s_dev;
-> +		__entry->ino    = inode->i_ino;
-> +		__entry->pos    = pos;
-> +		__entry->len    = len;
-> +	),
-> +
-> +	TP_printk("dev (%d,%d) ino %lu pos %lld len %u",
-> +		show_dev(__entry->dev),
-> +		(unsigned long) __entry->ino,
-> +		__entry->pos, __entry->len)
-> +
-> +);
-> +
-> +TRACE_EVENT(exfat_write_end,
-> +	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
-> +			unsigned int copied),
-> +
-> +	TP_ARGS(inode, pos, len, copied),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t,	dev)
-> +		__field(ino_t,	ino)
-> +		__field(loff_t,	pos)
-> +		__field(unsigned int, len)
-> +		__field(unsigned int, copied)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->dev	= inode->i_sb->s_dev;
-> +		__entry->ino	= inode->i_ino;
-> +		__entry->pos	= pos;
-> +		__entry->len	= len;
-> +		__entry->copied	= copied;
-> +	),
-> +
-> +	TP_printk("dev (%d,%d) ino %lu pos %lld len %u copied %u",
-> +		show_dev(__entry->dev),
-> +		(unsigned long) __entry->ino,
-> +		__entry->pos, __entry->len, __entry->copied)
-> +);
-> +
-> +TRACE_EVENT(exfat_read_folio,
-> +	TP_PROTO(struct inode *inode, struct folio *folio),
-> +
-> +	TP_ARGS(inode, folio),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t,	dev)
-> +		__field(ino_t,	ino)
-> +		__field(pgoff_t, index)
-> +
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->dev	= inode->i_sb->s_dev;
-> +		__entry->ino	= inode->i_ino;
-> +		__entry->index	= folio->index;
-> +	),
-> +
-> +	TP_printk("dev (%d,%d) ino %lu folio_index %lu",
-> +		show_dev(__entry->dev),
-> +		(unsigned long) __entry->ino,
-> +		(unsigned long) __entry->index)
-> +);
-> +
-> +TRACE_EVENT(exfat_writepages,
-> +	TP_PROTO(struct inode *inode, struct writeback_control *wbc),
-> +
-> +	TP_ARGS(inode, wbc),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t,	dev)
-> +		__field(ino_t,	ino)
-> +		__field(long,	nr_to_write)
-> +		__field(long,	pages_skipped)
-> +		__field(loff_t,		range_start)
-> +		__field(loff_t,		range_end)
-> +		__field(pgoff_t,	writeback_index)
-> +		__field(int,	sync_mode)
-> +		__field(char,	for_kupdate)
-> +		__field(char,	range_cyclic)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->dev		= inode->i_sb->s_dev;
-> +		__entry->ino		= inode->i_ino;
-> +		__entry->nr_to_write	= wbc->nr_to_write;
-> +		__entry->pages_skipped	= wbc->pages_skipped;
-> +		__entry->range_start	= wbc->range_start;
-> +		__entry->range_end	= wbc->range_end;
-> +		__entry->writeback_index = inode->i_mapping->writeback_index;
-> +		__entry->sync_mode	= wbc->sync_mode;
-> +		__entry->for_kupdate	= wbc->for_kupdate;
-> +		__entry->range_cyclic	= wbc->range_cyclic;
-> +	),
-> +
-> +	TP_printk("dev (%d,%d) ino %lu nr_to_write %ld pages_skipped %ld "
-> +		"range_start %lld range_end %lld sync_mode %d "
-> +		"for_kupdate %d range_cyclic %d writeback_index %lu",
-> +		show_dev(__entry->dev),
-> +		(unsigned long) __entry->ino, __entry->nr_to_write,
-> +		__entry->pages_skipped, __entry->range_start,
-> +		__entry->range_end, __entry->sync_mode,
-> +		__entry->for_kupdate, __entry->range_cyclic,
-> +		(unsigned long) __entry->writeback_index)
-> +);
-> +
-> +TRACE_EVENT(exfat_lookup_start,
-> +
-> +	TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
-> +
-> +	TP_ARGS(dir, dentry, flags),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t,	dev)
-> +		__field(ino_t,	ino)
-> +		__string(name,	dentry->d_name.name)
-> +		__field(unsigned int, flags)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->dev	= dir->i_sb->s_dev;
-> +		__entry->ino	= dir->i_ino;
-> +		__assign_str(name, dentry->d_name.name);
-> +		__entry->flags	= flags;
-> +	),
-> +
-> +	TP_printk("dev = (%d,%d), pino = %lu, name:%s, flags:%u",
-> +		show_dev_ino(__entry),
-> +		__get_str(name),
-> +		__entry->flags)
-> +);
-> +
-> +TRACE_EVENT(exfat_lookup_end,
-> +
-> +	TP_PROTO(struct inode *dir, struct dentry *dentry,
-> +		int err),
-> +
-> +	TP_ARGS(dir, dentry, err),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t,	dev)
-> +		__field(ino_t,	ino)
-> +		__string(name,	dentry->d_name.name)
-> +		__field(int,	err)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->dev	= dir->i_sb->s_dev;
-> +		__entry->ino	= dir->i_ino;
-> +		__assign_str(name, dentry->d_name.name);
-> +		__entry->err	= err;
-> +	),
-> +
-> +	TP_printk("dev = (%d,%d), pino = %lu, name:%s, err:%d",
-> +		show_dev_ino(__entry),
-> +		__get_str(name),
-> +		__entry->err)
-> +);
-> +
-> +#endif /* _TRACE_EXFAT_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> -- 
-> 2.35.3
-> 
+> +++ b/include/dt-bindings/gpio/amlogic-c3-gpio.h
+> @@ -0,0 +1,72 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
+
+Any reason to deviate from the usual license terms for bindings, which is
+"GPL-2.0-only OR BSD-2-Clause"?
+
+Cheers,
+Conor.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> +/*
+> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+> + * Author: Huqiang Qin <huqiang.qin@amlogic.com>
+> + */
+> +
+> +#ifndef _DT_BINDINGS_AMLOGIC_C3_GPIO_H
+> +#define _DT_BINDINGS_AMLOGIC_C3_GPIO_H
+> +
+> +#define	GPIOE_0		0
+> +#define	GPIOE_1		1
+> +#define	GPIOE_2		2
+> +#define	GPIOE_3		3
+> +#define	GPIOE_4		4
+> +
+> +#define	GPIOB_0		5
+> +#define	GPIOB_1		6
+> +#define	GPIOB_2		7
+> +#define	GPIOB_3		8
+> +#define	GPIOB_4		9
+> +#define	GPIOB_5		10
+> +#define	GPIOB_6		11
+> +#define	GPIOB_7		12
+> +#define	GPIOB_8		13
+> +#define	GPIOB_9		14
+> +#define	GPIOB_10	15
+> +#define	GPIOB_11	16
+> +#define	GPIOB_12	17
+> +#define	GPIOB_13	18
+> +#define	GPIOB_14	19
+> +
+> +#define	GPIOC_0		20
+> +#define	GPIOC_1		21
+> +#define	GPIOC_2		22
+> +#define	GPIOC_3		23
+> +#define	GPIOC_4		24
+> +#define	GPIOC_5		25
+> +#define	GPIOC_6		26
+> +
+> +#define	GPIOX_0		27
+> +#define	GPIOX_1		28
+> +#define	GPIOX_2		29
+> +#define	GPIOX_3		30
+> +#define	GPIOX_4		31
+> +#define	GPIOX_5		32
+> +#define	GPIOX_6		33
+> +#define	GPIOX_7		34
+> +#define	GPIOX_8		35
+> +#define	GPIOX_9		36
+> +#define	GPIOX_10	37
+> +#define	GPIOX_11	38
+> +#define	GPIOX_12	39
+> +#define	GPIOX_13	40
+> +
+> +#define	GPIOD_0		41
+> +#define	GPIOD_1		42
+> +#define	GPIOD_2		43
+> +#define	GPIOD_3		44
+> +#define	GPIOD_4		45
+> +#define	GPIOD_5		46
+> +#define	GPIOD_6		47
+> +
+> +#define	GPIOA_0		48
+> +#define	GPIOA_1		49
+> +#define	GPIOA_2		50
+> +#define	GPIOA_3		51
+> +#define	GPIOA_4		52
+> +#define	GPIOA_5		53
+> +
+> +#define	GPIO_TEST_N	54
+> +
+> +#endif /* _DT_BINDINGS_AMLOGIC_C3_GPIO_H */
+> --=20
+> 2.37.1
+>=20
+
+--j5AdCmeQS6DzLf1m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKwz/wAKCRB4tDGHoIJi
+0rEIAQCP3MeY9QpZ837QyziushD+wG7oQQH+/bUiJFdErQw1eQD/UHA++uo9GhtN
++J3t+px8WOPw2tOaHLK0z5Ew8Kf+wg0=
+=vmZA
+-----END PGP SIGNATURE-----
+
+--j5AdCmeQS6DzLf1m--
