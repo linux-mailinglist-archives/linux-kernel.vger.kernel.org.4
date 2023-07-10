@@ -2,328 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984F574DD4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6420574DD50
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbjGJSYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S230393AbjGJS0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjGJSYx (ORCPT
+        with ESMTP id S229543AbjGJS0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:24:53 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F46180
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:24:51 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b5d1498670so3969680a34.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689013490; x=1691605490;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5fYArT4F4wyQhowae//dXBBkxIpu1Zo/tKwap9qaUSc=;
-        b=L3dTBdKUkIywU38zEpkMs0y8Xfj7JHyFZvd45bFXZU26770otkc1ngWqbDzoiOOoVy
-         ETf8E+Gc6EAhgHnv82ya2BY0SzRU3V3tBXGK9x8KQ+ndaR8nVuPn56ZwbfxPuGMjzbOC
-         6SRu/t4OHyhbspY87kpH9P1shufo26VcUI8zfV3T9WfgZHz9+jCOHLWXTiJf3sJtoIz8
-         W+OrK1DwYMX1eOzNdNbUACJ99Fa8p+dQzRBCiozv/TgMXGY78pPju3xPuTgzO6ZlDrfz
-         f02cIkADqeMC/GNdIwvLze6wDllGu7HYyBm8dXRAwY33gtmxvvtJNw+TBY113IeFFgUv
-         2A5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689013490; x=1691605490;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5fYArT4F4wyQhowae//dXBBkxIpu1Zo/tKwap9qaUSc=;
-        b=Y7VdJgeIp8iT+/ZnWd0nDMB0dLIChDaaCDSHIn2g0IoBqYBZRr3nzBAkZc4ONHyLYD
-         GkmPnKcea2MOiAQJnlcPy07j1E89CsaUVLSvor6TzmQYUz1BpwMH4dYEXhacfS5LNUFb
-         qn/XU0uizLYdmuyQnZOADCK56oeCZ7D23J77XQXGV0LYQcs+Lpb8XWO/OjrEyYIKcWAF
-         23m1DN5PXPK7mqihFlvmF8UqpOZNh12RcEwzUk4OEfklQzR0g/gN6mOc8vTcQPIrsFr/
-         4BOSvp60pKKDaVQcmO2kjOW3ovHUNRQloVVphfsNxJzpMRBMfYS/SePRX7MOMYJ0RBol
-         u3pQ==
-X-Gm-Message-State: ABy/qLZTpgXS0iOkl6Nxsnvmwza64O1GOxWUbN6mbN0ocbReJIjBXcaW
-        05YXosXIkiATJabUH2EPQJyDJk1lEstnebggn6oT8LrIcf5YjFexrAA=
-X-Google-Smtp-Source: APBJJlHwSLd34YXuyPLg8jXMYmyOVnyot2U91AQJrkOXDKDIjQnuHe7gdhhf/hozkoZHU9BMz3V/yQ53yLONLrXDjtQ=
-X-Received: by 2002:a05:6830:1e33:b0:6b0:c67c:96f3 with SMTP id
- t19-20020a0568301e3300b006b0c67c96f3mr10929476otr.18.1689013490139; Mon, 10
- Jul 2023 11:24:50 -0700 (PDT)
+        Mon, 10 Jul 2023 14:26:49 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2048.outbound.protection.outlook.com [40.107.100.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B2BAB;
+        Mon, 10 Jul 2023 11:26:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GnJnEJxMhRWt7XuxEpHU1sXM4P0qFKx/czul1Wb1xhMSSzandU97Ark8vGRrjHkWEh9o/wVqPN9QOkF1bdsrOBSK7005fa+cuwe0xmHcT6OhY78kM6hIYmIUiokbNUS2YqJvg1QnSWkZyRoiW5cp39gVSwz2TbmG3h5T81AMwrQEP+08Vm0ALKDaiFiDXMHfYEpsIKMRrMW2YOsTkFrWUmsqq76kRTxCEELOQEuwajCQJuurVYO/5IVlUHVc0H2weCR6RlUn4MRNDnsDKTMBV3IK45idgFXAGEaFHm52wiuav9UAXhtXgMhNVATSUG3NfDa+DTauDrFhug+R9onzFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3FWsILRdPotKQYzhlsXC8KcjHd0YWNrZi1b71MoUum8=;
+ b=lM1EIkkIpmWb/3iuxgNmDEx1q2Ix90CGmuaCrZdLbpzLFAA+AQvykAVmTDg6wIBt+AJo7evhJp8F2bihEnLuUlpj4yR9ioh0YXX52Kx3DzX0NPBev05XIZLdotYx5pBC9bz5035FUgXAeRO1/1jWdzRvMDALdk1Ds+zUhyGyg+2IpycAwG4G9NnLeo/Esm3R1zKOVg08JR0FO1iNnAAMCW7DEemfDMLbAz6AkU9lLeFKGRzcborNQzHWvRreiA2kDBkqdlm6mOE2b09gED3DbODnagc0GKK8ttjTG5tSaL6Wo2LDk4JzAGzwR004U4bHUjRW+AmoBEPGeN/C+rllGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3FWsILRdPotKQYzhlsXC8KcjHd0YWNrZi1b71MoUum8=;
+ b=MsbHauKgM/qQB3hI43e7LT/4j/p8KxRVzHmnG6PdTgv4XBRz3DLW+liecmuVnZrw/oT3WFVE35iadWqNs71i4ESLZspodUwBEQ6HHriyn46AbfU6fI4JothH52kWjmKausW3d5cK7aNB1UBv4ngUr7Ews8GCNr4eoiI+n+fI3Fk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SA0PR12MB4558.namprd12.prod.outlook.com (2603:10b6:806:72::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
+ 2023 18:26:44 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::bce4:716a:8303:efcf]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::bce4:716a:8303:efcf%4]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 18:26:44 +0000
+Message-ID: <580858e8-27c8-ca3c-cb3d-61041298eb44@amd.com>
+Date:   Mon, 10 Jul 2023 13:26:41 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v5 00/11] Add dynamic boost control support
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        John Allen <john.allen@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <20230623135001.18672-1-mario.limonciello@amd.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20230623135001.18672-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DS7PR03CA0313.namprd03.prod.outlook.com
+ (2603:10b6:8:2b::18) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
- <1688773943-3887-6-git-send-email-quic_khsieh@quicinc.com>
- <0cac7c17-c822-927e-cc15-456b1423689c@linaro.org> <2278c46c-cb2c-2842-ab20-e6a334fe002b@quicinc.com>
-In-Reply-To: <2278c46c-cb2c-2842-ab20-e6a334fe002b@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 10 Jul 2023 21:24:39 +0300
-Message-ID: <CAA8EJpoJ4Tqew5oFSE44vnBrnO+nfizffLvHV3uwrvcvjZTk0A@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] drm/msm/dp: move of_dp_aux_populate_bus() to probe
- for eDP
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SA0PR12MB4558:EE_
+X-MS-Office365-Filtering-Correlation-Id: 346d9fea-a6b6-4f9b-98a1-08db8173368a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: urASjH7dGx3CheY18ky6xUkNHheKA6yDPCgZIi1mo1ZxDGvvnNOdcTahdwaStTEm5jQ3kAWMC0PzkQgjCddswooATtHM48lsCphqKf923krXK5kW4r8zqbWTyJCLnEralZB5ES7LBVxRk9cDJDyIX9rW+/fXXXB+MhUSHf5cLez3PmMTQh8QPf1RIrYTXNbMUGR+dyNZTDrb4F/r+QHD9uNCZeVuphFyhD7HX/1fjFznj4H9pk9Rw2r9D3WMIF8J36qddJ2Jo1UjE59TqAqlWhal/zNyTnztfuLtMNxG2uaqi/+e4ctqElhSAyVx7eV7aM9+vxwixO7x2a3Zrw0PyOW8dDOPv1dhnjueaiy4rtyuHnRjk+i91vLcUQuL2OOE3/Xpf3fkiZ4g9GscEiZNycLIBh4DhT9rmBA0FNwGIuCRp9nANdQUyM2bk/lAvBqgIWGJQdK/NAKarzsgWrsiIz1TEBkG5PGfyfKrNSxdr9ycbWIAt+rEz08aHDDKUZlFScFkHDaJH1vKF0QKdZrogA0XY7kjKojcJ1++dfQJ+HwmBTp0o6jOi8ne1mgmM5SaX6y5KciJbPo1IyW+RSHIZHCL6lbu1zNdOsehXZdM1ENdChn7+nFQ6qVvvG5RUqt+bAl99wx7r5WPOLzAI6PfVQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(39860400002)(346002)(366004)(451199021)(36756003)(86362001)(31696002)(38100700002)(478600001)(6666004)(54906003)(6486002)(6512007)(8676002)(8936002)(316002)(5660300002)(2906002)(4326008)(66476007)(6916009)(66556008)(66946007)(31686004)(41300700001)(2616005)(26005)(6506007)(53546011)(186003)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SC8rRjl3TDB5Ky9mMEJqWGYyOU8rUE04SVAyMy9VOWVDYXN3R2Z2VCtiajRz?=
+ =?utf-8?B?VSs3SWhMUmZORVp0MTNXWmd1OE9xcWVXUkdTZXRDTm4xOGhlYVFsalVVN3Ri?=
+ =?utf-8?B?T0I4bWo1a1piR0VCSER1U2xOZmZnUTh0azExTTBpRjZUbWpjTHBoQm5XREQ3?=
+ =?utf-8?B?Q0ZZRnZVY2ZXUURjTjUzYzB6UW9nbXFxLzFtdUNFeGlTTHBjL3UzTXI0NjIw?=
+ =?utf-8?B?cm4rVkVsOFUyc3hub28xeUd2alN0SjNranRyQXJ5UUw5MHhtMTlTR0RaSG9a?=
+ =?utf-8?B?YUZob3ZiM0dHZnFaRi90bEFBaTYyVG90SHY0WFQ2U1JtcWt1dm4ycWk5NS9j?=
+ =?utf-8?B?QzgrTmd0VVhNb2Z0N204Tzl1MkpCNDBOYmRvalVLejBDczVZeXpjTDFQaXNB?=
+ =?utf-8?B?OEk4TWFydUdDTW55ckY2TDZyZjlZMStEM3ZJKzl3OEowVXFOVDB4cXA5Qzhh?=
+ =?utf-8?B?Q00ydXd1dWtYZ1lWUmZsMys2aEg2SmorTkhaSWRoSnpWMUNtU0YwQXdGOXlD?=
+ =?utf-8?B?RTdxN24xeGhxenEySk1jRUFkamZaRGxKVm1xaU1hSm4vSUlCTm1vQXQ5WlZI?=
+ =?utf-8?B?SmpPd0tqcElHZUVIYzM5UmFtT1NBako0VUdMUmVpTFNIeUlXWmFjWXJSeGFD?=
+ =?utf-8?B?MVA2ZmRNTVRyblZJS3pxVWk4Vy8xMG0vYXhyR1I3RVZlZGRaVTE4REVhSnZU?=
+ =?utf-8?B?QzlWZDN5S21yTXJCVStQdERPRlVqdDdlc1NIbDJVUUFxaVgzUEtnd0RVbVd4?=
+ =?utf-8?B?ZzU4MkFQNEUyN0dPemU0eGxnUnBGOVIzeWhyMmlaa1pwUGRrNFJFdFZXempE?=
+ =?utf-8?B?dGlXaFg3RnNld1Rka0VPeHpQKzUxWndJMTJXT2EyQzlEblB5Qm9hS0E2d21w?=
+ =?utf-8?B?MXd1d1pBcTdZcEhoNEZVV2JuSG4rL3BnY1FRaDcrM3VDTWdtY1JoemgrNE9i?=
+ =?utf-8?B?Y3ZzeUxSWTZZYklvUmtRckFXeTRBSkU5ZU4yRDU0SmZPOElWOW0xQVJ1akVE?=
+ =?utf-8?B?YkRzUkRnN2VOTkN3T3czYWFyVC9XOVlEUThDLzVqV2JaR0R2RjFOM25vdXc0?=
+ =?utf-8?B?cFNYN0Z2SGtpYkxOZ01BNVhGV0Flak1WMnUxcFdFREFVOWppUERYOXV0aSty?=
+ =?utf-8?B?eERGcWtWc1VXSisvaDBacnNmY1pvS1NrNjJuTVB5eUhlUGRjK3FtT2ZUUFMy?=
+ =?utf-8?B?WXdEdEdhQktLbU1RN3dkcS92VHVEcElZd0hpRko2TDJMcjNmd3MwWDJMWmJw?=
+ =?utf-8?B?VlB2VEhTSDFqQ3FUenArczA2TjZvcWYyc0Y1R3VGRnJBMG1oU2ZKeFdlMDhl?=
+ =?utf-8?B?ZzF4VktTNERtRk9vTm1PVGhzY1U2b2hTa0poLzZZZURwOFJYU3BjYUM0ZTFw?=
+ =?utf-8?B?ZGE2c0FkUk9TNHFzaEdEaVRnMEtGVnF3OWZDZ1RwUXh6aG1iQ1pVSmVJdUlk?=
+ =?utf-8?B?dU83bi9sWDZSZzRtVFNqUVdtRWNGbU5NUEJwOEhZS29DWUdtMW5vOTY4SDlw?=
+ =?utf-8?B?anRtME1uYTBZVW42bnlmZkx6dFpvSWxYejZaMzBpbkFHVnhkS3o4YWdxaGJ6?=
+ =?utf-8?B?SHNnUHAxbmFvZTBRMnViRUZnZU5rbzR1cWNGSFNpd2ZqY3JVc0lkM1ptd3dG?=
+ =?utf-8?B?eE5FT2tEeExmVU1INHVVZEhtVGl3ZllVaGtmTFJrNURnZUdjSVNYYlh3VG1t?=
+ =?utf-8?B?Nnc5UWJLT0Y1aHpId2JMaHo0SlN3WGhEQnpNWlV6SFQvTEdJdTl3eGJmc1pM?=
+ =?utf-8?B?TFRNV0NoQmFiS3AzT09HV01DOG9WWXNzTXl4ZmZydi9GQTlsVGkrQzFtZ1dH?=
+ =?utf-8?B?SWw4Z0FFbEN6WjFPWENLalhwUGpnU1p0eWliejc4MzdLd01JRUJpTWtNdDBC?=
+ =?utf-8?B?VmtxSGN5aEJPenVFR0IvUUJOTlZoek1hYjkyZkRRVEVRekkvMHNVcTVOR1hn?=
+ =?utf-8?B?cDVJOXZKSk03WHRMem1Uam1qaTBTUFlxZlVONW04NU1rTVJ1Ump5ZVQvSy9J?=
+ =?utf-8?B?TG5uZzZpM0FEN0hkMEdvT3d2bmRINFczckxtbmVsSkJxYk1MVmxTZjNrcDVV?=
+ =?utf-8?B?enhYZFJVeTBDc0RmbWNGYVR1ZE1IUEduUHhRTUprWWlKUlUvcy93VGlqY0FW?=
+ =?utf-8?Q?uQ1+mEZnCsdWxAesmtr5UxwiY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 346d9fea-a6b6-4f9b-98a1-08db8173368a
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 18:26:44.1344
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bhpjDEQhuQTDNkNMR1j/UpKKSvM+p9pXZsrgTS/wsldhsh5bb+aPKHuwWYA6S6gZrT8Qli8XApg3vicdTjOf8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4558
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Restored CC list]
+On 6/23/2023 08:49, Mario Limonciello wrote:
+> Dynamic boost control is a feature of some SoCs that allows
+> an authenticated entity to send commands to the security processor
+> to control certain SOC characteristics with the intention to improve
+> performance.
+> 
+> This is implemented via a mechanism that a userspace application would
+> authenticate using a nonce and key exchange over an IOCTL interface.
+> 
+> After authentication is complete an application can exchange signed
+> messages with the security processor and both ends can validate the
+> data transmitted.
+> 
+> This series includes a test suite that can be run on real hardware
+> to ensure that the communication works as expected.  This can also be
+> used for an application to model the communication path.
+> 
+> Two sysfs files are introduced for reading the PSP bootloader version
+> as well as TEE version which can be useful data points for debugging
+> communication problems.
+> 
+> v4->v5:
+>   * Pick up tags
+>   * Pick up a static fix
+>   * Fix a mistake found in dbc_cli
+> 
+> Mario Limonciello (11):
+>    crypto: ccp: Rename macro for security attributes
+>    crypto: ccp: Add support for displaying PSP firmware versions
+>    crypto: ccp: Add bootloader and TEE version offsets
+>    crypto: ccp: move setting PSP master to earlier in the init
+>    crypto: ccp: Add support for fetching a nonce for dynamic boost
+>      control
+>    crypto: ccp: Add support for setting user ID for dynamic boost control
+>    crypto: ccp: Add support for getting and setting DBC parameters
+>    crypto: ccp: Add a sample library for ioctl use
+>    crypto: ccp: Add a sample python script for Dynamic Boost Control
+>    crypto: ccp: Add unit tests for dynamic boost control
+>    crypto: ccp: Add Mario to MAINTAINERS
+> 
+>   Documentation/ABI/testing/sysfs-driver-ccp |  18 ++
+>   MAINTAINERS                                |  12 +
+>   drivers/crypto/ccp/Makefile                |   3 +-
+>   drivers/crypto/ccp/dbc.c                   | 250 +++++++++++++++++++
+>   drivers/crypto/ccp/dbc.h                   |  56 +++++
+>   drivers/crypto/ccp/psp-dev.c               |  19 +-
+>   drivers/crypto/ccp/psp-dev.h               |   1 +
+>   drivers/crypto/ccp/sp-dev.h                |   7 +
+>   drivers/crypto/ccp/sp-pci.c                |  96 +++++++-
+>   include/linux/psp-platform-access.h        |   4 +
+>   include/uapi/linux/psp-dbc.h               | 147 ++++++++++++
+>   tools/crypto/ccp/.gitignore                |   1 +
+>   tools/crypto/ccp/Makefile                  |  13 +
+>   tools/crypto/ccp/dbc.c                     |  72 ++++++
+>   tools/crypto/ccp/dbc.py                    |  64 +++++
+>   tools/crypto/ccp/dbc_cli.py                | 134 +++++++++++
+>   tools/crypto/ccp/test_dbc.py               | 266 +++++++++++++++++++++
+>   17 files changed, 1146 insertions(+), 17 deletions(-)
+>   create mode 100644 drivers/crypto/ccp/dbc.c
+>   create mode 100644 drivers/crypto/ccp/dbc.h
+>   create mode 100644 include/uapi/linux/psp-dbc.h
+>   create mode 100644 tools/crypto/ccp/.gitignore
+>   create mode 100644 tools/crypto/ccp/Makefile
+>   create mode 100644 tools/crypto/ccp/dbc.c
+>   create mode 100644 tools/crypto/ccp/dbc.py
+>   create mode 100755 tools/crypto/ccp/dbc_cli.py
+>   create mode 100755 tools/crypto/ccp/test_dbc.py
+> 
+> 
+> base-commit: b335f258e8ddafec0e8ae2201ca78d29ed8f85eb
 
-On Mon, 10 Jul 2023 at 20:08, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
->
-> On 7/7/2023 5:32 PM, Dmitry Baryshkov wrote:
-> > On 08/07/2023 02:52, Kuogee Hsieh wrote:
-> >> Move of_dp_aux_populate_bus() to dp_display_probe() for eDP
-> >> from dp_display_bind() so that probe deferral cases can be
-> >> handled effectively
-> >>
-> >> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> >> ---
-> >>   drivers/gpu/drm/msm/dp/dp_aux.c     | 25 ++++++++++++
-> >>   drivers/gpu/drm/msm/dp/dp_display.c | 79
-> >> +++++++++++++++++++------------------
-> >>   2 files changed, 65 insertions(+), 39 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c
-> >> b/drivers/gpu/drm/msm/dp/dp_aux.c
-> >> index c592064..c1baffb 100644
-> >> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
-> >> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
-> >> @@ -505,6 +505,21 @@ void dp_aux_unregister(struct drm_dp_aux *dp_aux)
-> >>       drm_dp_aux_unregister(dp_aux);
-> >>   }
-> >>   +static int dp_wait_hpd_asserted(struct drm_dp_aux *dp_aux,
-> >> +                 unsigned long wait_us)
-> >> +{
-> >> +    int ret;
-> >> +    struct dp_aux_private *aux;
-> >> +
-> >> +    aux = container_of(dp_aux, struct dp_aux_private, dp_aux);
-> >> +
-> >> +    pm_runtime_get_sync(aux->dev);
-> >> +    ret = dp_catalog_aux_wait_for_hpd_connect_state(aux->catalog);
-> >> +    pm_runtime_put_sync(aux->dev);
-> >> +
-> >> +    return ret;
-> >> +}
-> >> +
-> >>   struct drm_dp_aux *dp_aux_get(struct device *dev, struct dp_catalog
-> >> *catalog,
-> >>                     bool is_edp)
-> >>   {
-> >> @@ -528,6 +543,16 @@ struct drm_dp_aux *dp_aux_get(struct device
-> >> *dev, struct dp_catalog *catalog,
-> >>       aux->catalog = catalog;
-> >>       aux->retry_cnt = 0;
-> >>   +    /*
-> >> +     * Use the drm_dp_aux_init() to use the aux adapter
-> >> +     * before registering aux with the DRM device.
-> >> +     */
-> >> +    aux->dp_aux.name = "dpu_dp_aux";
-> >> +    aux->dp_aux.dev = dev;
-> >> +    aux->dp_aux.transfer = dp_aux_transfer;
-> >> +    aux->dp_aux.wait_hpd_asserted = dp_wait_hpd_asserted;
-> >> +    drm_dp_aux_init(&aux->dp_aux);
-> >> +
-> >>       return &aux->dp_aux;
-> >>   }
-> >>   diff --git a/drivers/gpu/drm/msm/dp/dp_display.c
-> >> b/drivers/gpu/drm/msm/dp/dp_display.c
-> >> index 185f1eb..7ed4bea 100644
-> >> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> >> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> >> @@ -302,10 +302,6 @@ static int dp_display_bind(struct device *dev,
-> >> struct device *master,
-> >>           goto end;
-> >>       }
-> >>   -    pm_runtime_enable(dev);
-> >> -    pm_runtime_set_autosuspend_delay(dev, 1000);
-> >> -    pm_runtime_use_autosuspend(dev);
-> >> -
-> >>       return 0;
-> >>   end:
-> >>       return rc;
-> >> @@ -322,8 +318,6 @@ static void dp_display_unbind(struct device *dev,
-> >> struct device *master,
-> >>         kthread_stop(dp->ev_tsk);
-> >>   -    of_dp_aux_depopulate_bus(dp->aux);
-> >> -
-> >>       dp_power_client_deinit(dp->power);
-> >>       dp_unregister_audio_driver(dev, dp->audio);
-> >>       dp_aux_unregister(dp->aux);
-> >> @@ -1245,6 +1239,29 @@ static const struct msm_dp_desc
-> >> *dp_display_get_desc(struct platform_device *pde
-> >>       return NULL;
-> >>   }
-> >>   +static void of_dp_aux_depopulate_bus_void(void *data)
-> >> +{
-> >> +    of_dp_aux_depopulate_bus(data);
-> >> +}
-> >> +
-> >> +static int dp_display_auxbus_emulation(struct dp_display_private *dp)
-> >
-> > Why is it called emulation?
-> >
-> >> +{
-> >> +    struct device *dev = &dp->pdev->dev;
-> >> +    struct device_node *aux_bus;
-> >> +    int ret = 0;
-> >> +
-> >> +    aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
-> >> +
-> >> +    if (aux_bus) {
-> >> +        ret = devm_of_dp_aux_populate_bus(dp->aux, NULL);
-> >
-> > And here you missed the whole point of why we have been asking for.
-> > Please add a sensible `done_probing' callback, which will call
-> > component_add(). This way the DP component will only be registered
-> > when the panel has been probed. Keeping us from the component binding
-> > retries and corresponding side effects.
-> >
-> >> +
-> >> +        devm_add_action_or_reset(dev, of_dp_aux_depopulate_bus_void,
-> >> +                     dp->aux);
-> >
-> > Useless, it's already handled by the devm_ part of the
-> > devm_of_dp_aux_populate_bus().
-> >
-> >> +    }
-> >> +
-> >> +    return ret;
-> >> +}
-> >> +
-> >>   static int dp_display_probe(struct platform_device *pdev)
-> >>   {
-> >>       int rc = 0;
-> >> @@ -1290,8 +1307,18 @@ static int dp_display_probe(struct
-> >> platform_device *pdev)
-> >>         platform_set_drvdata(pdev, &dp->dp_display);
-> >>   +    pm_runtime_enable(&pdev->dev);
-> >> +    pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
-> >> +    pm_runtime_use_autosuspend(&pdev->dev);
-> >
-> > Can we have this in probe right from the patch #2?
->
-> no, at patch#2, devm_of_dp_aux_populate_bus() is done ta bind timing.
->
-> The device used by pm_runtime_get_sync() of generic_edp_panel_probe()
-> which is derived from devm_of_dp_aux_populate_bus() is different the
-> &pdev->dev here.
+Herbert,
 
-Excuse me, I don't get your answer. In patch #2 you have added
-pm_runtime_enable() / etc to dp_display_bind().
-In this patch you are moving these calls to dp_display_probe(). I
-think that the latter is a better place for enabling runtime PM and as
-such I've asked you to squash this chunk into patch #2.
-Why isn't that going to work?
+Any other concerns on this series?  It has acks from Tom and John both now.
 
-If I'm not mistaken here, the panel's call to pm_runtime_get_sync()
-will wake up the panel and all the parent devices, including the DP.
-That's what I meant in my comment regarding PM calls in the patch #1.
-pm_runtime_get_sync() / resume() / etc. do not only increase the
-runtime PM count. They do other things to parent devices, linked
-devices, etc.
+Do you want me to rebase on 6.5-rc1?
 
->
-> >
-> >> +
-> >>       dp_display_request_irq(dp);
-> >>   +    if (dp->dp_display.is_edp) {
-> >> +        rc = dp_display_auxbus_emulation(dp);
-> >> +        if (rc)
-> >> +            DRM_ERROR("eDP aux-bus emulation failed, rc=%d\n", rc);
-> >> +    }
-> >> +
-> >>       rc = component_add(&pdev->dev, &dp_display_comp_ops);
-> >>       if (rc) {
-> >>           DRM_ERROR("component add failed, rc=%d\n", rc);
-> >> @@ -1306,11 +1333,14 @@ static int dp_display_remove(struct
-> >> platform_device *pdev)
-> >>       struct dp_display_private *dp =
-> >> dev_get_dp_display_private(&pdev->dev);
-> >>         component_del(&pdev->dev, &dp_display_comp_ops);
-> >> -    dp_display_deinit_sub_modules(dp);
-> >> -
-> >>       platform_set_drvdata(pdev, NULL);
-> >> +
-> >> +    pm_runtime_dont_use_autosuspend(&pdev->dev);
-> >> +    pm_runtime_disable(&pdev->dev);
-> >>       pm_runtime_put_sync_suspend(&pdev->dev);
-> >>   +    dp_display_deinit_sub_modules(dp);
-> >> +
-> >>       return 0;
-> >>   }
-> >>   @@ -1514,31 +1544,10 @@ void msm_dp_debugfs_init(struct msm_dp
-> >> *dp_display, struct drm_minor *minor)
-> >>     static int dp_display_get_next_bridge(struct msm_dp *dp)
-> >>   {
-> >> -    int rc;
-> >> +    int rc = 0;
-> >>       struct dp_display_private *dp_priv;
-> >> -    struct device_node *aux_bus;
-> >> -    struct device *dev;
-> >>         dp_priv = container_of(dp, struct dp_display_private,
-> >> dp_display);
-> >> -    dev = &dp_priv->pdev->dev;
-> >> -    aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
-> >> -
-> >> -    if (aux_bus && dp->is_edp) {
-> >> -        /*
-> >> -         * The code below assumes that the panel will finish probing
-> >> -         * by the time devm_of_dp_aux_populate_ep_devices() returns.
-> >> -         * This isn't a great assumption since it will fail if the
-> >> -         * panel driver is probed asynchronously but is the best we
-> >> -         * can do without a bigger driver reorganization.
-> >> -         */
-> >> -        rc = of_dp_aux_populate_bus(dp_priv->aux, NULL);
-> >> -        of_node_put(aux_bus);
-> >> -        if (rc)
-> >> -            goto error;
-> >> -    } else if (dp->is_edp) {
-> >> -        DRM_ERROR("eDP aux_bus not found\n");
-> >> -        return -ENODEV;
-> >> -    }
-> >>         /*
-> >>        * External bridges are mandatory for eDP interfaces: one has to
-> >> @@ -1551,17 +1560,9 @@ static int dp_display_get_next_bridge(struct
-> >> msm_dp *dp)
-> >>       if (!dp->is_edp && rc == -ENODEV)
-> >>           return 0;
-> >>   -    if (!rc) {
-> >> +    if (!rc)
-> >>           dp->next_bridge = dp_priv->parser->next_bridge;
-> >> -        return 0;
-> >> -    }
-> >>   -error:
-> >> -    if (dp->is_edp) {
-> >> -        of_dp_aux_depopulate_bus(dp_priv->aux);
-> >> -        dp_display_host_phy_exit(dp_priv);
-> >> -        dp_display_host_deinit(dp_priv);
-> >> -    }
-> >>       return rc;
-> >>   }
-> >
-
-
-
--- 
-With best wishes
-Dmitry
+Thanks,
