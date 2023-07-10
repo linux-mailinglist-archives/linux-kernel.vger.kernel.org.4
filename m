@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF93774DEB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1422D74DEB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjGJUDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S229862AbjGJUDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjGJUDE (ORCPT
+        with ESMTP id S230344AbjGJUDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:03:04 -0400
+        Mon, 10 Jul 2023 16:03:05 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A1313E;
-        Mon, 10 Jul 2023 13:03:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840E4133;
+        Mon, 10 Jul 2023 13:03:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689019383; x=1720555383;
+  t=1689019384; x=1720555384;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8l42AXgYUGrnbuH+V3uVVyks9ctnrJPhFGxYqdNOUdU=;
-  b=G78w785fgThtU2mApgLldaJwO2VAng+4mE8QmMGU6zlcExTe1gz0a6Ar
-   8u60WYY1lUnIb3SbP63fztzlZ10Wmh2C35HAA5EzntPV1fbxcP3AnI9CV
-   fgPN92oDWyqqlJrHO5DXB84yhZBp7yf1Y3IuBc8Cel1kf+eb3vcebvgBb
-   V50zHP9h6bWIJmUiLu5djLn1ESR3GZibn87tK4JEji1T33XGVkrTnHf2l
-   7mgYwT8wu5rxUjb20vaDlEDE3NcmlSjiZx2WUsLN8d0LnhF8uXxOCBKqQ
-   i8nNltgKDktVmPYDE5/iCcBrGCGcxZDn/hgwis/gG9uiox0vnSOEd9ChJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344764064"
+  bh=pExp2WMXGyNpxCyGDYOXewD2SNqta6zQBIAwkyT6MEY=;
+  b=iEGdRBBBKct/8vbUN5DV9bIQlxrdxPbbFuQmu5al7PtEgtpaWaD4zKza
+   NzsDzCY/56m20Ws7yc22sFtUnHWKgbdtxdZRJ7gb8rqVDIezhfIKAnHxN
+   r7hYa2NBGzEkluOMfSaWscJgoKeKg+ikCVER4TTbyAu2OwH51ZIkVnsmh
+   K0RG0XkDBiVTjr7B9SZq/AujnNFKD5WhxZsFaBBVYoRGaTWFThczaPwc3
+   3APuWymlFaqcTUZFJeCMSrZz2StvABVHtzfEymnWieUCKp9VLdWB7wuS8
+   JHH/INNi7a4kYehWJuujwkSc2BAnTw9PBfTQKiaw7jGPondCFgzR6w2mh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344764078"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="344764064"
+   d="scan'208";a="344764078"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:03:02 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:03:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714903582"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714903601"
 X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="714903582"
+   d="scan'208";a="714903601"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.93.201])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:03:01 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:03:02 -0700
 From:   alison.schofield@intel.com
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Alison Schofield <alison.schofield@intel.com>, x86@kernel.org,
         linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Derick Marks <derick.w.marks@intel.com>
-Subject: [PATCH v4 1/2] x86/numa: Introduce numa_fill_memblks()
-Date:   Mon, 10 Jul 2023 13:02:58 -0700
-Message-Id: <ef078a6f056ca974e5af85997013c0fda9e3326d.1689018477.git.alison.schofield@intel.com>
+Subject: [PATCH v4 2/2] ACPI: NUMA: Apply SRAT proximity domain to entire CFMWS window
+Date:   Mon, 10 Jul 2023 13:02:59 -0700
+Message-Id: <eaa0b7cffb0951a126223eef3cbe7b55b8300ad9.1689018477.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1689018477.git.alison.schofield@intel.com>
 References: <cover.1689018477.git.alison.schofield@intel.com>
@@ -77,185 +77,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-numa_fill_memblks() fills in the gaps in numa_meminfo memblks
-over an physical address range.
+Commit fd49f99c1809 ("ACPI: NUMA: Add a node and memblk for each
+CFMWS not in SRAT") did not account for the case where the BIOS
+only partially describes a CFMWS Window in the SRAT. That means
+the omitted address ranges, of a partially described CFMWS Window,
+do not get assigned to a NUMA node.
 
-The ACPI driver will use numa_fill_memblks() to implement a new Linux
-policy that prescribes extending proximity domains in a portion of a
-CFMWS window to the entire window.
+Replace the call to phys_to_target_node() with numa_add_memblks().
+Numa_add_memblks() searches an HPA range for existing memblk(s)
+and extends those memblk(s) to fill the entire CFMWS Window.
 
-Dan Williams offered this explanation of the policy:
-A CFWMS is an ACPI data structure that indicates *potential* locations
-where CXL memory can be placed. It is the playground where the CXL
-driver has free reign to establish regions. That space can be populated
-by BIOS created regions, or driver created regions, after hotplug or
-other reconfiguration.
+Extending the existing memblks is a simple strategy that reuses
+SRAT defined proximity domains from part of a window to fill out
+the entire window, based on the knowledge* that all of a CFMWS
+window is of a similar performance class.
 
-When BIOS creates a region in a CXL Window it additionally describes
-that subset of the Window range in the other typical ACPI tables SRAT,
-SLIT, and HMAT. The rationale for BIOS not pre-describing the entire
-CXL Window in SRAT, SLIT, and HMAT is that it can not predict the
-future. I.e. there is nothing stopping higher or lower performance
-devices being placed in the same Window. Compare that to ACPI memory
-hotplug that just onlines additional capacity in the proximity domain
-with little freedom for dynamic performance differentiation.
+*Note that this heuristic will evolve when CFMWS Windows present
+a wider range of characteristics. The extension of the proximity
+domain, implemented here, is likely a step in developing a more
+sophisticated performance profile in the future.
 
-That leaves the OS with a choice, should unpopulated window capacity
-match the proximity domain of an existing region, or should it allocate
-a new one? This patch takes the simple position of minimizing proximity
-domain proliferation by reusing any proximity domain intersection for
-the entire Window. If the Window has no intersections then allocate a
-new proximity domain. Note that SRAT, SLIT and HMAT information can be
-enumerated dynamically in a standard way from device provided data.
-Think of CXL as the end of ACPI needing to describe memory attributes,
-CXL offers a standard discovery model for performance attributes, but
-Linux still needs to interoperate with the old regime.
+There is no change in behavior when the SRAT does not describe
+the CFMWS Window at all. In that case, a new NUMA node with a
+single memblk covering the entire CFMWS Window is created.
 
+Fixes: fd49f99c1809 ("ACPI: NUMA: Add a node and memblk for each CFMWS not in SRAT")
 Reported-by: Derick Marks <derick.w.marks@intel.com>
 Suggested-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Tested-by: Derick Marks <derick.w.marks@intel.com>
 ---
- arch/x86/include/asm/sparsemem.h |  2 +
- arch/x86/mm/numa.c               | 80 ++++++++++++++++++++++++++++++++
- include/linux/numa.h             |  7 +++
- 3 files changed, 89 insertions(+)
+ drivers/acpi/numa/srat.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
-index 64df897c0ee3..1be13b2dfe8b 100644
---- a/arch/x86/include/asm/sparsemem.h
-+++ b/arch/x86/include/asm/sparsemem.h
-@@ -37,6 +37,8 @@ extern int phys_to_target_node(phys_addr_t start);
- #define phys_to_target_node phys_to_target_node
- extern int memory_add_physaddr_to_nid(u64 start);
- #define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-+extern int numa_fill_memblks(u64 start, u64 end);
-+#define numa_fill_memblks numa_fill_memblks
- #endif
- #endif /* __ASSEMBLY__ */
+diff --git a/drivers/acpi/numa/srat.c b/drivers/acpi/numa/srat.c
+index 1f4fc5f8a819..12f330b0eac0 100644
+--- a/drivers/acpi/numa/srat.c
++++ b/drivers/acpi/numa/srat.c
+@@ -310,11 +310,16 @@ static int __init acpi_parse_cfmws(union acpi_subtable_headers *header,
+ 	start = cfmws->base_hpa;
+ 	end = cfmws->base_hpa + cfmws->window_size;
  
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 2aadb2019b4f..c01c5506fd4a 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -11,6 +11,7 @@
- #include <linux/nodemask.h>
- #include <linux/sched.h>
- #include <linux/topology.h>
-+#include <linux/sort.h>
- 
- #include <asm/e820/api.h>
- #include <asm/proto.h>
-@@ -961,4 +962,83 @@ int memory_add_physaddr_to_nid(u64 start)
- 	return nid;
- }
- EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
-+
-+static int __init cmp_memblk(const void *a, const void *b)
-+{
-+	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
-+	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
-+
-+	return ma->start - mb->start;
-+}
-+
-+static struct numa_memblk *numa_memblk_list[NR_NODE_MEMBLKS] __initdata;
-+
-+/**
-+ * numa_fill_memblks - Fill gaps in numa_meminfo memblks
-+ * @start: address to begin fill
-+ * @end: address to end fill
-+ *
-+ * Find and extend numa_meminfo memblks to cover the @start-@end
-+ * physical address range, such that the first memblk includes
-+ * @start, the last memblk includes @end, and any gaps in between
-+ * are filled.
-+ *
-+ * RETURNS:
-+ * 0		  : Success
-+ * NUMA_NO_MEMBLK : No memblk exists in @start-@end range
-+ */
-+
-+int __init numa_fill_memblks(u64 start, u64 end)
-+{
-+	struct numa_memblk **blk = &numa_memblk_list[0];
-+	struct numa_meminfo *mi = &numa_meminfo;
-+	int count = 0;
-+	u64 prev_end;
-+
+-	/* Skip if the SRAT already described the NUMA details for this HPA */
+-	node = phys_to_target_node(start);
+-	if (node != NUMA_NO_NODE)
 +	/*
-+	 * Create a list of pointers to numa_meminfo memblks that
-+	 * overlap start, end. Exclude (start == bi->end) since
-+	 * end addresses in both a CFMWS range and a memblk range
-+	 * are exclusive.
-+	 *
-+	 * This list of pointers is used to make in-place changes
-+	 * that fill out the numa_meminfo memblks.
++	 * The SRAT may have already described NUMA details for all,
++	 * or a portion of, this CFMWS HPA range. Extend the memblks
++	 * found for any portion of the window to cover the entire
++	 * window.
 +	 */
-+	for (int i = 0; i < mi->nr_blks; i++) {
-+		struct numa_memblk *bi = &mi->blk[i];
-+
-+		if (start < bi->end && end >= bi->start) {
-+			blk[count] = &mi->blk[i];
-+			count++;
-+		}
-+	}
-+	if (!count)
-+		return NUMA_NO_MEMBLK;
-+
-+	/* Sort the list of pointers in memblk->start order */
-+	sort(&blk[0], count, sizeof(blk[0]), cmp_memblk, NULL);
-+
-+	/* Make sure the first/last memblks include start/end */
-+	blk[0]->start = min(blk[0]->start, start);
-+	blk[count - 1]->end = max(blk[count - 1]->end, end);
-+
-+	/*
-+	 * Fill any gaps by tracking the previous memblks
-+	 * end address and backfilling to it if needed.
-+	 */
-+	prev_end = blk[0]->end;
-+	for (int i = 1; i < count; i++) {
-+		struct numa_memblk *curr = blk[i];
-+
-+		if (prev_end >= curr->start) {
-+			if (prev_end < curr->end)
-+				prev_end = curr->end;
-+		} else {
-+			curr->start = prev_end;
-+			prev_end = curr->end;
-+		}
-+	}
-+	return 0;
-+}
-+
- #endif
-diff --git a/include/linux/numa.h b/include/linux/numa.h
-index 59df211d051f..0f512c0aba54 100644
---- a/include/linux/numa.h
-+++ b/include/linux/numa.h
-@@ -12,6 +12,7 @@
- #define MAX_NUMNODES    (1 << NODES_SHIFT)
++	if (!numa_fill_memblks(start, end))
+ 		return 0;
  
- #define	NUMA_NO_NODE	(-1)
-+#define	NUMA_NO_MEMBLK	(-1)
++	/* No SRAT description. Create a new node. */
+ 	node = acpi_map_pxm_to_node(*fake_pxm);
  
- /* optionally keep NUMA memory info available post init */
- #ifdef CONFIG_NUMA_KEEP_MEMINFO
-@@ -43,6 +44,12 @@ static inline int phys_to_target_node(u64 start)
- 	return 0;
- }
- #endif
-+#ifndef numa_fill_memblks
-+static inline int __init numa_fill_memblks(u64 start, u64 end)
-+{
-+	return NUMA_NO_MEMBLK;
-+}
-+#endif
- #else /* !CONFIG_NUMA */
- static inline int numa_map_to_online_node(int node)
- {
+ 	if (node == NUMA_NO_NODE) {
 -- 
 2.37.3
 
