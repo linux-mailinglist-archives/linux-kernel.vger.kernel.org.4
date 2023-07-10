@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6970874CFE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853AD74CFE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjGJIZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S232140AbjGJIZl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 04:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjGJIZd (ORCPT
+        with ESMTP id S231622AbjGJIZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:25:33 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC84E5;
-        Mon, 10 Jul 2023 01:25:29 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-262e839647eso3228431a91.2;
-        Mon, 10 Jul 2023 01:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688977529; x=1691569529;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=euAD73FxrqgX4gYf9cb8DIHf1pvqA0RRBkCOGjGePjQ=;
-        b=Vvxqw74ZcgEcC16phKaNK/uLFlHjNdq2y9f7JLmGab9CnmUhfpookk5dHI0pE0bIxO
-         LRjZVinIwcdgNCL3Eg5KFMQQeBlHXAcxgI7wDfU+xIzFDTrWosJguAD2K1i/sXOQGhMI
-         kqE6Mk108f4C+yiNBLK+riGUZnbmcDQVZvEFqyTw1J6s0udPI/tMD7z9fGo7apbKnER8
-         EyImHSwQJPPW4+kQ7iNmOi3BIfzj5fHj9B+jVFjrA5gw/7YlrKsr3Rb1tKI724ELnr4n
-         tqN3QtjuxYDcBKXk8wKq7F/bX9+Wve62viQ/T1RLig49WWhzwRtbszEcju/lV+llsqAg
-         adKw==
+        Mon, 10 Jul 2023 04:25:36 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B20E2;
+        Mon, 10 Jul 2023 01:25:35 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-57712d00cc1so54467407b3.3;
+        Mon, 10 Jul 2023 01:25:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688977529; x=1691569529;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=euAD73FxrqgX4gYf9cb8DIHf1pvqA0RRBkCOGjGePjQ=;
-        b=gEjxIdKsLKvTDBP8kXSkhY3TffBfMJXwJWgnxzTfq5PnKP32M3Er5ARWK0M4zLb03t
-         W3Tw4eH/jrcpGVZ9gvr4hDM680re0DfIELgWY6f+NjcGx98EzLqMnjdPdqmhFJnIVctP
-         Csp6peFu9K1WVL6ulP90BXc3G5GOFyXAEmT16B9FgLhvlc2hZCvVzwfxBqdIj8ssYcFO
-         rr4o1kj5/S2jBrINEIVMK/Eh92WKKTd93ohZEp/lOs7Nq5i9QJJID+i5/5zV/uGtKBDA
-         iPKJ0IWMjTbeRbgsAwKqWV53PwsBKcxPnu9Ns1AMFbdIil7V+kAhg7djV+Fq4DYwsNYx
-         LMWA==
-X-Gm-Message-State: ABy/qLa5+PdueXnf+VbpCQ+9mkvbaP2Vsb5Re1kkGJRTffptGsdJMmyj
-        QH540kuHMSo4VpzmCqw9BRqkAK5gKh07wPuSc4c=
-X-Google-Smtp-Source: APBJJlHRvaqlWVjz/Y1IZSUcs+XH5s6zsw1pngI0Hmn9h0OcD2FE53c9uFMHy8Jqx2frb22rfUBEOw==
-X-Received: by 2002:a17:90a:1f8f:b0:262:f8b8:dba2 with SMTP id x15-20020a17090a1f8f00b00262f8b8dba2mr11733398pja.35.1688977528849;
-        Mon, 10 Jul 2023 01:25:28 -0700 (PDT)
-Received: from sandbox.. ([115.178.65.130])
-        by smtp.googlemail.com with ESMTPSA id l7-20020a17090aaa8700b00264044cca0fsm11081679pjq.1.2023.07.10.01.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 01:25:28 -0700 (PDT)
-Sender: Leesoo Ahn <yisooan.dev@gmail.com>
-From:   Leesoo Ahn <lsahn@ooseel.net>
-X-Google-Original-From: Leesoo Ahn <lsahn@wewakecorp.com>
-To:     lsahn@wewakecorp.com
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selinux: optimize major part with a kernel config in selinux_mmap_addr()
-Date:   Mon, 10 Jul 2023 17:25:00 +0900
-Message-Id: <20230710082500.1838896-1-lsahn@wewakecorp.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1688977534; x=1691569534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pH9fU93I+sCPyG6NQ4A6Nl6qz22cdcmPyX7o2EJSVqU=;
+        b=FBaemoJVmtW98PSZCEciK1PxalnPbsyWyTEkfVdhk2+2HAs343cn1yfQD9gEiV3otS
+         QZ1y9Q7KYpuzGZ9ZBUIoKASA3+l3z4vI4TlC63mEN4jGHEoRZZbChK4KHDmYsktIE/hp
+         8QggJLQ5TAV2KAUQdBY+YSduVrDgxC5/3K1ybMtOdGkH/cz/tupVMtGRqnwYfqD/Na2g
+         gatlqCYX0yNnTRvvbzKheaAPkH1moAtX4iRZOUeqouHso/cHEPrnBCPZKZ8FEjtF/xvK
+         Sm5pwY0e2wxkmOa8yW3hbUz2FG7b6wf1cFAqvRfmOVboyMgQDQWYDt04eHxYFHRbLu+X
+         T1uw==
+X-Gm-Message-State: ABy/qLa3r6X6bwrrdj0YIXMs77B6rZqA9/XIdwNbsrfSvZEKGge+WSkU
+        y3YUayKR5JGTTBehVuUgEtfbdsm8kAcMhQ==
+X-Google-Smtp-Source: APBJJlEosf1BKAh3lP1vPIjwTEISnLWb8ncH2+tKdHyVpmsvZ37F4YEaEwq7hvqazFBSK05LOwfP8A==
+X-Received: by 2002:a0d:ca55:0:b0:56d:5060:f91a with SMTP id m82-20020a0dca55000000b0056d5060f91amr12797425ywd.11.1688977534405;
+        Mon, 10 Jul 2023 01:25:34 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id a125-20020a818a83000000b0057a560a9832sm2582055ywg.1.2023.07.10.01.25.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 01:25:33 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-57712d00cc1so54467197b3.3;
+        Mon, 10 Jul 2023 01:25:33 -0700 (PDT)
+X-Received: by 2002:a0d:ea87:0:b0:57a:6bf0:2100 with SMTP id
+ t129-20020a0dea87000000b0057a6bf02100mr6098699ywe.1.1688977533504; Mon, 10
+ Jul 2023 01:25:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <2c99d5df41c40691f6c407b7b6a040d406bc81ac.1688901306.git.geert+renesas@glider.be>
+ <6af51602-631a-dadc-2740-d1cfad0a2993@roeck-us.net> <CAMuHMdW=WDuqgXk_51T341vgXrcxYPO34ou=rKHZrZj8Yiw6Rw@mail.gmail.com>
+ <f27872c8f374a42fb7ea313314c47cdba2473b06.camel@physik.fu-berlin.de>
+ <CAMuHMdXg1FvMCSBCvs=aFah0NWdOzEX+XdF4af0kY3kNx2bPtg@mail.gmail.com>
+ <e44bc98f41e0497a3f125a32a6e78fe14313c634.camel@physik.fu-berlin.de>
+ <CAMuHMdUOOPvVM-evLptCnbNGpDtAxktY7QDuKQo7WmZ7RhrAFg@mail.gmail.com> <63a34d66698065724d8ff3455192a8f2814cf034.camel@physik.fu-berlin.de>
+In-Reply-To: <63a34d66698065724d8ff3455192a8f2814cf034.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jul 2023 10:25:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV53tr3bmn0yJFB2-enUwBTtrieUvpH+qiQzmPtefUuTw@mail.gmail.com>
+Message-ID: <CAMuHMdV53tr3bmn0yJFB2-enUwBTtrieUvpH+qiQzmPtefUuTw@mail.gmail.com>
+Subject: Re: [PATCH] [RFT] sh: mach-r2d: Handle virq offset in cascaded IRL demux
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The major part, the conditional branch in selinux_mmap_addr() is always to be
-false so long as CONFIG_LSM_MMAP_MIN_ADDR is set to zero at compile time.
+Hi Adrian,
 
-This usually happens in some linux distros, for instance Ubuntu, which
-the config is set to zero in release version. Therefore it could be a bit
-optimized with '#if <expr>' at compile time.
+On Mon, Jul 10, 2023 at 10:20 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Mon, 2023-07-10 at 10:18 +0200, Geert Uytterhoeven wrote:
+> > > OK, so we're talking about two different regressions here?
+> > https://lore.kernel.org/r/CAMuHMdWmv-Jdvi7a04JGXuA2QARj8c8mpUvY7TOcetPkG4pW7A@mail.gmail.com
+>
+> Link doesn't work for me, unfortunately.
 
-Signed-off-by: Leesoo Ahn <lsahn@wewakecorp.com>
----
- security/selinux/hooks.c | 2 ++
- 1 file changed, 2 insertions(+)
+-EAGAIN ;-)
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index d06e350fedee..a049aab6524b 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3723,11 +3723,13 @@ static int selinux_mmap_addr(unsigned long addr)
- {
- 	int rc = 0;
- 
-+#if CONFIG_LSM_MMAP_MIN_ADDR > 0
- 	if (addr < CONFIG_LSM_MMAP_MIN_ADDR) {
- 		u32 sid = current_sid();
- 		rc = avc_has_perm(sid, sid, SECCLASS_MEMPROTECT,
- 				  MEMPROTECT__MMAP_ZERO, NULL);
- 	}
-+#endif
- 
- 	return rc;
- }
+Lore-archiving is not instantaneous. Please retry.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
