@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBA674CFAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C817374CFB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbjGJIPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
+        id S233000AbjGJIPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjGJIN6 (ORCPT
+        with ESMTP id S232674AbjGJIN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:13:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBD7E8;
-        Mon, 10 Jul 2023 01:13:56 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 08:13:55 -0000
+        Mon, 10 Jul 2023 04:13:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFB3E7;
+        Mon, 10 Jul 2023 01:13:58 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 08:13:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688976835;
+        s=2020; t=1688976837;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cgIfuLHvepzq9VhUs97s3Fny+OkENVlJAw90urJEAJ0=;
-        b=aSrCs42FDprIx3vZ2sSDzCWVsCcVm/tjYkgDYmKMuhlY6hcbpXLdh5kxjx4rAthtoBHDOM
-        FMcVqnG2MDeEou29UY411oGxwLQiNAboVPT0sE5FPiCZoj4EL8mZbEtwQgDlSsmVYuVrOw
-        YkbJw7mf6/ZzNPzCTuW0RfOVpOymM+6hvMrnwDYhrA+znfXz6ZWgI6UOxHOz1bFPIX95aN
-        znBPp8P9Zs/OXl8oNsl8DI7R0v+0UsP77nRN8AE4wuwCsvY6xWLmPFpVimyNRUJ0otw9GG
-        TRi4Vz4cqQhs6a6Wvw3QVL81eM6NfakEHVNpocX/EDPotQkN9BW2oBeTuGrxIA==
+        bh=EOtDsWidxulmTHHJmhH5S2A/34jwRP1wgHitph7bleo=;
+        b=CMAFuLvV6wWa7N1QaRCCIF/B4d4m3lIIsKs2JoZZ3w0NO+tCfCLRs9S8AQ0H99eZ43avSq
+        L+EBT1WhAFH7fGUxx37mV0Nm66i6xsKVAqUMwWuWC7TlEQ9tUhvaQ3GcDEYS/48ch6hDr4
+        Bx8gmoB0PBcz5G3HNkfkKt5XWUXGjUJpbQWTroZpol6HlKN9EU6Nvf8UEqiQtL710eHfBh
+        ADAcMv+hHPuy0qRhSHxyVZCF/boW5ECqAZyWFNKDqGza4UzlYd6axujCpD9xybWc1BKPHR
+        K1cGNDQs03lFnQ3POYrAYdS42/WnI3oY+MtSxqndPhkgNc6ozO3tJn4yygGPMQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688976835;
+        s=2020e; t=1688976837;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cgIfuLHvepzq9VhUs97s3Fny+OkENVlJAw90urJEAJ0=;
-        b=VgNkuDfDrqiUOTgOrBSNU6I/oh7veNxTmTtlngxDY0i8Tu9gGpTqnNqj4WMdbRDNhDaoML
-        NUTeyM3qikc1OaAA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=EOtDsWidxulmTHHJmhH5S2A/34jwRP1wgHitph7bleo=;
+        b=UoE61XaP+CqBT7jo5KbtTwuTHuI6MnB4xwFKnqpGlwqwNAeujkEEP53JPZgekTZuxpDt2M
+        g96cji8O0w5zM/Cg==
+From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/fineibt: Poison ENDBR at +0
-Cc:     "Milburn, Alyssa" <alyssa.milburn@intel.com>,
+Subject: [tip: x86/urgent] x86/32: Remove schedule_tail_wrapper()
+Cc:     Brian Gerst <brgerst@gmail.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Kees Cook <keescook@chromium.org>,
         Sami Tolvanen <samitolvanen@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230615193722.194131053@infradead.org>
-References: <20230615193722.194131053@infradead.org>
+In-Reply-To: <20230623225529.34590-2-brgerst@gmail.com>
+References: <20230623225529.34590-2-brgerst@gmail.com>
 MIME-Version: 1.0
-Message-ID: <168897683510.404.15529620600902653917.tip-bot2@tip-bot2>
+Message-ID: <168897683652.404.733058783899665441.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,88 +69,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     04505bbbbb15da950ea0239e328a76a3ad2376e0
-Gitweb:        https://git.kernel.org/tip/04505bbbbb15da950ea0239e328a76a3ad2376e0
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 15 Jun 2023 21:35:48 +02:00
+Commit-ID:     81f755d561f365f544795fad92f05a085ea4f292
+Gitweb:        https://git.kernel.org/tip/81f755d561f365f544795fad92f05a085ea4f292
+Author:        Brian Gerst <brgerst@gmail.com>
+AuthorDate:    Fri, 23 Jun 2023 18:55:28 -04:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 10 Jul 2023 09:52:25 +02:00
+CommitterDate: Mon, 10 Jul 2023 09:52:24 +02:00
 
-x86/fineibt: Poison ENDBR at +0
+x86/32: Remove schedule_tail_wrapper()
 
-Alyssa noticed that when building the kernel with CFI_CLANG+IBT and
-booting on IBT enabled hardware to obtain FineIBT, the indirect
-functions look like:
+The unwinder expects a return address at the very top of the kernel
+stack just below pt_regs and before any stack frame is created.  Instead
+of calling a wrapper, set up a return address as if ret_from_fork()
+was called from the syscall entry code.
 
-  __cfi_foo:
-	endbr64
-	subl	$hash, %r10d
-	jz	1f
-	ud2
-	nop
-  1:
-  foo:
-	endbr64
-
-This is because the compiler generates code for kCFI+IBT. In that case
-the caller does the hash check and will jump to +0, so there must be
-an ENDBR there. The compiler doesn't know about FineIBT at all; also
-it is possible to actually use kCFI+IBT when booting with 'cfi=kcfi'
-on IBT enabled hardware.
-
-Having this second ENDBR however makes it possible to elide the CFI
-check. Therefore, we should poison this second ENDBR when switching to
-FineIBT mode.
-
-Fixes: 931ab63664f0 ("x86/ibt: Implement FineIBT")
-Reported-by: "Milburn, Alyssa" <alyssa.milburn@intel.com>
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Link: https://lore.kernel.org/r/20230615193722.194131053@infradead.org
+Link: https://lkml.kernel.org/r/20230623225529.34590-2-brgerst@gmail.com
 ---
- arch/x86/kernel/alternative.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/x86/entry/entry_32.S | 33 ++++++++++-----------------------
+ 1 file changed, 10 insertions(+), 23 deletions(-)
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 04b25a2..d77aaab 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1068,6 +1068,17 @@ static int cfi_rewrite_preamble(s32 *start, s32 *end)
- 	return 0;
- }
+diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+index 91397f5..e56123f 100644
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -720,26 +720,6 @@ SYM_CODE_END(__switch_to_asm)
+ .popsection
  
-+static void cfi_rewrite_endbr(s32 *start, s32 *end)
-+{
-+	s32 *s;
+ /*
+- * The unwinder expects the last frame on the stack to always be at the same
+- * offset from the end of the page, which allows it to validate the stack.
+- * Calling schedule_tail() directly would break that convention because its an
+- * asmlinkage function so its argument has to be pushed on the stack.  This
+- * wrapper creates a proper "end of stack" frame header before the call.
+- */
+-.pushsection .text, "ax"
+-SYM_FUNC_START(schedule_tail_wrapper)
+-	FRAME_BEGIN
+-
+-	pushl	%eax
+-	call	schedule_tail
+-	popl	%eax
+-
+-	FRAME_END
+-	RET
+-SYM_FUNC_END(schedule_tail_wrapper)
+-.popsection
+-
+-/*
+  * A newly forked process directly context switches into this address.
+  *
+  * eax: prev task we switched from
+@@ -748,16 +728,23 @@ SYM_FUNC_END(schedule_tail_wrapper)
+  */
+ .pushsection .text, "ax"
+ SYM_CODE_START(ret_from_fork)
+-	call	schedule_tail_wrapper
++	/* return address for the stack unwinder */
++	pushl	$.Lsyscall_32_done
 +
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+
-+		poison_endbr(addr+16, false);
-+	}
-+}
-+
- /* .retpoline_sites */
- static int cfi_rand_callers(s32 *start, s32 *end)
- {
-@@ -1162,14 +1173,19 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
- 		return;
++	FRAME_BEGIN
++	pushl	%eax
++	call	schedule_tail
++	addl	$4, %esp
++	FRAME_END
  
- 	case CFI_FINEIBT:
-+		/* place the FineIBT preamble at func()-16 */
- 		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
- 		if (ret)
- 			goto err;
+ 	testl	%ebx, %ebx
+ 	jnz	1f		/* kernel threads are uncommon */
  
-+		/* rewrite the callers to target func()-16 */
- 		ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
- 		if (ret)
- 			goto err;
+ 2:
+ 	/* When we fork, we trace the syscall return in the child, too. */
+-	movl    %esp, %eax
++	leal    4(%esp), %eax
+ 	call    syscall_exit_to_user_mode
+-	jmp     .Lsyscall_32_done
++	RET
  
-+		/* now that nobody targets func()+0, remove ENDBR there */
-+		cfi_rewrite_endbr(start_cfi, end_cfi);
-+
- 		if (builtin)
- 			pr_info("Using FineIBT CFI\n");
- 		return;
+ 	/* kernel thread */
+ 1:	movl	%edi, %eax
