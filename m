@@ -2,148 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F9274DCE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2FB74DCED
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbjGJR61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S232894AbjGJSA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjGJR6R (ORCPT
+        with ESMTP id S229864AbjGJSA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:58:17 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCD811B
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:58:16 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-666edb1f24aso8398725b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:58:16 -0700 (PDT)
+        Mon, 10 Jul 2023 14:00:57 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADA2127
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:00:53 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b701e41cd3so78260171fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689011896; x=1691603896;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y3Kh6x6stmaNirlbTTjGLpQMo7AQpwDDe4+8wKlDwRI=;
-        b=gny4Y0B5iRsAfscYzrlANXGnpPraf2ilAIKd3sBAIh7ljOzLacn90WAyUN5AvepX85
-         bIE3BREZHLXXu1fbO1DnDO7/Txd4D4Phqr5bv2xfc57JMqgiJJ60C7BoY78DdMgvLs3a
-         KYwEX5FcX7Xft89IBFx/v6pb9jfduOWZpbakgiHxCgiXA4OHE1oxPucHk89myUYss1iY
-         PgY91LPFn2VqguNAxgLSPqVNpqLRpC5llIc3264JmY+vcQUUKxR21R4GvzyLcnyDOhJZ
-         XZjdho6cyjinpS04GxwPizzBgqrPEmndPWvsjxiTDPz86ua7yPbNWQ46I3Rh93i/g7/9
-         UyHw==
+        d=linaro.org; s=google; t=1689012052; x=1691604052;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dPczIFUT5swcmN5pPJIcNlKf/rMlVyDjhcPHAsFTnXg=;
+        b=R5D0I9Ir5SJAEDqpFN2S2SzstQAB5rTv/SjvJKvIqEDQYGzRbO9SgbV0OT3gDos6oO
+         dCBDBnCZ/YuIzEmD5J9EG83fcQnUdDpfVn7O06RjZlztrWnwRtBM5VyZwCo6wDlS3FBI
+         wxht3EPVzkNUKV71SvDM9NqGwa+GC4HFmeNrQVDX2TEKL/xS8mhWKxBLnoHQUhjOf7zd
+         Mt8wmEO9RCryQH+mxNwIFOoqCtGhmKttA/SMX5oqxU8WrbS5yywTkKNkx+6bqshngfY1
+         yLL5X0gq8F9RiJO8MElyZnebyCjLw0M6Uo/qCMP7uQ0SdBk+BD/i7IKIBhHUqKxx5md1
+         fUlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689011896; x=1691603896;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y3Kh6x6stmaNirlbTTjGLpQMo7AQpwDDe4+8wKlDwRI=;
-        b=SctSZ6bGkyk8hM1YiA7VpwWFISClDoesoEUtsVd7LruQulm82Gp8T6VpZoOv3OTTMk
-         mWvpsOOkJxnake1hcoi57H9mp59i2Fz/phWLUN/+zn9/WdA/fl927Xgs/JhF9AA1OMe6
-         Cl4TmbOx+/C/0NV8S997WZXN8L77rPMdK/QeGA3YUAgK2F6TQTYqqc88li79iHpbacVk
-         5raFyfKHi1oYK+f+Os7d+yGwhLKiHrl0pk0ZhImON5mppmu8uEiHTS2yKUMutdXhARx2
-         CWJNJ6AaGr75U4rhK7/hCKHtruUlz+uFeFC1Rs4QTivcQbX6nG/fKoC4T6lk1l0P8Vcw
-         WPPg==
-X-Gm-Message-State: ABy/qLawzYghC8wmPfAFs6Gql1Q3gw0MBfmYj9Gqfvqf5udxnuzdDBaL
-        Y4GX+JgfsWvhZ5Y+jVsedKCHWAwjtKI=
-X-Google-Smtp-Source: APBJJlFmQK5y/3ZF/NjQlJqwclOEqbzaB1jgwJKq1XVmV19HcVuZ2WkNRE92ggPf7JX2d7+bEIjB7YBzXzM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:3998:b0:668:7143:50ea with SMTP id
- fi24-20020a056a00399800b00668714350eamr18119150pfb.4.1689011896073; Mon, 10
- Jul 2023 10:58:16 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 10:58:14 -0700
-In-Reply-To: <0c32f845-aad0-3059-2efa-9f6e3bb3affb@intel.com>
-Mime-Version: 1.0
-References: <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
- <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
- <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
- <20230630183020.GA4253@hirez.programming.kicks-ass.net> <20230630190514.GH3436214@ls.amr.corp.intel.com>
- <ZJ9IKALhz1Q6ogu1@google.com> <20230704165836.GB462772@hirez.programming.kicks-ass.net>
- <1a8099e2-da28-6b2a-7b5a-1d6346b7f95d@intel.com> <20230705145750.GD4253@hirez.programming.kicks-ass.net>
- <0c32f845-aad0-3059-2efa-9f6e3bb3affb@intel.com>
-Message-ID: <ZKxGtl7ErXCG5joz@google.com>
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on demand
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ying Huang <ying.huang@intel.com>,
-        Dan J Williams <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1689012052; x=1691604052;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dPczIFUT5swcmN5pPJIcNlKf/rMlVyDjhcPHAsFTnXg=;
+        b=IlvfoR7M8hBnFZyfdQBElTVybX3C2fRXlLqqOThOVgSAiV/U+OrLWAxn4Qy/sdZV0l
+         WFcBwcLtD7psUjz5VvJDD5KFvvUiP4RvG4zfntlS8umNhfDeuBaW4mVx899uELxAHIED
+         guNFXqqqu5nh1lKuvcr4PHQRKeNZ8EEearqj/X37oz5XDm3eiTQsyWEDqHVIUfDCFSFl
+         tuG4a+8kcMV3KflF+C54kVhASc/Fva7o6JRODyFT5T4IVjCyRgAYDOaG9aj1+zRSpzgc
+         pRfvZ/kJQZmVTIcTe9jeJflmZjWI5QCL/1TPWjz/HUaI3QXWMuZIWr/FlE+8GaNdcIKS
+         V72A==
+X-Gm-Message-State: ABy/qLYm6X7zcgfzRcKwKNbJdmzEJD9HbcxiMSghwxmSygnNdHZBkhP0
+        htwz6gJjuSYuMpeFxG2uopj1pQ==
+X-Google-Smtp-Source: APBJJlFmZm9+86iGEXvex6hgMwhGxAlxtSK/mzvgG+u333wcjJZCS7fwoTcXY4jPp/goq79ZGQNU+g==
+X-Received: by 2002:a2e:880a:0:b0:2b6:cc93:4ecb with SMTP id x10-20020a2e880a000000b002b6cc934ecbmr12115534ljh.43.1689012052149;
+        Mon, 10 Jul 2023 11:00:52 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id h17-20020a2e9011000000b002b6c92fa161sm74538ljg.61.2023.07.10.11.00.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 11:00:51 -0700 (PDT)
+Message-ID: <ebafc2ec-947f-0c9f-4ac3-14f66468b63c@linaro.org>
+Date:   Mon, 10 Jul 2023 21:00:50 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [Freedreno] [PATCH v1 1/5] drm/msm/dp: remove pm_runtime_xxx()
+ from dp_power.c
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_sbillaka@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marijn.suijten@somainline.org, quic_jesszhan@quicinc.com,
+        freedreno@lists.freedesktop.org
+References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+ <1688773943-3887-2-git-send-email-quic_khsieh@quicinc.com>
+ <fc5501cf-c335-81f7-1ad7-26fdc1b6922d@linaro.org>
+ <72cb729b-a9d3-3e5b-c70a-0761f47a6779@quicinc.com>
+ <CAA8EJpqKVBKRpFs=sS2rwrJpDP22sNrd00kCYm-b_ZB96O=s5g@mail.gmail.com>
+ <10de9309-19f9-18af-3e01-1cda7d76e73e@quicinc.com>
+ <8a8b24ea-1abf-922c-439e-50a27cf2e5fa@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <8a8b24ea-1abf-922c-439e-50a27cf2e5fa@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023, Dave Hansen wrote:
-> On 7/5/23 07:57, Peter Zijlstra wrote:
-> > On Wed, Jul 05, 2023 at 07:34:06AM -0700, Dave Hansen wrote:
-> >> On 7/4/23 09:58, Peter Zijlstra wrote:
-> >>> If we have concerns about allocating the PAMT array, can't we use CMA
-> >>> for this? Allocate the whole thing at boot as CMA such that when not
-> >>> used for TDX it can be used for regular things like userspace and
-> >>> filecache pages?
-> >> I never thought of CMA as being super reliable.  Maybe it's improved
-> >> over the years.
-> >>
-> >> KVM also has a rather nasty habit of pinning pages, like for device
-> >> passthrough.  I suspect that means that we'll have one of two scenarios:
-> >>
-> >>  1. CMA works great, but the TDX/CMA area is unusable for KVM because
-> >>     it's pinning all its pages and they just get moved out of the CMA
-> >>     area immediately.  The CMA area is effectively wasted.
-> >>  2. CMA sucks, and users get sporadic TDX failures when they wait a long
-> >>     time to run a TDX guest after boot.  Users just work around the CMA
-> >>     support by starting up TDX guests at boot or demanding a module
-> >>     parameter be set.  Hacking in CMA support was a waste.
-> >>
-> >> Am I just too much of a pessimist?
-> > Well, if CMA still sucks, then that needs fixing. If CMA works, but we
-> > have a circular fail in that KVM needs to long-term pin the PAMT pages
-> > but long-term pin is evicted from CMA (the whole point of long-term pin,
-> > after all), then surely we can break that cycle somehow, since in this
-> > case the purpose of the CMA is being able to grab that memory chunk when
-> > we needs it.
-> > 
-> > That is, either way around is just a matter of a little code, no?
+On 10/07/2023 20:25, Kuogee Hsieh wrote:
 > 
-> It's not a circular dependency, it's conflicting requirements.
+> On 7/9/2023 1:32 PM, Abhinav Kumar wrote:
+>>
+>>
+>> On 7/9/2023 11:00 AM, Dmitry Baryshkov wrote:
+>>> On Sun, 9 Jul 2023 at 20:22, Abhinav Kumar 
+>>> <quic_abhinavk@quicinc.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 7/7/2023 5:06 PM, Dmitry Baryshkov wrote:
+>>>>> On 08/07/2023 02:52, Kuogee Hsieh wrote:
+>>>>>> Since both pm_runtime_resume() and pm_runtime_suspend() are not
+>>>>>> populated at dp_pm_ops. Those pm_runtime_get/put() functions within
+>>>>>> dp_power.c will not have any effects in addition to increase/decrease
+>>>>>> power counter.
+>>>>>
+>>>>> Lie.
+>>>>>
+>>>>
+>>>> Even if the commit text is incorrect, review comments like this are not
+>>>> helping the patch nor the author and will just get ignored anyway.
+>>>
+>>> The review comment might be overreacting, excuse me. I was really
+>>> impressed by the commit message, which contradicts the basic source
+>>> code. pm_runtime_get() does a lot more than just increasing the power
+>>> counter.
+>>>
+>>
+>> It says within dp_power.c. Nonetheless, please let us know what is 
+>> missing in the context of this patch like Bjorn did to make it an 
+>> effective review and we can correct it. In its current form, the 
+>> review comment is adding no value.
+>>
+> I am new in pm.
 > 
-> CMA makes memory more available, but only in the face of unpinned pages.
-> 
-> KVM can pin lots of pages, even outside of TDX-based VMs.
-> 
-> So we either need to change how CMA works fundamentally or stop KVM from
-> pinning pages.
+> Any recommendation to revise this commit test?
 
-Nit, I think you're conflating KVM with VFIO and/or IOMMU code.  Device passhthrough
-does pin large chunks of memory, but KVM itself isn't involved or even aware of
-the pins.
+I'd say, squash patches 1 and 2 and then state in the commit message 
+that you are changing pm_runtime code paths because you want to power up 
+the device from the runtime callbacks rather than just waking up the 
+device in the power up path.
 
-HugeTLB is another case where CMA will be effectively used to serve guest memory,
-but again KVM isn't the thing doing the pinning.
+Generally it is much easier to justify changing from A to B rather than 
+just dropping A and then adding B.
+
+> 
+>>>>>> Also pm_runtime_xxx() should be executed at top
+>>>>>> layer.
+>>>>>
+>>>>> Why?
+>>>>>
+>>>>
+>>>> I guess he meant to centralize this around dp_display.c. Will elaborate
+>>>> while posting the next rev.
+>>>>
+>>>>>>
+>>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>>>> ---
+>>>>>>    drivers/gpu/drm/msm/dp/dp_power.c | 9 ---------
+>>>>>>    1 file changed, 9 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_power.c
+>>>>>> b/drivers/gpu/drm/msm/dp/dp_power.c
+>>>>>> index 5cb84ca..ed2f62a 100644
+>>>>>> --- a/drivers/gpu/drm/msm/dp/dp_power.c
+>>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_power.c
+>>>>>> @@ -152,8 +152,6 @@ int dp_power_client_init(struct dp_power 
+>>>>>> *dp_power)
+>>>>>>        power = container_of(dp_power, struct dp_power_private, 
+>>>>>> dp_power);
+>>>>>> -    pm_runtime_enable(power->dev);
+>>>>>> -
+>>>>>>        return dp_power_clk_init(power);
+>>>>>>    }
+>>>>>> @@ -162,8 +160,6 @@ void dp_power_client_deinit(struct dp_power
+>>>>>> *dp_power)
+>>>>>>        struct dp_power_private *power;
+>>>>>>        power = container_of(dp_power, struct dp_power_private, 
+>>>>>> dp_power);
+>>>>>> -
+>>>>>> -    pm_runtime_disable(power->dev);
+>>>>>>    }
+>>>>>>    int dp_power_init(struct dp_power *dp_power)
+>>>>>> @@ -173,11 +169,7 @@ int dp_power_init(struct dp_power *dp_power)
+>>>>>>        power = container_of(dp_power, struct dp_power_private, 
+>>>>>> dp_power);
+>>>>>> -    pm_runtime_get_sync(power->dev);
+>>>>>> -
+>>>>>>        rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
+>>>>>> -    if (rc)
+>>>>>> -        pm_runtime_put_sync(power->dev);
+>>>>>>        return rc;
+>>>>>>    }
+>>>>>> @@ -189,7 +181,6 @@ int dp_power_deinit(struct dp_power *dp_power)
+>>>>>>        power = container_of(dp_power, struct dp_power_private, 
+>>>>>> dp_power);
+>>>>>>        dp_power_clk_enable(dp_power, DP_CORE_PM, false);
+>>>>>> -    pm_runtime_put_sync(power->dev);
+>>>>>>        return 0;
+>>>>>>    }
+>>>>>
+>>>
+>>>
+>>>
+
+-- 
+With best wishes
+Dmitry
+
