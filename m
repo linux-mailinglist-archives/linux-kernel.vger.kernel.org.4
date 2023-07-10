@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8204574D53F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C408E74D541
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjGJMWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
+        id S231394AbjGJMWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGJMWA (ORCPT
+        with ESMTP id S229517AbjGJMWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:22:00 -0400
+        Mon, 10 Jul 2023 08:22:03 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BF95C7;
-        Mon, 10 Jul 2023 05:21:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 782BFB1;
+        Mon, 10 Jul 2023 05:22:02 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E658B2B;
-        Mon, 10 Jul 2023 05:22:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 694C4D75;
+        Mon, 10 Jul 2023 05:22:44 -0700 (PDT)
 Received: from e127643.arm.com (unknown [10.57.29.214])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C59153F67D;
-        Mon, 10 Jul 2023 05:21:55 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 534343F67D;
+        Mon, 10 Jul 2023 05:21:59 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-perf-users@vger.kernel.org, irogers@google.com
 Cc:     James Clark <james.clark@arm.com>,
@@ -38,10 +38,12 @@ Cc:     James Clark <james.clark@arm.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 0/4] arm_pmu: Add PERF_PMU_CAP_EXTENDED_HW_TYPE capability
-Date:   Mon, 10 Jul 2023 13:21:33 +0100
-Message-Id: <20230710122138.1450930-1-james.clark@arm.com>
+Subject: [PATCH 1/4] arm_pmu: Add PERF_PMU_CAP_EXTENDED_HW_TYPE capability
+Date:   Mon, 10 Jul 2023 13:21:34 +0100
+Message-Id: <20230710122138.1450930-2-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230710122138.1450930-1-james.clark@arm.com>
+References: <20230710122138.1450930-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -53,36 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This came out of the discussion here [1]. It seems like we can get some
-extra big.LITTLE stuff working pretty easily. The test issues mentioned
-in the linked thread are actually fairly unrelated and I've fixed them
-in a different set on the list.
+This capability gives us the ability to open PERF_TYPE_HARDWARE and
+PERF_TYPE_HW_CACHE events on a specific PMU for free. All the
+implementation is contained in the Perf core and tool code so no change
+to the Arm PMU driver is needed.
 
-After adding it in the first commit, the remaining ones tidy up a
-related capability that doesn't do anything any more.
+The following basic use case now results in Perf opening the event on
+all PMUs rather than picking only one in an unpredictable way:
 
-I've added a fixes tag for the commit where
-PERF_PMU_CAP_EXTENDED_HW_TYPE was originally added because it probably
-should have been added to the Arm PMU at the same time. It doesn't apply
-cleanly that far back because another capability was added between then,
-but the resolution is trivial.
+  $ perf stat -e cycles -- taskset --cpu-list 0,1 stress -c 2
 
-Thanks
-James
+   Performance counter stats for 'taskset --cpu-list 0,1 stress -c 2':
 
-[1]: https://lore.kernel.org/linux-perf-users/CAP-5=fVkRc9=ySJ=fG-SQ8oAKmE_1mhHHzSASmGHUsda5Qy92A@mail.gmail.com/T/#t
+         963279620      armv8_cortex_a57/cycles/                (99.19%)
+         752745657      armv8_cortex_a53/cycles/                (94.80%)
 
-James Clark (4):
-  arm_pmu: Add PERF_PMU_CAP_EXTENDED_HW_TYPE capability
-  perf/x86: Remove unused PERF_PMU_CAP_HETEROGENEOUS_CPUS capability
-  arm_pmu: Remove unused PERF_PMU_CAP_HETEROGENEOUS_CPUS capability
-  perf: Remove unused PERF_PMU_CAP_HETEROGENEOUS_CPUS capability
+Fixes: 55bcf6ef314a ("perf: Extend PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE")
+Suggested-by: Ian Rogers <irogers@google.com>
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ drivers/perf/arm_pmu.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
- arch/x86/events/core.c     |  1 -
- drivers/perf/arm_pmu.c     | 10 ++++++----
- include/linux/perf_event.h |  2 +-
- 3 files changed, 7 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 277e29fbd504..d8844a9461a2 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -875,8 +875,13 @@ struct arm_pmu *armpmu_alloc(void)
+ 		 * configuration (e.g. big.LITTLE). This is not an uncore PMU,
+ 		 * and we have taken ctx sharing into account (e.g. with our
+ 		 * pmu::filter callback and pmu::event_init group validation).
++		 *
++		 * PERF_PMU_CAP_EXTENDED_HW_TYPE is required to open the legacy
++		 * PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events on a
++		 * specific PMU.
+ 		 */
+-		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS,
++		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS |
++				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
+ 	};
+ 
+ 	pmu->attr_groups[ARMPMU_ATTR_GROUP_COMMON] =
 -- 
 2.34.1
 
