@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3870474CBD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73B474CBD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjGJFGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S231587AbjGJFGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjGJFFk (ORCPT
+        with ESMTP id S230478AbjGJFFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:05:40 -0400
+        Mon, 10 Jul 2023 01:05:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0251985;
-        Sun,  9 Jul 2023 22:04:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5097611B;
+        Sun,  9 Jul 2023 22:05:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EF1C60DF3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CEB960DE4;
+        Mon, 10 Jul 2023 05:04:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B478C433C9;
         Mon, 10 Jul 2023 05:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22660C433C8;
-        Mon, 10 Jul 2023 05:04:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688965492;
-        bh=OXintvStWPY/Rn//5Om9zDsg1msekWSP2yTLF/pVnEA=;
+        s=k20201202; t=1688965494;
+        bh=HTAy/g8EZawI0HAPxGauhrZqCOkDqVYbdCCt4PyEBcQ=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=KyOa4u/kwrVRd4BVwAf1uLC7EIbnXNlkZ7QQZ5jdhwfYXLOsbkUFZbq4kaLM2gRSn
-         VxU0FR0xC6Ro1zf0EuyStKlHxyxtgrQYorgc9bFdy6Tne5pW2aGbEsO5dquQEgelsO
-         4Is7x8m014lAFNBVyx1y/rUUZXWP68oELpQrYBaThqUPW85DLRq/Tn9UictDKpmyF5
-         Xk3gXfuw5aNF0hJIgysIwghcvqo/T5ykz79u2pFgcjD3p1tCIKfFoAtboawtsGY3bA
-         gbPzJQxIxp1w3Xt/m1lzz1WSIgTKyzNklIIMGyPAW4q8xHdf9Oez8FSUTB4jVz3hcv
-         qrnosuK4bWFyA==
+        b=Yab21YNKCdVNTMJehri714Jp21SeptgGC3nOFV3hGE7BUDGpxggoQr6jQ7hsnHECf
+         VAb1fTJOFgI0Id0swj/ShYtZ+UemNBc624Cnb2pcoNfFXnoRwWSGYVEDT/21wxfjAf
+         +USh5E4GYYRQyDi9pDeSLlznClhXZ/aKf4RkON/bCcs3pAwFDaBP4EL5Ihaqlo+BXQ
+         OIeKKD0GcVjlG/ydCnt5Xp6AhDeCFwH6Jr9X00PVRdUM+ZblZ4k+2gzc6zjkfouWVj
+         5UUyiS3gjJfjZ6LuiC5GshVjK8FI0GFgoaDPJT6wBqZgZeL3aVn2zOauGj4AWtEZaw
+         Rpes+CsuD7D3Q==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] arm64: dts: qcom: add missing space before {
-Date:   Sun,  9 Jul 2023 22:07:32 -0700
-Message-ID: <168896565989.1376307.16596846019737958398.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: correct crypto unit address
+Date:   Sun,  9 Jul 2023 22:07:33 -0700
+Message-ID: <168896565955.1376307.188291654231025401.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
-References: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230616174955.1783652-1-krzysztof.kozlowski@linaro.org>
+References: <20230616174955.1783652-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,15 +64,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 05 Jul 2023 16:42:26 +0200, Krzysztof Kozlowski wrote:
-> Add missing whitespace between node name/label and opening {.
+On Fri, 16 Jun 2023 19:49:55 +0200, Krzysztof Kozlowski wrote:
+> Crypto node unit address should match reg.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: add missing space before {
-      commit: 068be6cb4b98a8a26426b603b23582b78630dd23
+[1/1] arm64: dts: qcom: sm8450: correct crypto unit address
+      commit: b02966f8689795406ac210189924a8cb02a71bbe
 
 Best regards,
 -- 
