@@ -2,299 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBCC74DF85
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960D374DF73
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjGJUoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
+        id S232032AbjGJUn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjGJUoE (ORCPT
+        with ESMTP id S232096AbjGJUn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:44:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED10CE6C;
-        Mon, 10 Jul 2023 13:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=Wwwg3Ff0sEXoT+gpLjTlRY8CfhDSyXqIxaVQtu9/j9M=; b=hcQFSxZH1BUy1pekV1P0xDwPNc
-        fi2coX6G0keIT4lFhynthoC81THCaUpZ9t9JtrYrw9KHtyZH4ukw+WZProSQw8fgbGgxdScNgka5c
-        BxaNAQzneZyIWJMjfVBbxcv+wwnoOqiaLAttj/xR0MnJ8+1Tc3+O8dRYGRL9V2sGnR4KnQdoXxFT/
-        oukgnBz9iSXWedje+9zSd+A2ReCZ8v8kW3V5yt7zFWB4HqTh73MtDQG1ABYXaogzi8/y7Jv1BC5Qi
-        xRHofb9HskVaYVuUuWAaB9HBSh83dKODGfB1xQgvKSS787jCRRM+YsRljg9YtmyEAWC22+Cqd9wie
-        uqYPgm4A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIxjT-00EupT-6u; Mon, 10 Jul 2023 20:43:43 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH v5 18/38] nios2: Implement the new page table range API
-Date:   Mon, 10 Jul 2023 21:43:19 +0100
-Message-Id: <20230710204339.3554919-19-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230710204339.3554919-1-willy@infradead.org>
-References: <20230710204339.3554919-1-willy@infradead.org>
+        Mon, 10 Jul 2023 16:43:26 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C11E40
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:43:22 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2632a72f289so2335606a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689021801; x=1691613801;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3/Kkq1v8telRaHQgV7zepQoTU75jRONxaU9eHXBvmDo=;
+        b=WvjAwqQtJtaHexfOvhDpNwojVMD0FhJ7NN7QEpiDGCae1doh1Uea7+vY15bW2qnVcY
+         2RB0RGTRLLQfc/zRwcQXcrwenuzrNED7/3drO5jsu2+mupbu+oQGapatwjZAVUePArzF
+         4b5ZqWIS/61Bu4pwSpy1ex9kt2k0OmQMf4vaM7eEqX+2vavLf8T7eShszSiHDaYilSc9
+         +JDevVG5yLsbmW/0YlrM8YfDj+y/cXjkdSQzmXnbbkf0qzZ4Fh3OGukXkbERsrCc/5KI
+         +1huTClsojnW6oOiHrnI0hzdgYWgVGRmNCg3twFpjvpDdvqoDCavRaJUVyUwSHAY6NLw
+         UJjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689021801; x=1691613801;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:sender:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3/Kkq1v8telRaHQgV7zepQoTU75jRONxaU9eHXBvmDo=;
+        b=F2pI8BBBeUWiYke+PvHqHyEApB0VU7OmcEzs0itKSLdK41UsYKwgPndmNnvK5TUBoB
+         /64FHb/IBmLrZwdgZy5DEKSIwY8wIrEb5IZ027x7Rsl14IRfjdHoh7VKqwyCWa/wi1Hd
+         z2tCZ0fDHcS0Zem7rFTuTGB9bPoTKmfiQ7GjxUdnyf1O8cmmanvJn7fcWlbgr8vUlL4b
+         jkusC3cA8GO02efteFjjliHxeWFB1imFTttQkjDtRznkuG/ZaJCSEUuhPlJ531VpS6V5
+         BXKvlxGRRkh21BEbtWOeM6HUV2p/Y7zsXjFYovU4M8GloQ7k9pcM+tTeSRXEQEBPOY1e
+         z9kQ==
+X-Gm-Message-State: ABy/qLacL12XkdaCPOipYEC0QtKjFpc/aVWnqGcMBUC57NvPcoM5HxA2
+        /EdO06BtN5LSuZE7VWB2475HHYR3mt4ZSg==
+X-Google-Smtp-Source: APBJJlHz7WUwBYrB720STPKVZk3YkBoazcrIVF9ccZd0GnTc+tu9XRBsQoMqwjVkXzdiuvxQODBmkg==
+X-Received: by 2002:a17:90a:88b:b0:262:ff1c:bc37 with SMTP id v11-20020a17090a088b00b00262ff1cbc37mr10913252pjc.2.1689021800908;
+        Mon, 10 Jul 2023 13:43:20 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id f12-20020a17090ac28c00b00262ff206931sm6678756pjt.42.2023.07.10.13.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 13:43:20 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 10:43:19 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     rdunlap@infradead.org, frederic@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, zyhtheonly@gmail.com,
+        zyhtheonly@yeah.net, zwp10758@gmail.com, fuyuanli@gmail.com
+Subject: Re: [PATCH v5] workqueue: add cmdline parameter
+ `workqueue.unbound_cpus` to further constrain wq_unbound_cpumask at boot
+ time
+Message-ID: <ZKxtZxH7c3L3f6c9@slm.duckdns.org>
+References: <fd34114d-d2e4-0d10-475c-61585753a639@infradead.org>
+ <20230629035050.GA17223@didi-ThinkCentre-M930t-N000>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629035050.GA17223@didi-ThinkCentre-M930t-N000>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
-flush_dcache_folio().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
-from being per-page to per-folio.
+On Thu, Jun 29, 2023 at 11:50:50AM +0800, tiozhang wrote:
+> Motivation of doing this is to better improve boot times for devices when
+> we want to prevent our workqueue works from running on some specific CPUs,
+> e,g, some CPUs are busy with interrupts.
+> 
+> Signed-off-by: tiozhang <tiozhang@didiglobal.com>
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
----
- arch/nios2/include/asm/cacheflush.h |  6 ++-
- arch/nios2/include/asm/pgtable.h    | 28 ++++++----
- arch/nios2/mm/cacheflush.c          | 79 ++++++++++++++++-------------
- 3 files changed, 67 insertions(+), 46 deletions(-)
+Applied to wq/for-6.6.
 
-diff --git a/arch/nios2/include/asm/cacheflush.h b/arch/nios2/include/asm/cacheflush.h
-index d0b71dd71287..8624ca83cffe 100644
---- a/arch/nios2/include/asm/cacheflush.h
-+++ b/arch/nios2/include/asm/cacheflush.h
-@@ -29,9 +29,13 @@ extern void flush_cache_page(struct vm_area_struct *vma, unsigned long vmaddr,
- 	unsigned long pfn);
- #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
- void flush_dcache_page(struct page *page);
-+void flush_dcache_folio(struct folio *folio);
-+#define flush_dcache_folio flush_dcache_folio
- 
- extern void flush_icache_range(unsigned long start, unsigned long end);
--extern void flush_icache_page(struct vm_area_struct *vma, struct page *page);
-+void flush_icache_pages(struct vm_area_struct *vma, struct page *page,
-+		unsigned int nr);
-+#define flush_icache_page(vma, page) flush_icache_pages(vma, page, 1);
- 
- #define flush_cache_vmap(start, end)		flush_dcache_range(start, end)
- #define flush_cache_vunmap(start, end)		flush_dcache_range(start, end)
-diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-index 0f5c2564e9f5..be6bf3e0bd7a 100644
---- a/arch/nios2/include/asm/pgtable.h
-+++ b/arch/nios2/include/asm/pgtable.h
-@@ -178,14 +178,21 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
- 	*ptep = pteval;
- }
- 
--static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
--			      pte_t *ptep, pte_t pteval)
-+static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-+		pte_t *ptep, pte_t pte, unsigned int nr)
- {
--	unsigned long paddr = (unsigned long)page_to_virt(pte_page(pteval));
--
--	flush_dcache_range(paddr, paddr + PAGE_SIZE);
--	set_pte(ptep, pteval);
-+	unsigned long paddr = (unsigned long)page_to_virt(pte_page(pte));
-+
-+	flush_dcache_range(paddr, paddr + nr * PAGE_SIZE);
-+	for (;;) {
-+		set_pte(ptep, pte);
-+		if (--nr == 0)
-+			break;
-+		ptep++;
-+		pte_val(pte) += 1;
-+	}
- }
-+#define set_ptes set_ptes
- 
- static inline int pmd_none(pmd_t pmd)
- {
-@@ -202,7 +209,7 @@ static inline void pte_clear(struct mm_struct *mm,
- 
- 	pte_val(null) = (addr >> PAGE_SHIFT) & 0xf;
- 
--	set_pte_at(mm, addr, ptep, null);
-+	set_pte(ptep, null);
- }
- 
- /*
-@@ -273,7 +280,10 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
- extern void __init paging_init(void);
- extern void __init mmu_init(void);
- 
--extern void update_mmu_cache(struct vm_area_struct *vma,
--			     unsigned long address, pte_t *pte);
-+void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
-+		unsigned long address, pte_t *ptep, unsigned int nr);
-+
-+#define update_mmu_cache(vma, addr, ptep) \
-+	update_mmu_cache_range(NULL, vma, addr, ptep, 1)
- 
- #endif /* _ASM_NIOS2_PGTABLE_H */
-diff --git a/arch/nios2/mm/cacheflush.c b/arch/nios2/mm/cacheflush.c
-index 6aa9257c3ede..28b805f465a8 100644
---- a/arch/nios2/mm/cacheflush.c
-+++ b/arch/nios2/mm/cacheflush.c
-@@ -71,26 +71,26 @@ static void __flush_icache(unsigned long start, unsigned long end)
- 	__asm__ __volatile(" flushp\n");
- }
- 
--static void flush_aliases(struct address_space *mapping, struct page *page)
-+static void flush_aliases(struct address_space *mapping, struct folio *folio)
- {
- 	struct mm_struct *mm = current->active_mm;
--	struct vm_area_struct *mpnt;
-+	struct vm_area_struct *vma;
- 	pgoff_t pgoff;
-+	unsigned long nr = folio_nr_pages(folio);
- 
--	pgoff = page->index;
-+	pgoff = folio->index;
- 
- 	flush_dcache_mmap_lock(mapping);
--	vma_interval_tree_foreach(mpnt, &mapping->i_mmap, pgoff, pgoff) {
--		unsigned long offset;
-+	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff + nr - 1) {
-+		unsigned long start;
- 
--		if (mpnt->vm_mm != mm)
-+		if (vma->vm_mm != mm)
- 			continue;
--		if (!(mpnt->vm_flags & VM_MAYSHARE))
-+		if (!(vma->vm_flags & VM_MAYSHARE))
- 			continue;
- 
--		offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
--		flush_cache_page(mpnt, mpnt->vm_start + offset,
--			page_to_pfn(page));
-+		start = vma->vm_start + ((pgoff - vma->vm_pgoff) << PAGE_SHIFT);
-+		flush_cache_range(vma, start, start + nr * PAGE_SIZE);
- 	}
- 	flush_dcache_mmap_unlock(mapping);
- }
-@@ -138,10 +138,11 @@ void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
- 		__flush_icache(start, end);
- }
- 
--void flush_icache_page(struct vm_area_struct *vma, struct page *page)
-+void flush_icache_pages(struct vm_area_struct *vma, struct page *page,
-+		unsigned int nr)
- {
- 	unsigned long start = (unsigned long) page_address(page);
--	unsigned long end = start + PAGE_SIZE;
-+	unsigned long end = start + nr * PAGE_SIZE;
- 
- 	__flush_dcache(start, end);
- 	__flush_icache(start, end);
-@@ -158,19 +159,19 @@ void flush_cache_page(struct vm_area_struct *vma, unsigned long vmaddr,
- 		__flush_icache(start, end);
- }
- 
--void __flush_dcache_page(struct address_space *mapping, struct page *page)
-+static void __flush_dcache_folio(struct folio *folio)
- {
- 	/*
- 	 * Writeback any data associated with the kernel mapping of this
- 	 * page.  This ensures that data in the physical page is mutually
- 	 * coherent with the kernels mapping.
- 	 */
--	unsigned long start = (unsigned long)page_address(page);
-+	unsigned long start = (unsigned long)folio_address(folio);
- 
--	__flush_dcache(start, start + PAGE_SIZE);
-+	__flush_dcache(start, start + folio_size(folio));
- }
- 
--void flush_dcache_page(struct page *page)
-+void flush_dcache_folio(struct folio *folio)
- {
- 	struct address_space *mapping;
- 
-@@ -178,32 +179,38 @@ void flush_dcache_page(struct page *page)
- 	 * The zero page is never written to, so never has any dirty
- 	 * cache lines, and therefore never needs to be flushed.
- 	 */
--	if (page == ZERO_PAGE(0))
-+	if (is_zero_pfn(folio_pfn(folio)))
- 		return;
- 
--	mapping = page_mapping_file(page);
-+	mapping = folio_flush_mapping(folio);
- 
- 	/* Flush this page if there are aliases. */
- 	if (mapping && !mapping_mapped(mapping)) {
--		clear_bit(PG_dcache_clean, &page->flags);
-+		clear_bit(PG_dcache_clean, &folio->flags);
- 	} else {
--		__flush_dcache_page(mapping, page);
-+		__flush_dcache_folio(folio);
- 		if (mapping) {
--			unsigned long start = (unsigned long)page_address(page);
--			flush_aliases(mapping,  page);
--			flush_icache_range(start, start + PAGE_SIZE);
-+			unsigned long start = (unsigned long)folio_address(folio);
-+			flush_aliases(mapping, folio);
-+			flush_icache_range(start, start + folio_size(folio));
- 		}
--		set_bit(PG_dcache_clean, &page->flags);
-+		set_bit(PG_dcache_clean, &folio->flags);
- 	}
- }
-+EXPORT_SYMBOL(flush_dcache_folio);
-+
-+void flush_dcache_page(struct page *page)
-+{
-+	flush_dcache_folio(page_folio(page));
-+}
- EXPORT_SYMBOL(flush_dcache_page);
- 
--void update_mmu_cache(struct vm_area_struct *vma,
--		      unsigned long address, pte_t *ptep)
-+void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
-+		unsigned long address, pte_t *ptep, unsigned int nr)
- {
- 	pte_t pte = *ptep;
- 	unsigned long pfn = pte_pfn(pte);
--	struct page *page;
-+	struct folio *folio;
- 	struct address_space *mapping;
- 
- 	reload_tlb_page(vma, address, pte);
-@@ -215,19 +222,19 @@ void update_mmu_cache(struct vm_area_struct *vma,
- 	* The zero page is never written to, so never has any dirty
- 	* cache lines, and therefore never needs to be flushed.
- 	*/
--	page = pfn_to_page(pfn);
--	if (page == ZERO_PAGE(0))
-+	if (is_zero_pfn(pfn))
- 		return;
- 
--	mapping = page_mapping_file(page);
--	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
--		__flush_dcache_page(mapping, page);
-+	folio = page_folio(pfn_to_page(pfn));
-+	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
-+		__flush_dcache_folio(folio);
- 
--	if(mapping)
--	{
--		flush_aliases(mapping, page);
-+	mapping = folio_flush_mapping(folio);
-+	if (mapping) {
-+		flush_aliases(mapping, folio);
- 		if (vma->vm_flags & VM_EXEC)
--			flush_icache_page(vma, page);
-+			flush_icache_pages(vma, &folio->page,
-+					folio_nr_pages(folio));
- 	}
- }
- 
+Thanks.
+
 -- 
-2.39.2
-
+tejun
