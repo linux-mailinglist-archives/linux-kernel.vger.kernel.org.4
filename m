@@ -2,106 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C586874D748
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EAF74D74B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbjGJNTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S231381AbjGJNUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjGJNT2 (ORCPT
+        with ESMTP id S230392AbjGJNUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:19:28 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEF1C4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:19:26 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77ac14ff51bso142735739f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688995166; x=1691587166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r1gRBue3D63AcisS8ZRrKq/nAe8+ybrtdsVfAzlr1PY=;
-        b=pA+OZj+6VRBv5gS74DBiOVUTgwvqM6wfhrRwlQNZG7tF+0mRI9MD1owZvdSX7ukimh
-         k8suDBs0QgKceGAu3WuWnG43cRnQhiCgUbXPnkIEICLi1FX3T2OtPFwSpBDYcJqYySgt
-         8mew5dOHk8HZ5c1QM7tS98XYN0MyH0n0xs+ZuFNgCNoZPS0u8LbWovuZ4i9/NUmQyg4n
-         fbtlVo8iSDEAMIIdt218mawBd6L7r00CCJnYonLgqo8KA3BEgoQ3XASlfTOPoyfp3UdI
-         pJThRWHkf8gbMgSucIu3KeJySWz3zR+8VUhz1cFP0/2GWDgOPQyx09LmmXuGwk7LWPuD
-         qXTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688995166; x=1691587166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r1gRBue3D63AcisS8ZRrKq/nAe8+ybrtdsVfAzlr1PY=;
-        b=NqqGR1M6E/V0UJb9LMpje0nBy7dS170o8cine1WZq253HfAwoP8KChZXIJgbNNQXpi
-         r3Lkhp2Tx2SMllqmx0Ujdf8I/9NsK54UAtvgKH40pYS3AtyttioH5p4cKQ4eYBKXUtKn
-         k/qN4xgbvNGHnjDKREtIuzf/7meJ2428wlAHAJkT0aMiVOmjDkzOiPcpMmzaNQJ94Px+
-         wdXFCriiW8sCJNh7YswfVJuXKU7x0DAKwSx0F7Hox5627oJazYJA3GOxaKgKRSVKIp23
-         xJLMylTdoX4Yky38fJ6dkhf40TDa6L4L9/gZ4wkrFp2HHbQmelggWD89CEblnrvmZyUm
-         O9YA==
-X-Gm-Message-State: ABy/qLaWeAMpkcHLrFHA5J+OkEYJ41iPz4v2mwUatSW8eIA8/gmtreS2
-        MdDXQ9wRXNCjY/1mTnggiRvZ2g==
-X-Google-Smtp-Source: APBJJlHvGG/zjHslHAxhLRw47sOr0nUaUNS7C7K4tdHJPkUEe+8zgZyMURiUepQv7N2eA4R4IfmuUg==
-X-Received: by 2002:a5d:9451:0:b0:783:72b9:ed67 with SMTP id x17-20020a5d9451000000b0078372b9ed67mr12562805ior.10.1688995165630;
-        Mon, 10 Jul 2023 06:19:25 -0700 (PDT)
-Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id q14-20020a5d9f0e000000b0077a1b6f73b9sm3643242iot.41.2023.07.10.06.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 06:19:25 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Conor Dooley <conor@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 2/2] clocksource: timer-riscv: Increase rating of clock_event_device for Sstc
-Date:   Mon, 10 Jul 2023 18:49:02 +0530
-Message-Id: <20230710131902.1459180-3-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230710131902.1459180-1-apatel@ventanamicro.com>
-References: <20230710131902.1459180-1-apatel@ventanamicro.com>
-MIME-Version: 1.0
+        Mon, 10 Jul 2023 09:20:18 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2113.outbound.protection.outlook.com [40.107.215.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A117AC4;
+        Mon, 10 Jul 2023 06:20:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=htOVpUO2j8elDid3u3guFhgnz17pMmqPGz0E4aB5G8WgPzdgwgoY7jGCVXTQGpV+UKILVK356RCbdzOpZonetQaFT2IYIehIzNWpBW40B60z5bV/OgOViapPYzy/AxedSwGaee/DOz2SB4OWgDvI/UjidVNYuYQFNhgxCQqpu8ZrtXwI4Wn95ivvm5uIEpoRQQYstqiJoO5meMzYzIag02MmOuFbNI3kyHPlemvWwk1H+rjxqEwAv074wtjqVv2mXxZXWbOXSPj7wwd41kt7YJQqIRmFByb6HG0ZM51JOKHwt/lGidQv/sXpVDNlsyNjK/davTZwBQDDlc/v3wvD3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fs+EtTk758No/dWDSdfwTWpFXRynKbiaOREM2MESQn4=;
+ b=PihuN6cO2+1tqQ0BxY9BkcZK5riTFqD4f5yrjqgIkFww7anlwdidLzB/7cXzPeUiO3JMHhu1pg0c5/XkdzSo0arJemMM6xRou3KQpX8IzVBFcRhpHIC7sRXDOiMgkTkDDEu0nkEroWlCHtXlqNuwZO8SCYhWQkRRRb+ajZ/zz3l0mYddSiZTkPZTmjgKUhWSKbTAqBjn3HWCNESJn5EOSDTmPJZ/T0kDIDrMrx8uzBptL2vPz4G1kKI+38gtXwUw3HTMte3xLVwfOpeGl+VjdAi4TSsFsVpjg36e/vDc5pZNvtu14ruVEheKRgUuIAadjh+2IzjnlvfoV44KFKlpHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fs+EtTk758No/dWDSdfwTWpFXRynKbiaOREM2MESQn4=;
+ b=e6+SJ2Ff74lGYIRyLlWS/gH4e9qeUPe4UahvESCw6W7a5NGWTASypO/4BObv3ztcCKRa6o/qBpcVEXdDkx+VtWkyncEKU9LQk42dvSKgjmM8z0hCcThKEWbehgeY/M+otKYPju3lk3aJIY2OK8N+WdxstPpquwphCAUiANLsDWZ8z1NxXVR6y0mrvLd6v7G9TL/Zt74SxMPDbRCl16FrXarPh3QWsxm/lY5YwIfd4W38UhOcbvqShmWGRkmD71TwBkGKbb5O4MTmswcw6PGGQUXfoIR8I+EbsdTrKYDIgBIoK7ohJ8ezrxPLeSRkc+djzsYMU6yn+GPo0jmv6GFTlg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SG2PR06MB5131.apcprd06.prod.outlook.com (2603:1096:4:1ce::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 13:20:12 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 13:20:12 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Helge Deller <deller@gmx.de>, Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-fbdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] fbdev: imxfb: Removed unneeded release_mem_region
+Date:   Mon, 10 Jul 2023 21:19:58 +0800
+Message-Id: <20230710132001.50764-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGBP274CA0005.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::17)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5131:EE_
+X-MS-Office365-Filtering-Correlation-Id: c236b37b-e1fd-46d8-a131-08db8148639b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mS3vPm/H1rv4xygV6WaSNmQdASxQUrCoCXxA3t8M4RHe16SkoK8KwJNs3qdZ93Q/BC/zkKLIIwRMdYN9TkJyuQdUEMcYHmXRmOyf8C8BdNYlqcEHPUeyRTiYVvOw0koC90Ag/m8YsJKbTn39Esvv0UklLmI/4DTnzEBvjo6VqADLRM9Hw+iopl+ipuRwqCixSWZzqRRVrcVAZg7/xkaUkBjWP32iWQBjkV/44xfVCcVONQXPvFqICTnMAY8P3k7nvTHVG8wAi+KcIWkxkYR4h16321THvSmQP2uCn+Vbtj0Tl/Yuywmwonvb3O5A+q2eun2vKNE7ZAojU57h+x+x/aoaqTZ1nBaQ1fMSGRTE9s2dKeueQa5EgmJv+Ydg5hcaGtRNGt7sYdXqnGsvBzRU5gCBaFafrK/8IMfJLl+20IfhtsvA7rnCvqmRZ76zEH560dOoZGPDF/2dEonpHdfCeYhiEbNbVbDWoAc1w0YhGUdouGMUws8OYADAv0xLjY8s0ARsE+YSzADaAyOFikYUm2rWpz1PEWIEqziFP+G7hpRU3kLoKTuSaIjc6hGWvuFye7lLio5TnXzr03pDF8d1d33Ejy934XCBwMwUhI3cDZcmtr0ZSqNE/0RgKvhtfFnH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(39860400002)(346002)(136003)(451199021)(38350700002)(86362001)(38100700002)(36756003)(6666004)(6486002)(52116002)(110136005)(26005)(6506007)(186003)(6512007)(1076003)(2616005)(7416002)(5660300002)(2906002)(66556008)(316002)(478600001)(66946007)(8936002)(66476007)(8676002)(83380400001)(4326008)(4744005)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?islLeWcQBhH4+AToX3FcMqMKCqus2bQKwqb3NNOwZNfiw49ggPzoGugAodV2?=
+ =?us-ascii?Q?hFoDXReUlCfOYq7Ff6xEpwU0MidH4CgIDEkehPi10RyPkhBNaN6nvzX6An2t?=
+ =?us-ascii?Q?J1Mh6m68WagWwD4wfAzuNoifrHr1DAwwoiY7tccTCDVLkzk9rH+5VFX50rHR?=
+ =?us-ascii?Q?eI+/Qk+nbqn2WC2s1i9AqNpnJgbFmKLviIdeV7Any5B0QPjP2MDeFlpcx8L/?=
+ =?us-ascii?Q?KbfzKqLcZMuMhAyFb1YYfIzPeXlOIqbzazT7Ero47mXa7cYLh2R16u1vxQ3J?=
+ =?us-ascii?Q?oJ8XyJulrzY13Zpxbqwrtcv7O9NOgh0/NHZqrDmaro/k0S7yImI9mqa71Lxs?=
+ =?us-ascii?Q?AthxsiEHFpPUIA+65C+9hIADWBUibnXkG4lX4cx67CVsMyBkJ67k+7Q2us2r?=
+ =?us-ascii?Q?XxLfu2TW8Kakyusd0zLElCyZjBR3bRzkGqjG9lcSbucdlYVi8r/4DMTxq+gW?=
+ =?us-ascii?Q?8bgoZQM9XBaI5XkIYWQX9Kh2RIub0u8ZYmCRnN9x7zP5kBXl8SHUnlNORjzF?=
+ =?us-ascii?Q?MfZfNO4P0vHk98/vqTOZzOhfxyhlSgO/w+jxnqmG579inQia/5xC0ZsuUhj8?=
+ =?us-ascii?Q?hHTHCqUM2JEv5Qk4tgEQ+T8Rqb2wWda2bADR2zEk4+L5G2kGaCJThaOL6XYV?=
+ =?us-ascii?Q?EEz17xqEAlbxZfLtVnYn/QETOhCiOQOCnqb09MwImlx8gMhpSX5HPbcfuHXG?=
+ =?us-ascii?Q?CxXBp97Tfa+uFf6q8bNFsByPXJJkXvpa6ruH7qhizQIrMMo3jqIXG3vAKV4Z?=
+ =?us-ascii?Q?zSQpNYg4RpFbjntXccgjqliZXmwCd+q6oFQd1lypFOGPTLiUzRpC+h+hBiAI?=
+ =?us-ascii?Q?vQE1ApU0WWbB/qAzsjYN+5rkeCWYt+41YcmIs3ZLMSmf8HnzmGZfiBd0EmpT?=
+ =?us-ascii?Q?klt9b/dzNRVlGJ/k28cD2V8r/UACNdY39jwXv3eEsM/pK1fuVdxYV2BKwcAg?=
+ =?us-ascii?Q?eShWmqaU0vyghhlMAT+wqcQ6AOiZMkZ4azt36dHuykEtuZOG9bsy9g8RjYIj?=
+ =?us-ascii?Q?I34Xwir4n2IG+HKDkgs7Y82CyPeiKnY8Qd4gME7Lx7mUzbLHvLMa/cgvTGZk?=
+ =?us-ascii?Q?ZG1LXzrwtNzKbjmTmVvdbz4qlLCYtBu2EVN9wtzq7+D0jpglsxvgQKrM3MkI?=
+ =?us-ascii?Q?L+bk/x5Uhq3CtF2lx02b542CFqu6ZEuUYWEOQwWmfDfCS23o1sC6paVqTAnE?=
+ =?us-ascii?Q?X9+Db6O08X/wnBbxPkxcmsHQNcwxL0zcHUq/saSyYvw8IKnUZKL31tm4o5un?=
+ =?us-ascii?Q?EL+tpBTT4MeagrcV79LcM/WJm+yt8KTtfFfOJGS5Kkg5l4HYAPkUCHpqLNgC?=
+ =?us-ascii?Q?aaeJYU9tgxBUpSl2zlhlV/fY0MPSja2yzVfT5zwTdoFndrxigvdL/5DQIYWD?=
+ =?us-ascii?Q?OfW0XOWannwmtpYMCC0gYvNWhpiulCbcxXHK8c+0Y5wfHnryzqCcEH/8I9bo?=
+ =?us-ascii?Q?VSZITavRw+o5Y4PfAANT3uEoWWsrOQk1JduToZDtHPxi2EbYA5Nu7WT3JVVs?=
+ =?us-ascii?Q?GAHYQHf/chnB1DtUtj14cFmV9/R/YPcLUiMdDHVilNbXDsS5aSeg4r03WUvG?=
+ =?us-ascii?Q?TFmr/IOPUhrqi86GucpcwshxFPAkWJWgsMUf0GTy?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c236b37b-e1fd-46d8-a131-08db8148639b
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 13:20:11.4121
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: laGEcHXNLlipK8dw2WLzhy0Mjii6dOQGBunFhp2pgwCp8MhQbxqMXqpjxHb1nCAMM15aXWOiXaGsIiHGS0BvBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5131
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Sstc is available the RISC-V timer clock_event_device should be
-the preferred clock_event_device hence we increase clock_event_device
-rating for Sstc.
+Remove unnecessary release_mem_region from the error path to prevent
+mem region from being released twice, which could avoid resource leak
+or other unexpected issues.
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+Fixes: b083c22d5114 ("video: fbdev: imxfb: Convert request_mem_region + ioremap to devm_ioremap_resource")
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- drivers/clocksource/timer-riscv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/video/fbdev/imxfb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index f2ea2b3d2d43..9c8f3e2decc2 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -105,6 +105,8 @@ static int riscv_timer_starting_cpu(unsigned int cpu)
- 	ce->irq = riscv_clock_event_irq;
- 	if (riscv_timer_cannot_wake_cpu)
- 		ce->features |= CLOCK_EVT_FEAT_C3STOP;
-+	if (static_branch_likely(&riscv_sstc_available))
-+		ce->rating = 450;
- 	clockevents_config_and_register(ce, riscv_timebase, 100, 0x7fffffff);
- 
- 	enable_percpu_irq(riscv_clock_event_irq,
+diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
+index 04f3bf30a529..385c4715c7b7 100644
+--- a/drivers/video/fbdev/imxfb.c
++++ b/drivers/video/fbdev/imxfb.c
+@@ -1043,7 +1043,6 @@ static int imxfb_probe(struct platform_device *pdev)
+ failed_map:
+ failed_ioremap:
+ failed_getclock:
+-	release_mem_region(res->start, resource_size(res));
+ failed_of_parse:
+ 	kfree(info->pseudo_palette);
+ failed_init:
 -- 
-2.34.1
+2.39.0
 
