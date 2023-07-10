@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977AC74CA2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C9374CA30
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjGJDFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 23:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S230247AbjGJDGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 23:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjGJDFN (ORCPT
+        with ESMTP id S229680AbjGJDGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 23:05:13 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43648123;
-        Sun,  9 Jul 2023 20:05:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688958312; x=1720494312;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RDmc0GZUWAA3G5ck7OlGOYb7bZsUDXGbc8q2Xk1f4ws=;
-  b=nJmm8xs56PcMOIcL21hjMXyKXVWjMYPMCTgjUkz2JhNOcmfwx8JCEent
-   d/sGm4qawzHxY8/5+wC28VHku5giNIFIp4Dg1KgvK0UlBwlyAaMsTCaYs
-   hGmxFMnfZz/fHDhTe5rjMgolrpNwyotwrSviZ8dO8LPIf2TOLmZ+DJvAb
-   ecBXOQBPSXb1lSFWa+a/AvzOXI9PUpxITWvs85/hqaEeLtUF564iNKm/t
-   Uz7b2Gt3YZHymCdYIlZ89Ml+GfxVkYw/f0Jn54R1m+cb6eMYuGh2Rzvxm
-   70yLtzHx3YtkGe8/5XKPyAYtqzqbKEMhzA4o5kPNBXHsJDSkzihsdg/6/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="354103778"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="354103778"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 20:05:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="697856804"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="697856804"
-Received: from krtulig-mobl45.amr.corp.intel.com (HELO [10.212.175.70]) ([10.212.175.70])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 20:05:10 -0700
-Message-ID: <fd4cf001-b600-a09e-050b-2b5ed94922da@linux.intel.com>
-Date:   Sun, 9 Jul 2023 20:05:09 -0700
+        Sun, 9 Jul 2023 23:06:34 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97B2F4;
+        Sun,  9 Jul 2023 20:06:30 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-78654448524so106913639f.2;
+        Sun, 09 Jul 2023 20:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688958390; x=1691550390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzyqXosdnDO68LtdH9MXWVaSATpoziQrNIP/nKesUIU=;
+        b=ZgjBUwWkJkWTLTgZjnUl36bz4hxN+A/JDp2vGU5E8dlQ/+FtHwSQ4j5JH9bVccfcQx
+         u/PQyu6P3cwxEXMM5oGk/aLjfuPLPTzvekiafWvtjc3mEpZW7Zppqrab3eslKKDccOlL
+         b+xn9eO7dXiVFL6jpvp3S96xBPsrPU2fK/7qNE0+gK4Yr5osxV/R5pxBzyXnDlZ+BZvd
+         tfmSVqcutKhiici1jMwMD4RmZik4S11EOfxtYlzBDKfjDpHy0Es4QygPcUi8+ayZoFX5
+         ULk6pjSUo36zNQphYyUAKZOMZ/9H/gzUMJyTjvred3eAhUfqPQ6n8ghcYf81hSkjGjbI
+         4awg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688958390; x=1691550390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tzyqXosdnDO68LtdH9MXWVaSATpoziQrNIP/nKesUIU=;
+        b=LHXy7eeEShiu9tJnGvFWNMNPdSQRRh+KRkbOSaQnN5/e1HrT51Ge7sN0Eb3h5wcsLx
+         GzyjiCS/pLk+aJU598OOw3YlsnuBEhuL4W93SjVp3bU986mC13LrF9B022Vms+bDq93n
+         y/L1IUsL8FAJdvtzVApJVLEgkK2MOa7hFDULncQBeuBS1oDS2D35MUckCT7enl4uynlM
+         L6SLoRg/3wwHnwYpgLXyp2kRucxcpQFPaRwjOoH+UWOfzw6cvDuGu5+tOneiCMUntkvA
+         iP11sszoZAdfuCsU5qF3U6f9c5z3c88pEFw2qLZZg1yj6ccqOhhbm2qz1vWNmV/XcGWu
+         cE7g==
+X-Gm-Message-State: ABy/qLYvlGZvNvuhH83fMcsHF3LSjlmw3H8v8KkUgdNkWtuxaz4JtEPs
+        FeocMIK43IMQ/Kbcg7Urqd8=
+X-Google-Smtp-Source: APBJJlE8CT21Yy9HxFydGW3qQDl6rJ1NBWg0JbeZFSqKmqU4woX9tlMfu/gL47Aw5RG60sJwrhDwNw==
+X-Received: by 2002:a6b:7b49:0:b0:780:bf50:32ce with SMTP id m9-20020a6b7b49000000b00780bf5032cemr11185666iop.19.1688958389884;
+        Sun, 09 Jul 2023 20:06:29 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id s11-20020a5eaa0b000000b00785cd25010esm3318732ioe.11.2023.07.09.20.06.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jul 2023 20:06:29 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH] wifi: mwifiex: Replace strlcpy with strscpy
+Date:   Mon, 10 Jul 2023 03:06:25 +0000
+Message-ID: <20230710030625.812707-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH RFC v9 05/51] x86/coco: move CONFIG_HAS_CC_PLATFORM check
- down into coco/Makefile
-To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, nikunj.dadhania@amd.com,
-        liam.merwick@oracle.com, zhi.a.wang@intel.com,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-6-michael.roth@amd.com>
-Content-Language: en-US
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230612042559.375660-6-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,54 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
 
-On 6/11/23 9:25 PM, Michael Roth wrote:
-> Currently CONFIG_HAS_CC_PLATFORM is a prereq for building anything in
-> arch/x86/coco, but that is generally only applicable for guest support.> 
-> For SEV-SNP, helpers related purely to host support will also live in
-> arch/x86/coco. To allow for CoCo-related host support code in
-> arch/x86/coco, move that check down into the Makefile and check for it
-> specifically when needed.
+Direct replacement is safe here since return value of -errno
+is used to check for truncation instead of sizeof(dest).
 
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-I think CONFIG_HAS_CC_PLATFORM is not meant to be guest specific (otherwise,
-we could have named it CONFIG_HAS_CC_GUEST). Will it create any issue if
-we enable it in host?
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/net/wireless/marvell/mwifiex/main.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> 
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/Kbuild        | 2 +-
->  arch/x86/coco/Makefile | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/Kbuild b/arch/x86/Kbuild
-> index 5a83da703e87..1889cef48b58 100644
-> --- a/arch/x86/Kbuild
-> +++ b/arch/x86/Kbuild
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -obj-$(CONFIG_ARCH_HAS_CC_PLATFORM) += coco/
-> +obj-y += coco/
->  
->  obj-y += entry/
->  
-> diff --git a/arch/x86/coco/Makefile b/arch/x86/coco/Makefile
-> index c816acf78b6a..6aa52e719bf5 100644
-> --- a/arch/x86/coco/Makefile
-> +++ b/arch/x86/coco/Makefile
-> @@ -3,6 +3,6 @@ CFLAGS_REMOVE_core.o	= -pg
->  KASAN_SANITIZE_core.o	:= n
->  CFLAGS_core.o		+= -fno-stack-protector
->  
-> -obj-y += core.o
-> +obj-$(CONFIG_ARCH_HAS_CC_PLATFORM) += core.o
->  
->  obj-$(CONFIG_INTEL_TDX_GUEST)	+= tdx/
-
+diff --git a/drivers/net/wireless/marvell/mwifiex/main.c b/drivers/net/wireless/marvell/mwifiex/main.c
+index 1cd9d20cca16..8d3c4bcf9c89 100644
+--- a/drivers/net/wireless/marvell/mwifiex/main.c
++++ b/drivers/net/wireless/marvell/mwifiex/main.c
+@@ -725,9 +725,8 @@ static int mwifiex_init_hw_fw(struct mwifiex_adapter *adapter,
+ 	 * manufacturing mode is enabled
+ 	 */
+ 	if (mfg_mode) {
+-		if (strlcpy(adapter->fw_name, MFG_FIRMWARE,
+-			    sizeof(adapter->fw_name)) >=
+-			    sizeof(adapter->fw_name)) {
++		if (strscpy(adapter->fw_name, MFG_FIRMWARE,
++			    sizeof(adapter->fw_name)) < 0) {
+ 			pr_err("%s: fw_name too long!\n", __func__);
+ 			return -1;
+ 		}
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.41.0.255.g8b1d071c50-goog
+
+
