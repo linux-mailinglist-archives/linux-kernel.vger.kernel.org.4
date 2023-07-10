@@ -2,134 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B63374DC89
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB64274DC8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjGJRbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S231949AbjGJRdX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 13:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjGJRb2 (ORCPT
+        with ESMTP id S229850AbjGJRdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:31:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B03E187;
-        Mon, 10 Jul 2023 10:31:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BA1D61169;
-        Mon, 10 Jul 2023 17:31:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DD5C433C7;
-        Mon, 10 Jul 2023 17:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689010285;
-        bh=yBEMuGoWHM9zUe+iAIatKlGNoEB//1WfSxUw+0SuQ6A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VttBOl+eNlj1/cgq3G8qxJc+Ah7b5ZQ04PTV+EG6CFR2pRgYe6JyXMHkH1/K5bemV
-         K7OqUHz9qrkCqPetZgj1nNcc9MMYdr/B9tGDE8jYkIXmiDAP6OS06Xl3q0kgh5hEpC
-         MvMnLChy3z1cQdkugx0ULecDib0F8BZscQJjcD6lCQGmAOZWkJumwmB1iP89ewG1mK
-         rAm6IHAnieSj0S2DZ5vLDOR0ISwF5BNq2Bv8GkENsnzbMGMTAKoGpz+DIGvt6qDstD
-         H+akvWxjFGPRQ19Fycx48iyLC1xdJ/ddnyN9qoFnjn+84u3R5jM1KfNYx9ZqQrj7XX
-         kUC1BkFYkCtCQ==
-Date:   Mon, 10 Jul 2023 18:31:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 00/15] spi: Header and core clean up and refactoring
-Message-ID: <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+        Mon, 10 Jul 2023 13:33:20 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFB9CA;
+        Mon, 10 Jul 2023 10:33:19 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-98e2865e2f2so136844866b.0;
+        Mon, 10 Jul 2023 10:33:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689010398; x=1691602398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AW7gIWoXz+75O82v0in9rOdnCFb2N1IDml+dDmi5wIg=;
+        b=RxHF0x56rGb4ij+aJg1D7q+g9dzGHrWTo5mO437HgBbmogPYys9/GSsVkphHH2kKnR
+         1o7HoK2q2XogldiENEY6LQP3GwwnpTA61fRx8m24L7rcBuF0F40ii7OmLqhqJ2ndGyAV
+         a+Gh8uNw2Zram32gUC6EjTtk5Xr9JFjR00C015jbHLztJyADorD8Ikl0HY2waJq8dM7b
+         ifkyt5CEb1NewJNVFjjoW0on61vyCbjtqn1W8nA6XLF/RDk5YjyDbSrAnx7r1b5PJJTT
+         opx+ndkOv+otbVTEixerg+9wSBzo0/QAW15ICHOwtocw330m4NbXiUtdJL+eZt/4FXQ8
+         SCkA==
+X-Gm-Message-State: ABy/qLaGT+1HEjw8ScW0GpffUA0pf5HidP75yiKRqushXvXstDxrySHK
+        BFZruOh0Smw6UFWSSbUnIjxCA9Pwn3OefZZQ4ao=
+X-Google-Smtp-Source: APBJJlGrFWckOpq6F+U2Dl/Hd7X1UmYvh0fkh/4EhV8ipIPJo+zhkLpCh1ZKPllZ5JtsB8HAZ9lnMlofZYItVc7OVGQ=
+X-Received: by 2002:a17:906:64d8:b0:988:815c:ba09 with SMTP id
+ p24-20020a17090664d800b00988815cba09mr11678904ejn.4.1689010397756; Mon, 10
+ Jul 2023 10:33:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Mtt0ZQ3K6jQ9xKnG"
-Content-Disposition: inline
-In-Reply-To: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
-X-Cookie: Do you have lysdexia?
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
+In-Reply-To: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 10 Jul 2023 19:33:06 +0200
+Message-ID: <CAJZ5v0h6_jzOBxhmd2b8WL5nVOvZ03AD5fzdtc9ACXGiCKEmOw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: core: constify params in thermal_zone_device_register
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jul 8, 2023 at 1:27 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>
+> Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone
+> parameters structure"), thermal_zone_device_register() allocates a copy
+> of the tzp argument and callers need not explicitly manage its lifetime.
+>
+> This means the function no longer cares about the parameter being
+> mutable, so constify it.
+>
+> No functional change.
+>
+> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
 
---Mtt0ZQ3K6jQ9xKnG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Why is this particular patch regarded as a fix?
 
-On Mon, Jul 10, 2023 at 06:49:17PM +0300, Andy Shevchenko wrote:
-> Various cleanups and refactorings of the SPI header and core parts
-> united in a single series. It also touches drivers under SPI subsystem
-> folder on the pure renaming purposes of some constants.
-
-I've queued 1-3, 6-8 and 11- for CI thanks.
-
---Mtt0ZQ3K6jQ9xKnG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsQF8ACgkQJNaLcl1U
-h9CQ2gf+NebuHlkBa9zrhzmcGhSrtVx5yFCLP0dHaZVPMEHj6t0rIpQGodx2xOq0
-MawEB/JvvnMHpCvUoGGUXGsTcLiBB3uxADywJKyPkitWM3W/9LMAGRwpdnyV/zbN
-i4RuTGjLyFnoHuDdf82cL/5f3EFsLn1J3rl3cUDAv1c3U+WpZReA4OO9s9QhlqJU
-GfQoV1As2DUX49504bC2EfuPpa4wYIWrR1fT8ApGCZXs3KUQpgTWQ7iH4X48fdbY
-5gE1rQID66FMT2d78FRZkVmqej6wFqYr34G0zD2Lf/qC+ZsTSvvy4YExJhNnts1Q
-Md56GS1p2fjwWtBGCvs3Gmlg6zcmtQ==
-=CQab
------END PGP SIGNATURE-----
-
---Mtt0ZQ3K6jQ9xKnG--
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+>  drivers/thermal/thermal_core.c | 4 ++--
+>  include/linux/thermal.h        | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 842f678c1c3e..cc2b5e81c620 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1203,7 +1203,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+>  struct thermal_zone_device *
+>  thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
+>                                         void *devdata, struct thermal_zone_device_ops *ops,
+> -                                       struct thermal_zone_params *tzp, int passive_delay,
+> +                                       const struct thermal_zone_params *tzp, int passive_delay,
+>                                         int polling_delay)
+>  {
+>         struct thermal_zone_device *tz;
+> @@ -1371,7 +1371,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
+>
+>  struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
+>                                                          void *devdata, struct thermal_zone_device_ops *ops,
+> -                                                        struct thermal_zone_params *tzp, int passive_delay,
+> +                                                        const struct thermal_zone_params *tzp, int passive_delay,
+>                                                          int polling_delay)
+>  {
+>         return thermal_zone_device_register_with_trips(type, NULL, ntrips, mask,
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 87837094d549..dee66ade89a0 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -301,14 +301,14 @@ int thermal_acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp);
+>  #ifdef CONFIG_THERMAL
+>  struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
+>                 void *, struct thermal_zone_device_ops *,
+> -               struct thermal_zone_params *, int, int);
+> +               const struct thermal_zone_params *, int, int);
+>
+>  void thermal_zone_device_unregister(struct thermal_zone_device *);
+>
+>  struct thermal_zone_device *
+>  thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int, int,
+>                                         void *, struct thermal_zone_device_ops *,
+> -                                       struct thermal_zone_params *, int, int);
+> +                                       const struct thermal_zone_params *, int, int);
+>
+>  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>  const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+> @@ -348,7 +348,7 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz);
+>  static inline struct thermal_zone_device *thermal_zone_device_register(
+>         const char *type, int trips, int mask, void *devdata,
+>         struct thermal_zone_device_ops *ops,
+> -       struct thermal_zone_params *tzp,
+> +       const struct thermal_zone_params *tzp,
+>         int passive_delay, int polling_delay)
+>  { return ERR_PTR(-ENODEV); }
+>  static inline void thermal_zone_device_unregister(
+> --
+> 2.39.2
+>
