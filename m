@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6957274D87E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFE274D880
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbjGJOGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S231731AbjGJOG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbjGJOGB (ORCPT
+        with ESMTP id S232382AbjGJOGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:06:01 -0400
+        Mon, 10 Jul 2023 10:06:06 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E664E100;
-        Mon, 10 Jul 2023 07:05:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1AFFA;
+        Mon, 10 Jul 2023 07:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688997959; x=1720533959;
+  t=1688997963; x=1720533963;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oKFvqYMRF7Pt7Xhjz32NaDYPooCMV5ps+J3TslYX8qg=;
-  b=dPmX8gSl8b39ozHg6QjfvY+K9c1ynMyET5VwrGzghuGGuNv59BdhGpDV
-   tVcxeMnoSXiJLl6gwY+3IRWbDykQWitNHVai95WweE2VhqMGTYbFz7Y7S
-   D4jvhfjFHoOsskfm4R0rCVofcRq++dOpvHbEjHjWjJSYSNDu7tAIjVmLx
-   8MooQKtnFFd5a2mS/Rf1WNFCecPQzmct4TKWUiFzBIiJteTJ7Cg8waXYh
-   y2eyM3uR/7S6x7kVJpulH3OOKVsFBMZ9FBZWlp/rKs3TxoQyvUaXygc1C
-   mtzDIaffl3qkCANGXxsa2647cJ31qYe+O9kgzAkp2S2alZZHQJKNsbnrA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361814852"
+  bh=0cQUe9pkwTFEo2qElR85DPOsKIH6ISqvOwLIiL5AbLE=;
+  b=arvXzGIbj+I592EQjuMUeDyaPU6MWEWlGMnvLc29xF41RGhsFBp8T1Qi
+   N3GqpMbg0A59/OpLdWXKNaI7jc89FQcHYM4o3LwYPrNTp1bXS6Z8iXlIn
+   LB+LH8xZUhaVC97VNj/BgFEg6B3m5wryv5WIf/Ch1YDNfP2wtEk2Sr6r4
+   POkk30ehGx33lora7LCsELwu0tEN0tTYuJwVPjAMbgyvqmAfkR3mjtSvV
+   YOM8aWqt7heaVrK/yM97kcRwV70CSdQICkrxWd7MtxNsh5AZSonJDpx7e
+   zWzl7wbRiflENwZJ2ti10w8WiO1ftoYvLKI8wYqH7IpxN8kUAieTEDkqE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361814888"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="361814852"
+   d="scan'208";a="361814888"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:13 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714822612"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714822707"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="714822612"
+   d="scan'208";a="714822707"
 Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:09 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:13 -0700
 From:   Michal Wilczynski <michal.wilczynski@intel.com>
 To:     linux-acpi@vger.kernel.org
 Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
@@ -47,9 +47,9 @@ Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
         jgross@suse.com, linux-kernel@vger.kernel.org, x86@kernel.org,
         Michal Wilczynski <michal.wilczynski@intel.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v4 1/9] acpi: Move mwait quirk out of acpi_processor.c
-Date:   Mon, 10 Jul 2023 17:03:29 +0300
-Message-ID: <20230710140337.1434060-2-michal.wilczynski@intel.com>
+Subject: [PATCH v4 2/9] acpi: Move processor_physically_present() to acpi_processor.c
+Date:   Mon, 10 Jul 2023 17:03:30 +0300
+Message-ID: <20230710140337.1434060-3-michal.wilczynski@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230710140337.1434060-1-michal.wilczynski@intel.com>
 References: <20230710140337.1434060-1-michal.wilczynski@intel.com>
@@ -65,118 +65,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2a2a64714d9c ("ACPI: Disable MWAIT via DMI on broken Compal board")
-introduced a workaround for mwait for a specific x86 system. Move the
-code outside of acpi_processor.c to acpi/x86 directory for better
-coherency. Rename functions to start with acpi_proc_quirk to make the
-goal obvious.
+Since _PDC method is deprecated and a preferred method of communicating
+OSPM processor power management capabilities is _OSC, there is a need to
+move function checking whether processor is present as this logic is not
+_PDC specific.
+
+Move processor_physically_present() to acpi_processor.c.
 
 Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
 ---
- drivers/acpi/internal.h      |  2 ++
- drivers/acpi/processor_pdc.c | 29 +----------------------------
- drivers/acpi/x86/utils.c     | 35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+), 28 deletions(-)
+ drivers/acpi/acpi_processor.c | 52 ++++++++++++++++++++++++++++++++++-
+ drivers/acpi/internal.h       |  1 +
+ drivers/acpi/processor_pdc.c  | 49 ---------------------------------
+ 3 files changed, 52 insertions(+), 50 deletions(-)
 
+diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+index f9aa02cac6d1..ebb4efd3d0aa 100644
+--- a/drivers/acpi/acpi_processor.c
++++ b/drivers/acpi/acpi_processor.c
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/acpi.h>
+ #include <linux/device.h>
++#include <linux/dmi.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+@@ -21,6 +22,8 @@
+ 
+ #include <asm/cpu.h>
+ 
++#include <xen/xen.h>
++
+ #include "internal.h"
+ 
+ DEFINE_PER_CPU(struct acpi_processor *, processors);
+@@ -508,7 +511,54 @@ static void acpi_processor_remove(struct acpi_device *device)
+ }
+ #endif /* CONFIG_ACPI_HOTPLUG_CPU */
+ 
+-#ifdef CONFIG_X86
++#ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
++bool __init processor_physically_present(acpi_handle handle)
++{
++	int cpuid, type;
++	u32 acpi_id;
++	acpi_status status;
++	acpi_object_type acpi_type;
++	unsigned long long tmp;
++	union acpi_object object = {};
++	struct acpi_buffer buffer = { sizeof(union acpi_object), &object };
++
++	status = acpi_get_type(handle, &acpi_type);
++	if (ACPI_FAILURE(status))
++		return false;
++
++	switch (acpi_type) {
++	case ACPI_TYPE_PROCESSOR:
++		status = acpi_evaluate_object(handle, NULL, NULL, &buffer);
++		if (ACPI_FAILURE(status))
++			return false;
++		acpi_id = object.processor.proc_id;
++		break;
++	case ACPI_TYPE_DEVICE:
++		status = acpi_evaluate_integer(handle, METHOD_NAME__UID,
++					       NULL, &tmp);
++		if (ACPI_FAILURE(status))
++			return false;
++		acpi_id = tmp;
++		break;
++	default:
++		return false;
++	}
++
++	if (xen_initial_domain())
++		/*
++		 * When running as a Xen dom0 the number of processors Linux
++		 * sees can be different from the real number of processors on
++		 * the system, and we still need to execute _PDC or _OSC for
++		 * all of them.
++		 */
++		return xen_processor_present(acpi_id);
++
++	type = (acpi_type == ACPI_TYPE_DEVICE) ? 1 : 0;
++	cpuid = acpi_get_cpuid(handle, type, acpi_id);
++
++	return !invalid_logical_cpuid(cpuid);
++}
++
+ static bool acpi_hwp_native_thermal_lvt_set;
+ static acpi_status __init acpi_hwp_native_thermal_lvt_osc(acpi_handle handle,
+ 							  u32 lvl,
 diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index f4148dc50b9c..90d199ab271c 100644
+index 90d199ab271c..87c343f79900 100644
 --- a/drivers/acpi/internal.h
 +++ b/drivers/acpi/internal.h
-@@ -153,6 +153,8 @@ int acpi_wakeup_device_init(void);
-    -------------------------------------------------------------------------- */
- #ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
+@@ -155,6 +155,7 @@ int acpi_wakeup_device_init(void);
  void acpi_early_processor_set_pdc(void);
-+
-+void acpi_proc_quirk_dmi_check(void);
+ 
+ void acpi_proc_quirk_dmi_check(void);
++bool processor_physically_present(acpi_handle handle);
  #else
  static inline void acpi_early_processor_set_pdc(void) {}
  #endif
 diff --git a/drivers/acpi/processor_pdc.c b/drivers/acpi/processor_pdc.c
-index 18fb04523f93..34bb06de2afb 100644
+index 34bb06de2afb..6d2d521a068d 100644
 --- a/drivers/acpi/processor_pdc.c
 +++ b/drivers/acpi/processor_pdc.c
-@@ -174,36 +174,9 @@ early_init_pdc(acpi_handle handle, u32 lvl, void *context, void **rv)
- 	return AE_OK;
- }
+@@ -9,61 +9,12 @@
  
--static int __init set_no_mwait(const struct dmi_system_id *id)
+ #define pr_fmt(fmt) "ACPI: " fmt
+ 
+-#include <linux/dmi.h>
+ #include <linux/slab.h>
+ #include <linux/acpi.h>
+ #include <acpi/processor.h>
+ 
+-#include <xen/xen.h>
+-
+ #include "internal.h"
+ 
+-static bool __init processor_physically_present(acpi_handle handle)
 -{
--	pr_notice("%s detected - disabling mwait for CPU C-states\n",
--		  id->ident);
--	boot_option_idle_override = IDLE_NOMWAIT;
--	return 0;
+-	int cpuid, type;
+-	u32 acpi_id;
+-	acpi_status status;
+-	acpi_object_type acpi_type;
+-	unsigned long long tmp;
+-	union acpi_object object = { 0 };
+-	struct acpi_buffer buffer = { sizeof(union acpi_object), &object };
+-
+-	status = acpi_get_type(handle, &acpi_type);
+-	if (ACPI_FAILURE(status))
+-		return false;
+-
+-	switch (acpi_type) {
+-	case ACPI_TYPE_PROCESSOR:
+-		status = acpi_evaluate_object(handle, NULL, NULL, &buffer);
+-		if (ACPI_FAILURE(status))
+-			return false;
+-		acpi_id = object.processor.proc_id;
+-		break;
+-	case ACPI_TYPE_DEVICE:
+-		status = acpi_evaluate_integer(handle, "_UID", NULL, &tmp);
+-		if (ACPI_FAILURE(status))
+-			return false;
+-		acpi_id = tmp;
+-		break;
+-	default:
+-		return false;
+-	}
+-
+-	if (xen_initial_domain())
+-		/*
+-		 * When running as a Xen dom0 the number of processors Linux
+-		 * sees can be different from the real number of processors on
+-		 * the system, and we still need to execute _PDC for all of
+-		 * them.
+-		 */
+-		return xen_processor_present(acpi_id);
+-
+-	type = (acpi_type == ACPI_TYPE_DEVICE) ? 1 : 0;
+-	cpuid = acpi_get_cpuid(handle, type, acpi_id);
+-
+-	return !invalid_logical_cpuid(cpuid);
 -}
 -
--static const struct dmi_system_id processor_idle_dmi_table[] __initconst = {
--	{
--	set_no_mwait, "Extensa 5220", {
--	DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
--	DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
--	DMI_MATCH(DMI_PRODUCT_VERSION, "0100"),
--	DMI_MATCH(DMI_BOARD_NAME, "Columbia") }, NULL},
--	{},
--};
--
--static void __init processor_dmi_check(void)
--{
--	/*
--	 * Check whether the system is DMI table. If yes, OSPM
--	 * should not use mwait for CPU-states.
--	 */
--	dmi_check_system(processor_idle_dmi_table);
--}
--
- void __init acpi_early_processor_set_pdc(void)
+ static void acpi_set_pdc_bits(u32 *buf)
  {
--	processor_dmi_check();
-+	acpi_proc_quirk_dmi_check();
- 
- 	acpi_walk_namespace(ACPI_TYPE_PROCESSOR, ACPI_ROOT_OBJECT,
- 			    ACPI_UINT32_MAX,
-diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-index c2b925f8cd4e..5903cd7c8404 100644
---- a/drivers/acpi/x86/utils.c
-+++ b/drivers/acpi/x86/utils.c
-@@ -518,3 +518,38 @@ bool acpi_quirk_skip_acpi_ac_and_battery(void)
- 	return false;
- }
- EXPORT_SYMBOL_GPL(acpi_quirk_skip_acpi_ac_and_battery);
-+
-+/* This section provides a workaround for a specific x86 system
-+ * which requires disabling of mwait to work correctly.
-+ */
-+static int __init acpi_proc_quirk_set_no_mwait(const struct dmi_system_id *id)
-+{
-+	pr_notice("%s detected - disabling mwait for CPU C-states\n",
-+		  id->ident);
-+	boot_option_idle_override = IDLE_NOMWAIT;
-+	return 0;
-+}
-+
-+static const struct dmi_system_id acpi_proc_quirk_idle_dmi_table[] __initconst = {
-+	{
-+		.callback = acpi_proc_quirk_set_no_mwait,
-+		.ident = "Extensa 5220",
-+		.matches =  {
-+			DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
-+			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-+			DMI_MATCH(DMI_PRODUCT_VERSION, "0100"),
-+			DMI_MATCH(DMI_BOARD_NAME, "Columbia"),
-+		},
-+		.driver_data = NULL,
-+	},
-+	{}
-+};
-+
-+void __init acpi_proc_quirk_dmi_check(void)
-+{
-+	/*
-+	 * Check whether the system is DMI table. If yes, OSPM
-+	 * should not use mwait for CPU-states.
-+	 */
-+	dmi_check_system(acpi_proc_quirk_idle_dmi_table);
-+}
+ 	buf[0] = ACPI_PDC_REVISION_ID;
 -- 
 2.41.0
 
