@@ -2,306 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948AB74CF33
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8785074CF34
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbjGJH4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S232158AbjGJH4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjGJH4V (ORCPT
+        with ESMTP id S232286AbjGJH43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:56:21 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78F71A1;
-        Mon, 10 Jul 2023 00:56:08 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36A7tu1Z098404;
-        Mon, 10 Jul 2023 02:55:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688975756;
-        bh=J7xkdooH54yvU8aeLNT+cg6gn7q0YbpZfhHdD5QhiMY=;
-        h=From:To:CC:Subject:Date;
-        b=BUZiHJGIiSDNUVauBGB4MdnD279bj7dmW2FphpvAFpBbYxWClpCfvHf8MdxB8RdR3
-         7yZ6zy16dXTXPG+8YK9MdZzDALA72ZvT1b6bJObnVBWaSOHElqFBPTYb81+X8xvV9s
-         l5xJV0X6np1RzikNK8NE3LJQ1pAsluXHM1g9oN+U=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36A7tup5012298
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 10 Jul 2023 02:55:56 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
- Jul 2023 02:55:56 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 10 Jul 2023 02:55:56 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36A7tqnX030856;
-        Mon, 10 Jul 2023 02:55:53 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <afd@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH v2] arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports with GESI
-Date:   Mon, 10 Jul 2023 13:25:51 +0530
-Message-ID: <20230710075551.1109024-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 10 Jul 2023 03:56:29 -0400
+Received: from out-34.mta1.migadu.com (out-34.mta1.migadu.com [95.215.58.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CE5194
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:56:18 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 16:56:07 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688975775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pxpfsWCTlFG1v+7dBNIcVRA81FfHjZwtoCj7hQ1Emik=;
+        b=OXMPdKFiMdjZEynNo2f5M+d2MB4748ozdgc0DsnBSIbSOX8ajZlQXXrj3eWfPrwmQvj81m
+        +nLfMuKBEB1ReuphfOM7mMAKJl/HZBa502dIbIkwG4pf95lpowjqhhiHJAOldyUKWW1qQy
+        dddbMwtfy0YLqcb99Oh3yoT6L8lAoiY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] mm: memory-failure: fix potential permanently locked
+ hpage
+Message-ID: <20230710075607.GA1686200@ik1-406-35019.vs.sakura.ne.jp>
+References: <20230708085744.3599311-1-linmiaohe@huawei.com>
+ <20230708085744.3599311-2-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230708085744.3599311-2-linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The J7 GESI EXP board for J721E Common-Proc-Board supports RGMII mode.
-Use the overlay to configure CPSW9G ports in RGMII-RXID mode.
+On Sat, Jul 08, 2023 at 04:57:37PM +0800, Miaohe Lin wrote:
+> If hpage isn't Hugetlb page, MF_DELAYED is returned without unlock hpage
+> leading to hpage permanently locked. But this shouldn't trigger in the
+> real world because this PageHuge() check is just for potential problems.
 
-Add aliases for CPSW9G ports to enable kernel to fetch MAC addresses
-directly from U-Boot.
+Right, so this if-block is dead code, how about simply removing it?
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
-v1:
-https://lore.kernel.org/r/20230529094222.512675-1-s-vadapalli@ti.com/
-Changes since v1:
-- Rebase on linux-next tagged next-20230710.
+Thanks,
+Naoya Horiguchi
 
- arch/arm64/boot/dts/ti/Makefile               |   2 +
- .../dts/ti/k3-j721e-evm-gesi-exp-board.dtso   | 196 ++++++++++++++++++
- 2 files changed, 198 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso
-
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 6dd7b6f1d6ab..01d58aa8b06e 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -46,6 +46,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-evm.dtb
- k3-j721e-evm-dtbs := k3-j721e-common-proc-board.dtb k3-j721e-evm-quad-port-eth-exp.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-beagleboneai64.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-evm.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-j721e-evm-gesi-exp-board.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-sk.dtb
- 
- # Boards with J721s2 SoC
-@@ -58,3 +59,4 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- 
- # Enable support for device-tree overlays
- DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
-+DTC_FLAGS_k3-j721e-common-proc-board += -@
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso b/arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso
-new file mode 100644
-index 000000000000..5a8e074a924b
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso
-@@ -0,0 +1,196 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT Overlay for CPSW9G in RGMII mode using J7 GESI EXP BRD board with
-+ * J721E board.
-+ *
-+ * GESI Board Product Link: https://www.ti.com/tool/J7EXPCXEVM
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/net/ti-dp83867.h>
-+
-+#include "k3-pinctrl.h"
-+
-+&{/} {
-+	aliases {
-+		ethernet1 = "/bus@100000/ethernet@c000000/ethernet-ports/port@1";
-+		ethernet2 = "/bus@100000/ethernet@c000000/ethernet-ports/port@2";
-+		ethernet3 = "/bus@100000/ethernet@c000000/ethernet-ports/port@3";
-+		ethernet4 = "/bus@100000/ethernet@c000000/ethernet-ports/port@4";
-+	};
-+};
-+
-+&cpsw0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rgmii1_pins_default
-+		     &rgmii2_pins_default
-+		     &rgmii3_pins_default
-+		     &rgmii4_pins_default>;
-+};
-+
-+&cpsw0_port1 {
-+	status = "okay";
-+	phy-handle = <&cpsw9g_phy12>;
-+	phy-mode = "rgmii-rxid";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 1>;
-+};
-+
-+&cpsw0_port2 {
-+	status = "okay";
-+	phy-handle = <&cpsw9g_phy15>;
-+	phy-mode = "rgmii-rxid";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 2>;
-+};
-+
-+&cpsw0_port3 {
-+	status = "okay";
-+	phy-handle = <&cpsw9g_phy0>;
-+	phy-mode = "rgmii-rxid";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 3>;
-+};
-+
-+&cpsw0_port4 {
-+	status = "okay";
-+	phy-handle = <&cpsw9g_phy3>;
-+	phy-mode = "rgmii-rxid";
-+	mac-address = [00 00 00 00 00 00];
-+	phys = <&cpsw0_phy_gmii_sel 4>;
-+};
-+
-+&cpsw9g_mdio {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mdio0_pins_default>;
-+	bus_freq = <1000000>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	cpsw9g_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+	cpsw9g_phy3: ethernet-phy@3 {
-+		reg = <3>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+	cpsw9g_phy12: ethernet-phy@12 {
-+		reg = <12>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+	cpsw9g_phy15: ethernet-phy@15 {
-+		reg = <15>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
-+&exp1 {
-+	p15-hog {
-+		/* P15 - EXP_MUX2 */
-+		gpio-hog;
-+		gpios = <13 GPIO_ACTIVE_HIGH>;
-+		output-high;
-+		line-name = "EXP_MUX2";
-+	};
-+
-+	p16-hog {
-+		/* P16 - EXP_MUX3 */
-+		gpio-hog;
-+		gpios = <14 GPIO_ACTIVE_HIGH>;
-+		output-high;
-+		line-name = "EXP_MUX3";
-+	};
-+};
-+
-+&main_pmx0 {
-+	mdio0_pins_default: mdio0-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x1bc, PIN_OUTPUT, 0) /* (V24) MDIO0_MDC */
-+			J721E_IOPAD(0x1b8, PIN_INPUT, 0) /* (V26) MDIO0_MDIO */
-+		>;
-+	};
-+
-+	rgmii1_pins_default: rgmii1-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x4, PIN_INPUT, 4) /* (AC23) PRG1_PRU0_GPO0.RGMII1_RD0 */
-+			J721E_IOPAD(0x8, PIN_INPUT, 4) /* (AG22) PRG1_PRU0_GPO1.RGMII1_RD1 */
-+			J721E_IOPAD(0xc, PIN_INPUT, 4) /* (AF22) PRG1_PRU0_GPO2.RGMII1_RD2 */
-+			J721E_IOPAD(0x10, PIN_INPUT, 4) /* (AJ23) PRG1_PRU0_GPO3.RGMII1_RD3 */
-+			J721E_IOPAD(0x1c, PIN_INPUT, 4) /* (AD22) PRG1_PRU0_GPO6.RGMII1_RXC */
-+			J721E_IOPAD(0x14, PIN_INPUT, 4) /* (AH23) PRG1_PRU0_GPO4.RGMII1_RX_CTL */
-+			J721E_IOPAD(0x30, PIN_OUTPUT, 4) /* (AF24) PRG1_PRU0_GPO11.RGMII1_TD0 */
-+			J721E_IOPAD(0x34, PIN_OUTPUT, 4) /* (AJ24) PRG1_PRU0_GPO12.RGMII1_TD1 */
-+			J721E_IOPAD(0x38, PIN_OUTPUT, 4) /* (AG24) PRG1_PRU0_GPO13.RGMII1_TD2 */
-+			J721E_IOPAD(0x3c, PIN_OUTPUT, 4) /* (AD24) PRG1_PRU0_GPO14.RGMII1_TD3 */
-+			J721E_IOPAD(0x44, PIN_OUTPUT, 4) /* (AE24) PRG1_PRU0_GPO16.RGMII1_TXC */
-+			J721E_IOPAD(0x40, PIN_OUTPUT, 4) /* (AC24) PRG1_PRU0_GPO15.RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	rgmii2_pins_default: rgmii2-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x58, PIN_INPUT, 4) /* (AE22) PRG1_PRU1_GPO0.RGMII2_RD0 */
-+			J721E_IOPAD(0x5c, PIN_INPUT, 4) /* (AG23) PRG1_PRU1_GPO1.RGMII2_RD1 */
-+			J721E_IOPAD(0x60, PIN_INPUT, 4) /* (AF23) PRG1_PRU1_GPO2.RGMII2_RD2 */
-+			J721E_IOPAD(0x64, PIN_INPUT, 4) /* (AD23) PRG1_PRU1_GPO3.RGMII2_RD3 */
-+			J721E_IOPAD(0x70, PIN_INPUT, 4) /* (AE23) PRG1_PRU1_GPO6.RGMII2_RXC */
-+			J721E_IOPAD(0x68, PIN_INPUT, 4) /* (AH24) PRG1_PRU1_GPO4.RGMII2_RX_CTL */
-+			J721E_IOPAD(0x84, PIN_OUTPUT, 4) /* (AJ25) PRG1_PRU1_GPO11.RGMII2_TD0 */
-+			J721E_IOPAD(0x88, PIN_OUTPUT, 4) /* (AH25) PRG1_PRU1_GPO12.RGMII2_TD1 */
-+			J721E_IOPAD(0x8c, PIN_OUTPUT, 4) /* (AG25) PRG1_PRU1_GPO13.RGMII2_TD2 */
-+			J721E_IOPAD(0x90, PIN_OUTPUT, 4) /* (AH26) PRG1_PRU1_GPO14.RGMII2_TD3 */
-+			J721E_IOPAD(0x98, PIN_OUTPUT, 4) /* (AJ26) PRG1_PRU1_GPO16.RGMII2_TXC */
-+			J721E_IOPAD(0x94, PIN_OUTPUT, 4) /* (AJ27) PRG1_PRU1_GPO15.RGMII2_TX_CTL */
-+		>;
-+	};
-+
-+	rgmii3_pins_default: rgmii3-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0xb0, PIN_INPUT, 4) /* (AF28) PRG0_PRU0_GPO0.RGMII3_RD0 */
-+			J721E_IOPAD(0xb4, PIN_INPUT, 4) /* (AE28) PRG0_PRU0_GPO1.RGMII3_RD1 */
-+			J721E_IOPAD(0xb8, PIN_INPUT, 4) /* (AE27) PRG0_PRU0_GPO2.RGMII3_RD2 */
-+			J721E_IOPAD(0xbc, PIN_INPUT, 4) /* (AD26) PRG0_PRU0_GPO3.RGMII3_RD3 */
-+			J721E_IOPAD(0xc8, PIN_INPUT, 4) /* (AE26) PRG0_PRU0_GPO6.RGMII3_RXC */
-+			J721E_IOPAD(0xc0, PIN_INPUT, 4) /* (AD25) PRG0_PRU0_GPO4.RGMII3_RX_CTL */
-+			J721E_IOPAD(0xdc, PIN_OUTPUT, 4) /* (AJ28) PRG0_PRU0_GPO11.RGMII3_TD0 */
-+			J721E_IOPAD(0xe0, PIN_OUTPUT, 4) /* (AH27) PRG0_PRU0_GPO12.RGMII3_TD1 */
-+			J721E_IOPAD(0xe4, PIN_OUTPUT, 4) /* (AH29) PRG0_PRU0_GPO13.RGMII3_TD2 */
-+			J721E_IOPAD(0xe8, PIN_OUTPUT, 4) /* (AG28) PRG0_PRU0_GPO14.RGMII3_TD3 */
-+			J721E_IOPAD(0xf0, PIN_OUTPUT, 4) /* (AH28) PRG0_PRU0_GPO16.RGMII3_TXC */
-+			J721E_IOPAD(0xec, PIN_OUTPUT, 4) /* (AG27) PRG0_PRU0_GPO15.RGMII3_TX_CTL */
-+		>;
-+	};
-+
-+	rgmii4_pins_default: rgmii4-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x100, PIN_INPUT, 4) /* (AE29) PRG0_PRU1_GPO0.RGMII4_RD0 */
-+			J721E_IOPAD(0x104, PIN_INPUT, 4) /* (AD28) PRG0_PRU1_GPO1.RGMII4_RD1 */
-+			J721E_IOPAD(0x108, PIN_INPUT, 4) /* (AD27) PRG0_PRU1_GPO2.RGMII4_RD2 */
-+			J721E_IOPAD(0x10c, PIN_INPUT, 4) /* (AC25) PRG0_PRU1_GPO3.RGMII4_RD3 */
-+			J721E_IOPAD(0x118, PIN_INPUT, 4) /* (AC26) PRG0_PRU1_GPO6.RGMII4_RXC */
-+			J721E_IOPAD(0x110, PIN_INPUT, 4) /* (AD29) PRG0_PRU1_GPO4.RGMII4_RX_CTL */
-+			J721E_IOPAD(0x12c, PIN_OUTPUT, 4) /* (AG26) PRG0_PRU1_GPO11.RGMII4_TD0 */
-+			J721E_IOPAD(0x130, PIN_OUTPUT, 4) /* (AF27) PRG0_PRU1_GPO12.RGMII4_TD1 */
-+			J721E_IOPAD(0x134, PIN_OUTPUT, 4) /* (AF26) PRG0_PRU1_GPO13.RGMII4_TD2 */
-+			J721E_IOPAD(0x138, PIN_OUTPUT, 4) /* (AE25) PRG0_PRU1_GPO14.RGMII4_TD3 */
-+			J721E_IOPAD(0x140, PIN_OUTPUT, 4) /* (AG29) PRG0_PRU1_GPO16.RGMII4_TXC */
-+			J721E_IOPAD(0x13c, PIN_OUTPUT, 4) /* (AF29) PRG0_PRU1_GPO15.RGMII4_TX_CTL */
-+		>;
-+	};
-+};
--- 
-2.34.1
-
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/memory-failure.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index a6221a4bc5ea..d21ee27ad412 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1187,8 +1187,10 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  	struct address_space *mapping;
+>  	bool extra_pins = false;
+>  
+> -	if (!PageHuge(hpage))
+> +	if (!PageHuge(hpage)) {
+> +		unlock_page(hpage);
+>  		return MF_DELAYED;
+> +	}
+>  
+>  	mapping = page_mapping(hpage);
+>  	if (mapping) {
+> -- 
+> 2.33.0
+> 
+> 
+> 
