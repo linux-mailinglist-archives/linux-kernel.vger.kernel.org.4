@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7991A74DEB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C569874DEAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjGJUBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S230248AbjGJUBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjGJUB2 (ORCPT
+        with ESMTP id S230107AbjGJUBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:01:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0D7194;
-        Mon, 10 Jul 2023 13:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689019287; x=1720555287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kZ45qk7hVluta2GMMn37Fyi3fXfY6yfPSBwe92peGkM=;
-  b=cY2faqJ4t4FjuhxMEj3aNkLQGeHkvqg/fm2/2RgjREXQ8/v76WsaDH+F
-   0IaPi7e6bXL0Ef4VFARa3Haa52O3zy9Gq9qBOJjjnIxd7zYFBWLX7sJOp
-   /gr62IAL0B5RyXeOja783qZbquZ224Lmq7H/qaV2FfPDvntjUQQGW1V0c
-   TjkEMgmaraMNLzhC6y5avPo8HyTbEnJuXEzB9jOHt2Gzu9wIrH3LbY6HF
-   qPCaa/dIb+38zzA0Hc8JkE2RcdImtpmLD8n4JqWX/F1HbEwHaLYbWM9n3
-   RBLnfht5h3jZYTIuqptwAbxImgdFDrBK0QJboY1khSCT0yCMOfv56wNzd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="363309444"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="363309444"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:01:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="967538695"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="967538695"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Jul 2023 13:01:25 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qIx4W-0003vK-1c;
-        Mon, 10 Jul 2023 20:01:24 +0000
-Date:   Tue, 11 Jul 2023 04:00:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     alison@she-devel.com, johan@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alison@she-devel.com, achaiken@aurora.tech
-Subject: Re: [PATCH v8 1/2] gnss: ubx: customize serial device open to set
- U-Blox Zed-F9P baud
-Message-ID: <202307110347.FjEbD70k-lkp@intel.com>
-References: <20230628150948.908273-2-alison@she-devel.com>
+        Mon, 10 Jul 2023 16:01:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183C513E;
+        Mon, 10 Jul 2023 13:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=NARVxAHU8hdSWaaKOBo8T6Vk6x7Y5zqJLlil7BmYBVI=; b=cqIo0WmUCiJcN5pvSBP2FkMxKH
+        k2ZnLOmwNaJJPJkw4PW+4V3p2f4rePzcvXzUNSG9s+9OInLdffZVlrx4tymeLgq9+VbRSOhSDl6XV
+        4gtgUmlPmRQG54ZE3p97WtRvFk/wCSzluiK4GvAwWodn6Amlah7IDZlamtPctaEDuMOEi3MDQ62hy
+        2YpdSsn6d3WpLq9OkhK4ACN/DAvHvtIMgQgXllsRX8VX658Y5w/AEMGXljrHpWRgFPQ5hYAm2uKID
+        lCk+W3XQOdHKr9dRwzvFmdojjV2R6D87JreCthNUssxalzqdYYxQv1yDjNSd2VvteMN1Zkqp43zkS
+        AdjdKvfQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qIx47-00CcDE-1R;
+        Mon, 10 Jul 2023 20:00:59 +0000
+Message-ID: <fa1d9a4c-16fe-955d-071b-d39f1a0d9b58@infradead.org>
+Date:   Mon, 10 Jul 2023 13:00:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628150948.908273-2-alison@she-devel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 01/13] Update MAINTAINERS file.
+Content-Language: en-US
+To:     "Dr. Greg" <greg@enjellic.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net
+References: <20230710102319.19716-1-greg@enjellic.com>
+ <20230710102319.19716-2-greg@enjellic.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230710102319.19716-2-greg@enjellic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,26 +57,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-kernel test robot noticed the following build warnings:
+On 7/10/23 03:23, Dr. Greg wrote:
+> Add an entry to the MAINTAINERS file to document the maintainer's
+> address and files relevant to the Trusted Security Event Modeling
+> system (TSEM).
+> 
+> Signed-off-by: Greg Wettstein <greg@enjellic.com>
+> ---
+>  MAINTAINERS | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 35e19594640d..4660c972d5e3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19026,6 +19026,14 @@ F:	include/uapi/linux/selinux_netlink.h
+>  F:	scripts/selinux/
+>  F:	security/selinux/
+>  
+> +TSEM SECURITY MODULE
+> +M:	Greg Wettstein <greg@enjellic.com>
+> +S:	Maintained
+> +L:	linux-security-module@vger.kernel.org
+> +F:	Documentation/admin-guide/LSM/tsem.rst
+> +F:	Documentation/ABI/testing/tsemfs
+> +F:	security/tsem/
+> +
 
-[auto build test WARNING on 6995e2de6891c724bfeb2db33d7b87775f913ad1]
+Please insert entries in the MAINTAINERS file in alphabetical order
+(as stated in that file).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/alison-she-devel-com/gnss-ubx-customize-serial-device-open-to-set-U-Blox-Zed-F9P-baud/20230628-231318
-base:   6995e2de6891c724bfeb2db33d7b87775f913ad1
-patch link:    https://lore.kernel.org/r/20230628150948.908273-2-alison%40she-devel.com
-patch subject: [PATCH v8 1/2] gnss: ubx: customize serial device open to set U-Blox Zed-F9P baud
-config: microblaze-randconfig-r062-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110347.FjEbD70k-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110347.FjEbD70k-lkp@intel.com/reproduce)
+Thanks.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307110347.FjEbD70k-lkp@intel.com/
-
-cocci warnings: (new ones prefixed by >>)
->> drivers/gnss/ubx.c:293:5-11: ERROR: allocation function on line 292 returns NULL not ERR_PTR on failure
+>  SENSABLE PHANTOM
+>  M:	Jiri Slaby <jirislaby@kernel.org>
+>  S:	Maintained
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+~Randy
