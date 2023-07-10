@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3A574DE4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAA574DE52
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjGJTjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S229732AbjGJTkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjGJTjP (ORCPT
+        with ESMTP id S229563AbjGJTkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:39:15 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C695D9E;
-        Mon, 10 Jul 2023 12:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=O1YKh0iCibYzsm4hsCWbry564ZmymBSwh69WIn0oPJM=; b=svDqzOPyzOOPqTymB4KcsYSohE
-        EnNrMhpo5uqx6SfFuNs/gqFoSzOUNocdni5V//pWJO0rhKU+55pvKYxVRWXifQLe5uUcfDUq6FUf0
-        T7g6F7zl+52RnGQ3gCy1Ir74sMuai5p6dKqzc5MFpW2kcvPo5vC8gJUV33SqEYkS4z84=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qIwih-000yaT-6n; Mon, 10 Jul 2023 21:38:51 +0200
-Date:   Mon, 10 Jul 2023 21:38:51 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vesa =?iso-8859-1?B?SuTkc2tlbORpbmVu?= 
-        <vesa.jaaskelainen@vaisala.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Davis <afd@ti.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] net: phy: dp83822: Add support for line class driver
- configuration
-Message-ID: <6cf76d72-4747-46d2-a1f7-d2f1131491f7@lunn.ch>
-References: <20230710175621.8612-1-vesa.jaaskelainen@vaisala.com>
- <261cb91c-eb3a-4612-93ad-25e2bc1a7c23@lunn.ch>
- <87fac0dd-9a97-b188-4887-8c4bb21196d5@vaisala.com>
+        Mon, 10 Jul 2023 15:40:04 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDF69E;
+        Mon, 10 Jul 2023 12:40:03 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b8ad907ba4so24106095ad.0;
+        Mon, 10 Jul 2023 12:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689018003; x=1691610003;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ivhLVKhACKnZhgX7GHkfgbJfc6Z11Wv6X0HCdw2KFv4=;
+        b=ig89NSSNCjVNIUtp+LTVjG7HGB9E2wmkZykr4cZYhYKHnJFmCdAGyPdHPq24XHeZ5t
+         hnJlw4JRuHka8VDdhWnaF6l4pvXy5vYPzk1YOJk0BMhyTBtJl/WAso1qUD9w8T5i4sfD
+         sP+V8Z0/l0dO+K6u8JrMmWsvjD3pq2ldsDSfS21zyooQOmjDkGzgZgoFFKiAVTodTlLf
+         HRa0L0HYZNmrg8tPBz/z9BB5+lD7zUb1TCDiTowsYQreCy4xRFPUtFrQGDjHM8UiLiFf
+         hK+bIaVW6ZCjCO7gDPGpGf0WMVGRe9PcCiGNrl7BvNDMKJNF3PA7fflK5i2ggufGx7if
+         /4pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689018003; x=1691610003;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ivhLVKhACKnZhgX7GHkfgbJfc6Z11Wv6X0HCdw2KFv4=;
+        b=i5K4unldR3lyuca9fB7M+fKUv2qsexgjs69w8CY+tsZEHqf7ZJpkrSeAY0tUaWv7aR
+         UGtpnaikLxycWrfdy1M/Z+1UxU5EFkqlv4FGrCb2btKg5gig4motsbznpxuWkPHFZtX4
+         PYCBVMHP3AMJP4XTibLsu5B995i8gvmjrVh6T3ujLoE6W5yJHTsYx3l8HpPsVmdCg9PA
+         6fUfRGDJtVvL6Ib1Xucz3INdFSv9q0X+MTJyJOpVCns1pzHMvQjkyuXZtmv10XndYPP6
+         WqxTRicNdrkI3V5NV4tc5ZjMY9nzY29caFNOac0xxSTerMeWe4OzcYiPmZNS2vJxHyG2
+         s5bA==
+X-Gm-Message-State: ABy/qLYD+iuwS2YZKIlxLRR/pbcRVryaopU7v6sDCGo6Ytok6wNDaIIv
+        VwDelNd1EoTljVG/mrK9wGk=
+X-Google-Smtp-Source: APBJJlGhJ5LBKMDr4CCM3ZThpk48jeo5LFLqFMRq3t3f7w/reTZDgvC443zAHkPiDzeWQii5dncJUQ==
+X-Received: by 2002:a17:903:1110:b0:1b8:4199:edfb with SMTP id n16-20020a170903111000b001b84199edfbmr12883806plh.25.1689018003070;
+        Mon, 10 Jul 2023 12:40:03 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b001b3acbde983sm290359pla.3.2023.07.10.12.40.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 12:40:02 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 09:40:01 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: remove unneeded return value of
+ cgroup_rm_cftypes_locked()
+Message-ID: <ZKxeke6SfBe37Jso@slm.duckdns.org>
+References: <20230701073856.2095425-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87fac0dd-9a97-b188-4887-8c4bb21196d5@vaisala.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230701073856.2095425-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Andrew,
+On Sat, Jul 01, 2023 at 03:38:56PM +0800, Miaohe Lin wrote:
+> The return value of cgroup_rm_cftypes_locked() is always 0. So remove
+> it to simplify the code. No functional change intended.
 > 
-> This is needed for configuration in link between DP83822 and Ethernet Switch
-> chip.
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-What switch chip is it?
+Applied to cgroup/for-6.6. Please feel free to follow up with the comment
+addition Michal suggested.
 
-Most boards just connect the MACs together and don't have PHYs in the
-middle. There are some boards which do have PHYs, but they don't need
-any special mode.
+Thanks.
 
-> In the connection there there is no Ethernet cable at all but routes
-> within the circuit boards but instead has capacitive coupling on routes.
-
-So you also left out the magnetics?
- 
-> So the setting itself is related to specific circuit board design.
-
-Agreed. So it is then valid to put it into DT, if it is actually
-needed.
-
-> MLT-3 is related to encoding used in the signals -- I suppose wiki page is
-> good introduction reference:
-> 
-> https://en.wikipedia.org/wiki/MLT-3_encoding
-
-MLT-3 is well defined. What i could not find is any reference to what
-reduced MLT-3 is. If it is not part of any standard, why don't you
-just hard code the PHY to always use MTL-3 which is defined as part of
-802.3?
-
-I get the feeling reduced MLT-3 is TI proprietary. As such, it should
-default to MLT-3 as defined in 802.3 and there could then be an option
-to enable this proprietary mode for anybody we wants to use it.
-
-So before accepting any patches, we need a better understanding of
-that reduced MLT-3 is and why you would want to use it.
-
-     Andrew
-
+-- 
+tejun
