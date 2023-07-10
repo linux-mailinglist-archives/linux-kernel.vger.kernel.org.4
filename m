@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9BB74CFBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D588574CFC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjGJITO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 04:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S232810AbjGJIU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbjGJISy (ORCPT
+        with ESMTP id S232814AbjGJIUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:18:54 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C50123;
-        Mon, 10 Jul 2023 01:18:25 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-56fff21c2ebso51137647b3.3;
-        Mon, 10 Jul 2023 01:18:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688977104; x=1691569104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g4+jAI+1GTCd84zI6N0h/1Lodtok5RA51aLjQEndjpI=;
-        b=GRszJxY8Ur0n2AEadQftUTaL21YmS+/PBE+qi00DOigblUpfpuxYJ9BRXDoIETnRSO
-         w8IubWzG8fGcxmZYy6J651/Z65odOl/eUj0cc2yuxBQhEjggmw2UcaiNnDRKyWOZ5aQ8
-         uFtAm/9tgagP8arczKmfio4LdH1g0RIAAFDDZ6CyXBQyb1M6EGofKrumM5GO37NZcc2i
-         5nsC8p7GUJkMMBPC/uxMiRcG3QI5GMSofd147iv7KMxlvRz5SZKS33RHcZgx3ANxCZ6g
-         +6xLvn4bxX8b4a7ss28DfHF/8agdtCGgFsHCRi0pc0rGIBmpStnvF6fXJq2E3swYzfqU
-         ZFeA==
-X-Gm-Message-State: ABy/qLbO/CeV8pErrtEmv5/sRpGYqMoQQEYfkiJ+rEqlvdv69ReTTAew
-        zHLe0oauWT3tjS/p8GKfMwjhGryNq/FM0A==
-X-Google-Smtp-Source: APBJJlEmxr2B1/Ojr4gLrmif7s9rz5VlKR0Wk2qirCyvE9X64uEMtIu21SHlLR1c5GISKgl1mPY6og==
-X-Received: by 2002:a81:6ad6:0:b0:56d:297e:7c8c with SMTP id f205-20020a816ad6000000b0056d297e7c8cmr11596679ywc.8.1688977104427;
-        Mon, 10 Jul 2023 01:18:24 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x142-20020a81a094000000b00565de196516sm2946126ywg.32.2023.07.10.01.18.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 01:18:23 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-c5ffb6cda23so5205505276.0;
-        Mon, 10 Jul 2023 01:18:23 -0700 (PDT)
-X-Received: by 2002:a5b:c82:0:b0:c1a:5904:fe8e with SMTP id
- i2-20020a5b0c82000000b00c1a5904fe8emr5592978ybq.34.1688977103757; Mon, 10 Jul
- 2023 01:18:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <2c99d5df41c40691f6c407b7b6a040d406bc81ac.1688901306.git.geert+renesas@glider.be>
- <6af51602-631a-dadc-2740-d1cfad0a2993@roeck-us.net> <CAMuHMdW=WDuqgXk_51T341vgXrcxYPO34ou=rKHZrZj8Yiw6Rw@mail.gmail.com>
- <f27872c8f374a42fb7ea313314c47cdba2473b06.camel@physik.fu-berlin.de>
- <CAMuHMdXg1FvMCSBCvs=aFah0NWdOzEX+XdF4af0kY3kNx2bPtg@mail.gmail.com> <e44bc98f41e0497a3f125a32a6e78fe14313c634.camel@physik.fu-berlin.de>
-In-Reply-To: <e44bc98f41e0497a3f125a32a6e78fe14313c634.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 10:18:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUOOPvVM-evLptCnbNGpDtAxktY7QDuKQo7WmZ7RhrAFg@mail.gmail.com>
-Message-ID: <CAMuHMdUOOPvVM-evLptCnbNGpDtAxktY7QDuKQo7WmZ7RhrAFg@mail.gmail.com>
-Subject: Re: [PATCH] [RFT] sh: mach-r2d: Handle virq offset in cascaded IRL demux
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 04:20:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD15E13D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:19:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8D6351F38D;
+        Mon, 10 Jul 2023 08:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688977190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9c1Hyfa0qbZcmFBIiXA4YT0W5pWsuJ23T868Rm8ntrE=;
+        b=G4vEUbokaMCTFfE3zvzK8FXiJOo6Bty0CkY3QoHJtalaNhvolPfJ/smYBe8loijQaYuk4l
+        dxbvCGQf//pQSVG0Wb4M7C7NVBcIK8Iu4Md7WBrlACDtQ2rUL49kGUbF7T5t2XkM8BHBcX
+        b45sI7ICema9q6Q38HvlV+bSbYCWhvY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688977190;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9c1Hyfa0qbZcmFBIiXA4YT0W5pWsuJ23T868Rm8ntrE=;
+        b=mO+ukF0yxY4sZwLLdtFPXTD9hMZaME+nplule9TTUrRr8UQqt7ARS0rYr5T3Tc8FGA2DOt
+        F74+13edVJnoIZBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4CD4313A05;
+        Mon, 10 Jul 2023 08:19:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NijtESa/q2SjCgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 10 Jul 2023 08:19:50 +0000
+Date:   Mon, 10 Jul 2023 10:19:49 +0200
+Message-ID: <87jzv8i3fe.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Johan Hovold <johan@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix dB range for HPHL and HPHR
+In-Reply-To: <56aecc8d-2f6c-42c0-a13a-89c84cf53773@sirena.org.uk>
+References: <20230705125723.40464-1-srinivas.kandagatla@linaro.org>
+        <ZKfAUOOcGoBanHHu@hovoldconsulting.com>
+        <efaf5960-bcc5-6d52-5552-e1505a13b635@linaro.org>
+        <87y1jrkgdx.wl-tiwai@suse.de>
+        <3450ef1e-cb20-4242-b482-41d3d34c4564@sirena.org.uk>
+        <87wmzbkfw7.wl-tiwai@suse.de>
+        <f1041542-bd97-41d9-96b9-c6e5fef6b096@sirena.org.uk>
+        <87v8evkf3w.wl-tiwai@suse.de>
+        <56aecc8d-2f6c-42c0-a13a-89c84cf53773@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 9:57 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Mon, 2023-07-10 at 09:54 +0200, Geert Uytterhoeven wrote:
-> > On Mon, Jul 10, 2023 at 9:44 AM John Paul Adrian Glaubitz
-> > <glaubitz@physik.fu-berlin.de> wrote:
-> > > On Mon, 2023-07-10 at 09:03 +0200, Geert Uytterhoeven wrote:
-> > > > Indeed, I hadn't tested that.
-> > > > My current tree isn't based on linux-next, but did have a build
-> > > > failure in the cdrom code, for which I had found your fix (thanks!) in
-> > > > linux-next...
-> > >
-> > > So, there is a patch for this already? Is it going to be included for 6.5?
-> >
-> > The cdrom fix is commit a587b046ce921cc1 ("cdrom/gdrom: Fix build
-> > error") in v6.5-rc1, which builds dreamcast_defconfig fine.
-> >
-> > That config is still broken in linux-next, but the breakage hasn't\
-> > entered v6.5-rc1 (yet?).
->
-> OK, so we're talking about two different regressions here?
+On Fri, 07 Jul 2023 17:06:24 +0200,
+Mark Brown wrote:
+> 
+> On Fri, Jul 07, 2023 at 03:47:47PM +0200, Takashi Iwai wrote:
+> > Mark Brown wrote:
+> 
+> > > The ASoC generic control stuff supports inverting the value prior to
+> > > presentation to userspace so it's masked there (instead of writing the
+> > > number userspace sees to the register we subtract the number from the
+> > > maximum value and write that to the register), pulling that up further
+> > > to the ALSA core might be nice I guess?
+> 
+> > I believe yes.  Though, I'm still not sure how we can improve the
+> > mismatch of dB min/max.  The dB values of those inverted controls
+> > reflect the result of subtraction, no?
+> 
+> Yes, the dB scale presented to userspace is reversed relative to the
+> ordering in the registers.
 
-Yes.
+Right, the TLV min/max corresponds to the control values, and they
+don't mean the raw register values.
 
-https://lore.kernel.org/r/CAMuHMdWmv-Jdvi7a04JGXuA2QARj8c8mpUvY7TOcetPkG4pW7A@mail.gmail.com
+BTW, this thread made me wonder whether it makes sense to give some
+sanity checks (maybe with CONFIG_SND_DEBUG) in ALSA core.
+e.g. read_tlv_buf() in sound/core/control.c can perform some tests
+before actually passing to user-space.
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Takashi
