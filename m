@@ -2,87 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF1174D18A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD8B74D18F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjGJJdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S232397AbjGJJda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbjGJJc2 (ORCPT
+        with ESMTP id S233119AbjGJJdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:32:28 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0EFBB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:31:03 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-440bb9bad3cso1085254137.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1688981461; x=1691573461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Xi+JZ3d5l4IyEvep5re0u/IjNg3c0U7NsZlfAOTxmg=;
-        b=bLNvqPCgiD+AaOE7k+wYF5DCm001b5gOP8FAp7urBI6j0ppB/EKV1e2qksEGI/+wnj
-         grmQQ5XFRTWeYRCRjgjrI7NPrzStNJ2gLhWtD7UPOFJV8vJCCDZmhXKulx6v6b1BZbzb
-         F7KKFcZL1qpeveqJ7f+l/k8otjqtR33sC/HWVI48tnRSGSDjDS3xjZ094HTcCTLBA/Y1
-         4poeBTHnNBBpR3xyTxrzsERHFsTTgFAkb74if0d18A95A9V6a2EJBziUCRe00JTLW5hW
-         hAtQjQ6qjKRZAlxHMdpGKn+i22a97SY8+PUgeameKVxGqkk2otzOjEGkurUQlTirP57x
-         QgRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688981461; x=1691573461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Xi+JZ3d5l4IyEvep5re0u/IjNg3c0U7NsZlfAOTxmg=;
-        b=RgYvaC8I1CrgKQ7NBkOmPcI5gqexo3Fe5ASIPF4X2IiO4sFLWjBfwZ6jZBNtPKcBG0
-         4KB/fTaY2efvTvqIfC9rrQfvrcl18ak9XpmA/Y6yjERrSV5UVqa3F1bjTKRB9r5WdVQf
-         SmjkgyDFq0LhWU9yhnm8LNqjVYrXDZ4JZG9TGvt8Jm+F1S0204i6O8IIXXE9HmcKz4oW
-         O+5VLCrtNn4S9BgpKpZgu9rrLAKVbxqHelKQDMjAm8CTfUvWFLJzN/e//m5xXJLD2z+p
-         QCxR2gg1TOZ19Skq8ond8iQuHk7pYKE1BzBfM1pNCO4e3dOyGElUHy0YOnkA9v6jP0Wz
-         iIbw==
-X-Gm-Message-State: ABy/qLaI5jS2vIHj4x0vZXCHns2T1oj3VgWnGnxJ1EIJ5/V7neXQ2dQR
-        MhBvgPlz8iYLxOOFNLhUQT4vcmqCFbpapFjVnTHryG697tZp10xC
-X-Google-Smtp-Source: APBJJlGzzrta8ZukC3rtGrcPpxn8GyAC1LXWMGc2b2OT2L1BDY3rq0Al0FGfLPnv+V1vtGDwWXXg5B0It+rDBMr6Bd0=
-X-Received: by 2002:a67:f596:0:b0:443:7a85:8fbd with SMTP id
- i22-20020a67f596000000b004437a858fbdmr3588883vso.32.1688981461067; Mon, 10
- Jul 2023 02:31:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230621174943.30302-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230621174943.30302-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 10 Jul 2023 11:30:50 +0200
-Message-ID: <CAMRc=Mc6Zib-fssXOtnnMU2VkM8HjBQ1kiTtBhKmh0moQBSA+Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] gpiolib: Make gpiochip_hierarchy_add_domain()
- return domain
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 10 Jul 2023 05:33:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87CA130;
+        Mon, 10 Jul 2023 02:31:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B664460F53;
+        Mon, 10 Jul 2023 09:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5B6C433C8;
+        Mon, 10 Jul 2023 09:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688981497;
+        bh=P5omAF5+4IQGDGwgmkbXIBU+7C5y9KBpDPJDzdnmvz8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HsIrOUwE/MthrHcBv7bsS3D+qf0BTkPrX/1qdTJl0ZQ8DVGfWZBL2zzACRcIIyvl4
+         TjcVH0c4U6MOiOmieT+IusZynxsCK3YXGyry3daH5/Ae5q/YyNOvRvka+RD8EUv480
+         +KpXOvET5yILQURLSHyBN/HhfmGqBVv5bb0cxia4ojb5I63aOKRXvzr0aRHEEYsdsz
+         7RE0mK8034uombpHswGPRCqsxHGzI0shpsphsfZGqYvJlJiSxqHB3/bGmEcFFgPAeO
+         zJRdcx09E/qKnarEEh7Qi+xi2LHns3nC45ybsr0jcs2nJ4jyw7M73az4qzF/4NfA5t
+         A2TEilC/tbAMw==
+Received: from [77.174.185.166] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qInF0-00Bkcq-F9;
+        Mon, 10 Jul 2023 10:31:34 +0100
+Date:   Mon, 10 Jul 2023 10:31:19 +0100
+Message-ID: <874jmc8654.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+Cc:     <will@kernel.org>, <corbet@lwn.net>, <catalin.marinas@arm.com>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+In-Reply-To: <32f442e3-3d5c-4cec-9791-0da039f88287@quicinc.com>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+        <875y6s8bwb.wl-maz@kernel.org>
+        <32f442e3-3d5c-4cec-9791-0da039f88287@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 77.174.185.166
+X-SA-Exim-Rcpt-To: quic_aiquny@quicinc.com, will@kernel.org, corbet@lwn.net, catalin.marinas@arm.com, quic_pkondeti@quicinc.com, quic_kaushalk@quicinc.com, quic_satyap@quicinc.com, quic_shashim@quicinc.com, quic_songxue@quicinc.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 7:49=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> As a preparatory patch and for the sake of consistency, make
-> gpiochip_hierarchy_add_domain() return IRQ domain. While at it,
-> rename it to gpiochip_hierarchy_create_domain() to show
-> the change.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
+On Mon, 10 Jul 2023 09:19:54 +0100,
+"Aiqun(Maria) Yu" <quic_aiquny@quicinc.com> wrote:
+> 
+> On 7/10/2023 3:27 PM, Marc Zyngier wrote:
+> > On Mon, 10 Jul 2023 06:59:55 +0100,
+> > Maria Yu <quic_aiquny@quicinc.com> wrote:
+> >> 
+> >> In order to be able to disable lse_atomic even if cpu
+> >> support it, most likely because of memory controller
+> >> cannot deal with the lse atomic instructions, use a
+> >> new idreg override to deal with it.
+> > 
+> > In general, the idreg overrides are *not* there to paper over HW bugs.
+> > They are there to force the kernel to use or disable a feature for
+> > performance reason or to guide the *enabling* of a feature, but not
+> > because the HW is broken.
+> > 
+> > The broken status of a HW platform must also be documented so that we
+> > know what to expect when we look at, for example, a bad case of memory
+> > corruption (something I'd expect to see on a system that only
+> > partially implements atomic memory operations).
+> > 
+> 
+> good idea. A noc error would be happened if the lse atomic instruction
+> happened during a memory controller doesn't support lse atomic
+> instructions.
+> I can put the information in next patchset comment message. Pls feel
+> free to let know if there is other place to have this kind of
+> information with.
 
-Series applied, thanks!
+For a start, Documentation/arch/arm64/silicon-errata.rst should
+contain an entry for the actual erratum, and a description of the
+symptoms of the issue (you're mentioning a "noc error": how is that
+reported to the CPU?).
 
-Bart
+The workaround should also be detected at runtime -- we cannot rely on
+the user to provide a command-line argument to disable an essential
+feature that anyone has taken for granted for most of a decade...
+
+[...]
+
+> >> @@ -185,6 +195,7 @@ static const struct {
+> >>   	{ "arm64.nomops",		"id_aa64isar2.mops=0" },
+> >>   	{ "arm64.nomte",		"id_aa64pfr1.mte=0" },
+> >>   	{ "nokaslr",			"arm64_sw.nokaslr=1" },
+> >> +	{ "arm64.nolse_atomic",         "id_aa64isar0.atomic=0" },
+> > 
+> > And what of 32bit?
+
+This particular question still stands, as it is likely to affect VMs.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
