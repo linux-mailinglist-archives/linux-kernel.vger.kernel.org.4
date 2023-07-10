@@ -2,220 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051BE74CC97
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCC874CC9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjGJGEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S230291AbjGJGF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjGJGEl (ORCPT
+        with ESMTP id S229968AbjGJGF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:04:41 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10olkn2011.outbound.protection.outlook.com [40.92.42.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469A7138;
-        Sun,  9 Jul 2023 23:04:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CjkqFXLInER4nccdNKe3vX+FKPA5FsGH8SwInkkrLEq9DOSeBuAkxDI9hzAHWBrc7vPsm58tGM4BdbmFX/ZT6RaPdyYixR/YP9zOFbIag6Tr54wtwOHXjIQ4z2xuW5EyB/cMPmy3ZFcafjfB0gKA7Y5rlbTkm7LysJOoB5MTlz9FQI5Ej9gNosUqg5YjcHKg4kzJ0zcDjQbsZE0NH0aupVzsf9iU6X6iSVCKByyDVpNvrgv8gO+uM4xzQHbL7pW4OQ39bUj+kyjORZblZmqGT/IuFeO4bY4UTr9vtB8dtdO4kr/ROE+iFzUTyUH0jmwzwR/fvUwpy38Ptt/aq/rDDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FKTbi+r/HFexkoQ8oafzdncay6jsht7FJmLrX5WsWPo=;
- b=exDHZQ86hdSzY7zC6WjKcC+I9t2fNOB71M+koMapGbe6kJPX5TGOV4pwWkvXQKJkaYDVooHztMZ7VI2ltoDMkMSMGWuz/HxYzc0LtrQ60rVerUKHfTX1J4oQhvFy5SNq/QAaYdZm++wHJdGpRJYMkhM6ZBn7wKD2fCEqLkRP1sySbvfuAMVo8xJBlwbfdL0Pe9VyDKbMKbX8NX7+T1oRYsfq62FLPUEVBB0rTfxmpXzkGNa1gx3V3jxak9V/wWJw5NOz3IPyEhAY5avRd55xHiDluNMoNiHh0V+S1ciHykf6YfI5VSYSV6rQstYWDNLb0wIaMAdST4qf4ai7FVS8rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FKTbi+r/HFexkoQ8oafzdncay6jsht7FJmLrX5WsWPo=;
- b=s8ve2nGpn0LObHvAB2Z2GAFN2IvupkvNXM452OgJfnpMbvVQRUAW+t3tr/uvTk/Uc2bjoS8POLvupAMWaAip4EkeS17sOlTuvcsPXHIWNPfHdmdnse0CzDRryxsjCvm/p6wL9exQq5DVLU7atEPRNEJzWmSle0gWPjTR8bsDYWqSBOMTr/sIaFwDVsl6RX1rOJmFEq5e1EQ9+AakY2F5/cbZOjtMziy+qj/zbUZmKtgXbt0MMYrkn753iEI5bikCiiYpd80DQxGWAaCNOqKCgTr6uUm6iKc3oB7zDs3wvzRvS4/NleXD6sCsseQeIM5RZVHKrx7tV6XCIBrw/W2kLQ==
-Received: from DM6PR03MB4140.namprd03.prod.outlook.com (2603:10b6:5:5c::12) by
- DM4PR03MB6109.namprd03.prod.outlook.com (2603:10b6:5:394::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6565.30; Mon, 10 Jul 2023 06:04:08 +0000
-Received: from DM6PR03MB4140.namprd03.prod.outlook.com
- ([fe80::d106:d232:850a:bd33]) by DM6PR03MB4140.namprd03.prod.outlook.com
- ([fe80::d106:d232:850a:bd33%3]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 06:04:08 +0000
-From:   Wang Jianchao <jianchwa@outlook.com>
-To:     seanjc@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, kvm@vger.kernel.org
-Cc:     arkinjob@outlook.com, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH V2 4/4] KVM: x86: add debugfs file for lazy tscdeadline
-Date:   Mon, 10 Jul 2023 14:03:27 +0800
-Message-ID: <DM6PR03MB4140849AE402EE47F94A26E6CD30A@DM6PR03MB4140.namprd03.prod.outlook.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1688969007-3796-1-git-send-email-jianchwa@outlook.com>
-References: <1688969007-3796-1-git-send-email-jianchwa@outlook.com>
-Content-Type: text/plain
-X-TMN:  [onPZ5+p0gqz3KntzztyvYHkohF0c5PfKitpsDGZ3UXk=]
-X-ClientProxiedBy: SG2PR02CA0090.apcprd02.prod.outlook.com
- (2603:1096:4:90::30) To DM6PR03MB4140.namprd03.prod.outlook.com
- (2603:10b6:5:5c::12)
-X-Microsoft-Original-Message-ID: <1688969007-3796-5-git-send-email-jianchwa@outlook.com>
+        Mon, 10 Jul 2023 02:05:57 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894E510D0
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:05:29 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-992b2249d82so535548066b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 23:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688969128; x=1691561128;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C/5sXBX6w+tx4fzz42BcVYvkT5fYXODw7taXVRoe5E4=;
+        b=VZPa7xtNdgB2TAHCpqnZpgTYHg5TAPiEGf5ws0Sz3CMZVM3Z0gXNkTttmrHBn2LAz8
+         dTg1/TKtwHNAgu5Vs9xKfyy4yKcVojt+4g1yCBD4+5Ius8IgrZvXKgnPgOf13fyKbZI+
+         yDy9qXQ0t6i6IaVXWCCVEQHo0fFEfnqU0BaoEsokcHkl5Lx5akcBrPgehA1pqrXoI0Hk
+         7L9xEr25Aw7MGz67Aenl1sHh65VJgJCKwAz5zUEkItpz7AsrwmfAi8Wx8C2YatGfcu9/
+         oBVpMGjbGhAJylf1uJzQT5G8CQwTWmxP6g0j7WMjmdFYs5KTXqFQrzsDO28yOLKnpGo4
+         XAag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688969128; x=1691561128;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C/5sXBX6w+tx4fzz42BcVYvkT5fYXODw7taXVRoe5E4=;
+        b=ixt0jBhVUA+x9vALCIuAF9u8eYnfc63qJYHa/u3u56siXWnWMdpZ+l+jhsYJxOfnA4
+         vQ2ipVo89Dmy8NSPdlsqSn6ZXoMVyvxzUAjjliQKJlR0R4JE/BtkExv4qwFjwUDfug/C
+         cj/CVu00zhUMRBACHvhGw2xfbdUiqSrJaXDxFNb836suCGhjZ4Tq64BMEMgM8kFuuI1D
+         tvuO/ptkEMXmG7AyWjOKCRxjQdV9Amsk9c4YOaGYSNeocr4VVYUE9/fR8q2tpbLJFjKP
+         9HKXygGDI7kp7YP2ycRRPU5FutHNwD8vc4ZAfDxnIq3L9z39ry85wNYq17KBhaklSr02
+         cVsg==
+X-Gm-Message-State: ABy/qLbucLqDNvurXwbQfZXthpiK8MQdQ2jyUIA5wN1uaDbUYfPyf0x6
+        RWeL14kRNtKsemeH+2/bcMPIlQ==
+X-Google-Smtp-Source: APBJJlEAeqh7WntGsbBW64VEcC+MW9HxtmE6MYzXkcd/We3xh1O8zeXD5iFrXnlmwb8Jb+WPICf/cQ==
+X-Received: by 2002:a17:906:7a0f:b0:974:1c98:d2d9 with SMTP id d15-20020a1709067a0f00b009741c98d2d9mr12858788ejo.3.1688969127746;
+        Sun, 09 Jul 2023 23:05:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id r11-20020a17090638cb00b00992b510089asm5639601ejd.84.2023.07.09.23.05.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jul 2023 23:05:27 -0700 (PDT)
+Message-ID: <6251cf1b-6428-81e5-50b2-d65cd514063a@linaro.org>
+Date:   Mon, 10 Jul 2023 08:05:25 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB4140:EE_|DM4PR03MB6109:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a2a9a55-fa9c-4077-bf2f-08db810b7912
-X-MS-Exchange-SLBlob-MailProps: 7qh87CJt6y28mnXrYaz3TQtaqHIOdY46WTW/a637EjUNEDkDiKF6jSSbbDAdciueN+PrybFT+bfiVrdGNM7ZIjfWJDorFBfEQ4UpXWHS74RhKGodTrASuSYQ6N0qzEHjBJXcmNbvUPaiXAuzda0pUNQ9TqJC4NbkBCghFAj8hmsQgiUCLGAxNP0yF4Wxttn8vCD/5yssgyGtF4Mvd3eSu4n0T+09G1SHeeO7nWkmruUVGmv7F9ybNLHNq6XBPvpe1h1ESBv4xj7HXVi+LW3VwGo1otc/UEeWKsy9Nncm4g4+So7iiDDrNAboTLltgRttt2NlFi9OzDN7WpOX1kM00tLIlp7MabQzn79AINHXZF0ofnT9El6aH2dNRVncnR/hBsep89eJ44WlAlR0bVh0sjR4F1oxU7SskuBQ3qNX3SMIdDiWxxV1SN1jtlVV6JdqlhsfrWD0KvFXejIu2aD5i8ynACT1+/Xg7dRg567ERDyOX420/OxAy2rsRYB4p6qS+R27TOgORrWMlsIK68kAXmL8pgyxwrEaSOw2+te49LUt9sNoYDXHq4AYZjDuXhFmKh0J0X6qB1prBYH63RkaBSIRClXF6t5jQr7fADny/RpZEq+4olIed1LaEIJOzmLgRp4mfWf6NAy3oYK5RAwYGmap6pLHxSODBfiDkojAHMuY0f2L7SVMR381h0K7+8/J046yY6JymH16R3ORdnwkRPxH59u6znY8u12cfTUVKvhW+9TigwWozK4wkiDl14qe
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 02OIfjhT7q4xXtmqDoD50HHYEBmEcag2RpM+rQGUw4ruaYeAvmDec1RPg3Ov7WkUVx/AR1mCh4bp3ECvojeHnncTYpNF/uyA07iDGw/+MNDRAJjtWj3v6LIzGfiLzWEmpKM3/QNZWpuWdMY1vM4y+5uEQu9cOyOBJ6Z/juvSjpGWbrH0Mhf+Wcd7jf15z1xnakssm29A82e/e1hyL3nHEEbDrFkFr+9+Cy/0pyiqSM/R5mq0Hsqmk9XZM/EjPOMCuz8kfMluUmsGGxhmJKFOhUcn5u9zqeGMojUjEkIqScMJDaG7DM3MfMxc3mPcG2bhsmUN/i3cQuaZuj83vHOBtL1nvmHLHmmZMzgst1DIZCKSnW/QSex5nmJnjLoh0jtI8Bs2MKTW8+7ZrtG1kfQUWGE/gnLHpP4eZsuoXZvapI7kNbcTGEPMyx9NoAkmvl/fWxH14ZoVT7zELUuiLOxVKo1zipJmMpXlpdPDgeGIGPZSWcz0lE+eBFiN7TXdHBb3BnIqziBrN1Mn1xzeV4sv9nyeTVhp17Cya6M7gfgP/iYQEPk2BDfUOGANVMmv3Soo
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dQ0ipSbqwaLAztu9BiVYHdhWbxrSoHahvwOhyv1MdNs1BhH5qL3EzKfj0oUo?=
- =?us-ascii?Q?bhP+QJE8G5k1/MI0Mk3w6fx/KDYjU4ocYU0UHIRDQ1vpsDCMxJzn90PLKDlS?=
- =?us-ascii?Q?v9r9JP1RXvR8e+KSKdyEjJySoMcjBXqVD61n0kh809oqgD7djQUv+8yXCRWg?=
- =?us-ascii?Q?f2TnCjgCrYZXI3JO9alQmyw0Ff2inF26uvGTAvt2lFZpLPtlXz3U+GxRcnOK?=
- =?us-ascii?Q?Q9M9P3gbNRdbqklv3s2kQeRbXzLEDwtUjeAnOWk8DY1kT+TS9mSf1uNVboVD?=
- =?us-ascii?Q?6B9DI5s14US7eooIocovhcONt8g1k+3BcvwG6NIs0QqYM5NQn/ECibqlrK9B?=
- =?us-ascii?Q?B5MF+xLSANtkYE+1ecuh/Z97Ln/D27VZtpzuEuJo17pj3yRCnEkgqOdufPf8?=
- =?us-ascii?Q?tdmWB/5xYZkjtlzANxYj663ekeZ3PFRKOC3QW/4021USyaPuY+Xj55rXeKc8?=
- =?us-ascii?Q?ApjwBgxFQpIAIs7i31IkuNDtYm9M9YmHATSiTUBdKWmh1wXSm9KJOHFCPnM7?=
- =?us-ascii?Q?IDIjO59ahcpHosbGiCirDPUsoxKHn6absh2pX6pPw0o957PwCvcu9SUvVLkj?=
- =?us-ascii?Q?UHX9vK0sU9EN0GUqSEYvkEgGZcX3LuawGCLtHAKemvXEBpywhW37+1Wr5d26?=
- =?us-ascii?Q?r2jX3mxXcuYg3H6guN367LMzHM0DTeqWM8DdADJtWrj/IA4PcZOKnuLPOE9g?=
- =?us-ascii?Q?j/t6mKg505ikqhokA0RbraR+5RwicwpKcS91YfzGB8GuqksynQ/Ta+fMKlxi?=
- =?us-ascii?Q?SuyZWdDzKZBGuVgoD/Cu1dMuxlmBTuZve733UItC5PoVHAeGLF+SNoNnowi1?=
- =?us-ascii?Q?k9otCcKWYz5G3ZQpts22VoLu5C6iC4mei7m5J6wGTVlOtfbdOUZfGrATRsbd?=
- =?us-ascii?Q?2s5ccKtRHtlSvAi/G2UB/+v33wGHQ1LZ7BpapI72iu2HD//mf4li1rguD/m0?=
- =?us-ascii?Q?y5g5dxXqPJbmSFBwx9xAsK9ok03m6t7pIT9al7bGEhxHxN0bviZsqd2CYiL4?=
- =?us-ascii?Q?tshp957IZZwiNgYc+781LVaYbFF1yH3VXXk5CKGKXc1iWmKBsaBrixCEzXdJ?=
- =?us-ascii?Q?pGuf1YtFvaJOZRNIevqmxEgKAxJW+p6rSNhdTKps/1vufRfyOc0ejnY11Y4r?=
- =?us-ascii?Q?fT57DY2MdqZZ/I2rkbT94NbnL7+WlxpNq9vHTir5OEy+qm5B/C/G01kkoXPN?=
- =?us-ascii?Q?yM/ax72VxwHT6tVT3ikimbMYNQs4OlnvR+QBlZWj36odtg8F7lVCausmc3Q?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a2a9a55-fa9c-4077-bf2f-08db810b7912
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB4140.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 06:04:08.2805
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR03MB6109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
+ Video Input Interface driver
+Content-Language: en-US
+To:     yuji2.ishikawa@toshiba.co.jp, lkp@intel.com, hverkuil@xs4all.nl,
+        sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org, robh+dt@kernel.org, krzk@kernel.org,
+        conor+dt@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230620031111.3776-3-yuji2.ishikawa@toshiba.co.jp>
+ <202306202006.FUjZfd9O-lkp@intel.com>
+ <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a file named lazy_tscdeadline, in kvm debugfs vcpu
-directory to get the state. And also, if you write to it, it will
-trigger a lazy_tscdeadline kick forcily which can rescue the guest
-if the feature fall into bug.
+On 10/07/2023 02:16, yuji2.ishikawa@toshiba.co.jp wrote:
+>> -----Original Message-----
+>> From: kernel test robot <lkp@intel.com>
+>> Sent: Tuesday, June 20, 2023 9:58 PM
+>> To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
+>> <yuji2.ishikawa@toshiba.co.jp>; Hans Verkuil <hverkuil@xs4all.nl>; Sakari
+>> Ailus <sakari.ailus@iki.fi>; Laurent Pinchart
+>> <laurent.pinchart@ideasonboard.com>; Mauro Carvalho Chehab
+>> <mchehab@kernel.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+>> Kozlowski <krzk@kernel.org>; Conor Dooley <conor+dt@kernel.org>;
+>> iwamatsu nobuhiro(岩松 信洋 ○ＤＩＴＣ□ＤＩＴ○ＯＳＴ)
+>> <nobuhiro1.iwamatsu@toshiba.co.jp>
+>> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev;
+>> linux-media@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
+>> Video Input Interface driver
+>>
+>> Hi Yuji,
+>>
+>> kernel test robot noticed the following build errors:
+>>
+>> [auto build test ERROR on media-tree/master] [also build test ERROR on
+>> linus/master sailus-media-tree/streams v6.4-rc7 next-20230620] [If your patch
+>> is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:
+>> https://github.com/intel-lab-lkp/linux/commits/Yuji-Ishikawa/dt-bindings-me
+>> dia-platform-visconti-Add-Toshiba-Visconti-Video-Input-Interface-bindings/20
+>> 230620-120839
+>> base:   git://linuxtv.org/media_tree.git master
+>> patch link:
+>> https://lore.kernel.org/r/20230620031111.3776-3-yuji2.ishikawa%40toshiba.co.j
+>> p
+>> patch subject: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
+>> Video Input Interface driver
+>> config: x86_64-buildonly-randconfig-r001-20230620
+>> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
+>> kp@intel.com/config)
+>> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git
+>> 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+>> reproduce:
+>> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
+>> kp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of the
+>> same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes:
+>> | https://lore.kernel.org/oe-kbuild-all/202306202006.FUjZfd9O-lkp@intel.
+>> | com/
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>    In file included from <built-in>:1:
+>>    In file included from ./usr/include/linux/visconti_viif.h:12:
+>>>> usr/include/linux/videodev2.h:2464:20: error: field has incomplete type
+>> 'struct timespec'
+>>            struct timespec                 timestamp;
+>>                                            ^
+>>    usr/include/linux/videodev2.h:2464:9: note: forward declaration of 'struct
+>> timespec'
+>>            struct timespec                 timestamp;
+>>                   ^
+>>    1 error generated.
+>>
+>> --
+>> 0-DAY CI Kernel Test Service
+>> https://github.com/intel/lkp-tests/wiki
+> 
+> I could not reproduce the error with the steps had been specified.
+> 
+> * archived config file didn't compile Visconti VIIF driver (at least, COMPILE_TEST is needed)
 
-Signed-off-by: Wang Jianchao <jianchwa@outlook.com>
----
- arch/x86/kvm/debugfs.c | 79 +++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
+That's not true. The config has enabled CONFIG_VIDEO_VISCONTI_VIIF, so
+your reproduction steps were not correct (e.g. wrong arch, compiler etc).
 
-diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
-index ee8c4c3..7fb1618 100644
---- a/arch/x86/kvm/debugfs.c
-+++ b/arch/x86/kvm/debugfs.c
-@@ -56,6 +56,78 @@ static int vcpu_get_tsc_scaling_frac_bits(void *data, u64 *val)
- 
- DEFINE_SIMPLE_ATTRIBUTE(vcpu_tsc_scaling_frac_fops, vcpu_get_tsc_scaling_frac_bits, NULL, "%llu\n");
- 
-+static int vcpu_lazy_tscddl_show(struct seq_file *m, void *v)
-+{
-+	struct kvm_vcpu *vcpu = m->private;
-+
-+	if (vcpu->arch.pv_cpuid.features & (1UL << KVM_FEATURE_LAZY_TSCDEADLINE)) {
-+		struct kvm_host_lazy_tscdeadline *hlt = &vcpu->arch.lazy_tscdeadline;
-+		if (!(hlt->msr_val & KVM_MSR_ENABLED) ||
-+		    !hlt->guest)
-+			seq_printf(m, "not open in guest\n");
-+		else
-+			seq_printf(m, "pending %llu armed %llu\n",
-+					hlt->guest->pending, hlt->guest->armed);
-+	} else {
-+		seq_printf(m, "not enable in cpuid\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int vcpu_lazy_tscdeadline_open(struct inode *inode, struct file *file)
-+{
-+	struct kvm_vcpu *vcpu = inode->i_private;
-+	struct kvm *kvm = vcpu->kvm;
-+	int ret;
-+
-+	if (!kvm_get_kvm_safe(kvm))
-+		return -ENOENT;
-+
-+	ret = single_open(file, vcpu_lazy_tscddl_show, vcpu);
-+	if (ret < 0)
-+		kvm_put_kvm(kvm);
-+
-+	return 0;
-+}
-+
-+static ssize_t vcpu_lazy_tscdeadline_write(struct file *file, const char __user *buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct seq_file *m = file->private_data;
-+	struct kvm_vcpu *vcpu = m->private;
-+	struct kvm_host_lazy_tscdeadline *hlt = &vcpu->arch.lazy_tscdeadline;
-+
-+	if (!(hlt->msr_val & KVM_MSR_ENABLED) ||
-+	    !hlt->guest)
-+		goto out;
-+
-+	/*
-+	 * Force to kick the tscdeadline timer to rescue the vcpu
-+	 */
-+	kvm_make_request(KVM_REQ_LAZY_TSCDEADLINE, vcpu);
-+out:
-+	return count;
-+}
-+
-+static int vcpu_lazy_tscdeadline_release(struct inode *inode, struct file *file)
-+{
-+	struct kvm_vcpu *vcpu = inode->i_private;
-+	struct kvm *kvm = vcpu->kvm;
-+
-+	kvm_put_kvm(kvm);
-+
-+	return 0;
-+}
-+
-+static const struct file_operations vcpu_lazy_tscdeadline_fops = {
-+	.open		= vcpu_lazy_tscdeadline_open,
-+	.read		= seq_read,
-+	.write		= vcpu_lazy_tscdeadline_write,
-+	.llseek		= seq_lseek,
-+	.release	= vcpu_lazy_tscdeadline_release,
-+};
-+
- void kvm_arch_create_vcpu_debugfs(struct kvm_vcpu *vcpu, struct dentry *debugfs_dentry)
- {
- 	debugfs_create_file("guest_mode", 0444, debugfs_dentry, vcpu,
-@@ -63,11 +135,16 @@ void kvm_arch_create_vcpu_debugfs(struct kvm_vcpu *vcpu, struct dentry *debugfs_
- 	debugfs_create_file("tsc-offset", 0444, debugfs_dentry, vcpu,
- 			    &vcpu_tsc_offset_fops);
- 
--	if (lapic_in_kernel(vcpu))
-+	if (lapic_in_kernel(vcpu)) {
- 		debugfs_create_file("lapic_timer_advance_ns", 0444,
- 				    debugfs_dentry, vcpu,
- 				    &vcpu_timer_advance_ns_fops);
- 
-+		debugfs_create_file("lazy_tscdeadline", 0644,
-+				    debugfs_dentry, vcpu,
-+				    &vcpu_lazy_tscdeadline_fops);
-+	}
-+
- 	if (kvm_caps.has_tsc_control) {
- 		debugfs_create_file("tsc-scaling-ratio", 0444,
- 				    debugfs_dentry, vcpu,
--- 
-2.7.4
+> * the error message didn't appear even if I add some options to config file.
+> * Environment:
+>   * OS: Ubuntu 22.04
+>   * compiler: Ubuntu clang version 15.07
+
+Different compilers can have have or not have warnings, but it does not
+allow to ignore this warning. You can analyze the code even without
+reproducing it, if the reproduction is a problem.
+
+Best regards,
+Krzysztof
 
