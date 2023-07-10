@@ -2,123 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A181B74D982
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6373874D98B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbjGJPFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S233513AbjGJPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjGJPFp (ORCPT
+        with ESMTP id S233489AbjGJPGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:05:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6E3D7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:05:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EC086105A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F8FC433C9;
-        Mon, 10 Jul 2023 15:05:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689001543;
-        bh=HFY+t8bQIxdFB9O4v0T1aDs4Q2MuQ+LXdrKENupo/eI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OIwy4/J1BD0D0Akpt2r6+AK1SR5c0eFG6zl8jLqBH2eMQmhmnFJTk4umvQXCNtFGA
-         skGXR0v68EzG17LYokBRxwpXvxWWR8JgOkqkdM7TaTSbgjgP1SSZca5UNlgV+0vfXv
-         I3ntkXrPJmlNtN3kmXFwDHulpotH+sS++f/N7njs=
-Date:   Mon, 10 Jul 2023 17:05:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johannes Thumshirn <jth@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Rodr=EDguez_Barbarin=2C_Jos=E9?= Javier 
-        <JoseJavier.Rodriguez@duagon.com>,
-        Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-Subject: Re: [PATCH 1/1] mcb: Do not add the mcb_bus_type to the mcb_bus
- itself
-Message-ID: <2023071044-deduct-cycle-a918@gregkh>
-References: <20230710145752.14285-1-jth@kernel.org>
- <20230710145752.14285-2-jth@kernel.org>
+        Mon, 10 Jul 2023 11:06:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26798123;
+        Mon, 10 Jul 2023 08:06:35 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R06kR1TCbzTmQ3;
+        Mon, 10 Jul 2023 23:05:19 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 23:06:29 +0800
+Subject: Re: [syzbot] [ext4?] kernel BUG in ext4_split_extent_at (2)
+To:     syzbot <syzbot+0f4d9f68fb6632330c6c@syzkaller.appspotmail.com>,
+        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>
+References: <000000000000f1378f0600025915@google.com>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <64AC1E74.30606@huawei.com>
+Date:   Mon, 10 Jul 2023 23:06:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <000000000000f1378f0600025915@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230710145752.14285-2-jth@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 04:57:52PM +0200, Johannes Thumshirn wrote:
-> From: Rodríguez Barbarin, José Javier <JoseJavier.Rodriguez@duagon.com>
 
-This does not match your signed-off-by line.
 
-> 
-> When allocating a new mcb_bus the bus_type is added to the mcb_bus
-> itself, causing an issue when calling mcb_bus_add_devices().
-> This function is not only called for each mcb_device under the
-> mcb_bus but for the bus itself.
-> 
-> This causes a crash when freeing the ida resources as the bus numbering
-> gets corrupted due to a wrong cast of structs mcb_bus and mcb_device.
-> 
-> Make the release of the mcb devices and their mcb bus explicit.
-> 
-> Co-developed-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-> Signed-off-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-> Signed-off-by: Javier Rodriguez <josejavier.rodriguez@duagon.com>
-> Signed-off-by: Johannes Thumshirn <jth@kernel.org>
+On 2023/7/9 7:45, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+>
+> HEAD commit:    8689f4f2ea56 Merge tag 'mmc-v6.5-2' of git://git.kernel.or..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12b9cb02a80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ad417033279f15a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=0f4d9f68fb6632330c6c
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13977778a80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1004666aa80000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/21b63023cf5a/disk-8689f4f2.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/e04836fe057e/vmlinux-8689f4f2.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/ee05dfd52843/bzImage-8689f4f2.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/e2ab005f1edb/mount_0.gz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+0f4d9f68fb6632330c6c@syzkaller.appspotmail.com
+>
+> ------------[ cut here ]------------
+> kernel BUG at fs/ext4/ext4_extents.h:200!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 5885 Comm: syz-executor219 Not tainted 6.4.0-syzkaller-12365-g8689f4f2ea56 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/03/2023
+> RIP: 0010:ext4_ext_mark_unwritten fs/ext4/ext4_extents.h:200 [inline]
+> RIP: 0010:ext4_split_extent_at+0xd11/0xe10 fs/ext4/extents.c:3221
+> Code: e9 d2 f8 ff ff e8 1f 6d 5d ff 66 81 c5 00 80 e9 32 fd ff ff e8 10 6d 5d ff 44 8d bd 00 80 ff ff e9 d1 fc ff ff e8 ff 6c 5d ff <0f> 0b 48 8b 7c 24 18 e8 73 9d b0 ff e9 7f f3 ff ff 48 89 cf e8 46
+> RSP: 0018:ffffc900055ef268 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff88807d9c0000 RSI: ffffffff82277271 RDI: 0000000000000007
+> RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807587d00c
+> R13: 0000000000000000 R14: 0000000000000000 R15: ffff88807587d012
+> FS:  00007f4820ae9700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f4820ae8fe8 CR3: 0000000028105000 CR4: 0000000000350ee0
+> Call Trace:
+>   <TASK>
+>   ext4_split_extent+0x3fc/0x530 fs/ext4/extents.c:3384
+>   ext4_ext_handle_unwritten_extents fs/ext4/extents.c:3874 [inline]
+>   ext4_ext_map_blocks+0x2e22/0x5bc0 fs/ext4/extents.c:4166
+>   ext4_map_blocks+0x760/0x1890 fs/ext4/inode.c:621
+>   ext4_iomap_alloc fs/ext4/inode.c:3276 [inline]
+>   ext4_iomap_begin+0x43d/0x7a0 fs/ext4/inode.c:3326
+>   iomap_iter+0x446/0x10e0 fs/iomap/iter.c:91
+>   __iomap_dio_rw+0x6e3/0x1d80 fs/iomap/direct-io.c:574
+>   iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:665
+>   ext4_dio_write_iter fs/ext4/file.c:609 [inline]
+>   ext4_file_write_iter+0x1102/0x1880 fs/ext4/file.c:720
+>   call_write_iter include/linux/fs.h:1871 [inline]
+>   new_sync_write fs/read_write.c:491 [inline]
+>   vfs_write+0x981/0xda0 fs/read_write.c:584
+>   ksys_write+0x122/0x250 fs/read_write.c:637
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f4828f26cd9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 61 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f4820ae9208 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: ffffffffffffffda RBX: 0000000000000034 RCX: 00007f4828f26cd9
+> RDX: 0000000000000012 RSI: 0000000020000000 RDI: 0000000000000004
+> RBP: 00007f4828fa4790 R08: 00007f4828fa4798 R09: 00007f4828fa4798
+> R10: 00007f4828fa4798 R11: 0000000000000246 R12: 00007f4828fa479c
+> R13: 00007ffef851f96f R14: 00007f4820ae9300 R15: 0000000000022000
+>   </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:ext4_ext_mark_unwritten fs/ext4/ext4_extents.h:200 [inline]
+> RIP: 0010:ext4_split_extent_at+0xd11/0xe10 fs/ext4/extents.c:3221
+> Code: e9 d2 f8 ff ff e8 1f 6d 5d ff 66 81 c5 00 80 e9 32 fd ff ff e8 10 6d 5d ff 44 8d bd 00 80 ff ff e9 d1 fc ff ff e8 ff 6c 5d ff <0f> 0b 48 8b 7c 24 18 e8 73 9d b0 ff e9 7f f3 ff ff 48 89 cf e8 46
+> RSP: 0018:ffffc900055ef268 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff88807d9c0000 RSI: ffffffff82277271 RDI: 0000000000000007
+> RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807587d00c
+> R13: 0000000000000000 R14: 0000000000000000 R15: ffff88807587d012
+> FS:  00007f4820ae9700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffef85799a0 CR3: 0000000028105000 CR4: 0000000000350ee0
+>
+>
 > ---
-
-What commit id does this fix?
-
->  drivers/mcb/mcb-core.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mcb/mcb-core.c b/drivers/mcb/mcb-core.c
-> index 978fdfc19a06..d4535b8aea1d 100644
-> --- a/drivers/mcb/mcb-core.c
-> +++ b/drivers/mcb/mcb-core.c
-> @@ -251,6 +251,12 @@ int mcb_device_register(struct mcb_bus *bus, struct mcb_device *dev)
->  }
->  EXPORT_SYMBOL_NS_GPL(mcb_device_register, MCB);
->  
-> +
-> +static void mcb_bus_unregister(struct mcb_bus *bus)
-> +{
-> +	device_unregister(&bus->dev);
-> +}
-> +
->  static void mcb_free_bus(struct device *dev)
->  {
->  	struct mcb_bus *bus = to_mcb_bus(dev);
-> @@ -286,7 +292,6 @@ struct mcb_bus *mcb_alloc_bus(struct device *carrier)
->  
->  	device_initialize(&bus->dev);
->  	bus->dev.parent = carrier;
-> -	bus->dev.bus = &mcb_bus_type;
-
-So what bus type does this device now belong to?
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+>
+> .
+This should be caused by the write block device.
+Here's the log I captured writing the block deviceï¼š
+[T15721] blkdev_write_iter:---------bdev=0xffff888117fc5080 loop2-----
+[T15722] EXT4-fs error (device loop2) in ext4_reserve_inode_write:5718: 
+Corrupt filesystem
+[T15722] EXT4-fs (loop2): Remounting filesystem read-only
+[T15722] EXT4-fs error (device loop2): ext4_ext_grow_indepth:1468: inode 
+#16: comm rep: mark_inode_dirty error
+[T15722] general protection fault, probably for non-canonical address 
+0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+[T15722] KASAN: null-ptr-deref in range 
+[0x0000000000000000-0x0000000000000007]
 
 
->  	bus->dev.type = &mcb_carrier_device_type;
->  	bus->dev.release = &mcb_free_bus;
->  
-> @@ -322,6 +327,7 @@ static void mcb_devices_unregister(struct mcb_bus *bus)
->  void mcb_release_bus(struct mcb_bus *bus)
->  {
->  	mcb_devices_unregister(bus);
-> +	mcb_bus_unregister(bus);
-
-thanks.
-
-greg k-h
