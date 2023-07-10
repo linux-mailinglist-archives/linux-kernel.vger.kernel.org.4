@@ -2,118 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52C874D4F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3A874D4FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjGJMK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S230425AbjGJMLb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 08:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjGJMKw (ORCPT
+        with ESMTP id S229714AbjGJML3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:10:52 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B34123
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:10:51 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4faaaa476a9so6861219e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:10:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688991050; x=1691583050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bUyQk17MJT3ao4v6RmDakeDvMlU54/RUOborqwgq2Pc=;
-        b=sJ5CdSxBaK4ZxFXLdKAkIUfHbc/Iqtb8Fb8kcXrvw0q91MvnOiJKJ7qxDJKN/n3sAD
-         eRonNevW7IMf/P7rCDxwTlWH4M8hVMAqZh9ljVb7jUu1DI5pdgfT9szg1uGmVEq9rHov
-         YiMtH2bx5xinaxNoq0t/E8LfjaD7X6PfvP8tgZDMPZVBjZvObkB2QXu0NfpljU9gvjMt
-         2iaVlAlxjshhLtH7U8yYmje/WERSD6R6zWWVcsJx2PUgdQe8wrbE2QhBG33rQ77Ro9+u
-         /3MvPvZZBnnew1TRQV8H3HU7sv0yBWv7OLi/5F/UmBxzl/yMfkLUbfexnirfmRiOWRjf
-         kq5Q==
+        Mon, 10 Jul 2023 08:11:29 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDA5F4;
+        Mon, 10 Jul 2023 05:11:28 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-57688a146ecso55270997b3.2;
+        Mon, 10 Jul 2023 05:11:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688991050; x=1691583050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bUyQk17MJT3ao4v6RmDakeDvMlU54/RUOborqwgq2Pc=;
-        b=iEC8PFXXQES6HFOEvqAySAfv046cvw0yLYZ8PaYLhXcCM0slGaak1tqp7Qr3he2Qgo
-         ZoYT3ueoC2sHIALUuqI1bSRlIIgN4eUllFGXmSW4cHbFcRlJF0gfKVQYwbnGB8txQykO
-         JPftqBxtwJqcAMoPALNV/TzmbmXEtfLwFwed8YP0EoJet5RU3chDxR4FoYLnouMURe7V
-         I98vxYCFkmU5e5MrU91ydfyaJUidL6Q+Z3c27gFlkQo68OWghWfzOVbfTEGJb7BBoBeZ
-         oJS7KVO8z4QuTNU45TMjeKB5EAU1eIrp9lDfBXSSvCYnchpzkWVNMSwf9HzfgsaJtGZ4
-         Md0w==
-X-Gm-Message-State: ABy/qLYR9sKAEMc4Aui6ET6aLqpYhaXwlLxg2J5oOdg++KW8+rEmu7lx
-        6BdhNMqLuDI4C1M8xWne+Pa2nA==
-X-Google-Smtp-Source: APBJJlGYFJBq0+fUXFgKsXuZtDpS7DQMojOgepm6/ZPiqpLZRz1nLPokxoLdXqkSf/XQediGcStaiw==
-X-Received: by 2002:a05:6512:1108:b0:4fb:893a:d322 with SMTP id l8-20020a056512110800b004fb893ad322mr10580256lfg.68.1688991049671;
-        Mon, 10 Jul 2023 05:10:49 -0700 (PDT)
-Received: from [192.168.1.101] (abxj141.neoplus.adsl.tpnet.pl. [83.9.3.141])
-        by smtp.gmail.com with ESMTPSA id d5-20020ac24c85000000b004fa35167729sm1666246lfl.159.2023.07.10.05.10.48
+        d=1e100.net; s=20221208; t=1688991087; x=1691583087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=72Wm2+Haf42PppkDwX2AiSMrYpGiUC/lF3qyDG6asRc=;
+        b=DY/+ByY0vdf8vg0p/U5eg96ZYFqoM40eAd2+UF7dTCNIBILYzfrYHpKOPvzLm4PJ1Y
+         sh/SXoBH6X06fKGvFdViJaajjykc1MVu4yrU8QXxY4LGeIkSo4ihMlbGC65q//5/BJ5f
+         +wa4NNCNNJwaSkwHKCZttbqe4kKbbqxfzflD1Kk8Xwkb3tCYkHBHa1ov0IIzGIUV8IJY
+         HiOC/KzUpHY6wXJKAVQi+XQFTlCV1NdZboSYSPi0uQJ9yuCsAI3H1HSKrEMC+ik9459t
+         NFPBWVWgDbysxtz3mwoMlcOL07Gqlf1SRdAE6eO1jiEEaeAsWxf3F77t3FJY/sphrhn+
+         wIHw==
+X-Gm-Message-State: ABy/qLa9cUeUUkYEELNnLmO3aLtGfmKjOaLTQMNfbN59Kj7O31ynfjcx
+        eAzczfHfh6YleD6An/PSixJkSQa02ohYDg==
+X-Google-Smtp-Source: APBJJlGbjUGhg6rEspeFw5o+Wkwl6HM9YmIQynaD/xfCeS7OS2iQklVvbtKsZaStJAg7qvbxWZVpNQ==
+X-Received: by 2002:a0d:e208:0:b0:579:16e0:b1bf with SMTP id l8-20020a0de208000000b0057916e0b1bfmr11014023ywe.12.1688991087351;
+        Mon, 10 Jul 2023 05:11:27 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id e8-20020a81e948000000b0057072e7fa77sm2974981ywm.95.2023.07.10.05.11.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:10:49 -0700 (PDT)
-Message-ID: <55e55042-5189-15cb-5b0f-4c7f321a4f61@linaro.org>
-Date:   Mon, 10 Jul 2023 14:10:47 +0200
+        Mon, 10 Jul 2023 05:11:26 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c4dfe2a95fbso5164776276.3;
+        Mon, 10 Jul 2023 05:11:26 -0700 (PDT)
+X-Received: by 2002:a25:810f:0:b0:c62:9634:d39 with SMTP id
+ o15-20020a25810f000000b00c6296340d39mr11075620ybk.52.1688991086188; Mon, 10
+ Jul 2023 05:11:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom,ids: drop the IPQ5019 SoC ID
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kathiravan T <quic_kathirav@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_anusha@quicinc.com, quic_saahtoma@quicinc.com
-References: <20230710105419.1228966-1-quic_kathirav@quicinc.com>
- <20230710105419.1228966-2-quic_kathirav@quicinc.com>
- <d752e5e0-3c34-02ad-6768-42eb2c66e582@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <d752e5e0-3c34-02ad-6768-42eb2c66e582@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230710032355.72914-1-frank.li@vivo.com>
+In-Reply-To: <20230710032355.72914-1-frank.li@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jul 2023 14:11:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU=HzoBKhq3raBrE2B8XxsnJCvBKt6hEP-X7ExuuD-LUw@mail.gmail.com>
+Message-ID: <CAMuHMdU=HzoBKhq3raBrE2B8XxsnJCvBKt6hEP-X7ExuuD-LUw@mail.gmail.com>
+Subject: Re: [PATCH v2 01/19] drm/renesas: Convert to devm_platform_ioremap_resource()
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.07.2023 13:37, Krzysztof Kozlowski wrote:
-> On 10/07/2023 12:54, Kathiravan T wrote:
->> IPQ5019 SoC is not available in production. Lets drop it.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
->>  include/dt-bindings/arm/qcom,ids.h | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
->> index bcbe9ee2cdaf..179dd56b2d95 100644
->> --- a/include/dt-bindings/arm/qcom,ids.h
->> +++ b/include/dt-bindings/arm/qcom,ids.h
->> @@ -250,7 +250,6 @@
->>  #define QCOM_ID_QRU1000			539
->>  #define QCOM_ID_QDU1000			545
->>  #define QCOM_ID_QDU1010			587
->> -#define QCOM_ID_IPQ5019			569
-> 
-> What about users of this binding? What's the impact on them? When did
-> the SoC become obsolete and unsupported by Qualcomm? Remember that
-> ceasing a production does not mean that magically all users of a product
-> disappear...
-This + from my experience, SOCID entries are set in stone and freed
-indices are never reclaimed
+On Mon, Jul 10, 2023 at 5:25 AM Yangtao Li <frank.li@vivo.com> wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
+>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-Konrad
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
