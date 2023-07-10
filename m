@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8D774D018
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6ED74D01C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjGJIiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S231631AbjGJIiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjGJIhy (ORCPT
+        with ESMTP id S231215AbjGJIhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jul 2023 04:37:54 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501D7E6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34BAE7;
         Mon, 10 Jul 2023 01:37:53 -0700 (PDT)
 Date:   Mon, 10 Jul 2023 08:37:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SUn+6Bo1QBKBDK8RwHrPsSPwL7VkjRzPfS9/sg4u31c=;
-        b=M06fGKAE6ERw5kLlpZVH/oGeAXIfutzXNjrVHaTNY0+LfYNz3SVhofFih2djuPpTu/wxym
-        cpg7RIx5SAeWxfl++M/5N/oXje9d3PsrcLWug31KsCEdPCeEJK6Suy03XwLqe8kJEAKv1v
-        5htR/HyXst+a66Pt5yWtaQeSpqv+WnSD81eiWcfK9OVAXRoFhbeLRrqRDV+gnxIKzQRHZt
-        gWw3YxqAg16scveBvdoVS/ns2bvhsSIdvWcIfhknyuw2i9nrdbI3I5dBCTYZuQqOmA8WC+
-        6Zs/SHBofcvOp+QKUBIapJ4qe8FMZnRm6OO/UoN7Y14VLF6ZVsbF/841AEWUPw==
+        bh=BkEV7e94CvD29tG1A+d36LoGy9+Z10KJyC4UL+8m9vA=;
+        b=E8fcE1zE/0LL0PTIC0UeKJ7pC2LWoMgmNJHt4pVpiUU9Iy50ohNZi5IlEz0wYRdZhyeDSK
+        69cL8rCVvP1lOnEGG0s3uAwtYW3qHaLgE3XZX9OlM2bD6Greuvq6Heng67GEUjckGhkMbi
+        lCksUVzpyfHoSjaM8UuXQ4ysGwJ0RzRL/VFKt/B0TgFXmS+PORx+56EpSucKihp4t9MxHQ
+        7yEgDLy5gX2XWE1jEn8Sm0lP0R83CbvOqvQnG3eABsscgs/47i1lAOBy8Kl8FSEtc7GmzI
+        IK4M0LeCDd4UVFBu67p0A2TKALfi58lOs1+H1Qmdmq2OuU2O5wS+Ur1MN+cEXg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1688978272;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SUn+6Bo1QBKBDK8RwHrPsSPwL7VkjRzPfS9/sg4u31c=;
-        b=8vptgk6J3Ee6tJikx/zsVGwBt4ClhLlWY8hA+syearJDRE/Ss5P9TAj0U+HaZC66ORj5+Z
-        janxNOAO5nRSflCg==
+        bh=BkEV7e94CvD29tG1A+d36LoGy9+Z10KJyC4UL+8m9vA=;
+        b=7WXTwqYYgsdP5/PLGDq/L4BOl1mLw/sgBUusU7m8IIQrc7V8NgSXa0mMTIKf64O0cIhfjx
+        GHG7phTOQ5APlECg==
 From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/core: Use local64_try_cmpxchg in
- perf_swevent_set_period
+Subject: [tip: perf/core] perf/x86: Use local64_try_cmpxchg
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230708081129.45915-1-ubizjak@gmail.com>
-References: <20230708081129.45915-1-ubizjak@gmail.com>
+In-Reply-To: <20230706141720.2672-1-ubizjak@gmail.com>
+References: <20230706141720.2672-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-Message-ID: <168897827147.404.3167586601225398989.tip-bot2@tip-bot2>
+Message-ID: <168897827185.404.3533982389263997885.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,59 +67,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     28fd85a10a2a73658c6e26056d9e093de06b5a22
-Gitweb:        https://git.kernel.org/tip/28fd85a10a2a73658c6e26056d9e093de06b5a22
+Commit-ID:     4c1c9dea2089374cb58505a0df6136969ff3c8b9
+Gitweb:        https://git.kernel.org/tip/4c1c9dea2089374cb58505a0df6136969ff3c8b9
 Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Sat, 08 Jul 2023 10:10:57 +02:00
+AuthorDate:    Thu, 06 Jul 2023 16:16:48 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 10 Jul 2023 09:52:35 +02:00
 
-perf/core: Use local64_try_cmpxchg in perf_swevent_set_period
+perf/x86: Use local64_try_cmpxchg
 
-Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old
-in perf_swevent_set_period.  x86 CMPXCHG instruction returns success in ZF
-flag, so this change saves a compare after cmpxchg (and related move
-instruction in front of cmpxchg).
+Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old.
+x86 CMPXCHG instruction returns success in ZF flag, so this change saves a
+compare after cmpxchg (and related move instruction in front of cmpxchg).
 
 Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
 fails. There is no need to re-read the value in the loop.
 
 No functional change intended.
 
+Cc. "H. Peter Anvin" <hpa@zytor.com>
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230708081129.45915-1-ubizjak@gmail.com
+Link: https://lkml.kernel.org/r/20230706141720.2672-1-ubizjak@gmail.com
 ---
- kernel/events/core.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ arch/x86/events/amd/ibs.c      |  4 ++--
+ arch/x86/events/core.c         | 10 ++++------
+ arch/x86/events/intel/cstate.c | 10 ++++------
+ arch/x86/events/msr.c          |  8 +++-----
+ 4 files changed, 13 insertions(+), 19 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 78ae7b6..f84e264 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9595,16 +9595,16 @@ u64 perf_swevent_set_period(struct perf_event *event)
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 74e6642..7d29be0 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -156,8 +156,8 @@ perf_event_try_update(struct perf_event *event, u64 new_raw_count, int width)
+ 	 * count to the generic event atomically:
+ 	 */
+ 	prev_raw_count = local64_read(&hwc->prev_count);
+-	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+-					new_raw_count) != prev_raw_count)
++	if (!local64_try_cmpxchg(&hwc->prev_count,
++				 &prev_raw_count, new_raw_count))
+ 		return 0;
  
- 	hwc->last_period = hwc->sample_period;
+ 	/*
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index 9d24870..23c9642 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -129,13 +129,11 @@ u64 x86_perf_event_update(struct perf_event *event)
+ 	 * exchange a new raw count - then add that new-prev delta
+ 	 * count to the generic event atomically:
+ 	 */
+-again:
+ 	prev_raw_count = local64_read(&hwc->prev_count);
+-	rdpmcl(hwc->event_base_rdpmc, new_raw_count);
+-
+-	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+-					new_raw_count) != prev_raw_count)
+-		goto again;
++	do {
++		rdpmcl(hwc->event_base_rdpmc, new_raw_count);
++	} while (!local64_try_cmpxchg(&hwc->prev_count,
++				      &prev_raw_count, new_raw_count));
+ 
+ 	/*
+ 	 * Now we have the new raw value and have updated the prev
+diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
+index 835862c..97035db 100644
+--- a/arch/x86/events/intel/cstate.c
++++ b/arch/x86/events/intel/cstate.c
+@@ -365,13 +365,11 @@ static void cstate_pmu_event_update(struct perf_event *event)
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	u64 prev_raw_count, new_raw_count;
  
 -again:
--	old = val = local64_read(&hwc->period_left);
--	if (val < 0)
--		return 0;
-+	old = local64_read(&hwc->period_left);
-+	do {
-+		val = old;
-+		if (val < 0)
-+			return 0;
- 
--	nr = div64_u64(period + val, period);
--	offset = nr * period;
--	val -= offset;
--	if (local64_cmpxchg(&hwc->period_left, old, val) != old)
+ 	prev_raw_count = local64_read(&hwc->prev_count);
+-	new_raw_count = cstate_pmu_read_counter(event);
+-
+-	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+-			    new_raw_count) != prev_raw_count)
 -		goto again;
-+		nr = div64_u64(period + val, period);
-+		offset = nr * period;
-+		val -= offset;
-+	} while (!local64_try_cmpxchg(&hwc->period_left, &old, val));
++	do {
++		new_raw_count = cstate_pmu_read_counter(event);
++	} while (!local64_try_cmpxchg(&hwc->prev_count,
++				      &prev_raw_count, new_raw_count));
  
- 	return nr;
+ 	local64_add(new_raw_count - prev_raw_count, &event->count);
  }
+diff --git a/arch/x86/events/msr.c b/arch/x86/events/msr.c
+index 0feaaa5..61c59e0 100644
+--- a/arch/x86/events/msr.c
++++ b/arch/x86/events/msr.c
+@@ -244,12 +244,10 @@ static void msr_event_update(struct perf_event *event)
+ 	s64 delta;
+ 
+ 	/* Careful, an NMI might modify the previous event value: */
+-again:
+ 	prev = local64_read(&event->hw.prev_count);
+-	now = msr_read_counter(event);
+-
+-	if (local64_cmpxchg(&event->hw.prev_count, prev, now) != prev)
+-		goto again;
++	do {
++		now = msr_read_counter(event);
++	} while (!local64_try_cmpxchg(&event->hw.prev_count, &prev, now));
+ 
+ 	delta = now - prev;
+ 	if (unlikely(event->hw.event_base == MSR_SMI_COUNT)) {
