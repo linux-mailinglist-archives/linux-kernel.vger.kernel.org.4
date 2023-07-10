@@ -2,101 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B55974CD9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF3674CDA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjGJGti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S229907AbjGJGv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjGJGth (ORCPT
+        with ESMTP id S229617AbjGJGv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:49:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B005AA6
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:49:36 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qIkhz-0004j7-25; Mon, 10 Jul 2023 08:49:19 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3A4901ECAA5;
-        Mon, 10 Jul 2023 06:49:15 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 08:49:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Su Hui <suhui@nfschina.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, uttenthaler@ems-wuensche.com,
-        yunchuan@nfschina.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next v2 09/10] can: ems_pci: Remove unnecessary
- (void*) conversions
-Message-ID: <20230710-parachute-dispersal-208e1a406b78-mkl@pengutronix.de>
-References: <20230710064138.173912-1-suhui@nfschina.com>
+        Mon, 10 Jul 2023 02:51:57 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946C0A8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:51:56 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55bc29a909dso2016607a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 23:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688971916; x=1691563916;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OHTjYXmEzIxUquNxc12N2ed97hoxj5Q5yMhXNmLYxUg=;
+        b=dWRiLXZrSKSFSMWsHBCQVAB/OlaHEOIh/Oml1FQLpvcm3sfSG6ev2fCiruI7p3ku7T
+         5K625KuWeejYo4UbkfJukPnHuiZaAm5ajcflQvjH11+2dW7FXXGIR/6kcsAN/6BQat8b
+         7klmo5pQBs08mERbff+G4nguqLH+zekW7LJ7o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688971916; x=1691563916;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OHTjYXmEzIxUquNxc12N2ed97hoxj5Q5yMhXNmLYxUg=;
+        b=T4+aiK1jJ6UY5SIuaK8HeqghSUAq75VAkMwQzPxG4Sl+LfC9HdpFB6cT6hrmfGcj76
+         UflxK0v6p6HasZuf60qTlHe9vBGkp12Ecf+m4JixDZLUSQL4xwRZnzDRPN1T/+Fuacdv
+         E2n5f45KikWxGtrEtYryE2telE9bxsoCjttTrkFYHqiIF+Q9VMU/KevL4KoX5Mcczdxz
+         4tzq9BLO6XI7N4R5RQH1sXTsfBiwO6lc2bzMOdvt8AZZxoWxlxvEXcjmujB7a9Qz1knb
+         HYlN90rHWMHL5Iu755yev5qy4Yceb6KBC0G5J8spLzhGcJfRihWdHJHDfINc/ErTPImt
+         OeZw==
+X-Gm-Message-State: ABy/qLbSmiCJqEumV/K7rn+2Xt3mhUJ0S4bJUC0SYZ9i7bhL+WdzCnc5
+        3hm8bBFsPMqydx8Agd311OGBj/hG0ocWKc7k+XU=
+X-Google-Smtp-Source: APBJJlEsK/dk4vJ7TGYCMmKUwZ7bo7xtcJrx/4aPs/O3RjBKNkmBBpuDQjFcEeGNWyeUrP7crV8msA==
+X-Received: by 2002:a17:90a:5317:b0:262:d2ca:e209 with SMTP id x23-20020a17090a531700b00262d2cae209mr8935382pjh.18.1688971916071;
+        Sun, 09 Jul 2023 23:51:56 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:be97:1d05:f9b6:36a6])
+        by smtp.gmail.com with ESMTPSA id s24-20020a17090aba1800b0026302348ee4sm5537135pjr.30.2023.07.09.23.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jul 2023 23:51:55 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Bin Liu <bin.liu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kyrie.wu@mediatek.com,
+        irui.wang@mediatek.com
+Subject: [PATCH] media: mtk-jpeg: Set platform driver data earlier
+Date:   Mon, 10 Jul 2023 14:51:36 +0800
+Message-ID: <20230710065139.1763695-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vliygvx23paytwk4"
-Content-Disposition: inline
-In-Reply-To: <20230710064138.173912-1-suhui@nfschina.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the multi-core JPEG encoder/decoder setup, the driver for the
+individual cores references the parent device's platform driver data.
+However, in the parent driver, this is only set at the end of the probe
+function, way later than devm_of_platform_populate(), which triggers
+the probe of the cores. This causes a kernel splat in the sub-device
+probe function.
 
---vliygvx23paytwk4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Move platform_set_drvdata() to before devm_of_platform_populate() to
+fix this.
 
-On 10.07.2023 14:41:38, Su Hui wrote:
-> From: wuych <yunchuan@nfschina.com>
->=20
-> Pointer variables of void * type do not require type cast.
+Fixes: 934e8bccac95 ("mtk-jpegenc: support jpegenc multi-hardware")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+Not sure what caused this to surface just now, given that the driver
+changes were merged in v6.2-rc1, and the corresponding dts entries
+in v6.3-rc1.
 
-I like the idea. Please add my Acked-by: Marc Kleine-Budde
-<mkl@pengutronix.de>, after you've fixed the issue:
+This fixes boot failures on MT8195. Please apply and send to Linus ASAP.
 
-> Signed-off-by: wuych <yunchuan@nfschina.com>
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This patch is not Signed-off-by the contributing person.
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 4768156181c9..6a8eea9dde67 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1312,6 +1312,8 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ 	jpeg->dev = &pdev->dev;
+ 	jpeg->variant = of_device_get_match_data(jpeg->dev);
+ 
++	platform_set_drvdata(pdev, jpeg);
++
+ 	ret = devm_of_platform_populate(&pdev->dev);
+ 	if (ret) {
+ 		v4l2_err(&jpeg->v4l2_dev, "Master of platform populate failed.");
+@@ -1383,8 +1385,6 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ 		  jpeg->variant->dev_name, jpeg->vdev->num,
+ 		  VIDEO_MAJOR, jpeg->vdev->minor);
+ 
+-	platform_set_drvdata(pdev, jpeg);
+-
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	return 0;
+-- 
+2.41.0.255.g8b1d071c50-goog
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---vliygvx23paytwk4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSrqecACgkQvlAcSiqK
-BOiTlQf+KaGq+RQKecV2KZC82/U90JGtuIisVjkNKRh/mMhg+6CPgj37A36dJopA
-B309j3311kHTCuBsPWfD+IXLkOunPKJRGtxL+IxsXWtcAClti6YDG7HqUYGl9Mpi
-f0vyLf1xV60WUFTu6yJ2w6Rn25G79SM+071PWHHgDGqqb2vSYZFIY8d2hhnh/as8
-oKl3x8v+Fskg/so9Z8QKZ3cydmNhH/FOFwu6kNk7ofEzNokpcVQ5Os6Fk6nt5VJT
-HjeB7kAV+JuKO07gyMqZKKPfOm5z4f+tsWB3RkSRnKPMM9J6+U/5Gwl/v7X21+5e
-d8sLIAYPaGagxcB1uQXk9Djy+S3kbg==
-=dqfX
------END PGP SIGNATURE-----
-
---vliygvx23paytwk4--
