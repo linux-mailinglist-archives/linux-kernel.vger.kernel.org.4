@@ -2,157 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6373874D98B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA4474D991
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbjGJPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S233527AbjGJPIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbjGJPGo (ORCPT
+        with ESMTP id S230448AbjGJPIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:06:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26798123;
-        Mon, 10 Jul 2023 08:06:35 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R06kR1TCbzTmQ3;
-        Mon, 10 Jul 2023 23:05:19 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 23:06:29 +0800
-Subject: Re: [syzbot] [ext4?] kernel BUG in ext4_split_extent_at (2)
-To:     syzbot <syzbot+0f4d9f68fb6632330c6c@syzkaller.appspotmail.com>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>
-References: <000000000000f1378f0600025915@google.com>
-From:   "yebin (H)" <yebin10@huawei.com>
-Message-ID: <64AC1E74.30606@huawei.com>
-Date:   Mon, 10 Jul 2023 23:06:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Mon, 10 Jul 2023 11:08:09 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6293D7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:08:05 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36AChZsg016621;
+        Mon, 10 Jul 2023 15:07:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=mfyYjv116VAzZo339cVcCRzcWsGdvneef8/MsSoYZXw=;
+ b=A/6fhspK0ymAhhl3clMrLKoA9t8K4pacdcJF5y+AaC/mMyNrq9uRGKSW9pJIOjHkry+i
+ GZPWiXKtNfR1yoDM+k1TxoxduQxJ+NWPa8jQP0iFW3U9CoJmQ014TZneOV6b/zau4pLL
+ sjsHyxoGS3l6kwhvaeiAOX1/t7PrkWzWyzGYEAfqeyBfUun3E1wXajEIVXL15aJuCu/U
+ IvU3QxOtqqBPuLOuVIyiDABbLHbkATpakHjfOA08YcMKOjyuGsFPVD/SSp2UlnmnGs8A
+ 3BGfxG+cFULgoB/E3wvLqI8FOs+ObAYAHLxKfuKhisJFFKAz2exnEdJYoqGyvlP//rcU PQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpydttpj1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jul 2023 15:07:34 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36AEYm3a015855;
+        Mon, 10 Jul 2023 15:07:33 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx83ksr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jul 2023 15:07:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nqr3IHeelom9cEQUZpsuNUDRZhwDHC3pst5zU75rFYJvcZJWNqUqKuTh+pU43al5pS06NbJ2+0uHECwRWHSwFor5ni5/E4i3HnynnetrJ9sRj9XR+4BLUS6J3ucV2n8W+P9t5/fwT3D9jzsUrl7hXWNKDKf0wc0uQ5GeRhHagar+ZQU/wKk+/5ATiSXbEV1dRXFO99a037D8CbV7fGrf8/xBgcCcwkibpqISOdC229TKptngxP7wWoLkK3XqywWFV1duOZm0fAzZ7YOHLQm94uOl+3oRuMARH+s2mGH4ca0skxPMgSIxb0/bI6Hr1PtXu1Tb9l2tmm2v7n98VdSEYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mfyYjv116VAzZo339cVcCRzcWsGdvneef8/MsSoYZXw=;
+ b=mIcCt7pWm5A9qwrVqfSRPWuSFHt9rTLuVntb+IqGddwPS2LOUPKnxGOkl+khLcT4reHZNuPfDJtcENX7FCIR+KssIBqlWMW4+edK+KiFSR0HzisRu4HgYMdYzVyr8/sGwNaYq83uMflDjNGqy/6L+cgKzza0GhHrSYosHdgPqQesAYaln/74TDPYl/3/kb5xFuuA1pPg+MKh/qrHM4EvUhxMo3gLKYM6dEV6i5FjvtW8l/xtBuMXY6QXk6Wq1t5o1jqP8PtnBIhTXJLZjlJ5xluysbC2PEdudCECREOtuvRWqrxsJReaFh5ug0SYtMHe6MOWETUDu8KgoJoKpUayRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mfyYjv116VAzZo339cVcCRzcWsGdvneef8/MsSoYZXw=;
+ b=FnzkMUizsDWgaqKpUsH8TYJjKY3QnZ0GcTra3w02W5DRyM6ZskgWVXN70/Ba4K4W+EeI9VhB03Jw/slcxW68RC/uH5nSq2nGv+nuthcCn+Wzs98Zv1qsdgr6XnfKAVZb24PgAZvMOtI+JdP1cNlZlyT4u4yUi1qXXaLF4ZtDEy8=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DS7PR10MB7177.namprd10.prod.outlook.com (2603:10b6:8:e1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 15:07:31 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6565.026; Mon, 10 Jul 2023
+ 15:07:29 +0000
+Date:   Mon, 10 Jul 2023 11:07:26 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [RESEND PATCH 1/8] maple_tree: set the node limit when creating
+ a new root node
+Message-ID: <20230710150726.orwwolf53i53hlro@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20230707101057.29326-1-zhangpeng.00@bytedance.com>
+ <20230707101057.29326-2-zhangpeng.00@bytedance.com>
+ <20230707151819.d5rvxalhewdv62nb@revolver>
+ <20230710150532.hvj7jzc5ep73yq4i@revolver>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710150532.hvj7jzc5ep73yq4i@revolver>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0110.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d7::6) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-In-Reply-To: <000000000000f1378f0600025915@google.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|DS7PR10MB7177:EE_
+X-MS-Office365-Filtering-Correlation-Id: 691c3f39-c9ae-462e-0194-08db81576130
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CtlHcptL0Z/8zJtUycntz/e3id4yG37P5oP635QERT9GIu0WaIoEO4VWBdMFAS3/YVNCSeSQosBGmnK+AGWVIGLeaEyHyXIRheTSEsivlQqHE2lyNYdHcB6j26QitHwGFfi0UvVExJTr5E9zgJqWYHvdYKfVuAi4GiNDUioMeUUgTzTztiIYurj5AbXTlQB+LaoNpfCd/4MbNgK3HGj4Wrm5ggifd4iAFTw0DWoVHDjcntWnOlDlk/7ak+hgKTm+Qo9e9VKXPUuX0ofQQgz+R5FVdn2LQgKtQkfRuYi+pu/TX5CVeOP/kKWwTwTaWrEwoDIxhcfZrA4gUVtD4O9YYlh0oDn9TR67l+DbK+qI3kEZjrMRde0Rc2lWmHvWpHB95VrZm0EfYUyr1Z4+q8VU6ZgLW/AyEkT3rmCBdBpKHBYDL8SFqMwjnPMWUNirO08k9TWWPzXnhhS/BNUKjVkThfn+9cIg7GaU18tDk+JDELVmdReIGK2K/hKRqMGyNuI7TNmq69ASuvsg479GttI+qABlUZsZfvglffs+oECXAm6otPv4McCDJQAm3cBCT0ptaz+vWynhd7TqMrVjrIhCqQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(396003)(366004)(376002)(39860400002)(346002)(451199021)(6666004)(6486002)(478600001)(8676002)(8936002)(5660300002)(2906002)(86362001)(33716001)(4326008)(316002)(66476007)(66556008)(66946007)(38100700002)(41300700001)(26005)(1076003)(6506007)(186003)(83380400001)(9686003)(6512007)(966005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6zTxamHBNkR6z3tMYHdq3U2b5MYfO3OH/FfVX8QukgixkGxbu/yAUnLkOwkf?=
+ =?us-ascii?Q?yOBjs+iiXDhNC4/4OeU4eyv6G8zW4edi2fkLHDe6+s+knVJoaj3OT8218iaA?=
+ =?us-ascii?Q?WCtG5UyqZi/NxzD3qbBjoLLlrkSWVTAPE9Sh+xwPSy6gmRWJN6Z0sIN5GB3b?=
+ =?us-ascii?Q?/YNtpr7KTqqXebEEJnJJpNpb6wFoxVUJlDKPdOZJk1nO8BxcpnygyBYcJ+mj?=
+ =?us-ascii?Q?FkIRTEvilks0LFX1ipeJbN6AoR/4k0mJzDoPyqRBG90KnJeF4EghWSj5XeUU?=
+ =?us-ascii?Q?Ywougd7DWJ2/kjZOaqFHNPr+LmIPjqHQbHncIifv67U1KxivXQmhFd3Cai0f?=
+ =?us-ascii?Q?H7u1bndy8WXJWZiBtDCC4H4rI9529LKTDP/YzFjJ1skBK2Nb6BSWGRBn/Bmg?=
+ =?us-ascii?Q?rQ+Vu77kHWKgoEUufDhfB71XwaXOVkHJqpCafAgixBm2lbOxN6G5pvWGlvt7?=
+ =?us-ascii?Q?noE34ZnhThYO5PrzSeRT4OuvkXDwOUXkjRssA5N+afnjSCQRMBPfRaPIE4nw?=
+ =?us-ascii?Q?PfDA0I5p8A0umhdXxVE1bGi3GJM7naYBv1X9kX1nZvIlOp6uSb9EWz89e3Cy?=
+ =?us-ascii?Q?Fz9+x/JdqNeawNbYlU9v/IBl1hLw7qf4fnGnOzqEKMd/u86ZJCOiNjWANIcN?=
+ =?us-ascii?Q?FN/qxnoJlAE6KA8FlRE7St8P1Q04zkpwFdiQaQNJl89iOT/HmY/FNUM251uo?=
+ =?us-ascii?Q?CzH5ynhlyVIAY8Yk8O8GmKfy6ngQVRDd1p8lTMl+aJrNPKgpD7zCIA/8RI0x?=
+ =?us-ascii?Q?2bDfQAeJUNhZUQmEezjXgND2J45lKzc4SLdvXTXDRZEqo7Va5NRwSXwK4fO3?=
+ =?us-ascii?Q?WjkPJcecK/93+P4YXyaQPml2rZu6NIkBNY5pv9a1Wx8aXQgIzxc8C84341vN?=
+ =?us-ascii?Q?zBuylscXobKSXYz6xOsNiQUpUgGqzDOSROc5bluEab+XrJmugdZbtY/Yk2KK?=
+ =?us-ascii?Q?xGC6A6Ua8aRC2iywa2RTi+vlqNZZfcGuZx2guUxXphtaKzmjIMczpaTjVejR?=
+ =?us-ascii?Q?hscLq2dCaOh8okaHaXdzWSxNiaytUTiWSXFGOrlMs/XSA3Zb7PVD1XrR5FHB?=
+ =?us-ascii?Q?o/xW2FbaiurUqKrCNROk0uGmIxDiLztuhwE1n7cgqCCuY7TknSEO02FhvaJr?=
+ =?us-ascii?Q?TNH38blBuSsEcqT0ik1S1k4Fqdpzuz1DIusC0isXGcRrib67VeQRcooZJ9B0?=
+ =?us-ascii?Q?3diAFVsqipbhYf1JahfptjKqV7KTa6DrgZTecEC0ctCroVRx/w2vmnCOf9sF?=
+ =?us-ascii?Q?JHq8hCYAlv2HvttBgASGAQtGYBtdb5s7RiTShS4GRCBdEyAYYnRfNH9XnkCf?=
+ =?us-ascii?Q?EfqHgrcyFVXP9fpx4Sl6Pjdr54bClNiyubR4Nzn7iEXHGfERWoGinIazse1Z?=
+ =?us-ascii?Q?0JqG6F1/tb96FN69/RxPIPGThUZUCYyZbAOfs3w8zInZFkbw+9O0J2XSVNcR?=
+ =?us-ascii?Q?7wUqyJLy0OLgmtQhL3OxDma9alyb6bBZFVJBeIUOBHw/j9URCbCKocMcKfNY?=
+ =?us-ascii?Q?QUm1krtYQWsNydDmO4ByUM3mJU4+SIR/YlHhvkaY1x0GvZdfAPGiK3wlsuwz?=
+ =?us-ascii?Q?mKkAjIsoqVXN/kkxnc0ufJaNLNDBCG9hpApjL9Klz1lTk2rZTA5VQBK9NMap?=
+ =?us-ascii?Q?sg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?RaYJ2EWlt1eLYsy4+PQ7C+Pd0KQrrNGWFq+6g9mH+sHGgvPOrr6ZKYEw8aYh?=
+ =?us-ascii?Q?P9bvErLO+Af8d6b7g/qfNUToKlahrtGbg3f9ab8Bh4li9IkRjH6ZFUok44N5?=
+ =?us-ascii?Q?jzGSt/KzDUlQt69fLbGAwbbskQuiyPiNWugE9qhJdfj/St/nZKS4dYCvaCZR?=
+ =?us-ascii?Q?6f7EGYVKed+BJrReURKLd71opq54tNJAFUGUWZfjT6s2zA3+h+zjkqHQQcZ0?=
+ =?us-ascii?Q?raT5XhzujGA9dGyBaL0CIWzitHQ2Ztjq8IA+DbOrqkzLyUtK8txR296rTOKe?=
+ =?us-ascii?Q?3qOVtgofGmMNIuk6jBRhcX1GcJFf/PGCAalvNmO6KhMdQf6cQIQ3wBAuo8FP?=
+ =?us-ascii?Q?rC5507OcAXj2nciEE0+Qd52mtqE494LBsN3fF3MFG7/n5//bx/EuTXEAWiBr?=
+ =?us-ascii?Q?CMoFv781G737QeVp0EEyXdAy6JLtYQxHOL5cg8cKeO8z0yRCUDAA+34e2go3?=
+ =?us-ascii?Q?VF9f8GHr0/ENbYiDropgzaXIVutNNLwoC2crnam/Dw32/yNEvF8k6wS+u5gc?=
+ =?us-ascii?Q?twTLoaOEF5ybQk+8qDtdLLLvXRBY450RIZiWcO10dfbDavs8UgjuAdpwjPw0?=
+ =?us-ascii?Q?3ljZhuw2I3L+G90J8XdOYRbrjmada5AvANWf1pvbOwJ51ujU3GZqsYeH/AIc?=
+ =?us-ascii?Q?m1D4/kO3CPpR3i+opM6kIbWjd3wlny1vQRXUDJuePbePUzNpWLLyuipT1AlZ?=
+ =?us-ascii?Q?STLICtAqbGuTOF+W7ZV9iuDXWzGyxxyFHKsMaf08pxMP6VR6J6CBE5iY9UPd?=
+ =?us-ascii?Q?8jyedfBNiua1xhTgRI3jO5uA0yaVk5g31sLTlknLCtTPPe2usYVo7Xs0M0Pv?=
+ =?us-ascii?Q?j2LDDj3DIo/9clINRNitlDWRNoUEIrQ8NcTBEDxpOE1xOyBGcST/scuXypG5?=
+ =?us-ascii?Q?h6+txHKmqytJTW60dAc+QtuxORzNRN6cmG7W0gAkmTT6qG84cc1RTucrFTNf?=
+ =?us-ascii?Q?NHmSZcMiKO9NhR8YPBPebf16HEM7Q5UsPBYiepXqSQw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 691c3f39-c9ae-462e-0194-08db81576130
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 15:07:29.6959
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M4zV0K8MxJFietEUMMkhrueP/Uf3DZ2FqaGQyXyySvrk31jB9w2gcF1dcWMgDfNGIL4NTtCMtFO2GcuEYTFc9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7177
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_11,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ adultscore=0 mlxscore=0 spamscore=0 phishscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307100136
+X-Proofpoint-GUID: Pc9ryvacHV6yxwigctDThFuSZ6UPukrP
+X-Proofpoint-ORIG-GUID: Pc9ryvacHV6yxwigctDThFuSZ6UPukrP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+... actually add Geert to the cc list.
 
-
-On 2023/7/9 7:45, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
->
-> HEAD commit:    8689f4f2ea56 Merge tag 'mmc-v6.5-2' of git://git.kernel.or..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12b9cb02a80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ad417033279f15a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=0f4d9f68fb6632330c6c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13977778a80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1004666aa80000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/21b63023cf5a/disk-8689f4f2.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e04836fe057e/vmlinux-8689f4f2.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ee05dfd52843/bzImage-8689f4f2.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/e2ab005f1edb/mount_0.gz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+0f4d9f68fb6632330c6c@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> kernel BUG at fs/ext4/ext4_extents.h:200!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 5885 Comm: syz-executor219 Not tainted 6.4.0-syzkaller-12365-g8689f4f2ea56 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/03/2023
-> RIP: 0010:ext4_ext_mark_unwritten fs/ext4/ext4_extents.h:200 [inline]
-> RIP: 0010:ext4_split_extent_at+0xd11/0xe10 fs/ext4/extents.c:3221
-> Code: e9 d2 f8 ff ff e8 1f 6d 5d ff 66 81 c5 00 80 e9 32 fd ff ff e8 10 6d 5d ff 44 8d bd 00 80 ff ff e9 d1 fc ff ff e8 ff 6c 5d ff <0f> 0b 48 8b 7c 24 18 e8 73 9d b0 ff e9 7f f3 ff ff 48 89 cf e8 46
-> RSP: 0018:ffffc900055ef268 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff88807d9c0000 RSI: ffffffff82277271 RDI: 0000000000000007
-> RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807587d00c
-> R13: 0000000000000000 R14: 0000000000000000 R15: ffff88807587d012
-> FS:  00007f4820ae9700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f4820ae8fe8 CR3: 0000000028105000 CR4: 0000000000350ee0
-> Call Trace:
->   <TASK>
->   ext4_split_extent+0x3fc/0x530 fs/ext4/extents.c:3384
->   ext4_ext_handle_unwritten_extents fs/ext4/extents.c:3874 [inline]
->   ext4_ext_map_blocks+0x2e22/0x5bc0 fs/ext4/extents.c:4166
->   ext4_map_blocks+0x760/0x1890 fs/ext4/inode.c:621
->   ext4_iomap_alloc fs/ext4/inode.c:3276 [inline]
->   ext4_iomap_begin+0x43d/0x7a0 fs/ext4/inode.c:3326
->   iomap_iter+0x446/0x10e0 fs/iomap/iter.c:91
->   __iomap_dio_rw+0x6e3/0x1d80 fs/iomap/direct-io.c:574
->   iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:665
->   ext4_dio_write_iter fs/ext4/file.c:609 [inline]
->   ext4_file_write_iter+0x1102/0x1880 fs/ext4/file.c:720
->   call_write_iter include/linux/fs.h:1871 [inline]
->   new_sync_write fs/read_write.c:491 [inline]
->   vfs_write+0x981/0xda0 fs/read_write.c:584
->   ksys_write+0x122/0x250 fs/read_write.c:637
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f4828f26cd9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 61 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f4820ae9208 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> RAX: ffffffffffffffda RBX: 0000000000000034 RCX: 00007f4828f26cd9
-> RDX: 0000000000000012 RSI: 0000000020000000 RDI: 0000000000000004
-> RBP: 00007f4828fa4790 R08: 00007f4828fa4798 R09: 00007f4828fa4798
-> R10: 00007f4828fa4798 R11: 0000000000000246 R12: 00007f4828fa479c
-> R13: 00007ffef851f96f R14: 00007f4820ae9300 R15: 0000000000022000
->   </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:ext4_ext_mark_unwritten fs/ext4/ext4_extents.h:200 [inline]
-> RIP: 0010:ext4_split_extent_at+0xd11/0xe10 fs/ext4/extents.c:3221
-> Code: e9 d2 f8 ff ff e8 1f 6d 5d ff 66 81 c5 00 80 e9 32 fd ff ff e8 10 6d 5d ff 44 8d bd 00 80 ff ff e9 d1 fc ff ff e8 ff 6c 5d ff <0f> 0b 48 8b 7c 24 18 e8 73 9d b0 ff e9 7f f3 ff ff 48 89 cf e8 46
-> RSP: 0018:ffffc900055ef268 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff88807d9c0000 RSI: ffffffff82277271 RDI: 0000000000000007
-> RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807587d00c
-> R13: 0000000000000000 R14: 0000000000000000 R15: ffff88807587d012
-> FS:  00007f4820ae9700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffef85799a0 CR3: 0000000028105000 CR4: 0000000000350ee0
->
->
-> ---
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
->
-> .
-This should be caused by the write block device.
-Here's the log I captured writing the block device：
-[T15721] blkdev_write_iter:---------bdev=0xffff888117fc5080 loop2-----
-[T15722] EXT4-fs error (device loop2) in ext4_reserve_inode_write:5718: 
-Corrupt filesystem
-[T15722] EXT4-fs (loop2): Remounting filesystem read-only
-[T15722] EXT4-fs error (device loop2): ext4_ext_grow_indepth:1468: inode 
-#16: comm rep: mark_inode_dirty error
-[T15722] general protection fault, probably for non-canonical address 
-0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-[T15722] KASAN: null-ptr-deref in range 
-[0x0000000000000000-0x0000000000000007]
-
-
+* Liam R. Howlett <Liam.Howlett@Oracle.com> [230710 11:06]:
+> * Liam R. Howlett <Liam.Howlett@Oracle.com> [230707 11:18]:
+> > * Peng Zhang <zhangpeng.00@bytedance.com> [230707 06:11]:
+> > > Set the node limit of the root node so that the last pivot of all nodes
+> > > is the node limit (if the node is not full).
+> 
+> This patch also fixes a bug in mas_rev_awalk().  Effectively, always
+> setting a maximum makes mas_logical_pivot() behave as mas_safe_pivot().
+> Without this fix, it is possible that very small tasks would fail to
+> find the correct gap.  Although this has not been observed with real
+> tasks, it has been reported to happen in m68k nommu running the maple
+> tree tests.
+> 
+> Link: https://lore.kernel.org/linux-mm/CAMuHMdV4T53fOw7VPoBgPR7fP6RYqf=CBhD_y_vOg53zZX_DnA@mail.gmail.com/
+> Cc: <stable@vger.kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> 
+> > > 
+> > > Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> > 
+> > This has been on my list of things to do for a while, thanks.
+> > 
+> > Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> > 
+> > > ---
+> > >  lib/maple_tree.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> > > index d3072858c280..f55e59bd9122 100644
+> > > --- a/lib/maple_tree.c
+> > > +++ b/lib/maple_tree.c
+> > > @@ -3692,7 +3692,8 @@ static inline int mas_root_expand(struct ma_state *mas, void *entry)
+> > >  	mas->offset = slot;
+> > >  	pivots[slot] = mas->last;
+> > >  	if (mas->last != ULONG_MAX)
+> > > -		slot++;
+> > > +		pivots[++slot] = ULONG_MAX;
+> > > +
+> > >  	mas->depth = 1;
+> > >  	mas_set_height(mas);
+> > >  	ma_set_meta(node, maple_leaf_64, 0, slot);
+> > > -- 
+> > > 2.20.1
+> > > 
+> > > 
+> 
+> -- 
+> maple-tree mailing list
+> maple-tree@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/maple-tree
