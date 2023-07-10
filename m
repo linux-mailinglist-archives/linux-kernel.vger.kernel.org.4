@@ -2,197 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B9474DE1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EEF74DE29
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjGJTY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S230178AbjGJT01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjGJTY0 (ORCPT
+        with ESMTP id S230039AbjGJT0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:24:26 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC0DE3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:24:25 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so3667329a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689017065; x=1691609065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aVU5xkkFrBHK9KN4xCmrxkM+F8/EoTyfyWL/2CP+3j0=;
-        b=HASFVZl23FPMCm79tXoegRb1RNFILB9pF0aVoVMK8x4Sxj+bbrS70w4s+kI778hKvo
-         rgVeXgf8djTPdQwty4wprwlEFrb3lhdGd/5Z7XWefuGrcp4oEeSRwKxzc9ZpwZ1lBEsY
-         41h1Q/oXnJCJAbhIepxk74dE+5mMkkSoVoHFg5jAw8QI079ME/C5vdykHYakRi4fPbX7
-         3z65PNk21m2ZjuB+sgjrjVcWtlZVtvMv5FD9QfkKTGY+nNIP7c5PDj1xs+OsZf+CVB6i
-         ZnJ7q30xy/5dw0omQTP7ZNjTUSEvmHUElLvT2Ns8khZyXU7Z3rqTKEwNO39X4vCDI3Ir
-         hDVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689017065; x=1691609065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aVU5xkkFrBHK9KN4xCmrxkM+F8/EoTyfyWL/2CP+3j0=;
-        b=B9wfhaLv315xpQjL/i4UeAjbG7XpDNOZzoQC3S5qa50aFs7IYRYamK2jIy5r86LQaW
-         qC+70VD7iCwSGNN+NzlcTNHRDcGuooR6+ZBnfg+tbk5ZISjUw7WJuEEJCcf6xnfy+MC8
-         ah/pzBvGueWrUaNqZIPv24kPJ6NmS9tcKKU5w1/NBk7OgMo47m44wp93CYQ0Dx9LB6Lg
-         wnO0ZpFIH3pQtXGFxm4I+qTdjegc2N+bcEnbOQC55y3AxkrOP4AG6pbnnJigorl74ARh
-         hEzgxcDyIcp0sAtFflvH9gYTnw5aWLInYPCWYjUjEbTiemLwTMWJ4YA45hdMVOCoGktC
-         kV7g==
-X-Gm-Message-State: ABy/qLa8Vkbsm1F2YPY8EZJBN7E2I47nggGOrmXsLJlihnduV72uiNAM
-        g35xRyIORgDg7aypqtlr6QoIug==
-X-Google-Smtp-Source: APBJJlElX3ouS/7FElxVVpI095f8HqlJxpa1dRsjo4z1LRMa0ZScCGPnPQjxkZlRuLEsux42YF/jSw==
-X-Received: by 2002:a17:90a:3e08:b0:25b:e85a:e9fe with SMTP id j8-20020a17090a3e0800b0025be85ae9femr12935954pjc.27.1689017064856;
-        Mon, 10 Jul 2023 12:24:24 -0700 (PDT)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id p9-20020a17090a74c900b00263ba6a248bsm6646981pjl.1.2023.07.10.12.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 12:24:24 -0700 (PDT)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Evan Green <evan@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v3] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
-Date:   Mon, 10 Jul 2023 12:24:13 -0700
-Message-Id: <20230710192413.2089085-1-evan@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 10 Jul 2023 15:26:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D7F127
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:26:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 399EF611BF
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 19:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8BEC433CA;
+        Mon, 10 Jul 2023 19:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689017182;
+        bh=Cf3mPWw+OR3bidf90Xpep4b0JaEMZawb41ulGjKXsKM=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=AZkZRKL688jBwYk6s7wfOPsr7VhB5LGg72BU3bRwxERCl7F6f18MRvOAJ+/bonsjT
+         mczXyuPRAyagOt6TfVVLLXrgc2QR/t7+RLno26iCA4JkIYAKeY3zbr8TQq/g4S9tv/
+         erq9upBSPF6Qo2YNHVKxN8N8b3bPQwDA5NMTZNGB8V7PkyEUNS9/NoBx18Jr906RRn
+         26qhTI1g4SJl/5GPL/PdjhLKSy89xHCJ6qAlgr24cmYllTw8czSOsdYRQDbq2OWuo7
+         mnqQnmid2Aneh1AQ9c7O/ONx70bISkm/S3CfX/xLEdZdMWfZlqe1Zv3kVdr2M8/0oY
+         D793LKLOi65Ng==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0EBE327C0054;
+        Mon, 10 Jul 2023 15:26:21 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Mon, 10 Jul 2023 15:26:21 -0400
+X-ME-Sender: <xms:XFusZGTcFBWon11bjmUfPXCnQcv7bxhX3-LvSZx8qfTMhb4c3nqf5Q>
+    <xme:XFusZLzKCeQ8lASp8yqJ3tius8er-l_FQX1vVHDMa4s7rdeehGIlT1K8WKEs1eoOx
+    b71EbfTMKg7faBTn_Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgdduvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
+    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
+    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
+    guvg
+X-ME-Proxy: <xmx:XFusZD2SAMl4sWYl6jI671q5Y9kbIvL-UkfdG8EwBz9d2XEve6g8NQ>
+    <xmx:XFusZCB-wBOCDRCQ8X4t7Hh3Kh-rBqMu276tGTQK5oxtMW_UHsOYVQ>
+    <xmx:XFusZPg3CpxzNeWBjhN5EmM3eHW7kyjPNzYgpXq7qUJR8Xw6zzoDww>
+    <xmx:XVusZAWEnGXpe89WMuyy7Wb5iY4-bqf6T-kC5QKUGZhOZg3G1q5sFg>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 593281700090; Mon, 10 Jul 2023 15:26:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <786918b1-d93e-4039-9061-0e3e75e47a90@app.fastmail.com>
+In-Reply-To: <47505d6f-a0a5-46ce-a3dc-78fda3256381@app.fastmail.com>
+References: <20230705140117.795478-1-arnd@kernel.org>
+ <20230710165506.GA30916@twin.jikos.cz>
+ <47505d6f-a0a5-46ce-a3dc-78fda3256381@app.fastmail.com>
+Date:   Mon, 10 Jul 2023 21:25:23 +0200
+From:   "Arnd Bergmann" <arnd@kernel.org>
+To:     "Arnd Bergmann" <arnd@arndb.de>, "David Sterba" <dsterba@suse.cz>
+Cc:     "Chris Mason" <clm@fb.com>, "Josef Bacik" <josef@toxicpanda.com>,
+        "David Sterba" <dsterba@suse.com>,
+        "Johannes Thumshirn" <johannes.thumshirn@wdc.com>,
+        "Anand Jain" <anand.jain@oracle.com>,
+        "Filipe Manana" <fdmanana@suse.com>, "Qu Wenruo" <wqu@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] btrfs: avoid Wmaybe-uninitialized warnings
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In /proc/cpuinfo, most of the information we show for each processor is
-specific to that hart: marchid, mvendorid, mimpid, processor, hart,
-compatible, and the mmu size. But the ISA string gets filtered through a
-lowest common denominator mask, so that if one CPU is missing an ISA
-extension, no CPUs will show it.
+On Mon, Jul 10, 2023, at 21:12, Arnd Bergmann wrote:
+>
+> building for arm32 (see below), I get maybe 20 failed builds, but
+> for x86 this is lower, maybe 2. I had attempted to work around
+> each one of the ones I saw, but ended up with a huge patch to
+> cover all architectures and compilers in random versions.
 
-Now that we track the ISA extensions for each hart, let's report ISA
-extension info accurately per-hart in /proc/cpuinfo. We cannot change
-the "isa:" line, as usermode may be relying on that line to show only
-the common set of extensions supported across all harts. Add a new "hart
-isa" line instead, which reports the true set of extensions for that
-hart. This matches what is returned in riscv_hwprobe() when querying a
-given hart.
+FWIW, this is the last version of my workaround patch from January
+before I gave up on trying to fix all the btrfs warnings on
+uninitialized variables.
 
-Signed-off-by: Evan Green <evan@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+     Arnd
 
----
-
-Changes in v3:
- - Add some documentation (Conor)
-
-Changes in v2:
- - Added new "hart isa" line rather than altering behavior of existing
-   "isa" line (Conor, Palmer)
-
-
-I based this series on top of Conor's riscv-extensions-strings branch
-from July 3rd, since otherwise this change gets hopelessly entangled
-with that series.
-
----
- Documentation/riscv/uabi.rst | 10 ++++++++++
- arch/riscv/kernel/cpu.c      | 22 ++++++++++++++++++----
- 2 files changed, 28 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
-index 8960fac42c40..4f462f5b168c 100644
---- a/Documentation/riscv/uabi.rst
-+++ b/Documentation/riscv/uabi.rst
-@@ -42,6 +42,16 @@ An example string following the order is::
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index db79e6b0a693f..ab2e54930ee5f 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -5656,7 +5656,7 @@ struct inode *btrfs_lookup_dentry(struct inode *dir, struct dentry *dentry)
+ 	struct inode *inode;
+ 	struct btrfs_root *root = BTRFS_I(dir)->root;
+ 	struct btrfs_root *sub_root = root;
+-	struct btrfs_key location;
++	struct btrfs_key location = {};
+ 	u8 di_type = 0;
+ 	int ret = 0;
  
-    rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
- 
-+"isa" vs "hart isa" lines in /proc/cpuinfo
-+-----------------------------------------
-+
-+The "isa" line in /proc/cpuinfo describes the lowest common denominator of
-+RISC-V ISA extensions understood by the kernel and implemented on all harts. The
-+"hart isa" line, in contrast, describes the set of extensions understood by the
-+kernel on the particular hart in question, even if those extensions may not be
-+present on all harts in the system. The "hart isa" line is consistent with
-+what's returned by __riscv_hwprobe() when querying for that specific CPU.
-+
- Misaligned accesses
- -------------------
- 
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 1acf3679600d..6264b7b94945 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
- 
- #ifdef CONFIG_PROC_FS
- 
--static void print_isa(struct seq_file *f)
-+static void print_isa(struct seq_file *f, const unsigned long *isa_bitmap)
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index ba769a1eb87ab..79e0c3a14c7fd 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -1730,7 +1730,7 @@ static noinline int btrfs_ioctl_tree_search(struct inode *inode,
+ 					    void __user *argp)
  {
--	seq_puts(f, "isa\t\t: ");
+ 	struct btrfs_ioctl_search_args __user *uargs = argp;
+-	struct btrfs_ioctl_search_key sk;
++	struct btrfs_ioctl_search_key sk = {};
+ 	int ret;
+ 	size_t buf_size;
  
- 	if (IS_ENABLED(CONFIG_32BIT))
- 		seq_write(f, "rv32", 4);
-@@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
- 		seq_write(f, "rv64", 4);
+@@ -1760,7 +1760,7 @@ static noinline int btrfs_ioctl_tree_search_v2(struct inode *inode,
+ 					       void __user *argp)
+ {
+ 	struct btrfs_ioctl_search_args_v2 __user *uarg = argp;
+-	struct btrfs_ioctl_search_args_v2 args;
++	struct btrfs_ioctl_search_args_v2 args = {};
+ 	int ret;
+ 	size_t buf_size;
+ 	const size_t buf_limit = SZ_16M;
+@@ -2971,7 +2971,7 @@ static void get_block_group_info(struct list_head *groups_list,
+ static long btrfs_ioctl_space_info(struct btrfs_fs_info *fs_info,
+ 				   void __user *arg)
+ {
+-	struct btrfs_ioctl_space_args space_args;
++	struct btrfs_ioctl_space_args space_args = {};
+ 	struct btrfs_ioctl_space_info space;
+ 	struct btrfs_ioctl_space_info *dest;
+ 	struct btrfs_ioctl_space_info *dest_orig;
+@@ -3132,7 +3132,7 @@ static noinline long btrfs_ioctl_start_sync(struct btrfs_root *root,
+ static noinline long btrfs_ioctl_wait_sync(struct btrfs_fs_info *fs_info,
+ 					   void __user *argp)
+ {
+-	u64 transid;
++	u64 transid = 0;
  
- 	for (int i = 0; i < riscv_isa_ext_count; i++) {
--		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
-+		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id))
- 			continue;
+ 	if (argp) {
+ 		if (copy_from_user(&transid, argp, sizeof(transid)))
+@@ -4106,7 +4106,7 @@ static int btrfs_ioctl_set_fslabel(struct file *file, void __user *arg)
+ 	struct btrfs_root *root = BTRFS_I(inode)->root;
+ 	struct btrfs_super_block *super_block = fs_info->super_copy;
+ 	struct btrfs_trans_handle *trans;
+-	char label[BTRFS_LABEL_SIZE];
++	char label[BTRFS_LABEL_SIZE] = {};
+ 	int ret;
  
- 		/* Only multi-letter extensions are split by underscores */
-@@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
+ 	if (!capable(CAP_SYS_ADMIN))
+@@ -4248,7 +4248,7 @@ static int btrfs_ioctl_set_features(struct file *file, void __user *arg)
+ 	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
+ 	struct btrfs_root *root = BTRFS_I(inode)->root;
+ 	struct btrfs_super_block *super_block = fs_info->super_copy;
+-	struct btrfs_ioctl_feature_flags flags[2];
++	struct btrfs_ioctl_feature_flags flags[2] = {};
+ 	struct btrfs_trans_handle *trans;
+ 	u64 newflags;
+ 	int ret;
+@@ -4320,7 +4320,7 @@ static int _btrfs_ioctl_send(struct inode *inode, void __user *argp, bool compat
  
- 	seq_printf(m, "processor\t: %lu\n", cpu_id);
- 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
--	print_isa(m);
-+
-+	/*
-+	 * For historical raisins, the isa: line is limited to the lowest common
-+	 * denominator of extensions supported across all harts. A true list of
-+	 * extensions supported on this hart is printed later in the hart_isa:
-+	 * line.
-+	 */
-+	seq_puts(m, "isa\t\t: ");
-+	print_isa(m, NULL);
- 	print_mmu(m);
+ 	if (compat) {
+ #if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
+-		struct btrfs_ioctl_send_args_32 args32;
++		struct btrfs_ioctl_send_args_32 args32 = {};
  
- 	if (acpi_disabled) {
-@@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
- 	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
- 	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
- 	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
-+
-+	/*
-+	 * Print the ISA extensions specific to this hart, which may show
-+	 * additional extensions not present across all harts.
-+	 */
-+	seq_puts(m, "hart isa\t: ");
-+	print_isa(m, hart_isa[cpu_id].isa);
- 	seq_puts(m, "\n");
+ 		ret = copy_from_user(&args32, argp, sizeof(args32));
+ 		if (ret)
+@@ -4369,7 +4369,7 @@ static int btrfs_ioctl_encoded_read(struct file *file, void __user *argp,
  
- 	return 0;
--- 
-2.34.1
-
+ 	if (compat) {
+ #if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
+-		struct btrfs_ioctl_encoded_io_args_32 args32;
++		struct btrfs_ioctl_encoded_io_args_32 args32 = {};
+ 
+ 		copy_end = offsetofend(struct btrfs_ioctl_encoded_io_args_32,
+ 				       flags);
+@@ -4433,7 +4433,7 @@ static int btrfs_ioctl_encoded_read(struct file *file, void __user *argp,
+ 
+ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp, bool compat)
+ {
+-	struct btrfs_ioctl_encoded_io_args args;
++	struct btrfs_ioctl_encoded_io_args args = {};
+ 	struct iovec iovstack[UIO_FASTIOV];
+ 	struct iovec *iov = iovstack;
+ 	struct iov_iter iter;
+@@ -4453,7 +4453,7 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp, bool
+ 
+ 	if (compat) {
+ #if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
+-		struct btrfs_ioctl_encoded_io_args_32 args32;
++		struct btrfs_ioctl_encoded_io_args_32 args32 = {};
+ 
+ 		if (copy_from_user(&args32, argp, sizeof(args32))) {
+ 			ret = -EFAULT;
+diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+index f41da7ac360d8..e93583f3f928b 100644
+--- a/fs/btrfs/qgroup.c
++++ b/fs/btrfs/qgroup.c
+@@ -4362,6 +4362,10 @@ int btrfs_qgroup_trace_subtree_after_cow(struct btrfs_trans_handle *trans,
+ 	}
+ 	node = blocks->blocks[level].rb_node;
+ 
++	if (!node) {
++		spin_unlock(&blocks->lock);
++		goto out;
++	}
+ 	while (node) {
+ 		block = rb_entry(node, struct btrfs_qgroup_swapped_block, node);
+ 		if (block->subvol_bytenr < subvol_eb->start) {
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index e5c963bb873db..af2e153543a5c 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -1875,7 +1875,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen,
+ 	int left_ret;
+ 	int right_ret;
+ 	u64 left_gen;
+-	u64 right_gen;
++	u64 right_gen = 0;
+ 	struct btrfs_inode_info info;
+ 
+ 	ret = get_inode_info(sctx->send_root, ino, &info);
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index de96d26f81f64..43b200102d1e6 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -2618,7 +2618,7 @@ int btrfs_init_new_device(struct btrfs_fs_info *fs_info, const char *device_path
+ 	struct block_device *bdev;
+ 	struct super_block *sb = fs_info->sb;
+ 	struct btrfs_fs_devices *fs_devices = fs_info->fs_devices;
+-	struct btrfs_fs_devices *seed_devices;
++	struct btrfs_fs_devices *seed_devices = NULL;
+ 	u64 orig_super_total_bytes;
+ 	u64 orig_super_num_devices;
+ 	int ret = 0;
