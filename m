@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBBD74CF20
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0FA74CF21
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjGJHxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S230175AbjGJHx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbjGJHwp (ORCPT
+        with ESMTP id S232159AbjGJHw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:52:45 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE6F102
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:51:59 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qzx6P154jzBHXhC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:51:57 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688975516; x=1691567517; bh=ZsIIaEJUxDOM5c2jsdgVlh2jw5J
-        ZbRvAFii5FM/EEdQ=; b=N0Nhc4cia7dHWDPJed0PiaYkaWENxQXS6hLyXCcKkBY
-        lHIjesx+H+OxXBOKDWGGtWtYu0QkVDcqpLbZD72Q7rko2iAfKl2wz05yszEPJHu8
-        R+c2qL2HO7bGlC/wPpWzasyv3RvdIEYr3/vXH0wAT+cp/1Foi+pe/D4LsrkBulhV
-        w+nK9HOcvEFwFYnxt+/zUTKdSF0xFgfKxG+T7sM7NLNI/jbtQG/40gICfBGdCPyf
-        iAz0aTNE7HXR1ePfhfslqu6/5BL+sO5e8UO3qYqwsG1qxinefEGmgyF7Z6bs8Kdf
-        JupI2g+ig7SldCDhDwGcOuUnp/daMIla/lqEvM11acg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id uj5j6R9fxfJc for <linux-kernel@vger.kernel.org>;
-        Mon, 10 Jul 2023 15:51:56 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qzx6N4GsXzBHXgs;
-        Mon, 10 Jul 2023 15:51:56 +0800 (CST)
+        Mon, 10 Jul 2023 03:52:56 -0400
+Received: from ir1.moh53n.ir (unknown [178.22.121.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ABFE73;
+        Mon, 10 Jul 2023 00:52:33 -0700 (PDT)
+From:   Mohsen Tahmasebi <moh53n@moh53n.ir>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=moh53n.ir; s=mail;
+        t=1688975549; bh=+Nhy1TbkSWhYfYGqNvVnJw+7u9eF3jLTXDt10/LLKW4=;
+        h=From:To:Cc:Subject;
+        b=YIawe2jcW+chmnB7uVJgy4rhbXYJ/Q9NRcDm7V3cfj413BqFoeWcQh3Mz4+HricFU
+         WmDCC7SSa8cTuDzbOjZ/jiVN+ueaXsXAyYNV89gGmBUdcsu6Zl/fIXMDMOyPxanxK8
+         89I64JvpjGvW3xftAK55N9gsINq7FwG5F4tNc0dfZWu0ym3ojSbwMXXVihvJsWZDWM
+         hTEHeRdhcqSAexQtncvA8DWCeu+Jw/s2bMyoTco318CBwAMqXsUEv+W5i2A6EsAbWM
+         F6RQAyBQBKOkNVhqvh+ZtbMknClhiBbdvbTGxGv7pc7RVEyBE+DW9urb2+osbxy+RG
+         R6u5nmaB3J/nJeNc9z/rq6GfXGzqS5NPR2s1U2Qh3Nn1eQPYnLNN76VsYTAuckuuta
+         LfHQTe7j94wGX54/46nnI1RfcuNz+o2uOolK7pJJU2B70VvN9I2g6l+ax5IaXSQEZd
+         kXtZ4YmxJOvAhOrgHRi9A+1G2znGh1xDBALe9bRoC6h3kDQgRkUBFRYiaAy00khCL4
+         cFNfnkyC8Cdep4XlSE8TUcthillppddVo+LtfKcVDpvRYl+n8IQUC+kv855SRduKTl
+         yZWTAlQSUtN/+9OokUK+4G5CR22wSXKVbEBkn5mUa9RUwl4IhPQH9mZxOIPeEnQWzR
+         1IEm/WDO0J7HtereC19i/XiA=
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, moh53n@moh53n.ir,
+        Mostafa Ghofrani <mostafaghrr@gmail.com>
+Subject: [PATCH v2] USB: serial: option: add Quectel EC200A module support
+Date:   Mon, 10 Jul 2023 11:22:18 +0330
+Message-ID: <20230710075218.8895-1-moh53n@moh53n.ir>
 MIME-Version: 1.0
-Date:   Mon, 10 Jul 2023 15:51:56 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/radeon: ERROR: "(foo*)" should be "(foo *)"
-In-Reply-To: <20230710074943.54300-1-xujianghui@cdjrlc.com>
-References: <20230710074943.54300-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <21106d58871949c9f301c1bab81ae111@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix four occurrences of the checkpatch.pl error:
-ERROR: "(foo*)" should be "(foo *)"
+Add Quectel EC200A "DIAG, AT, MODEM":
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
+0x6005: ECM + RNDIS + DIAG + AT + MODEM
+
+T:  Bus=01 Lev=01 Prnt=02 Port=05 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=6005 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=0000
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=0c(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=0b(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+
+Signed-off-by: Mohsen Tahmasebi <moh53n@moh53n.ir>
+Tested-by: Mostafa Ghofrani <mostafaghrr@gmail.com>
 ---
-  drivers/gpu/drm/radeon/radeon_test.c | 8 ++++----
-  1 file changed, 4 insertions(+), 4 deletions(-)
+V1 -> V2: Add proper changelog text
 
-diff --git a/drivers/gpu/drm/radeon/radeon_test.c 
-b/drivers/gpu/drm/radeon/radeon_test.c
-index a5e1d2139e80..c9fef9b61ced 100644
---- a/drivers/gpu/drm/radeon/radeon_test.c
-+++ b/drivers/gpu/drm/radeon/radeon_test.c
-@@ -156,10 +156,10 @@ static void radeon_do_test_moves(struct 
-radeon_device *rdev, int flag)
-                        i, *vram_start, gtt_start,
-                        (unsigned long long)
-                        (gtt_addr - rdev->mc.gtt_start +
--                       (void*)gtt_start - gtt_map),
-+                       (void *)gtt_start - gtt_map),
-                        (unsigned long long)
-                        (vram_addr - rdev->mc.vram_start +
--                       (void*)gtt_start - gtt_map));
-+                       (void *)gtt_start - gtt_map));
-                  radeon_bo_kunmap(vram_obj);
-                  goto out_lclean_unpin;
-              }
-@@ -207,10 +207,10 @@ static void radeon_do_test_moves(struct 
-radeon_device *rdev, int flag)
-                        i, *gtt_start, vram_start,
-                        (unsigned long long)
-                        (vram_addr - rdev->mc.vram_start +
--                       (void*)vram_start - vram_map),
-+                       (void *)vram_start - vram_map),
-                        (unsigned long long)
-                        (gtt_addr - rdev->mc.gtt_start +
--                       (void*)vram_start - vram_map));
-+                       (void *)vram_start - vram_map));
-                  radeon_bo_kunmap(gtt_obj[i]);
-                  goto out_lclean_unpin;
-              }
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 288a96a74266..ed4405efc18f 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -271,6 +271,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM061K_LWW		0x6008
+ #define QUECTEL_PRODUCT_EM061K_LCN		0x6009
+ #define QUECTEL_PRODUCT_EC200T			0x6026
++#define QUECTEL_PRODUCT_EC200A			0x6005
+ #define QUECTEL_PRODUCT_RM500K			0x7001
+ 
+ #define CMOTECH_VENDOR_ID			0x16d8
+@@ -1228,6 +1229,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200U, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200A, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
+ 
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+-- 
+2.41.0
+
