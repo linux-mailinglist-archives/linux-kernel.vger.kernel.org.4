@@ -2,138 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F2574D176
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958A774D178
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjGJJ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S231501AbjGJJ3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGJJ2N (ORCPT
+        with ESMTP id S232050AbjGJJ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:28:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8069B;
-        Mon, 10 Jul 2023 02:28:12 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A9Ge90022472;
-        Mon, 10 Jul 2023 09:28:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=i5x9hN7ANbiNLDt7+OOrTkB2vSMbC0zBUseJtYa7g4Y=;
- b=osQyxuiyykVZ8Bajv8fgu3Fl8GIGma1Hf1GvVQJV6sqIUOiwmUKm6b1I7rdEdGcaJJZt
- FCCJOEB5Jt4pajHDd9mAL1mRnA2FptPsRU13Dv0lWQ7040DZ2D9A4Wp+gluDFhYS4T7d
- W/09mK++zjfCiy331PO1+Tqj9JgERgTMFw+YyBAz47PU5ZNWlOj8ZHyrkDlL/118gE79
- txk1Ru9k4lt7Q7PCMlHa5aJ7tncfC4LvOD8NnQtv4D+XhO8r5mPnqkBYU1c1go8UFi2J
- NPrFJb0y3UsY9M4S87mTAXdOCbADsCuRMoi3NAd90sQ3wIPI31cGCOz7+UUtB0vE+Xus gQ== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rrf7dg7vx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:28:06 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36A6Imod008473;
-        Mon, 10 Jul 2023 09:28:04 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3rpye5gux1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:28:04 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36A9S0dP21824188
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jul 2023 09:28:01 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C920E20040;
-        Mon, 10 Jul 2023 09:28:00 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0C0D2004B;
-        Mon, 10 Jul 2023 09:27:58 +0000 (GMT)
-Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.85.154])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jul 2023 09:27:58 +0000 (GMT)
-From:   Kajol Jain <kjain@linux.ibm.com>
-To:     mpe@ellerman.id.au
-Cc:     linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, disgoel@linux.ibm.com,
-        kjain@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/10] docs: ABI: sysfs-bus-event_source-devices-hv_gpci: Document affinity_domain_via_partition sysfs interface file
-Date:   Mon, 10 Jul 2023 14:57:17 +0530
-Message-Id: <20230710092717.55317-11-kjain@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230710092717.55317-1-kjain@linux.ibm.com>
-References: <20230710092717.55317-1-kjain@linux.ibm.com>
+        Mon, 10 Jul 2023 05:28:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559CB1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688981263;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5kwkHvApEdStfVKInGVUfBcOvlOglFnlYRPePfAzvXw=;
+        b=Z0bEgaqUC11J59aPuw20dIEA4o0f21AEhc0nqy3WU2Ra9JYHW1sVEpL8rReusnEcPlseJG
+        DKSKrXvZi7+vQ13Xo8If4nXuIrXS+A+9tEKPR0tBbDipjt+CbTmDKYXYq/2vvbmDtfxSoz
+        5W/MbPyxqqyJAFdtjVxwy5aO/GOyQk4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-368-ibukddyLMGWg4o0lITkHGw-1; Mon, 10 Jul 2023 05:27:36 -0400
+X-MC-Unique: ibukddyLMGWg4o0lITkHGw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 344FA1C03D8F;
+        Mon, 10 Jul 2023 09:27:36 +0000 (UTC)
+Received: from ovpn-8-31.pek2.redhat.com (ovpn-8-33.pek2.redhat.com [10.72.8.33])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D0B822166B26;
+        Mon, 10 Jul 2023 09:27:28 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 17:27:23 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Damien Le Moal <dlemoal@kernel.org>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        gost.dev@samsung.com, Jens Axboe <axboe@kernel.dk>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>, ming.lei@redhat.com
+Subject: Re: [PATCH v6 1/3] ublk: add opcode offsets for DRV_IN/DRV_OUT
+Message-ID: <ZKvO+81b9fAx2L/r@ovpn-8-31.pek2.redhat.com>
+References: <20230706130930.64283-1-nmi@metaspace.dk>
+ <20230706130930.64283-2-nmi@metaspace.dk>
+ <51b660f3-8145-d35e-87b4-d9ac0623606d@kernel.org>
+ <ZKdjVxMT/sVUA5BV@ovpn-8-34.pek2.redhat.com>
+ <ZKuqt6QAXic3wuRX@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -gS1h5aMeMCCl7aJaaobzrPNW8_yadzj
-X-Proofpoint-ORIG-GUID: -gS1h5aMeMCCl7aJaaobzrPNW8_yadzj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_07,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307100082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKuqt6QAXic3wuRX@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add details of the new hv-gpci interface file called
-"affinity_domain_via_partition" in the ABI documentation.
-
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
----
- .../sysfs-bus-event_source-devices-hv_gpci    | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
-index d8e65b93d1f7..b03b2bd4b081 100644
---- a/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
-+++ b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hv_gpci
-@@ -208,3 +208,35 @@ Description:	admin read only
- 			   more information.
+On Sun, Jul 09, 2023 at 11:52:39PM -0700, Christoph Hellwig wrote:
+> On Fri, Jul 07, 2023 at 08:59:03AM +0800, Ming Lei wrote:
+> > > let's clearly state so. But then, I still not understand why these need
+> > > a different naming pattern using the "__UBLK" prefix...
+> > 
+> > I think __UBLK just meant we don't suggest userspace to use it directly,
+> > since the added macros are just for making ranges for DRV_IN and DRV_OUT,
+> > so we can check command direction easily be using this start/end info in
+> > both sides.
+> 
+> Folks, please stop coupling a uapi (or on-disk protocol) too tightly
+> to Linux internals.  Think of what makes sense as a communication
+> protocol, not what is an internal kernel interface.
+> 
+> REPORT_ZONES is a sensible command, and supported in ATA/SCSI/NVMe in
+> one way or another.  In Linux it is a synchronous method call right now
+> for one reason or another, and most implementation map it to a
+> passthrough command - be that the actual protocol command or something
+> internal for virtio.
+> 
+> So for ublk this is just another command like any other, that needs to
+> be defined and documented.  Nothing internal or driver specific.
  
- 		* "-EFBIG" : System information exceeds PAGE_SIZE.
-+
-+What:		/sys/devices/hv_gpci/interface/affinity_domain_via_partition
-+Date:		July 2023
-+Contact:	Linux on PowerPC Developer List <linuxppc-dev@lists.ozlabs.org>
-+Description:	admin read only
-+		This sysfs file exposes the system topology information by making HCALL
-+		H_GET_PERF_COUNTER_INFO. The HCALL is made with counter request value
-+		AFFINITY_DOMAIN_INFORMATION_BY_PARTITION(0xB1).
-+
-+		* This sysfs file will be created only for power10 and above platforms.
-+
-+		* User needs root privileges to read data from this sysfs file.
-+
-+		* This sysfs file will be created, only when the HCALL returns "H_SUCESS",
-+		  "H_AUTHORITY" and "H_PARAMETER" as the return type.
-+
-+		  HCALL with return error type "H_AUTHORITY", can be resolved during
-+		  runtime by setting "Enable Performance Information Collection" option.
-+
-+		* The end user reading this sysfs file must decode the content as per
-+		  underlying platform/firmware.
-+
-+		Possible error codes while reading this sysfs file:
-+
-+		* "-EPERM" : Partition is not permitted to retrieve performance information,
-+			    required to set "Enable Performance Information Collection" option.
-+
-+		* "-EIO" : Can't retrieve system information because of invalid buffer length/invalid address
-+			   or because of some hardware error. Refer getPerfCountInfo documentation for
-+			   more information.
-+
-+		* "-EFBIG" : System information exceeds PAGE_SIZE.
--- 
-2.31.1
+Yes, that is exactly what we are doing.
+
+The added macros of UBLK_IO_OP_DRV_IN_START[END] are just for supporting
+more ublk passthrough commands, and the motivation is for running
+check(such as buffer direction) in two sides easily.
+
+However, I think it is just fine to delay to add it until introducing
+the 2nd ublk pt command.
+
+Thanks, 
+Ming
 
