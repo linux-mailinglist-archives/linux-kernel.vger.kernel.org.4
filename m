@@ -2,102 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9090174DD0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D8274DD11
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjGJSG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S233152AbjGJSHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGJSG6 (ORCPT
+        with ESMTP id S233135AbjGJSHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:06:58 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DDDAB;
-        Mon, 10 Jul 2023 11:06:57 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-579de633419so54733997b3.3;
-        Mon, 10 Jul 2023 11:06:57 -0700 (PDT)
+        Mon, 10 Jul 2023 14:07:32 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3848712A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:07:30 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-40371070eb7so35041cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:07:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689012416; x=1691604416;
+        d=google.com; s=20221208; t=1689012449; x=1691604449;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dThlKftpvb1E4fm1zDxlvj7BacTYHr5aY/low3oUN7s=;
-        b=h4r2LsVLGXGvJLgAVbXBSZx6sxAfUNEQUFHN6gb3Tm9FYLDCLT0LPJAZx8OvP/UrL6
-         bYrhk8iIX8SIaYVdFbeDCOXVPOfLC590huH4ZvKULlMi2fUXAb+I1gUdkhRrzryK63yU
-         qpjJBAMm9gNCBb0uKXKj492XG7b5k1l9bnjsfNYY9id9XudCpkVgn4QI7u0Fbm2VcaMh
-         zm3xD3J2+EbJaJ5olgi2vAc1Z15HMNROcPLm2eQ+jJi4FEiMOv/0poxXgFrC3nDBcsGC
-         sLAjYK2qEZK5XzZcY8MKEYmmKJRU8dUsyAciozzxhpWDPHqSfO0KJ5c8liwucy7Us1cS
-         IEAQ==
+        bh=3vcZqySAK77JDIKXSlaeSBenWZVW7mTWYU6gz+aOzWM=;
+        b=BdM5ipce4ckFapSzvFsz/mz1MFVElMxrIigDKXUC2NAwgySxYK6inciZng1i9V0AcO
+         IsBaevYgEA7T5JVFS9OThSicQkIIdRVrZ59Duny7KESaWyiwFT3fPkb9xxDEL3f5hnrc
+         KABebBFkRqD6nVaxY4ilKQ2q4CUfVKLIlfMrZIQQDVT0UnyncpRW4tefeh3PSHVWW8V/
+         KoohETs+R+TES9Ytbz7qVHNT09mH8NJSCSSDTBP5Xxd73DwtYOSfQMBKWJGAK5jOu3Ay
+         W/0LrgFtc+QNrtVoDb0xPG/l+TuAEmfivhiYO3zP6MwYc0dxwo46+I3yIpmOJeh8DiJG
+         3sUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689012416; x=1691604416;
+        d=1e100.net; s=20221208; t=1689012449; x=1691604449;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dThlKftpvb1E4fm1zDxlvj7BacTYHr5aY/low3oUN7s=;
-        b=mAPrHFAEOU4l5oFOMAWTxS7ASyPuANQCattdQoeoQNEy64N+FZH0hhVmBlllzfvKqW
-         9Wq6gGvIQsG6p+ofUeWOXYxnkAYcU1NH0ZKtxDBtbOFMJHkxc6P667nWVQk1VWZnt65r
-         4p1lwJ+Er4F1yNZutBNmsi25Aj8bwzqaTC4nDol7ynjCJHp1ck+BtRr1qcGnOLYIpEYg
-         z2jYXjwAUZ0T2EsB9dCIgYWi1qX2M6OfQiQAKWq3jDE3CUrkuaN7b+GoXeMHqG1cRlGv
-         HYW56yZ09YFzZRv8kDFjEQQ2rkIvWmPBFMqCKETXeEt21JCY5goe7p4i2KKy5j3Gm6YZ
-         hynw==
-X-Gm-Message-State: ABy/qLb3KAB00J9EVwxsOysWYJI355IU/ZwGna/+2sKLsgtrU4tGnyrH
-        TLHj9rkYuTOXsFKCMmhSuWNOGHCX15ZIfb7CuL4=
-X-Google-Smtp-Source: APBJJlFGJ5dZVRcq9niZYmjvnH3Oc0k/JrqHNwcDPUNYkWASYZhPrQEKIKCLju2F3cOaIpM99PAJ2FMxYyii7DmD0lI=
-X-Received: by 2002:a81:4e0b:0:b0:577:373b:b18c with SMTP id
- c11-20020a814e0b000000b00577373bb18cmr12334205ywb.38.1689012416282; Mon, 10
- Jul 2023 11:06:56 -0700 (PDT)
+        bh=3vcZqySAK77JDIKXSlaeSBenWZVW7mTWYU6gz+aOzWM=;
+        b=TFEnHxAEB7w0F+dEbFPleSinu0yEHT+JKUCI3/HujiDPQffrVkUur/HZRwvUCPHAhF
+         zmsYEsUCiRwPRLJm7TcivllQ2Us3nVACUuZlmCRJKr0IRQbAnSCMBh66idCamszm50l2
+         RvOFIYB3gxmrGIpDmZ7PXYm6EZ1nKhLoFxBVAZtUeQ0/ulgrkKnc6CP1DkUowsWgEcij
+         vikagZG2RCaVvAidypPdBCTSzYQtsQEFVGSZ962akrJM3z1sErHpWH3bPStc79Bf8zq5
+         aCvFcF8H6RQvovbywmAuqN3rMephaDhtg8WArck1GekGSGwwex5ax2pnw1pV1VWfgicC
+         wXug==
+X-Gm-Message-State: ABy/qLapXk6AdtUxz4bY2aiD9P1t7Up47cD0z6khzMmjpwvyw7sqQ6Xd
+        gZDK+LcxmgZuI4N7kXpmHgaunUVSm2axSlYsCFdQRQ==
+X-Google-Smtp-Source: APBJJlH34radkf2MwC7ks4EaK+O1likCeOf3VRsMqP8wBCilOVINpD/goU0ECl/wscdW8b9gvJYjciS+5Fg7aB09eF0=
+X-Received: by 2002:a05:622a:4d0:b0:403:96e3:4745 with SMTP id
+ q16-20020a05622a04d000b0040396e34745mr18230qtx.20.1689012449156; Mon, 10 Jul
+ 2023 11:07:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230703180528.3709258-1-azeemshaikh38@gmail.com> <ad25bb8552704028860cf7a419c54fa3@AcuMS.aculab.com>
-In-Reply-To: <ad25bb8552704028860cf7a419c54fa3@AcuMS.aculab.com>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Mon, 10 Jul 2023 14:06:44 -0400
-Message-ID: <CADmuW3XOcGDBszYw80Dy03DXk3T25k8FNUrJWLKU9tL2znzanw@mail.gmail.com>
-Subject: Re: [PATCH] kobject: Replace strlcpy with strscpy
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230707210947.1208717-1-rmoar@google.com> <20230707210947.1208717-9-rmoar@google.com>
+In-Reply-To: <20230707210947.1208717-9-rmoar@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 10 Jul 2023 11:07:18 -0700
+Message-ID: <CAGS_qxpyWAO4567m9uF1ksDiO0zUBQDJ0pAUJRvKxg1PYhrtEA@mail.gmail.com>
+Subject: Re: [RFC v2 8/9] kunit: add tests for filtering attributes
+To:     Rae Moar <rmoar@google.com>
+Cc:     shuah@kernel.org, davidgow@google.com, brendan.higgins@linux.dev,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 9:13=E2=80=AFAM David Laight <David.Laight@aculab.c=
-om> wrote:
+On Fri, Jul 7, 2023 at 2:10=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
 >
-> >       int len;
-> >
-> > -     len =3D strlcpy(&env->buf[env->buflen], subsystem, buffer_size);
-> > -     if (len >=3D buffer_size) {
-> > +     len =3D strscpy(&env->buf[env->buflen], subsystem, buffer_size);
-> > +     if (len < 0) {
-> >               pr_warn("init_uevent_argv: buffer size of %d too small, n=
-eeded %d\n",
-> >                       buffer_size, len);
-> >               return -ENOMEM;
+> Add four tests to executor_test.c to test behavior of filtering attribute=
+s.
 >
-> The size in the error message is now wrong.
+> - parse_filter_attr_test - to test the parsing of inputted filters
+>
+> - filter_attr_test - to test the filtering procedure on attributes
+>
+> - filter_attr_empty_test - to test the behavior when all tests are filter=
+ed
+>   out
+>
+> - filter_attr_skip_test - to test the configurable filter_skip option
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 
-Thanks for catching this.
+I love that I'm able to read this patch first and get a feel for what
+exactly the patch series is doing overall.
 
-> It has to be said that mostly all the strings that get copied
-> in the kernel are '\0' terminated - so maybe it is all moot.
-> OTOH printing (at least some of) the string that didn't fit
-> is a lot more useful than its length.
+Some nits and suggestions below.
 
-How about printing out strlen(subsystem) along with the entire value
-of @subsystem? So that the warn reads:
+> ---
+>
+> Changes since v1:
+> - This is a new patch
+>
+>  lib/kunit/executor_test.c | 107 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 107 insertions(+)
+>
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index d7ab069324b5..145a78ade33d 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -7,6 +7,7 @@
+>   */
+>
+>  #include <kunit/test.h>
+> +#include <kunit/attributes.h>
+>
+>  static void kfree_at_end(struct kunit *test, const void *to_free);
+>  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+> @@ -22,6 +23,14 @@ static struct kunit_case dummy_test_cases[] =3D {
+>         {},
+>  };
+>
+> +static struct kunit_case dummy_attr_test_cases[] =3D {
+> +       /* .run_case is not important, just needs to be non-NULL */
+> +       { .name =3D "test1", .run_case =3D dummy_test, .module_name =3D "=
+dummy",
+> +         .attr.speed =3D KUNIT_SPEED_SLOW },
+> +       { .name =3D "test2", .run_case =3D dummy_test, .module_name =3D "=
+dummy" },
+> +       {},
+> +};
 
-pr_warn("init_uevent_argv: buffer size of %d too small for %s, needed
-%d\n", buffer_size, subsystem, strlen(subsystem));
+1) can we move this array to be just above parse_filter_attr_test so
+it's next to where it's used?
 
-Does that seem better?
+2) How about renaming "test1" to "slow" to make the assertions in the
+test case a bit easier to follow?
+Right now readers need to remember which test case was supposed to be
+filtered out.
+
+
+> +
+>  static void parse_filter_test(struct kunit *test)
+>  {
+>         struct kunit_glob_filter filter =3D {NULL, NULL};
+> @@ -108,11 +117,109 @@ static void filter_suites_to_empty_test(struct kun=
+it *test)
+>                                 "should be empty to indicate no match");
+>  }
+>
+> +static void parse_filter_attr_test(struct kunit *test)
+> +{
+> +       int j, filter_count;
+> +       struct kunit_attr_filter *parsed_filters;
+> +       char *filters =3D "speed>slow, module!=3Dexample";
+> +       int err =3D 0;
+> +
+> +       filter_count =3D kunit_get_filter_count(filters);
+> +       KUNIT_EXPECT_EQ(test, filter_count, 2);
+> +
+> +       parsed_filters =3D kcalloc(filter_count + 1, sizeof(*parsed_filte=
+rs), GFP_KERNEL);
+
+nit: kunit_kcalloc() instead?
+
+> +       for (j =3D 0; j < filter_count; j++)
+> +               parsed_filters[j] =3D kunit_next_attr_filter(&filters, &e=
+rr);
+
+then here we probably want to check err, i.e.
+  KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter '%s'", filters[=
+i]);
+
+
+> +
+> +       KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[0]=
+), "speed");
+> +       KUNIT_EXPECT_STREQ(test, parsed_filters[0].input, ">slow");
+> +
+> +       KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[1]=
+), "module");
+> +       KUNIT_EXPECT_STREQ(test, parsed_filters[1].input, "!=3Dexample");
+> +
+> +       kfree(parsed_filters);
+> +}
+> +
+> +static void filter_attr_test(struct kunit *test)
+> +{
+> +       struct kunit_suite *subsuite[3] =3D {NULL, NULL};
+> +       struct suite_set suite_set =3D {.start =3D subsuite, .end =3D &su=
+bsuite[2]};
+> +       struct suite_set got;
+> +       int err =3D 0;
+> +
+> +       subsuite[0] =3D alloc_fake_suite(test, "suite1", dummy_attr_test_=
+cases);
+> +       subsuite[1] =3D alloc_fake_suite(test, "suite2", dummy_attr_test_=
+cases);
+> +       subsuite[1]->attr.speed =3D KUNIT_SPEED_SLOW; // Set suite attrib=
+ute
+
+Similarly, perhaps we can rename suite2 to "slow_suite"?
+That would cause this line to go over 80 characters wide, but since
+that's no longer a hard limit, I think this would be a decent place to
+go past it.
+
+> +
+> +       /* Want: suite1(test1, test2), suite2(test1, test2), NULL -> suit=
+e1(test2), NULL */
+> +       got =3D kunit_filter_suites(&suite_set, NULL, "speed>slow", NULL,=
+ &err);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+> +       KUNIT_ASSERT_EQ(test, err, 0);
+> +       kfree_at_end(test, got.start);
+> +
+> +       /* Validate we just have suite1 */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+> +       KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->name, "suite=
+1");
+> +       KUNIT_ASSERT_EQ(test, got.end - got.start, 1);
+> +
+> +       /* Now validate we just have test2 */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+> +       KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->test_cases[0=
+].name, "test2");
+> +       KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+> +}
+> +
+> +static void filter_attr_empty_test(struct kunit *test)
+> +{
+> +       struct kunit_suite *subsuite[3] =3D {NULL, NULL};
+> +       struct suite_set suite_set =3D {.start =3D subsuite, .end =3D &su=
+bsuite[2]};
+> +       struct suite_set got;
+> +       int err =3D 0;
+> +
+> +       subsuite[0] =3D alloc_fake_suite(test, "suite1", dummy_attr_test_=
+cases);
+> +       subsuite[1] =3D alloc_fake_suite(test, "suite2", dummy_attr_test_=
+cases);
+> +
+> +       got =3D kunit_filter_suites(&suite_set, NULL, "module!=3Ddummy", =
+NULL, &err);
+> +       KUNIT_ASSERT_EQ(test, err, 0);
+> +       kfree_at_end(test, got.start); /* just in case */
+> +
+> +       KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+> +                               "should be empty to indicate no match");
+> +}
+> +
+> +static void filter_attr_skip_test(struct kunit *test)
+> +{
+> +       struct kunit_suite *subsuite[2] =3D {NULL};
+> +       struct suite_set suite_set =3D {.start =3D subsuite, .end =3D &su=
+bsuite[1]};
+> +       struct suite_set got;
+> +       int err =3D 0;
+> +
+> +       subsuite[0] =3D alloc_fake_suite(test, "suite1", dummy_attr_test_=
+cases);
+> +
+> +       /* Want: suite1(test1, test2), NULL -> suite1(test1 with SKIP, te=
+st2), NULL */
+> +       got =3D kunit_filter_suites(&suite_set, NULL, "speed>slow", "skip=
+", &err);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+> +       KUNIT_ASSERT_EQ(test, err, 0);
+> +       kfree_at_end(test, got.start);
+> +
+> +       /* Validate we have both test1 and test2 */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+
+Should we assert that we have 2 test cases before we dereference the second=
+ one?
+The other code in this file (that I wrote) is being a bit sloppy and
+deref'ing test_cases[0] without checking. It's doing that since I was
+relying on the fact that the filtering code drops suites with no test
+cases, so we don't necessarily need to check len(test_cases) >=3D 1.
+(In terms of best practices, we should be defensive and checking that, thou=
+gh).
+
+But in this case, we have no such guarantee about the second element.
+
+> +       KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->test_cases[0=
+].name, "test1");
+> +       KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->test_cases[1=
+].name, "test2");
+
+Trying to remember, I think the cast to `const char *` is no longer
+necessary after one of David's changes...
+I think we might just never have gotten around to cleaning that up due
+to the ordering in which the patches went in...
+
+> +
+> +       /* Now ensure test1 is skipped and test2 is not */
+> +       KUNIT_EXPECT_EQ(test, got.start[0]->test_cases[0].status, KUNIT_S=
+KIPPED);
+> +       KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].status);
+
+Should we check that it's equal to KUNIT_SUCCESS instead?
+
+
+> +}
+> +
+>  static struct kunit_case executor_test_cases[] =3D {
+>         KUNIT_CASE(parse_filter_test),
+>         KUNIT_CASE(filter_suites_test),
+>         KUNIT_CASE(filter_suites_test_glob_test),
+>         KUNIT_CASE(filter_suites_to_empty_test),
+> +       KUNIT_CASE(parse_filter_attr_test),
+> +       KUNIT_CASE(filter_attr_test),
+> +       KUNIT_CASE(filter_attr_empty_test),
+> +       KUNIT_CASE(filter_attr_skip_test),
+>         {}
+>  };
+>
+> --
+> 2.41.0.255.g8b1d071c50-goog
+>
