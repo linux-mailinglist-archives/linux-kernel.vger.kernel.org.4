@@ -2,217 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909BD74CE9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EAE74CEA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbjGJHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S229830AbjGJHjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjGJHii (ORCPT
+        with ESMTP id S231307AbjGJHjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:38:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D0F95
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:38:36 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B81236606FF3;
-        Mon, 10 Jul 2023 08:38:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688974715;
-        bh=LOXc+6Sqq2SjuM4ZCBO1k8rnrrk3ScMPXrSUxS0CCuE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iNE1sJ53UJG7JThYzk3vZyGbX3LodamTt5AcFLXPDLZtowxiXEgaeH4JdralBhJPp
-         XugpSEzAqLSOrwg3ORcljgb8vJIk90v8Pc7pny3Z0E6w55h+DHac3pDQbTh70+JZ5f
-         si2VcCK0bzBONTIAsWq2tN3LQPXdQ+6bRbxfjIZIpMHBhMTYE9XoTwqJ5utxJsw0v2
-         7E8FwkkufVJatjHiJnJ7F8dILMLB8aw4NA7N70ryufi4hprpNePY9XT3k1Kzc8ynmr
-         7aI38MKT9IwbuZnla3AwTW5IIK1+OboP8oUG6XXSSX8NvjFdlCzSm3413bLNWRwo7x
-         zuJ6z1l/ljQEQ==
-Message-ID: <da4847bb-d4b1-7810-3b5f-1200596b19fd@collabora.com>
-Date:   Mon, 10 Jul 2023 09:38:31 +0200
+        Mon, 10 Jul 2023 03:39:12 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CB2E6E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:38:56 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QzwqH25zQzBHXhB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:38:51 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688974731; x=1691566732; bh=1pv9U2ejg50V6ues3fPMO0Cknci
+        SgisMrIyVi0p4I4g=; b=0zDIx8qbSBbLhsZBxHNYyCIARocYe7tUU2eX2z8Ne37
+        McN7z6lf6DaK7HoTfG6DGh/5Tqdnk9xDw7VocPVN1c5H+FywlOOl2VRvrIW4k2ob
+        n8IOicj11yg9zMt7/kgKd8ByndZTzbSZbWAA8wsaSj8HvuXA9wvrDsb+ygzmHDC+
+        2Uvbk89MhdsBw/1mY/r4SGPwTiu/2XBpTSOL9soAM/IvQgTGrBwPKsGqFKiVsAUo
+        +hRpibTUWILfpBHy81P/4ZBTu4BjDCHOKIVoqmrK+PSiY8Vsy7JdEr3DHGfEUHGH
+        N+bZSQaqHzQ/5uRPNRGqyoJN/EY9hxvTKiHchq2LBQg==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id M2WvrzPClA7j for <linux-kernel@vger.kernel.org>;
+        Mon, 10 Jul 2023 15:38:51 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QzwqG6ZnlzBHXgs;
+        Mon, 10 Jul 2023 15:38:50 +0800 (CST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 0/9] MediaTek DisplayPort: support eDP and aux-bus
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
-        daniel@ffwll.ch, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        nfraprado@collabora.com
-References: <20230706123025.208408-1-angelogioacchino.delregno@collabora.com>
- <CAGXv+5HzQhoz0OUhifQC0vr44O5VwvuYnsHSA2jK0FjwJT3OBA@mail.gmail.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5HzQhoz0OUhifQC0vr44O5VwvuYnsHSA2jK0FjwJT3OBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 10 Jul 2023 15:38:50 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/radeon: ERROR: "foo * bar" should be "foo *bar"
+In-Reply-To: <20230710073659.54188-1-xujianghui@cdjrlc.com>
+References: <20230710073659.54188-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <656c6d33a676c141ea35fadb519ccfbc@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/07/23 10:23, Chen-Yu Tsai ha scritto:
-> On Thu, Jul 6, 2023 at 8:30 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Changes in v4:
->>   - Set data lanes to idle to prevent stalls if bootloader didn't
->>     properly close the eDP port
->>   - Now using the .done_probing() callback for AUX bus to prevent
->>     probe deferral loops in case the panel-edp driver is a module
->>     as previously seen with another bridge driver (ANX7625) on
->>     some other SoCs (MT8192 and others)
->>   - Rebased over next-20230706
->>   - Dropped Chen-Yu's T-b tag on last patch as some logic changed
->>     (before, I wasn't using the .done_probing() callback).
->>
->> Changes in v3:
->>   - Added DPTX AUX block initialization before trying to communicate
->>     to stop relying on the bootloader keeping it initialized before
->>     booting Linux.
->>   - Fixed commit description for patch [09/09] and removed commented
->>     out code (that slipped from dev phase.. sorry!).
->>
->> This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
->>
->> Explaining the "real":
->> Before this change, the DisplayPort driver did support eDP to some
->> extent, but it was treating it entirely like a regular DP interface
->> which is partially fine, after all, embedded DisplayPort *is* actually
->> DisplayPort, but there might be some differences to account for... and
->> this is for both small performance improvements and, more importantly,
->> for correct functionality in some systems.
->>
->> Functionality first:
->>
->> One of the common differences found in various boards implementing eDP
->> and machines using an eDP panel is that many times the HPD line is not
->> connected. This *must* be accounted for: at startup, this specific IP
->> will raise a HPD interrupt (which should maybe be ignored... as it does
->> not appear to be a "real" event...) that will make the eDP panel to be
->> detected and to actually work but, after a suspend-resume cycle, there
->> will be no HPD interrupt (as there's no HPD line in my case!) producing
->> a functionality issue - specifically, the DP Link Training fails because
->> the panel doesn't get powered up, then it stays black and won't work
->> until rebooting the machine (or removing and reinserting the module I
->> think, but I haven't tried that).
->>
->> Now for.. both:
->> eDP panels are *e*DP because they are *not* removable (in the sense that
->> you can't unplug the cable without disassembling the machine, in which
->> case, the machine shall be powered down..!): this (correct) assumption
->> makes us able to solve some issues and to also gain a little performance
->> during PM operations.
->>
->> What was done here is:
->>   - Caching the EDID if the panel is eDP: we're always going to read the
->>     same data everytime, so we can just cache that (as it's small enough)
->>     shortening PM resume times for the eDP driver instance;
->>   - Always return connector_status_connected if it's eDP: non-removable
->>     means connector_status_disconnected can't happen during runtime...
->>     this also saves us some time and even power, as we won't have to
->>     perform yet another power cycle of the HW;
->>   - Added aux-bus support!
->>     This makes us able to rely on panel autodetection from the EDID,
->>     avoiding to add more and more panel timings to panel-edp and, even
->>     better, allowing to use one panel node in devicetrees for multiple
->>     variants of the same machine since, at that point, it's not important
->>     to "preventively know" what panel we have (eh, it's autodetected...!).
->>
->> This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
-> 
-> Do you have panel-edp built as a module? If I have it built in, the panel
-> can correctly display stuff. If I have it built as a module, the panel is
-> correctly detected, but the panel stays black even if DRM thinks it is
-> displaying stuff.
-> 
+Fix nine occurrences of the checkpatch.pl error:
+ERROR: "foo * bar" should be "foo *bar"
 
-I tested both. I'll recheck on a clean tree just to be sure...
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  drivers/gpu/drm/radeon/atom.c | 14 +++++++-------
+  1 file changed, 7 insertions(+), 7 deletions(-)
 
-> And it looks like EDID reading and panel power sequencing is still not
-> working correctly, i.e. needs regulator-always-on?
+diff --git a/drivers/gpu/drm/radeon/atom.c 
+b/drivers/gpu/drm/radeon/atom.c
+index c1bbfbe28bda..11a1940bb26d 100644
+--- a/drivers/gpu/drm/radeon/atom.c
++++ b/drivers/gpu/drm/radeon/atom.c
+@@ -1156,7 +1156,7 @@ static struct {
+      atom_op_shr, ATOM_ARG_MC}, {
+  atom_op_debug, 0},};
 
-Yeah that's still needed with this version, I'm still trying to get *at least*
-some support upstreamed before refining it.
+-static int atom_execute_table_locked(struct atom_context *ctx, int 
+index, uint32_t * params)
++static int atom_execute_table_locked(struct atom_context *ctx, int 
+index, uint32_t *params)
+  {
+      int base = CU16(ctx->cmd_table + 4 + 2 * index);
+      int len, ws, ps, ptr;
+@@ -1216,7 +1216,7 @@ static int atom_execute_table_locked(struct 
+atom_context *ctx, int index, uint32
+      return ret;
+  }
 
-Cheers,
-Angelo
+-int atom_execute_table_scratch_unlocked(struct atom_context *ctx, int 
+index, uint32_t * params)
++int atom_execute_table_scratch_unlocked(struct atom_context *ctx, int 
+index, uint32_t *params)
+  {
+      int r;
 
-> 
-> ChenYu
-> 
->> P.S.: For your own testing commodity, here's a reference devicetree:
->> &edp_tx {
->>          status = "okay";
->>
->>          pinctrl-names = "default";
->>          pinctrl-0 = <&edptx_pins_default>;
->>
->>          ports {
->>                  #address-cells = <1>;
->>                  #size-cells = <0>;
->>
->>                  port@0 {
->>                          reg = <0>;
->>                          edp_in: endpoint {
->>                                  remote-endpoint = <&dp_intf0_out>;
->>                          };
->>                  };
->>
->>                  port@1 {
->>                          reg = <1>;
->>                          edp_out: endpoint {
->>                                  data-lanes = <0 1 2 3>;
->>                                  remote-endpoint = <&panel_in>;
->>                          };
->>                  };
->>          };
->>
->>          aux-bus {
->>                  panel: panel {
->>                          compatible = "edp-panel";
->>                          power-supply = <&pp3300_disp_x>;
->>                          backlight = <&backlight_lcd0>;
->>                          port {
->>                                  panel_in: endpoint {
->>                                          remote-endpoint = <&edp_out>;
->>                                  };
->>                          };
->>                  };
->>          };
->> };
->>
->>
->> AngeloGioacchino Del Regno (9):
->>    drm/mediatek: dp: Cache EDID for eDP panel
->>    drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
->>    drm/mediatek: dp: Always return connected status for eDP in .detect()
->>    drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
->>    drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
->>    drm/mediatek: dp: Enable event interrupt only when bridge attached
->>    drm/mediatek: dp: Use devm variant of drm_bridge_add()
->>    drm/mediatek: dp: Move AUX_P0 setting to
->>      mtk_dp_initialize_aux_settings()
->>    drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
->>
->>   drivers/gpu/drm/mediatek/mtk_dp.c | 197 +++++++++++++++++++-----------
->>   1 file changed, 127 insertions(+), 70 deletions(-)
->>
->> --
->> 2.40.1
->>
+@@ -1237,7 +1237,7 @@ int atom_execute_table_scratch_unlocked(struct 
+atom_context *ctx, int index, uin
+      return r;
+  }
 
+-int atom_execute_table(struct atom_context *ctx, int index, uint32_t * 
+params)
++int atom_execute_table(struct atom_context *ctx, int index, uint32_t 
+*params)
+  {
+      int r;
+      mutex_lock(&ctx->scratch_mutex);
+@@ -1359,8 +1359,8 @@ void atom_destroy(struct atom_context *ctx)
+  }
 
+  bool atom_parse_data_header(struct atom_context *ctx, int index,
+-                uint16_t * size, uint8_t * frev, uint8_t * crev,
+-                uint16_t * data_start)
++                uint16_t *size, uint8_t *frev, uint8_t *crev,
++                uint16_t *data_start)
+  {
+      int offset = index * 2 + 4;
+      int idx = CU16(ctx->data_table + offset);
+@@ -1379,8 +1379,8 @@ bool atom_parse_data_header(struct atom_context 
+*ctx, int index,
+      return true;
+  }
 
+-bool atom_parse_cmd_header(struct atom_context *ctx, int index, uint8_t 
+* frev,
+-               uint8_t * crev)
++bool atom_parse_cmd_header(struct atom_context *ctx, int index, uint8_t 
+*frev,
++               uint8_t *crev)
+  {
+      int offset = index * 2 + 4;
+      int idx = CU16(ctx->cmd_table + offset);
