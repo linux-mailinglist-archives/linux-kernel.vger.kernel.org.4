@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70AE74CE1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E2A74CE47
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjGJHWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S230280AbjGJHYB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 03:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGJHWG (ORCPT
+        with ESMTP id S230194AbjGJHXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:22:06 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCDCC3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:22:04 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QzwRs1DrjzBHXgt
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:22:01 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688973721; x=1691565722; bh=Gh6EO96d1xAiEk2mS1BrOEBqriM
-        6TGQNOsWTpVDRBTg=; b=bcXuONgPFCFhEmvNus1glrMHcK66koNeg5ekp7gM+N6
-        aZ9x8twCxrYlCoAZorB9cSE99YIec0JNogEP82wX1o+lQ280CpViL8yEEVh2Wdng
-        pOKBoOsszwt+zz5XOa8rnNREz+ENXGrFCmZ1ke6twa5kwg/2kleoa4SgIcCP5kFI
-        TKJFV/l0jwrIlK6cCEXH+PcsQuzBheqpXnBkhsNsirIolDCHbmg4WITFFrGg39Vu
-        dU3H6YkvvmFj+QxE474BnnXTypk/1n77sCPzKv91yDxq6OzZewrQIVIJ0bEmqgF7
-        qSkBdqH+4bGUbcm3n0J12bMHRfTpsnS3AGyOW2HOmAQ==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PQ4EqNxbrqUq for <linux-kernel@vger.kernel.org>;
-        Mon, 10 Jul 2023 15:22:01 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QzwRr6QXYzBHXgs;
-        Mon, 10 Jul 2023 15:22:00 +0800 (CST)
+        Mon, 10 Jul 2023 03:23:55 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37477138;
+        Mon, 10 Jul 2023 00:23:54 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1qIlFB-002LVa-Rm; Mon, 10 Jul 2023 09:23:37 +0200
+Received: from dynamic-089-014-157-058.89.14.pool.telefonica.de ([89.14.157.58] helo=[192.168.1.11])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1qIlFB-000YtY-Km; Mon, 10 Jul 2023 09:23:37 +0200
+Message-ID: <c7b9d65f5cc013f3a721ab6dd8c27ace89bc1fd3.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH] [RFT] sh: mach-r2d: Handle virq offset in cascaded IRL
+ demux
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 10 Jul 2023 09:23:27 +0200
+In-Reply-To: <6af51602-631a-dadc-2740-d1cfad0a2993@roeck-us.net>
+References: <2c99d5df41c40691f6c407b7b6a040d406bc81ac.1688901306.git.geert+renesas@glider.be>
+         <6af51602-631a-dadc-2740-d1cfad0a2993@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.4 
 MIME-Version: 1.0
-Date:   Mon, 10 Jul 2023 15:22:00 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau/pci: ERROR: "foo * bar" should be "foo *bar"
-In-Reply-To: <20230710072012.54076-1-xujianghui@cdjrlc.com>
-References: <20230710072012.54076-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <0b4bfadaf22077b14fe579c1935058ff@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 89.14.157.58
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/nouveau/nvkm/subdev/pci/gk104.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Guenter!
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pci/gk104.c 
-b/drivers/gpu/drm/nouveau/nvkm/subdev/pci/gk104.c
-index 6be87ecffc89..bc51987c5f5f 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pci/gk104.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pci/gk104.c
-@@ -147,7 +147,7 @@ gk104_pcie_set_link_speed(struct nvkm_pci *pci, enum 
-nvkm_pcie_speed speed)
-  }
+On Sun, 2023-07-09 at 18:13 -0700, Guenter Roeck wrote:
+> dreamcast doesn't build in linux-next, just in case you didn't notice.
 
-  static int
--gk104_pcie_init(struct nvkm_pci * pci)
-+gk104_pcie_init(struct nvkm_pci *pci)
-  {
-      enum nvkm_pcie_speed lnkctl_speed, max_speed, cap_speed;
-      struct nvkm_subdev *subdev = &pci->subdev;
+Didn't the person who introduced the regression a notification from the CI?
+
+Maybe we could configure the CI to send a mail to the linux-sh mailing list
+in case of such failures, so that the people involved in the SH port are
+being notified.
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
