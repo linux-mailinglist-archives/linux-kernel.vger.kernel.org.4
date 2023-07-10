@@ -2,135 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFE674D810
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE3474D815
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjGJNpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S233003AbjGJNq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbjGJNpf (ORCPT
+        with ESMTP id S230407AbjGJNq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:45:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6710B11B
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:45:32 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688996728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mOd9Z/Y7bd7pNGaxo//Z18/44l8G9zcu4FfGzkB3p4=;
-        b=XS44BxOgMF+ntJ4i3SNvH+Xz4wYQeLdVjA9CMnPz4O56If1F5PDyBEoKsE+abaGraJ5NbP
-        d+bf/knkAxY4xfhZbvcYUJ481mkTg0gzYped90BDsXO9J7OlyZCtcZ1hVe6X/P++hqIabm
-        B1FaDt3A1UqFowdj00k/SyRhMuk5KLfSC/sLUoiIZ0yIVYus9SWAbaaHDwa3Y7vrpKrnak
-        lBWpq2utIO/k+FPY2zLsBgoKf1jFo39flgPqYbjiJ2RK74aLWcGFlMBhjNyGDCBLsfIOd3
-        InX/xK5ZgtheFn5D4MM19iebg1LRKKz9VAToAFcLkmGNUsPsQTesvcrbuMpBgw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688996728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mOd9Z/Y7bd7pNGaxo//Z18/44l8G9zcu4FfGzkB3p4=;
-        b=SMgsQ96fW5dYutuP4iuvwQR9qSF+1IhBHPkLwxDrfLAyP/GKrGQvk9Af5UfpmjtW/U7aOv
-        63AnFfL8kKXxPVBg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk v2 5/5] printk: Rename abandon_console_lock_in_panic() to other_cpu_in_panic()
-Date:   Mon, 10 Jul 2023 15:51:24 +0206
-Message-Id: <20230710134524.25232-6-john.ogness@linutronix.de>
-In-Reply-To: <20230710134524.25232-1-john.ogness@linutronix.de>
-References: <20230710134524.25232-1-john.ogness@linutronix.de>
+        Mon, 10 Jul 2023 09:46:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D68C1B3;
+        Mon, 10 Jul 2023 06:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MttSIBFDzxo+w4PFW3J7ZDj+Lub8j7ffKGXirDBsatA=; b=UYobBqUdV751cNMlhoG7PQe8Wf
+        VgghfAe2GDPkENOs6/OBmeZwI3a1JHQPudBFW849/wJh2Str9PC0rEoAtKf93kqmaX/PZ96ZcwFKf
+        x3iHKezvRBU1GeZsJfqyESrNX0kMji3hMiXVi2x9lrHybRAwdvcpsecOt3ULqPw71EFpUYOz/SaR/
+        xvus7ag9nr7PhkAIHjbmZeV4bWQg/qBbnq7b87sU/qy9clQZjRo7NnV3kbUhUcxj2wY15StSHutJc
+        dkV0utIhHfvpI2F4IqcLO/zA0JrGfFXWXFUJLMreck7WuzJIVLHfBdNtmeu0TisAkpH6Lh6rVXrDO
+        bOIXHE3Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qIrDa-00EeDT-QW; Mon, 10 Jul 2023 13:46:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C67630017D;
+        Mon, 10 Jul 2023 15:46:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 664DE29984D3B; Mon, 10 Jul 2023 15:46:21 +0200 (CEST)
+Date:   Mon, 10 Jul 2023 15:46:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] x86: kprobes: Fix CFI_CLANG related issues
+Message-ID: <20230710134621.GC3034907@hirez.programming.kicks-ass.net>
+References: <168899125356.80889.17967397360941194229.stgit@devnote2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168899125356.80889.17967397360941194229.stgit@devnote2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently abandon_console_lock_in_panic() is only used to determine if
-the current CPU should immediately release the console lock because
-another CPU is in panic. However, later this function will be used by
-the CPU to immediately release other resources in this situation.
+On Mon, Jul 10, 2023 at 09:14:13PM +0900, Masami Hiramatsu (Google) wrote:
 
-Rename the function to other_cpu_in_panic(), which is a better
-description and does not assume it is related to the console lock.
+> I just build tested, since I could not boot the kernel with CFI_CLANG=y.
+> Would anyone know something about this error?
+> 
+> [    0.141030] MMIO Stale Data: Unknown: No mitigations
+> [    0.153511] SMP alternatives: Using kCFI
+> [    0.164593] Freeing SMP alternatives memory: 36K
+> [    0.165053] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b
+> [    0.166028] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.2-00002-g12b1b2fca8ef #126
+> [    0.166028] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> [    0.166028] Call Trace:
+> [    0.166028]  <TASK>
+> [    0.166028]  dump_stack_lvl+0x6e/0xb0
+> [    0.166028]  panic+0x146/0x2f0
+> [    0.166028]  ? start_kernel+0x472/0x48b
+> [    0.166028]  __stack_chk_fail+0x14/0x20
+> [    0.166028]  start_kernel+0x472/0x48b
+> [    0.166028]  x86_64_start_reservations+0x24/0x30
+> [    0.166028]  x86_64_start_kernel+0xa6/0xbb
+> [    0.166028]  secondary_startup_64_no_verify+0x106/0x11b
+> [    0.166028]  </TASK>
+> [    0.166028] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b ]---
+> 
+> 
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- kernel/printk/internal.h |  2 ++
- kernel/printk/printk.c   | 15 ++++++++-------
- 2 files changed, 10 insertions(+), 7 deletions(-)
+Hmm, I just build v6.4 using defconfig+kvm_guest.config+CFI_CLANG using
+clang-16 and that boots using kvm... (on my IVB, and the thing also
+boots natively on my ADL).
 
-diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
-index 2a17704136f1..7d4979d5c3ce 100644
---- a/kernel/printk/internal.h
-+++ b/kernel/printk/internal.h
-@@ -103,3 +103,5 @@ struct printk_message {
- 	u64			seq;
- 	unsigned long		dropped;
- };
-+
-+bool other_cpu_in_panic(void);
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 701908d389f4..529671aaec2d 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2612,11 +2612,12 @@ static int console_cpu_notify(unsigned int cpu)
- }
- 
- /*
-- * Return true when this CPU should unlock console_sem without pushing all
-- * messages to the console. This reduces the chance that the console is
-- * locked when the panic CPU tries to use it.
-+ * Return true if a panic is in progress on a remote CPU.
-+ *
-+ * On true, the local CPU should immediately release any printing resources
-+ * that may be needed by the panic CPU.
-  */
--static bool abandon_console_lock_in_panic(void)
-+bool other_cpu_in_panic(void)
- {
- 	if (!panic_in_progress())
- 		return false;
-@@ -2643,7 +2644,7 @@ void console_lock(void)
- 	might_sleep();
- 
- 	/* On panic, the console_lock must be left to the panic cpu. */
--	while (abandon_console_lock_in_panic())
-+	while (other_cpu_in_panic())
- 		msleep(1000);
- 
- 	down_console_sem();
-@@ -2663,7 +2664,7 @@ EXPORT_SYMBOL(console_lock);
- int console_trylock(void)
- {
- 	/* On panic, the console_lock must be left to the panic cpu. */
--	if (abandon_console_lock_in_panic())
-+	if (other_cpu_in_panic())
- 		return 0;
- 	if (down_trylock_console_sem())
- 		return 0;
-@@ -2978,7 +2979,7 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
- 			any_progress = true;
- 
- 			/* Allow panic_cpu to take over the consoles safely. */
--			if (abandon_console_lock_in_panic())
-+			if (other_cpu_in_panic())
- 				goto abandon;
- 
- 			if (do_cond_resched)
--- 
-2.30.2
-
+I'll go have a look at your patches shortly.
