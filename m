@@ -2,130 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B4D74DAA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281BE74DAA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbjGJP7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S233695AbjGJQBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjGJP66 (ORCPT
+        with ESMTP id S233701AbjGJQBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:58:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B628CA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:58:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 10 Jul 2023 12:01:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FD512E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:01:27 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qItIz-0006h7-IH; Mon, 10 Jul 2023 18:00:05 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00F596108F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:58:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B242C433C7;
-        Mon, 10 Jul 2023 15:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689004736;
-        bh=QUm9t1ezC/IIBjn6xwi8cf0YyRAsFcWX+N8CXwamai4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qErJf3rV0VSpOBIFaXedO/qXItU5H8PQsiFAaXjpq+rI9yjOk+4dSlOoV8gjGnOuL
-         gVsk5LZxUzKimVySyZNlOkD4C28uhf8aVy7JT0F411kCaAYrln0AwBgiQ2w/uIxbBV
-         ETAnqmD71bPt3/uC360q33UqtfVDEyF6ztR+0CmoLqEiUq7VMmqMqc7cun8p3TAZkI
-         YCcmfB6g+dLatvmJjjxYJiihz124cK2wbhkFTw5MT6cspS4oBZicsA/GkfMgb+cRoW
-         IN4n2n8m34M+Wh86LUDLbcKVmoTH0XrL+Pu07/zB20qtJAPB40RHgZnsUU8fEzZfJS
-         tX5RdTFMze6DQ==
-Date:   Mon, 10 Jul 2023 09:58:53 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "Clemens S." <cspringsguth@gmail.com>,
-        Martin Belanger <martin.belanger@dell.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        John Meneghini <jmeneghi@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVMe <linux-nvme@lists.infradead.org>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Kanchan Joshi <joshi.k@samsung.com>
-Subject: Re: Fwd: Need NVME QUIRK BOGUS for SAMSUNG MZ1WV480HCGL-000MV
- (Samsung SM-953 Datacenter SSD)
-Message-ID: <ZKwqvTMPVmhnkZjS@kbusch-mbp.dhcp.thefacebook.com>
-References: <d18d2a08-9d24-0209-c2cf-baf60bbf5048@gmail.com>
- <ZJsKBkPqoWzYyngS@kbusch-mbp.dhcp.thefacebook.com>
- <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B1351ED16C;
+        Mon, 10 Jul 2023 15:59:56 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 17:59:55 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: Re: [PATCH v2 09/15] spi: Use struct_size() helper
+Message-ID: <20230710-doze-scared-9f0a2e1a9125-mkl@pengutronix.de>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-10-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fkfcsps3yw5kjzrk"
 Content-Disposition: inline
-In-Reply-To: <6f333133-2cc4-406a-d6c2-642ac6ccabca@leemhuis.info>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230710154932.68377-10-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 10:52:52AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 27.06.23 18:10, Keith Busch wrote:
-> > On Mon, Jun 26, 2023 at 08:15:49AM +0700, Bagas Sanjaya wrote:
-> >> See Bugzilla for the full thread.
-> >>
-> >> The reporter had a quirk (see above) that fixed this regression,
-> >> nevertheless I'm adding it to regzbot to make sure it doesn't fall
-> >> through cracks unnoticed:
-> >>
-> >> #regzbot introduced: 86c2457a8e8112f https://bugzilla.kernel.org/show_bug.cgi?id=217593
-> >> #regzbot title: NVME_QUIRK_BOGUS_NID is needed for SAMSUNG MZ1WV480HCGL-000MV
-> > 
-> > These bug reports really should go to the vendors that created the
-> > broken device with non-unique "unique" fields.
-> 
-> I understand that, but I think we need middlemen for that, as I or Bagas
-> don't have the contacts -- and it's IMHO also a bit much too ask us for
-> in general, as regression tracking is hard enough already. At least
-> unless this becomes something that happen regularly, then a list of
-> persons we could contact would be fine I guess. But we simply can't deal
-> with too many subsystem specific special cases.
 
-I'm not asking the Linux regression trackers to fill that role, though.
-I'm asking people who experience these issues report it to their vendor
-directly because these device makers apparently have zero clue that
-their spec non-compliance is causing painful experiences for their
-customers and annoyance for maintainers. They keep pumping out more and
-more devices with the same breakage.
+--fkfcsps3yw5kjzrk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This particular vendor has been great at engaging with Linux, but that's
-not necessarily normal among all device makers, and I don't have
-contacts with the majority of the vendors we've had to quirk for this
-issue.
+On 10.07.2023 18:49:26, Andy Shevchenko wrote:
+> Prefer struct_size() over open-coded versions.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/linux/spi/spi.h | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index c9479badf38c..9fb8efb068c6 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -17,6 +17,7 @@
+>  #include <linux/minmax.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/mutex.h>
+> +#include <linux/overflow.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/slab.h>
+>  #include <linux/smp.h>
+> @@ -1095,6 +1096,8 @@ struct spi_transfer {
+>   * @state: for use by whichever driver currently owns the message
+>   * @resources: for resource management when the spi message is processed
+>   * @prepared: spi_prepare_message was called for the this message
+> + * @t: for use with spi_message_alloc() when message and transfers have
+> + *	been allocated together
+>   *
+>   * A @spi_message is used to execute an atomic sequence of data transfer=
+s,
+>   * each represented by a struct spi_transfer.  The sequence is "atomic"
+> @@ -1147,6 +1150,9 @@ struct spi_message {
+> =20
+>  	/* List of spi_res reources when the spi message is processed */
+>  	struct list_head        resources;
+> +
+> +	/* For embedding transfers into the memory of the message */
+> +	struct spi_transfer	t[];
 
-We did complain to the NVMe spec workgroup that their complaince cert
-suite is not testing for this. There was a little initial interest in
-fixing that gap, but it fizzled out...
+You might want to use the DECLARE_FLEX_ARRAY helper here.
 
-> Another request came in today, even with a pseudo-patch:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217649
-> 
-> To quote:
-> ```
-> As with numerous NVMe controllers these days, Samsung's
-> MZAL41T0HBLB-00BL2, which Lenovo builds into their 16ARP8 also suffers
-> from invalid IDs, breaking suspend and hibernate also on the latest
-> kernel 6.4.2.
-> 
-> The following change restores this functionality:
-> 
-> File: root/drivers/nvme/host/pci.c
-> Change:
-> 
-> -	{ PCI_DEVICE(0x144d, 0xa80b),   /* Samsung PM9B1 256G and 512G */
-> -		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-> 
-> +	{ PCI_DEVICE(0x144d, 0xa80b),   /* Samsung PM9B1 256G, 512G and 1TB */
-> +		.driver_data = NVME_QUIRK_BOGUS_NID |
-> +				NVME_QUIRK_DISABLE_WRITE_ZEROES, },
+Marc
 
-Panjaj, okay with this one too?
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--fkfcsps3yw5kjzrk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSsKvgACgkQvlAcSiqK
+BOgtxwf/Yz15ymm8GOJJtFmUerpE4jpOZcNfOw1mDTpDDgDH+8CXkQfj2uE13kRU
+xmZmpKSAMlsxxmOIGsv8VL18I9YKzWY9wk4vu5oovzx44NHON+6ivyODkaJdH2w9
+kOVb4XiHGF0bhFsC3TJ4HZSUlG3EbFNnc0nuj/IvF6VEoldwbjSR6R5ZR6+EX47u
+h77RsJnmXXbOKbOseq0nlPxZYkFSR03Hzey7BMzmHYQ93COdGDhQqI0kNbwrkD5F
+qpdpYHa26+CLsV+iBftiTk/C49nxRM0cvs4xqUDaZU1rzd2tlbhN28dsuGJ8zQL1
+T+7Bl7/j5IRqJUJiKB8YUQNVj2KrOg==
+=a9WN
+-----END PGP SIGNATURE-----
+
+--fkfcsps3yw5kjzrk--
