@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABB674D286
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0520474D299
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjGJKAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S231209AbjGJKCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjGJKA0 (ORCPT
+        with ESMTP id S231481AbjGJKBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:00:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561E730E6;
-        Mon, 10 Jul 2023 02:58:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A935121F0E;
-        Mon, 10 Jul 2023 09:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688983131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GvnjoW3g/Yhbetf1CpEHHC9av6tL/nbCORcUKb9FiY0=;
-        b=YUpm422VmaeMb/1/x0/I6LomqpN/khgdWLI/I4n4VSj8h8Qu0kBITuTFdrQNT81S+X0Ure
-        cOAmS9PlFn5Td4kNpX5S4nmUmulEeVV0gJbiIqJbsC6zYV1VHtDGEu6qGAkCfl4/M81Sbl
-        qF+t0IQSGwBU0Bp1F+7/LhHNGa23HJA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688983131;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GvnjoW3g/Yhbetf1CpEHHC9av6tL/nbCORcUKb9FiY0=;
-        b=ojUwtm56Y8O/npNBSENUt/NB+Ksi02uCMuwmqP/xkY7TN0zTWHelzUWRMlfajzKhMOf2wo
-        3c4U9bolzMDxw9BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0FC3F13A05;
-        Mon, 10 Jul 2023 09:58:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GaumAlvWq2SKNgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 09:58:51 +0000
-Message-ID: <72ddab83-abec-b096-6c91-9cb2083c4c0a@suse.de>
-Date:   Mon, 10 Jul 2023 11:58:50 +0200
+        Mon, 10 Jul 2023 06:01:40 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2132.outbound.protection.outlook.com [40.107.255.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57CB173C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:59:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PSVSitEbegBrfNhAiCZK7txIqe/Ni4lyxVTE1ml0iqu359k567rJoPpzhzBCYBYuJU1srLK34eZKzwmcUr/HG2mdWbz2ymT2aJH7Pc5yml8ypurmcmzRfvlyNzTmu2TPaLH5JE7M1CYN23Oz25PVKyH8KHG3ZTZYp2VQQOu5k97X3I0kRhF9JiDvgJsiOI0t/95nM0IxgwY6hImG52nNOafKGJb0hMYK8VyLc8JtbWHAl7omgLdYCn3caNL0Aki7DCJBs3RXvp0lqN522EOzvMRn3qNGjcv4iA99VS9g6rLzKrEHD1+ifm49foEhIGCX+uGBITK+YJwmBTZaSab/Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1Yp+KLuutQOtTAOdW01O4bS6fxtp3Qa2Yu19BQW/o80=;
+ b=CtujRGG9dMhiRwz6bWaC8yKymgcap9lKUOvmz7KxdmJWpOziPBAaYJtXb5akeILGW8tDX/rY3GQOX3mtuRP7jx67g8EOogNE1M9dEKkGcIky6y2VHzS1t23eYrpf/AxcB1NC7EkkYDYorEFE0oHByC9LR6Lx1GS+2M9LCD/5zK7dxN8euX0rxbalOS9EAWKwsznWGW99/0CTqgOoIqZuoLBQ3CAx8++iSpcODdeumttvBLqezIEV5pT7HmMwigMeK/ThkYzhG1qvOEqE6tHrk0caTnZo/syc2O4b5qRjn8fhs0hP6iKM4UWD2bDrDTewPe7z7e3au4pW5rRd9d7ZXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Yp+KLuutQOtTAOdW01O4bS6fxtp3Qa2Yu19BQW/o80=;
+ b=LsnZYfdfiGAljnGPSKGwuYgvVYcLotyqmHSDL2403kOBuhyGhWFiYwiNsjrSnf2nRcVolSOyRH2nyAdpGj7sJbnHHPz2lztsgTS0J/Sth2+BSE6pctqueXXrOkriHUYuWWExoJGpHyIkrdadW6eMdy/d9FCF+ks9iCWjgsXOwasxuM2nt0eViJG3KJgS30vmazrIQRlukBNRFsG3dqLGUG9wjqdLOOENVQSqHkFPWj+crfksVFv1ClH2dLncxLTZ5Cj33FsHK3DM9pbksnYIpxdzU2/p7dsfDaZjuULO/etBMARbsWTrOtR5YoLz02o7plBCacPGCwGJOfnegE3rkg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB3963.apcprd06.prod.outlook.com (2603:1096:4:f2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 09:59:38 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 09:59:38 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 01/21] genirq/devres: Add devm_request_threaded_irq_probe() and devm_request_irq_probe()
+Date:   Mon, 10 Jul 2023 17:59:05 +0800
+Message-Id: <20230710095926.15614-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR01CA0167.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::23) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/client: Send hotplug event after registering a client
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>, noralf@tronnes.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Moritz Duge <MoritzDuge@kolahilft.de>,
-        Torsten Krah <krah.tm@gmail.com>,
-        Paul Schyska <pschyska@gmail.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, stable@vger.kernel.org
-References: <20230710091029.27503-1-tzimmermann@suse.de>
- <87edlghz5e.fsf@minerva.mail-host-address-is-not-set>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <87edlghz5e.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------1vdugXBSagH09XaDcfo6AQRC"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB3963:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8451b738-553d-4182-3268-08db812c5f30
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 02Q0xr6/YhKNsz+6Wk/I4cF2+MlYwWsQLNlry+8mjoi2jyrri/CYQ1VOzBAmweD+6wRPJGmJ3Sz16nS5gNekGaCOwedwUxD6HHK4OhgOi53KvNLxirHBFBhb5ctxUiVW+OdurEGkXPI6tCt1/TPLqCsFMd9sFBO0MEF2nJHum8mkBP0eCyK475jeXJDQstlWZXMTJz9yrBch4Vs1QV/sOi0a6JUVaYZFD39oQ4VWk/4xE4XF1TRu1zLL6Wd6Q2n7KzBXX1mvdqpuf8R45Nc7C55wI3Vwt8PnDHaiGIvRMQQeI+/7xlfbw2dVofLh0jVJJVQCuOuFKAMVg0h0pIYEImd2bQyM8jQwP5JMIRPLLSMWdxG9N7S/YXhsIbwchNCQxcKWAsMw8jfM6BK3AhP8bM7FZp351iUru3xC/CJtZ5I6v+c/C5ghPyTsC+StaE9GT+xAWmuV0fAwAFhD08Qad1VdQ6ukj4dyTV2s+tS4Y+9QCLdFGYk9p3akr+9FVc+WzV7VLbh+NFZMwexvg7dw7OE+vMgjy6WUgPr2Ce++m6OGJlMAIlhF9DHLxHX5e95i1w3mpDrhdzXVZSWws7xnP9h2F9eMHdWkNdbgvn4+Drt4Pr1hoHqBk0x2xhmkx+0p
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199021)(86362001)(38100700002)(38350700002)(36756003)(6666004)(6486002)(52116002)(54906003)(6506007)(26005)(186003)(1076003)(6512007)(2616005)(5660300002)(2906002)(66556008)(316002)(478600001)(66946007)(8936002)(66476007)(8676002)(66574015)(83380400001)(4326008)(6916009)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qk5QbFA4RFd6RWFvNDN4QTNRUzAvNzBJU0xTdFh4ZFhPekpqNmlwWGNEVWRM?=
+ =?utf-8?B?NHdZQ0kyNEtIZ1dRVis4dkQwTzBuclcxdWtqZ3BnMXU5bHB5QVhWRVQrM0cw?=
+ =?utf-8?B?eHk3Q2swdG9PSkxQblpsdnh0OWlVM3NrOHpYNExxOFk3TVVGc0FJSHdldGV6?=
+ =?utf-8?B?akdBOVpTUzVtK3V0cHRWL3ZhWWsyWStaeEsyeEN0RmQ1VXdYdEhESCtOV1Ay?=
+ =?utf-8?B?L3BqR2tuOTQyUVNvZklrSnpPdDJUNnZXYm5tSHZtTmxuaFRJWDN6TnRpU2FW?=
+ =?utf-8?B?VmlVcm9HWnhZYWpIU1cxRkF0cFVxTzlwZFhWOE1JRDdQVkErYWQreTE4RS9q?=
+ =?utf-8?B?bUYzSzhIamk4ZnlLeUVQMng4UklTdERFd0pDUnBydm9UR3VUQjhiRnQyaktL?=
+ =?utf-8?B?bDZlcGFqWk00NitkQWhyNHZzYTFFeFFicFlrWTllaFgrWG9oVE5IR21qVFYx?=
+ =?utf-8?B?Y1dacnBhVFFvanBKem9VTkVYK0NHN3VmWERxOUF6cVlNY1VsclZLYWYxcVlF?=
+ =?utf-8?B?R0VsWWpiekVvMnRkd0FaSW9kenI5SExqcDRnTWRENE01MXQ5YVRZbk5scWlX?=
+ =?utf-8?B?RFVXSWlvWmVLUit6dXpDOTd2L2gwSWZsekkvRmQ5VlhpV2lVd0tIS25pKzNU?=
+ =?utf-8?B?dDdQdyt5VTFFOC9YeHFaOVBtdWFpZ2ZHS1k2WUp4cVRZM25sVDV0TXVtNDcz?=
+ =?utf-8?B?bFhrdEl2WEVuK3dDQjdWRmMvL3VrQnVacUsrQTJGYkRrR3lOblhVRU5YY3N1?=
+ =?utf-8?B?NENGRm9MaWFGM1d2M0taS1k0eENMb09VV0o3bGVHd05mNnUvSHVpQ0JRTGpt?=
+ =?utf-8?B?Q3J1NDg5cHl1eXRHU3JpaXNGZzVEWDdHU053VGEzdlFCTElBSVFXSVlWbTM3?=
+ =?utf-8?B?Tm9MaWtxa0dwQ054MHB4dWl0emlwMzV3S1dTcnYrSWR4VXA1bndpOTJBcStP?=
+ =?utf-8?B?c0FwaWFFZmRDTXMvWjY2WlhSV3ozZGZnR1JJY2dOWGpCMXZxdXFnYmxpSDgr?=
+ =?utf-8?B?UjBpSndjVkZwQ0lpaFlxczB3STdjaWJGbWdqZVpzdW81KzZSbWdZMVlESW1E?=
+ =?utf-8?B?Nk0xVXpNR01YU2JhT0ZMOWRiWXpGM0hEeWs4Um1GY1VYOTRkRlBJKytLL1g4?=
+ =?utf-8?B?ZUw4N2daOVVabkwrQ2VNNkhiQkppcVRuV0oybjlLNGtFYS9XRnhoVlZlYjVq?=
+ =?utf-8?B?OUo3a2NLblFQbmJJbm5KWnhGMDdwTXBoN0FtVEY4WWh0cFFsc2FHRm9UL2Y2?=
+ =?utf-8?B?dXl4RjMzMkxHc2NqdWlhckFPTlhLNFFKZ2Fad3JvYlVpV0JKVFphc1lWNXJJ?=
+ =?utf-8?B?YjdRc3RyZUlhcS9pQUtwUm9taU5BMGo5SFcvOVVFdis0MGphK3Ava3lUUzZj?=
+ =?utf-8?B?WGYwNTVzSlpweGxRWlF1Y0hhMlJYZ2hnUzN3MkFGZm5vTS8rZjJ6SXg4Z1Nj?=
+ =?utf-8?B?MmpaZHg4dGVzdU9ONnRQVzRBL1hobmdsTWEzU2RYMGZwTGVQVy9MSlNsY1Zz?=
+ =?utf-8?B?OHF2cTNzc2NmQ2dlWS9GcjRycG5zSm5jcWxYSTZHVnQvM3RoeVFtNnNaVVly?=
+ =?utf-8?B?SzFXWld0K3dkK2tDdVI3ZDNUbzBWdHpmK3EvKzRUanNPWmJ2UDVQem5yeHBF?=
+ =?utf-8?B?aXk2bE5FajhTa0FtczNDV0pWMUd2UkM4SWpMQmdDU1FzQmVHMFB5eWxqWkV1?=
+ =?utf-8?B?SDlITStVZW5LNklyZ2xXenZBYkltQUR3aEQ5NHhNU3VDVW93TTZJd1paZW01?=
+ =?utf-8?B?N3VkM1FRWXZUK2lTRWE4bXg5SmZpeVB0dW5BeWhMZ1h6blJ3Uy95TzUweFlD?=
+ =?utf-8?B?Q0pJdGdIMkRlQzZHbDRqeVYrK0hQVTJhRGdoUVphR3UwRE13eW1RNFhwV0sz?=
+ =?utf-8?B?RDZVVndiRWNXTVJuMnEreWlnT3FLS3N3SU4vRDcxS1NLWUhPTTVMZGZDQXJI?=
+ =?utf-8?B?RXNWUnBITjAyblF5SlZXTEI0R203QUUwcWdDVDlCZlFDU2NCcGV3T2ViZFNp?=
+ =?utf-8?B?QlRqVlRYa0ZhWHpwTDNaOGNQMnd6TVFjT2Q4cWVRNWEzbFpXdGYxZzg3M0Ru?=
+ =?utf-8?B?Nml3UFZYbGpibm9PUmZtRmdFZ1BzWi83SVZtQWdBVTFLRHFENGtPbFpCZmor?=
+ =?utf-8?Q?fcRVTBH4tSy9RBvZsHfNfEfo9?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8451b738-553d-4182-3268-08db812c5f30
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 09:59:37.9866
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cqFgVeT0RRFjLphr7AoNFR6DKi8chTWkcsqUnwghm5T41CSkQbKoZTpm8Dv7DRPJ2p2UbzL1a9BW44cvIpnWbg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3963
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,170 +126,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------1vdugXBSagH09XaDcfo6AQRC
-Content-Type: multipart/mixed; boundary="------------ogGQXvUxAG6vOXW98TdFWf32";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>, noralf@tronnes.org
-Cc: dri-devel@lists.freedesktop.org, Moritz Duge <MoritzDuge@kolahilft.de>,
- Torsten Krah <krah.tm@gmail.com>, Paul Schyska <pschyska@gmail.com>,
- Daniel Vetter <daniel.vetter@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Inki Dae <inki.dae@samsung.com>, Seung-Woo Kim <sw0312.kim@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
- Rob Clark <robdclark@gmail.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Thierry Reding
- <thierry.reding@gmail.com>, Mikko Perttunen <mperttunen@nvidia.com>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- freedreno@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
- linux-tegra@vger.kernel.org, stable@vger.kernel.org
-Message-ID: <72ddab83-abec-b096-6c91-9cb2083c4c0a@suse.de>
-Subject: Re: [PATCH] drm/client: Send hotplug event after registering a client
-References: <20230710091029.27503-1-tzimmermann@suse.de>
- <87edlghz5e.fsf@minerva.mail-host-address-is-not-set>
-In-Reply-To: <87edlghz5e.fsf@minerva.mail-host-address-is-not-set>
+There are more than 700 calls to devm_request_threaded_irq method and
+more than 1000 calls to devm_request_irq method. Most drivers only
+request one interrupt resource, and these error messages are basically
+the same. If error messages are printed everywhere, more than 2000 lines
+of code can be saved by removing the msg in the driver.
 
---------------ogGQXvUxAG6vOXW98TdFWf32
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+And tglx point out that:
 
-SGkNCg0KQW0gMTAuMDcuMjMgdW0gMTE6NTIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cml0
-ZXM6DQo+IA0KPiBIZWxsbyBUaG9tYXMsDQo+IA0KPj4gR2VuZXJhdGUgYSBob3RwbHVnIGV2
-ZW50IGFmdGVyIHJlZ2lzdGVyaW5nIGEgY2xpZW50IHRvIGFsbG93IHRoZQ0KPj4gY2xpZW50
-IHRvIGNvbmZpZ3VyZSBpdHMgZGlzcGxheS4gUmVtb3ZlIHRoZSBob3RwbHVnIGNhbGxzIGZy
-b20gdGhlDQo+PiBleGlzdGluZyBjbGllbnRzIGZvciBmYmRldiBlbXVsYXRpb24uIFRoaXMg
-Y2hhbmdlIGZpeGVzIGEgY29uY3VycmVuY3kNCj4+IGJ1ZyBiZXR3ZWVuIHJlZ2lzdGVyaW5n
-IGEgY2xpZW50IGFuZCByZWNlaXZpbmcgZXZlbnRzIGZyb20gdGhlIERSTQ0KPj4gY29yZS4g
-VGhlIGJ1ZyBpcyBwcmVzZW50IGluIHRoZSBmYmRldiBlbXVsYXRpb24gb2YgYWxsIGRyaXZl
-cnMuDQo+Pg0KPj4gVGhlIGZiZGV2IGVtdWxhdGlvbiBjdXJyZW50bHkgZ2VuZXJhdGVzIGEg
-aG90cGx1ZyBldmVudCBiZWZvcmUNCj4+IHJlZ2lzdGVyaW5nIHRoZSBjbGllbnQgdG8gdGhl
-IGRldmljZS4gRm9yIGVhY2ggbmV3IG91dHB1dCwgdGhlIERSTQ0KPj4gY29yZSBzZW5kcyBh
-biBhZGRpdGlvbmFsIGhvdHBsdWcgZXZlbnQgdG8gZWFjaCByZWdpc3RlcmVkIGNsaWVudC4N
-Cj4+DQo+PiBJZiB0aGUgRFJNIGNvcmUgZGV0ZWN0cyBmaXJzdCBvdXRwdXQgYmV0d2VlbiBz
-ZW5kaW5nIHRoZSBhcnRpZmljaWFsDQo+PiBob3RwbHVnIGFuZCByZWdpc3RlcmluZyB0aGUg
-ZGV2aWNlLCB0aGUgb3V0cHV0J3MgaG90cGx1ZyBldmVudCBnZXRzDQo+PiBsb3N0LiBJZiB0
-aGlzIGlzIHRoZSBmaXJzdCBvdXRwdXQsIHRoZSBmYmRldiBjb25zb2xlIGRpc3BsYXkgcmVt
-YWlucw0KPj4gZGFyay4gVGhpcyBoYXMgYmVlbiBvYnNlcnZlZCB3aXRoIGFtZGdwdSBhbmQg
-ZmJkZXYtZ2VuZXJpYy4NCj4+DQo+PiBGaXggdGhpcyBieSBhZGRpbmcgaG90cGx1ZyBnZW5l
-cmF0aW9uIGRpcmVjdGx5IHRvIHRoZSBjbGllbnQncw0KPj4gcmVnaXN0ZXIgaGVscGVyIGRy
-bV9jbGllbnRfcmVnaXN0ZXIoKS4gUmVnaXN0ZXJpbmcgdGhlIGNsaWVudCBhbmQNCj4+IHJl
-Y2VpdmluZyBldmVudHMgYXJlIHNlcmlhbGl6ZWQgYnkgc3RydWN0IGRybV9kZXZpY2UuY2xp
-ZW50bGlzdF9tdXRleC4NCj4+IFNvIGFuIG91dHB1dCBpcyBlaXRoZXIgY29uZmlndXJlZCBi
-eSB0aGUgaW5pdGlhbCBob3RwbHVnIGV2ZW50LCBvcg0KPj4gdGhlIGNsaWVudCBoYXMgYWxy
-ZWFkeSBiZWVuIHJlZ2lzdGVyZWQuDQo+Pg0KPj4gVGhlIGJ1ZyB3YXMgb3JpZ2luYWxseSBh
-ZGRlZCBpbiBjb21taXQgNmUzZjE3ZWU3M2Y3ICgiZHJtL2ZiLWhlbHBlcjoNCj4+IGdlbmVy
-aWM6IENhbGwgZHJtX2NsaWVudF9hZGQoKSBhZnRlciBzZXR1cCBpcyBkb25lIiksIGluIHdo
-aWNoIGFkZGluZw0KPj4gYSBjbGllbnQgYW5kIHJlY2VpdmluZyBhIGhvdHBsdWcgZXZlbnQg
-c3dpdGNoZWQgb3JkZXIuIEl0IHdhcyBoaWRkZW4sDQo+PiBhcyBtb3N0IGhhcmR3YXJlIGFu
-ZCBkcml2ZXJzIGhhdmUgYXQgbGVhc3Qgb24gc3RhdGljIG91dHB1dCBjb25maWd1cmVkLg0K
-Pj4gT3RoZXIgZHJpdmVycyBkaWRuJ3QgdXNlIHRoZSBpbnRlcm5hbCBEUk0gY2xpZW50IG9y
-IHN0aWxsIGhhZCBzdHJ1Y3QNCj4+IGRybV9tb2RlX2NvbmZpZ19mdW5jcy5vdXRwdXRfcG9s
-bF9jaGFuZ2VkIHNldC4gVGhhdCBjYWxsYmFjayBoYW5kbGVkDQo+PiBob3RwbHVnIGV2ZW50
-cyBhcyB3ZWxsLiBBZnRlciBub3Qgc2V0dGluZyB0aGUgY2FsbGJhY2sgaW4gYW1kZ3B1IGlu
-DQo+PiBjb21taXQgMGUzMTcyYmFjM2Y0ICgiZHJtL2FtZGdwdTogRG9uJ3Qgc2V0IHN0cnVj
-dA0KPj4gZHJtX2RyaXZlci5vdXRwdXRfcG9sbF9jaGFuZ2VkIiksIGFtZGdwdSBkaWQgbm90
-IHNob3cgYSBmcmFtZWJ1ZmZlcg0KPj4gY29uc29sZSBpZiBvdXRwdXQgZXZlbnRzIGdvdCBs
-b3N0LiBUaGUgYnVnIGdvdCBjb3B5LXBhc3RlZCBmcm9tDQo+PiBmYmRldi1nZW5lcmljIGlu
-dG8gdGhlIG90aGVyIGZiZGV2IGVtdWxhdGlvbi4NCj4+DQo+PiBSZXBvcnRlZC1ieTogTW9y
-aXR6IER1Z2UgPE1vcml0ekR1Z2VAa29sYWhpbGZ0LmRlPg0KPj4gQ2xvc2VzOiBodHRwczov
-L2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvZHJtL2FtZC8tL2lzc3Vlcy8yNjQ5DQo+IA0KPiBB
-cmVuJ3QgeW91IG1pc3NpbmcgYSBGaXhlczogZm9yIDBlMzE3MmJhYzNmNCB0b28/IFNpbmNl
-IHRoYXQncyB0aGUgY29tbWl0DQo+IHRoYXQgdW5tYXNrZWQgdGhlIGJ1ZyBmb3IgYW1kZ3B1
-LCBJTU8gdGhhdCBpcyB0aGUgbW9zdCBpbXBvcnRhbnQgdG8gbGlzdC4NCg0KV2VsbCwgT0su
-DQoNCj4gDQo+PiBGaXhlczogNmUzZjE3ZWU3M2Y3ICgiZHJtL2ZiLWhlbHBlcjogZ2VuZXJp
-YzogQ2FsbCBkcm1fY2xpZW50X2FkZCgpIGFmdGVyIHNldHVwIGlzIGRvbmUiKQ0KPj4gRml4
-ZXM6IDhhYjU5ZGEyNmJjMCAoImRybS9mYi1oZWxwZXI6IE1vdmUgZ2VuZXJpYyBmYmRldiBl
-bXVsYXRpb24gaW50byBzZXBhcmF0ZSBzb3VyY2UgZmlsZSIpDQo+PiBGaXhlczogYjc5ZmU5
-YWJkNThiICgiZHJtL2ZiZGV2LWRtYTogSW1wbGVtZW50IGZiZGV2IGVtdWxhdGlvbiBmb3Ig
-R0VNIERNQSBoZWxwZXJzIikNCj4+IEZpeGVzOiA2M2MzODE1NTJmNjkgKCJkcm0vYXJtYWRh
-OiBJbXBsZW1lbnQgZmJkZXYgZW11bGF0aW9uIGFzIGluLWtlcm5lbCBjbGllbnQiKQ0KPj4g
-Rml4ZXM6IDQ5OTUzYjcwZTdkMyAoImRybS9leHlub3M6IEltcGxlbWVudCBmYmRldiBlbXVs
-YXRpb24gYXMgaW4ta2VybmVsIGNsaWVudCIpDQo+PiBGaXhlczogOGYxYWFjY2IwNGI3ICgi
-ZHJtL2dtYTUwMDogSW1wbGVtZW50IGNsaWVudC1iYXNlZCBmYmRldiBlbXVsYXRpb24iKQ0K
-Pj4gRml4ZXM6IDk0MGI4NjljMmYyZiAoImRybS9tc206IEltcGxlbWVudCBmYmRldiBlbXVs
-YXRpb24gYXMgaW4ta2VybmVsIGNsaWVudCIpDQo+PiBGaXhlczogOWU2OWJjZDg4ZTQ1ICgi
-ZHJtL29tYXBkcm06IEltcGxlbWVudCBmYmRldiBlbXVsYXRpb24gYXMgaW4ta2VybmVsIGNs
-aWVudCIpDQo+PiBGaXhlczogZTMxN2E2OWZlODkxICgiZHJtL3JhZGVvbjogSW1wbGVtZW50
-IGNsaWVudC1iYXNlZCBmYmRldiBlbXVsYXRpb24iKQ0KPj4gRml4ZXM6IDcxZWMxNmY0NWVm
-OCAoImRybS90ZWdyYTogSW1wbGVtZW50IGZiZGV2IGVtdWxhdGlvbiBhcyBpbi1rZXJuZWwg
-Y2xpZW50IikNCj4+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVy
-bWFubkBzdXNlLmRlPg0KPj4gVGVzdGVkLWJ5OiBNb3JpdHogRHVnZSA8TW9yaXR6RHVnZUBr
-b2xhaGlsZnQuZGU+DQo+PiBUZXN0ZWQtYnk6IFRvcnN0ZW4gS3JhaCA8a3JhaC50bUBnbWFp
-bC5jb20+DQo+PiBUZXN0ZWQtYnk6IFBhdWwgU2NoeXNrYSA8cHNjaHlza2FAZ21haWwuY29t
-Pg0KPj4gQ2M6IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0ZXJAZmZ3bGwuY2g+DQo+PiBD
-YzogRGF2aWQgQWlybGllIDxhaXJsaWVkQGdtYWlsLmNvbT4NCj4+IENjOiBOb3JhbGYgVHLD
-uG5uZXMgPG5vcmFsZkB0cm9ubmVzLm9yZz4NCj4+IENjOiBNYWFydGVuIExhbmtob3JzdCA8
-bWFhcnRlbi5sYW5raG9yc3RAbGludXguaW50ZWwuY29tPg0KPj4gQ2M6IE1heGltZSBSaXBh
-cmQgPG1yaXBhcmRAa2VybmVsLm9yZz4NCj4+IENjOiBKYXZpZXIgTWFydGluZXogQ2FuaWxs
-YXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4+IENjOiBSdXNzZWxsIEtpbmcgPGxpbnV4QGFy
-bWxpbnV4Lm9yZy51az4NCj4+IENjOiBJbmtpIERhZSA8aW5raS5kYWVAc2Ftc3VuZy5jb20+
-DQo+PiBDYzogU2V1bmctV29vIEtpbSA8c3cwMzEyLmtpbUBzYW1zdW5nLmNvbT4NCj4+IENj
-OiBLeXVuZ21pbiBQYXJrIDxreXVuZ21pbi5wYXJrQHNhbXN1bmcuY29tPg0KPj4gQ2M6IEty
-enlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4+
-IENjOiBQYXRyaWsgSmFrb2Jzc29uIDxwYXRyaWsuci5qYWtvYnNzb25AZ21haWwuY29tPg0K
-Pj4gQ2M6IFJvYiBDbGFyayA8cm9iZGNsYXJrQGdtYWlsLmNvbT4NCj4+IENjOiBBYmhpbmF2
-IEt1bWFyIDxxdWljX2FiaGluYXZrQHF1aWNpbmMuY29tPg0KPj4gQ2M6IERtaXRyeSBCYXJ5
-c2hrb3YgPGRtaXRyeS5iYXJ5c2hrb3ZAbGluYXJvLm9yZz4NCj4+IENjOiBUb21pIFZhbGtl
-aW5lbiA8dG9taS52YWxrZWluZW5AaWRlYXNvbmJvYXJkLmNvbT4NCj4+IENjOiBBbGV4IERl
-dWNoZXIgPGFsZXhhbmRlci5kZXVjaGVyQGFtZC5jb20+DQo+PiBDYzogIkNocmlzdGlhbiBL
-w7ZuaWciIDxjaHJpc3RpYW4ua29lbmlnQGFtZC5jb20+DQo+PiBDYzogIlBhbiwgWGluaHVp
-IiA8WGluaHVpLlBhbkBhbWQuY29tPg0KPj4gQ2M6IFRoaWVycnkgUmVkaW5nIDx0aGllcnJ5
-LnJlZGluZ0BnbWFpbC5jb20+DQo+PiBDYzogTWlra28gUGVydHR1bmVuIDxtcGVydHR1bmVu
-QG52aWRpYS5jb20+DQo+PiBDYzogZHJpLWRldmVsQGxpc3RzLmZyZWVkZXNrdG9wLm9yZw0K
-Pj4gQ2M6IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4+IENjOiBsaW51eC1hcm0t
-a2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4+IENjOiBsaW51eC1zYW1zdW5nLXNvY0B2
-Z2VyLmtlcm5lbC5vcmcNCj4+IENjOiBsaW51eC1hcm0tbXNtQHZnZXIua2VybmVsLm9yZw0K
-Pj4gQ2M6IGZyZWVkcmVub0BsaXN0cy5mcmVlZGVza3RvcC5vcmcNCj4+IENjOiBhbWQtZ2Z4
-QGxpc3RzLmZyZWVkZXNrdG9wLm9yZw0KPj4gQ2M6IGxpbnV4LXRlZ3JhQHZnZXIua2VybmVs
-Lm9yZw0KPj4gQ2M6IGRyaS1kZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5vcmcNCj4+IENjOiA8
-c3RhYmxlQHZnZXIua2VybmVsLm9yZz4gIyB2NS4yKw0KPiANCj4gV2hpbGUgaXQncyB0cnVl
-IHRoYXQgdGhlIGJ1dCB3YXMgaW50cm9kdWNlZCBieSBjb21taXQgNmUzZjE3ZWU3M2Y3IGFu
-ZCB0aGF0DQo+IGxhbmRlZCBpbiB2NS4yLCBJIHdvbmRlciBpZiB0aGlzIHBhdGNoIGNvdWxk
-IGV2ZW4gYmUgYXBwbGllZCB0byBzdWNoIG9sZGVycw0KPiBMaW51eCB2ZXJzaW9ucy4gUHJv
-YmFibHkgaW4gcHJhY3RpY2UgaXQgd291bGQgYmUgYXQgbW9zdCBiYWNrcG9ydGVkIHRvDQo+
-IHY2LjIsIHdoaWNoIGlzIHRoZSByZWxlYXNlIHRoYXQgZXhwb3NlZCB0aGUgYnVnIGZvciB0
-aGUgYW1kZ3B1IGRyaXZlci4NCg0KTm8gaWRlYS4gVGhlIGZpeCBsb29rcyBzaW1wbGUgZW5v
-dWdoLCBidXQgYSBsb3QgaGFzIGNoYW5nZWQgaW4gdGhlIA0Kc3Vycm91bmRpbmcgY29kZS4N
-Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gWW91ciBleHBsYW5hdGlvbiBtYWtl
-cyBzZW5zZSB0byBtZSBhbmQgdGhlIHBhdGNoIGxvb2tzIGdvb2QuDQo+IA0KPiBSZXZpZXdl
-ZC1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQo+
-IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
-DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3Nl
-IDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcg
-TXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFH
-IE51ZXJuYmVyZykNCg==
+  If we actually look at the call sites of
+  devm_request_threaded_irq() then the vast majority of them print more or
+  less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
 
---------------ogGQXvUxAG6vOXW98TdFWf32--
+     519 messages total (there are probably more)
 
---------------1vdugXBSagH09XaDcfo6AQRC
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+     352 unique messages
 
------BEGIN PGP SIGNATURE-----
+     323 unique messages after lower casing
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSr1loFAwAAAAAACgkQlh/E3EQov+Dk
-OA//Urw1SwmtNCQyIjfKuDxewZlClwKMSRvtLW4DYNyyCykiwPNcRVVWytSlEuLztlk+njoelgSZ
-4vJlkj1lm7p23KkKdGKI4x+i0LQcp46BqLbI9zmflh2bLaMigL5NqbddhHMZE/nkYmiTu0OSqhcZ
-cLpYSd/hBD4/Ix+nBIWgwoaqyYwljO+WySPyveymijVNKwhCF5SDQUfbwiE/2cfAjKR0EwyAF+xV
-S6unB8SWXb40QXPEQIUHIqs2c2Iww4fmI54AcuTnHx/8YjZdm0VQhGt99yAIgx3tsjaXfyKxgFRY
-UdMzv1D3rnzNMyO4Sa1rw7LRQKdLUxI1i5ABmMBNGOaL2xrVkZf5WYOWM5AwWNybt0MvKpaQXCU2
-2lO2VXd8snO0xp7zmtoOYZufdYgAOBFiGuyiCRZr4Tx8eddiQERK1hFPMb002GG1PrnSfcFQ37ta
-qy6iCBUGUMzu0blDBG+9G4/Pj69sjB05P/az3BKx5oO0Dc5lLjjxLuywl8ZumvwzuDv2POrtHsJM
-C81wrSo42y8B7Pz81r9oCJW+JY1LC9J0O0kszjzqeoiHJSi6q4xYmKUkANQ93Sh3XQs3w0crZQi9
-1uiHQ3i9uhG7IgN5JUFy7UGckta4QpNewT+8WBv86N+O0KbwnaOFNqs43hFVyTszaW7tZO2oMgL5
-Hes=
-=4IC+
------END PGP SIGNATURE-----
+         Those 323 are mostly just variants of the same patterns with
+         slight modifications in formatting and information provided.
 
---------------1vdugXBSagH09XaDcfo6AQRC--
+     186 of these messages do not deliver any useful information,
+         e.g. "no irq", "
+
+     The most useful one of all is: "could request wakeup irq: %d"
+
+  So there is certainly an argument to be made that this particular
+  function should print a well formatted and informative error message.
+
+  It's not a general allocator like kmalloc(). It's specialized and in the
+  vast majority of cases failing to request the interrupt causes the
+  device probe to fail. So having proper and consistent information why
+  the device cannot be used _is_ useful.
+
+So add devm_request_threaded_irq_probe() and devm_request_irq_probe(),
+which ensure that all error handling branches print error information.
+In this way, when this function fails, the upper-layer functions can
+directly return an error code without missing debugging information.
+Otherwise, the error message will be printed redundantly or missing.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ include/linux/interrupt.h | 15 +++++++++++++++
+ kernel/irq/devres.c       | 40 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+
+diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
+index a92bce40b04b..91ab9e501b3d 100644
+--- a/include/linux/interrupt.h
++++ b/include/linux/interrupt.h
+@@ -201,6 +201,21 @@ extern void free_percpu_nmi(unsigned int irq, void __percpu *percpu_dev_id);
+ 
+ struct device;
+ 
++extern int __must_check
++devm_request_threaded_irq_probe(struct device *dev, unsigned int irq,
++			      irq_handler_t handler, irq_handler_t thread_fn,
++			      unsigned long irqflags, const char *devname,
++			      void *dev_id, const char *info);
++
++static inline int __must_check
++devm_request_irq_probe(struct device *dev, unsigned int irq,
++		       irq_handler_t handler, unsigned long irqflags,
++		       const char *devname, void *dev_id, const char *info)
++{
++	return devm_request_threaded_irq_probe(dev, irq, handler, NULL, irqflags,
++					 devname, dev_id, info);
++}
++
+ extern int __must_check
+ devm_request_threaded_irq(struct device *dev, unsigned int irq,
+ 			  irq_handler_t handler, irq_handler_t thread_fn,
+diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+index f6e5515ee077..43a40d6e2e0b 100644
+--- a/kernel/irq/devres.c
++++ b/kernel/irq/devres.c
+@@ -79,6 +79,46 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+ }
+ EXPORT_SYMBOL(devm_request_threaded_irq);
+ 
++/**
++ *	devm_request_threaded_irq_probe - allocate an interrupt line for a managed device
++ *	@dev: device to request interrupt for
++ *	@irq: Interrupt line to allocate
++ *	@handler: Function to be called when the IRQ occurs
++ *	@thread_fn: function to be called in a threaded interrupt context. NULL
++ *		    for devices which handle everything in @handler
++ *	@irqflags: Interrupt type flags
++ *	@devname: An ascii name for the claiming device, dev_name(dev) if NULL
++ *	@dev_id: A cookie passed back to the handler function
++ *	@info: Optional additional error log
++ *
++ *	This is a variant of the devm_request_threaded_irq function.
++ *	It will print an error message by default when the request fails,
++ *	and the consumer can add a special error msg.
++ *
++ *	Except for the extra @dev argument, this function takes the
++ *	same arguments and performs the same function as
++ *	request_threaded_irq().  IRQs requested with this function will be
++ *	automatically freed on driver detach.
++ *
++ *	If an IRQ allocated with this function needs to be freed
++ *	separately, devm_free_irq() must be used.
++ */
++int devm_request_threaded_irq_probe(struct device *dev, unsigned int irq,
++				    irq_handler_t handler, irq_handler_t thread_fn,
++				    unsigned long irqflags, const char *devname,
++				    void *dev_id, const char *info)
++{
++	int rc;
++
++	rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags, devname, dev_id);
++	if (rc)
++		return dev_err_probe(dev, rc, "Failed to request %sinterrupt %u %s %s\n",
++				     thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
++				     info ? : "");
++	return 0;
++}
++EXPORT_SYMBOL(devm_request_threaded_irq_probe);
++
+ /**
+  *	devm_request_any_context_irq - allocate an interrupt line for a managed device
+  *	@dev: device to request interrupt for
+-- 
+2.39.0
+
