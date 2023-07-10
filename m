@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E651074D942
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920D074D947
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjGJOpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S231871AbjGJOqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGJOpi (ORCPT
+        with ESMTP id S229469AbjGJOqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:45:38 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDB2C3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:45:37 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36AEjV2s066492;
-        Mon, 10 Jul 2023 09:45:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1689000331;
-        bh=10128ZciQXGR8XCaEAHZNiZaXB9rJJgJ+eH+I2zdmRc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=c8sophcCrBuII7b1Oae7Q1AYHsJiqNtRmtoVwK5xeoqIPFdzsrqK+FF32buntJo7H
-         Fn1CGRiVaB55I2/sPE1CpfUbORZwr6SiWHkLY1NDzsPq5Eiw/9UIrU38z8MFQ2BLFC
-         Gk/4CkccqtAGG6x3xKJY/V2rr741Pn+WlugD+N3Q=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36AEjVQ0034374
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 10 Jul 2023 09:45:31 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
- Jul 2023 09:45:31 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 10 Jul 2023 09:45:31 -0500
-Received: from [10.250.32.50] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36AEjVpG048928;
-        Mon, 10 Jul 2023 09:45:31 -0500
-Message-ID: <0d28eb47-a564-2155-875b-5c8dc8aa806e@ti.com>
-Date:   Mon, 10 Jul 2023 09:45:30 -0500
+        Mon, 10 Jul 2023 10:46:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA6F114;
+        Mon, 10 Jul 2023 07:46:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FFC061048;
+        Mon, 10 Jul 2023 14:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE65BC433C8;
+        Mon, 10 Jul 2023 14:46:26 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 10:46:25 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ftrace: Fix possible warning on checking all pages used
+ in ftrace_process_locs()
+Message-ID: <20230710104625.421c851a@gandalf.local.home>
+In-Reply-To: <20230710212958.274126-1-zhengyejian1@huawei.com>
+References: <20230710212958.274126-1-zhengyejian1@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] phy: ti: gmii-sel: Allow parent to not be syscon node
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-CC:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230515195922.617243-1-afd@ti.com>
- <3c7d7d0b-b859-8921-952c-870c9474969c@kernel.org>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <3c7d7d0b-b859-8921-952c-870c9474969c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 1:33 PM, Roger Quadros wrote:
-> Hi Andrew,
+On Tue, 11 Jul 2023 05:29:58 +0800
+Zheng Yejian <zhengyejian1@huawei.com> wrote:
+
+> As comments in ftrace_process_locs(), there may be NULL pointers in
+> mcount_loc section:
+>  > Some architecture linkers will pad between
+>  > the different mcount_loc sections of different
+>  > object files to satisfy alignments.
+>  > Skip any NULL pointers.  
 > 
-> On 15/05/2023 22:59, Andrew Davis wrote:
->> If the parent node is not a syscon type, then fallback and check
->> if we can get a regmap from our own node. This no longer forces
->> us to make the parent of this node a syscon node when that might
->> not be appropriate.
+> After 20e5227e9f55 ("ftrace: allow NULL pointers in mcount_loc"),
+> NULL pointers will be accounted when allocating ftrace pages but
+> skipped before adding into ftrace pages, this may result in some
+> pages not being used. Then after 706c81f87f84 ("ftrace: Remove extra
+> helper functions"), warning may occur at:
+>   WARN_ON(pg->next);
 > 
-> Trying to understand the motive for this and if it is better to
-> introduce a "syscon = <&syscon_node>" property instead which
-> makes it fool proof for all cases.
+> So we may need to skip NULL pointers before allocating ftrace pages.
 > 
-
-My motivation is to reduce our overuse of syscon nodes, IMHO syscon
-is almost always a broken design in DT and goes against the standard
-usage.
-
-Some drivers like this one force us to make the parent node a syscon
-device, even what that is not needed otherwise (the register space is
-standalone and the standard DT "reg" property can be used to describe
-the device register space).
-
-Using "syscon = <&syscon_node>" could be a useful option for devices
-when syscon is actually needed. But I think that should only be used
-when the whole node itself cannot be made a child of the syscon node,
-making it a child when we can is better for DT organization vs. having
-a bunch of top-level nodes that point around to their register spaces
-with phandles.
-
-Andrew
-
->>
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>   drivers/phy/ti/phy-gmii-sel.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
->> index 8c667819c39a..1e67ed9a5cf6 100644
->> --- a/drivers/phy/ti/phy-gmii-sel.c
->> +++ b/drivers/phy/ti/phy-gmii-sel.c
->> @@ -435,9 +435,12 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
->>   
->>   	priv->regmap = syscon_node_to_regmap(node->parent);
->>   	if (IS_ERR(priv->regmap)) {
->> -		ret = PTR_ERR(priv->regmap);
->> -		dev_err(dev, "Failed to get syscon %d\n", ret);
->> -		return ret;
->> +		priv->regmap = device_node_to_regmap(node);
->> +		if (IS_ERR(priv->regmap)) {
->> +			ret = PTR_ERR(priv->regmap);
->> +			dev_err(dev, "Failed to get syscon %d\n", ret);
->> +			return ret;
->> +		}
->>   	}
->>   
->>   	ret = phy_gmii_sel_init_ports(priv);
+> Fixes: 706c81f87f84 ("ftrace: Remove extra helper functions")
+> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+> ---
+>  kernel/trace/ftrace.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 3740aca79fe7..5b474165df31 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -6485,6 +6485,16 @@ static int ftrace_process_locs(struct module *mod,
+>  	if (!count)
+>  		return 0;
+>  
+> +	p = start;
+> +	while (p < end) {
+> +		/*
+> +		 * Refer to conments below, there may be NULL pointers,
+> +		 * skip them before allocating pages
+> +		 */
+> +		addr = ftrace_call_adjust(*p++);
+> +		if (!addr)
+> +			count--;
+> +	}
+
+My main concern about this is the added overhead during boot to process
+this. There's 10s of thousands of functions, so this loop will be 10s of
+thousands. I also don't like that this is an unconditional loop (meaning it
+executes even when it is unnecessary to do so).
+
+
+>  	/*
+>  	 * Sorting mcount in vmlinux at build time depend on
+>  	 * CONFIG_BUILDTIME_MCOUNT_SORT, while mcount loc in
+
+How about something like this?
+
+-- Steve
+
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index b24c573934af..acd033371721 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6474,6 +6474,7 @@ static int ftrace_process_locs(struct module *mod,
+ 	struct ftrace_page *start_pg;
+ 	struct ftrace_page *pg;
+ 	struct dyn_ftrace *rec;
++	unsigned long skipped = 0;
+ 	unsigned long count;
+ 	unsigned long *p;
+ 	unsigned long addr;
+@@ -6536,8 +6537,10 @@ static int ftrace_process_locs(struct module *mod,
+ 		 * object files to satisfy alignments.
+ 		 * Skip any NULL pointers.
+ 		 */
+-		if (!addr)
++		if (!addr) {
++			skipped++;
+ 			continue;
++		}
+ 
+ 		end_offset = (pg->index+1) * sizeof(pg->records[0]);
+ 		if (end_offset > PAGE_SIZE << pg->order) {
+@@ -6551,12 +6554,24 @@ static int ftrace_process_locs(struct module *mod,
+ 		rec->ip = addr;
+ 	}
+ 
+-	/* We should have used all pages */
+-	WARN_ON(pg->next);
+-
+ 	/* Assign the last page to ftrace_pages */
+ 	ftrace_pages = pg;
+ 
++	/* We should have used all pages unless we skipped some */
++	if (pg->next) {
++		WARN_ON(!skipped);
++		while (ftrace_pages->next) {
++			pg = ftrace_pages->next;
++			ftrace_pages->next = pg->next;
++			if (pg->records) {
++				free_pages((unsigned long)pg->records, pg->order);
++				ftrace_number_of_pages -= 1 << pg->order;
++			}
++			kfree(pg);
++			ftrace_number_of_groups--;
++		}
++	}
++
+ 	/*
+ 	 * We only need to disable interrupts on start up
+ 	 * because we are modifying code that an interrupt
