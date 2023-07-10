@@ -2,121 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C2874DA14
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F317D74DA15
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjGJPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
+        id S229848AbjGJPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjGJPl2 (ORCPT
+        with ESMTP id S232475AbjGJPls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:41:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FE3129
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689003639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F0D7PqDIktc2dtIxI/bE8WlEAjuSUexO7v405cL9P8Q=;
-        b=UjxRtMV7Z4eK+0yiYCTKg7uKq/umX8OWTgMmkOkNIwPmpNwDbRP8J+YUnp6J6T65W2UdGU
-        59K7WXzbL4X64tRe2iUHoC+DDFlFbFlPx4Qo1bP/zrf+Zyb4ZwZFHTBbHsNiiuFck5u/Pl
-        2GPtWVPU5CWNveZnKrMx5QXoN/MhzRo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-633-gsY0jYqTNUyCCf89q1R_CQ-1; Mon, 10 Jul 2023 11:40:37 -0400
-X-MC-Unique: gsY0jYqTNUyCCf89q1R_CQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF55D185A792;
-        Mon, 10 Jul 2023 15:40:36 +0000 (UTC)
-Received: from [10.22.33.187] (unknown [10.22.33.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 67DFB2166B26;
-        Mon, 10 Jul 2023 15:40:36 +0000 (UTC)
-Message-ID: <74f1906e-fe58-c745-a851-b160374f7acf@redhat.com>
-Date:   Mon, 10 Jul 2023 11:40:36 -0400
+        Mon, 10 Jul 2023 11:41:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8AF115
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=IqtE8bxydGnxenKOefy+ykO3CYnjrck24uGHgIZ57LA=; b=pT+d7I5wUMIU2xUL0+YD7beR9+
+        dWe4feT6a0V4y0upUnLpY9E8iH+I8IT4UFgkveS+ji0Zvj1uQImighbAmI0QRbspgjm1HRjdBVsqu
+        lpLQ1lyoWqWVzisZ47AV0fOh83/8lXZ/PbPbhrcOboVOHPSImxWsWjDXw5mC77YRt71Y2VBJJ51Kd
+        skmrGUujQdOsyk7T84fK2395yU6NoKC9IGxgNoNBBwfqrJz1MG1R+s4xCTHJFMkH729jvsUxseAbG
+        cWi+Vp+u49tjb4SiVmQ0bCIP8qGYS9fJKYvonQ51vaqo9hGR2WPzuXqOEXAdUVao7YigDpAFPe0se
+        4s6JZTpA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qIt1C-00C2Qn-2x;
+        Mon, 10 Jul 2023 15:41:42 +0000
+Message-ID: <cae5cf32-4ad1-0dbf-1b61-c57dd5549798@infradead.org>
+Date:   Mon, 10 Jul 2023 08:41:41 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] cgroup/cpuset: update parent subparts cpumask while
- holding css refcnt
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] init: Don't proxy console= to earlycon
 Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230701065049.1758266-1-linmiaohe@huawei.com>
- <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Raul Rangel <rrangel@chromium.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>, kramasub@chromium.org,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Li Zhe <lizhe.67@bytedance.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Zhou jie <zhoujie@nfschina.com>
+References: <20230707191721.1.Id08823b2f848237ae90ce5c5fa7e027e97c33ad3@changeid>
+ <b32ae8af-7950-c725-5632-6ec13420bf77@infradead.org>
+ <6101a3bb-30eb-97fc-3a8e-6d15afc4efb5@amd.com>
+ <3de1ff24-3970-6e22-a73c-70446b8de4bd@infradead.org>
+ <CAHQZ30BLb13Mz5+3MCgV30eG-LiU-6-4F7AEinGQmsgiyzD-yA@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAHQZ30BLb13Mz5+3MCgV30eG-LiU-6-4F7AEinGQmsgiyzD-yA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/23 11:11, Michal Koutný wrote:
-> Hello.
->
-> On Sat, Jul 01, 2023 at 02:50:49PM +0800, Miaohe Lin <linmiaohe@huawei.com> wrote:
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1806,9 +1806,12 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
->>   		cpuset_for_each_child(cp, css, parent)
->>   			if (is_partition_valid(cp) &&
->>   			    cpumask_intersects(trialcs->cpus_allowed, cp->cpus_allowed)) {
->> +				if (!css_tryget_online(&cp->css))
->> +					continue;
->>   				rcu_read_unlock();
->>   				update_parent_subparts_cpumask(cp, partcmd_invalidate, NULL, &tmp);
->>   				rcu_read_lock();
->> +				css_put(&cp->css);
-> Apologies for a possibly noob question -- why is RCU read lock
-> temporarily dropped within the loop?
-> (Is it only because of callback_lock or cgroup_file_kn_lock (via
-> notify_partition_change()) on PREEMPT_RT?)
->
->
->
-> [
-> OT question:
-> 	cpuset_for_each_child(cp, css, parent)				(1)
-> 		if (is_partition_valid(cp) &&
-> 		    cpumask_intersects(trialcs->cpus_allowed, cp->cpus_allowed)) {
-> 			if (!css_tryget_online(&cp->css))
-> 				continue;
-> 			rcu_read_unlock();
-> 			update_parent_subparts_cpumask(cp, partcmd_invalidate, NULL, &tmp);
-> 			  ...
-> 			  update_tasks_cpumask(cp->parent)
-> 			    ...
-> 			    css_task_iter_start(&cp->parent->css, 0, &it);	(2)
-> 			      ...
-> 			rcu_read_lock();
-> 			css_put(&cp->css);
-> 		}
->
-> May this touch each task same number of times as its depth within
-> herarchy?
+Hi,
 
-I believe the primary reason is because update_parent_subparts_cpumask() 
-can potential run for quite a while. So we don't want to hold the 
-rcu_read_lock for too long. There may also be a potential that 
-schedule() may be called.
+On 7/10/23 08:30, Raul Rangel wrote:
+> On Sun, Jul 9, 2023 at 8:43 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>>
+>> On 7/9/23 18:15, Mario Limonciello wrote:
+>>> On 7/9/23 18:46, Randy Dunlap wrote:
+>>>>
+>>>>
+>>>> On 7/7/23 18:17, Raul E Rangel wrote:
+>>>>> Right now we are proxying the `console=XXX` command line args to the
+>>>>> param_setup_earlycon. This is done because the following are
+>>>>> equivalent:
+>>>>>
+>>>>>      console=uart[8250],mmio,<addr>[,options]
+>>>>>      earlycon=uart[8250],mmio,<addr>[,options]
+>>>>>
+>>>>> In addition, when `earlycon=` or just `earlycon` is specified on the
+>>>>> command line, we look at the SPCR table or the DT to extract the device
+>>>>> options.
+>>>>>
+>>>>> When `console=` is specified on the command line, it's intention is to
+>>>>> disable the console. Right now since we are proxying the `console=`
+>>>>
+>>>> How do you figure this (its intention is to disable the console)?
+>>>
+> 
+> https://www.kernel.org/doc/html/v6.1/admin-guide/kernel-parameters.html
+> says the following:
 
-Cheers,
-Longman
+> console=
 
+[many lines deleted here in kernel-parameters.txt]
+
+>     { null | "" }
+>             Use to disable console output, i.e., to have kernel
+>             console messages discarded.
+>             This must be the only console= parameter used on the
+>             kernel command line.
+> 
+
+OK, I see what you are referring to: "console=" without any following parameters,
+not the general "console=" command line parameter.
+
+Thanks for the clarification.
+
+>         earlycon=       [KNL] Output early console device and options.
+> 
+>             When used with no options, the early console is
+>             determined by stdout-path property in device tree's
+>             chosen node or the ACPI SPCR table if supported by
+>             the platform.
+> 
+> The reason this bug showed up is that ChromeOS has set `console=` for a
+> very long time:
+> https://chromium.googlesource.com/chromiumos/platform/crosutils/+/main/build_kernel_image.sh#282
+> I'm not sure on the exact history, but AFAIK, we don't have the ttyX devices.
+> 
+> Coreboot recently added support for the ACPI SPCR table which in
+> combination with the
+> `console=` arg, we are now seeing earlycon enabled when it shouldn't be.
+> 
+>>> I read that as "it's intention is to disable the default console (tty0)".
+>>
+>> Yes, that "default" word should be there IMO.
+>>
+>> Does this patch affect behavior if someone uses
+>>         console=tty0
+>> i.e., the default?
+>>
+> 
+> No, it shouldn't. This change makes it so that the
+> param_setup_earlycon function gets
+> skipped if there is no value.
+> See https://chromium.googlesource.com/chromiumos/third_party/kernel/+/v6.1/drivers/tty/serial/earlycon.c#223
+
+
+-- 
+~Randy
