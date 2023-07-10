@@ -2,148 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ACD74DC23
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF16674DC2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjGJRTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        id S232226AbjGJRUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjGJRTq (ORCPT
+        with ESMTP id S232147AbjGJRUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:19:46 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B041D128
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:19:45 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3a3b7fafd61so3896450b6e.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:19:45 -0700 (PDT)
+        Mon, 10 Jul 2023 13:20:34 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201F712E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:20:32 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-98de21518fbso625842666b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689009585; x=1691601585;
+        d=google.com; s=20221208; t=1689009630; x=1691601630;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mf12W3QMfs8wvFJMdqGBjbgKzWxSCEjVtEY7fJMchAc=;
-        b=chZ3x25f3s+60NDSQ0WbJLU67n5riu5akD7uta1MmfBjYnD3qhkRXaV0MzbYTUHLy6
-         nd6s8ypIqSXuEYguSk2epTD+HY2nKcsH7+8Nq6ARy29Ake00XMOMiU8bW9kHSku0ijGh
-         gWM+0qwflHgKVV77vvm5DnHzKuRVTLTfhMjVZ8aKiQT50Vx642VdCB28Ur2c5vLwx6bo
-         41efc6E5X4IrXzuf36jSg4msj9szH4161XIK/ogVfkjONxSm5zR7Ks0lIapYZJ3SIqHD
-         vzmA8RNS1vU0U1nqSiaRG04Gn2Rvc24Q9I1r3R4/JoGa26zj0kMmrrzETon7cZIZioLX
-         PD7A==
+        bh=TUvRrbUgojp3S6sSCvyqiMIcXWz8PVCjBGghvW84veI=;
+        b=ht6uj+rb8yZwl2NV6V2gaufj2a9VqDGv3yssM3oEm8JYDAo3AfjXbxHJBoKuO5DlTl
+         pD2WbqWUNWBfOfUcp7EjZQaJuiAnv1BmYyrgKUWyxJdJCQ68MaP1VKmDPuxC7dJIjAX7
+         5lTxg6vkvvnF36m5L1bm4PnNDP4LvpxIoQveWHh2gkoks+XtXvEeE+KHOyBM/KtU7ana
+         rLs2CvLZmdELqO0wio4tAbxozq0KdYtf0J/CTkahgjBxYGRmPFuUf1LzxrU4EkTfeN3Z
+         gpy7JaV38FmOqpGRYZf93Pg/PDCJFItQcB8y5NCti8Gz2Dad+OcDiuukXy3mkez7MG1/
+         Lpcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689009585; x=1691601585;
+        d=1e100.net; s=20221208; t=1689009630; x=1691601630;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mf12W3QMfs8wvFJMdqGBjbgKzWxSCEjVtEY7fJMchAc=;
-        b=HJfD+XNK4kecefBGLBehdVmzcMZ1ktjr7+m6eM7d9p0GK+rXqErL1MgRINqS1bXJ+9
-         rkn8brD6UH94Enj4JThsB0Qc4PDOyrtTrv3tU7YFqzFhDZjAIyKcx8SUIcXTNuP3eKWR
-         bwTONp4A8PHuwyX0hzAyQV6FbgxcveBk1BXTQTnBgZ8ne1kYmwtnA8lqkDc8u2SqoyO5
-         50JVdoFtUfAT4A4B31m14sVtVy0x5qYpMNFHsF9gh8k3+014kDPxZ2Ffn9T5oAHnD4Er
-         Pmcgcx7nY+eB1EiVLy7tI5WSeW2j75k2KRfrtk3UmNubjgGX3QW/+rLSgdgrAnw+ZTt6
-         qR4Q==
-X-Gm-Message-State: ABy/qLbkmoINI2GGF4tJS1FYiBomZjvpfJxLmTb+f6YcDS6SJmmUol2+
-        h7F9pNle8eotiSSJ6Irtkwt49/2S41JmLfuwcNivrA8V
-X-Google-Smtp-Source: APBJJlFM8ZDKgVy49NDz3B7j5aBzgSQO8+18VJjfx3IzNM4skrvEF5DbrZ/rJnoOmaNfdNeaUCY50FaGuUWZ6sqIjmY=
-X-Received: by 2002:a05:6808:2216:b0:3a3:72ef:5959 with SMTP id
- bd22-20020a056808221600b003a372ef5959mr16680965oib.53.1689009585008; Mon, 10
- Jul 2023 10:19:45 -0700 (PDT)
+        bh=TUvRrbUgojp3S6sSCvyqiMIcXWz8PVCjBGghvW84veI=;
+        b=iZO/fyFvnL0T/0E1KG/4FPANEHGKtzDRvRM0gikiarS9D4cT54NOta0DmtOTpvARez
+         fqXUZ+MoaCAuYe6AYnqUpp1GLOsqf4hpghi+AuAjorFLMvZDNoo1muEyb9/F0ywFhjeK
+         fX5LDcoq0dFeYMh7TzBSiijZoFClOlOdveY33IV/ST6MsjHNu1Z6/ElZrHdegMQxYM78
+         byfm5iEA7AY1ZdBFPx6m+8EL494d4TObtzyIjWpIobsdbG2qhTzbEE1kFWS/4NchlA1a
+         JbmtYIFyp29t+noOwpnYRUa0T8pKH+LFrojEU8mVTeex5uBZHO3VvIkUPgBIBB2oRnZ0
+         YImA==
+X-Gm-Message-State: ABy/qLaEyRgVw2FNXlEUcREKAgjiwq599oO9ndli87WenUoZPeIHzJjN
+        AQ+t3kHnItrOUUtVwg4pIi7OrS6gKv6UYQVcqv9svA==
+X-Google-Smtp-Source: APBJJlEwoywxx29c3j+Q6tKCZYdv00R5S9OXHCpuykOBe4v5wpLPGzaltu+U90bW+McFEnOZMwR1EGkBUBdKGHluAn4=
+X-Received: by 2002:a17:907:d23:b0:991:f383:d5c3 with SMTP id
+ gn35-20020a1709070d2300b00991f383d5c3mr17452608ejc.74.1689009630336; Mon, 10
+ Jul 2023 10:20:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710073659.54188-1-xujianghui@cdjrlc.com> <656c6d33a676c141ea35fadb519ccfbc@208suo.com>
-In-Reply-To: <656c6d33a676c141ea35fadb519ccfbc@208suo.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 10 Jul 2023 13:19:33 -0400
-Message-ID: <CADnq5_NwriVSHx27GTpHN1gWZ3Y=dd6ObmvSYHaBX=uf_DEo-A@mail.gmail.com>
-Subject: Re: [PATCH] drm/radeon: ERROR: "foo * bar" should be "foo *bar"
-To:     sunran001@208suo.com
-Cc:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+References: <20230707215540.2324998-1-axelrasmussen@google.com>
+ <20230707215540.2324998-2-axelrasmussen@google.com> <20230708180850.bc938ab49fbfb38b83c367c8@linux-foundation.org>
+In-Reply-To: <20230708180850.bc938ab49fbfb38b83c367c8@linux-foundation.org>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Mon, 10 Jul 2023 10:19:54 -0700
+Message-ID: <CAJHvVcgfN5RVXJ_f3tN2UinV_kWCMyCY_g5oKm=BtgQJz-e7gA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/8] mm: make PTE_MARKER_SWAPIN_ERROR more general
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Brian Geffon <bgeffon@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Yu Zhao <yuzhao@google.com>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Sat, Jul 8, 2023 at 6:08=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> On Fri,  7 Jul 2023 14:55:33 -0700 Axel Rasmussen <axelrasmussen@google.c=
+om> wrote:
+>
+> > Future patches will re-use PTE_MARKER_SWAPIN_ERROR to implement
+> > UFFDIO_POISON, so make some various preparations for that:
+> >
+> > First, rename it to just PTE_MARKER_POISONED. The "SWAPIN" can be
+> > confusing since we're going to re-use it for something not really
+> > related to swap. This can be particularly confusing for things like
+> > hugetlbfs, which doesn't support swap whatsoever. Also rename some
+> > various helper functions.
+> >
+> > Next, fix pte marker copying for hugetlbfs. Previously, it would WARN o=
+n
+> > seeing a PTE_MARKER_SWAPIN_ERROR, since hugetlbfs doesn't support swap.
+> > But, since we're going to re-use it, we want it to go ahead and copy it
+> > just like non-hugetlbfs memory does today. Since the code to do this is
+> > more complicated now, pull it out into a helper which can be re-used in
+> > both places. While we're at it, also make it slightly more explicit in
+> > its handling of e.g. uffd wp markers.
+> >
+> > For non-hugetlbfs page faults, instead of returning VM_FAULT_SIGBUS for
+> > an error entry, return VM_FAULT_HWPOISON. For most cases this change
+> > doesn't matter, e.g. a userspace program would receive a SIGBUS either
+> > way. But for UFFDIO_POISON, this change will let KVM guests get an MCE
+> > out of the box, instead of giving a SIGBUS to the hypervisor and
+> > requiring it to somehow inject an MCE.
+> >
+> > Finally, for hugetlbfs faults, handle PTE_MARKER_POISONED, and return
+> > VM_FAULT_HWPOISON_LARGE in such cases. Note that this can't happen toda=
+y
+> > because the lack of swap support means we'll never end up with such a
+> > PTE anyway, but this behavior will be needed once such entries *can*
+> > show up via UFFDIO_POISON.
+> >
+> > --- a/include/linux/mm_inline.h
+> > +++ b/include/linux/mm_inline.h
+> > @@ -523,6 +523,25 @@ static inline bool mm_tlb_flush_nested(struct mm_s=
+truct *mm)
+> >       return atomic_read(&mm->tlb_flush_pending) > 1;
+> >  }
+> >
+> > +/*
+> > + * Computes the pte marker to copy from the given source entry into ds=
+t_vma.
+> > + * If no marker should be copied, returns 0.
+> > + * The caller should insert a new pte created with make_pte_marker().
+> > + */
+> > +static inline pte_marker copy_pte_marker(
+> > +             swp_entry_t entry, struct vm_area_struct *dst_vma)
+> > +{
+> > +     pte_marker srcm =3D pte_marker_get(entry);
+> > +     /* Always copy error entries. */
+> > +     pte_marker dstm =3D srcm & PTE_MARKER_POISONED;
+> > +
+> > +     /* Only copy PTE markers if UFFD register matches. */
+> > +     if ((srcm & PTE_MARKER_UFFD_WP) && userfaultfd_wp(dst_vma))
+> > +             dstm |=3D PTE_MARKER_UFFD_WP;
+> > +
+> > +     return dstm;
+> > +}
+>
+> Breaks the build with CONFIG_MMU=3Dn (arm allnoconfig).  pte_marker isn't
+> defined.
+>
+> I'll slap #ifdef CONFIG_MMU around this function, but probably somethng m=
+ore
+> fine-grained could be used, like CONFIG_PTE_MARKER_UFFD_WP.  Please
+> consider.
 
-On Mon, Jul 10, 2023 at 3:38=E2=80=AFAM <sunran001@208suo.com> wrote:
+Whoops, sorry about this. This function "ought" to be in
+include/linux/swapops.h where it would be inside a #ifdef CONFIG_MMU
+anyway, but it can't be because it uses userfaultfd_wp() so there'd be
+a circular include. I think just wrapping it in CONFIG_MMU is the
+right way.
+
+But, this has also made me realize we need to not advertise
+UFFDIO_POISON as supported unless we have CONFIG_MMU. I don't want
+HAVE_ARCH_USERFAULTFD_WP for that, because it's only enabled on
+x86_64, whereas I want to support at least arm64 as well. I don't see
+a strong reason not to just use CONFIG_MMU for this too; this feature
+depends on the API in swapops.h, which uses that ifdef, so I don't see
+a lot of value out of creating a new but equivalent config option.
+
+I'll make the needed changes (and also address Peter's comment above)
+and send out a v5.
+
 >
-> Fix nine occurrences of the checkpatch.pl error:
-> ERROR: "foo * bar" should be "foo *bar"
+> btw, both copy_pte_marker() and pte_install_uffd_wp_if_needed() look
+> far too large to justify inlining.  Please review the desirability of
+> this.
 >
-> Signed-off-by: Ran Sun <sunran001@208suo.com>
-> ---
->   drivers/gpu/drm/radeon/atom.c | 14 +++++++-------
->   1 file changed, 7 insertions(+), 7 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/radeon/atom.c
-> b/drivers/gpu/drm/radeon/atom.c
-> index c1bbfbe28bda..11a1940bb26d 100644
-> --- a/drivers/gpu/drm/radeon/atom.c
-> +++ b/drivers/gpu/drm/radeon/atom.c
-> @@ -1156,7 +1156,7 @@ static struct {
->       atom_op_shr, ATOM_ARG_MC}, {
->   atom_op_debug, 0},};
->
-> -static int atom_execute_table_locked(struct atom_context *ctx, int
-> index, uint32_t * params)
-> +static int atom_execute_table_locked(struct atom_context *ctx, int
-> index, uint32_t *params)
->   {
->       int base =3D CU16(ctx->cmd_table + 4 + 2 * index);
->       int len, ws, ps, ptr;
-> @@ -1216,7 +1216,7 @@ static int atom_execute_table_locked(struct
-> atom_context *ctx, int index, uint32
->       return ret;
->   }
->
-> -int atom_execute_table_scratch_unlocked(struct atom_context *ctx, int
-> index, uint32_t * params)
-> +int atom_execute_table_scratch_unlocked(struct atom_context *ctx, int
-> index, uint32_t *params)
->   {
->       int r;
->
-> @@ -1237,7 +1237,7 @@ int atom_execute_table_scratch_unlocked(struct
-> atom_context *ctx, int index, uin
->       return r;
->   }
->
-> -int atom_execute_table(struct atom_context *ctx, int index, uint32_t *
-> params)
-> +int atom_execute_table(struct atom_context *ctx, int index, uint32_t
-> *params)
->   {
->       int r;
->       mutex_lock(&ctx->scratch_mutex);
-> @@ -1359,8 +1359,8 @@ void atom_destroy(struct atom_context *ctx)
->   }
->
->   bool atom_parse_data_header(struct atom_context *ctx, int index,
-> -                uint16_t * size, uint8_t * frev, uint8_t * crev,
-> -                uint16_t * data_start)
-> +                uint16_t *size, uint8_t *frev, uint8_t *crev,
-> +                uint16_t *data_start)
->   {
->       int offset =3D index * 2 + 4;
->       int idx =3D CU16(ctx->data_table + offset);
-> @@ -1379,8 +1379,8 @@ bool atom_parse_data_header(struct atom_context
-> *ctx, int index,
->       return true;
->   }
->
-> -bool atom_parse_cmd_header(struct atom_context *ctx, int index, uint8_t
-> * frev,
-> -               uint8_t * crev)
-> +bool atom_parse_cmd_header(struct atom_context *ctx, int index, uint8_t
-> *frev,
-> +               uint8_t *crev)
->   {
->       int offset =3D index * 2 + 4;
->       int idx =3D CU16(ctx->cmd_table + offset);
