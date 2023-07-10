@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B7A74CB18
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA7574CB1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjGJENG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 00:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S230222AbjGJEOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 00:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjGJEM7 (ORCPT
+        with ESMTP id S230004AbjGJEOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 00:12:59 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD06EA
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 21:12:57 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b89cfb4571so30709835ad.3
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 21:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688962377; x=1691554377;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HB32pg46ZxFMM2zUuxYDzqfAwTA74uUZxd//NR8MeNw=;
-        b=VM4M3cigp2vPb3Dj2gWZ8U9lyou31d7ndnQbI+tDRQ71jR6AFz2SWjfcnOUgH/ZmGY
-         mPOCkU5H1NIiuTmn3Mr0aCtQCEpP4OtZ3sGZiG2KhwzBEFiKqqF4wkyJO7FOE9y2c2gr
-         BbeUpWgGvp6tGBhN/bU7N+T4UEo4INPOZkb9Q=
+        Mon, 10 Jul 2023 00:14:12 -0400
+Received: from mail-pf1-f208.google.com (mail-pf1-f208.google.com [209.85.210.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2426FE5E
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 21:13:49 -0700 (PDT)
+Received: by mail-pf1-f208.google.com with SMTP id d2e1a72fcca58-666eb0346c4so4816903b3a.0
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 21:13:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688962377; x=1691554377;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HB32pg46ZxFMM2zUuxYDzqfAwTA74uUZxd//NR8MeNw=;
-        b=eeF1MdLr3cEqxRZccApB99sPHqH8dAQAj9RUWX/OXFOjqkhHRsZGkTO80bctl1tCYB
-         MgqLhxcsC2cKeYRYjisBQ8Me4Yesg3/+fsX8feO3jMkDESSySLmQucjchPwtw0ulWLCA
-         ZuIqd9jPxFjyxeLvh4bCpLasFFe2XPCqA+KSECSLwF8dpUr6SsyKFVRtTsk4k0+x81Wt
-         +dpk9aE+fEV4kmJXxxDy+UGQEdpjyXhF0mK25TLD1f4jKaf6kUzBoabXh8Q1JaO5FBRh
-         NZ7l06rg9gUv1YeAhrCK/eb2mOt101WL1CADuLAN6bk3mQHKQ+wJxickZQhz0UvDedOR
-         QI1Q==
-X-Gm-Message-State: ABy/qLYRDzqIpMQW7tOdICKRJTdkMFOpzGX3s1RP7yRe67U8Ofs65AIP
-        UW8YtE+UgAZahhqWlenD4ssA7M0wAbuFdwJUSn23Vw==
-X-Google-Smtp-Source: APBJJlHUD8ZGY+mgOYDqCWS4C36RsxREgxeVCZCTCiPP8m0rTNKFwfW0PtMFDDsyQGjuNaltuu1TcJ2VnUhTcAl1MYc=
-X-Received: by 2002:a17:90a:b283:b0:262:d661:75e4 with SMTP id
- c3-20020a17090ab28300b00262d66175e4mr11901101pjr.0.1688962377347; Sun, 09 Jul
- 2023 21:12:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688962428; x=1691554428;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8JBlq8U7o6+oDsoHy839/ATW+65fdJTfCb5NAT7MVVE=;
+        b=U31Pi4EtJSgKsn6uJPRl+qFf2cqTz09XF4vUTObv2iMp4S0bp67KTrUUhHV3mx4kyk
+         g3UIMXGkUGB9DdKqf5NJkEFIYl01eK1Y+1h8aFkmvQ+YpdfR3T60qy8G1iTjaQjDjGbT
+         2Ut/3nrPuYekiPSokWoceAsH3AKTfSkP8cuaKqeqp8v7ukT2tkfLkt8PJl7/fynK/pCL
+         Rwm8jStIDV6R3Y3mSCCWva/aUZqiURSj4bJxrUAkdibXNCjpgeCl8nWlEYpvOwAYlgQ+
+         IYMNSEwf/tqdDx8ziyM/XATHvJ7OxQ+whm0W/S3gjs59HHAsiHQM/J1+HZLoND8H2zsa
+         qfrg==
+X-Gm-Message-State: ABy/qLZRPXmH4TgHMXUk+Z24E1nGLXTqHO3QJaTxnqDN4aln4VhAZfQG
+        8evUBWWP5+s3DnsRwjemPr9bpWjOhOcmKELv1zGmB0b/AwlK
+X-Google-Smtp-Source: APBJJlEiJm0CaXSOMPCfYdtO632w3Ybbqq2RWc0P47XJmVWqpJoT5BAuS2zYQ7FFgQ6J9vWTILUPKJ0OrV4SrIUHgj34tNQ9oMmr
 MIME-Version: 1.0
-References: <20230710013907.43770-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230710013907.43770-1-jiasheng@iscas.ac.cn>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Mon, 10 Jul 2023 09:42:45 +0530
-Message-ID: <CALs4sv3Y4GDhdquNywOtFtkJmKWPGWt+C2hRaAyroRT5t64ARQ@mail.gmail.com>
-Subject: Re: [PATCH] net: dsa: qca8k: Add check for skb_copy
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ansuelsmth@gmail.com,
-        rmk+kernel@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008f7fc806001a3271"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6a00:2d8c:b0:67a:36e3:36b6 with SMTP id
+ fb12-20020a056a002d8c00b0067a36e336b6mr16162746pfb.6.1688962428465; Sun, 09
+ Jul 2023 21:13:48 -0700 (PDT)
+Date:   Sun, 09 Jul 2023 21:13:48 -0700
+In-Reply-To: <0000000000005921ef05ffddc3b7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000096797d06001a359d@google.com>
+Subject: Re: [syzbot] [f2fs?] possible deadlock in f2fs_getxattr
+From:   syzbot <syzbot+e5600587fa9cbf8e3826@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,126 +57,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000008f7fc806001a3271
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+syzbot has found a reproducer for the following issue on:
 
-On Mon, Jul 10, 2023 at 7:09=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.c=
-n> wrote:
->
-> Add check for the return value of skb_copy in order to avoid NULL pointer
-> dereference.
->
-> Fixes: 2cd548566384 ("net: dsa: qca8k: add support for phy read/write wit=
-h mgmt Ethernet")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/dsa/qca/qca8k-8xxx.c | 3 +++
->  1 file changed, 3 insertions(+)
->
+HEAD commit:    c192ac735768 MAINTAINERS 2: Electric Boogaloo
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1115adb0a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9831e2c2660aae77
+dashboard link: https://syzkaller.appspot.com/bug?extid=e5600587fa9cbf8e3826
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136809b4a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1484e74ca80000
 
-Looks good to me.
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a05cca457512/disk-c192ac73.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/87f55eba1b87/vmlinux-c192ac73.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/81e9815bafe0/bzImage-c192ac73.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/45865ba5a074/mount_0.gz
 
-> diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k=
--8xxx.c
-> index f7d7cfb2fd86..09b80644c11b 100644
-> --- a/drivers/net/dsa/qca/qca8k-8xxx.c
-> +++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-> @@ -588,6 +588,9 @@ qca8k_phy_eth_busy_wait(struct qca8k_mgmt_eth_data *m=
-gmt_eth_data,
->         bool ack;
->         int ret;
->
-> +       if (!skb)
-> +               return -ENOMEM;
-> +
->         reinit_completion(&mgmt_eth_data->rw_done);
->
->         /* Increment seq_num and set it in the copy pkt */
-> --
-> 2.25.1
->
->
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e5600587fa9cbf8e3826@syzkaller.appspotmail.com
 
---0000000000008f7fc806001a3271
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-syzkaller-12491-gc192ac735768 #0 Not tainted
+------------------------------------------------------
+syz-executor225/5016 is trying to acquire lock:
+ffff888072747888 (&fi->i_xattr_sem){.+.+}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
+ffff888072747888 (&fi->i_xattr_sem){.+.+}-{3:3}, at: f2fs_getxattr+0xb96/0xfd0 fs/f2fs/xattr.c:532
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDtehhe41SYp4p2rYTIq7dr6EgOFpIrx
-i31hLWTq4I+VMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcx
-MDA0MTI1N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAnlYMbdkISK7LIgZmYNWfd2m22+YOM4VJ2fl53WKjqnF2PeUwR
-9JHEZ/EiSgoXMyxMMZpZ/fOfxI2gQ6aZ8uAu5QaqPAjLCvEIGGsBgnirw97FmQAfIaMci5qEallB
-gEsT9NWhb+5S3Ex89z4aLSLM5j6Ortokhj4aroDOBpMqk3h64fAMoHbQ+kjmExuGVgvt+ljlk/e/
-9VrYa6kKmND1H+1GVvRbZ9+LnzWVTd8ZJFweHD4EhMPVV69+ES/r5eIuqaQ6rCLGipV9mzWgwfzX
-sefbnps/K9k2uaOGupjF5wHdUjaOIfjGHCXe+gYaIQdnhL8uwRmDpikCAuLFDyIc
---0000000000008f7fc806001a3271--
+but task is already holding lock:
+ffff88807274b668 (&fi->i_sem){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
+ffff88807274b668 (&fi->i_sem){+.+.}-{3:3}, at: f2fs_do_tmpfile+0x24/0x1d0 fs/f2fs/dir.c:838
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&fi->i_sem){+.+.}-{3:3}:
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
+       f2fs_add_inline_entry+0x2c4/0x6c0 fs/f2fs/inline.c:644
+       f2fs_add_dentry+0xa6/0x240 fs/f2fs/dir.c:784
+       f2fs_do_add_link+0x183/0x270 fs/f2fs/dir.c:827
+       f2fs_add_link fs/f2fs/f2fs.h:3554 [inline]
+       f2fs_create+0x3c1/0x670 fs/f2fs/namei.c:377
+       lookup_open.isra.0+0x1050/0x1400 fs/namei.c:3492
+       open_last_lookups fs/namei.c:3560 [inline]
+       path_openat+0x969/0x2710 fs/namei.c:3790
+       do_filp_open+0x1ba/0x410 fs/namei.c:3820
+       do_sys_openat2+0x160/0x1c0 fs/open.c:1407
+       do_sys_open fs/open.c:1422 [inline]
+       __do_sys_openat fs/open.c:1438 [inline]
+       __se_sys_openat fs/open.c:1433 [inline]
+       __x64_sys_openat+0x143/0x1f0 fs/open.c:1433
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&fi->i_xattr_sem){.+.+}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3142 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+       validate_chain kernel/locking/lockdep.c:3876 [inline]
+       __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+       lock_acquire kernel/locking/lockdep.c:5761 [inline]
+       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+       down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
+       f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
+       f2fs_getxattr+0xb96/0xfd0 fs/f2fs/xattr.c:532
+       __f2fs_get_acl+0x59/0x610 fs/f2fs/acl.c:179
+       f2fs_acl_create fs/f2fs/acl.c:377 [inline]
+       f2fs_init_acl+0x152/0xb40 fs/f2fs/acl.c:420
+       f2fs_init_inode_metadata+0x15d/0x1260 fs/f2fs/dir.c:558
+       f2fs_do_tmpfile+0x33/0x1d0 fs/f2fs/dir.c:839
+       __f2fs_tmpfile+0x1db/0x440 fs/f2fs/namei.c:884
+       f2fs_ioc_start_atomic_write+0xcf4/0x1330 fs/f2fs/file.c:2099
+       __f2fs_ioctl+0x317f/0xa5f0 fs/f2fs/file.c:4195
+       f2fs_ioctl+0x194/0x220 fs/f2fs/file.c:4287
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x19d/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&fi->i_sem);
+                               lock(&fi->i_xattr_sem);
+                               lock(&fi->i_sem);
+  rlock(&fi->i_xattr_sem);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor225/5016:
+ #0: ffff88807a306410 (sb_writers#10){.+.+}-{0:0}, at: f2fs_ioc_start_atomic_write+0x1a7/0x1330 fs/f2fs/file.c:2056
+ #1: ffff888072749250 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:771 [inline]
+ #1: ffff888072749250 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: f2fs_ioc_start_atomic_write+0x1e3/0x1330 fs/f2fs/file.c:2060
+ #2: ffff888072749830 (&fi->i_gc_rwsem[WRITE]){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
+ #2: ffff888072749830 (&fi->i_gc_rwsem[WRITE]){+.+.}-{3:3}, at: f2fs_ioc_start_atomic_write+0x2e6/0x1330 fs/f2fs/file.c:2074
+ #3: ffff88807ba403b0 (&sbi->cp_rwsem){.+.+}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
+ #3: ffff88807ba403b0 (&sbi->cp_rwsem){.+.+}-{3:3}, at: f2fs_lock_op fs/f2fs/f2fs.h:2151 [inline]
+ #3: ffff88807ba403b0 (&sbi->cp_rwsem){.+.+}-{3:3}, at: __f2fs_tmpfile+0x1ae/0x440 fs/f2fs/namei.c:879
+ #4: ffff88807274b668 (&fi->i_sem){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2133 [inline]
+ #4: ffff88807274b668 (&fi->i_sem){+.+.}-{3:3}, at: f2fs_do_tmpfile+0x24/0x1d0 fs/f2fs/dir.c:838
+
+stack backtrace:
+CPU: 1 PID: 5016 Comm: syz-executor225 Not tainted 6.4.0-syzkaller-12491-gc192ac735768 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/03/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x2df/0x3b0 kernel/locking/lockdep.c:2195
+ check_prev_add kernel/locking/lockdep.c:3142 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+ validate_chain kernel/locking/lockdep.c:3876 [inline]
+ __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+ lock_acquire kernel/locking/lockdep.c:5761 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+ down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
+ f2fs_down_read fs/f2fs/f2fs.h:2108 [inline]
+ f2fs_getxattr+0xb96/0xfd0 fs/f2fs/xattr.c:532
+ __f2fs_get_acl+0x59/0x610 fs/f2fs/acl.c:179
+ f2fs_acl_create fs/f2fs/acl.c:377 [inline]
+ f2fs_init_acl+0x152/0xb40 fs/f2fs/acl.c:420
+ f2fs_init_inode_metadata+0x15d/0x1260 fs/f2fs/dir.c:558
+ f2fs_do_tmpfile+0x33/0x1d0 fs/f2fs/dir.c:839
+ __f2fs_tmpfile+0x1db/0x440 fs/f2fs/namei.c:884
+ f2fs_ioc_start_atomic_write+0xcf4/0x1330 fs/f2fs/file.c:2099
+ __f2fs_ioctl+0x317f/0xa5f0 fs/f2fs/file.c:4195
+ f2fs_ioctl+0x194/0x220 fs/f2fs/file.c:4287
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x19d/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe30f74c969
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc55cdfb78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe30f74c969
+RDX: 0000000000000000 RSI: 000000000000f501 RDI: 0000000000000004
+RBP: 00007fe30f70c200 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 00000000
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
