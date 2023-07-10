@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A0374D3AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D5074D3BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbjGJKia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S233453AbjGJKj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbjGJKiZ (ORCPT
+        with ESMTP id S233429AbjGJKju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:38:25 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A789AB2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:38:21 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-78374596182so215365939f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688985500; x=1691577500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hvz04yJSt5agLndtywybtJHsB7jWS+1+gKVSsWWw8q8=;
-        b=ZfeBuOSdYbBlOpAuhNHZJi7BqVWFERjTyEFqrZqpYPyypLFucIAUo3RB41SWrv/fNy
-         6MQeOYsEhQX1N9AEnZsZhshl6efmEASygO1KUfuF7HCLMPjfnbqUMiHBw8EaKuNZHj2U
-         ZcASuu/2lYL77GerjZ4Um80miQJ03HJjjK/Zi1rE1/wrztQ4Dhqi/lcFW71Dc+pKyBOt
-         iixCNR9dUX0YM0n83hosROqtaIW3lpgFSs04PVQkDrwAIc7GN31MHsQa7TpCu6KbUUD1
-         zYdxalep44S/+wDCu0OdM37vejXarY7nz2wuEzGAFIXAjwl5sN0QHTA/4X1wazKUXAwe
-         JpXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688985500; x=1691577500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hvz04yJSt5agLndtywybtJHsB7jWS+1+gKVSsWWw8q8=;
-        b=AlGmZTU6jL3DxS8pqEEvfrpI/uzx+Jdm2BBu5z9lecE5GcsoeIFTiQLphaeqCQ3wR6
-         FRysBi3Mr/clo0BGEyIwOWRAL3Kc1/pj1OFN5AD1KtJV8T8VnITn0WqXjVX/uukKGTiC
-         xfBg88byX2KHDRQ2nL4qjfLhukW/X4SzHZWg+RfbTnGa6fkdh4knx9WOGWDfbTkgUyW7
-         FKOcaHlsTNXYzCgV+U5AqV3q2/IfCrEGWgyuKINOI+tUYu3+aN+Cl51qjNHXIJB68I9L
-         5mrLunKsk0AkJfwWvTAUxWyQ3/1LhIcr7UimF9HWcyRtgK2SHcmupOKq9bLpwh5UOLf6
-         Qu8w==
-X-Gm-Message-State: ABy/qLY59L5CRnVkklUML5tkYrhk2DEeWfX+8cRU4oULk0nI+xQRismk
-        vyBzq4IPpDmVEeMV7bc2HSsuI8YqAgX5mib0uai8Hg==
-X-Google-Smtp-Source: APBJJlHV0c/RmEiHfQDPTa8JHUyb9BGshA7xPbLYwdygcLChbrq+ZTqXINPJJAdemOgkFW139l34UqIqekrgl+kvTSg=
-X-Received: by 2002:a5d:9448:0:b0:783:65ba:8614 with SMTP id
- x8-20020a5d9448000000b0078365ba8614mr11099647ior.10.1688985500443; Mon, 10
- Jul 2023 03:38:20 -0700 (PDT)
+        Mon, 10 Jul 2023 06:39:50 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D52CC;
+        Mon, 10 Jul 2023 03:39:28 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qIoIc-0000vr-Cy; Mon, 10 Jul 2023 12:39:22 +0200
+Message-ID: <f04feee0-bb2c-b778-0603-2817c5b9bc40@leemhuis.info>
+Date:   Mon, 10 Jul 2023 12:39:19 +0200
 MIME-Version: 1.0
-References: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
-In-Reply-To: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 10 Jul 2023 12:37:44 +0200
-Message-ID: <CAG_fn=XH8s8JbMKjsyyw_FZhLuoBqAwWU_+hCGyAXwe3wTBCWQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: kfence: allocate kfence_metadata at runtime
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     elver@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, muchun.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [Regression][BISECTED] kernel boot hang after 19898ce9cf8a
+ ("wifi: iwlwifi: split 22000.c into multiple files")
+Content-Language: en-US, de-DE
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "Baruch, Yaara" <yaara.baruch@intel.com>,
+        "Greenman, Gregory" <gregory.greenman@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Ben Ami, Golan" <golan.ben.ami@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        Xi Ruoyao <xry111@xry111.site>
+References: <b533071f38804247f06da9e52a04f15cce7a3836.camel@intel.com>
+ <a4265090-d6b8-b185-a400-b09b27a347cc@leemhuis.info>
+ <CAHk-=wg23SdKRcn2W+BWWEfJ2Efp0sreJx9=iw0AsUPjW3qznw@mail.gmail.com>
+ <446c25888d9316d0f15e6bcc6ecb100dda99324e.camel@sipsolutions.net>
+ <e7d7945055802e5d3f1b42750716bc6a314ec97b.camel@intel.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <e7d7945055802e5d3f1b42750716bc6a314ec97b.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688985569;044dc97e;
+X-HE-SMSGID: 1qIoIc-0000vr-Cy
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,22 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 5:27=E2=80=AFAM 'Peng Zhang' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> kfence_metadata is currently a static array. For the purpose of
-> allocating scalable __kfence_pool, we first change it to runtime
-> allocation of metadata. Since the size of an object of kfence_metadata
-> is 1160 bytes, we can save at least 72 pages (with default 256 objects)
-> without enabling kfence.
->
-> Below is the numbers obtained in qemu (with default 256 objects).
-> before: Memory: 8134692K/8388080K available (3668K bss)
-> after: Memory: 8136740K/8388080K available (1620K bss)
-> More than expected, it saves 2MB memory.
+[CCing one
 
-Do you have an understanding of where these 2MB come from?
-According to your calculations (which seem valid) the gain should be
-290K, so either 2MB is irrelevant to your change (then these numbers
-should be omitted), or there's some hidden cost that we do not know
-about.
+On 10.07.23 03:54, Zhang, Rui wrote:
+> On Sun, 2023-07-09 at 20:07 +0200, Johannes Berg wrote:
+>> On Sun, 2023-07-09 at 09:31 -0700, Linus Torvalds wrote:
+>>> On Fri, 7 Jul 2023 at 03:55, Linux regression tracking (Thorsten
+>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>
+>>>> [CCing the regression list, netdev, the net maintainers, and
+>>>> Linus;
+>>>> Johannes and Kalle as well, but just for the record, they afaik
+>>>> are
+>>>> unavailable]
+>>>
+>>> So I will release rc1 with this issue, but remind me - if it hasn't
+>>> had any traction next week and the radio silence continues, I'll
+>>> just
+>>> revert it all.
+>>
+>> Sorry. I got back home a few hours ago (for few days anyway) and I
+>> think
+>> I already know what the issue is. 
+
+Many many thx for taking a look at this!
+
+FWIW in case anyone wonders where that fix is, find it here:
+https://lore.kernel.org/all/20230709181323.12085-2-johannes@sipsolutions.net/
+
+(or here: https://bugzilla.kernel.org/show_bug.cgi?id=217622#c9 )
+
+> I have tested Johannes' patch and it fixes the problem on my side.
+
+Ahh, great.
+
+Ciao, Thorsten
