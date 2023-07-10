@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDC274E0D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568B774E0D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjGJWAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S230091AbjGJWBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 18:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjGJWAe (ORCPT
+        with ESMTP id S230021AbjGJWBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:00:34 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D77DB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:00:33 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9939fbb7191so995847366b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:00:33 -0700 (PDT)
+        Mon, 10 Jul 2023 18:01:19 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069EFDB;
+        Mon, 10 Jul 2023 15:01:19 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b8ad907ba4so24823775ad.0;
+        Mon, 10 Jul 2023 15:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689026432; x=1691618432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QfZzCSrgvGz9BGtS4wsvtCeE34B7/lj4xCbe4JnIP2Q=;
-        b=IELdvlh9d5ofdqTbS2z8RhDc+X1hOJTuBZf0ZbiY48jlt9lPfkJVZe/Wb+ANJ63yBp
-         3tbyTl8zoOZLeyBV+rFCAm3x940PyUDWPt8floL10TItqyH+FrB/lAGZJtOMKZtZt+LE
-         AXebzx74RigJZLsDEDj+71KrNZ7AIkM3jSIZhPTcrbtV9iT+zovNNmAfibmyJQAcAG3s
-         gar9gMyoH8kJeZoRZEbQRzmJOZpL3w6TvRyJ05iXZGAzAKumLDVIkbWrwobqCp/EnIhf
-         WQ1hrqXvH6LHXODojzsxf3hq+oeedejJX94Hat/Qve2IHSIsFzVJsuq7ZMf2QnUCPaxw
-         LZVw==
+        d=gmail.com; s=20221208; t=1689026478; x=1691618478;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=noXk0R27HPx3THK3yfqnsU/gqkuv8yKrLuQKPLP+V2A=;
+        b=nGu3r0sV3DJyP0P2MeifuOet0MgQekGDmeWLcDPUE1xP4123fWOR4Cb5X5qMoYi3Am
+         PcBNhepVVlV3wvm5HymMyCPiTc+i1w+fG4qUxaZcfa7g2ntLLJho10RCQ2B66YU94NwF
+         U829Q13l3mRUxjw1fWICWNHT6nBbbou0yntiUCDqCkEjJ/EgiUTrU78dR/V4EfGg3Gbd
+         9UD4TOIS91gX6yY98aSeG607aDZ4zqZfIszzQNJZsjb2PD9FLGmHF9AKqF90A5vcXFoS
+         t5Qx0j3/ACqCTHhNcR5J39c4/PFAGrq1kaJF5oIZd7cHKPOcng4ki0WAQiebBf9O1BZZ
+         Xt6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689026432; x=1691618432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QfZzCSrgvGz9BGtS4wsvtCeE34B7/lj4xCbe4JnIP2Q=;
-        b=Hc5iC/Tj1uxg9anbjU7cLHfLHILJ30sQZ92DIlEfdTpHTH+w/EL3LCkk4fRe4LqGfg
-         eGjAOlCg+SHqKfAK7xQ34bGVzddyPPnbbpRwlHvSGPvKpgusGjNbYpdTx2seUD8ikcNW
-         01NQoBJ0pzMc4Y0efmE9dLQXXgj1lyHbrw/YsR1RLyE62b3bpQqT6l+D88Bhdnu3ihaY
-         +eoLjEV6R2hpwsU2pt9gzvz1zoBkujy9A6JEavQhwmgyanOGlyAYorRrfbCYbVr7OvOX
-         D4hLdONFU/1EMGvNwo5GRXtikgG6amSiJoU870SLbyRg01/G6N34efl5GDGd+CUWmubD
-         7KPQ==
-X-Gm-Message-State: ABy/qLb95bRRDly03gcREdgf3wtZexzZbzceYIW66UwDwlpKuuGnmx1W
-        1iFmvL4R92kZ7ZoQn4t67iZSAgSnfzie5eC0Gajs5A==
-X-Google-Smtp-Source: APBJJlF6PnMVGMOTSmSf3fdPKR5ba1hPx/zIlHrvaJ4KBennSkMIDBj6INtn7vwYR7M3C9Di2GejevZRUk2uTbDHu9g=
-X-Received: by 2002:a17:907:c29:b0:993:e85c:4ad6 with SMTP id
- ga41-20020a1709070c2900b00993e85c4ad6mr13335087ejc.7.1689026431632; Mon, 10
- Jul 2023 15:00:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689026478; x=1691618478;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=noXk0R27HPx3THK3yfqnsU/gqkuv8yKrLuQKPLP+V2A=;
+        b=Iv7hI8mxwa8QiVOap/6hT7p/W62bR4LInfN8pSs4iA82paQR0p0QWT3dqe6f1kjYa5
+         MxFamqK8u6TpbtUbFotAB3wu+gaKGFeXPUSfVTa5Uq9dgfiIxRwSzM0OJhod801zYNQb
+         0E/M+aRjmVt6n1C5wPZmFkjQD4Am8SJDJZ+7ajl5wHnbkTKgi9ht/aFo+Lv2uqTw40ba
+         6vJXjU271Ow7r7tsqa7yxHYhUBrMm1svtGMQJc3BvJCU2e6fHnS59zcyYL3x6Ho3QnJ1
+         jNxQ24rhAS/A6ikSVaUAzidq89EMuR8vULr1kHCUyrRARb8deHU8FlZ33l9buZP/tQdv
+         Ws6Q==
+X-Gm-Message-State: ABy/qLZBydgj3D2BcX9jyxLZxU2vm/ljQ6k8A5wx38+3ZoEmdL2GXlXI
+        hB23S/ntvqaOC4UY164AMf1XS9fMaSkND19s
+X-Google-Smtp-Source: APBJJlG1RJ1pRviKI/Ux2CN+PjCKK9mzBVgbONzmfvtdM05eJ71EmYz51bSX8G3qb9jbxfqJFlmDRQ==
+X-Received: by 2002:a17:903:482:b0:1b8:a2af:fe23 with SMTP id jj2-20020a170903048200b001b8a2affe23mr10920008plb.2.1689026478150;
+        Mon, 10 Jul 2023 15:01:18 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:76f2:d743:45e6:d02:e038])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b001b3df3ae3f8sm349404plx.281.2023.07.10.15.01.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 15:01:17 -0700 (PDT)
+From:   Anup Sharma <anupnewsmail@gmail.com>
+X-Google-Original-From: Anup Sharma <AnupSharma>
+Date:   Tue, 11 Jul 2023 03:31:10 +0530
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Anup Sharma <anupnewsmail@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] scripts: python: implement get or create stack
+ function
+Message-ID: <ZKx/pqBA6+14qkeN@yoga>
+References: <cover.1688585597.git.anupnewsmail@gmail.com>
+ <d432405a93438f1780a767567b69bcdab32e1683.1688585597.git.anupnewsmail@gmail.com>
+ <CAM9d7ciAeGJ=n6DiR9=0K1AmN1mLoYXqYVjFFEPPD8UnRrstoA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230707215540.2324998-1-axelrasmussen@google.com>
- <20230707215540.2324998-2-axelrasmussen@google.com> <20230708180850.bc938ab49fbfb38b83c367c8@linux-foundation.org>
- <CAJHvVcgfN5RVXJ_f3tN2UinV_kWCMyCY_g5oKm=BtgQJz-e7gA@mail.gmail.com>
-In-Reply-To: <CAJHvVcgfN5RVXJ_f3tN2UinV_kWCMyCY_g5oKm=BtgQJz-e7gA@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 10 Jul 2023 14:59:55 -0700
-Message-ID: <CAJHvVch5j=J=d-TqC1bgN6bKLrr0N3W7cwSOAqHf8O3axqapwA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/8] mm: make PTE_MARKER_SWAPIN_ERROR more general
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7ciAeGJ=n6DiR9=0K1AmN1mLoYXqYVjFFEPPD8UnRrstoA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,127 +84,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 10:19=E2=80=AFAM Axel Rasmussen
-<axelrasmussen@google.com> wrote:
->
-> On Sat, Jul 8, 2023 at 6:08=E2=80=AFPM Andrew Morton <akpm@linux-foundati=
-on.org> wrote:
+On Wed, Jul 05, 2023 at 10:55:52PM -0700, Namhyung Kim wrote:
+> On Wed, Jul 5, 2023 at 12:48 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
 > >
-> > On Fri,  7 Jul 2023 14:55:33 -0700 Axel Rasmussen <axelrasmussen@google=
-.com> wrote:
+> > The get_or_create_stack function is responsible for retrieving
+> > or creating a stack based on the provided frame and prefix.
+> > It first generates a key using the frame and prefix values.
+> > If the stack corresponding to the key is found in the stackMap,
+> > it is returned. Otherwise, a new stack is created by appending
+> > the prefix and frame to the stackTable's 'data' array. The key
+> > and the index of the newly created stack are added to the
+> > stackMap for future reference.
 > >
-> > > Future patches will re-use PTE_MARKER_SWAPIN_ERROR to implement
-> > > UFFDIO_POISON, so make some various preparations for that:
-> > >
-> > > First, rename it to just PTE_MARKER_POISONED. The "SWAPIN" can be
-> > > confusing since we're going to re-use it for something not really
-> > > related to swap. This can be particularly confusing for things like
-> > > hugetlbfs, which doesn't support swap whatsoever. Also rename some
-> > > various helper functions.
-> > >
-> > > Next, fix pte marker copying for hugetlbfs. Previously, it would WARN=
- on
-> > > seeing a PTE_MARKER_SWAPIN_ERROR, since hugetlbfs doesn't support swa=
-p.
-> > > But, since we're going to re-use it, we want it to go ahead and copy =
-it
-> > > just like non-hugetlbfs memory does today. Since the code to do this =
-is
-> > > more complicated now, pull it out into a helper which can be re-used =
-in
-> > > both places. While we're at it, also make it slightly more explicit i=
-n
-> > > its handling of e.g. uffd wp markers.
-> > >
-> > > For non-hugetlbfs page faults, instead of returning VM_FAULT_SIGBUS f=
-or
-> > > an error entry, return VM_FAULT_HWPOISON. For most cases this change
-> > > doesn't matter, e.g. a userspace program would receive a SIGBUS eithe=
-r
-> > > way. But for UFFDIO_POISON, this change will let KVM guests get an MC=
-E
-> > > out of the box, instead of giving a SIGBUS to the hypervisor and
-> > > requiring it to somehow inject an MCE.
-> > >
-> > > Finally, for hugetlbfs faults, handle PTE_MARKER_POISONED, and return
-> > > VM_FAULT_HWPOISON_LARGE in such cases. Note that this can't happen to=
-day
-> > > because the lack of swap support means we'll never end up with such a
-> > > PTE anyway, but this behavior will be needed once such entries *can*
-> > > show up via UFFDIO_POISON.
-> > >
-> > > --- a/include/linux/mm_inline.h
-> > > +++ b/include/linux/mm_inline.h
-> > > @@ -523,6 +523,25 @@ static inline bool mm_tlb_flush_nested(struct mm=
-_struct *mm)
-> > >       return atomic_read(&mm->tlb_flush_pending) > 1;
-> > >  }
-> > >
-> > > +/*
-> > > + * Computes the pte marker to copy from the given source entry into =
-dst_vma.
-> > > + * If no marker should be copied, returns 0.
-> > > + * The caller should insert a new pte created with make_pte_marker()=
-.
-> > > + */
-> > > +static inline pte_marker copy_pte_marker(
-> > > +             swp_entry_t entry, struct vm_area_struct *dst_vma)
-> > > +{
-> > > +     pte_marker srcm =3D pte_marker_get(entry);
-> > > +     /* Always copy error entries. */
-> > > +     pte_marker dstm =3D srcm & PTE_MARKER_POISONED;
-> > > +
-> > > +     /* Only copy PTE markers if UFFD register matches. */
-> > > +     if ((srcm & PTE_MARKER_UFFD_WP) && userfaultfd_wp(dst_vma))
-> > > +             dstm |=3D PTE_MARKER_UFFD_WP;
-> > > +
-> > > +     return dstm;
-> > > +}
+> > Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> > ---
+> >  tools/perf/scripts/python/firefox-gecko-converter.py | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
 > >
-> > Breaks the build with CONFIG_MMU=3Dn (arm allnoconfig).  pte_marker isn=
-'t
-> > defined.
+> > diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > index e56864e78dc1..6f69c083d3ff 100644
+> > --- a/tools/perf/scripts/python/firefox-gecko-converter.py
+> > +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > @@ -65,6 +65,17 @@ def process_event(param_dict):
+> >                         },
+> >                         'data': [],
+> >                 }
+> > +               stringTable = []
+> > +
+> > +               stackMap = dict()
+> > +               def get_or_create_stack(frame, prefix):
+> > +                       key = f"{frame}" if prefix is None else f"{frame},{prefix}"
+> > +                       stack = stackMap.get(key)
+> 
+> I'm confused about what the 'stack' is.
+
+The stack is a list of frames.
+
+> > +                       if stack is None:
+> > +                               stack = len(stackTable['data'])
+> 
+> It seems like a kind of index for the stackTable's data.
+
+Yes, it is an index.
+
+> > +                               stackTable['data'].append([prefix, frame])
+> > +                               stackMap[key] = stack
+> > +                       return stack
+> 
+> So this function returns an index, right?
+
+Correct, it returns an index. This index allows to access or identify
+a specific stack within the table.
+
+> Thanks,
+> Namhyung
+> 
+> 
 > >
-> > I'll slap #ifdef CONFIG_MMU around this function, but probably somethng=
- more
-> > fine-grained could be used, like CONFIG_PTE_MARKER_UFFD_WP.  Please
-> > consider.
->
-> Whoops, sorry about this. This function "ought" to be in
-> include/linux/swapops.h where it would be inside a #ifdef CONFIG_MMU
-> anyway, but it can't be because it uses userfaultfd_wp() so there'd be
-> a circular include. I think just wrapping it in CONFIG_MMU is the
-> right way.
->
-> But, this has also made me realize we need to not advertise
-> UFFDIO_POISON as supported unless we have CONFIG_MMU. I don't want
-> HAVE_ARCH_USERFAULTFD_WP for that, because it's only enabled on
-> x86_64, whereas I want to support at least arm64 as well. I don't see
-> a strong reason not to just use CONFIG_MMU for this too; this feature
-> depends on the API in swapops.h, which uses that ifdef, so I don't see
-> a lot of value out of creating a new but equivalent config option.
-
-Actually, I'm being silly. CONFIG_USERFAULTFD depends on CONFIG_MMU,
-so we don't need to worry about most of this.
-
-Andrew's fix to just wrap the helper in CONFIG_MMU is enough.
-
->
-> I'll make the needed changes (and also address Peter's comment above)
-> and send out a v5.
->
-> >
-> > btw, both copy_pte_marker() and pte_install_uffd_wp_if_needed() look
-> > far too large to justify inlining.  Please review the desirability of
-> > this.
-
-As far as inlining goes, I'm not opposed to un-inlining this, I was
-mainly copying that pattern from existing helpers in swapops.h.
-
-One question is, if it weren't inline, where should it go? There is no
-mm/swapops.c which I would say is otherwise the proper place for it. I
-don't see any other good place for the functions to go. The one I'm
-introducing isn't userfaultfd-specific so userfaultfd.c seems wrong.
-
-> >
+> >         def _addThreadSample(pid, tid, threadName, time_stamp, stack):
+> >                 thread = thread_map.get(tid)
+> > --
+> > 2.34.1
 > >
