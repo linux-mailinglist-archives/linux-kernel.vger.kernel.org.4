@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A1974D457
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D511874D459
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjGJLOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S231546AbjGJLPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjGJLOj (ORCPT
+        with ESMTP id S229627AbjGJLPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:14:39 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAE2DE;
-        Mon, 10 Jul 2023 04:14:37 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36ABEL7K017773;
-        Mon, 10 Jul 2023 06:14:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688987661;
-        bh=lEG4EkiJoyjdNaLGVyxMsl1ogCUgIuEE4QUrYtNYdk0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=CkqGTlT3bDjBbrBV/D5MdRgXwxvj0N2B8RB1xeYPX855NIOOr9GvSnTI7AqjPrtwc
-         fgueWR42oPr4DLxe3fle98IGtkztYxsZ3j85gX//dfc/5dmW0vmglCU2VJC25w704e
-         zb5xlGBY5MakSE25Zt3snqOl3nReFPMZrvwVop1Q=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36ABELtW023174
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 10 Jul 2023 06:14:21 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
- Jul 2023 06:14:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 10 Jul 2023 06:14:20 -0500
-Received: from [172.24.227.83] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36ABEGYW089298;
-        Mon, 10 Jul 2023 06:14:17 -0500
-Message-ID: <dc2abecb-c3c6-0265-4352-89737b26de66@ti.com>
-Date:   Mon, 10 Jul 2023 16:44:16 +0530
+        Mon, 10 Jul 2023 07:15:40 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6BED2;
+        Mon, 10 Jul 2023 04:15:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Vn1s.Sb_1688987732;
+Received: from 30.240.113.134(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vn1s.Sb_1688987732)
+          by smtp.aliyun-inc.com;
+          Mon, 10 Jul 2023 19:15:33 +0800
+Message-ID: <dcb4e4d8-a9ec-14af-3529-e8646b2606ad@linux.alibaba.com>
+Date:   Mon, 10 Jul 2023 19:15:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/2] usb: cdns3: fix incorrect calculation of
- ep_buf_size when more than one config
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [Patch v2] perf/core: Bail out early if the request AUX area is
+ out of bound
 Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>
-CC:     <Thinh.Nguyen@synopsys.com>, <andriy.shevchenko@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <imx@lists.linux.dev>,
-        <jgilab@gmail.com>, <jun.li@nxp.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <peter.chen@kernel.org>, <quic_eserrao@quicinc.com>,
-        <quic_prashk@quicinc.com>, <rogerq@kernel.org>
-References: <20230707230015.494999-1-Frank.Li@nxp.com>
- <20230707230015.494999-2-Frank.Li@nxp.com>
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <20230707230015.494999-2-Frank.Li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     alexander.shishkin@linux.intel.com, peterz@infradead.org,
+        james.clark@arm.com, leo.yan@linaro.org
+Cc:     mingo@redhat.com, baolin.wang@linux.alibaba.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
+In-Reply-To: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,45 +51,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7/8/23 4:30 AM, Frank Li wrote:
-> Previously, the cdns3_gadget_check_config() function in the cdns3 driver
-> mistakenly calculated the ep_buf_size by considering only one
-> configuration's endpoint information because "claimed" will be clear after
-> call usb_gadget_check_config().
+On 2023/6/13 20:32, Shuai Xue wrote:
+> When perf-record with a large AUX area, e.g 4GB, it fails with:
 > 
-> The fix involves checking the private flags EP_CLAIMED instead of relying
-> on the "claimed" flag.
+>     #perf record -C 0 -m ,4G -e arm_spe_0// -- sleep 1
+>     failed to mmap with 12 (Cannot allocate memory)
 > 
-> Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to composite EP number")
-> Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> and it reveals a WARNING with __alloc_pages():
+> 
+> [   66.595604] ------------[ cut here ]------------
+> [   66.600206] WARNING: CPU: 44 PID: 17573 at mm/page_alloc.c:5568 __alloc_pages+0x1ec/0x248
+> [   66.608375] Modules linked in: ip6table_filter(E) ip6_tables(E) iptable_filter(E) ebtable_nat(E) ebtables(E) aes_ce_blk(E) vfat(E) fat(E) aes_ce_cipher(E) crct10dif_ce(E) ghash_ce(E) sm4_ce_cipher(E) sm4(E) sha2_ce(E) sha256_arm64(E) sha1_ce(E) acpi_ipmi(E) sbsa_gwdt(E) sg(E) ipmi_si(E) ipmi_devintf(E) ipmi_msghandler(E) ip_tables(E) sd_mod(E) ast(E) drm_kms_helper(E) syscopyarea(E) sysfillrect(E) nvme(E) sysimgblt(E) i2c_algo_bit(E) nvme_core(E) drm_shmem_helper(E) ahci(E) t10_pi(E) libahci(E) drm(E) crc64_rocksoft(E) i40e(E) crc64(E) libata(E) i2c_core(E)
+> [   66.657719] CPU: 44 PID: 17573 Comm: perf Kdump: loaded Tainted: G            E      6.3.0-rc4+ #58
+> [   66.666749] Hardware name: Default Default/Default, BIOS 1.2.M1.AL.P.139.00 03/22/2023
+> [   66.674650] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+> [   66.681597] pc : __alloc_pages+0x1ec/0x248
+> [   66.685680] lr : __kmalloc_large_node+0xc0/0x1f8
+> [   66.690285] sp : ffff800020523980
+> [   66.693585] pmr_save: 000000e0
+> [   66.696624] x29: ffff800020523980 x28: ffff000832975800 x27: 0000000000000000
+> [   66.703746] x26: 0000000000100000 x25: 0000000000100000 x24: ffff8000083615d0
+> [   66.710866] x23: 0000000000040dc0 x22: ffff000823d6d140 x21: 000000000000000b
+> [   66.717987] x20: 000000000000000b x19: 0000000000000000 x18: 0000000000000030
+> [   66.725108] x17: 0000000000000000 x16: ffff800008f05be8 x15: ffff000823d6d6d0
+> [   66.732229] x14: 0000000000000000 x13: 343373656761705f x12: 726e202c30206574
+> [   66.739350] x11: 00000000ffff7fff x10: 00000000ffff7fff x9 : ffff8000083af570
+> [   66.746471] x8 : 00000000000bffe8 x7 : c0000000ffff7fff x6 : 000000000005fff4
+> [   66.753592] x5 : 0000000000000000 x4 : ffff000823d6d8d8 x3 : 0000000000000000
+> [   66.760713] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000040dc0
+> [   66.767834] Call trace:
+> [   66.770267]  __alloc_pages+0x1ec/0x248
+> [   66.774003]  __kmalloc_large_node+0xc0/0x1f8
+> [   66.778259]  __kmalloc_node+0x134/0x1e8
+> [   66.782081]  rb_alloc_aux+0xe0/0x298
+> [   66.785643]  perf_mmap+0x440/0x660
+> [   66.789031]  mmap_region+0x308/0x8a8
+> [   66.792593]  do_mmap+0x3c0/0x528
+> [   66.795807]  vm_mmap_pgoff+0xf4/0x1b8
+> [   66.799456]  ksys_mmap_pgoff+0x18c/0x218
+> [   66.803365]  __arm64_sys_mmap+0x38/0x58
+> [   66.807187]  invoke_syscall+0x50/0x128
+> [   66.810922]  el0_svc_common.constprop.0+0x58/0x188
+> [   66.815698]  do_el0_svc+0x34/0x50
+> [   66.818999]  el0_svc+0x34/0x108
+> [   66.822127]  el0t_64_sync_handler+0xb8/0xc0
+> [   66.826296]  el0t_64_sync+0x1a4/0x1a8
+> [   66.829946] ---[ end trace 0000000000000000 ]---
+> 
+> 'rb->aux_pages' allocated by kcalloc() is a pointer array which is used to
+> maintains AUX trace pages. The allocated page for this array is physically
+> contiguous (and virtually contiguous) with an order of 0..MAX_ORDER. If the
+> size of pointer array crosses the limitation set by MAX_ORDER, it reveals a
+> WARNING.
+> 
+> So bail out early with -EINVAL if the request AUX area is out of bound,
+> e.g.:
+> 
+>     #perf record -C 0 -m ,4G -e arm_spe_0// -- sleep 1
+>     failed to mmap with 22 (Invalid argument)
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 > ---
->  drivers/usb/cdns3/cdns3-gadget.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> changes since v1:
+> - drop out patch2 because it has been fixed on upstream (Thanks James for reminding)
+> - move sanity check into rb_alloc_aux (per Leo)
+> - add overflow check (per James)
+
+
+Hi, all,
+
+Gentle Ping.
+
+Best Regards,
+Shuai
+
+> ---
+>  kernel/events/ring_buffer.c              | 13 +++++++++++++
+>  tools/perf/Documentation/perf-record.txt |  3 ++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index ccfaebca6faa..3326955f6991 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2999,12 +2999,14 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
->  static int cdns3_gadget_check_config(struct usb_gadget *gadget)
->  {
->  	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
-> +	struct cdns3_endpoint *priv_ep;
->  	struct usb_ep *ep;
->  	int n_in = 0;
->  	int total;
+> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> index a0433f37b024..e514aaba9d42 100644
+> --- a/kernel/events/ring_buffer.c
+> +++ b/kernel/events/ring_buffer.c
+> @@ -673,6 +673,7 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
+>  	bool overwrite = !(flags & RING_BUFFER_WRITABLE);
+>  	int node = (event->cpu == -1) ? -1 : cpu_to_node(event->cpu);
+>  	int ret = -ENOMEM, max_order;
+> +	size_t bytes;
 >  
->  	list_for_each_entry(ep, &gadget->ep_list, ep_list) {
-> -		if (ep->claimed && (ep->address & USB_DIR_IN))
-> +		priv_ep = ep_to_cdns3_ep(ep);
-> +		if ((priv_ep->flags & EP_CLAIMED) && (ep->address & USB_DIR_IN))
->  			n_in++;
+>  	if (!has_aux(event))
+>  		return -EOPNOTSUPP;
+> @@ -699,6 +700,18 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
+>  		watermark = 0;
 >  	}
 >  
-
-Tested-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-
--- 
-Regards,
-Ravi
+> +	/*
+> +	 * 'rb->aux_pages' allocated by kcalloc() is a pointer array which is
+> +	 * used to maintains AUX trace pages. The allocated page for this array
+> +	 * is physically contiguous (and virtually contiguous) with an order of
+> +	 * 0..MAX_ORDER. If the size of pointer array crosses the limitation set
+> +	 * by MAX_ORDER, it reveals a WARNING.
+> +	 *
+> +	 * So bail out early if the request AUX area is out of bound.
+> +	 */
+> +	if (check_mul_overflow(nr_pages, sizeof(void *), &bytes) ||
+> +	    get_order(bytes) > MAX_ORDER)
+> +		return -EINVAL;
+>  	rb->aux_pages = kcalloc_node(nr_pages, sizeof(void *), GFP_KERNEL,
+>  				     node);
+>  	if (!rb->aux_pages)
+> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+> index 680396c56bd1..5d8d3ad084ed 100644
+> --- a/tools/perf/Documentation/perf-record.txt
+> +++ b/tools/perf/Documentation/perf-record.txt
+> @@ -290,7 +290,8 @@ OPTIONS
+>  	specification with appended unit character - B/K/M/G. The
+>  	size is rounded up to have nearest pages power of two value.
+>  	Also, by adding a comma, the number of mmap pages for AUX
+> -	area tracing can be specified.
+> +	area tracing can be specified. With MAX_ORDER set as 10 on
+> +	arm64 platform , the maximum AUX area is limited to 2GiB.
+>  
+>  -g::
+>  	Enables call-graph (stack chain/backtrace) recording for both
