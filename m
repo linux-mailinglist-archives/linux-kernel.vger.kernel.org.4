@@ -2,161 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8339D74D720
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FEB74D726
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjGJNMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
+        id S229969AbjGJNNO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 09:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjGJNL5 (ORCPT
+        with ESMTP id S229736AbjGJNNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:11:57 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28EB194;
-        Mon, 10 Jul 2023 06:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688994704; x=1720530704;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DJgY4ciUiCYZnuYn9MihHuASvS84fRZSA2ENwfBYIiU=;
-  b=LUorezlukmWp3Vh4ech/a7g+ulF1IxEc7VJO5c+BGVmDUff7pA9Ukgwn
-   uGkuz3F/rm22RAmzHM4vCHPV9dLIQ4meXDXdIaujYCcF5+tCUIgNa6dGV
-   D0htRAFM887s4Xpu6e6pDt+Ply7H+EAhVxR6jzxmY2icYrnBITrvNAJzW
-   SeUR43FgYoMxeqprniKUa+dV2dRp0Q5lFgO6xqRW7Ok13DC64PtjBDK4J
-   xMxQIL6gJsLp2fQjCd81XyQlUjyPfJM/3EtscKgpPh/qT36BFj+jiXE7v
-   xUW8m48FSiiaKlv5VwSgsCIcuAm7ioB8/5YzpVCAq/VM0MIfx61lf/w+i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344665577"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="344665577"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 06:11:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="697985342"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="697985342"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2023 06:11:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1152F1FC; Mon, 10 Jul 2023 16:11:44 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v1 1/1] range.h: Move resource API and constant to respective headers
-Date:   Mon, 10 Jul 2023 16:11:42 +0300
-Message-Id: <20230710131142.32284-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Mon, 10 Jul 2023 09:13:12 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7500EBB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:13:10 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-286-g_5tey9eP9ugS51RLSz6Gw-1; Mon, 10 Jul 2023 14:13:07 +0100
+X-MC-Unique: g_5tey9eP9ugS51RLSz6Gw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 10 Jul
+ 2023 14:13:06 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 10 Jul 2023 14:13:06 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Azeem Shaikh' <azeemshaikh38@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] kobject: Replace strlcpy with strscpy
+Thread-Topic: [PATCH] kobject: Replace strlcpy with strscpy
+Thread-Index: AQHZrdj8Qo2zsxXODk+YaMEZxqXK9K+zA4Wg
+Date:   Mon, 10 Jul 2023 13:13:06 +0000
+Message-ID: <ad25bb8552704028860cf7a419c54fa3@AcuMS.aculab.com>
+References: <20230703180528.3709258-1-azeemshaikh38@gmail.com>
+In-Reply-To: <20230703180528.3709258-1-azeemshaikh38@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-range.h works with struct range data type. The resource_size_t
-is an alien here. Move the related pieces to the respective
-headers and rename MAX_RESOURCE using pattern ${TYPE}_MAX.
+From: Azeem Shaikh
+> Sent: 03 July 2023 19:05
+> 
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> 
+> Direct replacement is safe here since return value of -errno
+> is used to check for truncation instead of sizeof(dest).
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> ---
+>  lib/kobject_uevent.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
+> index 7c44b7ae4c5c..e5497fa0a2d2 100644
+> --- a/lib/kobject_uevent.c
+> +++ b/lib/kobject_uevent.c
+> @@ -254,8 +254,8 @@ static int init_uevent_argv(struct kobj_uevent_env *env, const char *subsystem)
+>  	int buffer_size = sizeof(env->buf) - env->buflen;
+>  	int len;
+> 
+> -	len = strlcpy(&env->buf[env->buflen], subsystem, buffer_size);
+> -	if (len >= buffer_size) {
+> +	len = strscpy(&env->buf[env->buflen], subsystem, buffer_size);
+> +	if (len < 0) {
+>  		pr_warn("init_uevent_argv: buffer size of %d too small, needed %d\n",
+>  			buffer_size, len);
+>  		return -ENOMEM;
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/mips/cavium-octeon/setup.c | 2 +-
- arch/x86/pci/amd_bus.c          | 8 ++++++++
- arch/x86/pci/bus_numa.c         | 2 +-
- include/linux/limits.h          | 2 ++
- include/linux/range.h           | 8 --------
- 5 files changed, 12 insertions(+), 10 deletions(-)
+The size in the error message is now wrong.
+It has to be said that mostly all the strings that get copied
+in the kernel are '\0' terminated - so maybe it is all moot.
+OTOH printing (at least some of) the string that didn't fit
+is a lot more useful than its length.
 
-diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
-index c5561016f577..1ad2602a0383 100644
---- a/arch/mips/cavium-octeon/setup.c
-+++ b/arch/mips/cavium-octeon/setup.c
-@@ -1240,7 +1240,7 @@ static int __init octeon_no_pci_init(void)
- 	 */
- 	octeon_dummy_iospace = vzalloc(IO_SPACE_LIMIT);
- 	set_io_port_base((unsigned long)octeon_dummy_iospace);
--	ioport_resource.start = MAX_RESOURCE;
-+	ioport_resource.start = RESOURCE_SIZE_MAX;
- 	ioport_resource.end = 0;
- 	return 0;
- }
-diff --git a/arch/x86/pci/amd_bus.c b/arch/x86/pci/amd_bus.c
-index dd40d3fea74e..631512f7ec85 100644
---- a/arch/x86/pci/amd_bus.c
-+++ b/arch/x86/pci/amd_bus.c
-@@ -51,6 +51,14 @@ static struct pci_root_info __init *find_pci_root_info(int node, int link)
- 	return NULL;
- }
- 
-+static inline resource_size_t cap_resource(u64 val)
-+{
-+	if (val > RESOURCE_SIZE_MAX)
-+		return RESOURCE_SIZE_MAX;
-+
-+	return val;
-+}
-+
- /**
-  * early_root_info_init()
-  * called before pcibios_scan_root and pci_scan_bus
-diff --git a/arch/x86/pci/bus_numa.c b/arch/x86/pci/bus_numa.c
-index 2752c02e3f0e..e4a525e59eaf 100644
---- a/arch/x86/pci/bus_numa.c
-+++ b/arch/x86/pci/bus_numa.c
-@@ -101,7 +101,7 @@ void update_res(struct pci_root_info *info, resource_size_t start,
- 	if (start > end)
- 		return;
- 
--	if (start == MAX_RESOURCE)
-+	if (start == RESOURCE_SIZE_MAX)
- 		return;
- 
- 	if (!merge)
-diff --git a/include/linux/limits.h b/include/linux/limits.h
-index f6bcc9369010..38eb7f6f7e88 100644
---- a/include/linux/limits.h
-+++ b/include/linux/limits.h
-@@ -10,6 +10,8 @@
- #define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
- #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
- 
-+#define RESOURCE_SIZE_MAX	((resource_size_t)~0)
-+
- #define U8_MAX		((u8)~0U)
- #define S8_MAX		((s8)(U8_MAX >> 1))
- #define S8_MIN		((s8)(-S8_MAX - 1))
-diff --git a/include/linux/range.h b/include/linux/range.h
-index 7efb6a9b069b..6ad0b73cb7ad 100644
---- a/include/linux/range.h
-+++ b/include/linux/range.h
-@@ -31,12 +31,4 @@ int clean_sort_range(struct range *range, int az);
- 
- void sort_range(struct range *range, int nr_range);
- 
--#define MAX_RESOURCE ((resource_size_t)~0)
--static inline resource_size_t cap_resource(u64 val)
--{
--	if (val > MAX_RESOURCE)
--		return MAX_RESOURCE;
+	David
+
 -
--	return val;
--}
- #endif
--- 
-2.40.0.1.gaa8946217a0b
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
