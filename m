@@ -2,147 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FA274CA8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDD874CA8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjGJD2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 23:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S230395AbjGJDaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 23:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjGJD2K (ORCPT
+        with ESMTP id S229732AbjGJD3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 23:28:10 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2122.outbound.protection.outlook.com [40.107.117.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451E61BE8
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 20:26:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IENu3w50yYqw6W2Ztqrk50cFhaVYqS9bTjWzhl3qSH2yH4bkbZqT9MxyFKfbRIbpTkCVIR3reC5/mJF0sfnnaoVSwl1LFBzTKbC7zc7ahnrjGORvAR7EQZSc8oK6oWSlSU/JJhcivgE95FNdvZ5ZA1ybkpyFkMF8BQzQOoDclOxY7GSOWD47g8fZ6wHbYJflPXbbqgfEoAE+QETDljqXrrOeCm3ygbbq0vy5MpFrdNj1TYR5aepO7I827cO+0QQGJ5G4GgrR6/8VjlH1vktrhzrU5UMxBvsvYq4heyEa1E6WOjJ11GDVTxSlno6p8IvYrjDYQxd7SebSZLLBzJwBBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DGxx+VePSjXYlpTqopkI+y0GcumA4d+Xb8ZaUtaDV5s=;
- b=DAojeakGq4Y0FdBo+oc64cMu1bQJOAsAcnmB6vHQmyN+rf2jDK1dGlnUK/Bbcjcq1pASaQjwF40VBz/XqNe3tAtx371zHQSWbv7XAQDEvt7/rumvasdpEgUersBFQ5wTbM7jdPmRkzP6pr9B+WH16s3hyim30VO5Za0x94DSall8iVlk0KEHXVp1LaisQ1OtkhRlv6NUVH8wNql0SyEa0yda1QkNcT/zwXFf26KllCTQQ/y7nysabd4I+bMFszMTRydMrlgO5WK9purOJp1Krec6EgslXfdi6Mj/NJ4kFFrkMLfoa3gOQ5racVSxoR47Dp9t5wvTVzBsFSVeloGl9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DGxx+VePSjXYlpTqopkI+y0GcumA4d+Xb8ZaUtaDV5s=;
- b=c36GYxW00TdwAMvixgmUpBwJZ+w3Yu+cqtODesIAOTVW1dthe6MVPALogat+NI6wXUOvcuYMcQbMCo8jybwW/p5qYQ7WW4v9MfrZsGhn/iy8IFWzoTwACR9t1bAX6A8ORKAebieHtDNmuDx3O70/tgVJp7bF5cUh1xWDRExBi2piSWb17++fhpR7pUaEvXbHQNmOvtV8MYognA9+K7PGfK3PkFTVXPKG3gIocJ0tB1m1YDQppJXNFBPRNt0wmykq3QIErt2QhC9Do3HyRSdb4V9Lm0x4fwvJKR+R5FAJoF62kPHpjFeevjdHXIT4afer9zotX2ihT18/wpjwNPP8Gg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEYPR06MB5376.apcprd06.prod.outlook.com (2603:1096:101:8f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.29; Mon, 10 Jul
- 2023 03:24:53 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 03:24:53 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Yangtao Li <frank.li@vivo.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/19] drm/fsl-dcu: Convert to devm_platform_ioremap_resource()
-Date:   Mon, 10 Jul 2023 11:23:55 +0800
-Message-Id: <20230710032355.72914-19-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230710032355.72914-1-frank.li@vivo.com>
-References: <20230710032355.72914-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0020.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::32)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        Sun, 9 Jul 2023 23:29:32 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78D830C4
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 20:27:34 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666ecf9a081so3485330b3a.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 20:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688959654; x=1691551654;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z+IV/3EU3GY4vUZv6vrcuErb2vDPlc1Isf1U0nOs3EE=;
+        b=T0DkrsabQei0/XIIO4dbC8R+HefLxd2T0hbWqqISpHzkWcVXf6rFLJrihNvSzxwoNL
+         y8OL10sicociCQXP4eGVvGHpBvzWf65vEDtKQj3iZGoYIDjHp3D7icwIwk6uh5TVF9F9
+         qi8v3BrfFvlhUy+vOtLb+Be9OYoyaDDnED8Ubl5i7m90FFpvOTcnRTjV6z5YSV25ZiyT
+         XlRSrV7GmtV1YHpef7qd0LaiCRZqJ2nBX0RlP1brg+K7Y3BiMkpbC11kgdQTJhDXEekN
+         jvx1AaHdQnL3/hwtGFEeqR2pvIy5CiITrk6Xbn2DGXkORVJJF0SdbhWRoZfTKBesUNRY
+         W6PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688959654; x=1691551654;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z+IV/3EU3GY4vUZv6vrcuErb2vDPlc1Isf1U0nOs3EE=;
+        b=KH2nMn4wdABismua/uHItNFoYW4mKoFSuWCUP+CYnDmFPsQNZcoBw8z/RtapEki2w1
+         yo1DHoJpcLcl4B/p6MKEihC++WiB4lWnWvPCe6mwlIgTjeI4FHksI6v73QRDIGqauPtQ
+         /MTezUJD43ilUh32h4HPYkY+wRj6UVO7ws4easBYzzG4UpD1PM9yVIVNFdinNzvGGxYI
+         siEVLGgb+xgMViftTV6wQJ0W4UJWFk1+UOM393L08JDhHvRb52B9dT4aWRbJmacFVw0O
+         i6wCurgACnp9IMVXtqLE3pFF9mIiL7gk3v63AZhB2x1JR1N30JgJYSYL2FWbRsYNV9Yc
+         9TzQ==
+X-Gm-Message-State: ABy/qLb/uv3hRznZjmol65y/JiybFYiIxCFkgvwdHzAHL8OrsW1UavA1
+        a86CcV0awOv6W3uYPW+Ci4ejfw==
+X-Google-Smtp-Source: APBJJlHK/NBb4uu/gdhAvc3gFctQlQEEpQnHzVEJ2KN/gCiA6SP14wS++9kHd3JIOelROmaBKGrQnA==
+X-Received: by 2002:a05:6a00:1704:b0:682:2fea:39f0 with SMTP id h4-20020a056a00170400b006822fea39f0mr13853334pfc.5.1688959653872;
+        Sun, 09 Jul 2023 20:27:33 -0700 (PDT)
+Received: from GL4FX4PXWL.bytedance.net ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id j15-20020aa7800f000000b00682c864f35bsm6279748pfi.140.2023.07.09.20.27.30
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 09 Jul 2023 20:27:33 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     glider@google.com, elver@google.com, dvyukov@google.com,
+        akpm@linux-foundation.org
+Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [PATCH] mm: kfence: allocate kfence_metadata at runtime
+Date:   Mon, 10 Jul 2023 11:27:14 +0800
+Message-Id: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB5376:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3868ecb4-c47f-4e0b-4398-08db80f539fc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CHCdqZQHvWZk/vvJNLsJtR7SL2o9BaHp1Zl5ARjL3b8oVDQTZLhneL5yJxBjF4coC7kIkKVEdet0Z3Ur1x969iape2lyF3HLD3MPh6JfjRuqZGVOnSrZD38WeGlOBsskAqD4JNoikCn9+SR0FqggrQkG/D+20PHn4n6UrDLpIRETppqxqGFFt36Aohhmzu0J9p88t5rbqLFLrgZoaK379g9BXhvvi/yl7S2n2Otf7gMp3Rt+7E3TWts1HXCMIV0Pg0gYq0cBQlZjXTNk9LMBORGkUj36jFtIUKaqd5aYxDBOQ+gWVBWNZaAzHJuj5iQMrUk6ORHvLehnKSiF0KjaxND2krIc5LiL2qhL1D5tA3FY03GIcyLvaSTiHn0MJIOiYT8lLiCbWPdfh5RPbJqPcWRxMQGTs6cPNGhJOJ21W5LKN7wXspSr4aYlEPTaNQExXMP/nSi5KcGIidhvszXD4Bxm3JW5bSZdBfsrgp6U+Kmi0L6MjQqTO1b1/s3cgp0EZqmk/whZeQTwN1ubfPFe+nO8aWpRM0i4qSvqer3iNCIU+IATKK2Im43h81sTMEoQpSwaWzptFE7wbesr3u3LKhbJLbac75kneeLJfuP2SdHBpMhN3rvEfzvHlnYwYypY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(376002)(366004)(136003)(451199021)(6506007)(1076003)(5660300002)(26005)(478600001)(6512007)(2906002)(110136005)(186003)(83380400001)(2616005)(41300700001)(86362001)(316002)(38100700002)(8676002)(38350700002)(8936002)(52116002)(36756003)(66946007)(66476007)(4326008)(6486002)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aY6Tg7x0MZpdn+pOr9Hk4/aFxMA2qs0ivPDhAo7HfmctWlxmu7J6VbsVWTU9?=
- =?us-ascii?Q?a/Lz5UXl3jf5N6W+aeQ6Z7b0Z0gwzXPrMq8BE/AtT1JKeeXsNE3B9ToWN8dj?=
- =?us-ascii?Q?4nHIxKhZT77t1AfRR45sxVa+ztXkypG34tMri5uyle2lqM8xbJaAP6xZNRLv?=
- =?us-ascii?Q?7YD0ljIg7KJOSvv0JTzQFHmve2uCg3FqeTAuFXx/gsV0fIOGWeyd7RCNc490?=
- =?us-ascii?Q?rs3TAKERyYUkjhXsTa83dsUruUzv3a4+Udk9JQ9BG4ykZ26mvaIDhfDFJ6Fe?=
- =?us-ascii?Q?anKYhj9zi0S/81AwSU/73/vykxkjWtChxelK62MF0QuKIeWE1VBL7cj5AGK7?=
- =?us-ascii?Q?Cfrp9W3T4VFxBizOXuDV3QpcP+v4h+dRg1i2BOUbfkwBSelqUEIi4jwKYl8Z?=
- =?us-ascii?Q?VQWBr4TWNUa1Mcz8rtJR0WzssEP9v7L8quJ1Zvd7S0Mk9qKB72R+xvhQuqx2?=
- =?us-ascii?Q?lNiWFqH/mC3FoUChF+/PouXfgVJAV+230SzGT0V50CnlJ6J5q4A4bShw5ps0?=
- =?us-ascii?Q?Zks2mn4gH/jcxI6pXJ0uT3KoJss2v8JNllpb76Fj3iFd95ZxGiI+mmMDyr8I?=
- =?us-ascii?Q?nqq8SYw9VP6X6N2ckAUnmsUmydDk3CyonliucnSg8VVE1VUx9xtfhh+ur0B/?=
- =?us-ascii?Q?hmno3PIHPPBrc28B/eZlSKfNc8fa9pEChz2GbEO/CZ6GuxOTZu/eihKfhl6n?=
- =?us-ascii?Q?2fgFPnbf2hVN4/CikAO60FuM73VYvx6qyRfG2TlPAR6IPULtQhh0OJyODoCy?=
- =?us-ascii?Q?r+EDOwiaeFpnXAj4g8ezgoKH+/JvO02zf/yV9qvlBQTn7C+CFW2Dz/q7Rmj/?=
- =?us-ascii?Q?0QmMjMK7pws5C8qEsGjZ2rAq+eyLUUq/wEhe1lA0HzqmJKchuAh2RCI9MD8i?=
- =?us-ascii?Q?9VShSqzJh2xOzHR21fzS2J2vpFESXDMr9qOjym/KLh8yj3qNx/gKioMvaL+q?=
- =?us-ascii?Q?C9mywJCyGTdANzWlUf/R5cLiJV274lL4nGh1S3qEDJ0Z3xmUZIkpvm4NMwUD?=
- =?us-ascii?Q?eFw8p7RFUlY9VaModLuR0ZMSlHc/CAgGSngOsp2q/arrmY1Ow94Ogdl2LQIt?=
- =?us-ascii?Q?OvFmyQg3rEeu29Zeq8og3/hTsCE6f2w4bxKz4FTwUgxmNKCD94TbC7sCGKlv?=
- =?us-ascii?Q?wfVVZm65+0wEKw2aYnxrhJNTl8ngO+IY9SJSLVwPTnSW/hLvb7RxB9frAZhy?=
- =?us-ascii?Q?GnlzK4+LVeXk4Jb5Z6mDwE/mgp9TkSLaU+uzVKXvSr32sV65GYrZnOxEMntA?=
- =?us-ascii?Q?4tLeBJYY+aX6QyGLKxTIBEb91nJeSBpEm/YJIun+vcCQYWBgQ8a0jZY0RGJY?=
- =?us-ascii?Q?+AJ2Ang1/oj9qUKqWXJNO3bubvjgJOrSe4lFQtPBygp+ukPp3GKkRId+L0UY?=
- =?us-ascii?Q?1OmJiTE/j7LLQsh5PcJd7xA++dRUU0cpe4jrr0dvxVF5pBkWyAOi1h1YXOvo?=
- =?us-ascii?Q?sV7ksJaRG7P/qzyiP6PoKyB6WqnGwdNwF0sh9MpowRwqdJL8JzITQqGdbpz4?=
- =?us-ascii?Q?QZu0iB664f47EGOMivB8xVYhy5MapDI7AQnWiv5n9+17DuYyuoCd+ow5a5BT?=
- =?us-ascii?Q?EATuqZH/DryGUyuhrsGsNDYHPjTYS8ufjhLlr6kO?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3868ecb4-c47f-4e0b-4398-08db80f539fc
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 03:24:53.3353
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iESXSuJ5tH9zTJ28KL6CvvKAsZht5oBzQSSZ5CXcMi/bUlKfcwJ6N6crtX3fqpnkKVYThrW5DZxXGjvUYF+6eg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5376
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify code.
+kfence_metadata is currently a static array. For the purpose of
+allocating scalable __kfence_pool, we first change it to runtime
+allocation of metadata. Since the size of an object of kfence_metadata
+is 1160 bytes, we can save at least 72 pages (with default 256 objects)
+without enabling kfence.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
+Below is the numbers obtained in qemu (with default 256 objects).
+before: Memory: 8134692K/8388080K available (3668K bss)
+after: Memory: 8136740K/8388080K available (1620K bss)
+More than expected, it saves 2MB memory.
+
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ mm/kfence/core.c   | 102 ++++++++++++++++++++++++++++++++-------------
+ mm/kfence/kfence.h |   5 ++-
+ 2 files changed, 78 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-index c09ba019ba5e..14661912e60f 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-@@ -246,7 +246,6 @@ static int fsl_dcu_drm_probe(struct platform_device *pdev)
- 	struct fsl_dcu_drm_device *fsl_dev;
- 	struct drm_device *drm;
- 	struct device *dev = &pdev->dev;
--	struct resource *res;
- 	void __iomem *base;
- 	struct clk *pix_clk_in;
- 	char pix_clk_name[32];
-@@ -264,8 +263,7 @@ static int fsl_dcu_drm_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	fsl_dev->soc = id->data;
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index dad3c0eb70a0..b9fec1c46e3d 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -116,7 +116,7 @@ EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
+  * backing pages (in __kfence_pool).
+  */
+ static_assert(CONFIG_KFENCE_NUM_OBJECTS > 0);
+-struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
++struct kfence_metadata *kfence_metadata;
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(dev, res);
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base)) {
- 		ret = PTR_ERR(base);
- 		return ret;
+ /* Freelist with available objects. */
+ static struct list_head kfence_freelist = LIST_HEAD_INIT(kfence_freelist);
+@@ -643,13 +643,56 @@ static unsigned long kfence_init_pool(void)
+ 	return addr;
+ }
+ 
++static int kfence_alloc_metadata(void)
++{
++	unsigned long nr_pages = KFENCE_METADATA_SIZE / PAGE_SIZE;
++
++#ifdef CONFIG_CONTIG_ALLOC
++	struct page *pages;
++
++	pages = alloc_contig_pages(nr_pages, GFP_KERNEL, first_online_node,
++				   NULL);
++	if (pages)
++		kfence_metadata = page_to_virt(pages);
++#else
++	if (nr_pages > MAX_ORDER_NR_PAGES) {
++		pr_warn("KFENCE_NUM_OBJECTS too large for buddy allocator\n");
++		return -EINVAL;
++	}
++	kfence_metadata = alloc_pages_exact(KFENCE_METADATA_SIZE,
++					    GFP_KERNEL);
++#endif
++
++	if (!kfence_metadata)
++		return -ENOMEM;
++
++	memset(kfence_metadata, 0, KFENCE_METADATA_SIZE);
++	return 0;
++}
++
++static void kfence_free_metadata(void)
++{
++	if (WARN_ON(!kfence_metadata))
++		return;
++#ifdef CONFIG_CONTIG_ALLOC
++	free_contig_range(page_to_pfn(virt_to_page((void *)kfence_metadata)),
++			  KFENCE_METADATA_SIZE / PAGE_SIZE);
++#else
++	free_pages_exact((void *)kfence_metadata, KFENCE_METADATA_SIZE);
++#endif
++	kfence_metadata = NULL;
++}
++
+ static bool __init kfence_init_pool_early(void)
+ {
+-	unsigned long addr;
++	unsigned long addr = (unsigned long)__kfence_pool;
+ 
+ 	if (!__kfence_pool)
+ 		return false;
+ 
++	if (!kfence_alloc_metadata())
++		goto free_pool;
++
+ 	addr = kfence_init_pool();
+ 
+ 	if (!addr) {
+@@ -663,6 +706,7 @@ static bool __init kfence_init_pool_early(void)
+ 		return true;
+ 	}
+ 
++	kfence_free_metadata();
+ 	/*
+ 	 * Only release unprotected pages, and do not try to go back and change
+ 	 * page attributes due to risk of failing to do so as well. If changing
+@@ -670,31 +714,12 @@ static bool __init kfence_init_pool_early(void)
+ 	 * fails for the first page, and therefore expect addr==__kfence_pool in
+ 	 * most failure cases.
+ 	 */
++free_pool:
+ 	memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
+ 	__kfence_pool = NULL;
+ 	return false;
+ }
+ 
+-static bool kfence_init_pool_late(void)
+-{
+-	unsigned long addr, free_size;
+-
+-	addr = kfence_init_pool();
+-
+-	if (!addr)
+-		return true;
+-
+-	/* Same as above. */
+-	free_size = KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool);
+-#ifdef CONFIG_CONTIG_ALLOC
+-	free_contig_range(page_to_pfn(virt_to_page((void *)addr)), free_size / PAGE_SIZE);
+-#else
+-	free_pages_exact((void *)addr, free_size);
+-#endif
+-	__kfence_pool = NULL;
+-	return false;
+-}
+-
+ /* === DebugFS Interface ==================================================== */
+ 
+ static int stats_show(struct seq_file *seq, void *v)
+@@ -896,6 +921,10 @@ void __init kfence_init(void)
+ static int kfence_init_late(void)
+ {
+ 	const unsigned long nr_pages = KFENCE_POOL_SIZE / PAGE_SIZE;
++	unsigned long addr = (unsigned long)__kfence_pool;
++	unsigned long free_size = KFENCE_POOL_SIZE;
++	int ret;
++
+ #ifdef CONFIG_CONTIG_ALLOC
+ 	struct page *pages;
+ 
+@@ -913,15 +942,29 @@ static int kfence_init_late(void)
+ 		return -ENOMEM;
+ #endif
+ 
+-	if (!kfence_init_pool_late()) {
+-		pr_err("%s failed\n", __func__);
+-		return -EBUSY;
++	ret = kfence_alloc_metadata();
++	if (!ret)
++		goto free_pool;
++
++	addr = kfence_init_pool();
++	if (!addr) {
++		kfence_init_enable();
++		kfence_debugfs_init();
++		return 0;
+ 	}
+ 
+-	kfence_init_enable();
+-	kfence_debugfs_init();
++	pr_err("%s failed\n", __func__);
++	kfence_free_metadata();
++	free_size = KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool);
++	ret = -EBUSY;
+ 
+-	return 0;
++free_pool:
++#ifdef CONFIG_CONTIG_ALLOC
++	free_contig_range(page_to_pfn(virt_to_page((void *)addr)), free_size / PAGE_SIZE);
++#else
++	free_pages_exact((void *)addr, free_size);
++#endif
++	return ret;
+ }
+ 
+ static int kfence_enable_late(void)
+@@ -941,6 +984,9 @@ void kfence_shutdown_cache(struct kmem_cache *s)
+ 	struct kfence_metadata *meta;
+ 	int i;
+ 
++	if (!__kfence_pool)
++		return;
++
+ 	for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
+ 		bool in_use;
+ 
+diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+index 392fb273e7bd..f46fbb03062b 100644
+--- a/mm/kfence/kfence.h
++++ b/mm/kfence/kfence.h
+@@ -102,7 +102,10 @@ struct kfence_metadata {
+ #endif
+ };
+ 
+-extern struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
++#define KFENCE_METADATA_SIZE PAGE_ALIGN(sizeof(struct kfence_metadata) * \
++					CONFIG_KFENCE_NUM_OBJECTS)
++
++extern struct kfence_metadata *kfence_metadata;
+ 
+ static inline struct kfence_metadata *addr_to_metadata(unsigned long addr)
+ {
 -- 
-2.39.0
+2.20.1
 
