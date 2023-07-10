@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A955374D160
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F13D74D162
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjGJJ1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        id S231344AbjGJJ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjGJJ1B (ORCPT
+        with ESMTP id S230144AbjGJJ1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:27:01 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F932114
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:27:00 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-47e793ccdc7so1175974e0c.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1688981219; x=1691573219;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xSgqmrfhrfLHk+Rtln7FX4R9GhlwgoSFZ/Hmf3Xuu8o=;
-        b=5Aqch1oXfro/XYSLV9jNT5X2Md/AdjdklKt9b+qVnXw+0OXhzbYe0yes7eN+SanfRh
-         DnkJCbVERhWZIEF5xMWXyyHM4D8SGrZBYprpH9a7T/HzgQ1F+eMUCXeD6yJd/0hCAsTp
-         qaRjq0ByLDAcdjDr6IpSzo9fHon29LLYDP8CE0fGAlqDxfJOPNSs5WRlxl7g9yHiWIfg
-         yPoaLjyV69qp3TJMyE6AcKo4lAV66QjLYiodPmQoPo+XPj19FFSZvD9qaFPs/LgCB/mG
-         rrRyh4rcRfWCdzDxKd9EglwDUrOvd2rtuO0GCZg6PrQhKyAB5tbQPh9M48v6wRtV2mB8
-         qvJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688981219; x=1691573219;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xSgqmrfhrfLHk+Rtln7FX4R9GhlwgoSFZ/Hmf3Xuu8o=;
-        b=BirgfYiJb2J8jWNle3JY/evsvj9ErsKnzID2v4hNIc+zXjEDwCX5cfUjbsE52kNFx5
-         eIJVuHVgCcPuS5wk6MIQUpVHNxlj0vO1UYsfppLszMl/Q4lLtul8xkT+YwTjllrSFLvu
-         YzeYO2xmz/jOxrPyzFCrsypgGaFdrwejSh14Kyd3HytsPosS752+5E5mX5nBHMVp3FRq
-         q1BxsQdl+6ktjoTRKBdy4i9TedhQ8dqa7HQYNuOItkAZYZdWZTvxYhP1Hu1NtsmNxmGP
-         7CSTZGT04+SunoW6E+crylDhWkZrOPnE8428SCS45BouPJPgPVgswfwKFTlhrwZu6w7h
-         XMYA==
-X-Gm-Message-State: ABy/qLYM5NGQpWQ61liErRofWRd+1FijL6usCvisu+6Q+PYGajTaBBTC
-        WvhYQBnseve26LguOMVXMZbQVGp1Bo6pAd5hL+ZbnA==
-X-Google-Smtp-Source: APBJJlEQT2Oqz6H+43YCqXvSmQo50UIhAp6Rg+TqGxyYtSEr3m7p/Iq97NPCskDoJwzSskOCFQDYnJMPaXNVPyN0WgE=
-X-Received: by 2002:a1f:4544:0:b0:47e:a218:86b2 with SMTP id
- s65-20020a1f4544000000b0047ea21886b2mr2684352vka.15.1688981219330; Mon, 10
- Jul 2023 02:26:59 -0700 (PDT)
+        Mon, 10 Jul 2023 05:27:06 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0078C8E;
+        Mon, 10 Jul 2023 02:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688981225; x=1720517225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I/WgV0sJEPaUA+jyYm6Sf1+ATnzrq8IVU5O5blbvl3Q=;
+  b=k4UFKwuJ9sRKpY06jis67SyzdqjBOe3vvYtY1atWBhmxQTWaYUQLEZYv
+   eYXb8dw9kran3Ti8SrAf7v6xGO1RUzpvwMz7foJjAumkG1MAaUiq6XVXE
+   y4y2OhPY1wI+NcM826mchiN+X+jGeE+0xMtFUg1lJoIU9RKglpSh8vnUA
+   XAZNtLGkZS7ZVQtsgZvyfTnNf4M/ef36eJFkATmrrBmBIdSXCkFMaP6ur
+   kReC7dg3gXrdoC5wK6kN+Hp/lJm6lBhVl9k2d1ZEw9T8XKZdcYousg3Ht
+   2q4S+9RvXy+jC11F6zUsmlBOfq8A8u2ATvvZoJP46rlnCLeWksSrY9iC9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="364334369"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="364334369"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 02:26:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="697936671"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="697936671"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2023 02:26:50 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qInAO-001VsZ-1g;
+        Mon, 10 Jul 2023 12:26:48 +0300
+Date:   Mon, 10 Jul 2023 12:26:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     George Stark <gnstark@sberdevices.ru>
+Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v4 2/6] iio: adc: meson: move enums declaration before
+ variables declaration
+Message-ID: <ZKvO2Fm2PL/Fsb+0@smile.fi.intel.com>
+References: <20230707153322.114302-1-gnstark@sberdevices.ru>
+ <20230707153322.114302-3-gnstark@sberdevices.ru>
 MIME-Version: 1.0
-References: <20230703142308.5772-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230703142308.5772-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 10 Jul 2023 11:26:48 +0200
-Message-ID: <CAMRc=MfBnz7bg7Qxoh3t0aQoSPMTgAuz6+JLSgUQA5zyS3r=mQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] gpiolib: Avoid modifying GPIO chip fwnode
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230707153322.114302-3-gnstark@sberdevices.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 4:23=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Ideally the GPIO chip data structure has to be constant.
-> In real life it's not true, but we can make it closer to
-> that. Hence the series.
->
-> Bart, the idea is that this series has to land immediately after
-> v6.5-rc1 is out so we will have longer time to fix downsides and
-> regressions found, if any.
->
-> Benjamin, thank you for testing!
->
-> Changelog v2:
-> - replaced open coded device_match_acpi_handle()
-> - corrected commit message due to above change
-> - added tag (Benjamin)
->
-> Andy Shevchenko (3):
->   gpiolib: of: Don't use GPIO chip fwnode in of_gpiochip_*()
->   gpiolib: acpi: Don't use GPIO chip fwnode in acpi_gpiochip_find()
->   gpiolib: Do not alter GPIO chip fwnode member
->
->  drivers/gpio/gpiolib-acpi.c |  2 +-
->  drivers/gpio/gpiolib-of.c   |  6 +++---
->  drivers/gpio/gpiolib.c      | 16 ++++++++--------
->  3 files changed, 12 insertions(+), 12 deletions(-)
->
-> --
-> 2.40.0.1.gaa8946217a0b
->
+On Fri, Jul 07, 2023 at 06:27:39PM +0300, George Stark wrote:
+> Allow to use enum items for variables initialization.
 
-Applied, thanks!
+"For this, move enums upper in the code."
+?
 
-Bart
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
