@@ -2,2027 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B4574DE00
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A63174DE02
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjGJTNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S230367AbjGJTN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbjGJTNN (ORCPT
+        with ESMTP id S229617AbjGJTN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:13:13 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061DD137;
-        Mon, 10 Jul 2023 12:12:49 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7A2925C006B;
-        Mon, 10 Jul 2023 15:12:40 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Mon, 10 Jul 2023 15:12:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1689016360; x=1689102760; bh=Hs
-        syr6EMZRmpJVx1eAG3ugOBD1aZJaA1p9GC+p24zE0=; b=LgZteR+/17I2gy3B9Z
-        j3vHDfXd1c/1OY2U9uaKlWLW1AY5h/3X/NO3TdOOl0FsNuXsw4kt4UvlISDM9piy
-        PnHIFGMG1bG5blVp6jNePN1hURAb+W0wnTCIQTTxQPBAmx/Fn/NwBn298veRhvEN
-        YW1CCS5DylGKFtT72dga6ob1fFTA9XNIuZwn12YYirtMbs1XZixhXOCGtUjnQT2p
-        seajGiypVRJSDeQf7g1/1/4HJQoxCWMUwNpEtd8UNFpTdaF//7+ZAe5UZRZjiurJ
-        LCGMBUR81w1fHKPfGh+kJHEjeXWY9VDIv5tK9E4RaazVcX4b1giyNv6JK1ZJtRet
-        bPUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1689016360; x=1689102760; bh=Hssyr6EMZRmpJ
-        Vx1eAG3ugOBD1aZJaA1p9GC+p24zE0=; b=bjr4F+J0n14BcucsMzbPEY7f0sOKM
-        fxB4oWoO4m1ysDqcvJwphW6AOpoBjEPXBH4NCGGXk+aeL5U+sPXiXufHpiDNRfIf
-        c3hyxXKqZsTXKP6nbZ03ACfy5nm6XJ1dSrMqVQxLamf72JH0dU0RQtJXDCpHAKOH
-        YPcoNisINVRsGI68hQB3VmqWUauMmYwWZCn649CpFVXguiwqFObnzTeXVNUqsxEQ
-        rX0gmEpl/CbXKVCMGV1caENhzvlolMVtfGLos4yJXhdAyRj0MM/7BR/kYiBL7OUw
-        4KbA30MOnUu6dTmz5Pd3qxkM4tekAqdWyvA0yHpqouh5VMU+21lyzfzow==
-X-ME-Sender: <xms:J1isZAcBLUdrTLKOFwRDaojEr4ExP8CzZp9v7oVCvZmih9EXyy4rCg>
-    <xme:J1isZCPWfwkgSkVLTxh2NEIcGOevEodT6UmCsNZm28ZldVvdIDdiVJ_ZXP_v5K6Wf
-    WCDE-YIAaC9YrwAUJg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:J1isZBj3dZ_qaZRAnf1LTXq4nA7fBOMvwjNtzHroOTu2nQTplUMdMg>
-    <xmx:J1isZF8xPcDFkf3-zu4cFOdWLpwjf9T5PUAtA3KYNdMgJPsB7Xk7rQ>
-    <xmx:J1isZMsjQfafqYdtUKeygQMBDuFATXCeDVrElRRpURFgkPTF6lDbdw>
-    <xmx:KFisZKDVcJcBFn_Kd_aN0Z8BOOLUMY4YO0d4vmTPnn52Kanrpcf_aw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 96E561700090; Mon, 10 Jul 2023 15:12:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <47505d6f-a0a5-46ce-a3dc-78fda3256381@app.fastmail.com>
-In-Reply-To: <20230710165506.GA30916@twin.jikos.cz>
-References: <20230705140117.795478-1-arnd@kernel.org>
- <20230710165506.GA30916@twin.jikos.cz>
-Date:   Mon, 10 Jul 2023 21:12:19 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "David Sterba" <dsterba@suse.cz>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Chris Mason" <clm@fb.com>, "Josef Bacik" <josef@toxicpanda.com>,
-        "David Sterba" <dsterba@suse.com>,
-        "Johannes Thumshirn" <johannes.thumshirn@wdc.com>,
-        "Anand Jain" <anand.jain@oracle.com>,
-        "Filipe Manana" <fdmanana@suse.com>, "Qu Wenruo" <wqu@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] btrfs: avoid Wmaybe-uninitialized warnings
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 15:13:56 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3170A197
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:13:49 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-403b622101bso60481cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689016428; x=1691608428;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F+hA88FR3vPplUQ1011adLOle3GTZBi7T5Emm/QInIk=;
+        b=hmhTZ7NGouMWNCZh6IekL2vgyQ2LQcEvrTPLhV3EfbbMDYQgPoifrRTfhfyWC1qjwF
+         jcwqMTIYqx3ugfS7WWU0d7nTeYwY/UzoOINz9gIbJ+vyj35KKF//xRR3U5KQnRDzCAjx
+         NOH9hJHOa22Y0PJSfCaYk3LpNGL8J9rL2vptOTQHKDfpnT8ZeRpqvRz6B1fmz6zn0oCk
+         XX2c1KLa4qMkvbL6RSgwWQJ01phyuBvysYabdwihfYx52w820th2RzE8OUxdLeO+GWpe
+         3TKF6mEnUEuDRT6zfEqR17JZ5qLx/VSmSiwrOllBseulxCi65qBmsH9Xl95VrEOd3wvH
+         Xpjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689016428; x=1691608428;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F+hA88FR3vPplUQ1011adLOle3GTZBi7T5Emm/QInIk=;
+        b=KNmSO73IqIz/uFt37pYXf1VZsL5O0UJu2NWAy4bjyQy1qOoSLX1HyI+qb2JLHGOiTR
+         4+wu16BHIQe2c+MXwZWfILFXrBAO8e3xpiMnqsAr8J1BPeDwr5TlM7QVx6epR6zgIf7G
+         1QDz7uHCjkx8SCvzthmlqu3OeVUYSNngeueijHxooiKtcVpBlKuXmV9SdOjvdawLkJCn
+         o6O5JmIItJPPc07JZ3T0ArXdvgrR6z6MiNgriPlbbW9gqjJCuC7dz9bySy4iziO1FNTS
+         mpQrQ4Cs3gV7nHvJajQUndVxO3Qsyy++U+xg1izmRK3PeuoO/HWo/olO+fRM1aGAM9wR
+         jlrw==
+X-Gm-Message-State: ABy/qLZQ8w+ShdUyYGq/3jzGRiRL3KTLLjX6UnWsp6pMnLrJM19uBszB
+        ZsTpRT9hAs41Z4ZPUgRj8g0tM8D3wH8rb7mbdhk9uQ==
+X-Google-Smtp-Source: APBJJlFCs60IYfIke7ip+lzlgj6rKsEJCExfA8nbyBjdWEr2aqsvgey9Fl462Ly/r/Mb35oACz0sHqgwq1Yv0eAnotM=
+X-Received: by 2002:ac8:5882:0:b0:3f9:a78f:c527 with SMTP id
+ t2-20020ac85882000000b003f9a78fc527mr17762qta.21.1689016428164; Mon, 10 Jul
+ 2023 12:13:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <202307101059.86ea1eac-oliver.sang@intel.com>
+In-Reply-To: <202307101059.86ea1eac-oliver.sang@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 10 Jul 2023 12:13:36 -0700
+Message-ID: <CAP-5=fVQc_FioO2QAGrW2B7QMQN8TyD1_Ns=rMNxmGQ9hhPnYQ@mail.gmail.com>
+Subject: Re: [linus:master] [perf parse] 70c90e4a6b: perf-test.perf_hw_event_sample_group.group_sampe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses_instructions_HAS_FIX_NO_NMI_R1.fail
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Clark <james.clark@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Rob Herring <robh@kernel.org>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023, at 18:55, David Sterba wrote:
-> On Wed, Jul 05, 2023 at 04:01:08PM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The -Wmaybe-uninitialized warning option in gcc produces tons of false
->> positive warnings when KASAN is enabled, as that turns off some required
->> optimizations.
+Hi and thanks for the report, I'm confused by the output. Specifically:
+
+Direct leak of 17544 byte(s) in 51 object(s) allocated from:
+    #0 0x7f49ee50c037 in __interceptor_calloc
+../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:154
+    #1 0x556656895a6b in map__new2 util/map.c:226
+    #2 0x55665687a6ac in machine__addnew_module_map util/machine.c:1039
+    #3 0x556656880bfa in machine__process_kernel_mmap_event util/machine.c:=
+1809
+    #4 0x556656882eb7 in machine__process_mmap_event util/machine.c:1996
+    #5 0x5566567426bd in perf_event__process_mmap util/event.c:370
+    #6 0x5566568b3536 in machines__deliver_event util/session.c:1565
+    #7 0x5566568b4e16 in perf_session__deliver_event util/session.c:1645
+    #8 0x5566568b7ea1 in perf_session__process_event util/session.c:1881
+    #9 0x5566568bed4d in process_simple util/session.c:2442
+    #10 0x5566568bdd9d in reader__read_event util/session.c:2371
+    #11 0x5566568be6dd in reader__process_events util/session.c:2420
+    #12 0x5566568bf506 in __perf_session__process_events util/session.c:246=
+7
+    #13 0x5566568c243e in perf_session__process_events util/session.c:2633
+    #14 0x5566563ff7d9 in __cmd_report
+/usr/src/perf_selftests-x86_64-rhel-8.3-bpf-70c90e4a6b2fbe775b662eafefae51f=
+64d627790/tools/perf/builtin-report.c:989
+    #15 0x55665640be73 in cmd_report
+/usr/src/perf_selftests-x86_64-rhel-8.3-bpf-70c90e4a6b2fbe775b662eafefae51f=
+64d627790/tools/perf/builtin-report.c:1709
+    #16 0x5566566e0d7f in run_builtin
+/usr/src/perf_selftests-x86_64-rhel-8.3-bpf-70c90e4a6b2fbe775b662eafefae51f=
+64d627790/tools/perf/perf.c:323
+    #17 0x5566566e1601 in handle_internal_command
+/usr/src/perf_selftests-x86_64-rhel-8.3-bpf-70c90e4a6b2fbe775b662eafefae51f=
+64d627790/tools/perf/perf.c:377
+    #18 0x5566566e1b33 in run_argv
+/usr/src/perf_selftests-x86_64-rhel-8.3-bpf-70c90e4a6b2fbe775b662eafefae51f=
+64d627790/tools/perf/perf.c:421
+    #19 0x5566566e225f in main
+/usr/src/perf_selftests-x86_64-rhel-8.3-bpf-70c90e4a6b2fbe775b662eafefae51f=
+64d627790/tools/perf/perf.c:537
+    #20 0x7f49ed6b3d09 in __libc_start_main
+(/lib/x86_64-linux-gnu/libc.so.6+0x23d09)
+
+It shows a map being leaked but without the reference count checker
+being enabled, which shouldn't happen given:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/to=
+ols/lib/perf/include/internal/rc_check.h#n12
+
+Trying to look further, the blamed line is a closing curly for a function:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/to=
+ols/perf/util/machine.c#n1039
+
+As such I'm not sure there is anything actionable here and I suspect
+the underlying issues were fixed with the numerous reference count
+checker fixes to the perf tool.
+
+Thanks,
+Ian
+
+On Sun, Jul 9, 2023 at 8:10=E2=80=AFPM kernel test robot <oliver.sang@intel=
+.com> wrote:
 >
-> Which version of gcc produces the warnings? I have KASAN enabled and
-> don't see any warnings, with gcc 13. Making the warning conditional
-> would effectively turn it off for me which means I can't catch the
-> warnings early. We do get reports from various build bots with
-> various arch/compiler combinations and fix the warnings.
 >
-> If there's a know minimum compiler version where there are no reports
-> (or reasonably small nubmer to fix) then I'd rather make the condition
-> bassed on that, neither on KASAN nor any similar feature for that matter.
-
-As far as I can tell, this happens with every version of gcc.
-What I think happens is that with any combination of compiler
-flags and version, the code generation changes a little, so you
-end up getting the warnings in different places, and one can
-easily avoid them by adding fake initializers for a particular
-configuration but not for other configurations.
-
-If I run 100 randconfig builds with KASAN and btrfs force-enabled,
-using gcc-13.1.0 like
-
-for i in `seq 100` ; do
-   make   -skj16 randconfig fs/btrfs/
-done
-
-building for arm32 (see below), I get maybe 20 failed builds, but
-for x86 this is lower, maybe 2. I had attempted to work around
-each one of the ones I saw, but ended up with a huge patch to
-cover all architectures and compilers in random versions.
-
-      Arnd
-
-/home/arnd/arm-soc/fs/btrfs/scrub.c: In function 'scrub_simple_mirror.constprop':
-/home/arnd/arm-soc/fs/btrfs/scrub.c:2014:16: error: 'ret' may be used uninitialized in this function [-Werror=maybe-uninitialized]
- 2014 |         return ret;
-      |                ^~~
-KCONFIG_SEED=0xFF336D86
-KCONFIG_SEED=0x8B05C4B2
-KCONFIG_SEED=0x64310838
-KCONFIG_SEED=0x3DB885EC
-KCONFIG_SEED=0x983AF756
-KCONFIG_SEED=0xEC0D51EC
-KCONFIG_SEED=0xB1B553E8
-KCONFIG_SEED=0x98E3861
-KCONFIG_SEED=0xAC9172F6
-KCONFIG_SEED=0xA2325450
-KCONFIG_SEED=0x20E308F6
-KCONFIG_SEED=0xC238FBF0
-KCONFIG_SEED=0x791A0953
-KCONFIG_SEED=0x55CE08D2
-KCONFIG_SEED=0x6653C680
-KCONFIG_SEED=0x52503183
-KCONFIG_SEED=0x4D293618
-KCONFIG_SEED=0x558D9E5B
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xBFB8CB20
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xB104EEBA
-KCONFIG_SEED=0x80695891
-KCONFIG_SEED=0xD82997F0
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_features':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_space_info':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xAA4AD4E2
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_features':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_space_info':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x6DA7D48C
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x26CA5A79
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x2D2D44C
-KCONFIG_SEED=0xD984DF1C
-KCONFIG_SEED=0x9A330457
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4677:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xB1096B7E
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4677:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xAB63E698
-KCONFIG_SEED=0xF60D4D80
-KCONFIG_SEED=0x84787E6E
-KCONFIG_SEED=0x39B76E26
-KCONFIG_SEED=0x7266F10
-KCONFIG_SEED=0xD08875AC
-KCONFIG_SEED=0x4D8842C3
-KCONFIG_SEED=0x29B7A4AC
-KCONFIG_SEED=0xFED01A8F
-KCONFIG_SEED=0x593CCD90
-KCONFIG_SEED=0x9E8F768D
-KCONFIG_SEED=0xB723335B
-KCONFIG_SEED=0x6CE2500C
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xD26AE43C
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xF0EE3781
-KCONFIG_SEED=0x2659EA00
-KCONFIG_SEED=0x7A984178
-KCONFIG_SEED=0x196A6EC8
-KCONFIG_SEED=0xBBE97CCB
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xCA63D258
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xE360B828
-KCONFIG_SEED=0x8BB52CA0
-KCONFIG_SEED=0x9703EBEB
-KCONFIG_SEED=0xC05C41F5
-KCONFIG_SEED=0x8BBA3CC8
-KCONFIG_SEED=0xCC046259
-KCONFIG_SEED=0xED4A6408
-KCONFIG_SEED=0x8194C34E
-KCONFIG_SEED=0x3A029C2A
-KCONFIG_SEED=0xAEC7F728
-KCONFIG_SEED=0x6B0212AD
-KCONFIG_SEED=0xA88C8291
-KCONFIG_SEED=0x3F5C676C
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x2271B29B
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x6D7C92C0
-KCONFIG_SEED=0xE127F39C
-KCONFIG_SEED=0x30223BC0
-KCONFIG_SEED=0xFB06665A
-KCONFIG_SEED=0xF3AEAD98
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xF2F46C48
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xE6BC74C7
-KCONFIG_SEED=0xC1487C18
-KCONFIG_SEED=0xD4D4EAC8
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xE1003AAC
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remadeKCONFIG_SEED=0x85E79AC8
-KCONFIG_SEED=0x94D3F039
-KCONFIG_SEED=0x9D4C8E40
-KCONFIG_SEED=0x60B769E3
-KCONFIG_SEED=0xC386D86
-KCONFIG_SEED=0x835F94A2
-KCONFIG_SEED=0xC0F21885
-KCONFIG_SEED=0xC50925AF
-KCONFIG_SEED=0xFA8DDB2F
-KCONFIG_SEED=0x56B76368
-KCONFIG_SEED=0x394DADE7
-KCONFIG_SEED=0xE11A07BB
-KCONFIG_SEED=0xE2D409F8
-KCONFIG_SEED=0x3B78F3C8
-KCONFIG_SEED=0xF9ED4A5C
-KCONFIG_SEED=0xE16D18FC
-KCONFIG_SEED=0x97A0B953
-KCONFIG_SEED=0xDBF867A6
-KCONFIG_SEED=0xB9D4F056
-KCONFIG_SEED=0x8C44E1A
-
-WARNING: unmet direct dependencies detected for SM_GCC_8450
-  Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
-  Selected by [m]:
-  - SM_VIDEOCC_8450 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-
-WARNING: unmet direct dependencies detected for SM_GCC_8550
-  Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
-  Selected by [m]:
-  - SM_VIDEOCC_8550 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-KCONFIG_SEED=0xFF336D86
-KCONFIG_SEED=0x8B05C4B2
-KCONFIG_SEED=0x64310838
-KCONFIG_SEED=0x3DB885EC
-KCONFIG_SEED=0x983AF756
-KCONFIG_SEED=0xEC0D51EC
-KCONFIG_SEED=0xB1B553E8
-KCONFIG_SEED=0x98E3861
-KCONFIG_SEED=0xAC9172F6
-KCONFIG_SEED=0xA2325450
-KCONFIG_SEED=0x20E308F6
-KCONFIG_SEED=0xC238FBF0
-KCONFIG_SEED=0x791A0953
-KCONFIG_SEED=0x55CE08D2
-KCONFIG_SEED=0x6653C680
-KCONFIG_SEED=0x52503183
-KCONFIG_SEED=0x4D293618
-KCONFIG_SEED=0x558D9E5B
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xBFB8CB20
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xB104EEBA
-KCONFIG_SEED=0x80695891
-KCONFIG_SEED=0xD82997F0
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_features':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_space_info':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xAA4AD4E2
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_features':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_space_info':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x6DA7D48C
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x26CA5A79
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x2D2D44C
-KCONFIG_SEED=0xD984DF1C
-KCONFIG_SEED=0x9A330457
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4677:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xB1096B7E
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1741:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'sk' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1734:39: note: 'sk' declared here
- 1734 |         struct btrfs_ioctl_search_key sk;
-      |                                       ^~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_tree_search_v2' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:1773:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_tree_search_v2':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:1764:43: note: 'args' declared here
- 1764 |         struct btrfs_ioctl_search_args_v2 args;
-      |                                           ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_fslabel' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4127:6:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'label' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_set_fslabel':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4121:14: note: 'label' declared here
- 4121 |         char label[BTRFS_LABEL_SIZE];
-      |              ^~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_encoded_write.constprop' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4488:7:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl_encoded_write.constprop':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4448:44: note: 'args' declared here
- 4448 |         struct btrfs_ioctl_encoded_io_args args;
-      |                                            ^~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_set_features' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4271:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4677:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'flags' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:4263:42: note: 'flags' declared here
- 4263 |         struct btrfs_ioctl_feature_flags flags[2];
-      |                                          ^~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xAB63E698
-KCONFIG_SEED=0xF60D4D80
-KCONFIG_SEED=0x84787E6E
-KCONFIG_SEED=0x39B76E26
-KCONFIG_SEED=0x7266F10
-KCONFIG_SEED=0xD08875AC
-KCONFIG_SEED=0x4D8842C3
-KCONFIG_SEED=0x29B7A4AC
-KCONFIG_SEED=0xFED01A8F
-KCONFIG_SEED=0x593CCD90
-KCONFIG_SEED=0x9E8F768D
-KCONFIG_SEED=0xB723335B
-KCONFIG_SEED=0x6CE2500C
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xD26AE43C
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xF0EE3781
-KCONFIG_SEED=0x2659EA00
-KCONFIG_SEED=0x7A984178
-KCONFIG_SEED=0x196A6EC8
-KCONFIG_SEED=0xBBE97CCB
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xCA63D258
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xE360B828
-KCONFIG_SEED=0x8BB52CA0
-KCONFIG_SEED=0x9703EBEB
-KCONFIG_SEED=0xC05C41F5
-KCONFIG_SEED=0x8BBA3CC8
-KCONFIG_SEED=0xCC046259
-KCONFIG_SEED=0xED4A6408
-KCONFIG_SEED=0x8194C34E
-KCONFIG_SEED=0x3A029C2A
-KCONFIG_SEED=0xAEC7F728
-KCONFIG_SEED=0x6B0212AD
-KCONFIG_SEED=0xA88C8291
-KCONFIG_SEED=0x3F5C676C
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x2271B29B
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x6D7C92C0
-KCONFIG_SEED=0xE127F39C
-KCONFIG_SEED=0x30223BC0
-KCONFIG_SEED=0xFB06665A
-KCONFIG_SEED=0xF3AEAD98
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xF2F46C48
-In file included from /home/arnd/arm-soc/include/asm-generic/rwonce.h:26,
-                 from ./arch/arm/include/generated/asm/rwonce.h:1,
-                 from /home/arnd/arm-soc/include/linux/compiler.h:246,
-                 from /home/arnd/arm-soc/include/linux/export.h:5,
-                 from /home/arnd/arm-soc/include/linux/linkage.h:7,
-                 from /home/arnd/arm-soc/include/linux/kernel.h:17,
-                 from /home/arnd/arm-soc/fs/btrfs/ioctl.c:6:
-In function 'instrument_copy_from_user_before',
-    inlined from '_copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:148:3,
-    inlined from 'copy_from_user' at /home/arnd/arm-soc/include/linux/uaccess.h:183:7,
-    inlined from 'btrfs_ioctl_space_info' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:2993:6,
-    inlined from 'btrfs_ioctl' at /home/arnd/arm-soc/fs/btrfs/ioctl.c:4610:10:
-/home/arnd/arm-soc/include/linux/kasan-checks.h:38:27: error: 'space_args' may be used uninitialized [-Werror=maybe-uninitialized]
-   38 | #define kasan_check_write __kasan_check_write
-/home/arnd/arm-soc/include/linux/instrumented.h:129:9: note: in expansion of macro 'kasan_check_write'
-  129 |         kasan_check_write(to, n);
-      |         ^~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/include/linux/kasan-checks.h: In function 'btrfs_ioctl':
-/home/arnd/arm-soc/include/linux/kasan-checks.h:20:6: note: by argument 1 of type 'const volatile void *' to '__kasan_check_write' declared here
-   20 | bool __kasan_check_write(const volatile void *p, unsigned int size);
-      |      ^~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/ioctl.c:2975:39: note: 'space_args' declared here
- 2975 |         struct btrfs_ioctl_space_args space_args;
-      |                                       ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/ioctl.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xE6BC74C7
-KCONFIG_SEED=0xC1487C18
-KCONFIG_SEED=0xD4D4EAC8
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0xE1003AAC
-/home/arnd/arm-soc/fs/btrfs/tree-log.c: In function 'btrfs_log_prealloc_extents':
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4828:23: error: 'start_slot' may be used uninitialized [-Werror=maybe-uninitialized]
- 4828 |                 ret = copy_items(trans, inode, dst_path, path,
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 4829 |                                  start_slot, ins_nr, 1, 0);
-      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/arnd/arm-soc/fs/btrfs/tree-log.c:4725:13: note: 'start_slot' was declared here
- 4725 |         int start_slot;
-      |             ^~~~~~~~~~
-cc1: all warnings being treated as errors
-make[6]: *** [/home/arnd/arm-soc/scripts/Makefile.build:243: fs/btrfs/tree-log.o] Error 1
-make[6]: Target 'fs/btrfs/' not remade because of errors.
-make[5]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs/btrfs] Error 2
-make[5]: Target 'fs/btrfs/' not remade because of errors.
-make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:477: fs] Error 2
-make[4]: Target 'fs/btrfs/' not remade because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x2BD778F8
-KCONFIG_SEED=0xEC319E0E
-KCONFIG_SEED=0xED473D40
-KCONFIG_SEED=0x2F7A7070
-KCONFIG_SEED=0xA58A4FCA
- because of errors.
-make[3]: *** [/home/arnd/arm-soc/Makefile:1934: .] Error 2
-make[3]: Target 'fs/btrfs/' not remade because of errors.
-make[2]: *** [/home/arnd/arm-soc/Makefile:234: __sub-make] Error 2
-make[2]: Target 'fs/btrfs/' not remade because of errors.
-make[1]: *** [Makefile:234: __sub-make] Error 2
-make[1]: Target 'fs/btrfs/' not remade because of errors.
-make: *** [makefile:163: fs/btrfs/] Error 2
-KCONFIG_SEED=0x2BD778F8
-KCONFIG_SEED=0xEC319E0E
-KCONFIG_SEED=0xED473D40
-KCONFIG_SEED=0x2F7A7070
-KCONFIG_SEED=0xA58A4FCA
+> hi Ian Rogers,
+>
+> when we reported
+> "[linux-next:master] [perf parse]  70c90e4a6b: perf-test.perf_hw_event_sa=
+mple_group.group_sampe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses_=
+instructions_HAS_FIX_NO_NMI_R1.fail"
+> on
+> https://lore.kernel.org/all/202306161546.17ace7b9-oliver.sang@intel.com/
+> when this commit is still on linus-next, you mentioned it should be fixed=
+ by
+> https://lore.kernel.org/r/20230608232823.4027869-20-irogers@google.com
+> which we noticed is already on mainline now.
+>   "1981da1fe2499 perf machine: Don't leak module maps"
+>
+> now we noticed the commit is on mainline already, and the issues seem sti=
+ll
+> exist. we also tested on latest linus/master linux-next/master when this =
+bisect
+> done, which we confirmed both include 1981da1fe2499. but we found the tes=
+ts
+> still failed. so we send this report again FYI.
+>
+>
+> Hello,
+>
+> kernel test robot noticed "perf-test.perf_hw_event_sample_group.group_sam=
+pe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses_instructions_HAS_FIX=
+_NO_NMI_R1.fail" on:
+>
+> commit: 70c90e4a6b2fbe775b662eafefae51f64d627790 ("perf parse-events: Avo=
+id scanning PMUs before parsing")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+>
+> [test failed on linus/master 1c7873e3364570ec89343ff4877e0f27a7b21a61]
+> [test failed on linux-next/master 123212f53f3e394c1ae69a58c05dfdda56fec8c=
+6]
+>
+> in testcase: perf-test
+> version: perf-test-x86_64-git-1_20220520
+> with following parameters:
+>
+>         type: lkp
+>         group: group-00
+>
+> test-description: The internal Perf Test suite.
+>
+>
+> compiler: gcc-12
+> test machine: 224 threads 2 sockets Intel(R) Xeon(R) Platinum 8480+ (Sapp=
+hire Rapids) with 256G memory
+>
+> (please refer to attached dmesg/kmsg for entire log/backtrace)
+>
+>
+>
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Closes: https://lore.kernel.org/oe-lkp/202307101059.86ea1eac-oliver.san=
+g@intel.com
+>
+>
+> besides, we also noticed several other cases will fail on this commit but=
+ pass
+> on parent:
+>
+> 442eeb77044705f2 70c90e4a6b2fbe775b662eafefa
+> ---------------- ---------------------------
+>        fail:runs  %reproduction    fail:runs
+>            |             |             |
+>            :6          100%           6:6     perf-test.perf_hw_event_sam=
+ple_group.group_sampe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses_i=
+nstructions_HAS_FIX_NO_NMI_R1.fail
+>            :6          100%           6:6     perf-test.perf_hw_event_sam=
+ple_group.group_sampe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses_i=
+nstructions_NO_FIX_HAS_NMI_R1.fail
+>            :6          100%           6:6     perf-test.perf_hw_event_sam=
+ple_group.group_sampe_cpu-cycles_instructions_k_HAS_FIX_NO_NMI_R1.fail
+>            :6          100%           6:6     perf-test.perf_hw_event_sam=
+ple_group.group_sampe_cpu-cycles_instructions_k_NO_FIX_HAS_NMI_R1.fail
+>
+>
+>
+> 28 test cases pass for perf_hw_event_sample_group test. 4 test cases fail=
+ for perf_hw_event_sample_group test.
+> Test Case sampe_cpu-cycles_cache-misses_instructions_NO_FIX_HAS_NMI_R1 PA=
+SS!
+> Test Case group_sampe_cpu-cycles_cache-misses_NO_FIX_HAS_NMI_R1 PASS!
+> Test Case group_sampe_cache-misses_instructions_u_NO_FIX_HAS_NMI_R1 PASS!
+> Test Case group_sampe_cpu-cycles_instructions_k_NO_FIX_HAS_NMI_R1 FAILED!=
+     <----------
+> Test Case group_sampe_cpu-cycles_cache-misses_and_cache-misses_instructio=
+ns_NO_FIX_HAS_NMI_R1 PASS!
+> Test Case group_sampe_cpu-cycles_cache-misses_instructions_NO_FIX_HAS_NMI=
+_R1 PASS!
+> Test Case group_sampe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses=
+_instructions_NO_FIX_HAS_NMI_R1 FAILED!     <----------
+> Test Case group_sampe_cpu-cycles_cache-misses_instructions_and_cpu-cycles=
+_cache-misses_instructions_NO_FIX_HAS_NMI_R1 PASS!
+> Test Case sampe_cpu-cycles_cache-misses_instructions_HAS_FIX_NO_NMI_R1 PA=
+SS!
+> Test Case group_sampe_cpu-cycles_cache-misses_HAS_FIX_NO_NMI_R1 PASS!
+> Test Case group_sampe_cache-misses_instructions_u_HAS_FIX_NO_NMI_R1 PASS!
+> Test Case group_sampe_cpu-cycles_instructions_k_HAS_FIX_NO_NMI_R1 FAILED!=
+     <----------
+> Test Case group_sampe_cpu-cycles_cache-misses_and_cache-misses_instructio=
+ns_HAS_FIX_NO_NMI_R1 PASS!
+> Test Case group_sampe_cpu-cycles_cache-misses_instructions_HAS_FIX_NO_NMI=
+_R1 PASS!
+> Test Case group_sampe_cpu-cycles_cache-misses_and_cpu-cycles_cache-misses=
+_instructions_HAS_FIX_NO_NMI_R1 FAILED!     <----------
+> Test Case group_sampe_cpu-cycles_cache-misses_instructions_and_cpu-cycles=
+_cache-misses_instructions_HAS_FIX_NO_NMI_R1 PASS!
+> Test Case sampe_bus-cycles_bus-cycles_branch-misses_NO_FIX_HAS_NMI_R0 PAS=
+S!
+> Test Case group_sampe_bus-cycles_bus-cycles_NO_FIX_HAS_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_branch-misses_u_NO_FIX_HAS_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_branch-misses_k_NO_FIX_HAS_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_and_bus-cycles_branch-misses_=
+NO_FIX_HAS_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_branch-misses_NO_FIX_HAS_NMI_=
+R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_and_bus-cycles_bus-cycles_bra=
+nch-misses_NO_FIX_HAS_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_branch-misses_and_bus-cycles_=
+bus-cycles_branch-misses_NO_FIX_HAS_NMI_R0 PASS!
+> Test Case sampe_bus-cycles_bus-cycles_branch-misses_HAS_FIX_NO_NMI_R0 PAS=
+S!
+> Test Case group_sampe_bus-cycles_bus-cycles_HAS_FIX_NO_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_branch-misses_u_HAS_FIX_NO_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_branch-misses_k_HAS_FIX_NO_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_and_bus-cycles_branch-misses_=
+HAS_FIX_NO_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_branch-misses_HAS_FIX_NO_NMI_=
+R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_and_bus-cycles_bus-cycles_bra=
+nch-misses_HAS_FIX_NO_NMI_R0 PASS!
+> Test Case group_sampe_bus-cycles_bus-cycles_branch-misses_and_bus-cycles_=
+bus-cycles_branch-misses_HAS_FIX_NO_NMI_R0 PASS!
+> perf hardware cache event sample group test
+>
+>
+>
+> To reproduce:
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in=
+ this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file =
+for lkp run
+>         sudo bin/lkp run generated-yaml-file
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>
+>
