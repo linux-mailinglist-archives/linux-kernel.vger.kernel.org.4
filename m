@@ -2,74 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6704F74DD60
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5949874DD63
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjGJSdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S231757AbjGJSdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjGJSdD (ORCPT
+        with ESMTP id S231510AbjGJSdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:33:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D60AB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:33:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B7E461190
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D34C433C7;
-        Mon, 10 Jul 2023 18:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689013981;
-        bh=Pv/lcySJO1XElAFhqqvd4ig1BMThJRh3ymVy3haiYOc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T0sUysvFq2/EErWjQ6pNbUPnDRkgdK1x4lTcQnGR34CMyvsTAL5fmXjEXuaXW8fEM
-         Huky67w2Io4ttbGXWldeTI28Y8CM0q2j+9L7XDh1sDbJ5FJNdZ1YCmvdiUKpMGQWNP
-         T1BI98TSuIwjDBpaWp7j7V3CRPxI9nC/Q5MvbCbepE7kGkDR4UH7XHFDOZCFzSbdtu
-         Xr5yMBxiE6bF+YVuh+IcJaIh1PuxhS4eYf5xDvK2ya8Vzd5F/wJyGqEdncZAasExqU
-         +ySUD0BCGWeAgtVtiY1I4ULCD9881lfq/dANEISJiJpgHPxpmYePOwxBeOvkM7CNkS
-         Fu3yC8vLMtwtQ==
-Date:   Mon, 10 Jul 2023 11:33:00 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Cc:     davem@davemloft.net, Liam.Howlett@Oracle.com,
-        akpm@linux-foundation.org, david@fries.net, edumazet@google.com,
-        pabeni@redhat.com, zbr@ioremap.net, brauner@kernel.org,
-        johannes@sipsolutions.net, ecree.xilinx@gmail.com, leon@kernel.org,
-        keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v9 0/6] Process connector bug fixes & enhancements
-Message-ID: <20230710113300.10cba1b3@kernel.org>
-In-Reply-To: <20230708023420.3931239-1-anjali.k.kulkarni@oracle.com>
-References: <20230708023420.3931239-1-anjali.k.kulkarni@oracle.com>
+        Mon, 10 Jul 2023 14:33:44 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F5C198
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:33:42 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666e64e97e2so2456474b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:33:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1689014021; x=1691606021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KfOFwa2MqGzUVHMgMbaymeSQf/jXq0PE9ZHxapBD3Wg=;
+        b=L6sqxAkYvprfFLOpuEhxBMp3KNnplB0ZZcAipTraoZiFvvCxf5cGIkbNgr1XsLKwwt
+         dYDuePFBEKrJay9FP/gc2BkJQgoUC0I4JXHljZAkscoST0FgIb9tIOctKtBoElAIOCeJ
+         RLip2ZlDiqlYFlPsq3R684aqltWpmCQoDLRgg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689014021; x=1691606021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KfOFwa2MqGzUVHMgMbaymeSQf/jXq0PE9ZHxapBD3Wg=;
+        b=g0etvl8heuRWEHKkeNDq97mMBcCxagLf0407etWOPFrOCy5+NiPb9ZvT8pYNxbT39e
+         FeKvRzd5I37V6h+mTB7hLetk8cG+rReOFYCc6nmH93kIk3n7UzXLfsSPfIFRLuklZ+7+
+         Q6eG/q85fomo9B6MytxGflmiElC7CN/23egf/vbxPLx4g/DOv//JquKn9sLpbSW4MgZm
+         Tvb5JiLqBs1ssMkjQsnvJXmsOtmQYuUu0Wtij1wwvbEmw9xYAp7u9QFrs+ByoDHJXJSK
+         6F5jsmWuquwU3ksxXKByqhZBz+lAbqiQ6vwIpEi0tnnXaUVcnRDTnWa6J7NfOJdLdA/g
+         K2Zw==
+X-Gm-Message-State: ABy/qLa7kcZDb9n8VNakHrZ546DMc67bWMYC/rnwy7B+fSOjmWqQZ+iM
+        RFMWV8ui5ltYJPKu4usAjelwxw==
+X-Google-Smtp-Source: APBJJlEqVexQ6jN2gO3KWfYqkBJoMzaqpFqQyvVnVP9eqYxWtYJk6TKV2fjLJpZdKtiKiwtFwVEYsg==
+X-Received: by 2002:a05:6a00:1915:b0:64a:2dd6:4f18 with SMTP id y21-20020a056a00191500b0064a2dd64f18mr12947103pfi.13.1689014021308;
+        Mon, 10 Jul 2023 11:33:41 -0700 (PDT)
+Received: from localhost ([2601:644:200:aea:60e1:d34a:f5f6:64b5])
+        by smtp.gmail.com with ESMTPSA id t17-20020aa79391000000b00679d3fb2f92sm96713pfe.154.2023.07.10.11.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 11:33:41 -0700 (PDT)
+From:   Ivan Babrou <ivan@cloudflare.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     kernel-team@cloudflare.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ivan Babrou <ivan@cloudflare.com>
+Subject: [PATCH] kernfs: attach uuid for every kernfs and report it in fsid
+Date:   Mon, 10 Jul 2023 11:33:38 -0700
+Message-ID: <20230710183338.58531-1-ivan@cloudflare.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Jul 2023 19:34:14 -0700 Anjali Kulkarni wrote:
-> Oracle DB is trying to solve a performance overhead problem it has been
-> facing for the past 10 years and using this patch series, we can fix this
-> issue.
+The following two commits added the same thing for tmpfs:
 
-You sent this when net-next was still closed, please read the first
-few sections of: 
+* commit 2b4db79618ad ("tmpfs: generate random sb->s_uuid")
+* commit 59cda49ecf6c ("shmem: allow reporting fanotify events with file handles on tmpfs")
 
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
+Having fsid allows using fanotify, which is especially handy for cgroups,
+where one might be interested in knowing when they are created or removed.
 
-To be fair towards folks who follow the rules I need to discard this
-from patchwork, please repost later this week.
+Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+---
+ fs/kernfs/mount.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
+index d49606accb07..930026842359 100644
+--- a/fs/kernfs/mount.c
++++ b/fs/kernfs/mount.c
+@@ -16,6 +16,8 @@
+ #include <linux/namei.h>
+ #include <linux/seq_file.h>
+ #include <linux/exportfs.h>
++#include <linux/uuid.h>
++#include <linux/statfs.h>
+ 
+ #include "kernfs-internal.h"
+ 
+@@ -45,8 +47,15 @@ static int kernfs_sop_show_path(struct seq_file *sf, struct dentry *dentry)
+ 	return 0;
+ }
+ 
++int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
++{
++	simple_statfs(dentry, buf);
++	buf->f_fsid = uuid_to_fsid(dentry->d_sb->s_uuid.b);
++	return 0;
++}
++
+ const struct super_operations kernfs_sops = {
+-	.statfs		= simple_statfs,
++	.statfs		= kernfs_statfs,
+ 	.drop_inode	= generic_delete_inode,
+ 	.evict_inode	= kernfs_evict_inode,
+ 
+@@ -351,6 +360,8 @@ int kernfs_get_tree(struct fs_context *fc)
+ 		}
+ 		sb->s_flags |= SB_ACTIVE;
+ 
++		uuid_gen(&sb->s_uuid);
++
+ 		down_write(&root->kernfs_supers_rwsem);
+ 		list_add(&info->node, &info->root->supers);
+ 		up_write(&root->kernfs_supers_rwsem);
 -- 
-pw-bot: defer
+2.41.0
+
