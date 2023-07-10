@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D5074D3BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7E474D3BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbjGJKj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S233434AbjGJKjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233429AbjGJKju (ORCPT
+        with ESMTP id S232563AbjGJKjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:39:50 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D52CC;
-        Mon, 10 Jul 2023 03:39:28 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qIoIc-0000vr-Cy; Mon, 10 Jul 2023 12:39:22 +0200
-Message-ID: <f04feee0-bb2c-b778-0603-2817c5b9bc40@leemhuis.info>
-Date:   Mon, 10 Jul 2023 12:39:19 +0200
+        Mon, 10 Jul 2023 06:39:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0B3BD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:39:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DDE9D2189D;
+        Mon, 10 Jul 2023 10:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688985562; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CYxrrYnUqrkMy59GTjELve4cJ3+ZVeFvdL7z1zpjvkY=;
+        b=uz0YFn4CeP6lKsNjbqQROnOqL+V0G7gRIEXTnEXfg5hF/N/LxIToBI9g9eRO0nOJXn7FBe
+        VDttgRpBlSHdIS82z3NdQ3Nz8JUEwBaAl5oxT2vS44D+CTt4hJJVz5APzYaJty8kJRibwf
+        FsZeEnPn2GMt932m6OcfRAUDqm6Q/tM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688985562;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CYxrrYnUqrkMy59GTjELve4cJ3+ZVeFvdL7z1zpjvkY=;
+        b=LXZpglhQB1Z4Hol7lzeZKTYfjLkf4FMw5iA1Vj9D67B5RXhN7GhGdYzdwDfuqCCrhUfQnb
+        KuRTJ9RKcQR2wqCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B128813A05;
+        Mon, 10 Jul 2023 10:39:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id s6kgKtrfq2Q4SQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 10:39:22 +0000
+Message-ID: <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
+Date:   Mon, 10 Jul 2023 12:39:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [Regression][BISECTED] kernel boot hang after 19898ce9cf8a
- ("wifi: iwlwifi: split 22000.c into multiple files")
-Content-Language: en-US, de-DE
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "Baruch, Yaara" <yaara.baruch@intel.com>,
-        "Greenman, Gregory" <gregory.greenman@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "Ben Ami, Golan" <golan.ben.ami@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <b533071f38804247f06da9e52a04f15cce7a3836.camel@intel.com>
- <a4265090-d6b8-b185-a400-b09b27a347cc@leemhuis.info>
- <CAHk-=wg23SdKRcn2W+BWWEfJ2Efp0sreJx9=iw0AsUPjW3qznw@mail.gmail.com>
- <446c25888d9316d0f15e6bcc6ecb100dda99324e.camel@sipsolutions.net>
- <e7d7945055802e5d3f1b42750716bc6a314ec97b.camel@intel.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <e7d7945055802e5d3f1b42750716bc6a314ec97b.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688985569;044dc97e;
-X-HE-SMSGID: 1qIoIc-0000vr-Cy
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Subject: Re: [PATCH] drm/loongson: Remove a useless check in
+ cursor_plane_atomic_async_check()
+Content-Language: en-US
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn,
+        Dan Carpenter <dan.carpenter@linaro.org>
+References: <20230710102411.257970-1-suijingfeng@loongson.cn>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230710102411.257970-1-suijingfeng@loongson.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------4NzYHQ0meXnyjp5NUHEctiO8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,38 +77,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing one
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------4NzYHQ0meXnyjp5NUHEctiO8
+Content-Type: multipart/mixed; boundary="------------gHC0UBfbZfbysQI57TF0upCZ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sui Jingfeng <suijingfeng@loongson.cn>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ loongson-kernel@lists.loongnix.cn, Dan Carpenter <dan.carpenter@linaro.org>
+Message-ID: <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
+Subject: Re: [PATCH] drm/loongson: Remove a useless check in
+ cursor_plane_atomic_async_check()
+References: <20230710102411.257970-1-suijingfeng@loongson.cn>
+In-Reply-To: <20230710102411.257970-1-suijingfeng@loongson.cn>
 
-On 10.07.23 03:54, Zhang, Rui wrote:
-> On Sun, 2023-07-09 at 20:07 +0200, Johannes Berg wrote:
->> On Sun, 2023-07-09 at 09:31 -0700, Linus Torvalds wrote:
->>> On Fri, 7 Jul 2023 at 03:55, Linux regression tracking (Thorsten
->>> Leemhuis) <regressions@leemhuis.info> wrote:
->>>>
->>>> [CCing the regression list, netdev, the net maintainers, and
->>>> Linus;
->>>> Johannes and Kalle as well, but just for the record, they afaik
->>>> are
->>>> unavailable]
->>>
->>> So I will release rc1 with this issue, but remind me - if it hasn't
->>> had any traction next week and the radio silence continues, I'll
->>> just
->>> revert it all.
->>
->> Sorry. I got back home a few hours ago (for few days anyway) and I
->> think
->> I already know what the issue is. 
+--------------gHC0UBfbZfbysQI57TF0upCZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Many many thx for taking a look at this!
+DQoNCkFtIDEwLjA3LjIzIHVtIDEyOjI0IHNjaHJpZWIgU3VpIEppbmdmZW5nOg0KPiBCZWNh
+dXNlIHNtYXRjaCB3YXJuaW5nczoNCj4gDQo+IGRyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9s
+c2RjX3BsYW5lLmM6MTk5DQo+IGxzZGNfY3Vyc29yX3BsYW5lX2F0b21pY19hc3luY19jaGVj
+aygpDQo+IHdhcm46IHZhcmlhYmxlIGRlcmVmZXJlbmNlZCBiZWZvcmUgY2hlY2sgJ3N0YXRl
+JyAoc2VlIGxpbmUgMTgwKQ0KPiANCj4gdmltICsvc3RhdGUgKzE5OSBkcml2ZXJzL2dwdS9k
+cm0vbG9vbmdzb24vbHNkY19wbGFuZS5jDQo+IA0KPiAxNzQgIHN0YXRpYyBpbnQNCj4gICAg
+ICAgbHNkY19jdXJzb3JfcGxhbmVfYXRvbWljX2FzeW5jX2NoZWNrKHN0cnVjdCBkcm1fcGxh
+bmUgKnBsYW5lLA0KPiAxNzUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqc3RhdGUpDQo+IDE3NiAgew0KPiAxNzcgICAg
+ICAgICAgc3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqbmV3X3N0YXRlOw0KPiAxNzggICAgICAg
+ICAgc3RydWN0IGRybV9jcnRjX3N0YXRlICpjcnRjX3N0YXRlOw0KPiAxNzkNCj4gMTgwICAg
+ICAgICAgIG5ld19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19wbGFuZV9zdGF0ZShzdGF0
+ZSwgcGxhbmUpOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBeXl5eXg0KPiBzdGF0ZSBpcyBkZXJlZmVyZW5jZWQgaW5zaWRl
+IHRoaXMgZnVuY3Rpb24NCj4gDQo+IDE4MQ0KPiAxODIgIGlmICghcGxhbmUtPnN0YXRlIHx8
+ICFwbGFuZS0+c3RhdGUtPmZiKSB7DQo+IDE4MyAgICAgICAgICBkcm1fZGJnKHBsYW5lLT5k
+ZXYsICIlczogc3RhdGUgaXMgTlVMTFxuIiwgcGxhbmUtPm5hbWUpOw0KPiAxODQgICAgICAg
+ICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsNCj4gMTg1ICB9DQo+IDE4Ng0KPiAxODcgIGlm
+IChuZXdfc3RhdGUtPmNydGNfdyAhPSBuZXdfc3RhdGUtPmNydGNfaCkgew0KPiAxODggICAg
+ICAgICAgZHJtX2RiZyhwbGFuZS0+ZGV2LCAidW5zdXBwb3J0ZWQgY3Vyc29yIHNpemU6ICV1
+eCV1XG4iLA0KPiAxODkgICAgICAgICAgICAgICAgICBuZXdfc3RhdGUtPmNydGNfdywgbmV3
+X3N0YXRlLT5jcnRjX2gpOw0KPiAxOTAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+IDE5
+MSAgfQ0KPiAxOTINCj4gMTkzICBpZiAobmV3X3N0YXRlLT5jcnRjX3cgIT0gNjQgJiYgbmV3
+X3N0YXRlLT5jcnRjX3cgIT0gMzIpIHsNCj4gMTk0ICAgICAgICAgIGRybV9kYmcocGxhbmUt
+PmRldiwgInVuc3VwcG9ydGVkIGN1cnNvciBzaXplOiAldXgldVxuIiwNCj4gMTk1ICAgICAg
+ICAgICAgICAgICAgbmV3X3N0YXRlLT5jcnRjX3csIG5ld19zdGF0ZS0+Y3J0Y19oKTsNCj4g
+MTk2ICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiAxOTcgIH0NCj4gMTk4DQo+IDE5OSAg
+aWYgKHN0YXRlKSB7DQo+ICAgICAgICAgICBeXl5eXg0KPiBDaGVja2VkIHRvbyBsYXRlIQ0K
+PiANCj4gUmVwb3J0ZWQtYnk6IERhbiBDYXJwZW50ZXIgPGRhbi5jYXJwZW50ZXJAbGluYXJv
+Lm9yZz4NCj4gQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjMwNzEwMDQy
+My5yVjdEMDVVcS1sa3BAaW50ZWwuY29tLw0KPiBTaWduZWQtb2ZmLWJ5OiBTdWkgSmluZ2Zl
+bmcgPHN1aWppbmdmZW5nQGxvb25nc29uLmNuPg0KDQpBY2tlZC1ieTogVGhvbWFzIFppbW1l
+cm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkJUVywgeW91J3JlIHBvc3RpbmcgdGhl
+c2UgcGF0Y2hlcyBmb3IgbG9vbmdzb24sIGJ1dCB0aGF0IGRyaXZlciBpcyBub3QgDQp5ZXQg
+aW4gb3VyIHRyZWU/DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCg0KPiAtLS0NCj4gICBk
+cml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbHNkY19wbGFuZS5jIHwgOCArLS0tLS0tLQ0KPiAg
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNyBkZWxldGlvbnMoLSkNCj4gDQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbHNkY19wbGFuZS5jIGIv
+ZHJpdmVycy9ncHUvZHJtL2xvb25nc29uL2xzZGNfcGxhbmUuYw0KPiBpbmRleCAyYWIzZGI5
+ODJhYTMuLjBkNTA5NDYzMzIyMiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2xv
+b25nc29uL2xzZGNfcGxhbmUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24v
+bHNkY19wbGFuZS5jDQo+IEBAIC0xOTYsMTMgKzE5Niw3IEBAIHN0YXRpYyBpbnQgbHNkY19j
+dXJzb3JfcGxhbmVfYXRvbWljX2FzeW5jX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5l
+LA0KPiAgIAkJcmV0dXJuIC1FSU5WQUw7DQo+ICAgCX0NCj4gICANCj4gLQlpZiAoc3RhdGUp
+IHsNCj4gLQkJY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X2V4aXN0aW5nX2NydGNfc3Rh
+dGUoc3RhdGUsIG5ld19zdGF0ZS0+Y3J0Yyk7DQo+IC0JfSBlbHNlIHsNCj4gLQkJY3J0Y19z
+dGF0ZSA9IHBsYW5lLT5jcnRjLT5zdGF0ZTsNCj4gLQkJZHJtX2RiZyhwbGFuZS0+ZGV2LCAi
+JXM6IGF0b21pYyBzdGF0ZSBpcyBOVUxMXG4iLCBwbGFuZS0+bmFtZSk7DQo+IC0JfQ0KPiAt
+DQo+ICsJY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X2V4aXN0aW5nX2NydGNfc3RhdGUo
+c3RhdGUsIG5ld19zdGF0ZS0+Y3J0Yyk7DQo+ICAgCWlmICghY3J0Y19zdGF0ZS0+YWN0aXZl
+KQ0KPiAgIAkJcmV0dXJuIC1FSU5WQUw7DQo+ICAgDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1h
+bm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25z
+IEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdl
+cm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBC
+b3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
 
-FWIW in case anyone wonders where that fix is, find it here:
-https://lore.kernel.org/all/20230709181323.12085-2-johannes@sipsolutions.net/
+--------------gHC0UBfbZfbysQI57TF0upCZ--
 
-(or here: https://bugzilla.kernel.org/show_bug.cgi?id=217622#c9 )
+--------------4NzYHQ0meXnyjp5NUHEctiO8
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> I have tested Johannes' patch and it fixes the problem on my side.
+-----BEGIN PGP SIGNATURE-----
 
-Ahh, great.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSr39kFAwAAAAAACgkQlh/E3EQov+AG
+YBAApa6MqDvII6lUjrhDQf7muKdgzsn40UQB/YfdsvISa2AhZ9fu/hbns/alX/fwVJNqUJcQoMVw
+XiGVgbhxsqlTUIaP0EaftZGsAItfzMEWm0NF/JE3vKHTm8xca6RItiWmXbW/U2o0mqv7E4etmmOH
+2OCnRTSwTpNAxiBwclThu0NWoxBF6mc4JT+dPghIMuu32f3bkjPmzwvEb1cbvvvdWBLH2icl+CBy
+mH6N1GmlPwFR2vFWM9+E8ChgbJrCR2D9jE5lGDnRRNm7OMmMQBTD2cppKLzmn7KP/le5ZUmWUriZ
+EupfNIA3Bxz7rMAxddqoY/FjF7jYo54yU1gCzqmRGpHtkOpbCkh8XdifGCTeCDzeymGoqG5HX4Qj
+IX4Ep21g1xp/W6D/j04DwGgA3Kq5tnTnbE+H62CT0Dr45JjQY/kscrwyiUB9YykEpAKVh3ffPf4r
+Dg07H1IqunB+ABgkqTXCBAaPrsRdUDGItaWB+ke+ndMbOn9e5TwEtidG0dP6Iqjiuc0yA6Iz4rW5
+QWf2xT/XJeU8Ep8qTnHNTPrVOr240pPcypnmZYNnmx862WkDkAFwTNMG6p6MTR0W6OiHtFb2IBWm
+zx5zWnnVo6vHq4J2UKGmQAImkCVyw5lN3whkB2t9ZsHtTVYiYcXeTpHOZ/d8HwvHC7DGbA6DZApv
+zm4=
+=7Co2
+-----END PGP SIGNATURE-----
 
-Ciao, Thorsten
+--------------4NzYHQ0meXnyjp5NUHEctiO8--
