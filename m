@@ -2,234 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26EB74DBA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670EE74DBAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjGJQzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S231512AbjGJQzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbjGJQzC (ORCPT
+        with ESMTP id S231585AbjGJQzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:55:02 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C689E58
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:54:43 -0700 (PDT)
+        Mon, 10 Jul 2023 12:55:43 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2041.outbound.protection.outlook.com [40.107.8.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF2F187;
+        Mon, 10 Jul 2023 09:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b52kxjIbzKwFn0WYm3LjTdw2O3lOH9P+tsnbMSn4c3o=;
+ b=Q7PVmz6V31vZ6DchfQsbT5TzCPTr3yHt7TcK2+adS7seBq6OamDqr1d9AlIYcAMB+cidBlOBl1nBflJfbfGffYB9T4/jWmwbelkQBzHpBFq1Kv47+nKwHyFylMweyMpu/RDLB1Zcw4ICiUARXFILvF+IhfCT9I0jQ/UYRwefMXg=
+Received: from DB8PR03CA0030.eurprd03.prod.outlook.com (2603:10a6:10:be::43)
+ by DB5PR08MB10096.eurprd08.prod.outlook.com (2603:10a6:10:4aa::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 16:55:04 +0000
+Received: from DBAEUR03FT021.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:be:cafe::2e) by DB8PR03CA0030.outlook.office365.com
+ (2603:10a6:10:be::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30 via Frontend
+ Transport; Mon, 10 Jul 2023 16:55:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT021.mail.protection.outlook.com (100.127.142.184) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.18 via Frontend Transport; Mon, 10 Jul 2023 16:55:04 +0000
+Received: ("Tessian outbound f9124736ff4f:v145"); Mon, 10 Jul 2023 16:55:03 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: ac1b14dc7dceaa16
+X-CR-MTA-TID: 64aa7808
+Received: from f0426a1ec8f0.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 561E077A-9C4C-417B-8EEB-CDD0D27B6C78.1;
+        Mon, 10 Jul 2023 16:54:56 +0000
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id f0426a1ec8f0.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Mon, 10 Jul 2023 16:54:56 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hmq/83vPYPWcN5iZwyyLP+rr2WSeJYw0COMYvu0jj6Yvqll1j5CLT8RvPRAzZGcQ617oHK9gwjzg7yhvj0MfJVpVrCQBNoHwDd41Hhiq4vMsrMfu5o9jiYcIds+qhCdIoDej0+ltdaK3OwJ3wwyIfaJmV9Ue3TMA1iS8KMklwjuhLQY+vrzvRJcHZV9FQT8ZpIC+iYu3u8CjdkzWbgyFhzkR4cIAT0gtroUIPzD9L9ssYQRuVOcTuxZIbVfnXyp+zncE8zmSd0qoN0YMdVofh+Ckk0CVWPZR4B4RR541yPBgdoZ+2yoYPnOvbDpA1YkS6BktfVe9Z6oq01AlZBm1WQ==
+ b=bv38UvGdzw8yEokfG7qSRHYkJsmEXCfV4ZWwmrrdIKPxKW1Is+4lGs11B2YM+T8m5tKC6kh6bEGXUWpUJ2F9jTlUOrMeC9e8gXmu/y/G8E1NyWL0K4q5XSi4plzbDP6+LMvPAzi8NhXGCZtT1cvf7r+7uOUnwfwTbwr6x2cscn8yq3FiNiOOiFO1evevyP6+64nrNq18m8gJFXa1Ir6a1BzqRbXLo7S5bbZle7tq8MPHA0qnsZmnIa6cGoPBWC5S7yJr4pt+xGQpsfzMZ1YxIsFT4DCx4XrTruKigRWqHLMFQrD0WoaC4ymfBIFJzxvFmsqM2iPfooKKdZFptPkihA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lzj6JWmGezlQEOdya9p+ygIwZcsZWchF/CPxyXZ1fSM=;
- b=RUwCZsH1t/7CPI4t11+KxgTI4cNb/+a6yYw5F60Z/kr41wXOWg4fGPZRJBVRHrf4PQmCpgZx7ckkJBzWn0o8e2bJC6BkeSX7U1JinFPeyAfbq5Gv4shMZ357KkwZn+wiktWf7MwqdUx587PCEwcqBo1uyenUihTnUwAgeqg70Nn4qWhT37kh1g8HyIt88ixTUQ1epLM6spD2os8LDc2FERFUQebSIcSHjN/E2zMnRHRbhZfsLmlkl6W5yU27Ob0U3DbB/ae1wNLW5TuEZyjfseWyOe2Y9yo2kkXibOxGeMBchioy8vsHj012U/V9LACr5rZYSilwlwZWbtcd6ACjSg==
+ bh=b52kxjIbzKwFn0WYm3LjTdw2O3lOH9P+tsnbMSn4c3o=;
+ b=HgMTEgsEknOH4tbhCl6vu/xnM4Uk0TvrnDFAYd8RoKACd0eQfZFs4kHshyPdUbYvIupesIpnGEAy+H2ox5Wa2gNNZjoVTkrjCkO9z8p07/CWDoOXL2/DNyggcUPaLLYOFgPfGTL6Ja4lcWuU4YwbeknsOKpkSMZslXNOy4EJezgb9ZGwofj4vGBjweN1Um6LT5l49UOfqabP+pOO6bZv0pdg6BDlZjUQin7/jk9V6Jp3EC5eQ3Y/jnUFS0S24i4oLrb9m1w7UHRsqUUHzvcY0lg+5Np6Qnx0cbmQyvE4rLgvbf47Ebj9L6oiGh7/UfamKHueu4OOZlUKYeKd67D8Nw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lzj6JWmGezlQEOdya9p+ygIwZcsZWchF/CPxyXZ1fSM=;
- b=JWy2m/4OR0Wzl93Tcq0+IFSSWzZLBSEu+nZj+9jEOGJRKfk7hSk/rtSUACif5FEVGCmcALab+amsWfe4rK1wGptV0xoYF+Ka1tHX1ZtMEV3Udt6I9VXylK8Bl8AQ1Fyj06+bSk0FHA7lQictX6JdNMrXAtoT0rigSqQuYh6AZ0KI/c+xgYQnQ41fyL/MLGwaxqndLu1bHVXnbjvWX7Qc1Wwb6HBlJOm8j/MfzOCp+jPsIOQs9xNgx4KXOHKSNwi21kI8ipsZCt4EgxwujwCdxrEa02PBAc9qtsBeWvObqLiglh6JTyaFw0CGoBqiv7LD1bEzsdWZGTxin0DeTE7WtA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- PH7PR12MB5877.namprd12.prod.outlook.com (2603:10b6:510:1d5::17) with
+ bh=b52kxjIbzKwFn0WYm3LjTdw2O3lOH9P+tsnbMSn4c3o=;
+ b=Q7PVmz6V31vZ6DchfQsbT5TzCPTr3yHt7TcK2+adS7seBq6OamDqr1d9AlIYcAMB+cidBlOBl1nBflJfbfGffYB9T4/jWmwbelkQBzHpBFq1Kv47+nKwHyFylMweyMpu/RDLB1Zcw4ICiUARXFILvF+IhfCT9I0jQ/UYRwefMXg=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by AS8PR08MB10345.eurprd08.prod.outlook.com (2603:10a6:20b:57d::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
- 2023 16:53:37 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::12b7:fbc0:80e1:4b8b]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::12b7:fbc0:80e1:4b8b%3]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 16:53:37 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 0/5] variable-order, large folios for anonymous memory
-Date:   Mon, 10 Jul 2023 12:53:33 -0400
-X-Mailer: MailMate (1.14r5964)
-Message-ID: <C56EA745-E112-4887-8C22-B74FCB6A14EB@nvidia.com>
-In-Reply-To: <bfa13f35-bca9-c4e8-25f3-e8021f85f223@redhat.com>
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <78159ed0-a233-9afb-712f-2df1a4858b22@redhat.com>
- <4d4c45a2-0037-71de-b182-f516fee07e67@arm.com>
- <d9cb4563-c622-9660-287b-a2f35121aec7@redhat.com>
- <ZKgPIXSrxqymWrsv@casper.infradead.org>
- <bfa13f35-bca9-c4e8-25f3-e8021f85f223@redhat.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL0PR05CA0007.namprd05.prod.outlook.com
- (2603:10b6:208:91::17) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 16:54:54 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 16:54:54 +0000
+Date:   Mon, 10 Jul 2023 17:54:37 +0100
+From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>
+Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZKw3zSKxCug0IbC1@arm.com>
+References: <ZJR545en+dYx399c@arm.com>
+ <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
+ <ZJ2sTu9QRmiWNISy@arm.com>
+ <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
+ <ZKMRFNSYQBC6S+ga@arm.com>
+ <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
+ <ZKa8jB4lOik/aFn2@arm.com>
+ <68b7f983ffd3b7c629940b6c6ee9533bb55d9a13.camel@intel.com>
+ <ZKguVAZe+DGA1VEv@arm.com>
+ <1c2f524cbaff886ce782bf3a3f95756197bc1e27.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1c2f524cbaff886ce782bf3a3f95756197bc1e27.camel@intel.com>
+X-ClientProxiedBy: LO4P265CA0005.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ad::17) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|PH7PR12MB5877:EE_
-X-MS-Office365-Filtering-Correlation-Id: eadceeb5-86fe-43f2-890a-08db81663444
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS8PR08MB10345:EE_|DBAEUR03FT021:EE_|DB5PR08MB10096:EE_
+X-MS-Office365-Filtering-Correlation-Id: 184477e6-a80d-4fef-0330-08db8166687e
+x-checkrecipientrouted: true
+NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: oW4Qi92VkPAyncIJaMc5/GkNdY7ixx3sNE9sR6k3xm2R3DjcDHAR19us0fRhGEyxgTCMZJIewwypXajzW7BK6nuiy9EgeuyUMPOtGUrjFVNGfpNZX6k3AcFwGQUxPskDTpl8Jslv2wcnIRX9jXWOymFoVcyeC6+ahmfbAINTCWkcU7iG4TzjUNOzTCxohNyN0l9VURILsqqowD9b7yhYUPh2hEaFXdGZnMyxnrqfNBqD2jzq4qdm3ICRHjjxZXx2oRPQ4ZVEXNShIKBVs7sUOXpVZkVPvgko6mg25RteUI/+QDGJonlH9pR4wRZz3lgprivN+nksUpGPiJCiiXPc8RDwh9PCITKIBe789EPe7xc1xLRDiiwPCXiaWs6xw+dKoasEoIba2SKaJfBxNMtfxJVtUd6g+AvyTPvnuDf089hDqOG3zfs1mQ0WeUk3qZ4/DHhRVa2HIOurXHNVRkPY6FK2WMbwbx2AqeCXuk9Drgfv2CpspMhyQ3ryG/ykl3NeHpGJPXlaYGCYfV7EU2cnPFjfaOaDv8ePlRXBUINdmFJGOqxsNY2VQuD32eY+XrU1
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(136003)(396003)(346002)(451199021)(6666004)(6486002)(478600001)(110136005)(54906003)(2616005)(83380400001)(36756003)(86362001)(2906002)(66946007)(186003)(6506007)(26005)(6512007)(38100700002)(8936002)(8676002)(4326008)(66476007)(41300700001)(66556008)(316002)(5660300002)(7416002)(7406005);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB10345
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT021.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: df91ed88-ba0d-47fe-2815-08db816660af
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KU9Cm1z8reaX5347tSaoVgGsXbcib4Y8vSOYn0abJlCT1wZqO95uz9Vor0d/he4GzJZ6RO7sloOehu6wUD3wmFLn0GgPjNBSBlmeyy+u4tmPwNyNxZ5a6up2NMHV9aNFMBSl+Ar1k2r8R3J+j6JJHDWtj0ATiIdMMeB2pukzxaRfaUtGj0XUdx5x4r1juVyNmt30FLNMgEF5eTDCM7UMhdWNpvWemzz42Ows48dVRXBWjZSbyx9drf3gutHAAwgComkjQRyTevVIZN6RpqfFUW8qeyEG0UhXayHnySfj4GqcjmNzXRvs+Z4tsiA0EWU42NXT8WcCPef60vOwiBMwVA3PCt+KfQjcy/EvQS3B5YViNWU1g1+PfHOvJm+acWIDhIUDfc6cVmNzLq4hdbyjC7GmdXHvbct8He8cK/gSkjuNT4NfWbR4oaiQJKsOpB25lsddelL3LLjAhBxIazQoCEJ6CJbBOX1Ddc9Y1gNmXg8A6MQcDHY66YrV3FE1tp9G8S8v1hCUWbKakjFTt72/Duvc8npZBxnGW38DFELW19NsTMGnSYM3U9DihVGEdpvFhFHbgs/5Pbb2ccn4FZZqiolxVjvTeraB7eqgRCvedbtPFRH7NpxucqRuMydiFrFcwCPKRp0hU5zO9Xf3g9txYw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(376002)(396003)(39860400002)(451199021)(36756003)(33656002)(86362001)(38100700002)(478600001)(6666004)(54906003)(6486002)(6512007)(8936002)(8676002)(5660300002)(235185007)(7416002)(316002)(2906002)(6916009)(4326008)(66946007)(66556008)(66476007)(41300700001)(2616005)(26005)(53546011)(6506007)(83380400001)(186003)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2VFYneL+LKduAiEgqAgLiva2EwQlD3V0xGFpkbFVqrAVZex7zAp3/BxJsOEW?=
- =?us-ascii?Q?YzgQ4kXyD3ZOwu4ALpPYki2mr2g9v4/NQyakSTl0q5T75oIsyxP+lOPB4Jdt?=
- =?us-ascii?Q?UhNHJjjpvVJursh/BaCPvMa8ad0Nc6fFZ4BfoZYKaGpzF83HF0MQQDBZYQO/?=
- =?us-ascii?Q?eC20QlDqDtqDHWi7r8OPGOGDFKyjjS2yBRtKYq8V0o/Zm9aeYCXN+ClXWay8?=
- =?us-ascii?Q?7s1fIwVtVBw21gvUjGm3/TAxgFuGOJmpsps3T2F9sMSzzbp6Q4FocrInijn+?=
- =?us-ascii?Q?8qQOJpcIKtxMSU3ImI4jZ206lI4bMlUl5ID3jeSk02wYjcUO0U23nPOgksaX?=
- =?us-ascii?Q?EIG92O4gDWtP/1+zgWaD3mx7l1qJSP9EA5Io3E+rCjOtqwT2qMFNE4RkmYPG?=
- =?us-ascii?Q?DmHIHVIo5B6lAy+aTH1Db/qDb+98KdWtSdhXxe0CZUZFwYiwQk6K8YskY2T0?=
- =?us-ascii?Q?dxOZSX8YMR0e/B5UgARUiRG+Hx5Ilx1mChUtwt5xFL1N/vmal+apN95ZBWfn?=
- =?us-ascii?Q?RcCfC3GnepBRGeMDNagG5rs+wCgQlZHE8B9olcbP8Pj1NZ80Nsk/vCuIVg2O?=
- =?us-ascii?Q?LKIqsUt+Px0cqqGlL6IkN0ThbrxZ+drNQ9Vmh3/GFvN/8+BAMQplseObvlko?=
- =?us-ascii?Q?y0eK5j0rSZpjRq/hE0OcopGoRY9/nLjZHQkpK86Bv2En68E3esSyX0TwRj3H?=
- =?us-ascii?Q?L8qDX6hMcSCdO8Dk4EzFIR+FqbHrOeEp92+IeXBuwaEny9X8Bmrw4QuCGD6t?=
- =?us-ascii?Q?esTl7V6pDPeUyAG257/IQJyufxNMN4/HAuK0aohE8oR82Ii94kAXMkNjGuBa?=
- =?us-ascii?Q?uB327tJlNmejhcKmEvGcFCaAINIB0p5Vi+NXdxUlepWQ224Rb2w2/H6niGAg?=
- =?us-ascii?Q?WbPs6bqx1kr3Kw/Fk52O/EuG/+kLkc4ZReOLHQXzeOc8wugeszo1J5U+7mi2?=
- =?us-ascii?Q?f279NOg6dLRVm6yxngKl9F31DtNNkxW0FqtDtn7JMb/AG9M4jpFa0Ih72gIm?=
- =?us-ascii?Q?dZIBQtR5WH6+6qPyQ0A4zKs8W1ummhnpapIrEmZFWXDTPjASwtgNqm4fnwBG?=
- =?us-ascii?Q?/cNE3Qhj84KcLeQp7Ng4bO+DdgNngeZO4tJRd9HhESORmyfKGs8mXmHua6nQ?=
- =?us-ascii?Q?sexMJ0JIa7Np6z2IrnEkhM5AQqDT9ZfvJ00t7dj8COnLF/1c+QpauBSwi0cK?=
- =?us-ascii?Q?E9p3lyxr6zSooKqLGw+AatbZS2zj9l3FCc7qOdLxgPlvkWmeHl6LgjiVA/pb?=
- =?us-ascii?Q?98nZGEsy7g32JMBYlxadPJgSDKF7wfSWx/2eQ3FUNTi3J3JspF5IswagCpAq?=
- =?us-ascii?Q?rk40z8GdA7de9siiUm1NxMtBVSZYSojFIM6IpJWIPOIq7yU7nBW0lZOhR7uW?=
- =?us-ascii?Q?YpnqcFqe8cY+uKXdvm+qKrFpPd+X+WiilwuLL0NGk2+8ILWpT7iHkxSy6B9n?=
- =?us-ascii?Q?I4Bs17BVn+FWBsDNX6K4HLxPzaCBoOoHPM7MBWsntaGAsIzvaQaPmFAOAc2a?=
- =?us-ascii?Q?s8kp0wJ6b8fDuyAAOaBjbmVCVRZDmogsLSDBAC7dla0MjsiSedVMWSC6MA52?=
- =?us-ascii?Q?HCjkKsD+yJ+XOrDfAJM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eadceeb5-86fe-43f2-890a-08db81663444
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 16:53:36.9387
+X-Microsoft-Antispam-Message-Info: YS/IhEVpgiHbZ1ZGDo2ZwCfR83itoC6AkR243bcokxW8u2YEDWJeIGRsVJnxEG+Dmg2JLhN3Ro1aBcn9TFkaQlZ2h1ddIq2h5eZpty4+3seOxHdY14bObb4gDLhDADI4DV2VO6Jr9oJ5MCUHriAJILhVbKnpT3meDgbA0pC+rDF50GA/4okhiSp1sXsuzCSvfM6LvXHHDS+dtY936eXQaeuCxvfNm44j3NZnxdZLp1DLZtZEUqBZ430TCo8n1j/8Z/rmnUY9w6a7LQwPx7f3kDK2sby9tTKZllaUVypAY59I7PrfnnBzJK/uVKgPG4UF3T4vv1AADZd3WkLeASkQkte1BVzSHbr7rOOhDMsJT0lSewM0MkRjtSGt3slBetFrJ4cFyVvLvLFO6T7cHIAAPRq0KCCkhS/rfi18wfBwDSV/l86oi1pI0gQf4emIQrZ78DsZleHMRaN8lXt4/ZSyEj0H+xT9gk0KZZy05Mrt839SyGRg5Vb2F8Mov7UX5VQMwBRzrpovzf5kI7xieQbzL4K4FI9AliiVRjsxLgxC8NOblmETm8ep0swHafMzjWqDkmxnJCElO++hCoR0IFAvOA/OIQNudxsySM3q44XSBXJKwFzd+jnx5JZnDp5YeR4sFgdIm+GKQ1Ph4T8orlF6sipmyvkPB5feU9RHaZPRm4tANR/ojCxpajea6Wy2zL60HuRBvcUZx3Zr1BcW2hTe6q7BQFA9LlwF7f8QqUS1AR7rDFHRzFpb3/xJuTWSHdGg
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(40470700004)(46966006)(36840700001)(478600001)(6666004)(6486002)(110136005)(54906003)(450100002)(36860700001)(47076005)(83380400001)(36756003)(40460700003)(86362001)(40480700001)(2616005)(2906002)(70206006)(82310400005)(336012)(70586007)(26005)(6506007)(107886003)(186003)(6512007)(81166007)(82740400003)(8676002)(356005)(5660300002)(4326008)(316002)(41300700001)(8936002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 16:55:04.1543
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +sjSAx/A4Biz7FvsaoVtD+sC2V3CuzQqiWA43Iv9McZxMndjeBJEbsi+43E11Au1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5877
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 184477e6-a80d-4fef-0330-08db8166687e
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT021.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR08MB10096
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+The 07/07/2023 17:37, Edgecombe, Rick P wrote:
+> On Fri, 2023-07-07 at 16:25 +0100, szabolcs.nagy@arm.com wrote:
+> > > Separate from all of this...now that all the constraints are
+> > > clearer,
+> > > if you have changed your mind on whether this series is ready,
+> > > could
+> > > you comment at the top of this thread something to that effect? I'm
+> > > imagining not many are reading so far down at this point.
+> > > 
+> > > For my part, I think we should go forward with what we have on the
+> > > kernel side, unless glibc/gcc developers would like to start by
+> > > deprecating the existing binaries. I just talked with HJ, and he
+> > > has
+> > > not changed his plans around this. If anyone else in that community
+> > > has
+> > > (Florian?), please speak up. But otherwise I think it's better to
+> > > start
+> > > getting real world feedback and grow based on that.
+> > > 
+> > 
+> > the x86 v1 abi tries to be compatible with existing unwinders.
+> > (are there other binaries that constrains v1? portable code
+> > should be fine as they rely on libc which we can still change)
+> > 
+> > i will have to discuss the arm plan with the arm kernel devs.
+> > the ugly bit i want to avoid on arm is to have to reimplement
+> > unwind and jump ops to make alt shadow stack work in a v2 abi.
+> > 
+> > i think the worse bit of the x86 v1 abi is that crash handlers
+> > don't work reliably (e.g. a crash on a tiny makecontext stack
+> > with the usual sigaltstack crash handler can unrecoverably fail
+> > during crash handling). i guess this can be somewhat mitigated
+> > by both linux and libc adding an extra page to the shadow stack
+> > size to guarantee that alt stack handlers with certain depth
+> > always work.
+> 
+> Some mails back, I listed the three things you might be asking for from
+> the kernel side and pointedly asked you to clarify. The only one you
+> still were wishing for up front was "Leave a token on switching to an
+> alt shadow stack."
+> 
+> But how you want to use this involves a lot of details for how glibc
+> will work (automatic shadow stack for sigaltstack, scan-restore-incssp,
+> etc). I think you first need to get the story straight with other libc
+> developers, otherwise this is just brainstorming. I'm not a glibc
+> contributor, so winning me over is only half the battle.
+> 
+> Only after that is settled do we get to the problem of the old libgcc
+> unwinders, and how it is a challenge to even add alt shadow stack given
+> glibc's plans and the existing binaries.
+> 
+> Once that is solved we are at the overflow problem, and the current
+> state of thinking on that is "i'm fairly sure this can be done (but
+> indeed complicated)".
+> 
+> So I think we are still missing any actionable requests that should
+> hold this up.
+> 
+> Is this a reasonable summary?
 
-On 7 Jul 2023, at 9:24, David Hildenbrand wrote:
+not entirely.
 
-> On 07.07.23 15:12, Matthew Wilcox wrote:
->> On Fri, Jul 07, 2023 at 01:40:53PM +0200, David Hildenbrand wrote:
->>> On 06.07.23 10:02, Ryan Roberts wrote:
->>> But can you comment on the page migration part (IOW did you try it al=
-ready)?
->>>
->>> For example, memory hotunplug, CMA, MCE handling, compaction all rely=
- on
->>> page migration of something that was allocated using GFP_MOVABLE to a=
-ctually
->>> work.
->>>
->>> Compaction seems to skip any higher-order folios, but the question is=
- if the
->>> udnerlying migration itself works.
->>>
->>> If it already works: great! If not, this really has to be tackled ear=
-ly,
->>> because otherwise we'll be breaking the GFP_MOVABLE semantics.
->>
->> I have looked at this a bit.  _Migration_ should be fine.  _Compaction=
-_
->> is not.
->
-> Thanks! Very nice if at least ordinary migration works.
->
->>
->> If you look at a function like folio_migrate_mapping(), it all seems
->> appropriately folio-ised.  There might be something in there that is
->> slightly wrong, but that would just be a bug to fix, not a huge
->> architectural problem.
->>
->> The problem comes in the callers of migrate_pages().  They pass a
->> new_folio_t callback.  alloc_migration_target() is the usual one passe=
-d
->> and as far as I can tell is fine.  I've seen no problems reported with=
- it.
->>
->> compaction_alloc() is a disaster, and I don't know how to fix it.
->> The compaction code has its own allocator which is populated with orde=
-r-0
->> folios.  How it populates that freelist is awful ... see split_map_pag=
-es()
->
-> Yeah, all that code was written under the assumption that we're moving =
-order-0 pages (which is what the anon+pagecache pages part).
->
-> From what I recall, we're allocating order-0 pages from the high memory=
- addresses, so we can migrate from low memory addresses, effectively free=
-ing up low memory addresses and filling high memory addresses.
->
-> Adjusting that will be ... interesting. Instead of allocating order-0 p=
-ages from high addresses, we might want to allocate "as large as possible=
-" ("grab what we can") from high addresses and then have our own kind of =
-buddy for allocating from that pool a compaction destination page, depend=
-ing on our source page. Nasty.
+the high level requirement is a design that
 
-We probably do not need a pool, since before migration, we have isolated =
-folios to
-be migrated and can come up with a stats on how many folios there are at =
-each order.
-Then, we can isolate free pages based on the stats and do not split free =
-pages
-all the way down to order-0. We can sort the source folios based on their=
- orders
-and isolate free pages from largest order to smallest order. That could a=
-void
-a free page pool.
+a) does not break many existing sigaltstack uses,
 
---
-Best Regards,
-Yan, Zi
+b) allows implementing jump and unwind that support the
+   relevant use-cases around signals and stack switches
+   with minimal userspace changes.
 
---=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+where (b) has nothing to add to v1 abi: existing unwind
+binaries mean this needs a v2 abi. (the point of discussing
+v2 ahead of time is to understand the cost of v2 and the
+divergence wrt targets without abi compat issue.)
 
------BEGIN PGP SIGNATURE-----
+for (a) my actionable suggestion was to account altstack
+when sizing shadow stacks. to document an altstack call
+depth limit on the libc level (e.g. fixed 100 is fine) we
+need guarantees from the kernel. (consider recursive calls
+overflowing the stack with altstack crash handler: for this
+to be reliable shadow stack size > stack size is needed.
+but the diff can be tiny e.g. 1 page is enough.)
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmSsN44PHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU4HkP/2eqrpsuhW5eSauD0tKhtXtsn8/juJr03m1u
-UwxvfrM3tZXCp9FqPmMs3XKSeec/3/EZJKLr2arXy9fHm/U8AY9F5K7TUtZ6q1V0
-fF4xIXa/FLMv069x5A0sX8RgkNWeUoxODWMdIEBCPAmCdDuNa2tlXDx7QYl0JcJb
-leujrshinZXi0+77MuFUCoOuqzjiggkSOrX70dFAl8CQffYsaHx9RnXreNRC9AIa
-9Nc5deqP+Zx7HtDrC2MSEh2unEhz8RuIavM00at96/iFKRqVWlhVkttc8e0rY6f1
-/3QtCBmudHAYFUvZ8DD7ouFTmyWEZ+Vpc4H/7kJYap05aS9AzX5D4yIehCNBtLOT
-BsWPcivTbwtundDHMhuUqICjh1L76quVtyD62puo6nu4KnZSCh0lpK3ZiumSFpa7
-Tk+o5B7fIOaK6GycRswF5+9sr72x5IXR//tcE7Pf4id3AcoXWzhXQpnbZZHH6p9f
-YWDd5riXzVXziCy5KGvPRoFdBE3t5jK/IRCGfNfi1Wo0DqUDvJ6TeVISi/Wf3C7O
-0mrXD0AjqsVb1/v936OvCUi/1WIUzM6nWTHIumR/lo7pqO+xto6KfDhLGpYlUA/Y
-jn2J7yEjR6S05Jw+uo1Nz3HW3GvzAj8exg0pRFiNO5Kyq6K8eM+kl68IlUuBRjSF
-9pE8FQKC
-=Y9or
------END PGP SIGNATURE-----
+your previous 3 actionable item list was
 
---=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=--
+1. add token when handling signals on altstack.
+
+this falls under (b). your summary is correct that this
+requires sorting out many fiddly details.
+
+2. top of stack token.
+
+this can work differently across targets so i have nothing
+against the x86 v1 abi, but on arm64 we plan to have this.
+
+3. more shadow stack sizing policies.
+
+this can be done in the future except the default policy
+should be fixed for (a) and a smaller size introduces the
+overflow issue which may require v2.
+
+in short the only important change for v1 is shstk sizing.
