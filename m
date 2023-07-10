@@ -2,195 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF16674DC2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E743D74DC54
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjGJRUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S232958AbjGJRXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbjGJRUe (ORCPT
+        with ESMTP id S232429AbjGJRXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:20:34 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201F712E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:20:32 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-98de21518fbso625842666b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689009630; x=1691601630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TUvRrbUgojp3S6sSCvyqiMIcXWz8PVCjBGghvW84veI=;
-        b=ht6uj+rb8yZwl2NV6V2gaufj2a9VqDGv3yssM3oEm8JYDAo3AfjXbxHJBoKuO5DlTl
-         pD2WbqWUNWBfOfUcp7EjZQaJuiAnv1BmYyrgKUWyxJdJCQ68MaP1VKmDPuxC7dJIjAX7
-         5lTxg6vkvvnF36m5L1bm4PnNDP4LvpxIoQveWHh2gkoks+XtXvEeE+KHOyBM/KtU7ana
-         rLs2CvLZmdELqO0wio4tAbxozq0KdYtf0J/CTkahgjBxYGRmPFuUf1LzxrU4EkTfeN3Z
-         gpy7JaV38FmOqpGRYZf93Pg/PDCJFItQcB8y5NCti8Gz2Dad+OcDiuukXy3mkez7MG1/
-         Lpcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689009630; x=1691601630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TUvRrbUgojp3S6sSCvyqiMIcXWz8PVCjBGghvW84veI=;
-        b=iZO/fyFvnL0T/0E1KG/4FPANEHGKtzDRvRM0gikiarS9D4cT54NOta0DmtOTpvARez
-         fqXUZ+MoaCAuYe6AYnqUpp1GLOsqf4hpghi+AuAjorFLMvZDNoo1muEyb9/F0ywFhjeK
-         fX5LDcoq0dFeYMh7TzBSiijZoFClOlOdveY33IV/ST6MsjHNu1Z6/ElZrHdegMQxYM78
-         byfm5iEA7AY1ZdBFPx6m+8EL494d4TObtzyIjWpIobsdbG2qhTzbEE1kFWS/4NchlA1a
-         JbmtYIFyp29t+noOwpnYRUa0T8pKH+LFrojEU8mVTeex5uBZHO3VvIkUPgBIBB2oRnZ0
-         YImA==
-X-Gm-Message-State: ABy/qLaEyRgVw2FNXlEUcREKAgjiwq599oO9ndli87WenUoZPeIHzJjN
-        AQ+t3kHnItrOUUtVwg4pIi7OrS6gKv6UYQVcqv9svA==
-X-Google-Smtp-Source: APBJJlEwoywxx29c3j+Q6tKCZYdv00R5S9OXHCpuykOBe4v5wpLPGzaltu+U90bW+McFEnOZMwR1EGkBUBdKGHluAn4=
-X-Received: by 2002:a17:907:d23:b0:991:f383:d5c3 with SMTP id
- gn35-20020a1709070d2300b00991f383d5c3mr17452608ejc.74.1689009630336; Mon, 10
- Jul 2023 10:20:30 -0700 (PDT)
+        Mon, 10 Jul 2023 13:23:37 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4C2C7;
+        Mon, 10 Jul 2023 10:23:36 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id d7984a7ab631e1fc; Mon, 10 Jul 2023 19:23:35 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id C8903660DCF;
+        Mon, 10 Jul 2023 19:23:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>,
+        Saket Dumbre <saket.dumbre@intel.com>
+Subject: [PATCH 10/14] ACPICA: Add a define for size of struct acpi_srat_generic_affinity device_handle
+Date:   Mon, 10 Jul 2023 19:20:14 +0200
+Message-ID: <9141577.CDJkKcVGEf@kreacher>
+In-Reply-To: <5698695.DvuYhMxLoT@kreacher>
+References: <5698695.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-References: <20230707215540.2324998-1-axelrasmussen@google.com>
- <20230707215540.2324998-2-axelrasmussen@google.com> <20230708180850.bc938ab49fbfb38b83c367c8@linux-foundation.org>
-In-Reply-To: <20230708180850.bc938ab49fbfb38b83c367c8@linux-foundation.org>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 10 Jul 2023 10:19:54 -0700
-Message-ID: <CAJHvVcgfN5RVXJ_f3tN2UinV_kWCMyCY_g5oKm=BtgQJz-e7gA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/8] mm: make PTE_MARKER_SWAPIN_ERROR more general
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrkhgvthdrughumhgsrhgv
+ sehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 6:08=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Fri,  7 Jul 2023 14:55:33 -0700 Axel Rasmussen <axelrasmussen@google.c=
-om> wrote:
->
-> > Future patches will re-use PTE_MARKER_SWAPIN_ERROR to implement
-> > UFFDIO_POISON, so make some various preparations for that:
-> >
-> > First, rename it to just PTE_MARKER_POISONED. The "SWAPIN" can be
-> > confusing since we're going to re-use it for something not really
-> > related to swap. This can be particularly confusing for things like
-> > hugetlbfs, which doesn't support swap whatsoever. Also rename some
-> > various helper functions.
-> >
-> > Next, fix pte marker copying for hugetlbfs. Previously, it would WARN o=
-n
-> > seeing a PTE_MARKER_SWAPIN_ERROR, since hugetlbfs doesn't support swap.
-> > But, since we're going to re-use it, we want it to go ahead and copy it
-> > just like non-hugetlbfs memory does today. Since the code to do this is
-> > more complicated now, pull it out into a helper which can be re-used in
-> > both places. While we're at it, also make it slightly more explicit in
-> > its handling of e.g. uffd wp markers.
-> >
-> > For non-hugetlbfs page faults, instead of returning VM_FAULT_SIGBUS for
-> > an error entry, return VM_FAULT_HWPOISON. For most cases this change
-> > doesn't matter, e.g. a userspace program would receive a SIGBUS either
-> > way. But for UFFDIO_POISON, this change will let KVM guests get an MCE
-> > out of the box, instead of giving a SIGBUS to the hypervisor and
-> > requiring it to somehow inject an MCE.
-> >
-> > Finally, for hugetlbfs faults, handle PTE_MARKER_POISONED, and return
-> > VM_FAULT_HWPOISON_LARGE in such cases. Note that this can't happen toda=
-y
-> > because the lack of swap support means we'll never end up with such a
-> > PTE anyway, but this behavior will be needed once such entries *can*
-> > show up via UFFDIO_POISON.
-> >
-> > --- a/include/linux/mm_inline.h
-> > +++ b/include/linux/mm_inline.h
-> > @@ -523,6 +523,25 @@ static inline bool mm_tlb_flush_nested(struct mm_s=
-truct *mm)
-> >       return atomic_read(&mm->tlb_flush_pending) > 1;
-> >  }
-> >
-> > +/*
-> > + * Computes the pte marker to copy from the given source entry into ds=
-t_vma.
-> > + * If no marker should be copied, returns 0.
-> > + * The caller should insert a new pte created with make_pte_marker().
-> > + */
-> > +static inline pte_marker copy_pte_marker(
-> > +             swp_entry_t entry, struct vm_area_struct *dst_vma)
-> > +{
-> > +     pte_marker srcm =3D pte_marker_get(entry);
-> > +     /* Always copy error entries. */
-> > +     pte_marker dstm =3D srcm & PTE_MARKER_POISONED;
-> > +
-> > +     /* Only copy PTE markers if UFFD register matches. */
-> > +     if ((srcm & PTE_MARKER_UFFD_WP) && userfaultfd_wp(dst_vma))
-> > +             dstm |=3D PTE_MARKER_UFFD_WP;
-> > +
-> > +     return dstm;
-> > +}
->
-> Breaks the build with CONFIG_MMU=3Dn (arm allnoconfig).  pte_marker isn't
-> defined.
->
-> I'll slap #ifdef CONFIG_MMU around this function, but probably somethng m=
-ore
-> fine-grained could be used, like CONFIG_PTE_MARKER_UFFD_WP.  Please
-> consider.
+From: Dave Jiang <dave.jiang@intel.com>
 
-Whoops, sorry about this. This function "ought" to be in
-include/linux/swapops.h where it would be inside a #ifdef CONFIG_MMU
-anyway, but it can't be because it uses userfaultfd_wp() so there'd be
-a circular include. I think just wrapping it in CONFIG_MMU is the
-right way.
+ACPICA commit be56820b03d8aeabfa6709c4d99bf1711afe7ef1
 
-But, this has also made me realize we need to not advertise
-UFFDIO_POISON as supported unless we have CONFIG_MMU. I don't want
-HAVE_ARCH_USERFAULTFD_WP for that, because it's only enabled on
-x86_64, whereas I want to support at least arm64 as well. I don't see
-a strong reason not to just use CONFIG_MMU for this too; this feature
-depends on the API in swapops.h, which uses that ifdef, so I don't see
-a lot of value out of creating a new but equivalent config option.
+Replace magic number with a define. Linux kernel code will utilize this
+define.
 
-I'll make the needed changes (and also address Peter's comment above)
-and send out a v5.
+Link: https://github.com/acpica/acpica/commit/be56820b
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/acpi/actbl3.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->
-> btw, both copy_pte_marker() and pte_install_uffd_wp_if_needed() look
-> far too large to justify inlining.  Please review the desirability of
-> this.
->
->
+diff --git a/include/acpi/actbl3.h b/include/acpi/actbl3.h
+index 000764ab3985..c080d579a546 100644
+--- a/include/acpi/actbl3.h
++++ b/include/acpi/actbl3.h
+@@ -279,12 +279,14 @@ struct acpi_srat_gic_its_affinity {
+  * 6: ACPI_SRAT_TYPE_GENERIC_PORT_AFFINITY
+  */
+ 
++#define ACPI_SRAT_DEVICE_HANDLE_SIZE	16
++
+ struct acpi_srat_generic_affinity {
+ 	struct acpi_subtable_header header;
+ 	u8 reserved;
+ 	u8 device_handle_type;
+ 	u32 proximity_domain;
+-	u8 device_handle[16];
++	u8 device_handle[ACPI_SRAT_DEVICE_HANDLE_SIZE];
+ 	u32 flags;
+ 	u32 reserved1;
+ };
+-- 
+2.35.3
+
+
+
+
