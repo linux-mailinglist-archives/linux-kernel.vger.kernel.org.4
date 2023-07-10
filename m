@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4DE74CE8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8FC74CE8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjGJHgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        id S230457AbjGJHgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjGJHgB (ORCPT
+        with ESMTP id S229659AbjGJHgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:36:01 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26321EB;
-        Mon, 10 Jul 2023 00:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688974556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pdykm1IEGXCNP+4KYVVXGZUNeBfIgSrmIH45XmqOIEc=;
-        b=EoyDf5E+m+C9+A9pRywQm3MugVhoXsP+s6OymqrMQgX2OJhPMy6c+mVR6Bdm/caqBtQ3Df
-        PLTlCC/mKX/bsqAStBFfYG0KQiinYLfOB+ass9vBA1M+zjXRcE1rsYw4YK3tv1ko4ZmWTi
-        LDSwHW7aHmonwB2/BFY9bCz7Fw/BWrs=
-Message-ID: <7672f0b65cf7d2a1bb81019417aa3fa98fbac5e3.camel@crapouillou.net>
-Subject: Re: [PATCH v2 3/3] ARM: dts: exynos/i9100: Fix LCD screen's
- physical size
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, stable@vger.kernel.org
-Date:   Mon, 10 Jul 2023 09:35:54 +0200
-In-Reply-To: <98b39071-cbfa-bc58-032e-56f6e9dd5c2a@linaro.org>
-References: <20230708084027.18352-1-paul@crapouillou.net>
-         <20230708084027.18352-4-paul@crapouillou.net>
-         <98b39071-cbfa-bc58-032e-56f6e9dd5c2a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 10 Jul 2023 03:36:16 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94254EC;
+        Mon, 10 Jul 2023 00:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1688974570; bh=wtMH4x5k93+5UQkNxRZ4qkKRzT5QI5tjnFGasrZuo2U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D/kTCuYSi/lR7oEx1oCIS8+4w5z4MlZrR+nxs2VaSfqBX4g6/9jOaYmstXSJ3ulWK
+         vEkZDVodH9IcixSiSXY6lkO+R1FKb8gx1aU3ZF5QjnwcXlicEWASUo2Uy7mNpNe+uC
+         fhWUBh0IrItdgKttpXyxdVMAibbDTwbO9wPrVN3s=
+Date:   Mon, 10 Jul 2023 09:36:09 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
+Message-ID: <7d4163ad-f9bc-4361-ab8a-673eb9336b63@t-8ch.de>
+References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
+ <20230630140609.263790-1-falcon@tinylab.org>
+ <20230709092947.GF9321@1wt.eu>
+ <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
+ <20230709172753.GA22287@1wt.eu>
+ <df91b1d3-2c66-4a6b-9a8a-544679bc09a8@t-8ch.de>
+ <20230709180432.GA22685@1wt.eu>
+ <74eddce8-4f59-40c8-bc49-38c286a3cbb0@t-8ch.de>
+ <ZKuuoB6fcAV3ucFM@1wt.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZKuuoB6fcAV3ucFM@1wt.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,36 +53,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 2023-07-10 09:09:20+0200, Willy Tarreau wrote:
+> On Sun, Jul 09, 2023 at 08:22:31PM +0200, Thomas Weißschuh wrote:
+> > On 2023-07-09 20:04:32+0200, Willy Tarreau wrote:
 
-Le lundi 10 juillet 2023 =C3=A0 08:59 +0200, Krzysztof Kozlowski a =C3=A9cr=
-it=C2=A0:
-> On 08/07/2023 10:40, Paul Cercueil wrote:
-> > The previous values were completely bogus, and resulted in the
-> > computed
-> > DPI ratio being much lower than reality, causing applications and
-> > UIs to
-> > misbehave.
-> >=20
-> > The new values were measured by myself with a ruler.
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the
-> > Galaxy S2")
-> > Cc: <stable@vger.kernel.org> # v5.8+
-> > ---
->=20
-> This does not apply. You rebased your work on some older
-> version/tree,
-> without new layout. Please work on linux-next.
+> [..]
 
-This patchset was based on drm-misc-next, because that's where I was
-planning to apply it; and it was extremely unlikely (but not
-impossible, apparently) that the i9100.dts would be modified in the
-meantime.
+> > That should work fine, too.
+> > Can you add the Fixes and Cc-stable tags in your tree and let the fs
+> > maintainers know?
+> 
+> OK here's what it's like now, let me know if you'd prefer any change:
+> 
+>   commit 8c2e51e174ed0f998b6bd90244324a4966a55efc
+>   Author: Thomas Weißschuh <linux@weissschuh.net>
+>   Date:   Sat Jun 24 12:30:46 2023 +0200
+> 
+>     selftests/nolibc: drop test chmod_net
+>     
+>     The test relies on /proc/$PID/net to allow chmod() operations.
+>     It is the only file or directory in /proc/$PID/ to allow this and a bug.
+>     That bug will be fixed in the next patch in the series and therefore
+>     the test would start failing.
 
-I can rebase on linux-next, the problem then is that I then don't know
-how/where to apply the patchset.
+As the patch is now standalone the part "fixed in the next patch in the
+series" is not accurate anymore.
+Maybe only "When this bug gets fixed the test would start failing"?
 
-Cheers,
--Paul
+>     Link: https://lore.kernel.org/lkml/d0d111ef-edae-4760-83fb-36db84278da1@t-8ch.de/
+>     Fixes: b4844fa0bdb4 ("selftests/nolibc: implement a few tests for various syscalls")
+
++ Cc: stable@vger.kernel.org
+
+The Fixes tag alone is not enough to trigger the formalized backport
+process. It may be picked up anyways through heuristics but that would
+only be luck.
+
+>     Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>     Tested-by: Zhangjin Wu <falcon@tinylab.org>
+>     Signed-off-by: Willy Tarreau <w@1wt.eu>
+> 
+> > Or do you want me to split and resend the series?
+> 
+> Not needed, thank you.
+
+Thanks!
+
+Thomas
