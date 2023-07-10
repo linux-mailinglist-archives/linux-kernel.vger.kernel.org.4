@@ -2,143 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0B274CE01
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C7E74CE00
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjGJHKs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 03:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
+        id S230426AbjGJHKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjGJHKm (ORCPT
+        with ESMTP id S229823AbjGJHKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:10:42 -0400
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F9311B;
-        Mon, 10 Jul 2023 00:10:41 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6348a8045a2so27743706d6.1;
-        Mon, 10 Jul 2023 00:10:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688973040; x=1691565040;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/NvmjpSWvN0CjEUDELfk+DsRk9SKm69LdatvFeM24C8=;
-        b=PDAshxf1ynIBiMd2N1vKxgNlc3vn5Q5baZVYbtj84C8AdiRZ0sRuTw8D55Isz+axUH
-         xXPOntYcJGtqXtRY7PzZ1Sf+Eq2imMujfR1iUeLkuZIgLb053alM93eg0R0S3MzvaNbd
-         KJ9uFY/2rLW2wVW7YySoU5g0OY/54O+U4QV34UO1ZoKO6D0JDFSW/puhisQa3adDAOWi
-         0/q9WznfFEFUCekszZHn5vFMoI5Dff85sA3hqksN8AZ5E7IOQnbWQcc68g52fpTC2b9u
-         nxBM/ajOStyrlL+dIXwb19gUwBcPC5dJrVTL765rH5F7JfUBHHpYjOq56EK4TZFsNNaT
-         /7Ig==
-X-Gm-Message-State: ABy/qLbIAlRUHAJqlsp7vQXjSDPsgR5gf2JVLbo72AmVguOk4NLolVwv
-        KDgL4iEsDOnMRyHa+G0VEFu1coMBigOo4g==
-X-Google-Smtp-Source: APBJJlEsC5z9hmVcXRHCZs0fm7ZUVZTSRno11os/GxDTN+p1haC6xywc1Yqcjej2yVxnW2PWI1NyDA==
-X-Received: by 2002:a0c:8e8a:0:b0:635:dda5:bb8e with SMTP id x10-20020a0c8e8a000000b00635dda5bb8emr10030441qvb.22.1688973040689;
+        Mon, 10 Jul 2023 03:10:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAEFEB;
         Mon, 10 Jul 2023 00:10:40 -0700 (PDT)
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com. [209.85.160.171])
-        by smtp.gmail.com with ESMTPSA id x10-20020a0ce24a000000b0063659410b04sm5220740qvl.107.2023.07.10.00.10.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 00:10:39 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-40339da998eso33939641cf.0;
-        Mon, 10 Jul 2023 00:10:39 -0700 (PDT)
-X-Received: by 2002:ac8:7dc8:0:b0:403:aa35:ef8c with SMTP id
- c8-20020ac87dc8000000b00403aa35ef8cmr4637283qte.34.1688973039444; Mon, 10 Jul
- 2023 00:10:39 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A4UIXN021222;
+        Mon, 10 Jul 2023 07:10:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dCm0/Vy6asPs4IBh53btJ9D//kXAfuuaZbmgUQVFn1k=;
+ b=hvWkPTtOMLETSPrOu5SPSG6/V/0Na2DWUT0ijRh3k2a2/2K1e57IzsLsBkkV81LSvV4d
+ VaTbVHVEpnXXFZf0vzKNA01/Y79Ujv9P2eR2utBu6Cv/0GUkSWxI/026+sVh90BRRczE
+ 84FCwUuIDD9YuJhfWoI+ITqwhftpjWJ8IxHSMGbn/rWAPviFHnHkrPv86wN0D/XhiTeC
+ fZnBfIf4h/IRfNDSpHo72jiebiCY32DQRJ6rIBxIPJ9B3UOLJDLZET4mA6P1Fw4RR8E3
+ hLr89RYg6Sc0zOOfez6gUcPJH+jVAlzQYAeCRZi61OINoRKHGy7LEXgUYAU0GKE3AuQD CQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rq13f2pnb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 07:10:36 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36A7AZoX007887
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 07:10:35 GMT
+Received: from [10.50.37.218] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 00:10:31 -0700
+Message-ID: <931fe2af-85a8-ad0d-8869-2907db9fff25@quicinc.com>
+Date:   Mon, 10 Jul 2023 12:40:28 +0530
 MIME-Version: 1.0
-References: <20230704093652.18191-1-frank.li@vivo.com>
-In-Reply-To: <20230704093652.18191-1-frank.li@vivo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 09:10:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWrBY1+JDuwODyqLrwJJivt=ewCOKfK41xq+0Hpaf8akQ@mail.gmail.com>
-Message-ID: <CAMuHMdWrBY1+JDuwODyqLrwJJivt=ewCOKfK41xq+0Hpaf8akQ@mail.gmail.com>
-Subject: Re: [PATCH] fbdev: imxfb: Convert to devm_platform_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Helge Deller <deller@gmx.de>, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-fbdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH][next] media: venus: Use struct_size_t() helper in
+ pkt_session_unset_buffers()
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
+References: <ZKBfoqSl61jfpO2r@work>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <ZKBfoqSl61jfpO2r@work>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4CAE994kF6N4fs_aYf5ll27cOi-b8Num
+X-Proofpoint-ORIG-GUID: 4CAE994kF6N4fs_aYf5ll27cOi-b8Num
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_05,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 priorityscore=1501
+ adultscore=0 impostorscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=918 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307100065
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
 
-On Tue, Jul 4, 2023 at 11:38 AM Yangtao Li <frank.li@vivo.com> wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
->
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On 7/1/2023 10:47 PM, Gustavo A. R. Silva wrote:
+> Prefer struct_size_t() over struct_size() when no pointer instance
+> of the structure type is present.
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Thanks for your patch, which is now commit c1cd7a7a231a26c6 ("fbdev:
-imxfb: Convert to devm_platform_ioremap_resource()") in fbdev/for-next
+Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 
-> --- a/drivers/video/fbdev/imxfb.c
-> +++ b/drivers/video/fbdev/imxfb.c
-> @@ -868,7 +868,6 @@ static int imxfb_probe(struct platform_device *pdev)
->         struct imxfb_info *fbi;
->         struct lcd_device *lcd;
->         struct fb_info *info;
-> -       struct resource *res;
->         struct imx_fb_videomode *m;
->         const struct of_device_id *of_id;
->         struct device_node *display_np;
-> @@ -885,10 +884,6 @@ static int imxfb_probe(struct platform_device *pdev)
->         if (of_id)
->                 pdev->id_entry = of_id->data;
->
-> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       if (!res)
-> -               return -ENODEV;
-> -
->         info = framebuffer_alloc(sizeof(struct imxfb_info), &pdev->dev);
->         if (!info)
->                 return -ENOMEM;
-> @@ -970,7 +965,7 @@ static int imxfb_probe(struct platform_device *pdev)
->                 goto failed_getclock;
->         }
->
-> -       fbi->regs = devm_ioremap_resource(&pdev->dev, res);
-> +       fbi->regs = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(fbi->regs)) {
->                 ret = PTR_ERR(fbi->regs);
->                 goto failed_ioremap;
-> @@ -1043,7 +1038,6 @@ static int imxfb_probe(struct platform_device *pdev)
->  failed_map:
->  failed_ioremap:
->  failed_getclock:
-> -       release_mem_region(res->start, resource_size(res));
-
-This part is not directly related, but a bug fix for commit
-b083c22d51148f3d ("video: fbdev: imxfb: Convert request_mem_region +
-ioremap to devm_ioremap_resource") in v6.0.
-
-Please do not mix bug fixes with other changes.
-The stable teams want to backport only bugfixes .
-
->  failed_of_parse:
->         kfree(info->pseudo_palette);
->  failed_init:
-> --
-> 2.39.0
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/media/platform/qcom/venus/hfi_cmds.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> index 7f0802a5518c..3418d2dd9371 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> @@ -251,8 +251,8 @@ int pkt_session_unset_buffers(struct hfi_session_release_buffer_pkt *pkt,
+>  
+>  		pkt->extradata_size = 0;
+>  		pkt->shdr.hdr.size =
+> -			struct_size((struct hfi_session_set_buffers_pkt *)0,
+> -				    buffer_info, bd->num_buffers);
+> +			struct_size_t(struct hfi_session_set_buffers_pkt,
+> +				      buffer_info, bd->num_buffers);
+>  	}
+>  
+>  	pkt->response_req = bd->response_required;
