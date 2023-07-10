@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B37674CFF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23D474CFF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbjGJIcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S232992AbjGJIcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjGJIcU (ORCPT
+        with ESMTP id S230248AbjGJIce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:32:20 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99941FB;
-        Mon, 10 Jul 2023 01:32:18 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qImJb-0007Yg-HW; Mon, 10 Jul 2023 10:32:15 +0200
-Message-ID: <6f8715af-95c2-8333-2b32-206a143ebb52@leemhuis.info>
-Date:   Mon, 10 Jul 2023 10:32:14 +0200
+        Mon, 10 Jul 2023 04:32:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6E118B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:32:30 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qzy0X2LTXz1FDnC;
+        Mon, 10 Jul 2023 16:31:56 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 16:32:27 +0800
+Subject: Re: [PATCH 8/8] mm: memory-failure: fix race window when trying to
+ get hugetlb folio
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20230708085744.3599311-1-linmiaohe@huawei.com>
+ <20230708085744.3599311-9-linmiaohe@huawei.com>
+ <20230710075812.GH1686200@ik1-406-35019.vs.sakura.ne.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <74acb109-76cc-3990-c770-8330e343ef54@huawei.com>
+Date:   Mon, 10 Jul 2023 16:32:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Aloka Dixit <quic_alokad@quicinc.com>,
-        John Crispin <john@phrozen.org>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Aditya Kumar Singh <quic_adisi@quicinc.com>,
-        linux-wireless@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] iwlwifi driver broken on Intel 3165 network card
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230710075812.GH1686200@ik1-406-35019.vs.sakura.ne.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688977938;859abe82;
-X-HE-SMSGID: 1qImJb-0007Yg-HW
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,75 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
-
-Aloka Dixit, apparently it's cause by a change of yours: bd54f3c2907
-("wifi: mac80211: generate EMA beacons in AP mode") [v6.4-rc1]
-
-Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-not CCed them in mails like this.
-
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217635 :
-
-> Distro: Arch Linux
-> Kernel version: 6.4.1.arch1-1
-> Happens on mainline kernel? : YES (linux-mainline 6.4-1)
-> Note: linux-mainline 6.4.1 is not available at time of this writing
+On 2023/7/10 15:58, Naoya Horiguchi wrote:
+> On Sat, Jul 08, 2023 at 04:57:44PM +0800, Miaohe Lin wrote:
+>> page_folio() is fetched before calling get_hwpoison_hugetlb_folio()
+>> without hugetlb_lock being held. So hugetlb page could be demoted
+>> before get_hwpoison_hugetlb_folio() holding hugetlb_lock but after
+>> page_folio() is fetched. So get_hwpoison_hugetlb_folio() will hold
+>> unexpected extra refcnt of hugetlb folio while leaving demoted page
+>> un-refcnted.
 > 
-> Arch linux bug:
-> https://bugs.archlinux.org/task/78984
+> Very nice, thank you for finding the issue.
 > 
-> Summary:
-> No network access even after connecting to wifi. Websites don't load, ping doesn't work.
-> This didn't happen on kernel 6.3.x (specifically 6.3.9, the last 6.3 kernel provided by Arch).
+>>
+>> Fixes: 25182f05ffed ("mm,hwpoison: fix race with hugetlb page allocation")
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/memory-failure.c | 18 ++++++++++++++----
+>>  1 file changed, 14 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 76d88d27cdbe..066bf57f2d22 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1388,8 +1388,14 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
+>>  	bool hugetlb = false;
+>>  
+>>  	ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, false);
+>> -	if (hugetlb)
+>> -		return ret;
+>> +	if (hugetlb) {
+>> +		if (folio == page_folio(page))
+>> +			return ret;
 > 
-> Bug happens on both Arch-provided kernel and mainline kernel
+> Some short comment about the race against demotion here is helpful.
+
+Does the below comment makes sense to you?
+
+"
+  Make sure hugetlb demotion did not happen from under us.
+"
+
 > 
-> Steps to reproduce:
-> 1) On fresh boot, connect to a wifi network
->    a) Make sure wifi password is not saved beforehand
-> 2) Ping a url with terminal, or open a website with browser
-> 3) Ping fails to work / website doesn't load
+> Anyway, the patch looks good to me.
+> 
+> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-See the ticket for more details and the bisection result that came later.
+Many thanks for your review and comment, Naoya.
 
-Aditya Kumar Singh, FWIW, I hope you don't mind that I CCed you, but you
-already contributed a fix for the culprit, so it seemed the right thing
-to do in this case.
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: bd54f3c29077f2
-https://bugzilla.kernel.org/show_bug.cgi?id=217635
-#regzbot title: net: wireless: iwlwifi driver broken on Intel 3165
-network card
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
