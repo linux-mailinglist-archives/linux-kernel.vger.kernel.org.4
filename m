@@ -2,102 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C070674D90E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFDD74D90C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbjGJObY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S233253AbjGJOa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjGJObW (ORCPT
+        with ESMTP id S231578AbjGJOa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:31:22 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D856CF2;
-        Mon, 10 Jul 2023 07:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688999480; x=1720535480;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LOdSUAq0OWnykpn7i+mc3p2uFC+TwqqqMHbwvvn1c6Y=;
-  b=I5GqNoMgGzPoldBtHdb9vAyZCEd1ywr0Vam5zupaZ4yh/zQgLSBztl2U
-   x/tDaX/9BLrkTRZaQN0/MPouRXjT6LPsZ3QFIY6C7JDSZ0+e7xmmRlNCI
-   2eyddtCT2zmcKRJIFA6tDv077WtXU0VFcmdzHKmph1t9pgADbpTSN16+o
-   kSoDx2LGyZ2e/ip5o0srm8fmM76gqfTb8n3bFFdZ6jDOTO4DFrGA/gol/
-   hZhkXVInFUT+0UnI2SB9ACmTwLsiadzFB/yF/B9BczqgI5XwvC4Rnoyd2
-   F705Kd6eYqhA7R4Fa/AjsMKiiR6+togQuYcshxxPugY/scKwL5B+4DodL
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="asc'?scan'208";a="223957711"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jul 2023 07:31:18 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 10 Jul 2023 07:31:18 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 10 Jul 2023 07:31:15 -0700
-Date:   Mon, 10 Jul 2023 15:30:45 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <conor@kernel.org>
-Subject: Re: [PATCH 6.3 000/426] 6.3.13-rc3 review
-Message-ID: <20230710-parakeet-conjure-fd252215dc84@wendy>
-References: <20230710054619.475084489@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aHlqKoYVsI68erxS"
-Content-Disposition: inline
-In-Reply-To: <20230710054619.475084489@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 10:30:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB6EBB;
+        Mon, 10 Jul 2023 07:30:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8CF8B1FFA2;
+        Mon, 10 Jul 2023 14:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688999454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SjlMk0EbffxuJOjramPPb1TR2XCPnRGkKXj9Qt7aAIQ=;
+        b=O2gr+3UKqOIqNDknFnuyExnyA2GyVIpvfbTUZDFkgROlAWUvecJcwYBk3f9qGdVarxw/ps
+        iYm9yXIxGqTMj6uOyBg9AOjOa6C47zxfKmHOjkBeM2H6wJPzHQFk4GzPrYOUFukNxmzOIN
+        sIbyCBg0nbtitfhDHZO7FLFcMSBlk64=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688999454;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SjlMk0EbffxuJOjramPPb1TR2XCPnRGkKXj9Qt7aAIQ=;
+        b=1x34zqImdfaqQE5pWTOJvMwf0R480bRp7n1ETIvCExjCri9k/g4gKTj4ALsioIT21D4zyp
+        5bOQX6oDJRF4NWAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E1E713A05;
+        Mon, 10 Jul 2023 14:30:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SJlECh4WrGS8QwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 10 Jul 2023 14:30:54 +0000
+Date:   Mon, 10 Jul 2023 16:30:53 +0200
+Message-ID: <87351vzvmq.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, liam.r.girdwood@intel.com,
+        mengdong.lin@intel.com, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com
+Subject: Re: [PATCH v2 1/3] ALSA: hda/tas2781: Add tas2781 HDA driver
+In-Reply-To: <20230710041217.151099-1-13916275206@139.com>
+References: <20230710041217.151099-1-13916275206@139.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---aHlqKoYVsI68erxS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, 10 Jul 2023 06:12:15 +0200,
+Shenghao Ding wrote:
+> 
+> Integrate tas2781 configs for Lenovo Laptops. All of the tas2781s in the
+> laptop will be aggregated as one audio device. The code support realtek
+> as the primary codec. Rename "struct cs35l41_dev_name" to
+> "struct scodec_dev_name" for all other side codecs instead of the certain
+> one.
+> 
+> Signed-off-by: Shenghao Ding <13916275206@139.com>
+> 
+> ---
+> Changes in v2:
+>  -  simplify the check of vendor id with Lenovo
+>  - ThinkPad is one of Lenovo's brands, they suggested me to use
+>    ALC269_FIXUP_THINKPAD_ACPI.
+>  - Add comments on ACARD_SINGLE_RANGE_EXT_TLV
+>  - Add the range check for tas_priv->tasdevice[] in tas2781_acpi_get_i2c_res.
+>  - remove acpi_subsystem_id
+>  - Issue in Laptop 0x17aa38be ACPI talbe caused codec->bus->pci->subsystem_device
+>    is not equal to (codec->core.subsystem_id & 0xffff) in snd_hda_pick_fixup.
+>    The former is 0x3802 and the latter is 0x38be leads to getting the wrong
+>    fixup_id and enter into the wrong entry. Although, this issue has been raised
+>    to the laptop manufacturer, but the ACPI table is locked, cannot be changed
+>    any more. Correct the wrong entry in the code.
+>  - Rename "struct cs35l41_dev_name" to "struct scodec_dev_name" for all
+>    other side codecs instead of one certain codec.
+>  - Ignore the checkpatch complaints in alc269_fixup_tbl
+>  - Drop the hunk which is irrelevant with my code in
+>    alc_fixup_headset_mode_alc255_no_hp_mic
+>  - Add tiwai@suse.de into Cc list
+>  - remove useless index
+>  - combine ALC287_FIXUP_TAS2781_I2C_2 and ALC287_FIXUP_TAS2781_I2C_4 together as
+>    ALC287_FIXUP_TAS2781_I2C, The code view all the tas2781s in the laptop as one instance.
+>  - delete the white space at the end of the line in alc_fixup_headset_mode_alc255_no_hp_mic
 
-On Mon, Jul 10, 2023 at 07:47:20AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.13 release.
-> There are 426 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+The patch looks almost fine.  Just a few things:
 
-CI had a wee hiccup & skipped one boot-test, but everything else looked
-normal...
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+> @@ -6730,12 +6730,32 @@ static int comp_match_cs35l41_dev_name(struct device *dev, void *data)
+>  	return !strcmp(d + n, tmp);
+>  }
+>  
+> +static int comp_match_tas2781_dev_name(struct device *dev,
+> +	void *data)
 
-Cheers,
-Conor.
+The indentation in the patch doesn't look good.
+I don't want to be too strict about it, but this inconsistent
+indentation makes reading quite difficult, so better to be fixed.
+In general, it's recommended to align the opened parenthesis.
+(But, in the case above, you don't need to break the line at all.)
 
---aHlqKoYVsI68erxS
-Content-Type: application/pgp-signature; name="signature.asc"
+> @@ -10761,6 +10843,22 @@ static int patch_alc269(struct hda_codec *codec)
+>  		codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
+>  	}
+>  
+> +	/* FIXME: Issue in Laptop 0x17aa38be ACPI talbe caused
+> +	 * codec->bus->pci->subsystem_device is not equal to
+> +	 * (codec->core.subsystem_id & 0xffff) in snd_hda_pick_fixup.
+> +	 * The former is 0x3802 and the latter is 0x38be leads to getting the
+> +	 * wrong fixup_id and enter into the wrong entry. Although, this issue
+> +	 * has been raised to the laptop manufacturer, but the ACPI table is
+> +	 * locked, cannot be changed any more. Correct the wrong entry in the
+> +	 * code.
+> +	 */
+> +	if (codec->fixup_id == ALC287_FIXUP_YOGA7_14ITL_SPEAKERS &&
+> +		codec->core.vendor_id == 0x10ec0287 &&
+> +		codec->core.subsystem_id == 0x17aa38be) {
+> +		codec_dbg(codec, "Clear wrong fixup for 17aa38be\n");
+> +		codec->fixup_id = ALC287_FIXUP_TAS2781_I2C;
+> +	}
 
------BEGIN PGP SIGNATURE-----
+This should be rather applied differently.  A similar workaround was
+found in the commit 56ec3e755bd1041d35bdec020a99b327697ee470
+    ALSA: hda/realtek: Apply fixup for Lenovo Yoga Duet 7 properly
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKwWFAAKCRB4tDGHoIJi
-0skoAQDE8fqdEO0gxuNGAUHqk2owntemGPzxXEZxXBCYXZTeugD/Quwoj8kDa8Z3
-+vnNj5LEO0o5wcqIk4aCGQsqHoH4Kw0=
-=JgJc
------END PGP SIGNATURE-----
 
---aHlqKoYVsI68erxS--
+thanks,
+
+Takashi
