@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3B774E220
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84A774E221
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjGJXOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
+        id S230295AbjGJXPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjGJXOb (ORCPT
+        with ESMTP id S230361AbjGJXPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:14:31 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B127195;
-        Mon, 10 Jul 2023 16:14:30 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-51452556acdso3453696a12.2;
-        Mon, 10 Jul 2023 16:14:30 -0700 (PDT)
+        Mon, 10 Jul 2023 19:15:19 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9321B7;
+        Mon, 10 Jul 2023 16:15:17 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-55b1238a013so3633707a12.3;
+        Mon, 10 Jul 2023 16:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689030869; x=1691622869;
+        d=gmail.com; s=20221208; t=1689030917; x=1691622917;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIaFszOKIjmn1GPr4vHWBEQHE0KiRcRwYwejxWSEw6Q=;
-        b=ekQZS/WIxWgWBCCc3eYQbd+gCWkoM9tJ6gYrkHQ0yrjLOaMwGNhJlLy8FSrAH/hYKE
-         22F6BErvLuoFVQOKreCpTGmH2CtgSXiXk9PiTeR2Hr74BXpeSdLF4sPY6x5gaH1kKMIP
-         nBi193IpxPuhGZyO5P8GUgPfYzmlf7wsRjQYtsVBmjVNWY6W8ubw92VjRdgzsIPeffky
-         qfkOQNDg1qfQZ0hUhzpmKWi5xCCO7tDHThABGdvf4jEtOlofC19ukFNlj9C4F1XLqPQl
-         +RkYtwdjNQPIsiiyTiVgerMp/8tXSrK9txrxZ7xJLpHBHPpR7wn1hh8kDq6Z6J5q1Zr4
-         z4Ig==
+        bh=dAwiz27o1hNxGAQwrIRT6lxtMelfroQzik/QCJDjd3Q=;
+        b=b0GCU0td2713cSKuiHV/PsI8IVs/WmY2ym5aADJqcjTx3HWC7XNdRQaDOPXjNIRYgc
+         WEnpFPR4gSrPyWkqlStg3rQwvlKROz9w4/WU0yKShDufhQmZC3BCyxgetFfqtU8wNtIS
+         QKiesFEBkm6SxRTGJc8lkWRD/sDTfDpZgEo/QYy4U73TeCaoaqqiHwTbIRFCjyi5rTHT
+         3+sJxKowFugyM4/TPZSjBML2/CE3P4p00enxTxrL0ab4c/gyDRxpx6LEPqTs7n/oexWl
+         OdXP/MDVFIVkjj1zGsC76AG05Gt5cueT4C3vMoQkdw4BB6BiyHuaLdtY1xVen6ZEH2WB
+         GadA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689030870; x=1691622870;
+        d=1e100.net; s=20221208; t=1689030917; x=1691622917;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EIaFszOKIjmn1GPr4vHWBEQHE0KiRcRwYwejxWSEw6Q=;
-        b=eW+5qvGh2+rmder9Ma1TeUc5nPZaDQTcLigjkrjaeJ0sarose0/AVGtGqmX313Tj4B
-         8znFNA6CTKOwefyFNxVCxzWzJAuUoRJtqnFQjVaYDy6nruedP3cEbE8s27HYkZPf8le2
-         scuy1X/Wju8vBKGq/GYcmEibQohXup76qggdNUSIrkhHpgquSsaJmtOttmcqGVyk8en8
-         xJmGRyqk4gU82ySe+jK1tCHP7vrJsC2J4qFAN8IR9udh4S0vPQCedTmBFYKCma1Ef2ZZ
-         /uB0w+XrB1A8iWKYioTK894cEMZd4EX+lkCgJ4gpOLOzMd6+az9Y5pUeF+KugAa3HV7B
-         Tenw==
-X-Gm-Message-State: ABy/qLZcztsaVJpS0SS2Wg6WaRoYclsh3feyDrkOi9RKynalrniB20+d
-        zhRmgOUoI0ssvtfENgvMP/g=
-X-Google-Smtp-Source: APBJJlGgAvP70h63K/YLCRubROWtnNOywvJJQNDmqcqFLiAhFTt2GlaLDGCF9NIFITC9+YVmX2ZYIw==
-X-Received: by 2002:a17:902:daca:b0:1b8:9195:1dd8 with SMTP id q10-20020a170902daca00b001b891951dd8mr13057988plx.51.1689030869579;
-        Mon, 10 Jul 2023 16:14:29 -0700 (PDT)
+        bh=dAwiz27o1hNxGAQwrIRT6lxtMelfroQzik/QCJDjd3Q=;
+        b=JTzM+cq9x4Q+ptV2Lx8YLfJx9BaiEiismcM8uVTHc7ChnITAuCSsaOku+Brnv6y2M7
+         coUY+k40zJeP968xDE8R9HT7GB/IIe7e9Pw1cQnvC5g4E2bxUzfg5xrpCOdfqH+BQcUg
+         vaMJlN4Z5piWF9VE1L/K3nu6So4bIHoTz9uK0L/bpYvyQOCqwyv7A2DNzrx2lwVPxTnS
+         hsaRlPakX1b8THect0TgJ1x/ayVkWwLIIG+KCHwo4BIzBv5xwdXGTyqqB+bt7UQbux+U
+         a9Wp4ddEJ1DUiKnFXBLdVv7lGHFFtC/ZKQ3wy/bvd3D04n1pSMWj/aS1E1N9qB8N0Jpa
+         vODQ==
+X-Gm-Message-State: ABy/qLZsQXZbVf4a3KCzwY3KrAN3Ues4HBW1nrX8HbFFr9OmhzYXT3LH
+        6ev/mEQUuIDD148h/g//yXQ=
+X-Google-Smtp-Source: APBJJlF6C6Tptsh25nmcDwQDB9YW4j1H6BPwVehKw7ItD6HJJIsYlF3lN3rYWXHtoWKCKMoVaY6dzA==
+X-Received: by 2002:a05:6a20:54a7:b0:131:a21:9f96 with SMTP id i39-20020a056a2054a700b001310a219f96mr11740678pzk.6.1689030917027;
+        Mon, 10 Jul 2023 16:15:17 -0700 (PDT)
 Received: from yoga ([2400:1f00:13:76f2:868d:bc7d:562b:a5bb])
-        by smtp.gmail.com with ESMTPSA id t4-20020a170902bc4400b001b9c960ffeasm428846plz.47.2023.07.10.16.14.25
+        by smtp.gmail.com with ESMTPSA id k22-20020aa792d6000000b00682868714fdsm325357pfa.95.2023.07.10.16.15.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 16:14:29 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 04:44:22 +0530
+        Mon, 10 Jul 2023 16:15:16 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 04:45:10 +0530
 From:   Anup Sharma <anupnewsmail@gmail.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -62,9 +62,9 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Anup Sharma <anupnewsmail@gmail.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/6] scripts: python: Implement add sample function and
- return finish
-Message-ID: <8b80f803ffbed4c84c0c63b3e1dae155a66ac1f2.1689024635.git.anupnewsmail@gmail.com>
+Subject: [PATCH v3 6/6] scripts: python: implement get or create frame and
+ stack function
+Message-ID: <dd26619520465132d33dd84780859e6bf89133bf.1689024635.git.anupnewsmail@gmail.com>
 References: <cover.1689024635.git.anupnewsmail@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -72,7 +72,7 @@ Content-Disposition: inline
 In-Reply-To: <cover.1689024635.git.anupnewsmail@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,59 +80,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The addSample function appends a new entry to the 'samples' data structure.
+Complete addSample function, it takes the thread name, stack array,
+and time as input parameters and  if the thread name differs from
+the current name, it updates the name. The function utilizes the
+get_or_create_stack and get_or_create_frame methods to construct
+the stack structure. Finally, it adds the stack, time, and
+responsiveness values to the 'data' list within 'samples'.
 
-The finish function generates a dictionary containing various profile
-information such as 'tid', 'pid', 'name', 'markers', 'samples',
-'frameTable', 'stackTable', 'stringTable', 'registerTime',
-'unregisterTime', and 'processType'.
+The get_or_create_stack function is responsible for retrieving
+or creating a stack based on the provided frame and prefix.
+It first generates a key using the frame and prefix values.
+If the stack corresponding to the key is found in the stackMap,
+it is returned. Otherwise, a new stack is created by appending
+the prefix and frame to the stackTable's 'data' array. The key
+and the index of the newly created stack are added to the
+stackMap for future reference.
+
+The get_or_create_frame function is responsible for retrieving or
+creating a frame based on the provided frameString. If the frame
+corresponding to the frameString is found in the frameMap, it is
+returned. Otherwise, a new frame is created by appending relevant
+information to the frameTable's 'data' array and adding the
+frameString to the stringTable.
 
 Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
 ---
- .../scripts/python/firefox-gecko-converter.py | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ .../scripts/python/firefox-gecko-converter.py | 57 ++++++++++++++++++-
+ 1 file changed, 56 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
-index 39818a603265..6c934de1f608 100644
+index 6c934de1f608..97fbe562ee2b 100644
 --- a/tools/perf/scripts/python/firefox-gecko-converter.py
 +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
-@@ -106,11 +106,36 @@ def process_event(param_dict):
+@@ -21,6 +21,8 @@ sys.path.append(os.environ['PERF_EXEC_PATH'] + \
+ from perf_trace_context import *
+ from Core import *
+ 
++USER_CATEGORY_INDEX = 0
++KERNEL_CATEGORY_INDEX = 1
+ thread_map = {}
+ start_time = None
+ 
+@@ -34,7 +36,12 @@ CATEGORIES = [
+ PRODUCT = os.popen('uname -op').read().strip()
+ 
+ def trace_end():
+-    thread_array = thread_map.values()))
++    thread_array = list(map(lambda thread: thread['finish'](), thread_map.values()))
++
++# Parse the callchain of the current sample into a stack array.
++    for thread in thread_array:
++        key = thread['samples']['schema']['time']
++        thread['samples']['data'].sort(key=lambda data : float(data[key]))
+ 
+     result = {
+         'meta': {
+@@ -106,7 +113,55 @@ def process_event(param_dict):
  		}
  		stringTable = []
  
-+		def addSample(threadName, stackArray, time):
-+			responsiveness = 0
-+			samples['data'].append([stack, time, responsiveness])
++		stackMap = dict()
++		def get_or_create_stack(frame, prefix):
++			key = f"{frame}" if prefix is None else f"{frame},{prefix}"
++			stack = stackMap.get(key)
++			if stack is None:
++				stack = len(stackTable['data'])
++				stackTable['data'].append([prefix, frame])
++				stackMap[key] = stack
++			return stack
 +
-+		def finish():
-+			return {
-+				"tid": tid,
-+				"pid": pid,
-+				"name": name,
-+				"markers": markers,
-+				"samples": samples,
-+				"frameTable": frameTable,
-+				"stackTable": stackTable,
-+				"stringTable": stringTable,
-+				"registerTime": 0,
-+				"unregisterTime": None,
-+				"processType": 'default'
-+			}
++		frameMap = dict()
++		def get_or_create_frame(frameString):
++			frame = frameMap.get(frameString)
++			if frame is None:
++				frame = len(frameTable['data'])
++				location = len(stringTable)
++				stringTable.append(frameString)
++				category = KERNEL_CATEGORY_INDEX if frameString.find('kallsyms') != -1 \
++						or frameString.find('/vmlinux') != -1 \
++						or frameString.endswith('.ko)') \
++						else USER_CATEGORY_INDEX
++				implementation = None
++				optimizations = None
++				line = None
++				relevantForJS = False
++				subcategory = None
++				innerWindowID = 0
++				column = None
 +
-+		return {
-+			"addSample": addSample,
-+			"finish": finish
-+		}
++				frameTable['data'].append([
++					location,
++					relevantForJS,
++					innerWindowID,
++					implementation,
++					optimizations,
++					line,
++					column,
++					category,
++					subcategory,
++				])
++				frameMap[frameString] = frame
++			return frame
 +
- 	def _addThreadSample(pid, tid, threadName, time_stamp, stack):
- 		thread = thread_map.get(tid)
- 		if not thread:
- 			thread = _createThread(threadName, pid, tid)
- 			thread_map[tid] = thread
-+		thread['addSample'](threadName, stack, time_stamp)
+ 		def addSample(threadName, stackArray, time):
++			nonlocal name
++			if name != threadName:
++				name = threadName
++			stack = reduce(lambda prefix, stackFrame: get_or_create_stack
++					(get_or_create_frame(stackFrame), prefix), stackArray, None)
+ 			responsiveness = 0
+ 			samples['data'].append([stack, time, responsiveness])
  
- 	# Extract relevant information from the event parameters. The event parameters
- 	# are in a dictionary:
 -- 
 2.34.1
 
