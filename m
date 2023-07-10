@@ -2,157 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920D074D947
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD9774D94A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjGJOqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S231859AbjGJOr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGJOqb (ORCPT
+        with ESMTP id S229469AbjGJOrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:46:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA6F114;
-        Mon, 10 Jul 2023 07:46:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 10 Jul 2023 10:47:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B97F114;
+        Mon, 10 Jul 2023 07:47:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FFC061048;
-        Mon, 10 Jul 2023 14:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE65BC433C8;
-        Mon, 10 Jul 2023 14:46:26 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 10:46:25 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Zheng Yejian <zhengyejian1@huawei.com>
-Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ftrace: Fix possible warning on checking all pages used
- in ftrace_process_locs()
-Message-ID: <20230710104625.421c851a@gandalf.local.home>
-In-Reply-To: <20230710212958.274126-1-zhengyejian1@huawei.com>
-References: <20230710212958.274126-1-zhengyejian1@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ECEAF21CA3;
+        Mon, 10 Jul 2023 14:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689000441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q+1Q5IqVM4jiy8w9gyxY+YF8o42gE208jNH/45cti5Y=;
+        b=wUnUmdDiJSqdoz3B0jXxqRF3kTWxJQz1nybKGSlco4yStjqHgWyYeyKwVNnuRgpyQ7KMIT
+        WlIWN7xv/Rb/jKYTr8tI/Y863fvZp58mBtDvyJv1G1zmVT3396zh0+asxRpgRQtwJxNwfz
+        Qk9wUYgVyXg10tqt5tcLpa+BvQxTZzQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689000441;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q+1Q5IqVM4jiy8w9gyxY+YF8o42gE208jNH/45cti5Y=;
+        b=QydSZCJbBRa8iINwFoStHdiU0aw+t9lVdxnsQeIq1VojcEFCrtPKvOiqA/nGBiu+0DU29c
+        IOyefZK13erea/Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9DFA013A05;
+        Mon, 10 Jul 2023 14:47:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QYy0JfkZrGR0TAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 10 Jul 2023 14:47:21 +0000
+Date:   Mon, 10 Jul 2023 16:47:21 +0200
+Message-ID: <871qhfzuva.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, liam.r.girdwood@intel.com,
+        mengdong.lin@intel.com, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com
+Subject: Re: [PATCH v2 2/3] ALSA: hda/tas2781: Add tas2781 HDA driver
+In-Reply-To: <20230710041217.151099-2-13916275206@139.com>
+References: <20230710041217.151099-1-13916275206@139.com>
+        <20230710041217.151099-2-13916275206@139.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 05:29:58 +0800
-Zheng Yejian <zhengyejian1@huawei.com> wrote:
-
-> As comments in ftrace_process_locs(), there may be NULL pointers in
-> mcount_loc section:
->  > Some architecture linkers will pad between
->  > the different mcount_loc sections of different
->  > object files to satisfy alignments.
->  > Skip any NULL pointers.  
+On Mon, 10 Jul 2023 06:12:16 +0200,
+Shenghao Ding wrote:
 > 
-> After 20e5227e9f55 ("ftrace: allow NULL pointers in mcount_loc"),
-> NULL pointers will be accounted when allocating ftrace pages but
-> skipped before adding into ftrace pages, this may result in some
-> pages not being used. Then after 706c81f87f84 ("ftrace: Remove extra
-> helper functions"), warning may occur at:
->   WARN_ON(pg->next);
+> Create tas2781 side codec HDA driver for Lenovo Laptops. The quantity
+> of the speakers has been define in ACPI. All of the tas2781s in the
+> laptop will be aggregated as one audio speaker. The code supports
+> realtek codec as the primary codec. Code offers several controls for
+> digtial/analog gain setting during playback, and other for eq params
+> setting in case of different audio profiles, such as music, voice,
+> movie, etc.
 > 
-> So we may need to skip NULL pointers before allocating ftrace pages.
+> Signed-off-by: Shenghao Ding <13916275206@139.com>
 > 
-> Fixes: 706c81f87f84 ("ftrace: Remove extra helper functions")
-> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 > ---
->  kernel/trace/ftrace.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 3740aca79fe7..5b474165df31 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6485,6 +6485,16 @@ static int ftrace_process_locs(struct module *mod,
->  	if (!count)
->  		return 0;
->  
-> +	p = start;
-> +	while (p < end) {
-> +		/*
-> +		 * Refer to conments below, there may be NULL pointers,
-> +		 * skip them before allocating pages
-> +		 */
-> +		addr = ftrace_call_adjust(*p++);
-> +		if (!addr)
-> +			count--;
-> +	}
+> Changes in v2:
+>  - All the controls set as const static
+>  - Add descriptions for tas2781_save_calibration
+>  - remove global addr handling in the code
+>  - checking subid in switch statement in function tas2781_hda_bind
+>  - add force firmware load Kcontrol
+>  - rename the kcontrol name to be more undertandable
+>  - remove Superfluous cast in tasdevice_fw_ready
+>  - correct weird line break in function tas2781_acpi_get_i2c_resource
+>  - correct Referencing adev after acpi_dev_put() in tas2781_hda_read_acpi
+>  - As to checking the given value in tasdevice_set_profile_id, it seems done
+>    by the tasdevice_info_profile
+>  - replace strcpy with strscpy in tas2781_hda_read_acpi
+>  - rewrite the subid judgement
+>  - Add tiwai@suse.de into Cc list
+>  - remove the cast in tas2781_acpi_get_i2c_resource
+>  - remove else in tas2781_acpi_get_i2c_resource
+>  - fix the return value in tasdevice_set_profile_id
+>  - remove unneeded NL in tasdevice_config_get
+>  - Unifiy the comment style
+>  - remove ret = 0 in tasdevice_fw_ready
+>  - remove ret in tas2781_save_calibration
+>  - remove unused ret in tas2781_hda_playback
+>  - add force firmware load Kcontrol
 
-My main concern about this is the added overhead during boot to process
-this. There's 10s of thousands of functions, so this loop will be 10s of
-thousands. I also don't like that this is an unconditional loop (meaning it
-executes even when it is unnecessary to do so).
+The new version looks much better.  Another few minor comments:
+
+> +static int tas2781_acpi_get_i2c_res(struct acpi_resource *ares,
+> +	void *data)
+
+The indentation could be improved in this patch, too.
+Not only this line but in many places.
+
+> +static int tas2781_hda_read_acpi(struct tasdevice_priv *tas_priv,
+> +	const char *hid)
+> +{
+...
+> +err:
+> +	dev_err(tas_priv->dev, "Failed acpi ret: %d\n", ret);
+
+Too ambiguous error message.  It's hard to spot what the error is only
+from this text.
+
+> +static int tasdevice_set_profile_id(struct snd_kcontrol *kcontrol,
+> +		struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
+> +	int ret = 0;
+> +
+> +	if (tas_priv->rcabin.profile_cfg_id !=
+> +		ucontrol->value.integer.value[0]) {
+> +		tas_priv->rcabin.profile_cfg_id =
+> +			ucontrol->value.integer.value[0];
+
+You should have a sanity check of the given values.  User-space may
+pass any arbitrary value, and ALSA core doesn't always filter invalid
+values.  Ditto for other *_put() callbacks.
+
+> +static void tas2781_apply_calib(struct tasdevice_priv *tas_priv)
+> +{
+> +	const unsigned char page_array[CALIB_MAX] = {
+> +		0x17, 0x18, 0x18, 0x0d, 0x18
+> +	};
+
+Missing static.
+
+> +	const unsigned char rgno_array[CALIB_MAX] = {
+> +		0x74, 0x0c, 0x14, 0x3c, 0x7c
+> +	};
+
+Ditto.
+
+> +static void tas2781_hda_remove(struct device *dev)
+> +{
+> +	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
+> +
+> +	pm_runtime_get_sync(tas_priv->dev);
+> +	pm_runtime_disable(tas_priv->dev);
+> +
+> +
+
+Too many blank lines.
 
 
->  	/*
->  	 * Sorting mcount in vmlinux at build time depend on
->  	 * CONFIG_BUILDTIME_MCOUNT_SORT, while mcount loc in
+thanks,
 
-How about something like this?
-
--- Steve
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index b24c573934af..acd033371721 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6474,6 +6474,7 @@ static int ftrace_process_locs(struct module *mod,
- 	struct ftrace_page *start_pg;
- 	struct ftrace_page *pg;
- 	struct dyn_ftrace *rec;
-+	unsigned long skipped = 0;
- 	unsigned long count;
- 	unsigned long *p;
- 	unsigned long addr;
-@@ -6536,8 +6537,10 @@ static int ftrace_process_locs(struct module *mod,
- 		 * object files to satisfy alignments.
- 		 * Skip any NULL pointers.
- 		 */
--		if (!addr)
-+		if (!addr) {
-+			skipped++;
- 			continue;
-+		}
- 
- 		end_offset = (pg->index+1) * sizeof(pg->records[0]);
- 		if (end_offset > PAGE_SIZE << pg->order) {
-@@ -6551,12 +6554,24 @@ static int ftrace_process_locs(struct module *mod,
- 		rec->ip = addr;
- 	}
- 
--	/* We should have used all pages */
--	WARN_ON(pg->next);
--
- 	/* Assign the last page to ftrace_pages */
- 	ftrace_pages = pg;
- 
-+	/* We should have used all pages unless we skipped some */
-+	if (pg->next) {
-+		WARN_ON(!skipped);
-+		while (ftrace_pages->next) {
-+			pg = ftrace_pages->next;
-+			ftrace_pages->next = pg->next;
-+			if (pg->records) {
-+				free_pages((unsigned long)pg->records, pg->order);
-+				ftrace_number_of_pages -= 1 << pg->order;
-+			}
-+			kfree(pg);
-+			ftrace_number_of_groups--;
-+		}
-+	}
-+
- 	/*
- 	 * We only need to disable interrupts on start up
- 	 * because we are modifying code that an interrupt
+Takashi
