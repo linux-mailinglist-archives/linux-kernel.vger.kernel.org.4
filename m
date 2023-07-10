@@ -2,227 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9AB74DAD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432F374DAE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjGJQQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S229890AbjGJQSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGJQQ4 (ORCPT
+        with ESMTP id S229612AbjGJQSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:16:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAEE106;
-        Mon, 10 Jul 2023 09:16:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=/LswZXyKDM4slxIskQwFHult6e/+CLn3LiQS3znqeWE=; b=b4MaOaqmUjhOXC9c1pp8Xr8sBy
-        r9mrPU9jeziMDj8ghbfvjEDteV7Q7yJqV/j/vIykfiKriI0RMDCrRzBi2DUv6JGslSnBYTPLiU2Md
-        JjM7fLPBLE+0vcLpJmh5CD3QqbeSWn3058sjO9lo/YEVbj4TMyroFsH2xtrRlyTfRqF+8TuTCc7Uq
-        rCk0ADDSyE7fbsgxjQgc0lYXteKg4T/92o9bslsIQVbatzw6pMiodvLtwKpLG7axCxrl4Kwu9KoS5
-        VpIbhL1hGB/rdG6xaVb7nrdTPpNv8CSNb8e28aL7/VYKj2tifWQOTrSUSFIxC1/K7jyd3Ui4kQ/PD
-        /yknlwaw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qItZ6-00EkAx-VI; Mon, 10 Jul 2023 16:16:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1ACFC3002B1;
-        Mon, 10 Jul 2023 18:16:44 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 01A8E2B3B25DF; Mon, 10 Jul 2023 18:16:43 +0200 (CEST)
-Date:   Mon, 10 Jul 2023 18:16:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] x86/kprobes: Prohibit probing on compiler
- generated CFI checking code
-Message-ID: <20230710161643.GB3040258@hirez.programming.kicks-ass.net>
-References: <168899125356.80889.17967397360941194229.stgit@devnote2>
- <168899127520.80889.15418363018799407058.stgit@devnote2>
+        Mon, 10 Jul 2023 12:18:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E630106;
+        Mon, 10 Jul 2023 09:18:49 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36AAevoi014118;
+        Mon, 10 Jul 2023 16:18:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=x19N/EDFOr5tso6qW9yH4+I6KbFUv6GjFik7G5Qp/8M=;
+ b=jLBO5j6w3joHcvp48OO9jBkUdhp7klVIBsOD97dd7GvjeExlI/eBsgA6XEGdMtF30CaC
+ keJc1T83RVJ/sSkykHkYheIntWAJ2utE5k2ZOmoxANyg2T1LLRsF4k8U8g/bFVPhDG2T
+ oodMId0ZwcezQhYlrsJYDwPj9YPZOu2lQN0eF6qFvxiMvXIGJZgA8DIzkd2B3eCvk+tc
+ HIZFmBOZ2hosy/2W74DQ6dRQA8ExjtuB3JfOUNt2YKBc9oU5TKzoCEEWu2+nQyie8JXz
+ /SiHQdHL/uSDi5oppGu5iKMcrMI9nIcs8UgaeYmY0DkT4TjV8q3WItZv44hNe+MKq1w6 jw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpwgm4bg0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 16:18:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36AGIXv2027851
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 16:18:33 GMT
+Received: from [10.110.55.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 09:18:32 -0700
+Message-ID: <9d037933-6d55-9a4b-f3e4-8993816c4425@quicinc.com>
+Date:   Mon, 10 Jul 2023 09:18:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 2/5] drm/msm/dp: incorporate pm_runtime framework into
+ DP driver
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
+ <1688773943-3887-3-git-send-email-quic_khsieh@quicinc.com>
+ <c551f77f-804f-3e45-6b15-680c70b86d37@linaro.org>
+Content-Language: en-US
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <c551f77f-804f-3e45-6b15-680c70b86d37@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <168899127520.80889.15418363018799407058.stgit@devnote2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: m503kfYCmEolsVnqjaYcER4tFQFJTRST
+X-Proofpoint-ORIG-GUID: m503kfYCmEolsVnqjaYcER4tFQFJTRST
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_12,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ spamscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307100147
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 09:14:35PM +0900, Masami Hiramatsu (Google) wrote:
-> +	if (IS_ENABLED(CONFIG_CFI_CLANG)) {
-> +		/*
-> +		 * The compiler generates the following instruction sequence
-> +		 * for indirect call checks and cfi.c decodes this;
-> +		 *
-> +		 *�  movl    -<id>, %r10d       ; 6 bytes
-> +		 *   addl    -4(%reg), %r10d    ; 4 bytes
-> +		 *   je      .Ltmp1             ; 2 bytes
-> +		 *   ud2                        ; <- regs->ip
-> +		 *   .Ltmp1:
-> +		 *
-> +		 * Also, these movl and addl are used for showing expected
-> +		 * type. So those must not be touched.
-> +		 */
-> +		__addr = recover_probed_instruction(buf, addr);
-> +		if (!__addr)
-> +			return 0;
-> +
-> +		if (insn_decode_kernel(&insn, (void *)__addr) < 0)
-> +			return 0;
-> +
-> +		if (insn.opcode.value == 0xBA)
-> +			offset = 12;
-> +		else if (insn.opcode.value == 0x3)
-> +			offset = 6;
-> +		else
-> +			goto out;
 
-Notably, the JE will already be avoided?
+On 7/7/2023 5:04 PM, Dmitry Baryshkov wrote:
+> On 08/07/2023 02:52, Kuogee Hsieh wrote:
+>> Incorporating pm runtime framework into DP driver so that power
+>> and clock resource handling can be centralized allowing easier
+>> control of these resources in preparation of registering aux bus
+>> uring probe.
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/dp/dp_aux.c     |  3 ++
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 75 
+>> +++++++++++++++++++++++++++++--------
+>>   2 files changed, 63 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c 
+>> b/drivers/gpu/drm/msm/dp/dp_aux.c
+>> index 8e3b677..c592064 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
+>> @@ -291,6 +291,7 @@ static ssize_t dp_aux_transfer(struct drm_dp_aux 
+>> *dp_aux,
+>>           return -EINVAL;
+>>       }
+>>   +    pm_runtime_get_sync(dp_aux->dev);
+>
+> Let me quote the function's documentation:
+> Consider using pm_runtime_resume_and_get() instead of it, especially 
+> if its return value is checked by the caller, as this is likely to 
+> result in cleaner code.
 
-> +
-> +		/* This movl/addl is used for decoding CFI. */
-> +		if (is_cfi_trap(addr + offset))
-> +			return 0;
-> +	}
->  
-> +out:
->  	return (addr == paddr);
->  }
+pm_runtime_resume_and_get() will call pm_runtime_resume()  every time.
 
-Hmm, so I was thinking something like the below, which also catches
-things when we rewrite kCFI to FineIBT, except I don't think we care if
-the FineIBT callsite gets re-written. FineIBT only relies on the __cfi_
-symbol not getting poked at (which the previous patches should ensure).
+Since aux_transfer is called very frequently, is it just simple to call 
+pm_runtiem_get_sync() which will call pm_runtime_reusme() if power 
+counter is 0 before increased it.
 
-Additionally is_cfi_trap() is horrifically slow -- it's a full linear
-search of the entire kcfi_traps array, it doesn't have any smarts on
-(#UD can hardly be considered a fast path).
-
-So I tihnk I'm ok with the above, just adding the below for reference
-(completely untested and everything).
+otherwise it just increase power counter?
 
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>
+> So two notes concerning the whole patch:
+> - error checking is missing
+> - please use pm_runtime_resume_and_get() instead.
+>
+>>       mutex_lock(&aux->mutex);
+>>       if (!aux->initted) {
+>>           ret = -EIO;
+>> @@ -364,6 +365,8 @@ static ssize_t dp_aux_transfer(struct drm_dp_aux 
+>> *dp_aux,
+>>     exit:
+>>       mutex_unlock(&aux->mutex);
+>> +    pm_runtime_mark_last_busy(dp_aux->dev);
+>> +    pm_runtime_put_autosuspend(dp_aux->dev);
+>>         return ret;
+>>   }
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
+>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index 76f1395..2c5706a 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -309,6 +309,10 @@ static int dp_display_bind(struct device *dev, 
+>> struct device *master,
+>>           goto end;
+>>       }
+>>   +    pm_runtime_enable(dev);
+>
+> devm_pm_runtime_enable() removes need for a cleanup.
+>
+>> +    pm_runtime_set_autosuspend_delay(dev, 1000);
+>> +    pm_runtime_use_autosuspend(dev);
+>
+> Why do you want to use autosuspend here?
+>
+>> +
+>>       return 0;
+>>   end:
+>>       return rc;
+>> @@ -320,9 +324,8 @@ static void dp_display_unbind(struct device *dev, 
+>> struct device *master,
+>>       struct dp_display_private *dp = dev_get_dp_display_private(dev);
+>>       struct msm_drm_private *priv = dev_get_drvdata(master);
+>>   -    /* disable all HPD interrupts */
+>> -    if (dp->core_initialized)
+>> -        dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, 
+>> false);
+>> +    pm_runtime_dont_use_autosuspend(dev);
+>> +    pm_runtime_disable(dev);
+>>         kthread_stop(dp->ev_tsk);
+>>   @@ -466,10 +469,12 @@ static void dp_display_host_init(struct 
+>> dp_display_private *dp)
+>>           dp->dp_display.connector_type, dp->core_initialized,
+>>           dp->phy_initialized);
+>>   -    dp_power_init(dp->power);
+>> -    dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>> -    dp_aux_init(dp->aux);
+>> -    dp->core_initialized = true;
+>> +    if (!dp->core_initialized) {
+>> +        dp_power_init(dp->power);
+>> +        dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>> +        dp_aux_init(dp->aux);
+>> +        dp->core_initialized = true;
+>> +    }
+>
+> Is this relevant to PM runtime? I don't think so.
+>
+>>   }
+>>     static void dp_display_host_deinit(struct dp_display_private *dp)
+>> @@ -478,10 +483,12 @@ static void dp_display_host_deinit(struct 
+>> dp_display_private *dp)
+>>           dp->dp_display.connector_type, dp->core_initialized,
+>>           dp->phy_initialized);
+>>   -    dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>> -    dp_aux_deinit(dp->aux);
+>> -    dp_power_deinit(dp->power);
+>> -    dp->core_initialized = false;
+>> +    if (dp->core_initialized) {
+>> +        dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>> +        dp_aux_deinit(dp->aux);
+>> +        dp_power_deinit(dp->power);
+>> +        dp->core_initialized = false;
+>> +    }
+>>   }
+>>     static int dp_display_usbpd_configure_cb(struct device *dev)
+>> @@ -1304,6 +1311,39 @@ static int dp_display_remove(struct 
+>> platform_device *pdev)
+>>       dp_display_deinit_sub_modules(dp);
+>>         platform_set_drvdata(pdev, NULL);
+>> +    pm_runtime_put_sync_suspend(&pdev->dev);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int dp_pm_runtime_suspend(struct device *dev)
+>> +{
+>> +    struct platform_device *pdev = to_platform_device(dev);
+>> +    struct msm_dp *dp_display = platform_get_drvdata(pdev);
+>> +    struct dp_display_private *dp;
+>> +
+>> +    dp = container_of(dp_display, struct dp_display_private, 
+>> dp_display);
+>> +
+>> +    dp_display_host_phy_exit(dp);
+>> +    dp_catalog_ctrl_hpd_enable(dp->catalog);
+>
+> What? NO!
+>
+>> +    dp_display_host_deinit(dp);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int dp_pm_runtime_resume(struct device *dev)
+>> +{
+>> +    struct platform_device *pdev = to_platform_device(dev);
+>> +    struct msm_dp *dp_display = platform_get_drvdata(pdev);
+>> +    struct dp_display_private *dp;
+>> +
+>> +    dp = container_of(dp_display, struct dp_display_private, 
+>> dp_display);
+>> +
+>> +    dp_display_host_init(dp);
+>> +    if (dp_display->is_edp) {
+>> +        dp_catalog_ctrl_hpd_enable(dp->catalog);
+>> +        dp_display_host_phy_init(dp);
+>> +    }
+>>         return 0;
+>>   }
+>> @@ -1409,6 +1449,7 @@ static int dp_pm_suspend(struct device *dev)
+>>   }
+>>     static const struct dev_pm_ops dp_pm_ops = {
+>> +    SET_RUNTIME_PM_OPS(dp_pm_runtime_suspend, dp_pm_runtime_resume, 
+>> NULL)
+>>       .suspend = dp_pm_suspend,
+>>       .resume =  dp_pm_resume,
+>
+> With the runtime PM in place, can we change suspend/resume to use 
+> pm_runtime_force_suspend() and pm_runtime_force_resume() ?
 
+Let em try if i can move checking device connection status out of 
+dp_pm_resume(). it handles external dp panel plugin/unplug during 
+suspend cases.
 
----
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index f7f6042eb7e6..b812dee76909 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -293,6 +293,11 @@ static int can_probe(unsigned long paddr)
- #endif
- 		addr += insn.length;
- 	}
-+	/*
-+	 * Don't allow poking the kCFI/FineIBT callsites.
-+	 */
-+	if (IS_ENABLED(CONFIG_CFI_CLANG) && cfi_call_site(addr))
-+		return 0;
- 
- 	return (addr == paddr);
- }
-diff --git a/kernel/cfi.c b/kernel/cfi.c
-index 08caad776717..2656e6ffa013 100644
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -31,16 +31,22 @@ static inline unsigned long trap_address(s32 *p)
- 	return (unsigned long)((long)p + (long)*p);
- }
- 
--static bool is_trap(unsigned long addr, s32 *start, s32 *end)
-+static long cfi_trap_distance(unsigned long addr, s32 *start, s32 *end)
- {
-+	long dist = LONG_MAX;
- 	s32 *p;
- 
- 	for (p = start; p < end; ++p) {
--		if (trap_address(p) == addr)
--			return true;
-+		long d = trap_address(p) - addr;
-+
-+		if (abs(dist) < abs(d)) {
-+			dist = d;
-+			if (dist == 0)
-+				return 0;
-+		}
- 	}
- 
--	return false;
-+	return dist;
- }
- 
- #ifdef CONFIG_MODULES
-@@ -66,25 +72,25 @@ void module_cfi_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
- 	}
- }
- 
--static bool is_module_cfi_trap(unsigned long addr)
-+static long module_cfi_trap_distance(unsigned long addr)
- {
- 	struct module *mod;
--	bool found = false;
-+	long dist = LONG_MAX;
- 
- 	rcu_read_lock_sched_notrace();
- 
- 	mod = __module_address(addr);
- 	if (mod)
--		found = is_trap(addr, mod->kcfi_traps, mod->kcfi_traps_end);
-+		dist = cfi_trap_distance(addr, mod->kcfi_traps, mod->kcfi_traps_end);
- 
- 	rcu_read_unlock_sched_notrace();
- 
- 	return found;
- }
- #else /* CONFIG_MODULES */
--static inline bool is_module_cfi_trap(unsigned long addr)
-+static long module_cfi_trap_distance(unsigned long addr)
- {
--	return false;
-+	return LONG_MAX;
- }
- #endif /* CONFIG_MODULES */
- 
-@@ -93,9 +99,24 @@ extern s32 __stop___kcfi_traps[];
- 
- bool is_cfi_trap(unsigned long addr)
- {
--	if (is_trap(addr, __start___kcfi_traps, __stop___kcfi_traps))
-+	long dist = cfi_trap_distance(addr, __start___kcfi_traps, __stop___kcfi_traps);
-+	if (!dist)
-+		return true;
-+
-+	return module_cfi_trap_distance(addr) == 0;
-+}
-+
-+bool cfi_call_site(unsigned long addr)
-+{
-+	long dist = cfi_trap_distance(addr, __start___kcfi_traps, __stop___kcfi_traps);
-+	if (dist >= -12 && dist <= 0)
-+		return true;
-+
-+	dist = module_cfi_trap_distance(addr);
-+	if (dist >= -12 && dist <= 0)
- 		return true;
- 
--	return is_module_cfi_trap(addr);
-+	return false;
- }
-+
- #endif /* CONFIG_ARCH_USES_CFI_TRAPS */
+>
+>
+>>   };
+>> @@ -1493,10 +1534,6 @@ static int dp_display_get_next_bridge(struct 
+>> msm_dp *dp)
+>>       aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
+>>         if (aux_bus && dp->is_edp) {
+>> -        dp_display_host_init(dp_priv);
+>> -        dp_catalog_ctrl_hpd_enable(dp_priv->catalog);
+>> -        dp_display_host_phy_init(dp_priv);
+>
+> Are you going to populate the AUX bus (which can cause AUX bus access) 
+> without waking up the device?
+
+> devm_of_dp_aux_populate_ep_devices() ==>  will call 
+> pm_runtiemget_sync() internally which will call pm_runtime_resume() to 
+> wake dp driver
+>> -
+>>           /*
+>>            * The code below assumes that the panel will finish probing
+>>            * by the time devm_of_dp_aux_populate_ep_devices() returns.
+>> @@ -1604,6 +1641,7 @@ void dp_bridge_atomic_enable(struct drm_bridge 
+>> *drm_bridge,
+>>           dp_hpd_plug_handle(dp_display, 0);
+>
+> Nearly the same question. Resume device before accessing registers.
+>
+>> mutex_lock(&dp_display->event_mutex);
+>> +    pm_runtime_get_sync(&dp_display->pdev->dev);
+>>         state = dp_display->hpd_state;
+>>       if (state != ST_DISPLAY_OFF && state != ST_MAINLINK_READY) {
+>> @@ -1684,6 +1722,8 @@ void dp_bridge_atomic_post_disable(struct 
+>> drm_bridge *drm_bridge,
+>>       }
+>>         drm_dbg_dp(dp->drm_dev, "type=%d Done\n", dp->connector_type);
+>> +
+>> +    pm_runtime_put_sync(&dp_display->pdev->dev);
+>>       mutex_unlock(&dp_display->event_mutex);
+>>   }
+>>   @@ -1723,6 +1763,8 @@ void dp_bridge_hpd_enable(struct drm_bridge 
+>> *bridge)
+>>       struct dp_display_private *dp = container_of(dp_display, struct 
+>> dp_display_private, dp_display);
+>>         mutex_lock(&dp->event_mutex);
+>> +    pm_runtime_get_sync(&dp->pdev->dev);
+>> +
+>>       dp_catalog_ctrl_hpd_enable(dp->catalog);
+>>         /* enable HDP interrupts */
+>> @@ -1744,6 +1786,9 @@ void dp_bridge_hpd_disable(struct drm_bridge 
+>> *bridge)
+>>       dp_catalog_ctrl_hpd_disable(dp->catalog);
+>>         dp_display->internal_hpd = false;
+>> +
+>> +    pm_runtime_mark_last_busy(&dp->pdev->dev);
+>> +    pm_runtime_put_autosuspend(&dp->pdev->dev);
+>>       mutex_unlock(&dp->event_mutex);
+>>   }
+>
