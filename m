@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458E574D323
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A422974D334
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233210AbjGJKRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        id S233397AbjGJKTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjGJKQx (ORCPT
+        with ESMTP id S233407AbjGJKTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:16:53 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5504FE7C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:16:28 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R00255XydzBHXhD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:03:25 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688983405; x=1691575406; bh=9eGsasZCdvlfGHZbPBuBp6LJrAr
-        WhWGbB1Y1Gl7O060=; b=cMhE0ZzDYHXQtRtw2S7cGuQ+AEgRA92QIB0jpxylIQw
-        v7Um2xeXdYWbxagnj8oqKVD3yQbl9wkkxhyFXfYE9JKSc92hxnyy2kqouopzyPwO
-        yAzz5HqO7VDhBcMap+ckhSt3A5eOfijX5BTKhwYUIC6h6htnRQpkAsMO5iZZ9f3B
-        5JUAoAjWQQ6i9WPPp+T10cOlVETKtkTVBG68XlIywX2F1KAzpwm5FeiidKl6kf00
-        PmGIOAlzr2S7tdcQ8tkv1AAwg9M2iHQNcTbP4bhrhKN/GiXy8IVQVVr17Df6WqJM
-        AEX4/ZwMnWkuwHIV+DePS/03wHY8sMjot+OiDu/lRfg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ixD7zODK_b95 for <linux-kernel@vger.kernel.org>;
-        Mon, 10 Jul 2023 18:03:25 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R00252j4hzBHXhC;
-        Mon, 10 Jul 2023 18:03:25 +0800 (CST)
+        Mon, 10 Jul 2023 06:19:36 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350C31FF0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:18:54 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b6fbf0c0e2so64784541fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688984332; x=1691576332;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i4Yt6jByRQ8UFPjX+QYfSMRSiYEbxoGiK3g/FogftK4=;
+        b=THOJ5lDTIAUv0g6+hdYNtFZRmpZ1sOsItEI3uZB1UXDsad7VTCTUASzaDP8kW6KAGE
+         ZWeEaFdZpsYp5gHypo4Cf+0EFlHchlY9Ng9mbtRveFej3AJKOe1Ijx5KwluyDsKU/Smh
+         LFnJRvw5k19jN8U/grLbJEE3C0R2Tr0XIdbQfy9ROMI8IBxq78D+RyNqhg7HsnPKmCYZ
+         vHdC/qVnvQ1HG7gl0ZouzyT6liyAH+7G2TLvp3rjUzhaoxVJgGhJ2dPrOVIXY1OlZkh9
+         e3p88udGpEFFv1AMFgozqbwO95OrCYoLVmPds4wBglkn1PmdUVKah6zLB2pXadVVZ/R3
+         1G0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688984332; x=1691576332;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i4Yt6jByRQ8UFPjX+QYfSMRSiYEbxoGiK3g/FogftK4=;
+        b=WATeX2Ixo2BV68mEPqK1phEFboyKaxJqRas3DlXbHdHMHyQ0EBsW/tKDUk5TXtJN3Y
+         e6BCOdChnb1k4Yf+eZnf7buS25I9ibm65aXVqFRJ2N/5qhGGi/NxULpdtboQHBptvC32
+         KO2zGMaYUZqIoLs5nZNvR0U/oOJg2ulbty5zzsDiLak+Xa1uZ9mq6ZQPFQxNosK2jx0u
+         CcWAu/GCe0VAGaV6Eu/o7W5rKTO5Eub74f4OmUZ7sho2TsdFf3K4gQYuaNPJ0qR48DKf
+         zKR1NgkUoSA+cFrlfpyg6a+lCLyeA9NoJhPSVvQCHSinseLTdV2ecESOjhk3+7CcidPN
+         ECcg==
+X-Gm-Message-State: ABy/qLaLuZ1uqp4jq8m+bcOvei2beR0DdXed2EV8omWYP82XfrD/fKtw
+        0R9Jza60V+h2b43utEVyTxczAU4NlUSY3HZoSg3aYA==
+X-Google-Smtp-Source: APBJJlGcqkp5rqwlLnxdIkdWpmebSjbzBOnq/8Gzu2xJq62n8aShR/Rwsgt6EBSo80iaOQjXU74kqA==
+X-Received: by 2002:a2e:b781:0:b0:2b7:7b9:4767 with SMTP id n1-20020a2eb781000000b002b707b94767mr8820763ljo.41.1688983473701;
+        Mon, 10 Jul 2023 03:04:33 -0700 (PDT)
+Received: from [192.168.1.101] (abxj141.neoplus.adsl.tpnet.pl. [83.9.3.141])
+        by smtp.gmail.com with ESMTPSA id p1-20020a2ea401000000b002b6c92fa161sm1866277ljn.61.2023.07.10.03.04.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 03:04:33 -0700 (PDT)
+Message-ID: <74aa7196-e76c-a1c8-9b0f-1d5f236d3467@linaro.org>
+Date:   Mon, 10 Jul 2023 12:04:31 +0200
 MIME-Version: 1.0
-Date:   Mon, 10 Jul 2023 18:03:25 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/radeon: ERROR: "(foo*)" should be "(foo *)"
-In-Reply-To: <20230710091057.64085-1-xujianghui@cdjrlc.com>
-References: <20230710091057.64085-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <3a541f425a1ab6d2664a6d74cc4c3a51@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230709201309.274306-1-dmitry.baryshkov@linaro.org>
+ <20230709201309.274306-3-dmitry.baryshkov@linaro.org>
+ <0408a6f6-356e-af6a-3e32-1781aec2854f@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <0408a6f6-356e-af6a-3e32-1781aec2854f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix five occurrences of the checkpatch.pl error:
-ERROR: "(foo*)" should be "(foo *)"
+On 10.07.2023 12:02, Bryan O'Donoghue wrote:
+> On 09/07/2023 21:13, Dmitry Baryshkov wrote:
+>> The current approach to handling DP on bridge-enabled platforms requires
+>> a chain of DP bridges up to the USB-C connector. Register a last DRM
+>> bridge for such chain.
+>>
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+>>   drivers/usb/typec/tcpm/Kconfig                |  1 +
+>>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 39 +++++++++++++++++++
+>>   2 files changed, 40 insertions(+)
+>>
+>> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+>> index 5d393f520fc2..0b2993fef564 100644
+>> --- a/drivers/usb/typec/tcpm/Kconfig
+>> +++ b/drivers/usb/typec/tcpm/Kconfig
+>> @@ -79,6 +79,7 @@ config TYPEC_WCOVE
+>>   config TYPEC_QCOM_PMIC
+>>       tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
+>>       depends on ARCH_QCOM || COMPILE_TEST
+>> +    depends on DRM || DRM=n
+>>       help
+>>         A Type-C port and Power Delivery driver which aggregates two
+>>         discrete pieces of silicon in the PM8150b PMIC block: the
+>> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+>> index a905160dd860..0722fb8d75c4 100644
+>> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+>> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+>> @@ -17,6 +17,9 @@
+>>   #include <linux/usb/role.h>
+>>   #include <linux/usb/tcpm.h>
+>>   #include <linux/usb/typec_mux.h>
+>> +
+>> +#include <drm/drm_bridge.h>
+>> +
+>>   #include "qcom_pmic_typec_pdphy.h"
+>>   #include "qcom_pmic_typec_port.h"
+>>   @@ -33,6 +36,9 @@ struct pmic_typec {
+>>       struct pmic_typec_port    *pmic_typec_port;
+>>       bool            vbus_enabled;
+>>       struct mutex        lock;        /* VBUS state serialization */
+>> +#ifdef CONFIG_DRM
+>> +    struct drm_bridge    bridge;
+>> +#endif
+> 
+> IMO there's no reason to ifdef the structure. Its up to you if you want to change it nor not, I have no strong feelings about it.
++1, there's no ifdefs in the drm_bridge.h header that would make this not compile
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/radeon/radeon_kms.c | 10 +++++-----
-  1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/radeon/radeon_kms.c 
-b/drivers/gpu/drm/radeon/radeon_kms.c
-index e0214cf1b43b..a16590c6247f 100644
---- a/drivers/gpu/drm/radeon/radeon_kms.c
-+++ b/drivers/gpu/drm/radeon/radeon_kms.c
-@@ -444,7 +444,7 @@ int radeon_info_ioctl(struct drm_device *dev, void 
-*data, struct drm_file *filp)
-              DRM_DEBUG_KMS("timestamp is r6xx+ only!\n");
-              return -EINVAL;
-          }
--        value = (uint32_t*)&value64;
-+        value = (uint32_t *)&value64;
-          value_size = sizeof(uint64_t);
-          value64 = radeon_get_gpu_clock_counter(rdev);
-          break;
-@@ -543,18 +543,18 @@ int radeon_info_ioctl(struct drm_device *dev, void 
-*data, struct drm_file *filp)
-          *value = rdev->vce.fb_version;
-          break;
-      case RADEON_INFO_NUM_BYTES_MOVED:
--        value = (uint32_t*)&value64;
-+        value = (uint32_t *)&value64;
-          value_size = sizeof(uint64_t);
-          value64 = atomic64_read(&rdev->num_bytes_moved);
-          break;
-      case RADEON_INFO_VRAM_USAGE:
--        value = (uint32_t*)&value64;
-+        value = (uint32_t *)&value64;
-          value_size = sizeof(uint64_t);
-          man = ttm_manager_type(&rdev->mman.bdev, TTM_PL_VRAM);
-          value64 = ttm_resource_manager_usage(man);
-          break;
-      case RADEON_INFO_GTT_USAGE:
--        value = (uint32_t*)&value64;
-+        value = (uint32_t *)&value64;
-          value_size = sizeof(uint64_t);
-          man = ttm_manager_type(&rdev->mman.bdev, TTM_PL_TT);
-          value64 = ttm_resource_manager_usage(man);
-@@ -614,7 +614,7 @@ int radeon_info_ioctl(struct drm_device *dev, void 
-*data, struct drm_file *filp)
-          DRM_DEBUG_KMS("Invalid request %d\n", info->request);
-          return -EINVAL;
-      }
--    if (copy_to_user(value_ptr, (char*)value, value_size)) {
-+    if (copy_to_user(value_ptr, (char *)value, value_size)) {
-          DRM_ERROR("copy_to_user %s:%u\n", __func__, __LINE__);
-          return -EFAULT;
-      }
+Konrad
+> 
+> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> 
+> ---
+> bod
