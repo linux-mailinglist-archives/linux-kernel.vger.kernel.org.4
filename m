@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CC274CE9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4F274CEA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjGJHhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S230258AbjGJHiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjGJHhd (ORCPT
+        with ESMTP id S230252AbjGJHis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:37:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C73F4;
-        Mon, 10 Jul 2023 00:37:31 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9922d6f003cso558534766b.0;
-        Mon, 10 Jul 2023 00:37:31 -0700 (PDT)
+        Mon, 10 Jul 2023 03:38:48 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0CFFA;
+        Mon, 10 Jul 2023 00:38:40 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51e362e4c61so4395660a12.0;
+        Mon, 10 Jul 2023 00:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688974650; x=1691566650;
+        d=gmail.com; s=20221208; t=1688974718; x=1691566718;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A9Nv8hdTpZ1xMx5bIOtGrgeBtJ+A2/F1n9QKY2k4cjc=;
-        b=DIGPvNdQbuCxmYr1UuwZUbnpXGTwEcorKe9uJej5q4F/8hRF3tTZKBMKmx2DZiXP65
-         iR1qQ041sjabLXrHjVP/ROE9uYbcYP3CKAudwkBOebvx0itO1TjFsF9s6mepr2cqf2W5
-         beSisnzMVSEQnbIgPJCep+pswhO4q4uqy8WKMdln3NSP0jLa9FwzCRqiVjv+vNO5XjXb
-         3rcFILsF2hs/zHVnQsv1Z5JCbEkOkP7cnLqsatotfHg0z38FXZ/MNNtuaMFaypDRFN72
-         0Rg+zWB3bWsN9ePGMoc2Qpiz2+mIgyGdaTv/sgOL7Z9VvqTUqb8luHkzyn05XjPqI1Es
-         FPEQ==
+        bh=K0RrzppqWK8amO/hYoEe/sGNQQUvYJv9b/1K1O2WuZU=;
+        b=F+ykSINOl4JRcwz99T0450qy+LEU7sfc349swulXvKki2qEkI+R5mVjp6cGVCUcaB+
+         2/bT0MY6O2SPSnidD0o9U34h4ayAE5tYsXWKYz0hL6jr1y9AEJKel5ppzFKFClYULaUF
+         PlVx1UmgaggLHEN7xpIH6Hc79U+/J3IvRJdX1ctKjGzwfGlDvGnsVPmuyBp/lvEWHiy5
+         MkUhrbGeI/dRqAGPBoBhc5hI4QVR0p2aGyoEpDKc0WF/4+Dk1GmoGx943XmNyWte/IUD
+         YaVzb2lmpoakA4dFgYnsH55BaIfbhDSQ7arKyUPZXY39F4oGdtev96ixkxBnekUJK2lB
+         b2Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688974650; x=1691566650;
+        d=1e100.net; s=20221208; t=1688974718; x=1691566718;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A9Nv8hdTpZ1xMx5bIOtGrgeBtJ+A2/F1n9QKY2k4cjc=;
-        b=UDdrvXqDxhgcPgcaQ1uDFqCVviqItcyyawFf3SqxhZj/Fu4XwnM9rZ0TfdYml9p09g
-         qDDfI2b2loitmLNlCGlE1zeQv46psem6geBKAh/fPTrw9/oHbNt86MqjhIX6Ck6mcLgL
-         pcdZe6cxDEHFdljKOE0Lo27n7sK5hGalX8Vl5f6y35SDhYHLBkL7GT2mM/vDLML3rPtL
-         AalHESTl9NrpNwPfVTwngxaYBZsefmMMosfD199YZ6PZuZm3yyLLCOMtnbdPq+LgT4Z8
-         qNiqwdGAyu9HeifwSycUw/G0JPXg3aYfLdCAnf5Jt+AmGSvrK5sZtm6Hb8Vce2H+X1b3
-         3wjw==
-X-Gm-Message-State: ABy/qLbc3weblLXLGR5EgfDrBOLrDOzsseWtgGG4kpypYhrTjE1eZqwr
-        KZY/hOgsY1BztBnAXjcwuFCOuqeLZmtM4WTXM1Y99VUype8=
-X-Google-Smtp-Source: APBJJlEYDii09SUQ0/5P40+Ef9zzKD5WQUWMHKt/i36QroSYc/+2MxbjXI0rc7Av5zVBurjfkmSC3LsEWPjP0OfGiG4=
-X-Received: by 2002:a17:907:a704:b0:992:630f:98b6 with SMTP id
- vw4-20020a170907a70400b00992630f98b6mr12131090ejc.37.1688974649649; Mon, 10
- Jul 2023 00:37:29 -0700 (PDT)
+        bh=K0RrzppqWK8amO/hYoEe/sGNQQUvYJv9b/1K1O2WuZU=;
+        b=Vdn8yLhnO+gfpN0WeWuaSqjZicMtSlrHltvJzSiikLEB+pm8AzvZmuVHQvdt/6yp2I
+         9tkx5vq0QB2kxPHY0cuWQlpMDhxJvqCSjInepLSb8o280K3scf0a3BmjwpMztNeLMB+n
+         xo8cYpnJU02Dj/6NWg6eBZB5tXMtyY5m8OAwo2Qa83V6dmutR0URqQ33ErehfqSP3VS1
+         E/ZbGjZ8bIs/PL18ZAp3LmPUNFXcb9PS72BAslxkhXriNFmCqIsoeaRGuYb1cBeMH4bt
+         bLizTH0R66Qf49Pq/sg1zX051/UoFrApC/eSFRDkW3V4IhIl+5YMH1951ULVcPouLCX2
+         QjIw==
+X-Gm-Message-State: ABy/qLaSlYyPzA3s8yvbL1aZeHr6YKcWA0Rsj4oT/s0BE7Crkr9NVmVf
+        XmPzqGwKjJ4+2BPD8srAlHFlaLS8O0fMZyKQJrk=
+X-Google-Smtp-Source: APBJJlGqkEdiipwucOvH/n8Bin+i1fTRMPJtr6nPaHPI0UGzqG1RimEwKjIAW5V0oxDqJelykWgtvGWC6FX/ZB54C7Q=
+X-Received: by 2002:a17:906:15d:b0:993:ffcb:ad54 with SMTP id
+ 29-20020a170906015d00b00993ffcbad54mr4324698ejh.10.1688974718518; Mon, 10 Jul
+ 2023 00:38:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710042723.46084-1-kimseer.paller@analog.com> <20230710042723.46084-2-kimseer.paller@analog.com>
-In-Reply-To: <20230710042723.46084-2-kimseer.paller@analog.com>
+References: <20230710042723.46084-1-kimseer.paller@analog.com>
+ <20230710042723.46084-2-kimseer.paller@analog.com> <CAHp75Vd386P9xM_+wLahp6B_XwYVq1AZxaFQeWvZ2pnk-tFGHA@mail.gmail.com>
+In-Reply-To: <CAHp75Vd386P9xM_+wLahp6B_XwYVq1AZxaFQeWvZ2pnk-tFGHA@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Jul 2023 10:36:53 +0300
-Message-ID: <CAHp75Vd386P9xM_+wLahp6B_XwYVq1AZxaFQeWvZ2pnk-tFGHA@mail.gmail.com>
+Date:   Mon, 10 Jul 2023 10:38:02 +0300
+Message-ID: <CAHp75VcvHQ7m8y5Rm6nVtF-iYop4Gjyzgoo=2jQQkWbc0SQ5Kg@mail.gmail.com>
 Subject: Re: [PATCH v9 2/2] iio: adc: max14001: New driver
 To:     Kim Seer Paller <kimseer.paller@analog.com>
 Cc:     jic23@kernel.org, lars@metafoo.de, lgirdwood@gmail.com,
@@ -72,72 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 7:27=E2=80=AFAM Kim Seer Paller
-<kimseer.paller@analog.com> wrote:
+On Mon, Jul 10, 2023 at 10:36=E2=80=AFAM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Mon, Jul 10, 2023 at 7:27=E2=80=AFAM Kim Seer Paller
+> <kimseer.paller@analog.com> wrote:
+
+...
+
+> > V8 -> V9: Changed SPI buffer data types to __le16,
 >
-> The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
-> binary inputs.
+> Why?
+>
+> ...
+>
+> > +       __le16                  spi_tx_buffer __aligned(IIO_DMA_MINALIG=
+N);
+> > +       __le16                  spi_rx_buffer;
+>
+> ...
+>
+> > +       /*
+> > +        * Prepare SPI transmit buffer 16 bit-value to big-endian forma=
+t and
+> > +        * reverses bit order to align with the LSB-first input on SDI =
+port.
+>
+> reverse
+>
+> > +        */
+> > +       st->spi_tx_buffer =3D bitrev16(cpu_to_be16(FIELD_PREP(MAX14001_=
+ADDR_MASK,
+> > +                                    reg_addr)));
+>
+> ...
+>
+> > +       /*
+> > +        * Convert received 16-bit value from big-endian to little-endi=
+an format
+> > +        * and reverses bit order.
+>
+> reverse
+>
+> > +        */
+> > +       *data =3D bitrev16(be16_to_cpu(st->spi_rx_buffer));
+
+On top of that, this left unfixed.
 
 ...
 
-> V8 -> V9: Changed SPI buffer data types to __le16,
+> > +       /*
+> > +        * Prepare SPI transmit buffer 16 bit-value to big-endian forma=
+t and
+> > +        * reverses bit order to align with the LSB-first input on SDI =
+port.
+>
+> reverse
+>
+> > +        */
+> > +       st->spi_tx_buffer =3D bitrev16(cpu_to_be16(
+> > +                                    FIELD_PREP(MAX14001_ADDR_MASK, reg=
+_addr) |
+> > +                                    FIELD_PREP(MAX14001_SET_WRITE_BIT,=
+ 1) |
+> > +                                    FIELD_PREP(MAX14001_DATA_MASK, dat=
+a)));
+>
+> Obviously it's incorrect now even more than before.
+> The types are defined as __le, while ops are against __be.
 
-Why?
-
-...
-
-> +       __le16                  spi_tx_buffer __aligned(IIO_DMA_MINALIGN)=
-;
-> +       __le16                  spi_rx_buffer;
-
-...
-
-> +       /*
-> +        * Prepare SPI transmit buffer 16 bit-value to big-endian format =
-and
-> +        * reverses bit order to align with the LSB-first input on SDI po=
-rt.
-
-reverse
-
-> +        */
-> +       st->spi_tx_buffer =3D bitrev16(cpu_to_be16(FIELD_PREP(MAX14001_AD=
-DR_MASK,
-> +                                    reg_addr)));
-
-...
-
-> +       /*
-> +        * Convert received 16-bit value from big-endian to little-endian=
- format
-> +        * and reverses bit order.
-
-reverse
-
-> +        */
-> +       *data =3D bitrev16(be16_to_cpu(st->spi_rx_buffer));
-
-...
-
-> +       /*
-> +        * Prepare SPI transmit buffer 16 bit-value to big-endian format =
-and
-> +        * reverses bit order to align with the LSB-first input on SDI po=
-rt.
-
-reverse
-
-> +        */
-> +       st->spi_tx_buffer =3D bitrev16(cpu_to_be16(
-> +                                    FIELD_PREP(MAX14001_ADDR_MASK, reg_a=
-ddr) |
-> +                                    FIELD_PREP(MAX14001_SET_WRITE_BIT, 1=
-) |
-> +                                    FIELD_PREP(MAX14001_DATA_MASK, data)=
-));
-
-Obviously it's incorrect now even more than before.
-The types are defined as __le, while ops are against __be.
 
 --=20
 With Best Regards,
