@@ -2,89 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CB374CAFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B7874CB05
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjGJEHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 00:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S230178AbjGJEIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 00:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjGJEHT (ORCPT
+        with ESMTP id S229462AbjGJEIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 00:07:19 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE410E6
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 21:07:17 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qzr765XvbzBHXgl
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:07:14 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688962034; x=1691554035; bh=gRcZ3CLGEDPxZrkiTCKDOKBlXr/
-        +k73D4egciW6sOpk=; b=eWvhsixi8tKjM7NCs0B685IGtqjz+l+82IYFkC6Q6Kt
-        KS7HOty57NlUX61nnsMm8JaH530Opl2oTRhp35xMGB3GsAo5KO+LyMzK9e36K7Wn
-        x0bIcFxIwFlGRmYjhOb6kYHG1B1aR3ra4LjkEi12memAeQUnZnYT7/L5dE7Pp+dh
-        ulAXNVs7BY4DD1r8KdB9IP8qp+BwlpCzdfMfmR4VXOccx86/iVztg4qo1df+HSMT
-        od/iIl4mMmKNHpreU6MMpp0DUWuW/DOLVMCSxc5Eh+K6UfLD4DyBPvfZfignm7lT
-        NXzt+ky51giZ2x1NOVfHAvm9PeWGaZTZIBiaSekhDmA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6hZXDzVu71Xg for <linux-kernel@vger.kernel.org>;
-        Mon, 10 Jul 2023 12:07:14 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qzr762vBwzBHXgf;
-        Mon, 10 Jul 2023 12:07:14 +0800 (CST)
+        Mon, 10 Jul 2023 00:08:16 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A64E6;
+        Sun,  9 Jul 2023 21:08:15 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1b055511b85so3069201fac.2;
+        Sun, 09 Jul 2023 21:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688962094; x=1691554094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SI9RNcelEJRqjgZ3cj4A/MldUxL+d7rqihkZbBH1AFY=;
+        b=iVKpTnqvNrUhmIj8Pead4qxzUx+5FEqEj2o2LZQPy/bO+4COQLAPUA2tYXOc/R2BgT
+         WXXxngVaWFUrztbY3CREIS4d8vXvIbEUHInTqWO8/fcCVi/k61dqCs9L57T6/hQPeoTL
+         djqWGsASDlN37qpDOunajF78cc7Miv4m5fR9daAJazyNoH/Jv0IoP4QuI8R0xXektt0Z
+         BzUZmv9QLZnpwucS2nyyz/xwdmr7pR9/9w8M76YZcl6WiWHbfX6msKl+3Dl0nSAnHW2A
+         n70RJ3CEVgoCVyWZRzjwy1vt9eb2l4ZKA4WC/qtPMPfB6EBkvQiU2qne580vUi/Mhbov
+         qXsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688962094; x=1691554094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SI9RNcelEJRqjgZ3cj4A/MldUxL+d7rqihkZbBH1AFY=;
+        b=Q+6EfR1EDMLqnHzGYGsPkafP0E0jQu7zzhMUYm3JldflAl4oVD28Gcf339ZSmUKRLr
+         smf87vNhaJV+oofS0ivFwj6W9U+fDOtMhIn+OM3TK/LXEMOzjVf/AmzTZBN1HgnicZft
+         S/Obo74NidK1npRdVG+4KR5979ZVBj5v72rGZNQf1OasFS/P9hZGGvZDqfb6onFhRY23
+         jQlxtjH8CKPrlY68nYfsQ78hBmlA4AJ10UuLvVXHMg6eO57sFrOBpP8N+QQFR5YQ19Hi
+         f62c+EGoyOhhRdgpEQM9aV1DZNu1n84sKTOW0xB0EDDwxqrqxtwelTChHp15+AvShg2c
+         vB8A==
+X-Gm-Message-State: ABy/qLbFyEQeRZl+AwMSrPQt35A0E7SMGvET5Ja4VLnK/Q6yzxg4J/xp
+        S500PhueBJXt6tAB4iPZb+rjfXbYkETShM3BPfg=
+X-Google-Smtp-Source: APBJJlGmSNmHOoafZjLJZz8/wV792WRpiff+2GDpJxWf6XS+WYjRR+08RhvbYCi14YACNX/qF8Zpr859L/3Uxipik8M=
+X-Received: by 2002:a05:6870:438f:b0:1b0:25b4:4b77 with SMTP id
+ r15-20020a056870438f00b001b025b44b77mr12556779oah.14.1688962094392; Sun, 09
+ Jul 2023 21:08:14 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Mon, 10 Jul 2023 12:07:14 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau/nvkm: do not use assignment in if condition
-In-Reply-To: <20230710032131.52747-1-xujianghui@cdjrlc.com>
-References: <20230710032131.52747-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <decd9e6f68cbebda22d6648fa7b9b737@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230707095415.1449376-1-arnd@kernel.org> <20230707095415.1449376-4-arnd@kernel.org>
+In-Reply-To: <20230707095415.1449376-4-arnd@kernel.org>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Sun, 9 Jul 2023 21:08:03 -0700
+Message-ID: <CAMo8BfLOYkdxF4x=E2L4OYavw+GDtO0ftdAxCaVuFwGr=RUCyw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] vgacon, arch/*: remove unused screen_info definitions
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assignments in if condition are less readable and error-prone.  Fixes
-also checkpatch warning:
+On Fri, Jul 7, 2023 at 2:56=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A number of architectures either kept the screen_info definition for
+> historical purposes as it used to be required by the generic VT code, or
+> they copied it from another architecture in order to build the VGA
+> console driver in an allmodconfig build.
+>
+> Now that vgacon no longer builds on these architectures, remove the
+> stale definitions.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/csky/kernel/setup.c          | 12 ------------
+>  arch/hexagon/kernel/Makefile      |  2 --
+>  arch/hexagon/kernel/screen_info.c |  3 ---
+>  arch/nios2/kernel/setup.c         |  5 -----
+>  arch/sh/kernel/setup.c            |  5 -----
+>  arch/sparc/kernel/setup_32.c      | 13 -------------
+>  arch/sparc/kernel/setup_64.c      | 13 -------------
+>  arch/xtensa/kernel/setup.c        | 12 ------------
 
-ERROR: do not use assignment in if condition
+For xtensa:
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Signed-off-by:Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/nouveau/nvkm/subdev/i2c/base.c | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/base.c 
-b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/base.c
-index 976539de4220..054fa42f1d04 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/base.c
-@@ -286,7 +286,8 @@ nvkm_i2c_new_(const struct nvkm_i2c_func *func, 
-struct nvkm_device *device,
-
-          if (ccbE.share != DCB_I2C_UNUSED) {
-              const int id = NVKM_I2C_PAD_HYBRID(ccbE.share);
--            if (!(pad = nvkm_i2c_pad_find(i2c, id)))
-+            pad = nvkm_i2c_pad_find(i2c, id);
-+            if (!pad)
-                  ret = func->pad_s_new(i2c, id, &pad);
-              else
-                  ret = 0;
+--=20
+Thanks.
+-- Max
