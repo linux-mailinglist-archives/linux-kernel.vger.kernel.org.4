@@ -2,503 +2,491 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3AC74CC58
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD1174CC5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjGJFpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S230194AbjGJFqK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 01:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjGJFpI (ORCPT
+        with ESMTP id S229635AbjGJFqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:45:08 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93921E3;
-        Sun,  9 Jul 2023 22:45:06 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A5VELb000618;
-        Mon, 10 Jul 2023 05:44:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=73VMwD7/lZdjbElZTY1Us+dyCatU/2AtOjVuw+oUu7I=;
- b=LUWjTtio9VbMhc2yw476+nerOWL5zCiy81ls4WsBY0ZWaweLuuVGJtBg/EJBy4MSuNLU
- SW1aqCLGlPNGCkSGF7boM7aQTv2CQzWUZNlGlegN1kQKDrerZYKTRdFTnVbfzVaN3cn5
- 5qqauHDKXyfXMWaVhUPB5Qkgw0C1CoCL1ta56P/J4IsRPv3PBNcSyw/cU3qLbaj67U0F
- 8UcxV0Xy+zxgO7Zb6vsULgIPsADoyfMx5E7rYFZGS9u98ZIf5gSMRitO7s+BRZbX8tsY
- S3WTdTcBmvOq8eszoOh6/F/limCJEXUQtRDyi76ZB6Fp9hy1QUUJm7Cv7VYvaml2Hxfe Jw== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rq06d2jgw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 05:44:48 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36A5ijVo013325;
-        Mon, 10 Jul 2023 05:44:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3rq0vkcgdc-1;
-        Mon, 10 Jul 2023 05:44:45 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36A5ijkq013318;
-        Mon, 10 Jul 2023 05:44:45 GMT
-Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 36A5ii1f013317;
-        Mon, 10 Jul 2023 05:44:45 +0000
-Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
-        id 3FC2312010C1; Mon, 10 Jul 2023 11:14:44 +0530 (IST)
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-To:     mani@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_mdalam@quicinc.com
-Subject: [PATCH v5 2/2] mtd: rawnand: qcom: Remove legacy interface
-Date:   Mon, 10 Jul 2023 11:14:40 +0530
-Message-Id: <20230710054440.23297-2-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230710054440.23297-1-quic_mdalam@quicinc.com>
-References: <20230710054440.23297-1-quic_mdalam@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: M_yAhJ3IYXsctNCnQKg_YyR0UXpfbaBf
-X-Proofpoint-GUID: M_yAhJ3IYXsctNCnQKg_YyR0UXpfbaBf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_04,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- spamscore=0 lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307100052
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 10 Jul 2023 01:46:09 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC71E3;
+        Sun,  9 Jul 2023 22:46:04 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E45B524DD81;
+        Mon, 10 Jul 2023 13:45:53 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Jul
+ 2023 13:45:53 +0800
+Received: from [192.168.1.218] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Jul
+ 2023 13:45:53 +0800
+Message-ID: <21616ab2-da92-eaa0-397a-4fa0ed92b0e2@starfivetech.com>
+Date:   Mon, 10 Jul 2023 13:45:52 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+Subject: Re: [PATCH v7 0/6] Add StarFive Camera Subsystem driver
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        <bryan.odonoghue@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230619112838.19797-1-jack.zhu@starfivetech.com>
+Content-Language: en-US
+In-Reply-To: <20230619112838.19797-1-jack.zhu@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove legacy interface implementation
 
-Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
-Change in [v5]
 
-* No change in v5
+On 2023/6/19 19:28, Jack Zhu wrote:
+> Hi,
+> 
+> This series is the v7 series that attempts to support the Camera Subsystem
+> found on StarFive JH7110 SoC.
+> 
 
-Change in [v4]
+Hi everyone,
 
-* Updated commit message
+Could you please help to review and give your comments? 
+Thanks a lot!
 
-Change in [v3]
+> The following are the media graph for the device and the v4l2-compliance
+> output.
+> 
+> ===========================================================================
+> [the media graph]:
+> 
+> digraph board {
+> 	rankdir=TB
+> 	n00000001 [label="{{<port0> 0} | stf_isp0\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n00000001:port1 -> n0000000d:port0 [style=dashed]
+> 	n00000004 [label="{{<port0> 0} | stf_vin0_wr\n/dev/v4l-subdev1 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n00000004:port1 -> n00000007 [style=bold]
+> 	n00000007 [label="stf_vin0_wr_video0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
+> 	n0000000d [label="{{<port0> 0} | stf_vin0_isp0\n/dev/v4l-subdev2 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n0000000d:port1 -> n00000010 [style=bold]
+> 	n00000010 [label="stf_vin0_isp0_video1\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
+> 	n00000018 [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n00000018:port1 -> n00000004:port0 [style=dashed]
+> 	n00000018:port1 -> n00000001:port0 [style=dashed]
+> 	n00000022 [label="{{} | imx219 6-0010\n/dev/v4l-subdev3 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
+> 	n00000022:port0 -> n00000018:port0 [style=bold]
+> }
+> 
+> [the device topology]:
+> 
+> Media controller API version 6.4.0
+> 
+> Media device information
+> ------------------------
+> driver          starfive-camss
+> model           Starfive Camera Subsystem
+> serial          
+> bus info        platform:19840000.camss
+> hw revision     0x0
+> driver version  6.4.0
+> 
+> Device topology
+> - entity 1: stf_isp0 (2 pads, 2 links)
+>             type V4L2 subdev subtype Unknown flags 0
+>             device node name /dev/v4l-subdev0
+> 	pad0: Sink
+> 		[fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb
+> 		 crop.bounds:(0,0)/1920x1080
+> 		 crop:(0,0)/1920x1080]
+> 		<- "cdns_csi2rx.19800000.csi-bridge":1 []
+> 	pad1: Source
+> 		[fmt:Y12_1X12/1920x1080 field:none colorspace:srgb
+> 		 crop.bounds:(0,0)/1920x1080
+> 		 crop:(0,0)/1920x1080]
+> 		-> "stf_vin0_isp0":0 []
+> 
+> - entity 4: stf_vin0_wr (2 pads, 2 links)
+>             type V4L2 subdev subtype Unknown flags 0
+>             device node name /dev/v4l-subdev1
+> 	pad0: Sink
+> 		[fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb]
+> 		<- "cdns_csi2rx.19800000.csi-bridge":1 []
+> 	pad1: Source
+> 		[fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb]
+> 		-> "stf_vin0_wr_video0":0 [ENABLED,IMMUTABLE]
+> 
+> - entity 7: stf_vin0_wr_video0 (1 pad, 1 link)
+>             type Node subtype V4L flags 0
+>             device node name /dev/video0
+> 	pad0: Sink
+> 		<- "stf_vin0_wr":1 [ENABLED,IMMUTABLE]
+> 
+> - entity 13: stf_vin0_isp0 (2 pads, 2 links)
+>              type V4L2 subdev subtype Unknown flags 0
+>              device node name /dev/v4l-subdev2
+> 	pad0: Sink
+> 		[fmt:Y12_1X12/1920x1080 field:none colorspace:srgb]
+> 		<- "stf_isp0":1 []
+> 	pad1: Source
+> 		[fmt:Y12_1X12/1920x1080 field:none colorspace:srgb]
+> 		-> "stf_vin0_isp0_video1":0 [ENABLED,IMMUTABLE]
+> 
+> - entity 16: stf_vin0_isp0_video1 (1 pad, 1 link)
+>              type Node subtype V4L flags 0
+>              device node name /dev/video1
+> 	pad0: Sink
+> 		<- "stf_vin0_isp0":1 [ENABLED,IMMUTABLE]
+> 
+> - entity 24: cdns_csi2rx.19800000.csi-bridge (5 pads, 3 links)
+>              type V4L2 subdev subtype Unknown flags 0
+> 	pad0: Sink
+> 		<- "imx219 6-0010":0 [ENABLED,IMMUTABLE]
+> 	pad1: Source
+> 		-> "stf_vin0_wr":0 []
+> 		-> "stf_isp0":0 []
+> 	pad2: Source
+> 	pad3: Source
+> 	pad4: Source
+> 
+> - entity 34: imx219 6-0010 (1 pad, 1 link)
+>              type V4L2 subdev subtype Sensor flags 0
+>              device node name /dev/v4l-subdev3
+> 	pad0: Source
+> 		[fmt:SRGGB10_1X10/3280x2464 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:full-range
+> 		 crop.bounds:(8,8)/3280x2464
+> 		 crop:(8,8)/3280x2464]
+> 		-> "cdns_csi2rx.19800000.csi-bridge":0 [ENABLED,IMMUTABLE]
+> 
+> ===========================================================================
+> [the v4l2-compliance output]:
+> 
+> v4l2-compliance -s -d /dev/video1
+> v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+> 
+> Compliance test for stf camss device /dev/video1:
+> 
+> Driver Info:
+> 	Driver name      : stf camss
+> 	Card type        : Starfive Camera Subsystem
+> 	Bus info         : platform:19840000.camss
+> 	Driver version   : 6.4.0
+> 	Capabilities     : 0x85200001
+> 		Video Capture
+> 		Read/Write
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x05200001
+> 		Video Capture
+> 		Read/Write
+> 		Streaming
+> 		Extended Pix Format
+> Media Driver Info:
+> 	Driver name      : starfive-camss
+> 	Model            : Starfive Camera Subsystem
+> 	Serial           : 
+> 	Bus info         : platform:19840000.camss
+> 	Media version    : 6.4.0
+> 	Hardware revision: 0x00000000 (0)
+> 	Driver version   : 6.4.0
+> Interface Info:
+> 	ID               : 0x03000012
+> 	Type             : V4L Video
+> Entity Info:
+> 	ID               : 0x00000010 (16)
+> 	Name             : stf_vin0_isp0_video1
+> 	Function         : V4L2 I/O
+> 	Pad 0x01000011   : 0: Sink
+> 	  Link 0x02000014: from remote pad 0x100000f of entity 'stf_vin0_isp0' (Video Pixel Formatter): Data, Enabled, Immutable
+> 
+> Required ioctls:
+> 	test MC information (see 'Media Driver Info' above): OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test invalid ioctls: OK
+> 
+> Allow for multiple opens:
+> 	test second /dev/video1 open: OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test VIDIOC_G/S_PRIORITY: OK
+> 	test for unlimited opens: OK
+> 
+> Debug ioctls:
+> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+> 	test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+> 	test VIDIOC_QUERYCTRL: OK (Not Supported)
+> 	test VIDIOC_G/S_CTRL: OK (Not Supported)
+> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+> 	Standard Controls: 0 Private Controls: 0
+> 
+> Format ioctls:
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+> 	test VIDIOC_G/S_PARM: OK (Not Supported)
+> 	test VIDIOC_G_FBUF: OK (Not Supported)
+> 	test VIDIOC_G_FMT: OK
+> 	test VIDIOC_TRY_FMT: OK
+> 	test VIDIOC_S_FMT: OK
+> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+> 	test Cropping: OK (Not Supported)
+> 	test Composing: OK (Not Supported)
+> 	test Scaling: OK
+> 
+> Codec ioctls:
+> 	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+> 	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls:
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+> 	test VIDIOC_EXPBUF: OK
+> 	test Requests: OK (Not Supported)
+> 
+> Test input 0:
+> 
+> Streaming ioctls:
+> 	test read/write: OK
+> 	test blocking wait: OK
+> 	test MMAP (no poll): OK                           
+> 	test MMAP (select): OK                            
+> 	test MMAP (epoll): OK                             
+> 	test USERPTR (no poll): OK (Not Supported)
+> 	test USERPTR (select): OK (Not Supported)
+> 	test DMABUF: Cannot test, specify --expbuf-device
+> 
+> Total for stf camss device /dev/video1: 53, Succeeded: 53, Failed: 0, Warnings: 0
+> 
+> ===========================================================================
+> 
+> Changes in v7:
+> - HAS_DMA is used instead of DMA_CMA in Kconfig.
+> - Dropped some non-essential member variables.
+> - Used v4l2_async_nf_add_fwnode_remote() to simplify the relevant code.
+> - Modified some Local variable types in the function.
+> - Used v4l2_create_fwnode_links_to_pad() to simplify the relevant code.
+> - Added error handling for clk_prepare_enable().
+> - Simplified stfcamss_format_info struct and modified the relevant code.
+> - Dropped enum_input, g_input and s_input.
+> - Unified v4l2_ioctl_ops struct.
+> - Used v4l2_fh_open()/vb2_fop_release to replace deprecated APIs.
+> - Added a camss directory under the starfive directory and modified the
+>   patch title.
+> 
+> v6 link: https://lore.kernel.org/all/20230525083202.67933-1-jack.zhu@starfivetech.com/
+> 
+> Changes in v6:
+> - Added 'bus-type' in bindings example.
+> - Corrected spelling errors.
+> - As reviewed by Bryan, used 'nclks' and 'nrsts' variables.
+> - Added lccf config for ISP.
+> 
+> v5 link: https://lore.kernel.org/all/20230512102844.51084-1-jack.zhu@starfivetech.com/
+> 
+> Changes in v5:
+> - Rebased on v6.4-rc1.
+> - Added new patch.
+> - Modified ISP driver.
+> 
+> v4 link: https://lore.kernel.org/all/20230413035541.62129-1-jack.zhu@starfivetech.com/
+> 
+> Previous cover letter from v4:
+> 
+> This patch series adds support for the StarFive Camera Subsystem
+> found on StarFive JH7110 SoC.
+> 
+> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+> Camera sensor using V4L2 subdev interface in the kernel is supported.
+> 
+> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
+> GStreamer 1.18.5 with v4l2src plugin is supported.
+> 
+> Changes since v3:
+> Patch 1:
+> - Modified port@0 and port@1 properties.
+> - Extended the port@0 example with appropriate properties.
+> - Added 'port@0' for 'required'
+> Patch 2:
+> - Modified spelling errors.
+> Patch 3:
+> - Merged patch 5 into the patch with an explanation for compatible in
+>   commit msg.
+> Patch 6:
+> - Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
+>   label.
+> - Modified Code Style for getting sys_rst and p_rst.
+> - Renamed clk_name to name and modified the relevant code.
+> Patch 9:
+> - Added static for stfcamss_get_mem_res function.
+> - Added static for isp_close function.
+> - Fixed implicit conversion warning for stf_vin_map_isp_pad function.
+> - Dropped unused variables.
+> 
+>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
+> 
+> Changes since v2:
+> - Rebased on v6.3-rc1.
+> Patch 1:
+> - Modified spelling errors.
+> - Added port@0.
+> - Modified '$ref' of port.
+> - Added 'ports' to 'required'.
+> - Dropped 'stfcamss' label in example.
+> - Added port@0 in example.
+> - Added MAINTAINERS file.
+> Patch 2:
+> - Split this patch into three new patches.
+> - Modified compatible property.
+> - Replaced clock names with the existing names.
+> - Modified 'bus-type' and 'clock-lanes'
+> - Added port@2 - port@4
+> - Dropped 'csi2rx' label in example.
+> Patch 3:
+> - Updated rst and dot file as three pipelines were deleted.
+> Patch 4:
+> - Split this patch into three new patches.
+> - Dropped .s_power() and .get_fmt().
+> - Dropped CSI-2 DT support.
+> - Dropped v4l2_device_register_subdev_nodes().
+> - Used assigned-clock-rates in DT to set clk value.
+> - Modified 'compatible' field.
+> Patch 5:
+> - Deleted three pipelines. 
+> - Modified 'stfcamss_clocks'/'stfcamss_resets' struct.
+> - Dropped stfcamss_find_sensor() function.
+> - Removed redundant code from stfcamss_of_parse_endpoint_node().
+> - Modified spelling errors.
+> - Rewrote stfcamss_reg_media_subdev_node() function.
+> - Modified stfcamss_subdev_notifier_bound().
+> - Modified stfcamss_probe() function.
+> - Dropped stfcamss_suspend() and stfcamss_resume().
+> - Dropped dev_info() in stfcamss_remove() function.
+> - Added 'stf_' prefix for enum subdev_type.
+> - Moved all includes to the top in stf_camss.h file.
+> - Dropped unused fields in stfcamss struct.
+> - Replaced Custom logging macros with regular macros.
+> - Rewrote register read and write functions.
+> - Used lowercase for all hex constants.
+> - Used macro to name registers.
+> - Dropped unused ioctl and stf_isp_ioctl.h file.
+> 
+>   v2: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
+> 
+> Changes since v1:
+> - Deleted starfive,jh7110-mipi-csi2.yaml.
+> - Converted cdns,csi2rx.txt to cdns,csi2rx.yaml and added ‘resets’
+>   properties.
+> - Added ‘cdns,csi2rx.yaml’ in ‘CADENCE MIPI-CSI2 BRIDGES’ entry.
+> - The following contents were modified in starfive,jh7110-camss.yaml:
+>   dropped quotes from ’id’ and ‘schema’; dropped ‘|’ for ‘description’;
+>   corrected the wrong or redundant words: ‘a ISP’, ‘PD ISP’;
+>   dropped ‘minItems’ for ‘reg’, ‘clocks’, ‘resets’ and ‘interrupts’;
+>   dropped the '_clk' and 'rst_' prefix about the 'clock-names' and
+>   'reset-names';
+>   changed ‘endpoint@1’ to ‘endpoint’; updated examples;
+> - Updated Subject for some patches.
+> - Merged patch 6, 7, 8, 9, 10, 11 into one patch.
+> 
+> Jack Zhu (6):
+>   media: dt-bindings: Add JH7110 Camera Subsystem
+>   media: admin-guide: Add starfive_camss.rst for Starfive Camera
+>     Subsystem
+>   media: starfive: camss: Add basic driver
+>   media: starfive: camss: Add video driver
+>   media: starfive: camss: Add ISP driver
+>   media: starfive: camss: Add VIN driver
+> 
+>  .../admin-guide/media/starfive_camss.rst      |   57 +
+>  .../media/starfive_camss_graph.dot            |   16 +
+>  .../admin-guide/media/v4l-drivers.rst         |    1 +
+>  .../bindings/media/starfive,jh7110-camss.yaml |  180 +++
+>  MAINTAINERS                                   |    9 +
+>  drivers/media/platform/Kconfig                |    1 +
+>  drivers/media/platform/Makefile               |    1 +
+>  drivers/media/platform/starfive/Kconfig       |    5 +
+>  drivers/media/platform/starfive/Makefile      |    2 +
+>  drivers/media/platform/starfive/camss/Kconfig |   16 +
+>  .../media/platform/starfive/camss/Makefile    |   14 +
+>  .../media/platform/starfive/camss/stf_camss.c |  444 +++++++
+>  .../media/platform/starfive/camss/stf_camss.h |  151 +++
+>  .../media/platform/starfive/camss/stf_isp.c   |  519 ++++++++
+>  .../media/platform/starfive/camss/stf_isp.h   |  479 ++++++++
+>  .../platform/starfive/camss/stf_isp_hw_ops.c  |  468 ++++++++
+>  .../media/platform/starfive/camss/stf_video.c |  724 +++++++++++
+>  .../media/platform/starfive/camss/stf_video.h |   92 ++
+>  .../media/platform/starfive/camss/stf_vin.c   | 1069 +++++++++++++++++
+>  .../media/platform/starfive/camss/stf_vin.h   |  173 +++
+>  .../platform/starfive/camss/stf_vin_hw_ops.c  |  192 +++
+>  21 files changed, 4613 insertions(+)
+>  create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+>  create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
+>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>  create mode 100644 drivers/media/platform/starfive/Kconfig
+>  create mode 100644 drivers/media/platform/starfive/Makefile
+>  create mode 100644 drivers/media/platform/starfive/camss/Kconfig
+>  create mode 100644 drivers/media/platform/starfive/camss/Makefile
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_camss.c
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_camss.h
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_isp.c
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_isp.h
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_isp_hw_ops.c
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_video.c
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_video.h
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_vin.c
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_vin.h
+>  create mode 100644 drivers/media/platform/starfive/camss/stf_vin_hw_ops.c
+> 
 
-* Removed pre_command() API definition completely.
-
-Change in [v2]
-
-* Missed to post Cover-letter, so posting v2 patch with cover-letter
-
-Change in [v1]
-
-* Added initial support for exec_ops.
-
- drivers/mtd/nand/raw/qcom_nandc.c | 359 ------------------------------
- 1 file changed, 359 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-index 852c6a203c78..b1e69d634d4a 100644
---- a/drivers/mtd/nand/raw/qcom_nandc.c
-+++ b/drivers/mtd/nand/raw/qcom_nandc.c
-@@ -1303,155 +1303,6 @@ static void config_nand_cw_write(struct nand_chip *chip)
- 	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
- }
- 
--/*
-- * the following functions are used within chip->legacy.cmdfunc() to
-- * perform different NAND_CMD_* commands
-- */
--
--/* sets up descriptors for NAND_CMD_PARAM */
--static int nandc_param(struct qcom_nand_host *host)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	/*
--	 * NAND_CMD_PARAM is called before we know much about the FLASH chip
--	 * in use. we configure the controller to perform a raw read of 512
--	 * bytes to read onfi params
--	 */
--	if (nandc->props->qpic_v2)
--		nandc_set_reg(chip, NAND_FLASH_CMD, OP_PAGE_READ_ONFI_READ |
--			      PAGE_ACC | LAST_PAGE);
--	else
--		nandc_set_reg(chip, NAND_FLASH_CMD, OP_PAGE_READ |
--			      PAGE_ACC | LAST_PAGE);
--
--	nandc_set_reg(chip, NAND_ADDR0, 0);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_DEV0_CFG0, 0 << CW_PER_PAGE
--					| 512 << UD_SIZE_BYTES
--					| 5 << NUM_ADDR_CYCLES
--					| 0 << SPARE_SIZE_BYTES);
--	nandc_set_reg(chip, NAND_DEV0_CFG1, 7 << NAND_RECOVERY_CYCLES
--					| 0 << CS_ACTIVE_BSY
--					| 17 << BAD_BLOCK_BYTE_NUM
--					| 1 << BAD_BLOCK_IN_SPARE_AREA
--					| 2 << WR_RD_BSY_GAP
--					| 0 << WIDE_FLASH
--					| 1 << DEV0_CFG1_ECC_DISABLE);
--	if (!nandc->props->qpic_v2)
--		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, 1 << ECC_CFG_ECC_DISABLE);
--
--	/* configure CMD1 and VLD for ONFI param probing in QPIC v1 */
--	if (!nandc->props->qpic_v2) {
--		nandc_set_reg(chip, NAND_DEV_CMD_VLD,
--			      (nandc->vld & ~READ_START_VLD));
--		nandc_set_reg(chip, NAND_DEV_CMD1,
--			      (nandc->cmd1 & ~(0xFF << READ_ADDR))
--			      | NAND_CMD_PARAM << READ_ADDR);
--	}
--
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	if (!nandc->props->qpic_v2) {
--		nandc_set_reg(chip, NAND_DEV_CMD1_RESTORE, nandc->cmd1);
--		nandc_set_reg(chip, NAND_DEV_CMD_VLD_RESTORE, nandc->vld);
--	}
--
--	nandc_set_read_loc(chip, 0, 0, 0, 512, 1);
--
--	if (!nandc->props->qpic_v2) {
--		write_reg_dma(nandc, NAND_DEV_CMD_VLD, 1, 0);
--		write_reg_dma(nandc, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
--	}
--
--	nandc->buf_count = 512;
--	memset(nandc->data_buffer, 0xff, nandc->buf_count);
--
--	config_nand_single_cw_page_read(chip, false, 0);
--
--	read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer,
--		      nandc->buf_count, 0);
--
--	/* restore CMD1 and VLD regs */
--	if (!nandc->props->qpic_v2) {
--		write_reg_dma(nandc, NAND_DEV_CMD1_RESTORE, 1, 0);
--		write_reg_dma(nandc, NAND_DEV_CMD_VLD_RESTORE, 1, NAND_BAM_NEXT_SGL);
--	}
--
--	return 0;
--}
--
--/* sets up descriptors for NAND_CMD_ERASE1 */
--static int erase_block(struct qcom_nand_host *host, int page_addr)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	nandc_set_reg(chip, NAND_FLASH_CMD,
--		      OP_BLOCK_ERASE | PAGE_ACC | LAST_PAGE);
--	nandc_set_reg(chip, NAND_ADDR0, page_addr);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_DEV0_CFG0,
--		      host->cfg0_raw & ~(7 << CW_PER_PAGE));
--	nandc_set_reg(chip, NAND_DEV0_CFG1, host->cfg1_raw);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--	nandc_set_reg(chip, NAND_FLASH_STATUS, host->clrflashstatus);
--	nandc_set_reg(chip, NAND_READ_STATUS, host->clrreadstatus);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 3, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
--
--	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
--
--	write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
--	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
--
--	return 0;
--}
--
--/* sets up descriptors for NAND_CMD_READID */
--static int read_id(struct qcom_nand_host *host, int column)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	if (column == -1)
--		return 0;
--
--	nandc_set_reg(chip, NAND_FLASH_CMD, OP_FETCH_ID);
--	nandc_set_reg(chip, NAND_ADDR0, column);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
--		      nandc->props->is_bam ? 0 : DM_EN);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
--
--	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
--
--	return 0;
--}
--
--/* sets up descriptors for NAND_CMD_RESET */
--static int reset(struct qcom_nand_host *host)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	nandc_set_reg(chip, NAND_FLASH_CMD, OP_RESET_DEVICE);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
--
--	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
--
--	return 0;
--}
--
- /* helpers to submit/free our list of dma descriptors */
- static int submit_descs(struct qcom_nand_controller *nandc)
- {
-@@ -1534,150 +1385,6 @@ static void clear_read_regs(struct qcom_nand_controller *nandc)
- 	nandc_read_buffer_sync(nandc, false);
- }
- 
--static void pre_command(struct qcom_nand_host *host, int command)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	nandc->buf_count = 0;
--	nandc->buf_start = 0;
--	host->use_ecc = false;
--	host->last_command = command;
--
--	clear_read_regs(nandc);
--
--	clear_bam_transaction(nandc);
--}
--
--/*
-- * this is called after NAND_CMD_PAGEPROG and NAND_CMD_ERASE1 to set our
-- * privately maintained status byte, this status byte can be read after
-- * NAND_CMD_STATUS is called
-- */
--static void parse_erase_write_errors(struct qcom_nand_host *host, int command)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	struct nand_ecc_ctrl *ecc = &chip->ecc;
--	int num_cw;
--	int i;
--
--	num_cw = command == NAND_CMD_PAGEPROG ? ecc->steps : 1;
--	nandc_read_buffer_sync(nandc, true);
--
--	for (i = 0; i < num_cw; i++) {
--		u32 flash_status = le32_to_cpu(nandc->reg_read_buf[i]);
--
--		if (flash_status & FS_MPU_ERR)
--			host->status &= ~NAND_STATUS_WP;
--
--		if (flash_status & FS_OP_ERR || (i == (num_cw - 1) &&
--						 (flash_status &
--						  FS_DEVICE_STS_ERR)))
--			host->status |= NAND_STATUS_FAIL;
--	}
--}
--
--static void post_command(struct qcom_nand_host *host, int command)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	switch (command) {
--	case NAND_CMD_READID:
--		nandc_read_buffer_sync(nandc, true);
--		memcpy(nandc->data_buffer, nandc->reg_read_buf,
--		       nandc->buf_count);
--		break;
--	case NAND_CMD_PAGEPROG:
--	case NAND_CMD_ERASE1:
--		parse_erase_write_errors(host, command);
--		break;
--	default:
--		break;
--	}
--}
--
--/*
-- * Implements chip->legacy.cmdfunc. It's  only used for a limited set of
-- * commands. The rest of the commands wouldn't be called by upper layers.
-- * For example, NAND_CMD_READOOB would never be called because we have our own
-- * versions of read_oob ops for nand_ecc_ctrl.
-- */
--static void qcom_nandc_command(struct nand_chip *chip, unsigned int command,
--			       int column, int page_addr)
--{
--	struct qcom_nand_host *host = to_qcom_nand_host(chip);
--	struct nand_ecc_ctrl *ecc = &chip->ecc;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	bool wait = false;
--	int ret = 0;
--
--	pre_command(host, command);
--
--	switch (command) {
--	case NAND_CMD_RESET:
--		ret = reset(host);
--		wait = true;
--		break;
--
--	case NAND_CMD_READID:
--		nandc->buf_count = 4;
--		ret = read_id(host, column);
--		wait = true;
--		break;
--
--	case NAND_CMD_PARAM:
--		ret = nandc_param(host);
--		wait = true;
--		break;
--
--	case NAND_CMD_ERASE1:
--		ret = erase_block(host, page_addr);
--		wait = true;
--		break;
--
--	case NAND_CMD_READ0:
--		/* we read the entire page for now */
--		WARN_ON(column != 0);
--
--		host->use_ecc = true;
--		set_address(host, 0, page_addr);
--		update_rw_regs(host, ecc->steps, true, 0);
--		break;
--
--	case NAND_CMD_SEQIN:
--		WARN_ON(column != 0);
--		set_address(host, 0, page_addr);
--		break;
--
--	case NAND_CMD_PAGEPROG:
--	case NAND_CMD_STATUS:
--	case NAND_CMD_NONE:
--	default:
--		break;
--	}
--
--	if (ret) {
--		dev_err(nandc->dev, "failure executing command %d\n",
--			command);
--		free_descs(nandc);
--		return;
--	}
--
--	if (wait) {
--		ret = submit_descs(nandc);
--		if (ret)
--			dev_err(nandc->dev,
--				"failure submitting descs for command %d\n",
--				command);
--	}
--
--	free_descs(nandc);
--
--	post_command(host, command);
--}
--
- /*
-  * when using BCH ECC, the HW flags an error in NAND_FLASH_STATUS if it read
-  * an erased CW, and reports an erased CW in NAND_ERASED_CW_DETECT_STATUS.
-@@ -2533,64 +2240,6 @@ static int qcom_nandc_block_markbad(struct nand_chip *chip, loff_t ofs)
- 	return nand_prog_page_end_op(chip);
- }
- 
--/*
-- * the three functions below implement chip->legacy.read_byte(),
-- * chip->legacy.read_buf() and chip->legacy.write_buf() respectively. these
-- * aren't used for reading/writing page data, they are used for smaller data
-- * like reading	id, status etc
-- */
--static uint8_t qcom_nandc_read_byte(struct nand_chip *chip)
--{
--	struct qcom_nand_host *host = to_qcom_nand_host(chip);
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	u8 *buf = nandc->data_buffer;
--	u8 ret = 0x0;
--
--	if (host->last_command == NAND_CMD_STATUS) {
--		ret = host->status;
--
--		host->status = NAND_STATUS_READY | NAND_STATUS_WP;
--
--		return ret;
--	}
--
--	if (nandc->buf_start < nandc->buf_count)
--		ret = buf[nandc->buf_start++];
--
--	return ret;
--}
--
--static void qcom_nandc_read_buf(struct nand_chip *chip, uint8_t *buf, int len)
--{
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	int real_len = min_t(size_t, len, nandc->buf_count - nandc->buf_start);
--
--	memcpy(buf, nandc->data_buffer + nandc->buf_start, real_len);
--	nandc->buf_start += real_len;
--}
--
--static void qcom_nandc_write_buf(struct nand_chip *chip, const uint8_t *buf,
--				 int len)
--{
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	int real_len = min_t(size_t, len, nandc->buf_count - nandc->buf_start);
--
--	memcpy(nandc->data_buffer + nandc->buf_start, buf, real_len);
--
--	nandc->buf_start += real_len;
--}
--
--/* we support only one external chip for now */
--static void qcom_nandc_select_chip(struct nand_chip *chip, int chipnr)
--{
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	if (chipnr <= 0)
--		return;
--
--	dev_warn(nandc->dev, "invalid chip select\n");
--}
--
- /*
-  * NAND controller page layout info
-  *
-@@ -3663,14 +3312,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
- 	mtd->owner = THIS_MODULE;
- 	mtd->dev.parent = dev;
- 
--	chip->legacy.cmdfunc	= qcom_nandc_command;
--	chip->legacy.select_chip	= qcom_nandc_select_chip;
--	chip->legacy.read_byte	= qcom_nandc_read_byte;
--	chip->legacy.read_buf	= qcom_nandc_read_buf;
--	chip->legacy.write_buf	= qcom_nandc_write_buf;
--	chip->legacy.set_features	= nand_get_set_features_notsupp;
--	chip->legacy.get_features	= nand_get_set_features_notsupp;
--
- 	/*
- 	 * the bad block marker is readable only when we read the last codeword
- 	 * of a page with ECC disabled. currently, the nand_base and nand_bbt
 -- 
-2.17.1
+Regards,
 
+Jack Zhu
