@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75CA74D40F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A50374D437
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjGJK7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S229848AbjGJLGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjGJK7G (ORCPT
+        with ESMTP id S231297AbjGJLF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:59:06 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3E3B1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:58:41 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-66c729f5618so3771431b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688986721; x=1691578721;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cJG2s9++f1Tq43C8nTe1vusCTWa1w6VOf0Nc/0qr1bc=;
-        b=cKdGo6luZE6/wyeOLKWmhZkMm8M9MCBnKpAVfD//7521pQuMoN8btgJJ+2BaO/bv/O
-         cqRNM7oi65pYwa+/o+ez1GXe+NAhCw8fcJ0UXxG4WgLx/SQPAg+WAs1sNv8WVsqEV+b5
-         8iTYK0WqSYH5BzKkpswldpM3L4JXof6Rh3geezbs3+XCtASvom/EgXO1j0cCh2IcHRgG
-         nEt+WyjcR/ceWDcVoUcaoQxGGG6nc29l2CZ/bJcF/O8VOeHP5mQx3Bxl8Nvr7dkgJYMJ
-         R+BPnOANyUszDgmSkgSHhtdg6tLNZFX5NqT3RKWZJwbGtuPBhil5McJTWm5cMJbc/9Li
-         MYgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688986721; x=1691578721;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cJG2s9++f1Tq43C8nTe1vusCTWa1w6VOf0Nc/0qr1bc=;
-        b=KMTpAJLEFf7wY4jH0YmRGl7sJpW0boPZd3HfLS9XgjXquKlF6dDgtNNxicObKPT1bd
-         DZdncfZbwSQRYfc9lmKOaA8LLPV+yONDRM6xOs6wRW2jGUwUAqqh/dck/Vq3WsKL3e1f
-         fwUnlm70zp6YgoMiJi8XCB8xxBov0WhhZCk7WPo5tBqVQHiHbCWDHqr4U30gfxen9wdT
-         tWNfmAyOKHttlwKR7PVYhKsil5RyFzeYvparwqO07bQsBEw1K727JpQENVUDOkx+UzNM
-         ZKSgYsnkOCMvhmozupCr1jJxuU1JRolEV4SOKN/qdTEU09hrdXuVKEyquTC3fEujGMQ7
-         j28w==
-X-Gm-Message-State: ABy/qLbukrF9k+fCGsqe6oWtV/m1w+FHAV0f9qGzgnHq3BNBaoaUwOFA
-        ertYHL4rXaGwhYvwbyLgdco8Uw==
-X-Google-Smtp-Source: APBJJlEuiQjcQvPJVlTos6Efw7mgpBrtolrrjkWuHCzIzouvZZQ6/nfWHceXiNG4c/N7mLStOsdRvA==
-X-Received: by 2002:a05:6a20:5483:b0:127:3c6e:fc83 with SMTP id i3-20020a056a20548300b001273c6efc83mr15851991pzk.42.1688986720819;
-        Mon, 10 Jul 2023 03:58:40 -0700 (PDT)
-Received: from [10.90.35.114] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id u8-20020a62ed08000000b0067ab572c72fsm6919768pfh.84.2023.07.10.03.58.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 03:58:40 -0700 (PDT)
-Message-ID: <8bc21e32-fdb0-e1a3-477f-dd660646ccdd@bytedance.com>
-Date:   Mon, 10 Jul 2023 18:58:35 +0800
+        Mon, 10 Jul 2023 07:05:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ACE199B;
+        Mon, 10 Jul 2023 04:04:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4BF860FC0;
+        Mon, 10 Jul 2023 11:04:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D578C433C7;
+        Mon, 10 Jul 2023 11:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688987084;
+        bh=TwtuDKEbyYTJYwb5YfWy40545UzZJ3eX6HtXjCq2/DY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F1hoO4AmByvX1+/WmpbkKZwew5eudKc1FQfa/lRAOOwiXQ8zRshL+Oq9bFoJQeu7s
+         LcEcu9oephfIQANzA4/3cifEEgUeal19PEixt2fvddV8g2XCmGK0fFh3Uc4W+J5uOn
+         XEO983Rlb7MGqbsEKGjwJjCaRtJ44jxPCT5CF+Iau9ZSof+GY2neKJt0KjAvaY/9jd
+         RBqd+kDX18tFNSlYceBbrvR3r37PvxSvj3S5DjVmlQqBMkOMXeP2JrMR5z6F5rg6jE
+         qp2ogGv8JQb+t32ZmOV4oiKG0GwgxT5l0kEjeNVOqRmXVjkyf2EUtnmSnqitny5s3z
+         HoqJaUtvZLO7w==
+Date:   Mon, 10 Jul 2023 12:04:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>, Kris Bahnsen <kris@embeddedts.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v1 4/8] spi: Get rid of old SPI_MASTER_NO_.X and
+ SPI_MASTER_MUST_.X
+Message-ID: <1ffd5603-4140-4bf6-bfed-af70a6759bda@sirena.org.uk>
+References: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
+ <20230710102751.83314-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] mm: kfence: allocate kfence_metadata at runtime
-To:     Alexander Potapenko <glider@google.com>
-Cc:     elver@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
-        Peng Zhang <zhangpeng.00@bytedance.com>
-References: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
- <CAG_fn=XH8s8JbMKjsyyw_FZhLuoBqAwWU_+hCGyAXwe3wTBCWQ@mail.gmail.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <CAG_fn=XH8s8JbMKjsyyw_FZhLuoBqAwWU_+hCGyAXwe3wTBCWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kWZTJCyyxQE+byGQ"
+Content-Disposition: inline
+In-Reply-To: <20230710102751.83314-5-andriy.shevchenko@linux.intel.com>
+X-Cookie: Do you have lysdexia?
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,26 +85,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--kWZTJCyyxQE+byGQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-在 2023/7/10 18:37, Alexander Potapenko 写道:
-> On Mon, Jul 10, 2023 at 5:27 AM 'Peng Zhang' via kasan-dev
-> <kasan-dev@googlegroups.com> wrote:
->>
->> kfence_metadata is currently a static array. For the purpose of
->> allocating scalable __kfence_pool, we first change it to runtime
->> allocation of metadata. Since the size of an object of kfence_metadata
->> is 1160 bytes, we can save at least 72 pages (with default 256 objects)
->> without enabling kfence.
->>
->> Below is the numbers obtained in qemu (with default 256 objects).
->> before: Memory: 8134692K/8388080K available (3668K bss)
->> after: Memory: 8136740K/8388080K available (1620K bss)
->> More than expected, it saves 2MB memory.
-> 
-> Do you have an understanding of where these 2MB come from?
-> According to your calculations (which seem valid) the gain should be
-> 290K, so either 2MB is irrelevant to your change (then these numbers
-> should be omitted), or there's some hidden cost that we do not know
-> about.
-I don't know why the 2MB memory was saved, but it looks like it has to 
-do with the .bss section, maybe removing this array affected the linker?
+On Mon, Jul 10, 2023 at 01:27:47PM +0300, Andy Shevchenko wrote:
+
+> Convert the users to SPI_CONTROLLER_NO_?X and SPI_CONTROLLER_MUST_.X
+> and kill the not used anymore definitions.
+
+The above is not what this change does:
+
+> -	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
+> +	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
+
+--kWZTJCyyxQE+byGQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSr5cIACgkQJNaLcl1U
+h9Ah2wf+KmkGI9qlUKgHUSNXh1DbqoLxbTpYFnFP5xpasapdwBa05UYP3eghOigF
+R9RLm+Z+cOhxpxkEijdYqYKOu94px87YE9vU9+e00ZWaz+X+R8C17kt4hk+9x5pI
+n6ln7unk1TDzZww8TWx81WkEqR6E4uMcYhMfsfjKKDcC6ZOxJu6+h3wWjhkj8q35
+k8NbtIo8bz2TzLqTuNjWsA64H1AxpRqwoT1fLLiZRPrng7Zc4wIP68cX17WSWwqj
++Tn8sO3EBbpYl4vuJircRmezY6Roo1TuLU4M7iIGhGoUrt+jdmoqIDsjQVU4IKIv
+kRGC3WQT0+LuWsoU8vUp0PFt+ntu4w==
+=03Nv
+-----END PGP SIGNATURE-----
+
+--kWZTJCyyxQE+byGQ--
