@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1191474D4C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBD274D4CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjGJLrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S231898AbjGJLuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjGJLrC (ORCPT
+        with ESMTP id S231546AbjGJLue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:47:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFF3BB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:47:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688989619; x=1720525619;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=w4dV9H7pVRIxcuMaxlX5D7urUgvVv34X8a5DfkzUas0=;
-  b=GKqYzjh9sjHYIui09Jbn0W4Y9NnCEQVOSKtGB6spwCS8hfoJ493ayNaL
-   tRamP6ZJgRJlwmAQHw106pmQCN8uk9M648q3tM+Lmapr5EGW9dmvgTGpr
-   R9m6CFDal3EXQltJM2xpWe5MZguwb0aiZ7ADZCOH77o9lOWB4ryeX1xl9
-   P4r9SNhLvDHiHa8xCFyQxBgLRxj/bGj79mBLKT4xuJyV+RpPgfvLgYndt
-   AAHxY2SxaukdqY2dnUsmT9cWNRStXeGQJLRqD0Lm6O7yiwxMHGmNjAwGh
-   cLwMiiNGI4IGYo4dLqZDMX9ceI8vlGQP6Cv8SHrOXbd7wJ846m1Rv/FOo
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="366895492"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="366895492"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 04:46:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="834244024"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="834244024"
-Received: from stoicaan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.170])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 04:46:57 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     suijingfeng <suijingfeng@loongson.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc:     loongson-kernel@lists.loongnix.cn,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/loongson: Remove a useless check in
- cursor_plane_atomic_async_check()
-In-Reply-To: <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230710102411.257970-1-suijingfeng@loongson.cn>
- <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
- <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
-Date:   Mon, 10 Jul 2023 14:46:54 +0300
-Message-ID: <87r0pghtu9.fsf@intel.com>
+        Mon, 10 Jul 2023 07:50:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC6FC4;
+        Mon, 10 Jul 2023 04:50:32 -0700 (PDT)
+Received: from obbardc-t14.home (unknown [IPv6:2a00:23c8:b70a:ae01:f690:3e44:90e:2421])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: obbardc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F34326606F65;
+        Mon, 10 Jul 2023 12:50:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688989830;
+        bh=JumdZYtvxLtSAoNuus3Vk18IRLG+75lEolvKS608bXw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SyQA4C4YrHxruum9uozCSEyOzdJEYVKhNzUFcSM8smtOmhrKedlIKMkVwUvSQYzEM
+         2cs3s6LCDPHuxsgKXrDTyf/UkqYJdegxvqnl0EjYEMmPWIuPZeHyJhmJ1AETF9y9RY
+         TF/5UQmADD62eiHbcI8ERhwQsuD74ZBJ/JKAouwlb9h8DVtAQlgIFRqBSO56z6Jc6v
+         IcsjbAcvsUYw3aoDmp2sY2beFbmp1kfQKJfxprE4TyHEujQzF4Z2lwOcPbS7F3m/tG
+         U1V74jNBgUJH97V9yjk8DMPJYdYhP7oNCPTHf++6XfhjgCdRT8jUt1o+s6ZWt38ldZ
+         c+ajVcanpSeqA==
+From:   Christopher Obbard <chris.obbard@collabora.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     kernel@collabora.com,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>, Andy Yan <andyshrk@163.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        FUKAUMI Naoki <naoki@radxa.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Tianling Shen <cnsztl@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Add support for Radxa ROCK 4SE
+Date:   Mon, 10 Jul 2023 12:50:22 +0100
+Message-Id: <20230710115025.507439-1-chris.obbard@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023, suijingfeng <suijingfeng@loongson.cn> wrote:
-> On 2023/7/10 18:39, Thomas Zimmermann wrote:
->> but that driver is not yet in our tree?
->>
->
-> I already applied(push) drm/loongson driver to drm-misc-next branch,
->
-> What do you means that by "not yet in our tree", linux kernel side?
->
-> Am I missing something ?
+Add support for the RK3399T-based Radxa ROCK 4SE board. This board offers
+similar peripherals and form-factor to the ROCK Pi 4B but uses the
+cost-optimised RK3399T processor (which has different a OPP table but
+otherwise minimal changes) and some other minor hardware changes between
+the Rock Pi 4B (described in the devicetree).
 
-Hmm, indeed there's commit f39db26c5428 ("drm: Add kms driver for
-loongson display controller")... but it only has one Acked-by from
-Thomas that I can't find on any lists, and zero Reviewed-by.
+The first patch moves the RK3399 OPP table from the generic Radxa ROCK
+Pi 4 dtsi into board-specific devicetree files, in preparation for the
+ROCK 4SE devicetree file (in later patches).
 
-Usually, the bigger the change, the more acks/reviews you need. Did
-Thomas really ack this to be merged without recorder reviews? :o
+The second patch adds the devicetree binding documentation for the Radxa
+ROCK 4SE.
 
+The third patch adds the board-specific devicetree file for the Radxa ROCK
+4SE.
 
-BR,
-Jani.
+Changes in v2:
+- Add Krzysztof Kozlowski's Acked-by tag.
+- Set proper interrupt type for brcmf.
 
+Christopher Obbard (3):
+  arm64: dts: rockchip: Move OPP table from ROCK Pi 4 dtsi
+  dt-bindings: arm: rockchip: Add Radxa ROCK 4SE
+  arm64: dts: rockchip: Add Radxa ROCK 4SE
+
+ .../devicetree/bindings/arm/rockchip.yaml     |  5 ++
+ arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+ .../boot/dts/rockchip/rk3399-rock-4se.dts     | 65 +++++++++++++++++++
+ .../boot/dts/rockchip/rk3399-rock-pi-4.dtsi   |  1 -
+ .../boot/dts/rockchip/rk3399-rock-pi-4a.dts   |  1 +
+ .../boot/dts/rockchip/rk3399-rock-pi-4b.dts   |  1 +
+ .../boot/dts/rockchip/rk3399-rock-pi-4c.dts   |  1 +
+ 7 files changed, 74 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-rock-4se.dts
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.40.1
+
