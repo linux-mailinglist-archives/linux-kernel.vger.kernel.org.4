@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4716D74D747
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C586874D748
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjGJNTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S231223AbjGJNTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjGJNTX (ORCPT
+        with ESMTP id S231179AbjGJNT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:19:23 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EF2D7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:19:21 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7869bcee569so143393139f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:19:21 -0700 (PDT)
+        Mon, 10 Jul 2023 09:19:28 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEF1C4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:19:26 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77ac14ff51bso142735739f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688995160; x=1691587160;
+        d=ventanamicro.com; s=google; t=1688995166; x=1691587166;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h/mpcltcpfYZvMxozrUvDAlbbzSsEYse6Dp8FAFYE/Y=;
-        b=pRM4SRhC4BcC6WvkfHp+9VQNMx6pEMQAigYEXFZhUYg/EBNumEgM1yRXhES0h3SB1x
-         LFG9Pl70z8JZfd9PsuS/fPLoS0eYU/K2qveVgJ7alZOH58YAEyKLaguGygZVvOXsg9JC
-         gBxXoKeHRtQ6KoWEM6zIz9zS+GvY//ChCT/Ugwf0WgFoD/qNI7rAAefnCkPODN0qAiBL
-         kZdsp3E8MYdIskT5ybqqiKd/VZcOun+x5+MjXxII6cd0l308e3pwsGyKOQCQGSs/MTCV
-         TcNWuw150Dv3iwE+djEW2gNS8O2vCt9wwhWTQt2mlfFgopnH342mqUw5XotHgy2g/2jp
-         zymg==
+        bh=r1gRBue3D63AcisS8ZRrKq/nAe8+ybrtdsVfAzlr1PY=;
+        b=pA+OZj+6VRBv5gS74DBiOVUTgwvqM6wfhrRwlQNZG7tF+0mRI9MD1owZvdSX7ukimh
+         k8suDBs0QgKceGAu3WuWnG43cRnQhiCgUbXPnkIEICLi1FX3T2OtPFwSpBDYcJqYySgt
+         8mew5dOHk8HZ5c1QM7tS98XYN0MyH0n0xs+ZuFNgCNoZPS0u8LbWovuZ4i9/NUmQyg4n
+         fbtlVo8iSDEAMIIdt218mawBd6L7r00CCJnYonLgqo8KA3BEgoQ3XASlfTOPoyfp3UdI
+         pJThRWHkf8gbMgSucIu3KeJySWz3zR+8VUhz1cFP0/2GWDgOPQyx09LmmXuGwk7LWPuD
+         qXTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688995160; x=1691587160;
+        d=1e100.net; s=20221208; t=1688995166; x=1691587166;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h/mpcltcpfYZvMxozrUvDAlbbzSsEYse6Dp8FAFYE/Y=;
-        b=bkAFkZoy+W1lB8Jeke15h5ZpkBwU2nmPQI4FjsW9XlQOTfBr261REnq2maxACBadSz
-         UoqFTlq9kIsjfegH+VVFpEx1qg3lUkVBkGVKXfoPBgXZi5jrlyK+PWkpo+rGbNTCEQc1
-         ZbAtVizl2xrW++/h/xTmf9ImJEe9lZe4OFxQiY923lhUm4Nln3tEdMNxqzxExnRLzHIO
-         kwl8VUg2/IoteKhobNSQ8tXq4Er1WqZ8xuKii91sQrUUWPqFmaUeQnaXkEbFxThj5nAQ
-         +nl79GPPCrLKNXMPOFSDghzpCCQpCvK9v/nLMn9EP89xv1R+R46k9VXJtFWWyhLkV8MA
-         zjSg==
-X-Gm-Message-State: ABy/qLaz48zSMUsoB3vIvR43z6owbFsyUkdpskeH+7AW/pfMbobv0v+8
-        stwT+E2UMkaMWd8w/d2y4kkQQA==
-X-Google-Smtp-Source: APBJJlHEKKAe5FMXwjfaffR8jMAuyuZBXmIS2Nm5cTFlKw8kRCpjNg3NP95fiNXB9KaNPlz5bW1Itg==
-X-Received: by 2002:a6b:dc16:0:b0:786:2c7d:dd19 with SMTP id s22-20020a6bdc16000000b007862c7ddd19mr12338002ioc.17.1688995160268;
-        Mon, 10 Jul 2023 06:19:20 -0700 (PDT)
+        bh=r1gRBue3D63AcisS8ZRrKq/nAe8+ybrtdsVfAzlr1PY=;
+        b=NqqGR1M6E/V0UJb9LMpje0nBy7dS170o8cine1WZq253HfAwoP8KChZXIJgbNNQXpi
+         r3Lkhp2Tx2SMllqmx0Ujdf8I/9NsK54UAtvgKH40pYS3AtyttioH5p4cKQ4eYBKXUtKn
+         k/qN4xgbvNGHnjDKREtIuzf/7meJ2428wlAHAJkT0aMiVOmjDkzOiPcpMmzaNQJ94Px+
+         wdXFCriiW8sCJNh7YswfVJuXKU7x0DAKwSx0F7Hox5627oJazYJA3GOxaKgKRSVKIp23
+         xJLMylTdoX4Yky38fJ6dkhf40TDa6L4L9/gZ4wkrFp2HHbQmelggWD89CEblnrvmZyUm
+         O9YA==
+X-Gm-Message-State: ABy/qLaWeAMpkcHLrFHA5J+OkEYJ41iPz4v2mwUatSW8eIA8/gmtreS2
+        MdDXQ9wRXNCjY/1mTnggiRvZ2g==
+X-Google-Smtp-Source: APBJJlHvGG/zjHslHAxhLRw47sOr0nUaUNS7C7K4tdHJPkUEe+8zgZyMURiUepQv7N2eA4R4IfmuUg==
+X-Received: by 2002:a5d:9451:0:b0:783:72b9:ed67 with SMTP id x17-20020a5d9451000000b0078372b9ed67mr12562805ior.10.1688995165630;
+        Mon, 10 Jul 2023 06:19:25 -0700 (PDT)
 Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id q14-20020a5d9f0e000000b0077a1b6f73b9sm3643242iot.41.2023.07.10.06.19.15
+        by smtp.gmail.com with ESMTPSA id q14-20020a5d9f0e000000b0077a1b6f73b9sm3643242iot.41.2023.07.10.06.19.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 06:19:20 -0700 (PDT)
+        Mon, 10 Jul 2023 06:19:25 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -62,9 +62,9 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 1/2] clocksource: timer-riscv: Don't enable/disable timer interrupt
-Date:   Mon, 10 Jul 2023 18:49:01 +0530
-Message-Id: <20230710131902.1459180-2-apatel@ventanamicro.com>
+Subject: [PATCH 2/2] clocksource: timer-riscv: Increase rating of clock_event_device for Sstc
+Date:   Mon, 10 Jul 2023 18:49:02 +0530
+Message-Id: <20230710131902.1459180-3-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230710131902.1459180-1-apatel@ventanamicro.com>
 References: <20230710131902.1459180-1-apatel@ventanamicro.com>
@@ -80,64 +80,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we enable/disable timer interrupt at runtime to start/stop
-timer events. This makes timer interrupt state go out-of-sync with
-the Linux interrupt subsystem.
-
-To address the above issue, we can stop a per-HART timer interrupt
-by setting U64_MAX in timecmp CSR (or sbi_set_timer()) at the time
-of handling timer interrupt.
+When Sstc is available the RISC-V timer clock_event_device should be
+the preferred clock_event_device hence we increase clock_event_device
+rating for Sstc.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- drivers/clocksource/timer-riscv.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/clocksource/timer-riscv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index da3071b387eb..f2ea2b3d2d43 100644
+index f2ea2b3d2d43..9c8f3e2decc2 100644
 --- a/drivers/clocksource/timer-riscv.c
 +++ b/drivers/clocksource/timer-riscv.c
-@@ -22,6 +22,7 @@
- #include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/interrupt.h>
- #include <linux/of_irq.h>
-+#include <linux/limits.h>
- #include <clocksource/timer-riscv.h>
- #include <asm/smp.h>
- #include <asm/hwcap.h>
-@@ -31,12 +32,22 @@
- static DEFINE_STATIC_KEY_FALSE(riscv_sstc_available);
- static bool riscv_timer_cannot_wake_cpu;
+@@ -105,6 +105,8 @@ static int riscv_timer_starting_cpu(unsigned int cpu)
+ 	ce->irq = riscv_clock_event_irq;
+ 	if (riscv_timer_cannot_wake_cpu)
+ 		ce->features |= CLOCK_EVT_FEAT_C3STOP;
++	if (static_branch_likely(&riscv_sstc_available))
++		ce->rating = 450;
+ 	clockevents_config_and_register(ce, riscv_timebase, 100, 0x7fffffff);
  
-+static void riscv_clock_event_stop(void)
-+{
-+	if (static_branch_likely(&riscv_sstc_available)) {
-+		csr_write(CSR_STIMECMP, ULONG_MAX);
-+		if (IS_ENABLED(CONFIG_32BIT))
-+			csr_write(CSR_STIMECMPH, ULONG_MAX);
-+	} else {
-+		sbi_set_timer(U64_MAX);
-+	}
-+}
-+
- static int riscv_clock_next_event(unsigned long delta,
- 		struct clock_event_device *ce)
- {
- 	u64 next_tval = get_cycles64() + delta;
- 
--	csr_set(CSR_IE, IE_TIE);
- 	if (static_branch_likely(&riscv_sstc_available)) {
- #if defined(CONFIG_32BIT)
- 		csr_write(CSR_STIMECMP, next_tval & 0xFFFFFFFF);
-@@ -119,7 +130,7 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
- {
- 	struct clock_event_device *evdev = this_cpu_ptr(&riscv_clock_event);
- 
--	csr_clear(CSR_IE, IE_TIE);
-+	riscv_clock_event_stop();
- 	evdev->event_handler(evdev);
- 
- 	return IRQ_HANDLED;
+ 	enable_percpu_irq(riscv_clock_event_irq,
 -- 
 2.34.1
 
