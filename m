@@ -2,101 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495CC74DD00
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62CD74DD0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjGJSEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S233127AbjGJSFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjGJSEJ (ORCPT
+        with ESMTP id S231393AbjGJSFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:04:09 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D678812B
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:04:06 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-7659c6cae2cso337084285a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:04:06 -0700 (PDT)
+        Mon, 10 Jul 2023 14:05:11 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B8711B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:05:09 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-57764a6bf8cso60310377b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689012246; x=1691604246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BT8anRcoBomkCL3eLhDuSMG7VrJUf8etAybJpx2cUmQ=;
-        b=P3qkNZJyr3B9iPQ6tzo+Oph7KFNgQR48WP4GUaBG7LO2uQevnfZqahEoF65sPAugnn
-         MNhWEMJae9jMmX7YMUOhnYiRDETA0ZxJsxaJ3VfekaJodPQ0XE7/CMmAauDvYrE75B7W
-         e6Reiouu8KjXUJZm8YbqiHVuOqgKFmIz9g/N3BOq4+MfXFB+VobVN9UMSj1yq/bM+FvH
-         2vmlEzf/kW7afVr8b6ghNyN0dOyVHo4CIbT0AOP08KVkn04tBq6MnrtyGey8uRxlttek
-         mfECNBxhrEl971vEGY6ftU/fY4U3a2UcgpcCRczCcddHUAy7XCE4ihu65DPMtVkNd2IB
-         CQBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689012246; x=1691604246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1689012309; x=1691604309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BT8anRcoBomkCL3eLhDuSMG7VrJUf8etAybJpx2cUmQ=;
-        b=g+y0B5K6AEyrVyzug/MSsc6P5JSSzfnwdMP8388/m7zXaz5SKnPz2bsDd8mu2DBC9y
-         QV9eA3qEKnjqb0M8vAER9ap6rYD6G/H0uTlpv+0fzekO/jM3UK4dx5B4VTbwjpjFssZn
-         3ppHTJWTnl0MPy6vkRyideH7RqzLslPwDNoULwFjVLmxp91dNdbOGLsX9wRvd25kYXwX
-         TQp3PBpZeTIC5DHbEN6SYHcAckStNzT4RZfLGFTRTmfGj6RsRvRauamrM4b6Puui/c94
-         Q4Iie1a51ADBvV+SngoEnR4DtR5bcW6S8nXqXRF2mWvpcNosPC5HV1qgp8f5hFLgot7z
-         ooAw==
-X-Gm-Message-State: ABy/qLZPjko0LjP9APKqfay5M3UBK+WxYMVVGYToHwuV0f4hqrSNeftq
-        3+DQAsnmhOjYm6cMgyGd9i4jKw==
-X-Google-Smtp-Source: APBJJlEkdizBr7UJSHKmwk1Pw53s9bGXZHen90PgCZoTRA4bGUaUV/2iylwD9yRi/UQu94OEzqbZDw==
-X-Received: by 2002:a0c:e108:0:b0:628:6879:ee48 with SMTP id w8-20020a0ce108000000b006286879ee48mr11363899qvk.50.1689012246035;
-        Mon, 10 Jul 2023 11:04:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id r17-20020a0c8b91000000b006360931c12fsm65717qva.96.2023.07.10.11.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 11:04:05 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qIvEy-0004U3-Vv;
-        Mon, 10 Jul 2023 15:04:04 -0300
-Date:   Mon, 10 Jul 2023 15:04:04 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Souradeep Chakrabarti <schakrabarti@microsoft.com>,
-        souradeep chakrabarti <schakrabarti@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [EXTERNAL] Re: [PATCH V4 net] net: mana: Fix MANA VF unload when
- host is unresponsive
-Message-ID: <ZKxIFK2nQqV9AvIA@ziepe.ca>
-References: <1688374171-10534-1-git-send-email-schakrabarti@linux.microsoft.com>
- <83ef6401-8736-8416-c898-2fbbb786726e@intel.com>
- <PUZP153MB07880E6D692FD5D13C508694CC29A@PUZP153MB0788.APCP153.PROD.OUTLOOK.COM>
- <7e316b51-be46-96db-84cb-addd28d90b0f@intel.com>
- <PUZP153MB0788A5F92E65AC9A98AF03AFCC2CA@PUZP153MB0788.APCP153.PROD.OUTLOOK.COM>
- <c7e4a416-9da4-7ff2-2223-589fd66f557d@intel.com>
- <PUZP153MB0788C7D2376F3271D77CE826CC2CA@PUZP153MB0788.APCP153.PROD.OUTLOOK.COM>
- <cd36e39a-ebb9-706a-87c3-2f76de82f7ca@intel.com>
- <PH7PR21MB311670231963DE8661C2F178CA2CA@PH7PR21MB3116.namprd21.prod.outlook.com>
+        bh=EB5CFdTYWApS8YMHOsiv0TiQQf51kpScKMC8hHDqG8g=;
+        b=PRUSckhb2w2tvQVVqKRnAyFmh/xH4DVarLn2tfQUHuZsRmlUdlaoZS4tZ/DtqvuCcC
+         vw7wH9gSaid4XnJN8d0feAmFI+jdpMwX19vdHLHSWTT/aaIB+ces3ILY4kHUkuLjXoHQ
+         CmEpOHNRRSFnNjUm0goZkW6P579aehUi1pSQtU87E+sxiJeekPKGmihjBe2w1IN/vS5h
+         SSeoBmil9Z+t5D3S1+K20tHmPDDQdCz0gPzjlQBkR3Kw6vrkkebxGQd93XdCw+eVSM5A
+         bv/ahQVscDhIR+kBLYh6Q/z5/MEcwbba/IK44dTuptfxx2eLDdO7uulqpaNx7DtWj5qb
+         B3ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689012309; x=1691604309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EB5CFdTYWApS8YMHOsiv0TiQQf51kpScKMC8hHDqG8g=;
+        b=SnEx3DDrS1X5EjRD+XFjzIwLwSJAHQ8lJwK9Lv2k25whoGTzsz9OaMzQ8MUtXc877+
+         DCO7n1CENcRky3CcLM9xHJyrhXpLUfH6Z9Dxiy5s5vceo+eGwHvMzWVMiJVW0gn/qdif
+         jzTDLP2nlbm5XwPMJN/2a41k1sFLzanc/4PZ2fp7SRSw0CvOeluUHvROukj9p7skPEQK
+         sBb7rqmSX/SpFN3SgTNIb9v22eNI3E0VfvqJ4HrjTCPDyLUTD3upNCFnlpGE/F7iO+p3
+         5N5SIfXzIP4z4yvsyMA9u4Llq/UYU/ovT6hZ78GO3RL/HXsH2HA6Q6dtjU08duqPPqHQ
+         eS5w==
+X-Gm-Message-State: ABy/qLaJNQBNFo0LMR45LebaY1kb4xVNUjRA/vcOoomElQ30XIC7iUaG
+        wFp0jyOGYTJS3BIOAPNV5v8+eC9fhJoBkfA+Acaj
+X-Google-Smtp-Source: APBJJlEXMnAXAqgSe2gS4I8jMdsUlxV2m1S0LePICnU+VtDinyOkis46Y0X2+XrvApiiB580t/Us4PR4QCI8RZeUqGA=
+X-Received: by 2002:a0d:cc47:0:b0:577:a46:26e5 with SMTP id
+ o68-20020a0dcc47000000b005770a4626e5mr12504009ywd.31.1689012309085; Mon, 10
+ Jul 2023 11:05:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR21MB311670231963DE8661C2F178CA2CA@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
+ <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com> <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
+ <CAHC9VhSNqzVpHcDw59a2CznaME1078SJWuEcqJx=R5PQgSjTDg@mail.gmail.com>
+In-Reply-To: <CAHC9VhSNqzVpHcDw59a2CznaME1078SJWuEcqJx=R5PQgSjTDg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 10 Jul 2023 14:04:58 -0400
+Message-ID: <CAHC9VhSFy6wf+7DXrG=6CXZC4RrpTeP2sQezX0BPc95fxGAWxQ@mail.gmail.com>
+Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,25 +78,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 01:54:35PM +0000, Haiyang Zhang wrote:
+On Fri, Jul 7, 2023 at 5:44=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
+te:
+> On Fri, Jul 7, 2023 at 12:54=E2=80=AFPM Casey Schaufler <casey@schaufler-=
+ca.com> wrote:
+> > On 7/6/2023 6:43 PM, Paul Moore wrote:
+> > > On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> > >> Currently, the LSM infrastructure supports only one LSM providing an=
+ xattr
+> > >> and EVM calculating the HMAC on that xattr, plus other inode metadat=
+a.
+> > >>
+> > >> Allow all LSMs to provide one or multiple xattrs, by extending the s=
+ecurity
+> > >> blob reservation mechanism. Introduce the new lbs_xattr_count field =
+of the
+> > >> lsm_blob_sizes structure, so that each LSM can specify how many xatt=
+rs it
+> > >> needs, and the LSM infrastructure knows how many xattr slots it shou=
+ld
+> > >> allocate.
+> > >>
+> > >> Modify the inode_init_security hook definition, by passing the full
+> > >> xattr array allocated in security_inode_init_security(), and the cur=
+rent
+> > >> number of xattr slots in that array filled by LSMs. The first parame=
+ter
+> > >> would allow EVM to access and calculate the HMAC on xattrs supplied =
+by
+> > >> other LSMs, the second to not leave gaps in the xattr array, when an=
+ LSM
+> > >> requested but did not provide xattrs (e.g. if it is not initialized)=
+.
+> > >>
+> > >> Introduce lsm_get_xattr_slot(), which LSMs can call as many times as=
+ the
+> > >> number specified in the lbs_xattr_count field of the lsm_blob_sizes
+> > >> structure. During each call, lsm_get_xattr_slot() increments the num=
+ber of
+> > >> filled xattrs, so that at the next invocation it returns the next xa=
+ttr
+> > >> slot to fill.
+> > >>
+> > >> Cleanup security_inode_init_security(). Unify the !initxattrs and
+> > >> initxattrs case by simply not allocating the new_xattrs array in the
+> > >> former. Update the documentation to reflect the changes, and fix the
+> > >> description of the xattr name, as it is not allocated anymore.
+> > >>
+> > >> Adapt both SELinux and Smack to use the new definition of the
+> > >> inode_init_security hook, and to call lsm_get_xattr_slot() to obtain=
+ and
+> > >> fill the reserved slots in the xattr array.
+> > >>
+> > >> Move the xattr->name assignment after the xattr->value one, so that =
+it is
+> > >> done only in case of successful memory allocation.
+> > >>
+> > >> Finally, change the default return value of the inode_init_security =
+hook
+> > >> from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
+> > >> conventions.
+> > >>
+> > >> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+> > >> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archl=
+inux/
+> > >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > >> ---
+> > >>  include/linux/lsm_hook_defs.h |  6 +--
+> > >>  include/linux/lsm_hooks.h     | 20 ++++++++++
+> > >>  security/security.c           | 71 +++++++++++++++++++++++---------=
+---
+> > >>  security/selinux/hooks.c      | 17 +++++----
+> > >>  security/smack/smack_lsm.c    | 25 ++++++------
+> > >>  5 files changed, 92 insertions(+), 47 deletions(-)
+> > > Two *very* small suggestions below, but I can make those during the
+> > > merge if you are okay with that Roberto?
+> > >
+> > > I'm also going to assume that Casey is okay with the Smack portion of
+> > > this patchset?  It looks fine to me, and considering his ACK on the
+> > > other Smack patch in this patchset I'm assuming he is okay with this
+> > > one as well ... ?
+> >
+> > Yes, please feel free to add my Acked-by as needed.
+>
+> Done.  Thanks Casey.
 
-> > This waiting loop is needed to let the pending Tx packets be sent. If
-> > they weren't sent in 1 second, it most likely makes no sense already
-> > whether they will be sent at all or not -- the destination host won't
-> > wait for them for so long.
-> > You say that it may happen only in case of HW issue. If so, I assume you
-> > need to fix it some way, e.g. do a HW reset or so? If so, why bother
-> > waiting for Tx completions if Tx is hung? You free all skbs later either
-> > way, so there are no leaks.
-> 
-> At that point, we don't actually care if the pending packets are sent or not. 
-> But if we free the queues too soon, and the HW is slow for unexpected 
-> reasons, a delayed completion notice will DMA into the freed memory and 
-> cause corruption. That's why we have a longer waiting time.
+I'm merging the full patchset into lsm/next right now.  Thanks for all
+your work on this Roberto, and a thank you for everyone else who
+helped with reviews, testing, etc.
 
-Aieiiie that is a horrible HW design to not have a strong fence of DMA.
-
-"just wait and hope the HW doesn't UAF the kernel with DMA" is really
-awful.
-
-Jason
+--=20
+paul-moore.com
