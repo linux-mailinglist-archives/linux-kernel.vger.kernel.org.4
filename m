@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F69874D319
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EBC74D324
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjGJKPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S233351AbjGJKRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbjGJKPe (ORCPT
+        with ESMTP id S231622AbjGJKQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:15:34 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CF135A9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:14:04 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51e344efd75so7954114a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:14:04 -0700 (PDT)
+        Mon, 10 Jul 2023 06:16:53 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DC8E7D;
+        Mon, 10 Jul 2023 03:16:29 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-4452fe640fbso488937137.0;
+        Mon, 10 Jul 2023 03:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688984043; x=1691576043;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nUEWXEFp+1oZr3kpVMJaoQSxkbkTSjRww+xMqeNuW+U=;
-        b=coOXt0JVy/PKdCwR4/GcJ2HCVu/jydih7pmt243YtW7vhvpPOEmjrMvIUoiGNb2tqw
-         KUmOuEut8EA2oUMSKMubkfa6j/7dqVGpgdbIFI9TWrsfWlxVYf779f9F8xrMNW2dabhg
-         tx9BWEHUJX1XLBGIP29lOQpaqsE7awuMjNMnWQzkiDB1yAWLBlFv79Ar+CpmOB2Nn0vy
-         rr5mREIrx/Tut1WlmmcDE8ProxiTJthgC4g1kR8OCgQBw7A+VkKs4QA6HYpcsNEA0J/K
-         x4UGQI8wPTq53z1DO/XEsCAe50C+8iiXfLx7SQCyXXH6uUUO4vDxvQ5VTT/HISalohPr
-         HFQg==
+        d=gmail.com; s=20221208; t=1688984189; x=1691576189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LzWFsqoe/v6zSf+Upw+SNFQ6NrSy8Ce/GjnyKdu6vQk=;
+        b=aVCPEK61dljR5uzJMRK3Wv1AlsHllj4aC/RZOqqJ/SrYFxoRQAb7TyeyOM1MDRZAem
+         VDTcwv6HRLb/pD85hxjIh27u4ebYfMOSZcS2DMWYaYqnSSUCHDidj8P4/iij50jyBJq6
+         odKQdVvU/x8oXreEKAaFI9zNvPLvj+2rB5AeO13nqv0HI8XsOuWIVn4IfkBnKYiBdOt3
+         g/1CtOIX2405bjBXs3Ot+vp4HQ7xp1QHY2Gq7yTNHXwVuwfd72BPYTlp9D1cKzxlTpXE
+         YoBt9sJXwKfIjosP0VTAi07XikVkSmInJygBJHEYATrJGBHMXThJ6AvSjnrPgqFyzZmo
+         qgtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688984043; x=1691576043;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUEWXEFp+1oZr3kpVMJaoQSxkbkTSjRww+xMqeNuW+U=;
-        b=cYftFHPhvbVeQI0IX7CjWfa3IBZv1GcRF50kRd8J+gYFEMF3uQ46v4zLbEr+yWm9+C
-         M5g8cVjApLmPdvtQNGZ8IJh66MR+cRsd2gMGoO8Yzvso20drAbABe/odByGC0HEAHQEH
-         dk98TYZ+4eMVxFvJug3NzWkbJtUbq63D27tXd1HcZ5THVEPn4ENPivFvbd4YlqH9YTc+
-         2G8KJNJSYyIGx6E44PyvbvL+UiNXfOdO/6jbGZuOrEyP/gS2BRItRyTKOn/7V9PQB46r
-         OZP6aC8soWGptVp/8cdfBvx+wjzpF3dpQUsQqt+1nc/rdwvQUqOL2DHCexZ23OrO8trE
-         pRSA==
-X-Gm-Message-State: ABy/qLaAVPGCAMeE3fAc+xX+VO1FQWubRAZiMtUAAG65sD8BIZc0jkmR
-        vUEvTei6DT3HNK6kpoa7wR3gNw==
-X-Google-Smtp-Source: APBJJlHmi2r9OzHgiqvApCLLnrK8IZai9S0ZSxrSRSQMHeshe+fZ1oKO/Dp9bywWV1JxTmwA8MelPg==
-X-Received: by 2002:aa7:c508:0:b0:51d:e185:a211 with SMTP id o8-20020aa7c508000000b0051de185a211mr8809170edq.21.1688984043258;
-        Mon, 10 Jul 2023 03:14:03 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id n24-20020aa7d058000000b0051df583ca96sm5454199edo.43.2023.07.10.03.14.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 03:14:02 -0700 (PDT)
-Message-ID: <c1dcf8dc-b230-fd54-fc25-e57d6c6b6dea@linaro.org>
-Date:   Mon, 10 Jul 2023 12:14:01 +0200
+        d=1e100.net; s=20221208; t=1688984189; x=1691576189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LzWFsqoe/v6zSf+Upw+SNFQ6NrSy8Ce/GjnyKdu6vQk=;
+        b=AFYqQW7o97yerhZWAjUtQ8uf61umzYJP3L3ToJrqoTWNiOi7FBWEFtdq8eDSOI8JYV
+         lcVJAwNlR84zELrhyDpp+qhOvTOFiA7Qz+Hwosp7mHhVD6KDUO9x/8FswypsO9i0SRpa
+         MahyLq+pIAOajq4ypcFk/nioubYAczWZ0bW5EYw3Yzoa/sBktTYpHp/b+vn9JkJ0hRrS
+         HDZsARUkNd6FwpAjpvQRnHWkBCr0u2jGlSUb97s1+/MQiCmxjUX/Nnb8QPsCw4HCAeqw
+         5S23EOm/D1z5SO/nW8sAXsA3pjIqW+ytx4iz+gyG9lR4tD65Z5Y+e28VRQMacL++r7WB
+         vbEA==
+X-Gm-Message-State: ABy/qLa33YHMzrOvIxXXc7Lbf9HYBSNRJ5pajA/pX+Yy307fvxGiacPL
+        NKnEHl3x1h2mALDFthRrPHv0LfG5u0dxiGUWgAY=
+X-Google-Smtp-Source: APBJJlG4I9tVvLXnSxYL9jvsaXKYazWNuZRHN1x2UL7e+8MRHM8teg5dqRCNtwNZRXsCsa2n6w7nRP8w9HJR/tmcYTs=
+X-Received: by 2002:a67:f446:0:b0:444:bb70:db73 with SMTP id
+ r6-20020a67f446000000b00444bb70db73mr3105959vsn.28.1688984188693; Mon, 10 Jul
+ 2023 03:16:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 10/21] thermal/drivers/exynos: convert to use
- devm_request*_irq_probe()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230710095926.15614-1-frank.li@vivo.com>
- <20230710095926.15614-10-frank.li@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230710095926.15614-10-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20230709181323.12085-2-johannes@sipsolutions.net> <19f7bc7f43922c257238127d5fe84ea01cf2be79.camel@intel.com>
+In-Reply-To: <19f7bc7f43922c257238127d5fe84ea01cf2be79.camel@intel.com>
+From:   Jeff Chua <jeff.chua.linux@gmail.com>
+Date:   Mon, 10 Jul 2023 18:16:17 +0800
+Message-ID: <CAAJw_Zuo1L3yTP-PVgdW74uYg=R7YxXF0hA5s0Gfm1bCqC90RQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] wifi: iwlwifi: remove 'use_tfh' config to fix crash
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "Berg, Johannes" <johannes.berg@intel.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,59 +80,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2023 11:59, Yangtao Li wrote:
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
-> 
-> And tglx point out that:
-> 
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
-> 
->      519 messages total (there are probably more)
-> 
->      352 unique messages
-> 
->      323 unique messages after lower casing
-> 
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
-> 
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
-> 
->      The most useful one of all is: "could request wakeup irq: %d"
-> 
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
-> 
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
-> 
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
-> 
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
+On Mon, Jul 10, 2023 at 9:53=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> wr=
+ote:
+>
+> On Sun, 2023-07-09 at 20:13 +0200, Johannes Berg wrote:
+> > From: Johannes Berg <johannes.berg@intel.com>
+> >
+> > This is equivalent to 'gen2', and it's confusing to have two
+> > of the same configs. The split config patch actually had been
+> > originally developed after this, and didn't add the use_tfh
+> > in the new configs because they were copied to the new files
+> > after ...
+> >
+> > There's clearly still an unwind error in iwl_txq_gen2_init()
+> > since it crashes if something fails there, but the reason it
+> > fails in the first place is due to the gen2/use_tfh confusion.
+> >
+> > Reported-by: Jeff Chua <jeff.chua.linux@gmail.com>
+> > Reported-by: "Zhang, Rui" <rui.zhang@intel.com>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217622
+> > Link:
+> > https://lore.kernel.org/all/9274d9bd3d080a457649ff5addcc1726f08ef5b2.ca=
+mel@xry111.site/
+> > Link:
+> > https://lore.kernel.org/all/CAAJw_Zug6VCS5ZqTWaFSr9sd85k%3DtyPm9DEE%2Bm=
+V%3DAKoECZM%2BsQ@mail.gmail.com/
+> > Fixes: 19898ce9cf8a ("wifi: iwlwifi: split 22000.c into multiple
+> > files")
+> > Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+>
+> Hi, Johannes,
+>
+> Thanks for the patch. It fixes the problem on my side.
+>
+> Tested-by: Zhang Rui <rui.zhang@intel.com>
+>
+> thanks,
+> rui
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Johannes,
 
-Best regards,
-Krzysztof
+Fixed as well! Thank you!
 
+cc to those I've posted before as well.
+
+Jeff
