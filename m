@@ -2,69 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9115074DCA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AC974DCAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjGJRni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S229670AbjGJRoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjGJRng (ORCPT
+        with ESMTP id S230322AbjGJRoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:43:36 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABDB6DD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:43:34 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 36AHhRKI025103;
-        Mon, 10 Jul 2023 19:43:27 +0200
-Date:   Mon, 10 Jul 2023 19:43:27 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     linux-kernel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>
-Subject: Re: [PATCH] tools/nolibc: completely remove optional environ support
-Message-ID: <ZKxDP3YrIdKxWaIN@1wt.eu>
-References: <20230710-nolibc-environ-v1-1-173831573af6@weissschuh.net>
+        Mon, 10 Jul 2023 13:44:09 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9808A120
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:44:07 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-76714caf466so432387485a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689011047; x=1691603047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOnVzen9HDghW2bswxVCUVsZLhlFm73bqh1O1PTU2i4=;
+        b=WLQs6EGun6B4BulXmKogPdCt5oDVFVpE2okzj27FHCHNnLDGIi5Czr14p89ybAaXYJ
+         lhMk1w685GxTpiUrgFlizkUlyNVVz8nobylcjl30cPaLaTPeJE3z6JVgYmXjCN3ss5vo
+         Q82dok6ccsNwR6dZZeC5Uc8sSHaM9gSRZNnou3UkB0vrGQPnuGeSrm1Q/3KZboxAzoVb
+         H13lwGXwQ6e6Km+Dl3IMJxRHMGkEVGEkOp0D+LLl6byPLvxeJpBIju++uVvCt5NYV2/7
+         7w/6QRlieWrNTaKDG74MRdVrZ5SqOcAGw5ip54VjrxKSNLq8BAtYgaaEz7vgDQF4W/kA
+         ufBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689011047; x=1691603047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AOnVzen9HDghW2bswxVCUVsZLhlFm73bqh1O1PTU2i4=;
+        b=XvIxiXQDYcnOLgwioFM+1o0TTkTFK6dJsB8PkXpkuPIsP6e5JeZT5Z5yVIx+ZNVRng
+         7IkN+1/fKBM/B5OejqeRfd2TISfO2GU1H/8fzsfbefNQl3J0gK2m8wvgUEebfNKamQnj
+         je4vdMqDt1d+LhcHDOlI+w+Vsdsg/j71uLHkRo1BNmaYGa6KQ+haE7+qRXJhWI1i918B
+         8eRZMojBErboM8dapNJpd4ZxVlNuVA5o2LO1MHhyqSogW7uj8HKOaHxFBGG3fd1KqOoq
+         Nu3ueJ4qPYmttdID3vbQbX+4r5FKsZHsmLR2/CUrxEHegBXVohZSbSH4VkkkY/XS8eHt
+         2uyw==
+X-Gm-Message-State: ABy/qLYh5kEaKR8AJ+J1kpMgv1Cu5m25coNr50+e6aKhBFsoSpf5+L3H
+        VRzCJSYPH+7FLrxQVv6JJiQ7wg==
+X-Google-Smtp-Source: APBJJlEadY1dI3vNQ2N0fmgDC+Ual1DpU2psFdVln3u1qHl6Z/3ncb0HysMERESWP4YSo180rdHzZw==
+X-Received: by 2002:a37:b645:0:b0:75d:4e8b:9d19 with SMTP id g66-20020a37b645000000b0075d4e8b9d19mr14672746qkf.26.1689011046739;
+        Mon, 10 Jul 2023 10:44:06 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id o8-20020a0cf4c8000000b0063007ccaf42sm59906qvm.57.2023.07.10.10.44.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 10:44:06 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qIuvd-0004KO-KO;
+        Mon, 10 Jul 2023 14:44:05 -0300
+Date:   Mon, 10 Jul 2023 14:44:05 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZKxDZfVAbVHgNgIM@ziepe.ca>
+References: <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
+ <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
+ <20230616122140.6e889357@kernel.org>
+ <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
+ <20230619110705.106ec599@kernel.org>
+ <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+ <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <ZKNA9Pkg2vMJjHds@ziepe.ca>
+ <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230710-nolibc-environ-v1-1-173831573af6@weissschuh.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Wed, Jul 05, 2023 at 06:17:39PM -0700, Mina Almasry wrote:
 
-On Mon, Jul 10, 2023 at 07:22:53PM +0200, Thomas Weißschuh wrote:
-> In commit 52e423f5b93e ("tools/nolibc: export environ as a weak symbol on i386")
-> and friends the asm startup logic was extended to directly populate the
-> "environ" array.
+> Another issue is that in networks with low MTU, we could be DMAing
+> 1400/1500 bytes into each allocation, which is problematic if the
+> allocation is 8K+. I would need to investigate a bit to see if/how to
+> solve that, and we may end up having to split the page and again run
+> into the 'not enough room in struct page' problem.
+
+You don't have an intree driver to use this with, so who knows, but
+the out of tree GPU drivers tend to use a 64k memory management page
+size, and I don't expect you'd make progress with a design where a 64K
+naturaly sized allocator is producing 4k/8k non-compound pages just
+for netdev. We are still struggling with pagemap support for variable
+page size folios, so there is a bunch of technical blockers before
+drivers could do this.
+
+This is why it is so important to come with a complete in-tree
+solution, as we cannot review this design if your work is done with
+hacked up out of tree drivers.
+
+Fully and properly adding P2P ZONE_DEVICE to a real world driver is a
+pretty big ask still.
+
+> > Or allocate per page memory and do a memdesc like thing..
 > 
-> This makes it impossible for "environ" to be dropped by the linker.
-> Therefore also drop the other logic to handle non-present "environ".
+> I need to review memdesc more closely. Do you imagine I add a pointer
+> in struct page that points to the memdesc? 
 
-Hmmm OK but at least I'd like that we continue to reference it from
-nolibc-test to make sure it's still visible. Maybe we could just check
-that it's always equal to envp ? If we drop its reference from there,
-sooner or later someone will find it interesting to rename it and some
-programs referencing it will break.
+Pointer to extra memory from the PFN has been the usual meaning of
+memdesc, so doing an interm where the pointer is in the struct page is
+a reasonable starting point.
 
-> Note:
+> > Though overall, you won't find devices creating struct pages for their
+> > P2P memory today, so I'm not sure what the purpose is. Jonathan
+> > already got highly slammed for proposing code to the kernel that was
+> > unusable. Please don't repeat that. Other than a special NVMe use case
+> > the interface for P2P is DMABUF right now and it is not struct page
+> > backed.
+> >
 > 
-> Given that nowadays both _auxv and environ are mandatory symbols imposed
-> by nolibc of pointer size does it make sense to keep the code to make
-> int-sized errno optional?
+> Our approach is actually to extend DMABUF to provide struct page
+> backed attachment mappings, which as far as I understand sidesteps the
+> issues Jonathan ran into.
 
-While it indeed used to be related to having a data segment or not
-initially, it still has an impact on our ability to completely drop
-the errno setting code from all syscalls. Given the SET_ERRNO() macro
-now I guess it's very cheap to keep it, don't you think ?
+No DMABUF exporters do this today, so your patch series is just as
+incomplete as the prior ones. Please don't post it as non-RFC,
+unusable code like this must not be merged.
 
-Thanks,
-Willy
+> that supports dmabuf and in fact a lot of my tests use udmabuf to
+> minimize the dependencies. The RFC may come with a udmabuf selftest to
+> showcase that any dmabuf, even a mocked one, would be supported.
+
+That is not good enough to get merged. You need to get agreement and
+coded merged from actual driver owners of dmabuf exporters that they
+want to support this direction. As above it has surprising road
+blocks outside netdev :\
+
+Jason
