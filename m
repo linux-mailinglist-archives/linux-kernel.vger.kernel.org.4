@@ -2,59 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0058874E23B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4FD74E23D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjGJX0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S231277AbjGJXb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjGJX0j (ORCPT
+        with ESMTP id S229581AbjGJXbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:26:39 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D110898;
-        Mon, 10 Jul 2023 16:26:37 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1qJ0H4-0015aF-7o; Tue, 11 Jul 2023 09:26:35 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 11 Jul 2023 09:26:27 +1000
-Date:   Tue, 11 Jul 2023 09:26:27 +1000
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        John Allen <john.allen@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v5 00/11] Add dynamic boost control support
-Message-ID: <ZKyTo0izAmDVYW3C@gondor.apana.org.au>
-References: <20230623135001.18672-1-mario.limonciello@amd.com>
- <580858e8-27c8-ca3c-cb3d-61041298eb44@amd.com>
- <ZKyRUB7dGzQ/FaIG@gondor.apana.org.au>
- <12148445-cc19-28a2-2a36-7511d5c57e9f@amd.com>
+        Mon, 10 Jul 2023 19:31:53 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C69CA0;
+        Mon, 10 Jul 2023 16:31:51 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3FDA21BF204;
+        Mon, 10 Jul 2023 23:31:47 +0000 (UTC)
+From:   Artur Rojek <contact@artur-rojek.eu>
+To:     Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Subject: [PATCH v2] sh: hd64461: fix virq offsets
+Date:   Tue, 11 Jul 2023 01:31:32 +0200
+Message-ID: <20230710233132.69734-1-contact@artur-rojek.eu>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12148445-cc19-28a2-2a36-7511d5c57e9f@amd.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: contact@artur-rojek.eu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 06:25:21PM -0500, Limonciello, Mario wrote:
->
-> Right; this is why I was offering to re-base it on 6.5-rc1 if necessary.
+A recent change to start counting SuperH IRQ #s from 16 breaks support
+for the Hitachi HD64461 companion chip.
 
-If there are no major conflicts a rebase is not necessary.  It will
-only delay your patches further.
+Move the offchip IRQ base and HD64461 IRQ # by 16 in order to
+accommodate for the new virq numbering rules.
 
-Thanks,
+Fixes: a8ac2961148e ("sh: Avoid using IRQ0 on SH3 and SH4")
+Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+---
+
+v2: Make the IRQ base offset an explicit (64 + 16), as per review.
+
+ arch/sh/cchips/Kconfig        | 4 ++--
+ arch/sh/include/asm/hd64461.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/sh/cchips/Kconfig b/arch/sh/cchips/Kconfig
+index efde2edb5627..9659a0bc58de 100644
+--- a/arch/sh/cchips/Kconfig
++++ b/arch/sh/cchips/Kconfig
+@@ -29,9 +29,9 @@ endchoice
+ config HD64461_IRQ
+ 	int "HD64461 IRQ"
+ 	depends on HD64461
+-	default "36"
++	default "52"
+ 	help
+-	  The default setting of the HD64461 IRQ is 36.
++	  The default setting of the HD64461 IRQ is 52.
+ 
+ 	  Do not change this unless you know what you are doing.
+ 
+diff --git a/arch/sh/include/asm/hd64461.h b/arch/sh/include/asm/hd64461.h
+index afb24cb034b1..d2c485fa333b 100644
+--- a/arch/sh/include/asm/hd64461.h
++++ b/arch/sh/include/asm/hd64461.h
+@@ -229,7 +229,7 @@
+ #define	HD64461_NIMR		HD64461_IO_OFFSET(0x5002)
+ 
+ #define	HD64461_IRQBASE		OFFCHIP_IRQ_BASE
+-#define	OFFCHIP_IRQ_BASE	64
++#define	OFFCHIP_IRQ_BASE	(64 + 16)
+ #define	HD64461_IRQ_NUM		16
+ 
+ #define	HD64461_IRQ_UART	(HD64461_IRQBASE+5)
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.41.0
+
