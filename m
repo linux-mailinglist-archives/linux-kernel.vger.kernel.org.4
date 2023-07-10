@@ -2,290 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A486274D13A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BDC74D13E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjGJJUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S231134AbjGJJVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjGJJUV (ORCPT
+        with ESMTP id S229522AbjGJJVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:20:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0128B8E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:20:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688980819; x=1720516819;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=ly/MDRV2EOLHcR5c4dEoNmyijTn1dRwSPnIkbL/BJH0=;
-  b=lNrYko/wa+aaadU0DFKPgPX3FcNyWk3SrgzxRmosiFO5LXWYjZT94iDX
-   hMhzvlwL/3aIMRp68PP3LV/q4jmfN8U48lLUXVujX6S7+0r32JJl5UGPs
-   3xtVQ33AQf351eDuBnhtu03j7fmTC0C9js0+kmiY52kcbxjhI3oq9BsNT
-   f1o5Qd/Mn47ZUtdpvH6TTfSmTVGzYtBfe3wVdCeLkmCbEY20rLuMNOG9V
-   QyZMr8Po0vq9+rQjc6S9fnK5XvSILYPowMzlhOU+m65err5CdgyHk06N0
-   UNqtJPVp9cf4kSLbvZYsw6Q0LyPBClvFwIywpK8RpQZmsOWvEQSnaqn7q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="427988494"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="427988494"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 02:20:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="670880190"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="670880190"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 02:20:15 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Zhu <alexlzhu@fb.com>
-Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
-        <20230703135330.1865927-5-ryan.roberts@arm.com>
-        <87edlkgnfa.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <44e60630-5e9d-c8df-ab79-cb0767de680e@arm.com>
-        <524bacd2-4a47-2b8b-6685-c46e31a01631@redhat.com>
-        <ZKgZrNuxuq4ACvIb@casper.infradead.org>
-        <1e406f04-78ef-6573-e1f1-f0d0e0d5246a@redhat.com>
-        <9dd036a8-9ba3-0cc4-b791-cb3178237728@arm.com>
-        <87y1jofoyi.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <6c2f3127-9334-85ba-48f6-83a9c87abde0@arm.com>
-Date:   Mon, 10 Jul 2023 17:18:38 +0800
-In-Reply-To: <6c2f3127-9334-85ba-48f6-83a9c87abde0@arm.com> (Ryan Roberts's
-        message of "Mon, 10 Jul 2023 09:55:14 +0100")
-Message-ID: <874jmcf7kh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Mon, 10 Jul 2023 05:21:14 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C56A8E;
+        Mon, 10 Jul 2023 02:21:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RZylTb4Pj6pz9xzJBEvw2l/7m5p+jhQxPVjqw0oySABtzOqZgKDmaDD8mB2B/FA4II2WEOTg4srCoh1MCnjDxu8aw9rqSfHhZe0GIZLAIstHMEbkC8cTVjwhl1YRLDSc7zQSy+5Mryx+0a8Vo+sxx82QCsItALFmPNBiKXN6LzUz3sEPfuZ7NkuCdFVJSEJ5L42t6LTjLRIxOBQY1A46pj962r6NC6QSyHAnDwFbXn1jfF++VFuaDY71ZBWZ6hMVrtOFi0ve6KaUXqYiX2DhEtn0SU67xNCZDkFNqLaIIHlZiACP83MeNq3zMM2Aafc75D+uflzgRJ5NJhxSOwizUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6QdgIvHEVDFvfH4Ry7MyAFDnb5ixGI/D1dR9GEMzUq4=;
+ b=cLKR7ScJHkg3IGPKgwXZuKfQ0lacDxR8MV6HELIlgCA1nRbc1Daj+qIkJi9WMFqUZAG8ubEey9MvYmdPRroLztQbQNC3KVmukTL2g1uw4VBh8MyF3Kp7oFr89/FW3f6upu0VuHgaZf2P6opHo3wyC3SPGhJ7zeCZVxDFoPpoZHnpt+7ehGqmgXH0vkzzRYyRDorsPN15sV2rVBLyaxuKnVnratzoTnAMBV3egoFhcU4j5+Fie3FLpJ0+zAll9bkGDyxqdEO2Ju0m1K/Oa58ZVIBCevZizfPKQ6N/DdtIWuV7ktvrS80PVKBvmMoQvdgmuH3iJInrVkzmvRHeXJqU1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6QdgIvHEVDFvfH4Ry7MyAFDnb5ixGI/D1dR9GEMzUq4=;
+ b=Tmq8bp42iRwt+0eBMzFYPSfVYDd6vVJmeNxkPHfCJsRT6FRoaeV/zn39PbUXbmC21/Tms0YgXrGEc1cZPFm12p4Hg938xiTpLyh54UOlrht6mKKvUmj1CqPoDfemAgkH1Cru1r6h8qdh/w/TQtskDTeihkDms+gc+17deV0PeI8Yh+n2fULEAsrCaITYY3bsf5/uTcPQa95r0WRms/cITzoPTJ56houhjwXk1U8r4z9hXOL2KkwkTqz9C/jgFN1l3pW1zzF70gBs3pPWBspS9hU6uyWeIGum9C22oyeuoySltKg7vV9ghe0NGzwQtpC8NMb6IgzwcrcxXzxljyN5gQ==
+Received: from BN9PR03CA0196.namprd03.prod.outlook.com (2603:10b6:408:f9::21)
+ by SJ0PR12MB7006.namprd12.prod.outlook.com (2603:10b6:a03:486::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 09:21:09 +0000
+Received: from BN8NAM11FT099.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f9:cafe::c0) by BN9PR03CA0196.outlook.office365.com
+ (2603:10b6:408:f9::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30 via Frontend
+ Transport; Mon, 10 Jul 2023 09:21:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT099.mail.protection.outlook.com (10.13.177.197) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.18 via Frontend Transport; Mon, 10 Jul 2023 09:21:08 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Jul 2023
+ 02:20:48 -0700
+Received: from nvidia.com (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Jul
+ 2023 02:20:43 -0700
+From:   Gavin Li <gavinl@nvidia.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <xuanzhuo@linux.alibaba.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <jiri@nvidia.com>,
+        <dtatulea@nvidia.com>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+Subject: [PATCH net-next V1 0/4] virtio_net: add per queue interrupt coalescing support
+Date:   Mon, 10 Jul 2023 12:20:01 +0300
+Message-ID: <20230710092005.5062-1-gavinl@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT099:EE_|SJ0PR12MB7006:EE_
+X-MS-Office365-Filtering-Correlation-Id: 89f6122f-0968-45bd-e820-08db8126ff10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ABOmY2z23mprI7COSWl0vxU93XHRtFMO4l6ywTP2FokSmulC1yjfaXTaPWwqo/l3YbBJuYKz39thRrdV3vCDPuwnDvmi4M5xUijSYH4uP7xH//mMwuizZrjNatSU6I6h0VHaznF2jAcMZ95M4zKQDtPjjasgYDgYV71n1WjSxudxzJb0H/tNuIZA9KorZfkOrYpyVOffs0r722kUFMax29KBqLhpu0bNPRUqmAiiT9mwW775U+p7j2uM4LuPgcthu2qKLagUZxqXBkkxjSAxktijYN4eNzX2JxSgfFc5Mxf4qDk9J0Wbk12v76TV6Ih7SLJsTv4YClrMuWbZGpiMN36xr8EgAb8HRa+69EHA+mzNTLotKE6+OEFqkLj1HF+mlhnaAFybuHqisuG3YpYm+M13f5Iw3RGwAgD//nLNFbWyR8O1Lf8NHSVgqFA2Sv7ehYf/OiGkc9XYjGaRojFaQDQUJMooq1VRsWGJC48ewULj7EkF5tn8+BUHJUyGVAk0y5F+rfqE4cyvNThwANnl2C50E1ZM7gor2eTQ5oiVy1zhu7FdgyR1P4JqezzGzKogq0EcXhGNzmIag3GOv9JVpV4xmFPXyYj2dGi98uz0AoGcs/LMIBjDyY01pz1r5ZTmdg+SxRobfn5Dvj6vjRpy+29xvcIvjNVrq4CoReXDT43lEypBIRUuVxE10pgXdvReUkWoq861nj58oRvazO1WDnazdWtaq7nyjPL01NN0a/wsXiRzTht4FQNOXjhyZEVVTiWQizSru6dVNOsQRbXi9z5OdEQWyASS75twlmydx7hp8ArNZhUiwlQ7JBpRqknZ
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199021)(46966006)(40470700004)(36840700001)(6666004)(478600001)(7696005)(110136005)(54906003)(16526019)(1076003)(26005)(6286002)(70586007)(186003)(336012)(70206006)(2906002)(82310400005)(41300700001)(6636002)(4326008)(7636003)(316002)(5660300002)(7416002)(8936002)(8676002)(356005)(82740400003)(921005)(2616005)(86362001)(40460700003)(36756003)(47076005)(36860700001)(83380400001)(426003)(40480700001)(55016003)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 09:21:08.9064
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89f6122f-0968-45bd-e820-08db8126ff10
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7006
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ryan Roberts <ryan.roberts@arm.com> writes:
+Currently, coalescing parameters are grouped for all transmit and receive
+virtqueues. This patch series add support to set or get the parameters for
+a specified virtqueue.
 
-> On 10/07/2023 04:03, Huang, Ying wrote:
->> Ryan Roberts <ryan.roberts@arm.com> writes:
->>=20
->>> On 07/07/2023 15:07, David Hildenbrand wrote:
->>>> On 07.07.23 15:57, Matthew Wilcox wrote:
->>>>> On Fri, Jul 07, 2023 at 01:29:02PM +0200, David Hildenbrand wrote:
->>>>>> On 07.07.23 11:52, Ryan Roberts wrote:
->>>>>>> On 07/07/2023 09:01, Huang, Ying wrote:
->>>>>>>> Although we can use smaller page order for FLEXIBLE_THP, it's hard=
- to
->>>>>>>> avoid internal fragmentation completely.=C2=A0 So, I think that fi=
-nally we
->>>>>>>> will need to provide a mechanism for the users to opt out, e.g.,
->>>>>>>> something like "always madvise never" via
->>>>>>>> /sys/kernel/mm/transparent_hugepage/enabled.=C2=A0 I'm not sure wh=
-ether it's
->>>>>>>> a good idea to reuse the existing interface of THP.
->>>>>>>
->>>>>>> I wouldn't want to tie this to the existing interface, simply becau=
-se that
->>>>>>> implies that we would want to follow the "always" and "madvise" adv=
-ice too;
->>>>>>> That
->>>>>>> means that on a thp=3Dmadvise system (which is certainly the case f=
-or android and
->>>>>>> other client systems) we would have to disable large anon folios fo=
-r VMAs that
->>>>>>> haven't explicitly opted in. That breaks the intention that this sh=
-ould be an
->>>>>>> invisible performance boost. I think it's important to set the poli=
-cy for
->>>>>>> use of
->>>>>>
->>>>>> It will never ever be a completely invisible performance boost, just=
- like
->>>>>> ordinary THP.
->>>>>>
->>>>>> Using the exact same existing toggle is the right thing to do. If so=
-meone
->>>>>> specify "never" or "madvise", then do exactly that.
->>>>>>
->>>>>> It might make sense to have more modes or additional toggles, but
->>>>>> "madvise=3Dnever" means no memory waste.
->>>>>
->>>>> I hate the existing mechanisms.=C2=A0 They are an abdication of our
->>>>> responsibility, and an attempt to blame the user (be it the sysadmin
->>>>> or the programmer) of our code for using it wrongly.=C2=A0 We should =
-not
->>>>> replicate this mistake.
->>>>
->>>> I don't agree regarding the programmer responsibility. In some cases t=
-he
->>>> programmer really doesn't want to get more memory populated than reque=
-sted --
->>>> and knows exactly why setting MADV_NOHUGEPAGE is the right thing to do.
->>>>
->>>> Regarding the madvise=3Dnever/madvise/always (sys admin decision), mem=
-ory waste
->>>> (and nailing down bugs or working around them in customer setups) have=
- been very
->>>> good reasons to let the admin have a word.
->>>>
->>>>>
->>>>> Our code should be auto-tuning.=C2=A0 I posted a long, detailed outli=
-ne here:
->>>>> https://lore.kernel.org/linux-mm/Y%2FU8bQd15aUO97vS@casper.infradead.=
-org/
->>>>>
->>>>
->>>> Well, "auto-tuning" also should be perfect for everybody, but once rea=
-lity
->>>> strikes you know it isn't.
->>>>
->>>> If people don't feel like using THP, let them have a word. The "madvis=
-e" config
->>>> option is probably more controversial. But the "always vs. never" abso=
-lutely
->>>> makes sense to me.
->>>>
->>>>>> I remember I raised it already in the past, but you *absolutely* hav=
-e to
->>>>>> respect the MADV_NOHUGEPAGE flag. There is user space out there (for
->>>>>> example, userfaultfd) that doesn't want the kernel to populate any
->>>>>> additional page tables. So if you have to respect that already, then=
- also
->>>>>> respect MADV_HUGEPAGE, simple.
->>>>>
->>>>> Possibly having uffd enabled on a VMA should disable using large foli=
-os,
->>>>
->>>> There are cases where we enable uffd *after* already touching memory (=
-postcopy
->>>> live migration in QEMU being the famous example). That doesn't fly.
->>>>
->>>>> I can get behind that.=C2=A0 But the notion that userspace knows what=
- it's
->>>>> doing ... hahaha.=C2=A0 Just ignore the madvise flags.=C2=A0 Userspac=
-e doesn't
->>>>> know what it's doing.
->>>>
->>>> If user space sets MADV_NOHUGEPAGE, it exactly knows what it is doing =
-... in
->>>> some cases. And these include cases I care about messing with sparse V=
-M memory :)
->>>>
->>>> I have strong opinions against populating more than required when user=
- space set
->>>> MADV_NOHUGEPAGE.
->>>
->>> I can see your point about honouring MADV_NOHUGEPAGE, so think that it =
-is
->>> reasonable to fallback to allocating an order-0 page in a VMA that has =
-it set.
->>> The app has gone out of its way to explicitly set it, after all.
->>>
->>> I think the correct behaviour for the global thp controls (cmdline and =
-sysfs)
->>> are less obvious though. I could get on board with disabling large anon=
- folios
->>> globally when thp=3D"never". But for other situations, I would prefer t=
-o keep
->>> large anon folios enabled (treat "madvise" as "always"),
->>=20
->> If we have some mechanism to auto-tune the large folios usage, for
->> example, detect the internal fragmentation and split the large folio,
->> then we can use thp=3D"always" as default configuration.  If my memory
->> were correct, this is what Johannes and Alexander is working on.
->
-> Could you point me to that work? I'd like to understand what the mechanis=
-m is.
-> The other half of my work aims to use arm64's pte "contiguous bit" to tel=
-l the
-> HW that a span of PTEs share the same mapping and is therefore coalesced =
-into a
-> single TLB entry. The side effect of this, however, is that we only have a
-> single access and dirty bit for the whole contpte extent. So I'd like to =
-avoid
-> any mechanism that relies on getting access/dirty at the base page granul=
-arity
-> for a large folio.
+When the traffic between virtqueues is unbalanced, for example, one virtqueue
+is busy and another virtqueue is idle, then it will be very useful to
+control coalescing parameters at the virtqueue granularity.
 
-Please take a look at the THP shrinker patchset,
+Example command:
+$ ethtool -Q eth5 queue_mask 0x1 --coalesce tx-packets 10
+Would set max_packets=10 to VQ 1.
+$ ethtool -Q eth5 queue_mask 0x1 --coalesce rx-packets 10
+Would set max_packets=10 to VQ 0.
+$ ethtool -Q eth5 queue_mask 0x1 --show-coalesce
+ Queue: 0
+ Adaptive RX: off  TX: off
+ stats-block-usecs: 0
+ sample-interval: 0
+ pkt-rate-low: 0
+ pkt-rate-high: 0
 
-https://lore.kernel.org/linux-mm/cover.1667454613.git.alexlzhu@fb.com/
+ rx-usecs: 222
+ rx-frames: 0
+ rx-usecs-irq: 0
+ rx-frames-irq: 256
 
->>=20
->>> with the argument that
->>> their order is much smaller than traditional THP and therefore the inte=
-rnal
->>> fragmentation is significantly reduced.
->>=20
->> Do you have any data for this?
->
-> Some; its partly based on intuition that the smaller the allocation unit,=
- the
-> smaller the internal fragmentation. And partly on peak memory usage data =
-I've
-> collected for the benchmarks I'm running, comparing baseline-4k kernel wi=
-th
-> baseline-16k and baseline-64 kernels along with a 4k kernel that supports=
- large
-> anon folios (I appreciate that's not exactly what we are talking about he=
-re, and
-> it's not exactly an extensive set of results!):
->
->
-> Kernel Compliation with 8 Jobs:
-> | kernel        |   peak |
-> |:--------------|-------:|
-> | baseline-4k   |   0.0% |
-> | anonfolio     |   0.1% |
-> | baseline-16k  |   6.3% |
-> | baseline-64k  |  28.1% |
->
->
-> Kernel Compliation with 80 Jobs:
-> | kernel        |   peak |
-> |:--------------|-------:|
-> | baseline-4k   |   0.0% |
-> | anonfolio     |   1.7% |
-> | baseline-16k  |   2.6% |
-> | baseline-64k  |  12.3% |
->
+ tx-usecs: 222
+ tx-frames: 0
+ tx-usecs-irq: 0
+ tx-frames-irq: 256
 
-Why is anonfolio better than baseline-64k if you always allocate 64k
-anonymous folio?  Because page cache uses 64k in baseline-64k?
+ rx-usecs-low: 0
+ rx-frame-low: 0
+ tx-usecs-low: 0
+ tx-frame-low: 0
 
-We may need to test some workloads with sparse access patterns too.
+ rx-usecs-high: 0
+ rx-frame-high: 0
+ tx-usecs-high: 0
+ tx-frame-high: 0
 
-Best Regards,
-Huang, Ying
+In this patch series:
+Patch-1: Extract interrupt coalescing settings to a structure.
+Patch-2: Extract get/set interrupt coalesce to a function.
+Patch-3: Support per queue interrupt coalesce command.
+Patch-4: Enable per queue interrupt coalesce feature.
 
->>=20
->>> I really don't want to end up with user
->>> space ever having to opt-in (with MADV_HUGEPAGE) to see the benefits of=
- large
->>> anon folios.
->>>
->>> I still feel that it would be better for the thp and large anon folio c=
-ontrols
->>> to be independent though - what's the argument for tying them together?
->>>
+Gavin Li (4):
+  virtio_net: extract interrupt coalescing settings to a structure
+  virtio_net: extract get/set interrupt coalesce to a function
+  virtio_net: support per queue interrupt coalesce command
+  virtio_net: enable per queue interrupt coalesce feature
+
+ drivers/net/virtio_net.c        | 169 ++++++++++++++++++++++++++------
+ include/uapi/linux/virtio_net.h |  14 +++
+ 2 files changed, 154 insertions(+), 29 deletions(-)
+
+-- 
+2.39.1
 
