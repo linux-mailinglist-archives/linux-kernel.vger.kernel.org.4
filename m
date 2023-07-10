@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BC974DC37
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B089E74DC3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjGJRVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        id S232350AbjGJRWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjGJRVd (ORCPT
+        with ESMTP id S232429AbjGJRWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:21:33 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F80E5C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:21:14 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-766fd5f9536so332767585a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689009674; x=1691601674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vDKqe6h9VsjQuDpKI9KRg1N7kbgZMbKA4ecQ1xozFqs=;
-        b=IMsBYjy3Toq+G3vBDgnvPIjgdoK/8dHggIY3Hs7qoUt25YkpzOmPBi/nHn//DrOYJB
-         /Ua+/QBa5Use8IJESRSiFunKdkGqNHd+YUqoRuJfQ4kcz9FzGR8GIZXsQpoAByEtiRoW
-         aHShM1l7QbL76OMNkc1lG2qoSZ//vH0KwhSWZJu3JAj2Jxo8XWZBsa1X0VxWF2oEWd2s
-         Qu1lVdsr/969sUuC9+ClJLKaydssewFZiIszGWbW/S6Cjo7VrKDsSxZ7RPNvyFeMxk1W
-         6TYZEng5dbEcOdn1U6fXy08kcBT33/DATCe+/VchSTeFDgqF+J/WUVPSVonRZqpbV4JY
-         T2ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689009674; x=1691601674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vDKqe6h9VsjQuDpKI9KRg1N7kbgZMbKA4ecQ1xozFqs=;
-        b=kPIplTuqw6AK82mSQCSykAu8RhwaFCBzsV2pxGuW18lUFD2ektIUudBE+zvr6Pfh3/
-         2ailg8e792EBqrr9IhpkipVAAOcQ6B5on8C0H+V+cN9LjcuRYxF8cm4unSHP9pZzqrrR
-         soZHwSs+0x6LeJa9mAA4moHAFHQn2V7rvbLAw/oqZKqqizWpCBh/nvC89f197xHG7PlT
-         H8YrHrqEYa/QIAX9SzYvPm0xRDDPBlGhzG+30uSkQ/tzHXJngxhoGphjvUGG4iompLLS
-         ktFRD82EpszzrfYXUBBY7yViUVtk9YBI9ZHdVk2/NEMKUkhF2UDW/YcICqAaictNKttr
-         YvpA==
-X-Gm-Message-State: ABy/qLbtN46jQqaDnbPoIlBwiMD5TfWN7RKp3rGp9bd6jY94lFKEHhvX
-        73WSmzr6s9Czu7inUaH9YLXrbA==
-X-Google-Smtp-Source: APBJJlEZjgv87sGoqCoA2OyNTenIrI3xxoXPoRV2o/wxukY2mPE0POHCvXNINrLxikThI/IjdSHCSQ==
-X-Received: by 2002:a05:620a:198f:b0:767:205b:7f4b with SMTP id bm15-20020a05620a198f00b00767205b7f4bmr13197531qkb.41.1689009673882;
-        Mon, 10 Jul 2023 10:21:13 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id g6-20020ae9e106000000b00767dc4c539bsm61695qkm.44.2023.07.10.10.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 10:21:13 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qIuZT-0004Dq-J0;
-        Mon, 10 Jul 2023 14:21:11 -0300
-Date:   Mon, 10 Jul 2023 14:21:11 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
- page
-Message-ID: <ZKw+BxRUrGC8LW5P@ziepe.ca>
-References: <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com>
- <20230628211624.531cdc58@thinkpad-T15>
- <cd7c2851-1440-7220-6c53-16b343b1474@google.com>
- <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca>
- <20230629175645.7654d0a8@thinkpad-T15>
- <edaa96f-80c1-1252-acbb-71c4f045b035@google.com>
- <7bef5695-fa4a-7215-7e9d-d4a83161c7ab@google.com>
- <20230704171905.1263478f@thinkpad-T15>
- <e678affb-5eee-a055-7af1-1d29a965663b@google.com>
- <20230705145516.7d9d554d@thinkpad-T15>
+        Mon, 10 Jul 2023 13:22:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C33B10D;
+        Mon, 10 Jul 2023 10:21:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE666112F;
+        Mon, 10 Jul 2023 17:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7CBC433C7;
+        Mon, 10 Jul 2023 17:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689009717;
+        bh=CpTuLljbdaBkyoyitx9Zt2kT2mpNPwthrmEzA4FZh0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jH9O9AHymoIzZncRhS0boDcQENihuPJ9tiOMacCBW9S1HyXoS4fmk05l3yiGNAo2K
+         KI1hyt+ZX+7NEHBvWCqXjT4yNe/LtAsjRDwPWtbPDyinDXBlqwNxiz4igGDEvFujjT
+         HvuvVf7zfJpIqBT2DHBv4rYYp+mzBEGWoHelZgtBRzC5a9ODbB3jbYPRYOu+MpK8DF
+         3DKPCT3xy2bGoPblEhEFYavUFRlVpmVElN1x+riHF3GGBKfZ16h5m4CDQWCrPt/Kv/
+         vK54neWN9FR7qTjWY6hgaJiuvxPLSkqkKUC983rTnSx7XHJONotnyRARakAtXoacgn
+         BzkLNw5lEztpw==
+Date:   Mon, 10 Jul 2023 18:21:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 08/15] spi: Clean up headers
+Message-ID: <54bb9fe7-fb62-4c2e-ae36-d2c10648ee27@sirena.org.uk>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w5h1T0k99Bnkn5Gc"
 Content-Disposition: inline
-In-Reply-To: <20230705145516.7d9d554d@thinkpad-T15>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
+X-Cookie: Do you have lysdexia?
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 02:55:16PM +0200, Gerald Schaefer wrote:
 
-> Ah ok, I was aware of that "semi-RCU" fallback logic in tlb_remove_table(),
-> but that is rather a generic issue, and not s390-specific. I thought you
-> meant some s390-oddity here, of which we have a lot, unfortunately...
-> Of course, we call tlb_remove_table() from our page_table_free_rcu(), so
-> I guess you could say that page_table_free_rcu() cannot guarantee what
-> tlb_remove_table() cannot guarantee.
+--w5h1T0k99Bnkn5Gc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The issue is the arches don't provide a reliable way to RCU free
-things, so the core code creates an RCU situation using the MMU
-batch. With the non-RCU compatible IPI fallback. So it isn't actually
-RCU, it is IPI but optimized with RCU in some cases.
+On Mon, Jul 10, 2023 at 06:49:25PM +0300, Andy Shevchenko wrote:
+> There is a few things done:
+> - include only the headers we are direct user of
+> - when pointer is in use, provide a forward declaration
+> - add missing headers
+> - group generic headers and subsystem headers
+> - sort each group alphabetically
 
-When Hugh introduces a reliable way to RCU free stuff we could fall
-back to that in the TLB code instead of invoking the synchronize_rcu()
+The previous commit was supposed to be sorting things and AFAICT did
+so...
 
-For lots of arches, S390 included after this series, this would be
-pretty easy.
+> +struct spi_device_id;
 
-What I see now as the big trouble is that this series only addresses
-PTE RCU'ness and making all the other levels RCUable would be much
-harder on some arches like power.
+Why are we adding this given that there's also an inclusion of
+mod_devicetable that you didn't remove?
 
-In short we could create a CONFIG_ARCH_RCU_SAFE_PAGEWALK and it could
-be done on alot of arches quite simply, but at least not power. Which
-makes me wonder about the value, but maybe it could shame power into
-doing something..
+--w5h1T0k99Bnkn5Gc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-However, calling things 'page_table_free_rcu()' when it doesn't
-actually always do RCU but IPI optimzed RCU is an unfortunate name :(
-As long as you never assume it does RCU anywhere else, and don't use
-rcu_read_lock(), it is fine :)
+-----BEGIN PGP SIGNATURE-----
 
-The corner case is narrow, you have to OOM the TLB batching before you
-loose the RCU optimization of the IPI.  Then you can notice that
-rcu_read_lock() doesn't actually protect against concurrent free.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsPicACgkQJNaLcl1U
+h9CPUAf/RRQIrb0PfZnRSA7kc94fTv5rQbNfPboY9/94tcd2SIZjbZezvGfMuSZp
+6KHTd2Kkiwzya3J0dExwrNiIzmVrIGl+uWJWbvppEpglEeE0BNrEl1a9mRgzaQUk
+Ys7HqCSSbbtJqGSlgQAODJPS7eaPIw1ChR5Wv5B+4AlUGavA+iCrwDK+TD0dFZpQ
+ovdLIOvU+8RA2XrWSPmDSi4ywOFt9I70VxOWbR9rbfQcvXLRaJA1FOJa2ZArMhHy
+CULubdIfA4BO7mOmyLX63DXgjZqu703oW4W5RFmjc+sa9xmoSdlCYflpgXX/xSqG
+VmDSPECCeUQc9NZwlOM4i7+iPwCymQ==
+=E/m2
+-----END PGP SIGNATURE-----
 
-Jason
+--w5h1T0k99Bnkn5Gc--
