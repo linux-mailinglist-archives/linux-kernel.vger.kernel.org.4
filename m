@@ -2,74 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B13B74D0AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBAA74D0B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjGJIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S230361AbjGJI7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbjGJIzh (ORCPT
+        with ESMTP id S229493AbjGJI7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:55:37 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C063EC3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:55:35 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b701e1c80fso61581071fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688979334; x=1691571334;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yn9ioLNwEgAe0GJRu4yxWz0XbMvGtpC919vku2LmRu4=;
-        b=FlzVImcE4J5Y7YSTzYuyGCbRicW0KB3qKsGvjoU8PQ0R4leQk/PcmX8CTdF6m+2s4H
-         vCVuFkamxEX2swHPAINA66ayYIKUC7MC0IPOGd874mgKnuey/7lkYXAI1KCtSJocLmpl
-         m+de3Bx80f6tout5/MvTvg2JSwXrAKNHlXzutUNUtYUmCDEIrREd8MYwbbGEeDUAlONi
-         jOUE48BKU4CtjaSjZXGsq0ADM7spH7d/s1rOq5OWD9Ti64TfQud+kAVVFkNwZHlRSPJz
-         lzZknudmSWRe+YPoIYGAJ+9z8j2O2FwWH4T2KnQv40RQvnmWX754+zsll9n1HkFyXjjy
-         zPqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688979334; x=1691571334;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yn9ioLNwEgAe0GJRu4yxWz0XbMvGtpC919vku2LmRu4=;
-        b=Kxww/A0QnChp/QIBUwtuF5NalbpXzYOaC9bQJTldco4PvPc86SA1QMy7BA3lOiTn60
-         qYE9LpasfzIOqMDUAU9twct4yGnzChAgvDztZi16WRo3qk6bRWleRDI2rMIHQSFSiStM
-         PjhOmjTHq6S+fB3IiVRFjttzfQ8UQmzFB4vOo5lmF3fW5h+bF8h9ZGJyVNS1so/EwNKj
-         Upwgq7mbl3sm+zQLVIgdzQqjq7LrskCCIyNjoS6wA0RaGq0dfPDMtT0bvfPZ9Cw4tDoU
-         QhxCytfQjwZ2lu/yl53xBbZQANoODxksc+gnmWggwWi6CecdqMF8CVaVC+x6vYdWclvk
-         VG5g==
-X-Gm-Message-State: ABy/qLYNhydguZQhp0PvtzZKUEBznIYck7vv1tAlqGCjIaqoh2IE7ZXy
-        Pjb3HMD3cB0FoHpcx3lqtkvi2A==
-X-Google-Smtp-Source: APBJJlHf6M7nrwzpmLVNv3eHxsbeIXrb/TI4xh1WONMNAfVQ84+jVpvqnsf2XyHfPXAhMcBR2Mg56g==
-X-Received: by 2002:a2e:9206:0:b0:2b6:ba00:f733 with SMTP id k6-20020a2e9206000000b002b6ba00f733mr8666371ljg.18.1688979333800;
-        Mon, 10 Jul 2023 01:55:33 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id k12-20020a7bc30c000000b003fba92fad35sm9677016wmj.26.2023.07.10.01.55.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 01:55:33 -0700 (PDT)
-Message-ID: <6d3f24a4-ae70-49eb-6e41-86baa1db6bed@linaro.org>
-Date:   Mon, 10 Jul 2023 10:55:32 +0200
+        Mon, 10 Jul 2023 04:59:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6015C3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:59:15 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QzyXZ1hN1ztR8c;
+        Mon, 10 Jul 2023 16:56:14 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 16:59:10 +0800
+Subject: Re: [PATCH 8/8] mm: memory-failure: fix race window when trying to
+ get hugetlb folio
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20230708085744.3599311-1-linmiaohe@huawei.com>
+ <20230708085744.3599311-9-linmiaohe@huawei.com>
+ <20230710075812.GH1686200@ik1-406-35019.vs.sakura.ne.jp>
+ <74acb109-76cc-3990-c770-8330e343ef54@huawei.com>
+ <20230710083925.GA1754785@ik1-406-35019.vs.sakura.ne.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <147fb145-1289-4526-862e-0cb63c9711e0@huawei.com>
+Date:   Mon, 10 Jul 2023 16:59:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V5] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
+In-Reply-To: <20230710083925.GA1754785@ik1-406-35019.vs.sakura.ne.jp>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Di Shen <di.shen@unisoc.com>, lukasz.luba@arm.com,
-        rafael@kernel.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, orsonzhai@gmail.com, zhanglyra@gmail.com
-References: <20230710033234.28641-1-di.shen@unisoc.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230710033234.28641-1-di.shen@unisoc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,143 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2023 05:32, Di Shen wrote:
-> When the thermal trip point is changed, the governor should
-> be reset so that the policy algorithm can be updated to adapt
-> to the new trip point.
+On 2023/7/10 16:39, Naoya Horiguchi wrote:
+> On Mon, Jul 10, 2023 at 04:32:27PM +0800, Miaohe Lin wrote:
+>> On 2023/7/10 15:58, Naoya Horiguchi wrote:
+>>> On Sat, Jul 08, 2023 at 04:57:44PM +0800, Miaohe Lin wrote:
+>>>> page_folio() is fetched before calling get_hwpoison_hugetlb_folio()
+>>>> without hugetlb_lock being held. So hugetlb page could be demoted
+>>>> before get_hwpoison_hugetlb_folio() holding hugetlb_lock but after
+>>>> page_folio() is fetched. So get_hwpoison_hugetlb_folio() will hold
+>>>> unexpected extra refcnt of hugetlb folio while leaving demoted page
+>>>> un-refcnted.
+>>>
+>>> Very nice, thank you for finding the issue.
+>>>
+>>>>
+>>>> Fixes: 25182f05ffed ("mm,hwpoison: fix race with hugetlb page allocation")
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/memory-failure.c | 18 ++++++++++++++----
+>>>>  1 file changed, 14 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>>> index 76d88d27cdbe..066bf57f2d22 100644
+>>>> --- a/mm/memory-failure.c
+>>>> +++ b/mm/memory-failure.c
+>>>> @@ -1388,8 +1388,14 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
+>>>>  	bool hugetlb = false;
+>>>>  
+>>>>  	ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, false);
+>>>> -	if (hugetlb)
+>>>> -		return ret;
+>>>> +	if (hugetlb) {
+>>>> +		if (folio == page_folio(page))
+>>>> +			return ret;
+>>>
+>>> Some short comment about the race against demotion here is helpful.
+>>
+>> Does the below comment makes sense to you?
+>>
+>> "
+>>   Make sure hugetlb demotion did not happen from under us.
+>> "
 > 
-> 1.Thermal governor is working for the passive trip point or active
-> trip point. Therefore, when the trip point is changed it should
-> reset the governor only for passic/active trip points.
+> Yes, this sounds fine.
+
+Will do it in v2. Thanks.
+
 > 
-> 2.For "power_allocator" governor reset, the parameters of pid
-> controller and the states of power cooling devices should be reset.
+> Thanks,
+> Naoya Horiguchi
 > 
-> 2.1
-> The IPA controls temperature using PID mechanism. It is a closed-
-> loop feedback monitoring system. It uses the gap between target
-> temperature and current temperature which says "error" as the
-> input of the PID controller:
+> .
 > 
-> err = desired_temperature - current_temperature
-> P_max =
-> k_p * err + k_i * err_integral + k_d * diff_err + sustainable_power
-> 
-> That algorithm can 'learn' from the 'observed' in the past reaction
-> for it's control decisions and accumulates that information in the
-> I(Integral) part so that it can conpensate for those 'learned'
-> mistakes.
-> 
-> Based on the above, the most important is the desired temperature
-> comes from the trip point. When the trip point is changed, all the
-> previous learned errors won't help for the IPA. So the pid parameters
-> should be reset for IPA governor reset.
-> 
-> 2.2
-> Other wise, the cooling devices should also be reset when the trip
-> point is changed.
-> 
-> This patch adds an ops for the thermal_governor structure to reset
-> the governor and give the 'reset' function definition for power
-> allocator. The ops is called when the trip points are changed via
-> sysfs interface.
-> 
-> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> ---
->   drivers/thermal/gov_power_allocator.c | 9 +++++++++
->   drivers/thermal/thermal_trip.c        | 5 +++++
->   include/linux/thermal.h               | 3 +++
->   3 files changed, 17 insertions(+)
-> 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index 8642f1096b91..8d17a10671e4 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -729,10 +729,19 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
->   	return allocate_power(tz, trip.temperature);
->   }
->   
-> +static void power_allocator_reset(struct thermal_zone_device *tz)
-> +{
-> +	struct power_allocator_params *params = tz->governor_data;
-> +
-> +	reset_pid_controller(params);
-> +	allow_maximum_power(tz, true);
-
-Do you really want to allow the maximum power? What about if the trip 
-temperature is decreased ?
-
-You want maximum power only if the mitigation ends.
-
-> +}
-> +
->   static struct thermal_governor thermal_gov_power_allocator = {
->   	.name		= "power_allocator",
->   	.bind_to_tz	= power_allocator_bind,
->   	.unbind_from_tz	= power_allocator_unbind,
->   	.throttle	= power_allocator_throttle,
-> +	.reset		= power_allocator_reset,
->   };
->   THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
-> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-> index 907f3a4d7bc8..13bbe029c6ab 100644
-> --- a/drivers/thermal/thermal_trip.c
-> +++ b/drivers/thermal/thermal_trip.c
-> @@ -173,6 +173,11 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
->   	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
->   		tz->trips[trip_id] = *trip;
->   
-> +	/* Reset the governor only when the trip type is active or passive. */
-> +	ret = (trip->type == THERMAL_TRIP_PASSIVE || trip->type == THERMAL_TRIP_ACTIVE);
-
-Actually we have the trip points:
-
-ACTIVE, PASSIVE, HOT and CRITICAL
-
-The last two ones should not be writable.
-
-Instead of this test, it would be cleaner to only make the ACTIVE and 
-PASSIVE trip point writable when the CONFIG_THERMAL_WRITABLE_TRIPS 
-option is set. Consequently, other trip points won't be writable and 
-this test can go away as set_trip will be protected by a RO sysfs file 
-property.
-
-> +	if (ret && t.temperature != trip->temperature && tz->governor && tz->governor->reset)
-
-The temperature test is duplicated because it is already done in the 
-block before.
-
-> +		tz->governor->reset(tz);
-> +
->   	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
->   				      trip->temperature, trip->hysteresis);
->   
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 87837094d549..d27d053319bf 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -197,6 +197,8 @@ struct thermal_zone_device {
->    *			thermal zone.
->    * @throttle:	callback called for every trip point even if temperature is
->    *		below the trip point temperature
-> + * @reset:	callback called for governor reset
-> + *
->    * @governor_list:	node in thermal_governor_list (in thermal_core.c)
->    */
->   struct thermal_governor {
-> @@ -204,6 +206,7 @@ struct thermal_governor {
->   	int (*bind_to_tz)(struct thermal_zone_device *tz);
->   	void (*unbind_from_tz)(struct thermal_zone_device *tz);
->   	int (*throttle)(struct thermal_zone_device *tz, int trip);
-> +	void (*reset)(struct thermal_zone_device *tz);
->   	struct list_head	governor_list;
->   };
->   
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
