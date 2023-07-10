@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7593974DB43
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD8374DB49
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjGJQkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S230221AbjGJQlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGJQkH (ORCPT
+        with ESMTP id S229450AbjGJQlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:40:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 966F793;
-        Mon, 10 Jul 2023 09:40:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 578312B;
-        Mon, 10 Jul 2023 09:40:46 -0700 (PDT)
-Received: from [10.57.36.32] (unknown [10.57.36.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADC5E3F740;
-        Mon, 10 Jul 2023 09:40:01 -0700 (PDT)
-Message-ID: <38f0c8f3-5fb3-a18a-456d-867da2998786@arm.com>
-Date:   Mon, 10 Jul 2023 17:40:00 +0100
+        Mon, 10 Jul 2023 12:41:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AD793;
+        Mon, 10 Jul 2023 09:41:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C937B6112C;
+        Mon, 10 Jul 2023 16:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4932AC433C8;
+        Mon, 10 Jul 2023 16:41:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689007276;
+        bh=BklOa+pPKx6unr8IyAuyGhh7uFZFgnSkVkf6qlGHnAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PInj/CefJW6G0t6ImrUTddulyxavfXgH5IsG3VLk4AWrOuJSoqOjdAzKXwYKmmO9+
+         TpH8uMhQ+NEHXZkBkP9/E/lPxdyKgDL+eyDXS+gqft4HVdmnjyjH6PbUnm6/NZs9Bu
+         r9ef3qEtXslV49T1zzzbJt5bp36OJ07JvRxmL8NERABHTTvvE/Ocj7BxwGAm9rr5e6
+         gmG+HRchwacb9T9ZJ7npTesYRYHZvpm+A3BArDifgwRYwgpkkf4Ro2tIx8zbmK3MHI
+         O18F7oZVF04V9d45m1+fc0aBurdqjBPaJYnNPNhPoDlRgG1WUDf42dslI1A3YaOt1Q
+         INgpXraznkmIw==
+Date:   Mon, 10 Jul 2023 17:41:10 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Piyush Mehta <piyush.mehta@amd.com>, nava.kishore.manne@amd.com,
+        linux-kernel@vger.kernel.org, git@amd.com, wsa@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        broonie@kernel.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, dlemoal@kernel.org,
+        michal.simek@amd.com, sebastian.reichel@collabora.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: firmware: add reset-controller property
+Message-ID: <20230710-hatchery-pesky-6f837788e576@spud>
+References: <20230709172542.1393828-1-piyush.mehta@amd.com>
+ <168892849854.136160.7620779203584875736.robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH V6 6/6] coresight: etm4x: Add ACPI support in platform
- driver
-To:     rafael@kernel.org, Len Brown <lenb@kernel.org>
-Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        Steve Clevenger <scclevenger@os.amperecomputing.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        gregkh@linuxfoundation.org
-References: <20230710062500.45147-1-anshuman.khandual@arm.com>
- <20230710062500.45147-7-anshuman.khandual@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230710062500.45147-7-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hXqBLkZYbGg49ffb"
+Content-Disposition: inline
+In-Reply-To: <168892849854.136160.7620779203584875736.robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,87 +62,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rafael, Len
 
-On 10/07/2023 07:25, Anshuman Khandual wrote:
-> From: Suzuki K Poulose <suzuki.poulose@arm.com>
-> 
-> Drop ETM4X ACPI ID from the AMBA ACPI device list, and instead just move it
-> inside the new ACPI devices list detected and used via platform driver.
-> 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Mike Leach <mike.leach@linaro.org>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Cc: linux-acpi@vger.kernel.org
-> Cc: coresight@lists.linaro.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for ACPI specific changes)
-> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+--hXqBLkZYbGg49ffb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We would like to queue this via coresight tree. The acpi_amba bits have
-been reviewed by Sudeep. Please could you give us an Ack, if you are
-happy with the proposal ?
+On Sun, Jul 09, 2023 at 12:48:18PM -0600, Rob Herring wrote:
+>=20
+> On Sun, 09 Jul 2023 22:55:42 +0530, Piyush Mehta wrote:
+> > The reset controller is responsible for managing both device-level rese=
+ts
+> > and individual PMC (Power Management Controller) block resets.
+> >=20
+> > To facilitate this functionality reset-controller property is added to =
+the
+> > firmware device tree binding.
+> >=20
+> > Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> > ---
+> >  .../firmware/xilinx/xlnx,zynqmp-firmware.yaml         | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >=20
+>=20
+> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>=20
+> yamllint warnings/errors:
+>=20
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/f=
+irmware/xilinx/xlnx,zynqmp-firmware.yaml:
+> Error in referenced schema matching $id: http://devicetree.org/schemas/re=
+set/xlnx,zynqmp-reset.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/f=
+irmware/xilinx/xlnx,zynqmp-firmware.example.dtb: versal-firmware: reset-con=
+troller: False schema does not allow {'compatible': ['xlnx,zynqmp-reset'], =
+'#reset-cells': [[1]]}
+> 	from schema $id: http://devicetree.org/schemas/firmware/xilinx/xlnx,zynq=
+mp-firmware.yaml#
+> Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.ex=
+ample.dtb: /example-0/versal-firmware/reset-controller: failed to match any=
+ schema with compatible: ['xlnx,zynqmp-reset']
+>=20
+> doc reference errors (make refcheckdocs):
+>=20
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202307=
+09172542.1393828-1-piyush.mehta@amd.com
+>=20
+> The base for the series is generally the latest rc1. A different dependen=
+cy
+> should be noted in *this* patch.
+>=20
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>=20
+> pip3 install dtschema --upgrade
+>=20
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your sch=
+ema.
+>=20
 
-Kind regards
-Suzuki
+When you fix this error, please add an indication of the platform in
+question to $subject, "dt-bindings: firmware: add reset-controller property"
+sounds like it applies to all firmware bindings..
 
+Cheers,
+Conor.
 
-> ---
->   drivers/acpi/acpi_amba.c                           |  1 -
->   drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
->   2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
-> index f5b443ab01c2..099966cbac5a 100644
-> --- a/drivers/acpi/acpi_amba.c
-> +++ b/drivers/acpi/acpi_amba.c
-> @@ -22,7 +22,6 @@
->   static const struct acpi_device_id amba_id_list[] = {
->   	{"ARMH0061", 0}, /* PL061 GPIO Device */
->   	{"ARMH0330", 0}, /* ARM DMA Controller DMA-330 */
-> -	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
->   	{"ARMHC501", 0}, /* ARM CoreSight ETR */
->   	{"ARMHC502", 0}, /* ARM CoreSight STM */
->   	{"ARMHC503", 0}, /* ARM CoreSight Debug */
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index 43f583987250..703b6fcbb6a5 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -3,6 +3,7 @@
->    * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->    */
->   
-> +#include <linux/acpi.h>
->   #include <linux/bitops.h>
->   #include <linux/kernel.h>
->   #include <linux/moduleparam.h>
-> @@ -2347,12 +2348,21 @@ static const struct of_device_id etm4_sysreg_match[] = {
->   	{}
->   };
->   
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id etm4x_acpi_ids[] = {
-> +	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, etm4x_acpi_ids);
-> +#endif
-> +
->   static struct platform_driver etm4_platform_driver = {
->   	.probe		= etm4_probe_platform_dev,
->   	.remove		= etm4_remove_platform_dev,
->   	.driver			= {
->   		.name			= "coresight-etm4x",
->   		.of_match_table		= etm4_sysreg_match,
-> +		.acpi_match_table	= ACPI_PTR(etm4x_acpi_ids),
->   		.suppress_bind_attrs	= true,
->   		.pm			= &etm4_dev_pm_ops,
->   	},
+--hXqBLkZYbGg49ffb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKw0pgAKCRB4tDGHoIJi
+0rnMAP4vUl3fJNAP7YMUJwwBkLCd2p+d2m74MMytBGPmwWImRQD8DfhzqqPCDxxX
+PPaFDCUfBf0If2C2+cGKd2pO2kPGJAc=
+=gMVg
+-----END PGP SIGNATURE-----
+
+--hXqBLkZYbGg49ffb--
