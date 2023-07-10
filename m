@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA72674DABF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E7374DAC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjGJQIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S232320AbjGJQIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjGJQID (ORCPT
+        with ESMTP id S229954AbjGJQIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:08:03 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0DFB1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:08:02 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-40371070eb7so398421cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:08:02 -0700 (PDT)
+        Mon, 10 Jul 2023 12:08:31 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76ECC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:08:29 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-40371070eb7so398831cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689005281; x=1691597281;
+        d=google.com; s=20221208; t=1689005308; x=1691597308;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AjKMlN7Hn/eUWbs2kPX1xd2yBg/zUqu1UnIgvGuGwT8=;
-        b=IbOhZLPDDP4ChlJN7mEf2wdW3kbIT7JaGqTbUpcbpMhIdOqTeW7DqC6HCyVdxS6p3E
-         NBWDKi01JdTf83cVhXOv2z5WT6ByNyjzEBJtaRWaP3Ld6SEYlbTCkfCCRueCrLdsROc0
-         F3LQe/ey+43hD1wrWgZhClNBE0sSEzeUrsVZbxdY0RlBrZBZOxUTvwLu3lDULbfg2hLo
-         Vv4PoO1HACU5sAtSnfSCnyNN5FL8x7XXDhuXT9xDegLi1po0VwCPIB16GTCcZvvSuCoY
-         WMowBk13RLsadZkEX3JJPAbB3xSKyixUD2Y7dy+VbrfTUU7ln0YsE1or0a4AygL4JpR4
-         mJig==
+        bh=SCZ478BjRJ70dGPiyazKHs2AHwhWpPHvIJs192KkWtA=;
+        b=raiwsZg/csJTCrSWgdBtnd9ljQyiwBv9lV8BD6vdvUmrIz14MewJmemne/YcRSjxbQ
+         pZ7wYvDSB2QJECcClLFUE3RWyzO70AqfIXdN54acUD9e4VCf7E96xJ/q5k9bjJuoE+tD
+         JZakBTUj4gklq22OZnalVTtBFhnREB4OGxMMw0/P0B8XzioIPEtt/t1xZ/v8L8px72w+
+         p4IOjS2dSrLhywDqFRPqIhfRTEljzI6Dj+mWCIGdyqDRtMLWzzheC3hJ+I4v/HYdzd9u
+         JLT/+Eo+wjXAAusil+Q9GA6rF6UA5d3PjaY1qMdAIpbInGaZAuuI1/6ABHPeTSm3nQ5Z
+         G6iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689005281; x=1691597281;
+        d=1e100.net; s=20221208; t=1689005308; x=1691597308;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AjKMlN7Hn/eUWbs2kPX1xd2yBg/zUqu1UnIgvGuGwT8=;
-        b=YIob3GIp9DgjtERjduxFH0Tg6vBLY9H5UH7CzEuLgdOW4Px/CcpjXXU+pGsl1hDyaZ
-         fv0e3iuAtpo9LaSIS1U8DjRNMHismgkfBVqb9CPoQTZnqxUm/qVMq4zEfsJAHiFUK89H
-         sQyBFJm+Ux1EvKBe7Hx4jvYRbWfQag2JEL+M1v+btXWjjdtoeF6PkxQHaqDSDSRIbq3g
-         jjkk0YIRh20dDIY0aVGJcxwkDjN2OIefMNReMAhC3Ung3eCryYxKB3IH7zoB7v8SA/Rr
-         Ks3D7lYIwyTasxkKl796LFlACxkw6a35fMQubWFmRPR2NW4b81887d5JYxQcFcxK78dY
-         SdkQ==
-X-Gm-Message-State: ABy/qLbbLNwog4F/j5/x9BCW6ZEXlDVXEYwmyeL6Ib12Y5bQ1zoR7LnK
-        TlbV57dfw8/DcfxVAUQLTBQ6cWBPipzMBVfEdeODHg==
-X-Google-Smtp-Source: APBJJlEPfdemhfM3kEi/lB1MUR6DL1XKjejvb67jS0nfqhwdVzvR8rr8wDSfM3IV+88zlch5i5raBv76nKqs8QJGFfc=
-X-Received: by 2002:a05:622a:609:b0:3f5:2006:50f1 with SMTP id
- z9-20020a05622a060900b003f5200650f1mr369683qta.12.1689005281540; Mon, 10 Jul
- 2023 09:08:01 -0700 (PDT)
+        bh=SCZ478BjRJ70dGPiyazKHs2AHwhWpPHvIJs192KkWtA=;
+        b=a08AmEm+F0NcpcTXyDZ8R1iVI4aonXVWgFKJY4qh7OnWrD8fIbHFQ812DI35Vtj0Yz
+         euVUgEYHSEil3LtShrLyC6cV7hfUxaBz0WL0GGnfAcQMvMO/pb0PxCybJdBAsMuEukiV
+         s04iGRXM9atpCb9g9kHv/dYLQxtJFESK8Ub2IQQ5xEgCx5TV9iIUypvxraZ/ypfWADcR
+         Iup/QFxETBGZNe5SoX0QFi+OYqMIwRBbPIwNee/SHHNE+NmqrYsVe6WCRxqDWnHyGSU3
+         bs21iKRwUCeEZ2gfx3zajNMN676hJSZcz0Uz39oyxq/waENeWTKYqKJFPGvbjCj/fGRp
+         lfAw==
+X-Gm-Message-State: ABy/qLYCvGrfJif+YzoLO7SUKHKdhNZVT6WjKobQ8ljZDaOWcEIrllP8
+        zBh3nCmFSZ1yYQ8GraZ8oSqquxtGclhB+QnhYXuDPA==
+X-Google-Smtp-Source: APBJJlFy1h+xduL4V4mkm/cNZocGgxpL/alpQAW35hY7UfCdCZZXX0KwLjWG4NbXvtKvDxjK6aTHSCnAsTEFRr1B05Y=
+X-Received: by 2002:ac8:5850:0:b0:3f8:5b2:aef5 with SMTP id
+ h16-20020ac85850000000b003f805b2aef5mr285849qth.29.1689005308540; Mon, 10 Jul
+ 2023 09:08:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710122138.1450930-1-james.clark@arm.com> <20230710122138.1450930-3-james.clark@arm.com>
-In-Reply-To: <20230710122138.1450930-3-james.clark@arm.com>
+References: <20230710122138.1450930-1-james.clark@arm.com> <20230710122138.1450930-4-james.clark@arm.com>
+In-Reply-To: <20230710122138.1450930-4-james.clark@arm.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 10 Jul 2023 09:07:50 -0700
-Message-ID: <CAP-5=fU_pr98phNSrbaeoHoeDPrTPeC3S1c2Z-vOG-FBWn_F5Q@mail.gmail.com>
-Subject: Re: [PATCH 2/4] perf/x86: Remove unused PERF_PMU_CAP_HETEROGENEOUS_CPUS
+Date:   Mon, 10 Jul 2023 09:08:17 -0700
+Message-ID: <CAP-5=fVqHi8M+xCL3ORiabfbaoMSugS=AkPDdhgs5TPUypzqHA@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arm_pmu: Remove unused PERF_PMU_CAP_HETEROGENEOUS_CPUS
  capability
 To:     James Clark <james.clark@arm.com>
 Cc:     linux-perf-users@vger.kernel.org,
@@ -92,8 +92,9 @@ rote:
 > the error scenario that PERF_PMU_CAP_HETEROGENEOUS_CPUS originally
 > silenced no longer exists.
 >
-> Remove the capability to avoid confusion that it actually influences
-> any perf core behavior. This change should be a no-op.
+> Remove the capability and associated comment to avoid confusion that it
+> actually influences any perf core behavior. This change should be a
+> no-op.
 >
 > Signed-off-by: James Clark <james.clark@arm.com>
 
@@ -103,25 +104,36 @@ Thanks,
 Ian
 
 > ---
->  arch/x86/events/core.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/perf/arm_pmu.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index 9d248703cbdd..2353aaf0b248 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2168,7 +2168,6 @@ static int __init init_hw_perf_events(void)
->                         hybrid_pmu->pmu =3D pmu;
->                         hybrid_pmu->pmu.type =3D -1;
->                         hybrid_pmu->pmu.attr_update =3D x86_pmu.attr_upda=
-te;
-> -                       hybrid_pmu->pmu.capabilities |=3D PERF_PMU_CAP_HE=
-TEROGENEOUS_CPUS;
->                         hybrid_pmu->pmu.capabilities |=3D PERF_PMU_CAP_EX=
-TENDED_HW_TYPE;
+> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+> index d8844a9461a2..297906df6628 100644
+> --- a/drivers/perf/arm_pmu.c
+> +++ b/drivers/perf/arm_pmu.c
+> @@ -872,15 +872,12 @@ struct arm_pmu *armpmu_alloc(void)
+>                 .attr_groups    =3D pmu->attr_groups,
+>                 /*
+>                  * This is a CPU PMU potentially in a heterogeneous
+> -                * configuration (e.g. big.LITTLE). This is not an uncore=
+ PMU,
+> -                * and we have taken ctx sharing into account (e.g. with =
+our
+> -                * pmu::filter callback and pmu::event_init group validat=
+ion).
+> -                *
+> +                * configuration (e.g. big.LITTLE) so
+>                  * PERF_PMU_CAP_EXTENDED_HW_TYPE is required to open the =
+legacy
+>                  * PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events on a
+>                  * specific PMU.
+>                  */
+> -               .capabilities   =3D PERF_PMU_CAP_HETEROGENEOUS_CPUS | PER=
+F_PMU_CAP_EXTENDED_REGS |
+> +               .capabilities   =3D PERF_PMU_CAP_EXTENDED_REGS |
+>                                   PERF_PMU_CAP_EXTENDED_HW_TYPE,
+>         };
 >
->                         err =3D perf_pmu_register(&hybrid_pmu->pmu, hybri=
-d_pmu->name,
 > --
 > 2.34.1
 >
