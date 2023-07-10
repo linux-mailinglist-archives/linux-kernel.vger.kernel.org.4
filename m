@@ -2,170 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CA074D337
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB8874D339
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbjGJKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S229924AbjGJKUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbjGJKT7 (ORCPT
+        with ESMTP id S233386AbjGJKUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:19:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACE11BF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688984396; x=1720520396;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=opBhJeLFUFjFV01B1/DdWIIof/9GUzqDaqkKJ0VAofA=;
-  b=HlEtxYaMI9Ae9tramSAipmnyCgj8wFDi5efJ9fcIfHNjSRUoFxXniMd/
-   pqDjEeiAD7WLb2DAVDb4T5WRZLBkHhhleNIorcQWDAYUKURqxZ3IU2+qC
-   6a9/LPupNj/rwBm4ykkG/AXuMBOC+Wxktlf5Jbyu8GNVHGdNbbqPSGNWu
-   QIJLLkOjsxx61i4F3qSCrm8Cjld8J2eJsiaOgtadqVsl9bALsEDefMbsh
-   bsMSl7/TBQ0sqCSRtLhbgP/snnFTdZgmMnYmB0G7c2lW74MaGSbuOA4rP
-   5u+7mHXt/HZoA9zCyvctyd7ENYrK+WuucgZHCe3x686/jpZk4JdPGLiZt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="343899046"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="343899046"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:19:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="723957558"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="723957558"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jul 2023 03:19:55 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 03:19:55 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 03:19:54 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 10 Jul 2023 03:19:54 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Mon, 10 Jul 2023 03:19:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GJ/HskXncj1vIoz9FIhQ00jo9b70WnHLMzps0WGdvwmbjxqmtyJxKhCyRtgKzWkgPufsEpO7ecsBDweL0fe+xlFWIVNYKSAXk3NnB1LK+ufv+p2FB9JALLP0Q3DEqxCytavLmIPhHqiopyqQ0M7xOqCryXwmAECGV5n9oUMAcC4ZVhWGcA7VZYETZ7Ma+quviqdRqTm85KkHHVnrChoJ2c5TOsdIT21gkPO/x893YXUhq+AVLfTm3Mf+Y/SJduBgQcDD1I85XchG7dEHCPCheiXfq/+kTwyZHOpCU0jdJlgiv0JPS7Yz7ncH1dxt/jXwcTRMplqQYv1b6FYUo2UByQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wYYusdhuZ7j3RtKRMo8XP2e2ELYHRstg7Xd/ZEMIn0E=;
- b=RERVYRrMu9btwq6gfZX29Tzg35gONSn/ROI9UFYYYpjDlfbP6s6282LBsfTyV3jgiyOHfi3mYwo9L0mmJeP0OE1YYSckqz4Ez6OMYZ2qL0XH9v6/0+WxtMJ8aVyx7/Qfn4rOqAILqR0wyr3BdnvpamrRvzabJc/P1QVuyAJTWjwmn9mF0jZXSrqRfZQGHt2w0YftD9VydCPmq3im9I57FM6bOUj2ooQm7U3fiw+Q3+ib/hWBUryMpr8NCHZj9uRP37xsJDRromvNWfItiQ+79qVkLUSHak5jqgwUKAPK9lVIvEMlXjvf5+NngNmXtsCvksz8KPj0ATEQkL8F5YCarg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
- by MW4PR11MB6909.namprd11.prod.outlook.com (2603:10b6:303:224::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
- 2023 10:19:47 +0000
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::e6c7:a86d:68d6:f2f3]) by CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::e6c7:a86d:68d6:f2f3%5]) with mapi id 15.20.6565.026; Mon, 10 Jul 2023
- 10:19:47 +0000
-Message-ID: <af1ee9a7-2c6f-0450-e44e-59e5eeb50d6b@intel.com>
-Date:   Mon, 10 Jul 2023 18:19:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [RFC PATCH 0/3] support large folio for mlock
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>,
-        Matthew Wilcox <willy@infradead.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <yuzhao@google.com>, <ryan.roberts@arm.com>, <shy828301@gmail.com>,
-        <akpm@linux-foundation.org>
-References: <20230707165221.4076590-1-fengwei.yin@intel.com>
- <ZKhK1Ic1KCdOLRYm@casper.infradead.org>
- <4bb39d6e-a324-0d85-7d44-8e8a37a1cfec@redhat.com>
- <ZKhiGLpIWi5Z2WnY@casper.infradead.org>
- <436cd29f-44a6-7636-5015-377051942137@intel.com>
- <ZKjfwYWh/n/LbTZv@casper.infradead.org>
- <676ce1b3-6c72-011e-3a4f-723945db3d31@intel.com>
- <04efd5eb-06c2-d449-8427-d7c30df962d1@redhat.com>
- <b598c796-7bec-5ac7-9e7e-9a8b5d9ecba2@intel.com>
- <967ccf33-0982-6042-e4ce-b0c859b4c3b1@redhat.com>
-From:   "Yin, Fengwei" <fengwei.yin@intel.com>
-In-Reply-To: <967ccf33-0982-6042-e4ce-b0c859b4c3b1@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR01CA0151.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::31) To CO1PR11MB4820.namprd11.prod.outlook.com
- (2603:10b6:303:6f::8)
+        Mon, 10 Jul 2023 06:20:38 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFA510D9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:20:28 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc77e76abso45120495e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688984427; x=1691576427;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KO1SxVtMO5vB92CZUE0zhLXTJjAA8Kw6VkcMKrG36Wg=;
+        b=hrK+K2RBJk+T3MdMLp8EadIPwWxixUSriE/4t9PrkQYRX8fkZxQ1XvVX6Bej8VhhGN
+         KtMbNphsSEl6eDMbGcoTL0Hcxk1BgFEkeLe73diEBHvMBYINp1J3LrrWlPAag/Drmskt
+         qTpfAy5duNPGl3FvlgjI4xxfKVJo97nhOeuzrrVhUyuGwcFvhj7FG5Ne6VwR8ijLMwPY
+         tduUjHumhml9vD1qc0Xb2oimPBuN/8PyNxx/Vd4hOoFpYpP5qZ0WNOlA7A7e1PzO7DAu
+         RPVngDayC2V7eXQLYBIC68yFpQ9JoNH11AM3Qj4DkSpIlJxL5yYI47pWXHzsH4pJg6nC
+         6Znw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688984427; x=1691576427;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KO1SxVtMO5vB92CZUE0zhLXTJjAA8Kw6VkcMKrG36Wg=;
+        b=K/GPnOOasds0G0AGQ5MGxGTujnG+xf6aWomZcbdVpOXS0WeRXiB4qz46faXszpfN3y
+         HnSO8QjSwnEYhWze2+acJg9E9tFWRkkAaLmtKYlMLUKJ3JLT2hN3rjbHgD7HiVl7FtSD
+         PFzY/+LZ9a+KwWPPd/lh12inFjDajhujKgAnDGCnlSM6fjj89husu6t/bzCFE8aEu6l8
+         yI0HjJ+cbk0a4RKp4GNfKG18c0Nb0KX65sQXkj9lyK+C7c+yYqbH8rWKbTuNQjyQmSYV
+         VPhlW8WTe39E6pPDplb/klOzr+z8FsTdsqhXVmnYWsg8EImz5K+zvHBsgp3sk4IPpMiN
+         S3HA==
+X-Gm-Message-State: ABy/qLZ3XL5A/MBZ6+iHT7L3FDEposmuhN4cgYQ/g+09nSXFCaubPoK/
+        m7Lh6/xhw+/OB0S2q3PsLZ0VeImUbGqbrapsswgqLw==
+X-Google-Smtp-Source: APBJJlHSXQc+ESPjEz52ZdkpQXzwhCD9qowDHN/4ZXQXgmMSYrietThrhrEqs/C9aalWUxrOkMJ2l5vlEAJaV8/4PN8=
+X-Received: by 2002:a1c:7c15:0:b0:3fb:9ef2:157 with SMTP id
+ x21-20020a1c7c15000000b003fb9ef20157mr10147681wmc.28.1688984426752; Mon, 10
+ Jul 2023 03:20:26 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4820:EE_|MW4PR11MB6909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 110b6b6f-2f4d-496d-5d68-08db812f2fcb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rJxyAiGF9aQhedp4Nw6O0jdbINYchRFC9iWRU54xyeF0zuh1ySEqWCMD17Gyh9A1i74Pmt2F0ZG3ZO58eyc3SJzZKYvwQgZxjxS2CDhcKOQRbQk/e809ieyVim+DfkvOrh2qt9EQv+DIi7LHE6TKYYxHmlbAWY29aU+p3KGz8KC6DLPrPPaRmlaWXsfy8IqJlu2Om3lHCDD2S9nnwHpKEoX1SgfC/LG4ZKXyh31fv+xzxLmY/n47YBah50Y7QG3Sv625VaAkwix4flKdjqg8eUP2HXGxb4U2NdvYzeyG9ZKLP1C93TMK+zQH8t97rxfZfp4MieIuMJe+60TUbLI0FvRNMcKS/cUHkm1CBgSq9ffh8wZ0smBp4PZyRkAhAWbbrRpiW75wi6U5/TfIyeJ4jI0DVz7X0BdA8CZMORI+oM6/TC5oTbRr+iL+WSjRFU2zBQJ3NC8TowoW3UySsa/uPTk2TpOGmrlxAO6zn11ZUqjQOHq9od+CQhHZsmthehgX1+3qrF2Gq2oez2POdMggPf4VSvT5LECiRbZ8UUzp8N6Rqz6ylJZXYyhA7OKei4nCFFMCcK/z2bgF0JbXYhkxBeXwOS144kcfSPizGkraNJ+0aII0GhU5GkBRUDNLOhS7zbe4bN4502IuoabKtAd0WA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(346002)(39860400002)(376002)(396003)(451199021)(36756003)(86362001)(31696002)(38100700002)(82960400001)(478600001)(110136005)(6666004)(6486002)(6512007)(8936002)(8676002)(5660300002)(316002)(2906002)(4326008)(66946007)(66556008)(66476007)(31686004)(41300700001)(2616005)(26005)(53546011)(6506007)(186003)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEcvWXY3enRRZmJGQURNS1ByUWdLMy9lU0FqcnhuVU9BdUFhK1lzNW9XZWFq?=
- =?utf-8?B?ZW1sN3M2eU1kYVlteDdsRFZLeitpaURWVitYbXJQS04zTXN0TFV2WmFiNTh1?=
- =?utf-8?B?SDE5YUVDQllvTEUrdFMwdFgzOHdyYllwR0w4MmRYS3F6WHNxR0JoNkxhS1RX?=
- =?utf-8?B?VU5Rd0NsakZETlhORERzcFBKSlh1VEdtK2dvWEFjTEYydUZFN251OVI0NkJP?=
- =?utf-8?B?cll2aXN4Sk13czhRRWYyeStTcFVRVUk1MDVTU1ZOZENqZlY3Z2ZwaXRyUkV0?=
- =?utf-8?B?SkJzN0I4MURucjJ4ZkVxU3dvMVVqRmkvbkJWNzA2K3BjZlFxV1FTYlpBMWlB?=
- =?utf-8?B?SFFybFlyMlkyTStCdUZTNFhneWc2aEFPQXV5ZWF0SVJkR055OHViNFB0Q0Ew?=
- =?utf-8?B?UnB4NVY3WGZGYkhSSjc0bWsweWlWUnNXMks0bUQrM3YwVWM4dGVmUGNscUtq?=
- =?utf-8?B?cXozZ2dNTkNDTWUwcDhPdjdoVzFadmtZT09YU3ZxSWFrNGkrd0pFQ09LSVhT?=
- =?utf-8?B?TXg3SDg2NlpKc0FQazQzaXQ3TzJEcGJOV3UwMkMybVU5YTJvNFJuSVI5T2Jh?=
- =?utf-8?B?K2VwYjVxM2c3cFpLVHBoK3R4bXdNQTZUQkgrc1VMSDBvSTlrOGduM0YxNnJM?=
- =?utf-8?B?c3E1dHl3ZmNwWUhrODluNVJoR0RMY3M1RjNNcUlOYjNiUXZMaTMrNkE2ZGk1?=
- =?utf-8?B?SkloVHlxNmt5aUZWSDI4L0p1Qmw1Tm1jYzVaMHhXbnF5K2YwTjNTekpkcHoy?=
- =?utf-8?B?enc4bG1ZOUlSbGhreWlLM1dPV3lLazdNMFJJeXhaQ0U4a2dmSkI0bzNMbUVO?=
- =?utf-8?B?NGJjMlcxbnVJazgrZDFYRTdaQ0RTNFNwK1FmSW9peG16QVJIYVlVY2Y2T0Fz?=
- =?utf-8?B?UTI3NHZWNE1PV29ScmFYTUUvV0FDcHpKV0dhR1FmM2hrQzRTNEIvTUI1Mjgw?=
- =?utf-8?B?RTFpZWxKY2xSRlVUOUt1SVlqYTYva041L09HcktLMTNHbzIrMzB3a00wRjl6?=
- =?utf-8?B?cThibkM1WjlOQlZFUEF2QlhQbC9GZ0Fjb0tZeGg5YUlqaEN5VW5aTmszbXls?=
- =?utf-8?B?NlM1UGNIZGVvaWtuTU1qNDJhTy9NazE2RHNwelpZU3hjWkVNcnJ3RHRWQVhl?=
- =?utf-8?B?RHFHL3p6K2dPV1NJa3pTVlhKdGxaR2RHTHdiMGpWQnIzZ1B6VXB0d01CeE1y?=
- =?utf-8?B?MzBiTHZXWWwxMmljTmRoV2Y2eDRFNytuK0hRZmJiN3Y5b0U3NkcwSXVGUUFa?=
- =?utf-8?B?K2lZUEVUWUpvL0wwM3o3VWtrdFNaL1JzWndPRWdIQW5lN25PVlhBRW1TS3NQ?=
- =?utf-8?B?M1pkY2tTZ0Z2Q0VoelZlR2lUUG5YZ0tjeEdCR0wyMGhwWU9xQ1JIeXF0ODkv?=
- =?utf-8?B?YWk2VVhjWWlrZGQwaHBuNEcrNzMydGlKV1YrQXYrai8rUXBxSU5SWTRRVHl1?=
- =?utf-8?B?cUMyNVBjcUlUdmd6ZXB0blN0TkZTQWFtNWlKYXNTUGVtWmJMdnR0VzVzZFZO?=
- =?utf-8?B?SW84dG1Fc1ZGKzdkbjUxd1VtYmcyWHVXNXhnbFZTWHNqNDVyMjc0SWFBNDBC?=
- =?utf-8?B?cllndEI3cE4wcEtwcHlDMVN5OTBPc1VzVkRwRUEwR25HREtITTNURXVEUFZP?=
- =?utf-8?B?MnVvd2lIU09Sa3YzNmJEZGEzTksvckNnZkpXVlVPVEIxUXgyZHFNbFJFNWZr?=
- =?utf-8?B?TVZub3RheGdGVHMxYTlKcUwrakZKMHBlamtuWDgreHJWVEIrTFUrbXE3OVVI?=
- =?utf-8?B?cXZheUFick93OFBSdk5PVGxTOGJlZXMwQ0gxM2NsNHBZcXJYVE9jTTNBaUZ1?=
- =?utf-8?B?M0E1SjZSR25MVDFyL3ZxbVllZnREeGcxTzhwTFNnSDVXbEVKSWUvWVlEZk5a?=
- =?utf-8?B?aThMMHM4N3NuUEVBK3dPSXlGQ1NjWEVlVnpBeGVORnZwWEtZdGx4ZFpRT3ZO?=
- =?utf-8?B?Q0lFbkxWNDFzaHNqYStOeEFINi9sOWhXOVFtb2NzK1V1Ly9OajJCanZaTkFF?=
- =?utf-8?B?M2VENXAvRzc1N24rcWM4ZEZRN2dhczZIQVBXQ0pXcE1aSjRNS25LeVZ4MjFH?=
- =?utf-8?B?TzBZazQrcElRYVZkblNHVWRUZENKTW5sbmV3cHVkaS8rL0IvelAvWkk5UHl0?=
- =?utf-8?B?bUcvMEEyeHNGSmJMTE94YmlPa2xMb3pwVWJwSEtmdDh0cXhKdmVINkRFdnJL?=
- =?utf-8?B?T3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 110b6b6f-2f4d-496d-5d68-08db812f2fcb
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 10:19:47.2314
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4bPPbqGZnvVwF7EEk/ZWfSX2oYFYXDGRn9kER/K/BiFL3g4z1ypj8SqlhUPRPlwog5TgW9qvp1PrKQoJE9DRFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6909
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
+In-Reply-To: <20230710032714.26200-1-zhangpeng.00@bytedance.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 10 Jul 2023 12:19:49 +0200
+Message-ID: <CANpmjNOHz+dRbJsAyg29nksPMcd2P6109iPxTem_-b2qfUvXtw@mail.gmail.com>
+Subject: Re: [PATCH] mm: kfence: allocate kfence_metadata at runtime
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -173,67 +69,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 10 Jul 2023 at 05:27, 'Peng Zhang' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> kfence_metadata is currently a static array. For the purpose of
+> allocating scalable __kfence_pool, we first change it to runtime
+> allocation of metadata. Since the size of an object of kfence_metadata
+> is 1160 bytes, we can save at least 72 pages (with default 256 objects)
+> without enabling kfence.
+>
+> Below is the numbers obtained in qemu (with default 256 objects).
+> before: Memory: 8134692K/8388080K available (3668K bss)
+> after: Memory: 8136740K/8388080K available (1620K bss)
+> More than expected, it saves 2MB memory.
+>
+> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 
+Seems like a reasonable optimization, but see comments below.
 
-On 7/10/2023 5:57 PM, David Hildenbrand wrote:
-> On 10.07.23 11:43, Yin, Fengwei wrote:
->> Hi David,
->>
->> On 7/10/2023 5:32 PM, David Hildenbrand wrote:
->>> On 09.07.23 15:25, Yin, Fengwei wrote:
->>>>
->>>>
->>>> On 7/8/2023 12:02 PM, Matthew Wilcox wrote:
->>>>> I would be tempted to allocate memory & copy to the new mlocked VMA.
->>>>> The old folio will go on the deferred_list and be split later, or its
->>>>> valid parts will be written to swap and then it can be freed.
->>>> If the large folio splitting failure is because of GUP pages, can we
->>>> do copy here?
->>>>
->>>> Let's say, if the GUP page is target of DMA operation and DMA operation
->>>> is ongoing. We allocated a new page and copy GUP page content to the
->>>> new page, the data in the new page can be corrupted.
->>>
->>> No, we may only replace anon pages that are flagged as maybe shared (!PageAnonExclusive). We must not replace pages that are exclusive (PageAnonExclusive) unless we first try marking them maybe shared. Clearing will fail if the page maybe pinned.
->> Thanks a lot for clarification.
->>
->> So my understanding is that if large folio splitting fails, it's not always
->> true that we can allocate new folios, copy original large folio content to
->> new folios, remove original large folio from VMA and map the new folios to
->> VMA (like it's only true if original large folio is marked as maybe shared).
->>
-> 
-> While it might work in many cases, there are some corner cases where it won't work.
-> 
-> So to summarize
-> 
-> (1) THP are transparent and should not result in arbitrary syscall
->     failures.
-> (2) Splitting a THP might fail at random points in time either due to
->     GUP pins or due to speculative page references (including
->     speculative GUP pins).
-> (3) Replacing an exclusive anon page that maybe pinned will result in
->     memory corruptions.
-> 
-> So we can try to split any THP that crosses VMA borders on VMA modifications (split due to munmap, mremap, madvise, mprotect, mlock, ...), it's not guaranteed to work due to (1). And we can try to replace pages such pages, but it's not guaranteed to be allowed due to (3).
-> 
-> And as it's all transparent, we cannot fail (1).
-Very clear to me now.
+Also with this patch applied on top of v6.5-rc1, KFENCE just doesn't
+init at all anymore (early init). Please fix.
 
-> 
-> For the other cases that Willy and I discussed (split on VMA modifications after fork()), we can at least always replace the anon page.
-> 
-> <details>
-> 
-> What always works, is putting the THP on the deferred split queue to see if we can split it later. The deferred split queue is a bit suboptimal right now, because it requires the (sub)page mapcounts to detect whether the folio is partially mapped vs. fully mapped. If we want to get rid of that, we have to come up with something reasonable.
-> 
-> I was wondering if we could have a an optimized deferred split queue, that only conditionally splits: do an rmap walk and detect if (a) each page of the folio is still mapped (b) the folio does not cross a VMA. If both are met, one could skip the deferred split. But that needs a bit of thought -- but we're already doing an rmap walk when splitting, so scanning which parts are actually mapped does not sound too weird.
-> 
-> </details>
-> 
-Thanks a lot for extra information which help me to know more background.
-Really appreciate it.
+> ---
+>  mm/kfence/core.c   | 102 ++++++++++++++++++++++++++++++++-------------
+>  mm/kfence/kfence.h |   5 ++-
+>  2 files changed, 78 insertions(+), 29 deletions(-)
+>
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index dad3c0eb70a0..b9fec1c46e3d 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -116,7 +116,7 @@ EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
+>   * backing pages (in __kfence_pool).
+>   */
+>  static_assert(CONFIG_KFENCE_NUM_OBJECTS > 0);
+> -struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
+> +struct kfence_metadata *kfence_metadata;
+>
+>  /* Freelist with available objects. */
+>  static struct list_head kfence_freelist = LIST_HEAD_INIT(kfence_freelist);
+> @@ -643,13 +643,56 @@ static unsigned long kfence_init_pool(void)
+>         return addr;
+>  }
+>
+> +static int kfence_alloc_metadata(void)
+> +{
+> +       unsigned long nr_pages = KFENCE_METADATA_SIZE / PAGE_SIZE;
+> +
+> +#ifdef CONFIG_CONTIG_ALLOC
+> +       struct page *pages;
+> +
+> +       pages = alloc_contig_pages(nr_pages, GFP_KERNEL, first_online_node,
+> +                                  NULL);
+> +       if (pages)
+> +               kfence_metadata = page_to_virt(pages);
+> +#else
+> +       if (nr_pages > MAX_ORDER_NR_PAGES) {
+> +               pr_warn("KFENCE_NUM_OBJECTS too large for buddy allocator\n");
 
+Does this mean that KFENCE won't work at all if we can't allocate the
+metadata? I.e. it won't work either in early nor late init modes?
 
-Regards
-Yin, Fengwei
+I know we already have this limitation for _late init_ of the KFENCE pool.
+
+So I have one major question: when doing _early init_, what is the
+maximum size of the KFENCE pool (#objects) with this change?
+
+> +               return -EINVAL;
+> +       }
+> +       kfence_metadata = alloc_pages_exact(KFENCE_METADATA_SIZE,
+> +                                           GFP_KERNEL);
+> +#endif
+> +
+> +       if (!kfence_metadata)
+> +               return -ENOMEM;
+> +
+> +       memset(kfence_metadata, 0, KFENCE_METADATA_SIZE);
+
+memzero_explicit, or pass __GFP_ZERO to alloc_pages?
+
+> +       return 0;
+> +}
+> +
+> +static void kfence_free_metadata(void)
+> +{
+> +       if (WARN_ON(!kfence_metadata))
+> +               return;
+> +#ifdef CONFIG_CONTIG_ALLOC
+> +       free_contig_range(page_to_pfn(virt_to_page((void *)kfence_metadata)),
+> +                         KFENCE_METADATA_SIZE / PAGE_SIZE);
+> +#else
+> +       free_pages_exact((void *)kfence_metadata, KFENCE_METADATA_SIZE);
+> +#endif
+> +       kfence_metadata = NULL;
+> +}
+> +
+>  static bool __init kfence_init_pool_early(void)
+>  {
+> -       unsigned long addr;
+> +       unsigned long addr = (unsigned long)__kfence_pool;
+>
+>         if (!__kfence_pool)
+>                 return false;
+>
+> +       if (!kfence_alloc_metadata())
+> +               goto free_pool;
+> +
+>         addr = kfence_init_pool();
+>
+>         if (!addr) {
+> @@ -663,6 +706,7 @@ static bool __init kfence_init_pool_early(void)
+>                 return true;
+>         }
+>
+> +       kfence_free_metadata();
+>         /*
+>          * Only release unprotected pages, and do not try to go back and change
+>          * page attributes due to risk of failing to do so as well. If changing
+> @@ -670,31 +714,12 @@ static bool __init kfence_init_pool_early(void)
+>          * fails for the first page, and therefore expect addr==__kfence_pool in
+>          * most failure cases.
+>          */
+> +free_pool:
+>         memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
+>         __kfence_pool = NULL;
+>         return false;
+>  }
+>
+> -static bool kfence_init_pool_late(void)
+> -{
+> -       unsigned long addr, free_size;
+> -
+> -       addr = kfence_init_pool();
+> -
+> -       if (!addr)
+> -               return true;
+> -
+> -       /* Same as above. */
+> -       free_size = KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool);
+> -#ifdef CONFIG_CONTIG_ALLOC
+> -       free_contig_range(page_to_pfn(virt_to_page((void *)addr)), free_size / PAGE_SIZE);
+> -#else
+> -       free_pages_exact((void *)addr, free_size);
+> -#endif
+> -       __kfence_pool = NULL;
+> -       return false;
+> -}
+> -
+>  /* === DebugFS Interface ==================================================== */
+>
+>  static int stats_show(struct seq_file *seq, void *v)
+> @@ -896,6 +921,10 @@ void __init kfence_init(void)
+>  static int kfence_init_late(void)
+>  {
+>         const unsigned long nr_pages = KFENCE_POOL_SIZE / PAGE_SIZE;
+> +       unsigned long addr = (unsigned long)__kfence_pool;
+> +       unsigned long free_size = KFENCE_POOL_SIZE;
+> +       int ret;
+> +
+>  #ifdef CONFIG_CONTIG_ALLOC
+>         struct page *pages;
+>
+> @@ -913,15 +942,29 @@ static int kfence_init_late(void)
+>                 return -ENOMEM;
+>  #endif
+>
+> -       if (!kfence_init_pool_late()) {
+> -               pr_err("%s failed\n", __func__);
+> -               return -EBUSY;
+> +       ret = kfence_alloc_metadata();
+> +       if (!ret)
+> +               goto free_pool;
+> +
+> +       addr = kfence_init_pool();
+> +       if (!addr) {
+> +               kfence_init_enable();
+> +               kfence_debugfs_init();
+> +               return 0;
+>         }
+>
+> -       kfence_init_enable();
+> -       kfence_debugfs_init();
+> +       pr_err("%s failed\n", __func__);
+> +       kfence_free_metadata();
+> +       free_size = KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool);
+> +       ret = -EBUSY;
+>
+> -       return 0;
+> +free_pool:
+> +#ifdef CONFIG_CONTIG_ALLOC
+> +       free_contig_range(page_to_pfn(virt_to_page((void *)addr)), free_size / PAGE_SIZE);
+> +#else
+> +       free_pages_exact((void *)addr, free_size);
+> +#endif
+
+You moved this from kfence_init_pool_late - that did "__kfence_pool =
+NULL" which is missing now.
