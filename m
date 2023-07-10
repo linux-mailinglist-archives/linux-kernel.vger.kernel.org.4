@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5128574DF6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393D474DF6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjGJUix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S231871AbjGJUkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjGJUit (ORCPT
+        with ESMTP id S229560AbjGJUkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:38:49 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB81195;
-        Mon, 10 Jul 2023 13:38:49 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b9e9765f2cso6389985ad.3;
-        Mon, 10 Jul 2023 13:38:49 -0700 (PDT)
+        Mon, 10 Jul 2023 16:40:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3265B127
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:40:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6687446eaccso4318967b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689021528; x=1691613528;
+        d=gmail.com; s=20221208; t=1689021644; x=1691613644;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AANwmYnIjrNG1ny8ADZlcMF6VhBoiSpdnMPHT/u0j+U=;
-        b=a9vlDHib/vMGEM7aj5ZziEIfVB9053U+yrZ7to7Yd8hR15TTgPRZXqM+aIlJDlWKPY
-         CrJBsGBouks3CfFEd3QRv1Yh7dQm6xNAOqgHHU3VN9DNSaL1+tpwRU5rlXJO9ismFxe4
-         Hq/4DleBOQdSXFD+XjWaDWY5xLt3mvgWf3U05EAxLNXXbn71AVZT33qR+hN/ZA7W5iti
-         j2FlnXR+XTocZTLDWBsxKRyv8pcEf/x0EXhFXyFuz/MUiowyCCXOmCwW+UUzggU47gSN
-         4bXR7XPV2Dca04qA0GJHy7NqllrEwRZPjVMgpFgoNDCPdqsRtEzr3a5JOoqHOKvIgcfJ
-         pOfA==
+        bh=4yI/5JzDunfxYzTEyK6SV0vTMPUwE4Tukc49pveSo/g=;
+        b=W3jRSblvR5/Es3K43OV+c3nJakIgwR8KvNLXHzcW7LNonTpf//oTsHtc917FOH2Ilm
+         6mMQMq5J1h0SXAp2IfKfy6G2c6+dee7L8u7A4YPUP3MKB7GYkOCsKxDfPKoE3s0GvoS0
+         0d/wUP6MYFHx8v2/RbmTnVg+LKJNzJM7PeNpiY1LcyL7LOFtVHT9y28Lp62j/0x8def6
+         o5LovdF0I9gpxU62RdlXGiaZlue1OsQWCA98fAr/M3rC0qTvCGE+KAvOuIPDO5Zt87aT
+         D32gfDO9FevhawHCQ6VUZxflWct9ti9BhrhTDS22XuVLKAsBgBYWG43/9u/T2COjEzmz
+         oJyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689021528; x=1691613528;
+        d=1e100.net; s=20221208; t=1689021644; x=1691613644;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AANwmYnIjrNG1ny8ADZlcMF6VhBoiSpdnMPHT/u0j+U=;
-        b=jfc5ZugQLFri2Phl+plsTHes12Ah8ake1U3fyrvQZ6Bq1naVi6PE/3bPjpSijP2PID
-         0JzlE1eJa4WoGHWtZFjw6xqPnepn46RY+6mF5vb8gvP8e9OHZOwL6c0XAqSyqNtvR6zQ
-         4/UgFxGs7QgulX2+Kyo76cBU8jkkUXyl+g3pPV++yAGbleF2sGpvKb1H8xE/L1P/EwBg
-         VTUx1Y6b7jBADEOpo6LaJbnh6U0W5gOsYiceyGa9QYVKxKfsshGGDLAuup8hztn+IJxL
-         RONwK31w54a7YNd/M6mC4zxuz/3f8YPgpZjmDs1Z7jUF0nDn4G0myK2dt42edYruNAwm
-         BwUg==
-X-Gm-Message-State: ABy/qLa5hEe1qNwldFMg7/1YoXEwDykei4Yd9HVQweubANhpaFLYd7af
-        Qc+iO5VRpOQsgCfjOnBBafc=
-X-Google-Smtp-Source: APBJJlEZWuY/msbyREsMLqJ7pXCL+z6hIoLk4MAu/D5lqGRN52QX2Ydh0HXQ3I0i0YHXmtzXIStPwQ==
-X-Received: by 2002:a17:902:da92:b0:1b8:50ae:557 with SMTP id j18-20020a170902da9200b001b850ae0557mr12453868plx.36.1689021528394;
-        Mon, 10 Jul 2023 13:38:48 -0700 (PDT)
+        bh=4yI/5JzDunfxYzTEyK6SV0vTMPUwE4Tukc49pveSo/g=;
+        b=kyON7UBm0+zyYFpU7ADfnNos5/AbF5aa+HY2IwOZkE5sOGSSECkWXxc/X7WrZIReL5
+         2DsFK96rh6PNZbtk9PyarPoa96BKjUt8B8Z691owdq/oc6g5drQW6jntkoTtESOYa3dt
+         lbIk5g8kb10CNAzwBe+PVjv2LSuCsnmBduRA+n5k9WrrOky7BefHAKdjI8YHGgq63q0d
+         9XRkBAv9jNf8QftOJFk9IZNYrDrJK8pV35MAGgkAcagkV2vwCPl7zwUFiAkptDNS92bf
+         sYJpA7Iw3THMP468rJtTzHiLdod/ZKYJrWDOHuuEN7OBty3+cq6NcMluAv6cO8nnZpfV
+         BZpA==
+X-Gm-Message-State: ABy/qLbVU/E8jWj0XIQH2HjD9du7d89avznrs9GIF6C3kV5RlrJ3z9uh
+        ycYuSUNh0kA12db+My2WzpA=
+X-Google-Smtp-Source: APBJJlHXIRJGksqXH3W73+/BWvjbHF6UQDAqXWrzFG3wH/VgGdOzQdEyelm/bHcwkwREmCkgFOSH9g==
+X-Received: by 2002:a05:6a00:2d20:b0:67a:a906:9edb with SMTP id fa32-20020a056a002d2000b0067aa9069edbmr18019684pfb.30.1689021644476;
+        Mon, 10 Jul 2023 13:40:44 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id y2-20020a1709029b8200b001b891259eddsm300297plp.197.2023.07.10.13.38.47
+        by smtp.gmail.com with ESMTPSA id s14-20020aa7828e000000b0063d24fcc2b7sm228483pfm.1.2023.07.10.13.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 13:38:48 -0700 (PDT)
+        Mon, 10 Jul 2023 13:40:43 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 10:38:46 -1000
+Date:   Mon, 10 Jul 2023 10:40:42 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>, peterz@infradead.org,
-        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-Message-ID: <ZKxsVuDqdr6IJeyv@slm.duckdns.org>
-References: <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
- <20230628-spotten-anzweifeln-e494d16de48a@brauner>
- <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
- <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
- <2023062845-stabilize-boogieman-1925@gregkh>
- <CAJuCfpFqYytC+5GY9X+jhxiRvhAyyNd27o0=Nbmt_Wc5LFL1Sw@mail.gmail.com>
- <ZJyZWtK4nihRkTME@slm.duckdns.org>
- <CAJuCfpFKjhmti8k6OHoDHAu6dPvqP0jn8FFdSDPqmRfH97bkiQ@mail.gmail.com>
- <CAJuCfpH3JcwADEYPBhzUcunj0dcgYNRo+0sODocdhbuXQsbsUQ@mail.gmail.com>
- <20230630-fegefeuer-urheber-0a25a219520d@brauner>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH for 6.5] workqueue: Warn attempt to flush system-wide
+ workqueues.
+Message-ID: <ZKxsyh0QlqQfQRD0@slm.duckdns.org>
+References: <42f1067f-3232-0a64-4c19-6165dabf46d0@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630-fegefeuer-urheber-0a25a219520d@brauner>
+In-Reply-To: <42f1067f-3232-0a64-4c19-6165dabf46d0@I-love.SAKURA.ne.jp>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
@@ -92,30 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Fri, Jun 30, 2023 at 10:21:17AM +0200, Christian Brauner wrote:
-> What I'm mostly reacting to is that there's a kernfs_ops->release()
-> method which mirrors f_op->release() but can be called when there are
-> still users which is counterintuitive for release semantics. And that
-> ultimately caused this UAF issue which was rather subtle given how long
-> it took to track down the root cause.
+On Fri, Jun 30, 2023 at 09:28:53PM +0900, Tetsuo Handa wrote:
+> Based on commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue() using
+> a macro"), all in-tree users stopped flushing system-wide workqueues.
+> Therefore, start emitting runtime message so that all out-of-tree users
+> will understand that they need to update their code.
 > 
-> A rmdir() isn't triggering a f_op->release() if there are still file
-> references but it's apparently triggering a kernfs_ops->release(). It
-> feels like this should at least be documented in struct kernfs_ops...
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-Oh yeah, better documentation would be great. The core part here is that
-kernfs is the layer which is implementing the revoke-like semantics
-specifically to allow kernfs users (the ones that implement kernfs_ops) can
-synchronously abort their involvement at will. So, from those users' POV,
-->release is being called when it should be. The problem here was that PSI
-was mixing objects from two layers with different lifetime rules, which
-obviously causes issues.
+Applied to wq/for-6.6.
 
-As Suren's new fix shows, the fix is just using the matching object whose
-lifetime is governed by kernfs. While this shows up in a subtle way for
-poll, for all other operations, this is almost completely transprent.
+> After this patch, flush_workqueue(wq) where wq cannot be determined at build
+> time will not get runtime warning. Should we now start checking wq at run time
+> so that we get runtime warning when wq is system-wide?
+
+Yeah, we can add an internal flag for these standard workqueues and trigger
+warning when somebody tries to flush them.
 
 Thanks.
 
