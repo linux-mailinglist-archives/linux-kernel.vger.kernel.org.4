@@ -2,183 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A3574D1DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4614774D1C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjGJJkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S231503AbjGJJir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjGJJjS (ORCPT
+        with ESMTP id S231356AbjGJJiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:39:18 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8649359D;
-        Mon, 10 Jul 2023 02:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688981819; x=1720517819;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5gfCaYU0chLq5c3B/D2KhUCxcGWsZsApGGytqjShGTw=;
-  b=gMjrZErUTiBgXaj+dPf8Xl4I8gbCxlxkvgSYdH2NvoArCz1D98neZW69
-   bAh8fkNXPl8FnxY01kfwvtw48WBaH8gEibG7ZZD8vru8NFBTG+UT87Pvj
-   +sCAzO45urGwMcuLfM4mhE6nVx91zQVek8dJSmD7nd0H/NID+eqPX2KdL
-   FF8QljXWvFSrDrKhZC5nZ4DlYoW+lmjbZXPEIUdgSgMJ6SfxocCrnJBf/
-   cmkPAs3sKj1GC6rSFsNvEirJ+9aS+Zwnlu4fhDz9oNRfyR9w/ktsPDE0w
-   x+HmtTCLVOboWSmj4FYlODt5gONp4SQscmwnftH+eUtpiLSCXe0jHUyzk
-   A==;
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="160600093"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jul 2023 02:36:47 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 10 Jul 2023 02:36:42 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 10 Jul 2023 02:36:39 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <palmer@dabbelt.com>
-CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        "Heiko Stuebner" <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 05/11] RISC-V: repurpose riscv_isa_ext array in riscv_fill_hwcap()
-Date:   Mon, 10 Jul 2023 10:35:40 +0100
-Message-ID: <20230710-banker-visible-4c4cb3685dc1@wendy>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230710-equipment-stained-dd042d66ba5d@wendy>
-References: <20230710-equipment-stained-dd042d66ba5d@wendy>
+        Mon, 10 Jul 2023 05:38:17 -0400
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1804610E9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:36:17 -0700 (PDT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-262dc0bab18so5384814a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:36:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688981742; x=1691573742;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0ydRUn+tKaLG1zTzHEXZ2Ybmp5TubgGd03eOnLQcB9w=;
+        b=ZYBkEoD+uZ3x61KTfm65qAy814Y3yZ+CRm36yvtFOrrB87S5se96zSfxZ/dMq8kD94
+         IL+1EVJy1a8VO7hzb+u4+mgA8su7Hyp807yptwsEdsBEp+2vUWzcWh11k8SktjUrVpk7
+         xxbrWxRE+5SAIlx4wqmj7/p2nxdDJ+iIlvCv4vfYjh+YbqVCV1UrAZehV41/9Wn3kxfJ
+         Fr+tVHN7tapuC9/h0xzlaUjxApkhEm5ETVlR8d5aH1j35XF280beurdhGlhpcT4MZtAk
+         GzB260t9yYTiWObumgwps+/5Ethug7lq3SDXpf7zEbqj8OHncGMUnQZMIpWDHsen9lgJ
+         7Gxw==
+X-Gm-Message-State: ABy/qLa2fMa4PDlaIBDjycoWWILfr2Toz0bNWISn/gIvjrqTN5PuIykl
+        oUm4is4nNcAhTlO3eaLswNegt/Q7w0rTBfB9TI7ngnOBF3Qs
+X-Google-Smtp-Source: APBJJlFte/aUON1/d+7OQe6PyezOXIdxpLKUCjpp5BSxfk2sXsOXrfOimFbJkWLgfI1py9v9VxR1Zb7iypewj+Cuo1VSsavUc/Ai
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3700; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=5gfCaYU0chLq5c3B/D2KhUCxcGWsZsApGGytqjShGTw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmrL1xPKCp13DJjVogsRwlTZfMlzXpt12j+2T8ZbJl2Cdet OyPWUcrCIMbBICumyJJ4u69Fav0flx3OPW9h5rAygQxh4OIUgIlcqWJk+FL9M1HkwgNBzrJw3wIr8y 0/2/tyOLWzN8vMf1O87FXPbIa/4ptXtRwIX+jS0cmzzDbz75bd9eyrdv9cUaXiHrwm4+85PgA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:90b:1283:b0:263:f16:3192 with SMTP id
+ fw3-20020a17090b128300b002630f163192mr9969156pjb.3.1688981741807; Mon, 10 Jul
+ 2023 02:35:41 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 02:35:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0affc06001eb4b5@google.com>
+Subject: [syzbot] Monthly can report (Jul 2023)
+From:   syzbot <syzbot+lista46e1a512a5bfdf1cfa5@syzkaller.appspotmail.com>
+To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In riscv_fill_hwcap() riscv_isa_ext array can be looped over, rather
-than duplicating the list of extensions with individual
-SET_ISA_EXT_MAP() usage. While at it, drop the statement-of-the-obvious
-comments from the struct, rename uprop to something more suitable for
-its new use & constify the members.
+Hello can maintainers/developers,
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+This is a 31-day syzbot report for the can subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/can
+
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 13 issues are still open and 45 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 279     Yes   possible deadlock in j1939_sk_queue_drop_all
+                  https://syzkaller.appspot.com/bug?extid=3bd970a1887812621b4c
+<2> 56      Yes   possible deadlock in j1939_session_activate
+                  https://syzkaller.appspot.com/bug?extid=f32cbede7fd867ce0d56
+<3> 10      No    KCSAN: data-race in bcm_can_tx / bcm_tx_setup (3)
+                  https://syzkaller.appspot.com/bug?extid=e1786f049e71693263bf
+
 ---
-Changes in v2:
-- Delete the now unused definition
----
- arch/riscv/include/asm/hwcap.h |  7 ++-----
- arch/riscv/kernel/cpu.c        |  5 +++--
- arch/riscv/kernel/cpufeature.c | 26 +++++++-------------------
- 3 files changed, 12 insertions(+), 26 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 7a57e6109aef..2460ac2fc7ed 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -55,7 +55,6 @@
- #define RISCV_ISA_EXT_ZIHPM		42
- 
- #define RISCV_ISA_EXT_MAX		64
--#define RISCV_ISA_EXT_NAME_LEN_MAX	32
- 
- #ifdef CONFIG_RISCV_M_MODE
- #define RISCV_ISA_EXT_SxAIA		RISCV_ISA_EXT_SMAIA
-@@ -70,10 +69,8 @@
- unsigned long riscv_get_elf_hwcap(void);
- 
- struct riscv_isa_ext_data {
--	/* Name of the extension displayed to userspace via /proc/cpuinfo */
--	char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
--	/* The logical ISA extension ID */
--	unsigned int isa_ext_id;
-+	const unsigned int id;
-+	const char *name;
- };
- 
- extern const struct riscv_isa_ext_data riscv_isa_ext[];
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index bf93293d51f3..aa17eeb0ec9a 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -168,9 +168,10 @@ static void print_isa_ext(struct seq_file *f)
- {
- 	for (int i = 0; i < riscv_isa_ext_count; i++) {
- 		const struct riscv_isa_ext_data *edata = &riscv_isa_ext[i];
--		if (!__riscv_isa_extension_available(NULL, edata->isa_ext_id))
-+		if (!__riscv_isa_extension_available(NULL, edata->id))
- 			continue;
--		seq_printf(f, "_%s", edata->uprop);
-+
-+		seq_printf(f, "_%s", edata->name);
- 	}
- }
- 
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index fb476153fffc..6d8cd45af723 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -99,11 +99,10 @@ static bool riscv_isa_extension_check(int id)
- 	return true;
- }
- 
--#define __RISCV_ISA_EXT_DATA(UPROP, EXTID) \
--	{							\
--		.uprop = #UPROP,				\
--		.isa_ext_id = EXTID,				\
--	}
-+#define __RISCV_ISA_EXT_DATA(_name, _id) {	\
-+	.name = #_name,				\
-+	.id = _id,				\
-+}
- 
- /*
-  * The canonical order of ISA extension names in the ISA string is defined in
-@@ -366,20 +365,9 @@ void __init riscv_fill_hwcap(void)
- 					set_bit(nr, isainfo->isa);
- 				}
- 			} else {
--				/* sorted alphabetically */
--				SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
--				SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
--				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
--				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
--				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
--				SET_ISA_EXT_MAP("svnapot", RISCV_ISA_EXT_SVNAPOT);
--				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
--				SET_ISA_EXT_MAP("zba", RISCV_ISA_EXT_ZBA);
--				SET_ISA_EXT_MAP("zbb", RISCV_ISA_EXT_ZBB);
--				SET_ISA_EXT_MAP("zbs", RISCV_ISA_EXT_ZBS);
--				SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
--				SET_ISA_EXT_MAP("zicboz", RISCV_ISA_EXT_ZICBOZ);
--				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
-+				for (int i = 0; i < riscv_isa_ext_count; i++)
-+					SET_ISA_EXT_MAP(riscv_isa_ext[i].name,
-+							riscv_isa_ext[i].id);
- 			}
- #undef SET_ISA_EXT_MAP
- 		}
--- 
-2.40.1
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
