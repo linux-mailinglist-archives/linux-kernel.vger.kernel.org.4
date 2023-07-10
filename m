@@ -2,165 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFEA74D54A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B19674D54F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjGJMXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S231383AbjGJMZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjGJMXd (ORCPT
+        with ESMTP id S229668AbjGJMZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:23:33 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8992BB1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:23:32 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-c6833e6e326so5405645276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688991812; x=1691583812;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D5wpUGcoCMLJktVtdk3pDx8grpN6B5CCP4ofqZN22Ns=;
-        b=ocuAjur8c/g9aUvJT2WR3TfZAzQu4EnTUMo6UB4meKF3y4D2+ka8nTVf/Vhb60o4hr
-         WwXb78+52KfjNDzUyweIoufpkr/Er+ng7kY/r4h05JkVxgCsya6DQRp4eRW307L/4/rW
-         wrJCv2Tdl3iVrIqR6SgqgOA5aW5UZI3hjCT516SMj4/PqL2st3hc7ZwZgW7gMGXrG/pv
-         T1NkTZpXq6BkOa9Q4IjsY1ReLnGy0NsuZnH7N8nEBpbYH6i/fkNiSvkERtIQlrs7naTx
-         TsTQNXBzKS5dfnmrXmhWgmfED08ndpUUawf7HCVOVAyqdWPrFw7Qi6QXsVYiNK8ulRJL
-         Rv1w==
+        Mon, 10 Jul 2023 08:25:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703FDB1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688991872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qvML2ZTbSvNa76WH3v+ED/1x/GpVFa6SlPl50qQBVD4=;
+        b=C5vLb6RP/zGiUOiCbYRfmtDTJT+4EQUTiDbkbpgMDWIx+NdCKfakOrUDkobgGmYfMQ8S2v
+        bc+wgqqhG8J/kJRVVi82UOsv6Lc2/QwtHjDgPIXQSABgURRyT0/+h4Pi7xKkinkVMwI+AK
+        zA2xp8aIRKgJLIVedh6o5dbEnm4YMQ4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-640-vg3EBT3fMS6m10tFc3C1hQ-1; Mon, 10 Jul 2023 08:24:28 -0400
+X-MC-Unique: vg3EBT3fMS6m10tFc3C1hQ-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-31596170243so1064442f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:24:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688991812; x=1691583812;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D5wpUGcoCMLJktVtdk3pDx8grpN6B5CCP4ofqZN22Ns=;
-        b=baDP5RXhGckSYWM/Jem284szm6siDzu3s3TS844ujsWZNwSY8LxVeaF9lJfLSB4oIi
-         bvHRRimCHQY6Dv3sgsT5yYh6yzCSYmKdbiTXFuzaYgYT68PAthcKaGACWuN6MfS8YcyY
-         7mXFmJKICbsaRZZjcWddREv/Wu3IoSSBVy+pfs3kg+OqRS9s1DjKken5NpYrPmvt0GMK
-         tzDDZKsNS1H/E2074GnRNDZZpGSr1LDpQnMSmbKF/ao+2QbLSsHkefiDRsKMBH/pN9oS
-         B9L35iPZJCZA+5mi2l11AR+6FlCqyN3WYc8wz4wcpvHxQ6Rbr7JzvCPR5m/i0dOK/aYt
-         EidA==
-X-Gm-Message-State: ABy/qLYR+x9lRhMqJXXOiWpaGv2VKyIxFoph18BIBYAo5inr01dp+OL7
-        05RptDkqcSIDiJOhMxsQW0Ue1GAwekARAOz1DAq1TQ==
-X-Google-Smtp-Source: APBJJlHupZJB9Sam/r2Z4m1rFw/1XEugNXZQqU3G9JkRqCdzFkoSQ+aCNbEcwdZgIfayhMA1sxapEfL1iViYtUhPMwA=
-X-Received: by 2002:a81:5354:0:b0:576:de5d:164e with SMTP id
- h81-20020a815354000000b00576de5d164emr13041207ywb.23.1688991811684; Mon, 10
- Jul 2023 05:23:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688991867; x=1691583867;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qvML2ZTbSvNa76WH3v+ED/1x/GpVFa6SlPl50qQBVD4=;
+        b=itK8cpj538pN6Bdbt4Stv189qP0RTB78UEiyr8VK1Va+seJJJohxqob0XQ6eRnHQe+
+         S+Y5uzsrXGjp9g8Jn4O8EaSeCbJujCMsvSBuJ9yj9sFhYKiScYrExWZrgSHbjIwUNRYC
+         YShsOyXP7b/3YJQoNmx5VHRxBCKeM8cQ2oUZxcJKrGcqWMV6ihs/OVtjbCXjYulg7XEC
+         VVi5B6CghnLdAlx2BqkoomYj9l+zNrtmiarvEs7ydJTq47ZTL2CJcs/kmepnm4GpP+Ml
+         SSeJva7KIG48WJR3nOr83ttvdfhUCuRV6XqbRvEYhtJt4xQDrW2ClfydUnQIaS9kWf5G
+         6v1g==
+X-Gm-Message-State: ABy/qLbk+p08k5K2h8OgBuON00yQRkz5wjCA746BP/b3h65sDxHaqSW2
+        jKaz8vc//cEyxlGIjl9llJpkNex2zdizM6zDBsFcEYggbCkhXhqRlKo7fGkJnbK3FmU1lp1ttrU
+        QYk9sHGHipumXCGT12kAzZuvg
+X-Received: by 2002:a5d:6992:0:b0:313:f4e2:901d with SMTP id g18-20020a5d6992000000b00313f4e2901dmr11318659wru.22.1688991867030;
+        Mon, 10 Jul 2023 05:24:27 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGCfHIfxXiWxsjzpJqDBImSNlKwiDDmZPDNf+ZmkYEr3xDoS7La+lATpQqDI1yIxm7fr9+CSg==
+X-Received: by 2002:a5d:6992:0:b0:313:f4e2:901d with SMTP id g18-20020a5d6992000000b00313f4e2901dmr11318632wru.22.1688991866762;
+        Mon, 10 Jul 2023 05:24:26 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f17-20020adfe911000000b0031416362e23sm11618363wrm.3.2023.07.10.05.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 05:24:26 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        neil.armstrong@linaro.org, Aradhya Bhatia <a-bhatia1@ti.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     Nishanth Menon <nm@ti.com>, Jayesh Choudhary <j-choudhary@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH v7 0/8] drm/tidss: Use new connector model for tidss
+In-Reply-To: <be2c4c02-43bc-5b16-2162-b8ace8d34996@ideasonboard.com>
+References: <20230606082142.23760-1-a-bhatia1@ti.com>
+ <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
+ <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
+ <42151d11-12d9-c165-0d4b-a0af80b683c3@linaro.org>
+ <be2c4c02-43bc-5b16-2162-b8ace8d34996@ideasonboard.com>
+Date:   Mon, 10 Jul 2023 14:24:25 +0200
+Message-ID: <87bkgkhs3q.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-References: <20230531090424.3187-1-johan+linaro@kernel.org>
- <20230531090424.3187-3-johan+linaro@kernel.org> <CAMi1Hd3fe=wk02WG8J7K5Ud1GcWkuKKKrxFjkNguxDkzNz2WVQ@mail.gmail.com>
- <ZKfyH4jRGlVlcLeY@hovoldconsulting.com> <CAMi1Hd2CGQKbMPm6GXfSHgrdHsyngBQ_DBseF08=oEvGdizVcw@mail.gmail.com>
- <ZKvvN53dM5vbAFGi@hovoldconsulting.com>
-In-Reply-To: <ZKvvN53dM5vbAFGi@hovoldconsulting.com>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Mon, 10 Jul 2023 17:52:55 +0530
-Message-ID: <CAMi1Hd3-iiNYfSyrvXpsjEFQ+_PzR_WJPoDEbcnAvH+Q1O_Pmw@mail.gmail.com>
-Subject: Re: [PATCH RESEND 2/2] Bluetooth: fix use-bdaddr-property quirk
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 at 17:14, Johan Hovold <johan@kernel.org> wrote:
->
-> On Fri, Jul 07, 2023 at 07:12:35PM +0530, Amit Pundir wrote:
-> > On Fri, 7 Jul 2023 at 16:37, Johan Hovold <johan@kernel.org> wrote:
->
-> > > That's odd. You should still see the above messages also with this patch
-> > > applied, but you may now need to provide a valid device address before
-> > > being able to use device in case the bootloader has not provided one
-> > > (e.g. using btmgmt).
-> >
-> > Sorry for the confusion, I missed the part where I do see these
-> > messages when the kernel module is loaded but the direct firmware
-> > loading fails.
-> >
-> > Bluetooth: hci0: setting up wcn399x
-> > Bluetooth: hci0: QCA Product ID   :0x0000000a
-> > Bluetooth: hci0: QCA SOC Version  :0x40010214
-> > Bluetooth: hci0: QCA ROM Version  :0x00000201
-> > Bluetooth: hci0: QCA Patch Version:0x00000001
-> > Bluetooth: hci0: QCA controller version 0x02140201
-> > Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-> > bluetooth hci0: Direct firmware load for qca/crbtfw21.tlv failed with error -2
-> > Bluetooth: hci0: QCA Failed to request file: qca/crbtfw21.tlv (-2)
-> > Bluetooth: hci0: QCA Failed to download patch (-2)
-> > Bluetooth: hci0: QCA preshutdown_cmd failed (-56)
-> >
-> > This happens in all the cases (working and non-working BT) because
-> > filesystem is not mounted by that time. I'm running AOSP and all the
-> > kernel modules get loaded from a ramdisk. But in the working case, the
-> > firmware loading kicks in again later in the boot process and BT gets
-> > initiazed..
-> >
-> > With this patch, after the first attempt to load the firmware fails,
-> > the firmware loading doesn't kick-in again. Also even if I keep the
-> > firmware in ramdisk then the direct firmware loading from ramdisk
-> > happens but BT still doesn't work
-> > https://bugs.linaro.org/attachment.cgi?id=1148.
->
-> So everything appears to work as intended. First, the firmware needs to
-> be in your initramfs if you want to avoid that initial fw load failure.
->
-> And after that you need to provide a valid device address as these
-> devices ship without one.
->
-> Once you set the address, the firmware should be loaded if it hasn't
-> been already.
+Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> writes:
 
-Thanks a lot for explanation Johan. I just booted up Debian on DB845c
-and btmgmt works as you pointed out above.
+Hello Tomi and Neil,
 
-root@linaro-gnome:~#
-root@linaro-gnome:~# uname -a
-Linux linaro-gnome 6.5.0-rc1 #1 SMP PREEMPT Mon Jul 10 15:42:50 IST
-2023 aarch64 GNU/Linux
-root@linaro-gnome:~#
-root@linaro-gnome:~# btmgmt public-addr 01:02:03:04:05:06
-[  165.708146] Bluetooth: MGMT ver 1.22
-hci0 Set Public Address complete, options:
-[  165.715275] Bluetooth: hci0: setting up wcn399x
-root@linaro-gnome:~# [  165.868755] Bluetooth: hci0: QCA Product ID
-:0x0000000a
-[  165.874272] Bluetooth: hci0: QCA SOC Version  :0x40010214
-[  165.879758] Bluetooth: hci0: QCA ROM Version  :0x00000201
-[  165.885226] Bluetooth: hci0: QCA Patch Version:0x00000001
-[  165.903506] Bluetooth: hci0: QCA controller version 0x02140201
-[  165.909424] Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-[  166.794992] Bluetooth: hci0: QCA Downloading qca/crnv21.bin
-[  166.870882] Bluetooth: hci0: QCA setup on UART is completed
-
+> On 06/06/2023 12:48, neil.armstrong@linaro.org wrote:
+>> On 06/06/2023 11:46, Aradhya Bhatia wrote:
+>>> Hi Neil,
+>>>
+>>> Thank you for reviewing the previous patches!
+>>>
+>>> On 06-Jun-23 14:37, Neil Armstrong wrote:
+>>>> Hi,
+>>>>
+>>>> On 06/06/2023 10:21, Aradhya Bhatia wrote:
+>>>>> Hi all,
+>>>>>
+>>>>> I have picked up this long standing series from Nikhil Devshatwar[1].
+>>>>>
+>>>>> This series moves the tidss to using new connectoe model, where the SoC
+>>>>> driver (tidss) creates the connector and all the bridges are attached
+>>>>> with the flag DRM_BRIDGE_ATTACH_NO_CONNECTOR. It also now creates 
+>>>>> bridge
+>>>>> to support format negotiation and and 'simple' encoder to expose it to
+>>>>> the userspace.
+>>>>>
+>>>>> Since the bridges do not create the connector, the bus_format and
+>>>>> bus_flag is set via atomic hooks.
+>>>>>
+>>>>> Support format negotiations in the tfp410, sii902x and mhdp-8546 bridge
+>>>>> drivers as a first step before moving the connector model.
+>>>>>
+>>>>> These patches were tested on AM625-SK EVM, AM625 SoC based BeaglePlay,
+>>>>> and J721E-SK. Display support for AM625 SoC has not been added upstream
+>>>>> and is a WIP. To test this series on AM625 based platforms, basic
+>>>>> display support patches, (for driver + devicetree), can be found in
+>>>>> the "next_AttachNoConn-v2" branch on my github fork[2].
+>>>>
+>>>> I can apply all bridge patches right now so only the tidss change 
+>>>> remain,
+>>>> is that ok for you ?
+>>>>
+>>>
+>>> While the bridge patches and the tidss patch can be separately built
+>>> without any issue, the tidss functionality will break if only the bridge
+>>> patches get picked up, and not the tidss.
+>>>
+>>> Would it be possible for you to pick all the patches together once Tomi
+>>> acks the tidss patch?
+>> 
+>> Sure
 >
-> > > Are there any error messages in the log when running with this patch?
-> >
-> > I don't see any relevant error message in dmesg. I'll check if I can
-> > find a command line BT debug tool which I can use on AOSP for
-> > debugging. There used to be a few hci command line tools, when I
-> > looked into it a few years ago. Not sure if they are still around and
-> > useful.
+> I think this looks fine. For the series:
 >
-> Yeah, I'm not sure how you set the device address with the Android
-> stack, but there must be some way as there are other bluetooth
-> controllers out there which similarly need a valid address before they
-> can be used.
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 >
 
-I'll look if I can reuse/simplify "btmgmt public-addr" command on
-Android or find an equivalent tool to do that.
+It seems this series fell through the cracks? Since you both already
+reviewed the patches, I've just pushed all the set to drm-misc-next.
 
-Regards,
-Amit Pundir
+Thanks all!
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
