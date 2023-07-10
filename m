@@ -2,61 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C5D74DB83
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCF774DB87
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjGJQwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S231146AbjGJQwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjGJQv7 (ORCPT
+        with ESMTP id S230406AbjGJQwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:51:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4AD180;
-        Mon, 10 Jul 2023 09:51:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 10 Jul 2023 12:52:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8237112E;
+        Mon, 10 Jul 2023 09:52:32 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-189-246.ewe-ip-backbone.de [91.248.189.246])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F04C86112C;
-        Mon, 10 Jul 2023 16:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A12C433C7;
-        Mon, 10 Jul 2023 16:51:52 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 12:51:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Zehao Zhang <zhangzehao@vivo.com>, linkinjeon@kernel.org,
-        sj1557.seo@samsung.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] exfat: Add ftrace support for exfat and add some
- tracepoints
-Message-ID: <20230710125149.6424268a@gandalf.local.home>
-In-Reply-To: <20230711013723.1b677cae2870bd509f77babd@kernel.org>
-References: <20230710092559.19087-1-zhangzehao@vivo.com>
-        <20230711013723.1b677cae2870bd509f77babd@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1AAD96602B7B;
+        Mon, 10 Jul 2023 17:52:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689007950;
+        bh=ABpJQ8z918e5OZkfpgP7HwSnXWU4EFxL3SvzflDiHoM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nGNYDGcxK+5wDcCrAZ/2csXrrZCAaOWFOOyDfwc5T7vkrETYIb+QVrafuclahWIxr
+         IXE4pd4C+FGuT3BMPNyTVUw3r+bsP5f/dv74DqIUF7UJEPwL48DzCq17O2Yz0kPVJm
+         PjA2aBVKVCp5jrI/sElqItEyFPAjVWBj9qENQcctAYj62vGaXxXQT4vGi41pTVnX8i
+         2PQAe1Y9dy3EiqR2qiU1z/AZeeY06iEfOhJhTrRG+t3aurbv266IAsu+5F3ezmW76m
+         /o9IBSDGg40IAn8IcbLBeeUgWNgxXNM5oQwZhJaUzLW+hIsAG3IYTk3VFqVZq1uXWQ
+         kVcv8eJO1TtPA==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 1980D480592; Mon, 10 Jul 2023 18:52:28 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v1 00/13] Improve Rock 5A Device Tree
+Date:   Mon, 10 Jul 2023 18:52:15 +0200
+Message-Id: <20230710165228.105983-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 01:37:23 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+Hi,
 
-> It seems like most of them are address_space_operations' operators.
-> Is that OK to define those events (~= user exposed interface) from
-> exFAT filesystem? I wonder why we can not make a generic VFS events
-> for those. (Or all FS-wide generic events).
+This brings Rock 5A on par with the Rock 5B. All necessary driver
+changes have already been merged.
 
-Probably because the VFS maintainer has NACK'd all trace events in the
-generic VFS subsystem :-(
+-- Sebastian
 
--- Steve
+Lucas Tanure (1):
+  arm64: dts: rockchip: rock-5a: add SD card support
+
+Sebastian Reichel (12):
+  dt-bindings: vendor-prefixes: Add prefix for belling
+  dt-bindings: at24: add Belling BL24C16A
+  arm64: dts: rockchip: rock-5a: add PMIC
+  arm64: dts: rockchip: rock-5a: add vdd_cpu_big regulators
+  arm64: dts: rockchip: rock-5a: add 5V regulator
+  arm64: dts: rockchip: rock-5a: add status LED
+  arm64: dts: rockchip: rock-5a: add analog audio
+  arm64: dts: rockchip: rock-5a: add I2C EEPROM
+  arm64: dts: rockchip: rock-5a: add vdd_npu_s0 regulator
+  arm64: dts: rockchip: rock-5a: enable I2C interface from DSI and CSI
+    connectors
+  arm64: dts: rockchip: rock-5a: add ADC
+  arm64: dts: rockchip: rock-5a: add fan support
+
+ .../devicetree/bindings/eeprom/at24.yaml      |   3 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ .../boot/dts/rockchip/rk3588s-rock-5a.dts     | 586 ++++++++++++++++++
+ 3 files changed, 591 insertions(+)
+
+-- 
+2.40.1
+
