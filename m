@@ -2,135 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1AB74CEDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9CA74CED6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjGJHra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S229870AbjGJHqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjGJHr2 (ORCPT
+        with ESMTP id S229792AbjGJHqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:47:28 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E1B12E;
-        Mon, 10 Jul 2023 00:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688975243; x=1720511243;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xPztZ+J8MBfqfmjx7KsUl5UggWWY3LTfkcDk9EsYdp4=;
-  b=kx0nVSR10GaI3H6a2Ly69+cAI5ngdqdicRDp6tVgyc/eQ2P+aT/aEsiu
-   d+UeVMgBFUhe6qHafqHh2VNIiheVe4656Trj0NxYU2PQ9TWtU5F51JO0O
-   h/LLDTDKBWIAbTBGJfgYWKP1nolCIC2qBD/XfPDt3WmJnewlaFvpUkJ0A
-   JGSomsfQftXXmKeQuvk+R3UowWNSEsNsXoN1askv5L7WenLjGFtWYX028
-   J+RiXidb7Dt30RNYpy/JxOjYgPKGs7Pxq7qh+DacpFa1aq5zg/UudwWl6
-   pwboG91IdYzIVa84zG4d0EUm6/ZQiwpTLTgmvP39luHqTC3qAesaYf/96
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="354138667"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="354138667"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 00:47:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="1051272913"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="1051272913"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jul 2023 00:47:19 -0700
-Date:   Mon, 10 Jul 2023 15:45:52 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Peter Colberg <peter.colberg@intel.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com, marpagan@redhat.com,
-        lgoncalv@redhat.com
-Subject: Re: [PATCH 1/2] fpga: dfl: use sysfs_emit() to format sysfs values
-Message-ID: <ZKu3MIfEyIBqg2g1@yilunxu-OptiPlex-7050>
-References: <cover.1687301688.git.peter.colberg@intel.com>
- <a80ad13ad82ff294e706bb87e5b62793c5d195f5.1687301688.git.peter.colberg@intel.com>
+        Mon, 10 Jul 2023 03:46:31 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2109.outbound.protection.outlook.com [40.107.8.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2596EB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:46:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kkjYXte690q71cilFyLTvR0BmfBH/1UGubOx81AmtWF6TaW4tgmKAnjkXiuw4HTqRAfee4+QVHFT0/B5dwVGTsDZzZx8gRsUyUA3HGAU/lErXHu/i0pfzYCEMFA5+PaXQO5qaP1jRfko8SQbHlXgF+Fs2gOzrTDBI9cU9kZQlDoLgau7tSIzaN15S9ioWCwAeQ/wATVNbUN0eq1qddsZL37lvAhVOIdg+Y4hwf8wBg6ahlo7NLaV3vpZRRkzjcR5BBj7wQz7nzS+yGxjgFuTMLmK9lblhodiK6jW1NipI8Qlo1peCwUGYDm1AxtbodigIRXNYZqJzQ5aIktmm043ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hFgcu5IQqi1trwk7O3wcbQgfXYQI9pdPDNZa2OtRmws=;
+ b=Fo3hHQW+2+vKfhoDXytd9DP82WetkKzSOW21erpIT3ylCGIcAS34fTsUJL9zWWa2bOcywd6ZPlbquZ/FntgoUB6WLHxaSkPKC3qAhg43Hhn5dfq53BTBFhp2G2Qn5U1fFHIUVQV1ZFMPcbGXPxI72ixxW4os9sD0TSCb2sgqNST6VUT38m/gSWOJJwBF+/dxyhPfW8mrK0dsqvAwQl2r9Ql8azgNc5tmkRL7wVfDFtkBfDfPfLf5F1qV5jzZdijBiAsyrazkCRUxp5BVKjahDbyxXrkwbuhmmoQlBAT2BDbtNSuiUR095XQsHHqLcvo19HYekD5p00qIgWJOoFjtgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hFgcu5IQqi1trwk7O3wcbQgfXYQI9pdPDNZa2OtRmws=;
+ b=FnwrehTg4XMtD8vWDcpZsLcPSyTr8eOOWtsCzng36Eke+Ic9oDSKmjRiG6xDUiW8OmLc9f+avDIDznMBlWtGv30UepkQFo+JefzmuRoF1BiWtoauwnC9TRqg2XVHZnWi/AP4BmxoPwKnHhUBme3y3/Wsdg7jvqs59l4j8GBnPeY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by DUZPR10MB8169.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:4b1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 07:46:25 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::1b98:7428:fb6b:3b65]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::1b98:7428:fb6b:3b65%7]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 07:46:25 +0000
+Message-ID: <7c4affcb-bcb4-5f4b-cc2f-bed2cad9de71@kontron.de>
+Date:   Mon, 10 Jul 2023 09:46:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/1] drm/bridge: Fix handling of bridges with
+ pre_enable_prev_first flag
+To:     Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jagan Teki <jagan@amarulasolutions.com>
+References: <20230707190020.6280-2-vladimir.lypak@gmail.com>
+Content-Language: en-US, de-DE
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20230707190020.6280-2-vladimir.lypak@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0267.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b5::13) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a80ad13ad82ff294e706bb87e5b62793c5d195f5.1687301688.git.peter.colberg@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|DUZPR10MB8169:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b45982b-4f69-4d78-a733-08db8119c309
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +jGLFG62Du9LUxZqFzJB+uEVJmjVGkI4NON8NP62nvl4V2g1fgPz4LuXNlbapL2iYxkPGvyuNbD6A3PH73g6UWhsSaJYxkMqo3AMeCP4d+q/O7rqslyrOYgfju22QZe2/S8JJbLCPa6wzrIf5YJFeugliPrmDIqkLkbs814Bm30RnUR+mP5TsvKrviZ8nNd7b/OwuRRz5VWJ9yL3BZOfNm3HNdshaAlYomQlPdGSrRuClA8JnlpLyRVQErPc9rzAz9nUNxi2TI867vGGUpPS+33TsNsRDh1QodVDz69o8gV5LaY0xFxRjyL/+eJIJ2o0ivQSa7SfiDdy8shqsPvCeLYQyj57aMdyXA26wD5P4Opc5oXm+jr70xTnqcm91TA6iyXuWYfOO3cWtrYoEGXHHcQP2hosHcJ2HOLsDnos9kjFUOu5hKB5diN8qVWW7GG4J3jyV8iO+/snvB7xKsZjiJVAPapMb0VohnqmSLKy6u0kKqLC9JZh3EXkv+WjgvZ1tHkxJFqSnU6sJztGaGt6ueYLHhCkJmTVNhamw0XS+24od/l/Di0ExCbd/GvY5fxgb8qi5dxbWFRw0aG3dpOXAQJHmRhMd9Of2UxLxuasy7b296uSg5KYdyNqLOWjgeZWI+5k9YYbklkY+ZYTIWs7cA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(136003)(376002)(39860400002)(451199021)(86362001)(31696002)(38100700002)(31686004)(36756003)(6486002)(110136005)(54906003)(53546011)(26005)(6506007)(186003)(966005)(6512007)(2616005)(44832011)(7416002)(5660300002)(2906002)(66556008)(316002)(478600001)(66946007)(8936002)(66476007)(8676002)(66574015)(83380400001)(4326008)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aStYQ0hFZUxETkZDc2Rza2VORjBzZFhhbmtUdUpHNThvK3ozblBWWnJPdE04?=
+ =?utf-8?B?L3l4UVRIUmhyd0tBTFlFdGNRQ3hEMGRoZ1dvYVN4cGF5cEVYbGdYeFA4NGdv?=
+ =?utf-8?B?L1FyczMrbDZxTHIzaTRkWTZWT1dGaGlYbFVJNlZVM040L205eUZaWVgvWHEy?=
+ =?utf-8?B?QWg2R3h4dmkrMERxSGZYNUtJQ3J5b1ljRDBvTC9LdG5XV2gyNk94dURBd1ZW?=
+ =?utf-8?B?OWJSUUVmQ3dGZUtCM0ZrTnh2TTQrTVZRdU81eGI1RXFUc2o4Mk9PNklqVXhP?=
+ =?utf-8?B?MUR6M2FRcUdGckNNdlU3NkNoelBCRXRuT01lNmpQaHRaSHA5TWZsRmIwMGkw?=
+ =?utf-8?B?WFhldlcxYm95RmtYemFKSXc5QXhhcE9rVFU3MUQvZmJVNjZUYzVZbHhsUnli?=
+ =?utf-8?B?ZmdFVGp4S1RUTlFjcGhjcXNESlF3dmw1SEZBWnowcGl5ck9HSXVwamdKcUZU?=
+ =?utf-8?B?NkE2YkZaczlSTFJBa085YlFuYk1ESndTeWlqei82YVJxbUZPMXNmVHdPbWZ6?=
+ =?utf-8?B?QlZnenErUWpPam52Zi90dTVMankramxRYzlQVCsyOFhzUTFvK0VMTTlBUlVs?=
+ =?utf-8?B?OWU5L2FkWmZVNnJlZDI0VGd3RldWb0Q1dTdsc3ZrR1FiZ2xvK28xWXZLZk5H?=
+ =?utf-8?B?SWJtQlY4b3pYTGhpM2dRMXdHelBUL2lEOWI3OE14TDNMOU5wWkhqNkF1aWV1?=
+ =?utf-8?B?MlMycEx5QUYxR1NVOWwrT2Jlb1U3T2UrNDdPeUxDVExnTlZLYW1yZnJIZG9R?=
+ =?utf-8?B?eithcWo1a2xvaUpVY0ZLRlhnTUtHY3RicDNhOVMzNEN4Z3FEdUVqWSs1V3BW?=
+ =?utf-8?B?RU5sRnlqOEwxNXd0elJnU3l4dGRaNlBKdlF3Mlh4L2NmNFVLUHlaTmEyT2Zt?=
+ =?utf-8?B?Z2FnRjA2dHZaSlJSQnZhMThCbXdJaG5BSWVPZEJaV3l4SnBFU09KZjdpWllr?=
+ =?utf-8?B?dmd6MHZBQjFRK09McHNqdzlucjV5WDRwM0k3OXJQV3cyeGFCZjFzeSsvSjhS?=
+ =?utf-8?B?Y0dGckdIb1lQRUc3a2I5VGZhMGJkOUYxTDM3ZTJ1R3lXVEloRHNVRHpoNGFv?=
+ =?utf-8?B?Z3FGRlhJUTBFbi9ZUDhsNnd3cDNWVk9Fa0NIZ2RzM2RmeXJOaXNCM0tVaFFH?=
+ =?utf-8?B?R240ajI5WmJlUGJyc2R2eVJQeW5GL05mNUFwMjBGVXhHcEpqa0kzMGxKNEta?=
+ =?utf-8?B?V1ZneHphNzlyKzhULzMrMEUyVUtRSThzR2NXRkMzNXJpQklONFZzMjdvMXZm?=
+ =?utf-8?B?NnBGZmdLYXpFUStHYzlNYkxqbzE4M2syTkJ2TE81T3kxcmc5eUVWY003SWdy?=
+ =?utf-8?B?Rm5mSTRMK2pjTzI2S3B4MVNhaU83OERmUzlsSE53UjdqdXBxSTJ1SGhyMDRz?=
+ =?utf-8?B?bHE3WXI0SzhzcitjTDJITVQzUmNOczZEQXRUYVRyc2NZeHl0SlNWR0dGbWpG?=
+ =?utf-8?B?cksxK2l1ZTlLNURRZzkvalpFNnNzd0FzUFQvZmRNMVQ1TlhVaWp4M3pIZklP?=
+ =?utf-8?B?ams1a2VObERpNTlzc0ExRTg4MEs1K2FhdWFNVEtwZmlzTmRRZEVTckdRMk43?=
+ =?utf-8?B?MUxrVEthZXROVEdOTFN5UGRXR2NYbFdmeGFOZGk3ODczWVFaUWp6WHBhVS9t?=
+ =?utf-8?B?VG1zSGJ6MkU4bVRPam54V1paYVlFVk9wYXQ0ZTJsd2VYa2pxR0dFbDNadFdI?=
+ =?utf-8?B?YkhOUUNHb3EzNVVHaU9XdFdKWXNqUzFVRzJYVFVnNy9IZXMxSzFyMEJueC80?=
+ =?utf-8?B?dHowbzd4TWlEQjAyYnVuWTUvMUc2VmRua2ZTcmNIb25zNml2U1duTFo5Qmpv?=
+ =?utf-8?B?UmtEL29sQzBxT2dQNHpQS0xBS1k5Z0k1amY1TXQ5MGlSYVNWOVo5cStRcWYv?=
+ =?utf-8?B?REc0L0NoTDZXZ05wKzB2cUV4Wi8xRkY0TWNMYUUvdjUwUk1FK2tyV2U1L1Fy?=
+ =?utf-8?B?SVNvdWZvdDF0OWY1YjRuUHJ3V003VWxiN0dwVVJwZ1BmTkxUYk9rREZlbzNM?=
+ =?utf-8?B?RDE5UFh6QlNaTk1qVXZ2L1hHU0JVRzl5b010WlRlUnJJWkNLVzJhU0VJN2xX?=
+ =?utf-8?B?ZjNKeVdueldDbDkwOWcwMlBaTDAyNlZWR3BHbEZYSDV2a1NEb0ZvN0JSVkp1?=
+ =?utf-8?B?VVJKVllvRHNucTg4OHBHT0ZGcm1Oa3VYa0pYaGk2TlJrS2NOaVZYUFlaN0Uv?=
+ =?utf-8?B?VWc9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b45982b-4f69-4d78-a733-08db8119c309
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 07:46:25.0893
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9hI0yO/nur2CGpv+tmkgME7XA2AOasHVcQ7TPO+0PmTAyUzgBmKpNojIfp99ji/F3QvmFe2UYaslyeGr7zhlmi4y/lUqeRWIhho2HHOWyss=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR10MB8169
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-04 at 22:54:50 -0400, Peter Colberg wrote:
-> Use sysfs_emit() to format sysfs values, which wraps vscnprintf() for a
-> PAGE_SIZE buffer. Remove explicit casts in favour of using the printk()
-> format specifier corresponding to the type of the formatted value.
+On 07.07.23 21:00, Vladimir Lypak wrote:
+> [Sie erhalten nicht häufig E-Mails von vladimir.lypak@gmail.com. Weitere Informationen, warum dies wichtig ist, finden Sie unter https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> These changes are cosmetic only; no functional changes.
+> In function drm_atomic_bridge_chain_post_disable handling of
+> pre_enable_prev_first flag is broken because "next" variable will always
+> end up set to value of "bridge". This breaks loop which should disable
+> bridges in reverse:
 > 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/fpga/dfl-afu-error.c |  7 +++----
->  drivers/fpga/dfl-afu-main.c  | 17 ++++++++---------
->  drivers/fpga/dfl-fme-error.c | 19 ++++++++-----------
->  drivers/fpga/dfl-fme-main.c  | 26 ++++++++++----------------
->  drivers/fpga/dfl-fme-perf.c  | 16 +++++++---------
->  drivers/fpga/dfl.c           |  4 ++--
->  drivers/fpga/fpga-bridge.c   |  2 +-
->  drivers/fpga/fpga-mgr.c      |  4 ++--
->  drivers/fpga/fpga-region.c   |  5 ++---
->  9 files changed, 43 insertions(+), 57 deletions(-)
->
-[...]
- 
-> diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
-> index 7422d2bc6f37..1b072416069b 100644
-> --- a/drivers/fpga/dfl-fme-perf.c
-> +++ b/drivers/fpga/dfl-fme-perf.c
-> @@ -524,20 +524,18 @@ static ssize_t fme_perf_event_show(struct device *dev,
->  {
->  	struct dev_ext_attribute *eattr;
->  	unsigned long config;
-> -	char *ptr = buf;
->  
->  	eattr = container_of(attr, struct dev_ext_attribute, attr);
->  	config = (unsigned long)eattr->var;
->  
-> -	ptr += sprintf(ptr, "event=0x%02x", (unsigned int)get_event(config));
-> -	ptr += sprintf(ptr, ",evtype=0x%02x", (unsigned int)get_evtype(config));
-> +	if (!is_portid_root(get_portid(config)))
-> +		return sysfs_emit(buf,
-> +				  "event=0x%02llx,evtype=0x%02llx,portid=?\n",
-                                              ^               ^
-why llx, should be lx?
+>  next = list_next_entry(bridge, chain_node);
+> 
+>  if (next->pre_enable_prev_first) {
+>         /* next bridge had requested that prev
+>          * was enabled first, so disabled last
+>          */
+>         limit = next;
+> 
+>         /* Find the next bridge that has NOT requested
+>          * prev to be enabled first / disabled last
+>          */
+>         list_for_each_entry_from(next, &encoder->bridge_chain,
+>                                  chain_node) {
+> // Next condition is always true. It is likely meant to be inversed
+> // according to comment above. But doing this uncovers another problem:
+> // it won't work if there are few bridges with this flag set at the end.
+>                 if (next->pre_enable_prev_first) {
+>                         next = list_prev_entry(next, chain_node);
+>                         limit = next;
+> // Here we always set next = limit = branch at first iteration.
+>                         break;
+>                 }
+>         }
+> 
+>         /* Call these bridges in reverse order */
+>         list_for_each_entry_from_reverse(next, &encoder->bridge_chain,
+>                                          chain_node) {
+> // This loop never executes past this branch.
+>                 if (next == bridge)
+>                         break;
+> 
+>                 drm_atomic_bridge_call_post_disable(next, old_state);
+> 
+> In this patch logic for handling the flag is simplified. Temporary
+> "iter" variable is introduced instead of "next" which is used only
+> inside inner loops.
+> 
+> Fixes: 4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter bridge init order")
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
 
-> +				  get_event(config), get_evtype(config));
->  
-> -	if (is_portid_root(get_portid(config)))
-> -		ptr += sprintf(ptr, ",portid=0x%02x\n", FME_PORTID_ROOT);
-> -	else
-> -		ptr += sprintf(ptr, ",portid=?\n");
-> -
-> -	return (ssize_t)(ptr - buf);
-> +	return sysfs_emit(buf, "event=0x%02llx,evtype=0x%02llx,portid=0x%02x\n",
+I haven't had a chance to look at this, but I still want to reference
+another patch by Jagan that intends to fix some bug in this area:
 
-same
+https://patchwork.kernel.org/project/dri-devel/patch/20230328170752.1102347-1-jagan@amarulasolutions.com/
 
-> +			  get_event(config), get_evtype(config),
-> +			  FME_PORTID_ROOT);
++Cc: Jagan
 
-BTW, have you ever tested with perf tool? The perf sysfs is a little
-tricky to make perf work. I'm not sure everything is fine with naked
-eyes.
-
-Thanks,
-Yilun
-
+Dave, as you introduced this feature, did you have a chance to look at
+Jagan's and Vladimir's patches?
