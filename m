@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E099374E21D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566CD74E21F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjGJXO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
+        id S231154AbjGJXOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjGJXOZ (ORCPT
+        with ESMTP id S231134AbjGJXO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:14:25 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B40F1B7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:14:22 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so7675596e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1689030861; x=1691622861;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VIA0vS9CGVZu/dKUtt1DEeTq+za3hXZ7GjZyvjklTUs=;
-        b=wbebkbLh9K+s7RqRbnPjkJnBGX5Q2tQ8wr1xPosokwNjTydGAOTVas0VGA6zyRvd8W
-         WPyz+AzJVi309tna+AIGoxvDbPTKSBqHQhlDFTkuO0K7N/LXJ+6lBIA4a0/d9bQl4L5V
-         2u5aXF3lCrjW8ZVuffdH+voZjPSyNhDf7YA8Pn5PaW98cNENUYJDCXNaPPMiOVE/owwg
-         T1Q5RnfMgUW/9WFfuhI7SWR1RJxpKbsAkgkD+QTqkZ4KScpOELTy7xA1xbGH3aMYFxFE
-         WthVHtgBB+4NQP+RVltsVo14IXrQLyjuhWpqF0JjkiE+VOTMeGhWn182IwNCWlc1KsVT
-         Xn+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689030861; x=1691622861;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VIA0vS9CGVZu/dKUtt1DEeTq+za3hXZ7GjZyvjklTUs=;
-        b=aTFiRYe/bpYgPcxIFvAwZZo9seCFWZRAfiBbtrXFL1vnSLCwcuY+CcjI/C3p//R/hK
-         DZErG+7ayB4wCTLWvqzYx3bTxBz8rdm5bSBATZZz+LW0JxnCkxQY4UGOf3OjTu5SUuDp
-         MESEvLEdusBbEmrzbFJBIkb21UlKpPuDcH5Netj1e8YubRd6nfhUxb8GNs7Qtz+mP2RG
-         6AtcIlE7+/xswRI9r9MQgNPuwnbmfljdta//y0y+6MZY8MQr11N5oJMVi/x6WgujcFVa
-         XGz5R6cGOaV9npSjeDFkzXSTTy8AoOvxTaqh0OFSyk6tZkhGv22tTXOXSvUEkR5KM80v
-         a8mQ==
-X-Gm-Message-State: ABy/qLYSiHVfWa/ibq80WbhXr2k9qyE79aMsoEJ9M7GkN4D2YzCtXLJW
-        285e1jNLlJRvfPacm/mC65ohkXEl1RJDMNgNRZ2r9iWWs9BdUn157PPyIA==
-X-Google-Smtp-Source: APBJJlEcIKfj6d06z0ZSWaBeY8VonHC9pf+QP0h3+s903O5LXh6RbAYPuokBP+PaRwBXogdljmL9fsDD46SWpNIEctM=
-X-Received: by 2002:a19:e006:0:b0:4f8:6bbe:8a0b with SMTP id
- x6-20020a19e006000000b004f86bbe8a0bmr10101748lfg.16.1689030860745; Mon, 10
- Jul 2023 16:14:20 -0700 (PDT)
+        Mon, 10 Jul 2023 19:14:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014E5137;
+        Mon, 10 Jul 2023 16:14:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 948FF6125F;
+        Mon, 10 Jul 2023 23:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9602C433C8;
+        Mon, 10 Jul 2023 23:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689030866;
+        bh=3pacJFdrciplk9UTyYfKnVqmTOkTDznXreLebZgCpcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FFa1cwZMYTNEk2+uKOfl/u+Z354qKOEXsU7dCcJNHIgSwW3g81vYZuz+hbnKvFKHJ
+         TwCwS1KkJzzi2H6SiZnQY8tlT13Js5S3z4dxDXczn3VEVUGwV+MhTDwxWawomkIPZN
+         DuQzYbNxYHwFiTK8quELngQuJ+onwLUNBvK29jwcgyR3OHWncK9CsjzClfxOWXUiwl
+         OD+y4x3gRviZCmYPG+lPvvx0lGr/HREp/B4kNTUHUWrOhF8BM28cgTFH8hNFM0vL9o
+         gTBfHPFSgaVmbrP4qP9oML6CUJBSBLLz+HExEWfdcNBQ/4Mp6qJLRoUke6uiqVQ3Co
+         Keod6VwjvIbfA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] cxl/pci: Remove unnecessary aer.h include
+Date:   Mon, 10 Jul 2023 18:14:16 -0500
+Message-Id: <20230710231416.232751-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230709203826.141774942@linuxfoundation.org>
-In-Reply-To: <20230709203826.141774942@linuxfoundation.org>
-From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
-Date:   Tue, 11 Jul 2023 08:14:09 +0900
-Message-ID: <CAKL4bV7eHZerKW5F2_Zx_fEpmotZ3YvGYht1H1Evro6M5CBHxA@mail.gmail.com>
-Subject: Re: [PATCH 6.4 0/6] 6.4.3-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-On Mon, Jul 10, 2023 at 5:45=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.4.3 release.
-> There are 6 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue, 11 Jul 2023 20:38:10 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.4.3-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+<linux/aer.h> is unused, so remove it.
 
-6.4.3-rc2 tested.
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Cc: Alison Schofield <alison.schofield@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Ben Widawsky <bwidawsk@kernel.org>
+Cc: Dan Williams <dan.j.williams@intel.com>
+---
+ drivers/cxl/pci.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Build successfully completed.
-Boot successfully completed.
-No dmesg regressions.
-Video output normal.
-Sound output normal.
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index 1cb1494c28fe..8314cf2ac16a 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -8,7 +8,6 @@
+ #include <linux/mutex.h>
+ #include <linux/list.h>
+ #include <linux/pci.h>
+-#include <linux/aer.h>
+ #include <linux/io.h>
+ #include "cxlmem.h"
+ #include "cxlpci.h"
+-- 
+2.34.1
 
-Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P(x86_64), arch linux)
-
-Thanks
-
-Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
