@@ -2,150 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF0C74DC72
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9DB74DC73
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjGJR20 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 13:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S231328AbjGJR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjGJR2Y (ORCPT
+        with ESMTP id S231319AbjGJR2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:28:24 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2B9C4;
-        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98dfd15aae1so108981366b.0;
-        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
+        Mon, 10 Jul 2023 13:28:43 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6657D187
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:28:39 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-635eedf073eso31177456d6.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689010118; x=1691602118;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLpjzQEenkbJ/gFlghd5REGFAGYnm9xmo03pfq2YYWo=;
+        b=fSUBtljW2tupPgc7JdOUNMdW4laZhz1EUL6fRhFT3oIYk6LXlb8eDlvz5YyQcxCMhu
+         aZqXgl3kHe/jI8ubKGqhnPmNH6yInPwogwdX9CwU5R/3lEEEXDaFIPIhhjoQNvbXGrIl
+         +4oTH2UIJ+qNtwFB07Mi+9f41IUPzZV5Ui1ZnRzxAoLUclWyzjeEzZ903j5wwRW4zGoM
+         aPjpSdDi+Wg/CDofCt429PZLE2hcKYYCt31G3IPKCA0aln05ua500196g40qrnXORZWw
+         dYbf5r/HTkrGgweFngOzWZft3EaMNRxq/N0Ui6aL1pZMCkcd7Pw9/Tj/YchoqE9TRrEK
+         2rGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689010101; x=1691602101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6m9bcYgGbjrVRMFW6nrHcAcb8xg9Wr/oPN8BtfdOyoo=;
-        b=DpbGpUoGlBUJ3pq+NuJX09C9Ttk9iQS7C1oQ+dDX2wLh6fd4AgdpBkS/n9QsnABYP8
-         Zo2b+0LZgV8Xnxi1qyzTo+fZoaobbDctjEigQNJEG0H80bKVitAaSYLtxKBYqknqUHtX
-         bh6S7PjWeWorPAet3nZCwGnrLHV6X7NX7o63nHaimBwCQ95Z5QBEgZRxtBG4Q6fIfC9u
-         hruAc4+FShMtcK48CFl/qqByFVfmCUb1CCFX6tXqTxy3cc0pgyMEco0cMnNhileckDEp
-         3dZR+P1J1WK2DzRRDs6Gv/1/3cglTZM4cufwglJXXiRT898ujbHJ+HFHPfSgBZAlEkbI
-         pRZQ==
-X-Gm-Message-State: ABy/qLZ8/3I8Xc9nIacUWw3/lXWqne9sASv09kw5BdHKzuT+VoHPn/LG
-        GE/AjhAlkxXKX+3e8cWrTs7TZp6yOoixQ89Z+vg=
-X-Google-Smtp-Source: APBJJlGaLddWMgg3l2iwjH8O/u5lm1FCcnISu3+XYpvHyebQmDlWIxA57nnYOaWv8SkozX7erXyetKP23I5mOyLbYZ4=
-X-Received: by 2002:a17:906:51c9:b0:993:d901:9b46 with SMTP id
- v9-20020a17090651c900b00993d9019b46mr8677753ejk.3.1689010101128; Mon, 10 Jul
- 2023 10:28:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689010118; x=1691602118;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wLpjzQEenkbJ/gFlghd5REGFAGYnm9xmo03pfq2YYWo=;
+        b=gKFvuiQqOguJpVaZreK1AgMr/k232Pg4v2z/k8CefqUmiMIf3awUkSOpA6s18IorZ0
+         ckhOTMd3ae3tGceYXbcudQP/OuvreD3jnJNZ4NiZAOsKRVweqDsUrlJBc6gkqZ0lFiQ3
+         iPPkeAXTuN8XvonrnrlhNAuEpX/bZA297ZZ6FGI8YEycZghazCb/8lnBL2OpkAGNvq4J
+         2/5HI4KyZbMTYoYkkz3PAzI6JPaG1JZ6zKkSojyvhQzv7rMWa9U1DExo2S0enqkJp/jy
+         9UQjFz/L3jJfOZXcdza81f1pQUEWYJDsAV4N3YPtZvCa0XdFYpxYRz795LFCUu5VoaIN
+         50dw==
+X-Gm-Message-State: ABy/qLaLhd9qpKEcuLkCrrqpEgopgMbC8y0aMt9V/fTNCzbGPd81/zBV
+        O+juiaArmEHlO4mIxMgpngMYlg==
+X-Google-Smtp-Source: APBJJlFExA2moLbyNhVmA2Jybezw3b+s7HmTxgqMtHVXfr1jnmQ18NRx3XeqvNVgeBiLSgTXM+41bw==
+X-Received: by 2002:a0c:dc01:0:b0:636:836e:8064 with SMTP id s1-20020a0cdc01000000b00636836e8064mr11800445qvk.63.1689010118491;
+        Mon, 10 Jul 2023 10:28:38 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id d25-20020a0cb2d9000000b006166d870243sm54803qvf.43.2023.07.10.10.28.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 10:28:38 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qIugf-0004Gb-F9;
+        Mon, 10 Jul 2023 14:28:37 -0300
+Date:   Mon, 10 Jul 2023 14:28:37 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Tina Zhang <tina.zhang@intel.com>
+Cc:     Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Michael Shavit <mshavit@google.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 5/6] iommu: Support mm PASID 1:1 with sva domain
+Message-ID: <ZKw/xS7wOoRvNfnH@ziepe.ca>
+References: <20230707013441.365583-1-tina.zhang@intel.com>
+ <20230707013441.365583-6-tina.zhang@intel.com>
 MIME-Version: 1.0
-References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-9-frank.li@vivo.com>
-In-Reply-To: <20230710095926.15614-9-frank.li@vivo.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Jul 2023 19:28:09 +0200
-Message-ID: <CAJZ5v0h7bvAqyKzV_SsKaTc3JV0R01y0k6aaieAk7iRcbN-eCg@mail.gmail.com>
-Subject: Re: [PATCH v4 09/21] thermal: intel: int340x: processor_thermal:
- convert to use devm_request*_irq_probe()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230707013441.365583-6-tina.zhang@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 12:00 PM Yangtao Li <frank.li@vivo.com> wrote:
->
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
->
-> And tglx point out that:
->
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
->
->      519 messages total (there are probably more)
->
->      352 unique messages
->
->      323 unique messages after lower casing
->
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
->
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
->
->      The most useful one of all is: "could request wakeup irq: %d"
->
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
->
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
->
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
->
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Fri, Jul 07, 2023 at 09:34:40AM +0800, Tina Zhang wrote:
+> Each mm bound to devices gets a PASID and a corresponding sva domain
+> allocated in iommu_sva_bind_device(), which are referenced by iommu_mm
+> field of the mm. And that PASID and sva domain get released in iommu_sva_
+> unbind_device() when no devices are binding to that mm. As a result,
+> during the life cycle, sva domain has 1:1 with mm PASID.
+> 
+> Since the required info of PASID and sva domain are kept in struct
+> iommu_mm_data of a mm, use mm->iommu_mm field instead of the old pasid
+> field in mm struct.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+This is not technically right, the domains need to be a list, and we
+need to search the list. Almost always the list will have 0 or 1
+entries in it.
 
-> ---
->  .../intel/int340x_thermal/processor_thermal_device_pci.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index 0d1e98007270..ee766904b314 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -258,13 +258,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
->                 irq_flag = IRQF_SHARED;
->
->         irq =  pci_irq_vector(pdev, 0);
-> -       ret = devm_request_threaded_irq(&pdev->dev, irq,
-> -                                       proc_thermal_irq_handler, NULL,
-> -                                       irq_flag, KBUILD_MODNAME, pci_info);
-> -       if (ret) {
-> -               dev_err(&pdev->dev, "Request IRQ %d failed\n", pdev->irq);
-> +       ret = devm_request_threaded_irq_probe(&pdev->dev, irq, proc_thermal_irq_handler,
-> +                                             NULL, irq_flag, KBUILD_MODNAME, pci_info, NULL);
-> +       if (ret)
->                 goto err_free_vectors;
-> -       }
->
->         ret = thermal_zone_device_enable(pci_info->tzone);
->         if (ret)
-> --
-> 2.39.0
->
+> @@ -88,31 +98,41 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm
+>  		goto out_unlock;
+>  	}
+>  
+> -	if (domain) {
+> -		domain->users++;
+> -		goto out;
+> +	if (unlikely(domain)) {
+> +		/* Re-attach the device to the same domain? */
+> +		if (domain == sva_domain) {
+> +			goto out;
+> +		} else {
+> +			/* Didn't get detached from the previous domain? */
+> +			ret = -EBUSY;
+> +			goto out_unlock;
+> +		}
+>  	}
+
+And if we do all of this we should just get rid of the horrible
+iommu_get_domain_for_dev_pasid() entirely.
+
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 20135912584ba..1511ded7bc910 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -1175,20 +1175,20 @@ static inline bool tegra_dev_iommu_get_stream_id(struct device *dev, u32 *stream
+>  #ifdef CONFIG_IOMMU_SVA
+>  static inline void mm_pasid_init(struct mm_struct *mm)
+>  {
+> -	mm->pasid = IOMMU_PASID_INVALID;
+> +	mm->iommu_mm = &default_iommu_mm;
+>  }
+>  static inline bool mm_valid_pasid(struct mm_struct *mm)
+>  {
+> -	return mm->pasid != IOMMU_PASID_INVALID;
+> +	return mm->iommu_mm->pasid != IOMMU_PASID_INVALID;
+>  }
+
+And these can now just test if the iommu_mmu->sva_domain is NULL
+
+Jaon
