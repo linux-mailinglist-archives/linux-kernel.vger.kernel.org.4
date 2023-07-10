@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF59F74D38D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D05174D396
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjGJKcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S232062AbjGJKeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGJKcK (ORCPT
+        with ESMTP id S231340AbjGJKd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:32:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F03B8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688985129; x=1720521129;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=tz2zZQ8f/yg7gZP7NI81aF7OXMQPyUOJOe7LMRyGsrg=;
-  b=hTEB5lfkiX7nq1GG2J5NIzcwCh6dAIZik24Snz74FYooKgd/kyUWoTlG
-   q8fpYbh+3CxuEL/ydfAQUW5odLjSbRNLI6jJzchEc9OGyBUrhqwklQimM
-   DjmHwhNLGN8RP+gnL9WXntjCXCnyzZZXRgfBh9Vr6BKXS9oUFcR2As8Iq
-   D9NzHTiGC2dseUqI+74Mu8gTh88J9z12IKEA9D00CmVHTRr9Kjc02jKZp
-   IjW/8reBPUMzkan/0rcqC1WJ8OwkXzOdgWEJEYmNJXHyOKcjjqmj085E2
-   cb3GtpRbQWOJ76RGl4ADzky5WkpZripf0q+wUzMIcHy3lmvQm9j66fFex
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="349110577"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="349110577"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:32:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="723960814"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="723960814"
-Received: from stoicaan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.170])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:32:05 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Xin Ji <xji@analogixsemi.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     =?utf-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH RESEND] drm/bridge: anx7625: Use common macros for DP
- power sequencing commands
-In-Reply-To: <20230710090929.1873646-1-wenst@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230710090929.1873646-1-wenst@chromium.org>
-Date:   Mon, 10 Jul 2023 13:32:03 +0300
-Message-ID: <87edlgjbvg.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Mon, 10 Jul 2023 06:33:59 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9085ED1;
+        Mon, 10 Jul 2023 03:33:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1688985230;
+        bh=Qd7Jq6PV9bUrlUetZdlFipTTG5XNVHRahk+7pTupUnY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=hnWfx1femhGVzcnMKSnDNf5xgExdFaoCKOuaJ7ctT8uwiVSpSlPmmIAI906gmEQ+4
+         0owCsZvwTSPxqkE5OG0BhsTeRBEFCnEw61/oroH4BdFCoDwDucZwRFDJsYpLsNac3a
+         nZkP5TXtpTvOEY4bvFfgSRt+BdyWIKfa6EDfvFUg=
+Received: from [192.168.124.11] (unknown [113.140.11.4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 7226465AB5;
+        Mon, 10 Jul 2023 06:33:47 -0400 (EDT)
+Message-ID: <2856be90ec133a2bafd5f11e537f8d589d0f8cb9.camel@xry111.site>
+Subject: Re: [RFC PATCH] wifi: iwlwifi: remove 'use_tfh' config to fix crash
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Jeff Chua <jeff.chua.linux@gmail.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "Berg, Johannes" <johannes.berg@intel.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Date:   Mon, 10 Jul 2023 18:33:45 +0800
+In-Reply-To: <CAAJw_Zuo1L3yTP-PVgdW74uYg=R7YxXF0hA5s0Gfm1bCqC90RQ@mail.gmail.com>
+References: <20230709181323.12085-2-johannes@sipsolutions.net>
+         <19f7bc7f43922c257238127d5fe84ea01cf2be79.camel@intel.com>
+         <CAAJw_Zuo1L3yTP-PVgdW74uYg=R7YxXF0hA5s0Gfm1bCqC90RQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.48.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023, Chen-Yu Tsai <wenst@chromium.org> wrote:
-> The DRM DP code has macros for the DP power sequencing commands. Use
-> them in the anx7625 driver instead of raw numbers.
->
-> Fixes: 548b512e144f ("drm/bridge: anx7625: send DPCD command to downstrea=
-m")
-> Fixes: 27f26359de9b ("drm/bridge: anx7625: Set downstream sink into norma=
-l status")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
-> Collected tags and rebased on v6.5-rc1.
->
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/=
-bridge/analogix/anx7625.c
-> index 8b985efdc086..9db3784cb554 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -931,8 +931,8 @@ static void anx7625_dp_start(struct anx7625_data *ctx)
->=20=20
->  	dev_dbg(dev, "set downstream sink into normal\n");
->  	/* Downstream sink enter into normal mode */
-> -	data =3D 1;
-> -	ret =3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
-> +	data =3D DP_SET_POWER_D0;
-> +	ret =3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER, 1, &d=
-ata);
+On Mon, 2023-07-10 at 18:16 +0800, Jeff Chua wrote:
+> On Mon, Jul 10, 2023 at 9:53=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> =
+wrote:
+> >=20
+> > On Sun, 2023-07-09 at 20:13 +0200, Johannes Berg wrote:
+> > > From: Johannes Berg <johannes.berg@intel.com>
+> > >=20
+> > > This is equivalent to 'gen2', and it's confusing to have two
+> > > of the same configs. The split config patch actually had been
+> > > originally developed after this, and didn't add the use_tfh
+> > > in the new configs because they were copied to the new files
+> > > after ...
+> > >=20
+> > > There's clearly still an unwind error in iwl_txq_gen2_init()
+> > > since it crashes if something fails there, but the reason it
+> > > fails in the first place is due to the gen2/use_tfh confusion.
+> > >=20
+> > > Reported-by: Jeff Chua <jeff.chua.linux@gmail.com>
+> > > Reported-by: "Zhang, Rui" <rui.zhang@intel.com>
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217622
+> > > Link:
+> > > https://lore.kernel.org/all/9274d9bd3d080a457649ff5addcc1726f08ef5b2.=
+camel@xry111.site/
+> > > Link:
+> > > https://lore.kernel.org/all/CAAJw_Zug6VCS5ZqTWaFSr9sd85k%3DtyPm9DEE%2=
+BmV%3DAKoECZM%2BsQ@mail.gmail.com/
+> > > Fixes: 19898ce9cf8a ("wifi: iwlwifi: split 22000.c into multiple
+> > > files")
+> > > Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+> >=20
+> > Hi, Johannes,
+> >=20
+> > Thanks for the patch. It fixes the problem on my side.
+> >=20
+> > Tested-by: Zhang Rui <rui.zhang@intel.com>
+> >=20
+> > thanks,
+> > rui
+>=20
+>=20
+> Johannes,
+>=20
+> Fixed as well! Thank you!
 
-So you have code to implement the drm dp aux abstractions, why aren't
-you using drm_dp_dpcd_writeb() and friends here?
+Works for me too, thanks!
 
-BR,
-Jani.
-
-
->  	if (ret < 0)
->  		dev_err(dev, "IO error : set sink into normal mode fail\n");
->=20=20
-> @@ -971,8 +971,8 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
->=20=20
->  	dev_dbg(dev, "notify downstream enter into standby\n");
->  	/* Downstream monitor enter into standby mode */
-> -	data =3D 2;
-> -	ret |=3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data=
-);
-> +	data =3D DP_SET_POWER_D3;
-> +	ret |=3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER, 1, &=
-data);
->  	if (ret < 0)
->  		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+Tested-by: Xi Ruoyao <xry111@xry111.site>
 
 --=20
-Jani Nikula, Intel Open Source Graphics Center
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
