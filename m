@@ -2,174 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DEF74DE27
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B9474DE1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjGJTZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S230303AbjGJTY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGJTZ1 (ORCPT
+        with ESMTP id S229659AbjGJTY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:25:27 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4DE6E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:25:01 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51e429e1eabso4312946a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:25:01 -0700 (PDT)
+        Mon, 10 Jul 2023 15:24:26 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC0DE3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:24:25 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so3667329a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:24:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689017099; x=1691609099;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8jAJrLaj81nDh4wW1pP27vJFmY8UiJKSEaQ+/Hb04Nc=;
-        b=hnX3o4peRysHE4PlLHbB9M+JugRMzR7VVp6giACiIXm0TS66MpvDNrmpEM20fnHH2A
-         oSFUd0VYZ/MdWgmzGsmXue6dq2b+VMz3GxtLT1LjmN2vOJPTyB1MlJVUP4Zg1582I7Ih
-         bvByd4d2/2KrUOhapdZ5gYfpSGWLMwWzS/Wj/NbCJxGevCFI9QeDcs9Auy4zAcVQ/Tf8
-         inx384WtL7/fUnA4qAcq/gmiQWcOE2I+2JT4Su/1IT5W/UTbkLOtSMHLNoEqNw2olwUV
-         YBlaAEf7Uv05hM5H6jTxldHdo0TkB+So0trN2HA+X0Z1MAsWYaG52b6cC+vifMgd8TY2
-         hLeg==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1689017065; x=1691609065;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aVU5xkkFrBHK9KN4xCmrxkM+F8/EoTyfyWL/2CP+3j0=;
+        b=HASFVZl23FPMCm79tXoegRb1RNFILB9pF0aVoVMK8x4Sxj+bbrS70w4s+kI778hKvo
+         rgVeXgf8djTPdQwty4wprwlEFrb3lhdGd/5Z7XWefuGrcp4oEeSRwKxzc9ZpwZ1lBEsY
+         41h1Q/oXnJCJAbhIepxk74dE+5mMkkSoVoHFg5jAw8QI079ME/C5vdykHYakRi4fPbX7
+         3z65PNk21m2ZjuB+sgjrjVcWtlZVtvMv5FD9QfkKTGY+nNIP7c5PDj1xs+OsZf+CVB6i
+         ZnJ7q30xy/5dw0omQTP7ZNjTUSEvmHUElLvT2Ns8khZyXU7Z3rqTKEwNO39X4vCDI3Ir
+         hDVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689017099; x=1691609099;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8jAJrLaj81nDh4wW1pP27vJFmY8UiJKSEaQ+/Hb04Nc=;
-        b=la9/tb9bYitJ1FN4MvdaML+FCTPS9XGzJ3P6qg6y5b6ECUoQaRoVf4gzxW6or3/oHw
-         MRHsmt1SqE3tPk4zy/eRWRtz3UcTvMAEeIz1CZChOKj4uVnes0WxuT6jAzPTBbrPDUWj
-         R+y2F3U2BdYXOLbYsxNeOjrX/v/+0t8Awh9wQh78PdMuZyH55bSU2KnHZzR83glE4U5u
-         YJIAJpG8UeiyCo7Gdyl6GbCZ+oHMuEfZQLJD0ExhsCTh3dNVFX8LzOkCoFReyWRhbKVm
-         LJXqOdWLA2Vwc6wcLG42G60CfRai99HxLi3NZWji/22f7JOME26Q5Qwyn90hh52pcuP3
-         7kLQ==
-X-Gm-Message-State: ABy/qLZSpzs3nUQ0ISlib4AMsxbvZ6DNmBAauBpda114EB1j7XD7Bop3
-        rpYOb/tJRV1H9QQX3Wof022XjXT+kyWbfVAr
-X-Google-Smtp-Source: APBJJlHwVT5frp02REiaP08Tw2FykEOwGxdLWWsPCiw5aMtj6jXyTUwf06D5IHzSoxQJfVL+VWOmXA==
-X-Received: by 2002:a17:906:5307:b0:993:f996:52d3 with SMTP id h7-20020a170906530700b00993f99652d3mr6394846ejo.25.1689017099074;
-        Mon, 10 Jul 2023 12:24:59 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id w15-20020a170906480f00b0096a6be0b66dsm110076ejq.208.2023.07.10.12.24.58
+        d=1e100.net; s=20221208; t=1689017065; x=1691609065;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aVU5xkkFrBHK9KN4xCmrxkM+F8/EoTyfyWL/2CP+3j0=;
+        b=B9wfhaLv315xpQjL/i4UeAjbG7XpDNOZzoQC3S5qa50aFs7IYRYamK2jIy5r86LQaW
+         qC+70VD7iCwSGNN+NzlcTNHRDcGuooR6+ZBnfg+tbk5ZISjUw7WJuEEJCcf6xnfy+MC8
+         ah/pzBvGueWrUaNqZIPv24kPJ6NmS9tcKKU5w1/NBk7OgMo47m44wp93CYQ0Dx9LB6Lg
+         wnO0ZpFIH3pQtXGFxm4I+qTdjegc2N+bcEnbOQC55y3AxkrOP4AG6pbnnJigorl74ARh
+         hEzgxcDyIcp0sAtFflvH9gYTnw5aWLInYPCWYjUjEbTiemLwTMWJ4YA45hdMVOCoGktC
+         kV7g==
+X-Gm-Message-State: ABy/qLa8Vkbsm1F2YPY8EZJBN7E2I47nggGOrmXsLJlihnduV72uiNAM
+        g35xRyIORgDg7aypqtlr6QoIug==
+X-Google-Smtp-Source: APBJJlElX3ouS/7FElxVVpI095f8HqlJxpa1dRsjo4z1LRMa0ZScCGPnPQjxkZlRuLEsux42YF/jSw==
+X-Received: by 2002:a17:90a:3e08:b0:25b:e85a:e9fe with SMTP id j8-20020a17090a3e0800b0025be85ae9femr12935954pjc.27.1689017064856;
+        Mon, 10 Jul 2023 12:24:24 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id p9-20020a17090a74c900b00263ba6a248bsm6646981pjl.1.2023.07.10.12.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 12:24:58 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: [PATCH 3/3] xen: Illustrate the transition to sync_try_cmpxchg
-Date:   Mon, 10 Jul 2023 21:21:56 +0200
-Message-ID: <20230710192440.47140-3-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230710192440.47140-1-ubizjak@gmail.com>
-References: <20230710192440.47140-1-ubizjak@gmail.com>
+        Mon, 10 Jul 2023 12:24:24 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Evan Green <evan@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Date:   Mon, 10 Jul 2023 12:24:13 -0700
+Message-Id: <20230710192413.2089085-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch illustrates the transition to sync_try_cmpxchg.
-It is not intended to be merged as-is.
+In /proc/cpuinfo, most of the information we show for each processor is
+specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+compatible, and the mmu size. But the ISA string gets filtered through a
+lowest common denominator mask, so that if one CPU is missing an ISA
+extension, no CPUs will show it.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>
-Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Now that we track the ISA extensions for each hart, let's report ISA
+extension info accurately per-hart in /proc/cpuinfo. We cannot change
+the "isa:" line, as usermode may be relying on that line to show only
+the common set of extensions supported across all harts. Add a new "hart
+isa" line instead, which reports the true set of extensions for that
+hart. This matches what is returned in riscv_hwprobe() when querying a
+given hart.
+
+Signed-off-by: Evan Green <evan@rivosinc.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
 ---
- drivers/xen/events/events_fifo.c | 26 ++++++++++++--------------
- drivers/xen/grant-table.c        | 10 ++++------
- 2 files changed, 16 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/xen/events/events_fifo.c b/drivers/xen/events/events_fifo.c
-index ad9fe51d3fb3..655775db7caf 100644
---- a/drivers/xen/events/events_fifo.c
-+++ b/drivers/xen/events/events_fifo.c
-@@ -226,21 +226,20 @@ static bool evtchn_fifo_is_masked(evtchn_port_t port)
-  */
- static bool clear_masked_cond(volatile event_word_t *word)
+Changes in v3:
+ - Add some documentation (Conor)
+
+Changes in v2:
+ - Added new "hart isa" line rather than altering behavior of existing
+   "isa" line (Conor, Palmer)
+
+
+I based this series on top of Conor's riscv-extensions-strings branch
+from July 3rd, since otherwise this change gets hopelessly entangled
+with that series.
+
+---
+ Documentation/riscv/uabi.rst | 10 ++++++++++
+ arch/riscv/kernel/cpu.c      | 22 ++++++++++++++++++----
+ 2 files changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
+index 8960fac42c40..4f462f5b168c 100644
+--- a/Documentation/riscv/uabi.rst
++++ b/Documentation/riscv/uabi.rst
+@@ -42,6 +42,16 @@ An example string following the order is::
+ 
+    rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
+ 
++"isa" vs "hart isa" lines in /proc/cpuinfo
++-----------------------------------------
++
++The "isa" line in /proc/cpuinfo describes the lowest common denominator of
++RISC-V ISA extensions understood by the kernel and implemented on all harts. The
++"hart isa" line, in contrast, describes the set of extensions understood by the
++kernel on the particular hart in question, even if those extensions may not be
++present on all harts in the system. The "hart isa" line is consistent with
++what's returned by __riscv_hwprobe() when querying for that specific CPU.
++
+ Misaligned accesses
+ -------------------
+ 
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index 1acf3679600d..6264b7b94945 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
+ 
+ #ifdef CONFIG_PROC_FS
+ 
+-static void print_isa(struct seq_file *f)
++static void print_isa(struct seq_file *f, const unsigned long *isa_bitmap)
  {
--	event_word_t new, old, w;
-+	event_word_t new, old;
+-	seq_puts(f, "isa\t\t: ");
  
--	w = *word;
-+	old = *word;
+ 	if (IS_ENABLED(CONFIG_32BIT))
+ 		seq_write(f, "rv32", 4);
+@@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
+ 		seq_write(f, "rv64", 4);
  
- 	do {
--		if (!(w & (1 << EVTCHN_FIFO_MASKED)))
-+		if (!(old & (1 << EVTCHN_FIFO_MASKED)))
- 			return true;
+ 	for (int i = 0; i < riscv_isa_ext_count; i++) {
+-		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
++		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id))
+ 			continue;
  
--		if (w & (1 << EVTCHN_FIFO_PENDING))
-+		if (old & (1 << EVTCHN_FIFO_PENDING))
- 			return false;
+ 		/* Only multi-letter extensions are split by underscores */
+@@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
  
--		old = w & ~(1 << EVTCHN_FIFO_BUSY);
-+		old = old & ~(1 << EVTCHN_FIFO_BUSY);
- 		new = old & ~(1 << EVTCHN_FIFO_MASKED);
--		w = sync_cmpxchg(word, old, new);
--	} while (w != old);
-+	} while (!sync_try_cmpxchg(word, &old, new));
+ 	seq_printf(m, "processor\t: %lu\n", cpu_id);
+ 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
+-	print_isa(m);
++
++	/*
++	 * For historical raisins, the isa: line is limited to the lowest common
++	 * denominator of extensions supported across all harts. A true list of
++	 * extensions supported on this hart is printed later in the hart_isa:
++	 * line.
++	 */
++	seq_puts(m, "isa\t\t: ");
++	print_isa(m, NULL);
+ 	print_mmu(m);
  
- 	return true;
- }
-@@ -259,17 +258,16 @@ static void evtchn_fifo_unmask(evtchn_port_t port)
+ 	if (acpi_disabled) {
+@@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
+ 	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
+ 	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
+ 	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
++
++	/*
++	 * Print the ISA extensions specific to this hart, which may show
++	 * additional extensions not present across all harts.
++	 */
++	seq_puts(m, "hart isa\t: ");
++	print_isa(m, hart_isa[cpu_id].isa);
+ 	seq_puts(m, "\n");
  
- static uint32_t clear_linked(volatile event_word_t *word)
- {
--	event_word_t new, old, w;
-+	event_word_t new, old;
- 
--	w = *word;
-+	old = *word;
- 
- 	do {
--		old = w;
--		new = (w & ~((1 << EVTCHN_FIFO_LINKED)
--			     | EVTCHN_FIFO_LINK_MASK));
--	} while ((w = sync_cmpxchg(word, old, new)) != old);
-+		new = (old & ~((1 << EVTCHN_FIFO_LINKED)
-+			       | EVTCHN_FIFO_LINK_MASK));
-+	} while (!sync_try_cmpxchg(word, &old, new));
- 
--	return w & EVTCHN_FIFO_LINK_MASK;
-+	return old & EVTCHN_FIFO_LINK_MASK;
- }
- 
- static void consume_one_event(unsigned cpu, struct evtchn_loop_ctrl *ctrl,
-diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-index e1ec725c2819..211d083d4fbe 100644
---- a/drivers/xen/grant-table.c
-+++ b/drivers/xen/grant-table.c
-@@ -427,16 +427,14 @@ EXPORT_SYMBOL_GPL(gnttab_grant_foreign_access);
- 
- static int gnttab_end_foreign_access_ref_v1(grant_ref_t ref)
- {
--	u16 flags, nflags;
--	u16 *pflags;
-+	u16 *pflags = &gnttab_shared.v1[ref].flags;
-+	u16 flags;
- 
--	pflags = &gnttab_shared.v1[ref].flags;
--	nflags = *pflags;
-+	flags = *pflags;
- 	do {
--		flags = nflags;
- 		if (flags & (GTF_reading|GTF_writing))
- 			return 0;
--	} while ((nflags = sync_cmpxchg(pflags, flags, 0)) != flags);
-+	} while (!sync_try_cmpxchg(pflags, &flags, 0));
- 
- 	return 1;
- }
+ 	return 0;
 -- 
-2.41.0
+2.34.1
 
