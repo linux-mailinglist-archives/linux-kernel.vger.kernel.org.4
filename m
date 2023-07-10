@@ -2,232 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B9974E0F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D575C74E0FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjGJWXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S229901AbjGJWYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 18:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGJWXd (ORCPT
+        with ESMTP id S230049AbjGJWYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:23:33 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F184A197;
-        Mon, 10 Jul 2023 15:23:31 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f95bf5c493so7422860e87.3;
-        Mon, 10 Jul 2023 15:23:31 -0700 (PDT)
+        Mon, 10 Jul 2023 18:24:01 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC5B1BC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:23:58 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-307d58b3efbso4964043f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689027810; x=1691619810;
+        d=fireburn-co-uk.20221208.gappssmtp.com; s=20221208; t=1689027837; x=1691619837;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8aC5j+4htVlsymnJcEKPXKllCMhmhfroAZbbpDtPHC8=;
-        b=Zyl/4HO2Ne5t2DhjrqWBoFuYOrKHSWz0Lw771twH/TmMn7zv8lW5iUh35uhhWya1L1
-         /5GIumtcaWqd4nooQ4nnRdY7Z7jxFf/v6Enq5yvN/f9/1pjv7JPQVloE1XgQ54dpiIay
-         lguZHH8XazPn8EnylQPHy4ZUKJqZP38ZBGQp2MSsD4SLgtfjwF71lTdn0Cr9CisnBu28
-         RX6dRsaoQB9rCf9EA1BWxXTbC7Ji1pBxIVpFPxk3d5g1ICDYnPcH1pJt6nUrWFLqS777
-         8TbZsouhMQHYRs93lViWXY1HeokmlxrLbUhOSJU3GIKSccPAScQNNAMyx9/dIEetZ6AB
-         Ovxg==
+        bh=k+uRSZaNW94drRfaP5L/VJThT+qbzWt+a4m0PC1+H4c=;
+        b=BGJwtu/eYDeeRz6gd9DW/1dlrKmdKTY5LkPMrD8VqiQjMxN7JoO9VdAeSxsct2N1AA
+         RHztHsO/Ag4ji7+SPc/aVGU+ioISxQDSctgi4qfPKB/qChuM1/SUco0pTqNmKQbWdbyo
+         7fDfQpW7AE7IIJpAdBuwj+QuXBAiNXIjBDr73NztsSaHYezINnldgNhJBcd0qYW5vmEY
+         +4G/hVixr3YySmX+NrwspZKpNocBFDbfCCAZadUYle20SqmBqPXX91t6M23ZcsnE/P09
+         wEEBJYThW/kn39pNb0v7acrw5izKLcx3fgmiSgQ3Y9cAMSokLMrSpnv6a5acp4nvaACs
+         GFww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689027810; x=1691619810;
+        d=1e100.net; s=20221208; t=1689027837; x=1691619837;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8aC5j+4htVlsymnJcEKPXKllCMhmhfroAZbbpDtPHC8=;
-        b=N5XAfhWt9/DX6eg507HKb++UOkFaJWsyIhdYIJEZ28qf05nOVjlcsm7rvAmHg+bQ8G
-         E9LL0hiikZ03KvBNdjjnlIgrCEDl4nmrKIfmUu2dEsikIU+JnfoHsY/mNqu3fe0XZOmf
-         GM9hRxFpkQDazHau6Xt72+jlXSKIHkviLQkrCz7EWPJ5mb/Zfscq65oqumVn7qPKFZCE
-         1NAIwEbX6o2D1EATA1lqN+wV7Tf3z/Fib1Q92fvyFpJmHxB+DkZTOhlQl5SV8LNJ6YvK
-         QNqKidNJ70Qw8spNLXGqimuttqPu/0YNulwNUvEM/B2SHvwh1oxRPniVkMVQ9zcFIYxn
-         w+AQ==
-X-Gm-Message-State: ABy/qLZ/WXhfr66hmWwywispFAuficw1WogLMwk6m5jh8xW5KQok50qF
-        3JYgj05t3q/S/uAhoFI4be5aZRfFbzvYTAjsS5U=
-X-Google-Smtp-Source: APBJJlFN8x2+wNX9Pho+Hycdeec6GrCe2Cvkl7Ri3UGz5HVuMNJf+5MAy7NpYDUo/9jVs0jVfN+yny92KrUU259H1vw=
-X-Received: by 2002:a05:6512:3593:b0:4f9:d272:5847 with SMTP id
- m19-20020a056512359300b004f9d2725847mr10480467lfr.68.1689027809871; Mon, 10
- Jul 2023 15:23:29 -0700 (PDT)
+        bh=k+uRSZaNW94drRfaP5L/VJThT+qbzWt+a4m0PC1+H4c=;
+        b=M7OawgJDMQF7n0/48U5w6fJAjs+je7vqXGmcQsu444B+R5QBNuVNu5UDUuSbt7tx0s
+         w0hpjOlBVl+rwF8WExcOQF+ahd1Unr2hXXp7VLkvIeeeKoc/KX9yBa5n5jLXfzXyFNtU
+         j19PTC19Cc+RSwqGAJlWQ+naXyyccUSF1ZE0SPUMDA8B0cCnPvWtKjlzbxsJbdgKW27c
+         ZWkc5WHk8xADrjpcZHR/RAzZ5xs4quu8CD7UP/PViEDHKgwi8s9/FaTNGgpl/ufAnbNc
+         0egjUNAPcjAL4EhPZOYD8wHZ/QwNoNy9tVmKwWPvAa95kD2Qb1/AZLKuIGV5O/nSS9vA
+         HIzA==
+X-Gm-Message-State: ABy/qLaETWH/O0nATKycsMs5xgVUl67SL6xJPr55E164HD+YLyOdry0P
+        GWuRDPQqh7mymZs3AigkKKZ+jzfrNyBsS0KDWRYm3A==
+X-Google-Smtp-Source: APBJJlGWtw8f4A2ctcC8tl3oCSE31f33fxmAUGJnr4OHt+wZ4ekqgW0g26gHvys0bWgym34SFWrWokUD9oDJHrFTQP0=
+X-Received: by 2002:a5d:614b:0:b0:314:7487:96a3 with SMTP id
+ y11-20020a5d614b000000b00314748796a3mr10923400wrt.52.1689027836873; Mon, 10
+ Jul 2023 15:23:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230708040750.72570-1-hffilwlqm@gmail.com> <20230708040750.72570-2-hffilwlqm@gmail.com>
-In-Reply-To: <20230708040750.72570-2-hffilwlqm@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 10 Jul 2023 15:23:17 -0700
-Message-ID: <CAEf4BzZxS8sxr47GoXU0ZrwgZtp7drc5cehCOFrbx3-=n-1aFg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Introduce bpf generic log
-To:     Leon Hwang <hffilwlqm@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
-        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <cover.1681898595.git.petr.tesarik.ext@huawei.com>
+ <20230426141520.0caf4386@meshulam.tesarici.cz> <2023042617-wobble-enlighten-9361@gregkh>
+ <20230426144439.5674f8bc@meshulam.tesarici.cz> <20230509091635.27450bd9@meshulam.tesarici.cz>
+ <2023050949-grueling-verify-a43b@gregkh>
+In-Reply-To: <2023050949-grueling-verify-a43b@gregkh>
+From:   Mike Lothian <mike@fireburn.co.uk>
+Date:   Mon, 10 Jul 2023 23:23:45 +0100
+Message-ID: <CAHbf0-HY0-u4MwgU39b53hjOM+bWfGmOEYQuvHARjV+6j+O7Kg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Allow dynamic allocation of software IO TLB bounce buffers
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Borislav Petkov <bp@suse.de>, Won Chung <wonchung@google.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Tesarik <petr.tesarik.ext@huawei.com>,
+        Kees Cook <keescook@chromium.org>, Ondrej Zary <linux@zary.sk>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Robin Murphy <robin.murphy@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 9:08=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.com> wro=
-te:
->
-> Currently, excluding verifier, users are unable to obtain detailed error
-> information when issues occur in BPF syscall.
->
-> To overcome this limitation, bpf generic log is introduced to provide
-> error details similar to the verifier. This enhancement will enable the
-> reporting of error details along with the corresponding errno in BPF
-> syscall.
->
-> Essentially, bpf generic log functions as a mechanism similar to netlink,
-> enabling the transmission of error messages to user space. This
-> mechanism greatly enhances the usability of BPF syscall by allowing
-> users to access comprehensive error messages instead of relying solely
-> on errno.
->
-> This patch specifically addresses the error reporting in dev_xdp_attach()
-> . With this patch, the error messages will be transferred to user space
-> like the netlink approach. Hence, users will be able to check the error
-> message along with the errno.
->
-> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
-> ---
->  include/linux/bpf.h            | 30 ++++++++++++++++++++++++++++++
->  include/uapi/linux/bpf.h       |  6 ++++++
->  kernel/bpf/log.c               | 33 +++++++++++++++++++++++++++++++++
->  net/core/dev.c                 | 11 ++++++++++-
->  tools/include/uapi/linux/bpf.h |  6 ++++++
->  5 files changed, 85 insertions(+), 1 deletion(-)
->
+Hi
 
-Just curious, what's wrong with struct bpf_verifier_log for
-implementing "generic log"? bpf_log, bpf_vlog_reset, bpf_vlog_finalize
-are quite generic, I think. Why invent yet another structure? Existing
-code and struct support rotating log, if necessary.
+I was hoping this might land for 6.5-rc1, is there a new version that
+might apply against 6.5?
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 360433f14496a..7d2124a537943 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -3107,4 +3107,34 @@ static inline gfp_t bpf_memcg_flags(gfp_t flags)
->         return flags;
->  }
+Cheers
+
+Mike
+
+On Tue, 9 May 2023 at 08:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> +#define BPF_GENERIC_TMP_LOG_SIZE       256
-> +
-> +struct bpf_generic_log {
-> +       char            kbuf[BPF_GENERIC_TMP_LOG_SIZE];
-> +       char __user     *ubuf;
-> +       u32             len_used;
-> +       u32             len_total;
-> +};
-> +
-> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
-> +                       const char *fmt, ...);
-> +static inline void bpf_generic_log_init(struct bpf_generic_log *log,
-> +                       const struct bpf_generic_user_log *ulog)
-> +{
-> +       log->ubuf =3D (char __user *) (unsigned long) ulog->log_buf;
-> +       log->len_total =3D ulog->log_size;
-> +       log->len_used =3D 0;
-> +}
-> +
-> +#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)     do {    \
-> +       const char *____fmt =3D (fmt);                            \
-> +       bpf_generic_log_init(log, ulog);                        \
-> +       bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__);     \
-> +} while (0)
-> +
-> +#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...) do {                    \
-> +       struct bpf_generic_log ____log;                                 \
-> +       BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);      \
-> +} while (0)
-> +
->  #endif /* _LINUX_BPF_H */
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 60a9d59beeabb..34fa334938ba5 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1318,6 +1318,11 @@ struct bpf_stack_build_id {
->         };
->  };
+> On Tue, May 09, 2023 at 09:16:35AM +0200, Petr Tesa=C5=99=C3=ADk wrote:
+> > On Wed, 26 Apr 2023 14:44:39 +0200
+> > Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
+> >
+> > > Hi Greg,
+> > >
+> > > On Wed, 26 Apr 2023 14:26:36 +0200
+> > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > > On Wed, Apr 26, 2023 at 02:15:20PM +0200, Petr Tesa=C5=99=C3=ADk wr=
+ote:
+> > > > > Hi,
+> > > > >
+> > > > > On Wed, 19 Apr 2023 12:03:52 +0200
+> > > > > Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
+> > > > >
+> > > > > > From: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> > > > > >
+> > > > > > The goal of my work is to provide more flexibility in the sizin=
+g of
+> > > > > > SWIOTLB.
+> > > > > >
+> > > > > > The software IO TLB was designed with these assumptions:
+> > > > > >
+> > > > > > 1. It would not be used much, especially on 64-bit systems.
+> > > > > > 2. A small fixed memory area (64 MiB by default) is sufficient =
+to
+> > > > > >    handle the few cases which require a bounce buffer.
+> > > > > > 3. 64 MiB is little enough that it has no impact on the rest of=
+ the
+> > > > > >    system.
+> > > > > >
+> > > > > > First, if SEV is active, all DMA must be done through shared
+> > > > > > unencrypted pages, and SWIOTLB is used to make this happen with=
+out
+> > > > > > changing device drivers. The software IO TLB size is increased =
+to
+> > > > > > 6% of total memory in sev_setup_arch(), but that is more of an
+> > > > > > approximation. The actual requirements may vary depending on th=
+e
+> > > > > > amount of I/O and which drivers are used. These factors may not=
+ be
+> > > > > > know at boot time, i.e. when SWIOTLB is allocated.
+> > > > > >
+> > > > > > Second, other colleagues have noticed that they can reliably ge=
+t
+> > > > > > rid of occasional OOM kills on an Arm embedded device by reduci=
+ng
+> > > > > > the SWIOTLB size. This can be achieved with a kernel parameter,=
+ but
+> > > > > > determining the right value puts additional burden on pre-relea=
+se
+> > > > > > testing, which could be avoided if SWIOTLB is allocated small a=
+nd
+> > > > > > grows only when necessary.
+> > > > >
+> > > > > Now that merging into 6.4 has begun, what about this patch series=
+? I'm
+> > > > > eager to get some feedback (positive or negative) and respin the =
+next
+> > > > > version.
+> > > >
+> > > > It's the merge window, we can't add new things that haven't been in
+> > > > linux-next already.
+> > >
+> > > This is understood. I'm not asking for immediate inclusion.
+> > >
+> > > >   Please resubmit it after -rc1 is out.
+> > >
+> > > If you can believe that rebasing to -rc1 will be enough, then I will
+> > > also try to believe I'm lucky. ;-)
+> > >
+> > > The kind of feedback I really want to get is e.g. about the extra
+> > > per-device DMA-specific fields. If they cannot be added to struct
+> > > device, then I'd rather start discussing an interim solution, because
+> > > getting all existing DMA fields out of that struct will take a lot of
+> > > time...
+> >
+> > All right, 6.4-rc1 is out now. The patch series still applies cleanly.
+> >
+> > Any comments what must be changed (if anything) to get it in?
 >
-> +struct bpf_generic_user_log {
-> +       __aligned_u64   log_buf;    /* user supplied buffer */
-> +       __u32           log_size;   /* size of user buffer */
-> +};
-> +
->  #define BPF_OBJ_NAME_LEN 16U
+> Try resending it, it's long out of my review queue...
 >
->  union bpf_attr {
-> @@ -1544,6 +1549,7 @@ union bpf_attr {
->                 };
->                 __u32           attach_type;    /* attach type */
->                 __u32           flags;          /* extra flags */
-> +               struct bpf_generic_user_log log; /* user log */
-
-I think explicit triplet of log_level (should be log_flags, but too
-late, probably), log_size, and log_buf is less error prone and more in
-sync with other two commands that accept log (BPF_PROG_LOAD and
-BPF_BTF_LOAD).
-
->                 union {
->                         __u32           target_btf_id;  /* btf_id of targ=
-et to attach to */
->                         struct {
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index 850494423530e..be56b153bbf0b 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-> @@ -325,3 +325,36 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log =
-*log,
->         va_end(args);
->  }
->  EXPORT_SYMBOL_GPL(bpf_log);
-> +
-> +static inline void __bpf_generic_log_write(struct bpf_generic_log *log, =
-const char *fmt,
-> +                                     va_list args)
-> +{
-> +       unsigned int n;
-> +
-> +       n =3D vscnprintf(log->kbuf, BPF_GENERIC_TMP_LOG_SIZE, fmt, args);
-> +
-> +       WARN_ONCE(n >=3D BPF_GENERIC_TMP_LOG_SIZE - 1,
-> +                 "bpf generic log truncated - local buffer too short\n")=
-;
-> +
-> +       n =3D min(log->len_total - log->len_used - 1, n);
-> +       log->kbuf[n] =3D '\0';
-> +
-> +       if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
-> +               log->len_used +=3D n;
-> +       else
-> +               log->ubuf =3D NULL;
-> +}
-> +
-
-please see bpf_verifier_vlog() in kernel/bpf/log.c. We don't want to
-maintain another (even if light) version of it.
-
-> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
-> +                                    const char *fmt, ...)
-> +{
-> +       va_list args;
-> +
-> +       if (!log->ubuf || !log->len_total)
-> +               return;
-> +
-> +       va_start(args, fmt);
-> +       __bpf_generic_log_write(log, fmt, args);
-> +       va_end(args);
-> +}
-
-[...]
+> thanks,
+>
+> greg k-h
