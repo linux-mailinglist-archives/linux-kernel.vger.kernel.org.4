@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC2A74D4DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEE274D4DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjGJL7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S230407AbjGJMBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjGJL7c (ORCPT
+        with ESMTP id S229663AbjGJMBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:59:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720FED1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:59:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 10 Jul 2023 08:01:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C4AD1;
+        Mon, 10 Jul 2023 05:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7a3aObqALZ0RGVJNPU87pW+rmJD5s/3iTVbIQ9L7MVY=; b=jK+jMf+l74JDzsvgKRmBF4nw95
+        wxZTqNU1gg/WKprlF0LO8D2en3yOA61Kshjq/DxDa+/kqZ8nFhKca0gXFfKQ9qfbo3n54C4MiC+T8
+        T+QNDSKZM+ucpPDLOZKvE4Wlu59PAFYBtGhMoaFzuK+hRQAa5dP8UxK+rVrEbFgt+4iAYDthzC1bs
+        SogNMxPbjzWK3WpN02v+NQIvlaG+N8WLW6/HjEjuC2psnZ7/fUnr6xR8ijWA9XaGX2czu7u6g2WAD
+        Uzc/C+ixvg5d7maGag0HUi3Zjetl5ab3nfcGsNdvPTGTr7597PFKqsPoIfJuekshDJoV42NZSZz7Z
+        2pLsxtPg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qIpZ6-00EZpt-FH; Mon, 10 Jul 2023 12:00:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2E5901FF0E;
-        Mon, 10 Jul 2023 11:59:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688990366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aULb6K93sg3Ih4opxCSOWF5nXnLPwALdHFb2APcKkWU=;
-        b=lttRnlpuRTIpiibdAwDgr/Vq8pdXPQrh9mD7dDI37fhOhlBDpkvsWFTudHdRIQukU4wSDu
-        x7QqHOwKonu7dy7+Hp8wPRXnAD5LmqPpjVDTaEyzKgI78J7pYww2HzTUuJB+r4e94Y02VG
-        Zbh+lX2y9RRd2XCN5QHMplTn2yZrOxY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688990366;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aULb6K93sg3Ih4opxCSOWF5nXnLPwALdHFb2APcKkWU=;
-        b=CvVJCQGBb30k8jY5PN46r/Xr/dbvgThKyB6bsxX1dV1vr5xKDDpXTaKtmHkEydvIFRHX0C
-        2G2a+6+/fw0nR7Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED99813A05;
-        Mon, 10 Jul 2023 11:59:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XS2vOJ3yq2SRcgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 11:59:25 +0000
-Message-ID: <13d4c853-ed7b-f0f5-dffb-a7811f2da249@suse.de>
-Date:   Mon, 10 Jul 2023 13:59:25 +0200
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 87F0630017D;
+        Mon, 10 Jul 2023 14:00:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6B79B2B3B25E1; Mon, 10 Jul 2023 14:00:26 +0200 (CEST)
+Date:   Mon, 10 Jul 2023 14:00:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     alexander.shishkin@linux.intel.com, james.clark@arm.com,
+        leo.yan@linaro.org, mingo@redhat.com,
+        baolin.wang@linux.alibaba.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [Patch v2] perf/core: Bail out early if the request AUX area is
+ out of bound
+Message-ID: <20230710120026.GA3034907@hirez.programming.kicks-ass.net>
+References: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/loongson: Remove a useless check in
- cursor_plane_atomic_async_check()
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc:     loongson-kernel@lists.loongnix.cn, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@linaro.org>
-References: <20230710102411.257970-1-suijingfeng@loongson.cn>
- <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
- <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn> <87r0pghtu9.fsf@intel.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <87r0pghtu9.fsf@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------3wSbXI0PX1n3j1pHqk1CnxXN"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,73 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------3wSbXI0PX1n3j1pHqk1CnxXN
-Content-Type: multipart/mixed; boundary="------------iNh77Gx20Fj0eUW5OG4MCHPb";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jani Nikula <jani.nikula@linux.intel.com>,
- suijingfeng <suijingfeng@loongson.cn>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc: loongson-kernel@lists.loongnix.cn, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, Dan Carpenter <dan.carpenter@linaro.org>
-Message-ID: <13d4c853-ed7b-f0f5-dffb-a7811f2da249@suse.de>
-Subject: Re: [PATCH] drm/loongson: Remove a useless check in
- cursor_plane_atomic_async_check()
-References: <20230710102411.257970-1-suijingfeng@loongson.cn>
- <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
- <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn> <87r0pghtu9.fsf@intel.com>
-In-Reply-To: <87r0pghtu9.fsf@intel.com>
+On Tue, Jun 13, 2023 at 08:32:11PM +0800, Shuai Xue wrote:
 
---------------iNh77Gx20Fj0eUW5OG4MCHPb
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+>  kernel/events/ring_buffer.c              | 13 +++++++++++++
+>  tools/perf/Documentation/perf-record.txt |  3 ++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> index a0433f37b024..e514aaba9d42 100644
+> --- a/kernel/events/ring_buffer.c
+> +++ b/kernel/events/ring_buffer.c
+> @@ -673,6 +673,7 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
+>  	bool overwrite = !(flags & RING_BUFFER_WRITABLE);
+>  	int node = (event->cpu == -1) ? -1 : cpu_to_node(event->cpu);
+>  	int ret = -ENOMEM, max_order;
+> +	size_t bytes;
+>  
+>  	if (!has_aux(event))
+>  		return -EOPNOTSUPP;
+> @@ -699,6 +700,18 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
+>  		watermark = 0;
+>  	}
+>  
+> +	/*
+> +	 * 'rb->aux_pages' allocated by kcalloc() is a pointer array which is
+> +	 * used to maintains AUX trace pages. The allocated page for this array
+> +	 * is physically contiguous (and virtually contiguous) with an order of
+> +	 * 0..MAX_ORDER. If the size of pointer array crosses the limitation set
+> +	 * by MAX_ORDER, it reveals a WARNING.
+> +	 *
+> +	 * So bail out early if the request AUX area is out of bound.
+> +	 */
+> +	if (check_mul_overflow(nr_pages, sizeof(void *), &bytes) ||
+> +	    get_order(bytes) > MAX_ORDER)
+> +		return -EINVAL;
 
-SGkNCg0KQW0gMTAuMDcuMjMgdW0gMTM6NDYgc2NocmllYiBKYW5pIE5pa3VsYToNCj4gT24g
-TW9uLCAxMCBKdWwgMjAyMywgc3VpamluZ2ZlbmcgPHN1aWppbmdmZW5nQGxvb25nc29uLmNu
-PiB3cm90ZToNCj4+IE9uIDIwMjMvNy8xMCAxODozOSwgVGhvbWFzIFppbW1lcm1hbm4gd3Jv
-dGU6DQo+Pj4gYnV0IHRoYXQgZHJpdmVyIGlzIG5vdCB5ZXQgaW4gb3VyIHRyZWU/DQo+Pj4N
-Cj4+DQo+PiBJIGFscmVhZHkgYXBwbGllZChwdXNoKSBkcm0vbG9vbmdzb24gZHJpdmVyIHRv
-IGRybS1taXNjLW5leHQgYnJhbmNoLA0KPj4NCj4+IFdoYXQgZG8geW91IG1lYW5zIHRoYXQg
-YnkgIm5vdCB5ZXQgaW4gb3VyIHRyZWUiLCBsaW51eCBrZXJuZWwgc2lkZT8NCj4+DQo+PiBB
-bSBJIG1pc3Npbmcgc29tZXRoaW5nID8NCj4gDQo+IEhtbSwgaW5kZWVkIHRoZXJlJ3MgY29t
-bWl0IGYzOWRiMjZjNTQyOCAoImRybTogQWRkIGttcyBkcml2ZXIgZm9yDQo+IGxvb25nc29u
-IGRpc3BsYXkgY29udHJvbGxlciIpLi4uIGJ1dCBpdCBvbmx5IGhhcyBvbmUgQWNrZWQtYnkg
-ZnJvbQ0KPiBUaG9tYXMgdGhhdCBJIGNhbid0IGZpbmQgb24gYW55IGxpc3RzLCBhbmQgemVy
-byBSZXZpZXdlZC1ieS4NCj4gDQo+IFVzdWFsbHksIHRoZSBiaWdnZXIgdGhlIGNoYW5nZSwg
-dGhlIG1vcmUgYWNrcy9yZXZpZXdzIHlvdSBuZWVkLiBEaWQNCj4gVGhvbWFzIHJlYWxseSBh
-Y2sgdGhpcyB0byBiZSBtZXJnZWQgd2l0aG91dCByZWNvcmRlciByZXZpZXdzPyA6bw0KDQpT
-aG91bGQgYmUgT0s7IGl0J3MgYW4gaXNvbGF0ZWQgZHJpdmVyLiBJIGRpZCBhIHJldmlldyBl
-YXJseSBvbiBhbmQgYWZ0ZXIgDQp+MTMgcmV2aXNpb25zIEkgYXNrZWQgZm9yIGl0IHRvIGJl
-IG1lcmdlZC4gSXQncyBhY3R1YWxseSBhIGJpdCBoYXJkIHRvIA0KZmluZCByZXZpZXdlcnMu
-DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IA0KPiBCUiwNCj4gSmFuaS4NCj4g
-DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxv
-cGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJh
-c3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRy
-ZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkg
-KEFHIE51ZXJuYmVyZykNCg==
+This is all quite horrific :/ What's wrong with something simple:
 
---------------iNh77Gx20Fj0eUW5OG4MCHPb--
+	/* Can't allocate more than MAX_ORDER  */
+	if (get_order((unsigned long)nr_pages * sizeof(void*)) > MAX_ORDER)
+		return -EINVAL;
 
---------------3wSbXI0PX1n3j1pHqk1CnxXN
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+If you're on 32bit then nr_pages should never be big enough to overflow,
+fundamentally you'll only have 32-PAGE_SHIFT bits in nr_pages.
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSr8p0FAwAAAAAACgkQlh/E3EQov+Ak
-BhAAr8KF99OABlQvhA9Cr0d0jYOyBiVOoZ7JO8RmlIUewGsZr3jPKSKk0InpHeGwjNzmAfDP8zMt
-fUQo5es2NbzPG4D6ok7SKzjTa/2ujbUzejrqIaH++qeLi1TVbl8ljAoi8XTp2tyeHXL93KZAv3Hz
-d0pL90E0j14aourloeqQ2ujXv3RdiEKKHbzyOMy6ar1IOGFIVQBytcCsUjnYbWElefPIDaTy2OfR
-jmxclWO53dryanVEOhG/XdBl5500DxHdXlOO8WwaBbV0CPCtARCjikabL8U3NIB8Pf4VP7c9EPxd
-ltZpyNQCp112rBUU5087X+JoFM6piWkv84TnPNAD09zrU9ZoxpkNpolzHfTaIzKIBJcKSnSmhagK
-tXe9XYcomwNkda2euaNHuuvQBhPwFvF4gLIQHo3YmDrXvuCPM14g9ERMO7fbwURUlI2JYN5HZFlr
-D2nPawshTrVSe7sg69BL8cqDj1ZlBO+2DakXfZXm39X4y7HSTrRCATVGyCtzlED8/hvpVHbb7oAV
-U42J3eJiZRp19FwChNJ1ryglbpHOhq40/MAb1QzmxK6RSYFwD8HU528Qt9vYorwid7xO7dAxp7VZ
-h3vl/QDt5QemRuK1WG7pUF68GSwBZWNvMul0oQlGyvEilOf9SoQyiTCl0gyeEZwK1lQ5eiOBFMnH
-ncE=
-=HRk8
------END PGP SIGNATURE-----
+>  	rb->aux_pages = kcalloc_node(nr_pages, sizeof(void *), GFP_KERNEL,
+>  				     node);
 
---------------3wSbXI0PX1n3j1pHqk1CnxXN--
+
