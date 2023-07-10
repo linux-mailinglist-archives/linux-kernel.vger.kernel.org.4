@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E76574CE54
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE58074CE51
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGJH1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S229977AbjGJH1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjGJH1S (ORCPT
+        with ESMTP id S229458AbjGJH1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:27:18 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55920127;
-        Mon, 10 Jul 2023 00:27:17 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-991ef0b464cso1039155866b.0;
-        Mon, 10 Jul 2023 00:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688974036; x=1691566036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=12SwgujBvNm5u6+5Cu/MHnSp3kLy9fw9popJaOP4K9Q=;
-        b=PJQD/wf5Fs/m/YMEnq5E9JP76DgiHcJ1H7b+cbPxL5uR+FHrHl7b4GCPqrkiapTaRC
-         J/Y/Th0wXawHmwDoBFij1OoWYzF6j8Bv/gI8QDaIer+GsUpOBrYSI+7A814pohqJpp7O
-         68R+i8cwuv5DbppV/y0qmOCYjxUT3nebMb/lBmtcQjqr3v2tnZAko7Zqj8lQMUs3TegK
-         1VsQcskWZohLsVDbytT6haoN9l2xD7nDIJixSTDmHGlxay46ExVAif/l9PWikv3CRem8
-         6axXdNPzp+hZT+XetQgTzlrEtmgbAaHxI2+LDMloQM6pyn2HfY0su1IbRfLVdq4RBc3Q
-         AQRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688974036; x=1691566036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=12SwgujBvNm5u6+5Cu/MHnSp3kLy9fw9popJaOP4K9Q=;
-        b=Eyenw6r58JP6ZCYPxcTLdffTHwZkqafPV8wWd8/4+Za4MXdthoWpc9pH86Jc8ugCuY
-         FjkBw2hZAZNjtARJ05gaVuG0MMkV/lIC9FKa1wsyN1qq/3v5DOJxr5w55QTm7d+r3r7G
-         krqK3ZOJVglReX2jXep7Zl03iE8z0xH8C4p5QoAYDrgMnNt3RSeOlwJNWEHDf9A1EobJ
-         jcmRRGYSZWwhoWXIRc1Jn+yxBDzJGL45sYNZgDny+0D8um6kuqCULOuZVkrktGFqlstE
-         81z2Kr5wMaRc+TQb2Qaq/aL2TVJuZdX8R1h7pm/+lV3o8aHI+LWO2pezjbzOThWANjWs
-         +4XA==
-X-Gm-Message-State: ABy/qLanE6dTwGH37C44oMrfJeZPJx/9rRu1YG6EVfjOGdgEX/W0YWV6
-        j//d0FB/WpTOkeBnVMDq8vBFAHoehByiV43FIuQ=
-X-Google-Smtp-Source: APBJJlELkCEdlXye8US5g/6R435+/ePCacMKC+8upB0zYkVGAIV+dy+ir9Yfy3SW1NAV08Y/UbPfQrhop57vhspWmxA=
-X-Received: by 2002:a17:907:6d1f:b0:993:22a2:9234 with SMTP id
- sa31-20020a1709076d1f00b0099322a29234mr19989579ejc.31.1688974035627; Mon, 10
- Jul 2023 00:27:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230710042812.2007928-1-huqiang.qin@amlogic.com>
-In-Reply-To: <20230710042812.2007928-1-huqiang.qin@amlogic.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Jul 2023 10:26:39 +0300
-Message-ID: <CAHp75VcEUre4RVAoMO0Tg1uRdeOBr-ZLeX9ppNx+Nc0ZdSrtiA@mail.gmail.com>
-Subject: Re: [PATCH V2 0/2] Add pinctrl driver support for Amlogic C3 SoCs
-To:     Huqiang Qin <huqiang.qin@amlogic.com>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        brgl@bgdev.pl, andy@kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        Mon, 10 Jul 2023 03:27:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D898F1;
+        Mon, 10 Jul 2023 00:27:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0111960E9E;
+        Mon, 10 Jul 2023 07:27:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 585B5C433C8;
+        Mon, 10 Jul 2023 07:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688974028;
+        bh=FhffuQilgxNH5+XIQXWwDEj8UWTe1x5+T0sHaDOKZ/w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pufzeEwhOf70tjjpy+JUXSmbm1El+zeFDdhzGNjp3CVtVQ+9crrOIXNDHzBm15oUm
+         OsQwQ7rJYstuYZbUNBjiSys1erzCEwhHeKW2m7F2Z9hy41sBaAZ+R0IPGxZ4pMV7o4
+         Z8t2SVVJQTggoHFYRCwXB2u/fdjoZlhkMRqSeYPGmo+p/Nqx+jVgqgqQ3QQi0Uy/GI
+         p3liKMnfvXIF++695FtcckB38LwSuKXwfZ3eSJN6yDS7mQwnLIyBMvDOUOz1Phjh4X
+         srG2HvDuqvjobYRd5bQQjPC3FbC3UbUrCyvtBVHr8ccUkduFPia6YN7oRCyf6POmOM
+         wUDArHkcK7k/Q==
+Received: from 84-53-99-172.bbserv.nl ([84.53.99.172] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qIlIX-00BiEl-UU;
+        Mon, 10 Jul 2023 08:27:06 +0100
+Date:   Mon, 10 Jul 2023 08:27:00 +0100
+Message-ID: <875y6s8bwb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Maria Yu <quic_aiquny@quicinc.com>
+Cc:     <will@kernel.org>, <corbet@lwn.net>, <catalin.marinas@arm.com>,
+        <quic_pkondeti@quicinc.com>, <quic_kaushalk@quicinc.com>,
+        <quic_satyap@quicinc.com>, <quic_shashim@quicinc.com>,
+        <quic_songxue@quicinc.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+In-Reply-To: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 84.53.99.172
+X-SA-Exim-Rcpt-To: quic_aiquny@quicinc.com, will@kernel.org, corbet@lwn.net, catalin.marinas@arm.com, quic_pkondeti@quicinc.com, quic_kaushalk@quicinc.com, quic_satyap@quicinc.com, quic_shashim@quicinc.com, quic_songxue@quicinc.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,15 +71,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 7:28=E2=80=AFAM Huqiang Qin <huqiang.qin@amlogic.co=
-m> wrote:
->
-> This patch adds pinctrl driver support for Amloigc C3 SoC (C308L and C302=
-X)
+On Mon, 10 Jul 2023 06:59:55 +0100,
+Maria Yu <quic_aiquny@quicinc.com> wrote:
+> 
+> In order to be able to disable lse_atomic even if cpu
+> support it, most likely because of memory controller
+> cannot deal with the lse atomic instructions, use a
+> new idreg override to deal with it.
 
-Neither here, nor in the patch I see the changelog. Can you elaborate, plea=
-se?
+In general, the idreg overrides are *not* there to paper over HW bugs.
+They are there to force the kernel to use or disable a feature for
+performance reason or to guide the *enabling* of a feature, but not
+because the HW is broken.
 
---=20
-With Best Regards,
-Andy Shevchenko
+The broken status of a HW platform must also be documented so that we
+know what to expect when we look at, for example, a bad case of memory
+corruption (something I'd expect to see on a system that only
+partially implements atomic memory operations).
+
+> 
+> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  2 ++
+>  arch/arm64/include/asm/cpufeature.h             |  1 +
+>  arch/arm64/kernel/cpufeature.c                  |  4 +++-
+>  arch/arm64/kernel/idreg-override.c              | 11 +++++++++++
+>  4 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 85fb0fa5d091..6ad754549f1d 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -433,6 +433,8 @@
+>  	arm64.nomops	[ARM64] Unconditionally disable Memory Copy and Memory
+>  			Set instructions support
+>  
+> +	arm64.nolse_atomic [ARM64] Unconditionally disable LSE Atomic support
+> +
+
+'nolse', or 'noatomic' should be enough. In general, the suffix should
+be either derived from the FEAT_* name or the idreg field name.
+
+>  	ataflop=	[HW,M68k]
+>  
+>  	atarimouse=	[HW,MOUSE] Atari Mouse
+> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+> index 96e50227f940..9d56dea1fe62 100644
+> --- a/arch/arm64/include/asm/cpufeature.h
+> +++ b/arch/arm64/include/asm/cpufeature.h
+> @@ -916,6 +916,7 @@ extern struct arm64_ftr_override id_aa64pfr0_override;
+>  extern struct arm64_ftr_override id_aa64pfr1_override;
+>  extern struct arm64_ftr_override id_aa64zfr0_override;
+>  extern struct arm64_ftr_override id_aa64smfr0_override;
+> +extern struct arm64_ftr_override id_aa64isar0_override;
+>  extern struct arm64_ftr_override id_aa64isar1_override;
+>  extern struct arm64_ftr_override id_aa64isar2_override;
+>  
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index f9d456fe132d..9bd766880807 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -669,6 +669,7 @@ struct arm64_ftr_override __ro_after_init id_aa64pfr0_override;
+>  struct arm64_ftr_override __ro_after_init id_aa64pfr1_override;
+>  struct arm64_ftr_override __ro_after_init id_aa64zfr0_override;
+>  struct arm64_ftr_override __ro_after_init id_aa64smfr0_override;
+> +struct arm64_ftr_override __ro_after_init id_aa64isar0_override;
+>  struct arm64_ftr_override __ro_after_init id_aa64isar1_override;
+>  struct arm64_ftr_override __ro_after_init id_aa64isar2_override;
+>  
+> @@ -721,7 +722,8 @@ static const struct __ftr_reg_entry {
+>  	ARM64_FTR_REG(SYS_ID_AA64DFR1_EL1, ftr_raz),
+>  
+>  	/* Op1 = 0, CRn = 0, CRm = 6 */
+> -	ARM64_FTR_REG(SYS_ID_AA64ISAR0_EL1, ftr_id_aa64isar0),
+> +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64ISAR0_EL1, ftr_id_aa64isar0,
+> +			       &id_aa64isar0_override),
+>  	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64ISAR1_EL1, ftr_id_aa64isar1,
+>  			       &id_aa64isar1_override),
+>  	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64ISAR2_EL1, ftr_id_aa64isar2,
+> diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
+> index 2fe2491b692c..af41ab4f3d94 100644
+> --- a/arch/arm64/kernel/idreg-override.c
+> +++ b/arch/arm64/kernel/idreg-override.c
+> @@ -105,6 +105,15 @@ static const struct ftr_set_desc pfr1 __initconst = {
+>  	},
+>  };
+>  
+> +static const struct ftr_set_desc isar0 __initconst = {
+> +	.name		= "id_aa64isar0",
+> +	.override	= &id_aa64isar0_override,
+> +	.fields		= {
+> +	        FIELD("atomic", ID_AA64ISAR0_EL1_ATOMIC_SHIFT, NULL),
+> +		{}
+> +	},
+> +};
+> +
+>  static const struct ftr_set_desc isar1 __initconst = {
+>  	.name		= "id_aa64isar1",
+>  	.override	= &id_aa64isar1_override,
+> @@ -163,6 +172,7 @@ static const struct ftr_set_desc * const regs[] __initconst = {
+>  	&mmfr1,
+>  	&pfr0,
+>  	&pfr1,
+> +	&isar0,
+>  	&isar1,
+>  	&isar2,
+>  	&smfr0,
+> @@ -185,6 +195,7 @@ static const struct {
+>  	{ "arm64.nomops",		"id_aa64isar2.mops=0" },
+>  	{ "arm64.nomte",		"id_aa64pfr1.mte=0" },
+>  	{ "nokaslr",			"arm64_sw.nokaslr=1" },
+> +	{ "arm64.nolse_atomic",         "id_aa64isar0.atomic=0" },
+
+And what of 32bit?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
