@@ -2,88 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E5174DBF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CA374DC61
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjGJRJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S233038AbjGJRYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjGJRJX (ORCPT
+        with ESMTP id S232922AbjGJRXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:09:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E8AC0;
-        Mon, 10 Jul 2023 10:09:21 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qIuNj-000676-Ls; Mon, 10 Jul 2023 19:09:03 +0200
-Message-ID: <c76eae67-b391-a39e-a907-988b8277a72b@leemhuis.info>
-Date:   Mon, 10 Jul 2023 19:09:02 +0200
+        Mon, 10 Jul 2023 13:23:44 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06965C7;
+        Mon, 10 Jul 2023 10:23:43 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id c4c0e8f90a95acfb; Mon, 10 Jul 2023 19:23:42 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id DAE64660DCF;
+        Mon, 10 Jul 2023 19:23:41 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>,
+        Saket Dumbre <saket.dumbre@intel.com>
+Subject: [PATCH 00/14] ACPICA 20230628
+Date:   Mon, 10 Jul 2023 19:10:09 +0200
+Message-ID: <5698695.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: 3 more broken Zaurii - SL-5600, A300, C700
-Content-Language: en-US, de-DE
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ross Maynard <bids.7405@bigpond.com>,
-        Dave Jones <davej@codemonkey.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
- <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
- <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
- <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
- <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
- <14fd48c8-3955-c933-ab6f-329e54da090f@bigpond.com>
- <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
- <ac957af4-f265-3ba0-0373-3a71d134a57e@leemhuis.info>
- <20230710095519.5056c98b@kernel.org>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230710095519.5056c98b@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689008961;6a1d2bdd;
-X-HE-SMSGID: 1qIuNj-000676-Ls
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnheptefgiedtfeeuheegtdfhleeltdeuledugfehfeekkeekudffgeegtdeufeekvdeunecuffhomhgrihhnpegrtghpihgtrgdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrkhgvthdrughumhgsrhgvsehi
+ nhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.07.23 18:55, Jakub Kicinski wrote:
-> On Sun, 9 Jul 2023 06:36:32 +0200 Linux regression tracking (Thorsten
-> Leemhuis) wrote:
->> To chime in here: I most agree, but FWIW, it broke more than a decade
->> ago in v3.0, so maybe this is better suited for net-next. But of course
->> that up to the -net maintainers.
-> 
-> I'm surprised to see you suggest -next for a fix to a user reported bug.
-> IMO it's very firmly net material.
+Hi All,
 
-Yes, yes, normally it would argue the other way around. :-D
+This series of patches is a set of ACPICA 20230628 changes described at
+https://acpica.org/sites/acpica/files/changes_63.txt ported to Linux.
 
-But Linus a few times in one way or another argued that time is a factor
-when it comes to regressions. Here for example:
+It contains the following material:
 
-https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/
+Abhishek Mainkar (1):
+      ACPICA: Add AML_NO_OPERAND_RESOLVE flag to Timer
 
-But there are no "semantic changes that now mean that fixing the
-regression could cause a _new_ regression" here I guess. And what he was
-talking about there is quite different from this case as well (I vaguely
-remember a better example, but I can't find it; whatever).
+Bob Moore (1):
+      ACPICA: Update version to 20230628
 
-In the end this is one of issue where I don't care much. :-D
+Christophe Jaillet (1):
+      ACPICA: Slightly simplify an error message in acpi_ds_result_push()
 
-Ciao, Thorsten
+Dave Jiang (2):
+      ACPICA: Fix misspelled CDAT DSMAS define
+      ACPICA: Add a define for size of struct acpi_srat_generic_affinity device_handle
+
+George Guo (1):
+      ACPICA: Modify ACPI_STATE_COMMON
+
+Jiangshan Yi (1):
+      ACPICA: exserial.c: replace ternary operator with ACPI_MIN()
+
+Jose Marinho (2):
+      ACPICA: Detect GED device and keep track of _EVT
+      ACPICA: Add interrupt command to acpiexec
+
+Najumon B.A (1):
+      ACPICA: fix for conflict macro definition on zephyr interface
+
+Philip Prindeville (1):
+      ACPICA: Fix GCC 12 dangling-pointer warning
+
+Saket Dumbre (1):
+      ACPICA: Add support for _DSC as per ACPI 6.5
+
+Sunil V L (2):
+      ACPICA: MADT: Add RISC-V external interrupt controllers
+      ACPICA: RHCT: Add flags, CMO and MMU nodes
+
+Thanks!
+
+
+
