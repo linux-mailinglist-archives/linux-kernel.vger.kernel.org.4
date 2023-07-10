@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4290174DF35
+	by mail.lfdr.de (Postfix) with ESMTP id DB95574DF37
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjGJU27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S231624AbjGJU3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjGJU25 (ORCPT
+        with ESMTP id S230464AbjGJU26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:28:57 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473B2AD;
-        Mon, 10 Jul 2023 13:28:56 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b6fdaf6eefso76014151fa.0;
-        Mon, 10 Jul 2023 13:28:56 -0700 (PDT)
+        Mon, 10 Jul 2023 16:28:58 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B57195
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:28:57 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b9de135bddso20441365ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689020934; x=1691612934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NwA4CqvxKmvSRXgeGj2yadyCOJ4Y6n3edsoObSgx8d4=;
-        b=Cdbg3WzcN8W/VWeQQ49vaAlmTB8aKVQYef9AXCEh7EneO1Ufbzeoq0m4c4ePS0pijj
-         CuDq6IMPiVqh8VC6KRN5IFBXOwRgb5sVm3TyTyX/EbntinrWdj3Y2PONkrBXRf0AQ2Y+
-         wcm+hLMEX9Se5p7128uD5j02kn6VrBj3EKOkbb1apArMYNhu83xrRi+wRr2tCu0SDeWI
-         6y/nSqv5qEZevC4tRP3tcO0ldog226UJRP5YqUkxkNr3bHFQSL71q4Ib+fx0hS2iLBqK
-         ih8COm4OdSzBJpHciSa2fztN8tocQr3v64l1y9SrIlZeNSArU589egSSj9pIOOkMSYqO
-         OZZA==
+        d=google.com; s=20221208; t=1689020937; x=1691612937;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rF29GRgI8hOW8jLROF4KwGHDbjmxwt4c6jNir/qrBzs=;
+        b=jOkorrw1678EU4ez642rTZ8VfFOAcxpduo03I2ahHvbcWtPyX1J9zaxk9/HdnXV5NF
+         +8NbcVqbXxIEETOSio0rxJoqfOFcya+Q2zzEYN8/fNNNZhZr/koS7KObNfEFEr4edCYG
+         g2otY5bdgkOa+0E7RELb6lFzySFZIP8voBrD4PR9VBD7ILLRAclviplJxyOQPaXuKSMn
+         ANzmrhcTL3RD0Tl5DGWR/knsa+xTrfDSUDkyKz9aCBjL3LiPBp9HFz9nayULGVFla0nc
+         80PIUiTW0WSKogKnyAAfCYQjdVEQaXl8YbAY/SrRBlKDsx/fX9G5/KTdHoV2xrgWvcBg
+         +Pvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689020934; x=1691612934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NwA4CqvxKmvSRXgeGj2yadyCOJ4Y6n3edsoObSgx8d4=;
-        b=EamBQgo3J94zrqm1R3wVjGr7FVpfMmhLkSV9JvZWDC1T9NEi5gwZkSqM2hMJ2/8j+W
-         UfzLHra4jMS1q9zvgL7h39zysqQRTkVpLxxUbooLvrwQA6FDlz+gLcTgwbJoorcuwf11
-         jgz2+/OZibTfvTIIgPJPvpsC9Ok5XVV4xkPEi+vNcPmeURSfeWn5hTRDX63sOs4mKwUD
-         3w+Dd39QlezBxVe7N1nn8NrN+Df1NhBxl1J7Sc4jtMfC5CUz4YXIVrsj19ulOOIWm5en
-         nYGCVvVRS9CLggg49xkRJrZdQzqVTN+lwTyO/+q/lJOxsRp+d2upZulGcOcQJooDXmWe
-         IIYg==
-X-Gm-Message-State: ABy/qLYC2R6WTutV+MIehSpZAI0timRwMMbSVUjqFuMrTZI9Yc77R1hb
-        XpGC87BVO15cRQtaDZOhbXI=
-X-Google-Smtp-Source: APBJJlGXpHLLHlw1nROTlf734S1oqGBDWm6C5C/qiewL6aJbndZxCQqkGJMoCyOv5gzKM7iXSRxYlA==
-X-Received: by 2002:a2e:3507:0:b0:2b6:b611:64e9 with SMTP id z7-20020a2e3507000000b002b6b61164e9mr9219778ljz.52.1689020934229;
-        Mon, 10 Jul 2023 13:28:54 -0700 (PDT)
-Received: from valmont.froyen.eu ([2a01:799:ba5:6500::80f])
-        by smtp.gmail.com with ESMTPSA id s15-20020a2e9c0f000000b002b700ca0f61sm123522lji.112.2023.07.10.13.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 13:28:53 -0700 (PDT)
-From:   Valentin David <valentin.david@gmail.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Valentin David <valentin.david@gmail.com>
-Subject: [PATCH v3] tpm: Do not remap from ACPI resouces again for Pluton TPM
-Date:   Mon, 10 Jul 2023 22:27:49 +0200
-Message-ID: <20230710202845.190917-1-valentin.david@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <CTYJ4KD2K9GO.25KSGPKKJSEN0@suppilovahvero>
-References: <CTYJ4KD2K9GO.25KSGPKKJSEN0@suppilovahvero>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        d=1e100.net; s=20221208; t=1689020937; x=1691612937;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rF29GRgI8hOW8jLROF4KwGHDbjmxwt4c6jNir/qrBzs=;
+        b=R/X1HDD0YRRsaDd7BE/mi/9enEWAr2DKc6rIS7ukmtxRfSn8BUzkUKon2NHAeF5B7k
+         JftvXte/kRxDACLgHUTPXaQVYqOPB94GZuC0MQHGq1hEEpFkGp4a4cnRyx/RIBpOPXqB
+         syRaIh7byuxy223fRSJDdGvqunxLzyNP17EmKt4WclRI+vH8tkuDS56f/Kh95P4vbI1F
+         OhKhhSFhSL9CIQabQPW44Y4cUpiqdJNKkHAV6EVGW2rQyK6lN3kb7DDwoZ6qFr6GldX1
+         OtvbZgBTjcHw/mZs8otpryaUGjklhSowdM+rWS6dk79t+kKSNdDgi5dymhbzKWhZdVCV
+         oC7g==
+X-Gm-Message-State: ABy/qLaZaWx3aGHeRupfCcm/ygu/Jng8K/leM0zCMyWwr2INdqhC7Sah
+        NcNZ4iy2MzG53lP3Sr+bKOJlxh/wm8k=
+X-Google-Smtp-Source: APBJJlG5lGHrhxyvgWQtaCd0VQa2a0kqO4lf9RNKbEuXXJ+s8Ne6YR8onYAvNGQVdSMH3WQ+Q13aPcYpSQc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:c1cd:b0:1b8:8fe2:6627 with SMTP id
+ c13-20020a170902c1cd00b001b88fe26627mr11923948plc.8.1689020937323; Mon, 10
+ Jul 2023 13:28:57 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 13:28:55 -0700
+In-Reply-To: <000000000000c7224e06001eb4b1@google.com>
+Mime-Version: 1.0
+References: <000000000000c7224e06001eb4b1@google.com>
+Message-ID: <ZKxqB+eKM4bIyehI@google.com>
+Subject: Re: [syzbot] Monthly kvm report (Jul 2023)
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+listf42719d660fa6d59a79a@syzkaller.appspotmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,57 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For Pluton TPM devices, it was assumed that there was no ACPI memory
-regions. This is not true for ASUS ROG Ally. ACPI advertises
-0xfd500000-0xfd5fffff.
+On Mon, Jul 10, 2023, syzbot wrote:
+> Hello kvm maintainers/developers,
+> 
+> This is a 31-day syzbot report for the kvm subsystem.
+> All related reports/information can be found at:
+> https://syzkaller.appspot.com/upstream/s/kvm
+> 
+> During the period, 2 new issues were detected and 0 were fixed.
+> In total, 5 issues are still open and 111 have been fixed so far.
+> 
+> Some of the still happening issues:
+> 
+> Ref Crashes Repro Title
+> <1> 138     Yes   WARNING in kvm_arch_vcpu_ioctl_run (5)
+>                   https://syzkaller.appspot.com/bug?extid=5feef0b9ee9c8e9e5689
 
-Since remapping is already done in `crb_map_pluton`, remapping again
-in `crb_map_io` causes EBUSY error:
-```
-[    3.510453] tpm_crb MSFT0101:00: can't request region for resource [mem 0xfd500000-0xfd5fffff]
-[    3.510463] tpm_crb: probe of MSFT0101:00 failed with error -16
-```
+This will *hopefully* be resolved when the unrestricted guest patches[*] are
+applied.  This WARN is a bit of a catch-all.  The upside is that it detects a lot
+of bugs, the downside is completely unrelated bugs can have the same signature,
+i.e. there may be more bugs lurking.
 
-Fixes: 4d2732882703 ("tpm_crb: Add support for CRB devices based on Pluton")
+[*] https://lore.kernel.org/all/20230613203037.1968489-1-seanjc@google.com
 
-Signed-off-by: Valentin David <valentin.david@gmail.com>
----
-v3: Add fixes tag
----
- drivers/char/tpm/tpm_crb.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+> <2> 89      Yes   WARNING in handle_exception_nmi (2)
+>                   https://syzkaller.appspot.com/bug?extid=4688c50a9c8e68e7aaa1
 
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index d43a0d7b97a8..1a5d09b18513 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -563,15 +563,18 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 	u32 rsp_size;
- 	int ret;
- 
--	INIT_LIST_HEAD(&acpi_resource_list);
--	ret = acpi_dev_get_resources(device, &acpi_resource_list,
--				     crb_check_resource, iores_array);
--	if (ret < 0)
--		return ret;
--	acpi_dev_free_resource_list(&acpi_resource_list);
--
--	/* Pluton doesn't appear to define ACPI memory regions */
-+	/*
-+	 * Pluton sometimes does not define ACPI memory regions.
-+	 * Mapping is then done in crb_map_pluton
-+	 */
- 	if (priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
-+		INIT_LIST_HEAD(&acpi_resource_list);
-+		ret = acpi_dev_get_resources(device, &acpi_resource_list,
-+					     crb_check_resource, iores_array);
-+		if (ret < 0)
-+			return ret;
-+		acpi_dev_free_resource_list(&acpi_resource_list);
-+
- 		if (resource_type(iores_array) != IORESOURCE_MEM) {
- 			dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
- 			return -EINVAL;
--- 
-2.41.0
+This is likely a bug in the underlying GCE kernel, i.e. in L0.  Not sure how to
+bin this one.
 
+> <3> 58      No    WARNING in kthread_bind_mask
+>                   https://syzkaller.appspot.com/bug?extid=087b7effddeec0697c66
+
+This is more than likely a bug in either the workqueues or in sched, e.g. btrfs hit
+the same WARN a while back with a similarly innocuous alloc_workqueue() call.
+I'll (try to) re-label to "kernel".
