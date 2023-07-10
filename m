@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6339774D8D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A6B74D8DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbjGJOUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S231144AbjGJOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjGJOUV (ORCPT
+        with ESMTP id S231876AbjGJOUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:20:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18FE90;
-        Mon, 10 Jul 2023 07:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688998821; x=1720534821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T+ipmIGBmanZ1HNwwnrLFkQbzQzWcUpCwirt14pJwto=;
-  b=LWqRyIVvtnDlGZrQ+B52sahWuiXr60lNkANZhGio/rNaVWz99mgzKQ2b
-   1FoXSUGFffyiYioiDncCxwKT65Q4GpOM6BUayaLihLGft4rxZwYMal09E
-   H5+XEcuFRB5/PR1/weZKMCln2xz3XiAFNmELBW4ULnuVytowutAmKOUui
-   3t+zDJP6p0dbkDncfxYZYGXJppREGWVi4rixokeOg4TAT3j8oaiw7llfy
-   ZPCHC8Jpz/CSCK1cOUtSJ51B4gScREiq6MHfZOA7UUtKqCMfiO53CwRf0
-   4OoIWDNXRr65ss4HdNPxxYZ88qYJUnNVRhyRPElVrlqu9jAa5g0KalNnp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="430431159"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="430431159"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:20:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="698003669"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="698003669"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2023 07:20:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qIrkN-001ZjY-1i;
-        Mon, 10 Jul 2023 17:20:15 +0300
-Date:   Mon, 10 Jul 2023 17:20:15 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Michal Wilczynski <michal.wilczynski@intel.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
-        artem.bityutskiy@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, lenb@kernel.org,
-        jgross@suse.com, linux-kernel@vger.kernel.org, x86@kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v4 4/9] acpi: Rename ACPI_PDC constants
-Message-ID: <ZKwTn/cLwAM7uSUA@smile.fi.intel.com>
-References: <20230710140337.1434060-1-michal.wilczynski@intel.com>
- <20230710140337.1434060-5-michal.wilczynski@intel.com>
+        Mon, 10 Jul 2023 10:20:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB9290;
+        Mon, 10 Jul 2023 07:20:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4532B6102D;
+        Mon, 10 Jul 2023 14:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23776C433C7;
+        Mon, 10 Jul 2023 14:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688998821;
+        bh=OLMdz1DN5xibC7Sk2gaZG3zWRkoxbpH001OB0bLR0ww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pmzHx8uT7TGM/txBD6jaX1GWoerubuy6fgJwTOmP694+ens0oNsgIh4iK2TRvNOvW
+         uM4MqBrd5sCukWd3zrE3vKvQStRY6o9w3dWjfoR8+rPum6TgDHPQXltABa4pICxUcE
+         LaBIW/v+zpMtFa10oD4kbBBpNPUZr7UMe8IDfsxjBCfdPSOPaDhh4GCE7sLbO3FEXq
+         evgwMbpQIX1SNnQkakwubpWueqTOz7dUx9W57YTzV7qMUMK2iK3oRurKhHb89loiR1
+         3Sp1UM1zDMtN5+BZLDsBWZ/aVt4Nrm3Q8HyAjYEJ9d0cJjComBi+nIiI2cQlfxLcGT
+         9j+MmPYVXC8CA==
+Date:   Mon, 10 Jul 2023 15:20:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 10/11] Documentation: kselftest: "make headers" is a
+ prerequisite
+Message-ID: <36093b4d-1225-435e-accb-f596ef7a2967@sirena.org.uk>
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
+ <20230606071637.267103-11-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SXAURWvz4FkmpKYo"
 Content-Disposition: inline
-In-Reply-To: <20230710140337.1434060-5-michal.wilczynski@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20230606071637.267103-11-jhubbard@nvidia.com>
+X-Cookie: "I am, therefore I am."
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 05:03:32PM +0300, Michal Wilczynski wrote:
-> ACPI_PDC constants prefix suggest that those constants are only relevant
-> in the context of the _PDC method. This is not true, as they can also be
-> used in _OSC context. Change prefix to more generic ACPI_PROC_CAP, that
-> better describe the purpose of those constants as they describe bits in
-> processor capabilities buffer. Rename pdc_intel.h to proc_cap_intel.h to
-> reflect the change in the prefix.
 
-...
+--SXAURWvz4FkmpKYo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -	/* Ask the Hypervisor whether to clear ACPI_PDC_C_C2C3_FFH. If so,
-> +	/* Ask the Hypervisor whether to clear ACPI_PROC_CAP_C_C2C3_FFH. If so,
->  	 * don't expose MWAIT_LEAF and let ACPI pick the IOPORT version of C3.
->  	 */
+On Tue, Jun 06, 2023 at 12:16:36AM -0700, John Hubbard wrote:
+> As per a discussion with Muhammad Usama Anjum [1], the following is how
+> one is supposed to build selftests:
+>=20
+>     make headers && make -C tools/testing/selftests/mm
+>=20
+> However, that's not yet documented anywhere. So add it to
+> Documentation/dev-tools/kselftest.rst .
 
-/*
- * While at it, you can fix multi-line
- * comment style. It supposed to be
- * like in this example.
- */
+This is breaking the arm64 selftests, I've sent a revert:
 
-I don't know if resend is required, I would wait for Rafael to comment on this.
+   https://lore.kernel.org/linux-kselftest/20230710-kselftest-fix-arm64-v1-=
+1-48e872844f25@kernel.org/T/#u
 
--- 
-With Best Regards,
-Andy Shevchenko
+(logs included in the above patch.)
 
+--SXAURWvz4FkmpKYo
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsE58ACgkQJNaLcl1U
+h9DW5wf+K3ErUXYG5NoFTwiBKRLqmjlCbqt53gVZU46qFA+tyb9S4K5iyg5Vd+/D
+srIjEtIdTXB+t7W7tZOrjVOlfDHIpJmGiG88pqq1MRJfTTlq+MNeKyhyK//8OkN4
+a/Ugsgf9v9gXc0DYLltGEj4NPHokXvxyrNRrqewj3OIoLY65qgqKSUgjvbBuORdn
+KSM/HoHqfp57n5xTBx7UdCTQ6KTsIbXSeNInDIq1FVC+THvEBgVTXYXa8720fRwy
+HLSLdcR7gOFGn6INsEUqOT33Z7UyreQhWtq0j6gfSZg9uqNt1RwXo493Krp6YLOm
+GOWBk8OfMij3SoSvAlEDxIt9Fqh9Mg==
+=bFPt
+-----END PGP SIGNATURE-----
+
+--SXAURWvz4FkmpKYo--
