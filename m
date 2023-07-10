@@ -2,230 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5CB74D1EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF2374D1CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbjGJJk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S232570AbjGJJjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjGJJjZ (ORCPT
+        with ESMTP id S232524AbjGJJjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:39:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E351BF5;
-        Mon, 10 Jul 2023 02:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688981825; x=1720517825;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=O+veMtx+JvcXWx4LygV6hHgSQoTVwUJDCTyGDuzrzBQ=;
-  b=LBLIx8HxraHsJs4qdxZJMnyOOT6d/dfzVDMICBJ2XZr2tFxTWZl2W6Zn
-   adHNgUCPcRIxHTs+qCsCjM7rwyhS2rAgZm3tnKpR7FsXLILQJtaD5hHFK
-   p143z1stnt/t7udHMVooZxL/8z67TwOwBH+ilu0q0crxPKVlwmdidj0ao
-   doC4iIr1CjV2T0nUsHphTxnhLYgyy7hDPzqTlBC+awcWveXN23JYL+IsQ
-   vyK0Opnas7kxK1fi3IlaA9rmdfcoYT2kx+RkJAtE0QA7EoU/tSbWxY66Q
-   4CeV/U88RPAu+TenEvs1KhJenz1doK0JOgMhX1jO+lyYsG6ofRE6NAPDB
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="222870094"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jul 2023 02:37:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 10 Jul 2023 02:36:59 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 10 Jul 2023 02:36:57 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <palmer@dabbelt.com>
-CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        "Heiko Stuebner" <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v4 11/11] RISC-V: provide Kconfig & commandline options to control parsing "riscv,isa"
-Date:   Mon, 10 Jul 2023 10:35:46 +0100
-Message-ID: <20230710-reappear-unable-5f954043552a@wendy>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230710-equipment-stained-dd042d66ba5d@wendy>
-References: <20230710-equipment-stained-dd042d66ba5d@wendy>
+        Mon, 10 Jul 2023 05:39:03 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3619358C;
+        Mon, 10 Jul 2023 02:36:46 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id E30F414808A;
+        Mon, 10 Jul 2023 11:36:19 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1688981780; bh=cEGhRoXPGRpwdgEcYnOlQCfMzy6z9NfW6eHFlWupbSY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XABk4b2xj/95NSII8KdLFD9UXbqReOD/JSMT78/awbRfpUBqfGBkx8UaOP7uLhMBC
+         3ilozKe2ETT4f5Fu81wNHDCN07rfMRv27v/9Xz75qERHzeG33+YIPLfvMTvoepShXB
+         bp2X4b8fPNU/Y7K2HLpKLrrq+yf2U2JAokof6WBFlaoG05B6pU1H78/xgPW15MdaqE
+         BfIGVqnvqysxdQ4LOZdewoT61n6Z6aso0jS/C+m9Ibd4l2WgvIliFFmHeTIN46rnAB
+         VG7cMrMlXNhKuXURvWmxWocykbHhVETgX2QSYY2w6dFYQnLEHCYsWEc7f2hvRbUR7/
+         o2NH4pbmYxXYQ==
+Date:   Mon, 10 Jul 2023 11:36:18 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
+ transient memory pool
+Message-ID: <20230710113618.2038e033@meshulam.tesarici.cz>
+In-Reply-To: <BYAPR21MB1688D3AC0C094420733717C4D732A@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+        <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
+        <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070626-boxcar-bubbly-471d@gregkh>
+        <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070706-humbling-starfish-c68f@gregkh>
+        <20230707122213.3a7378b5@meshulam.tesarici.cz>
+        <BYAPR21MB1688D3AC0C094420733717C4D732A@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5841; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=O+veMtx+JvcXWx4LygV6hHgSQoTVwUJDCTyGDuzrzBQ=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmrL9y8PuV2Ys/Sp1ln9klIzzh54OEpA/nQ7D/2q3hOTZnj v/iCeUcpC4MYB4OsmCJL4u2+Fqn1f1x2OPe8hZnDygQyhIGLUwAmUveUkWG1b8Le2iv7uZJ3qqh0xX 8XT9h6piP31ok5+4NWz7AKs05k+Gcnk/aSeyM3J7um42zJ1AaWd3XnZI/ef7F4Xpv/5e1vrvACAA==
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As it says on the tin, provide Kconfig option to control parsing the
-"riscv,isa" devicetree property. If either option is used, the kernel
-will fall back to parsing "riscv,isa", where "riscv,isa-base" and
-"riscv,isa-extensions" are not present.
-The Kconfig options are set up so that the default kernel configuration
-will enable the fallback path, without needing the commandline option.
+On Sat, 8 Jul 2023 15:18:32 +0000
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
 
-Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Changes in v4:
-- add __init to fixup k210 build issue
-- use Drew's revised wording
+> From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> Sent: Friday, July 7, 202=
+3 3:22 AM
+> >=20
+> > On Fri, 7 Jul 2023 10:29:00 +0100
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> >  =20
+> > > On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrot=
+e: =20
+> > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursda=
+y, July 6, =20
+> > 2023 1:07 AM =20
+> > > > >
+> > > > > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) =
+wrote: =20
+> > > > > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday,=
+ June 27, 2023 =20
+> > > > > 2:54 AM =20
+> > > > > > >
+> > > > > > > Try to allocate a transient memory pool if no suitable slots =
+can be found,
+> > > > > > > except when allocating from a restricted pool. The transient =
+pool is just
+> > > > > > > enough big for this one bounce buffer. It is inserted into a =
+per-device
+> > > > > > > list of transient memory pools, and it is freed again when th=
+e bounce
+> > > > > > > buffer is unmapped.
+> > > > > > >
+> > > > > > > Transient memory pools are kept in an RCU list. A memory barr=
+ier is
+> > > > > > > required after adding a new entry, because any address within=
+ a transient
+> > > > > > > buffer must be immediately recognized as belonging to the SWI=
+OTLB, even if
+> > > > > > > it is passed to another CPU.
+> > > > > > >
+> > > > > > > Deletion does not require any synchronization beyond RCU orde=
+ring
+> > > > > > > guarantees. After a buffer is unmapped, its physical addresse=
+s may no
+> > > > > > > longer be passed to the DMA API, so the memory range of the c=
+orresponding
+> > > > > > > stale entry in the RCU list never matches. If the memory rang=
+e gets
+> > > > > > > allocated again, then it happens only after a RCU quiescent s=
+tate.
+> > > > > > >
+> > > > > > > Since bounce buffers can now be allocated from different pool=
+s, add a
+> > > > > > > parameter to swiotlb_alloc_pool() to let the caller know whic=
+h memory pool
+> > > > > > > is used. Add swiotlb_find_pool() to find the memory pool corr=
+esponding to
+> > > > > > > an address. This function is now also used by is_swiotlb_buff=
+er(), because
+> > > > > > > a simple boundary check is no longer sufficient.
+> > > > > > >
+> > > > > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_a=
+lloc_pages(),
+> > > > > > > simplified and enhanced to use coherent memory pools if neede=
+d.
+> > > > > > >
+> > > > > > > Note that this is not the most efficient way to provide a bou=
+nce buffer,
+> > > > > > > but when a DMA buffer can't be mapped, something may (and wil=
+l) actually
+> > > > > > > break. At that point it is better to make an allocation, even=
+ if it may be
+> > > > > > > an expensive operation. =20
+> > > > > >
+> > > > > > I continue to think about swiotlb memory management from the st=
+andpoint
+> > > > > > of CoCo VMs that may be quite large with high network and stora=
+ge loads.
+> > > > > > These VMs are often running mission-critical workloads that can=
+'t tolerate
+> > > > > > a bounce buffer allocation failure.  To prevent such failures, =
+the swiotlb
+> > > > > > memory size must be overly large, which wastes memory. =20
+> > > > >
+> > > > > If "mission critical workloads" are in a vm that allowes overcomm=
+it and
+> > > > > no control over other vms in that same system, then you have worse
+> > > > > problems, sorry.
+> > > > >
+> > > > > Just don't do that.
+> > > > > =20
+> > > >
+> > > > No, the cases I'm concerned about don't involve memory overcommit.
+> > > >
+> > > > CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current sw=
+iotlb
+> > > > code in the Linux guest allocates a configurable, but fixed, amount=
+ of guest
+> > > > memory at boot time for this purpose.  But it's hard to know how mu=
+ch
+> > > > swiotlb bounce buffer memory will be needed to handle peak I/O load=
+s.
+> > > > This patch set does dynamic allocation of swiotlb bounce buffer mem=
+ory,
+> > > > which can help avoid needing to configure an overly large fixed siz=
+e at boot. =20
+> > >
+> > > But, as you point out, memory allocation can fail at runtime, so how =
+can
+> > > you "guarantee" that this will work properly anymore if you are going=
+ to
+> > > make it dynamic? =20
+> >=20
+> > In general, there is no guarantee, of course, because bounce buffers
+> > may be requested from interrupt context. I believe Michael is looking
+> > for the SWIOTLB_MAY_SLEEP flag that was introduced in my v2 series, so
+> > new pools can be allocated with GFP_KERNEL instead of GFP_NOWAIT if
+> > possible, and then there is no need to dip into the coherent pool.
+> >=20
+> > Well, I have deliberately removed all complexities from my v3 series,
+> > but I have more WIP local topic branches in my local repo:
+> >=20
+> > - allow blocking allocations if possible
+> > - allocate a new pool before existing pools are full
+> > - free unused memory pools
+> >=20
+> > I can make a bigger series, or I can send another series as RFC if this
+> > is desired. ATM I don't feel confident enough that my v3 series will be
+> > accepted without major changes, so I haven't invested time into
+> > finalizing the other topic branches.
+> >=20
+> > @Michael: If you know that my plan is to introduce blocking allocations
+> > with a follow-up patch series, is the present approach acceptable?
+> >  =20
+>=20
+> Yes, I think the present approach is acceptable as a first step.  But
+> let me elaborate a bit on my thinking.
+>=20
+> I was originally wondering if it is possible for swiotlb_map() to detect
+> whether it is called from a context that allows sleeping, without the use
+> of SWIOTLB_MAY_SLEEP.   This would get the benefits without having to
+> explicitly update drivers to add the flag.  But maybe that's too risky.
 
-Changes in v3:
-- Invert the Kconfig entry. It's now default y & not hidden by
-  NONPORTABLE, but its entablement will now activate the fallback
-- Add a commandline option to enable the fallback on kernels that do not
-  enable it in Kconfig, as Drew suggested
-- Default the global var to the Kconfig option & override it with the
-  commandline one, rather than have checks for IS_ENABLED() and for the
-  commandline option in riscv_fill_hwcap() &
-  riscv_early_of_processor_hartid()
----
- .../admin-guide/kernel-parameters.txt          |  7 +++++++
- arch/riscv/Kconfig                             | 18 ++++++++++++++++++
- arch/riscv/include/asm/hwcap.h                 |  1 +
- arch/riscv/kernel/cpu.c                        |  8 +++++++-
- arch/riscv/kernel/cpufeature.c                 | 14 +++++++++++++-
- 5 files changed, 46 insertions(+), 2 deletions(-)
+This is a recurring topic and it has been discussed several times in
+the mailing lists. If you ask me, the best answer is this one by Andrew
+Morton, albeit a bit dated:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a1457995fd41..bdc3fa712e92 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5468,6 +5468,13 @@
- 			[KNL] Disable ring 3 MONITOR/MWAIT feature on supported
- 			CPUs.
- 
-+	riscv_isa_fallback [RISCV]
-+			When CONFIG_RISCV_ISA_FALLBACK is not enabled, permit
-+			falling back to detecting extension support by parsing
-+			"riscv,isa" property on devicetree systems when the
-+			replacement properties are not found. See the Kconfig
-+			entry for RISCV_ISA_FALLBACK.
-+
- 	ro		[KNL] Mount root device read-only on boot
- 
- 	rodata=		[KNL]
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 4c07b9189c86..f52dd125ac5e 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -848,6 +848,24 @@ config XIP_PHYS_ADDR
- 	  be linked for and stored to.  This address is dependent on your
- 	  own flash usage.
- 
-+config RISCV_ISA_FALLBACK
-+	bool "Permit falling back to parsing riscv,isa for extension support by default"
-+	default y
-+	help
-+	  Parsing the "riscv,isa" devicetree property has been deprecated and
-+	  replaced by a list of explicitly defined strings. For compatibility
-+	  with existing platforms, the kernel will fall back to parsing the
-+	  "riscv,isa" property if the replacements are not found.
-+
-+	  Selecting N here will result in a kernel that does not use the
-+	  fallback, unless the commandline "riscv_isa_fallback" parameter is
-+	  present.
-+
-+	  Please see the dt-binding, located at
-+	  Documentation/devicetree/bindings/riscv/extensions.yaml for details
-+	  on the replacement properties, "riscv,isa-base" and
-+	  "riscv,isa-extensions".
-+
- endmenu # "Boot options"
- 
- config BUILTIN_DTB
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index e3cda14a486b..b7b58258f6c7 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -81,6 +81,7 @@ struct riscv_isa_ext_data {
- 
- extern const struct riscv_isa_ext_data riscv_isa_ext[];
- extern const size_t riscv_isa_ext_count;
-+extern bool riscv_isa_fallback;
- 
- unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
- 
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 28d5af21f544..208f1a700121 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -41,7 +41,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
- 	return 0;
- }
- 
--int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *hart)
-+int __init riscv_early_of_processor_hartid(struct device_node *node, unsigned long *hart)
- {
- 	const char *isa;
- 
-@@ -87,6 +87,12 @@ int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *har
- 	return 0;
- 
- old_interface:
-+	if (!riscv_isa_fallback) {
-+		pr_warn("CPU with hartid=%lu is invalid: this kernel does not parse \"riscv,isa\"",
-+			*hart);
-+		return -ENODEV;
-+	}
-+
- 	if (of_property_read_string(node, "riscv,isa", &isa)) {
- 		pr_warn("CPU with hartid=%lu has no \"riscv,isa-base\" or \"riscv,isa\" property\n",
- 			*hart);
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 2c4503fa984f..5945dfc5f806 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -471,6 +471,18 @@ static int __init riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
- 	return 0;
- }
- 
-+#ifdef CONFIG_RISCV_ISA_FALLBACK
-+bool __initdata riscv_isa_fallback = true;
-+#else
-+bool __initdata riscv_isa_fallback;
-+static int __init riscv_isa_fallback_setup(char *__unused)
-+{
-+	riscv_isa_fallback = true;
-+	return 1;
-+}
-+early_param("riscv_isa_fallback", riscv_isa_fallback_setup);
-+#endif
-+
- void __init riscv_fill_hwcap(void)
- {
- 	char print_str[NUM_ALPHA_EXTS + 1];
-@@ -490,7 +502,7 @@ void __init riscv_fill_hwcap(void)
- 	} else {
- 		int ret = riscv_fill_hwcap_from_ext_list(isa2hwcap);
- 
--		if (ret) {
-+		if (ret && riscv_isa_fallback) {
- 			pr_info("Falling back to deprecated \"riscv,isa\"\n");
- 			riscv_fill_hwcap_from_isa_string(isa2hwcap);
- 		}
--- 
-2.40.1
+https://lore.kernel.org/lkml/20080320201723.b87b3732.akpm@linux-foundation.=
+org/
 
+> For
+> the CoCo VM scenario that I'm most interested in, being a VM implicitly
+> reduces the set of drivers that are being used, and so it's not that hard
+> to add the flag in the key drivers that generate most of the bounce
+> buffer traffic.
+
+Yes, that's my thinking as well.
+
+> Then I was thinking about a slightly different usage for the flag than wh=
+at
+> you implemented in v2 of the series.   In the case where swiotlb_map()
+> can't allocate slots because of the swiotlb pool being full (or mostly fu=
+ll),
+> kick the background thread (if it is not already awake) to allocate a
+> dynamic pool and grow the total size of the swiotlb.  Then if
+> SWIOTLB_MAY_SLEEP is *not* set, allocate a transient pool just as you
+> have implemented in this v3 of the series.  But if SWIOTLB_MAY_SLEEP
+> *is* set, swiotlb_map() should sleep until the background thread has
+> completed the memory allocation and grown the size of the swiotlb.
+> After the sleep, retry the slot allocation.  Maybe what I'm describing
+> is what you mean by "allow blocking allocations".  :-)
+
+Not really, but I like the idea. After all, the only reason to have
+transient pools is when something is needed immediately while the
+background allocation is running.
+
+> This approach effectively throttles incoming swiotlb requests when space
+> is exhausted, and gives the dynamic sizing mechanism a chance to catch
+> up in an efficient fashion.  Limiting transient pools to requests that ca=
+n't
+> sleep will reduce the likelihood of exhausting the coherent memory
+> pools.  And as you mentioned above, kicking the background thread at the
+> 90% full mark (or some such heuristic) also helps the dynamic sizing
+> mechanism keep up with demand.
+
+FWIW I did some testing, and my systems were not able to survive a
+sudden I/O peak without transient pools, no matter how low I set the
+threshold for kicking a background. OTOH I always tested with the
+smallest possible SWIOTLB (256 KiB * rounded up number of CPUs, e.g. 16
+MiB on my VM with 48 CPUs). Other sizes may lead to different results.
+
+As a matter of fact, the size of the initial SWIOTLB memory pool and the
+size(s) of additional pool(s) sound like interesting tunable parameters
+that I haven't explored in depth yet.
+
+Petr T
