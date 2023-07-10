@@ -2,123 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFFA74D34C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB45F74D34E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjGJK06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S232969AbjGJK10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGJK04 (ORCPT
+        with ESMTP id S229637AbjGJK1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:26:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45224AF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688984815; x=1720520815;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=lmv0G8hZetKfnEAWnNAaFa2Izy9izfDDhRQBoU/UakU=;
-  b=cwMoUm3n85MykoFvLEL+NCP5TWFDEUe3kYnzAzwAMSYfN98QGp4wFygO
-   mS08uUGR/9fseSp+qAMtpWJoqNt/pAHezx2F4jhZjmOhbz/pl9JdjIsuh
-   6dvLerbDJqcdPtnQkeQQWbGhrHxQksOahb6OOYAGWMYgdosaP1Scy9s3X
-   oxARYBAoku2Su+rIzq4ex7yGLrUhAuRCnnXxO6sobz/5fTUKttKhlcqVE
-   eKEn8CgJzddv6U/lWsq1qDIhS3iD28SyR7wKVPs6Pn9aNDqLU/yyEe8Cd
-   ROHVgYmN3keCujpRjh9NJD8Av+XVaLBxzNzi6FV+l2UWy5qaz2UYffGqV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="344634881"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="344634881"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:26:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="810771133"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="810771133"
-Received: from stoicaan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.170])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:26:52 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Li Yi <liyi@loongson.cn>
-Cc:     loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] drm/loongson: Fix two warnings because of passing wrong
- type
-In-Reply-To: <20230710100931.255234-1-suijingfeng@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230710100931.255234-1-suijingfeng@loongson.cn>
-Date:   Mon, 10 Jul 2023 13:26:49 +0300
-Message-ID: <87h6qcjc46.fsf@intel.com>
+        Mon, 10 Jul 2023 06:27:22 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9F4AF;
+        Mon, 10 Jul 2023 03:27:21 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36AARD9E006556;
+        Mon, 10 Jul 2023 05:27:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688984833;
+        bh=XCjojQmD3ORr6iKQRCwLRlcf2oumzBAdTIbrfEtuIo8=;
+        h=From:To:CC:Subject:Date;
+        b=b6IXh+i9E/RZyVJxOIFM4x+fjSGe/ABOVd0WbXQUB6LNlV1764Ljcu5PnooZxMzRX
+         zfwmjq3bC4yxf8+VNFHS18yOPqPjZeDPqFXhV4TpXroTWc3V9j6XncvY4uGwzssgwL
+         55iGnNYUpV5Iql6m3zc+JFec+K61UY4j2jxUCU2M=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36AARDTU012762
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Jul 2023 05:27:13 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
+ Jul 2023 05:27:13 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 10 Jul 2023 05:27:13 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36AARCbK003111;
+        Mon, 10 Jul 2023 05:27:12 -0500
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+To:     <peda@axentia.se>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <s-vadapalli@ti.com>, <j-choudhary@ti.com>
+Subject: [PATCH] dt-bindings: ti-serdes-mux: Add defines for SERDES4 in J784S4 SoC
+Date:   Mon, 10 Jul 2023 15:57:12 +0530
+Message-ID: <20230710102712.155195-1-j-choudhary@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
-> When accessing I/O memory, we should pass '__iomem *' type instead of
-> 'void *' simply, otherwise sparse tests will complain. After applied
-> this patch, the following two sparse warnings got fixed.
+SERDES4 has 4 lanes. Add lane definitions for it.
 
-Usually the commit message should explain why it's okay to cast away the
-warning.
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+---
+ include/dt-bindings/mux/ti-serdes.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Because realistically this doesn't "fix" the warning, this merely hides
-it.
-
-BR,
-Jani.
-
->
-> 1) drivers/gpu/drm/loongson/lsdc_benchmark.c:27:35:
->    sparse:     expected void volatile [noderef] __iomem *
->    sparse:     got void *kptr
->
-> 2) drivers/gpu/drm/loongson/lsdc_benchmark.c:42:51:
->    sparse:     expected void const volatile [noderef] __iomem *
->    sparse:     got void *kptr
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202307100243.v3hv6aes-lkp@intel.com/
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->  drivers/gpu/drm/loongson/lsdc_benchmark.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/loongson/lsdc_benchmark.c b/drivers/gpu/drm/loongson/lsdc_benchmark.c
-> index b088646a2ff9..36e352820bdb 100644
-> --- a/drivers/gpu/drm/loongson/lsdc_benchmark.c
-> +++ b/drivers/gpu/drm/loongson/lsdc_benchmark.c
-> @@ -24,7 +24,7 @@ static void lsdc_copy_gtt_to_vram_cpu(struct lsdc_bo *src_bo,
->  	lsdc_bo_kmap(dst_bo);
->  
->  	while (n--)
-> -		memcpy_toio(dst_bo->kptr, src_bo->kptr, size);
-> +		memcpy_toio((void __iomem *)dst_bo->kptr, src_bo->kptr, size);
->  
->  	lsdc_bo_kunmap(src_bo);
->  	lsdc_bo_kunmap(dst_bo);
-> @@ -39,7 +39,7 @@ static void lsdc_copy_vram_to_gtt_cpu(struct lsdc_bo *src_bo,
->  	lsdc_bo_kmap(dst_bo);
->  
->  	while (n--)
-> -		memcpy_fromio(dst_bo->kptr, src_bo->kptr, size);
-> +		memcpy_fromio(dst_bo->kptr, (void __iomem *)src_bo->kptr, size);
->  
->  	lsdc_bo_kunmap(src_bo);
->  	lsdc_bo_kunmap(dst_bo);
-
+diff --git a/include/dt-bindings/mux/ti-serdes.h b/include/dt-bindings/mux/ti-serdes.h
+index 669ca2d6abce..0d7aec677df9 100644
+--- a/include/dt-bindings/mux/ti-serdes.h
++++ b/include/dt-bindings/mux/ti-serdes.h
+@@ -179,4 +179,24 @@
+ #define J784S4_SERDES2_LANE3_IP3_UNUSED		0x2
+ #define J784S4_SERDES2_LANE3_IP4_UNUSED		0x3
+ 
++#define J784S4_SERDES4_LANE0_EDP_LANE0		0x0
++#define J784S4_SERDES4_LANE0_QSGMII_LANE5	0x1
++#define J784S4_SERDES4_LANE0_IP3_UNUSED		0x2
++#define J784S4_SERDES4_LANE0_IP4_UNUSED		0x3
++
++#define J784S4_SERDES4_LANE1_EDP_LANE1		0x0
++#define J784S4_SERDES4_LANE1_QSGMII_LANE6	0x1
++#define J784S4_SERDES4_LANE1_IP3_UNUSED		0x2
++#define J784S4_SERDES4_LANE1_IP4_UNUSED		0x3
++
++#define J784S4_SERDES4_LANE2_EDP_LANE2		0x0
++#define J784S4_SERDES4_LANE2_QSGMII_LANE7	0x1
++#define J784S4_SERDES4_LANE2_IP3_UNUSED		0x2
++#define J784S4_SERDES4_LANE2_IP4_UNUSED		0x3
++
++#define J784S4_SERDES4_LANE3_EDP_LANE3		0x0
++#define J784S4_SERDES4_LANE3_QSGMII_LANE8	0x1
++#define J784S4_SERDES4_LANE3_USB		0x2
++#define J784S4_SERDES4_LANE3_IP4_UNUSED		0x3
++
+ #endif /* _DT_BINDINGS_MUX_TI_SERDES */
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.25.1
+
