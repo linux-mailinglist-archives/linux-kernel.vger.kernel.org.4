@@ -2,304 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CEC74DB14
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCA474DB16
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjGJQ3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S229924AbjGJQaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGJQ3e (ORCPT
+        with ESMTP id S229844AbjGJQac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:29:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C9123;
-        Mon, 10 Jul 2023 09:29:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79FD561063;
-        Mon, 10 Jul 2023 16:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771B0C433C7;
-        Mon, 10 Jul 2023 16:29:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689006570;
-        bh=ae6QFQNElQd1BKJDZoXkx4iL3ughYws6hFQur12yufk=;
-        h=Subject:From:To:Cc:Date:From;
-        b=hUCDxWsHhARI3B5PrEurFf7cbATDizmyuaZ6X/wA8vTZzptNdoa4cKwOv1z1rebLw
-         AiOwF55RAzzcEck4zSQsQC/+0OreK6zF3aNPyr1NQPVNgEfPw6l94j4SDI+QRHi1I7
-         09zI2gxgow/80qSASd4jeDN2WX24l8FMfrXXkB22mhE0g5iBQTzUY68noBj5fvRo2a
-         aq6oxMRd4ohv2liFlTSWL2AzNo/0dlZ4tVA90/8fUNaRiWFu8jVuLPobOLBBeTOgDQ
-         1EOXkh5NUJ6hQKsZ14kjqfJ18GIouoEh+Mf1aY50ISGY4uYb/p7Wchj7pk4SsRX3P0
-         GNv5nE5oFsgyQ==
-Message-ID: <17881cf776b2c19dcd5a6d628fdfb54dae0eb4f8.camel@kernel.org>
-Subject: xfs WARNING on v6.5-rc1 kernel
-From:   Jeff Layton <jlayton@kernel.org>
-To:     linux-xfs <linux-xfs@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Date:   Mon, 10 Jul 2023 12:29:29 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Mon, 10 Jul 2023 12:30:32 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC31127;
+        Mon, 10 Jul 2023 09:30:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TpVdaFRsni60Db1OmSdNU+clKTzRRRT+UD1HWPtwJsanMAgTSay96iSsm00iDzSrDQEyLDZEP121RU6G4IfIG4tftfnP5GVVgTxJgcW6WQeOCDt54VlZTwne9twnxX0nry9jBQrOqe4xybVM9QPcsiClcQqg7GHN140hinBSGdfW20CbdIccz/Wf4s1auluy2no4oxBAAxNNvPSZ7pTpoLSaqfwkH2hIvnRpHEGFcCjLYZCQaefFSpfeMdSZ5Cvf+bqVixDLNXj2dmYkWUUQBkCFgI7Yifam3KDogMS06GWKfNZmSMZDqNsKCaOas/qas+8V4Bg7SXJJOyIjAoWdHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zh46fF74ot/ephvEELvxK9bKe23MM9skwHEfls3eIAw=;
+ b=bKeviAGb9mOYg5tVfzt1f0g731G5w+WSaZzOWRRgOOnQvmjCA4r524VRqaPVx6vrP4BpWDjB6dyhTIbrWKIoactcTLdfShH8aNZgucr3gtdy1NCNiHP7sEiFIaVsN2sms3CFpHCK2vo/QdfqUuPjIagQyFDbX5FyHqpKIL4J+vaWlodS1d5fEQob1agSjTbciaGTs+89iX3SZdxRcRWLOcJUPT+xZ4Mn6XrsOuPv/EjdwMOJNIC94ZbQqmifjoy+kY54inGQCvKZC8dEcR0M1uvFmIyD23NdiwcdYyjf6Uyj5n9MBr8k6P8ddfM1e7vj8+vyedwRCMip7NJMS4+jGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zh46fF74ot/ephvEELvxK9bKe23MM9skwHEfls3eIAw=;
+ b=ovimCb02fwp7dXQCr7Bd5TqPoI7fO8NvpKltuBpqCnOGs32sj6fFQEUi1JPFqoO2QKO1KVdKq7G82z3RRczmKsrjcYr4LtzqGvnZSeDg096cX121eINQRJYM9DNMhOs+ciJ2CfhtlpM08eDCecT47BvDJ6ZNQy11Rt1Szl2BSXlpM8oL8/rah038bC0OMSpv5BE/6BWOm1ole7q9ShDGxAS76UZZyaqXgSpHVo7WEsaTVfN96ZNMYmIBZ4fCUpMJwq0NpcG1r7XJ48gb3nCcmGBFm/AQg7B3XPyev3e7dakLfMr+vmHTFIEoh/OqB4JtFEoRfh+lSMUPJ+wNekbjtA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
+ by CH0PR12MB8464.namprd12.prod.outlook.com (2603:10b6:610:184::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
+ 2023 16:30:28 +0000
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::5fe3:edc2:ade4:32ea]) by DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::5fe3:edc2:ade4:32ea%7]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 16:30:28 +0000
+Message-ID: <6dced1ba-c468-c88e-f861-9c202e803894@nvidia.com>
+Date:   Mon, 10 Jul 2023 19:30:20 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH blktests v1 2/3] nvme/rc: Avoid triggering host nvme-cli
+ autoconnect
+Content-Language: en-US
+To:     Daniel Wagner <dwagner@suse.de>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>,
+        Martin Belanger <Martin.Belanger@dell.com>
+References: <20230620132703.20648-1-dwagner@suse.de>
+ <20230620132703.20648-3-dwagner@suse.de>
+ <9c07e4f6-2cf5-b53b-6b48-bd4df8798ee9@nvidia.com>
+ <bz2s6nyjwl6l7yfrd4wtjdtousv23ypcdleckibps5lyjpwi4x@wqq6qqesevpk>
+ <39f9977e-b34c-f2dd-d356-8c78414a60d1@nvidia.com>
+ <jdsoqllqmrqu5j5bt3fudkksmjskgs4ooodynm6yh3b4oc5scn@t3hydrmbb22f>
+ <972a06e0-6841-043e-fc00-db7596f664c4@nvidia.com>
+ <cskolyrp3s47gnn4nwtqpfxtafzhpirn3hv7ovhnnzpbb3ll2z@oum3v3n7go6l>
+From:   Max Gurtovoy <mgurtovoy@nvidia.com>
+In-Reply-To: <cskolyrp3s47gnn4nwtqpfxtafzhpirn3hv7ovhnnzpbb3ll2z@oum3v3n7go6l>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1P190CA0014.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:802:2b::27) To DM4PR12MB5040.namprd12.prod.outlook.com
+ (2603:10b6:5:38b::19)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_|CH0PR12MB8464:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2afb6a1e-6f25-4aff-6e96-08db8162f87a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yRSIRhbJs2vUknbVjX3+l8G/SAEiUAjqMGGoQs3gKagtPjPh6Bq9kfJOOKFY7Y/6guGIfvx9C8TyLivS+JwoHU8TAIsRtMAtOZZWUSwFfhhYhcFo2Hzv2tjGDGBd9i5toAenclMJxLeQEeFbUy1SF3VNZ17vB2pxOZSh8XXSFqnmfwE1oDan9eMRVNq/sPaE3mEkEOIxVTh8whGH8tV1K5ZlVbgJVy3aiDourgWMyf+IOnYo6ceNcqzCj2Wqkg47UNg0Ewyx4oteoHNB73myBMAdgvDH09jSa5DnUN/XyjIFVO/IasF6hdzYvMoYLobq9EzDwB+pq9gIdAaER3mJlr/W3kwK/pllIHi/qgbGQzop45ctt+cQO9iH5EoKEPP5W+o+wv9KMeit9+hGzQcc4kED+/J+8R5rxzE3xJWWzKgx+d7DSo1bKyGxGBlBUwEd4e8MpImyuzQ8FCQEmOupU+OkZJsOULZ6zdkLsf6kGCgZHWfmQHDsV4cLlyW5cxznpFiaWihljXAWhTyB7SlouZS1O0TjpN3uFHKcoC6rIBIqT+2XrJyGg85QYEnZbOeo1hQL3QXMJgcNSrbiJ3K6kFbs5JSBJtWywJZONfILtmy878w+BBzhuCIbg9ooAGBea2Fa1Fm54mux5aerUdC3Gg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199021)(6666004)(6486002)(478600001)(83380400001)(2616005)(6506007)(186003)(36756003)(53546011)(6512007)(316002)(2906002)(41300700001)(38100700002)(66476007)(66946007)(66556008)(6916009)(4326008)(86362001)(31696002)(8676002)(8936002)(31686004)(5660300002)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTN2YmhFMWdPbjIzc28yTGEvQUk3MFFnOGVOVitXS0tMalZaT092RWpnMmdj?=
+ =?utf-8?B?d1N4dC9FRVBzN1oyc0g0YmgrUCtJMmY1OHBFdVYxdmUwTHpqUERxcDlVL01r?=
+ =?utf-8?B?TTZna1BHZTg2MTFGcnNYNllJTkxrUW5McDFVY24xSHMvSnJDeSt5bFpESDhV?=
+ =?utf-8?B?TzczT0k4VzJUMU1sRHJmL2J5Q2hsbjd0cTlwRzVuUDdNYlBkeDBpejhlRXJo?=
+ =?utf-8?B?OXJCTVc3SHUyeWVqbDhqMUFKd29VZjI4R0pXekVqUlJITGhUN2FRZ0pMM3Y1?=
+ =?utf-8?B?TkUySGErWm5oTWlWM2lZMHUzUHFTRkVMb2U5SHVSUDM1WTlnekZ1QjdqdnBW?=
+ =?utf-8?B?SEtqV0p2QmhWTlhuaWNxZk4rZUtSK21tR2s5NWpZc2J3eDgxWmVlR2dBSlFK?=
+ =?utf-8?B?Sko3RE04VG5JWm55RU9HZVBlV2lVS20xUVkyZzdLNWtTRUJXd1ZLMWhwNHJN?=
+ =?utf-8?B?QkFRVFZBSE94NGxua2QvanNxaFJlRGZNK1A1UTZnRmZoVGR5clU2SjlZbTZH?=
+ =?utf-8?B?cDhXS0t5TFBPcFpEcHZqb0dxNGdHMzhXY25mV2JNZHVlNmdWekQ4QlI0eDlz?=
+ =?utf-8?B?NXV6SDVJbnJxVElxRFZRTWpsTlQ4VlBMclMzcmQrRWpLTzIyNGNFaHNabXM5?=
+ =?utf-8?B?RDI0clU3QzdycnlKQnZoUzhPWE1HalNHUEpWeGV6cFl1Z0F2Y0VudUJxdkF3?=
+ =?utf-8?B?NW0rYlp5VVB0Vit1dGxlSmNjMHZIZ1QxdkVOSTBqZ1ZSd0dNV1p4OERXK215?=
+ =?utf-8?B?SDFoOXd0dXVPbkhSNzRjd1BQWVQ5NXFPZERXMGhxQkI4SzFPVk1MTmt3VWRJ?=
+ =?utf-8?B?Nk5oSGkxUFhtenRoSWpJc003SFpoZ2psVHI5ckhHekVPUHU0Y0RrYnRNYzl0?=
+ =?utf-8?B?MW5rTnkzUjJDdFVmd3RGSTZna0tYQThkbzJMUDVuTFZ1RU9GTnBHY25VOHB2?=
+ =?utf-8?B?K3NtaXJSR2hUWGxoSytraXAyQU1PbEIzL0NHWHE2ZEluN1ZhYXBrTmJHOGgx?=
+ =?utf-8?B?Y1NNSHBPbStNUUh0TlVmdEIyV2ZYRXRNdUtGcW8wMFBQMHR3MDluR0NUcTZ4?=
+ =?utf-8?B?UEVkR3ZDaDEzeWZySDQ3U3orZjBnVkpUenYrQk9qRWlFVkVmeG52YnJ0YndF?=
+ =?utf-8?B?aTlhZEpOOTZjaTNzcytReUQ5YUtUTjBDbGVONTlBYUlGZ1ZYYWZ5SEJ3QVlk?=
+ =?utf-8?B?ZnNRRlRxdWVtVEtOdzhLV1l4MllkQjg1azQ0dWV3L1N6VkRCU2luTDBiVFJz?=
+ =?utf-8?B?OWdxeUxOWkRDWEFyRVNNNW9CWHJEMFR2S2hOZUwyQWh1UXQvQmZ3UUhsTndV?=
+ =?utf-8?B?dVJDdEN1cno0NExpTWViY2NZWVdUbWZwR0tBbGdMNmkxdy9INGRPeFRNYW12?=
+ =?utf-8?B?RVN2Ty9hNXZ4UWFCNEV5WUQxbWcxWmx1aWluZkNBdVBlVlBLaEs4V043Nm9M?=
+ =?utf-8?B?Rm5OT2g2SVh1UHZTMStiaDZiVVFDL2pkZk52R2ZwT0RNK1hzd3NUZ0w1K1hB?=
+ =?utf-8?B?SWVRTEwyK0FmOWgzZjd3NjBSdWZ6TFJEVUhRcEs1M3cvbFp3dUQ3UVMyY2xp?=
+ =?utf-8?B?Z0hnRjNmWGQrd3RMVEhHUi9HNlNKRnJzOXJBVnZwN0gwSitHSG13MUVlQ0g4?=
+ =?utf-8?B?bTBMeWZoVUh5TTRTZlA0M0xIZGNqQzR2SkFTbDh1cHg1MldHZitWTW5GWDdZ?=
+ =?utf-8?B?OStqdEx3eDhlRGl5VVBPcE9CWDVkMXdLTmZZQ2NUeFdaOHpXcDVTUGw1cXhD?=
+ =?utf-8?B?dWhINmo0WnJYVVNjTEhzZHE1SlErcWJ1blZYMVVmT1ZIVTNub1M3R1V6a3da?=
+ =?utf-8?B?RFRZYWZld0diU05SR2Nobi9hTnVGNzhJdWN2SEhpNWdPc1cwTjhVSEF5QWFy?=
+ =?utf-8?B?MXIzazdzaDJzTVAzbE9zSHpkZy9MWG5xVTMya3dCRkhxTGpqRnRKTE5MRGYw?=
+ =?utf-8?B?ZFhZUHJZYnI2WXNCdlc5YUxkZ293ZHdDOVpnakNIendPVVJMRTBqSUFiWjNh?=
+ =?utf-8?B?R0hCbjVubVVqSzF2M28yQ0kyMUVjZk1ZRVR4eU5SK0lKbGFia3htbkdGM2p1?=
+ =?utf-8?B?eXUyNlNQaEtzZkhmYkpBZlpZQlJya2Q2Q2J1bzM4UnhRWUk5NmRVMUxXVmc1?=
+ =?utf-8?B?cVU1RDF6cmJRZ1d3WitpYTVtZ1NCLzVERjE3SkVIRUU0YW1NUUpPTmpGa1Qx?=
+ =?utf-8?B?ZFdEcC9wcnI1NXhiRmtLaHFSMmg2akJlb3BNN2VaNFFsQmQrMTZJZmVtY2hv?=
+ =?utf-8?B?RDVibW8zemtDbDlkTWdrOVVJRGhnPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2afb6a1e-6f25-4aff-6e96-08db8162f87a
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 16:30:28.1158
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TXPbRsu/jPjL3E0DQpnqIHI2VfO1zdf/2ZubKDC41P6P6duQWDyqQHdRYeiLm6aZwZhi98srS6FmdycFdU7FPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8464
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I hit this this morning while running generic/013 (fsstress), with a
-kernel based on v6.5-rc1. The main changes on top of this are timestamp
-related, so I doubt they're a factor here.
-
-Is this some of the flexarray hardening?
-
-[ 2704.665314] run fstests generic/013 at 2023-07-10 16:09:58
-[ 2705.646507] XFS (loop16): Unmounting Filesystem 3058c032-3f67-4fb9-b24e-=
-c1414b0b532b
-[ 2705.820402] XFS (loop16): Mounting V5 Filesystem 3058c032-3f67-4fb9-b24e=
--c1414b0b532b
-[ 2705.838655] XFS (loop16): Ending clean mount
-[ 2705.916080] ------------[ cut here ]------------
-[ 2705.917615] memcpy: detected field-spanning write (size 2) of single fie=
-ld "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c:1559 (size =
-1)
-[ 2705.921569] WARNING: CPU: 6 PID: 48206 at fs/xfs/libxfs/xfs_attr_leaf.c:=
-1559 xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
-[ 2705.926783] Modules linked in: xfs nls_iso8859_1 nls_cp437 vfat fat ext4=
- 9p crc16 mbcache netfs jbd2 kvm_intel cirrus virtio_net kvm joydev drm_shm=
-em_helper net_failover pcspkr virtio_balloon 9pnet_virtio psmouse irqbypass=
- failover drm_kms_helper evdev button drm loop dm_mod zram zsmalloc crct10d=
-if_pclmul crc32_pclmul ghash_clmulni_intel sha512_ssse3 sha512_generic nvme=
- virtio_blk nvme_core t10_pi aesni_intel virtio_pci crc64_rocksoft_generic =
-crypto_simd cryptd crc64_rocksoft virtio i6300esb crc64 virtio_pci_legacy_d=
-ev virtio_pci_modern_dev virtio_ring serio_raw btrfs blake2b_generic libcrc=
-32c crc32c_generic crc32c_intel xor raid6_pq autofs4
-[ 2705.942668] CPU: 6 PID: 48206 Comm: fsstress Not tainted 6.5.0-rc1+ #13
-[ 2705.945361] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.1=
-6.2-1.fc38 04/01/2014
-[ 2705.947758] RIP: 0010:xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
-[ 2705.949442] Code: fe ff ff b9 01 00 00 00 4c 89 fe 48 c7 c2 c8 2e fc c0 =
-48 c7 c7 10 2f fc c0 48 89 44 24 08 c6 05 ac 9c 0e 00 01 e8 a2 de 67 d0 <0f=
-> 0b 48 8b 44 24 08 e9 88 fe ff ff 80 3d 93 9c 0e 00 00 0f 85 bd
-[ 2705.953536] RSP: 0018:ffffb52ac29bb8c0 EFLAGS: 00010282
-[ 2705.954925] RAX: 0000000000000000 RBX: ffffb52ac29bb990 RCX: 00000000000=
-00000
-[ 2705.956604] RDX: 0000000000000002 RSI: ffffffff92612d95 RDI: 00000000fff=
-fffff
-[ 2705.958998] RBP: ffffb52ac29bb924 R08: 0000000000000000 R09: ffffb52ac29=
-bb760
-[ 2705.960903] R10: 0000000000000003 R11: ffffffff928c1aa8 R12: ffff8ecf3ad=
-c8050
-[ 2705.962537] R13: ffff8ecf3adc8000 R14: ffff8ecf3adc8fcc R15: 00000000000=
-00002
-[ 2705.964083] FS:  00007fcb152f4740(0000) GS:ffff8ed077d80000(0000) knlGS:=
-0000000000000000
-[ 2705.965752] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 2705.967124] CR2: 00007ff8022cd2d8 CR3: 000000015e1d2005 CR4: 00000000000=
-60ee0
-[ 2705.969279] Call Trace:
-[ 2705.970318]  <TASK>
-[ 2705.971321]  ? xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
-[ 2705.973729]  ? __warn+0x7d/0x130
-[ 2705.974822]  ? xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
-[ 2705.976251]  ? report_bug+0x18d/0x1c0
-[ 2705.977242]  ? handle_bug+0x3c/0x80
-[ 2705.978282]  ? exc_invalid_op+0x13/0x60
-[ 2705.979310]  ? asm_exc_invalid_op+0x16/0x20
-[ 2705.980648]  ? xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
-[ 2705.982645]  xfs_attr3_leaf_add+0x173/0x1e0 [xfs]
-[ 2705.984131]  xfs_attr_shortform_to_leaf+0x21d/0x230 [xfs]
-[ 2705.985415]  xfs_attr_set_iter+0x766/0x900 [xfs]
-[ 2705.986514]  ? path_setxattr+0xc7/0xe0
-[ 2705.987324]  xfs_xattri_finish_update+0x18/0x50 [xfs]
-[ 2705.988486]  xfs_attr_finish_item+0x1a/0xb0 [xfs]
-[ 2705.989566]  xfs_defer_finish_noroll+0x192/0x6e0 [xfs]
-[ 2705.990714]  __xfs_trans_commit+0x242/0x360 [xfs]
-[ 2705.991768]  xfs_attr_set+0x462/0x680 [xfs]
-[ 2705.993079]  xfs_xattr_set+0x89/0xe0 [xfs]
-[ 2705.994183]  __vfs_setxattr+0x95/0xd0
-[ 2705.995160]  __vfs_setxattr_noperm+0x73/0x1d0
-[ 2705.996536]  vfs_setxattr+0x9b/0x180
-[ 2705.997510]  setxattr+0x88/0xa0
-[ 2705.998249]  ? __pfx_free_object_rcu+0x10/0x10
-[ 2705.999190]  ? __call_rcu_common.constprop.0+0x107/0x220
-[ 2706.000196]  ? user_path_at_empty+0x40/0x50
-[ 2706.001045]  ? kmem_cache_free+0x160/0x380
-[ 2706.001881]  ? preempt_count_add+0x47/0xa0
-[ 2706.002719]  ? __mnt_want_write+0x61/0x90
-[ 2706.003528]  path_setxattr+0xc7/0xe0
-[ 2706.004277]  __x64_sys_setxattr+0x27/0x30
-[ 2706.005074]  do_syscall_64+0x3b/0x90
-[ 2706.005800]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-[ 2706.006739] RIP: 0033:0x7fcb1540515e
-[ 2706.007628] Code: 48 8b 0d ad 6c 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 =
-2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 bc 00 00 00 0f 05 <48=
-> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 7a 6c 0c 00 f7 d8 64 89 01 48
-[ 2706.010450] RSP: 002b:00007fffe4df12d8 EFLAGS: 00000246 ORIG_RAX: 000000=
-00000000bc
-[ 2706.011976] RAX: ffffffffffffffda RBX: 0000000000000061 RCX: 00007fcb154=
-0515e
-[ 2706.013103] RDX: 0000000001548010 RSI: 00007fffe4df1320 RDI: 00000000015=
-5cf50
-[ 2706.014103] RBP: 0000000001548071 R08: 0000000000000000 R09: 00000000000=
-00000
-[ 2706.015177] R10: 0000000000000061 R11: 0000000000000246 R12: 00000000015=
-48010
-[ 2706.016236] R13: 0000000001548071 R14: 0410410410410411 R15: 00000000015=
-26450
-[ 2706.017238]  </TASK>
-[ 2706.017817] ---[ end trace 0000000000000000 ]---
-[ 2706.737755] ------------[ cut here ]------------
-[ 2706.739255] memmove: detected field-spanning write (size 24) of single f=
-ield "entry" at fs/xfs/libxfs/xfs_attr_leaf.c:2235 (size 8)
-[ 2706.743694] WARNING: CPU: 1 PID: 48206 at fs/xfs/libxfs/xfs_attr_leaf.c:=
-2235 xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
-[ 2706.747045] Modules linked in: xfs nls_iso8859_1 nls_cp437 vfat fat ext4=
- 9p crc16 mbcache netfs jbd2 kvm_intel cirrus virtio_net kvm joydev drm_shm=
-em_helper net_failover pcspkr virtio_balloon 9pnet_virtio psmouse irqbypass=
- failover drm_kms_helper evdev button drm loop dm_mod zram zsmalloc crct10d=
-if_pclmul crc32_pclmul ghash_clmulni_intel sha512_ssse3 sha512_generic nvme=
- virtio_blk nvme_core t10_pi aesni_intel virtio_pci crc64_rocksoft_generic =
-crypto_simd cryptd crc64_rocksoft virtio i6300esb crc64 virtio_pci_legacy_d=
-ev virtio_pci_modern_dev virtio_ring serio_raw btrfs blake2b_generic libcrc=
-32c crc32c_generic crc32c_intel xor raid6_pq autofs4
-[ 2706.763271] CPU: 1 PID: 48206 Comm: fsstress Tainted: G        W        =
-  6.5.0-rc1+ #13
-[ 2706.765484] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.1=
-6.2-1.fc38 04/01/2014
-[ 2706.767821] RIP: 0010:xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
-[ 2706.769821] Code: c7 c2 00 30 fc c0 48 89 c6 48 c7 c7 08 2e fc c0 44 89 =
-44 24 14 4c 89 4c 24 08 48 89 04 24 c6 05 30 6e 0e 00 01 e8 29 b0 67 d0 <0f=
-> 0b 44 8b 44 24 14 4c 8b 4c 24 08 48 8b 04 24 e9 62 fd ff ff e8
-[ 2706.774843] RSP: 0018:ffffb52ac29bba20 EFLAGS: 00010282
-[ 2706.776465] RAX: 0000000000000000 RBX: 0000000000000f08 RCX: 00000000000=
-00000
-[ 2706.778427] RDX: 0000000000000002 RSI: ffffffff92612d95 RDI: 00000000fff=
-fffff
-[ 2706.780343] RBP: ffffb52ac29bbc70 R08: 0000000000000000 R09: ffffb52ac29=
-bb8c0
-[ 2706.782170] R10: 0000000000000003 R11: ffffffff928c1aa8 R12: ffff8ecf3ad=
-c8050
-[ 2706.783934] R13: ffff8ecf61308900 R14: ffff8ecf3adc8000 R15: 00000000000=
-00fcc
-[ 2706.786138] FS:  00007fcb152f4740(0000) GS:ffff8ed077c40000(0000) knlGS:=
-0000000000000000
-[ 2706.788370] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 2706.790691] CR2: 0000000001606000 CR3: 000000015e1d2005 CR4: 00000000000=
-60ee0
-[ 2706.792692] Call Trace:
-[ 2706.793721]  <TASK>
-[ 2706.794717]  ? xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
-[ 2706.796542]  ? __warn+0x7d/0x130
-[ 2706.797701]  ? xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
-[ 2706.799435]  ? report_bug+0x18d/0x1c0
-[ 2706.800684]  ? handle_bug+0x3c/0x80
-[ 2706.801938]  ? exc_invalid_op+0x13/0x60
-[ 2706.803272]  ? asm_exc_invalid_op+0x16/0x20
-[ 2706.804474]  ? xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
-[ 2706.806068]  xfs_attr_leaf_removename+0xad/0x110 [xfs]
-[ 2706.808661]  ? xfs_defer_add+0x57/0x160 [xfs]
-[ 2706.810164]  xfs_attr_set_iter+0x63/0x900 [xfs]
-[ 2706.811611]  ? removexattr+0x77/0x110
-[ 2706.812779]  xfs_xattri_finish_update+0x18/0x50 [xfs]
-[ 2706.814338]  xfs_attr_finish_item+0x1a/0xb0 [xfs]
-[ 2706.815799]  xfs_defer_finish_noroll+0x192/0x6e0 [xfs]
-[ 2706.817405]  __xfs_trans_commit+0x242/0x360 [xfs]
-[ 2706.818916]  xfs_attr_set+0x462/0x680 [xfs]
-[ 2706.820252]  xfs_xattr_set+0x89/0xe0 [xfs]
-[ 2706.822251]  __vfs_removexattr+0x7f/0xb0
-[ 2706.823463]  __vfs_removexattr_locked+0xb7/0x140
-[ 2706.824648]  vfs_removexattr+0x54/0x100
-[ 2706.825667]  removexattr+0x77/0x110
-[ 2706.826830]  ? __pfx_free_object_rcu+0x10/0x10
-[ 2706.827853]  ? __call_rcu_common.constprop.0+0x107/0x220
-[ 2706.828989]  ? user_path_at_empty+0x40/0x50
-[ 2706.830468]  ? kmem_cache_free+0x160/0x380
-[ 2706.831638]  ? preempt_count_add+0x47/0xa0
-[ 2706.832611]  ? __mnt_want_write+0x61/0x90
-[ 2706.833569]  path_removexattr+0x9f/0xc0
-[ 2706.834506]  __x64_sys_removexattr+0x17/0x20
-[ 2706.835443]  do_syscall_64+0x3b/0x90
-[ 2706.836267]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-[ 2706.837302] RIP: 0033:0x7fcb1540512b
-[ 2706.838118] Code: f0 ff ff 73 01 c3 48 8b 0d da 6c 0c 00 f7 d8 64 89 01 =
-48 83 c8 ff c3 0f 1f 84 00 00 00 00 00 f3 0f 1e fa b8 c5 00 00 00 0f 05 <48=
-> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ad 6c 0c 00 f7 d8 64 89 01 48
-[ 2706.841389] RSP: 002b:00007fffe4df1318 EFLAGS: 00000246 ORIG_RAX: 000000=
-00000000c5
-[ 2706.842767] RAX: ffffffffffffffda RBX: 000000000000019e RCX: 00007fcb154=
-0512b
-[ 2706.844024] RDX: 0000000000000000 RSI: 00007fffe4df1340 RDI: 00000000015=
-5d270
-[ 2706.845254] RBP: 00000000015345a0 R08: 0000000000000064 R09: 00000000000=
-00000
-[ 2706.846557] R10: 0000000000000000 R11: 0000000000000246 R12: 028f5c28f5c=
-28f5c
-[ 2706.847786] R13: 8f5c28f5c28f5c29 R14: 00000000004054b0 R15: 00007fcb152=
-f46c8
-[ 2706.849029]  </TASK>
-[ 2706.849578] ---[ end trace 0000000000000000 ]---
 
 
-For reference:
+On 10/07/2023 18:03, Daniel Wagner wrote:
+> On Mon, Jul 10, 2023 at 03:31:23PM +0300, Max Gurtovoy wrote:
+>> I think it is more than just commit message.
+> 
+> Okay, starting to understand what's the problem.
+> 
+>> A lot of code that we can avoid was added regarding the --context cmdline
+>> argument.
+> 
+> Correct and it's not optional to get the tests passing for the fc transport.
 
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 1555)        if (entry->flags & XFS_ATTR_LOCAL) {
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 1556)                name_loc =3D xfs_attr3_leaf_name_local=
-(leaf, args->index);
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 1557)                name_loc->namelen =3D args->namelen;
-053b5758cbc09 fs/xfs/xfs_attr_leaf.c        (Nathan Scott        2006-03-17=
- 17:29:09 +1100 1558)                name_loc->valuelen =3D cpu_to_be16(arg=
-s->valuelen);
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 1559)                memcpy((char *)name_loc->nameval, args=
-->name, args->namelen);
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 1560)                memcpy((char *)&name_loc->nameval[args=
-->namelen], args->value,
-053b5758cbc09 fs/xfs/xfs_attr_leaf.c        (Nathan Scott        2006-03-17=
- 17:29:09 +1100 1561)                                   be16_to_cpu(name_lo=
-c->valuelen));
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 1562)        } else {
+why the fc needs the --context to pass tests ?
 
-[...]
+> 
+>> Maybe it's worth cleaning it..
+> 
+> It really solves the problem that the autoconnect setup of nvme-cli is
+> distrubing the tests (*). The only other way I found to stop the autoconnect is
+> by disabling the udev rule completely. If autoconnect isn't enabled the context
+> isn't necessary. Though changing system configuration from blktests seems at bit
+> excessive.
 
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 2233)=20
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2234)        tmp =3D (ichdr.count - args->index) * sizeof(x=
-fs_attr_leaf_entry_t);
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2235)        memmove(entry, entry + 1, tmp);
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2236)        ichdr.count--;
-1d9025e56143c fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2012-06-22=
- 18:50:14 +1000 2237)        xfs_trans_log_buf(args->trans, bp,
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2238)            XFS_DA_LOGRANGE(leaf, entry, tmp + sizeof(=
-xfs_attr_leaf_entry_t)));
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2239)=20
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2240)        entry =3D &xfs_attr3_leaf_entryp(leaf)[ichdr.c=
-ount];
-517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
- 18:58:55 +1000 2241)        memset(entry, 0, sizeof(xfs_attr_leaf_entry_t)=
-);
-^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
- 15:20:36 -0700 2242)=20
+we should not stop any autoconnect during blktests. The autoconnect and 
+all the system admin services should run normally.
+The blktests should not interfere with regular system configuration and 
+should not use any sysadmin file/services/devices.
 
+It should create its own subsystems, nqn's, id's, namespaces, etc..
 
---=20
-Jeff Layton <jlayton@kernel.org>
+> 
+> Another option is to detect if autoconect is enabled and report this when
+> starting the tests. In this case we could remove the context part completely.
+
+the --context might be used in the some sysadmin scripts or so. I don't 
+see a point to do so in the blktests since we create a new association 
+between initiator and target on each test (or on each group of tests).
+
+> Obviously, I would prefer to keep it but I am certaintaly not against dropping
+> it and make blktests a bit simpler if this is the preference. I just need to
+> remember to disable the autoconnect stuff when using blktests.
+> 
+> (*) Sure we can fix this but at this point. Though I think it's a bit strange
+> for a test suite to depend/interact with external components in this way.
