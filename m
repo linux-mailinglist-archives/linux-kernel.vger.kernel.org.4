@@ -2,137 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61E874D7FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E0274D809
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjGJNoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
+        id S232742AbjGJNpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjGJNoO (ORCPT
+        with ESMTP id S229907AbjGJNpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:44:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FA6BA;
-        Mon, 10 Jul 2023 06:44:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E642460FC6;
-        Mon, 10 Jul 2023 13:44:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECCEC433C8;
-        Mon, 10 Jul 2023 13:44:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688996652;
-        bh=f8+Tgjr82BQ+lwzbHHg9u/aqPVDfaD8lbBwoguIlk+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u9aUbDe2rXRBAMG0lbwa91r24ByoD38mxzaGazqadyRo4c0gTzwwTBMnSbJidaiVc
-         3VdBn6sx6m1JR2rQNJDd5P5aTFDO5+oRg9aRD9wQ0YSBEk6A6GWMo7wO2vjUiw1orY
-         tmLGIgMOq75VHbkxAVkNC67l6/3PeacJSrtuV+oTaXSXsQN10yx/nUDEGY9Gkx/rWN
-         a9CKWZggWo0CEQ74Lx6LxRuvaiTlT/qfgPvSgqE3NGsYEWUMvm4pd1VC1BFMdMBV8P
-         Nuh+qygzLfkuj1iDco31uWVbX8H74SmwR2pWMhTUqDyjCM3l8VDLviQY/w7wcEPAHI
-         E/vjXhuylIFSg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5C8E140516; Mon, 10 Jul 2023 10:44:09 -0300 (-03)
-Date:   Mon, 10 Jul 2023 10:44:09 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Georg =?iso-8859-1?Q?M=FCller?= <georgmueller@gmx.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] perf probe: fix regression introduced by switch
- to die_get_decl_file
-Message-ID: <ZKwLKXL6rkoShDNc@kernel.org>
-References: <20230628084551.1860532-3-georgmueller@gmx.net>
- <1c85c4d6-7097-bc0a-d0ca-ebe234d63ece@leemhuis.info>
+        Mon, 10 Jul 2023 09:45:21 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE37D2;
+        Mon, 10 Jul 2023 06:45:17 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c6cad6a3998so4257074276.3;
+        Mon, 10 Jul 2023 06:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688996716; x=1691588716;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BgDibfR0vAy+tLjLyuDFWsMqKLHBAQDTBnmpMQZgZHM=;
+        b=NEh20sQA0/Nk1JUkAoZXMpAvCOBQ3PofbPqSWNWdTAiY0a08l5a6wDUeHSzoXxGpp1
+         7osD9g+aPAJWMGG4R4q1LuqrdfjORuD4rrpniZGYfbCePnIJ9AgUul7UiOmxP8bL1/cX
+         QfqTzWeHyTtaFOsP2u1JfcRNSnNJvxFnW6OY7x5Izxamti7wTCQ9Cj6eIROe1Rb1OI+T
+         8ARbMUqLucJxl7miJt+iTVPM8Zg1XqRf2eswqsIKMyhmCUvp+sTAsc9Xgb0CY2P0bjvR
+         2pHmLYUIpcLvxZ1bQ+p0JENGcsWeRrYAu25k36PieRIb9ME+FjB0nWmmHSd0e4i6NaCH
+         82Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688996716; x=1691588716;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BgDibfR0vAy+tLjLyuDFWsMqKLHBAQDTBnmpMQZgZHM=;
+        b=W5hK4moHT2ZhnQN5ZmocrYy5PhlB3vtSpT9lK9HeldHO3ic6K/95w8Jgpt2Ob8ZLZz
+         GxIsTqGQUZoaL6B/+tlPw5T0vtdQaniDmvDvELhiG3HOZnMdoMq/tX6VZH7/AaxMBmg3
+         QIFUfmmwRLzagpQ1c2aKeM8fVNmUrapQDkU0kGohn1yfBaJ7ydDIjsf2aget/a+q1CNC
+         wtTJaYBBecXLpNvPwALCjPYDAZGqLA3nI7zNm5eI7KBh7AUmPwHrSnj7cjEbFVocGZVm
+         6ytttM0cuumPWHtFffWu/r1JDBXbqKL3cffeC/x+QIiKwmxlfxaPxo+Zq2f0V9Yyx+Tq
+         lVjg==
+X-Gm-Message-State: ABy/qLad35qxN/XpiinO/c0pNptwaDM2O9ax52W1XH4HK6kkol+FYCte
+        IID8e9cbhb5/jWxWLIoOrXV/Lg8u+zM=
+X-Google-Smtp-Source: APBJJlEY+dyUdKH6Z2Inbsz5UG/wmI+GW2BQqQIJgC6nYrh9+GwOQruu8eXHiIFkeCcRkH7uVV83SQ==
+X-Received: by 2002:a5b:345:0:b0:c83:add0:889f with SMTP id q5-20020a5b0345000000b00c83add0889fmr2344630ybp.51.1688996716257;
+        Mon, 10 Jul 2023 06:45:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c12-20020a5b014c000000b00c624de0d9absm2544316ybp.5.2023.07.10.06.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 06:45:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 10 Jul 2023 06:45:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Henning Schild <henning.schild@siemens.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH 1/2] watchdog: simatic-ipc-wdt: make IO region access of
+ one model muxed
+Message-ID: <087368d7-15d6-45e2-bd1e-5955bf81d206@roeck-us.net>
+References: <20230706154831.19100-1-henning.schild@siemens.com>
+ <20230706154831.19100-2-henning.schild@siemens.com>
+ <876f6a08-1850-21cd-83d1-b309e7e1e912@roeck-us.net>
+ <4a11393d-69bb-8e9d-3bfe-21aa7a7fb1e3@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1c85c4d6-7097-bc0a-d0ca-ebe234d63ece@leemhuis.info>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+In-Reply-To: <4a11393d-69bb-8e9d-3bfe-21aa7a7fb1e3@redhat.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jul 10, 2023 at 02:32:28PM +0200, Linux regression tracking (Thorsten Leemhuis) escreveu:
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
+On Mon, Jul 10, 2023 at 03:33:45PM +0200, Hans de Goede wrote:
+> Hi Guenter,
 > 
-> Masami, Arnaldo, what's up here? Georg (who is not a regular
-> contributor) afaics found a regression in a commit you
-> authored/committed and even provided a patch-set to fix it (the first
-> one nearly four weeks ago, e.g. before the merge window started), but
-> hasn't received much support from your side to get this in. Could you
-> please look into this to get this cleared up? Or am I missing something
-> and progress to fix this has been made?
+> On 7/6/23 18:03, Guenter Roeck wrote:
+> > On 7/6/23 08:48, Henning Schild wrote:
+> >> The IO region used for the watchdog also hold CMOS battery monitoring
+> >> information. Make the access muxed so that a hwmon driver can use the
+> >> region as well.
+> >>
+> >> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> > 
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Thank you. Is it ok if I pick up his patch and merge it together with 2/2
+> through the pdx86 tree ?
+> 
 
-I'm back from a 2 week vacation, going thru the pile, probably fell thru
-the cracks and Namyung, that processed patches while I was away didn't
-notice it either.
+Yes. That was my assumption.
 
-I'm checking,
+Guenter
 
-- Arnaldo
- 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
+> Regards,
+> 
+> Hans
 > 
 > 
-> On 28.06.23 10:45, Georg Müller wrote:
-> > When switching from dwarf_decl_file() to die_get_decl_file(), a regression
-> > was introduced when having a binary where the DWARF info is split to
-> > multiple CUs. It is not possible to add probes to certain functions.
 > > 
-> > These patches introduce a testcase which shows the current regression
-> > and a fix for the issue
+> >> ---
+> >>   drivers/watchdog/simatic-ipc-wdt.c | 9 ++++++---
+> >>   1 file changed, 6 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
+> >> index 6599695dc672..cdc1a2e15180 100644
+> >> --- a/drivers/watchdog/simatic-ipc-wdt.c
+> >> +++ b/drivers/watchdog/simatic-ipc-wdt.c
+> >> @@ -155,9 +155,8 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+> >>         switch (plat->devmode) {
+> >>       case SIMATIC_IPC_DEVICE_227E:
+> >> -        if (!devm_request_region(dev, gp_status_reg_227e_res.start,
+> >> -                     resource_size(&gp_status_reg_227e_res),
+> >> -                     KBUILD_MODNAME)) {
+> >> +        res = &gp_status_reg_227e_res;
+> >> +        if (!request_muxed_region(res->start, resource_size(res), res->name)) {
+> >>               dev_err(dev,
+> >>                   "Unable to register IO resource at %pR\n",
+> >>                   &gp_status_reg_227e_res);
+> >> @@ -210,6 +209,10 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+> >>       if (wdd_data.bootstatus)
+> >>           dev_warn(dev, "last reboot caused by watchdog reset\n");
+> >>   +    if (plat->devmode == SIMATIC_IPC_DEVICE_227E)
+> >> +        release_region(gp_status_reg_227e_res.start,
+> >> +                   resource_size(&gp_status_reg_227e_res));
+> >> +
+> >>       watchdog_set_nowayout(&wdd_data, nowayout);
+> >>       watchdog_stop_on_reboot(&wdd_data);
+> >>       return devm_watchdog_register_device(dev, &wdd_data);
 > > 
-> > Signed-off-by: Georg Müller <georgmueller@gmx.net>
-> > Link: https://lore.kernel.org/r/5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.net/
-> > 
-> > ---
-> > Changes in v2:
-> >  - Add testcase
-> > 
-> > Changes in v3:
-> >  - start new thread
-> >  - add stable to cc
-> > 
-> > Georg Müller (2):
-> >   perf probe: add test for regression introduced by switch to
-> >     die_get_decl_file
-> >   perf probe: read DWARF files from the correct CU
-> > 
-> >  .../shell/test_uprobe_from_different_cu.sh    | 77 +++++++++++++++++++
-> >  tools/perf/util/dwarf-aux.c                   |  4 +-
-> >  2 files changed, 80 insertions(+), 1 deletion(-)
-> >  create mode 100755 tools/perf/tests/shell/test_uprobe_from_different_cu.sh
-> > 
-> > --
-> > 2.41.0
-> > 
-> > 
-> > 
-
--- 
-
-- Arnaldo
+> 
