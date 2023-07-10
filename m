@@ -2,80 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C07674E0E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B572274E0E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjGJWNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S230196AbjGJWPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 18:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGJWNp (ORCPT
+        with ESMTP id S229450AbjGJWPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:13:45 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B045F186
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:13:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689027224; x=1720563224;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=fT6p44pWryViVUU+L5d4KhFH3YedtPBQg6yoCla9z2M=;
-  b=N6/tucD15whvbpQeTCxhYXW43bE9H2hiUIYsU5N6LPNKLBkjITn7eajh
-   rS/PL0VIZ9Q3vhFGoTYgzLrkCO+oTN1CFdS3j1kSuteSpcUavW4J3JKTJ
-   5tQq/wDiYMpudB5tklnuVA5wnYUK3dAwud9/mYg3e157xg+8WTiQ6rKjR
-   kVSnTlDSTAQUClHUdnqjp2PomXPqHzAjDGus4/rM8Jue5jjrsUSqW9YTB
-   2I91DUi8X09BTMbQVj8dYv7Q898H0BlUjdxz3aDq0i5W2+KGOonOmrjsH
-   WRPbvqH74zOaAXcTzFe11F2p3pSHIHLHsh3poOu8BIG+q6pTT8YS7/kin
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="367969815"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="367969815"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 15:13:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="845040744"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="845040744"
-Received: from rmirwin-mobl.amr.corp.intel.com (HELO [10.209.4.178]) ([10.209.4.178])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 15:13:43 -0700
-Message-ID: <0b20535f4bd6908942c91be86bd17bc3c07514f2.camel@linux.intel.com>
-Subject: Re: [Patch v3 2/6] sched/topology: Record number of cores in sched
- group
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Valentin Schneider <vschneid@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Date:   Mon, 10 Jul 2023 15:13:43 -0700
-In-Reply-To: <xhsmhedlfv74k.mognet@vschneid.remote.csb>
-References: <cover.1688770494.git.tim.c.chen@linux.intel.com>
-         <04641eeb0e95c21224352f5743ecb93dfac44654.1688770494.git.tim.c.chen@linux.intel.com>
-         <xhsmhedlfv74k.mognet@vschneid.remote.csb>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 10 Jul 2023 18:15:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C5186;
+        Mon, 10 Jul 2023 15:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=/20lzeATL6XNAUoXPVIsEpJavXLnPumR9witgHW8cpI=; b=fl5lXArkWvd6LHDrrNuNKxgwQb
+        cEvuKAVfS0v3Zirc55kkO3ZYEQ7b1k+ZTPzCapO4nXOPD3mvttpGdwsYKrkGCWfN54MCWH2FO1sYZ
+        qU+629htHGyC96MTgoa2Wro/QYDjqvLXLcwjF22QojArphXNPSvKWaarc1T9YhGHXUxZpKH0EgLX/
+        lVua1VNyPMQY5tMXgXItt0lGw+XcZHqwRNLLllyMpKjrMRTQSRi89uhHIdZ+tx6MYv9GdAEyAgQYA
+        WjUZA67W4ERd6ukmgn3IyFKwZoOMrJUzJEInDBRXSPEA8wiLHkhB2uN1PDy7GfF8/eBLU3wRHMNKq
+        kHbhUSzw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qIzA5-00Cpu8-2O;
+        Mon, 10 Jul 2023 22:15:19 +0000
+Message-ID: <5311ed1b-ab09-6e9c-4ca6-061fe0201de6@infradead.org>
+Date:   Mon, 10 Jul 2023 15:15:17 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: linux-next: Tree for Jul 10
+ (arch/s390/kernel/machine_kexec_file.c)
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230710113814.4a4916cf@canb.auug.org.au>
+ <9536c8ca-a0f2-c4be-d705-2ac1054ebf7d@infradead.org>
+ <8a848504-6e4c-ba7a-4777-3175c1fdc6d7@oracle.com>
+ <903448cf-b333-cb75-87e2-4bee8d1d915e@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <903448cf-b333-cb75-87e2-4bee8d1d915e@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,82 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-07-10 at 21:33 +0100, Valentin Schneider wrote:
-> On 07/07/23 15:57, Tim Chen wrote:
-> > From: Tim C Chen <tim.c.chen@linux.intel.com>
-> >=20
-> > When balancing sibling domains that have different number of cores,
-> > tasks in respective sibling domain should be proportional to the number
-> > of cores in each domain. In preparation of implementing such a policy,
-> > record the number of tasks in a scheduling group.
-> >=20
-> > Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
-> > ---
-> >  kernel/sched/sched.h    |  1 +
-> >  kernel/sched/topology.c | 10 +++++++++-
-> >  2 files changed, 10 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 3d0eb36350d2..5f7f36e45b87 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -1860,6 +1860,7 @@ struct sched_group {
-> >       atomic_t		ref;
-> >=20
-> >       unsigned int		group_weight;
-> > +	unsigned int		cores;
-> >       struct sched_group_capacity *sgc;
-> >       int			asym_prefer_cpu;	/* CPU of highest priority in group */
-> >       int			flags;
-> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > index 6d5628fcebcf..6b099dbdfb39 100644
-> > --- a/kernel/sched/topology.c
-> > +++ b/kernel/sched/topology.c
-> > @@ -1275,14 +1275,22 @@ build_sched_groups(struct sched_domain *sd, int=
- cpu)
-> >  static void init_sched_groups_capacity(int cpu, struct sched_domain *s=
-d)
-> >  {
-> >       struct sched_group *sg =3D sd->groups;
-> > +	struct cpumask *mask =3D sched_domains_tmpmask2;
-> >=20
-> >       WARN_ON(!sg);
-> >=20
-> >       do {
-> > -		int cpu, max_cpu =3D -1;
-> > +		int cpu, cores =3D 0, max_cpu =3D -1;
-> >=20
-> >               sg->group_weight =3D cpumask_weight(sched_group_span(sg))=
-;
-> >=20
-> > +		cpumask_copy(mask, sched_group_span(sg));
-> > +		for_each_cpu(cpu, mask) {
-> > +			cores++;
-> > +			cpumask_andnot(mask, mask, cpu_smt_mask(cpu));
-> > +		}
->=20
->=20
-> This rekindled my desire for an SMT core cpumask/iterator. I played aroun=
-d
-> with a global mask but that's a headache: what if we end up with a core
-> whose SMT threads are split across two exclusive cpusets?
 
-Peter and I pondered that for a while.  But it seems like partitioning
-threads in a core between two different sched domains is not a very
-reasonable thing to do.=20
 
-https://lore.kernel.org/all/20230612112945.GK4253@hirez.programming.kicks-a=
-ss.net/
+On 7/10/23 14:27, Eric DeVolder wrote:
+> 
+> 
+> On 7/10/23 15:23, Eric DeVolder wrote:
+>>
+>>
+>> On 7/10/23 15:11, Randy Dunlap wrote:
+>>>
+>>>
+>>> On 7/9/23 18:38, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20230707:
+>>>>
+>>>
+>>> on s390:
+>>>
+>>> ../arch/s390/kernel/machine_kexec_file.c: In function 's390_verify_sig':
+>>> ../arch/s390/kernel/machine_kexec_file.c:69:15: error: implicit declaration of function 'verify_pkcs7_signature' [-Werror=implicit-function-declaration]
+>>>     69 |         ret = verify_pkcs7_signature(kernel, kernel_len,
+>>>        |               ^~~~~~~~~~~~~~~~~~~~~~
+>>> cc1: some warnings being treated as errors
+>>>
+>>>
+>>> Full randconfig file is attached.
+>>>
+>>
+>> Randy,
+>> Thanks for this. This appears to be randconfig testing against linux-next.
+>> As of right now, linux-next does not contain the v5 that I posted friday.
+>> The v5 posted friday was picked up by Andrew and over the weekend no fails
+>> discovered, and the series currently sits in mm-everything branch. So hopefully
+>> it will appear soon in linux-next!
+>>
+>> Let me know if I misunderstand the situation.
+>> Thanks!
+>> eric
+> 
+> Well the root cause is a missing SYSTEM_DATA_VERIFICATION. This was discussed
+> through MODULE_SIG_FORMAT thread. I don't think v5 changed anything with
+> respect to this issue, so it will likely reveal itself again.
+> 
+> Since it was agreed to drop MODULE_SIG_FORMAT, and my attempt to select
+> SYSTEM_DATA_VERIFICATION results in same circular dependency as with
+> MODULE_SIG_FORMAT, I'm unsure how to proceed.
+> 
+> The arch/s390/Kconfig S390 option has a 'select KEXEC' (but not KEXEC_FILE),
+> maybe we consider adding a 'select SYSTEM_DATA_VERIFICATION' as well?
 
-Tim
+Sure, since some other configs select it also.
+And as long as it doesn't cause a circular dependency problem.
 
->=20
-> I ended up necro'ing a patch from Peter [1], but didn't get anywhere nice
-> (the LLC shared storage caused me issues).
->=20
-> All that to say, I couldn't think of a nicer way :(
->=20
-> [1]: https://lore.kernel.org/all/20180530143106.082002139@infradead.org/#=
-t
->=20
-
+thanks.
+-- 
+~Randy
