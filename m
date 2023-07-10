@@ -2,98 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE73C74DF57
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A1974DF5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjGJUdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S230344AbjGJUd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjGJUdB (ORCPT
+        with ESMTP id S230155AbjGJUdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:33:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A813DAD;
-        Mon, 10 Jul 2023 13:33:00 -0700 (PDT)
+        Mon, 10 Jul 2023 16:33:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4341198;
+        Mon, 10 Jul 2023 13:33:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 439CE611DC;
-        Mon, 10 Jul 2023 20:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D16EC433C7;
-        Mon, 10 Jul 2023 20:32:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 666C2611DC;
+        Mon, 10 Jul 2023 20:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCE8C433C8;
+        Mon, 10 Jul 2023 20:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689021179;
-        bh=DUlvTGQbRlgHfvUIq64vgJvepRuPbwJU9Mj7tz1rw0s=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=NI6WSYFz2jmNWfkEvf0+/P78If/lMk7teaGNbkY14oPG5LxNRAlbj3Bw7XgvDAri5
-         aTMP2DQUhXpyDUvhmCsZHFCDg4mERmtcsk/aN5ClHpjAMGiEqGJUI5mLhbkJWuqDlc
-         SbxjivQ/TM4XEcCIeRdi84/dubkMYys++Rwh3i7HMtTnHfeZwyoJfAKcAUvGbG/usx
-         3zNzr4VpWHKOtZAMn2II9nS/fZjIb3xQtPk3UU2kNWxZn65BPj3s97gyQ6SeGZcBjh
-         eHO4HbQmZGmXLK+WvCvL5++3LjQdtoLrEr1iTKyi2C1uGxWZ8YdaVYymu1V+lHmk0T
-         6P2D1Ns9lM9jA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 213B7CE008B; Mon, 10 Jul 2023 13:32:59 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 13:32:59 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] rcu: Don't dump the stalled CPU on where RCU GP
- kthread last ran twice
-Message-ID: <33ec8708-35be-446a-8cc5-58d366a6d75d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230705073020.2030-1-thunder.leizhen@huawei.com>
- <20230705073020.2030-3-thunder.leizhen@huawei.com>
- <39430021-dc0d-4abd-8266-642e4e2dc7df@paulmck-laptop>
- <CAEXW_YR_t-x-eYKLFmruOLqZv91oi=AJKEEeuqYosejjdscn1g@mail.gmail.com>
+        s=k20201202; t=1689021201;
+        bh=gGXXrojuoIWNAw/sxFKlgIo61HCLR9eouOaOtd2kFFI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WxQ3lhE4kDYn/Xwd0L0OWRfY5888FCT8p5MyQuEjhey5NBcmhBXk0BbpwlkXWvJq0
+         8L+0DqBfTkOZagZByJmL/tWmzd3Ub0dzdocQZ/HWHaX6TclyE1JOdFnDMQp106iW09
+         vVIqQ0AmKWBst5DuP7Szk+3om36A+qxe3ew2ol8myPwawn0aF01U2r9ytdzMs2YrsT
+         B5zXq3O0QwKG1fMVJ4NIVXdFwnytxh68kBaA7IZ4JQe06lqTUZJ256kwKa1tMENn2D
+         Z++ivouPlmekYMu9UMF7Puw5kX6N8gLOG11566uoLezcZbFedh2QJGiVP3fsDOboIL
+         VYRUCOHonuV5Q==
+Date:   Mon, 10 Jul 2023 15:33:19 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        stable@vger.kernel.org, Iain Lane <iain@orangesquash.org.uk>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v6 1/1] PCI: Avoid putting some root ports into D3 on
+ some Ryzen chips
+Message-ID: <20230710203319.GA220162@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YR_t-x-eYKLFmruOLqZv91oi=AJKEEeuqYosejjdscn1g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2f052692-9406-3812-0c53-7edf8360115d@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 03:55:16PM -0400, Joel Fernandes wrote:
-> On Mon, Jul 10, 2023 at 3:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Wed, Jul 05, 2023 at 03:30:20PM +0800, Zhen Lei wrote:
-> > > The stacks of all stalled CPUs will be dumped. If the CPU on where RCU GP
-> > > kthread last ran is stalled, its stack does not need to be dumped again.
-> > >
-> > > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >
-> > This one looks good.  Please feel free to rebase it before 1/2 and repost.
-> 
-> Just a small comment:
-> I wondered if this would make it harder to identify which stack among
-> the various CPU stacks corresponds to the one the GP kthread is
-> running on. However, this line does print the CPU number of the
-> thread, so it is perhaps not an issue:
-> 
->                 pr_err("%s kthread starved for %ld jiffies! g%ld f%#x
-> %s(%d) ->state=%#x ->cpu=%d\n",
-> 
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+[+cc Mika, author of 9d26d3a8f1b0]
 
-Thank you!  Zhen Lei, please feel free to add Joel's Reviewed-by on your
-next posting.
+On Mon, Jul 10, 2023 at 02:44:23PM -0500, Limonciello, Mario wrote:
+> On 7/10/2023 14:32, Bjorn Helgaas wrote:
+> > On Sat, Jul 08, 2023 at 04:44:57PM -0500, Mario Limonciello wrote:
+> > > commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> > > sets the policy that all PCIe ports are allowed to use D3.  When
+> > > the system is suspended if the port is not power manageable by the
+> > > platform and won't be used for wakeup via a PME this sets up the
+> > > policy for these ports to go into D3hot.
+> > > 
+> > > This policy generally makes sense from an OSPM perspective but it leads
+> > > to problems with wakeup from suspend on laptops with AMD chips:
+> > > 
+> > > - On family 19h model 44h (PCI 0x14b9) this manifests as a missing wakeup
+> > >    interrupt.
+> > > - On family 19h model 74h (PCI 0x14eb) this manifests as a system hang.
+> > > 
+> > > Add a quirk for the PCI device ID used by the problematic root port on
+> > > both chips to ensure that these root ports are not put into D3hot at
+> > > suspend.
+> > 
+> > What is problematic about these root ports?  Is this a hardware
+> > erratum?
+> 
+> I mentioned some of this in earlier versions; but the problem is deeper
+> in the platform firmware and only happens when the root ports are in D3hot
+> across an s2idle cycle.
+> 
+> When looked at independently they can be moved in and out of D3hot no
+> problem.
+> 
+> From the perspective of hardware designers they say this is a software bug
+> that Linux puts PCI RP into D3hot over Modern Standby when they don't
+> specify for this to be done.  I don't expect any erratum for it.
 
-							Thanx, Paul
+It sounds like there's someplace the hardware designers specify how
+this should work?  Where is that?  "Modern Standby" doesn't mean
+anything to me, but maybe there's some spec that covers it?
+
+> > Some corner of the ACPI spec that allows undefined behavior?
+> 
+> These root ports are not reported as power manageable by ACPI.
+> 
+> As I mentioned in the cover letter how the OSPM handles this case is outside
+> of any spec AFAICT.
+
+If it's truly outside the spec, then I don't think Linux should use D3
+until we have some standardized way to tell whether it's safe.
+
+> > Does AMD have any guidance about generic ways to use D3, or does AMD
+> > expect to add quirks piecemeal as problems are discovered?  How does
+> > Windows handle all this?
+> 
+> Windows doesn't put root ports into D3hot over suspend unless they are power
+> managed by ACPI (as described in section 7.3 of the ACPI spec).
+> 
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mgmt/device-power-management-objects.html
+> 
+> So on Windows these ports are all in D0 and none of the issues happen.
+
+Maybe this is the clue we need.  My eyes glaze over when reading that
+section, but if we can come up with a commit log that starts with a
+sentence from that section and connects the dots all the way to the
+platform_pci_power_manageable() implementation, that might be a good
+argument that 9d26d3a8f1b0 was a little too aggressive.
+
+> Linux if PCI devices aren't power managed by ACPI will either follow deepest
+> state it can wake from PME or fall back to D3hot.
+> 
+> > Adding quirks as we discover random devices that don't behave
+> > correctly for reasons unknown is not very sustainable.
+> 
+> I don't disagree but in v5 I tried to align this to the Windows behavior and
+> it wasn't accepted.
+
+I like the fact that v5 ([1] for anybody following along at home) is
+very generic:
+
+  @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+  ...
+  +       if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
+  +           !platform_pci_power_manageable(bridge))
+  +               return false;
+
+My objection was that we didn't have a clear connection to any specs,
+so even though the code is perfectly generic, the commit log mentioned
+specific cases (USB keyboard/mouse on xHCI device connected to USB-C
+on AMD USB4 router).
+
+But maybe we *could* make a convincing generic commit log.  I guess
+we'd also have to explain the PCI_EXP_TYPE_ROOT_PORT part of the
+patch.
+
+Bjorn
+
+[1] https://lore.kernel.org/r/20230530163947.230418-2-mario.limonciello@amd.com
+
+> > > Cc: stable@vger.kernel.org # 6.1+
+> > > Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> > > Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> > > Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > >   drivers/pci/quirks.c | 16 ++++++++++++++++
+> > >   1 file changed, 16 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> > > index 321156ca273d5..e0346073e5855 100644
+> > > --- a/drivers/pci/quirks.c
+> > > +++ b/drivers/pci/quirks.c
+> > > @@ -3867,6 +3867,22 @@ static void quirk_apple_poweroff_thunderbolt(struct pci_dev *dev)
+> > >   DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_INTEL,
+> > >   			       PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
+> > >   			       quirk_apple_poweroff_thunderbolt);
+> > > +
+> > > +/*
+> > > + * Putting PCIe root ports on Ryzen SoCs with USB4 controllers into D3hot
+> > > + * may cause problems when the system attempts wake up from s2idle.
+> > > + *
+> > > + * On family 19h model 44h (PCI 0x14b9) this manifests as a missing wakeup
+> > > + * interrupt.
+> > > + * On family 19h model 74h (PCI 0x14eb) this manifests as a system hang.
+> > > + */
+> > > +static void quirk_ryzen_rp_d3(struct pci_dev *pdev)
+> > > +{
+> > > +	if (!acpi_pci_power_manageable(pdev))
+> > > +		pdev->dev_flags |= PCI_DEV_FLAGS_NO_D3;
+> > > +}
+> > > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x14b9, quirk_ryzen_rp_d3);
+> > > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x14eb, quirk_ryzen_rp_d3);
+> > >   #endif
+> > >   /*
+> > > -- 
+> > > 2.34.1
+> > > 
+> 
