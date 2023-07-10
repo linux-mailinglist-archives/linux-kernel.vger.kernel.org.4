@@ -2,63 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC7874DCFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495CC74DD00
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbjGJSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S232397AbjGJSEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjGJSDy (ORCPT
+        with ESMTP id S231393AbjGJSEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:03:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3329EAB;
-        Mon, 10 Jul 2023 11:03:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C421361181;
-        Mon, 10 Jul 2023 18:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294D8C433C7;
-        Mon, 10 Jul 2023 18:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689012233;
-        bh=6jWr+jA+0JNwfJGO7rMuTRMnUOpHYMJXNBO85uDITqM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PQsgoUiMLpkyP7vtJuEwEAMo3jCKKGy1US+o+5BaYt/MSKqNLZ/CM5qUqIzUtsyyV
-         OQNFweG5QBYir79Liyb5oPFoFoMg3O8QA3XlWRKQfjxaF9VZn5r1NNsRWBs2C8+8H7
-         v8HktTDdM7+9gWIlJwzjpBoXTSKyXOMNWE7tFv++0jKN3K8K68xmnNyzrbYiwAthCj
-         QJJ3f+ALPYssacJ9DhEli5f5puxP9OmQ/8zRHwVQHrk1B4Xg91d1XhtrDetYGM9gO+
-         wjZYFU2l6PLAnCQbkVZWErL9rbekt6CcQ/iUaj0SsW/cu+XueqO6cE3P45BhKwOTBS
-         RJcTwii+BGEmQ==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so78318131fa.1;
-        Mon, 10 Jul 2023 11:03:53 -0700 (PDT)
-X-Gm-Message-State: ABy/qLawb4UpVUETWCcOKX3s6zQuMTNZt19lkkmFwcIgykNk/sxONxaz
-        Bf3bsv2/fzYhMpXnEqPynci/QF+ZHJ1QXiKX2A==
-X-Google-Smtp-Source: APBJJlFV86eCbBcABOMtsF7FRn2kX3cRrkY/rjIhBwqAFjzhX7m8M9va+DiWdMEGyh1uipSuuLjcUqWkTHuIPrYkNWI=
-X-Received: by 2002:a2e:95d4:0:b0:2b6:d89e:74e2 with SMTP id
- y20-20020a2e95d4000000b002b6d89e74e2mr11255205ljh.7.1689012231160; Mon, 10
- Jul 2023 11:03:51 -0700 (PDT)
+        Mon, 10 Jul 2023 14:04:09 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D678812B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:04:06 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-7659c6cae2cso337084285a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689012246; x=1691604246;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BT8anRcoBomkCL3eLhDuSMG7VrJUf8etAybJpx2cUmQ=;
+        b=P3qkNZJyr3B9iPQ6tzo+Oph7KFNgQR48WP4GUaBG7LO2uQevnfZqahEoF65sPAugnn
+         MNhWEMJae9jMmX7YMUOhnYiRDETA0ZxJsxaJ3VfekaJodPQ0XE7/CMmAauDvYrE75B7W
+         e6Reiouu8KjXUJZm8YbqiHVuOqgKFmIz9g/N3BOq4+MfXFB+VobVN9UMSj1yq/bM+FvH
+         2vmlEzf/kW7afVr8b6ghNyN0dOyVHo4CIbT0AOP08KVkn04tBq6MnrtyGey8uRxlttek
+         mfECNBxhrEl971vEGY6ftU/fY4U3a2UcgpcCRczCcddHUAy7XCE4ihu65DPMtVkNd2IB
+         CQBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689012246; x=1691604246;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BT8anRcoBomkCL3eLhDuSMG7VrJUf8etAybJpx2cUmQ=;
+        b=g+y0B5K6AEyrVyzug/MSsc6P5JSSzfnwdMP8388/m7zXaz5SKnPz2bsDd8mu2DBC9y
+         QV9eA3qEKnjqb0M8vAER9ap6rYD6G/H0uTlpv+0fzekO/jM3UK4dx5B4VTbwjpjFssZn
+         3ppHTJWTnl0MPy6vkRyideH7RqzLslPwDNoULwFjVLmxp91dNdbOGLsX9wRvd25kYXwX
+         TQp3PBpZeTIC5DHbEN6SYHcAckStNzT4RZfLGFTRTmfGj6RsRvRauamrM4b6Puui/c94
+         Q4Iie1a51ADBvV+SngoEnR4DtR5bcW6S8nXqXRF2mWvpcNosPC5HV1qgp8f5hFLgot7z
+         ooAw==
+X-Gm-Message-State: ABy/qLZPjko0LjP9APKqfay5M3UBK+WxYMVVGYToHwuV0f4hqrSNeftq
+        3+DQAsnmhOjYm6cMgyGd9i4jKw==
+X-Google-Smtp-Source: APBJJlEkdizBr7UJSHKmwk1Pw53s9bGXZHen90PgCZoTRA4bGUaUV/2iylwD9yRi/UQu94OEzqbZDw==
+X-Received: by 2002:a0c:e108:0:b0:628:6879:ee48 with SMTP id w8-20020a0ce108000000b006286879ee48mr11363899qvk.50.1689012246035;
+        Mon, 10 Jul 2023 11:04:06 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id r17-20020a0c8b91000000b006360931c12fsm65717qva.96.2023.07.10.11.04.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 11:04:05 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qIvEy-0004U3-Vv;
+        Mon, 10 Jul 2023 15:04:04 -0300
+Date:   Mon, 10 Jul 2023 15:04:04 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Souradeep Chakrabarti <schakrabarti@microsoft.com>,
+        souradeep chakrabarti <schakrabarti@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        Long Li <longli@microsoft.com>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
+        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH V4 net] net: mana: Fix MANA VF unload when
+ host is unresponsive
+Message-ID: <ZKxIFK2nQqV9AvIA@ziepe.ca>
+References: <1688374171-10534-1-git-send-email-schakrabarti@linux.microsoft.com>
+ <83ef6401-8736-8416-c898-2fbbb786726e@intel.com>
+ <PUZP153MB07880E6D692FD5D13C508694CC29A@PUZP153MB0788.APCP153.PROD.OUTLOOK.COM>
+ <7e316b51-be46-96db-84cb-addd28d90b0f@intel.com>
+ <PUZP153MB0788A5F92E65AC9A98AF03AFCC2CA@PUZP153MB0788.APCP153.PROD.OUTLOOK.COM>
+ <c7e4a416-9da4-7ff2-2223-589fd66f557d@intel.com>
+ <PUZP153MB0788C7D2376F3271D77CE826CC2CA@PUZP153MB0788.APCP153.PROD.OUTLOOK.COM>
+ <cd36e39a-ebb9-706a-87c3-2f76de82f7ca@intel.com>
+ <PH7PR21MB311670231963DE8661C2F178CA2CA@PH7PR21MB3116.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230707210646.868758-1-robh@kernel.org> <20230710-underling-angelfish-c47d363a59f5@spud>
-In-Reply-To: <20230710-underling-angelfish-c47d363a59f5@spud>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 10 Jul 2023 12:03:38 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+5mtgCAfFZOZTUjqFLW0DM5A6exD+PbznO71A8SDyyTA@mail.gmail.com>
-Message-ID: <CAL_Jsq+5mtgCAfFZOZTUjqFLW0DM5A6exD+PbznO71A8SDyyTA@mail.gmail.com>
-Subject: Re: [PATCH] media: dt-bindings: Convert Omnivision OV7251 to DT schema
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR21MB311670231963DE8661C2F178CA2CA@PH7PR21MB3116.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,40 +104,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 11:57=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
-ote:
->
-> On Fri, Jul 07, 2023 at 03:06:46PM -0600, Rob Herring wrote:
-> > Convert the OmniVision OV7251 Image Sensor binding to DT schema format.
-> >
-> > vddd-supply was listed as required, but the example and actual user
-> > don't have it. Also, the data brief says it has an internal regulator,
-> > so perhaps it is truly optional.
->
-> ov7251.c:
->         ov7251->core_regulator =3D devm_regulator_get(dev, "vddd");
->         if (IS_ERR(ov7251->core_regulator)) {
->                 dev_err(dev, "cannot get core regulator\n");
->                 return PTR_ERR(ov7251->core_regulator);
->         }
->
-> Looks like the driver's probe function disagrees?
+On Thu, Jul 06, 2023 at 01:54:35PM +0000, Haiyang Zhang wrote:
 
-Doesn't the regulator framework return a dummy regulator if missing?
+> > This waiting loop is needed to let the pending Tx packets be sent. If
+> > they weren't sent in 1 second, it most likely makes no sense already
+> > whether they will be sent at all or not -- the destination host won't
+> > wait for them for so long.
+> > You say that it may happen only in case of HW issue. If so, I assume you
+> > need to fix it some way, e.g. do a HW reset or so? If so, why bother
+> > waiting for Tx completions if Tx is hung? You free all skbs later either
+> > way, so there are no leaks.
+> 
+> At that point, we don't actually care if the pending packets are sent or not. 
+> But if we free the queues too soon, and the HW is slow for unexpected 
+> reasons, a delayed completion notice will DMA into the freed memory and 
+> cause corruption. That's why we have a longer waiting time.
 
-> I was going to ask how it worked, but the one user has
-> status =3D "disabled"...
+Aieiiie that is a horrible HW design to not have a strong fence of DMA.
 
-Saw that too, but figured there's some other include with that
-overridden. We should really add a built .dts output target to avoid
-trying to manually walk includes.
+"just wait and hope the HW doesn't UAF the kernel with DMA" is really
+awful.
 
-
-> /shrug, what's here looks fine to me, whatever Qualcomm person cares
-> about the driver can make sure it works for them I guess.
->
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks.
-
-Rob
+Jason
