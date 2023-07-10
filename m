@@ -2,142 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3B674CA93
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66ED274CA97
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjGJDb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 23:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
+        id S229559AbjGJDd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 23:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjGJDba (ORCPT
+        with ESMTP id S229554AbjGJDdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 23:31:30 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E62119;
-        Sun,  9 Jul 2023 20:29:13 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QzqFn2QNTzTm20;
-        Mon, 10 Jul 2023 11:27:57 +0800 (CST)
-Received: from huawei.com (10.175.104.67) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 10 Jul
- 2023 11:29:06 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <miklos@szeredi.hu>, <amir73il@gmail.com>
-CC:     <linux-unionfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <sashal@kernel.org>, <chengzhihao1@huawei.com>
-Subject: [PATCH 5.15] ovl: fix null pointer dereference in ovl_get_acl_rcu()
-Date:   Mon, 10 Jul 2023 11:27:30 +0800
-Message-ID: <20230710032730.2049748-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.39.2
+        Sun, 9 Jul 2023 23:33:25 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B23F9;
+        Sun,  9 Jul 2023 20:33:20 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 36A3Wd9E089360;
+        Mon, 10 Jul 2023 11:32:39 +0800 (+08)
+        (envelope-from Di.Shen@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4QzqL567v8z2LcN4n;
+        Mon, 10 Jul 2023 11:31:41 +0800 (CST)
+Received: from bj10906pcu1.spreadtrum.com (10.0.73.63) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Mon, 10 Jul 2023 11:32:37 +0800
+From:   Di Shen <di.shen@unisoc.com>
+To:     <lukasz.luba@arm.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>
+CC:     <amitk@kernel.org>, <rui.zhang@intel.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuewen.yan@unisoc.com>, <jeson.gao@unisoc.com>,
+        <orsonzhai@gmail.com>, <zhanglyra@gmail.com>, <di.shen@unisoc.com>
+Subject: [PATCH V5] thermal/core/power_allocator: reset thermal governor when trip point is changed
+Date:   Mon, 10 Jul 2023 11:32:34 +0800
+Message-ID: <20230710033234.28641-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.67]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.73.63]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 36A3Wd9E089360
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Upstream commit f4e19e595cc2e76a8a58413eb19d3d9c51328b53 ]
+When the thermal trip point is changed, the governor should
+be reset so that the policy algorithm can be updated to adapt
+to the new trip point.
 
-Following process:
-         P1                     P2
- path_openat
-  link_path_walk
-   may_lookup
-    inode_permission(rcu)
-     ovl_permission
-      acl_permission_check
-       check_acl
-        get_cached_acl_rcu
-	 ovl_get_inode_acl
-	  realinode = ovl_inode_real(ovl_inode)
-	                      drop_cache
-		               __dentry_kill(ovl_dentry)
-				iput(ovl_inode)
-		                 ovl_destroy_inode(ovl_inode)
-		                  dput(oi->__upperdentry)
-		                   dentry_kill(upperdentry)
-		                    dentry_unlink_inode
-				     upperdentry->d_inode = NULL
-	    ovl_inode_upper
-	     upperdentry = ovl_i_dentry_upper(ovl_inode)
-	     d_inode(upperdentry) // returns NULL
-	  IS_POSIXACL(realinode) // NULL pointer dereference
-, will trigger an null pointer dereference at realinode:
-  [  205.472797] BUG: kernel NULL pointer dereference, address:
-                 0000000000000028
-  [  205.476701] CPU: 2 PID: 2713 Comm: ls Not tainted
-                 6.3.0-12064-g2edfa098e750-dirty #1216
-  [  205.478754] RIP: 0010:do_ovl_get_acl+0x5d/0x300
-  [  205.489584] Call Trace:
-  [  205.489812]  <TASK>
-  [  205.490014]  ovl_get_inode_acl+0x26/0x30
-  [  205.490466]  get_cached_acl_rcu+0x61/0xa0
-  [  205.490908]  generic_permission+0x1bf/0x4e0
-  [  205.491447]  ovl_permission+0x79/0x1b0
-  [  205.491917]  inode_permission+0x15e/0x2c0
-  [  205.492425]  link_path_walk+0x115/0x550
-  [  205.493311]  path_lookupat.isra.0+0xb2/0x200
-  [  205.493803]  filename_lookup+0xda/0x240
-  [  205.495747]  vfs_fstatat+0x7b/0xb0
+1.Thermal governor is working for the passive trip point or active
+trip point. Therefore, when the trip point is changed it should
+reset the governor only for passic/active trip points.
 
-Fetch a reproducer in [Link].
+2.For "power_allocator" governor reset, the parameters of pid
+controller and the states of power cooling devices should be reset.
 
-Use the helper ovl_i_path_realinode() to get realinode and then do
-non-nullptr checking.
+2.1
+The IPA controls temperature using PID mechanism. It is a closed-
+loop feedback monitoring system. It uses the gap between target
+temperature and current temperature which says "error" as the
+input of the PID controller:
 
-There are some changes from upstream commit:
-1. Corrusponds to do_ovl_get_acl() in 5.15 is ovl_get_acl()
-2. ovl_i_path_real is not imported in 5.15, we can get realinode by
-   ovl_inode_real
-3. CONFIG_FS_POSIX_ACL checking is dropped in commit
-   ded536561a3674327dfa4bb389085705cae22b8a ("ovl: improve ovl_get_acl()
-   if POSIX ACL support is off"), we still keep it in 5.15.
+err = desired_temperature - current_temperature
+P_max =
+k_p * err + k_i * err_integral + k_d * diff_err + sustainable_power
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217404
-Fixes: 332f606b32b6 ("ovl: enable RCU'd ->get_acl()")
-Cc: <stable@vger.kernel.org> # v5.15
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Suggested-by: Christian Brauner <brauner@kernel.org>
-Suggested-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+That algorithm can 'learn' from the 'observed' in the past reaction
+for it's control decisions and accumulates that information in the
+I(Integral) part so that it can conpensate for those 'learned'
+mistakes.
+
+Based on the above, the most important is the desired temperature
+comes from the trip point. When the trip point is changed, all the
+previous learned errors won't help for the IPA. So the pid parameters
+should be reset for IPA governor reset.
+
+2.2
+Other wise, the cooling devices should also be reset when the trip
+point is changed.
+
+This patch adds an ops for the thermal_governor structure to reset
+the governor and give the 'reset' function definition for power
+allocator. The ops is called when the trip points are changed via
+sysfs interface.
+
+Signed-off-by: Di Shen <di.shen@unisoc.com>
 ---
- fs/overlayfs/inode.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/thermal/gov_power_allocator.c | 9 +++++++++
+ drivers/thermal/thermal_trip.c        | 5 +++++
+ include/linux/thermal.h               | 3 +++
+ 3 files changed, 17 insertions(+)
 
-diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-index d41f0c8e0e2a..65e5e6eb761a 100644
---- a/fs/overlayfs/inode.c
-+++ b/fs/overlayfs/inode.c
-@@ -453,7 +453,15 @@ struct posix_acl *ovl_get_acl(struct inode *inode, int type, bool rcu)
- 	const struct cred *old_cred;
- 	struct posix_acl *acl;
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 8642f1096b91..8d17a10671e4 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -729,10 +729,19 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+ 	return allocate_power(tz, trip.temperature);
+ }
  
--	if (!IS_ENABLED(CONFIG_FS_POSIX_ACL) || !IS_POSIXACL(realinode))
-+	if (!IS_ENABLED(CONFIG_FS_POSIX_ACL))
-+		return NULL;
++static void power_allocator_reset(struct thermal_zone_device *tz)
++{
++	struct power_allocator_params *params = tz->governor_data;
 +
-+	if (!realinode) {
-+		WARN_ON(!rcu);
-+		return ERR_PTR(-ECHILD);
-+	}
++	reset_pid_controller(params);
++	allow_maximum_power(tz, true);
++}
 +
-+	if (!IS_POSIXACL(realinode))
- 		return NULL;
+ static struct thermal_governor thermal_gov_power_allocator = {
+ 	.name		= "power_allocator",
+ 	.bind_to_tz	= power_allocator_bind,
+ 	.unbind_from_tz	= power_allocator_unbind,
+ 	.throttle	= power_allocator_throttle,
++	.reset		= power_allocator_reset,
+ };
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index 907f3a4d7bc8..13bbe029c6ab 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -173,6 +173,11 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+ 	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
+ 		tz->trips[trip_id] = *trip;
  
- 	if (rcu)
++	/* Reset the governor only when the trip type is active or passive. */
++	ret = (trip->type == THERMAL_TRIP_PASSIVE || trip->type == THERMAL_TRIP_ACTIVE);
++	if (ret && t.temperature != trip->temperature && tz->governor && tz->governor->reset)
++		tz->governor->reset(tz);
++
+ 	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+ 				      trip->temperature, trip->hysteresis);
+ 
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 87837094d549..d27d053319bf 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -197,6 +197,8 @@ struct thermal_zone_device {
+  *			thermal zone.
+  * @throttle:	callback called for every trip point even if temperature is
+  *		below the trip point temperature
++ * @reset:	callback called for governor reset
++ *
+  * @governor_list:	node in thermal_governor_list (in thermal_core.c)
+  */
+ struct thermal_governor {
+@@ -204,6 +206,7 @@ struct thermal_governor {
+ 	int (*bind_to_tz)(struct thermal_zone_device *tz);
+ 	void (*unbind_from_tz)(struct thermal_zone_device *tz);
+ 	int (*throttle)(struct thermal_zone_device *tz, int trip);
++	void (*reset)(struct thermal_zone_device *tz);
+ 	struct list_head	governor_list;
+ };
+ 
 -- 
-2.39.2
+2.17.1
 
