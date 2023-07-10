@@ -2,106 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8820374D446
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4970874D401
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjGJLJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        id S230302AbjGJK4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjGJLJO (ORCPT
+        with ESMTP id S229837AbjGJK4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:09:14 -0400
-X-Greylist: delayed 804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Jul 2023 04:09:09 PDT
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEF6DD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:09:09 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; b=CR46z7G4pA2j7R2rcjI+mkhCZYT1XWYJGu1dQEzzmhgtUNbvWyaYNp872JW/90qIoFMq2FVaCS6EqRUCixG6EjivzZZg0/Ye7/6lTbDGjJ5eyUD9krSWI+6LouQg0kBcXTH6Bk4oPLVmuOibVMQrFAN7HqvK4q2nFYIzk7X4iI7/22SxRhmewhyb4MbkNJSSJnlSyXTEfsb0avRfLpkhiSf4fcL0gJxd6h5318mWTeOphgQy+ncB1OZFO5Jn51To8PMKRpFQ40ScrhyulVXnLf+cheCdYsuCbBfafqDMkQdyC+ZOk674oOoezz9D7KzLAb2m3FyuRkLFSPRvuAO81A==; s=purelymail1; d=iskren.info; v=1; bh=lV9ppPsaEOEUAnUrflv2EQZQzeibRC/rcgeYGnMmG3E=; h=Received:Subject:To:From;
-DKIM-Signature: a=rsa-sha256; b=sQP16rDNnb/IEgmYI3OUskIyrc79nOrvoGvb7vdLe0Pzx2xit27ukgMVj1r9rX6nWpmI4tnz+SMTzL14Zg0RFhNXk9tTfEoP40HUvObGdvg/G30fwjAmQwjyC6du/5G/N8AdSSvibB48/mIbX075QUUnlTEPkCGOIsvpd8vMpKxJWXciV1tBS755N52Iwa5xP6qt0Pr7CMDDxnXcSMVTv99ZkPSRc2OKqQ2I025hFJFDOIOk3lSeMAt1Oal1yjI43rozpUFC+FXKDLgkeMLCxp965Mx5PhaRCqwa6t96ogVqDAYjQnZ65KtvBw6Mi9pvo6HLxmTzFGB7sg1kldEd9Q==; s=purelymail1; d=purelymail.com; v=1; bh=lV9ppPsaEOEUAnUrflv2EQZQzeibRC/rcgeYGnMmG3E=; h=Feedback-ID:Received:Subject:To:From;
-Feedback-ID: 10275:2339:null:purelymail
-X-Pm-Original-To: linux-kernel@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1418986860;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Mon, 10 Jul 2023 10:55:13 +0000 (UTC)
-Message-ID: <5dbd78ee-6726-650f-31d4-526382001e68@iskren.info>
-Date:   Mon, 10 Jul 2023 13:55:09 +0300
+        Mon, 10 Jul 2023 06:56:18 -0400
+Received: from out-5.mta0.migadu.com (out-5.mta0.migadu.com [91.218.175.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE17CC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:56:13 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688986571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JAAcTMTsrAbVSkHrV3Db9f82+9y9+CSUZSusZpOXTxQ=;
+        b=xwELUxx5NzyXo3IUYtBQAxtpHrkwS2foQIMSGnIRGb4fpzUZXqrsl/58qwGy0RWV9aLuW3
+        +A5S2ZbKe6hh7F1nGgFkEJXbY0mDM5XLF4ZuG2UceOGYCDxJAobfJPe8SA35FieYN050C5
+        aO0n7VPxcYyZonSHVWMalC620oP26IE=
+From:   chengming.zhou@linux.dev
+To:     axboe@kernel.dk, hch@lst.de, tj@kernel.org, ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhouchengming@bytedance.com
+Subject: [PATCH v5] blk-mq: fix start_time_ns and alloc_time_ns for pre-allocated rq
+Date:   Mon, 10 Jul 2023 18:55:16 +0800
+Message-ID: <20230710105516.2053478-1-chengming.zhou@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] dt-bindings: leds: Convert Panasonic AN30259A to DT
- schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Simon Shields <simon@lineageos.org>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Daniele Debernardi <drebrez@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-References: <20230707210653.868907-1-robh@kernel.org>
- <361a4706-6a64-9322-3210-d9cd45827a2a@linaro.org>
-From:   Iskren Chernev <me@iskren.info>
-In-Reply-To: <361a4706-6a64-9322-3210-d9cd45827a2a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Chengming Zhou <zhouchengming@bytedance.com>
 
+The iocost rely on rq start_time_ns and alloc_time_ns to tell saturation
+state of the block device. Most of the time request is allocated after
+rq_qos_throttle() and its alloc_time_ns or start_time_ns won't be affected.
 
-On 7/10/23 12:13, Krzysztof Kozlowski wrote:
-> On 07/07/2023 23:06, Rob Herring wrote:
->> Convert the Panasonic AN30259A 3-channel LED controller binding to DT
->> schema format.
->>
->> Signed-off-by: Rob Herring <robh@kernel.org>
->> ---
-> 
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
->>  .../bindings/leds/leds-an30259a.txt           | 55 ------------
->>  .../bindings/leds/panasonic,an30259a.yaml     | 84 +++++++++++++++++++
-> 
-> ...
-> 
->> diff --git a/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml b/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
->> new file mode 100644
->> index 000000000000..f55f8c232bc6
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
->> @@ -0,0 +1,84 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/leds/panasonic,an30259a.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Panasonic AN30259A 3-channel LED controller
->> +
->> +maintainers:
->> +  - Simon Shields <simon@lineageos.org>
-> 
-> Device is used in qcom-msm8974pro-samsung-klte.dts, so maybe its main
-> authors would maintain this binding?
-> 
-> Iskren Chernev <me@iskren.info>
+But for plug batched allocation introduced by the commit 47c122e35d7e
+("block: pre-allocate requests if plug is started and is a batch"), we can
+rq_qos_throttle() after the allocation of the request. This is what the
+blk_mq_get_cached_request() does.
 
-I'll be happy to be listed as a maintainer of that binding.
+In this case, the cached request alloc_time_ns or start_time_ns is much
+ahead if blocked in any qos ->throttle().
 
-> Daniele Debernardi <drebrez@gmail.com>
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+Fix it by setting alloc_time_ns and start_time_ns to now when the allocated
+request is actually used.
+
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+v5:
+ - Don't reuse __blk_mq_alloc_requests(), which makes it much complex.
+ - Always initialize the time stamps after blk_mq_rq_ctx_init(), which
+   is clearer, as suggested by Christoph Hellwig.
+ - We still need to pass optional alloc_time_ns to blk_mq_rq_time_init(),
+   which includes depth and tag waits time by definition.
+ - [v4] https://lore.kernel.org/all/20230629121302.1124851-1-chengming.zhou@linux.dev/
+
+v4:
+ - Use blk_mq_alloc_data to pass start_time_ns instead of passing down
+   yet another parameter. Thanks Christoph Hellwig.
+ - [v3] https://lore.kernel.org/all/20230628124546.1056698-1-chengming.zhou@linux.dev/
+
+v3:
+ - Skip setting the alloc_time_ns and start_time_ns during pre-allocation,
+   which is clearer, as suggested by Tejun.
+ - [v2] https://lore.kernel.org/all/20230626050405.781253-1-chengming.zhou@linux.dev/
+---
+ block/blk-mq.c | 47 ++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 17 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index decb6ab2d508..2352fed460f8 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -337,8 +337,24 @@ void blk_rq_init(struct request_queue *q, struct request *rq)
+ }
+ EXPORT_SYMBOL(blk_rq_init);
+ 
++/* Set start and alloc time when the allocated request is actually used */
++static inline void blk_mq_rq_time_init(struct request *rq, u64 alloc_time_ns)
++{
++	if (blk_mq_need_time_stamp(rq))
++		rq->start_time_ns = ktime_get_ns();
++	else
++		rq->start_time_ns = 0;
++
++#ifdef CONFIG_BLK_RQ_ALLOC_TIME
++	if (blk_queue_rq_alloc_time(rq->q))
++		rq->alloc_time_ns = alloc_time_ns ?: rq->start_time_ns;
++	else
++		rq->alloc_time_ns = 0;
++#endif
++}
++
+ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+-		struct blk_mq_tags *tags, unsigned int tag, u64 alloc_time_ns)
++		struct blk_mq_tags *tags, unsigned int tag)
+ {
+ 	struct blk_mq_ctx *ctx = data->ctx;
+ 	struct blk_mq_hw_ctx *hctx = data->hctx;
+@@ -365,14 +381,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+ 	}
+ 	rq->timeout = 0;
+ 
+-	if (blk_mq_need_time_stamp(rq))
+-		rq->start_time_ns = ktime_get_ns();
+-	else
+-		rq->start_time_ns = 0;
+ 	rq->part = NULL;
+-#ifdef CONFIG_BLK_RQ_ALLOC_TIME
+-	rq->alloc_time_ns = alloc_time_ns;
+-#endif
+ 	rq->io_start_time_ns = 0;
+ 	rq->stats_sectors = 0;
+ 	rq->nr_phys_segments = 0;
+@@ -402,8 +411,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+ }
+ 
+ static inline struct request *
+-__blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
+-		u64 alloc_time_ns)
++__blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data)
+ {
+ 	unsigned int tag, tag_offset;
+ 	struct blk_mq_tags *tags;
+@@ -422,7 +430,7 @@ __blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
+ 		tag = tag_offset + i;
+ 		prefetch(tags->static_rqs[tag]);
+ 		tag_mask &= ~(1UL << i);
+-		rq = blk_mq_rq_ctx_init(data, tags, tag, alloc_time_ns);
++		rq = blk_mq_rq_ctx_init(data, tags, tag);
+ 		rq_list_add(data->cached_rq, rq);
+ 		nr++;
+ 	}
+@@ -483,9 +491,11 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
+ 	 * Try batched alloc if we want more than 1 tag.
+ 	 */
+ 	if (data->nr_tags > 1) {
+-		rq = __blk_mq_alloc_requests_batch(data, alloc_time_ns);
+-		if (rq)
++		rq = __blk_mq_alloc_requests_batch(data);
++		if (rq) {
++			blk_mq_rq_time_init(rq, alloc_time_ns);
+ 			return rq;
++		}
+ 		data->nr_tags = 1;
+ 	}
+ 
+@@ -508,8 +518,9 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
+ 		goto retry;
+ 	}
+ 
+-	return blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag,
+-					alloc_time_ns);
++	rq = blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag);
++	blk_mq_rq_time_init(rq, alloc_time_ns);
++	return rq;
+ }
+ 
+ static struct request *blk_mq_rq_cache_fill(struct request_queue *q,
+@@ -564,6 +575,7 @@ static struct request *blk_mq_alloc_cached_request(struct request_queue *q,
+ 			return NULL;
+ 
+ 		plug->cached_rq = rq_list_next(rq);
++		blk_mq_rq_time_init(rq, 0);
+ 	}
+ 
+ 	rq->cmd_flags = opf;
+@@ -665,8 +677,8 @@ struct request *blk_mq_alloc_request_hctx(struct request_queue *q,
+ 	tag = blk_mq_get_tag(&data);
+ 	if (tag == BLK_MQ_NO_TAG)
+ 		goto out_queue_exit;
+-	rq = blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag,
+-					alloc_time_ns);
++	rq = blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag);
++	blk_mq_rq_time_init(rq, alloc_time_ns);
+ 	rq->__data_len = 0;
+ 	rq->__sector = (sector_t) -1;
+ 	rq->bio = rq->biotail = NULL;
+@@ -2901,6 +2913,7 @@ static inline struct request *blk_mq_get_cached_request(struct request_queue *q,
+ 	plug->cached_rq = rq_list_next(rq);
+ 	rq_qos_throttle(q, *bio);
+ 
++	blk_mq_rq_time_init(rq, 0);
+ 	rq->cmd_flags = (*bio)->bi_opf;
+ 	INIT_LIST_HEAD(&rq->queuelist);
+ 	return rq;
+-- 
+2.41.0
+
