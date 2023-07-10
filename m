@@ -2,237 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4215274D5F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7666D74D5F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjGJMpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S232006AbjGJMpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjGJMpF (ORCPT
+        with ESMTP id S231148AbjGJMpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:45:05 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B876EB;
-        Mon, 10 Jul 2023 05:45:01 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36ABWJS9027612;
-        Mon, 10 Jul 2023 14:44:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=y4vhLbDxnpig5dCdMLGROChfvNNa99P9Q2XNlg4LdNQ=;
- b=b6rVFXKN+JV4FditmO3exGIRgBmpBr5eTi/3rWzM2bWqpDo4GD9L5Xpra9x+fu7KKSO7
- 6R+pmTqdfDDNxIHgxkxo8+9CmXUWPkLjXqS4MB5OO2HIEhDnYOdy2utKH2TsML30ONrF
- HhSIzN2fK+w0fa+Ar1HzGvv59yqYqYZifYreCqqXNT9PSTmuEIdG28Qw7gGmF1J1SlHI
- cENzbu6wdcZbmnRQnsZtw0q1VVwf5hNF8OOg57LFICKv8RV7ZD2EG/1fQqq/zdFKCv40
- IcdEZeHEVBn/Dz/wLoUqkzV9VFg0kpd31IGpGAkElVsU63rApGc3pcVnCsOWrKdE0cuN sg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rre8vt3hm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 14:44:53 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2D1C7100066;
-        Mon, 10 Jul 2023 14:44:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 05DB223C6A4;
-        Mon, 10 Jul 2023 14:44:48 +0200 (CEST)
-Received: from [10.252.15.83] (10.252.15.83) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 10 Jul
- 2023 14:44:46 +0200
-Message-ID: <6985175f-719a-bd4d-e95e-021b70234c8a@foss.st.com>
-Date:   Mon, 10 Jul 2023 14:44:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V9 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL
- support
-Content-Language: en-US
-To:     Sarannya S <quic_sarannya@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
-        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1688679698-31274-1-git-send-email-quic_sarannya@quicinc.com>
- <1688679698-31274-4-git-send-email-quic_sarannya@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <1688679698-31274-4-git-send-email-quic_sarannya@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.15.83]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_09,2023-07-06_02,2023-05-22_02
+        Mon, 10 Jul 2023 08:45:42 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9559B;
+        Mon, 10 Jul 2023 05:45:37 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id B2B8C5C0166;
+        Mon, 10 Jul 2023 08:45:33 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Mon, 10 Jul 2023 08:45:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688993133; x=1689079533; bh=Wr
+        gvfSK/ZjUnMocbnypFGx2Xu2Tz3bZYi5KhzSIRavg=; b=HfW8C5wWvq2nAWizjJ
+        E4WtfRQ4petWcoSQ6q0lIWyXzXpmAu28ZnV+iEWxSjyiGp3QT/ansazGclbI1WPh
+        Su0zHiFw5m1xXNT37hK7v370U1VWB4SpIQrCR1U9EtSVMJIuIobaQBKg6QzWa8Vx
+        oDe0CizDplLYcnZ9A3QMibFpjS5yZxiBGMf6LiZcpMC2aZ9MKU1CURIuL8WtalT4
+        7kcAKuEEOzF0isQMeeMtzROFbi31vervfvhw82Oy2tqIDytrWIQls6FMR+A/G31u
+        kARY4iT5PTCKBwZn3KdWefT740SJkyf/1kZPGOj26rK0e8IiiW2I8loSlyyvdHjE
+        Ij0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688993133; x=1689079533; bh=WrgvfSK/ZjUnM
+        ocbnypFGx2Xu2Tz3bZYi5KhzSIRavg=; b=XwySPgjShiTivcgcO87lJeu+tsCXi
+        46y9i6y8bzcsRCaUaVkoFhuL4ghB2S3GmwEK+ALBPlUpo9XuCxoHutJF/avr2N0R
+        QjcFzUWgK8SbagUmPHhI6585NY1lR1104mBpvV3p9HG8akg8bpRf3lgFkPJy+JtD
+        oB+c2K6UItXlfhud0cnZXi0g7gAOxT3L4r2U/h4oJ5iQiyi2akD6pR7MgJTf4Pvj
+        DERhrrGvwapHWW2rOL7KVwYTyNO39YH2VxwISU+4ZjbQuqjReIW5cGICQ46a7hHb
+        v7nUQpbFgK8v0fjmSztcgAh71TQ1MUzyYYqmqoSRWclYBmwO1wvkDHq9g==
+X-ME-Sender: <xms:bf2rZOmf60ZQDGJgw3s8P5MRfo7CShCcZZPAIuV5AKPOSwfkFjvNVw>
+    <xme:bf2rZF2IwKTaJzFicKJVcjZ-sEZ_HztTfq61gt2xvXzlhgQ6G7UxUSV039NsCkbou
+    fs5qPenfx6yLLyOUp8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgdegiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:bf2rZMr1mXNHciHOBChPaW6Kq9Lz5-zJSwYwMIvseSyLPD_2DnIl6g>
+    <xmx:bf2rZCmPfJL1nn0qaON3MrFyk0OVlEgZc-DMvaMTUu56DJMPW6CUMw>
+    <xmx:bf2rZM2Otwu3AneCWbaQ71VydAQ8Ozmrj9Idq0VTY67Sb3hjP36Jdg>
+    <xmx:bf2rZNLkOeVMZ5nvzl-PVhBKmJ7kMATU6iBPYONR472oQbo3nlvDdw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 395001700089; Mon, 10 Jul 2023 08:45:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <2ef84fb8-b5eb-4c9a-b8a1-0c5f33e7f572@app.fastmail.com>
+In-Reply-To: <CAPDyKFoRtEXTGQkNzGza-sS_j1ajGmjtCTaoPB7PXVDE2bS0tQ@mail.gmail.com>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-4-ulf.hansson@linaro.org>
+ <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
+ <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
+ <1496b9c1-289a-c354-f0ae-e14fd4c9bcfa@linaro.org>
+ <CAPDyKFr7Mqy5bisLcxcA_iEGWqL8SFt2mDDng7zYEaTD1vNisA@mail.gmail.com>
+ <deyyt5r2wkxo7ily434gl3wudls2sbinkmnehssqshwnbzmlwf@lmqskj6zwfu2>
+ <CAPDyKFoRtEXTGQkNzGza-sS_j1ajGmjtCTaoPB7PXVDE2bS0tQ@mail.gmail.com>
+Date:   Mon, 10 Jul 2023 14:45:12 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Bjorn Andersson" <andersson@kernel.org>
+Cc:     "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Olof Johansson" <olof@lixom.net>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Kevin Hilman" <khilman@baylibre.com>,
+        "Jerome Brunet" <jbrunet@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the genpd dir
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 10, 2023, at 14:37, Ulf Hansson wrote:
+> On Sun, 9 Jul 2023 at 04:21, Bjorn Andersson <andersson@kernel.org> wrote:
+>> On Fri, Jul 07, 2023 at 05:27:39PM +0200, Ulf Hansson wrote:
+>
+> If I understand correctly, you are suggesting that each platform
+> maintainer should merge the immutable branch with patch1 - and that I
+> should send the patches (based on the immutable branch) to each of the
+> platform maintainers to manage. Instead of one pull request with
+> everything directly to Arnd, right?
+>
+> This still means that Arnd will have to resolve the conflicts as the
+> pull requests arrive in his inbox.
+>
+> Although, I guess what you are looking for is less work for the soc/
+> maintainers, which seems reasonable. Although, in that case, I might
+> as well share an immutable branch with the complete series, rather
+> than just patch1. That should help Arnd too, I think.
+>
+> Again, let's leave the call to Arnd on what to do.
 
+I think it's much easier for me to pick up a single branch with
+all of your patches. For platform maintainers, other changes can
+go one of two ways:
 
-On 7/6/23 23:41, Sarannya S wrote:
-> From: Chris Lew <quic_clew@quicinc.com>
-> 
-> Add RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
-> IOCTL support for rpmsg char device nodes to get/set the low level
-> transport signals.
-> 
-> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
-> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
-> ---
->  drivers/rpmsg/rpmsg_char.c | 54 ++++++++++++++++++++++++++++++++++++++++------
->  include/uapi/linux/rpmsg.h | 10 +++++++++
->  2 files changed, 58 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index a271fce..09833ad 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -52,6 +52,8 @@ static DEFINE_IDA(rpmsg_minor_ida);
->   * @readq:	wait object for incoming queue
->   * @default_ept: set to channel default endpoint if the default endpoint should be re-used
->   *              on device open to prevent endpoint address update.
-> + * remote_flow_restricted: to indicate if the remote has requested for flow to be limited
-> + * remote_flow_updated: to indicate if the flow control has been requested
->   */
->  struct rpmsg_eptdev {
->  	struct device dev;
-> @@ -68,6 +70,8 @@ struct rpmsg_eptdev {
->  	struct sk_buff_head queue;
->  	wait_queue_head_t readq;
->  
-> +	bool remote_flow_restricted;
-> +	bool remote_flow_updated;
->  };
->  
->  int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
-> @@ -116,6 +120,18 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
->  	return 0;
->  }
->  
-> +static int rpmsg_ept_flow_cb(struct rpmsg_device *rpdev, void *priv, bool enable)
-> +{
-> +	struct rpmsg_eptdev *eptdev = priv;
-> +
-> +	eptdev->remote_flow_restricted = enable;
-> +	eptdev->remote_flow_updated = true;
-> +
-> +	wake_up_interruptible(&eptdev->readq);
-> +
-> +	return 0;
-> +}
-> +
->  static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->  {
->  	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-> @@ -152,6 +168,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->  		return -EINVAL;
->  	}
->  
-> +	ept->flow_cb = rpmsg_ept_flow_cb;
->  	eptdev->ept = ept;
->  	filp->private_data = eptdev;
->  	mutex_unlock(&eptdev->ept_lock);
-> @@ -172,6 +189,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
->  		eptdev->ept = NULL;
->  	}
->  	mutex_unlock(&eptdev->ept_lock);
-> +	eptdev->remote_flow_updated = false;
->  
->  	/* Discard all SKBs */
->  	skb_queue_purge(&eptdev->queue);
-> @@ -285,6 +303,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
->  	if (!skb_queue_empty(&eptdev->queue))
->  		mask |= EPOLLIN | EPOLLRDNORM;
->  
-> +	if (eptdev->remote_flow_updated)
-> +		mask |= EPOLLPRI;
-> +
->  	mutex_lock(&eptdev->ept_lock);
->  	mask |= rpmsg_poll(eptdev->ept, filp, wait);
->  	mutex_unlock(&eptdev->ept_lock);
-> @@ -297,14 +318,35 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
->  {
->  	struct rpmsg_eptdev *eptdev = fp->private_data;
->  
-> -	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
-> -		return -EINVAL;
-> +	bool set;
-> +	int ret;
->  
-> -	/* Don't allow to destroy a default endpoint. */
-> -	if (eptdev->default_ept)
-> -		return -EINVAL;
-> +	switch (cmd) {
-> +	case RPMSG_GET_OUTGOING_FLOWCONTROL:
-> +		eptdev->remote_flow_updated = false;
-> +		ret = put_user(eptdev->remote_flow_restricted, (int __user *)arg);
-> +		break;
-> +	case RPMSG_SET_INCOMING_FLOWCONTROL:
-> +		if (arg > 1) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +		set = !!arg;
-> +		ret = rpmsg_set_flow_control(eptdev->ept, set, eptdev->chinfo.dst);
-> +		break;
-> +	case RPMSG_DESTROY_EPT_IOCTL:
-> +		/* Don't allow to destroy a default endpoint. */
-> +		if (eptdev->default_ept) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +		ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +	}
->  
-> -	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> +	return ret;
->  }
->  
->  static const struct file_operations rpmsg_eptdev_fops = {
-> diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
-> index 1637e68..f0c8da2 100644
-> --- a/include/uapi/linux/rpmsg.h
-> +++ b/include/uapi/linux/rpmsg.h
-> @@ -43,4 +43,14 @@ struct rpmsg_endpoint_info {
->   */
->  #define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
->  
-> +/**
-> + * Get the flow control state of the remote rpmsg char device.
-> + */
-> +#define RPMSG_GET_OUTGOING_FLOWCONTROL _IOR(0xb5, 0x5, int)
-> +
-> +/**
-> + * Set the flow control state of the local rpmsg char device.
-> + */
-> +#define RPMSG_SET_INCOMING_FLOWCONTROL _IOR(0xb5, 0x6, int)
-> +
+- send a normal pull requests with changes against the same
+  files, and have me take care of any conflicts where they
+  arise. Since most of the changes are just simple file moves
+  rather than changing file contents, 'git mergetool' handles
+  these fine is most cases
 
-Seems that it is not the use to document the parameters for IOCTL
-but I wonder if documenting the use of the RPMSG_GET_OUTGOING_FLOWCONTROL
-and RPMSG_SET_INCOMING_FLOWCONTROL parameter could help users to implement
-the IOCTL...
+- If there is a non-obvious merge, the entire genpd branch
+  can be shared as an immutable branch, with patches for
+  a particular platform rebased on top of that branch.
 
-For the series
-Acked-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-
-Thanks,
-Arnaud
-
->  #endif
+     Arnd
