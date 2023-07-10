@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9523A74D11C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1757F74D10F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjGJJK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S230416AbjGJJKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjGJJKu (ORCPT
+        with ESMTP id S230322AbjGJJKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:10:50 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FA4127
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:10:49 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3a1ebb79579so3263154b6e.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:10:49 -0700 (PDT)
+        Mon, 10 Jul 2023 05:10:00 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F56FEB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:09:59 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b9d80e33fbso5621555ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688980248; x=1691572248;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+G6rw6Lzr4S57ts7YP1ylMlTPk8hLpi7yHWyU7B67Pk=;
-        b=WA5KTELETcwWf6w/I55emKwkPdPD6iqH5cMo+ztoYJPOEhyW0/lxNunr71IJJgEdb0
-         2BuAPcAN8UtUjVLClL3O/XIk22Ql1QD0X5B5mVXbPp4K8te5CPBCi5/r5a9c/0yAbs0M
-         TXWfi6YXFEVwT9ToCZShEm1GhLQTa1PFXALAI=
+        d=gmail.com; s=20221208; t=1688980199; x=1691572199;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZfziryGEywF1OCFAiRrD5HH2CawNQQd/yh4CzyASrxI=;
+        b=EgnRXmIty3Veat9BxmT9s9PzIR26yGSc64PHjsJASW6rQkjDt6h6hF6dFNdPEL6Nt4
+         PUT0zti06eDX6hNIbbMG/t6j3cpQBB1RBa8+w18HTM904n9b+ueSlinzNk0MtsoG8+oz
+         dLQk3zFQTzQaXt6W+/yDX0add7uJCFrqJirKxFpXM3dhQ3jpmshjbjruAZ4SOuuujXaF
+         lCkjeuiAwSs3Ebu3Ya3oj5RwWphbVmTerT/FkoDqWeTTTorZy1PMc8NMKXMPur7dzvig
+         oUGnp5EJBFTJyQv8Fywqlmmpt6Z43QAsdsq/8J//KV/53/E6RuYZHW08OlipX40ilE1F
+         vhXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688980248; x=1691572248;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+G6rw6Lzr4S57ts7YP1ylMlTPk8hLpi7yHWyU7B67Pk=;
-        b=BNCknR9mbVHnsaI0VnUjNW9ZZh5H+Pm5UHJkSrv/WTAVtRMpu27tUFX4K5jH18hodX
-         txt5SGdcjDnSUwfteFqEJweBKIjxaPQlbEbSjCqG7pqiupoMcgbpLO8oOLbjopFdsOyD
-         DxHXlsSsrZirWAOMu0y5dDucS61ngliT/Q6zjWX6R/MTF/v4zQn274gcKHQ5Drzyu01Y
-         3kaRXrP6RjOjXbaPSWwNXjcMUOxTXsNNoYn0Mtd/mimzhbuLOU0B00yiUIQVRGork14a
-         qbkvAAb0hZlerOtncMLaRc1WG+IAbnudYmYHQHfb0RKGQ9pRmIkC4KblftbRXENfd+iW
-         GfoQ==
-X-Gm-Message-State: ABy/qLbr2fNH9e2k3jr7UBahtBAKcwRCqXNUe8ButecrFnTk9rHksUtC
-        enKD1rn0l/2N2oOyhTw6RQQfxA==
-X-Google-Smtp-Source: APBJJlEpqaHHC1IrHo+NkQBReIWnVoPc8td0Q6Q/LlodZF7TnbCM+J5/LE3j7wJfL6wk0SQ9tHt8Bw==
-X-Received: by 2002:a05:6358:52ca:b0:135:3f00:b8de with SMTP id z10-20020a05635852ca00b001353f00b8demr11516209rwz.17.1688980248710;
-        Mon, 10 Jul 2023 02:10:48 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:be97:1d05:f9b6:36a6])
-        by smtp.gmail.com with ESMTPSA id w27-20020a637b1b000000b0053f06d09725sm6997574pgc.32.2023.07.10.02.10.46
+        d=1e100.net; s=20221208; t=1688980199; x=1691572199;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZfziryGEywF1OCFAiRrD5HH2CawNQQd/yh4CzyASrxI=;
+        b=QDC78KtuTuexK2jrwcWUdz0qkkTMQVc/jTBPCIMH5ubzPWJLhDkQ+5Fb+2ZZCz8MC3
+         yrQ8I2UFbNereJg86Ks2+sHz+6LOnAI7SYsT7HFRIwDiwtpES2+UdMciebGsuztiXT/F
+         z+QwyJEkhFx6fXvnM+NNStWN/NUqRF08EYRJ+OK2WyV33jQx3J8pKSpbKiQVxaPdXjNs
+         gbDJ4HTiz53GDJJXFMtBWfm7x0qWzJTrcmJzGR+W2Wplnbs27LkqkogHlmMGvaBI2X1U
+         eBo+t/gHY7fyRA0gg1w7KbsOwTmWRoMndbZ6e6zhwB3Xx8XN0oEJ9t0z/tZpx+pyhf8t
+         hZvQ==
+X-Gm-Message-State: ABy/qLZCjGxDnsQoeHY8PRUmNF+TWw6F1iWjM//7H4R3nEy1zmPccFrU
+        LGHI+aYy84PsS+d3IyuDlQ0=
+X-Google-Smtp-Source: APBJJlECPiX2JObsb+RjoZmVK9i5eoWA4utCjAYXj24Z5oVB1RCRjZJ3hDpsi5MIPpxKT6wRYYOytQ==
+X-Received: by 2002:a17:902:c409:b0:1b8:28f6:20e6 with SMTP id k9-20020a170902c40900b001b828f620e6mr13600129plk.34.1688980198740;
+        Mon, 10 Jul 2023 02:09:58 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id s12-20020a170902ea0c00b001b9df8f14d7sm1822852plg.267.2023.07.10.02.09.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 02:10:48 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Xin Ji <xji@analogixsemi.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] drm/bridge: anx7625: Use common macros for DP power sequencing commands
-Date:   Mon, 10 Jul 2023 17:09:27 +0800
-Message-ID: <20230710090929.1873646-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+        Mon, 10 Jul 2023 02:09:57 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id AF9DF91C4E4C; Mon, 10 Jul 2023 16:09:52 +0700 (WIB)
+Date:   Mon, 10 Jul 2023 16:09:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     sunran001@208suo.com, airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/nouveau/iccsense:
+Message-ID: <ZKvK4NXzkKZTE35E@debian.me>
+References: <20230710070505.53916-1-xujianghui@cdjrlc.com>
+ <1ddf673283e93e83d912066f2241b976@208suo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sesJufGAkiPhMEHr"
+Content-Disposition: inline
+In-Reply-To: <1ddf673283e93e83d912066f2241b976@208suo.com>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DRM DP code has macros for the DP power sequencing commands. Use
-them in the anx7625 driver instead of raw numbers.
 
-Fixes: 548b512e144f ("drm/bridge: anx7625: send DPCD command to downstream")
-Fixes: 27f26359de9b ("drm/bridge: anx7625: Set downstream sink into normal status")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-Collected tags and rebased on v6.5-rc1.
+--sesJufGAkiPhMEHr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Mon, Jul 10, 2023 at 03:06:47PM +0800, sunran001@208suo.com wrote:
+> Fixed error: 'do not use assignment in if condition'
+>=20
+> This patch fixes error: 'do not use assignment in if condition'
+> in drm/nouveau/iccsense
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 8b985efdc086..9db3784cb554 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -931,8 +931,8 @@ static void anx7625_dp_start(struct anx7625_data *ctx)
- 
- 	dev_dbg(dev, "set downstream sink into normal\n");
- 	/* Downstream sink enter into normal mode */
--	data = 1;
--	ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
-+	data = DP_SET_POWER_D0;
-+	ret = anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER, 1, &data);
- 	if (ret < 0)
- 		dev_err(dev, "IO error : set sink into normal mode fail\n");
- 
-@@ -971,8 +971,8 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
- 
- 	dev_dbg(dev, "notify downstream enter into standby\n");
- 	/* Downstream monitor enter into standby mode */
--	data = 2;
--	ret |= anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
-+	data = DP_SET_POWER_D3;
-+	ret |= anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER, 1, &data);
- 	if (ret < 0)
- 		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
- 
--- 
-2.41.0.255.g8b1d071c50-goog
+I guess this is checkpatch fix, right?
 
+>=20
+> Signed-off-by: Ran Sun <sunran001@208suo.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
+> b/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
+> index 8f0ccd3664eb..2428f3d6e477 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
+> @@ -322,7 +322,8 @@ int
+>  nvkm_iccsense_new_(struct nvkm_device *device, enum nvkm_subdev_type typ=
+e,
+> int inst,
+>             struct nvkm_iccsense **iccsense)
+>  {
+> -    if (!(*iccsense =3D kzalloc(sizeof(**iccsense), GFP_KERNEL)))
+> +    *iccsense =3D kzalloc(sizeof(**iccsense), GFP_KERNEL);
+> +    if (!*iccsense)
+>          return -ENOMEM;
+>      INIT_LIST_HEAD(&(*iccsense)->sensors);
+>      INIT_LIST_HEAD(&(*iccsense)->rails);
+
+Your patch is corrupted (tabs converted to spaces) because you're using
+Roundcube. Please use git-send-mail(1) instead.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--sesJufGAkiPhMEHr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKvK2QAKCRD2uYlJVVFO
+o30SAQCBQ0XJUZtYK5k23vpkl8YQStJLMGNiuEo8Wulk+Ne03QEAkGbjMCU8DRCz
+Ohcbe1uBj+CW/b2kAyogZavYb8WBBAE=
+=5wr9
+-----END PGP SIGNATURE-----
+
+--sesJufGAkiPhMEHr--
