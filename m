@@ -2,130 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF57574DBED
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D7674DBF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjGJRJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S231723AbjGJRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjGJRJD (ORCPT
+        with ESMTP id S230078AbjGJRJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:09:03 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D635A128
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:09:01 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-992dcae74e0so622759766b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689008940; x=1691600940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qUzXCzHDtsBOWe+bKKtFjsi637OpN1F95ddxn0q8hxY=;
-        b=PZWAQvpHgPUSANsJa/B9f1rPlQFnV0lh6zBRJrDKvXAaRtN8UcvT77e7VwVxB8azXj
-         vDvRukLJK+z8JLzRjyWyQwDKx65b1IgIvSgluiZN4A8POF7IxxDqw+1u22PtdDUku9yN
-         z/woIJ7FIQKPCG69WzPC7n74uXh0F946sDTkFhrXCXKEUpWXwklt7jyXIFzNlare6RI5
-         Sge3/7A4SQyi1NQS0dnC/BnMMnw9V1Jz8rt7j2rA0KA0gjm0FVeYuN+l3H0wWCsvJtKv
-         vbGg3qDhRcmp5+4JZ3VsXON1sj4ZLdbKSGUoJkrMHC9WAymYQL1jEAu9Wmukq20Mx74A
-         p0Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689008940; x=1691600940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qUzXCzHDtsBOWe+bKKtFjsi637OpN1F95ddxn0q8hxY=;
-        b=K7bzMWLhkjQ4/C3M9ylOg41pkdkw5RuM9dZVfPiiH2aBGVWFVF8v+cktC32ZlfvOg6
-         EmRh6co5aPWX7SKOcZyctqge9GHyCPeB0wjGv3i00gPnOpqNQJoKwsZbKJp+pz3D5+Iv
-         RWD7woniRhOV0WJl3+ZUYbAkrIf+vIfStSU5/AFqRimzbELJbmIpz8jvTTVv9l0TPgq9
-         vJruxB+oSBKGeT9UElSbGeLywuKfGbGB1VtDx8WV3u7Ilg0ti/F/MQMFNYrfP/1g0PG0
-         tBPqrpa1sPFoakZH+KfbOnDkYQKvFwCmnOqK7I+Ashulk2LAIrl6OXNcS1/BWUWU18Nu
-         CY+g==
-X-Gm-Message-State: ABy/qLZZaY4TsRjiHNfeOLwb6A4wnKn4XH4KLcDm0UlqBpuyXTzmlIGb
-        CQHu5OZ6NJ5b/xvRshkehBVTSnR9L5+O0V0zSqIF6g==
-X-Google-Smtp-Source: APBJJlGFB6b2OLnR3LAAjVZGXplbgux6d184o3SoKq+5qcCfCog9p7d/Ua6PLTtc9pZOhfiKD7DuelWLIJitDb5PJ4s=
-X-Received: by 2002:a17:907:7f89:b0:98d:cacb:888f with SMTP id
- qk9-20020a1709077f8900b0098dcacb888fmr18460583ejc.49.1689008940175; Mon, 10
- Jul 2023 10:09:00 -0700 (PDT)
+        Mon, 10 Jul 2023 13:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E80C0;
+        Mon, 10 Jul 2023 10:09:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFEFB61127;
+        Mon, 10 Jul 2023 17:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822D8C433C9;
+        Mon, 10 Jul 2023 17:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689008956;
+        bh=nKZycr1bbDIhX+7r/umilV/wuLHcsLLg8WWLjNqfVGw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ks7RL3h40J9Gsg6+T5tGMhXUPebOkMtv2HYbINZYkE0HBcDFe3InO0uHvSLO6Ywfd
+         z9dbScYbXDyBfN0KKzvhwsevIOZI2Wa4nTPSPcqSdIk9dVy3t4CwrMIhESNVB8EcTq
+         DHcqHiLwexT4fjkOSD7WRFfWxwr4oLox+CN38zoYAqwcwq7DLt0YYhvaSCGjOeZdC6
+         /OMp7mPT/0W9iS9bRuPwjhjEgn3ZN4a3GPUVex+MO83a5hpzqpvTmLwha1tCaAJG7B
+         IOQDzu3lMvKgzC08AKXIF8wSz30WvJ3WDseHtgBrUd0ZFYjZe2rdpVVbiRnkMjF1jV
+         sbYhTW/HyF8mg==
+Date:   Mon, 10 Jul 2023 18:09:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 02/15] spi: Drop duplicate IDR allocation code in
+ spi_register_controller()
+Message-ID: <97f3436a-78ca-4a94-a409-ef04bd3b593f@sirena.org.uk>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230707215540.2324998-1-axelrasmussen@google.com>
- <20230707215540.2324998-8-axelrasmussen@google.com> <ZKl6ie4s/94TPCgm@xz-m1.local>
-In-Reply-To: <ZKl6ie4s/94TPCgm@xz-m1.local>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 10 Jul 2023 10:08:24 -0700
-Message-ID: <CAJHvVch+1TUqtW=EvA92u21axcEr9uhcuXhyLmCoh=38TB=GSg@mail.gmail.com>
-Subject: Re: [PATCH v4 7/8] selftests/mm: refactor uffd_poll_thread to allow
- custom fault handlers
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "T.J. Alumbaugh" <talumbau@google.com>,
-        Yu Zhao <yuzhao@google.com>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ugTz/0iIbXaMesMQ"
+Content-Disposition: inline
+In-Reply-To: <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
+X-Cookie: Do you have lysdexia?
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 8:02=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Jul 07, 2023 at 02:55:39PM -0700, Axel Rasmussen wrote:
-> > Previously, we had "one fault handler to rule them all", which used
-> > several branches to deal with all of the scenarios required by all of
-> > the various tests.
-> >
-> > In upcoming patches, I plan to add a new test, which has its own
-> > slightly different fault handling logic. Instead of continuing to add
-> > cruft to the existing fault handler, let's allow tests to define custom
-> > ones, separate from other tests.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->
-> Acked-by: Peter Xu <peterx@redhat.com>
->
-> PS: please remember to update manpage after it lands.  I still have a pla=
-n
-> to update but not yet happening; if you happen to update before mine plea=
-se
-> feel free to update for whatever is missing.
 
-Will do!
+--ugTz/0iIbXaMesMQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->
-> Thanks!
->
-> --
-> Peter Xu
->
+On Mon, Jul 10, 2023 at 06:49:19PM +0300, Andy Shevchenko wrote:
+
+> Refactor spi_register_controller() to drop duplicate IDR allocation.
+> Instead of if-else-if branching use two sequential if:s, which allows
+> to re-use the logic of IDR allocation in all cases.
+
+For legibility this should have been split into a separate factoring out
+of the shared code and rewriting of the logic, that'd make it trivial to
+review.
+
+> -		mutex_lock(&board_lock);
+> -		id = idr_alloc(&spi_master_idr, ctlr, first_dynamic,
+> -			       0, GFP_KERNEL);
+> -		mutex_unlock(&board_lock);
+> -		if (WARN(id < 0, "couldn't get idr"))
+> -			return id;
+> -		ctlr->bus_num = id;
+> +		status = spi_controller_id_alloc(ctlr, first_dynamic, 0);
+> +		if (status)
+> +			return status;
+
+The original does not do the remapping of return codes that the previous
+two copies do...
+
+--ugTz/0iIbXaMesMQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsOysACgkQJNaLcl1U
+h9Bj2wf/eujSGQes7B4PBTQ3n1oBhkcL7Y24XQnkT5q6FXhb+PNy2gOUL7X4u8/s
+jewRdgc+ViUGaokkDON2TN26dLdi/+KEGq7rPGhgLMeyGSqKJx5uRaCQSSdKa2Y2
+w1zSdEXhWd9SZsgsLa18k9bVMBbmyuylLjQYrLlHktiuD4/baW1HQ5SqKICkb1Bg
+/ZdcRGqcKDfgJWnVfK4loF7rFNMRBY0rXsSdOVE3yOKeZE2uS46s2BPPN+xc7UaA
+KTSUu8JjCacwP+V70yrm4VGRb5/c0NJ++iO44yiykKNRvcJWCDemwAYhj9zV1ja/
+5l/fUqxd3+5Kv3hbc1rSnyAywM7/4g==
+=1GBL
+-----END PGP SIGNATURE-----
+
+--ugTz/0iIbXaMesMQ--
