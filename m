@@ -2,159 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530F974D8CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C08F74D8CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbjGJOS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S233180AbjGJOSz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 10:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjGJOS0 (ORCPT
+        with ESMTP id S232761AbjGJOSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:18:26 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2100.outbound.protection.outlook.com [40.107.114.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541FA90;
-        Mon, 10 Jul 2023 07:18:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QE5L7axDZXl+eF9mylLaWQuYglyMbt202/IwRCMeDxOrWNQXUuTJ5zJG2ibtRq3S1RZO3q4qiesCHDYhxiLBehmeYpJRowUQSd3z1MyqpUuTfqTbEKIVKsCGZDj9aOR+LI0oZq+K94q2H8r+qGa60W22JOVCINPiQeWsP0PD+lbGYV6kRD6VuyBllRRhqoBRq3vnrYGetsX+CDdeuV4ewW+equc2fNWDe2gRsd84GXebfCWarumcY999ClEsDk3H6ZWaSMMst7JcWm1PkFFBe+cNwg7yHR2vDHoLoRH8q+qJW7BeKY9aLtQ6c0bz0p8bbDStr/qAIcpvQQ0lchr3BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Go/qEYT/FyQXH9z2U2NBDapdDuOAdX6whj4yiUNYKs=;
- b=lDmz+vn4J7/rStY7NhMi97fQgZ3CVcDVbSaczaL7ArdR0X6w9Mq8p/+rZNzv3LPLM9J5GwR/2c45Cs8ZUte6f95LSk5ZtyK6VqUzPZb4rGSzwNSTcDkUCTAuqwIBUYUiPTOjBZ+TH4RB1LySqdkSo8N1QUvxo3WLe03rtwFJE9Xhxc3K8fZrM/srkQIbdqAZo04L9XtwpkuZuKmnNasdXjuuan0b6I0zAXZdIrkj+YixHOFgCEN27Sjeb4y5M3pHV7JNGu5aK9T5JYWUjOK9h7ga4bw4B97bsLTZsMkSi3xRE1rzYBcW0hdCAw0HMt6YijdDhMlESYk62iYz+92C7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Go/qEYT/FyQXH9z2U2NBDapdDuOAdX6whj4yiUNYKs=;
- b=NBmvIqyw0GZvZzCGFrhHGz9LQ6N6Af37zId14lFIqGYUuhW0QfiLCm7LRZjtzU8o8GFP0ZyGC3MGytnSpvfmMpCZuZSPRtcqR37GyjFDpLFnen5M2I//NMrFcy1tbj96A/B1Qt56Pg0GLDnbz6OaxjCGiJeV5UAa/kaYOf/k0iY=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by TY3PR01MB11259.jpnprd01.prod.outlook.com (2603:1096:400:3d7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
- 2023 14:18:21 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::6f67:84a4:13d9:2f28]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::6f67:84a4:13d9:2f28%4]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 14:18:21 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>,
-        "conor@kernel.org" <conor@kernel.org>
-Subject: RE: [PATCH 6.3 000/426] 6.3.13-rc3 review
-Thread-Topic: [PATCH 6.3 000/426] 6.3.13-rc3 review
-Thread-Index: AQHZsvJ1mXxVL4YMfEWhRkQoYwRBqa+zDIJg
-Date:   Mon, 10 Jul 2023 14:18:21 +0000
-Message-ID: <TY2PR01MB378835A1769A6747F00189D2B730A@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230710054619.475084489@linuxfoundation.org>
-In-Reply-To: <20230710054619.475084489@linuxfoundation.org>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TY3PR01MB11259:EE_
-x-ms-office365-filtering-correlation-id: acd2764c-0832-4a62-a185-08db815083f4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uOoVpZ4VbsWoC592rQvhRdldWB5fWo8wqikJMSY/NBcKpW8bQG1MyhGGoxEB4nHHvsfl02gtpTjRxozmoJ8vp2zFir/0Dzdn9W+SmUNVxJUmGYKMqvc3mZUwN8GP0nG+NlZaloMaEqhBWFsUv3Q6rHuVGigqmer5RLoHqywBKtOSYo1YkKJZVI03aiFkbCrS6/0TJCItiKmzkwl+piY9AKdcOOvoc65mPtApABJN/R4Kf5TJBxqy03jYQUpSpmkF6xpnFypwj3cdkrELA//jdUETAqmufPja27lrnBGpttmby4F/PqMj0msNbmch9TBFetrj9t09jZw8Oss7LX5ZM94CSlVaYta6ed5CCklFC1ZpUeqikgWR2KrGFraNkhFvLvhNRXYKxACZ6g+upxLwgfOGYq4TRVF9dqzea4StmVCc1kK/9rOzInIE0qFAqjnsDkx3n88KMgtENgBHPVVe5Vbxa0i4iVMylxtzyUtbDLNMZcBU6NxmM5lCx7kTF1pEbuHW8CON801dvBOl646R8wgbLQOPfGDWkKTX9vkSoBlbXRvFqcWa3e0sqfTd2nNplhx4KpJE/+yo9FvnS9E9rOrLoynhZO9PeikS5gMJn6t2t7tb5jJjM7Rzup3yPKUSr3C57L51g7OyV5ssJP/43A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199021)(7696005)(33656002)(71200400001)(478600001)(26005)(6506007)(186003)(9686003)(55016003)(966005)(316002)(2906002)(41300700001)(4744005)(38100700002)(122000001)(64756008)(66446008)(66476007)(76116006)(66946007)(66556008)(4326008)(86362001)(7416002)(8676002)(8936002)(38070700005)(5660300002)(52536014)(110136005)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?1JfYtZoABKBA0So0Y4+KeCyZbWwqDq7GHRvU3x5ITyjBudQPQzw3WE+Q?=
- =?Windows-1252?Q?Y9P26ZHOao5qJU2WGuizNLchusvOZRJ4v+NAfx2qUOLb57VacXuC6IB4?=
- =?Windows-1252?Q?iTwA4uTZbS/dtZQqTFMfSzasrvW9iLu4ubJ3FLRmEZIvRj3eSEcpDU3l?=
- =?Windows-1252?Q?eyV8zXLj9W4hejWlucvpPLvRzfLwpE65Ur9eRxHcYtOSGedmwqx8ZfuU?=
- =?Windows-1252?Q?TLfm3E1n9QnN258O8rsmO2+H+pkrcQRLv/7etJ3EHfSXauOZGfLRCO4+?=
- =?Windows-1252?Q?ng2SlSNFtkqTYt78+4nkcbUCPYReHoT6Y43W/j1tVZ67QfD7gNCe2lBW?=
- =?Windows-1252?Q?vNT+KsPTBEW9A/yQxnKQ267jQP7OaWHB8gt/EPDqT8yY0PmycenBf17z?=
- =?Windows-1252?Q?/FiUFsPeIK2t8NwHPpQGWe68ME++gdOXD0NwFdpmlSS4dsh0n7gnz475?=
- =?Windows-1252?Q?66JqMplLheHp4lBJlYMkYkgUWLhDGayr8veti6PIvmU1SE7OP1B6gBSh?=
- =?Windows-1252?Q?yN16NJDyY1cabYQKxMGOioZMJWzuIlONas0R9e3nDGzLv0gzTZkds6I5?=
- =?Windows-1252?Q?RJSW0N+64AHR6JYR4BGL+iquREEyAPCOHhu0N4WjWcNFOfftXc3rviOs?=
- =?Windows-1252?Q?1OU0NduKbUdgzaBNVyRnlzMhSjhAQuUSWY0qNTwI9DlAfuXLjSJTpwwH?=
- =?Windows-1252?Q?nMcfyeoTWhAp3EC/3SZCAD3b23EuwRDHJTim7V4jxG5A9IAzbJ5ykzDI?=
- =?Windows-1252?Q?VCRkjhDwX10EvytMY9aatXgJpkUumgpQ9mCnaIuTn6jNcSAaPzKY1dGc?=
- =?Windows-1252?Q?ZdtDpxTnaYR1J6cATPt659+4b7B6bVjYWJhe1lRK04fhGYfNIwdJRf9F?=
- =?Windows-1252?Q?Lo5c5JYrFiNOjEDD3USCMFWSWoIrHWfkiq8h6TVIxgqINibfTRSHujWD?=
- =?Windows-1252?Q?kIlEN3wvLotLxpaGHPG6Vc8ZJmdGBEFoiYLVsndureKPhI1Rn8TTma1K?=
- =?Windows-1252?Q?cyIgPp7AKFUQqA2OJ1uaPNfiD7hYWcgGa5jSIWk1hR/l5h2N5LFGeAp0?=
- =?Windows-1252?Q?2f9/FjzsIG6FalNTzvd1K9Q6pyDdmEvGftDFdT+z8hgRqOWvjy6Jx+PU?=
- =?Windows-1252?Q?7gnNFD5+ffg9QjU7u4ekhSrnWKUsCfALFacpSJND/K3W7MNhM256K57/?=
- =?Windows-1252?Q?w4dqLrqdWnq/RqW4JENnNZ4qS6GJCAOow2r9RmbDgfnWNFsKAKV9gDTm?=
- =?Windows-1252?Q?qiGNXL2SZ1bSMhNXiOCAVhGhz30xZNpAElqyVxxrV2Ph8TOZMOcwaqLZ?=
- =?Windows-1252?Q?v8xwMzg9/0GXO6J6RD1QCEzissnoAIaOOIUhTtlY1HfDhl5jNG07R/2i?=
- =?Windows-1252?Q?QtkJSsDb50lplWki6BS8AJLzom8NFjFg5ZIp8v4MN7/hgJhV6OSUKbAZ?=
- =?Windows-1252?Q?Ikd/pAEF8a7+lxEeFohagb35GYfNLP66bnXD6m2RsFDT4MQagO9+yNLX?=
- =?Windows-1252?Q?5Zyrxlpxtl2FLfYm3YdDu8mqWze04NpA5QH5IkmOWyIOFSe2LrWCylN/?=
- =?Windows-1252?Q?6ErMjnEgDrBpBgqNhpTwII9EdKbMCFP4M6J+H57/FL4j5Y8rHEGtZCF5?=
- =?Windows-1252?Q?oufP7HO4sBOE45EHUMJ5lG0dbMcrri3UrMVfekA1VqbhTYV0VjP/meQD?=
- =?Windows-1252?Q?50E+wV/UeM0VvqPRylVWravXR0U2C9sCo5iCV8SM/khK3YcGJyleUA?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 10 Jul 2023 10:18:45 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075ECDF;
+        Mon, 10 Jul 2023 07:18:39 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5700b15c12fso55616957b3.1;
+        Mon, 10 Jul 2023 07:18:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688998719; x=1691590719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HqT4bbLk0Pn2au1SGKBZn9et9L/6n+652kKaxwG9w2g=;
+        b=E92vIil8mjpZ4NzMwKCUsb+Zh3PpvelXn6yPQFpqrZh3pdhENeN39PM1cr6yCycFvX
+         pwkh7/pNYWcqTbR+QkAAJXant4WzVWKTDg4WeQfMCbw7WRaTbavj+uWVYOd70v3N2uIU
+         /JxwSfqZpAj5ih2J7/dsqTAVOSDDjdlbOZhJ0Ys+fhB7OQsjjiNfrPpavqDJENK/Nbu+
+         00QLeaJUMI6MfIX7OKKfncVF3FBuz8fxiAVlUTNWfHaq8dv0KxfR5N5Mha9qEnOr3MbD
+         KZEiEbYxMqSBhu3+VYxzFJySP+aK2/P3CczfHjtuSIlc3bRg0kpGKb2V9rLsyg9NTxSK
+         GYmA==
+X-Gm-Message-State: ABy/qLbUokUwJop7NJg6Jy1Xe8DL8Jb7MPnNoDxGI+GBkx1PyLxwRDAH
+        sPH9zghejB49Ojszw37saUe0d84Axn/oWg==
+X-Google-Smtp-Source: APBJJlGRtESM/R8UHlfoGLykPDsdnD9i7zw7L7OAfWPz0Fo6cc7n4QQC2o5GEy+Zp3DVUpzliWGvLw==
+X-Received: by 2002:a0d:f181:0:b0:577:3aaf:c876 with SMTP id a123-20020a0df181000000b005773aafc876mr13300206ywf.30.1688998718877;
+        Mon, 10 Jul 2023 07:18:38 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id z7-20020a81c207000000b005703cfc23c1sm2986813ywc.104.2023.07.10.07.18.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 07:18:38 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-c6833e6e326so5547500276.1;
+        Mon, 10 Jul 2023 07:18:38 -0700 (PDT)
+X-Received: by 2002:a25:9d06:0:b0:c84:3e74:c6ed with SMTP id
+ i6-20020a259d06000000b00c843e74c6edmr501779ybp.28.1688998718162; Mon, 10 Jul
+ 2023 07:18:38 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acd2764c-0832-4a62-a185-08db815083f4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 14:18:21.3724
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0e9luPr2Nuef1QukLieADYOp6I79E31KW3QNj9C57v8dATOnMq799iE5S6hKsQD7HOOvlbnEBoAnd7QX++eJQ2ZUCSJIT0ZJQhE4ypxg96o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11259
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230630120433.49529-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230630120433.49529-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230630120433.49529-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jul 2023 16:18:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXZwdQHnXqMsSz2Bqva4JELTWewCYLWJBMnmgotDxmayQ@mail.gmail.com>
+Message-ID: <CAMuHMdXZwdQHnXqMsSz2Bqva4JELTWewCYLWJBMnmgotDxmayQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] pinctrl: renesas: pinctrl-rzg2l: Add the missing
+ port pins P19 to P28
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+Hi Prabhakar,
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Monday, July 10, 2023 6:47 AM
->=20
-> This is the start of the stable review cycle for the 6.3.13 release.
-> There are 426 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Wed, 12 Jul 2023 05:45:32 +0000.
-> Anything received after that time might be too late.
+On Fri, Jun 30, 2023 at 2:05 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Add the missing port pins P19 to P28 for RZ/Five SoC. These additional pins
+> provide expanded capabilities and are exclusive to the RZ/Five SoC.
+> Furthermore, a new variant called r9a07g043_data has been introduced
+> specifically for the RZ/Five SoC. When CONFIG_RISCV is enabled, this
+> variant replaces the previous data configuration. Additionally, a new macro
+> named PIN_CFG_NOGPIO has been implemented. This macro serves as an
+> indicator to determine whether the port pins can be utilized as GPIO pins.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Thank you for the release!
+Thanks for your patch!
 
-CIP configurations built and booted okay with Linux 6.3.13-rc3 (b95b5708242=
-0):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/9=
-25837172
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-6.3.y
+> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/of_irq.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/sys_soc.h>
+>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/pinctrl/pinconf-generic.h>
+> @@ -53,6 +54,7 @@
+>  #define PIN_CFG_FILONOFF               BIT(10)
+>  #define PIN_CFG_FILNUM                 BIT(11)
+>  #define PIN_CFG_FILCLKSEL              BIT(12)
+> +#define PIN_CFG_NOGPIO                 BIT(13)
+>
+>  #define RZG2L_MPXED_PIN_FUNCS          (PIN_CFG_IOLH_A | \
+>                                          PIN_CFG_SR | \
+> @@ -101,6 +103,12 @@
+>  #define SD_CH(n)               (0x3000 + (n) * 4)
+>  #define QSPI                   (0x3008)
+>
+> +#define RZFIVE_P_EX(n)         (0x0000 + 0x06 + ((n) - 19))
+> +#define RZFIVE_PM_EX(n)                (0x0100 + 0x0c + ((n) - 19) * 2)
+> +#define RZFIVE_PMC_EX(n)       (0x0200 + 0x06 + ((n) - 19))
+> +#define RZFIVE_PFC_EX(n)       (0x0400 + 0x18 + ((n) - 19) * 4)
+> +#define RZFIVE_PIN_EX(n)       (0x0800 + 0x06 + ((n) - 19))
+> +
+>  #define PVDD_1800              1       /* I/O domain voltage <= 1.8V */
+>  #define PVDD_3300              0       /* I/O domain voltage >= 3.3V */
+>
+> @@ -160,39 +168,53 @@ struct rzg2l_pinctrl {
+>  static const unsigned int iolh_groupa_mA[] = { 2, 4, 8, 12 };
+>  static const unsigned int iolh_groupb_oi[] = { 100, 66, 50, 33 };
+>
+> +static const struct soc_device_attribute rzfive_match[] = {
+> +       { .family = "RZ/Five" },
+> +       { /* sentinel */}
+> +};
+> +
+>  static void rzg2l_pinctrl_set_pfc_mode(struct rzg2l_pinctrl *pctrl,
+>                                        u8 port, u8 pin, u8 func)
+>  {
+> +       u32 pm_offset = PM(port);
+> +       u32 pmc_offset = PMC(port);
+> +       u32 pfc_offset = PFC(port);
+>         unsigned long flags;
+>         u32 reg;
+>
+> +       if (soc_device_match(rzfive_match) && port > 18) {
 
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+Please no soc_device_match() outside .probe() callbacks.
 
-Kind regards, Chris
+> +               pm_offset = RZFIVE_PM_EX(port);
+> +               pmc_offset = RZFIVE_PMC_EX(port);
+> +               pfc_offset = RZFIVE_PFC_EX(port);
+> +       }
+> +
+>         spin_lock_irqsave(&pctrl->lock, flags);
+
+> @@ -1050,6 +1077,38 @@ static const u64 r9a07g043_gpio_configs[] = {
+>         RZG2L_GPIO_PORT_PACK(0x3f, 6, 0x22, RZG2L_MPXED_PIN_FUNCS),
+>  };
+>
+> +static const u64 r9a07g043f_gpio_configs[] = {
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x10, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x11, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x12, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x13, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+> +       RZG2L_GPIO_PORT_PACK(0x3f, 6, 0x14, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x15, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x16, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x17, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x18, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x19, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x1a, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x1b, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x03, 2, 0x1c, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x1f, 5, 0x1d, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x07, 3, 0x1e, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x1f, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x03, 2, 0x20, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x21, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x3f, 6, 0x22, RZG2L_MPXED_PIN_FUNCS),
+> +       RZG2L_GPIO_PORT_PACK(0x02, 1, 0x06, RZG2L_MPXED_PIN_FUNCS | PIN_CFG_NOGPIO),
+
+Aha, so that's where P19-P28 are hiding: in the P06-P0F registers :-(
+
+> +       RZG2L_GPIO_PORT_PACK(0xff, 8, 0x07, RZG2L_MPXED_PIN_FUNCS | PIN_CFG_NOGPIO),
+> +       RZG2L_GPIO_PORT_PACK(0x02, 1, 0x08, (PIN_CFG_IOLH_A | PIN_CFG_SR | PIN_CFG_PUPD | PIN_CFG_NOGPIO)),
+> +       RZG2L_GPIO_PORT_PACK(0x0f, 4, 0x09, (PIN_CFG_IOLH_A | PIN_CFG_SR | PIN_CFG_PUPD | PIN_CFG_NOGPIO)),
+> +       RZG2L_GPIO_PORT_PACK(0x3e, 5, 0x0a, (PIN_CFG_IOLH_A | PIN_CFG_SR | PIN_CFG_PUPD | PIN_CFG_NOGPIO)),
+> +       RZG2L_GPIO_PORT_PACK(0x3f, 6, 0x0b, RZG2L_MPXED_PIN_FUNCS | PIN_CFG_NOGPIO),
+> +       RZG2L_GPIO_PORT_PACK(0x02, 1, 0x0c, RZG2L_MPXED_PIN_FUNCS | PIN_CFG_NOGPIO),
+> +       RZG2L_GPIO_PORT_PACK(0x00, 0, 0x0d, 0x0),
+> +       RZG2L_GPIO_PORT_PACK(0x00, 0, 0x0e, 0x0),
+> +       RZG2L_GPIO_PORT_PACK(0x3f, 6, 0x0f, RZG2L_MPXED_PIN_FUNCS | PIN_CFG_NOGPIO),
+> +};
+> +
+>  static struct {
+>         struct rzg2l_dedicated_configs common[35];
+>         struct rzg2l_dedicated_configs rzg2l_pins[7];
+> @@ -1534,6 +1593,16 @@ static int rzg2l_pinctrl_probe(struct platform_device *pdev)
+>         return 0;
+>  }
+>
+> +#ifdef CONFIG_RISCV
+> +static struct rzg2l_pinctrl_data r9a07g043_data = {
+> +       .port_pins = rzg2l_gpio_names,
+> +       .port_pin_configs = r9a07g043f_gpio_configs,
+> +       .n_ports = ARRAY_SIZE(r9a07g043f_gpio_configs),
+> +       .dedicated_pins = rzg2l_dedicated_pins.common,
+> +       .n_port_pins = ARRAY_SIZE(r9a07g043f_gpio_configs) * RZG2L_PINS_PER_PORT,
+> +       .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common),
+> +};
+
+I can't really say I'm excited about this...
+
+> +#else
+>  static struct rzg2l_pinctrl_data r9a07g043_data = {
+>         .port_pins = rzg2l_gpio_names,
+>         .port_pin_configs = r9a07g043_gpio_configs,
+> @@ -1542,6 +1611,7 @@ static struct rzg2l_pinctrl_data r9a07g043_data = {
+>         .n_port_pins = ARRAY_SIZE(r9a07g043_gpio_configs) * RZG2L_PINS_PER_PORT,
+>         .n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common),
+>  };
+> +#endif
+>
+>  static struct rzg2l_pinctrl_data r9a07g044_data = {
+>         .port_pins = rzg2l_gpio_names,
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
