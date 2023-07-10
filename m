@@ -2,133 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DF474D2EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A9E74D2F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbjGJKJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S231209AbjGJKK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbjGJKJj (ORCPT
+        with ESMTP id S230030AbjGJKKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:09:39 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79203ABD;
-        Mon, 10 Jul 2023 03:07:33 -0700 (PDT)
+        Mon, 10 Jul 2023 06:10:06 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on20602.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8c::602])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AA63C2A;
+        Mon, 10 Jul 2023 03:08:02 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VU6Su5SvdhEX7u2cQRPFosJ3PVYm4n9zp1h/9mmZLX+RSp0gXYTflEL4gFsb263RtUWRJR8Qfi4EqQWsAd43Gt8Rvwcx6cALgaRQGG9KAEWGNrTV1UIhiIlOduSVyBnW0hemPRU6G/oWTzD6F1S2HzdkJc0QFUScZpTAmpYRdo5qbkOPbUlM9ZhdXfixWH4q1ap4eLufZCtQvp8Bfb1AyviJYN80i5iA66ZrGONOGbRvxYdVPpfDZzdBordrjQM5/cYEK3+PLv7DNCDmgthvk+gDWuPF8P+BczjICQkgV+1R8iQQhDMG6JIOi8rx+QTSodXk+P7AdtR0eDY6vfH/yg==
+ b=OoJipLELfOPwDR964tVGhwRPek1beym1B06dc2JDGaWCm3a8xVfacxAD6CyPt9qGNnowgzs6f9C9xUnQHoRgZx2C4ymxnTdiYDQ1+lDueFWVUex0uWAjiESiftOMS76zB/gEoDrTNYKBd9Jg2/teqQ8lI8FjNLUmxu7844d2rH/4tF1RSNzXuW18QBlgnQrOUNSH8B3eCqNx3ycSAWaPfGUcAhG6wEBjw7CwlVnPVMrrert86djvrUjQA044dlRoPDxF2p1UH9kGNNGL55yQyz0cJ8YhSckrP4k7uXdXBw7ExQyDncFGstRtTE2JqSgLn78D2RR0Jc0oQVHXJtkatw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4nXRpra73V670gdGozPJ69rkuJaHCytuPPMUnLvHH7c=;
- b=FbPMtDQHoigRMWOiTUKSh25iKho3LnkDxGzd2giVB6QfPvj8LfNC8kAS+xbCBAMyce8pDIWxm5LdaP94X4ubVPaMQnTov+YJB7KpOXEL4cqIgFAuZqObDMDQK6QFW6++pfgqn92r/TFj63sibzoWKZQbGWV+KdMMouXo91UbXvANs23JedzUtfHsNiD8tnWB3dgbjsrEUr1baCKFUpj+SdWzSs9t8Iwe2j0A6N706pEwUggbIYv1LhSUalejDfsZiwWBAzwsu6QfxX/41VZ7b4A/LMuDHZQ5jdU3jTr4E0yBGALy5jVOFAHdH9saFh1rMAGLWXVYs4OUT98/5k+LAQ==
+ bh=q0vJD8WFWCftl0MLkMZsG8T96rvjOGtEBOYxdwCb6fg=;
+ b=Ek1WJgSgzw7Wu0vj7ZnrqMuPWb09QaynqZMwIhr8KVI4Z0Onp/VAZzSbgz4U6wQoLYPSdG12iB/KfduySEiU8LQ+xnwL1QIOLoRcK/MKb250e9I/Wv5VYUQgN+DRjoSc1tlIPkHlQkSesYOuo/GElAy36xj92JqNre01GqyWD9+KyLTlJkeBsmovW/ZWdOAf/sLtgsItWsvH6Ze3HjS8e03HZ1fHxNGUGS6kpZyD2cKhvhJpn7o391YG5GfYsxAfL69ZYlKWKvRF1UEQ73iyybx1vVY6xm2+I1gvLKOcUJdNZNohil5YhMfhoHil28cjfR7XMlQva+10WUfy6q92FQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4nXRpra73V670gdGozPJ69rkuJaHCytuPPMUnLvHH7c=;
- b=rBXTWErbPjIAbdJJpv+hHLovdVGMBxtR3L8xvD9VeaBJ/nDKzNSuaenRsizg5MKd47LYedj34aEcDeZmxNYRYzFdvJOmRoxxrxfyTDvwfOrsmNVReSuhuQ77HKHSq5lJ18QE1v2qCPscjJTjXTbMUNcBpvPyxNUHngCnmwIuabw=
+ bh=q0vJD8WFWCftl0MLkMZsG8T96rvjOGtEBOYxdwCb6fg=;
+ b=eGHflBAGN9D3pr2Izhfwop78tTgaoT2VdnlREloRxWFCjJxAyMXSVmVJBMI+M87rhGZTFYz4WmbYbTq6oe7WxBLO87RQk3EMeXoJ4HwlEW04JwU+4GPQ8Pb5TEifXStrtWZsdhIwRaqs1o3lapCp495jD25Q8p6htLHJTqQ1Bh4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by DS0PR12MB8442.namprd12.prod.outlook.com (2603:10b6:8:125::12) with
+ by CYXPR12MB9443.namprd12.prod.outlook.com (2603:10b6:930:db::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Mon, 10 Jul
- 2023 10:05:04 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
+ 2023 10:05:32 +0000
 Received: from BYAPR12MB4758.namprd12.prod.outlook.com
  ([fe80::bb94:8eb4:943:d955]) by BYAPR12MB4758.namprd12.prod.outlook.com
  ([fe80::bb94:8eb4:943:d955%7]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 10:05:04 +0000
-Message-ID: <6bd1233f-3b09-27a3-44f1-92198dc08aa9@amd.com>
-Date:   Mon, 10 Jul 2023 12:04:56 +0200
+ 10:05:31 +0000
+Message-ID: <940c6040-4c71-a1b6-b568-3d93096411aa@amd.com>
+Date:   Mon, 10 Jul 2023 12:05:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 0/1] arm64: zynqmp: Misc zynqmp changes
+Subject: Re: [PATCH] arm64: zynqmp: Fix open drain warning on ZynqMP
 Content-Language: en-US
 To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
         michal.simek@xilinx.com, git@xilinx.com
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Harini Katakam <harini.katakam@amd.com>,
+Cc:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Andrew Davis <afd@ti.com>,
+        Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
         Parth Gajjar <parth.gajjar@amd.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Tanmay Shah <tanmay.shah@amd.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1685964230.git.michal.simek@amd.com>
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <a0faf488dde310e1c1c1a676c371e223db6bdca6.1686227712.git.michal.simek@amd.com>
 From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <cover.1685964230.git.michal.simek@amd.com>
+In-Reply-To: <a0faf488dde310e1c1c1a676c371e223db6bdca6.1686227712.git.michal.simek@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0146.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:98::7) To BYAPR12MB4758.namprd12.prod.outlook.com
+X-ClientProxiedBy: FR2P281CA0155.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::15) To BYAPR12MB4758.namprd12.prod.outlook.com
  (2603:10b6:a03:a5::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|DS0PR12MB8442:EE_
-X-MS-Office365-Filtering-Correlation-Id: 661044d4-a955-4e73-0cc6-08db812d21af
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|CYXPR12MB9443:EE_
+X-MS-Office365-Filtering-Correlation-Id: d47b59b4-0688-465b-0d49-08db812d31dc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3MPViva0M6Mig3RkB0ZMZKJZ9oHnq55q4jDPbvOKxuyN4wzMsXPDEh0nqJ9q4lsL7B9YJJ7jg6JkMU0xKVIAGqO/Gsj81B6CXgCpSZ6GIRpZTRbT702s3ih+uNv2GSBReoOi72oqDMqb9P1sG4lF0k43J2EfGD/jJtddvc4lyHHdcNZD8H4902jtW+k00Kg3K/bejeslLicA5/dUsW1zEPI8cVH9bmm/0HU7wBrat99E/ffejIl4wsMlFoiTs+oIbKvD5pt00L6CVe7Dz4KzEUaguh1lFVRnuIlRyv1IMclmguFkqUNDvqoGQ0JkX0XVkh4ttsQ650toB0shKsjZCXsRg1lFZNpKl1NGK0DxJAdd+8Inj9WK43z9SPkjZQVfU2IQMB7BssQvh7myMSn5NjmtcHdlJ3a+xjnIKqFEu76q/5F/HbVL/AWjB/H/rl/ugv5ESOKap2Wg5jgc7Qy5tYjWbvPngMvw8IJhRbfWTgL40NVTIB7Gra0mFPC/x/uf4QE3BhCiVSX9/bdcPHaHOv4a/D2dXTjPGw/pJiS1dTwa7Mz8SytxhyF3w/p4S42ZReRqW0Q5xRAe5muePZVVYmt/ka10mASMJxCXqj/gAgDKRFG363zB2GloM/TpaiI/ccP1KYqFkjRppnFtvgauemcHcxVDnW+KQeOsiy8EOBI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(396003)(366004)(346002)(451199021)(44832011)(4326008)(66946007)(316002)(66556008)(66476007)(4744005)(36756003)(7416002)(31686004)(5660300002)(8936002)(2906002)(41300700001)(8676002)(26005)(31696002)(86362001)(6486002)(54906003)(478600001)(38100700002)(6506007)(186003)(6512007)(53546011)(6666004)(2616005)(83380400001)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Jo5+jWZv8did0SgNzpjZxWrcEBuNA9uWCImpLzsIwIAbazPfc8jqTYt6rBph1HLm2xXcynh+Pp4ORXofGb7iwyBl1Sbssvyvhxnn2cMq8XxcuEfZsCh8HdeHyBi+3R8QwKgvZr+yyBgBsXLmEZ4l1Mb4emN6T293makrHK+x+2+XEH3hp0nNWogktELbxnnYBS2dazVSwY07i5/ouj3uvllKuHXEe29Mii0NxPzDDxoY+zTPP2Iyms7VU9N1d3n5lOk0iMYEq6Pd8Wcha72dPYPIgLlcRtkzTSeJbpAU+Md/xC+Nbjj86fuHTtwou0XDdVXMUm7IX/ypLhHvmu2bdm1cYBm55PpnvPTVgNjVZGAwl3UyFjfWL3YxhKawcPtbHgfnos+OZ8ARBDlsDuFabDa4Wi7f0HOTv5sNm1/GV3zix4Z5csqTi7O/xLyw2TKNU6GIINXV1+3/hFRbh2iTCfXc6DUQS9vu2VLzPwpn2LJsQ+2Q5VT8lWih8ur8dGmOAk6tqOdcL2JeVAxuPlKxdbJaednEAlJcOMFW/60bOp+lKXXOu2f4R09l8C9Nb3NfEFdr1kmbhXeeubpfyKo2BWxTP9cvhuLmDe1DfkaqwllzGdLn2pE4XyzTqcgbMRyiEmtHTNv7io5v0IrzEHpmCw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(366004)(451199021)(44832011)(7416002)(5660300002)(8676002)(8936002)(316002)(66946007)(66556008)(66476007)(31686004)(41300700001)(2906002)(4326008)(54906003)(6666004)(6486002)(6512007)(6506007)(53546011)(26005)(186003)(83380400001)(30864003)(2616005)(38100700002)(478600001)(36756003)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHFYZ0lYL0VhRUxpUWNMRGNTUG1rVE1Hay9ORlhtTUh6S0RmbmVTTzF1TVI2?=
- =?utf-8?B?VnNDRUF2djhvVXIwT1R3SC9KQ0JZTitzYmZCNlB2Qnc5Vk5mamN0aTI3TTJJ?=
- =?utf-8?B?bU9UeW5JQy9xcEZWQlMwcm5pU0U3cDJ5Yk9tV3FERm9PTnhqZ1lEbjM2RldK?=
- =?utf-8?B?empVVC85NVhVbUJyWjg3N2pRT0tjcDQ4TXk3RE5aNmRhQmRCR1BXM2oySG5O?=
- =?utf-8?B?V09MMGE5ajZjRVJDb2dTV21rQ1lMVmVzMU9LMEF6eXA0UkloL1BJZWxRR01L?=
- =?utf-8?B?M3hWOW1YU1hSTUhub21kelIrd3JwUmh4RHRXeDQyWExCcjRMdlZBa214YTMy?=
- =?utf-8?B?TElUK00wbWpSM3kzVkoxSko0V242VUVlNXIrYWhsT2lXYkRhTDQyVkdWc3Q3?=
- =?utf-8?B?SUpJV2cveDVkdjJjYVd1TytXcEZ6d095RVRQWWIvbzFVcENPenBpbE9jM1dQ?=
- =?utf-8?B?UUJneGJDNGo1YmRpVWc2V3dlVlI4blMxdmgrRHRZajlaZktPOUt5K3Nyb1hX?=
- =?utf-8?B?R1JaNWNrRW84LytQU3V5RXRRbmd4RlFSNzZkWEF4N0p3UGpSQkg4V1NZU0cw?=
- =?utf-8?B?dVppR2xBcFAzZ1l3R2VlNUQrM254Q25ScEpTbzRTZmhCaEI4Yi92Yy9UT1cx?=
- =?utf-8?B?T0F3WmQrZVd1ZjdMQjNGT3pRTzh5YUZMMlFwQzd3MkttQThodHZ6UlQwRkpa?=
- =?utf-8?B?MEpVNFJxU2ZxNXQ5UkJTNEVDUTlyaFYxVCtVclFYM2VrQ2NUcWJXVDdFSlhX?=
- =?utf-8?B?dGZ6Um4zT0EveXVncE9HL0xJY3piajA5VHVjdk4wVm5hb0R0R2crZjY0M3ZY?=
- =?utf-8?B?T1RGQ2xmSEhaQ0tORm5ucHF2TnBXSXg5N0puU3V4RmY2MVNRZ20vTXpiSHla?=
- =?utf-8?B?UTlIMEJ5N0o4b0pQL1UrL0NMN2poT3pNelZvdTlUUU5qbHVwOTAxOGs5MkhX?=
- =?utf-8?B?TVcwNXNSVVV3Z09FMEtoNmd6WUs1Ukhnd2NUcjZDVGFXS3ViWnR4YnI2a0F6?=
- =?utf-8?B?ZzhRbVNxU3U5SERYaEJ0VzkrNmNuTTBocVpRdXUwaWtnb2lSOFdZT1ZtNm52?=
- =?utf-8?B?RU9JNlF1bE8zcjFLbVEvOGJ3K2Z0MktjWDFwZy9ZbTdaNGRPOUVVL0hrL3RZ?=
- =?utf-8?B?Q25DaVRacGIvcmQvL1BlUWthVk9uWmY0Y0FlYWFwd24zMk9xV0dZN0w5eU5B?=
- =?utf-8?B?UXhGUW95WFY2TmhWbnAyd3ZmTnA3UzNIM0UzVnJkcEJXSGt4THZ3SEdHZjhk?=
- =?utf-8?B?Vmlzck5PbisyTDkxdllpM0piQjJhQnBIT0dPdnQvZE8wd2ZxWjVuQjZTSDRo?=
- =?utf-8?B?SitpQ0M4ZkhOQVZUc2lVYURMTG9CWlBUNFFCNXU4bXp4UVpJRDRUZE5CQ2Fm?=
- =?utf-8?B?ZHZKUUt1TW8yK3oweVd2ZHJNMnFiZmVJT1B1TURmeXVOSm5VNVNjVUZIRUI2?=
- =?utf-8?B?SVlkWXYrOVFPdy8ySnZJOGY5bGEyeFZDbnJZd1hLWndtcGowVkRSMnB0UUJQ?=
- =?utf-8?B?MlpTTllTWVJYQ2pXckFGek5YaUtRUHUvVGFWR29LY203MFNUTFFLKzFYVmxL?=
- =?utf-8?B?Wis1dXBsNmdGYXY4V2p4dHlJd2daS3Yycjd0SGVOT3cySjVMelNjK1dLblVu?=
- =?utf-8?B?bVVjUExGWmU5MHp1UVlSWCtkcHZSWjM4MloxWi9KTm92UWgrRGhubkQ2MWFv?=
- =?utf-8?B?YlJMcjlGT3VSOVpNd3R4S0NxTVVhSWhjTmxnOGJmN2dMcDhKYjZoemMwSGRn?=
- =?utf-8?B?Tm0wN2NicG9PVlM3TnppWitzd01vSERoVXVBdjN2ZE9LQ2hmdW51TUwwMStD?=
- =?utf-8?B?bFJ6cm9kOFpBTDBJRkZxckNrUnBsc3Y2M2lRb1dLeTNNRnd0K1d6LzBjVGox?=
- =?utf-8?B?OEUzbFNXT2RYSjlOYU8wSmU2bytEOHdIeG9Vb3FHaHF4TkJSNnZaWFR1bDIv?=
- =?utf-8?B?S0hqTWFNUVNmMkZpNW5GT3RMRXpxcWhyMjh6SnRRRXB1RmNkKyt3b0hIa3pY?=
- =?utf-8?B?MVJ2eEtNc2xQU0VqdkhzKzcxL29WcEdXWDlMSVUzVlNFeE9GZ0JKcW9oMFZZ?=
- =?utf-8?B?MC9vaGc0dDNHdnFBYmFoeUZEMG1zcW02a3A2ckpXazEzNjJoTDdnZDRIS2lO?=
- =?utf-8?Q?s+7CX7UNpcHM9z5DYlbCeaKRP?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OC9lMGFNKzRpMzZiSm9admZUTzNxYUN3SWQrdU43dWI3a1Rpa1lqdkR0VDUx?=
+ =?utf-8?B?YUJxOUo1UUpXLzhHYUZTNmNiOWZwT0VRS1RjeUFCZm9TbUN5UVJMSHVQRVdt?=
+ =?utf-8?B?YkovTWlVVWJaUnlMNkgvSkNqS0tYS1RnZEE5RER0OFhTRENkeEtTN0RLamNF?=
+ =?utf-8?B?SUR2MWhBOEt0bG9FRFljVE9lclI0ZTVFK3JrdDJ5SFpZRTYzY1ZuMXVZZTAr?=
+ =?utf-8?B?RjJXbUJNdFpZMHREN3d1T0dLaDFETXlGOW1BaEVDVnozK3gzZ2lXZk4zeVlV?=
+ =?utf-8?B?T2xYV2YzdWdBVlBaSWp4M2N1SjdHZjlOVmVnMi8zZmVReGRpS2VpMDBqczlM?=
+ =?utf-8?B?WmZwMCsxV0w5RzdPeHRXS2NMakFYOEJMcGhUN1ZFVzFzY2FsOXM2Q1E2VGMy?=
+ =?utf-8?B?TnBoMFpvTjM5Q25mZER3aXVXOHdYcExNdmdHcHlKdjRXQTAvQXhKMUJVd0Vm?=
+ =?utf-8?B?clhQcTVNNmpPN1hpbUlDdkJDY3JGMFJVZGRpVk0rSFdGL1IzTDhzOXB5b2U4?=
+ =?utf-8?B?cUd5bmcwUFVsamxpT0crcVpZc3BKU3FuYmpZNWl2VUJRQlcrYXRJMXFhbXdr?=
+ =?utf-8?B?Qkd0N0RMeUZkVjkyQkNQT2tjaVE4QlQzY3NTaE93WEk4R1lGOUxDRWJRL1ps?=
+ =?utf-8?B?aWxpYjlYNmhPRUpTVlBBK3pudjIrbzU3ZmtLMlQ1SDcwUHBXcW9JYTl1R094?=
+ =?utf-8?B?Nmt5Rkw4Z3o3VklTK2tMT1Nlc3M4Y2ZCN0h1ZEhBbTBSaitHR014bUlzUUpt?=
+ =?utf-8?B?OU5oTkNwVFpBb2hGMk1KbWVoMGdkN2RtQWxUN1c1aTJTM1psbHVDRHIzajFN?=
+ =?utf-8?B?d0FTQ2JkSEt0cVl3c1A3REczV2VVMVNMZVk1MWYrQUd0QnBURGxzazZXbHV5?=
+ =?utf-8?B?ZVBzWi9FUW5ObnBDbmx5V2o5LzB2Z0Vhem93SnBPc3l1MThLencwdTViMmI5?=
+ =?utf-8?B?d2YxOWNVNGtxL2loSVhTQ3RZVHVJdUxqc0gyL1hnV2FEUk90c1Ntam1wcTFH?=
+ =?utf-8?B?MFljS0dKZW5Dd0c5V1cvdGJSbEtGNU9jcWhzWVdvVHl5YXVkWGxPVGE5QnFr?=
+ =?utf-8?B?SFJMWWt2MDhETVVSeW1wZmg5OVVFM0pJQVprSGRwUGEyRTJXR0l2VGNvNmkw?=
+ =?utf-8?B?aTRBbmtrM25MWG1iY05Pd3ZLQ0tJQWpXQVZPV3YwMnVzemtMVWZ5MTZSNmpF?=
+ =?utf-8?B?cGE5cExZR0MyN214WDRpTjZkQXJ2SzZiMlFKSzdLS0JQWnlDWUw2TWFwZzVK?=
+ =?utf-8?B?WUlLOXBlbWZEU090U2czRGxhS1R6UkN3eGNQZEkzMHJQMWNGN0IxOTVEK3po?=
+ =?utf-8?B?WndyM0t4Q0FhY0JDdlgrVEhMbytYVlI3WTBHdzgrV2t2WlFBd0UrWUMwdk41?=
+ =?utf-8?B?WWtpRjlRSXhvUkdxMU1OVitPeUF0ODJmM1lQYzlsdy8wcWVJNzFTNXVYL1hJ?=
+ =?utf-8?B?d252VENHSHJKWFVuUzhpTXNyOXJHUDg3eFp0Mllac3RFWlYrTTFWRk5VL3g1?=
+ =?utf-8?B?ZVJNbUlXYVZSdU0xWHMzMnYzR1ZpejNZVUdXdmtTVDZjTTROT1ZmOERkeExj?=
+ =?utf-8?B?QndGUCtsVnRIZlg3Qi9FYUU5MjdQSldHaWhTYXJmcHcwbEU2T0ErcFpIM1NG?=
+ =?utf-8?B?NHRhRXdYL2pwV2x2cmx2K3VnNUZvbEV4bUlnQXRyVHVCRjRVVXp4UHhoYWZ5?=
+ =?utf-8?B?YkV4Ung4TDRKanFpbHl5TDNGWlllY1BJU2xrRE9rTzFoaHpZRmNFbmlIdWtL?=
+ =?utf-8?B?K05hcGd2RU5CaGxFZkV3VXgxV0ZNdUFjRkJCL0dMa29VVEtacDU4RUszcUVC?=
+ =?utf-8?B?YnJzaDZrdU1FaC9aSHBSc3Z0NS9MQmFKYWd2Q00wcWxiYiszL0pJMXdDS1BF?=
+ =?utf-8?B?eFZTRXBwRlc2eWtXUUdHWVlFMG1pbFRucHRLTnZtQTBaRnFjc04vSU9qVHN2?=
+ =?utf-8?B?blBHWXFQcVplUmFsRTV2bXhkaDJsOFNLdkZtUHQ2RkR2cWpNWGgraUVKUXR2?=
+ =?utf-8?B?TS80RDRlWS9RaU9SWXZCLzJJRG9nYUc2bGtQQUs5QnhzUE5NZzhKQWE1VWlp?=
+ =?utf-8?B?M0xzWGRFWjAxaU12eHErdWxaR1BKOEl0SjY4cDh0R1RwTkdYZ000ai92ODFL?=
+ =?utf-8?Q?pfuKOUsaqtg111qQ8rBdUNo9O?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 661044d4-a955-4e73-0cc6-08db812d21af
+X-MS-Exchange-CrossTenant-Network-Message-Id: d47b59b4-0688-465b-0d49-08db812d31dc
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 10:05:04.4169
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 10:05:31.6174
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: luS0I7P7ziYrsdJ/8BfCn0752snV+mUtTGRrN5f/7yQ/sirjt/wqS3NyQLj99rYK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8442
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9Z0lL2r0AZWgLwOv2J7uae6vOTOp6BTURFqpARKShaiTjUXCYG810gb33R9YEByp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR12MB9443
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -137,39 +139,255 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/5/23 13:23, Michal Simek wrote:
-> Hi,
+On 6/8/23 14:35, Michal Simek wrote:
+> From: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 > 
-> the series is syncing the latest dt changes based on board status and the
-> latest DT schema.
-> The patches are based on
-> https://lore.kernel.org/all/20230321070619.29440-1-parth.gajjar@amd.com/
+> Mark both GPIO lines as GPIO_OPEN_DRAIN which is required by i2c-gpio DT
+> binding. Similar change was done by commit 8df80c1801c9 ("ARM: dts: exynos:
+> Convert to new i2c-gpio bindings").
 > 
-> I have applied patches which were reviewed already to have smaller series.
-> Patches can be found https://github.com/Xilinx/linux-xlnx/tree/zynqmp/dt
-> or they are in Linux-next already.
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
 > 
-> v1 is at
-> https://lore.kernel.org/r/7d034b9e-e4e6-5d72-8b37-78e25918aa59@amd.com.
+>   arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso   | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso   | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts      | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts | 8 ++++----
+>   arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts      | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      | 8 ++++----
+>   arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      | 4 ++--
+>   arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      | 8 ++++----
+>   arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      | 8 ++++----
+>   12 files changed, 32 insertions(+), 32 deletions(-)
 > 
-> v2 is at
-> https://lore.kernel.org/r/cover.1684767562.git.michal.simek@amd.com
-> 
-> Thanks,
-> Michal
-> 
-> Changes in v3:
-> - Add missing cache-unified
-> 
-> Changes in v2:
-> - Update commit message to remove Linux part - reported by Laurent
-> 
-> Radhey Shyam Pandey (1):
->    arm64: zynqmp: Add L2 cache nodes
-> 
->   arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> index 603839c82599..e06c6824dea4 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> @@ -27,8 +27,8 @@ &i2c1 { /* I2C_SCK C23/C24 - MIO from SOM */
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 25 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	/* u14 - 0x40 - ina260 */
+>   	/* u27 - 0xe0 - STDP4320 DP/HDMI splitter */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> index a91d09e7da4b..030e2c93f0e6 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> @@ -22,8 +22,8 @@ &i2c1 { /* I2C_SCK C23/C24 - MIO from SOM */
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 25 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	/* u14 - 0x40 - ina260 */
+>   	/* u43 - 0x2d - usb5744 */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> index dfd1a18f5a10..c1f21b0e1760 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> @@ -245,8 +245,8 @@ &i2c1 {
+>   	status = "okay";
+>   	bootph-all;
+>   	clock-frequency = <400000>;
+> -	scl-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 25 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	eeprom: eeprom@50 { /* u46 - also at address 0x58 */
+>   		bootph-all;
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
+> index d9d1de5f313c..e821d55d8d5a 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
+> @@ -119,8 +119,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 36 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 36 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 37 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	eeprom: eeprom@55 {
+>   		compatible = "atmel,24c64"; /* 24AA64 */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
+> index 6503f4985f8d..b59e11316b4b 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
+> @@ -110,8 +110,8 @@ &i2c0 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c0_default>;
+>   	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> -	scl-gpios = <&gpio 6 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 7 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 6 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 7 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	tca6416_u26: gpio@20 {
+>   		compatible = "ti,tca6416";
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts
+> index b1e933b8a2cd..0d2ea9c09a0a 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts
+> @@ -91,8 +91,8 @@ &i2c0 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c0_default>;
+>   	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> -	scl-gpios = <&gpio 74 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 75 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 74 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 75 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   };
+>   
+>   &i2c1 {
+> @@ -100,8 +100,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 76 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 77 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 76 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 77 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   };
+>   
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+> index 44d1f351bb75..d0091d3cb764 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+> @@ -180,8 +180,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 4 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 4 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   	clock-frequency = <100000>;
+>   	i2c-mux@75 { /* u11 */
+>   		compatible = "nxp,pca9548";
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> index 8767f147cbe3..84952c14f021 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> @@ -233,8 +233,8 @@ &i2c0 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c0_default>;
+>   	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> -	scl-gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	tca6416_u97: gpio@20 {
+>   		compatible = "ti,tca6416";
+> @@ -497,8 +497,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	/* PL i2c via PCA9306 - u45 */
+>   	i2c-mux@74 { /* u34 */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> index e185709c0d84..5084ddcee00f 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> @@ -140,8 +140,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	/* Another connection to this bus via PL i2c via PCA9306 - u45 */
+>   	i2c-mux@74 { /* u34 */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> index 7fceebd1815c..b273bd1d920a 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> @@ -145,8 +145,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	tca6416_u97: gpio@20 {
+>   		compatible = "ti,tca6416";
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> index 27b2416cb6d8..50c384aa253e 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> @@ -245,8 +245,8 @@ &i2c0 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c0_default>;
+>   	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> -	scl-gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	tca6416_u97: gpio@20 {
+>   		compatible = "ti,tca6416";
+> @@ -508,8 +508,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	/* PL i2c via PCA9306 - u45 */
+>   	i2c-mux@74 { /* u34 */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> index 6224365826d8..617cb0405a7d 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> @@ -205,8 +205,8 @@ &i2c0 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c0_default>;
+>   	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> -	scl-gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	tca6416_u22: gpio@20 {
+>   		compatible = "ti,tca6416";
+> @@ -385,8 +385,8 @@ &i2c1 {
+>   	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c1_default>;
+>   	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+> -	scl-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+> -	sda-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+> +	scl-gpios = <&gpio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	i2c-mux@74 { /* u26 */
+>   		compatible = "nxp,pca9548";
 
 Applied.
 M
