@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8B574DB7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB2174DB81
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjGJQvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S230455AbjGJQvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjGJQvk (ORCPT
+        with ESMTP id S230417AbjGJQvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:51:40 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA4012E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:51:39 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-666e5f0d639so5881646b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689007898; x=1691599898;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRU9KE0/UeG1sJBHq2OuDf9Y6hZBKDfbe6WNpwhFzK0=;
-        b=buVV+QQk90iJgfUh7Kqt1d2+0obGf2JPxRXP4oJ586nGq2pFwHByr0UpziYonmHBKq
-         pFpq8lX7kdAGGmFJdQNkWk9DZv4uReocJ3MD1Ba3CNsFdB01Wb5Lx0ieEvAxUEJdssn+
-         MrFfgk/NpgSXWV7f06QJSDLXuINxy2eUOCK6hpOTOkGDg8gpXGli7D4XmJ80gJYBKZLS
-         Ckg+NOslBTqeP+QGNLlh4kCH2vzEZZtWXW6gcX+IH+BtARZUteajxMX08hsbh3nHpKTl
-         27dU3CYhVWWTB7g8DXpFctVDPY1es87ZGdvh8qhGUXc16drPYFOGETN/93l5g6ToJt5e
-         lvqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689007898; x=1691599898;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRU9KE0/UeG1sJBHq2OuDf9Y6hZBKDfbe6WNpwhFzK0=;
-        b=ft1nIiiR2N7cW2tx+fIHAq4U+9gs29M7dpASqjNAVV/uBTjLCSqsPMqiCzd8jaEp0x
-         4UkyTLeMd3ITXuIqbkfQIViFCUyDzDfntxV6XFrYhO6kt0s8ATWiOOKNJJkSb1yQT8AK
-         x1HGXoMF90r4+qsnbYUCSEkC46VXiOF+YdBMFub/qP4fb5ENA8q9Oniv29UCIpxXsZSe
-         LrJxChNVKhy7Ahmejt9bP0MrW0j9RItsbA52jAYf12AWxQq9iHoGGQGxpSqAVFExWMB9
-         mmKot9L4BNjl2z+LTPdbX/qHJrvrVfXF/rqP/gIsrmm+iWNrp6KVV+ZosVNcr2lC6NTZ
-         0yIw==
-X-Gm-Message-State: ABy/qLbg7flis36eTLa+HAQy4N6ryVEIuAGBgVLWcmpJtJxj2RIltikC
-        wNivUvq/9WeEeiZa5tKnUqrU089lMWw=
-X-Google-Smtp-Source: APBJJlEiMclUC3rKcbE6nvWWGzZrZRVFK1l2kRju/N4dQe3BNwUcZvWCE2tCe6uUD20BY/kyQMs+bYFzLYI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:3921:b0:67c:a3a6:7a70 with SMTP id
- fh33-20020a056a00392100b0067ca3a67a70mr16686189pfb.4.1689007898532; Mon, 10
- Jul 2023 09:51:38 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 09:51:36 -0700
-In-Reply-To: <20230706072954.4881-1-duminjie@vivo.com>
-Mime-Version: 1.0
-References: <20230706072954.4881-1-duminjie@vivo.com>
-Message-ID: <ZKw3GIg9ZiXMWCsE@google.com>
-Subject: Re: [PATCH v1] virt: kvm: Replace define function
-From:   Sean Christopherson <seanjc@google.com>
-To:     Minjie Du <duminjie@vivo.com>
-Cc:     linux-fsdevel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 10 Jul 2023 12:51:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4B9E3;
+        Mon, 10 Jul 2023 09:51:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0A4A6112C;
+        Mon, 10 Jul 2023 16:51:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463C9C433C8;
+        Mon, 10 Jul 2023 16:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689007906;
+        bh=5z3WsJxJGTtWjrX2KHLkkdeETGptB61J+3QAspj8jBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mnFzUs11tjzs+9ReI3FmujHvobKv5/wZaFYYlv72apTaj5q+5nJjG3Xvck7oyN0Bb
+         3r44Ru3KtKzPCZgCsOL43nG19l61vH11QqTchheHpnKzoOF/dVEenhPlN7QrlfjL2c
+         FeX3O0mEnPMK13b8PlAUX6IiOnBOVP4/wLoDDuUj4ZMDIksPVrHBzd1QOTy9kmahwx
+         eobFZLlT4bSmSj1mrHmB1i/EikuL3cWQ95AmcH8Dqn1YdcXFE0GbnrJEJjvnJhy8yW
+         ZKEcOl6J/0mSWQsL0oTMC9iBItuU/lUz+vZp71BaggN8U1ScOprjLHgJij04ThusAj
+         TUT5ije+zaq+w==
+Date:   Mon, 10 Jul 2023 10:51:43 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        Wen Xiong <wenxiong@linux.ibm.com>,
+        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 2/2] nvme-pci: use blk_mq_max_nr_hw_queues() to calculate
+ io queues
+Message-ID: <ZKw3H2cJzRPZa29N@kbusch-mbp.dhcp.thefacebook.com>
+References: <20230708020259.1343736-1-ming.lei@redhat.com>
+ <20230708020259.1343736-3-ming.lei@redhat.com>
+ <20230710064109.GB24519@lst.de>
+ <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKvL58L58rY3GWnt@ovpn-8-31.pek2.redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023, Minjie Du wrote:
-> Replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE.
+On Mon, Jul 10, 2023 at 05:14:15PM +0800, Ming Lei wrote:
+> On Mon, Jul 10, 2023 at 08:41:09AM +0200, Christoph Hellwig wrote:
+> > On Sat, Jul 08, 2023 at 10:02:59AM +0800, Ming Lei wrote:
+> > > Take blk-mq's knowledge into account for calculating io queues.
+> > > 
+> > > Fix wrong queue mapping in case of kdump kernel.
+> > > 
+> > > On arm and ppc64, 'maxcpus=1' is passed to kdump command line, see
+> > > `Documentation/admin-guide/kdump/kdump.rst`, so num_possible_cpus()
+> > > still returns all CPUs.
+> > 
+> > That's simply broken.  Please fix the arch code to make sure
+> > it does not return a bogus num_possible_cpus value for these
+> 
+> That is documented in Documentation/admin-guide/kdump/kdump.rst.
+> 
+> On arm and ppc64, 'maxcpus=1' is passed for kdump kernel, and "maxcpu=1"
+> simply keep one of CPU cores as online, and others as offline.
+> 
+> So Cc our arch(arm & ppc64) & kdump guys wrt. passing 'maxcpus=1' for
+> kdump kernel.
+> 
+> > setups, otherwise you'll have to paper over it in all kind of
+> > drivers.
+> 
+> The issue is only triggered for drivers which use managed irq &
+> multiple hw queues.
 
-NAK.  I'm sending a patch to revert 5103068eaca2 ("debugfs, coccinelle: check for
-obsolete DEFINE_SIMPLE_ATTRIBUTE() usage"), this is beyond ridiculous.
-
-https://lore.kernel.org/all/Y3PPCHa9Yzi1sSnQ@google.com
+Is the problem that the managed interrupt sets the effective irq
+affinity to an offline CPU? You mentioned observed timeouts; are you
+seeing the "completion polled" nvme message?
