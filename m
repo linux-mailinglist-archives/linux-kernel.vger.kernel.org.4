@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7D474E20E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E116A74E20F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjGJXKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S229562AbjGJXLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjGJXKu (ORCPT
+        with ESMTP id S230446AbjGJXK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:10:50 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4A31BC;
-        Mon, 10 Jul 2023 16:10:42 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-26598fc0825so1752305a91.0;
-        Mon, 10 Jul 2023 16:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689030642; x=1691622642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rNmeeRduS9hujTrUN0M+dmMgGxYGX8uEUfhYcfOYymg=;
-        b=CPziO0/boaqbaHNRFbRAn6svFGoaxS4y3UQaqEdmPdQD100wdIzoZZUBW/OdaFqKyR
-         kVJWKil7yB7MDnWrCkpO0Re0A9fbvIaxU3TXI1RjMy5Pe7Jcwi38EOuuu/2pcGnwsStI
-         76HznsqwJK3SFEqR94ILTF+sq3Fo8mckSCamxKqiN3y4TPY1sohZZLShFkk63gFjbrLl
-         MLhQxoRaCXrUK8ZSHIcuOA88Y7ZvfquaPuA5CM2R8PXMkPZRbEvTdOfEafvWiJ2EF19s
-         VBWIEGEtAJ40rYhekFltZKyn43g17t3a+qhPx/ylexbrITG9Q2uhyUFh62XodybWS9/v
-         PEsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689030642; x=1691622642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rNmeeRduS9hujTrUN0M+dmMgGxYGX8uEUfhYcfOYymg=;
-        b=lDh/+F8ujKNQnvXLQ9KlDo/k2TOHQ+DQd23mQaFbOAn/yu84SrD8VAr0sLrjKJYywL
-         NBPxU6eZjkxlLSc1mM6xpx5ypXAbStIXzWHN2eBx2nB5bFqRT+Px5MpHzcAO8uY5qblw
-         xIiDYZY4onoCj1wX1Gw7aSIRFWkdVqCdT+1EHLsxanjYFIstsN9Hu8dAu9Wtzhasw2r9
-         ELcDWPZJd2k45L4bvvASbjqGgaQ+fMvzZ5jXhXPjR0oJbCsaJ+aNPUP9Beugn5fZ54Tj
-         ddjpcdlDGrZ6kjjk86GVUkf5N7mnSLq4HrjzNjiQ4hqv1axXjsWJAFDK+CK2EHMi++Jh
-         ddpQ==
-X-Gm-Message-State: ABy/qLYzOhl0uXBBWy8h0XQ9RkNG3+MgacVhQ471qVtsepS8HhFynxS9
-        wyBFnKgArCv0oi03iHA9htU=
-X-Google-Smtp-Source: APBJJlEOEGGbDVkNWLd92CS4nQGfnhewo7Lu4+7IWWAmdosKrgva54gLe97Ro1WymAGaE2Rh3ybmAQ==
-X-Received: by 2002:a17:90a:8a14:b0:261:219b:13b3 with SMTP id w20-20020a17090a8a1400b00261219b13b3mr20346474pjn.16.1689030641684;
-        Mon, 10 Jul 2023 16:10:41 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:76f2:868d:bc7d:562b:a5bb])
-        by smtp.gmail.com with ESMTPSA id 5-20020a17090a018500b0026333ad02c1sm505433pjc.10.2023.07.10.16.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 16:10:41 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 04:40:33 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anup Sharma <anupnewsmail@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/6] scripts: python: Extact necessary information from
- process event
-Message-ID: <ba55bf712cc27494635ca0bb23a21b42529c9327.1689024635.git.anupnewsmail@gmail.com>
-References: <cover.1689024635.git.anupnewsmail@gmail.com>
+        Mon, 10 Jul 2023 19:10:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3641C10D;
+        Mon, 10 Jul 2023 16:10:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8979C61259;
+        Mon, 10 Jul 2023 23:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6C7C433C8;
+        Mon, 10 Jul 2023 23:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689030651;
+        bh=aM5buVVOq2kRFVuMvF8C3QRzb/ywr1e8PEniwg01lE8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CBmnOE47fPWH6cpLW8yHxaD0ha04n73NeRbdLxSADYxjIGiNcafCDm1fSXGoNM6+d
+         Bk2HF9rBYm5ogM3SoTqZTccVuqDdl2Dsm/PirB13/Aeu/CdL8AYE/rwe3f1zvi2uaN
+         aNw3aVQVIryJiUNCPq90HlqPCFSpUaRTXahBR3dhuHU8ZwlwD9Pus+Y7k1t8kKPm1Z
+         +Xs9+70QFxSYI1UKAyIoJaxdFqjdQZZrgNQ4FPrllNt/OYxmrrDZAnR6Q4sB14+6s2
+         cCxtJJxh2Kcd2jFD64jPEBrg3EwMSe7lAjWqI0j9abVn6lE+XrxMFvB/QRimzgN0u4
+         rl7Kw58QAlL9Q==
+Message-ID: <70d603e5-69c1-20f8-ad0a-e7ef02244cde@kernel.org>
+Date:   Mon, 10 Jul 2023 18:10:48 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1689024635.git.anupnewsmail@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 17/36] nios2: Implement the new page table range API
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-18-willy@infradead.org> <ZBGZKTP7BGhvS9Oo@kernel.org>
+ <ce464a86-b75e-3488-bab0-cbea1b3e2572@kernel.org>
+ <ZKxnqmk3sstOtDZQ@casper.infradead.org>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <ZKxnqmk3sstOtDZQ@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,40 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The script takes in a sample event dictionary(param_dict) and retrieves
-relevant data such as time stamp, PID, TID, thread name. Also start time
-is defined.
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
----
- .../perf/scripts/python/firefox-gecko-converter.py  | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
-index 5b342641925c..765f1775cee5 100644
---- a/tools/perf/scripts/python/firefox-gecko-converter.py
-+++ b/tools/perf/scripts/python/firefox-gecko-converter.py
-@@ -21,8 +21,19 @@ sys.path.append(os.environ['PERF_EXEC_PATH'] + \
- from perf_trace_context import *
- from Core import *
- 
-+start_time = None
-+
- def trace_end():
- 	pass
- 
- def process_event(param_dict):
--	pass
-+	global start_time
-+	# Extract relevant information from the event parameters. The event parameters
-+	# are in a dictionary:
-+	time_stamp = (param_dict['sample']['time'] // 1000) / 1000
-+	pid = param_dict['sample']['pid']
-+	tid = param_dict['sample']['tid']
-+	thread_name = param_dict['comm']
-+
-+	# Assume that start time is the time of the first event.
-+	start_time = time_stamp if not start_time else start_time
--- 
-2.34.1
+On 7/10/23 15:18, Matthew Wilcox wrote:
+> On Tue, Jun 13, 2023 at 05:45:54PM -0500, Dinh Nguyen wrote:
+>>
+>>
+>> On 3/15/23 05:08, Mike Rapoport wrote:
+>>> On Wed, Mar 15, 2023 at 05:14:25AM +0000, Matthew Wilcox (Oracle) wrote:
+>>>> Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
+>>>> flush_dcache_folio().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
+>>>> from being per-page to per-folio.
+>>>>
+>>>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
+>>>
+>>> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+>>>
+>>
+>> Applied!
+> 
+> Sorry, what?  You can't pick this patch out of the middle of a series
+> and apply it!  This needs various earlier patches to work.  And then
+> later patches depend on this one having been applied, so if we were to
+> go the route of "please arch maintainers apply each of these patches",
+> it'd take over a year to get them all in.
+> 
+> As I said in the cover letter, this will all go in through the mm tree.
+> So what I want from arch maintainers is an Acked-by/Reviewed-by/Tested-by,
+> and then Andrew will apply the whole set.
 
+Apologies, I realized that after replying.
+
+Dinh
