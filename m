@@ -2,66 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C1E74DE3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3C074DE40
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjGJTcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S230219AbjGJTdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjGJTck (ORCPT
+        with ESMTP id S230310AbjGJTcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:32:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5F2BC;
-        Mon, 10 Jul 2023 12:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=LlnkGC74GytHxIJJwovutf2P2UKxE2NwtFzNvbCu77w=; b=dD1fzSZm0jygoNKQ+rjqYV5ieH
-        MwkPL/1dkEj91m/+OIUepeywUTRrqPip2derKvuJJ+o5/teMxJHnp69oBMx5ZU9Pvj6dvs1Dseqrb
-        6UjHZTZk/ajaal30G38cj0dnJX/rOzDq3rqi7U47LoshOpCnvPFc8XjjAVJK5sWxypFTaVrtb9Xme
-        zDxPo9h5tfarAbWxeK3fhBtPBH56D726mv2DUisD4pVUU1kBE1kxUlH68KPFxj/VNmtYFMXeD9Bhz
-        A3CHl7vTSVbWMoZdp4wOqnNyznYMHJ6rQMFRA5ZCJ5P8cNwNXzCE0Tr3SyjJcsTQSWHrcNEi6Dx7y
-        VBcRVxQA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIwcS-00CZN0-0B;
-        Mon, 10 Jul 2023 19:32:37 +0000
-Date:   Mon, 10 Jul 2023 12:32:24 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] dyndbg: increase PREFIX_SIZE to 128
-Message-ID: <ZKxcyC7hOStZrWy3@bombadil.infradead.org>
-References: <20230709-dyndbg-filename-v2-0-fd83beef0925@weissschuh.net>
- <20230709-dyndbg-filename-v2-2-fd83beef0925@weissschuh.net>
+        Mon, 10 Jul 2023 15:32:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E201B1;
+        Mon, 10 Jul 2023 12:32:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54799611C0;
+        Mon, 10 Jul 2023 19:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C36C433C8;
+        Mon, 10 Jul 2023 19:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689017569;
+        bh=VO939+UHAARObDvVdftwDAAwyOD9ujQLDJhFUZ6alak=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=c6iRjdZfW5RwF8Ejv599j9TjVkZEqLIm9tpq6ajwWtLhko9+fB4WUIks0zTOr6t9X
+         7pF59S+7gk3oUTleeOvgVfrxgzGfvApH4ESv0AH1B/aQjfCDR+OcWIBz8OXeG7MHLN
+         g+gX+TpHXhyq/A0KxFBFkB33yBppE3X0PtkFJT3PjtJz7rCKoxsFxrwMvZwURav2+l
+         agraie9m/K/LIt9uLu/L09bqJS7vjNcIJVYicajvDK2VLXnslD82bCGELP6S36KwvE
+         kIFaELsw0CzU+iZ4NJ3V5iRGst4DeOUeoBeMPgIegsHUx8U5KziSEewKvdPMezuOTB
+         LO87S2WT3h20Q==
+Date:   Mon, 10 Jul 2023 14:32:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        stable@vger.kernel.org, Iain Lane <iain@orangesquash.org.uk>
+Subject: Re: [PATCH v6 1/1] PCI: Avoid putting some root ports into D3 on
+ some Ryzen chips
+Message-ID: <20230710193247.GA218021@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230709-dyndbg-filename-v2-2-fd83beef0925@weissschuh.net>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230708214457.1229-2-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 09, 2023 at 11:17:59PM +0200, Thomas Weiﬂschuh wrote:
-> A follow-up patch will add the possibility to print the filename as part
-> of the prefix.
-> Increase the maximum prefix size to accommodate this.
+On Sat, Jul 08, 2023 at 04:44:57PM -0500, Mario Limonciello wrote:
+> commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> sets the policy that all PCIe ports are allowed to use D3.  When
+> the system is suspended if the port is not power manageable by the
+> platform and won't be used for wakeup via a PME this sets up the
+> policy for these ports to go into D3hot.
 > 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> This policy generally makes sense from an OSPM perspective but it leads
+> to problems with wakeup from suspend on laptops with AMD chips:
+> 
+> - On family 19h model 44h (PCI 0x14b9) this manifests as a missing wakeup
+>   interrupt.
+> - On family 19h model 74h (PCI 0x14eb) this manifests as a system hang.
+> 
+> Add a quirk for the PCI device ID used by the problematic root port on
+> both chips to ensure that these root ports are not put into D3hot at
+> suspend.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+What is problematic about these root ports?  Is this a hardware
+erratum?  Some corner of the ACPI spec that allows undefined behavior?
 
-  Luis
+Does AMD have any guidance about generic ways to use D3, or does AMD
+expect to add quirks piecemeal as problems are discovered?  How does
+Windows handle all this?
+
+Adding quirks as we discover random devices that don't behave
+correctly for reasons unknown is not very sustainable.
+
+Bjorn
+
+> Cc: stable@vger.kernel.org # 6.1+
+> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/pci/quirks.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 321156ca273d5..e0346073e5855 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -3867,6 +3867,22 @@ static void quirk_apple_poweroff_thunderbolt(struct pci_dev *dev)
+>  DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_INTEL,
+>  			       PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
+>  			       quirk_apple_poweroff_thunderbolt);
+> +
+> +/*
+> + * Putting PCIe root ports on Ryzen SoCs with USB4 controllers into D3hot
+> + * may cause problems when the system attempts wake up from s2idle.
+> + *
+> + * On family 19h model 44h (PCI 0x14b9) this manifests as a missing wakeup
+> + * interrupt.
+> + * On family 19h model 74h (PCI 0x14eb) this manifests as a system hang.
+> + */
+> +static void quirk_ryzen_rp_d3(struct pci_dev *pdev)
+> +{
+> +	if (!acpi_pci_power_manageable(pdev))
+> +		pdev->dev_flags |= PCI_DEV_FLAGS_NO_D3;
+> +}
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x14b9, quirk_ryzen_rp_d3);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x14eb, quirk_ryzen_rp_d3);
+>  #endif
+>  
+>  /*
+> -- 
+> 2.34.1
+> 
