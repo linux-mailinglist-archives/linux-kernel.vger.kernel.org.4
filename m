@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CC574CD3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 639E274CD42
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjGJGkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
+        id S231270AbjGJGkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjGJGkB (ORCPT
+        with ESMTP id S230306AbjGJGkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:40:01 -0400
+        Mon, 10 Jul 2023 02:40:36 -0400
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 45A7B18F;
-        Sun,  9 Jul 2023 23:39:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5AF768E;
+        Sun,  9 Jul 2023 23:40:35 -0700 (PDT)
 Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 61FF3602B2DC6;
-        Mon, 10 Jul 2023 14:39:55 +0800 (CST)
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 49965602B2DC6;
+        Mon, 10 Jul 2023 14:40:32 +0800 (CST)
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From:   Su Hui <suhui@nfschina.com>
-To:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     yunchuan@nfschina.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH net-next v2 02/10] net: atlantic: Remove unnecessary (void*) conversions
-Date:   Mon, 10 Jul 2023 14:39:52 +0800
-Message-Id: <20230710063952.173055-1-suhui@nfschina.com>
+To:     mostrows@earthlink.net, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, xeb@mail.ru
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, wuych <yunchuan@nfschina.com>
+Subject: [PATCH net-next v2 03/10] net: ppp: Remove unnecessary (void*) conversions
+Date:   Mon, 10 Jul 2023 14:40:27 +0800
+Message-Id: <20230710064027.173298-1-suhui@nfschina.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -46,84 +46,54 @@ Pointer variables of void * type do not require type cast.
 
 Signed-off-by: wuych <yunchuan@nfschina.com>
 ---
- .../net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c | 12 ++++++------
- .../aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c     |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/ppp/pppoe.c | 4 ++--
+ drivers/net/ppp/pptp.c  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
-index 5dfc751572ed..220400a633f5 100644
---- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
-@@ -93,7 +93,7 @@ static u32 hw_atl2_sem_act_rslvr_get(struct aq_hw_s *self)
- 
- static int hw_atl2_hw_reset(struct aq_hw_s *self)
+diff --git a/drivers/net/ppp/pppoe.c b/drivers/net/ppp/pppoe.c
+index 3b79c603b936..ba8b6bd8233c 100644
+--- a/drivers/net/ppp/pppoe.c
++++ b/drivers/net/ppp/pppoe.c
+@@ -968,7 +968,7 @@ static int __pppoe_xmit(struct sock *sk, struct sk_buff *skb)
+  ***********************************************************************/
+ static int pppoe_xmit(struct ppp_channel *chan, struct sk_buff *skb)
  {
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
-+	struct hw_atl2_priv *priv = self->priv;
- 	int err;
+-	struct sock *sk = (struct sock *)chan->private;
++	struct sock *sk = chan->private;
+ 	return __pppoe_xmit(sk, skb);
+ }
  
- 	err = hw_atl2_utils_soft_reset(self);
-@@ -378,8 +378,8 @@ static int hw_atl2_hw_init_tx_path(struct aq_hw_s *self)
- 
- static void hw_atl2_hw_init_new_rx_filters(struct aq_hw_s *self)
+@@ -976,7 +976,7 @@ static int pppoe_fill_forward_path(struct net_device_path_ctx *ctx,
+ 				   struct net_device_path *path,
+ 				   const struct ppp_channel *chan)
  {
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
- 	u8 *prio_tc_map = self->aq_nic_cfg->prio_tc_map;
-+	struct hw_atl2_priv *priv = self->priv;
- 	u16 action;
- 	u8 index;
- 	int i;
-@@ -433,7 +433,7 @@ static void hw_atl2_hw_new_rx_filter_vlan_promisc(struct aq_hw_s *self,
- 	u16 off_action = (!promisc &&
- 			  !hw_atl_rpfl2promiscuous_mode_en_get(self)) ?
- 				HW_ATL2_ACTION_DROP : HW_ATL2_ACTION_DISABLE;
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
-+	struct hw_atl2_priv *priv = self->priv;
- 	u8 index;
+-	struct sock *sk = (struct sock *)chan->private;
++	struct sock *sk = chan->private;
+ 	struct pppox_sock *po = pppox_sk(sk);
+ 	struct net_device *dev = po->pppoe_dev;
  
- 	index = priv->art_base_index + HW_ATL2_RPF_VLAN_PROMISC_OFF_INDEX;
-@@ -445,7 +445,7 @@ static void hw_atl2_hw_new_rx_filter_vlan_promisc(struct aq_hw_s *self,
- static void hw_atl2_hw_new_rx_filter_promisc(struct aq_hw_s *self, bool promisc)
+diff --git a/drivers/net/ppp/pptp.c b/drivers/net/ppp/pptp.c
+index 32183f24e63f..6b3d3df99549 100644
+--- a/drivers/net/ppp/pptp.c
++++ b/drivers/net/ppp/pptp.c
+@@ -148,7 +148,7 @@ static struct rtable *pptp_route_output(struct pppox_sock *po,
+ 
+ static int pptp_xmit(struct ppp_channel *chan, struct sk_buff *skb)
  {
- 	u16 off_action = promisc ? HW_ATL2_ACTION_DISABLE : HW_ATL2_ACTION_DROP;
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
-+	struct hw_atl2_priv *priv = self->priv;
- 	bool vlan_promisc_enable;
- 	u8 index;
- 
-@@ -539,8 +539,8 @@ static int hw_atl2_hw_init(struct aq_hw_s *self, const u8 *mac_addr)
- 		[AQ_HW_IRQ_MSIX]    = { 0x20000022U, 0x20000026U },
- 	};
- 
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
- 	struct aq_nic_cfg_s *aq_nic_cfg = self->aq_nic_cfg;
-+	struct hw_atl2_priv *priv = self->priv;
- 	u8 base_index, count;
- 	int err;
- 
-@@ -770,7 +770,7 @@ static struct aq_stats_s *hw_atl2_utils_get_hw_stats(struct aq_hw_s *self)
- static int hw_atl2_hw_vlan_set(struct aq_hw_s *self,
- 			       struct aq_rx_filter_vlan *aq_vlans)
+-	struct sock *sk = (struct sock *) chan->private;
++	struct sock *sk = chan->private;
+ 	struct pppox_sock *po = pppox_sk(sk);
+ 	struct net *net = sock_net(sk);
+ 	struct pptp_opt *opt = &po->proto.pptp;
+@@ -575,7 +575,7 @@ static int pptp_create(struct net *net, struct socket *sock, int kern)
+ static int pptp_ppp_ioctl(struct ppp_channel *chan, unsigned int cmd,
+ 	unsigned long arg)
  {
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
-+	struct hw_atl2_priv *priv = self->priv;
- 	u32 queue;
- 	u8 index;
- 	int i;
-diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
-index 674683b54304..52e2070a4a2f 100644
---- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
-@@ -413,8 +413,8 @@ do { \
- 
- static int aq_a2_fw_update_stats(struct aq_hw_s *self)
- {
--	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
- 	struct aq_stats_s *cs = &self->curr_stats;
-+	struct hw_atl2_priv *priv = self->priv;
- 	struct statistics_s stats;
- 	struct version_s version;
- 	int err;
+-	struct sock *sk = (struct sock *) chan->private;
++	struct sock *sk = chan->private;
+ 	struct pppox_sock *po = pppox_sk(sk);
+ 	struct pptp_opt *opt = &po->proto.pptp;
+ 	void __user *argp = (void __user *)arg;
 -- 
 2.30.2
 
