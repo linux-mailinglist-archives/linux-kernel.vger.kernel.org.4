@@ -2,145 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159A774DFFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE7D74E001
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjGJVIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 17:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S231153AbjGJVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 17:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjGJVIO (ORCPT
+        with ESMTP id S229742AbjGJVIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 17:08:14 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA2ABF;
-        Mon, 10 Jul 2023 14:08:12 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-307d58b3efbso4901456f8f.0;
-        Mon, 10 Jul 2023 14:08:12 -0700 (PDT)
+        Mon, 10 Jul 2023 17:08:34 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E5CC4;
+        Mon, 10 Jul 2023 14:08:32 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-676f16e0bc4so2246502b3a.0;
+        Mon, 10 Jul 2023 14:08:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689023291; x=1691615291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wREkc9/s2frBQXho8+/CmRUkUf/FKLAaYC6JcuNeuKw=;
-        b=AOa/4+nDWhX8zfxWmovYsSScEa4jmw+KEHo/LrsK1V7QSZ0S/i8tBBN8oW0o4Cmkw5
-         BUVboHgy9+V0i2v912vrXnZLoh9g2PIIIDCQDMaptj23UBAsOLGiJgZTuDfP76nwsuR7
-         DkQJbjyxIMMu/JV8x6yjPnl5u4B1KISE7UeIxLU/fAXSCx4nD0cNx+sNKor8Hl9ADzoE
-         5MCtaaMRf+FW9k0avTPTyRBY8HeBsGDe55mof7iodo3DzK9zgw5GiQrjlWbIWtlPBMkm
-         zPpjtTI0Nh5jXIkF+BX4W9peDNuRTr+QUmdCQGv+ScNTXkmpdQUKXiA5OmraFaej2H9M
-         UfcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689023291; x=1691615291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1689023312; x=1691615312;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wREkc9/s2frBQXho8+/CmRUkUf/FKLAaYC6JcuNeuKw=;
-        b=deE/bKX6I4fDT2FShZkUd1zcVsMLRJTKfe8aTRW/ABl5+ovG4Rf4ZqbCrS8oXJ/PNp
-         wdZRyOrb7BFYMGlb4l1VdGsAJLhrkuhXwyn89maYDzzRyo1Yz7OSpifRe4oi+eQBwdBt
-         5cJM3PgxS3EBJT6VnTk3SrEmkbFA7LlrSMJGzQ+tYIk3vm4S13/wzhgP7z1ZsSyatiJZ
-         1RtaM5hXfdVEmtlhoHnErr6U39fkgKPjBzuPJcnpSNszqGbQNOEh5wnE4MiqqZoF8plh
-         gC6efNjaPg5YPsXza3Td50riz4gcvFDyvIjXr+VI81giSKyt85lYw6q3A7+7WkM4kzBE
-         72uQ==
-X-Gm-Message-State: ABy/qLb3UKM9miJpV/D8gUZVb7SD9rWqwI7SuuNncD++fBLumXLkRDTQ
-        kx//DI2QS8a6Wd7y0bQ2cexazyaE5sgLgA==
-X-Google-Smtp-Source: APBJJlHYBAcwrGSqDfxFbssGAqXTqJroNEjE/qAl+zAEuxHi7EuOR7UuLqv3UPiQ6thnN1dT7+FuxQ==
-X-Received: by 2002:a5d:6b47:0:b0:314:152d:f8db with SMTP id x7-20020a5d6b47000000b00314152df8dbmr10481002wrw.58.1689023290492;
-        Mon, 10 Jul 2023 14:08:10 -0700 (PDT)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id p5-20020a5d4e05000000b003143d80d11dsm364606wrt.112.2023.07.10.14.08.09
+        bh=2WumLpz2xEP5+8PT8olwpPEOtDAiclqdr88UfJwne5c=;
+        b=OhfDziLrK2LihIMSV6Z5P3zQNZYTDuSYuR8reJ6mavc6O7MDoHRKA37qk5HQD1rPhV
+         GMX25JEahad1Ok1SEOZx1cHicb1IDroG39pagy2/Iic6K5MpsmwB5YxGzB11o0SixbS7
+         wZwZgDiKPWl0PdZFMh+yU0+2rVPvzI5y2LLoekGFF27w7Kd59mgZ996dPc/NKNnvra1u
+         klwVwjPUt+5La3erZOgYk6H1rkrMWsPghzZTGFHHQRwaex8geYy/fp/P5OHXO7ByuyzQ
+         hytxk+WWevZj71KI0BUNYig41ytJDNHpcw1qJ1zelX7bzxhPIKNW4EiL8+AtK17SvzWF
+         rcEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689023312; x=1691615312;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2WumLpz2xEP5+8PT8olwpPEOtDAiclqdr88UfJwne5c=;
+        b=Hk8o6HQVP0u+S0docObHYIKxg9dDTbJC1DZ9s3BzrjkNIS6bI/HRQVbjj/f2CEAAB+
+         O6xJmfaljuyotatJCaFKPOwYjAnxygFW08y4yCDUqfnsy2wbEGI+2C7Byc/3qCBNb8b2
+         OgPsAYpqoBgTTn3SBiic/V1fGq0AfocCgmRRXV0nG36BiYva/IhvtR3nIOFzJcOZJsU3
+         2X3uGnXrBuYx6ntctrWC8Sqn7f/qtacSNsH5l9ZJmM5+fEsT/eQDJ83nCyQ7PPr0ub0o
+         71ncnv6jmg2esjwxk+DD3g+GFS+SGkAIWf+y+paq1SNQHD74K6+1n15KEgM6Zke+SZQX
+         y7Dg==
+X-Gm-Message-State: ABy/qLb9JRM+x424q9Xc6cjYoQXuuSped3492U9J7gzTqL7+NA+wFUc6
+        2zOlMzphf1wxoLPpw3WA6yU=
+X-Google-Smtp-Source: APBJJlGeFt6GMCGjdaMKt5d41LWI4LQWVcLwpw65y2/arY7Uv1RBV/p6xWHLRuRpRIU6rzLCuzd+sg==
+X-Received: by 2002:a05:6a20:3d10:b0:130:bdc8:2294 with SMTP id y16-20020a056a203d1000b00130bdc82294mr9911426pzi.17.1689023311897;
+        Mon, 10 Jul 2023 14:08:31 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id iy12-20020a170903130c00b001b243a20f26sm309068plb.273.2023.07.10.14.08.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 14:08:09 -0700 (PDT)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Rich Felker <dalias@libc.org>, Stafford Horne <shorne@gmail.com>,
-        Szabolcs Nagy <nsz@port70.net>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-openrisc@vger.kernel.org
-Subject: [PATCH v4] openrisc: Union fpcsr and oldmask in sigcontext to unbreak userspace ABI
-Date:   Mon, 10 Jul 2023 22:08:03 +0100
-Message-Id: <20230710210805.131666-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 10 Jul 2023 14:08:31 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 11:08:30 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
+Message-ID: <ZKxzTrN2yiKfXndI@slm.duckdns.org>
+References: <20230627143508.1576882-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627143508.1576882-1-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit 27267655c531 ("openrisc: Support floating point user api") I
-added an entry to the struct sigcontext which caused an unwanted change
-to the userspace ABI.
+Hello, Waiman.
 
-To fix this we use the previously unused oldmask field space for the
-floating point fpcsr state.  We do this with a union to restore the ABI
-back to the pre kernel v6.4 ABI and keep API compatibility.
+I applied the prep patches. They look good on their own.
 
-This does mean if there is some code somewhere that is setting oldmask
-in an OpenRISC specific userspace sighandler it would end up setting the
-floating point register status, but I think it's unlikely as oldmask was
-never functional before.
+On Tue, Jun 27, 2023 at 10:34:59AM -0400, Waiman Long wrote:
+...
+> cpuset. Unlike "cpuset.cpus", invalid input to "cpuset.cpus.exclusive"
+> will be rejected with an error. This new control file has no effect on
 
-Fixes: 27267655c531 ("openrisc: Support floating point user api")
-Reported-by: Szabolcs Nagy <nsz@port70.net>
-Closes: https://lore.kernel.org/openrisc/20230626213840.GA1236108@port70.net/
-Signed-off-by: Stafford Horne <shorne@gmail.com>
----
-Changes since v3:
- - Fix typos in commit message
- - Add back change log
-Changes since v2:
- - Don't use a struct in sigcontext as hinted by Rich Felker
-Changes since v1:
- - Rather than revert the change, just use the oldmask slot for fpu state.
+We cannot maintain this as an invariant tho, right? For example, what
+happens when a parent cgroup later wants to withdraw a CPU from its
+cpuset.cpus which should always be allowed regardless of what its
+descendants are doing? Even with cpus.exclusive itself, I think it'd be
+important to always allow ancestors to be able to withdraw from the
+commitment as with other resources. I suppose one can argue that giving
+exclusive access to CPUs is a special case which doesn't follow this rule
+but cpus.exclusive having to be nested inside cpus which is subject to that
+rule makes that combination too contorted.
 
- arch/openrisc/include/uapi/asm/sigcontext.h | 6 ++++--
- arch/openrisc/kernel/signal.c               | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Would it be difficult to follow how isolation modes behave when the target
+configuration can't be achieved?
 
-diff --git a/arch/openrisc/include/uapi/asm/sigcontext.h b/arch/openrisc/include/uapi/asm/sigcontext.h
-index ca585e4af6b8..e7ffb58ff58f 100644
---- a/arch/openrisc/include/uapi/asm/sigcontext.h
-+++ b/arch/openrisc/include/uapi/asm/sigcontext.h
-@@ -28,8 +28,10 @@
- 
- struct sigcontext {
- 	struct user_regs_struct regs;  /* needs to be first */
--	struct __or1k_fpu_state fpu;
--	unsigned long oldmask;
-+	union {
-+		unsigned long fpcsr;
-+		unsigned long oldmask;	/* unused */
-+	};
- };
- 
- #endif /* __ASM_OPENRISC_SIGCONTEXT_H */
-diff --git a/arch/openrisc/kernel/signal.c b/arch/openrisc/kernel/signal.c
-index 4664a18f0787..2e7257a433ff 100644
---- a/arch/openrisc/kernel/signal.c
-+++ b/arch/openrisc/kernel/signal.c
-@@ -50,7 +50,7 @@ static int restore_sigcontext(struct pt_regs *regs,
- 	err |= __copy_from_user(regs, sc->regs.gpr, 32 * sizeof(unsigned long));
- 	err |= __copy_from_user(&regs->pc, &sc->regs.pc, sizeof(unsigned long));
- 	err |= __copy_from_user(&regs->sr, &sc->regs.sr, sizeof(unsigned long));
--	err |= __copy_from_user(&regs->fpcsr, &sc->fpu.fpcsr, sizeof(unsigned long));
-+	err |= __copy_from_user(&regs->fpcsr, &sc->fpcsr, sizeof(unsigned long));
- 
- 	/* make sure the SM-bit is cleared so user-mode cannot fool us */
- 	regs->sr &= ~SPR_SR_SM;
-@@ -113,7 +113,7 @@ static int setup_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
- 	err |= __copy_to_user(sc->regs.gpr, regs, 32 * sizeof(unsigned long));
- 	err |= __copy_to_user(&sc->regs.pc, &regs->pc, sizeof(unsigned long));
- 	err |= __copy_to_user(&sc->regs.sr, &regs->sr, sizeof(unsigned long));
--	err |= __copy_to_user(&sc->fpu.fpcsr, &regs->fpcsr, sizeof(unsigned long));
-+	err |= __copy_to_user(&sc->fpcsr, &regs->fpcsr, sizeof(unsigned long));
- 
- 	return err;
- }
+Thanks.
+
 -- 
-2.39.1
-
+tejun
