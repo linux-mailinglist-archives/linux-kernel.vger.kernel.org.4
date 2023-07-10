@@ -2,37 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B48574D416
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3F874D347
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjGJLC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S232152AbjGJKYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjGJLCv (ORCPT
+        with ESMTP id S230345AbjGJKYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:02:51 -0400
-Received: from blizzard.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 385F6CE;
-        Mon, 10 Jul 2023 04:02:50 -0700 (PDT)
-Received: from blizzard.enjellic.com (localhost [127.0.0.1])
-        by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 36AANTIX019804;
-        Mon, 10 Jul 2023 05:23:29 -0500
-Received: (from greg@localhost)
-        by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 36AANTS0019802;
-        Mon, 10 Jul 2023 05:23:29 -0500
-X-Authentication-Warning: blizzard.enjellic.com: greg set sender to greg@enjellic.com using -f
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-Subject: [PATCH 13/13] Activate the configuration and build of the TSEM LSM.
-Date:   Mon, 10 Jul 2023 05:23:19 -0500
-Message-Id: <20230710102319.19716-14-greg@enjellic.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230710102319.19716-1-greg@enjellic.com>
-References: <20230710102319.19716-1-greg@enjellic.com>
+        Mon, 10 Jul 2023 06:24:18 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EE5F95
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:24:16 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxDOtP3KtkHxkDAA--.3709S3;
+        Mon, 10 Jul 2023 18:24:15 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx7yNP3Ktk6SYnAA--.5526S2;
+        Mon, 10 Jul 2023 18:24:15 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Li Yi <liyi@loongson.cn>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [PATCH] drm/loongson: Remove a useless check in cursor_plane_atomic_async_check()
+Date:   Mon, 10 Jul 2023 18:24:11 +0800
+Message-Id: <20230710102411.257970-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx7yNP3Ktk6SYnAA--.5526S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KrWDXrykAr18GrW3CF48AFc_yoW8tF1rp3
+        9FkryFkrW5Jrn7tr9rJwn8KrZxuayxGryIgFWUGw1SqFW0kry3Jr1kurZrurW7ZrW7G347
+        trn7CFs0ga1UK3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+        6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+        AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU8uuWJUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -42,110 +64,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Complete the implementation by integrating the LSM into the
-configuration and kernel build infrastructure.
+Because smatch warnings:
 
-Signed-off-by: Greg Wettstein <greg@enjellic.com>
+drivers/gpu/drm/loongson/lsdc_plane.c:199
+lsdc_cursor_plane_atomic_async_check()
+warn: variable dereferenced before check 'state' (see line 180)
+
+vim +/state +199 drivers/gpu/drm/loongson/lsdc_plane.c
+
+174  static int
+     lsdc_cursor_plane_atomic_async_check(struct drm_plane *plane,
+175                                       struct drm_atomic_state *state)
+176  {
+177          struct drm_plane_state *new_state;
+178          struct drm_crtc_state *crtc_state;
+179
+180          new_state = drm_atomic_get_new_plane_state(state, plane);
+                                                        ^^^^^
+state is dereferenced inside this function
+
+181
+182  if (!plane->state || !plane->state->fb) {
+183          drm_dbg(plane->dev, "%s: state is NULL\n", plane->name);
+184                  return -EINVAL;
+185  }
+186
+187  if (new_state->crtc_w != new_state->crtc_h) {
+188          drm_dbg(plane->dev, "unsupported cursor size: %ux%u\n",
+189                  new_state->crtc_w, new_state->crtc_h);
+190          return -EINVAL;
+191  }
+192
+193  if (new_state->crtc_w != 64 && new_state->crtc_w != 32) {
+194          drm_dbg(plane->dev, "unsupported cursor size: %ux%u\n",
+195                  new_state->crtc_w, new_state->crtc_h);
+196          return -EINVAL;
+197  }
+198
+199  if (state) {
+         ^^^^^
+Checked too late!
+
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/r/202307100423.rV7D05Uq-lkp@intel.com/
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 ---
- security/Kconfig       | 11 ++++++-----
- security/Makefile      |  1 +
- security/tsem/Kconfig  | 36 ++++++++++++++++++++++++++++++++++++
- security/tsem/Makefile |  2 ++
- 4 files changed, 45 insertions(+), 5 deletions(-)
- create mode 100644 security/tsem/Kconfig
- create mode 100644 security/tsem/Makefile
+ drivers/gpu/drm/loongson/lsdc_plane.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/security/Kconfig b/security/Kconfig
-index 97abeb9b9a19..23c25a12c8df 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -202,6 +202,7 @@ source "security/yama/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
- source "security/landlock/Kconfig"
-+source "security/tsem/Kconfig"
+diff --git a/drivers/gpu/drm/loongson/lsdc_plane.c b/drivers/gpu/drm/loongson/lsdc_plane.c
+index 2ab3db982aa3..0d5094633222 100644
+--- a/drivers/gpu/drm/loongson/lsdc_plane.c
++++ b/drivers/gpu/drm/loongson/lsdc_plane.c
+@@ -196,13 +196,7 @@ static int lsdc_cursor_plane_atomic_async_check(struct drm_plane *plane,
+ 		return -EINVAL;
+ 	}
  
- source "security/integrity/Kconfig"
+-	if (state) {
+-		crtc_state = drm_atomic_get_existing_crtc_state(state, new_state->crtc);
+-	} else {
+-		crtc_state = plane->crtc->state;
+-		drm_dbg(plane->dev, "%s: atomic state is NULL\n", plane->name);
+-	}
+-
++	crtc_state = drm_atomic_get_existing_crtc_state(state, new_state->crtc);
+ 	if (!crtc_state->active)
+ 		return -EINVAL;
  
-@@ -241,11 +242,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
--	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
--	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
--	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list, except for those with order
-diff --git a/security/Makefile b/security/Makefile
-index 18121f8f85cd..11d93885c806 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
- obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
- obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
-+obj-$(CONFIG_SECURITY_TSEM)		+= tsem/
- 
- # Object integrity file lists
- obj-$(CONFIG_INTEGRITY)			+= integrity/
-diff --git a/security/tsem/Kconfig b/security/tsem/Kconfig
-new file mode 100644
-index 000000000000..2e9d54eb3acc
---- /dev/null
-+++ b/security/tsem/Kconfig
-@@ -0,0 +1,36 @@
-+config SECURITY_TSEM
-+	bool "Trusted Security Event Modeling"
-+	depends on SECURITY
-+	depends on NET && INET
-+	select SECURITY_NETWORK
-+	select SECURITYFS
-+	select CRYPTO
-+	select CRYPTO_SHA256
-+	select CRYPTO_HASH_INFO
-+	select TCG_TPM if HAS_IOMEM && !UML
-+	select TCG_TIS if TCG_TPM && X86
-+	select TCG_CRB if TCG_TPM && ACPI
-+	default n
-+	help
-+	  This option selects support for Trusted Security Event
-+	  Modeling (TSEM).  TSEM implements the ability to model
-+	  the security state of either the system at large or in a
-+	  restricted namespace on the basis of the LSM security
-+	  events and attributes that occur in the scope of the model.
-+	  The model may be implemented either in the kernel proper
-+	  or exported to an external Trusted Modeling Agent (TMA).
-+	  If you are unsure how to answer this question, answer N.
-+
-+config SECURITY_TSEM_ROOT_MODEL_PCR
-+	int "TPM PCR index for root domain"
-+	depends on SECURITY_TSEM
-+	range 8 14
-+	default 11
-+	help
-+	  This configuration variable determines the TPM Platform
-+	  Configuration Register (PCR) that the coefficients of
-+	  security events for the root modeling domain are extended
-+	  into.  The default value is one register above the default
-+	  value that IMA uses for its integrity measurements, in order
-+	  to avoid a conflict between the two sub-systems.  If unsure,
-+	  leave the value at its default value of 11.
-diff --git a/security/tsem/Makefile b/security/tsem/Makefile
-new file mode 100644
-index 000000000000..d43cf2ae2142
---- /dev/null
-+++ b/security/tsem/Makefile
-@@ -0,0 +1,2 @@
-+obj-$(CONFIG_SECURITY_TSEM) := tsem.o model.o namespace.o map.o event.o fs.o \
-+	export.o trust.o
 -- 
-2.39.1
+2.34.1
 
