@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C023774D4CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB3E74D4CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjGJLuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S230326AbjGJLvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjGJLug (ORCPT
+        with ESMTP id S229837AbjGJLvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:50:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106D7E3;
-        Mon, 10 Jul 2023 04:50:32 -0700 (PDT)
-Received: from obbardc-t14.home (unknown [IPv6:2a00:23c8:b70a:ae01:f690:3e44:90e:2421])
+        Mon, 10 Jul 2023 07:51:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B76EBB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:51:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: obbardc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 67A976607001;
-        Mon, 10 Jul 2023 12:50:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688989831;
-        bh=DR7uiuLvS/1UwwlyDPNnRUlzzR9ZrApORlGUcB+k/VI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/9kK0r1PJpPmyXoADG9UmEEqenk4JI6jazuDCwTVjz+z4wdl7MZ8ms6f3XdMJhSu
-         bpEMHR9viwxR+uOWdAWSFVDUwYCkgrVUstsZlRo+WCTJkLE0kPEwhqJxWMoYq7uhW3
-         xmdyQ2QfuBeTYnHNXtRvmbAF6Va67eRopb0zIRpr6b8dF/JFFRsvfn/Fh8kDdrTKry
-         lcoJxg5jXICvFEXbtE2J7DilQvdTCTmRY6708yEXd8GbnpDDv8xBQPSQd5aZMk2pvb
-         5pvCZutYXKqFDcbIw6goP6c6/a9KvqjI9SLBk3mD/J5cBIqdNRoqA9fOTM2hUlR1hE
-         75b+5PT/6PHtA==
-From:   Christopher Obbard <chris.obbard@collabora.com>
-To:     linux-rockchip@lists.infradead.org
-Cc:     kernel@collabora.com,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Andy Yan <andyshrk@163.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tianling Shen <cnsztl@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: rockchip: Add Radxa ROCK 4SE
-Date:   Mon, 10 Jul 2023 12:50:25 +0100
-Message-Id: <20230710115025.507439-4-chris.obbard@collabora.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230710115025.507439-1-chris.obbard@collabora.com>
-References: <20230710115025.507439-1-chris.obbard@collabora.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7AEE71FEE9;
+        Mon, 10 Jul 2023 11:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688989899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9b63AdZG7loth1s/Ab22HhMt5pKXA2TBVOl+TodRbhg=;
+        b=QNz6pekD3HGbd0EcK/E0ZAZYUT49mQucTWehSVlV4jobdDDJGn5fTlyzBru1pmKQ9gBaXO
+        A6oxC/46LC376oK1TNHHaxx1kXhpP8qc0I6oENKClwns6RK/8TP4i76ApdEIN9eryi9UOI
+        6Kk18z/0oSaL4XfxRp+c0i+OIR5ZnyY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688989899;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9b63AdZG7loth1s/Ab22HhMt5pKXA2TBVOl+TodRbhg=;
+        b=nBtSg+vZLXuhugGflCd1Mfx821J+axsOJ/dAjCvEM2ZH0Tw2MfAA8oIGDRyTWqDKma8Hq5
+        5kom7VzpjT3OlXCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4BA581361C;
+        Mon, 10 Jul 2023 11:51:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +utwEcvwq2TdbgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 11:51:39 +0000
+Message-ID: <45925a3e-40ec-7509-b9da-53c11594f6d7@suse.de>
+Date:   Mon, 10 Jul 2023 13:51:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] drm/loongson: Remove a useless check in
+ cursor_plane_atomic_async_check()
+Content-Language: en-US
+To:     suijingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
+Cc:     loongson-kernel@lists.loongnix.cn,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230710102411.257970-1-suijingfeng@loongson.cn>
+ <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
+ <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------bM3nLF4PVRA7pEcnbKDYKYeQ"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,106 +79,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add board-specific devicetree file for the RK3399T-based Radxa ROCK 4SE
-board. This board offers similar peripherals in a similar form-factor to
-the existing ROCK Pi 4B but uses the cost-optimised RK3399T processor
-(which has different OPP table than the RK3399) and other minimal hardware
-changes.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------bM3nLF4PVRA7pEcnbKDYKYeQ
+Content-Type: multipart/mixed; boundary="------------p7Hs6jNNzORrl80BOrE9c0YW";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: suijingfeng <suijingfeng@loongson.cn>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
+Cc: loongson-kernel@lists.loongnix.cn,
+ Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Message-ID: <45925a3e-40ec-7509-b9da-53c11594f6d7@suse.de>
+Subject: Re: [PATCH] drm/loongson: Remove a useless check in
+ cursor_plane_atomic_async_check()
+References: <20230710102411.257970-1-suijingfeng@loongson.cn>
+ <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
+ <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
+In-Reply-To: <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
 
-Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
----
+--------------p7Hs6jNNzORrl80BOrE9c0YW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Changes in v2:
-- Set proper interrupt type for brcmf.
+SGkNCg0KQW0gMTAuMDcuMjMgdW0gMTM6MzQgc2NocmllYiBzdWlqaW5nZmVuZzoNCj4gSGks
+DQo+IA0KPiBPbiAyMDIzLzcvMTAgMTg6MzksIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0K
+Pj4NCj4+DQo+PiBBbSAxMC4wNy4yMyB1bSAxMjoyNCBzY2hyaWViIFN1aSBKaW5nZmVuZzoN
+Cj4+PiBCZWNhdXNlIHNtYXRjaCB3YXJuaW5nczoNCj4+Pg0KPj4+IGRyaXZlcnMvZ3B1L2Ry
+bS9sb29uZ3Nvbi9sc2RjX3BsYW5lLmM6MTk5DQo+Pj4gbHNkY19jdXJzb3JfcGxhbmVfYXRv
+bWljX2FzeW5jX2NoZWNrKCkNCj4+PiB3YXJuOiB2YXJpYWJsZSBkZXJlZmVyZW5jZWQgYmVm
+b3JlIGNoZWNrICdzdGF0ZScgKHNlZSBsaW5lIDE4MCkNCj4+Pg0KPj4+IHZpbSArL3N0YXRl
+ICsxOTkgZHJpdmVycy9ncHUvZHJtL2xvb25nc29uL2xzZGNfcGxhbmUuYw0KPj4+DQo+Pj4g
+MTc0wqAgc3RhdGljIGludA0KPj4+IMKgwqDCoMKgwqAgbHNkY19jdXJzb3JfcGxhbmVfYXRv
+bWljX2FzeW5jX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLA0KPj4+IDE3NcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGRybV9hdG9taWNfc3RhdGUgDQo+Pj4gKnN0YXRl
+KQ0KPj4+IDE3NsKgIHsNCj4+PiAxNzfCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGRybV9w
+bGFuZV9zdGF0ZSAqbmV3X3N0YXRlOw0KPj4+IDE3OMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1
+Y3QgZHJtX2NydGNfc3RhdGUgKmNydGNfc3RhdGU7DQo+Pj4gMTc5DQo+Pj4gMTgwwqDCoMKg
+wqDCoMKgwqDCoMKgIG5ld19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19wbGFuZV9zdGF0
+ZShzdGF0ZSwgcGxhbmUpOw0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXl5eXl4NCj4+PiBzdGF0ZSBpcyBkZXJlZmVy
+ZW5jZWQgaW5zaWRlIHRoaXMgZnVuY3Rpb24NCj4+Pg0KPj4+IDE4MQ0KPj4+IDE4MsKgIGlm
+ICghcGxhbmUtPnN0YXRlIHx8ICFwbGFuZS0+c3RhdGUtPmZiKSB7DQo+Pj4gMTgzwqDCoMKg
+wqDCoMKgwqDCoMKgIGRybV9kYmcocGxhbmUtPmRldiwgIiVzOiBzdGF0ZSBpcyBOVUxMXG4i
+LCBwbGFuZS0+bmFtZSk7DQo+Pj4gMTg0wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCByZXR1cm4gLUVJTlZBTDsNCj4+PiAxODXCoCB9DQo+Pj4gMTg2DQo+Pj4gMTg3wqAg
+aWYgKG5ld19zdGF0ZS0+Y3J0Y193ICE9IG5ld19zdGF0ZS0+Y3J0Y19oKSB7DQo+Pj4gMTg4
+wqDCoMKgwqDCoMKgwqDCoMKgIGRybV9kYmcocGxhbmUtPmRldiwgInVuc3VwcG9ydGVkIGN1
+cnNvciBzaXplOiAldXgldVxuIiwNCj4+PiAxODnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIG5ld19zdGF0ZS0+Y3J0Y193LCBuZXdfc3RhdGUtPmNydGNfaCk7DQo+Pj4g
+MTkwwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiAtRUlOVkFMOw0KPj4+IDE5McKgIH0NCj4+
+PiAxOTINCj4+PiAxOTPCoCBpZiAobmV3X3N0YXRlLT5jcnRjX3cgIT0gNjQgJiYgbmV3X3N0
+YXRlLT5jcnRjX3cgIT0gMzIpIHsNCj4+PiAxOTTCoMKgwqDCoMKgwqDCoMKgwqAgZHJtX2Ri
+ZyhwbGFuZS0+ZGV2LCAidW5zdXBwb3J0ZWQgY3Vyc29yIHNpemU6ICV1eCV1XG4iLA0KPj4+
+IDE5NcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbmV3X3N0YXRlLT5jcnRj
+X3csIG5ld19zdGF0ZS0+Y3J0Y19oKTsNCj4+PiAxOTbCoMKgwqDCoMKgwqDCoMKgwqAgcmV0
+dXJuIC1FSU5WQUw7DQo+Pj4gMTk3wqAgfQ0KPj4+IDE5OA0KPj4+IDE5OcKgIGlmIChzdGF0
+ZSkgew0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBeXl5eXg0KPj4+IENoZWNrZWQgdG9vIGxh
+dGUhDQo+Pj4NCj4+PiBSZXBvcnRlZC1ieTogRGFuIENhcnBlbnRlciA8ZGFuLmNhcnBlbnRl
+ckBsaW5hcm8ub3JnPg0KPj4+IENsb3NlczogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8y
+MDIzMDcxMDA0MjMuclY3RDA1VXEtbGtwQGludGVsLmNvbS8NCj4+PiBTaWduZWQtb2ZmLWJ5
+OiBTdWkgSmluZ2ZlbmcgPHN1aWppbmdmZW5nQGxvb25nc29uLmNuPg0KPj4NCj4+IEFja2Vk
+LWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4+DQo+PiBC
+VFcsIHlvdSdyZSBwb3N0aW5nIHRoZXNlIHBhdGNoZXMgZm9yIGxvb25nc29uLCANCj4gDQo+
+IEknbSBwb3N0aW5nIHRoZXNlIHBhdGNoZXMgZm9yIHRoZSBkcm0vbG9vbmdzb24gZHJpdmVy
+IGluIGRybS1taXNjIGFuZC9vciANCj4gZHJtLXRpcCBicmFuY2gsDQo+IA0KPiB3aGF0IGRv
+IHlvdSBtZWFucyBmb3IgKmxvb25nc29uKiwNCj4gDQo+PiBidXQgdGhhdCBkcml2ZXIgaXMg
+bm90IHlldCBpbiBvdXIgdHJlZT8NCj4+DQo+IA0KPiBJIGFscmVhZHkgYXBwbGllZChwdXNo
+KSBkcm0vbG9vbmdzb24gZHJpdmVyIHRvIGRybS1taXNjLW5leHQgYnJhbmNoLA0KPiANCj4g
+V2hhdCBkbyB5b3UgbWVhbnMgdGhhdCBieSAibm90IHlldCBpbiBvdXIgdHJlZSIsIGxpbnV4
+IGtlcm5lbCBzaWRlPw0KPiANCj4gQW0gSSBtaXNzaW5nIHNvbWV0aGluZyA/DQoNCk5vLCBp
+dCdzIG15IGZhdWx0LiBJIGRpZG4ndCB1cGRhdGUgbXkgYnJhbmNoZXMgY29ycmVjdGx5LiA6
+KQ0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiANCj4+IEJlc3QgcmVnYXJkcw0K
+Pj4gVGhvbWFzDQo+Pg0KPj4NCj4+PiAtLS0NCj4+PiDCoCBkcml2ZXJzL2dwdS9kcm0vbG9v
+bmdzb24vbHNkY19wbGFuZS5jIHwgOCArLS0tLS0tLQ0KPj4+IMKgIDEgZmlsZSBjaGFuZ2Vk
+LCAxIGluc2VydGlvbigrKSwgNyBkZWxldGlvbnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbHNkY19wbGFuZS5jIA0KPj4+IGIvZHJpdmVy
+cy9ncHUvZHJtL2xvb25nc29uL2xzZGNfcGxhbmUuYw0KPj4+IGluZGV4IDJhYjNkYjk4MmFh
+My4uMGQ1MDk0NjMzMjIyIDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9sb29u
+Z3Nvbi9sc2RjX3BsYW5lLmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24v
+bHNkY19wbGFuZS5jDQo+Pj4gQEAgLTE5NiwxMyArMTk2LDcgQEAgc3RhdGljIGludCANCj4+
+PiBsc2RjX2N1cnNvcl9wbGFuZV9hdG9taWNfYXN5bmNfY2hlY2soc3RydWN0IGRybV9wbGFu
+ZSAqcGxhbmUsDQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiAtRUlOVkFMOw0KPj4+
+IMKgwqDCoMKgwqAgfQ0KPj4+IMKgIC3CoMKgwqAgaWYgKHN0YXRlKSB7DQo+Pj4gLcKgwqDC
+oMKgwqDCoMKgIGNydGNfc3RhdGUgPSBkcm1fYXRvbWljX2dldF9leGlzdGluZ19jcnRjX3N0
+YXRlKHN0YXRlLCANCj4+PiBuZXdfc3RhdGUtPmNydGMpOw0KPj4+IC3CoMKgwqAgfSBlbHNl
+IHsNCj4+PiAtwqDCoMKgwqDCoMKgwqAgY3J0Y19zdGF0ZSA9IHBsYW5lLT5jcnRjLT5zdGF0
+ZTsNCj4+PiAtwqDCoMKgwqDCoMKgwqAgZHJtX2RiZyhwbGFuZS0+ZGV2LCAiJXM6IGF0b21p
+YyBzdGF0ZSBpcyBOVUxMXG4iLCBwbGFuZS0+bmFtZSk7DQo+Pj4gLcKgwqDCoCB9DQo+Pj4g
+LQ0KPj4+ICvCoMKgwqAgY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X2V4aXN0aW5nX2Ny
+dGNfc3RhdGUoc3RhdGUsIA0KPj4+IG5ld19zdGF0ZS0+Y3J0Yyk7DQo+Pj4gwqDCoMKgwqDC
+oCBpZiAoIWNydGNfc3RhdGUtPmFjdGl2ZSkNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0
+dXJuIC1FSU5WQUw7DQo+Pg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhp
+Y3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBH
+bWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6
+IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9l
+cm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3399-rock-4se.dts     | 65 +++++++++++++++++++
- 2 files changed, 66 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-rock-4se.dts
+--------------p7Hs6jNNzORrl80BOrE9c0YW--
 
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index b7fb908eb92d..7ab29cbe71c4 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -58,6 +58,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc-mezzanine.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc-plus.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-4c-plus.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-4se.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4a.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4a-plus.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4b.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-4se.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock-4se.dts
-new file mode 100644
-index 000000000000..7cfc198bbae7
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-4se.dts
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2019 Akash Gajjar <Akash_Gajjar@mentor.com>
-+ * Copyright (c) 2019 Pragnesh Patel <Pragnesh_Patel@mentor.com>
-+ */
-+
-+/dts-v1/;
-+#include "rk3399-rock-pi-4.dtsi"
-+#include "rk3399-t-opp.dtsi"
-+
-+/ {
-+	model = "Radxa ROCK 4SE";
-+	compatible = "radxa,rock-4se", "rockchip,rk3399";
-+
-+	aliases {
-+		mmc2 = &sdio0;
-+	};
-+};
-+
-+&pinctrl {
-+	usb2 {
-+		vcc5v0_host_en: vcc5v0-host-en {
-+			rockchip,pins = <4 RK_PD1 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
-+
-+&sdio0 {
-+	status = "okay";
-+
-+	brcmf: wifi@1 {
-+		compatible = "brcm,bcm4329-fmac";
-+		reg = <1>;
-+		interrupt-parent = <&gpio0>;
-+		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "host-wake";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_host_wake_l>;
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "brcm,bcm4345c5";
-+		clocks = <&rk808 1>;
-+		clock-names = "lpo";
-+		device-wakeup-gpios = <&gpio2 RK_PD3 GPIO_ACTIVE_HIGH>;
-+		host-wakeup-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_HIGH>;
-+		shutdown-gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_HIGH>;
-+		max-speed = <1500000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
-+		vbat-supply = <&vcc3v3_sys>;
-+		vddio-supply = <&vcc_1v8>;
-+	};
-+};
-+
-+&vcc5v0_host {
-+	enable-active-high;
-+	gpio = <&gpio4 RK_PD1 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&vcc5v0_host_en>;
-+};
--- 
-2.40.1
+--------------bM3nLF4PVRA7pEcnbKDYKYeQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSr8MoFAwAAAAAACgkQlh/E3EQov+Dk
+Fw//ePfZQdMN0v3R9F8fgb4SeN6tnQlbbEovMsbSv2/ZU6g5tx/ruCTT472rFux3tqYPmi95POao
+uaBqFstalX+HnBpdTBb6VWAxC5eYvB2b/yqOhjl7ov7mqZyAL4utPYtJW0pedfYyDG/bEsdZV6u0
+BsRsObDg4iU78t6VRmNV6FLasnIJPuJvu0ayOf2FkcTGH8EOe3Ajtcy/S3XmeC+hrvcKMcnl5R6u
+Ja97oPhER9mfoCTVzYZPtkYbCyzo2XsghTINtMx5ko9TgCmumBuUhz8x2jWqKFezsE7M+z3oZgoz
+AEN094vxLW6ELSxbZWLk5LgYmvIP4X1h7daxd3r+UO0kJ7YNezPocUAQ34wd3ZTWA7M7qTij7R7M
+v/Iwe2xyhbxZ7hC47B6Zm5uM080UIcVgHkdfc6WQP2hfOEX0bAVmiHSyha2Fz2Zw+Vn5M4Q7z8M4
+s2Obni46/mGXo534iAAbknAaymY/cCx8uyuLPsI1Aa2S++ohBXXrzxRmacynnrqjJoW/+RV564z6
+Xj67NYyG63zpcAwA7LIqJ+DRlly0G2axJENW3UFaaZ8xanPTRvq32E0iEQyQqNSOAbnL0tmrprs3
++PubKHIzh4WR7YWA1bZvtB0k6gTVDBQe7ka1JlCzvJLmI/fLaUDz74GDcH8r0Q0VYSY8fux3l3dB
+YP0=
+=pzxq
+-----END PGP SIGNATURE-----
+
+--------------bM3nLF4PVRA7pEcnbKDYKYeQ--
