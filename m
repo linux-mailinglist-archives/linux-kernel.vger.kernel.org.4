@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F62E74DEBA
+	by mail.lfdr.de (Postfix) with ESMTP id 6864074DEBB
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjGJUEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S229468AbjGJUEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjGJUEF (ORCPT
+        with ESMTP id S229947AbjGJUEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:04:05 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C28A13E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:04 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-403b30c7377so5868901cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:04 -0700 (PDT)
+        Mon, 10 Jul 2023 16:04:06 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF8F133
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:05 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-40355e76338so43937231cf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689019443; x=1691611443;
+        d=1e100.net; s=20221208; t=1689019444; x=1691611444;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QE5xKsSsyeGv9fIIctRqoxdDyE7MPAyTGVDmmeq+ixU=;
-        b=XnKZM9UbzPNGRyQMbF9g/3Zlj+vlzjkH2N6zArI52fqowRA/wH1LxM+wGNk4Q86Edj
-         HBGCoHhqyhdGlU93kPNiD/HGJglMCCpL/c39ljqQBEI1wGwXNtYmy2m6jjX4Qlk1CImD
-         3h6pJPYK5NGioKoWsZzg9XoY84MYW6kDTEMaGJEAX7BF2aX7HnyoRUYvhpuCjOlVEkZ7
-         1/mrwGRk4vTyMpNTiFMHiJDgufpcEyIkrcugHY9F6xav58EDX7mmga8gQmTeqS8IfSvd
-         RmysbZVaOwFIILCh/Y2e33XyyfwEx5ExnZeUR+8xRYpxWYOVscHsENumL9aPzBkE6DcL
-         gIUQ==
-X-Gm-Message-State: ABy/qLbqpDuZbR7q0LL+i6ZTU8CZlkJdV6/q/RTuLiCqYe+1UyMvA4ng
-        atrAh1JDE5VfN7ESGHyBD8Xe0/JL8TU6bcyL
-X-Google-Smtp-Source: APBJJlEE/4JqEU5DKF97ZkgVYls4asm8IrRhpaqRjLmLJ0tVrW3s1rdAn05mGjrCeraOP22vAERGog==
-X-Received: by 2002:a05:622a:486:b0:3ff:407e:12 with SMTP id p6-20020a05622a048600b003ff407e0012mr15034264qtx.25.1689019443006;
-        Mon, 10 Jul 2023 13:04:03 -0700 (PDT)
+        bh=5SBGw2jXOpZgmbGBedJ7/r5mS0Q0qMFpeepfUvmrysc=;
+        b=IthWIhQjs6zlc88WmpO6Tw+iLkfYLE4qsiPGQbHzR18BIMxjVADrsoqnXTU2Wg0YOx
+         VrH7k7uxvBd9QBOKJQM9JBtYM8AEraUrTufGixUtt9Xv7M1v7bYgvHcWKxIUNtETpKoO
+         MKzQ+eaq/7V5ehlnF66s6e6ZLa+NPJAJUP79oRgcwF5tNKfBzS9UpEM5BqruHRMNSkJ8
+         TRfNwVXBpkR21ZeEgKqAcwehQfdXcErrgNwYwAr+/1w+laS/cqRcznzytuDDOH87Bpz9
+         jXPKPvL0aVTPq7IlB77JO8M6HxetvpVRmaDf8V7rdOfxZH3E9QYiz91xP932pqCTZh9G
+         3Nmg==
+X-Gm-Message-State: ABy/qLaWEmridOc+HdPJy6oMmp3nAeDFscgjwD0P/djKM1Q45JGUWMBZ
+        ztmC8s8YJp1IUG4lUX1zrJ1NxcWNMjVafumg
+X-Google-Smtp-Source: APBJJlFXKIc271vLQDN756+0T2CUOvBZoIOFPeV9CYqSYjs2XHITZ7kofgy1dG/IlTtDLmFHRJFOFw==
+X-Received: by 2002:ac8:5f13:0:b0:403:b395:b450 with SMTP id x19-20020ac85f13000000b00403b395b450mr2250143qta.2.1689019444299;
+        Mon, 10 Jul 2023 13:04:04 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:400::5:4850])
-        by smtp.gmail.com with ESMTPSA id x13-20020ac8538d000000b00403ad47c895sm265964qtp.22.2023.07.10.13.04.02
+        by smtp.gmail.com with ESMTPSA id d15-20020ac8668f000000b003f394decd08sm250151qtp.62.2023.07.10.13.04.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 13:04:02 -0700 (PDT)
+        Mon, 10 Jul 2023 13:04:03 -0700 (PDT)
 From:   David Vernet <void@manifault.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
@@ -46,9 +46,9 @@ Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         bristot@redhat.com, vschneid@redhat.com, gautham.shenoy@amd.com,
         kprateek.nayak@amd.com, aaron.lu@intel.com, clm@meta.com,
         tj@kernel.org, roman.gushchin@linux.dev, kernel-team@meta.com
-Subject: [PATCH v2 2/7] sched: Move is_cpu_allowed() into sched.h
-Date:   Mon, 10 Jul 2023 15:03:37 -0500
-Message-Id: <20230710200342.358255-3-void@manifault.com>
+Subject: [PATCH v2 3/7] sched: Check cpu_active() earlier in newidle_balance()
+Date:   Mon, 10 Jul 2023 15:03:38 -0500
+Message-Id: <20230710200342.358255-4-void@manifault.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230710200342.358255-1-void@manifault.com>
 References: <20230710200342.358255-1-void@manifault.com>
@@ -65,117 +65,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-is_cpu_allowed() exists as a static inline function in core.c. The
-functionality offered by is_cpu_allowed() is useful to scheduling
-policies as well, e.g. to determine whether a runnable task can be
-migrated to another core that would otherwise go idle.
+In newidle_balance(), we check if the current CPU is inactive, and then
+decline to pull any remote tasks to the core if so. Before this check,
+however, we're currently updating rq->idle_stamp. If a core is offline,
+setting its idle stamp is not useful. The core won't be chosen by any
+task in select_task_rq_fair(), and setting the rq->idle_stamp is
+misleading anyways given that the core being inactive should imply that
+it should have a very cold cache.
 
-Let's move it to sched.h.
+Let's set rq->idle_stamp in newidle_balance() only if the cpu is active.
 
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- kernel/sched/core.c  | 31 -------------------------------
- kernel/sched/sched.h | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+), 31 deletions(-)
+ kernel/sched/fair.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 167cd9f11ed0..1451f5aa82ac 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -48,7 +48,6 @@
- #include <linux/kcov.h>
- #include <linux/kprobes.h>
- #include <linux/llist_api.h>
--#include <linux/mmu_context.h>
- #include <linux/mmzone.h>
- #include <linux/mutex_api.h>
- #include <linux/nmi.h>
-@@ -2444,36 +2443,6 @@ static inline bool rq_has_pinned_tasks(struct rq *rq)
- 	return rq->nr_pinned;
- }
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a80a73909dc2..6e882b7bf5b4 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11837,18 +11837,18 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf)
+ 	if (this_rq->ttwu_pending)
+ 		return 0;
  
--/*
-- * Per-CPU kthreads are allowed to run on !active && online CPUs, see
-- * __set_cpus_allowed_ptr() and select_fallback_rq().
-- */
--static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
--{
--	/* When not in the task's cpumask, no point in looking further. */
--	if (!cpumask_test_cpu(cpu, p->cpus_ptr))
--		return false;
+-	/*
+-	 * We must set idle_stamp _before_ calling idle_balance(), such that we
+-	 * measure the duration of idle_balance() as idle time.
+-	 */
+-	this_rq->idle_stamp = rq_clock(this_rq);
 -
--	/* migrate_disabled() must be allowed to finish. */
--	if (is_migration_disabled(p))
--		return cpu_online(cpu);
--
--	/* Non kernel threads are not allowed during either online or offline. */
--	if (!(p->flags & PF_KTHREAD))
--		return cpu_active(cpu) && task_cpu_possible(cpu, p);
--
--	/* KTHREAD_IS_PER_CPU is always allowed. */
--	if (kthread_is_per_cpu(p))
--		return cpu_online(cpu);
--
--	/* Regular kernel threads don't get to stay during offline. */
--	if (cpu_dying(cpu))
--		return false;
--
--	/* But are allowed during online. */
--	return cpu_online(cpu);
--}
--
- /*
-  * This is how migration works:
-  *
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 94846c947d6e..187ad5da5ef6 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -44,6 +44,7 @@
- #include <linux/lockdep.h>
- #include <linux/minmax.h>
- #include <linux/mm.h>
-+#include <linux/mmu_context.h>
- #include <linux/module.h>
- #include <linux/mutex_api.h>
- #include <linux/plist.h>
-@@ -1199,6 +1200,36 @@ static inline bool is_migration_disabled(struct task_struct *p)
- #endif
- }
+ 	/*
+ 	 * Do not pull tasks towards !active CPUs...
+ 	 */
+ 	if (!cpu_active(this_cpu))
+ 		return 0;
  
-+/*
-+ * Per-CPU kthreads are allowed to run on !active && online CPUs, see
-+ * __set_cpus_allowed_ptr() and select_fallback_rq().
-+ */
-+static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
-+{
-+	/* When not in the task's cpumask, no point in looking further. */
-+	if (!cpumask_test_cpu(cpu, p->cpus_ptr))
-+		return false;
++	/*
++	 * We must set idle_stamp _before_ calling idle_balance(), such that we
++	 * measure the duration of idle_balance() as idle time.
++	 */
++	this_rq->idle_stamp = rq_clock(this_rq);
 +
-+	/* migrate_disabled() must be allowed to finish. */
-+	if (is_migration_disabled(p))
-+		return cpu_online(cpu);
-+
-+	/* Non kernel threads are not allowed during either online or offline. */
-+	if (!(p->flags & PF_KTHREAD))
-+		return cpu_active(cpu) && task_cpu_possible(cpu, p);
-+
-+	/* KTHREAD_IS_PER_CPU is always allowed. */
-+	if (kthread_is_per_cpu(p))
-+		return cpu_online(cpu);
-+
-+	/* Regular kernel threads don't get to stay during offline. */
-+	if (cpu_dying(cpu))
-+		return false;
-+
-+	/* But are allowed during online. */
-+	return cpu_online(cpu);
-+}
-+
- DECLARE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
- 
- #define cpu_rq(cpu)		(&per_cpu(runqueues, (cpu)))
+ 	/*
+ 	 * This is OK, because current is on_cpu, which avoids it being picked
+ 	 * for load-balance and preemption/IRQs are still disabled avoiding
 -- 
 2.40.1
 
