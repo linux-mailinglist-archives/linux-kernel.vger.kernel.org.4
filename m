@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0139174D003
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A0974D002
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjGJIdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S232999AbjGJId0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjGJIc5 (ORCPT
+        with ESMTP id S233083AbjGJIdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:32:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB07E1AB;
-        Mon, 10 Jul 2023 01:32:46 -0700 (PDT)
+        Mon, 10 Jul 2023 04:33:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0524CE6A;
+        Mon, 10 Jul 2023 01:32:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4131060F25;
-        Mon, 10 Jul 2023 08:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792B0C433C8;
-        Mon, 10 Jul 2023 08:32:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B0960F04;
+        Mon, 10 Jul 2023 08:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1E4C433CB;
+        Mon, 10 Jul 2023 08:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688977965;
-        bh=7wEZ8cWn6iI3q53NlwvvK5ANVSOjH92itswEk6JWwto=;
+        s=k20201202; t=1688977967;
+        bh=RWqXVmbCkD0zxeg5+q+W4tm1/y5wQWtRN+u2j/wCPgE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Q6JrexAQ5+1gqpXYkCMu0Kg+5RJk31m2NwecZi8r4CZYqmB82WjnbmCmrSvIFJoW0
-         VU7OV1by9ErcW1AoDO9Ou9EV8tmKA3MRaKgngzY4vocsJyASqZqCAdTmy2ymzd1JhW
-         rvJS7kvYU8z5T06TyDgIn3umNgmbRJqa0YGJydDVbIu6lK3viB8zB+SO+Atb+4DFsY
-         QpGV/IET7rIJJm+t3uMJO2cwIc8/DETZ3J4N181ceq1Guh3wJIWTDiSvD05d+fArFC
-         RWyThyC1lczoyBW1CEe3b6z3z3Bv9SCUomigLxKLs6Rng0xxsX55ThnJRwbeg2lp8o
-         yMvG9ns/mPuVg==
+        b=ClPJ3O4/7s3AcvKHCCOLJhilECYfMBYdKSsRs5AtawvoQEbvRyNNy4XIIZY7at+va
+         y+fkTUUOaEGOG0s5dnC3BDHWalioXGj55TvKUs+tjC0UZ1QifPqRfpJbK/opVH15xd
+         SzFiC/sggRnVoWFqt6iCvsHZ7bMKtT6+1xtTQ5y0dATXguA6nZdZcPzBfPtzBZurGI
+         EFkGrcgj89BNR/uRJwKgLYvVw9Xlvuhq8V1DM5+fMisUMUBPqYS6JNEvnv1obvaktP
+         S5Edw+Ocxu6ToQfWL8HxAoIT1Qb6uzv91x6/bSU1oQ8RjFvsvTcuu4w1fXNWx3QJtq
+         /nrXICnp5h62w==
 From:   Benjamin Tissoires <bentiss@kernel.org>
-To:     Jiri Kosina <jikos@kernel.org>,
+To:     Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rahul Rameshbabu <rrameshbabu@nvidia.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-In-Reply-To: <20230705060414.581468-1-rrameshbabu@nvidia.com>
-References: <20230705060414.581468-1-rrameshbabu@nvidia.com>
-Subject: Re: [PATCH HID v1] HID: nvidia-shield: Pack inner/related
- declarations in HOSTCMD reports
-Message-Id: <168897796423.315593.17705252764263719274.b4-ty@kernel.org>
-Date:   Mon, 10 Jul 2023 10:32:44 +0200
+        Jiri Kosina <jikos@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>
+In-Reply-To: <20230630113818.13005-1-stuart.a.hayhurst@gmail.com>
+References: <20230630113818.13005-1-stuart.a.hayhurst@gmail.com>
+Subject: Re: [PATCH v3] HID: logitech-hidpp: Add wired USB id for Logitech
+ G502 Lightspeed
+Message-Id: <168897796584.315593.11108454722291259760.b4-ty@kernel.org>
+Date:   Mon, 10 Jul 2023 10:32:45 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,22 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Jul 2023 23:04:14 -0700, Rahul Rameshbabu wrote:
-> Match alignment information in composite type declarations used by packed
-> HOSTCMD report structures. Compiler packing attribute is not recursive for
-> inner declarations. Mismatched alignment information can cause undefined
-> behavior in code generated for accessing composite type members. struct
-> pointers passed to thunderstrike_parse_board_info_payload and
-> thunderstrike_parse_haptics_payload are an example of this being
-> potentially problematic since alignment information from the packed HOSTCMD
-> report is lost.
+On Fri, 30 Jun 2023 12:38:20 +0100, Stuart Hayhurst wrote:
+> Previously, support for the G502 had been attempted in commit
+> '27fc32fd9417 ("HID: logitech-hidpp: add USB PID for a few more supported mice")'
+> 
+> This caused some issues and was reverted by
+> 'addf3382c47c ("Revert "HID: logitech-hidpp: add USB PID for a few more
+> supported mice"")'.
 > 
 > [...]
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git (for-6.5/upstream-fixes), thanks!
 
-[1/1] HID: nvidia-shield: Pack inner/related declarations in HOSTCMD reports
-      https://git.kernel.org/hid/hid/c/8bcf314b92ed
+[1/1] HID: logitech-hidpp: Add wired USB id for Logitech G502 Lightspeed
+      https://git.kernel.org/hid/hid/c/a343a7682acc
 
 Cheers,
 -- 
