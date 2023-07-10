@@ -2,142 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEAA74E119
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29C074E11E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjGJWai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S230289AbjGJWbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 18:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjGJWah (ORCPT
+        with ESMTP id S230266AbjGJWbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:30:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289941B7;
-        Mon, 10 Jul 2023 15:30:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FF661234;
-        Mon, 10 Jul 2023 22:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1F7C433C8;
-        Mon, 10 Jul 2023 22:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689028235;
-        bh=3aYDbMLS8gbBAT0pTmBXom0DR9pequUWpETs0BPTXQU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qhd6Qrbc3gLTYfWDfurVXAEwESS0gghpr06Fs+LfCNQZjtvAxYSrBSx+akaMS/tLa
-         jBkYR5f9zdYQ+6mEBn0xx+ZL6Y5h1/jeFMUG07IsChPrxNv2tV/mdDw7EZ7KeuFbqv
-         Y2X2wzP/rpTu9btpt3P2vcAf4L+L+K2a8QZZscxrxBStCjp6pyLqAvvI9AtOXq/M7a
-         FNcyXxxoDWkPPoKeZ1M3MlYcML7ughf3RbhJWYMS4VbCgvgAyfOePQl+3I0k6dI23M
-         8hnY+fmk88JUHpKixSXUgnRrYBKiXROimMaL1w6WkmL+XD2M+vpU+jT4/qgR+1MUA9
-         68JDxr9cjSuRA==
-Date:   Mon, 10 Jul 2023 23:30:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] selftests: Fix arm64 test installation
-Message-ID: <ZKyGh8AKRLobQKlX@finisterre.sirena.org.uk>
-References: <20230710-kselftest-fix-arm64-v1-1-48e872844f25@kernel.org>
- <04a35122-5020-5ad9-7bdc-c17f9a27bf50@nvidia.com>
- <ZKx17G7ULaQox7Xo@finisterre.sirena.org.uk>
- <ec86c0eb-5c6d-48a2-c216-ec4f40710ca1@nvidia.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A2HdvkGmzCb8nKVk"
-Content-Disposition: inline
-In-Reply-To: <ec86c0eb-5c6d-48a2-c216-ec4f40710ca1@nvidia.com>
-X-Cookie: Slow day.  Practice crawling.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 18:31:03 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D531B7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:30:57 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57704a25be9so73670877b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689028257; x=1691620257;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jrFjrK5MWxllCEyWLwQALYzED0ScrRsviwL5/1Q7jDs=;
+        b=4MMjLb464Pb5VZEX1b8fj9jAnvfPpt8zq+yBzPWJAVy4E2mlu9B8AcWgnZmCPNmb/1
+         BmrnPtBYzpTZO1Z8MbEivQNKg2gZCbl2CsU3nf5S5aU8w9RpQ+4uzAX90JuHBHq2B83p
+         +ketJXUbkQ3q03+14CL2uRTeSd/juQksX0NKkNh4tvuBAVKJLherxhOZ/vcUhPCNsn4c
+         aOm5mz6MGe2qdt0p3XHUcOdqWJN58QqHjHk9j/8lx4jGTy/gjKYKwXvSWmxwtxI9LlhC
+         KuGx+2g9GpZ40rFVO3ulYofhVr8ZzrFZSTqbDQtQFYqr05FZYTqw74JH3HBR4gjWPNQI
+         1Wfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689028257; x=1691620257;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jrFjrK5MWxllCEyWLwQALYzED0ScrRsviwL5/1Q7jDs=;
+        b=KYQLxmLGGz1LsLyBL+o59rkijCLOGMqMiuRhXDcT88IY6Oz7yclGzpADehEAjLLXFK
+         5ORlPeRqg2x/63LlYcDc7gMX6TmdQUuQE6OJUOKLmq6TB8LlZbNoVHjkpck9rHzfkpTh
+         T3FFWmbh8C6rI7p0sZpI98a/mcORU/CcoiZ00IS4OZyXvmLNsyqndiw4AtZJCdQhXWhs
+         6kww/Zd8eFV2cOwW6lOvs/l3Zq4Ht4OsyixurZCkthasMmpI0u7EpX/krwaLjNHgWosm
+         hIOG8hBch7MzOPmB7/9RNX9VJ0m+oq11pG+NgjH9enhUf/95dXi6/OauYhMQjp0zQZyk
+         ib3g==
+X-Gm-Message-State: ABy/qLauCd/0Gil2ioNby+BWM2PQ6L6cWh1CBG1TYquvKJuQHHr0XAOJ
+        AoUvjFIX/HxoiliNzyPJKwgeH/v9Lao=
+X-Google-Smtp-Source: APBJJlFUSokVx7EwS5XHoKGdMsaWyqcDvburopZlrDTYNL9HvQ/enmKw8Urv4Kq9cHYV5/vscLNh8hk1nb8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:2d08:b0:57a:6019:62aa with SMTP id
+ eq8-20020a05690c2d0800b0057a601962aamr109283ywb.5.1689028256906; Mon, 10 Jul
+ 2023 15:30:56 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:30:55 -0700
+In-Reply-To: <0000000000007ff56205ba985b60@google.com>
+Mime-Version: 1.0
+References: <0000000000007ff56205ba985b60@google.com>
+Message-ID: <ZKyGn5UsJaAx7Ghy@google.com>
+Subject: Re: general protection fault in vmx_vcpu_run (2)
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+42a71c84ef04577f1aef@syzkaller.appspotmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 05, 2021, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    aa2b8820 Add linux-next specific files for 20210205
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13d27b54d00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=15c41e44a64aa1a5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=42a71c84ef04577f1aef
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+42a71c84ef04577f1aef@syzkaller.appspotmail.com
+> 
+> general protection fault, probably for non-canonical address 0xdffffc0000001e26: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: probably user-memory-access in range [0x000000000000f130-0x000000000000f137]
+> CPU: 0 PID: 18290 Comm: syz-executor.0 Not tainted 5.11.0-rc6-next-20210205-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:atomic_switch_perf_msrs arch/x86/kvm/vmx/vmx.c:6527 [inline]
+> RIP: 0010:vmx_vcpu_run+0x538/0x2740 arch/x86/kvm/vmx/vmx.c:6698
+> Code: 8a 55 00 39 eb 0f 8d fd 00 00 00 e8 42 85 55 00 48 8b 0c 24 48 63 c3 48 8d 04 40 48 8d 2c c1 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 38 00 0f 85 05 1d 00 00 48 8d 7d 10 4c 8b 6d 08 48 89 f8
+> RSP: 0018:ffffc9000238fb00 EFLAGS: 00010003
+> RAX: 0000000000001e26 RBX: 0000000000000000 RCX: 000000000000f12e
+> RDX: 0000000000040000 RSI: ffffffff811d679e RDI: 000000000000f136
+> RBP: 000000000000f12e R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff811d675e R11: 0000000000000000 R12: ffff88806d8ba4d0
+> R13: ffff88806d8ba520 R14: ffff88806d8b8000 R15: dffffc0000000000
+> FS:  00007f1a30eaf700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f1a30ece6b8 CR3: 000000001c387000 CR4: 00000000001526f0
+> Call Trace:
+>  vcpu_enter_guest+0x103d/0x3f90 arch/x86/kvm/x86.c:9015
+>  vcpu_run arch/x86/kvm/x86.c:9155 [inline]
+>  kvm_arch_vcpu_ioctl_run+0x440/0x1980 arch/x86/kvm/x86.c:9382
+>  kvm_vcpu_ioctl+0x467/0xd90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3283
+>  vfs_ioctl fs/ioctl.c:48 [inline]
+>  __do_sys_ioctl fs/ioctl.c:753 [inline]
+>  __se_sys_ioctl fs/ioctl.c:739 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
+>  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x465b09
 
---A2HdvkGmzCb8nKVk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I haven't been able to reproduce this, and based on the super simple reproducer
+and the fact that AFAICT this hasn't been hit in 2+ years, I suspect whatever
+was broken has long since been fixed.
 
-On Mon, Jul 10, 2023 at 02:31:56PM -0700, John Hubbard wrote:
-> On 7/10/23 14:20, Mark Brown wrote:
-
-> > There are no such thing as far as I am aware - the arm64 selftests are
-> > *very* actively used by a range of people and CI systems, I certainly
-> > build them pretty consistently and am aware of no build failures with
-> > either GCC or clang.  You do need to install the headers to get the
-> > current APIs but until your commit everything was building cleanly.
-
-> > If you are seeing any problems please report them.
-
-> oh wow, yes, I am! It's on a slightly older installation (gcc version
-> 8.5.0 20210514 (Red Hat 8.5.0-18)), but there are a lot of basic build
-> failures, I'll get them together and send out a note.
-
-There is a floor on binutils version for the kselftests that's more
-aggressive than that for the kernel itself, though that looks like RHEL
-8 which has binutils 2.30 which *should* be fine for most things - the
-MTE tests won't build but they do have version detection so should skip,
-I guess you might have trouble with PAC support which doesn't have
-detection in the tests?  It's certainly old enough that I'm surprised to
-hear someone doing development for anything current with it.
-
-I just tried a Debian based GCC 8 container which seems pretty happy
-for arm64, the command was:
-
-make -j16 O=3D/tmp/out INSTALL_PATH=3D/tmp/kselftest \
-	ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- \
-	CROSS_COMPILE_COMPAT=3Darm-linux-gnueabihf- kselftest-install
-
-(the compat toolchain isn't used here IIRC).  It does skip the MTE tests
-but otherwise isn't showing any obvious issues in the arm64 tests.
-
-> Meanwhile, if you would like to try a quick fix, I have one that fixes
-> the problem on my system. I'm inclined to dress it up with a comment
-> that explains it (with a "TODO: stop using recursive Make here"), and
-> send it out as an actual fix:
->=20
-> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selft=
-ests/arm64/Makefile
-> index 9460cbe81bcc..ace8b67fb22d 100644
-> --- a/tools/testing/selftests/arm64/Makefile
-> +++ b/tools/testing/selftests/arm64/Makefile
-> @@ -42,7 +42,7 @@ run_tests: all
->         done
->  # Avoid any output on non arm64 on emit_tests
-> -emit_tests: all
-> +emit_tests:
->         @for DIR in $(ARM64_SUBTARGETS); do                             \
->                 BUILD_TARGET=3D$(OUTPUT)/$$DIR;                   \
->                 make OUTPUT=3D$$BUILD_TARGET -C $$DIR $@;         \
-
-That does seem to work around the issue at least with a quick out of
-tree build, including with GCC 8.
-
---A2HdvkGmzCb8nKVk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSshoQACgkQJNaLcl1U
-h9B72gf/bG4zsdgvPAfpCrtQZigPZ1y8k9YCk4NwudygQJgD5kAsKBt6MPToz9pF
-QBoHXzZNbLqsxjsV5dSNXDHFwWBEQYoiivipyWkUmsXgfkXYTi8epoXtgygF4Zfc
-9XDlPRaa98CiSTu187MbSxAjaJvLSwHOfs8m0VW80jir0nwaVyOqD2geYbXF7swZ
-FBEgemXwQm0u3UqBuXfGKN1uGnX6/XfProIbs9JW/tEF+eMfFEnog7oKPHvFj6XN
-LBeAUboWXQy/8kZcSwYEo2xuKZY3wW46a1wGdmOJg0CWzarznI9zjr5g5RRZ5r3d
-mAz8dgvlRbrT/OATjy+BKUkVEmkJ4Q==
-=RcK3
------END PGP SIGNATURE-----
-
---A2HdvkGmzCb8nKVk--
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
