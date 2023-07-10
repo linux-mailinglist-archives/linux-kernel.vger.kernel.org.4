@@ -2,87 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E9774DC5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4099374DC09
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjGJRYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S232201AbjGJRNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjGJRXn (ORCPT
+        with ESMTP id S230263AbjGJRNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:23:43 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46D9137;
-        Mon, 10 Jul 2023 10:23:41 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 1e24d625bc52e79f; Mon, 10 Jul 2023 19:23:40 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
+        Mon, 10 Jul 2023 13:13:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C21813D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:13:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id BCE38660DCF;
-        Mon, 10 Jul 2023 19:23:39 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Saket Dumbre <saket.dumbre@intel.com>
-Subject: [PATCH 03/14] ACPICA: exserial.c: replace ternary operator with ACPI_MIN()
-Date:   Mon, 10 Jul 2023 19:13:05 +0200
-Message-ID: <1865812.tdWV9SEqCh@kreacher>
-In-Reply-To: <5698695.DvuYhMxLoT@kreacher>
-References: <5698695.DvuYhMxLoT@kreacher>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2A75A20098;
+        Mon, 10 Jul 2023 17:13:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1689009193;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QsMS0DlhrpMEuR7nFBsrcQoVkbT4l+w8hmmcBp3sw0E=;
+        b=c+HByhagpM+GFey1o84QKdsmP3tOhZ40glAnELHvVVi6TQ0lJUjmZWZQ7YfxY9WlrCypH0
+        I1RGk1QqAq9lMPiDY1t1YpS+Jyw4YRYP8xg1TLuGS+3lf7iqGFVs6o6TmamOjV+ZdNVQY6
+        fHJsYBOfPWRSbw/yPUikvsckn34kMUg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1689009193;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QsMS0DlhrpMEuR7nFBsrcQoVkbT4l+w8hmmcBp3sw0E=;
+        b=LGkmUkLG0a2AwS1rXcJSzrZFwQ0MHHH7rrpAWwcQ/1kWYAzVBHA/S7IbMd2XDjngA97wyA
+        F1sJeXtm+MO4+ABg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4FD2F13A05;
+        Mon, 10 Jul 2023 17:13:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Qm1KESg8rGSYEAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 10 Jul 2023 17:13:12 +0000
+Date:   Mon, 10 Jul 2023 19:13:10 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, sam@ravnborg.org,
+        Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>
+Subject: Re: [PATCH v2] uapi/netfilter: Prefer ISO-friendly __typeof__
+Message-ID: <20230710171310.GA671729@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20230504083613.3789010-1-pvorel@suse.cz>
+ <CAK7LNAS_0yOTtw36xfCtnBKFMkG_96nOSoyD4hejfacYUwW3Eg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrkhgvthdrughumhgsrhgv
- sehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNAS_0yOTtw36xfCtnBKFMkG_96nOSoyD4hejfacYUwW3Eg@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+> On Thu, May 4, 2023 at 10:36 AM Petr Vorel <pvorel@suse.cz> wrote:
 
-ACPICA commit 2250f71fe77396db21df805222ffcbf19e1e7896
+> > typeof() is a GNU extension, UAPI requires ISO C, therefore __typeof__()
+> > should be used.  Similarly to 31088f6f7906 ("uapi/linux/const.h: Prefer
+> > ISO-friendly __typeof__") use __typeof__() also in x_tables.h.
 
-Make the code simpler and more readable.
-
-Link: https://github.com/acpica/acpica/commit/2250f71f
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/exserial.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/acpi/acpica/exserial.c b/drivers/acpi/acpica/exserial.c
-index 5d99b1a76c83..5241f4c01c76 100644
---- a/drivers/acpi/acpica/exserial.c
-+++ b/drivers/acpi/acpica/exserial.c
-@@ -343,8 +343,7 @@ acpi_ex_write_serial_bus(union acpi_operand_object *source_desc,
- 	/* Copy the input buffer data to the transfer buffer */
- 
- 	buffer = buffer_desc->buffer.pointer;
--	data_length = (buffer_length < source_desc->buffer.length ?
--		       buffer_length : source_desc->buffer.length);
-+	data_length = ACPI_MIN(buffer_length, source_desc->buffer.length);
- 	memcpy(buffer, source_desc->buffer.pointer, data_length);
- 
- 	/* Lock entire transaction if requested */
--- 
-2.35.3
+> > Fixes: 72b2b1dd77e8 ("netfilter: xtables: replace XT_ENTRY_ITERATE macro")
+> > Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
 
 
+> Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
 
+Hi Andrew,
+
+gently ping, could you please merge this to next tree?
+Or do we need to wait to next merge window?
+
+Kind regards,
+Petr
+
+> > ---
+> > Changes v1->v2:
+> > * Add Kevin's Reviewed-by:
+> >   https://lore.kernel.org/lkml/f8bd4212-9cca-03ca-884a-c9dec63bb256@arm.com/
+> > * Update hash to 31088f6f7906 (Kevin)
+> > * Add Fixes: 72b2b1dd77e8 (Kevin)
+
+> >  include/uapi/linux/netfilter/x_tables.h | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+
+> > diff --git a/include/uapi/linux/netfilter/x_tables.h b/include/uapi/linux/netfilter/x_tables.h
+> > index 796af83a963a..d4eced07f2a2 100644
+> > --- a/include/uapi/linux/netfilter/x_tables.h
+> > +++ b/include/uapi/linux/netfilter/x_tables.h
+> > @@ -172,11 +172,11 @@ struct xt_counters_info {
+
+> >  /* pos is normally a struct ipt_entry/ip6t_entry/etc. */
+> >  #define xt_entry_foreach(pos, ehead, esize) \
+> > -       for ((pos) = (typeof(pos))(ehead); \
+> > -            (pos) < (typeof(pos))((char *)(ehead) + (esize)); \
+> > -            (pos) = (typeof(pos))((char *)(pos) + (pos)->next_offset))
+> > +       for ((pos) = (__typeof__(pos))(ehead); \
+> > +            (pos) < (__typeof__(pos))((char *)(ehead) + (esize)); \
+> > +            (pos) = (__typeof__(pos))((char *)(pos) + (pos)->next_offset))
+
+> > -/* can only be xt_entry_match, so no use of typeof here */
+> > +/* can only be xt_entry_match, so no use of __typeof__ here */
+> >  #define xt_ematch_foreach(pos, entry) \
+> >         for ((pos) = (struct xt_entry_match *)entry->elems; \
+> >              (pos) < (struct xt_entry_match *)((char *)(entry) + \
+> > --
+> > 2.40.0
