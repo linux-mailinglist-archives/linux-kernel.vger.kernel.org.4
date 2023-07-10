@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EEC74D2CE
+	by mail.lfdr.de (Postfix) with ESMTP id AD79A74D2CF
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjGJKFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S232933AbjGJKF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbjGJKEb (ORCPT
+        with ESMTP id S232762AbjGJKEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:04:31 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40BD185
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688983287; x=1720519287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=luSbHsx5d1FecnumIWJGPoVnuKwT7pnZ0idb4x+0LEI=;
-  b=ezC2eUZ/Xvvvslm1/+lsizfg777CVEpv0yCWpnW70yny3HfXLkveAiS5
-   Ez2rdBp6P7U6DIw4Mp5b5aa6Im7j9GYR8kJzfj2SfEeaNoeOMdKduV5qQ
-   XcU9Fpe3cmunigfttbiRMTN2mxYmgdqJEhg4bKxyHNeyYI7/chfrQfR8h
-   QjIqDXiRMsjIXIei2N9ZB0aLrQgHnaoP3OQFhGolNqfLsAhjt8YGfSGK/
-   MGqkJ8+EDt8PXLm3MKXjKPyHkjyemXM9n/NHsu+3ozy6Wj9ENeC8NCM4N
-   ehXV7vC6+jQn1z/NyjhFKSUKOmtPazIQy2awoA3KhYFRlZjVkeVtRLWal
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="363169642"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="363169642"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:00:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="790736520"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="790736520"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2023 03:00:53 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qInhL-001WM3-2h;
-        Mon, 10 Jul 2023 13:00:51 +0300
-Date:   Mon, 10 Jul 2023 13:00:51 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        JaimeLiao <jaimeliao.tw@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v1 1/1] mtd: rawnand: Remove unused of_gpio.h inclusion
-Message-ID: <ZKvW0yzxU1ktDALd@smile.fi.intel.com>
-References: <20230615164210.25515-1-andriy.shevchenko@linux.intel.com>
- <CAFBinCAJ5m+NTVry56=0AYMYr9xiM9KS7F837Hqb=ptOG_u54g@mail.gmail.com>
+        Mon, 10 Jul 2023 06:04:52 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E0D18C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:01:30 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4Qzzzp2ZF4zBHXhD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:01:26 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688983286; x=1691575287; bh=PyOOJASrvDlFlpTMrbZnhxWUxwu
+        x8onceApx5EockGo=; b=erAgk2mFDIezBF+ARrjyQVU3ouCxKIfFIiChEU88QYf
+        Kvx5taEKHPBLhYHe4bF6RfGlzavTrMiXHRV2RiBE67e1gRxTBu2YWS3Umwj5A6+0
+        3JrTxDbF4rBwkZNeQA3cCGMFozfjG1X3i+Hdo46+1mkxF9ZiQsKvDh5L5T+JZPFy
+        BX++ULdYv3YGFzrcG5YnCDX+dFQbX/+uf1DajfYYtCgydwjhCvbAB5ivAjzNgzVa
+        3b3FfMFenBuEAaBc3b1Gj+tAyjWpVGmR0HxchPFcw7jjQarHYEnysqHmBXKJmywC
+        EoNGK27XH3MRddWec17UCYlf5G8cKXRKIGqIsvbpEKQ==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id rtmEQlkZnvAS for <linux-kernel@vger.kernel.org>;
+        Mon, 10 Jul 2023 18:01:26 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4Qzzzp0lMvzBHXhC;
+        Mon, 10 Jul 2023 18:01:26 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCAJ5m+NTVry56=0AYMYr9xiM9KS7F837Hqb=ptOG_u54g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Mon, 10 Jul 2023 18:01:26 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/iccsense: do not use assignment in if condition
+In-Reply-To: <20230710095957.77430-1-xujianghui@cdjrlc.com>
+References: <20230710095957.77430-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <7e2e8f69f6faf6a7bb8ecb65c8933f22@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 12:10:52AM +0200, Martin Blumenstingl wrote:
-> On Thu, Jun 15, 2023 at 6:42 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > The of_gpio.h is not and shouldn't be used in the drivers. Remove it.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+checkpatch.pl does not like assignment in if condition
 
-Thank you!
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Can it be applied now?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c 
+b/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
+index 8f0ccd3664eb..2428f3d6e477 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/iccsense/base.c
+@@ -322,7 +322,8 @@ int
+  nvkm_iccsense_new_(struct nvkm_device *device, enum nvkm_subdev_type 
+type, int inst,
+             struct nvkm_iccsense **iccsense)
+  {
+-    if (!(*iccsense = kzalloc(sizeof(**iccsense), GFP_KERNEL)))
++    *iccsense = kzalloc(sizeof(**iccsense), GFP_KERNEL);
++    if (!*iccsense)
+          return -ENOMEM;
+      INIT_LIST_HEAD(&(*iccsense)->sensors);
+      INIT_LIST_HEAD(&(*iccsense)->rails);
