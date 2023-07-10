@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C9374CA30
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D64074CA34
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjGJDGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 23:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S230261AbjGJDHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 23:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjGJDGe (ORCPT
+        with ESMTP id S229921AbjGJDHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 23:06:34 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97B2F4;
-        Sun,  9 Jul 2023 20:06:30 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-78654448524so106913639f.2;
-        Sun, 09 Jul 2023 20:06:30 -0700 (PDT)
+        Sun, 9 Jul 2023 23:07:31 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E45F9;
+        Sun,  9 Jul 2023 20:07:30 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-77a62a84855so121827839f.1;
+        Sun, 09 Jul 2023 20:07:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688958390; x=1691550390;
+        d=gmail.com; s=20221208; t=1688958449; x=1691550449;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tzyqXosdnDO68LtdH9MXWVaSATpoziQrNIP/nKesUIU=;
-        b=ZgjBUwWkJkWTLTgZjnUl36bz4hxN+A/JDp2vGU5E8dlQ/+FtHwSQ4j5JH9bVccfcQx
-         u/PQyu6P3cwxEXMM5oGk/aLjfuPLPTzvekiafWvtjc3mEpZW7Zppqrab3eslKKDccOlL
-         b+xn9eO7dXiVFL6jpvp3S96xBPsrPU2fK/7qNE0+gK4Yr5osxV/R5pxBzyXnDlZ+BZvd
-         tfmSVqcutKhiici1jMwMD4RmZik4S11EOfxtYlzBDKfjDpHy0Es4QygPcUi8+ayZoFX5
-         ULk6pjSUo36zNQphYyUAKZOMZ/9H/gzUMJyTjvred3eAhUfqPQ6n8ghcYf81hSkjGjbI
-         4awg==
+        bh=kQ4LzUj0QVAIaJdaKsROcbGgUrEytRzB7GK9NjnNLnA=;
+        b=TnJ9yuS+dAzbY9H3ryP3EPnR2aM+ZyRp7vei69wycGF4zJkGVDqV9i1SQ5++E5WL++
+         jDuQ8hEcLscKBaYBNZHT/ecyPdScjhmPRwPfg3GM74Fz96e1fsBJiabREuZaIUJXyi/L
+         3hh2HY3+QQGiAwAn9tMYVA2xa+EekdK+lJ7UExIvVmdLETK4bIn85/8qUm3NPEr14KfF
+         WyBlYMKMfuorrSHz0FaR1ueijse8LoESup2wweK7p/O/lHNSW/ZFMkdrSpUs+idCW05X
+         zWyGoL/yZa9DnI7yTlsWqGBAiNRA2Igawpob+m1XNLzpPF/aLZz+A+f0eCy1jvgQ9r0+
+         DO2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688958390; x=1691550390;
+        d=1e100.net; s=20221208; t=1688958449; x=1691550449;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tzyqXosdnDO68LtdH9MXWVaSATpoziQrNIP/nKesUIU=;
-        b=LHXy7eeEShiu9tJnGvFWNMNPdSQRRh+KRkbOSaQnN5/e1HrT51Ge7sN0Eb3h5wcsLx
-         GzyjiCS/pLk+aJU598OOw3YlsnuBEhuL4W93SjVp3bU986mC13LrF9B022Vms+bDq93n
-         y/L1IUsL8FAJdvtzVApJVLEgkK2MOa7hFDULncQBeuBS1oDS2D35MUckCT7enl4uynlM
-         L6SLoRg/3wwHnwYpgLXyp2kRucxcpQFPaRwjOoH+UWOfzw6cvDuGu5+tOneiCMUntkvA
-         iP11sszoZAdfuCsU5qF3U6f9c5z3c88pEFw2qLZZg1yj6ccqOhhbm2qz1vWNmV/XcGWu
-         cE7g==
-X-Gm-Message-State: ABy/qLYvlGZvNvuhH83fMcsHF3LSjlmw3H8v8KkUgdNkWtuxaz4JtEPs
-        FeocMIK43IMQ/Kbcg7Urqd8=
-X-Google-Smtp-Source: APBJJlE8CT21Yy9HxFydGW3qQDl6rJ1NBWg0JbeZFSqKmqU4woX9tlMfu/gL47Aw5RG60sJwrhDwNw==
-X-Received: by 2002:a6b:7b49:0:b0:780:bf50:32ce with SMTP id m9-20020a6b7b49000000b00780bf5032cemr11185666iop.19.1688958389884;
-        Sun, 09 Jul 2023 20:06:29 -0700 (PDT)
+        bh=kQ4LzUj0QVAIaJdaKsROcbGgUrEytRzB7GK9NjnNLnA=;
+        b=KX02PFRLjbGM99HMnaib4qoiz5JvKe48/wGImz50NW0UAy07Li6pfeOLUKzc6ozPS7
+         2CvmUDph7/ZrxtEbQzgVpU8T9sAsuz7PnfRyLyDVfpX7Dl8yEvSE1YoSQTkn9u/2rGXA
+         ei0IpSUcRqOXtVlhoiTkWha8w+iNhuC/MUrlV7+AC6499WTL5zeGKWJ5CmE44iw9EQks
+         XnREVdf1QdraEDOg7Fov1xxmrjB2Jostfn0lAAxo0jtxqS9s4eWeW1mtlXaOPEaHMnVG
+         fCW6mVcRzv3unwIvs/mT0GIdWRABlXLIGIFfbpNg37jjrENu5K1Sau0H08W19HPIRZmw
+         qaAA==
+X-Gm-Message-State: ABy/qLbNpHlsCA9VxzSNNorDHEqKVmV8h/qX2rmCn7G8Vxh7WIj5o0vs
+        L6MgdqzxEZXPpePTLWmYfHY=
+X-Google-Smtp-Source: APBJJlHdDk/Ml3RK93f2D3puiLRW5iL8OhOKJGuEsWGdEPCBmjMwRL1eqRNzIRe+/VZRhqOVrGfw9Q==
+X-Received: by 2002:a5e:df4a:0:b0:783:40ef:c9f6 with SMTP id g10-20020a5edf4a000000b0078340efc9f6mr11416245ioq.19.1688958449373;
+        Sun, 09 Jul 2023 20:07:29 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id s11-20020a5eaa0b000000b00785cd25010esm3318732ioe.11.2023.07.09.20.06.29
+        by smtp.gmail.com with ESMTPSA id y6-20020a02a386000000b0042baffe832fsm926344jak.101.2023.07.09.20.07.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jul 2023 20:06:29 -0700 (PDT)
+        Sun, 09 Jul 2023 20:07:29 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>
 Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH] wifi: mwifiex: Replace strlcpy with strscpy
-Date:   Mon, 10 Jul 2023 03:06:25 +0000
-Message-ID: <20230710030625.812707-1-azeemshaikh38@gmail.com>
+        Azeem Shaikh <azeemshaikh38@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH] net: sched: Replace strlcpy with strscpy
+Date:   Mon, 10 Jul 2023 03:07:11 +0000
+Message-ID: <20230710030711.812898-1-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -89,24 +91,21 @@ is used to check for truncation instead of sizeof(dest).
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- drivers/net/wireless/marvell/mwifiex/main.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ net/sched/act_api.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/main.c b/drivers/net/wireless/marvell/mwifiex/main.c
-index 1cd9d20cca16..8d3c4bcf9c89 100644
---- a/drivers/net/wireless/marvell/mwifiex/main.c
-+++ b/drivers/net/wireless/marvell/mwifiex/main.c
-@@ -725,9 +725,8 @@ static int mwifiex_init_hw_fw(struct mwifiex_adapter *adapter,
- 	 * manufacturing mode is enabled
- 	 */
- 	if (mfg_mode) {
--		if (strlcpy(adapter->fw_name, MFG_FIRMWARE,
--			    sizeof(adapter->fw_name)) >=
--			    sizeof(adapter->fw_name)) {
-+		if (strscpy(adapter->fw_name, MFG_FIRMWARE,
-+			    sizeof(adapter->fw_name)) < 0) {
- 			pr_err("%s: fw_name too long!\n", __func__);
- 			return -1;
+diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+index f7887f42d542..9d3f26bf0440 100644
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -1320,7 +1320,7 @@ struct tc_action_ops *tc_action_load_ops(struct nlattr *nla, bool police,
+ 			return ERR_PTR(err);
+ 		}
+ 	} else {
+-		if (strlcpy(act_name, "police", IFNAMSIZ) >= IFNAMSIZ) {
++		if (strscpy(act_name, "police", IFNAMSIZ) < 0) {
+ 			NL_SET_ERR_MSG(extack, "TC action name too long");
+ 			return ERR_PTR(-EINVAL);
  		}
 -- 
 2.41.0.255.g8b1d071c50-goog
