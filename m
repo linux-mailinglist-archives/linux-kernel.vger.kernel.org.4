@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAADD74CFAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5959074CFAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbjGJIPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S232958AbjGJIP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjGJIOA (ORCPT
+        with ESMTP id S229805AbjGJIOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:14:00 -0400
+        Mon, 10 Jul 2023 04:14:24 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDD7EB;
-        Mon, 10 Jul 2023 01:13:59 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 08:13:57 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88242118;
+        Mon, 10 Jul 2023 01:14:00 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 08:13:58 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688976838;
+        s=2020; t=1688976839;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=MAG37qGGr89k2BFEqvKK2pP+ysq9/blpIRKXNezQDpM=;
-        b=YNegB55Q8trvUS38HZRYSvqMvSXKrFhEG4PHFl8JQ0NgY0VTqXDSkcLAWLkKb9CPa+xhLt
-        tSmuxE/ghtPc+SkR35LMdrm0DKkHNz+WYgw1A98dzGD9Of5M+Is99tPqojL/rDzqXqcD3A
-        hi/o8ArTdqpv9M5sQJdFi65kLqEDCtmCii1+lgQDwVFGh7geIIm3kvmVhJaJyq2R15P4Er
-        li7ikxcDj5JSjW1fURi63PS8M8Gr/NNgCvXmpA1bWkBbhy0ZRe9vQ1uG2yk6FgFST4Mhy3
-        KNfPZm65rq5Qq+TTtmgkZRQ2i6Dn/wFnlIfBbdRXvAsezbM592R3+3lzR63tyA==
+        bh=kbBlRYtDCHZkO48Xq/c2gicY7m6ZLit+ZxrtxvK05ak=;
+        b=1IHDsNXN3CQage9sR5uyMDyyPha040tcxmrkF5k75Xr84nm0ersv3gkiav+rScPCpF0Ga1
+        qI9XV08eg56YHuZ4YC/AlkPCjmQIDS6Z6PDhzrBILF0F4mR6wbYd81hdCQnDGbVHo0FpCY
+        rYpuTPhlC13Z1rzDndUOgikXs1r2RKVw/VTUO3ybE0riSak7GqfjPpc6sQecm5G4+wbaE9
+        8ntfXPlFunzTq2knXROQRJZq3J1M2Sv4DbWy3dE8T4t1wlk94WyNlvghS3ff2DR2BUDcI8
+        KpgGLdJWKOyKfxnMSC0nuTv+xqu1A9vBprnIb/H3QVaT6AMBoJAPR2ObRn9dGQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688976838;
+        s=2020e; t=1688976839;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=MAG37qGGr89k2BFEqvKK2pP+ysq9/blpIRKXNezQDpM=;
-        b=e5z/H/Bhv0y1UXvQf3ylLo14qnwFwhuP7KD3INIQYOVt5LLjSwzKnAavHNpBIrEAVengz+
-        0ZhamlCiz+4/bZDQ==
+        bh=kbBlRYtDCHZkO48Xq/c2gicY7m6ZLit+ZxrtxvK05ak=;
+        b=P5MI63ybiMlI45LbveuPELNkQDAbbpYHcGN/+sOeAq9Sr2KdAUNeKKKMjzT+nfSd2GZFJv
+        pmRZNZcAfrWMNjCg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/cfi: Extend ENDBR sealing to kCFI
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+Subject: [tip: x86/urgent] x86/cfi: Extend {JMP,CAKK}_NOSPEC comment
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
         Sami Tolvanen <samitolvanen@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168897683742.404.15642618384381262204.tip-bot2@tip-bot2>
+Message-ID: <168897683854.404.12338449674612649088.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,112 +62,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     9831c6253ace48051189f6d18a15f658f94babc2
-Gitweb:        https://git.kernel.org/tip/9831c6253ace48051189f6d18a15f658f94babc2
+Commit-ID:     0479a42d4c15bd554f54d89d12bf68218e3e70da
+Gitweb:        https://git.kernel.org/tip/0479a42d4c15bd554f54d89d12bf68218e3e70da
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 21 Jun 2023 22:17:12 +02:00
+AuthorDate:    Thu, 22 Jun 2023 16:27:13 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 10 Jul 2023 09:52:24 +02:00
+CommitterDate: Mon, 10 Jul 2023 09:52:23 +02:00
 
-x86/cfi: Extend ENDBR sealing to kCFI
+x86/cfi: Extend {JMP,CAKK}_NOSPEC comment
 
-Kees noted that IBT sealing could be extended to kCFI.
+With the introduction of kCFI these helpers are no longer equivalent
+to C indirect calls and should be used with care.
 
-Fundamentally it is the list of functions that do not have their
-address taken and are thus never called indirectly. It doesn't matter
-that objtool uses IBT infrastructure to determine this list, once we
-have it it can also be used to clobber kCFI hashes and avoid kCFI
-indirect calls.
-
-Suggested-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Link: https://lkml.kernel.org/r/20230622144321.494426891%40infradead.org
+Link: https://lkml.kernel.org/r/20230622144321.360957723%40infradead.org
 ---
- arch/x86/kernel/alternative.c | 44 +++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/nospec-branch.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 27e0cb4..04b25a2 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -778,6 +778,8 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end) { }
- 
- #ifdef CONFIG_X86_KERNEL_IBT
- 
-+static void poison_cfi(void *addr);
-+
- static void __init_or_module poison_endbr(void *addr, bool warn)
- {
- 	u32 endbr, poison = gen_endbr_poison();
-@@ -802,6 +804,9 @@ static void __init_or_module poison_endbr(void *addr, bool warn)
- 
- /*
-  * Generated by: objtool --ibt
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 55388c9..1a65cf4 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -234,6 +234,10 @@
+  * JMP_NOSPEC and CALL_NOSPEC macros can be used instead of a simple
+  * indirect jmp/call which may be susceptible to the Spectre variant 2
+  * attack.
 + *
-+ * Seal the functions for indirect calls by clobbering the ENDBR instructions
-+ * and the kCFI hash value.
++ * NOTE: these do not take kCFI into account and are thus not comparable to C
++ * indirect calls, take care when using. The target of these should be an ENDBR
++ * instruction irrespective of kCFI.
   */
- void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end)
- {
-@@ -812,7 +817,7 @@ void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end)
- 
- 		poison_endbr(addr, true);
- 		if (IS_ENABLED(CONFIG_FINEIBT))
--			poison_endbr(addr - 16, false);
-+			poison_cfi(addr - 16);
- 	}
- }
- 
-@@ -1177,6 +1182,41 @@ err:
- 	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
- }
- 
-+static inline void poison_hash(void *addr)
-+{
-+	*(u32 *)addr = 0;
-+}
-+
-+static void poison_cfi(void *addr)
-+{
-+	switch (cfi_mode) {
-+	case CFI_FINEIBT:
-+		/*
-+		 * __cfi_\func:
-+		 *	osp nopl (%rax)
-+		 *	subl	$0, %r10d
-+		 *	jz	1f
-+		 *	ud2
-+		 * 1:	nop
-+		 */
-+		poison_endbr(addr, false);
-+		poison_hash(addr + fineibt_preamble_hash);
-+		break;
-+
-+	case CFI_KCFI:
-+		/*
-+		 * __cfi_\func:
-+		 *	movl	$0, %eax
-+		 *	.skip	11, 0x90
-+		 */
-+		poison_hash(addr + 1);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+}
-+
- #else
- 
- static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
-@@ -1184,6 +1224,8 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
- {
- }
- 
-+static void poison_cfi(void *addr) { }
-+
- #endif
- 
- void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ .macro JMP_NOSPEC reg:req
+ #ifdef CONFIG_RETPOLINE
