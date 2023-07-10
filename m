@@ -2,92 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE3474D815
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B4074D81B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjGJNq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S233061AbjGJNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjGJNq5 (ORCPT
+        with ESMTP id S233050AbjGJNrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:46:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D68C1B3;
-        Mon, 10 Jul 2023 06:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MttSIBFDzxo+w4PFW3J7ZDj+Lub8j7ffKGXirDBsatA=; b=UYobBqUdV751cNMlhoG7PQe8Wf
-        VgghfAe2GDPkENOs6/OBmeZwI3a1JHQPudBFW849/wJh2Str9PC0rEoAtKf93kqmaX/PZ96ZcwFKf
-        x3iHKezvRBU1GeZsJfqyESrNX0kMji3hMiXVi2x9lrHybRAwdvcpsecOt3ULqPw71EFpUYOz/SaR/
-        xvus7ag9nr7PhkAIHjbmZeV4bWQg/qBbnq7b87sU/qy9clQZjRo7NnV3kbUhUcxj2wY15StSHutJc
-        dkV0utIhHfvpI2F4IqcLO/zA0JrGfFXWXFUJLMreck7WuzJIVLHfBdNtmeu0TisAkpH6Lh6rVXrDO
-        bOIXHE3Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIrDa-00EeDT-QW; Mon, 10 Jul 2023 13:46:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C67630017D;
-        Mon, 10 Jul 2023 15:46:21 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 664DE29984D3B; Mon, 10 Jul 2023 15:46:21 +0200 (CEST)
-Date:   Mon, 10 Jul 2023 15:46:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] x86: kprobes: Fix CFI_CLANG related issues
-Message-ID: <20230710134621.GC3034907@hirez.programming.kicks-ass.net>
-References: <168899125356.80889.17967397360941194229.stgit@devnote2>
+        Mon, 10 Jul 2023 09:47:25 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFBDFA;
+        Mon, 10 Jul 2023 06:47:23 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36AAuL6G004354;
+        Mon, 10 Jul 2023 13:47:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=VuzxAZWTO9XALPcGxBjzo5XE0a0pOhGmpguTa4nLSlA=;
+ b=SNht0G50pjgxBgrX4ZElfOZILoncLEBZi0f7LEbnHa1+dv/gJAO/AmzTjxifEFFn7ToZ
+ YJsONylBuV57YqHEXikrDYRCuYSR2+SbzN/Z1zFcfJQEBBD0ikRHY5IqyGFo/rX5HtZP
+ hd5D/vEUMJd2hVtFR2I8e9PZNWRuyJWqJIKj3YwHZ3pf/qkILeoO+nrHoZfFSTUaPsvI
+ +nQh4FOvEOdTSti7jWXp4gLNCKl78rb4kLlLw23yN59Kot04XWWKisM3ZP8pDqQwMe47
+ G1pF48PqdccwpWJTu8ZyqjWf8MJGCd0/747O0/WsX9Wu+7taqzJxFJgpGBG9CSg7zsmS jw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rrgnngf87-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 13:47:17 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36ADlGIL009647
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 13:47:16 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 06:47:11 -0700
+Message-ID: <8661411f-ea47-2a7a-ceb4-6c37978c3a75@quicinc.com>
+Date:   Mon, 10 Jul 2023 19:17:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168899125356.80889.17967397360941194229.stgit@devnote2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 6/6] thermal/drivers/tsens: Add IPQ5332 support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-7-quic_ipkumar@quicinc.com>
+ <96e52c65-6216-91ba-8d2b-197f86433d98@linaro.org>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <96e52c65-6216-91ba-8d2b-197f86433d98@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: MCcel9Mt9WF8SJY-RlsWx1iTNBGMtY3R
+X-Proofpoint-GUID: MCcel9Mt9WF8SJY-RlsWx1iTNBGMtY3R
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307100124
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 09:14:13PM +0900, Masami Hiramatsu (Google) wrote:
 
-> I just build tested, since I could not boot the kernel with CFI_CLANG=y.
-> Would anyone know something about this error?
-> 
-> [    0.141030] MMIO Stale Data: Unknown: No mitigations
-> [    0.153511] SMP alternatives: Using kCFI
-> [    0.164593] Freeing SMP alternatives memory: 36K
-> [    0.165053] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b
-> [    0.166028] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.2-00002-g12b1b2fca8ef #126
-> [    0.166028] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> [    0.166028] Call Trace:
-> [    0.166028]  <TASK>
-> [    0.166028]  dump_stack_lvl+0x6e/0xb0
-> [    0.166028]  panic+0x146/0x2f0
-> [    0.166028]  ? start_kernel+0x472/0x48b
-> [    0.166028]  __stack_chk_fail+0x14/0x20
-> [    0.166028]  start_kernel+0x472/0x48b
-> [    0.166028]  x86_64_start_reservations+0x24/0x30
-> [    0.166028]  x86_64_start_kernel+0xa6/0xbb
-> [    0.166028]  secondary_startup_64_no_verify+0x106/0x11b
-> [    0.166028]  </TASK>
-> [    0.166028] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b ]---
-> 
-> 
-
-Hmm, I just build v6.4 using defconfig+kvm_guest.config+CFI_CLANG using
-clang-16 and that boots using kvm... (on my IVB, and the thing also
-boots natively on my ADL).
-
-I'll go have a look at your patches shortly.
+On 7/10/2023 4:54 PM, Dmitry Baryshkov wrote:
+> On 10/07/2023 13:37, Praveenkumar I wrote:
+>> IPQ5332 uses tsens v2.3.3 IP and it is having combined interrupt as
+>> like IPQ8074. But as the SoCs does not have RPM, kernel needs to
+>> take care of sensor enablement and calibration. Hence introduced
+>> new ops and data for IPQ5332 and reused the feature_config from
+>> IPQ8074.
+>>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> ---
+>>   drivers/thermal/qcom/tsens-v2.c | 13 +++++++++++++
+>>   drivers/thermal/qcom/tsens.c    |  3 +++
+>>   drivers/thermal/qcom/tsens.h    |  2 +-
+>>   3 files changed, 17 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/qcom/tsens-v2.c 
+>> b/drivers/thermal/qcom/tsens-v2.c
+>> index db48b1d95348..8b6e3876fd2c 100644
+>> --- a/drivers/thermal/qcom/tsens-v2.c
+>> +++ b/drivers/thermal/qcom/tsens-v2.c
+>> @@ -237,6 +237,19 @@ struct tsens_plat_data data_ipq8074 = {
+>>       .fields    = tsens_v2_regfields,
+>>   };
+>>   +static const struct tsens_ops ops_ipq5332_v2 = {
+>
+> Please drop v2. It is unclear if it refers to tsens being v2 or being 
+> specific to ipq5332 v2.
+Sure, will drop v2.
+>
+>> +    .init        = init_common,
+>> +    .get_temp    = get_temp_tsens_valid,
+>> +    .calibrate    = tsens_v2_calibration,
+>> +};
+>> +
+>> +struct tsens_plat_data data_ipq5332 = {
+>> +    .sensors_to_en    = 0xF800,
+>
+> This doesn't seem to match the offsets that you have enabled in the DTSI.
+In order to overcome the DT binding check failure, added all the 
+available QFPROM offsets in the DTSI. Else DT binding check failing on 
+"nvmem-cell-names".
+>
+>> +    .ops        = &ops_ipq5332_v2,
+>> +    .feat        = &ipq8074_feat,
+>> +    .fields        = tsens_v2_regfields,
+>> +};
+>> +
+>>   /* Kept around for backward compatibility with old msm8996.dtsi */
+>>   struct tsens_plat_data data_8996 = {
+>>       .num_sensors    = 13,
+>> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+>> index 169690355dad..e8ba2901cda8 100644
+>> --- a/drivers/thermal/qcom/tsens.c
+>> +++ b/drivers/thermal/qcom/tsens.c
+>> @@ -1140,6 +1140,9 @@ static const struct of_device_id tsens_table[] = {
+>>       }, {
+>>           .compatible = "qcom,ipq8074-tsens",
+>>           .data = &data_ipq8074,
+>> +    }, {
+>> +        .compatible = "qcom,ipq5332-tsens",
+>> +        .data = &data_ipq5332,
+>>       }, {
+>>           .compatible = "qcom,mdm9607-tsens",
+>>           .data = &data_9607,
+>> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+>> index f8897bc8944e..36040f9beebc 100644
+>> --- a/drivers/thermal/qcom/tsens.h
+>> +++ b/drivers/thermal/qcom/tsens.h
+>> @@ -701,6 +701,6 @@ extern struct tsens_plat_data data_8226, 
+>> data_8909, data_8916, data_8939, data_8
+>>   extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
+>>     /* TSENS v2 targets */
+>> -extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
+>> +extern struct tsens_plat_data data_8996, data_ipq8074, data_ipq5332, 
+>> data_tsens_v2;
+>>     #endif /* __QCOM_TSENS_H__ */
+>
+--
+Thanks,
+Praveenkumar
