@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2474D74CC1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5BA74CB81
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjGJFUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S230393AbjGJFEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjGJFTe (ORCPT
+        with ESMTP id S229928AbjGJFES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:19:34 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57A149DC;
-        Sun,  9 Jul 2023 22:13:58 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1688965561t6naos8a
-Received: from linux-lab-host.localdomain ( [116.30.126.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 10 Jul 2023 13:06:00 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: lO87fmWkX3HaW2taDfSs1R2OvsTmxaaDoJO0KeobxemAPs/y0vAjAAG+ceg1U
-        aRywlrn6iekitbZolZ8HVumUutuczuLTcDuK1yUynq/HUbN0HNUIpXYssnICOSXZEclQeX4
-        OShbbEncp+Qzd0ncHv81++CrYJbb1iRyl1r7WzywMrLt13h4UavuRtZr0A+eu9gtllRTV9Z
-        mepmWqt54jVzgPb4JPBkfuyflF69WVFLADjDTLG98GhQsLcHEHz5ueUhc+3iTzGlpsHN8xD
-        gm2BxvotdF1oz05lhjU3oH/O6xtjqZfhBPIfcQrVc5Sa+KgoUwvyLnBgT+ksD8ALbooB5K3
-        GZVk86Pu4WciOxpGddcCeFJ6AckMT1iNhW6oI4Pm/vXDSjvt9Em1Aa6RQxKCw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 655532314049486488
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux@weissschuh.net
-Subject: Re: [PATCH v4 13/18] selftests/nolibc: prepare /tmp for tmpfs or ramfs
-Date:   Mon, 10 Jul 2023 13:06:00 +0800
-Message-Id: <20230710050600.9697-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230709093821.GH9321@1wt.eu>
-References: <20230709093821.GH9321@1wt.eu>
+        Mon, 10 Jul 2023 01:04:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DD8CE;
+        Sun,  9 Jul 2023 22:04:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD31260DE4;
+        Mon, 10 Jul 2023 05:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D9DBC433C8;
+        Mon, 10 Jul 2023 05:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688965457;
+        bh=p8YNjR5FTTbYpldel0JyzfCWG3L7Lf5CN238TGr/nxA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WJTx68/Zxf/bU3IANW7O+cWZUDIolnUEvYVYDSDs3yx+XAgGWvbWn8nQBOCdKOpJK
+         rl/AmC5DvIy/PM1OJmYgvWR0datPINSx0nNZZIJcg1g0+GpbPWxR2YHp+MQjgmfgvx
+         7FdiMG9tI3o/vz/cf0bdEDfqGo/NodVPiK8qyRuNyPwzJtxDzGVkZRtmxLHE6eM4iX
+         skG6awDb1RF/wlU5DkOAfWIPVQVkWTVxPCZ4spZcaMGWVZEavHJabuZe1x/QUnWbgL
+         zrroN06K8Bc1/jTNPmc4j36bYxjEEcRB+ibdWQjdBIj7OoE1MkcnNOjLKVnSTZaTZ+
+         GFDAc5/7bs0YQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [RESEND PATCH v2 0/5] arm64: dts: qcom: enable ethernet on sa8775p-ride
+Date:   Sun,  9 Jul 2023 22:07:00 -0700
+Message-ID: <168896565968.1376307.18127304044280221873.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230622120142.218055-1-brgl@bgdev.pl>
+References: <20230622120142.218055-1-brgl@bgdev.pl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,63 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
 
-> Hi Zhangjin,
+On Thu, 22 Jun 2023 14:01:37 +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> On Sat, Jul 08, 2023 at 02:38:57AM +0800, Zhangjin Wu wrote:
-> > create a /tmp directory and mount tmpfs there, if tmpfs is not
-> > mountable, use ramfs as tmpfs.
-> > 
-> > tmpfs will be used instead of procfs for some tests.
+> Bjorn,
 > 
-> Just curious, in which cases do you need this ? We're building an
-> initramfs for the root that's already read-write, so without mounting
-> anything you already have write access. I'm taking it anyway for now,
-> but if you figure it's not needed we can later drop it (or just drop
-> the mount part and keep mkdir).
->
- 
-This "/tmp" directory is originally created to check the 'TMPFS' existence for
-the old vfprintf/memfd_create (from old version of the minimal config support),
-it is used to skip the whole vfprintf tests if the TMPFS (or HUGETLBFS) is not
-there. BTW, Thomas's patch [1] shows, MEMFD_CREATE is able to work with ramfs
-too.
+> Now that all other bits and pieces are in next, I'm resending the reviewed
+> DTS patches for pick up. This enables one of the 1Gb ethernet ports on
+> sa8775p-ride.
+> 
+> [...]
 
-And it is later used by the old chmod_tmpdir/chmod_tmpfile and chroot_tmpfile
-too (from old version of the minimal config support), so, it is important to
-align with the normal Linux systems to let "/tmp" means TMPFS mount.
+Applied, thanks!
 
-Now, we use "/tmp" directly in vfprintf, and we use argv0 for chmod_exe and
-chroot_exe, so, the only user of "/tmp" is vfprintf currently. In this case, it
-is a simple normal writable directory to allow create tmp files there, so,
-agree very much to only reserve the mkdir part:
-
-    /* create /tmp if not there. Silently fail otherwise */
-    mkdir("/tmp", 0755);
-
-Another consideration before is whether it is required to be consistent with
-the normal Linux systems, let the "/tmp" directory mounted as tmpfs at most of
-the time, but "/tmp" means ramfs for CONFIG_TMPFS=n currently even mount it
-explicitly (ramfs is a fallback of tmpfs in such case), so, this assumption of
-"/tmp" means tmpfs is not true currently.
-
-What I'm worried about is people in the future assume "/tmp" as tmpfs at the
-first glance and use the features only provided by TMPFS but not provided by
-RAMFS (I'm not sure which one they will use). so, I even tried to create a
-"/tmp/tmpfs" flag for TMPFS and "/tmp/ramfs" flag for RAMFS before, since there
-is no user to explicitly prefer TMPFS to RAMFS currently, at last, I removed
-these flags from the sent patchsets. Based on the same logic, The removal of
-tmpfs mount is of course ok.
-
-So, Willy, is it ok for you to remove that mount line with corresponding update
-of the commit message (and the subject title), or require me to send a revision
-for this patch?
+[1/5] arm64: dts: qcom: sa8775p: add the SGMII PHY node
+      commit: 683ef77158cbb56ede2a524751b150cec340128a
+[2/5] arm64: dts: qcom: sa8775p: add the first 1Gb ethernet interface
+      commit: ff499a0fbb2352bff15d75c13afe46decf90d7eb
+[3/5] arm64: dts: qcom: sa8775p-ride: enable the SerDes PHY
+      commit: 5ef26fb8b3ed72cc5beb6461c258127e3a388247
+[4/5] arm64: dts: qcom: sa8775p-ride: add pin functions for ethernet0
+      commit: 48c99529998026e21a78f84261d24c0b93c1027e
+[5/5] arm64: dts: qcom: sa8775p-ride: enable ethernet0
+      commit: 120ab6c06f69b39e54c949542fa85fd49ff51278
 
 Best regards,
-Zhangjin
-
----
-[1]: https://lore.kernel.org/lkml/20230703224803.GF4378@monkey/
-
-> Willy
+-- 
+Bjorn Andersson <andersson@kernel.org>
