@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3763B74D5F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657F174D5F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjGJMmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S231403AbjGJMoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbjGJMmr (ORCPT
+        with ESMTP id S230374AbjGJMoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:42:47 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F00103
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:42:44 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so45481375e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688992962; x=1691584962;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TdvM16o5h23jwD1okqOHQiuKkM8L7IpEOiBotY2IGmY=;
-        b=b376hUBVwU5cG0vV849R90AbgHClWR5m0B0ip65d7lLM9lEjoEwc5JayOE5aBw1QWX
-         b5bc3XGTXrLab8Vol+LypXiM7YozU6vCehy1UgWdXKnRUbzAxcuf3jD3mHKCLihQnTbt
-         2ECT/v7hdYss29tOsNN/+7uQmX9S/toJpC2ipJ0kEYWK7rOYfnP51klWTWVEWZM3inYG
-         wvCQZoqU3Ac9v7ROA07LO0/1ACRT258GaaUcxrTdGiCAzpPRx8VNORi88g7HuqMlN/CI
-         SbKQahle6Va+QU6n+8MeOKUcO5358RHYMp+fKK3/50Zmoow6bjq6YzhwNI9BeTM73JQp
-         4ESg==
+        Mon, 10 Jul 2023 08:44:44 -0400
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B5099
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:44:43 -0700 (PDT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b9c60aa6e7so36929325ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:44:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688992962; x=1691584962;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TdvM16o5h23jwD1okqOHQiuKkM8L7IpEOiBotY2IGmY=;
-        b=X9B4844hF2F4nM3gPmIOiB3HE0xJX3SUEvuF10irkwe0t2VU+Sb2QNQTnwW07C0l0Y
-         r0/NfjBTEnTvn1f8z5golJSoatRxX6ev5X8KDPfYzOi0oCCx8mGU95CA3cRpHPe0sEIT
-         WfLCLNDNkhhWBKnJVEd0rv3W64Z8AdJ0HnGepwacrpStBPIMJGopHWSdUvR9QgjK1LV/
-         LHk8ZJtbsmGnHWpGMxNPavijp84N91sqPXCVd5kVJrYROuObJkCoOHe8/xsTI8sd8BSt
-         T6XSAvCtnDsWChC+IiiWtqiRRrRQMAu4BpLhX8s3NSrtFKxs66jQaMMwn7pwb06o/cEI
-         h8Qw==
-X-Gm-Message-State: ABy/qLb67baUs0rucGPT5sIwlA7J0vyfv/tIFFvCoEUWAP8OFv1fa5Cp
-        uzcrKxMuuVNITRQYKaiRtcw=
-X-Google-Smtp-Source: APBJJlHd019CoyCypGiulVzj6NCOiOfzkSWrETKAuTfVD3XhhcYEgNfYy/2loWPSYkCuLickws37OA==
-X-Received: by 2002:a1c:ed14:0:b0:3fb:4149:b816 with SMTP id l20-20020a1ced14000000b003fb4149b816mr10732743wmh.8.1688992962064;
-        Mon, 10 Jul 2023 05:42:42 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id e32-20020a5d5960000000b0031432f1528csm11637235wri.45.2023.07.10.05.42.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:42:41 -0700 (PDT)
-Message-ID: <0d6d0c57-c1e3-6761-9ecd-48176b4b6d4c@gmail.com>
-Date:   Mon, 10 Jul 2023 14:42:40 +0200
+        d=1e100.net; s=20221208; t=1688993083; x=1691585083;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fShfDNh4gU0YuX0JpRlhR+SVOpacMGT7g73q3AiRaAc=;
+        b=gHD0NjMlj00EwTv3pVbV4wgZdiqFdZvcgMqSDiNU1iJxMJRj8txb1lzWHV2Z2WUvBi
+         owZuOI2nIhWa7MyuEYNTbj5B/i9jdaW8ZO+mFwLGcY3hXp/8Mq1C1WofDNX0jSbcFDLl
+         B4c1kEilHSO+RpsLwnqaL5ipJch1W8b78LEKtMTKBn3D5xQkxJRrVMP99bKOH+rJb4+d
+         dDPrdwbUwm5IRdsvjy8pNhUZar6+w9NrIv22nZWPhP6WUa9KYARravxYfTdDfrWR5emP
+         2WeoMCMU2+rXc2Gii2kLgCoqOpGfH9t0hsKLDshy6rGDgfLqcrZVOpOjW/WWl9W5Nqab
+         AJDQ==
+X-Gm-Message-State: ABy/qLbWxcDtXMLBx97e1uNBlDVrvKRvGMq8Xw4F9/xYPolTaFzTWAh3
+        eThdLw7Z8MXn6+/F2eqUl8lfOjUZEBNP9OWXXHoSQN/Wlr10nrI=
+X-Google-Smtp-Source: APBJJlF0iuOvkKo+DJob8q8uuMOWNtS/nBCWpUsNT+tg6rToWNkXZe/VGk/DU4t8RyOix4wlPelbYrjmVD9zTF5U7w3gHCWamNmY
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v4 3/3] mtd: rawnand: rockchip: add skipbbt option
-To:     miquel.raynal@bootlin.com
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-References: <08f694df-4c1d-f059-43fd-f1aee678062c@gmail.com>
-Content-Language: en-US
-In-Reply-To: <08f694df-4c1d-f059-43fd-f1aee678062c@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:902:c3c6:b0:1b5:bd8:5aaa with SMTP id
+ j6-20020a170902c3c600b001b50bd85aaamr11623457plj.1.1688993083420; Mon, 10 Jul
+ 2023 05:44:43 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 05:44:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c3f89306002158b3@google.com>
+Subject: [syzbot] Monthly mm report (Jul 2023)
+From:   syzbot <syzbot+list3f0f911fd8f4559c698c@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Rockchip SoCs the first boot stages are written on NAND
-with help of manufacturer software that uses a different format
-then the MTD framework. Skip the automatic BBT scan with the
-NAND_SKIP_BBTSCAN option so that the original content is unchanged
-during the driver probe.
-The NAND_NO_BBM_QUIRK option allows us to erase bad blocks with
-the nand_erase_nand() function and the flash_erase command.
-With these options the user has the "freedom of choice" by neutral
-access mode to read and write in whatever format is needed.
+Hello mm maintainers/developers,
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+This is a 31-day syzbot report for the mm subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/mm
+
+During the period, 13 new issues were detected and 2 were fixed.
+In total, 48 issues are still open and 220 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 7337    Yes   WARNING in ext4_dirty_folio
+                  https://syzkaller.appspot.com/bug?extid=ecab51a4a5b9f26eeaa1
+<2> 507     No    KCSAN: data-race in generic_fillattr / shmem_mknod (2)
+                  https://syzkaller.appspot.com/bug?extid=702361cf7e3d95758761
+<3> 451     No    KCSAN: data-race in generic_fillattr / shmem_unlink (3)
+                  https://syzkaller.appspot.com/bug?extid=f682b67a78ce05867e78
+<4> 217     Yes   kernel BUG in validate_mm (2)
+                  https://syzkaller.appspot.com/bug?extid=70b97abe3e253d1c3f8e
+<5> 200     Yes   general protection fault in mt_validate
+                  https://syzkaller.appspot.com/bug?extid=6c0c8f9846801f6fbec0
+<6> 91      No    KCSAN: data-race in __filemap_remove_folio / shmem_get_folio_gfp
+                  https://syzkaller.appspot.com/bug?extid=ec4650f158c91a963120
+<7> 33      No    WARNING in try_grab_page
+                  https://syzkaller.appspot.com/bug?extid=9b82859567f2e50c123e
+<8> 15      Yes   KASAN: slab-out-of-bounds Read in mt_validate_nulls
+                  https://syzkaller.appspot.com/bug?extid=609e63261638ff3d5436
+<9> 11      No    WARNING in validate_mm
+                  https://syzkaller.appspot.com/bug?extid=a85a0b4b0f39dca529a5
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changed V4:
-  Reduce subject size
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-Changes V3:
-  Change prefixes
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-Changed V2:
-  reword
-
----
-
-I'm aware that the maintainer finds it "awful",
-but it's absolute necessary to:
-1: read/write boot blocks in user space without touching original content
-2: format a NAND for MTD either with built in or external driver module
-
-So we keep it include in this serie.
----
- drivers/mtd/nand/raw/rockchip-nand-controller.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-index 5a04680342c3..fcda4c760ffa 100644
---- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
-+++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-@@ -188,6 +188,10 @@ struct rk_nfc {
- 	unsigned long assigned_cs;
- };
-
-+static int skipbbt;
-+module_param(skipbbt, int, 0644);
-+MODULE_PARM_DESC(skipbbt, "Skip BBT scan if data on the NAND chip is not in MTD format.");
-+
- static inline struct rk_nfc_nand_chip *rk_nfc_to_rknand(struct nand_chip *chip)
- {
- 	return container_of(chip, struct rk_nfc_nand_chip, chip);
-@@ -1153,6 +1157,9 @@ static int rk_nfc_nand_chip_init(struct device *dev, struct rk_nfc *nfc,
-
- 	nand_set_controller_data(chip, nfc);
-
-+	if (skipbbt)
-+		chip->options |= NAND_SKIP_BBTSCAN | NAND_NO_BBM_QUIRK;
-+
- 	chip->options |= NAND_USES_DMA | NAND_NO_SUBPAGE_WRITE;
- 	chip->bbt_options = NAND_BBT_USE_FLASH | NAND_BBT_NO_OOB;
-
---
-2.30.2
-
+You may send multiple commands in a single email message.
