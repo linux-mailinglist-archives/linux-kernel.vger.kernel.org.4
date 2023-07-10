@@ -2,108 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BA974DFF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9034874DFF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjGJVBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 17:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S231146AbjGJVFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 17:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjGJVBm (ORCPT
+        with ESMTP id S229743AbjGJVFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 17:01:42 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1300FB;
-        Mon, 10 Jul 2023 14:01:38 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8b2886364so32103375ad.0;
-        Mon, 10 Jul 2023 14:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689022898; x=1691614898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zzk4Zb/UOMk4q6SsaPq5WbyWefCvWA/AqIp31W/KVD8=;
-        b=H6BC9RtRP0P20hEKbP+Uhd6OQuHBhPT9SfnS0pwXP24XbpLNWqk0FExxrS9awU95x2
-         8B4Bbnjjw9RL05xU9E/YaRNOlTka+eSss8TVQdG7S1iNyRISMOYUtbKg9udky0slv/FF
-         mDUFVKGHwjoZtEma/F37Rl2Dy1nhtW2iOQHwtEYwU0e9eiv5aEtkCvnCBP5t20/XtSzD
-         5QMXCpb5ArjpjC1/08Euri6cpZpygC+4GlKZLWycDUd4d/ZfPRvtOu3L6QV3NPlRylKp
-         TelCtPjzjGufaKH2E4Std+TYmAwWsMF9WkpohjwncUY0OcQU4dzzT6f4F6Uz+CYsSj5n
-         7NbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689022898; x=1691614898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zzk4Zb/UOMk4q6SsaPq5WbyWefCvWA/AqIp31W/KVD8=;
-        b=ZtrgDkzwETLXfP+1uT6owv5sUGog6noCCuMqA4bq0SPw981cdb2IZliWo58VIz+sFY
-         w0W8fJyAwuFMqyFmbh+DHb7moIEr/gbOj98sbiy09uiakoC8dlgNrOG+BlTiz7Ywq4in
-         7VzdaK/tzYOlEKa5GC4yPTwyXA4zh/AWdJLzp3sjpiwn7TCilz0xYIGP9HhDn0a9dMIK
-         7VPfstdCbVota3f1U0wrXpNd5giaJw4YsfcZ6CloFj7PFs9pntiZQ9ya73c0CYeOI/z3
-         BRQYywUAM1faWFyvFbhmdEpC7qjlXLftD2ODp/64wQ/luw3nvWFw8/xa77HoAUi+nkzb
-         2EnQ==
-X-Gm-Message-State: ABy/qLZEwocGkih3noqTxNcvoBEya1Ec8o3lsyrHOLCDBHF5WUCXi3gX
-        voFQYjOpKGLB/NCG0Bq1dqk=
-X-Google-Smtp-Source: APBJJlFHcy2tvzWfCNeWSBgkI2pJBkziE/VqFLKjUNuGJj1R2pSUDQ/76neQ1bmZ0I0PFmcYUz8TZw==
-X-Received: by 2002:a17:903:234e:b0:1b8:9bd4:297 with SMTP id c14-20020a170903234e00b001b89bd40297mr12123114plh.15.1689022897937;
-        Mon, 10 Jul 2023 14:01:37 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902b10f00b001b9da7ae98bsm324904plr.122.2023.07.10.14.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 14:01:37 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 11:01:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
+        Mon, 10 Jul 2023 17:05:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F2DA8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 14:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689023067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JurnhLHH9YQFXyYfM7Lu+OdaASAwBLZOqLUwNesFXOA=;
+        b=Kt/juClkCnyht1j52qs5XN0CjcfZLAHh2GAb1emb3lunAy41Tem/gtMj3rbCZ4/dZ2T5wh
+        fa0MJhgHijKizPBg4XJsAoHdE/6hkvXuq0rPsJoXLSzV7E/UTjYcsJGKjTGTIwBNuw+kLR
+        iPDXMdLoQ7T457HQNNtQjHo9HuR0C7A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-387-lqcSTs8NMmiwbnZUgdYJMg-1; Mon, 10 Jul 2023 17:04:24 -0400
+X-MC-Unique: lqcSTs8NMmiwbnZUgdYJMg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80FB71C17103;
+        Mon, 10 Jul 2023 21:04:23 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.217])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E0DFF492C13;
+        Mon, 10 Jul 2023 21:04:22 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 17:04:21 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [PATCH v4 4/9] cgroup/cpuset: Allow suppression of sched domain
- rebuild in update_cpumasks_hier()
-Message-ID: <ZKxxsPKf4uGoJWdX@slm.duckdns.org>
-References: <20230627143508.1576882-1-longman@redhat.com>
- <20230627143508.1576882-5-longman@redhat.com>
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH v5 1/2] sched, cgroup: Restore meaning to
+ hierarchical_quota
+Message-ID: <20230710210421.GA146093@lorien.usersys.redhat.com>
+References: <20230707195748.2918490-1-pauld@redhat.com>
+ <20230707195748.2918490-2-pauld@redhat.com>
+ <ZKxnRIZQzyVDMZGD@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230627143508.1576882-5-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZKxnRIZQzyVDMZGD@slm.duckdns.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 10:35:03AM -0400, Waiman Long wrote:
-> A single partition setup and tear-down operation can lead to
-> multiple rebuild_sched_domains_locked() calls which is a waste of
-> effort. This can partly be mitigated by adding a flag to suppress the
-> rebuild_sched_domains_locked() call in update_cpumasks_hier(). Since
-> a Boolean flag has already been passed as the 3rd argument to
-> update_cpumasks_hier(), we can extend that to a full flag word.
+On Mon, Jul 10, 2023 at 10:17:08AM -1000 Tejun Heo wrote:
+> Hello,
 > 
-> The sched domain rebuild suppression is now enabled in
-> update_sibling_cpumasks() as all it callers will do the sched domain
-> rebuild after its return later on anyway.
+> On Fri, Jul 07, 2023 at 03:57:47PM -0400, Phil Auld wrote:
+> > @@ -11038,11 +11038,14 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
+> >  
+> >  		/*
+> >  		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
+> > -		 * always take the min.  On cgroup1, only inherit when no
+> > -		 * limit is set:
+> > +		 * always take the non-RUNTIME_INF min.  On cgroup1, only
+> > +		 * inherit when no limit is set:
+> >  		 */
+> >  		if (cgroup_subsys_on_dfl(cpu_cgrp_subsys)) {
+> > -			quota = min(quota, parent_quota);
+> > +			if (quota == RUNTIME_INF)
+> > +				quota = parent_quota;
+> > +			else if (parent_quota != RUNTIME_INF)
+> > +				quota = min(quota, parent_quota);
 > 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Can you please add a comment explaining how hierarchical_quota is used in
+> cgroup2? It seems like you're using it to detect whether bw limit is
+> enforced for a given cgroup, which is fine, but the above code in isolation
+> looks a bit curious because it doesn't serve any purpose by itself.
 
-Applied 1-3 to cgroup/for-6.6.
+Sure, I can do that.
 
-Thanks.
+
+
+Cheers,
+Phil
+
+> 
+> Thanks.
+> 
+> -- 
+> tejun
+> 
 
 -- 
-tejun
+
