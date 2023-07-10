@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D241274D24F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEED74D24B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjGJJwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S231512AbjGJJw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbjGJJvt (ORCPT
+        with ESMTP id S231443AbjGJJvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:51:49 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6E6E1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:47:32 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-666eec46206so3714975b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:47:32 -0700 (PDT)
+        Mon, 10 Jul 2023 05:51:42 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8CBE6E;
+        Mon, 10 Jul 2023 02:48:25 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id 46e09a7af769-6b886456f66so2577931a34.0;
+        Mon, 10 Jul 2023 02:48:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688982452; x=1691574452;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CPkF6Xq3Ksijok8XA9MFZkl+XulMiyDQGCTonazggUI=;
-        b=chWhcN2sCCKyIM62U4NNuyElv0S591nGVkHfn7ERn5edStuEQ2czSUcv1RhSdMYq8p
-         PCMNK6flxO4+nZu7UdNmgnTg8EKiHOYOw8QCqMDxf5IHg+j7MnIGBl4k06eVXpcSRe/k
-         D++cWj7qdgTU1H37SOkwVY4mnMrI7ZZf31TF7M36BFH/B5X88gSTcWTkJngI6OYiRAxe
-         W3JuV1IjNeClf95lwsFZgNcLvuyXmUj/XOKfssb9Z4CHdyyMa2IK2DWyzVD4igwx5Rv+
-         NONFBIAE9h2+TA8ZwMbj+5UGvRsVExbwXCkucEsf3HacYgBFkwUJ7BQo0PhFWqeIjItX
-         DcMQ==
+        d=gmail.com; s=20221208; t=1688982504; x=1691574504;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HGz8+IC70d256D98s3UkooXpKb6O9hQKDllGM7BVdAY=;
+        b=mdSyE6hzeu/hvw8FSZ+A3gftTlWP92a9q17rdDNg65uIAOSgPqe7knBIMJBsMF5Xma
+         uAp5grYIC5jiwerfBpF1GWeGUS6P8vk18ls6S1hAH/OH/Q3zhKYltcB/xw6DFYu7OJoc
+         P0k6w9vfNYWXEVUQiqD1kpezvVfcmWvWHa3MHJPhjU8Zn/1IZTGjPRPfNgRYtyOQoBjZ
+         jMdmcSyuSwavrjG88xTT5+FR3dXOo6U/Xt7GuBQ86HEouUiFcAIboXVLcM3EWyC6F4r9
+         es8lXkbd9SELj0AIuLckmEmDxJEgmwSyzRZrKq1lN5ot06ujjRnkxJ/tYIhHchVNCF2P
+         Pc1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688982452; x=1691574452;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CPkF6Xq3Ksijok8XA9MFZkl+XulMiyDQGCTonazggUI=;
-        b=Pm63Oc4Jv5SzWaUpiIVcJFbUfmfmYftWt0c8ll+eRtiXBuZA5ka9MKKzHMXKZie9hX
-         X3ISBLXWyv8WAeUOQfb7SBDCwRMtM636QR7+KCVG4p9KoQhFjxE1ALnEllXmYTB52v9m
-         ymmd884ikH6tsN9AIs3hrx46qfmrmbddkl5wit22TJTeeqh7OYL7I2IABT/vaqdCQpR3
-         cOf6JClVvL5EXT9ArZXAbSQGeY9KQ+6hlU5dlZV+wGBJAb8iouhuMOUG0sqFuEC4Zgod
-         ak9N+vixRr98Qa7uzj5Xv7BpKVVyr0ryl3M56K5isO8YDSiNhNNMtkDF2XeTP2yoFmTL
-         5D0w==
-X-Gm-Message-State: ABy/qLaITD6md3pth53hnhU+bECQeGIFhE3OxLArElGCp6z8Sbx8Nq6X
-        rfHgP9tTa9sXZM++cZjJrtdqFOuIZlxw54MOVvE=
-X-Google-Smtp-Source: APBJJlEwo2b8KRHKhBXpmIt5ZbfZfUN8PfLA2p0hJW3qVCx5qBfqz8w0fmkSjNdKFGJjSMvo+LlV/g==
-X-Received: by 2002:a05:6a20:1589:b0:12c:6268:cd31 with SMTP id h9-20020a056a20158900b0012c6268cd31mr15162952pzj.47.1688982451780;
-        Mon, 10 Jul 2023 02:47:31 -0700 (PDT)
-Received: from [10.90.35.114] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b001b03f208323sm7812883plb.64.2023.07.10.02.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 02:47:31 -0700 (PDT)
-Message-ID: <217a8c6b-a4d9-dba3-5a31-6f69414e0c46@bytedance.com>
-Date:   Mon, 10 Jul 2023 17:47:27 +0800
+        d=1e100.net; s=20221208; t=1688982504; x=1691574504;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HGz8+IC70d256D98s3UkooXpKb6O9hQKDllGM7BVdAY=;
+        b=WcQNOLm+1xGei0X2wuEGb46ZNlPzD7lQkGKrTSYIv0/1QCt/EDPOgQ7F41MUxV9h76
+         Bh1g+moV/UwzP7Ftk/SYMD24sIY+m1NSOWpjN3D7ExSZK0qzvSwGi2fCbOThviEz1mVw
+         H1Bvm2z5ngSU8f/gWKXph8b/ld/KXDarFRNOOti+IJp20hB48m66jZ3jsfiLRr8jVPDN
+         I/V70vO1O7h1lcHdNvmZs7wchDFe/qMQVG/TYOw0jTieufEh4WlGCousPplZJYil7YpR
+         bQ+kOFo1Ge8GP67lE3soJ+tsSvRqAl/s9gm4VPiFhmDDQ6P3QupNGbBss+2F7ussDDDi
+         +L5g==
+X-Gm-Message-State: ABy/qLbuW02KTQS2TUV+JHgdiBD/l1qn9AMGBbmOcXeVFAqhPOOe8oeM
+        rzfBbO7sY0Adw1PLq5ABx6s=
+X-Google-Smtp-Source: APBJJlHqmYU1MiGWHBr6Gk/LMFOQOyGl4wGn6PSFPOOlMRoi+38ece62Adgwv523afyvaq7Cy44iIg==
+X-Received: by 2002:a05:6870:5610:b0:19a:695:15a5 with SMTP id m16-20020a056870561000b0019a069515a5mr11451916oao.25.1688982504442;
+        Mon, 10 Jul 2023 02:48:24 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.84])
+        by smtp.gmail.com with ESMTPSA id 18-20020a17090a1a1200b00265b9178a73sm1745780pjk.6.2023.07.10.02.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 02:48:23 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     michael.chan@broadcom.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH RESEND net-next] bnxt_en: use dev_consume_skb_any() in bnxt_tx_int
+Date:   Mon, 10 Jul 2023 17:47:47 +0800
+Message-Id: <20230710094747.943782-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [RESEND PATCH 6/8] maple_tree: update mt_validate()
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-References: <20230707101057.29326-1-zhangpeng.00@bytedance.com>
- <20230707101057.29326-7-zhangpeng.00@bytedance.com>
- <20230707150217.2ppiuemszsd5okfa@revolver>
-Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        maple-tree@lists.infradead.org
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230707150217.2ppiuemszsd5okfa@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,65 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Menglong Dong <imagedong@tencent.com>
 
+Replace dev_kfree_skb_any() with dev_consume_skb_any() in bnxt_tx_int()
+to clear the unnecessary noise of "kfree_skb" event.
 
-在 2023/7/7 23:02, Liam R. Howlett 写道:
-> * Peng Zhang <zhangpeng.00@bytedance.com> [230707 06:11]:
->> Instead of using mas_first_entry() to find the leftmost leaf, use a
->> simple loop instead. Remove an unneeded check for root node. To make
->> the error message more accurate, check pivots first and then slots,
->> because checking slots depend on the node limit pivot to break the loop.
->>
->> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
->> ---
->>   lib/maple_tree.c | 21 +++++++++++----------
->>   1 file changed, 11 insertions(+), 10 deletions(-)
->>
->> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->> index e84a042b6d84..3aede7deaa26 100644
->> --- a/lib/maple_tree.c
->> +++ b/lib/maple_tree.c
->> @@ -7260,21 +7260,22 @@ void mt_validate(struct maple_tree *mt)
->>   	if (!mas_searchable(&mas))
->>   		goto done;
->>   
->> -	mas_first_entry(&mas, mas_mn(&mas), ULONG_MAX, mte_node_type(mas.node));
->> +	while (!mte_is_leaf(mas.node))
->> +		mas_descend(&mas);
->> +
->>   	while (!mas_is_none(&mas)) {
->>   		MAS_WARN_ON(&mas, mte_dead_node(mas.node));
->> -		if (!mte_is_root(mas.node)) {
->> -			end = mas_data_end(&mas);
->> -			if (MAS_WARN_ON(&mas,
->> -					(end < mt_min_slot_count(mas.node)) &&
->> -					(mas.max != ULONG_MAX))) {
->> -				pr_err("Invalid size %u of %p\n", end,
->> -				       mas_mn(&mas));
->> -			}
->> +		end = mas_data_end(&mas);
->> +		if (MAS_WARN_ON(&mas,
->> +				(end < mt_min_slot_count(mas.node)) &&
->> +				(mas.max != ULONG_MAX))) {
-> 
-> This line can be reformatted now that it is not as nested.
-> 
->> +			pr_err("Invalid size %u of %p\n", end,
->> +				mas_mn(&mas));
-> 
-> Ditto here.
-Thanks, I'll reformat it.
-> 
->>   		}
->> +
->>   		mas_validate_parent_slot(&mas);
->> -		mas_validate_child_slot(&mas);
->>   		mas_validate_limits(&mas);
->> +		mas_validate_child_slot(&mas);
->>   		if (mt_is_alloc(mt))
->>   			mas_validate_gaps(&mas);
->>   		mas_dfs_postorder(&mas, ULONG_MAX);
->> -- 
->> 2.20.1
->>
->>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index e5b54e6025be..d84ded8db93d 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -685,7 +685,7 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int nr_pkts)
+ next_tx_int:
+ 		cons = NEXT_TX(cons);
+ 
+-		dev_kfree_skb_any(skb);
++		dev_consume_skb_any(skb);
+ 	}
+ 
+ 	WRITE_ONCE(txr->tx_cons, cons);
+-- 
+2.40.1
+
