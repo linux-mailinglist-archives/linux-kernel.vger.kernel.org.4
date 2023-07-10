@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A413674D88A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018B374D88B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjGJOHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:07:22 -0400
+        id S232478AbjGJOH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:07:26 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjGJOGi (ORCPT
+        with ESMTP id S232529AbjGJOHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:06:38 -0400
+        Mon, 10 Jul 2023 10:07:01 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E019918D;
-        Mon, 10 Jul 2023 07:06:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11E2E50;
+        Mon, 10 Jul 2023 07:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688997988; x=1720533988;
+  t=1688997992; x=1720533992;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/X+CMAVZ+fFGpEoYBchn+e9YP1RsPOzHxF/nXxtrpeE=;
-  b=E/lIF47yjJ24yaMlcjVExp+LFS+h+ARNsunlZ2KUAIoHAdZhY02EaPI/
-   b9CDtyLOxZLaj+S9zcznkmv6guljD0FKl+RhdDdO/EylHOOiQRbEBMUTl
-   9iCuGUy3rljHmCEiQlXNIePNdT4il6OhioDyxGKnf4cjrHyG4Zd0hr+vC
-   akluhxq0LOfTKbebf7+usoD8hWdWjBlAo1/wz9CDt31sIydDoYTK6knra
-   SJ406DfLt7CwNjBMo/JtLvV1swO0nrAytIhr3sopgite73XQxaA3ONmJk
-   ZAp20XZmTuMa58hxcCod+jkE2gHantF9oWsfJNv6khvVNvMakVlsG20/q
+  bh=yQFTo0B2urTk/RCCqud95p7Ixzev6NqE7JeTu/NsTRc=;
+  b=BnsVY8ZNOqAG6kLUNNu0sPF2+IqAfrDWLNqyLxbxhFEyhm8SNQNskcms
+   Sux+5j64ATfCnFAOYHJFZ+Crt0zcL4JTCvjxwMziSs1F1OlLHXTggJPBC
+   idbtALw3VB/auuSBIf3QoRt0opfCAkz4hWoehScctEyJNODBR1zXkJCQX
+   0dXmf3fx3zZ1Q2Bob8JPS+7hgRYdirwXNVgBJNJHzrcdFz/d7eL5n9pgh
+   4Vul0hhuNymON5sfitC0/vA6GMtt+9REWA3o6CTAPvouBXFmy2E6B0PAO
+   GFjAo1tlfz8bdM9Trvm7i5x1PRceW2fhUz7it2KUGvuVE46NhHMPH0Lxl
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361815052"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361815087"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="361815052"
+   d="scan'208";a="361815087"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:39 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714822968"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714823019"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="714822968"
+   d="scan'208";a="714823019"
 Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:35 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:39 -0700
 From:   Michal Wilczynski <michal.wilczynski@intel.com>
 To:     linux-acpi@vger.kernel.org
 Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
@@ -48,9 +48,9 @@ Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
         Michal Wilczynski <michal.wilczynski@intel.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 7/9] acpi: Introduce acpi_processor_osc()
-Date:   Mon, 10 Jul 2023 17:03:35 +0300
-Message-ID: <20230710140337.1434060-8-michal.wilczynski@intel.com>
+Subject: [PATCH v4 8/9] acpi: Use _OSC method to convey processor OSPM capabilities
+Date:   Mon, 10 Jul 2023 17:03:36 +0300
+Message-ID: <20230710140337.1434060-9-michal.wilczynski@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230710140337.1434060-1-michal.wilczynski@intel.com>
 References: <20230710140337.1434060-1-michal.wilczynski@intel.com>
@@ -66,98 +66,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently in ACPI code _OSC method is already used for workaround
-introduced in commit a21211672c9a ("ACPI / processor: Request native
-thermal interrupt handling via _OSC"). Create new function, similar to
-already existing acpi_hwp_native_thermal_lvt_osc(). Call new function
-acpi_processor_osc(). Make this function fulfill the purpose previously
-fulfilled by the workaround plus convey OSPM processor capabilities
-with it by setting correct processor capabilities bits. Don't include
-unnecessary acknowledgment present in
-acpi_hwp_native_thermal_lvt_osc(). Set ACPI_PROC_CAP_COLLAB_PROC_PERF
-in arch code for coherency.
+Change acpi_early_processor_osc() to return value in case of the failure.
+Make it more generic - previously it served only to execute workaround
+for buggy BIOS in Skylake systems. Now it will walk through ACPI
+namespace looking for processor objects and will convey OSPM processor
+capabilities using _OSC method.
+
+Introduce new function acpi_early_processor_control_setup(). Call it in
+acpi_bus_init(). Make acpi_early_processor_control_setup() call _OSC
+method first. In case of the failure of the _OSC, try using _PDC as a
+fallback.
 
 Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/x86/include/asm/acpi.h   |  3 +++
- drivers/acpi/acpi_processor.c | 29 ++++++++++++++++++++++++++++-
- include/acpi/proc_cap_intel.h |  1 +
- 3 files changed, 32 insertions(+), 1 deletion(-)
+ drivers/acpi/acpi_processor.c | 34 +++++++++++++++++++++++++---------
+ drivers/acpi/bus.c            |  5 +----
+ drivers/acpi/internal.h       |  9 ++-------
+ 3 files changed, 28 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-index 6f6752a2ea36..6c3af9486153 100644
---- a/arch/x86/include/asm/acpi.h
-+++ b/arch/x86/include/asm/acpi.h
-@@ -115,6 +115,9 @@ static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
- 	if (cpu_has(c, X86_FEATURE_ACPI))
- 		*cap |= ACPI_PROC_CAP_T_FFH;
- 
-+	if (cpu_has(c, X86_FEATURE_HWP))
-+		*cap |= ACPI_PROC_CAP_COLLAB_PROC_PERF;
-+
- 	/*
- 	 * If mwait/monitor is unsupported, C_C1_FFH and
- 	 * C2/C3_FFH will be disabled.
 diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index ebb4efd3d0aa..f3c41acdb8ae 100644
+index f3c41acdb8ae..50c456dbecea 100644
 --- a/drivers/acpi/acpi_processor.c
 +++ b/drivers/acpi/acpi_processor.c
-@@ -559,13 +559,40 @@ bool __init processor_physically_present(acpi_handle handle)
- 	return !invalid_logical_cpuid(cpuid);
+@@ -623,16 +623,32 @@ static acpi_status __init acpi_hwp_native_thermal_lvt_osc(acpi_handle handle,
+ 	return AE_OK;
  }
  
-+/* vendor specific UUID indicating an Intel platform */
-+static u8 sb_uuid_str[] = "4077A616-290C-47BE-9EBD-D87058713953";
- static bool acpi_hwp_native_thermal_lvt_set;
-+static acpi_status __init acpi_processor_osc(acpi_handle handle, u32 lvl,
-+					     void *context, void **rv)
-+{
-+	u32 capbuf[2] = {};
+-void __init acpi_early_processor_osc(void)
++acpi_status __init acpi_early_processor_osc(void)
+ {
+-	if (boot_cpu_has(X86_FEATURE_HWP)) {
+-		acpi_walk_namespace(ACPI_TYPE_PROCESSOR, ACPI_ROOT_OBJECT,
+-				    ACPI_UINT32_MAX,
+-				    acpi_hwp_native_thermal_lvt_osc,
+-				    NULL, NULL, NULL);
+-		acpi_get_devices(ACPI_PROCESSOR_DEVICE_HID,
+-				 acpi_hwp_native_thermal_lvt_osc,
+-				 NULL, NULL);
 +	acpi_status status;
-+	struct acpi_osc_context osc_context = {
-+		.uuid_str = sb_uuid_str,
-+		.rev = 1,
-+		.cap.length = 8,
-+		.cap.pointer = capbuf,
-+	};
 +
-+	if (!processor_physically_present(handle))
-+		return AE_OK;
++	acpi_proc_quirk_dmi_check();
 +
-+	arch_acpi_set_proc_cap_bits(&capbuf[OSC_SUPPORT_DWORD]);
-+
-+	status = acpi_run_osc(handle, &osc_context);
++	status = acpi_walk_namespace(ACPI_TYPE_PROCESSOR, ACPI_ROOT_OBJECT,
++				     ACPI_UINT32_MAX, acpi_processor_osc, NULL,
++				     NULL, NULL);
 +	if (ACPI_FAILURE(status))
 +		return status;
 +
-+	kfree(osc_context.ret.pointer);
-+
-+	return AE_OK;
++	return acpi_get_devices(ACPI_PROCESSOR_DEVICE_HID, acpi_processor_osc,
++				NULL, NULL);
 +}
 +
- static acpi_status __init acpi_hwp_native_thermal_lvt_osc(acpi_handle handle,
- 							  u32 lvl,
- 							  void *context,
- 							  void **rv)
- {
--	u8 sb_uuid_str[] = "4077A616-290C-47BE-9EBD-D87058713953";
- 	u32 capbuf[2];
- 	struct acpi_osc_context osc_context = {
- 		.uuid_str = sb_uuid_str,
-diff --git a/include/acpi/proc_cap_intel.h b/include/acpi/proc_cap_intel.h
-index 57e5e2628abb..ddcdc41d6c3e 100644
---- a/include/acpi/proc_cap_intel.h
-+++ b/include/acpi/proc_cap_intel.h
-@@ -19,6 +19,7 @@
- #define ACPI_PROC_CAP_C_C1_FFH			(0x0100)
- #define ACPI_PROC_CAP_C_C2C3_FFH		(0x0200)
- #define ACPI_PROC_CAP_SMP_P_HWCOORD		(0x0800)
-+#define ACPI_PROC_CAP_COLLAB_PROC_PERF		(0x1000)
++void __init acpi_early_processor_control_setup(void)
++{
++	acpi_status status;
++
++	status = acpi_early_processor_osc();
++	if (ACPI_FAILURE(status)) {
++		pr_err("_OSC methods failed, trying _PDC\n");
++		acpi_early_processor_set_pdc();
++	} else {
++		pr_info("_OSC methods ran successfully\n");
+ 	}
+ }
+ #endif
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index 2fc2b43a4ed3..a39f2f3a2cd6 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -1296,9 +1296,6 @@ static int __init acpi_bus_init(void)
+ 		goto error1;
+ 	}
  
- #define ACPI_PROC_CAP_EST_CAPABILITY_SMP	(ACPI_PROC_CAP_SMP_C1PT | \
- 						 ACPI_PROC_CAP_C_C1_HALT | \
+-	/* Set capability bits for _OSC under processor scope */
+-	acpi_early_processor_osc();
+-
+ 	/*
+ 	 * _OSC method may exist in module level code,
+ 	 * so it must be run after ACPI_FULL_INITIALIZATION
+@@ -1314,7 +1311,7 @@ static int __init acpi_bus_init(void)
+ 
+ 	acpi_sysfs_init();
+ 
+-	acpi_early_processor_set_pdc();
++	acpi_early_processor_control_setup();
+ 
+ 	/*
+ 	 * Maybe EC region is required at bus_scan/acpi_get_devices. So it
+diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+index 87c343f79900..ccffa04c7060 100644
+--- a/drivers/acpi/internal.h
++++ b/drivers/acpi/internal.h
+@@ -152,18 +152,13 @@ int acpi_wakeup_device_init(void);
+                                   Processor
+    -------------------------------------------------------------------------- */
+ #ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
++void acpi_early_processor_control_setup(void);
+ void acpi_early_processor_set_pdc(void);
+ 
+ void acpi_proc_quirk_dmi_check(void);
+ bool processor_physically_present(acpi_handle handle);
+ #else
+-static inline void acpi_early_processor_set_pdc(void) {}
+-#endif
+-
+-#ifdef CONFIG_X86
+-void acpi_early_processor_osc(void);
+-#else
+-static inline void acpi_early_processor_osc(void) {}
++void acpi_early_processor_control_setup(void) {}
+ #endif
+ 
+ /* --------------------------------------------------------------------------
 -- 
 2.41.0
 
