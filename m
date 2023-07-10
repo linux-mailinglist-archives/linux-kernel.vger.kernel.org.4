@@ -2,109 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF69274D7FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61E874D7FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjGJNnN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 09:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S231393AbjGJNoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjGJNm4 (ORCPT
+        with ESMTP id S229907AbjGJNoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:42:56 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F163CBA;
-        Mon, 10 Jul 2023 06:42:54 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qIrA9-000zai-Vg; Mon, 10 Jul 2023 15:42:50 +0200
-Received: from p57bd95f7.dip0.t-ipconnect.de ([87.189.149.247] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qIrA9-001iVF-NK; Mon, 10 Jul 2023 15:42:49 +0200
-Message-ID: <0a47ed93fe90a77180533f8c2e42e402827e8f1c.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 08/17] arch/sh: Do not assign FBINFO_FLAG_DEFAULT to
- fb_videomode.flag
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-        javierm@redhat.com
-Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
-        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-Date:   Mon, 10 Jul 2023 15:42:48 +0200
-In-Reply-To: <20230710130113.14563-9-tzimmermann@suse.de>
-References: <20230710130113.14563-1-tzimmermann@suse.de>
-         <20230710130113.14563-9-tzimmermann@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.4 
+        Mon, 10 Jul 2023 09:44:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FA6BA;
+        Mon, 10 Jul 2023 06:44:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E642460FC6;
+        Mon, 10 Jul 2023 13:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECCEC433C8;
+        Mon, 10 Jul 2023 13:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688996652;
+        bh=f8+Tgjr82BQ+lwzbHHg9u/aqPVDfaD8lbBwoguIlk+w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u9aUbDe2rXRBAMG0lbwa91r24ByoD38mxzaGazqadyRo4c0gTzwwTBMnSbJidaiVc
+         3VdBn6sx6m1JR2rQNJDd5P5aTFDO5+oRg9aRD9wQ0YSBEk6A6GWMo7wO2vjUiw1orY
+         tmLGIgMOq75VHbkxAVkNC67l6/3PeacJSrtuV+oTaXSXsQN10yx/nUDEGY9Gkx/rWN
+         a9CKWZggWo0CEQ74Lx6LxRuvaiTlT/qfgPvSgqE3NGsYEWUMvm4pd1VC1BFMdMBV8P
+         Nuh+qygzLfkuj1iDco31uWVbX8H74SmwR2pWMhTUqDyjCM3l8VDLviQY/w7wcEPAHI
+         E/vjXhuylIFSg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5C8E140516; Mon, 10 Jul 2023 10:44:09 -0300 (-03)
+Date:   Mon, 10 Jul 2023 10:44:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Georg =?iso-8859-1?Q?M=FCller?= <georgmueller@gmx.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] perf probe: fix regression introduced by switch
+ to die_get_decl_file
+Message-ID: <ZKwLKXL6rkoShDNc@kernel.org>
+References: <20230628084551.1860532-3-georgmueller@gmx.net>
+ <1c85c4d6-7097-bc0a-d0ca-ebe234d63ece@leemhuis.info>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.149.247
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c85c4d6-7097-bc0a-d0ca-ebe234d63ece@leemhuis.info>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas!
-
-On Mon, 2023-07-10 at 14:50 +0200, Thomas Zimmermann wrote:
-> FBINFO_FLAG_DEFAULT is a flag for a framebuffer in struct fb_info.
-> Flags for videomodes are prefixed with FB_MODE_. FBINFO_FLAG_DEFAULT
-> is 0 and the static declaration already clears the memory area of
-> sh7763fb_videomode. So remove the assignment.
+Em Mon, Jul 10, 2023 at 02:32:28PM +0200, Linux regression tracking (Thorsten Leemhuis) escreveu:
+> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> for once, to make this easily accessible to everyone.
 > 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> ---
->  arch/sh/boards/mach-sh7763rdp/setup.c | 1 -
->  1 file changed, 1 deletion(-)
+> Masami, Arnaldo, what's up here? Georg (who is not a regular
+> contributor) afaics found a regression in a commit you
+> authored/committed and even provided a patch-set to fix it (the first
+> one nearly four weeks ago, e.g. before the merge window started), but
+> hasn't received much support from your side to get this in. Could you
+> please look into this to get this cleared up? Or am I missing something
+> and progress to fix this has been made?
+
+I'm back from a 2 week vacation, going thru the pile, probably fell thru
+the cracks and Namyung, that processed patches while I was away didn't
+notice it either.
+
+I'm checking,
+
+- Arnaldo
+ 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
 > 
-> diff --git a/arch/sh/boards/mach-sh7763rdp/setup.c b/arch/sh/boards/mach-sh7763rdp/setup.c
-> index 97e715e4e9b3..345f2b76c85a 100644
-> --- a/arch/sh/boards/mach-sh7763rdp/setup.c
-> +++ b/arch/sh/boards/mach-sh7763rdp/setup.c
-> @@ -119,7 +119,6 @@ static struct fb_videomode sh7763fb_videomode = {
->  	.vsync_len = 1,
->  	.sync = 0,
->  	.vmode = FB_VMODE_NONINTERLACED,
-> -	.flag = FBINFO_FLAG_DEFAULT,
->  };
->  
->  static struct sh7760fb_platdata sh7763fb_def_pdata = {
-
-I would argue that the current code is more readable that your proposed change.
-
-I agree that it's a no-op, but code is not just about functionality but also
-readability, isn't it?
-
-Also, I prefer "sh:" as the architecture prefix, not "arch/sh:".
-
-Thanks,
-Adrian
+> 
+> On 28.06.23 10:45, Georg Müller wrote:
+> > When switching from dwarf_decl_file() to die_get_decl_file(), a regression
+> > was introduced when having a binary where the DWARF info is split to
+> > multiple CUs. It is not possible to add probes to certain functions.
+> > 
+> > These patches introduce a testcase which shows the current regression
+> > and a fix for the issue
+> > 
+> > Signed-off-by: Georg Müller <georgmueller@gmx.net>
+> > Link: https://lore.kernel.org/r/5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.net/
+> > 
+> > ---
+> > Changes in v2:
+> >  - Add testcase
+> > 
+> > Changes in v3:
+> >  - start new thread
+> >  - add stable to cc
+> > 
+> > Georg Müller (2):
+> >   perf probe: add test for regression introduced by switch to
+> >     die_get_decl_file
+> >   perf probe: read DWARF files from the correct CU
+> > 
+> >  .../shell/test_uprobe_from_different_cu.sh    | 77 +++++++++++++++++++
+> >  tools/perf/util/dwarf-aux.c                   |  4 +-
+> >  2 files changed, 80 insertions(+), 1 deletion(-)
+> >  create mode 100755 tools/perf/tests/shell/test_uprobe_from_different_cu.sh
+> > 
+> > --
+> > 2.41.0
+> > 
+> > 
+> > 
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+
+- Arnaldo
