@@ -2,46 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA88774CA9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE9474CAA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjGJDhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 23:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S230064AbjGJDiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 23:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGJDhN (ORCPT
+        with ESMTP id S229554AbjGJDiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 23:37:13 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32536AF
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 20:37:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VmxJER0_1688960227;
-Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VmxJER0_1688960227)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Jul 2023 11:37:08 +0800
-Message-ID: <fd738d38-17de-4b61-e4e8-d4f98ef8d1db@linux.alibaba.com>
-Date:   Mon, 10 Jul 2023 11:37:06 +0800
+        Sun, 9 Jul 2023 23:38:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF32AF;
+        Sun,  9 Jul 2023 20:38:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA3E60DC5;
+        Mon, 10 Jul 2023 03:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122C6C433C7;
+        Mon, 10 Jul 2023 03:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688960287;
+        bh=v0OsTtvNKU6Dld3+w3JG1lJowk+7fQMnwswrEl/ZXho=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I3vszjayKwTZgx7pu48sWg1k5KBKxkXctrW6bu353IwqtA9FDkUA7UB58Thl0EhHA
+         B70Ik7KJ+gLjEd/EJMekP58Fj22ciYqtrwFfDgaE8piXiARykGJpw4fmJMr0abMiYv
+         kznZLRTeIpAciA+le/inMAv0/2rIwFn7wPgoi0g6V+OEpDki3zv82reX0K4OX0Vk6U
+         Pk3PpnvQIPIwP0lZqaH5XhB2u9jeRgPYAmJw6E9/kj6Hic8bm2+vgsnEqqkEqgA9Ri
+         Z5P+PafgNNhL27TXboyzGxGeY4OuUhIK5umaEMLtbzeoYff/FKxbLMUD0g8AMLhDai
+         VEhKaDKNhWjAg==
+Message-ID: <fd95e3cb-d7b7-ec8b-c48b-d86634f07dfd@kernel.org>
+Date:   Sun, 9 Jul 2023 22:38:03 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] erofs: fix two loop issues when read page beyond EOF
-To:     Chunhai Guo <guochunhai@vivo.com>,
-        "xiang@kernel.org" <xiang@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>
-Cc:     "huyue2@coolpad.com" <huyue2@coolpad.com>,
-        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>,
-        "linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230708062432.67344-1-guochunhai@vivo.com>
- <97875049-8df9-e041-61ca-d90723ba6e82@linux.alibaba.com>
- <d6ee4571-64d6-ebd2-4adb-83f33e5e608d@vivo.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <d6ee4571-64d6-ebd2-4adb-83f33e5e608d@vivo.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 4/4] vgacon, arch/*: remove unused screen_info definitions
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>, Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+References: <20230707095415.1449376-1-arnd@kernel.org>
+ <20230707095415.1449376-4-arnd@kernel.org>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230707095415.1449376-4-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,118 +74,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/7/10 11:32, Chunhai Guo wrote:
-> Hi Xiang,
+On 7/7/23 04:52, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> On 2023/7/8 17:00, Gao Xiang wrote:
->> Hi Chunhai,
->>
->> On 2023/7/8 14:24, Chunhai Guo wrote:
->>> When z_erofs_read_folio() reads a page with an offset far beyond EOF, two
->>> issues may occur:
->>> - z_erofs_pcluster_readmore() may take a long time to loop when the offset
->>>     is big enough, which is unnecessary.
->>>       - For example, it will loop 4691368 times and take about 27 seconds
->>>         with following case.
->>>           - offset = 19217289215
->>>           - inode_size = 1442672
->>> - z_erofs_do_read_page() may loop infinitely due to the inappropriate
->>>     truncation in the below statement. Since the offset is 64 bits and
->>> min_t() truncates the result to 32 bits. The solution is to replace
->>> unsigned int with another 64-bit type, such as erofs_off_t.
->>>       cur = end - min_t(unsigned int, offset + end - map->m_la, end);
->>>       - For example:
->>>           - offset = 0x400160000
->>>           - end = 0x370
->>>           - map->m_la = 0x160370
->>>           - offset + end - map->m_la = 0x400000000
->>>           - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
->>
->> Thanks for the catch!
->>
->> Could you split these two into two patches?
->>
->> how about using:
->> cur = end - min_t(erofs_off_t, offend + end - map->m_la, end)
->> for this?
->>
->> since cur and end are all [0, PAGE_SIZE - 1] for now, and
->> folio_size() later.
+> A number of architectures either kept the screen_info definition for
+> historical purposes as it used to be required by the generic VT code, or
+> they copied it from another architecture in order to build the VGA
+> console driver in an allmodconfig build.
 > 
-> OK. I will split the patch.
+> Now that vgacon no longer builds on these architectures, remove the
+> stale definitions.
 > 
-> Sorry that I can not understand what is 'offend' refer to and what do you mean. Could you please describe it more clearly?
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   arch/csky/kernel/setup.c          | 12 ------------
+>   arch/hexagon/kernel/Makefile      |  2 --
+>   arch/hexagon/kernel/screen_info.c |  3 ---
+>   arch/nios2/kernel/setup.c         |  5 -----
 
-Sorry, there is a typo here, I meant 'offset'.
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 
-`cur` and `end` both are not exceed 4096 if your page_size
-is 4096.
-
-Does
-cur = end - min_t(erofs_off_t, offset + end - map->m_la, end)
-
-fix your issue?
-
-> 
->>>       - Expected result:
->>>           - cur = 0
->>>       - Actual result:
->>>           - cur = 0x370
->>>
->>> Signed-off-by: Chunhai Guo <guochunhai@vivo.com>
->>> ---
->>>    fs/erofs/zdata.c | 13 ++++++++++---
->>>    1 file changed, 10 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
->>> index 5f1890e309c6..6abbd4510076 100644
->>> --- a/fs/erofs/zdata.c
->>> +++ b/fs/erofs/zdata.c
->>> @@ -972,7 +972,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->>>        struct erofs_map_blocks *const map = &fe->map;
->>>        const loff_t offset = page_offset(page);
->>>        bool tight = true, exclusive;
->>> -    unsigned int cur, end, spiltted;
->>> +    erofs_off_t cur, end;
->>> +    unsigned int spiltted;
->>>        int err = 0;
->>>        /* register locked file pages as online pages in pack */
->>> @@ -1035,7 +1036,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->>>         */
->>>        tight &= (fe->mode > Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
->>> -    cur = end - min_t(unsigned int, offset + end - map->m_la, end);
->>> +    cur = end - min_t(erofs_off_t, offset + end - map->m_la, end);
->>>        if (!(map->m_flags & EROFS_MAP_MAPPED)) {
->>>            zero_user_segment(page, cur, end);
->>>            goto next_part;
->>> @@ -1841,7 +1842,7 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
->>>        }
->>>        cur = map->m_la + map->m_llen - 1;
->>> -    while (cur >= end) {
->>> +    while ((cur >= end) && (cur < i_size_read(inode))) {
->>>            pgoff_t index = cur >> PAGE_SHIFT;
->>>            struct page *page;
->>> @@ -1876,6 +1877,12 @@ static int z_erofs_read_folio(struct file *file, struct folio *folio)
->>>        trace_erofs_readpage(page, false);
->>>        f.headoffset = (erofs_off_t)page->index << PAGE_SHIFT;
->>> +    /* when trying to read beyond EOF, return zero page directly */
->>> +    if (f.headoffset >= i_size_read(inode)) {
->>> +        zero_user_segment(page, 0, PAGE_SIZE);
->>> +        return 0;
->>> +    }
->> Do we really need to optimize this rare case?
->> I guess the follow readmore fix is enough, thoughts? >
->> Thanks,
->> Gao Xiang
-> 
-> Since the code is constantly being updated and someone may encounter this bug again, I think we had better fix it if possible.
-
-z_erofs_do_read_page() already covers this case so I'm
-not sure why we need to add another logic here.
-
-Thanks,
-Gao Xiang
-
-> 
-> Thanks.
-> Guo Chunhai
