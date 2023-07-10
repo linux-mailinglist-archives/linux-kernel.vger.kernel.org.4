@@ -2,152 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126CE74E19D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D7A74E1A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjGJW6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S230253AbjGJXAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjGJW6P (ORCPT
+        with ESMTP id S229569AbjGJXAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:58:15 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18EDFB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:58:14 -0700 (PDT)
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36AM2A07002080;
-        Mon, 10 Jul 2023 22:57:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=a/2knozuNsYSUzy941WrFTX1nOINvJwI85QCF5EPkEw=;
- b=Y3vekMfsfGID69PohKfkLvbRwFrDygu1pixLAC+HkRfxJHQVsL86ksu+uMx2JSw1CI6K
- 1wzqCpwReTJvSa6f7V1dadZgUkQKTjVD+dQTJhKAb2KCK2MtISZWk2y7Q/YdKOHleXub
- MXQUiDJSAh5K0mWiXPmqvF7qcuIyUAkLm5OMzqHe1rD8D0ZN1b9GnXfepsWTvyiOHFL2
- YUp4DMPrsf4ztvcnk1WN3GiY48oHDZ+0w5IjbnK4+s93XXo1CMHlGicFvH2I8rRgvvAV
- QsrOxIm4QPhcj6LHnx1SNS+VaZY6xZU7w5gVaRIlX0G/JGbxnKplfks7TEUET+Su5YL/ Qg== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3rrc1efjr1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 22:57:55 +0000
-Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 10 Jul 2023 19:00:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B8DE5;
+        Mon, 10 Jul 2023 16:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689030004;
+        bh=rrskI+q7R9a0pNB+HSclMU73QhH+3YqzYp6kWphE1ik=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JnKoUUWzsgMaZ6pcHdm56iUmTEtOTjOd+FKt7RnzF7fdbYpO+y2zipsSPlw30ARRi
+         UcgIdpWxQh9cB5w2Mnsg2KUzZBCbxOgytTuSSxcE61Q099wSDaVuhEm+8bZ0E/OaR0
+         FbcQdTzp0jyQYxjH8eKlQ0fn/jdpU9Sn1NZyh5xDg73fJdWJJaNzLtuH+aR+i3Yz0i
+         QZo4p46O5DeL+WgS9Q5BP8HPcxgLSf69a7qzXPx+YkBk2wXGRztTKAKCbCMS6FhDbp
+         IUBXCZGBGaFKS4swVUYn5ZokvYMwxviZAmFMZzLITPSlhE0Uk3eZK59BGjix6aghFK
+         W+aCqtcnK5eMg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id C2662804796;
-        Mon, 10 Jul 2023 22:57:54 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 10 Jul 2023 10:57:54 -1200
-Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
- via Frontend Transport; Mon, 10 Jul 2023 10:57:54 -1200
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 10 Jul 2023 10:57:53 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=crylmJp2MqdaV5vwyBbAnzNddFXpK7v2Qv1mfGuEBjKZ9NcUAXergzsFaBaPpC42PBX7UcOdD1AKam35ye916Lqvzu6Zp3VFznIWXyO4lce6cdinHupz15/05v8C/7EKeKPX0rQ8l21bD5SXnVF464AUi4tjh/WXpPf/dEGpZaE7GCWZ+wHKKrbCyy1ynPQhx+quCj2psJJFHj69JQxs5ClKifkW+Do788ucKslU53EoIxpDmPZr+t/06jPS7ixyXCfHm2stfLrHWtuHTQwfFMtHQW9HZrVexPGVzBVADGBOu6at6RYS0zRGarSRJWEIHjl8ldU2ZzyjKktsKdUZSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a/2knozuNsYSUzy941WrFTX1nOINvJwI85QCF5EPkEw=;
- b=NOkqGvbTwOyIKBO9QgskKFc803COb3fg5T9TqlKbd3xdyhtrbGNGD9E6tIJ/ONG1kb7Jl+BW/BDInbjk/pTrkPiSZXjaa8m2quG8yZbkPs5slR12FZzO/fmYA56XR5hT/S+F5X15cpRsmyXbXK2M4rCXYLAtHK4VceWemedawkI3ANGfNBF9BkdCI6myUxg4lVPe2ePdFpI5kwFl/wSLkf8UwUaeW3QYd/3I5U/tG1r1v9t92qe+Sp3HNadtXErT55rB6S21uSN966PFRtK4mnoe5SgKuAMStmRNPkkwcxXl3TvE8NO1VZ4PWQbwZyirmXUYfT24Yjg/HqTfClbocQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from PH7PR84MB1813.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:153::10)
- by MW4PR84MB1419.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
- 2023 22:57:52 +0000
-Received: from PH7PR84MB1813.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2ac6:fa4a:e2b:f9a0]) by PH7PR84MB1813.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2ac6:fa4a:e2b:f9a0%4]) with mapi id 15.20.6565.016; Mon, 10 Jul 2023
- 22:57:52 +0000
-From:   "Ernst, Justin" <justin.ernst@hpe.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-CC:     Borislav Petkov <bp@alien8.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] x86/platform/uv: fix spelling in sgi_uv ABI
- documentation
-Thread-Topic: [PATCH v2] x86/platform/uv: fix spelling in sgi_uv ABI
- documentation
-Thread-Index: AQHZs4BaYzxwfeKXB0qqN54NRcF5hK+zmuJQ
-Date:   Mon, 10 Jul 2023 22:57:52 +0000
-Message-ID: <PH7PR84MB18131F23D6D2E50EE30122568730A@PH7PR84MB1813.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20230710224613.22950-1-rdunlap@infradead.org>
-In-Reply-To: <20230710224613.22950-1-rdunlap@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR84MB1813:EE_|MW4PR84MB1419:EE_
-x-ms-office365-filtering-correlation-id: 81129b3c-6d81-43bc-2d87-08db81991754
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R807BMkoJ5+amD5zSCQE9BGltl2uvxGzfrsozlGA9saSbs7AnU2xgK5yxaPZ9uPdG/LZ9SUfNZw7aj6enmSD4Rp0u28dxoJychofrqkCwpQS01kK4GBVqhNpXi2xcp8SkmP83scxdDTOScThFs3dG7ZywJ1C3a8MV8B3jEYtyM/hgYEC/lcYKrK9bqmbnaRSbhhvJW0BSUvblYAhecUcuxYPLJeOkVxtSncYt5/JYJ4upcDYAfoyXLKoqaJcALSUzpOHmei/Msiw+N/5MT+EKtmnqg+ZODcj3jdsT7Ogxhgo36qp061w73+geBvo1P8TLg0Eam8mJiEl6g04wTsVYxByuH0Kjj+222ArcevDShmaJ+KggQK4RCOLTxDHoOveMCyY3cF6NnyyYPh543tjjYKVnC/zD7/ta9XIZRe3LJeZpVTUf97LH04oUcLoTLHLlAWPQy39MzXlHmjw/7ZXk5H+mE3rRtflWspTpnI+rNSNbR/ZYrDQtd2I01kubG4Eh6Xaw5cX62aheFWkwstdEnVrOsj/YK6MyNLbyj/BrrgsAgz+RgccaGpxZwEnCFt0KyaRMe1HlYrqLk//+6IYs5W9cnqWmDbOQ8Z2KO3xL3rkRMXWDTAnlop4MQfUUNfv
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR84MB1813.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(39860400002)(366004)(396003)(136003)(451199021)(186003)(26005)(55236004)(6506007)(41300700001)(9686003)(83380400001)(7696005)(82960400001)(478600001)(122000001)(54906003)(71200400001)(4326008)(6916009)(66556008)(66946007)(76116006)(66476007)(64756008)(55016003)(38100700002)(66446008)(316002)(86362001)(33656002)(38070700005)(5660300002)(52536014)(8676002)(8936002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vFMaiuf20qM2olZszh5FHB004JW4WOVQ8av26S3nJglPFFW6qgbdFZSgQltJ?=
- =?us-ascii?Q?3khA9AJC8aasHFKZoSft6KiTAGjUHMtqNtG8kOakh9R3a3bmkLjOn3D9PCVH?=
- =?us-ascii?Q?kUSEouQVY3yi+Z3lDiUQWNwqHM2jkOvQJvQgeXz3rHxbT0IOoFcT2+ACPLXE?=
- =?us-ascii?Q?6i7eZV/PHqe57N7mz5vHvWaMwGrcZjh+ZVZw4aO5P/UB737Jb1yFevKlNDxD?=
- =?us-ascii?Q?fYkHJ+sLvcsT7YaE7BIfPGdVdxGyWNpsG2/uTfH7GEuza59JUoFowPGVC74J?=
- =?us-ascii?Q?9dvSyEL/Ul3eGFzz885hUtGzS3+w+RxOWggpTFWM3lvbjjKr63KZX/yOmYAA?=
- =?us-ascii?Q?re9l+/Rgp+1EBXOUlQpaWGjqy68R5y9lumBLBEVo/5/ciRF31golnwK2gg41?=
- =?us-ascii?Q?+CzAZarLOcRig7sEC0jCNcPbuhglahMgsGNUVgfXORCzpGdi5epSVJ18zvfd?=
- =?us-ascii?Q?rUApYq+8Ai3rsgV0gox6QZaQDXPKDDDTHQVAUzZCzSh0ojMbEPfeW62KrFzm?=
- =?us-ascii?Q?PZDhqWJkTuEd90LhYF+veVJmTpQvdUsOhmSZHecePmjyjT4L3UA5lOXyKwrM?=
- =?us-ascii?Q?cjySWVBGlOkZukTA3Hk7JyERVBXbHek5PvhDuPtVNRd0xdcZdNN9+O8OeiYQ?=
- =?us-ascii?Q?zjqXGxRRHcjNY5wiaTGgGvh1IpE5/bpA+FGjllJbrOrCRDy656qYe1AizHbI?=
- =?us-ascii?Q?jZJPPttDDjI2+lmW3+NfE/sztC14tUkLvxnHTGl8ckIX17Vbl626K2Z4aCwc?=
- =?us-ascii?Q?83gBNQGrYBBm08w7T2BJtZyNnXF7KlQaiuGn4u0IhbYxUnpN7Wj3RY+0M+iE?=
- =?us-ascii?Q?ypXf3VIV73PY3t5CZMFWcqDrcY2ptjOc03bP5H5uB7YK1suuiWK3DKeDyCJc?=
- =?us-ascii?Q?MbY/7b0mChfBmdMYqSVQUa4V2V1msjSuZnxZoyTOC1OU21DGw25Rjr8yJl4h?=
- =?us-ascii?Q?MHUSQ+9c+3cZMcAlbhG7Fqn4Cm62ALFOvMNKksKkKHAOQEsTO8aOFdB1VhTu?=
- =?us-ascii?Q?AO3hpAp0b/4B27ADakd98EfFD9aZA0fWY7FgnH39TQbV4V/zo5LAFqAJ7T0x?=
- =?us-ascii?Q?acQz5W1p8G1ZD0PljJQapfht9rsQZYIadcu3ruKJBcsHdSxZzq8KJIt3rJwY?=
- =?us-ascii?Q?8zS8lGKSdtZg5howJpnAnPiusBLj1QbW4Dck7TXmHbIcDFFBLi55nythfnp6?=
- =?us-ascii?Q?hiU2aalKSFOY9BGP2gjRUa6LAWrYk4VGx22OTZ0Kf5CdXSBetOzpCLnsMeTE?=
- =?us-ascii?Q?MvnvjMDfNc8NsyWNvQLMkH9tnSIbWgus9103A9/1PQWHMuFz4NvKz8rtNoFi?=
- =?us-ascii?Q?V7F9pkeolP/rCcA8bqPusO7TAcYefESgIjqiga9tMl25mzr1FuXUj1aiZR05?=
- =?us-ascii?Q?m7+T+YwBFf3aSqXrefwLDeMcuknTFv8Stk//BTGAvGY/VVZRyOx9a1nmrqra?=
- =?us-ascii?Q?qS2aRicH4U1ZXUN0CEjfQT90gHCx/O2Yr9+HdrAO4mXdWB2s9ZvlNYRO5qdH?=
- =?us-ascii?Q?eFsr1wZqNitosLZtgCXA9tGFhkQ2tALOD/3NXlMVfbt4xR7DNeojW1bA9kib?=
- =?us-ascii?Q?6uopAqTLXIQFU0Np7mowbs0vfNKn8gVlkGf9k52n?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0KGB2fDpz4wbP;
+        Tue, 11 Jul 2023 09:00:02 +1000 (AEST)
+Date:   Tue, 11 Jul 2023 08:59:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+Subject: Re: linux-next: branches to be removed
+Message-ID: <20230711085949.609305ef@canb.auug.org.au>
+In-Reply-To: <87wmz7rej3.fsf@suse.de>
+References: <20230710172602.05d32c03@canb.auug.org.au>
+        <87wmz7rej3.fsf@suse.de>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR84MB1813.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81129b3c-6d81-43bc-2d87-08db81991754
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 22:57:52.4244
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bhtYU5R5AN8lrSemCh8vBsJs6k0NtdMHt7Wm94J1l4ubhMifCdwOSxLKSagiPr2AlQnraLpOfhugHdoINg3fzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1419
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: gJiGNooD9ubunbk7qj0aoO8iUVpjO1co
-X-Proofpoint-ORIG-GUID: gJiGNooD9ubunbk7qj0aoO8iUVpjO1co
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_16,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=979 phishscore=0
- suspectscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307100208
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; boundary="Sig_/Tin3KwabZpDiyIGKKbVOCwG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,41 +63,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Correct spelling problems as identified by codespell.
->=20
-> Fixes: c159376490ee ("x86/platform/uv: Update ABI documentation of /sys/f=
-irmware/sgi_uv/")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Justin Ernst <justin.ernst@hpe.com>
-> Cc: Borislav Petkov <bp@alien8.de>
+--Sig_/Tin3KwabZpDiyIGKKbVOCwG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Randy! I appreciate the patch.
+Hi Gabriel,
 
-Reviewed-by: Justin Ernst <justin.ernst@hpe.com>
+On Mon, 10 Jul 2023 11:07:28 -0400 Gabriel Krisman Bertazi <krisman@suse.de=
+> wrote:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>=20
+> > unicode			2022-04-28 18:19:09 -0400
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git    =
+   for-next
+> >
+> > These branches are all empty except the last which just contains a
+> > commit that is the same patch of a commit in Linus' tree. =20
+>=20
+> Please, keep it.  It is not a busy area for development, but we I'm
+> looking into a unicode version update soon that will go through
+> this tree.
 
-> ---
-> v2: use Borislav's correct email address
->=20
->  Documentation/ABI/testing/sysfs-firmware-sgi_uv |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff -- a/Documentation/ABI/testing/sysfs-firmware-sgi_uv b/Documentation=
-/ABI/testing/sysfs-firmware-
-> sgi_uv
-> --- a/Documentation/ABI/testing/sysfs-firmware-sgi_uv
-> +++ b/Documentation/ABI/testing/sysfs-firmware-sgi_uv
-> @@ -102,12 +102,12 @@ Description:
->  			conn_port
->=20
->  		The conn_hub entry contains a value representing the unique
-> -		oridinal value of the hub on the other end of the fabric
-> +		ordinal value of the hub on the other end of the fabric
->  		cable plugged into the port. If the port is disconnected,
->  		the value returned will be -1.
->=20
->  		The conn_port entry contains a value representing the unique
-> -		oridinal value of the port on the other end of the fabric cable
-> +		ordinal value of the port on the other end of the fabric cable
->  		plugged into the port. If the port is disconnected, the value
->  		returned will be -1.
->=20
+I have added it back.  You might consider rebasing it onto v6.5-rc1 and
+I think you will find that its only commit will disappear.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Tin3KwabZpDiyIGKKbVOCwG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsjWUACgkQAVBC80lX
+0Gyypwf/awP9ZYx0yIhigLEMkjiUinM3v5ZG9Q5lTIamXfL2qrWE7BlI38C6Gjl/
+dX/gfR/aCBIBQOB+eTmtX2fhTJhe0SlhPJHzIdwDToPGzkCBoCS62pP3zSEKZYLO
+NkehE1xdGYmtjiKUd4Zvx3yTvYIkAnnE9D1t7MmWj2C0EsQmmetNYzUvE0RtGdG7
+Ak5DFBVO7q50ifgH9wLbpUSHtcSJHYdxpF30SQBjKBUDjCXip5ET62v3ZUhovFrN
+pyl3gckjS1PyXjVrsAL2olIsU1HzlRKnZYFfBTDNJv/cvzbooxteHK2eVXzxKEKJ
+yTYr6O7qpU8s29aqnlLg+umu7+Btdw==
+=Zyb6
+-----END PGP SIGNATURE-----
+
+--Sig_/Tin3KwabZpDiyIGKKbVOCwG--
