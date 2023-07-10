@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFCC74E0F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B9974E0F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjGJWUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S229736AbjGJWXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 18:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjGJWUg (ORCPT
+        with ESMTP id S229573AbjGJWXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:20:36 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A568189;
-        Mon, 10 Jul 2023 15:20:35 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b9cdef8619so13471445ad.0;
-        Mon, 10 Jul 2023 15:20:35 -0700 (PDT)
+        Mon, 10 Jul 2023 18:23:33 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F184A197;
+        Mon, 10 Jul 2023 15:23:31 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f95bf5c493so7422860e87.3;
+        Mon, 10 Jul 2023 15:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689027635; x=1691619635;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H18CdgrYMTpofy+sXOjkYOSJshvEuHvdbWqmwdvSi4E=;
-        b=cUtay2Mdoywod53JzsZMnBIYUUqlsr/H+h4hz7hE+usjY4rOuuGXMRk/bI/Wwt9Bke
-         qZTt1llHZDRCmn9y5ohESwrecyx8J4bzAIKEb2rWRCp2XDuOwz7+Z2wl2QlHW9x0F05Q
-         BlPGXe3mrcoHmdlXWKHuBoj3h8kZvLk4JKLv0GwsMM/ciDNm+SUDltWzskRVUnq2v6gU
-         nwdvBsKVxbIX7/9msIbibQLglMxO/iQVYy5AKPkEX0/PY0iPB+gIsLjRGDmCo5b58QOF
-         E/I72QXheGOaSJbYJIJuLHvHIHSOXmqEGzELpzwXlC2PqUMYKe4JVT8Rp8ceXFtB67fa
-         yB+g==
+        d=gmail.com; s=20221208; t=1689027810; x=1691619810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8aC5j+4htVlsymnJcEKPXKllCMhmhfroAZbbpDtPHC8=;
+        b=Zyl/4HO2Ne5t2DhjrqWBoFuYOrKHSWz0Lw771twH/TmMn7zv8lW5iUh35uhhWya1L1
+         /5GIumtcaWqd4nooQ4nnRdY7Z7jxFf/v6Enq5yvN/f9/1pjv7JPQVloE1XgQ54dpiIay
+         lguZHH8XazPn8EnylQPHy4ZUKJqZP38ZBGQp2MSsD4SLgtfjwF71lTdn0Cr9CisnBu28
+         RX6dRsaoQB9rCf9EA1BWxXTbC7Ji1pBxIVpFPxk3d5g1ICDYnPcH1pJt6nUrWFLqS777
+         8TbZsouhMQHYRs93lViWXY1HeokmlxrLbUhOSJU3GIKSccPAScQNNAMyx9/dIEetZ6AB
+         Ovxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689027635; x=1691619635;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H18CdgrYMTpofy+sXOjkYOSJshvEuHvdbWqmwdvSi4E=;
-        b=TYIM4l6oyrhFOJyqHrFQVLxXFNlb+Apdc0kYXulmtPB5zwztj6LJmVp8CDx0+3/Sey
-         q0Ck0aOL/eHp4mDdSHSWlv2Rh1HEkMTM9XY0tpyMoHuo1MeGUS9Rj9ru3TJTX701AGI7
-         518i+M+47ayRTpRWNyiys3TUJEuR5MRbXQU6f0ONuGnOboWzhu+2XIvD+L8pabwaqXsa
-         xP8tqkcddmvle8dx5sbwLCzgSs/D7cEGH7zO0CjhHtkAlB771v1xwsNqIGAeZCzBy8wY
-         t/Nspg7plBAPe+0SU+fYdtngf1mIZTROG7gjZmWOfL097g3eoOXruQJ77YvFj/1TEWGW
-         9CUQ==
-X-Gm-Message-State: ABy/qLYfM4+GMWfmpADmw6nr7j/hSbzGUlQuNAzcX5Bf2ic7uEVXYHUi
-        HVP82ndSEL82rND/IJ+yF5BF73aU4Vo=
-X-Google-Smtp-Source: APBJJlE5aXiIVMJm2FwNEoHQloWDI7S0GpS1C94OvT2AMG4z1j30hxa4cGTaO9itXrZrtMkTNvdgtA==
-X-Received: by 2002:a17:902:f546:b0:1b0:3df7:5992 with SMTP id h6-20020a170902f54600b001b03df75992mr14716372plf.32.1689027634962;
-        Mon, 10 Jul 2023 15:20:34 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:96bf:7e77:39eb:7a23])
-        by smtp.gmail.com with ESMTPSA id bb10-20020a170902bc8a00b001b9c5e07bc3sm364766plb.238.2023.07.10.15.20.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 15:20:34 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:20:31 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Roxana Bradescu <roxabee@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kvm/vfio: ensure kvg instance stays around in
- kvm_vfio_group_add()
-Message-ID: <ZKyEL/4pFicxMQvg@google.com>
+        d=1e100.net; s=20221208; t=1689027810; x=1691619810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8aC5j+4htVlsymnJcEKPXKllCMhmhfroAZbbpDtPHC8=;
+        b=N5XAfhWt9/DX6eg507HKb++UOkFaJWsyIhdYIJEZ28qf05nOVjlcsm7rvAmHg+bQ8G
+         E9LL0hiikZ03KvBNdjjnlIgrCEDl4nmrKIfmUu2dEsikIU+JnfoHsY/mNqu3fe0XZOmf
+         GM9hRxFpkQDazHau6Xt72+jlXSKIHkviLQkrCz7EWPJ5mb/Zfscq65oqumVn7qPKFZCE
+         1NAIwEbX6o2D1EATA1lqN+wV7Tf3z/Fib1Q92fvyFpJmHxB+DkZTOhlQl5SV8LNJ6YvK
+         QNqKidNJ70Qw8spNLXGqimuttqPu/0YNulwNUvEM/B2SHvwh1oxRPniVkMVQ9zcFIYxn
+         w+AQ==
+X-Gm-Message-State: ABy/qLZ/WXhfr66hmWwywispFAuficw1WogLMwk6m5jh8xW5KQok50qF
+        3JYgj05t3q/S/uAhoFI4be5aZRfFbzvYTAjsS5U=
+X-Google-Smtp-Source: APBJJlFN8x2+wNX9Pho+Hycdeec6GrCe2Cvkl7Ri3UGz5HVuMNJf+5MAy7NpYDUo/9jVs0jVfN+yny92KrUU259H1vw=
+X-Received: by 2002:a05:6512:3593:b0:4f9:d272:5847 with SMTP id
+ m19-20020a056512359300b004f9d2725847mr10480467lfr.68.1689027809871; Mon, 10
+ Jul 2023 15:23:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230708040750.72570-1-hffilwlqm@gmail.com> <20230708040750.72570-2-hffilwlqm@gmail.com>
+In-Reply-To: <20230708040750.72570-2-hffilwlqm@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 10 Jul 2023 15:23:17 -0700
+Message-ID: <CAEf4BzZxS8sxr47GoXU0ZrwgZtp7drc5cehCOFrbx3-=n-1aFg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Introduce bpf generic log
+To:     Leon Hwang <hffilwlqm@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
+        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,42 +75,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_vfio_group_add() creates kvg instance, links it to kv->group_list,
-and calls kvm_vfio_file_set_kvm() with kvg->file as an argument after
-dropping kv->lock. If we race group addition and deletion calls, kvg
-instance may get freed by the time we get around to calling
-kvm_vfio_file_set_kvm().
+On Fri, Jul 7, 2023 at 9:08=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.com> wro=
+te:
+>
+> Currently, excluding verifier, users are unable to obtain detailed error
+> information when issues occur in BPF syscall.
+>
+> To overcome this limitation, bpf generic log is introduced to provide
+> error details similar to the verifier. This enhancement will enable the
+> reporting of error details along with the corresponding errno in BPF
+> syscall.
+>
+> Essentially, bpf generic log functions as a mechanism similar to netlink,
+> enabling the transmission of error messages to user space. This
+> mechanism greatly enhances the usability of BPF syscall by allowing
+> users to access comprehensive error messages instead of relying solely
+> on errno.
+>
+> This patch specifically addresses the error reporting in dev_xdp_attach()
+> . With this patch, the error messages will be transferred to user space
+> like the netlink approach. Hence, users will be able to check the error
+> message along with the errno.
+>
+> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
+> ---
+>  include/linux/bpf.h            | 30 ++++++++++++++++++++++++++++++
+>  include/uapi/linux/bpf.h       |  6 ++++++
+>  kernel/bpf/log.c               | 33 +++++++++++++++++++++++++++++++++
+>  net/core/dev.c                 | 11 ++++++++++-
+>  tools/include/uapi/linux/bpf.h |  6 ++++++
+>  5 files changed, 85 insertions(+), 1 deletion(-)
+>
 
-Fix this by moving call to kvm_vfio_file_set_kvm() under the protection
-of kv->lock. We already call it while holding the same lock when vfio
-group is being deleted, so it should be safe here as well.
+Just curious, what's wrong with struct bpf_verifier_log for
+implementing "generic log"? bpf_log, bpf_vlog_reset, bpf_vlog_finalize
+are quite generic, I think. Why invent yet another structure? Existing
+code and struct support rotating log, if necessary.
 
-Fixes: ba70a89f3c2a ("vfio: Change vfio_group_set_kvm() to vfio_file_set_kvm()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- virt/kvm/vfio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 360433f14496a..7d2124a537943 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3107,4 +3107,34 @@ static inline gfp_t bpf_memcg_flags(gfp_t flags)
+>         return flags;
+>  }
+>
+> +#define BPF_GENERIC_TMP_LOG_SIZE       256
+> +
+> +struct bpf_generic_log {
+> +       char            kbuf[BPF_GENERIC_TMP_LOG_SIZE];
+> +       char __user     *ubuf;
+> +       u32             len_used;
+> +       u32             len_total;
+> +};
+> +
+> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
+> +                       const char *fmt, ...);
+> +static inline void bpf_generic_log_init(struct bpf_generic_log *log,
+> +                       const struct bpf_generic_user_log *ulog)
+> +{
+> +       log->ubuf =3D (char __user *) (unsigned long) ulog->log_buf;
+> +       log->len_total =3D ulog->log_size;
+> +       log->len_used =3D 0;
+> +}
+> +
+> +#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)     do {    \
+> +       const char *____fmt =3D (fmt);                            \
+> +       bpf_generic_log_init(log, ulog);                        \
+> +       bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__);     \
+> +} while (0)
+> +
+> +#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...) do {                    \
+> +       struct bpf_generic_log ____log;                                 \
+> +       BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);      \
+> +} while (0)
+> +
+>  #endif /* _LINUX_BPF_H */
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 60a9d59beeabb..34fa334938ba5 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1318,6 +1318,11 @@ struct bpf_stack_build_id {
+>         };
+>  };
+>
+> +struct bpf_generic_user_log {
+> +       __aligned_u64   log_buf;    /* user supplied buffer */
+> +       __u32           log_size;   /* size of user buffer */
+> +};
+> +
+>  #define BPF_OBJ_NAME_LEN 16U
+>
+>  union bpf_attr {
+> @@ -1544,6 +1549,7 @@ union bpf_attr {
+>                 };
+>                 __u32           attach_type;    /* attach type */
+>                 __u32           flags;          /* extra flags */
+> +               struct bpf_generic_user_log log; /* user log */
 
-diff --git a/virt/kvm/vfio.c b/virt/kvm/vfio.c
-index 9584eb57e0ed..cd46d7ef98d6 100644
---- a/virt/kvm/vfio.c
-+++ b/virt/kvm/vfio.c
-@@ -179,10 +179,10 @@ static int kvm_vfio_group_add(struct kvm_device *dev, unsigned int fd)
- 	list_add_tail(&kvg->node, &kv->group_list);
- 
- 	kvm_arch_start_assignment(dev->kvm);
-+	kvm_vfio_file_set_kvm(kvg->file, dev->kvm);
- 
- 	mutex_unlock(&kv->lock);
- 
--	kvm_vfio_file_set_kvm(kvg->file, dev->kvm);
- 	kvm_vfio_update_coherency(dev);
- 
- 	return 0;
--- 
-2.41.0.255.g8b1d071c50-goog
+I think explicit triplet of log_level (should be log_flags, but too
+late, probably), log_size, and log_buf is less error prone and more in
+sync with other two commands that accept log (BPF_PROG_LOAD and
+BPF_BTF_LOAD).
 
+>                 union {
+>                         __u32           target_btf_id;  /* btf_id of targ=
+et to attach to */
+>                         struct {
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 850494423530e..be56b153bbf0b 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -325,3 +325,36 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log =
+*log,
+>         va_end(args);
+>  }
+>  EXPORT_SYMBOL_GPL(bpf_log);
+> +
+> +static inline void __bpf_generic_log_write(struct bpf_generic_log *log, =
+const char *fmt,
+> +                                     va_list args)
+> +{
+> +       unsigned int n;
+> +
+> +       n =3D vscnprintf(log->kbuf, BPF_GENERIC_TMP_LOG_SIZE, fmt, args);
+> +
+> +       WARN_ONCE(n >=3D BPF_GENERIC_TMP_LOG_SIZE - 1,
+> +                 "bpf generic log truncated - local buffer too short\n")=
+;
+> +
+> +       n =3D min(log->len_total - log->len_used - 1, n);
+> +       log->kbuf[n] =3D '\0';
+> +
+> +       if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
+> +               log->len_used +=3D n;
+> +       else
+> +               log->ubuf =3D NULL;
+> +}
+> +
 
--- 
-Dmitry
+please see bpf_verifier_vlog() in kernel/bpf/log.c. We don't want to
+maintain another (even if light) version of it.
+
+> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
+> +                                    const char *fmt, ...)
+> +{
+> +       va_list args;
+> +
+> +       if (!log->ubuf || !log->len_total)
+> +               return;
+> +
+> +       va_start(args, fmt);
+> +       __bpf_generic_log_write(log, fmt, args);
+> +       va_end(args);
+> +}
+
+[...]
