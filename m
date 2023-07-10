@@ -2,133 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4754474C94B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 02:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA6D74C953
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 02:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjGJAgh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 9 Jul 2023 20:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S230127AbjGJAsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 20:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGJAgf (ORCPT
+        with ESMTP id S229441AbjGJAsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 20:36:35 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0817F120;
-        Sun,  9 Jul 2023 17:36:33 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36A0a7bF5026600, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36A0a7bF5026600
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 10 Jul 2023 08:36:07 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 10 Jul 2023 08:36:12 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 10 Jul 2023 08:36:12 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Mon, 10 Jul 2023 08:36:12 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "Lukas F . Hartmann" <lukas@mntre.com>
-Subject: RE: [PATCH] wifi: rtw88: sdio: Honor the host max_req_size in the RX path
-Thread-Topic: [PATCH] wifi: rtw88: sdio: Honor the host max_req_size in the RX
- path
-Thread-Index: AQHZsp+XbJMjQ56edkCHhTIfjugPgq+yJqHg
-Date:   Mon, 10 Jul 2023 00:36:12 +0000
-Message-ID: <b55cd3172ea7474ba1a67db2d5b39301@realtek.com>
-References: <20230709195712.603200-1-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230709195712.603200-1-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sun, 9 Jul 2023 20:48:30 -0400
+Received: from mx2.ucr.edu (mx2.ucr.edu [138.23.62.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F18FE
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 17:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1688950110; x=1720486110;
+  h=mime-version:references:in-reply-to:from:date:message-id:
+   subject:to:cc:content-transfer-encoding;
+  bh=th7GSjcH0mVMigTTb+zNmiXfnwvpUHHXzJpPYfFO42Q=;
+  b=XynSAWWg3BgLS+hdksH8OILmjcFBr1U3LO7PQgzLJtItn2mk2+sQFX4D
+   5cCiZ8Mgiz2DvitybLYuTd5fM2Oac81DGRBsAPEAhBYwcYmvw9rObzQd6
+   HHtrYcyqYa2n/A+ughbf7gBwcxwwtJtnpk/PLP3VtNovhUkF4uVaSooka
+   Hyl8pCDo69kxZYfh0Lg1hyZP+31SDooRckl+ivHWazrRS+l72kEc9IEng
+   P/Q0ZPLsJkdQQTVyohbdIfQ7HAGSX0eT2cK9tIVJ7GjdYt759cujtIr/R
+   rgU4Prhs9GGaZy1sOyVUdyTeGYnXMOLceW80qAmNRlcxO1fMktTydIB+b
+   w==;
+Received: from mail-wr1-f70.google.com ([209.85.221.70])
+  by smtp2.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Jul 2023 17:48:29 -0700
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-31421c900b7so2157078f8f.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 17:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ucr.edu; s=rmail; t=1688950107; x=1691542107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3MijvoflT0Dtq/ZeXcCS3BgET99hji2sxV55TlAWqxs=;
+        b=gU2O2AYACfuKmd2gpp2EPO4SlS7tf/658NycMOL2gwLTu/teSH2iPbFyXZ3PAVT1ov
+         lTvZDTe5lyhP66oZYz9G8mtDLAy/9poyVaDKEPD6jYer1UW6klLi7iGLyhbvtF7UtaCI
+         JJFiy60vOiCsmnJNvOgeY0j/5dGPkCVPHUMUE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688950107; x=1691542107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3MijvoflT0Dtq/ZeXcCS3BgET99hji2sxV55TlAWqxs=;
+        b=Cwq76mNzLJKNrLXXD4QuMPqhnu+9jWahAX0x5jawrlMUvVxUvyONAfTnBE7R36wPwn
+         fWswNMhGXdnnCc7w9q1KD/wQJUrNkndrUqhUinKAqyvtTdUGvW63hYHX8I6ujqoeOerB
+         a6irHqOoeqhd8JejzVByATQd6p4spGHJoSb1hThwwZmrg6yQUOBYWZeH3w3trrWU9PPE
+         6Qfy4FiTod4Zqr06FE1EnVTx6C8FJVeU4zkJQlsrtzHhbIdpKooFfnnspjeQ4UO2zIBq
+         VwXUmrVoyapnqmrV9tqQt1BRfBFMlCvMdOl8kUOxkgxhKI8G/WzMMWke0GXWXxZbRRR0
+         QZlg==
+X-Gm-Message-State: ABy/qLbCZND1YP+4TLNEi0OwM50IAlFHJnx8JXxWUwx9Uk+HQM2+2BJ9
+        WiEvSu1desynNrVnvv9D35/M35zFtjPTz2BYXnAjLnIOWTrF7u7079OsCJq2s4LcK7aQVZiKEil
+        x2tH0qO1oSCePHixThd3wXoQceMfMg2gFaDtfrojphQ==
+X-Received: by 2002:a5d:428b:0:b0:315:94ea:31ad with SMTP id k11-20020a5d428b000000b0031594ea31admr3610792wrq.66.1688950106801;
+        Sun, 09 Jul 2023 17:48:26 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHBZAuOciiBsmSRDr0cO0dz/Q88ySmcmH8vOjd474VLkUORc1RjF+j/z3yBnSYVd0lU7CqFovE+D1ABd70fcDw=
+X-Received: by 2002:a5d:428b:0:b0:315:94ea:31ad with SMTP id
+ k11-20020a5d428b000000b0031594ea31admr3610777wrq.66.1688950106478; Sun, 09
+ Jul 2023 17:48:26 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+UBctDxfb6+70+hzuXJ-gwb65E0uoNzXYEhpJT92sXr2CE7OA@mail.gmail.com>
+ <20230705080625.02b2bac5@bootlin.com>
+In-Reply-To: <20230705080625.02b2bac5@bootlin.com>
+From:   Yu Hao <yhao016@ucr.edu>
+Date:   Sun, 9 Jul 2023 17:48:15 -0700
+Message-ID: <CA+UBctBqtSvyBWf9ZwKbecTrh9_6sCDm_TyU-ncb+6h5y19K5g@mail.gmail.com>
+Subject: Re: [PATCH] usb: mtu3: Fix possible use-before-initialization bug
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Herv=C3=A9,
 
+Thanks for the comments. How about this patch?
+---
+ drivers/usb/mtu3/mtu3_gadget_ep0.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Monday, July 10, 2023 3:57 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org; jernej.skrabec@gmail.com; Ping-Ke Shih <pkshih@realtek.com>;
-> ulf.hansson@linaro.org; kvalo@kernel.org; tony0620emma@gmail.com; Martin Blumenstingl
-> <martin.blumenstingl@googlemail.com>; Lukas F . Hartmann <lukas@mntre.com>
-> Subject: [PATCH] wifi: rtw88: sdio: Honor the host max_req_size in the RX path
-> 
-> Lukas reports skb_over_panic errors on his Banana Pi BPI-CM4 which comes
-> with an Amlogic A311D (G12B) SoC and a RTL8822CS SDIO wifi/Bluetooth
-> combo card. The error he observed is identical to what has been fixed
-> in commit e967229ead0e ("wifi: rtw88: sdio: Check the HISR RX_REQUEST
-> bit in rtw_sdio_rx_isr()") but that commit didn't fix Lukas' problem.
-> 
-> Lukas found that disabling or limiting RX aggregation fix the problem
-> for him. In the following discussion a few key topics have been
-> discussed which have an impact on this problem:
-> - The Amlogic A311D (G12B) SoC has a hardware bug in the SDIO controller
->   which prevents DMA transfers. Instead all transfers need to go through
->   the controller SRAM which limits transfers to 1536 bytes
-> - rtw88 chips don't split incoming (RX) packets, so if a big packet is
->   received this is forwarded to the host in it's original form
-> - rtw88 chips can do RX aggregation, meaning more multiple incoming
->   packets can be pulled by the host from the card with one MMC/SDIO
->   transfer. This Depends on settings in the REG_RXDMA_AGG_PG_TH
->   register (BIT_RXDMA_AGG_PG_TH limits the number of packets that will
->   be aggregated, BIT_DMA_AGG_TO_V1 configures a timeout for aggregation
->   and BIT_EN_PRE_CALC makes the chip honor the limits more effectively)
-> 
-> Use multiple consecutive reads in rtw_sdio_read_port() to limit the
-> number of bytes which are copied by the host from the card in one
-> MMC/SDIO transfer. This allows receiving a buffer that's larger than
-> the hosts max_req_size (number of bytes which can be transferred in
-> one MMC/SDIO transfer). As a result of this the skb_over_panic error
-> is gone as the rtw88 driver is now able to receive more than 1536 bytes
-> from the card (either because the incoming packet is larger than that
-> or because multiple packets have been aggregated).
+diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+index e4fd1bb14a55..af2884943c2a 100644
+--- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
++++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+@@ -600,7 +600,7 @@ static void ep0_tx_state(struct mtu3 *mtu)
+        mtu3_readl(mtu->mac_base, U3D_EP0CSR));
+ }
 
-I assume your conclusion is correct for all platforms, so I add my reviewed-by.
-But, I think it would be better that Lukas can help to test this patch on his
-platform, and give a tested-by tag before getting this patch merged. 
+-static void ep0_read_setup(struct mtu3 *mtu, struct usb_ctrlrequest *setup=
+)
++static int ep0_read_setup(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
+ {
+    struct mtu3_request *mreq;
+    u32 count;
+@@ -608,6 +608,8 @@ static void ep0_read_setup(struct mtu3 *mtu,
+struct usb_ctrlrequest *setup)
 
-> 
-> Fixes: 65371a3f14e7 ("wifi: rtw88: sdio: Add HCI implementation for SDIO based chipsets")
-> Reported-by: Lukas F. Hartmann <lukas@mntre.com>
-> Closes:
-> https://lore.kernel.org/linux-wireless/CAFBinCBaXtebixKbjkWKW_WXc5k=NdGNaGUjVE8NCPNxOhsb2g@mail.gmail.
-> com/
-> Suggested-by: Ping-Ke Shih <pkshih@realtek.com>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+    csr =3D mtu3_readl(mtu->mac_base, U3D_EP0CSR) & EP0_W1C_BITS;
+    count =3D mtu3_readl(mtu->mac_base, U3D_RXCOUNT0);
++   if (count =3D=3D 0)
++       return -EINVAL;
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+    ep0_read_fifo(mtu->ep0, (u8 *)setup, count);
 
-[...]
+@@ -642,7 +644,8 @@ __acquires(mtu->lock)
+    struct mtu3_request *mreq;
+    int handled =3D 0;
 
+-   ep0_read_setup(mtu, &setup);
++   if (ep0_read_setup(mtu, &setup))
++       return -EINVAL;
+    trace_mtu3_handle_setup(&setup);
+
+    if ((setup.bRequestType & USB_TYPE_MASK) =3D=3D USB_TYPE_STANDARD)
+@@ -764,7 +767,9 @@ irqreturn_t mtu3_ep0_isr(struct mtu3 *mtu)
+            break;
+        }
+
+-       ep0_handle_setup(mtu);
++       if (ep0_handle_setup(mtu))
++           break;
++
+        ret =3D IRQ_HANDLED;
+        break;
+    default:
+--=20
+2.34.1
+
+Yu Hao
+
+On Tue, Jul 4, 2023 at 11:06=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
+com> wrote:
+>
+> Hi Yu,
+>
+> On Tue, 4 Jul 2023 16:25:50 -0700
+> Yu Hao <yhao016@ucr.edu> wrote:
+>
+> > The struct usb_ctrlrequest setup should be initialized in the function
+> > ep0_read_setup(mtu, &setup). However, inside that function,
+> > the variable count could be 0 and the struct usb_ctrlrequest setup
+> > is not initialized. But there is a read for setup.bRequestType.
+> >
+> > Signed-off-by: Yu Hao <yhao016@ucr.edu>
+> > ---
+> >  drivers/usb/mtu3/mtu3_gadget_ep0.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > index e4fd1bb14a55..67034fa515d0 100644
+> > --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > @@ -638,7 +638,7 @@ static int ep0_handle_setup(struct mtu3 *mtu)
+> >  __releases(mtu->lock)
+> >  __acquires(mtu->lock)
+> >  {
+> > -   struct usb_ctrlrequest setup;
+> > +   struct usb_ctrlrequest setup =3D {};
+> >     struct mtu3_request *mreq;
+> >     int handled =3D 0;
+> >
+>
+> Looks strange to me because, if ep0_read_setup() cannot read the setup da=
+ta
+> why don't we simply abort the operation ?
+>
+> With setup =3D {}, the following test is true:
+>   if ((setup.bRequestType & USB_TYPE_MASK) =3D=3D USB_TYPE_STANDARD)
+>         handled =3D handle_standard_request(mtu, &setup);
+>
+> handle_standard_request() is called and supposes an USB_REQ_GET_STATUS
+> (0x00) request:
+>    case USB_REQ_GET_STATUS:
+>         handled =3D ep0_get_status(mtu, setup);
+>         break;
+>
+> Then ep0_get_status() supposes USB_RECIP_DEVICE (0x00) and performs some
+> operation sending the data related to the GET_STATUS.
+>
+> All of these are not correct as the setup data that triggered this sequen=
+ce
+> was never received.
+> Aborting the operation if ep0_read_setup() cannot read the setup data see=
+ms
+> better to me.
+>
+> Best regards,
+> Herv=C3=A9
+>
+> --
+> Herv=C3=A9 Codina, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
