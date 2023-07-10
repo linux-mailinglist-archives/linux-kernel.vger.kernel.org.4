@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25D874CF28
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D919A74CF2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbjGJHyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        id S231551AbjGJHzO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 03:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbjGJHxo (ORCPT
+        with ESMTP id S229732AbjGJHzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:53:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F2E75
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:53:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6C660E9E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:53:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2380C433C9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688975616;
-        bh=Qmnrxtp2tVTiIKeDr6PzWwhoq+AXMYmOqhQmbX2jJEA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=me5X+1vMmbkCFoCblOI/6sz+FZwvBOq4e/BYklHzHPC7pwS+qVuFmXBpgx8JrIa0r
-         V7KTIKh+Rf597EnmBiZTTmH1JX0HJsImSgY3iimRTVpPHrBVnkeaojDt+gPt61T4gW
-         RshlctRNBefMm4u2EiUGZQ1mxejx8DTWSLZQbbyMIsUqzg9YyFInm2+c0cNGCm1Kxd
-         DCApn7BLIf6hIgfWTKdEZ4LUydtYcX/Ou6G8SjnEpI8o/I4D4uDULgRv3DlNPg72+f
-         WKsBPDc/0VFBNUzsC2mW8wlwHoWs4Y8Eb0vL/F724lcDCAWwk4EJe7EB/VO3Cj8vlN
-         inlniG9oCh0aA==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4fb73ba3b5dso6415859e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:53:36 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZhlCpqOj1B4zf60wYzGpOMCLv9/P/Vs7UykLJkGPRS+j6AT4oq
-        oSWEBXyhkGR4RhFJYzxO2rZS7Yuj9clGFA3MQ5o=
-X-Google-Smtp-Source: APBJJlGrklgwHO1qTgGjnKuzcyOdT3q0J8ogI9MWBIiWxlqTGfnoiRQZ9grmnfmcQOLwKf0YrCEcsSSO40htVXcdsY0=
-X-Received: by 2002:ac2:4e07:0:b0:4f9:5a0c:85b8 with SMTP id
- e7-20020ac24e07000000b004f95a0c85b8mr10308007lfr.36.1688975614593; Mon, 10
- Jul 2023 00:53:34 -0700 (PDT)
+        Mon, 10 Jul 2023 03:55:10 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F63BB;
+        Mon, 10 Jul 2023 00:55:09 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5728df0a7d9so54696517b3.1;
+        Mon, 10 Jul 2023 00:55:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688975708; x=1691567708;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UoVR0Ww3NqQWB+CsUodfgver6HRm/NVni4uz6vfXOaM=;
+        b=DvvjbayuwxXBWUvWxqUTcUYEIFkEmJkA3oJzU5zv3bQUjrCJ3XCimdgBSWI3mnMG+V
+         QQlD3pJBUK+/hvtRMDwEUvA2SCSdFjt9rhkVPfYrPeF0IhN3Wlht8WItQQL9nB9gWa2v
+         egvifc/mCk+8lsDgZb1+E3Y1B6WQUX33xp2Ddrd4GAHZAlnWUWMa+LuBNFtXWWXI2rBJ
+         e2gWf5ZNB9ms1AnwB5ZF0fQtJmRHnORXTH6l3/mTRJlqV4wZfFuUs6ujPEoLo+/xjLbs
+         oVOW2A+qRwK4mGi/5QzaITj/kPzpFh3SJVxSNu/ZJuoPlb06N83vUnbzBX+3EgXDDZsY
+         03rA==
+X-Gm-Message-State: ABy/qLZTOM1C6lHumhrESV1WUz5hd6rvCKf8vsSWtUyb2koN+u/9ys3O
+        +H3FTfabOlXMSFByFQHl0qvj3vKNC9w0tQ==
+X-Google-Smtp-Source: APBJJlHxpb+mLx9F04KFHepLfDhlnPl3f2B2fwdW00P+4hU75r5eDtlIcFL79fm4+b6KCMVJN0OFlA==
+X-Received: by 2002:a0d:cd81:0:b0:577:3bf2:80f0 with SMTP id p123-20020a0dcd81000000b005773bf280f0mr12617690ywd.2.1688975708424;
+        Mon, 10 Jul 2023 00:55:08 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id p135-20020a0de68d000000b005707d7686ddsm2927995ywe.76.2023.07.10.00.55.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 00:55:07 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-c17534f4c63so5503876276.0;
+        Mon, 10 Jul 2023 00:55:07 -0700 (PDT)
+X-Received: by 2002:a25:c343:0:b0:c16:8d80:228b with SMTP id
+ t64-20020a25c343000000b00c168d80228bmr10199701ybf.37.1688975707771; Mon, 10
+ Jul 2023 00:55:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <MEYP282MB2597CD6E861D659E3218148DD933A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
- <CAAhV-H5P_NgJ5kTQ1iO-eL577D=-COjEZ6u9_OgvrHpWJLqsXw@mail.gmail.com> <62e81ce06e69d549b12d1145429730f8b27ad156.camel@hotmail.com>
-In-Reply-To: <62e81ce06e69d549b12d1145429730f8b27ad156.camel@hotmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 10 Jul 2023 15:53:22 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7ihMnYD3LZi4kfJ1SQHxpX=j8D39Riinbvbb0AMo2oDg@mail.gmail.com>
-Message-ID: <CAAhV-H7ihMnYD3LZi4kfJ1SQHxpX=j8D39Riinbvbb0AMo2oDg@mail.gmail.com>
-Subject: Re: [PATCH] loongarch: Make CONFIG_CMDLINE work with
- CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER
-To:     donmor <donmor3000@hotmail.com>
-Cc:     "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "kernel@xen0n.name" <kernel@xen0n.name>,
-        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
-        "zhoubinbin@loongson.cn" <zhoubinbin@loongson.cn>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "tangyouling@loongson.cn" <tangyouling@loongson.cn>
+References: <2c99d5df41c40691f6c407b7b6a040d406bc81ac.1688901306.git.geert+renesas@glider.be>
+ <6af51602-631a-dadc-2740-d1cfad0a2993@roeck-us.net> <CAMuHMdW=WDuqgXk_51T341vgXrcxYPO34ou=rKHZrZj8Yiw6Rw@mail.gmail.com>
+ <f27872c8f374a42fb7ea313314c47cdba2473b06.camel@physik.fu-berlin.de>
+In-Reply-To: <f27872c8f374a42fb7ea313314c47cdba2473b06.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jul 2023 09:54:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXg1FvMCSBCvs=aFah0NWdOzEX+XdF4af0kY3kNx2bPtg@mail.gmail.com>
+Message-ID: <CAMuHMdXg1FvMCSBCvs=aFah0NWdOzEX+XdF4af0kY3kNx2bPtg@mail.gmail.com>
+Subject: Re: [PATCH] [RFT] sh: mach-r2d: Handle virq offset in cascaded IRL demux
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 1:35=E2=80=AFAM =E2=80=8E donmor <donmor3000@hotmai=
-l.com> wrote:
+Hi Adrian,
+
+On Mon, Jul 10, 2023 at 9:44 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Mon, 2023-07-10 at 09:03 +0200, Geert Uytterhoeven wrote:
+> > Indeed, I hadn't tested that.
+> > My current tree isn't based on linux-next, but did have a build
+> > failure in the cdrom code, for which I had found your fix (thanks!) in
+> > linux-next...
 >
-> =E5=9C=A8 2023-07-09=E6=98=9F=E6=9C=9F=E6=97=A5=E7=9A=84 23:30 +0800=EF=
-=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
-> > How to reproduce? If you use UEFI firmware, this is handled in
-> > drivers/firmware/efi/libstub/efi-stub.c; if you use non-UEFI firmware,
-> > this is handled in drivers/of/fdt.c.
->
-> In fact it 's not command line retrieved from efi or fdt, but the built-i=
-n
-> command line to be concerned. CONFIG_CMDLINE was never been touched durin=
-g
-> boot on loongarch, unless CONFIG_CMDLINE_FORCE is set because there is co=
-de
-> handling this. There should be code handling CONFIG_CMDLINE_FORCE and
-> CONFIG_CMDLINE_EXTEND as well but is absent by now.
+> So, there is a patch for this already? Is it going to be included for 6.5?
 
-I mean the code in drivers/of/fdt.c already handles
-CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_FORCE, understand?
+The cdrom fix is commit a587b046ce921cc1 ("cdrom/gdrom: Fix build
+error") in v6.5-rc1, which builds dreamcast_defconfig fine.
 
-On the other hand, I found that for non-FDT system
-CONFIG_CMDLINE_FORCE indeed doesn't work, but
-CONFIG_CMDLINE_BOOTLOADER works, so you needn't fix
-CONFIG_CMDLINE_BOOTLOADER, and you need add "goto out" in the "if
-(initial_boot_params)" condition.
+That config is still broken in linux-next, but the breakage hasn't\
+entered v6.5-rc1 (yet?).
 
-Huacai
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
