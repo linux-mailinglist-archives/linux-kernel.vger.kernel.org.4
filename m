@@ -2,176 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE4374CE9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619F774CE93
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjGJHih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S229624AbjGJHgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjGJHif (ORCPT
+        with ESMTP id S230391AbjGJHgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:38:35 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC27BB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688974714; x=1720510714;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iFLJx5NiOQIeVEKzF4rAwx4P6EJ9+qVukE35Bt4hZAc=;
-  b=X8YLm2IMA6WG4r63Dld3QPSbTFwHcbpge163VEot6mZuMsy6m1u1mL87
-   vwRWL70fs4OsNS6vPN/XkgUYNrE0ALgVWtJfcMbiXPZ/T/j++2rRqK33u
-   gyilXQ+3HvaYythuxLd8JSmJIXmC9d7tS5FXzm4jvpowl57U54R6D8yHr
-   19bIltpd22zBgs3FUIGWMXE+ef7hz7hWsifMnnjsfetCuF5TUOrIBqGTx
-   yjyP5deMILhrz56wlshHlaKbXzTtfYDMeV5VfLcp1NF8moV9hZIcOp1jl
-   GsvzVQuehZkzh+ILbeTZY31SJmvtoKfY/B9UPOuR1EnIi/hpbkzSjeyDA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="354137348"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="354137348"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 00:38:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="755899096"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="755899096"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.7.37])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 00:38:29 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: [PATCH v3 RESEND] x86/mm: Fix PAT bit missing from page protection modify mask
-Date:   Mon, 10 Jul 2023 09:36:14 +0200
-Message-ID: <20230710073613.8006-2-janusz.krzysztofik@linux.intel.com>
-X-Mailer: git-send-email 2.41.0
+        Mon, 10 Jul 2023 03:36:38 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2EC12E;
+        Mon, 10 Jul 2023 00:36:35 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 963D567373; Mon, 10 Jul 2023 09:36:31 +0200 (CEST)
+Date:   Mon, 10 Jul 2023 09:36:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Christoph Hellwig <hch@lst.de>, chengming.zhou@linux.dev,
+        axboe@kernel.dk, tj@kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ming.lei@redhat.com
+Subject: Re: [PATCH v3 1/3] blk-mq: always use __blk_mq_alloc_requests() to
+ alloc and init rq
+Message-ID: <20230710073631.GA29077@lst.de>
+References: <20230628124546.1056698-1-chengming.zhou@linux.dev> <20230628124546.1056698-2-chengming.zhou@linux.dev> <20230629052828.GD16819@lst.de> <f91c32b3-1d3b-b28c-40cb-2edf02448f22@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f91c32b3-1d3b-b28c-40cb-2edf02448f22@bytedance.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Visible glitches have been observed when running graphics applications on
-Linux under Xen hypervisor.  Those observations have been confirmed with
-failures from kms_pwrite_crc Intel GPU test that verifies data coherency
-of DRM frame buffer objects using hardware CRC checksums calculated by
-display controllers, exposed to userspace via debugfs.  Affected
-processing paths have then been identified with new IGT test variants that
-mmap the objects using different methods and caching modes [1].
+On Thu, Jun 29, 2023 at 03:40:03PM +0800, Chengming Zhou wrote:
+> Thanks for your review!
+> 
+> Since hctx-specific allocation path always has BLK_MQ_REQ_NOWAIT flag,
+> it won't retry.
+> 
+> But I agree, this makes the general __blk_mq_alloc_requests() more complex.
 
-When running as a Xen PV guest, Linux uses Xen provided PAT configuration
-which is different from its native one.  In particular, Xen specific PTE
-encoding of write-combining caching, likely used by graphics applications,
-differs from the Linux default one found among statically defined minimal
-set of supported modes.  Since Xen defines PTE encoding of the WC mode as
-_PAGE_PAT, it no longer belongs to the minimal set, depends on correct
-handling of _PAGE_PAT bit, and can be mismatched with write-back caching.
+And also very confusing as it pretends to share some code, while almost
+nothing of __blk_mq_alloc_requests is actually used.
 
-When a user calls mmap() for a DRM buffer object, DRM device specific
-.mmap file operation, called from mmap_region(), takes care of setting PTE
-encoding bits in a vm_page_prot field of an associated virtual memory area
-structure.  Unfortunately, _PAGE_PAT bit is not preserved when the vma's
-.vm_flags are then applied to .vm_page_prot via vm_set_page_prot().  Bits
-to be preserved are determined with _PAGE_CHG_MASK symbol that doesn't
-cover _PAGE_PAT.  As a consequence, WB caching is requested instead of WC
-when running under Xen (also, WP is silently changed to WT, and UC
-downgraded to UC_MINUS).  When running on bare metal, WC is not affected,
-but WP and WT extra modes are unintentionally replaced with WC and UC,
-respectively.
+> The reason is blk_mq_rq_ctx_init() has some data->rq_flags initialization:
+> 
+> ```
+> if (data->flags & BLK_MQ_REQ_PM)
+> 	data->rq_flags |= RQF_PM;
+> if (blk_queue_io_stat(q))
+> 	data->rq_flags |= RQF_IO_STAT;
+> rq->rq_flags = data->rq_flags;
+> ```
+> 
+> Because we need this data->rq_flags to tell if we need start_time_ns,
+> we need to put these initialization in the callers of blk_mq_rq_ctx_init().
 
-WP and WT modes, encoded with _PAGE_PAT bit set, were introduced by commit
-281d4078bec3 ("x86: Make page cache mode a real type").  Care was taken
-to extend _PAGE_CACHE_MASK symbol with that additional bit, but that
-symbol has never been used for identification of bits preserved when
-applying page protection flags.  Support for all cache modes under Xen,
-including the problematic WC mode, was then introduced by commit
-47591df50512 ("xen: Support Xen pv-domains using PAT").
+Why can't we just always initialize the time stampts after
+blk_mq_rq_ctx_init? Something like this (untested) variant of your
+patch 2 from the latest iteration:
 
-The issue needs to be fixed by including _PAGE_PAT bit into a bitmask used
-by pgprot_modify() for selecting bits to be preserved.  We can do that
-either internally to pgprot_modify() (as initially proposed), or by making
-_PAGE_PAT a part of _PAGE_CHG_MASK.  If we go for the latter then, since
-_PAGE_PAT is the same as _PAGE_PSE, we need to note that _HPAGE_CHG_MASK
--- a huge pmds' counterpart of _PAGE_CHG_MASK, introduced by commit
-c489f1257b8c ("thp: add pmd_modify"), defined as (_PAGE_CHG_MASK |
-_PAGE_PSE) -- will no longer differ from _PAGE_CHG_MASK.  If such
-modification of _PAGE_CHG_MASK was irrelevant to its users then one might
-wonder why that new _HPAGE_CHG_MASK symbol was introduced instead of
-reusing the existing one with that otherwise irrelevant bit (_PAGE_PSE in
-that case) added.
-
-Assume that adding _PAGE_PAT to _PAGE_CHG_MASK doesn't break pte_modify()
-and its users, and go for it.  Also, add _PAGE_PAT_LARGE to
-_HPAGE_CHG_MASK for symmetry.  For better clarity, split out common bits
-from both symbols to another one and use it together with specific bits
-when defining the masks.
-
-v3: Separate out common bits of _PAGE_CHG_MASK and _HPAGE_CHG_MASK into
-    _COMMON_PAGE_CHG_MASK (Rick),
-  - fix hard to parse wording of 'what' part of commit description (on
-    Dave's request).
-v2: Keep pgprot_modify() untouched, make _PAGE_PAT part of _PAGE_CHG_MASK
-    instead (Borislav),
-  - also add _PAGE_PAT_LARGE to _HPAGE_CHG_MASK (Juergen).
-
-[1] https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/0f0754413f14
-
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7648
-Fixes: 281d4078bec3 ("x86: Make page cache mode a real type")
-Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: stable@vger.kernel.org # v3.19+
----
- arch/x86/include/asm/pgtable_types.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 447d4bee25c48..97533e6b1c61b 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -125,11 +125,12 @@
-  * instance, and is *not* included in this mask since
-  * pte_modify() does modify it.
-  */
--#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |		\
--			 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY |	\
--			 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP | _PAGE_ENC |  \
--			 _PAGE_UFFD_WP)
--#define _HPAGE_CHG_MASK (_PAGE_CHG_MASK | _PAGE_PSE)
-+#define _COMMON_PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |	       \
-+				 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY |\
-+				 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP | _PAGE_ENC | \
-+				 _PAGE_UFFD_WP)
-+#define _PAGE_CHG_MASK	(_COMMON_PAGE_CHG_MASK | _PAGE_PAT)
-+#define _HPAGE_CHG_MASK (_COMMON_PAGE_CHG_MASK | _PAGE_PSE | _PAGE_PAT_LARGE)
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 5504719b970d59..55bf1009f3e32a 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -328,8 +328,26 @@ void blk_rq_init(struct request_queue *q, struct request *rq)
+ }
+ EXPORT_SYMBOL(blk_rq_init);
  
- /*
-  * The cache modes defined here are used to translate between pure SW usage
--- 
-2.41.0
-
++/* Set alloc and start time when pre-allocated rq is actually used */
++static inline void blk_mq_rq_time_init(struct request *rq, bool set_alloc_time)
++{
++	if (blk_mq_need_time_stamp(rq)) {
++		u64 now = ktime_get_ns();
++
++#ifdef CONFIG_BLK_RQ_ALLOC_TIME
++		/*
++		 * The alloc time is only used by iocost for now,
++		 * only possible when blk_mq_need_time_stamp().
++		 */
++		if (set_alloc_time)
++			rq->alloc_time_ns = now;
++#endif
++		rq->start_time_ns = now;
++	}
++}
++
+ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+-		struct blk_mq_tags *tags, unsigned int tag, u64 alloc_time_ns)
++		struct blk_mq_tags *tags, unsigned int tag)
+ {
+ 	struct blk_mq_ctx *ctx = data->ctx;
+ 	struct blk_mq_hw_ctx *hctx = data->hctx;
+@@ -356,14 +374,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+ 	}
+ 	rq->timeout = 0;
+ 
+-	if (blk_mq_need_time_stamp(rq))
+-		rq->start_time_ns = ktime_get_ns();
+-	else
+-		rq->start_time_ns = 0;
+ 	rq->part = NULL;
+-#ifdef CONFIG_BLK_RQ_ALLOC_TIME
+-	rq->alloc_time_ns = alloc_time_ns;
+-#endif
+ 	rq->io_start_time_ns = 0;
+ 	rq->stats_sectors = 0;
+ 	rq->nr_phys_segments = 0;
+@@ -393,8 +404,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+ }
+ 
+ static inline struct request *
+-__blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
+-		u64 alloc_time_ns)
++__blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data)
+ {
+ 	unsigned int tag, tag_offset;
+ 	struct blk_mq_tags *tags;
+@@ -413,7 +423,7 @@ __blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
+ 		tag = tag_offset + i;
+ 		prefetch(tags->static_rqs[tag]);
+ 		tag_mask &= ~(1UL << i);
+-		rq = blk_mq_rq_ctx_init(data, tags, tag, alloc_time_ns);
++		rq = blk_mq_rq_ctx_init(data, tags, tag);
+ 		rq_list_add(data->cached_rq, rq);
+ 		nr++;
+ 	}
+@@ -427,12 +437,13 @@ __blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
+ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
+ {
+ 	struct request_queue *q = data->q;
++	bool set_alloc_time = blk_queue_rq_alloc_time(q);
+ 	u64 alloc_time_ns = 0;
+ 	struct request *rq;
+ 	unsigned int tag;
+ 
+ 	/* alloc_time includes depth and tag waits */
+-	if (blk_queue_rq_alloc_time(q))
++	if (set_alloc_time)
+ 		alloc_time_ns = ktime_get_ns();
+ 
+ 	if (data->cmd_flags & REQ_NOWAIT)
+@@ -474,9 +485,11 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
+ 	 * Try batched alloc if we want more than 1 tag.
+ 	 */
+ 	if (data->nr_tags > 1) {
+-		rq = __blk_mq_alloc_requests_batch(data, alloc_time_ns);
+-		if (rq)
++		rq = __blk_mq_alloc_requests_batch(data);
++		if (rq) {
++			blk_mq_rq_time_init(rq, true);
+ 			return rq;
++		}
+ 		data->nr_tags = 1;
+ 	}
+ 
+@@ -499,8 +512,10 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
+ 		goto retry;
+ 	}
+ 
+-	return blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag,
+-					alloc_time_ns);
++	rq = blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag);
++	if (rq)
++		blk_mq_rq_time_init(rq, set_alloc_time);
++	return rq;
+ }
+ 
+ static struct request *blk_mq_rq_cache_fill(struct request_queue *q,
+@@ -555,6 +570,7 @@ static struct request *blk_mq_alloc_cached_request(struct request_queue *q,
+ 			return NULL;
+ 
+ 		plug->cached_rq = rq_list_next(rq);
++		blk_mq_rq_time_init(rq, blk_queue_rq_alloc_time(rq->q));
+ 	}
+ 
+ 	rq->cmd_flags = opf;
+@@ -656,8 +672,8 @@ struct request *blk_mq_alloc_request_hctx(struct request_queue *q,
+ 	tag = blk_mq_get_tag(&data);
+ 	if (tag == BLK_MQ_NO_TAG)
+ 		goto out_queue_exit;
+-	rq = blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag,
+-					alloc_time_ns);
++	rq = blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag);
++	blk_mq_rq_time_init(rq, blk_queue_rq_alloc_time(rq->q));
+ 	rq->__data_len = 0;
+ 	rq->__sector = (sector_t) -1;
+ 	rq->bio = rq->biotail = NULL;
+@@ -2896,6 +2912,7 @@ static inline struct request *blk_mq_get_cached_request(struct request_queue *q,
+ 	plug->cached_rq = rq_list_next(rq);
+ 	rq_qos_throttle(q, *bio);
+ 
++	blk_mq_rq_time_init(rq, blk_queue_rq_alloc_time(rq->q));
+ 	rq->cmd_flags = (*bio)->bi_opf;
+ 	INIT_LIST_HEAD(&rq->queuelist);
+ 	return rq;
