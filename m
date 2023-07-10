@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABED674CB79
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2474D74CC1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjGJFDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S232465AbjGJFUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjGJFDF (ORCPT
+        with ESMTP id S229679AbjGJFTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:03:05 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE0D120
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 22:03:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vmy4O50_1688965378;
-Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vmy4O50_1688965378)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Jul 2023 13:02:59 +0800
-Message-ID: <1a107593-e411-70a0-b6b8-3c34a9036ff3@linux.alibaba.com>
-Date:   Mon, 10 Jul 2023 13:02:58 +0800
+        Mon, 10 Jul 2023 01:19:34 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57A149DC;
+        Sun,  9 Jul 2023 22:13:58 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1688965561t6naos8a
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 10 Jul 2023 13:06:00 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: lO87fmWkX3HaW2taDfSs1R2OvsTmxaaDoJO0KeobxemAPs/y0vAjAAG+ceg1U
+        aRywlrn6iekitbZolZ8HVumUutuczuLTcDuK1yUynq/HUbN0HNUIpXYssnICOSXZEclQeX4
+        OShbbEncp+Qzd0ncHv81++CrYJbb1iRyl1r7WzywMrLt13h4UavuRtZr0A+eu9gtllRTV9Z
+        mepmWqt54jVzgPb4JPBkfuyflF69WVFLADjDTLG98GhQsLcHEHz5ueUhc+3iTzGlpsHN8xD
+        gm2BxvotdF1oz05lhjU3oH/O6xtjqZfhBPIfcQrVc5Sa+KgoUwvyLnBgT+ksD8ALbooB5K3
+        GZVk86Pu4WciOxpGddcCeFJ6AckMT1iNhW6oI4Pm/vXDSjvt9Em1Aa6RQxKCw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 655532314049486488
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux@weissschuh.net
+Subject: Re: [PATCH v4 13/18] selftests/nolibc: prepare /tmp for tmpfs or ramfs
+Date:   Mon, 10 Jul 2023 13:06:00 +0800
+Message-Id: <20230710050600.9697-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230709093821.GH9321@1wt.eu>
+References: <20230709093821.GH9321@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] erofs: fix two loop issues when read page beyond EOF
-To:     Chunhai Guo <guochunhai@vivo.com>,
-        "xiang@kernel.org" <xiang@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>
-Cc:     "huyue2@coolpad.com" <huyue2@coolpad.com>,
-        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>,
-        "linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230708062432.67344-1-guochunhai@vivo.com>
- <97875049-8df9-e041-61ca-d90723ba6e82@linux.alibaba.com>
- <d6ee4571-64d6-ebd2-4adb-83f33e5e608d@vivo.com>
- <fd738d38-17de-4b61-e4e8-d4f98ef8d1db@linux.alibaba.com>
- <ac05d6e3-79b4-a470-2a30-8c809c277209@vivo.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <ac05d6e3-79b4-a470-2a30-8c809c277209@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,73 +51,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Willy
 
-
-On 2023/7/10 12:35, Chunhai Guo wrote:
+> Hi Zhangjin,
 > 
+> On Sat, Jul 08, 2023 at 02:38:57AM +0800, Zhangjin Wu wrote:
+> > create a /tmp directory and mount tmpfs there, if tmpfs is not
+> > mountable, use ramfs as tmpfs.
+> > 
+> > tmpfs will be used instead of procfs for some tests.
 > 
-> On 2023/7/10 11:37, Gao Xiang wrote:
->>
->>
->> On 2023/7/10 11:32, Chunhai Guo wrote:
->>> Hi Xiang,
->>>
->>> On 2023/7/8 17:00, Gao Xiang wrote:
->>>> Hi Chunhai,
->>>>
->>>> On 2023/7/8 14:24, Chunhai Guo wrote:
->>>>> When z_erofs_read_folio() reads a page with an offset far beyond EOF, two
->>>>> issues may occur:
->>>>> - z_erofs_pcluster_readmore() may take a long time to loop when the offset
->>>>>      is big enough, which is unnecessary.
->>>>>        - For example, it will loop 4691368 times and take about 27 seconds
->>>>>          with following case.
->>>>>            - offset = 19217289215
->>>>>            - inode_size = 1442672
->>>>> - z_erofs_do_read_page() may loop infinitely due to the inappropriate
->>>>>      truncation in the below statement. Since the offset is 64 bits and
->>>>> min_t() truncates the result to 32 bits. The solution is to replace
->>>>> unsigned int with another 64-bit type, such as erofs_off_t.
->>>>>        cur = end - min_t(unsigned int, offset + end - map->m_la, end);
->>>>>        - For example:
->>>>>            - offset = 0x400160000
->>>>>            - end = 0x370
->>>>>            - map->m_la = 0x160370
->>>>>            - offset + end - map->m_la = 0x400000000
->>>>>            - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
->>>>
->>>> Thanks for the catch!
->>>>
->>>> Could you split these two into two patches?
->>>>
->>>> how about using:
->>>> cur = end - min_t(erofs_off_t, offend + end - map->m_la, end)
->>>> for this?
->>>>
->>>> since cur and end are all [0, PAGE_SIZE - 1] for now, and
->>>> folio_size() later.
->>>
->>> OK. I will split the patch.
->>>
->>> Sorry that I can not understand what is 'offend' refer to and what do you mean. Could you please describe it more clearly?
->>
->> Sorry, there is a typo here, I meant 'offset'.
->>
->> `cur` and `end` both are not exceed 4096 if your page_size
->> is 4096.
->>
->> Does
->> cur = end - min_t(erofs_off_t, offset + end - map->m_la, end)
->>
->> fix your issue?
-> 
-> Yes. I think this will fix this issue. Do you mean the below change is unncessary?
->  >>>> -    unsigned int cur, end, spiltted;
->  >>>> +    erofs_off_t cur, end;
->  >>>> +    unsigned int spiltted;
+> Just curious, in which cases do you need this ? We're building an
+> initramfs for the root that's already read-write, so without mounting
+> anything you already have write access. I'm taking it anyway for now,
+> but if you figure it's not needed we can later drop it (or just drop
+> the mount part and keep mkdir).
+>
+ 
+This "/tmp" directory is originally created to check the 'TMPFS' existence for
+the old vfprintf/memfd_create (from old version of the minimal config support),
+it is used to skip the whole vfprintf tests if the TMPFS (or HUGETLBFS) is not
+there. BTW, Thomas's patch [1] shows, MEMFD_CREATE is able to work with ramfs
+too.
 
-Yes, please help send a fix for this!
+And it is later used by the old chmod_tmpdir/chmod_tmpfile and chroot_tmpfile
+too (from old version of the minimal config support), so, it is important to
+align with the normal Linux systems to let "/tmp" means TMPFS mount.
 
-Thanks,
-Gao Xiang
+Now, we use "/tmp" directly in vfprintf, and we use argv0 for chmod_exe and
+chroot_exe, so, the only user of "/tmp" is vfprintf currently. In this case, it
+is a simple normal writable directory to allow create tmp files there, so,
+agree very much to only reserve the mkdir part:
 
+    /* create /tmp if not there. Silently fail otherwise */
+    mkdir("/tmp", 0755);
+
+Another consideration before is whether it is required to be consistent with
+the normal Linux systems, let the "/tmp" directory mounted as tmpfs at most of
+the time, but "/tmp" means ramfs for CONFIG_TMPFS=n currently even mount it
+explicitly (ramfs is a fallback of tmpfs in such case), so, this assumption of
+"/tmp" means tmpfs is not true currently.
+
+What I'm worried about is people in the future assume "/tmp" as tmpfs at the
+first glance and use the features only provided by TMPFS but not provided by
+RAMFS (I'm not sure which one they will use). so, I even tried to create a
+"/tmp/tmpfs" flag for TMPFS and "/tmp/ramfs" flag for RAMFS before, since there
+is no user to explicitly prefer TMPFS to RAMFS currently, at last, I removed
+these flags from the sent patchsets. Based on the same logic, The removal of
+tmpfs mount is of course ok.
+
+So, Willy, is it ok for you to remove that mount line with corresponding update
+of the commit message (and the subject title), or require me to send a revision
+for this patch?
+
+Best regards,
+Zhangjin
+
+---
+[1]: https://lore.kernel.org/lkml/20230703224803.GF4378@monkey/
+
+> Willy
