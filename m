@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FD574CBA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E89174CBA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjGJFFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        id S231163AbjGJFFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjGJFE7 (ORCPT
+        with ESMTP id S230467AbjGJFE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jul 2023 01:04:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82A7E50;
-        Sun,  9 Jul 2023 22:04:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A7FE5C;
+        Sun,  9 Jul 2023 22:04:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D49460DF3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 864D060E73;
+        Mon, 10 Jul 2023 05:04:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36844C433C8;
         Mon, 10 Jul 2023 05:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B243C433CA;
-        Mon, 10 Jul 2023 05:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688965474;
-        bh=4QW5Pspd9XzCJVbs3KRgrFvk3XDwLainaklLXJebkME=;
+        s=k20201202; t=1688965475;
+        bh=TWRzV+mGs6YFi2TtnVBTR2XSEgmw2zF5J3Z2qfNcMFo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NcRpfU7JubPtxocdu6a6+2i0OJDf4aJquVn2rHjxh/o5gQOwKynVUN5llQtZHV1Cu
-         hGuFgfTGBJeeCkvyJl/cOu1HgOsulwFA8AscJbFVLcQehOR5wy/XPdlvJ7yC8QbZQg
-         N1fmDalAQRcpYOWMceAwtbPWKDGmMY4xOZnP43BQCWtJ/n9KD4avPPQC93N3/SmVdn
-         Yr9pRjgUSAeWUhEy2It7ue4rLbiZu5MhTZLVWXOOYq0XC0Y0NNPqUgno7mJSzWETYb
-         iiBl5T0gMkeK5vOSbeiiVm9Ix59Fn5dlROjXygSbF0ezbqSwfJFaw8q5TCIaYZ1cjM
-         LQrvXEWlho0/w==
+        b=h+vNuNMZ6Eq2VjPHYytZpex+M5CtvmFQ7T4wKgaFfjiZtDCDCcJUPrXSsqzttkeU1
+         zWn+k77xgZ1prKq4EAufHshAUXHNlwowjwN7eod0TuezCmOFUpBPD1tYYqZ5+GxfJt
+         zpUPhDGrjYEtCnDRXspknWwkVLHvqv4twb7rMsjMEWmpknyrDsqJWsA3e62aDV4H4t
+         Vk8mPFng261PljiOg5vJvDGyCKasm7v5qRO1VAVdrnSgyXDFwEly4U1apODpCTB/6Y
+         hyNtYvZDb/3yN+7glv8LlgtAEs8VUE5IYRu25vvdygj74bmobEPiKgxwJB0CDEtrR1
+         RPcDlOrO18tGA==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] SM8350 CPU-adjacent fixes
-Date:   Sun,  9 Jul 2023 22:07:14 -0700
-Message-ID: <168896565988.1376307.1532849453927343435.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: msm8998: Provide XO to RPMCC
+Date:   Sun,  9 Jul 2023 22:07:15 -0700
+Message-ID: <168896565983.1376307.10081166281011300716.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230705-topic-sm8350_fixes-v1-0-0f69f70ccb6a@linaro.org>
-References: <20230705-topic-sm8350_fixes-v1-0-0f69f70ccb6a@linaro.org>
+In-Reply-To: <20230627-topic-98_rpmcc-v1-1-4024e43ad0fc@linaro.org>
+References: <20230627-topic-98_rpmcc-v1-1-4024e43ad0fc@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,20 +61,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 05 Jul 2023 15:36:20 +0200, Konrad Dybcio wrote:
-> I noticed there are some holes in the cpuidle and cpufreq on SM8350.
-> This series attempts to fix that.
+On Tue, 27 Jun 2023 19:28:52 +0200, Konrad Dybcio wrote:
+> The RPMCC node should be fed a reference to the XO fixed clock.
+> Do so.
 > 
 > 
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: sm8350: Add missing cluster sleep state
-      commit: 29a687c219e20fd4c6e8c47d214365f0d34e3d3d
-[2/3] arm64: dts: qcom: sm8350: Fix CPU idle state residency times
-      commit: 91ce3693e2fb685f31d39605a5ad1fbd940804da
-[3/3] arm64: dts: qcom: sm8350: Add missing LMH interrupts to cpufreq
-      commit: 951151c2bb548e0f6b2c40ab4c48675f5342c914
+[1/1] arm64: dts: qcom: msm8998: Provide XO to RPMCC
+      commit: ddf66e4b16744b96db4bd1ddee9d19b5a834f94f
 
 Best regards,
 -- 
