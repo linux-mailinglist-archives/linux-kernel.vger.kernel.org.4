@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C1174D55D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C7B74D560
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbjGJM12 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 08:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S230360AbjGJM2B convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 08:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjGJM10 (ORCPT
+        with ESMTP id S231810AbjGJM14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:27:26 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E73B1;
-        Mon, 10 Jul 2023 05:27:25 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-c15a5ed884dso5189995276.2;
-        Mon, 10 Jul 2023 05:27:25 -0700 (PDT)
+        Mon, 10 Jul 2023 08:27:56 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46449B1;
+        Mon, 10 Jul 2023 05:27:55 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5701810884aso47893327b3.0;
+        Mon, 10 Jul 2023 05:27:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688992044; x=1691584044;
+        d=1e100.net; s=20221208; t=1688992074; x=1691584074;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3C5/GxdOTSlGprN5fpWAYyQzVkP9RkeiGRt79KEKJV0=;
-        b=DxbA6SuYGMgWLuYHx95pmcwlkZbqbaRP7MARpwj7evY+FvPMvXXHMwEFtjAHPG1QJJ
-         uw/NUTfMquBhJG0YOOz5Nk538V3L+grqawIWLquLTY1yMoNRGfWXn4hbWRf3hR2hnRRT
-         tfjGCWXke9jrnTLlnwDIce3M8G2hfotA6bMwB8t+aacIwyW1sCwoUzu7+FiRzwpujNvw
-         YCQD630frD4SHmIvdW2xBNzpKFEmlbDXcS4f6o/Vl8AaQtYiAa2pP1LdtyXlshG3KOdd
-         +PcVYGkQmFNuARYSzma/OhC5cMobCcOxXidPMUgT2J9dpK+/0HE6JTlhI9NoXb4j99Rw
-         jFsg==
-X-Gm-Message-State: ABy/qLbLNIdbf4l5T4+9bhD2kEu56CXdNmDrOconWqSqhHUJVhzHJLbg
-        KjAklp6tj3SR/qHMFkNd+xynj/pPcoVzdA==
-X-Google-Smtp-Source: APBJJlHfu8VK3J40QrG+Nn6xp1XhW/ay4N1jugeZcU8FZ3XTTHXsKRCdy9dTn4xrnTFC529JOyyRCA==
-X-Received: by 2002:a25:1657:0:b0:bad:125f:9156 with SMTP id 84-20020a251657000000b00bad125f9156mr9983466ybw.35.1688992044203;
-        Mon, 10 Jul 2023 05:27:24 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id x63-20020a25ce42000000b00c5f99a71eaasm2605732ybe.57.2023.07.10.05.27.23
+        bh=72G0xT35DUUmjR1UqeCEhln7BH2NFD1TsIdwv6WzGBc=;
+        b=ZIcR4xwd+wyeXWZZf2pQxCdkIYD1dc8smbu0Aj/4NmE04Aa6wxyNER2S+y7gCiKzcP
+         YwmM4bRRrC8rbxdBTJeMspOog2NknJrGtg+QyLKfeEMM9FFo5B3sfth1NKvYRlbN1InM
+         nvPhs9fA4mZIBKyaqRHLiB4BYWLgUXYadg6QQhvqmbxyNV1qCRGWdyGpjtuYWgZpZU+B
+         N6tVBhayyONlmEOpgrfyTu3OdFasDiGP0Yb0CX3iboRYK7Dy4YRr5crSvItF/DHpqpc+
+         Gl+kjrkDoJPIKTYJChF+KlzyO0MPIwpitYZRP1Gbx1/85Qpldsn/Vi4uOwH2cZI0mwsw
+         cAJA==
+X-Gm-Message-State: ABy/qLb4OxsycZB+Nc2ERz2SXjpb0tMPS/RkKCHPeEa3ye4mLLmbHYIF
+        zAeTSfHT7y8hT3Tb8Iln1HsuYFo7m3yU5w==
+X-Google-Smtp-Source: APBJJlF3C3k5W0rlJYMrCIaaaHsDWlLU6YObswQhANuqzGgxgR+Tm6T4wmMLk9qs7TuJINXBo4mkMw==
+X-Received: by 2002:a0d:de42:0:b0:570:7df7:e401 with SMTP id h63-20020a0dde42000000b005707df7e401mr14208890ywe.29.1688992074352;
+        Mon, 10 Jul 2023 05:27:54 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id a62-20020a0dd841000000b0054f9e7fed7asm3048610ywe.137.2023.07.10.05.27.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:27:23 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-c5ce57836b8so5202300276.1;
-        Mon, 10 Jul 2023 05:27:23 -0700 (PDT)
-X-Received: by 2002:a25:d895:0:b0:bac:fecf:43d0 with SMTP id
- p143-20020a25d895000000b00bacfecf43d0mr10694122ybg.10.1688992042808; Mon, 10
- Jul 2023 05:27:22 -0700 (PDT)
+        Mon, 10 Jul 2023 05:27:53 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c4d04d50c4cso4240323276.1;
+        Mon, 10 Jul 2023 05:27:53 -0700 (PDT)
+X-Received: by 2002:a25:5c5:0:b0:c59:f91:a769 with SMTP id 188-20020a2505c5000000b00c590f91a769mr11544540ybf.64.1688992073743;
+ Mon, 10 Jul 2023 05:27:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-7-frank.li@vivo.com>
-In-Reply-To: <20230710095926.15614-7-frank.li@vivo.com>
+References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-13-frank.li@vivo.com>
+In-Reply-To: <20230710095926.15614-13-frank.li@vivo.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 14:27:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU==PhzyG7Dhzsq+3kq-B+H7D59juWyn2Lcg2A_C=XVHg@mail.gmail.com>
-Message-ID: <CAMuHMdU==PhzyG7Dhzsq+3kq-B+H7D59juWyn2Lcg2A_C=XVHg@mail.gmail.com>
-Subject: Re: [PATCH v4 07/21] thermal/drivers/rcar: convert to use devm_request*_irq_probe()
+Date:   Mon, 10 Jul 2023 14:27:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV7nef1OaBCwG7vs3KKm1nFuuhGp_41V6v4ZFjahZBeGQ@mail.gmail.com>
+Message-ID: <CAMuHMdV7nef1OaBCwG7vs3KKm1nFuuhGp_41V6v4ZFjahZBeGQ@mail.gmail.com>
+Subject: Re: [PATCH v4 13/21] drivers/thermal/rcar_gen3_thermal: convert to
+ use devm_request*_irq_probe()
 To:     Yangtao Li <frank.li@vivo.com>
 Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -78,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 12:07 PM Yangtao Li <frank.li@vivo.com> wrote:
+On Mon, Jul 10, 2023 at 12:10 PM Yangtao Li <frank.li@vivo.com> wrote:
 > There are more than 700 calls to devm_request_threaded_irq method and
 > more than 1000 calls to devm_request_irq method. Most drivers only
 > request one interrupt resource, and these error messages are basically
