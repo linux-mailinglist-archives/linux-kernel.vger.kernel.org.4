@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EDD74CFF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511A774CFED
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjGJIcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S230466AbjGJIbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjGJIcA (ORCPT
+        with ESMTP id S230501AbjGJIbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:32:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC4B9D;
-        Mon, 10 Jul 2023 01:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688977919; x=1720513919;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6NhvVYqsHEfigtx0YsZGpiHAjopC+ylj0l2HkwecxA4=;
-  b=HlpHaShEZoBpyfrqOAV+jjhzvyp/1JsI8UTmnXWlzsqOJjxokuWH/ao4
-   hFwWnG1EgtdULzefMmFCGXRd0HjqyuXz0rMFOXxS9YuJOlXUppIcc1Lpn
-   UFQbnB4wPYIum6/TasX8t41zaYHrAveXRazKI+4QrN2QCjfXW6uKvyq5e
-   jZm/ROHa3F7v7BxGeJOxU7+vEQNHIq46tWctT83G5LxRwsEFaFJezJjJo
-   JfdtZv9kNXORfDymPp06C3M1VHmMvR6unj6brFGU47V93hyy8yPGXHaDP
-   y49t/NOV4+cMm8zFk/LxV7CI4YjRBHlE9SEo1YcMwIEi+qoHY8/k4X0bA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="364323958"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="364323958"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 01:31:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="834193498"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="834193498"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Jul 2023 01:31:41 -0700
-Date:   Mon, 10 Jul 2023 16:30:14 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] fpga: fpga-mgr: altera-pr-ip: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZKvBlrCqzTnBP2S3@yilunxu-OptiPlex-7050>
-References: <20230705094655.44753-1-frank.li@vivo.com>
- <20230705094655.44753-2-frank.li@vivo.com>
+        Mon, 10 Jul 2023 04:31:01 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92804E6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:30:59 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b6fdaf6eefso63278631fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:30:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688977858; x=1691569858;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+wwP6BZLzF4aBD+iXkaOcxcJALLks32tIeZUMT3jig=;
+        b=LUI5nhWNqI9r+4yE8lFZyyJsSVi0Bao3yiv/RMb6OBnuPaUXqKLz2xA14FApN2TndE
+         +2a379MRuZAGcVBAnWhchUXI/8qEWlAAmTcFhbED9GrOZ3o2OtYokGICA42KLx6A+pgD
+         6Coze1rBwsd0EF6R1iVBGha4vqgvRbu6+6mzrFVJA3Louc66HVHKZTurrJHtUNIuG3Iy
+         g2xvwAb68boZmKgOBfBInM65ZB19LfjeblgpEXw8kVyRJZ8e5pKODI6IU7g9rKo9B1ug
+         Rcrm66K3+urS1CRYhZe4841jjpL7/PE0/IY2dLv8Pkhzagii7Mx4K54uQ/x/TKXhMpIt
+         23BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688977858; x=1691569858;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+wwP6BZLzF4aBD+iXkaOcxcJALLks32tIeZUMT3jig=;
+        b=JhfEk0dkn/EZO7bt+N3PUBxa24dwoNHcLuthmpAOTV5Kkl8LE1WzqSDE7OvkaFfmvv
+         EqaD2HyXzia6SWnx7KZF5y+cfTJBO1vUhk5VRBlAX8tkDHX7sMMPaJ/SLLKDsZejAWgX
+         I4deLEJUBIySy/l0ZVe4x1sJJVheT5uVN3fIHJgb3Wil85xJeGMYs0cBk7ePcpmby8GZ
+         2glOB66qAm/HwxRsVjaTi6SG11Gq+gErEQT1br5iYmjUkfaYnBA3OPc39ISCV6c8hkHK
+         dEdW+MVhdQWODpKiHi88jInVyiEnA+JmUNJ07cABXVXfJ2qPaoe6Ygmf1989/EIEdtao
+         f2IA==
+X-Gm-Message-State: ABy/qLbxVG4WCp5XQ7Pr03sZwfCVLsuyvjo6aY0jmTbLqneeDyloo3WZ
+        92ZUvTFg9p4lyNgNMWg5J7Y=
+X-Google-Smtp-Source: APBJJlFNweCwSbQM+3RSfPGHeoFrTm2G6HK8bCTnODC5rLeGIzrVrtgh6QGcgh1+yObWGKnGBjZ+mw==
+X-Received: by 2002:a2e:88cf:0:b0:2b6:a804:4cc with SMTP id a15-20020a2e88cf000000b002b6a80404ccmr8805171ljk.53.1688977857370;
+        Mon, 10 Jul 2023 01:30:57 -0700 (PDT)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id c24-20020a05651c015800b002b6fed37b18sm1843654ljd.101.2023.07.10.01.30.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 01:30:57 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 11:30:54 +0300
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, wayland-devel@lists.freedesktop.org,
+        kernel-dev@igalia.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        'Marek =?UTF-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Michel =?UTF-8?B?RMOkbnplcg==?= <michel.daenzer@mailbox.org>,
+        Randy Dunlap <rdunlap@infradead.org>, hwentlan@amd.com,
+        joshua@froggi.es, ville.syrjala@linux.intel.com
+Subject: Re: [PATCH v5 6/6] drm/doc: Define KMS atomic state set
+Message-ID: <20230710113054.316a9f31@eldfell>
+In-Reply-To: <20230707224059.305474-7-andrealmeid@igalia.com>
+References: <20230707224059.305474-1-andrealmeid@igalia.com>
+        <20230707224059.305474-7-andrealmeid@igalia.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705094655.44753-2-frank.li@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/_cBaQ_yD9IwDg/Rsy2Dl+2I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,36 +83,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-05 at 17:46:49 +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+--Sig_/_cBaQ_yD9IwDg/Rsy2Dl+2I
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Fri,  7 Jul 2023 19:40:59 -0300
+Andr=C3=A9 Almeida <andrealmeid@igalia.com> wrote:
+
+> From: Pekka Paalanen <pekka.paalanen@collabora.com>
+>=20
+> Specify how the atomic state is maintained between userspace and
+> kernel, plus the special case for async flips.
+>=20
+> Signed-off-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
 > ---
->  drivers/fpga/altera-pr-ip-core-plat.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/fpga/altera-pr-ip-core-plat.c b/drivers/fpga/altera-pr-ip-core-plat.c
-> index b008a6b8d2d3..fbeae6e68f60 100644
-> --- a/drivers/fpga/altera-pr-ip-core-plat.c
-> +++ b/drivers/fpga/altera-pr-ip-core-plat.c
-> @@ -15,13 +15,8 @@ static int alt_pr_platform_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	void __iomem *reg_base;
-> -	struct resource *res;
-> -
-> -	/* First mmio base is for register access */
+> v4: total rework by Pekka
+> ---
+>  Documentation/gpu/drm-uapi.rst | 41 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
 
-Please don't drop the comments.
+Thank you for polishing that email into a proper patch!
 
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -
-> -	reg_base = devm_ioremap_resource(dev, res);
->  
-> +	reg_base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(reg_base))
->  		return PTR_ERR(reg_base);
->  
-> -- 
-> 2.39.0
-> 
+For patches 1 and 2:
+Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+
+
+Thanks,
+pq
+
+> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.=
+rst
+> index 65fb3036a580..6a1662c08901 100644
+> --- a/Documentation/gpu/drm-uapi.rst
+> +++ b/Documentation/gpu/drm-uapi.rst
+> @@ -486,3 +486,44 @@ and the CRTC index is its position in this array.
+> =20
+>  .. kernel-doc:: include/uapi/drm/drm_mode.h
+>     :internal:
+> +
+> +KMS atomic state
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +An atomic commit can change multiple KMS properties in an atomic fashion,
+> +without ever applying intermediate or partial state changes.  Either the=
+ whole
+> +commit succeeds or fails, and it will never be applied partially. This i=
+s the
+> +fundamental improvement of the atomic API over the older non-atomic API =
+which is
+> +referred to as the "legacy API".  Applying intermediate state could unex=
+pectedly
+> +fail, cause visible glitches, or delay reaching the final state.
+> +
+> +An atomic commit can be flagged with DRM_MODE_ATOMIC_TEST_ONLY, which me=
+ans the
+> +complete state change is validated but not applied.  Userspace should us=
+e this
+> +flag to validate any state change before asking to apply it. If validati=
+on fails
+> +for any reason, userspace should attempt to fall back to another, perhaps
+> +simpler, final state.  This allows userspace to probe for various config=
+urations
+> +without causing visible glitches on screen and without the need to undo a
+> +probing change.
+> +
+> +The changes recorded in an atomic commit apply on top the current KMS st=
+ate in
+> +the kernel. Hence, the complete new KMS state is the complete old KMS st=
+ate with
+> +the committed property settings done on top. The kernel will automatical=
+ly avoid
+> +no-operation changes, so it is safe and even expected for userspace to s=
+end
+> +redundant property settings.  No-operation changes do not count towards =
+actually
+> +needed changes, e.g.  setting MODE_ID to a different blob with identical
+> +contents as the current KMS state shall not be a modeset on its own.
+> +
+> +A "modeset" is a change in KMS state that might enable, disable, or temp=
+orarily
+> +disrupt the emitted video signal, possibly causing visible glitches on s=
+creen. A
+> +modeset may also take considerably more time to complete than other kind=
+s of
+> +changes, and the video sink might also need time to adapt to the new sig=
+nal
+> +properties. Therefore a modeset must be explicitly allowed with the flag
+> +DRM_MODE_ATOMIC_ALLOW_MODESET.  This in combination with
+> +DRM_MODE_ATOMIC_TEST_ONLY allows userspace to determine if a state chang=
+e is
+> +likely to cause visible disruption on screen and avoid such changes when=
+ end
+> +users do not expect them.
+> +
+> +An atomic commit with the flag DRM_MODE_PAGE_FLIP_ASYNC is allowed to
+> +effectively change only the FB_ID property on any planes. No-operation c=
+hanges
+> +are ignored as always. Changing any other property will cause the commit=
+ to be
+> +rejected.
+
+
+--Sig_/_cBaQ_yD9IwDg/Rsy2Dl+2I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmSrwb4ACgkQI1/ltBGq
+qqcBAg//RoZa8NlDML/orFXTdrRJYvLDZ4R3Cek3ssDoj7yBDQy6HnXaLJwHwkf9
+WhkN28UTOu00/CsmgAVT2P3Cuz5ebS7zJsLkBqS7OzLqWx+8+WodZW8BswZvRilo
+EhrDGDDd+/8LFd57y2XFyuIMiwfDkK3ME17zl0s0fiGXtOixe4O3Q/vHajdBTp84
+JpLJ+fxnD2T4/R7mva7YxPPNbSxX/rTwkmcedf16MEfk6KX3LIVrGWQ+6jIyXMKQ
+ztC+R9R9SQ17WKMVck70nq82NwfF+VaFf78szBGnBkVTIn7jTRoyCPLn5mtLxzxT
+AS9/5y4JUbtb8d7Q/pG6eOdr25oUhJjSqhGBz83qicAn2U+dcwi9QzehyD9Kqd9S
+9NUjc8WN8mZSzt+8Pef528m3Ts7JrF57HJ4BTehuFhqXl/taJSJVGF8uBj4ZHiMk
+JUT4d/VUfsUnfWv59S8I9AyupcpvEFQnMW7r/RGJL3M9vNV3YVo4SEAlllmtTnA0
+l9Gi9o78iAc8vCdu5s+BWLyOe0rGkER1yAHJq+5LYWRpB+FWVIjcwS24JoBs9P15
+6Ba2dhHeN2/mljk/QD8HQrGrvWJPj+x9jY/YyZYETnwRQaFZnCtZeldoFh2WIvZb
+4YVxdUuDvOSuzYwIXWWaV+t17+iWBkk6yTyWzC1hO4vDosoMtQw=
+=LMkp
+-----END PGP SIGNATURE-----
+
+--Sig_/_cBaQ_yD9IwDg/Rsy2Dl+2I--
