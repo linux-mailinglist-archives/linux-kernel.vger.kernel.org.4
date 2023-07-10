@@ -2,132 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC45674DC6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF0C74DC72
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjGJR1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S229769AbjGJR20 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 13:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjGJR1Y (ORCPT
+        with ESMTP id S229558AbjGJR2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:27:24 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8017E183;
-        Mon, 10 Jul 2023 10:27:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AWh9RO4YNVTelZto2ko8HYddOeMV6vrLxnI8fCWVuSTmFFtDpFJ0uQsvRQLrrH5LTbhJ4sXXhZNeanr70ewfHTrPxSsiGi7oKmBMo3/oIZmYmLztaQOyWc3OdJNNphp/+agM+Jpit4eQ5gHgRBfFHscZUYCVQwO70t92dFakVKZPmIrCETYDZpz2Qgqo7sCp9IfbWg1t2EvFIrNoREwD/zzgGo4vM8bQRsyP7YUCaKyMFZwBGRwkDkruAs5uEqauiETyzsbj6YwCCty9jbfgJdxGJdBzsMlCKWr0ChvOLI4+groot+uM9b5Vs/TQU8z6nbrONzJdL14ZGiyQJdzCJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gUg0zXeUudZ2yYg+Hvn3YaMA9NrAAW54/CGfkp+Baz4=;
- b=n/8VwbbEs+aHsoZKjckT/vEtg7bHlB6NgMWsnNlwtliXw2XSPLN91cv2pMnDXOwd3sIMyjx4qzikFuTWFQLZbtu9WCKn4FvuclKOwsDgbeoaXACn5F/VIV7C25w+GDlkqTxqPx8S8Pc7fgbKs1i1L2W2Tmns5XILsiZ1pgkG/EbVQQOVImgoywhIT2pHFb4YsYB+XcZO9b5/bzc6G/WowKe9ok4YPRon/TMu8mq6iEXOKIxLjQSDXOPej0tffLPUpfbFJ0wFXCYzzQXg9czzgh1+TsB0OfJk/bePvz6xDO+xNdNBXlYo2Qd9xS9vYYlQCUXI5zwdMIF/YljqaS+yPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gUg0zXeUudZ2yYg+Hvn3YaMA9NrAAW54/CGfkp+Baz4=;
- b=pOPf2R4QdDtIpuqzZKHMWeOuZVXgY6QE+DsVu7Kj+ZY1JlN8AbEeC/hVTYksrDNxoABk9AfYySG5QhOfV85JBbWsXnCwmRho7anejhUQJnlPATI2L0eODPayKnYZCPssvZk0OsX3jJsQxBNvqV4Z3YrNICF1SLueXX+VxcnAlIPf87eaNLaH9eA8FHl2GBnaH7JvNYNSJd6bHrGjLifYc0OfHW0TIELm3Zc4HCmYHa5a7BphiG1hd3+2KiSH1a47LFPMrQOuuKDCT70+RCfxUE6KR4hSskePSa6pUnTu9bLf/yrEVhVBjGG7DGgAE53I76Hsf6HNs1mcKDwZ2ftUvA==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by SN7PR12MB6839.namprd12.prod.outlook.com (2603:10b6:806:265::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 10 Jul
- 2023 17:26:55 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::ee7e:9411:ca2b:85e]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::ee7e:9411:ca2b:85e%6]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
- 17:26:55 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
-Thread-Topic: [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
-Thread-Index: AQHZXcoi7FLBwG/JU0q3FmEUxUR5K68J1scAgKoUF6A=
-Date:   Mon, 10 Jul 2023 17:26:55 +0000
-Message-ID: <CH2PR12MB38951D4AC0D3C373E17FDDBFD730A@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <20230323205733.20763-1-asmaa@nvidia.com>
- <CAHp75Vd4m79RhG-_KLRNzr0SPzphG07fOiTWwmGCfx8Lz=+6Vg@mail.gmail.com>
-In-Reply-To: <CAHp75Vd4m79RhG-_KLRNzr0SPzphG07fOiTWwmGCfx8Lz=+6Vg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|SN7PR12MB6839:EE_
-x-ms-office365-filtering-correlation-id: dc7f8efb-51e4-454d-26c8-08db816adb9b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: asEqWiJwKaGDk1vdH7RmE+Q+zwwxUY8DdMKGRTB2lD9tvXJGRP4DUGXlvvflRmUFrSLTXBCEN2exKiDUfDBU9SFewv+qt/TeyUXzyIzvUBKcy58Zw175oB2LmtYqMKAIeJiTGtiFYhLb7FaJMf7hW32L0oFaZ+sK+iaZXrrVVbIQUGBXJIcEYV6qZSDFesx90Ab1x4GkuOW+i0LWYgVwkR/QbZEnHd6ujtEQ794ApYirzCIeHFFpb1t9sKavhFOQpzE1Mn54i5XMZ99Xu6PiaQQfJxzIa0cDsfRJNOupGFbJbeVBJPUgolVW8xzYMDK2Dnff8UkIG7RJyrFAJgIsRRDZPqI4dMCDkbB2ZvvJqmaO0zfQxyn+vTArv3iPfk2KO8PuaEWI+qMlZtXCiCYMErUo6p41dLkC8QWleZMLG8L/QI2XTBCnYLSL1iOrA4A6SlpJjulp5pWZN0m20WDN9pxCPVLPT5I6JC9YZIzSaPF7UpN9p2EK94B/QTZ8nHK+xw1Fa0WuRxT+dnyG6v08s31JxfcN+80lvWySrU5z+7dLz8E9P8ThQNFCajKiHbUxg8q7XJ3PjYHWZhacvB88wVt9Cyoo+Ozc6QL24wvMX1G5fy0WXc+GeD+JYfv6sAzG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(451199021)(38070700005)(558084003)(33656002)(54906003)(6506007)(478600001)(41300700001)(8676002)(38100700002)(122000001)(110136005)(86362001)(316002)(7696005)(52536014)(8936002)(5660300002)(9686003)(26005)(55016003)(2906002)(186003)(66446008)(64756008)(66556008)(66946007)(71200400001)(66476007)(76116006)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q1ZUWWFleklKMjltWE44OUMyMURsdCtOL25vK01Hd251aHRhek9pTVE5U0lC?=
- =?utf-8?B?aEdPNjhtd0VBcldYVkhBd3FDeVlLSk5TZTB5QzNRZ3lvNlZVWEtpTXprOEhQ?=
- =?utf-8?B?SnAxTE8zdU1MMjZHaXhZbEVqTStXTjN0ZUxsdE95SnVVa1gzOENNL2Q2SW9Y?=
- =?utf-8?B?dFNzcHpWYU1PMGlvNzhFYk14algyV2JSaU44WHZmR2UrRzU3MkJiZ2E1VVQy?=
- =?utf-8?B?cEJPdTlBU1c1ZXJCWE5iZTB6RWRLNE1LdmV3aERyTk01WkdHWEs0UCs2VFBY?=
- =?utf-8?B?UDY0b2ZFN1FrNjBUZ3YvN25QZHdQSVVqMzlwU0krRHRkQUVKU2dhbDNNbjUz?=
- =?utf-8?B?ckNIUFNYMzhxWDkvaTFxY09YOVNOUktoYlRGTU5qSG9mNVVtc3NWL3RkSWdv?=
- =?utf-8?B?OEJiNlVSWHRyZ1dlQzllUE81SC9zOHhxWFVMU1N2YjBJVkI3MGpldmpWb1Vi?=
- =?utf-8?B?OVRmZ0EzRlJsS1RNVitPTGNDUCs2amVzRkFBSGdYM3pISXU2dUN2TTZsMjhJ?=
- =?utf-8?B?TlBpZjduRkZIdlYySWM4RERvY05EREtiL2FKb0ZReWZIQ1ZZOGFZTG8wdjA0?=
- =?utf-8?B?ZXNRK0JRbUQzclF4YnFFcW4wekg3K202a0ZpTzNQTFV2VmtpS2E5K2dNWVE1?=
- =?utf-8?B?ZkJEelF0WG9NTXU1S2J0UlRhYWpkMmJKaUJBSjI1V3JPVnJqeFNxY21ZVjRk?=
- =?utf-8?B?M2p4UnJvMjFLK2dkcWdFWjlPVVJFZVJHdi83Tm5kM2lWRXp6WlVpRCtoalpY?=
- =?utf-8?B?QTNDZ2ptY1RWelNkR1dpOUtHUlNNNnNRRUdhYzd2ZGl3Ry9xaks0RU8vMlZu?=
- =?utf-8?B?anR4VjBIczd5UzFDWUpGVmw5VGNrcExteVAvVUNDY2oxRjdqUkROMmNPMllm?=
- =?utf-8?B?ZDFKci9pWklKd2F6S3VNeGplczNYSkx4YlF0VEk1VjljUHhib0NSclVKNVkw?=
- =?utf-8?B?eEs0Si9tbGtJZ1hoSDZ3TkxJRVRNdUc1OUo4d2I5WEZOcnBjK1NwTWFBV1RI?=
- =?utf-8?B?cXVUdFFmYjAyck9hMUlKbEx3Tm1GbWNyYUt5K2Z1Wm5meUtaYkl2UDROTlVY?=
- =?utf-8?B?WHVJYTJQdFFlOFFFaDZCUlFvSkxsZXJxS2d6dlFucWE3d09hMUc3OE9iQUha?=
- =?utf-8?B?N3pwV1hkaFRNRlBUWXZBN3ZnZXFmVURTYm04Z3RqZTZoVlZJR1g2WkVDb2VQ?=
- =?utf-8?B?YWxzMENxZkVSbDAxLzlITGlPcVRUb3FZUmt4TDBZWmorc1pzbW9tUC9xQWdJ?=
- =?utf-8?B?alk4dGdlaWxabXVvdDFIaGRKL3I0dVZjRUNBV1pmUkhtQVptSUlTbGJtWW50?=
- =?utf-8?B?bGZkaTVCblk1UTR6TUJpQ05Gb0RWcjQ2K1ZKMHRBZkdMY3NTRW5GUHVoUnJV?=
- =?utf-8?B?WjlBcCtDaFNXdG9FS0srbU1obld3N2JielJxSVk0NXlSb0l1MkJ4Ukt4RVg4?=
- =?utf-8?B?SFJDNVB2cnFOVG90NG9Qd1h0Zk03WUpKUjI1M09mVmU5VVlsNUhUWTdNTElM?=
- =?utf-8?B?d3NLdnY2YWtFNjVHYmFZUGt6L2JhbmUwdTd1UkxkeW85bks0SXhDdVpiY2tv?=
- =?utf-8?B?Z095anh4TkxmNEFQUHcwL01GN1BYaC9Vd0R4SGxtMUJubE1sMC9wNGlQRTFF?=
- =?utf-8?B?bzByaTRvZnVlK2kvRmdIdXErNUV0NUtieFhGRG4zeDdpSEY2K3dNbTZFa2FJ?=
- =?utf-8?B?RmpuWHRaZGlWbjVtczlYeC9GK1Z0RzhydWw0VER5WFAyWS9zM1duSVFRZ2VV?=
- =?utf-8?B?MkJsV1YvYVJzQXN1ZERjendwQVFjanhGZlZ4Z1pwTVZ4dms5YlB1UHIxZVAy?=
- =?utf-8?B?aS8xMzI4WDRieWRNR1VQRVVVb1dHdFZIbEJsV3g5UXhneXZZZWFRNlNQTk16?=
- =?utf-8?B?OE1BNVFGVlRIemorQzlsOGFBOHl0YTRzaTlLS2s2WlJRVWFtYUp1R0tnUXdj?=
- =?utf-8?B?R21BUXVpbVY2bGFONHJWbDB5b0srekwyb2wvN20xdHY0R0pJUTBFWnNOcUY4?=
- =?utf-8?B?OWxYTFlvRTZtTFpJTHdlY29lSDNBTG4rcFhkME42RTBpUnNlV2FVWFBJUFE0?=
- =?utf-8?B?N3NGOVR6cHFGY3hBeVNxQWpGUVhZUjZZaTk5eWFLNmZOc2pCWU9HQndLTGRK?=
- =?utf-8?Q?w4V0=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 10 Jul 2023 13:28:24 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2B9C4;
+        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98dfd15aae1so108981366b.0;
+        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689010101; x=1691602101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6m9bcYgGbjrVRMFW6nrHcAcb8xg9Wr/oPN8BtfdOyoo=;
+        b=DpbGpUoGlBUJ3pq+NuJX09C9Ttk9iQS7C1oQ+dDX2wLh6fd4AgdpBkS/n9QsnABYP8
+         Zo2b+0LZgV8Xnxi1qyzTo+fZoaobbDctjEigQNJEG0H80bKVitAaSYLtxKBYqknqUHtX
+         bh6S7PjWeWorPAet3nZCwGnrLHV6X7NX7o63nHaimBwCQ95Z5QBEgZRxtBG4Q6fIfC9u
+         hruAc4+FShMtcK48CFl/qqByFVfmCUb1CCFX6tXqTxy3cc0pgyMEco0cMnNhileckDEp
+         3dZR+P1J1WK2DzRRDs6Gv/1/3cglTZM4cufwglJXXiRT898ujbHJ+HFHPfSgBZAlEkbI
+         pRZQ==
+X-Gm-Message-State: ABy/qLZ8/3I8Xc9nIacUWw3/lXWqne9sASv09kw5BdHKzuT+VoHPn/LG
+        GE/AjhAlkxXKX+3e8cWrTs7TZp6yOoixQ89Z+vg=
+X-Google-Smtp-Source: APBJJlGaLddWMgg3l2iwjH8O/u5lm1FCcnISu3+XYpvHyebQmDlWIxA57nnYOaWv8SkozX7erXyetKP23I5mOyLbYZ4=
+X-Received: by 2002:a17:906:51c9:b0:993:d901:9b46 with SMTP id
+ v9-20020a17090651c900b00993d9019b46mr8677753ejk.3.1689010101128; Mon, 10 Jul
+ 2023 10:28:21 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc7f8efb-51e4-454d-26c8-08db816adb9b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 17:26:55.3402
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3x4NClaAq+pG7dYqDGdIl4QdJ2OJsFn5uMtAkf1NEhiqH8k0smGDe2FKMzzzK/8Vkps84n0Z+KNvqd9UQsF7FQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6839
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-9-frank.li@vivo.com>
+In-Reply-To: <20230710095926.15614-9-frank.li@vivo.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 10 Jul 2023 19:28:09 +0200
+Message-ID: <CAJZ5v0h7bvAqyKzV_SsKaTc3JV0R01y0k6aaieAk7iRcbN-eCg@mail.gmail.com>
+Subject: Re: [PATCH v4 09/21] thermal: intel: int340x: processor_thermal:
+ convert to use devm_request*_irq_probe()
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBSZXZpZXdlZC1ieTogQW5keSBTaGV2Y2hlbmtvIDxhbmR5LnNoZXZjaGVua29AZ21haWwuY29t
-Pg0KPiANCkhpIEJhcnQsDQoNCkNvdWxkIHlvdSBwbGVhc2UgYWRkIHRoaXMgcGF0Y2ggdG8gdGhl
-IHRyZWU/DQoNClRoYW5rcy4NCkFzbWFhDQo=
+On Mon, Jul 10, 2023 at 12:00 PM Yangtao Li <frank.li@vivo.com> wrote:
+>
+> There are more than 700 calls to devm_request_threaded_irq method and
+> more than 1000 calls to devm_request_irq method. Most drivers only
+> request one interrupt resource, and these error messages are basically
+> the same. If error messages are printed everywhere, more than 2000 lines
+> of code can be saved by removing the msg in the driver.
+>
+> And tglx point out that:
+>
+>   If we actually look at the call sites of
+>   devm_request_threaded_irq() then the vast majority of them print more or
+>   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+>
+>      519 messages total (there are probably more)
+>
+>      352 unique messages
+>
+>      323 unique messages after lower casing
+>
+>          Those 323 are mostly just variants of the same patterns with
+>          slight modifications in formatting and information provided.
+>
+>      186 of these messages do not deliver any useful information,
+>          e.g. "no irq", "
+>
+>      The most useful one of all is: "could request wakeup irq: %d"
+>
+>   So there is certainly an argument to be made that this particular
+>   function should print a well formatted and informative error message.
+>
+>   It's not a general allocator like kmalloc(). It's specialized and in the
+>   vast majority of cases failing to request the interrupt causes the
+>   device probe to fail. So having proper and consistent information why
+>   the device cannot be used _is_ useful.
+>
+> So convert to use devm_request*_irq_probe() API, which ensure that all
+> error handling branches print error information.
+>
+> In this way, when this function fails, the upper-layer functions can
+> directly return an error code without missing debugging information.
+> Otherwise, the error message will be printed redundantly or missing.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+> ---
+>  .../intel/int340x_thermal/processor_thermal_device_pci.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index 0d1e98007270..ee766904b314 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -258,13 +258,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
+>                 irq_flag = IRQF_SHARED;
+>
+>         irq =  pci_irq_vector(pdev, 0);
+> -       ret = devm_request_threaded_irq(&pdev->dev, irq,
+> -                                       proc_thermal_irq_handler, NULL,
+> -                                       irq_flag, KBUILD_MODNAME, pci_info);
+> -       if (ret) {
+> -               dev_err(&pdev->dev, "Request IRQ %d failed\n", pdev->irq);
+> +       ret = devm_request_threaded_irq_probe(&pdev->dev, irq, proc_thermal_irq_handler,
+> +                                             NULL, irq_flag, KBUILD_MODNAME, pci_info, NULL);
+> +       if (ret)
+>                 goto err_free_vectors;
+> -       }
+>
+>         ret = thermal_zone_device_enable(pci_info->tzone);
+>         if (ret)
+> --
+> 2.39.0
+>
