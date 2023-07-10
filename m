@@ -2,79 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4740974DF1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6250A74DF23
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjGJUTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S230260AbjGJUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjGJUTI (ORCPT
+        with ESMTP id S229505AbjGJUWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:19:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F4D1B2;
-        Mon, 10 Jul 2023 13:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZV6+5ZsIhvZLlZYDqAT59X7+VfV8F+fbtD5fCX3g0W4=; b=Wzn841NyYIQXYIGiYDX2X1Mlck
-        ty00EO4KYM+P78vdrMuP+kSnJ9pdEET8QYE2b2HTKE3DxkC2q0pXkBBsBoUd9svobF1qlOYzv8vRB
-        LjwRC8d6N18vRNG65WRc6STmGx0iaAG9+J9CJzVIgyxu62BCnI1ne5Wsch1yBbavgGMQtnhqQoMTz
-        L9s3GyZckfG2X+PHIS45QaUJcA6yoUncxCy8dnLyIrtV1SoriXmeRrlr+ayu435XVzY6NuDy9c97p
-        6NIZ3ZpIqVIU3Op+B0OrYzkXHNKjImuG4/u6g2n8w6dwK+R9GS6Q8eWGmzU7TLdTgdJJUwC0470o3
-        FYVQxhgQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIxLP-00Etis-16; Mon, 10 Jul 2023 20:18:51 +0000
-Date:   Mon, 10 Jul 2023 21:18:50 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 17/36] nios2: Implement the new page table range API
-Message-ID: <ZKxnqmk3sstOtDZQ@casper.infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-18-willy@infradead.org>
- <ZBGZKTP7BGhvS9Oo@kernel.org>
- <ce464a86-b75e-3488-bab0-cbea1b3e2572@kernel.org>
+        Mon, 10 Jul 2023 16:22:12 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D220133;
+        Mon, 10 Jul 2023 13:22:09 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666ed230c81so4275629b3a.0;
+        Mon, 10 Jul 2023 13:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689020529; x=1691612529;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bVYuNT6EKDwT78XA7oQei5eRW2f7Pj43cJgZHxURJ0M=;
+        b=b27G8isFzatJkPEvAH0d48BGZUoyFdMCKbweWfvbVBPqKbzF9JcyLH9MEwO0NY2QrG
+         0qdQsJbOFewwEc03KkfZ/gtRabY4hraZtKISxttsRuyUvZXGx5v7DxFABCGJr5Iz0urE
+         lbD74g84snd4sMBb3WCdgx+l9bsBYSwXxs5MZaH0aWsfC44+IY6WX2u3LvHRR2Fvd33F
+         PIul173VaWZaiSRFzIm2Or9VPJKpWbT+TZaIBUfMetuj2qQYqdEn8nYLm1QvfMyDWdyq
+         rznd0fdlTKGjA60hFUyrztVHERHufE/N8V+FxgBD1gb+1xRxg2xHtixyxNlgnCe/EBaF
+         YJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689020529; x=1691612529;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bVYuNT6EKDwT78XA7oQei5eRW2f7Pj43cJgZHxURJ0M=;
+        b=h7H9pPyBjk7xgpvhWxl2VS+5pbrdhKeAId9FHTDzEp0u92e3/oMcpFKiSh8Uy7TVND
+         FWVTpsa9WYVDz1uk5MTwtutXyPIW8qjje1AruquRQYryo7J9knHj6N9ER5UTbhuAeg7E
+         +TiID2HkdDWkHMuGrB/V5CLxxs7Lt+PRMP1yySJaTkTSCPpb2LXUryD46Mvj1gNUUlmm
+         v9Kd57fAS3Uu/+drGJ5c/YB8s56mphqBqAIiXEiZza/T9pF6civ7z5YCalLPuqnIuKjb
+         Y2COBQXu2jvB54UQG8KJAe9iMZLP0XdwnFXv0vsEuJdaqMKMO8W9b9sGqs8V5oJjqwGC
+         AQZA==
+X-Gm-Message-State: ABy/qLY/Ebv3GPqqwJm19sq+9veWyCPIGlvU/ur5l7emyhaIIGc1RPnc
+        jOlrmBWlyHFdJfVlNxyfI1o=
+X-Google-Smtp-Source: APBJJlGg63KMt6xiGy7XT7dJsIZ7msfrKBDQsUaA8vRRK6Vgqds35BYFhtZDkAwB8UuUYJbDwrM/Xg==
+X-Received: by 2002:a17:903:41c6:b0:1b2:1a79:147d with SMTP id u6-20020a17090341c600b001b21a79147dmr18010380ple.2.1689020528584;
+        Mon, 10 Jul 2023 13:22:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b001b8903d6773sm302475plb.85.2023.07.10.13.22.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 13:22:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 10:22:06 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     peterz@infradead.org, gregkh@linuxfoundation.org,
+        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] sched/psi: use kernfs polling functions for PSI
+ trigger polling
+Message-ID: <ZKxobukY3EbLcks9@slm.duckdns.org>
+References: <20230630005612.1014540-1-surenb@google.com>
+ <CAJuCfpH1eoB4cb-huqoMOP9M-zzm40pEJPZgSO_9Z8ZP6bRGPQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ce464a86-b75e-3488-bab0-cbea1b3e2572@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpH1eoB4cb-huqoMOP9M-zzm40pEJPZgSO_9Z8ZP6bRGPQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 05:45:54PM -0500, Dinh Nguyen wrote:
-> 
-> 
-> On 3/15/23 05:08, Mike Rapoport wrote:
-> > On Wed, Mar 15, 2023 at 05:14:25AM +0000, Matthew Wilcox (Oracle) wrote:
-> > > Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
-> > > flush_dcache_folio().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
-> > > from being per-page to per-folio.
-> > > 
-> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > Cc: Dinh Nguyen <dinguyen@kernel.org>
-> > 
-> > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > 
-> 
-> Applied!
+On Thu, Jun 29, 2023 at 06:04:15PM -0700, Suren Baghdasaryan wrote:
+> This patch is a replacement for the patchset posted at
+> https://lore.kernel.org/all/20230626201713.1204982-1-surenb@google.com/
+> The original patchset was more appropriate for Tejun's tree but this
+> one is mostly touching PSI-related code, so I changed the recipient to
+> PeterZ. That said, I would still greatly appreciate inputs from Tejun
+> and Greg, and anyone else of course.
 
-Sorry, what?  You can't pick this patch out of the middle of a series
-and apply it!  This needs various earlier patches to work.  And then
-later patches depend on this one having been applied, so if we were to
-go the route of "please arch maintainers apply each of these patches",
-it'd take over a year to get them all in.
+Yeah, this looks good to me.
 
-As I said in the cover letter, this will all go in through the mm tree.
-So what I want from arch maintainers is an Acked-by/Reviewed-by/Tested-by,
-and then Andrew will apply the whole set.
+Thanks.
+
+-- 
+tejun
