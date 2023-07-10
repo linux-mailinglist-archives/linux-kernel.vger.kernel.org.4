@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5B774DD84
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720FC74DD87
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjGJSky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S233253AbjGJSlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjGJSkw (ORCPT
+        with ESMTP id S232032AbjGJSlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:40:52 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF60E6D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:40:30 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-7658752ce2fso346368585a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689014429; x=1691606429;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zp4+jo/0AHmLulNuvIh/KwLGCyw4HNK3R4SueheNcGY=;
-        b=lYxf8rghghWJv0Q/vA+V23rYsyKhY8pOyeUVCpJjWaQeoVTTwwX5NsHIOYN6eF/d5q
-         1OzslYw7Mew3LXDQCKkepu0Mk88a/7qtxxHvKbssn1FyLQ7dc10gcdJv6dtWSE51dqeq
-         EBE4968gpBAofOVhg3FiKpizWNQgR7ux/JcfgP37z0nzpjyNHw/6MYL38g/Aj1kfytSS
-         A8QlNgghxoMgCo26xqlUi3iXl8p7ENNY9Ev6lhCIkFPIiEAhJUJvX/icgklDaLGZ772+
-         GjDzmwjFSJsSnlH2SGmSoJi7KBvTF5JRBpQok9/rdqRbYvqTwGN2tDW0hQY2kjtQhndb
-         +h3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689014429; x=1691606429;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zp4+jo/0AHmLulNuvIh/KwLGCyw4HNK3R4SueheNcGY=;
-        b=Rl2NTlg5smnlit/u9gLo4lTz0l5iy25DYNIgLvaKCzmGGS75v6sA2aqlBS4ASkX5FR
-         Jh+zVBuhZyuqgg3BG5+0txZaPW5+2463/6Vh3WGGZ6PImnJ4o0NLzzA8QfWhMjRDDZP2
-         8DGNYAHeoRQB4SkLp2EzMD19TQyOiayoQR7ERrXxPi7fjH/XWkwdlhzC+bxxC05BcJgO
-         kC3sGROlnTiaiqy8keYj1PoYI1TcwFm9Qk5/wgaWtyIP+AisWB07o7DBVzHBirAW6D1M
-         8MFGLzyXqS8lEdZYSRuaKgo7UmHZFRGy0gQDbVrWe1R8eddVuyj+if2/3szTFgeDVZk6
-         FutA==
-X-Gm-Message-State: ABy/qLZOqyWYVIrAPgCaGZOfhdCJ5gYajSWgg6pU7UCBPF/9RgaSqKpC
-        CiP4fxSV6Mi7lC25o6q2ywycow==
-X-Google-Smtp-Source: APBJJlHFbNkZF410er95MF4TKaxREjQwy7UnQBG18GsQoNgShoGn/BNZdT9yh3AybAWNLnEhuqOvOQ==
-X-Received: by 2002:a05:620a:45a1:b0:767:3771:f770 with SMTP id bp33-20020a05620a45a100b007673771f770mr13588204qkb.40.1689014429364;
-        Mon, 10 Jul 2023 11:40:29 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05620a079400b0075772c756e0sm119355qka.101.2023.07.10.11.40.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 11:40:29 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qIvoC-0004j8-Gp;
-        Mon, 10 Jul 2023 15:40:28 -0300
-Date:   Mon, 10 Jul 2023 15:40:28 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Stanimir Varbanov <svarbanov@suse.de>
-Cc:     linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [RFC PATCH] iommu: arm-smmu-nvidia: Add default domain type
- implementation op
-Message-ID: <ZKxQnKhqKziyxX8f@ziepe.ca>
-References: <20230710082252.9702-1-svarbanov@suse.de>
+        Mon, 10 Jul 2023 14:41:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA21B7;
+        Mon, 10 Jul 2023 11:40:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30EB961188;
+        Mon, 10 Jul 2023 18:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832ACC433C9;
+        Mon, 10 Jul 2023 18:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689014456;
+        bh=FWiqJzgFeCVtSPbsHpYgNf42BRrRoNIOtWAJqK2o6Uo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=spneGbfQNgQFGor1z3/FHKATtaZIzZd4cTg8x7lL34tGTJskPdypDUricgyEYQYFN
+         cb2CmTNa6DekKx9R6XFv03h45W3l2CkEntkUSle4XaI++04kCB9CERLIZ7hfJHKePz
+         LHg55ZnHBVHmiO0kxv5rFR5z0nOy9eMZH8Kph3ojVHRQGKTNgyaW3Kz20X+/gx0/gO
+         MJPZMDr1Dg6JUGbgSd0Yx2BTf5A8Tx7zK5O90uWA7z2h4qvIOk+k9+X//GhR1qEown
+         L0weFDBxwrY2ry0YYWYkTNmNFZYJoXzLbLo2aHDADkvNKGrwhDW+hw4aGueSDgXZNu
+         5eP98ZmRQ6ZeQ==
+Date:   Mon, 10 Jul 2023 19:40:52 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: microchip: add missing space before {
+Message-ID: <20230710-doorway-fifty-017db429d779@spud>
+References: <20230705150058.293942-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="rGxB0qPBFE0fZBJZ"
 Content-Disposition: inline
-In-Reply-To: <20230710082252.9702-1-svarbanov@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+In-Reply-To: <20230705150058.293942-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,21 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 11:22:52AM +0300, Stanimir Varbanov wrote:
-> Add def_domain_type implementation op and override default IOMMU
-> domain Kconfig option (CONFIG_IOMMU_DEFAULT_PASSTHROUGH=y), which
-> could be enabled on some distros. The current quirk has been done
-> for Tegra234 machine, because I found the issue on it. The issue
-> itself appears on USB host controller which cannot be initialized
-> without IOMMU translation. Something more, we proved that IOMMU
-> translation is needed for display and GPU drivers as well.
 
-Generically, if you find HW combinations where certain end points
-cannot work with passthrough (which is really weird in the first
-place) it should be narrowly quirked - not just an entire platform.
+--rGxB0qPBFE0fZBJZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also we don't really have a way to force non-passthrough, ARM32
-systems will always run in passthrough, for instance. Broadly the
-kernel expects it to work.
+On Wed, Jul 05, 2023 at 05:00:58PM +0200, Krzysztof Kozlowski wrote:
+> Add missing whitespace between node name/label and opening {.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/microchip/at91sam9260.dtsi       | 2 +-
+>  arch/arm/boot/dts/microchip/at91sam9261.dtsi       | 2 +-
+>  arch/arm/boot/dts/microchip/at91sam9g20ek_2mmc.dts | 2 +-
+>  arch/arm/boot/dts/microchip/at91sam9g45.dtsi       | 2 +-
+>  arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts   | 2 +-
+>  arch/arm/boot/dts/microchip/at91sam9rl.dtsi        | 2 +-
+>  arch/arm/boot/dts/microchip/at91sam9x5.dtsi        | 2 +-
+>  arch/arm/boot/dts/microchip/sama5d3.dtsi           | 2 +-
+>  arch/arm/boot/dts/microchip/sama5d4.dtsi           | 2 +-
+>  9 files changed, 9 insertions(+), 9 deletions(-)
 
-Jason
+I saw this whitespace patch when I was looking for the other ones on
+lore this morning. Nicolas, off-list, said I could grab the trivial
+stuff, therefore I've pushed this, so that it don't get lost between
+merge windows, leave, etc.
+
+Cheers,
+Conor.
+
+
+--rGxB0qPBFE0fZBJZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKxQtAAKCRB4tDGHoIJi
+0kyBAQDSeF5Qz0Qf059ssX0no91mf4kiL9p6D+aPvQAPEUqg4AD/fAcYPLsznKuA
+6RITBNVr3RqPcNp1Ho3XHdNRQ/UIIAQ=
+=AoUc
+-----END PGP SIGNATURE-----
+
+--rGxB0qPBFE0fZBJZ--
