@@ -2,100 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8DD74CC62
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D1774CC51
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjGJFr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S229875AbjGJFm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjGJFry (ORCPT
+        with ESMTP id S229751AbjGJFmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:47:54 -0400
-Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F5DDE
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 22:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688968052;
-        bh=xTvL2e6wK/GytVnhPpEJaEjWTVzGVbzLIg6DXCg+z60=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=zX8WBaQOI4GZfTbltzAy/0MLwOQVJlxfnAai1yJcZSvV0/loOnft/88GUlXjvkFVr
-         sChbSXPtXwqopq1eqJsVRD/jJzoFE2GgvZN7CNPcRAZCQtFzcOEDv14ZG22NRZUmMU
-         IvNU+IPfmjWjBNvxwvCnjl+v0gwu5c1iuSK/+uPM=
-Received: from smtpclient.apple ([240e:6b1:c0:120::b])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id A51BB0C9; Mon, 10 Jul 2023 13:41:17 +0800
-X-QQ-mid: xmsmtpt1688967677tr407q0zf
-Message-ID: <tencent_BB4124566E846A2FB6ECC0F63C5A15BE5009@qq.com>
-X-QQ-XMAILINFO: M0msBj/q2J/mf9gFfHhbU6RzGy6V0ipaK3fxvRF8YcN2FLrRemnAU6zZD6Ph7G
-         qPj+awM0q9VUD8jNFc6VQQJP91IzHZXYMXmeEWjmDsIcL7TEDbc5YhwUKkiyIfRF13O4e3O0LGfo
-         FowAEwoHrBD6RQizdfLkSKCOpL3t+kAEviQB3GuiMp65a7Kfc/sdKOEnCFi9f1R3MVvBUkDAUtmL
-         9X6EDQ5a23LkZlw2eML8xsnzyjK7UKhonil2zQRuE3rRQPB1QKHtDHI/9TBwc48GUYUEcaAx9QCW
-         qvADUxrxEiTzl3kkiEhElKYnYKsDq1dVQCZIuvuQE2Upmm0xHkk7uBFE4/i4cobyiTDk/eW8PfOH
-         dkYpQJqffa42tXTgYeXedC0lHZsGwUa2Y8Ale6SXo7YzVKZqKAM4oMJV0ff6grzKZNAGgn8TU+zj
-         tYd+wxbNcq62/pph7jV8xS6zCTUTFaHPaKPP1LyvKviyWitSvxP4p5cCASIsh/XEZm0C6LwHsIPI
-         kli8t0/U0sCDQ/ZMh5b+W0OIiqCan2+9Y3ZhKUH2edbHwt5yK+BnL0L7sq+U4mudRx1zu7Pe/g0d
-         nYsw22CX4hVdLljHWQ5mMNQTBvgvWgj/eklPSXEFhnjIe0mkHmRBMMJOhpMmFb6GwhDV4dxiyBFJ
-         yBQ6MO2TQs76od7MotNzxpGbgpADcjqaHU5ICQz3i5wPuhVzd4aqDEjJO91/w5BeSSgehJCRJ6h2
-         w5tAAw3WFGDhEYzOsLCM0JM6/gLMALmQ+YSlFb3wTKPl5ApPD1ZEd/Y5jfktUOFVZr19I5bOe6Gt
-         9V5KOeQOaPUgcns2pcnYSfI8nziVQT6vUUdch0FApzjSQtbjyPjSgkxnItboR2gPapY5jqpgfnhk
-         9jelCszPXYZkb1/LI/PtRv81N13PTh1Q0LzNRVdUTj4+nlpL+9adsDL6cvHqzb7oPMWnaiC8v2SA
-         3PLa9R17XaPLpXr7Xmp9nMmEMJJ8zAu19G18H1XnRNL0T9et0vI1N07+q9r5ep
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: staging: ks7010: potential buffer overflow in
- ks_wlan_set_encode_ext()
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-In-Reply-To: <e24f9c2c-1163-631a-f8c0-b6dcb445a858@web.de>
-Date:   Mon, 10 Jul 2023 13:41:07 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Xu Panda <xu.panda@zte.com.cn>
-Content-Transfer-Encoding: quoted-printable
-X-OQ-MSGID: <BA41CA41-19D6-48ED-89CC-B7A575DC0040@foxmail.com>
-References: <tencent_5153B668C0283CAA15AA518325346E026A09@qq.com>
- <2a41ca22-a0eb-df38-be43-7175e1230bd0@web.de>
- <2023070919-monetary-sleet-2f5c@gregkh>
- <e24f9c2c-1163-631a-f8c0-b6dcb445a858@web.de>
-To:     Markus Elfring <Markus.Elfring@web.de>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 10 Jul 2023 01:42:49 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456A2E3;
+        Sun,  9 Jul 2023 22:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1688967762;
+        bh=dIIudDnEs8xk2ol87Xl6lmeqU9CcTCPpcA26qaGJSL0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QZf0V7QIp3giI71oZjSLIfAYELBN8MFRZgmiSwhSDLFouRhzZ5ayaF5nmbkKx2wah
+         sXmtyw6Di+RRszt+Slt9cqvSvXZ1V/e8yTg3xO9n3Nh1ykNMgeHVVMdT9VEuQ+TrJd
+         WUvNoQouBg9tOIgnO8V9NcT00ix540L/RKycYed15lLPd8Z5A83Sy9XrPNeyg3gRkI
+         W2eZSsVPXaOLPtq2v5LqEp/3n9sNMkmFFkpLuxrD7z1q5mVF9Xzk5/toItucRb0Swd
+         EbJZmfrdOVni1UoeI+yYAJHco2TaeMUfu/O3cNYWA7pQXYNKMYST3k8a6geBo+LAPJ
+         iYDVxI5EPlgZQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QztFG0NC5z4wZw;
+        Mon, 10 Jul 2023 15:42:42 +1000 (AEST)
+Date:   Mon, 10 Jul 2023 15:42:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: stats (Was: Linux 6.5-rc1)
+Message-ID: <20230710154239.6ec4a675@canb.auug.org.au>
+In-Reply-To: <CAHk-=wj8sPDVoWgaceAs1AiwZrHV8mtC3vQNGbeV6-RypJi6aw@mail.gmail.com>
+References: <CAHk-=wj8sPDVoWgaceAs1AiwZrHV8mtC3vQNGbeV6-RypJi6aw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/N.hCBAaZdm2Ml6xB2JS56w8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markus,
+--Sig_/N.hCBAaZdm2Ml6xB2JS56w8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> 2023=E5=B9=B47=E6=9C=8810=E6=97=A5 03:56=EF=BC=8CMarkus Elfring =
-<Markus.Elfring@web.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
->>>> The "exc->key_len" is a u16 that comes from the user.  If it's over
->>>> IW_ENCODING_TOKEN_MAX (64) that could lead to memory corruption.
->>>=20
->>> Please choose an imperative change suggestion.
->>=20
->> Please stop reviewing staging patches, it is not helpful for anyone.
->=20
-> It seems that further contributors need to become more aware about
-> (and finally adhere to) requirements from the Linux development =
-documentation.
->=20
-> Regards,
-> Markus
+Hi all,
 
-I'm guilty of my incorrect patch format. And do I need to write another
-patch to fix this format issue?
+As usual, the executive friendly graph is at
+http://neuling.org/linux-next-size.html :-)
 
-Best regards
-Shurong
+(No merge commits counted, next-20230627 was the first linux-next after
+the merge window opened.)
 
+Commits in v6.5-rc1 (relative to v6.4):            11730
+Commits in next-20230627:                          11468
+Commits with the same SHA1:                        11053
+Commits with the same patch_id:                      144 (1)
+Commits with the same subject line:                   15 (1)
+
+(1) not counting those in the lines above.
+
+So commits in -rc1 that were in next-20230627:     11212 95%
+
+Some breakdown of the list of extra commits (relative to next-20230627)
+in -rc1:
+
+Top ten first word of commit summary:
+
+     37 drm
+     29 parisc
+     28 perf
+     25 s390
+     25 net
+     20 xfs
+     19 mm
+     17 dt-bindings
+     15 riscv
+     15 alsa
+
+Top ten authors:
+
+     30 deller@gmx.de
+     25 torvalds@linux-foundation.org
+     14 irogers@google.com
+     11 vladimir.oltean@nxp.com
+      9 masahiroy@kernel.org
+      9 djwong@kernel.org
+      8 xiubli@redhat.com
+      8 matthieu.baerts@tessares.net
+      8 dchinner@redhat.com
+      7 krzysztof.kozlowski@linaro.org
+
+Top ten commiters:
+
+     44 torvalds@linux-foundation.org
+     34 davem@davemloft.net
+     31 alexander.deucher@amd.com
+     30 deller@gmx.de
+     27 namhyung@kernel.org
+     25 agordeev@linux.ibm.com
+     23 palmer@rivosinc.com
+     22 kuba@kernel.org
+     22 djwong@kernel.org
+     16 akpm@linux-foundation.org
+
+There are also 256 commits in next-20230627 that didn't make it into
+v6.5-rc1.
+
+Top ten first word of commit summary:
+
+     30 x86
+     25 arm64
+     22 dt-bindings
+     18 drm
+     17 bluetooth
+     14 mm
+     12 soc
+     12 nvmem
+     10 media
+      9 virtio_ring
+
+Top ten authors:
+
+     38 rick.p.edgecombe@intel.com
+     10 xuanzhuo@linux.alibaba.com
+     10 krzysztof.kozlowski@linaro.org
+      9 yunfei.dong@mediatek.com
+      7 cristian.ciocaltea@collabora.com
+      7 arnd@arndb.de
+      6 srinivasan.shanmugam@amd.com
+      5 rafal@milecki.pl
+      5 marcan@marcan.st
+      4 wenst@chromium.org
+
+Top ten commiters:
+
+     42 dave.hansen@linux.intel.com
+     25 srinivas.kandagatla@linaro.org
+     19 matthias.bgg@gmail.com
+     17 luiz.von.dentz@intel.com
+     14 mst@redhat.com
+     12 jarkko@kernel.org
+      9 hverkuil-cisco@xs4all.nl
+      8 alexander.deucher@amd.com
+      7 minyard@acm.org
+      7 ebiederm@xmission.com
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/N.hCBAaZdm2Ml6xB2JS56w8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSrmk8ACgkQAVBC80lX
+0GyAwAf8D2JkankJEDM2kt1zrrhjA9hgLiqQcjYkkkxWJ0yfXap6Z7PtNjsud4Vt
+Ii9Q19UFpwiUrFI0J3vJtkfzL1DJdoJ35O5+z4kVkchJgIE9qqeyN5qUPOR82JZe
+Xy+Z+2w3mLLZtLvSoL0OdRjZ5sTtn2+A72w/+ufq41KM7q+fghUjdgOBnKKPgRGT
+RT1HpgYnndvNpUN7hbtvy1u21VF1mAcPaQs4ST2eHXSMKeaovaPieMShKKPpMy9E
+O0GJmepEdbAyALlcHplWCsMHkueXCxPUBFxhqsjb0t4Neb4kCMxoxL9Qyb9nWW80
+y0R+6rzAdrCtwUSI00aMLGgep/kIvA==
+=1LWs
+-----END PGP SIGNATURE-----
+
+--Sig_/N.hCBAaZdm2Ml6xB2JS56w8--
