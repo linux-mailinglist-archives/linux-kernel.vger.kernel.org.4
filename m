@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B6874CC38
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAE174CC35
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjGJFd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S229795AbjGJFcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjGJFd4 (ORCPT
+        with ESMTP id S229668AbjGJFcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:33:56 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A57EB3;
-        Sun,  9 Jul 2023 22:33:55 -0700 (PDT)
-X-UUID: fe22782b6d154cc5ac9c2e0da43990b4-20230710
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:89717b82-668f-4e85-85c5-8e906053f2e7,IP:15,
-        URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:6
-X-CID-INFO: VERSION:1.1.27,REQID:89717b82-668f-4e85-85c5-8e906053f2e7,IP:15,UR
-        L:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:6
-X-CID-META: VersionHash:01c9525,CLOUDID:1f2cd0da-b4fa-43c8-9c3e-0d3fabd03ec0,B
-        ulkID:230710133120G82S8ADA,BulkQuantity:4,Recheck:0,SF:24|17|19|42|102,TC:
-        nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
-        :0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
-        TF_CID_SPAM_ULS
-X-UUID: fe22782b6d154cc5ac9c2e0da43990b4-20230710
-X-User: jianghaoran@kylinos.cn
-Received: from localhost.localdomain [(39.156.73.12)] by mailgw
-        (envelope-from <jianghaoran@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1249612017; Mon, 10 Jul 2023 13:33:26 +0800
-From:   Haoran Jiang <jianghaoran@kylinos.cn>
-To:     chenhuacai@kernel.org
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, jianghaoran@kylinos.cn,
-        john.fastabend@gmail.com, jolsa@kernel.org, kernel@xen0n.name,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, loongarch@lists.linux.dev,
-        martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        sdf@google.com, song@kernel.org, trix@redhat.com,
-        yangtiezhu@loongson.cn, yhs@fb.com
-Subject: [PATCH v2] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
-Date:   Mon, 10 Jul 2023 13:27:50 +0800
-Message-Id: <20230710052750.259595-1-jianghaoran@kylinos.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
-References: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
+        Mon, 10 Jul 2023 01:32:09 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7DEA8;
+        Sun,  9 Jul 2023 22:32:08 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso1970367b3a.2;
+        Sun, 09 Jul 2023 22:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688967128; x=1691559128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xZq+Hz2DVjmoDUQM0f90c2lbY2SLTyJDQfq3fBqLjkw=;
+        b=sz6TrAumUip4aqI9GNBXa+tm5Y04pfzFRl0h0y+Gk+yWS2OZ8jYhkOGq/ct7x8u/Z4
+         s8Xf+aBQ9byGEHsoHHAnQqb5FAfZsCz5ADeD2xGryCFCurscL5mkDG48KJCIC1rkqxXB
+         WPEdHtC3teWr3+Ig6wykTdd5gJtLyMmNOU7tx0kTggwIwfrYfFp4iKwOoeHvn4x+t0r2
+         jZOW8JeD7z/DICTcINlpdCmED/SB5KdBvJCF9nEsDNLz7QMUnhCH75O1SqE6oVOyxf+U
+         a+HwqtYXuS84Ni98TxDwQTcUI8+to+djaJIRhCQC43PlQcOJPujJrHnc1NCFUTI1MInf
+         cIwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688967128; x=1691559128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xZq+Hz2DVjmoDUQM0f90c2lbY2SLTyJDQfq3fBqLjkw=;
+        b=OAOi0+BE99NsPoDjJkMX6MjiDelKT9Xp/ukeD5n1dDeItL0JXAnWL06pXe8Q/dZ4E5
+         i9xKkx9lhB/S+2Dm+shoR914pnphTXozbuj/889c8lfUiUYCzaoCEJS4ESycOOpQ5KSF
+         6i7zvuUgGSHhEFiaroFdeAbQ1KKqf0t4C8JxaByyxMBKOBdU8xNVBKpl4uPp3rLxhTgE
+         QXsK+STGhgL66H1fUMWaF9pp7EIU5I52PSu8/WZvR9heczncYFI2ZkevJKFCgR8LeJR1
+         ff4D9liHxJLRxAtPfjrGilnb5kLxhlwS6fqr0ijT2xZaYyJkZHhTlrdoZ5l6VfsaYnoB
+         edAg==
+X-Gm-Message-State: ABy/qLaox0xNxna6NrlPIDfqPP2cLrDi65g2jLgMRpXA7AYNT+dh7uPf
+        5u0y3YhIIo9Ig453NN0E0AA=
+X-Google-Smtp-Source: APBJJlHT4TVWDELt5QfX9k+VIh4sRV7vHhUQSonOcWQsrQTbt0453kd9DdfLrSieVAQGKdfO+j4hbQ==
+X-Received: by 2002:a05:6a20:4424:b0:131:dd92:4805 with SMTP id ce36-20020a056a20442400b00131dd924805mr1251390pzb.57.1688967127906;
+        Sun, 09 Jul 2023 22:32:07 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id z3-20020a63b043000000b0055bc21caa09sm6491247pgo.77.2023.07.09.22.32.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jul 2023 22:32:07 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7EEE58208E71; Mon, 10 Jul 2023 12:32:02 +0700 (WIB)
+Date:   Mon, 10 Jul 2023 12:32:02 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+Subject: Re: [PATCH 6.4 0/6] 6.4.3-rc2 review
+Message-ID: <ZKuX0gSlKFnSITOi@debian.me>
+References: <20230709203826.141774942@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AjhBD/Ows7aw9aei"
+Content-Disposition: inline
+In-Reply-To: <20230709203826.141774942@linuxfoundation.org>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building the latest samples/bpf on LoongArch Fedora
 
-     make M=samples/bpf
+--AjhBD/Ows7aw9aei
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There are compilation errors as follows:
+On Sun, Jul 09, 2023 at 10:45:16PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.4.3 release.
+> There are 6 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-In file included from ./include/uapi/linux/in.h:25:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-In file included from ./arch/loongarch/include/asm/processor.h:13:
-In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
-         ^~~~~~~~~~~~~~~
-1 error generated.
+Successfully compiled and installed bindeb-pkgs on my computer (Acer
+Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
 
-larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-and the header file location is specified at compile time.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Test on LoongArch Fedora:
-https://github.com/fedora-remix-loongarch/releases-info
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+--AjhBD/Ows7aw9aei
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-v2:
-use LoongArch instead of Loongarch in the title and commit message.
----
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 615f24ebc49c..b301796a3862 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(LIBBPF_INCLUDE) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
--- 
-2.27.0
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKuXzAAKCRD2uYlJVVFO
+o91DAP4sMRRejEh4mQ9Ejbh8eUPw0EiK30tmOk5cKYkbGldaHAD/c8Em6JEDHTqv
+/K+qBIzh2OnBYmhVchMpveU+lBup2go=
+=NpJm
+-----END PGP SIGNATURE-----
 
+--AjhBD/Ows7aw9aei--
