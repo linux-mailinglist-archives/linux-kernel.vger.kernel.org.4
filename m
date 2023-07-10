@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BA874DEBE
+	by mail.lfdr.de (Postfix) with ESMTP id 508A074DEBF
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjGJUE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S230268AbjGJUEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjGJUEX (ORCPT
+        with ESMTP id S231602AbjGJUEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jul 2023 16:04:23 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BF61A7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:09 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-400a39d4ffcso22557911cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:09 -0700 (PDT)
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3761B8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:11 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-635e0e6b829so37916866d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:04:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689019449; x=1691611449;
+        d=1e100.net; s=20221208; t=1689019450; x=1691611450;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nF2VH8kNHAb0EtloBoQBFvgN17tlh7Ri+RQTdgHw3fI=;
-        b=d4Em6qLQa3BH4LlpvqmTtzM8BtlGKmeCreQAk4IBGPJ2in5x3GArlNHonRslc/NaC2
-         jvojJTwZ1kgqieJGc9SYphVpN6T63RsE6hssq+mn4GIt44oZRDKMu5BfLoVR4we9ZnUP
-         Qft4Qjhvs/lpck6l06Z3CDWXizIfdh3oWd2UQVXEIwweUTGPfnwoqx1oQfDjI+mCPWJ8
-         6lOW33mzM1/U8I2PRIzpbcjThjtGPvzuFiuWrp46T8rZ/OHu/V7PK8JeJ7pzPTPdeiej
-         7b+n/vwtLQrSA2noEgbsDqhc+zNwaa3roVojKFl55eTImyZ615rf6RCVOYVXVT5E6SfD
-         CsIg==
-X-Gm-Message-State: ABy/qLbqagvB0e/tJ41R3/7BvqLE0H7KOd9bjYmTedQ440ReVaUfZEe3
-        2d55TZO+UQVrXbzWNGhordGnpVzvb5WSwEeC
-X-Google-Smtp-Source: APBJJlF0iBlezrek5dxMiUQJvSvp+6unD/vq6IWIBbEIFOZkwfbhpuzNtWzuOB2/D+ZLjoZV1EkEpw==
-X-Received: by 2002:ac8:7e95:0:b0:403:96e3:4740 with SMTP id w21-20020ac87e95000000b0040396e34740mr13111789qtj.25.1689019448421;
-        Mon, 10 Jul 2023 13:04:08 -0700 (PDT)
+        bh=aywgOaCBg8taQC5AfKHDC49h4sDlP6UNnulT1NAP3Eg=;
+        b=KpHcVIRLqOdeYHz7W7mMko4ses0wtKrliWuRx/7n3ciRXNMqDNWQYTPX+GjgzT5kXp
+         xOwV56A9q6SEy7z+xOvDmowMtoCwx06fu7EVDf3kscvmLSOW4uS8C+ZtQkbDEgjjMMaj
+         gVQ34PxNXJ5rkRWNHu6ZGMunh7tegmQ6rjFD8DdFBtNnM9ijL4eJKu7YwmAfsVsfcdnA
+         2juKJLdz2Cg73zbJVcJPcFQArLA9oZK/RDi2nm/bv84IlccYr95LXoqhVonvXi3a47t0
+         qPzy7x4pvZbjzo1JquyHePr4tRL4hiYNN+4Owe6byPuxthsi6aEP4RJZ4RKxiCKS9a+g
+         ZeNA==
+X-Gm-Message-State: ABy/qLaEFYHdSU8am6Y38Qw6BX8waGXO0SSTGUOJJzr/xC1MGCdKNm8H
+        tcdmJMqW/v9krsRlfO6AC00xT87F1TaiPXd+
+X-Google-Smtp-Source: APBJJlGvE1jiFDZG3UrdRG7SjCViu465mcQtH0vPiy1wBSs3JKIT19JTK52H66dznmU/uJK/8edYfw==
+X-Received: by 2002:a0c:cb8e:0:b0:636:14d4:4450 with SMTP id p14-20020a0ccb8e000000b0063614d44450mr11674967qvk.3.1689019449967;
+        Mon, 10 Jul 2023 13:04:09 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:400::5:4850])
-        by smtp.gmail.com with ESMTPSA id k10-20020ac8074a000000b00401e04c66fesm260118qth.37.2023.07.10.13.04.07
+        by smtp.gmail.com with ESMTPSA id o11-20020a0ce40b000000b006301ec0d16fsm217825qvl.0.2023.07.10.13.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 13:04:08 -0700 (PDT)
+        Mon, 10 Jul 2023 13:04:09 -0700 (PDT)
 From:   David Vernet <void@manifault.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
@@ -46,9 +46,9 @@ Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         bristot@redhat.com, vschneid@redhat.com, gautham.shenoy@amd.com,
         kprateek.nayak@amd.com, aaron.lu@intel.com, clm@meta.com,
         tj@kernel.org, roman.gushchin@linux.dev, kernel-team@meta.com
-Subject: [PATCH v2 6/7] sched: Shard per-LLC shared runqueues
-Date:   Mon, 10 Jul 2023 15:03:41 -0500
-Message-Id: <20230710200342.358255-7-void@manifault.com>
+Subject: [PATCH v2 7/7] sched: Move shared_runq to __{enqueue,dequeue}_entity()
+Date:   Mon, 10 Jul 2023 15:03:42 -0500
+Message-Id: <20230710200342.358255-8-void@manifault.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230710200342.358255-1-void@manifault.com>
 References: <20230710200342.358255-1-void@manifault.com>
@@ -56,410 +56,306 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SHARED_RUNQ scheduler feature creates a FIFO queue per LLC that
-tasks are put into on enqueue, and pulled from when a core in that LLC
-would otherwise go idle. For CPUs with large LLCs, this can sometimes
-cause significant contention, as illustrated in [0].
+In the thread at [0], Peter suggested experimenting with putting the
+shared_runq enqueue and dequeue calls in __enqueue_entity() and
+__dequeue_entity() respectively. This has the advantages of improve work
+conservation from utilizing the shared runq on all enqueues, as well as
+automagically causing shared_runq to work for SCHED_CORE. The possible
+disadvantage was that we're dong more enqueues/dequeues, which could
+result in untenable overhead or contention on the shard lock(s).
 
-[0]: https://lore.kernel.org/all/c8419d9b-2b31-2190-3058-3625bdbcb13d@meta.com/
+[0]: https://lore.kernel.org/lkml/20230622105841.GH4253@hirez.programming.kicks-ass.net/
 
-So as to try and mitigate this contention, we can instead shard the
-per-LLC runqueue into multiple per-LLC shards.
+It turns out that this appears to improve shared_runq quite a bit:
 
-While this doesn't outright prevent all contention, it does somewhat mitigate it.
-For example, if we run the following schbench command which does almost
-nothing other than pound the runqueue:
+=== Single-socket | 16 core / 32 thread | 2-CCX | AMD 7950X Zen4 ===
 
-schbench -L -m 52 -p 512 -r 10 -t 1
+CPU max MHz: 5879.8818
+CPU min MHz: 3000.0000
 
-we observe with lockstats that sharding significantly decreases
-contention.
+Command: make -j$(nproc) built-in.a
+			    o____________o_______o
+			    |    mean    | CPU   |
+			    o------------o-------o
+NO_SHARED_RUNQ:             | 582.46s    | 3101% |
+SHARED_RUNQ_WAKEUPS:        | 581.22s    | 3117% |
+SHARED_RUNQ_ALL:            | 578.41s    | 3141% |
+			    o------------o-------o
 
-3 shards:
+Takeaway: SHARED_RUNQ_WAKEUPS performs roughly the same as
+NO_SHARED_RUNQ, but SHARED_RUNQ_ALL results in a statistically
+significant ~.7% improvement over NO_SHARED_RUNQ. This suggests that
+enqueuing tasks in the shared runqueue on every enqueue improves work
+conservation, and thanks to sharding, does not result in contention.
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class name         con-bounces    contentions       waittime-min   waittime-max waittime-total   waittime-avg    acq-bounces   acquisitions   holdtime-min   holdtime-max holdtime-total   holdtime-avg
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Note that I didn't collect data for kernel compile with SHARED_RUNQ_ALL
+_without_ sharding. The reason for this is that we know that CPUs with
+sufficiently large LLCs will contend, so if we've decided to accommodate
+those CPUs with sharding, there's not much point in measuring the
+results of not sharding on CPUs that we know won't contend.
 
-&shard->lock:      31510503       31510711           0.08          19.98        168932319.64     5.36            31700383      31843851       0.03           17.50        10273968.33      0.32
-------------
-&shard->lock       15731657          [<0000000068c0fd75>] pick_next_task_fair+0x4dd/0x510
-&shard->lock       15756516          [<000000001faf84f9>] enqueue_task_fair+0x459/0x530
-&shard->lock          21766          [<00000000126ec6ab>] newidle_balance+0x45a/0x650
-&shard->lock            772          [<000000002886c365>] dequeue_task_fair+0x4c9/0x540
-------------
-&shard->lock          23458          [<00000000126ec6ab>] newidle_balance+0x45a/0x650
-&shard->lock       16505108          [<000000001faf84f9>] enqueue_task_fair+0x459/0x530
-&shard->lock       14981310          [<0000000068c0fd75>] pick_next_task_fair+0x4dd/0x510
-&shard->lock            835          [<000000002886c365>] dequeue_task_fair+0x4c9/0x540
+Command: hackbench --loops 10000
+			    o____________o_______o
+			    |    mean    | CPU   |
+			    o------------o-------o
+NO_SHARED_RUNQ:             | 2.1912s    | 3117% |
+SHARED_RUNQ_WAKEUP:         | 2.1080s    | 3155% |
+SHARED_RUNQ_ALL:            | 1.9830s    | 3144% |
+			    o------------o-------o
 
-No sharding:
+Takeaway: SHARED_RUNQ in both forms performs exceptionally well compared
+to NO_SHARED_RUNQ here, with SHARED_RUNQ_ALL beating NO_SHARED_RUNQ by
+almost 10%. This was a surprising result given that it seems
+advantageous to err on the side of avoiding migration in hackbench given
+that tasks are short lived in sending only 10k bytes worth of messages,
+but the results of the benchmark would seem to suggest that minimizing
+runqueue delays is preferable.
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class name        con-bounces    contentions         waittime-min   waittime-max waittime-total         waittime-avg    acq-bounces   acquisitions   holdtime-min  holdtime-max holdtime-total   holdtime-avg
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Command:
+for i in `seq 128`; do
+    netperf -6 -t UDP_RR -c -C -l $runtime &
+done
+			    o_______________________o
+			    |   mean  (thoughput)   |
+			    o-----------------------o
+NO_SHARED_RUNQ:             | 25064.12              |
+SHARED_RUNQ_WAKEUP:         | 24862.16              |
+SHARED_RUNQ_ALL:            | 25287.73              |
+			    o-----------------------o
 
-&shard->lock:     117868635      118361486           0.09           393.01       1250954097.25          10.57           119345882     119780601      0.05          343.35       38313419.51      0.32
-------------
-&shard->lock       59169196          [<0000000060507011>] __enqueue_entity+0xdc/0x110
-&shard->lock       59084239          [<00000000f1c67316>] __dequeue_entity+0x78/0xa0
-&shard->lock         108051          [<00000000084a6193>] newidle_balance+0x45a/0x650
-------------
-&shard->lock       60028355          [<0000000060507011>] __enqueue_entity+0xdc/0x110
-&shard->lock         119882          [<00000000084a6193>] newidle_balance+0x45a/0x650
-&shard->lock       58213249          [<00000000f1c67316>] __dequeue_entity+0x78/0xa0
+Takeaway: No statistical significance, though it is worth noting that
+there is no regression for shared runqueue on the 7950X, while there is
+a small regression on the Skylake and Milan hosts for SHARED_RUNQ_WAKEUP
+as described below.
 
-The contention is ~3-4x worse if we don't shard at all. This roughly
-matches the fact that we had 3 shards on the host where this was
-collected. This could be addressed in future patch sets by adding a
-debugfs knob to control the sharding granularity. If we make the shards
-even smaller (what's in this patch, i.e. a size of 6), the contention
-goes away almost entirely:
+=== Single-socket | 18 core / 36 thread | 1-CCX | Intel Skylake ===
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class name    	   con-bounces    contentions   waittime-min  waittime-max waittime-total   waittime-avg   acq-bounces   acquisitions   holdtime-min  holdtime-max holdtime-total   holdtime-avg
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CPU max MHz: 1601.0000
+CPU min MHz: 800.0000
 
-&shard->lock:      13839849       13877596      0.08          13.23        5389564.95       0.39           46910241      48069307       0.06          16.40        16534469.35      0.34
-------------
-&shard->lock           3559          [<00000000ea455dcc>] newidle_balance+0x45a/0x650
-&shard->lock        6992418          [<000000002266f400>] __dequeue_entity+0x78/0xa0
-&shard->lock        6881619          [<000000002a62f2e0>] __enqueue_entity+0xdc/0x110
-------------
-&shard->lock        6640140          [<000000002266f400>] __dequeue_entity+0x78/0xa0
-&shard->lock           3523          [<00000000ea455dcc>] newidle_balance+0x45a/0x650
-&shard->lock        7233933          [<000000002a62f2e0>] __enqueue_entity+0xdc/0x110
+Command: make -j$(nproc) built-in.a
+			    o____________o_______o
+			    |    mean    | CPU   |
+			    o------------o-------o
+NO_SHARED_RUNQ:             | 1535.46s   | 3417% |
+SHARED_RUNQ_WAKEUP:         | 1534.56s   | 3428% |
+SHARED_RUNQ_ALL:            | 1531.95s   | 3429% |
+			    o------------o-------o
 
-Interestingly, SHARED_RUNQ performs worse than NO_SHARED_RUNQ on the schbench
-benchmark on Milan, but we contend even more on the rq lock:
+Takeaway: SHARED_RUNQ_ALL results in a ~.23% improvement over
+NO_SHARED_RUNQ. Not a huge improvement, but consistently measurable.
+The cause of this gain is presumably the same as the 7950X: improved
+work conservation, with sharding preventing excessive contention on the
+shard lock.
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class name         con-bounces    contentions   waittime-min  waittime-max waittime-total   waittime-avg   acq-bounces   acquisitions   holdtime-min   holdtime-max holdtime-total   holdtime-avg
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Command: hackbench --loops 10000
+			    o____________o_______o
+			    |    mean    | CPU   |
+			    o------------o-------o
+NO_SHARED_RUNQ:             | 5.5750s    | 3369% |
+SHARED_RUNQ_WAKEUP:         | 5.5764s    | 3495% |
+SHARED_RUNQ_ALL:            | 5.4760s    | 3481% |
+			    o------------o-------o
 
-&rq->__lock:       9617614        9656091       0.10          79.64        69665812.00      7.21           18092700      67652829       0.11           82.38        344524858.87     5.09
------------
-&rq->__lock        6301611          [<000000003e63bf26>] task_rq_lock+0x43/0xe0
-&rq->__lock        2530807          [<00000000516703f0>] __schedule+0x72/0xaa0
-&rq->__lock         109360          [<0000000011be1562>] raw_spin_rq_lock_nested+0xa/0x10
-&rq->__lock         178218          [<00000000c38a30f9>] sched_ttwu_pending+0x3d/0x170
------------
-&rq->__lock        3245506          [<00000000516703f0>] __schedule+0x72/0xaa0
-&rq->__lock        1294355          [<00000000c38a30f9>] sched_ttwu_pending+0x3d/0x170
-&rq->__lock        2837804          [<000000003e63bf26>] task_rq_lock+0x43/0xe0
-&rq->__lock        1627866          [<0000000011be1562>] raw_spin_rq_lock_nested+0xa/0x10
+Takeaway: SHARED_RUNQ_ALL results in a ~1.6% improvement over
+NO_SHARED_RUNQ. Also statistically significant, but smaller than the
+almost 10% improvement observed on the 7950X.
 
-..................................................................................................................................................................................................
+Command: netperf -n $(nproc) -l 60 -t TCP_RR
+for i in `seq 128`; do
+	netperf -6 -t UDP_RR -c -C -l $runtime &
+done
+				o______________________o
+				|   mean  (thoughput)  |
+				o----------------------o
+NO_SHARED_RUNQ:			| 11963.08             |
+SHARED_RUNQ_WAKEUP:		| 11943.60             |
+SHARED_RUNQ_ALL:		| 11554.32             |
+				o----------------------o
 
-&shard->lock:       7338558       7343244       0.10          35.97        7173949.14       0.98           30200858      32679623       0.08           35.59        16270584.52      0.50
-------------
-&shard->lock        2004142          [<00000000f8aa2c91>] __dequeue_entity+0x78/0xa0
-&shard->lock        2611264          [<00000000473978cc>] newidle_balance+0x45a/0x650
-&shard->lock        2727838          [<0000000028f55bb5>] __enqueue_entity+0xdc/0x110
-------------
-&shard->lock        2737232          [<00000000473978cc>] newidle_balance+0x45a/0x650
-&shard->lock        1693341          [<00000000f8aa2c91>] __dequeue_entity+0x78/0xa0
-&shard->lock        2912671          [<0000000028f55bb5>] __enqueue_entity+0xdc/0x110
+Takeaway: NO_SHARED_RUNQ performs the same as SHARED_RUNQ_WAKEUP, but
+beats SHARED_RUNQ_ALL by ~3.4%. This result makes sense -- the workload
+is very heavy on the runqueue, so enqueuing tasks in the shared runqueue
+in __enqueue_entity() would intuitively result in increased contention
+on the shard lock.  The fact that we're at parity with
+SHARED_RUNQ_WAKEUP suggests that sharding the shared runqueue has
+significantly improved the contention that was observed in v1, but that
+__enqueue_entity() puts it over the edge.
 
-...................................................................................................................................................................................................
+NOTE: Parity for SHARED_RUNQ_WAKEUP relies on choosing the correct shard
+size. If we chose, for example, a shard size of 16, there would still be
+a regression between NO_SHARED_RUNQ and SHARED_RUNQ_WAKEUP. As described
+below, this suggests that we may want to add a debugfs tunable for the
+shard size.
 
-If we look at the lock stats with SHARED_RUNQ disabled, the rq lock still
-contends the most, but it's significantly less than with it enabled:
+=== Single-socket | 72-core | 6-CCX | AMD Milan Zen3 ===
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class name          con-bounces    contentions   waittime-min   waittime-max waittime-total   waittime-avg    acq-bounces   acquisitions   holdtime-min   holdtime-max holdtime-total   holdtime-avg
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CPU max MHz: 700.0000
+CPU min MHz: 700.0000
 
-&rq->__lock:        791277         791690        0.12           110.54       4889787.63       6.18            1575996       62390275       0.13           112.66       316262440.56     5.07
------------
-&rq->__lock         263343          [<00000000516703f0>] __schedule+0x72/0xaa0
-&rq->__lock          19394          [<0000000011be1562>] raw_spin_rq_lock_nested+0xa/0x10
-&rq->__lock           4143          [<000000003b542e83>] __task_rq_lock+0x51/0xf0
-&rq->__lock          51094          [<00000000c38a30f9>] sched_ttwu_pending+0x3d/0x170
------------
-&rq->__lock          23756          [<0000000011be1562>] raw_spin_rq_lock_nested+0xa/0x10
-&rq->__lock         379048          [<00000000516703f0>] __schedule+0x72/0xaa0
-&rq->__lock            677          [<000000003b542e83>] __task_rq_lock+0x51/0xf0
-&rq->__lock          47962          [<00000000c38a30f9>] sched_ttwu_pending+0x3d/0x170
+Command: make -j$(nproc) built-in.a
+				o____________o_______o
+				|    mean    | CPU   |
+				o------------o-------o
+NO_SHARED_RUNQ:			| 1601.81s   | 6476% |
+SHARED_RUNQ_WAKEUP:		| 1602.55s   | 6472% |
+SHARED_RUNQ_ALL:		| 1602.49s   | 6475% |
+				o------------o-------o
 
-In general, the takeaway here is that sharding does help with
-contention, but it's not necessarily one size fits all, and it's
-workload dependent. For now, let's include sharding to try and avoid
-contention, and because it doesn't seem to regress CPUs that don't need
-it such as the AMD 7950X.
+Takeaway: No statistically significant variance. It might be worth
+experimenting with work stealing in a follow-on patch set.
+
+Command: hackbench --loops 10000
+				o____________o_______o
+				|    mean    | CPU   |
+				o------------o-------o
+NO_SHARED_RUNQ:			| 5.2672s    | 6463% |
+SHARED_RUNQ_WAKEUP:		| 5.1476s    | 6583% |
+SHARED_RUNQ_ALL:		| 5.1003s    | 6598% |
+				o------------o-------o
+
+Takeaway: SHARED_RUNQ_ALL again wins, by about 3% over NO_SHARED_RUNQ in
+this case.
+
+Command: netperf -n $(nproc) -l 60 -t TCP_RR
+for i in `seq 128`; do
+	netperf -6 -t UDP_RR -c -C -l $runtime &
+done
+				o_______________________o
+				|   mean  (thoughput)   |
+				o-----------------------o
+NO_SHARED_RUNQ:			| 13819.08              |
+SHARED_RUNQ_WAKEUP:		| 13907.74              |
+SHARED_RUNQ_ALL:		| 13569.69              |
+				o-----------------------o
+
+Takeaway: Similar to the Skylake runs, NO_SHARED_RUNQ still beats
+SHARED_RUNQ_ALL, though by a slightly lower margin of ~1.8%.
 
 Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- kernel/sched/fair.c  | 139 +++++++++++++++++++++++++++++--------------
- kernel/sched/sched.h |   3 +-
- 2 files changed, 96 insertions(+), 46 deletions(-)
+ kernel/sched/fair.c | 38 ++++++++++++--------------------------
+ 1 file changed, 12 insertions(+), 26 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ff2491387201..97985f28a627 100644
+index 97985f28a627..bddb2bed4297 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -143,21 +143,28 @@ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
-  * struct shared_runq - Per-LLC queue structure for enqueuing and pulling
-  * waking tasks.
+@@ -140,8 +140,8 @@ static int __init setup_sched_thermal_decay_shift(char *str)
+ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
+ 
+ /**
+- * struct shared_runq - Per-LLC queue structure for enqueuing and pulling
+- * waking tasks.
++ * struct shared_runq - Per-LLC queue structure for enqueuing and migrating
++ * runnable tasks within an LLC.
   *
-+ * struct shared_runq_shard - A structure containing a task list and a spinlock
-+ * for a subset of cores in a struct shared_runq.
-+ *
-  * WHAT
-  * ====
+  * struct shared_runq_shard - A structure containing a task list and a spinlock
+  * for a subset of cores in a struct shared_runq.
+@@ -161,10 +161,9 @@ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
+  * 2. The shard inside of the per-LLC struct shared_runq which contains the
+  *    list of runnable tasks for that shard.
   *
-  * This structure enables the scheduler to be more aggressively work
-- * conserving, by placing waking tasks on a per-LLC FIFO queue that can then be
-- * pulled from when another core in the LLC is going to go idle.
-- *
-- * struct rq stores a pointer to its LLC's shared_runq via struct cfs_rq.
-- * Waking tasks are enqueued in a shared_runq at the end of
-- * enqueue_task_fair(), and are opportunistically pulled from the shared_runq
-- * in newidle_balance(). Tasks enqueued in a shared_runq may be scheduled prior
-- * to being pulled from the shared_runq, in which case they're simply dequeued
-- * from the shared_runq. A waking task is only enqueued to a shared_runq when
-- * it was _not_ manually migrated to the current runqueue by
-- * select_task_rq_fair().
-+ * conserving, by placing waking tasks on a per-LLC FIFO queue shard that can
-+ * then be pulled from when another core in the LLC is going to go idle.
-+ *
-+ * struct rq stores two pointers in its struct cfs_rq:
-+ *
-+ * 1. The per-LLC struct shared_runq which contains one or more shards of
-+ *    enqueued tasks.
-+ *
-+ * 2. The shard inside of the per-LLC struct shared_runq which contains the
-+ *    list of runnable tasks for that shard.
-+ *
-+ * Waking tasks are enqueued in the calling CPU's struct shared_runq_shard at
-+ * the end of enqueue_task_fair(), and are opportunistically pulled from the
-+ * shared_runq in newidle_balance(). Pulling from shards is an O(# shards)
-+ * operation.
+- * Waking tasks are enqueued in the calling CPU's struct shared_runq_shard at
+- * the end of enqueue_task_fair(), and are opportunistically pulled from the
+- * shared_runq in newidle_balance(). Pulling from shards is an O(# shards)
+- * operation.
++ * Waking tasks are enqueued in the calling CPU's struct shared_runq_shard in
++ * __enqueue_entity(), and are opportunistically pulled from the shared_runq in
++ * newidle_balance(). Pulling from shards is an O(# shards) operation.
   *
   * There is currently no task-stealing between shared_runqs in different LLCs,
   * which means that shared_runq is not fully work conserving. This could be
-@@ -167,11 +174,12 @@ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
-  * HOW
-  * ===
-  *
-- * An shared_runq is comprised of a list, and a spinlock for synchronization.
-- * Given that the critical section for a shared_runq is typically a fast list
-- * operation, and that the shared_runq is localized to a single LLC, the
-- * spinlock will typically only be contended on workloads that do little else
-- * other than hammer the runqueue.
-+ * A struct shared_runq_shard is comprised of a list, and a spinlock for
-+ * synchronization.  Given that the critical section for a shared_runq is
-+ * typically a fast list operation, and that the shared_runq_shard is localized
-+ * to a subset of cores on a single LLC (plus other cores in the LLC that pull
-+ * from the shard in newidle_balance()), the spinlock will typically only be
-+ * contended on workloads that do little else other than hammer the runqueue.
-  *
-  * WHY
-  * ===
-@@ -185,48 +193,64 @@ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
-  * it, as well as to strike a balance between work conservation, and L3 cache
-  * locality.
-  */
--struct shared_runq {
-+struct shared_runq_shard {
- 	struct list_head list;
- 	spinlock_t lock;
- } ____cacheline_aligned;
- 
-+struct shared_runq {
-+	u32 num_shards;
-+	struct shared_runq_shard shards[];
-+} ____cacheline_aligned;
-+
-+/* This would likely work better as a configurable knob via debugfs */
-+#define SHARED_RUNQ_SHARD_SZ 6
-+
- #ifdef CONFIG_SMP
- static struct shared_runq *rq_shared_runq(struct rq *rq)
- {
- 	return rq->cfs.shared_runq;
+@@ -253,22 +252,15 @@ static void shared_runq_push_task(struct shared_runq_shard *shard,
+ 	spin_unlock_irqrestore(&shard->lock, flags);
  }
  
--static struct task_struct *shared_runq_pop_task(struct rq *rq)
-+static struct shared_runq_shard *rq_shared_runq_shard(struct rq *rq)
-+{
-+	return rq->cfs.shard;
-+}
-+
-+static int shared_runq_shard_idx(const struct shared_runq *runq, int cpu)
-+{
-+	return cpu % runq->num_shards;
-+}
-+
-+static struct task_struct *
-+shared_runq_pop_task(struct shared_runq_shard *shard, int target)
+-static void shared_runq_enqueue_task(struct rq *rq, struct task_struct *p,
+-				     int enq_flags)
++static void shared_runq_enqueue_task(struct rq *rq, struct task_struct *p)
  {
- 	unsigned long flags;
- 	struct task_struct *p;
--	struct shared_runq *shared_runq;
- 
--	shared_runq = rq_shared_runq(rq);
--	if (list_empty(&shared_runq->list))
-+	if (list_empty(&shard->list))
- 		return NULL;
- 
--	spin_lock_irqsave(&shared_runq->lock, flags);
--	p = list_first_entry_or_null(&shared_runq->list, struct task_struct,
-+	spin_lock_irqsave(&shard->lock, flags);
-+	p = list_first_entry_or_null(&shard->list, struct task_struct,
- 				     shared_runq_node);
--	if (p && is_cpu_allowed(p, cpu_of(rq)))
-+	if (p && is_cpu_allowed(p, target))
- 		list_del_init(&p->shared_runq_node);
- 	else
- 		p = NULL;
--	spin_unlock_irqrestore(&shared_runq->lock, flags);
-+	spin_unlock_irqrestore(&shard->lock, flags);
- 
- 	return p;
- }
- 
--static void shared_runq_push_task(struct rq *rq, struct task_struct *p)
-+static void shared_runq_push_task(struct shared_runq_shard *shard,
-+				  struct task_struct *p)
- {
- 	unsigned long flags;
--	struct shared_runq *shared_runq;
- 
--	shared_runq = rq_shared_runq(rq);
--	spin_lock_irqsave(&shared_runq->lock, flags);
--	list_add_tail(&p->shared_runq_node, &shared_runq->list);
--	spin_unlock_irqrestore(&shared_runq->lock, flags);
-+	spin_lock_irqsave(&shard->lock, flags);
-+	list_add_tail(&p->shared_runq_node, &shard->list);
-+	spin_unlock_irqrestore(&shard->lock, flags);
- }
- 
- static void shared_runq_enqueue_task(struct rq *rq, struct task_struct *p,
-@@ -247,7 +271,7 @@ static void shared_runq_enqueue_task(struct rq *rq, struct task_struct *p,
- 	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
+-	bool task_migrated = enq_flags & ENQUEUE_MIGRATED;
+-	bool task_wakeup = enq_flags & ENQUEUE_WAKEUP;
+-
+ 	/*
+ 	 * Only enqueue the task in the shared runqueue if:
+ 	 *
+ 	 * - SWQUEUE is enabled
+-	 * - The task is on the wakeup path
+-	 * - The task wasn't purposefully migrated to the current rq by
+-	 *   select_task_rq()
+ 	 * - The task isn't pinned to a specific CPU
+ 	 */
+-	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
++	if (p->nr_cpus_allowed == 1)
  		return;
  
--	shared_runq_push_task(rq, p);
-+	shared_runq_push_task(rq_shared_runq_shard(rq), p);
- }
+ 	shared_runq_push_task(rq_shared_runq_shard(rq), p);
+@@ -357,8 +349,7 @@ int __weak arch_asym_cpu_priority(int cpu)
+  */
+ #define capacity_greater(cap1, cap2) ((cap1) * 1024 > (cap2) * 1078)
+ #else
+-static void shared_runq_enqueue_task(struct rq *rq, struct task_struct *p,
+-				     int enq_flags)
++static void shared_runq_enqueue_task(struct rq *rq, struct task_struct *p)
+ {}
  
- static int shared_runq_pick_next_task(struct rq *rq, struct rq_flags *rf)
-@@ -256,8 +280,21 @@ static int shared_runq_pick_next_task(struct rq *rq, struct rq_flags *rf)
- 	struct rq *src_rq;
- 	struct rq_flags src_rf;
- 	int ret;
-+	struct shared_runq *shared_runq;
-+	struct shared_runq_shard *shard;
-+	u32 i, starting_idx, curr_idx, num_shards;
- 
--	p = shared_runq_pop_task(rq);
-+	shared_runq = rq_shared_runq(rq);
-+	starting_idx = shared_runq_shard_idx(shared_runq, cpu_of(rq));
-+	num_shards = shared_runq->num_shards;
-+	for (i = 0; i < num_shards; i++) {
-+		curr_idx = (starting_idx + i) % num_shards;
-+		shard = &shared_runq->shards[curr_idx];
-+
-+		p = shared_runq_pop_task(shard, cpu_of(rq));
-+		if (p)
-+			break;
-+	}
- 	if (!p)
- 		return 0;
- 
-@@ -287,13 +324,13 @@ static int shared_runq_pick_next_task(struct rq *rq, struct rq_flags *rf)
  static void shared_runq_dequeue_task(struct task_struct *p)
+@@ -843,11 +834,15 @@ static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
+  */
+ static void __enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
  {
- 	unsigned long flags;
--	struct shared_runq *shared_runq;
-+	struct shared_runq_shard *shard;
- 
- 	if (!list_empty(&p->shared_runq_node)) {
--		shared_runq = rq_shared_runq(task_rq(p));
--		spin_lock_irqsave(&shared_runq->lock, flags);
-+		shard = rq_shared_runq_shard(task_rq(p));
-+		spin_lock_irqsave(&shard->lock, flags);
- 		list_del_init(&p->shared_runq_node);
--		spin_unlock_irqrestore(&shared_runq->lock, flags);
-+		spin_unlock_irqrestore(&shard->lock, flags);
- 	}
++	if (sched_feat(SHARED_RUNQ) && entity_is_task(se))
++		shared_runq_enqueue_task(rq_of(cfs_rq), task_of(se));
+ 	rb_add_cached(&se->run_node, &cfs_rq->tasks_timeline, __entity_less);
  }
  
-@@ -13003,19 +13040,31 @@ __init void init_sched_fair_class(void)
- __init void init_sched_fair_class_late(void)
+ static void __dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
  {
- #ifdef CONFIG_SMP
--	int i;
-+	int i, j;
- 	struct shared_runq *shared_runq;
-+	struct shared_runq_shard *shard;
- 	struct rq *rq;
- 	struct rq *llc_rq;
-+	size_t shared_runq_size;
-+	u32 num_shards, shard_idx;
++	if (sched_feat(SHARED_RUNQ) && entity_is_task(se))
++		shared_runq_dequeue_task(task_of(se));
+ 	rb_erase_cached(&se->run_node, &cfs_rq->tasks_timeline);
+ }
  
- 	for_each_possible_cpu(i) {
- 		if (per_cpu(sd_llc_id, i) == i) {
- 			llc_rq = cpu_rq(i);
+@@ -6587,9 +6582,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+ 	if (!task_new)
+ 		update_overutilized_status(rq);
+ 
+-	if (sched_feat(SHARED_RUNQ))
+-		shared_runq_enqueue_task(rq, p, flags);
 -
--			shared_runq = kzalloc_node(sizeof(struct shared_runq),
--					       GFP_KERNEL, cpu_to_node(i));
--			INIT_LIST_HEAD(&shared_runq->list);
--			spin_lock_init(&shared_runq->lock);
-+			num_shards = max(per_cpu(sd_llc_size, i) /
-+					 SHARED_RUNQ_SHARD_SZ, 1);
-+			shared_runq_size = sizeof(struct shared_runq) +
-+				num_shards * sizeof(struct shared_runq_shard);
-+
-+			shared_runq = kzalloc_node(shared_runq_size,
-+						   GFP_KERNEL, cpu_to_node(i));
-+			shared_runq->num_shards = num_shards;
-+			for (j = 0; j < num_shards; j++) {
-+				shard = &shared_runq->shards[j];
-+
-+				INIT_LIST_HEAD(&shard->list);
-+				spin_lock_init(&shard->lock);
-+			}
- 			llc_rq->cfs.shared_runq = shared_runq;
- 		}
- 	}
-@@ -13024,9 +13073,9 @@ __init void init_sched_fair_class_late(void)
- 		rq = cpu_rq(i);
- 		llc_rq = cpu_rq(per_cpu(sd_llc_id, i));
+ enqueue_throttle:
+ 	assert_list_leaf_cfs_rq(rq);
  
--		if (rq == llc_rq)
--			continue;
- 		rq->cfs.shared_runq = llc_rq->cfs.shared_runq;
-+		shard_idx = shared_runq_shard_idx(rq->cfs.shared_runq, i);
-+		rq->cfs.shard = &rq->cfs.shared_runq->shards[shard_idx];
- 	}
- #endif /* SMP */
+@@ -6671,9 +6663,6 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+ dequeue_throttle:
+ 	util_est_update(&rq->cfs, p, task_sleep);
+ 	hrtick_update(rq);
+-
+-	if (sched_feat(SHARED_RUNQ))
+-		shared_runq_dequeue_task(p);
  }
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 8b573dfaba33..ca56a8120088 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -576,7 +576,8 @@ struct cfs_rq {
- #endif
  
  #ifdef CONFIG_SMP
--	struct shared_runq	*shared_runq;
-+	struct shared_runq	 *shared_runq;
-+	struct shared_runq_shard *shard;
- 	/*
- 	 * CFS load tracking
- 	 */
+@@ -8380,9 +8369,6 @@ done: __maybe_unused;
+ 
+ 	update_misfit_status(p, rq);
+ 
+-	if (sched_feat(SHARED_RUNQ))
+-		shared_runq_dequeue_task(p);
+-
+ 	return p;
+ 
+ idle:
 -- 
 2.40.1
 
