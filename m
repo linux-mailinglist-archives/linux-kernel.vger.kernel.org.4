@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1EC74D1D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352C74D1D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjGJJjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S232990AbjGJJjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjGJJjF (ORCPT
+        with ESMTP id S232760AbjGJJjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:39:05 -0400
+        Mon, 10 Jul 2023 05:39:08 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193D0BD;
-        Mon, 10 Jul 2023 02:36:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD86D26BB;
+        Mon, 10 Jul 2023 02:36:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688981810; x=1720517810;
+  t=1688981813; x=1720517813;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9j52FthJZNa9Xc0YEIj+5Oie+v4CQc4EqZA27meU8go=;
-  b=LjiZ0UWzfTSHar9LrQIDvRQjUj3uM8R00nuWPGwo9GHiYO0QhLMpb2rJ
-   zVhAkGknL6L8AUO0oWtoBisnHJq59X2+xj9L6dlH1SUCnaA0Lk9Gexi7Z
-   7ffxWyOAJIXvSzDi4fqsejsYvKr70Q+y7eJXXflPTgxn3XsYthvEyY0xp
-   13xf5pcfughHOz3nNOdtFQYeFS8iG0ospob6qlznC09jF8KIvitvR192r
-   2TTLE9Zum2J5UFC/JKO+psSXAEFgNPZ4qFM4H3i0FNgZt8WsKiIcFpYhi
-   pFFaBWPNeRO3xiqnQR34eBoZdpocyM3EtkYF37o0qstk3iWBfHHVeteQA
+  bh=ZKaRuGdjiNCn7C7n8xPfX596TIEq0qNYdoQyUSZd1aQ=;
+  b=GkwOWqQ335P0jFJkhgvqYfI61DMRZvR1SXfg8LOaK37dPj2GerciF59M
+   iXWBI1ooRAcUTAkgAsuvzVlhOfeB7UTyqiBT9nfRiYpxbFqBf1p0uy4Zg
+   XjuzOSnYSs3yfRoHFW2lGaZdiMRN98l+tiPYlHtH1UTylMdCVGcVSzgmk
+   Sf2uWo8U7/4xgJQ4x1mn35rPHDZJH+SSK05F4BSp2IanPMaq7S9bkQyWH
+   ZhiFZl2S1+s12SgVJetkAQknVlRDLZ/bhTERGPzPTa7M3rR53ZI/hQTOW
+   FUlO/d0CGc18741X7M8pMlLQpYKu3zQOBM+MX3ELx0wxAVIIdAhE3K8hS
    g==;
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="222123395"
+   d="scan'208";a="234573276"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jul 2023 02:36:31 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jul 2023 02:36:38 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 10 Jul 2023 02:36:30 -0700
+ 15.1.2507.21; Mon, 10 Jul 2023 02:36:33 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 10 Jul 2023 02:36:28 -0700
+ Transport; Mon, 10 Jul 2023 02:36:31 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     <palmer@dabbelt.com>
 CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
@@ -53,16 +53,15 @@ CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
         Evan Green <evan@rivosinc.com>,
         Sunil V L <sunilvl@ventanamicro.com>,
         <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v4 01/11] RISC-V: Provide a more helpful error message on invalid ISA strings
-Date:   Mon, 10 Jul 2023 10:35:36 +0100
-Message-ID: <20230710-uncounted-suffocate-633f57fdecab@wendy>
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 02/11] RISC-V: don't parse dt/acpi isa string to get rv32/rv64
+Date:   Mon, 10 Jul 2023 10:35:37 +0100
+Message-ID: <20230710-moodiness-region-bf54989f0bbe@wendy>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230710-equipment-stained-dd042d66ba5d@wendy>
 References: <20230710-equipment-stained-dd042d66ba5d@wendy>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2940; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=9vL9UTnWKFum0JN16SUa6SYVYB7LNXsYDcHCgjUs78g=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmrL1zluRT2YZmquMAyIc6kHKnm7D/izxmq564XT3Q1W7Kk 63p0RykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACbiZMXIsHBpUphhktkj17h9USxOi/ oe7tj+nNHlWWrzwuB7DgHXvBj+F2ztKjc4v05c+HC3hVFH8fUnVxyV+BfJrt3aIbHp0N1p7AA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2526; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=n3RvV1kp7c1RvguDNV0TNjeqOvB9izEszUM2SQOrTeY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmrL1xrq/y6cc4vhwO/L/HHnJ5VqJXfx9W/P5Y19wqL85Ju 5cB3HSUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZiI+UpGhpOeN3I3stx12B/f4Ra3x+ XG9vUXrv67wHs1oeeolXnHw7UMX/iffzvHX6ykIZ2/sOaHy4qpNyayRNz3fDS5LEjI8EkLAwA=
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -76,73 +75,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-Right now we provide a somewhat unhelpful error message on systems with
-invalid error messages, something along the lines of
+When filling hwcap the kernel already expects the isa string to start with
+rv32 if CONFIG_32BIT and rv64 if CONFIG_64BIT.
 
-	CPU with hartid=0 is not available
-	------------[ cut here ]------------
-	kernel BUG at arch/riscv/kernel/smpboot.c:174!
-	Kernel BUG [#1]
-	Modules linked in:
-	CPU: 0 PID: 0 Comm: swapper Not tainted 6.4.0-rc1-00096-ge0097d2c62d5-dirty #1
-	Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
-	epc : of_parse_and_init_cpus+0x16c/0x16e
-	 ra : of_parse_and_init_cpus+0x9a/0x16e
-	epc : ffffffff80c04e0a ra : ffffffff80c04d38 sp : ffffffff81603e20
-	 gp : ffffffff8182d658 tp : ffffffff81613f80 t0 : 000000000000006e
-	 t1 : 0000000000000064 t2 : 0000000000000000 s0 : ffffffff81603e80
-	 s1 : 0000000000000000 a0 : 0000000000000000 a1 : 0000000000000000
-	 a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-	 a5 : 0000000000001fff a6 : 0000000000001fff a7 : ffffffff816148b0
-	 s2 : 0000000000000001 s3 : ffffffff81492a4c s4 : ffffffff81a4b090
-	 s5 : ffffffff81506030 s6 : 0000000000000040 s7 : 0000000000000000
-	 s8 : 00000000bfb6f046 s9 : 0000000000000001 s10: 0000000000000000
-	 s11: 00000000bf389700 t3 : 0000000000000000 t4 : 0000000000000000
-	 t5 : ffffffff824dd188 t6 : ffffffff824dd187
-	status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
-	[<ffffffff80c04e0a>] of_parse_and_init_cpus+0x16c/0x16e
-	[<ffffffff80c04c96>] setup_smp+0x1e/0x26
-	[<ffffffff80c03ffe>] setup_arch+0x6e/0xb2
-	[<ffffffff80c00384>] start_kernel+0x72/0x400
-	Code: 80e7 4a00 a603 0009 b795 1097 ffe5 80e7 92c0 9002 (9002) 715d
-	---[ end trace 0000000000000000 ]---
-	Kernel panic - not syncing: Fatal exception in interrupt
+So when recreating the runtime isa-string we can also just go the other way
+to get the correct starting point for it.
 
-Add a warning for the cases where the ISA string isn't valid.  It's still
-above the BUG_ON cut, but hopefully it's at least a bit easier for users.
-
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Reviewed-by: Evan Green <evan@rivosinc.com>
+Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Evan Green <evan@rivosinc.com>
+Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/kernel/cpu.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changes in v3:
+- Fix tabbing of print_mmu()
+
+Changes in v2:
+- Delete the whole else & pull print_mmu() above it, since that's common
+  code now
+---
+ arch/riscv/kernel/cpu.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
 diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index a2fc952318e9..3af2d214ce21 100644
+index 3af2d214ce21..f808b67f5a27 100644
 --- a/arch/riscv/kernel/cpu.c
 +++ b/arch/riscv/kernel/cpu.c
-@@ -66,11 +66,15 @@ int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *har
- 		return -ENODEV;
+@@ -257,13 +257,16 @@ static void print_isa_ext(struct seq_file *f)
+  */
+ static const char base_riscv_exts[13] = "imafdqcbkjpvh";
+ 
+-static void print_isa(struct seq_file *f, const char *isa)
++static void print_isa(struct seq_file *f)
+ {
+ 	int i;
+ 
+ 	seq_puts(f, "isa\t\t: ");
+-	/* Print the rv[64/32] part */
+-	seq_write(f, isa, 4);
++	if (IS_ENABLED(CONFIG_32BIT))
++		seq_write(f, "rv32", 4);
++	else
++		seq_write(f, "rv64", 4);
++
+ 	for (i = 0; i < sizeof(base_riscv_exts); i++) {
+ 		if (__riscv_isa_extension_available(NULL, base_riscv_exts[i] - 'a'))
+ 			/* Print only enabled the base ISA extensions */
+@@ -320,27 +323,21 @@ static int c_show(struct seq_file *m, void *v)
+ 	unsigned long cpu_id = (unsigned long)v - 1;
+ 	struct riscv_cpuinfo *ci = per_cpu_ptr(&riscv_cpuinfo, cpu_id);
+ 	struct device_node *node;
+-	const char *compat, *isa;
++	const char *compat;
+ 
+ 	seq_printf(m, "processor\t: %lu\n", cpu_id);
+ 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
++	print_isa(m);
++	print_mmu(m);
+ 
+ 	if (acpi_disabled) {
+ 		node = of_get_cpu_node(cpu_id, NULL);
+-		if (!of_property_read_string(node, "riscv,isa", &isa))
+-			print_isa(m, isa);
+ 
+-		print_mmu(m);
+ 		if (!of_property_read_string(node, "compatible", &compat) &&
+ 		    strcmp(compat, "riscv"))
+ 			seq_printf(m, "uarch\t\t: %s\n", compat);
+ 
+ 		of_node_put(node);
+-	} else {
+-		if (!acpi_get_riscv_isa(NULL, cpu_id, &isa))
+-			print_isa(m, isa);
+-
+-		print_mmu(m);
  	}
  
--	if (IS_ENABLED(CONFIG_32BIT) && strncasecmp(isa, "rv32ima", 7))
-+	if (IS_ENABLED(CONFIG_32BIT) && strncasecmp(isa, "rv32ima", 7)) {
-+		pr_warn("CPU with hartid=%lu does not support rv32ima", *hart);
- 		return -ENODEV;
-+	}
- 
--	if (IS_ENABLED(CONFIG_64BIT) && strncasecmp(isa, "rv64ima", 7))
-+	if (IS_ENABLED(CONFIG_64BIT) && strncasecmp(isa, "rv64ima", 7)) {
-+		pr_warn("CPU with hartid=%lu does not support rv64ima", *hart);
- 		return -ENODEV;
-+	}
- 
- 	return 0;
- }
+ 	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
 -- 
 2.40.1
 
