@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C9374D8AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C4774D8AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjGJOMU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 10:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S233013AbjGJOMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjGJOMS (ORCPT
+        with ESMTP id S230263AbjGJOMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:12:18 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AE7AD;
-        Mon, 10 Jul 2023 07:12:18 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-57012b2973eso58778817b3.2;
-        Mon, 10 Jul 2023 07:12:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688998337; x=1691590337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9RYEluLb4R6qDJqCu/Fobryc+g47o+Wn7YP9UuzqITQ=;
-        b=CpW/OP5WEt02B5UL4RzvexQG92lvmWrSGHizR2nHJ/+PEFIhnaprHteADY6w5YbjlB
-         2s3fLRQdbAoAkSdM54vX4jnf+awsHpvQcNXYNRFrFTrVBB+oZbo+AEdBY2ysNkgw9sd7
-         MpD2Uan/bgFpJnnPGUaApI76OhQvTu3G6Qr9gKx4m6NDKNt1jfCXmCpwcJvYldqPUNaQ
-         wMXgJ1w/0SzoTmuuiSfCfKqVwM6IRRV+ytwTfRY0fd+6oj6VcGP3S85Kiuus/f+nOP4U
-         0RG8IJHsy3+lOGH0dD+IU15m3cDQ2EpME99jF8wH6YTduhc7+391HKXG6ENLgWn49e92
-         cbGg==
-X-Gm-Message-State: ABy/qLZibr+By/9GJb2+zW+N5IXoRNmufmNJ+UivrHqlgRiiL+Ih4/lj
-        6qRBuuW9qcb19ujaoCzVfq96m907yBoOMA==
-X-Google-Smtp-Source: APBJJlEZa/mMvRsNfk7fvUjlfKNZFbo1QiBpLh3bKRaHtbbdZM1KPTlz014lOVKI+T1J0cnm7I2Hyg==
-X-Received: by 2002:a81:920b:0:b0:579:ed5f:5cd3 with SMTP id j11-20020a81920b000000b00579ed5f5cd3mr13094419ywg.23.1688998337008;
-        Mon, 10 Jul 2023 07:12:17 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id t10-20020a81460a000000b00576cd8f9770sm3050417ywa.146.2023.07.10.07.12.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 07:12:16 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-c5e67d75e0cso5907248276.2;
-        Mon, 10 Jul 2023 07:12:16 -0700 (PDT)
-X-Received: by 2002:a25:d312:0:b0:c6b:73df:7350 with SMTP id
- e18-20020a25d312000000b00c6b73df7350mr9120556ybf.34.1688998336300; Mon, 10
- Jul 2023 07:12:16 -0700 (PDT)
+        Mon, 10 Jul 2023 10:12:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2216E3;
+        Mon, 10 Jul 2023 07:12:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C9D76100B;
+        Mon, 10 Jul 2023 14:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B6CC433C7;
+        Mon, 10 Jul 2023 14:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688998339;
+        bh=n1QzVCFUGJL7T3s1ar92cI/LlLz0o3J+O2Umt/DnYE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SIj3kCae4u0Ux6qtQCEqr8Ge2We9WxZg+Mzg3tErvnz2NLwFwANOXHrfo9nyQmUvM
+         Pgo/xAVi+1iybArWOjB2C1i2CSz2aXn/l9gLGw7iPAJxpcmkxasR0uL7+0lXWvEwpC
+         998RRR8oCVq/lCR29EZpAKubLCdICQeRbFfRmZoGtXpQB18BYApl4/lCdCunundpYs
+         HCcPa4yvibPhDB/kVQXj046XwYZbFTmaxE1x+8iIvySHlVqZTaKOFtKkKZhZ2v8rzP
+         fPRYhUMNvPTT8y+yk6/xomXCGg6Ahte1+pKJbwOtviB5wE++nxL61s+GY7bBiGga16
+         EWviaSHxcoLjw==
+Date:   Mon, 10 Jul 2023 16:12:14 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     wenyang.linux@foxmail.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] eventfd: avoid overflow to ULLONG_MAX when ctx->count is
+ 0
+Message-ID: <20230710-fahrbahn-flocken-03818a6b2e91@brauner>
+References: <tencent_7588DFD1F365950A757310D764517A14B306@qq.com>
 MIME-Version: 1.0
-References: <20230630120433.49529-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230630120433.49529-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230630120433.49529-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 16:12:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXKavD1JLTMRhF6grRchd9pwDd3oupPPCRDw1Can3nb=w@mail.gmail.com>
-Message-ID: <CAMuHMdXKavD1JLTMRhF6grRchd9pwDd3oupPPCRDw1Can3nb=w@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
- RZG2L_GPIO_PORT_PACK() macro
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <tencent_7588DFD1F365950A757310D764517A14B306@qq.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Fri, Jun 30, 2023 at 2:05 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Currently we assume all the port pins are sequential ie always PX_0 to
-> PX_n (n=1..7) exist, but on RZ/Five SoC we have additional pins P19_1 to
-> P28_5 which have holes in them, for example only one pin on port19 is
-> available and that is P19_1 and not P19_0.
->
-> So to handle such cases include pinmap for each port which would indicate
-> the pin availability on each port. With this we also get additional pin
-> validation, for example on the RZ/G2L SOC P0 has two pins P0_1 and P0_0
-> but with DT/SYSFS could use the P0_2-P0_7.
->
-> While at it, update rzg2l_validate_gpio_pin() to use the port pinmap to
-> validate the gpio pin.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Sun, Jul 09, 2023 at 02:54:51PM +0800, wenyang.linux@foxmail.com wrote:
+> From: Wen Yang <wenyang.linux@foxmail.com>
+> 
+> For eventfd with flag EFD_SEMAPHORE, when its ctx->count is 0, calling
+> eventfd_ctx_do_read will cause ctx->count to overflow to ULLONG_MAX.
+> 
+> Fixes: cb289d6244a3 ("eventfd - allow atomic read and waitqueue remove")
+> Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Dylan Yudaken <dylany@fb.com>
+> Cc: David Woodhouse <dwmw@amazon.co.uk>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 > ---
->  drivers/pinctrl/renesas/pinctrl-rzg2l.c | 167 ++++++++++++------------
->  1 file changed, 86 insertions(+), 81 deletions(-)
->
-> diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> index 9511d920565e..a0c2e585e765 100644
-> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> @@ -67,10 +67,12 @@
->                                          PIN_CFG_FILCLKSEL)
->
->  /*
-> - * n indicates number of pins in the port, a is the register index
-> - * and f is pin configuration capabilities supported.
-> + * m indicates the bitmap of supported pins, n indicates number
-> + * of pins in the port, a is the register index and f is pin
-> + * configuration capabilities supported.
->   */
-> -#define RZG2L_GPIO_PORT_PACK(n, a, f)  (((n) << 28) | ((a) << 20) | (f))
-> +#define RZG2L_GPIO_PORT_PACK(m, n, a, f)       ((UL(m) << 32) | (UL(n) << 28) | ((a) << 20) | (f))
 
-Do we actually need 20 bits for the "f" field?
-As Biju already commented, "n" can be derived from "m".
-If "f" can be shrunk, we might fit everything in 32 bits.
+So this looks ok but I would like to see an analysis how the overflow
+can happen. I'm looking at the callers and it seems that once ctx->count
+hits 0 eventfd_read() won't call eventfd_ctx_do_read() anymore. So is
+there a caller that can call directly or indirectly
+eventfd_ctx_do_read() on a ctx->count == 0?
 
-Gr{oetje,eeting}s,
+I'm just slightly skeptical about patches that fix issues without an
+analysis how this can happen.
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  fs/eventfd.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/eventfd.c b/fs/eventfd.c
+> index 8aa36cd37351..10a101df19cd 100644
+> --- a/fs/eventfd.c
+> +++ b/fs/eventfd.c
+> @@ -189,7 +189,7 @@ void eventfd_ctx_do_read(struct eventfd_ctx *ctx, __u64 *cnt)
+>  {
+>  	lockdep_assert_held(&ctx->wqh.lock);
+>  
+> -	*cnt = (ctx->flags & EFD_SEMAPHORE) ? 1 : ctx->count;
+> +	*cnt = ((ctx->flags & EFD_SEMAPHORE) && ctx->count) ? 1 : ctx->count;
+>  	ctx->count -= *cnt;
+>  }
+>  EXPORT_SYMBOL_GPL(eventfd_ctx_do_read);
+> @@ -269,6 +269,8 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+>  		return -EFAULT;
+>  	if (ucnt == ULLONG_MAX)
+>  		return -EINVAL;
+> +	if ((ctx->flags & EFD_SEMAPHORE) && !ucnt)
+> +		return -EINVAL;
+>  	spin_lock_irq(&ctx->wqh.lock);
+>  	res = -EAGAIN;
+>  	if (ULLONG_MAX - ctx->count > ucnt)
+> -- 
+> 2.25.1
+> 
