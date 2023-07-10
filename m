@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E6174D6A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A5A74D606
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjGJNCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S230368AbjGJMx5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 08:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbjGJNB3 (ORCPT
+        with ESMTP id S229668AbjGJMxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:01:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C725A8;
-        Mon, 10 Jul 2023 06:01:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0BDD7221C1;
-        Mon, 10 Jul 2023 13:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688994082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I0Gm3caehTf+DDNUO7FEiHJTJ/hpEoZRP8IUYE91TXw=;
-        b=Go7brugIegGY+ZVPi6YfHKxGodhrQekZWN2V2ZK6jxPYBTjY635csao0oKFNQYWr11kMz8
-        G39YnLW+q7ItBbkzh7LkyKVTEiNWztYwaEDCGYGHHmSJ6suqKc0jI7HYjJIJ0YgoIdBdUB
-        y0bMj50CzUM97CeHB3sibChMwMXdKNs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688994082;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I0Gm3caehTf+DDNUO7FEiHJTJ/hpEoZRP8IUYE91TXw=;
-        b=MsqvxlT6sFr6ha7xHjLd+Ynf+kok1rNaAtXEFt/8fbacjxNPr9mpxokzH4T2unRIgadntW
-        9gKaSCCViPXyQpCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AFEF513A05;
-        Mon, 10 Jul 2023 13:01:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qGYSKiEBrGTTFAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 13:01:21 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     deller@gmx.de, javierm@redhat.com
-Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
-        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 17/17] fbdev: Remove FBINFO_DEFAULT and FBINFO_FLAG_DEFAULT
-Date:   Mon, 10 Jul 2023 14:50:21 +0200
-Message-ID: <20230710130113.14563-18-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230710130113.14563-1-tzimmermann@suse.de>
-References: <20230710130113.14563-1-tzimmermann@suse.de>
+        Mon, 10 Jul 2023 08:53:55 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A860C9;
+        Mon, 10 Jul 2023 05:53:54 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-577497ec6c6so47998647b3.2;
+        Mon, 10 Jul 2023 05:53:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688993633; x=1691585633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5ZOBAzVYjXK3LDlHRwH+RyX9od9CvnTpwN65S7Xs+ro=;
+        b=JWNU5NzllEu1w3nKr4E+zjK5dJRi6ghnKM+xHU15oP1uV0XmZeHZgFxIjH5mNHjRgK
+         lCWKrGCyGKeyVFJsqzK/gufJfTxbctcsw8NQhmtgOa4xrkQ2Mlo1sqP8LJ2ynXZ1xlzJ
+         IZqWfJGCQalUuNsWH7BRRTiotEWtCSUOYOW7CjAOdUlJN7VIHxfyGr53ZePw/c49uvpZ
+         Z04zZtRCQ4/WPUMYf61VQYtzxAbIfVJwhNjaagrfC/But4HzmNCG9PZ0O4BGNWAUvFcN
+         eQ6XoK695a1zGIi1jh+3GRYJ11fQsVfQECUL5WwIfq1LRLVAig1KE/EIzhbIQFoCHyVy
+         zDig==
+X-Gm-Message-State: ABy/qLYE5Xzf8Xmx1JEBnIosU+u50a2S6QaIAl5mV7+fMshIryUkx9nd
+        d4rksBVVMuWY3xnt/aXDux+2zweALTTK1Q==
+X-Google-Smtp-Source: APBJJlHvV4V+/sOXsbStTVlrSLhme6udEucKr1TSlnyIBzNjl46LuAvWKZ7/JfqJJhKysU8QtgvdDQ==
+X-Received: by 2002:a81:5a8b:0:b0:56f:fbc6:3b0 with SMTP id o133-20020a815a8b000000b0056ffbc603b0mr14119576ywb.14.1688993633417;
+        Mon, 10 Jul 2023 05:53:53 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id b127-20020a816785000000b0057a44e20fb8sm3031269ywc.73.2023.07.10.05.53.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 05:53:53 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5703cb4bcb4so47938297b3.3;
+        Mon, 10 Jul 2023 05:53:53 -0700 (PDT)
+X-Received: by 2002:a0d:cb56:0:b0:577:630d:ef63 with SMTP id
+ n83-20020a0dcb56000000b00577630def63mr13531231ywd.24.1688993633075; Mon, 10
+ Jul 2023 05:53:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230707140434.723349-1-ulf.hansson@linaro.org> <20230707140434.723349-10-ulf.hansson@linaro.org>
+In-Reply-To: <20230707140434.723349-10-ulf.hansson@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jul 2023 14:53:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUcmbv7vRKJWACN9dobqKeZuLqjpd8sLgt7FeTBi4uKfA@mail.gmail.com>
+Message-ID: <CAMuHMdUcmbv7vRKJWACN9dobqKeZuLqjpd8sLgt7FeTBi4uKfA@mail.gmail.com>
+Subject: Re: [PATCH 09/18] soc: renesas: Move power-domain drivers to the
+ genpd dir
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the unused flags FBINFO_DEFAULT and FBINFO_FLAG_DEFAULT. No
-functional changes.
+Hi Ulf,
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Helge Deller <deller@gmx.de>
----
- include/linux/fb.h | 3 ---
- 1 file changed, 3 deletions(-)
+On Fri, Jul 7, 2023 at 4:04 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Magnus Damm <magnus.damm@gmail.com>
+> Cc: <linux-renesas-soc@vger.kernel.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-diff --git a/include/linux/fb.h b/include/linux/fb.h
-index 1d5c13f34b09..43458f582f35 100644
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -383,7 +383,6 @@ struct fb_tile_ops {
- #endif /* CONFIG_FB_TILEBLITTING */
- 
- /* FBINFO_* = fb_info.flags bit flags */
--#define FBINFO_DEFAULT		0
- #define FBINFO_HWACCEL_DISABLED	0x0002
- 	/* When FBINFO_HWACCEL_DISABLED is set:
- 	 *  Hardware acceleration is turned off.  Software implementations
-@@ -504,8 +503,6 @@ struct fb_info {
- 	bool skip_vt_switch; /* no VT switch on suspend/resume required */
- };
- 
--#define FBINFO_FLAG_DEFAULT	FBINFO_DEFAULT
--
- /* This will go away
-  * fbset currently hacks in FB_ACCELF_TEXT into var.accel_flags
-  * when it wants to turn the acceleration engine on.  This is
+Thanks for your patch!
+
+> ---
+>  MAINTAINERS                                   |  1 +
+>  drivers/genpd/Makefile                        |  1 +
+>  drivers/genpd/renesas/Makefile                | 30 +++++++++++++++++++
+>  drivers/{soc => genpd}/renesas/r8a7742-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7743-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7745-sysc.c |  0
+>  .../{soc => genpd}/renesas/r8a77470-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a774a1-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a774b1-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a774c0-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a774e1-sysc.c    |  0
+>  drivers/{soc => genpd}/renesas/r8a7779-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7790-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7791-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7792-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7794-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7795-sysc.c |  0
+>  drivers/{soc => genpd}/renesas/r8a7796-sysc.c |  0
+>  .../{soc => genpd}/renesas/r8a77965-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a77970-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a77980-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a77990-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a77995-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a779a0-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a779f0-sysc.c    |  0
+>  .../{soc => genpd}/renesas/r8a779g0-sysc.c    |  0
+>  .../{soc => genpd}/renesas/rcar-gen4-sysc.c   |  0
+>  .../{soc => genpd}/renesas/rcar-gen4-sysc.h   |  0
+>  drivers/{soc => genpd}/renesas/rcar-sysc.c    |  0
+>  drivers/{soc => genpd}/renesas/rcar-sysc.h    |  0
+>  drivers/{soc => genpd}/renesas/rmobile-sysc.c |  0
+>  drivers/soc/renesas/Makefile                  | 27 -----------------
+>  32 files changed, 32 insertions(+), 27 deletions(-)
+
+LGTM.
+
+Is there any specific reason why you're not moving the SYSC_* symbols
+from drivers/soc/renesas/Kconfig to drivers/genpd/renesas/Kconfig?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.41.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
