@@ -2,148 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFB274DEC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FDA74DEC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjGJUGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S231916AbjGJUGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjGJUG2 (ORCPT
+        with ESMTP id S231140AbjGJUGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:06:28 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0329BE41
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689019586; x=1720555586;
-  h=date:from:to:cc:subject:message-id;
-  bh=0necTAJTSgs2Q6ujG0RVUX2MyUMzjfpKBhM4yRF9O/0=;
-  b=HdMvREO218EPABnrUAS2DSdBxoqQthrIaDoLlLN1MJ7VVPs0fwyHm0/m
-   ATzV8SJTzHfbYsnuvgDUO3g5JxbY4ZRNSWoa3rvh7sV1pqCv9Rw+ubaCq
-   S0hZESvEzxwMc0tf3UrHqcpt2Ce0XIPHInJpBl0qexp8YA4z6PIEcbMQt
-   5X0w8gpu5BQEOVk8TfHMGceAEOU9jepoNvmA8UTvfnemVKP1NVxaV9hDQ
-   eqwGqYMK0fTxhEeh7PE4DgajWLjxuRnnNvt8c1BEXCS4cn4IjKyY3thCm
-   efGQuNPg7/QLGzOYSHNZQRkAp2hRBJaz5nnB3FmWFobmJCcR0HjenVKPn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344764776"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="344764776"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:06:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="810912438"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="810912438"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jul 2023 13:06:25 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qIx9M-0003vQ-1i;
-        Mon, 10 Jul 2023 20:06:24 +0000
-Date:   Tue, 11 Jul 2023 04:06:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/urgent] BUILD SUCCESS
- 27c68c216ee1f1b086e789a64486e6511e380b8a
-Message-ID: <202307110420.KsW5GsHM-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Jul 2023 16:06:35 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2378F194
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:06:33 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9922d6f003cso651708166b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689019591; x=1691611591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1BsV3afNUPdRTqIu9mC0ppRm+HLuppkRLq5+x+yU4ss=;
+        b=iGsuPKAQ4y+HsUAXtu0egNmfuNLKhZpsLpulpuyFtbJuqk+DZ1W0Hn/IMhqy8VOGrX
+         qpAKbUMmEB4Gs03GN/GnUE5qZm49XEktkZYEhp1VFeLvk4Tl1wBAzx5zXfQwadTvV2Cz
+         DcmYDldJlJUPng05pyrCVnYkU8gYLBYSS35NOzG0/WRTY1W6NTrl8pQTY62XnQiH7VpY
+         ffZITKenjkKtuuDY67OpKol4V5t3sx0/gtPefhTz8GvK9GEIe65KqSVUXcI3pa4DQAtt
+         MHlUXmSAa7oF0tVn3Q3aqhxLKZoCPkYtCm0Nb6MOqbSgUuf8FpAhBG+VixX89pnwZEiG
+         wLow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689019591; x=1691611591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BsV3afNUPdRTqIu9mC0ppRm+HLuppkRLq5+x+yU4ss=;
+        b=RmY3GGFM68fz0WOG9uHh74oK7czZnuOGos8jWixVmCGWoTugcil251wq67txxgKoiZ
+         ZTIB5i7+FwMNmfxq2D+ur8Hjuu6WLHAB6BGbTt353R31BkBknvH2nQHiEroYn8AZ7epL
+         92HbvU+VKjGz9gPuFraXrapUuxHfl018Q3P37GciY+6VBw01WWi+MWyvi3sJxEdQBnnF
+         66lIpSOVBbeuqrd6RtobnBd6FYHRe9g0Z1tQaaVKJXy5cIl1Xhn1kaVqH8akT0kfDtbm
+         tBqw6YFKp5qel03/jB6Y1OwWWSZSYtOrnFVp+myh/OooYpOHeop9KcvV4CJ213uhJlC5
+         s9dw==
+X-Gm-Message-State: ABy/qLarCCHAEOCzq6dmXJzzvyVGVrwEIuJ9VqNqiiucIaE/91N8c8VB
+        4x1ff5Y3HSCSozOZMT95dx6Upg==
+X-Google-Smtp-Source: APBJJlEFYeatmYspjFQNCMZfZRMGTpcYPZh9depifJXq2wY7Qxc4M/1FWw5viZ1q7/HRU8uqbAP7EQ==
+X-Received: by 2002:a17:906:a242:b0:982:8ec0:15a3 with SMTP id bi2-20020a170906a24200b009828ec015a3mr11921561ejb.67.1689019591609;
+        Mon, 10 Jul 2023 13:06:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id dk7-20020a170906f0c700b009931a3adf64sm176882ejb.17.2023.07.10.13.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 13:06:30 -0700 (PDT)
+Message-ID: <5f65d487-4692-0e94-a79a-82c663317ec7@linaro.org>
+Date:   Mon, 10 Jul 2023 22:06:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 3/6] dt-bindings: thermal: tsens: Add ipq5332 compatible
+Content-Language: en-US
+To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_varada@quicinc.com
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-4-quic_ipkumar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230710103735.1375847-4-quic_ipkumar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/urgent
-branch HEAD: 27c68c216ee1f1b086e789a64486e6511e380b8a  perf/x86: Fix lockdep warning in for_each_sibling_event() on SPR
+On 10/07/2023 12:37, Praveenkumar I wrote:
+> IPQ5332 uses TSENS v2.3.3 with combined interrupt. RPM is not
+> available in the SoC, hence adding new compatible to have the
+> sensor enablement and calibration function.>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 8b7863c3989e..ee57713f6131 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -68,8 +68,10 @@ properties:
+>            - const: qcom,tsens-v2
+>  
+>        - description: v2 of TSENS with combined interrupt
+> -        enum:
+> -          - qcom,ipq8074-tsens
+> +        items:
 
-elapsed time: 728m
+Drop items, you do not have multiple items.
 
-configs tested: 71
-configs skipped: 99
+> +          - enum:
+> +              - qcom,ipq8074-tsens
+> +              - qcom,ipq5332-tsens
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Keep the order.
+>  
+>        - description: v2 of TSENS with combined interrupt
+>          items:
+> @@ -289,6 +291,7 @@ allOf:
+>            contains:
+>              enum:
+>                - qcom,ipq8074-tsens
+> +              - qcom,ipq5332-tsens
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                          collie_defconfig   clang
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230710   clang
-hexagon              randconfig-r045-20230710   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230710   gcc  
-i386         buildonly-randconfig-r005-20230710   gcc  
-i386         buildonly-randconfig-r006-20230710   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230710   gcc  
-i386                 randconfig-i002-20230710   gcc  
-i386                 randconfig-i003-20230710   gcc  
-i386                 randconfig-i004-20230710   gcc  
-i386                 randconfig-i005-20230710   gcc  
-i386                 randconfig-i006-20230710   gcc  
-i386                 randconfig-i011-20230710   clang
-i386                 randconfig-i012-20230710   clang
-i386                 randconfig-i013-20230710   clang
-i386                 randconfig-i014-20230710   clang
-i386                 randconfig-i015-20230710   clang
-i386                 randconfig-i016-20230710   clang
-i386                 randconfig-r031-20230710   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                 mpc832x_rdb_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230710   clang
-riscv                          rv32_defconfig   gcc  
-s390                 randconfig-r044-20230710   clang
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230710   gcc  
-x86_64       buildonly-randconfig-r002-20230710   gcc  
-x86_64       buildonly-randconfig-r003-20230710   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230710   clang
-x86_64               randconfig-x002-20230710   clang
-x86_64               randconfig-x003-20230710   clang
-x86_64               randconfig-x004-20230710   clang
-x86_64               randconfig-x005-20230710   clang
-x86_64               randconfig-x006-20230710   clang
-x86_64               randconfig-x011-20230710   gcc  
-x86_64               randconfig-x012-20230710   gcc  
-x86_64               randconfig-x013-20230710   gcc  
-x86_64               randconfig-x014-20230710   gcc  
-x86_64               randconfig-x015-20230710   gcc  
-x86_64               randconfig-x016-20230710   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+And here
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>      then:
+>        properties:
+>          interrupts:
+> @@ -304,6 +307,7 @@ allOf:
+>            contains:
+>              enum:
+>                - qcom,ipq8074-tsens
+> +              - qcom,ipq5332-tsens
+
+And here.
+
+>                - qcom,tsens-v0_1
+>                - qcom,tsens-v1
+>                - qcom,tsens-v2
+
+Best regards,
+Krzysztof
+
