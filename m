@@ -2,168 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF2174D9AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45B874D9AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbjGJPRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S231144AbjGJPRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjGJPRI (ORCPT
+        with ESMTP id S230300AbjGJPRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:17:08 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F3BA0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:17:07 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-57012b2973eso59829157b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689002227; x=1691594227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ev9w8qY5qeXK6l96dBjt1M0c/nck2SlIA1nfO//2Cvg=;
-        b=UXvy2lXuacyPSAIEDq5qk/QFhDP0pWrsvmHQao1FdXfgkWCCTkvztAJoL4KblYUUIn
-         Id6XFTfQ7pGHNwDVV0tIbF3GxZp5av38rOxIT6RcYIEhgy4qlSnbmn/zrnLUvwzPWO0Y
-         WYU6B8NWzON02+L61fxZmg49WwdNMkUrzaCU3ws366Y1MNmH4VJ3/IozxXvyFjnCM5Rv
-         8tJzfW4PTjiifwQ0kUJ6+yrqLA7N9CGXNOpufniE4821v5bcmEe2cP6YitHieT7uRIBW
-         7UWH+6fhv8DJJL9XxsmXLAEqeQaVt/0wfaTD+1WUG3ujlv6L5G6kjyH9qwzAVkrFBAdV
-         AIjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689002227; x=1691594227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ev9w8qY5qeXK6l96dBjt1M0c/nck2SlIA1nfO//2Cvg=;
-        b=Vh1GgHnGiL6AB+T+ZdRJjgIccolbLgfjkABXyLwKRkugO1/uemP3CqzyNFLOgLcbeq
-         0YLF4aIhkLnX84vGrag6DQJv7J7pCnloJ5K+mfFLnMfbRYlktz9PmlypWI/Qu+5uoD2H
-         Bh7SUDTy2Q2nJdWD87C1IqlwOynmsy064+3j+5gRvkR9m83xMiceOvEoCSCdL1O0UClJ
-         Hh9CJUXlvC3gJcbK8QYbNFOUts1a+0XOyWfioEc9JGckCsev0KVQJQFHogUPhMdm0LUH
-         Ej32uB7VDbqY8UkFPxuwSNAJJVNxGP4ph4BlOROaiVi4U06yT5nIdOroT71BHuNugjF1
-         4qBw==
-X-Gm-Message-State: ABy/qLa/K0/WHbOTnBwoqMK1MtY8sJPAMUHKNcwkKUrrXEUlAokzX2qT
-        4dDkrq3WNiLGXM1Go4BAG6a+x+DrVoSTdLqCWtmyUA==
-X-Google-Smtp-Source: APBJJlH/mdYwBePFgE2xPEQJ8BWpSbYER3+V0l6Dh7xD0Ej6k2tSZSaudJZCmfy3XG72u8/rjHDCdvJ288fZPdgHje4=
-X-Received: by 2002:a0d:ca0e:0:b0:56d:28b:8042 with SMTP id
- m14-20020a0dca0e000000b0056d028b8042mr11153655ywd.40.1689002226674; Mon, 10
- Jul 2023 08:17:06 -0700 (PDT)
+        Mon, 10 Jul 2023 11:17:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90001B7;
+        Mon, 10 Jul 2023 08:17:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EEB96105C;
+        Mon, 10 Jul 2023 15:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1879C433C8;
+        Mon, 10 Jul 2023 15:17:04 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 11:17:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zehao Zhang <zhangzehao@vivo.com>
+Cc:     linkinjeon@kernel.org, sj1557.seo@samsung.com, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] exfat: Add ftrace support for exfat and add some
+ tracepoints
+Message-ID: <20230710111703.33bb48c5@gandalf.local.home>
+In-Reply-To: <20230710092559.19087-1-zhangzehao@vivo.com>
+References: <20230710092559.19087-1-zhangzehao@vivo.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230707201904.953262-1-jiaqiyan@google.com> <20230707201904.953262-3-jiaqiyan@google.com>
- <6682284d-7ad3-9b59-687d-899f4d08d911@huawei.com>
-In-Reply-To: <6682284d-7ad3-9b59-687d-899f4d08d911@huawei.com>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Mon, 10 Jul 2023 08:16:53 -0700
-Message-ID: <CACw3F50k9WJr7WgHS-dRxJRfuXPbq2adUBLeFcKRjmm2D6qf-g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] mm/hwpoison: check if a subpage of a hugetlb folio
- is raw HWPOISON
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        naoya.horiguchi@nec.com, songmuchun@bytedance.com,
-        shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duenwen@google.com,
-        axelrasmussen@google.com, jthoughton@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 7:57=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> wr=
-ote:
->
-> On 2023/7/8 4:19, Jiaqi Yan wrote:
-> > Add the functionality, is_raw_hwp_subpage, to tell if a subpage of a
-> > hugetlb folio is a raw HWPOISON page. This functionality relies on
-> > RawHwpUnreliable to be not set; otherwise hugepage's raw HWPOISON list
-> > becomes meaningless.
-> >
-> > is_raw_hwp_subpage needs to hold hugetlb_lock in order to synchronize
-> > with __get_huge_page_for_hwpoison, who iterates and inserts an entry to
-> > raw_hwp_list. llist itself doesn't ensure insertion is synchornized wit=
-h
-> > the iterating used by __is_raw_hwp_list. Caller can minimize the
-> > overhead of lock cycles by first checking if folio / head page's
-> > HWPOISON flag is set.
-> >
-> > Exports this functionality to be immediately used in the read operation
-> > for hugetlbfs.
-> >
-> > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > ---
-> >  include/linux/hugetlb.h | 19 +++++++++++++++++++
-> >  include/linux/mm.h      |  7 +++++++
-> >  mm/hugetlb.c            | 10 ++++++++++
-> >  mm/memory-failure.c     | 34 ++++++++++++++++++++++++----------
-> >  4 files changed, 60 insertions(+), 10 deletions(-)
-> > ...
-> > -static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
-)
-> > +bool __is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
-> >  {
-> > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > +     struct llist_head *raw_hwp_head;
-> > +     struct raw_hwp_page *p, *tmp;
-> > +     bool ret =3D false;
-> > +
-> > +     if (!folio_test_hwpoison(folio))
-> > +             return false;
-> > +
-> > +     /*
-> > +      * When RawHwpUnreliable is set, kernel lost track of which subpa=
-ges
-> > +      * are HWPOISON. So return as if ALL subpages are HWPOISONed.
-> > +      */
-> > +     if (folio_test_hugetlb_raw_hwp_unreliable(folio))
-> > +             return true;
-> > +
-> > +     raw_hwp_head =3D raw_hwp_list_head(folio);
-> > +     llist_for_each_entry_safe(p, tmp, raw_hwp_head->first, node) {
->
-> Since we don't free the raw_hwp_list, does llist_for_each_entry works sam=
-e as llist_for_each_entry_safe?
->
-> > +             if (subpage =3D=3D p->page) {
-> > +                     ret =3D true;
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     return ret;
-> >  }
->
-> It seems there's a race between __is_raw_hwp_subpage and unpoison_memory:
->   unpoison_memory               __is_raw_hwp_subpage
->                                   if (!folio_test_hwpoison(folio)) -- hwp=
-oison is set
->     folio_free_raw_hwp            llist_for_each_entry_safe raw_hwp_list
->       llist_del_all                 ..
->     folio_test_clear_hwpoison
->
+On Mon, 10 Jul 2023 17:25:59 +0800
+Zehao Zhang <zhangzehao@vivo.com> wrote:
 
-Thanks Miaohe for raising this concern.
+> Add ftrace support for exFAT file system,
+> and add some tracepoints:
+> exfat_read_folio(), exfat_writepages(), exfat_write_begin(),
+> exfat_write_end(), exfat_lookup_start(), exfat_lookup_end()
+> 
+> exfat_read_folio():
+> shows the dev number, inode and the folio index.
+> 
+> exfat_writepages():
+> shows the inode and fields in struct writeback_control.
+> 
+> exfat_write_begin():
+> shows the inode, file position offset and length.
+> 
+> exfat_write_end():
+> shows the inode, file position offset, bytes write to page
+> and bytes copied from user.
+> 
+> exfat_lookup_start():
+> shows the target inode, dentry and flags.
+> 
+> exfat_lookup_end():
+> shows the target inode, dentry and err code.
+> 
+> Signed-off-by: Zehao Zhang <zhangzehao@vivo.com>
+> ---
+>  MAINTAINERS                  |   1 +
+>  fs/exfat/inode.c             |  16 +++
+>  fs/exfat/namei.c             |  10 +-
+>  include/trace/events/exfat.h | 192 +++++++++++++++++++++++++++++++++++
+>  4 files changed, 218 insertions(+), 1 deletion(-)
+>  create mode 100644 include/trace/events/exfat.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4f115c355a41..fbe1caa61a38 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7752,6 +7752,7 @@ L:	linux-fsdevel@vger.kernel.org
+>  S:	Maintained
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
+>  F:	fs/exfat/
+> +F:	include/trace/events/exfat.h
+>  
+>  EXT2 FILE SYSTEM
+>  M:	Jan Kara <jack@suse.com>
+> diff --git a/fs/exfat/inode.c b/fs/exfat/inode.c
+> index 481dd338f2b8..48fec3fa10af 100644
+> --- a/fs/exfat/inode.c
+> +++ b/fs/exfat/inode.c
+> @@ -17,6 +17,9 @@
+>  #include "exfat_raw.h"
+>  #include "exfat_fs.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/exfat.h>
+> +
+>  int __exfat_write_inode(struct inode *inode, int sync)
+>  {
+>  	unsigned long long on_disk_size;
+> @@ -335,6 +338,10 @@ static int exfat_get_block(struct inode *inode, sector_t iblock,
+>  
+>  static int exfat_read_folio(struct file *file, struct folio *folio)
+>  {
+> +	struct inode *inode = folio->mapping->host;
 
-> But __is_raw_hwp_subpage is used in hugetlbfs, unpoison_memory couldn't r=
-each here because there's a
-> folio_mapping =3D=3D NULL check before folio_free_raw_hwp.
+Why dereference here and not just use the folio that is passed in?
 
-I agree. But in near future I do want to make __is_raw_hwp_subpage
-work for shared-mapping hugetlb, so it would be nice to work with
-unpoison_memory. It doesn't seem to me that holding mf_mutex in
-__is_raw_hwp_subpage is nice or even absolutely correct. Let me think
-if I can come up with something in v4.
+That will keep the dereferencing logic out of the code path and only happen
+when the trace event is enabled.
 
->
-> Anyway, this patch looks good to me.
->
-> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-> Thanks.
->
+> +
+> +	trace_exfat_read_folio(inode, folio);
+> +
+>  	return mpage_read_folio(folio, exfat_get_block);
+>  }
+>  
+> @@ -346,6 +353,10 @@ static void exfat_readahead(struct readahead_control *rac)
+>  static int exfat_writepages(struct address_space *mapping,
+>  		struct writeback_control *wbc)
+>  {
+> +	struct inode *inode = mapping->host;
+> +
+> +	trace_exfat_writepages(inode, wbc);
+
+Here you could just pass in mapping and do the dereference in the TP_fast_assign().
+
+> +
+>  	return mpage_writepages(mapping, wbc, exfat_get_block);
+>  }
+>  
+> @@ -364,6 +375,7 @@ static int exfat_write_begin(struct file *file, struct address_space *mapping,
+>  		loff_t pos, unsigned int len,
+>  		struct page **pagep, void **fsdata)
+>  {
+> +	struct inode *inode = mapping->host;
+
+And here too.
+
+-- Steve
+
+>  	int ret;
+>  
+>  	*pagep = NULL;
+> @@ -371,6 +383,8 @@ static int exfat_write_begin(struct file *file, struct address_space *mapping,
+>  			       exfat_get_block,
+>  			       &EXFAT_I(mapping->host)->i_size_ondisk);
+>  
+> +	trace_exfat_write_begin(inode, pos, len);
+> +
+>  	if (ret < 0)
+>  		exfat_write_failed(mapping, pos+len);
+>  
+> @@ -394,6 +408,8 @@ static int exfat_write_end(struct file *file, struct address_space *mapping,
+>  		return -EIO;
+>  	}
+>  
+> +	trace_exfat_write_end(inode, pos, len, copied);
+> +
+>  	if (err < len)
+>  		exfat_write_failed(mapping, pos+len);
+>  
