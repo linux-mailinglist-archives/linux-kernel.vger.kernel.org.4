@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE8D74E179
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5615674E17D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 00:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjGJWif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 18:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S230392AbjGJWjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 18:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjGJWid (ORCPT
+        with ESMTP id S230318AbjGJWja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 18:38:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AC81702;
-        Mon, 10 Jul 2023 15:38:01 -0700 (PDT)
+        Mon, 10 Jul 2023 18:39:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEDB91;
+        Mon, 10 Jul 2023 15:39:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E3D06124A;
-        Mon, 10 Jul 2023 22:37:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA068C433C7;
-        Mon, 10 Jul 2023 22:37:43 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 18:37:41 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Zheng Yejian <zhengyejian1@huawei.com>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/ftrace: Correctly enable event in
- instance-event.tc
-Message-ID: <20230710183741.78f04c68@gandalf.local.home>
-In-Reply-To: <20230626191255.53baab4ed48d7111dcd44cad@kernel.org>
-References: <20230626001144.2635956-1-zhengyejian1@huawei.com>
-        <20230626191114.8c5a66fbaa28af3c303923bd@kernel.org>
-        <20230626191255.53baab4ed48d7111dcd44cad@kernel.org>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E48ED6124C;
+        Mon, 10 Jul 2023 22:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9BEC433C8;
+        Mon, 10 Jul 2023 22:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689028769;
+        bh=O/CW9tIuzx26NQX0JvkfDKa65lUbxxeZWmHKJIv1YGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MsHmKbEA1cwBwXVQm/AJFbzBTfcCW4W9w+qzNOubZKBlyJvvwIAnjWt1Du7gUXOpz
+         5DlNeiSw3lmEGcN+VmbWN7SGkRpkT1MgKkqKFvEx5fImdLieCpjibUeYV044c8/aJJ
+         Woi3xsyXyiDyYIlrwES5oMhrGuX7Agtvy2xjCPcTHnJD+sbbJbn9YAjvvJMzPPfTNc
+         QE6GHDUY5n16HqI4vP/1hf7fSvsGK4MngIfn41UxZA0xJnHtgHKdc0fhBc5eFu9gC2
+         uxSi8dP0h8csRKux8QeYA/hp8H2Gmn1pv4E3GsKOP51xxWzYbeZzszODxTSA2peq+I
+         YXCWbXmu4LFlw==
+Date:   Mon, 10 Jul 2023 23:39:24 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Evan Green <evan@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Message-ID: <20230710-frown-boogieman-b36445c1b5a7@spud>
+References: <20230710192413.2089085-1-evan@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="D7ZcV3Z0Ccixd94M"
+Content-Disposition: inline
+In-Reply-To: <20230710192413.2089085-1-evan@rivosinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,81 +68,25 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Shuah, can you take this?
+--D7ZcV3Z0Ccixd94M
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 26 Jun 2023 19:12:55 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+On Mon, Jul 10, 2023 at 12:24:13PM -0700, Evan Green wrote:
+> +"isa" vs "hart isa" lines in /proc/cpuinfo
+> +-----------------------------------------
 
-> On Mon, 26 Jun 2023 19:11:14 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> 
-> > On Mon, 26 Jun 2023 08:11:44 +0800
-> > Zheng Yejian <zhengyejian1@huawei.com> wrote:
-> >   
-> > > Function instance_set() expects to enable event 'sched_switch', so we
-> > > should set 1 to its 'enable' file.
-> > > 
-> > > Testcase passed after this patch:
-> > >   # ./ftracetest test.d/instances/instance-event.tc
-> > >   === Ftrace unit tests ===
-> > >   [1] Test creation and deletion of trace instances while setting an event
-> > >   [PASS]
-> > > 
-> > >   # of passed:  1
-> > >   # of failed:  0
-> > >   # of unresolved:  0
-> > >   # of untested:  0
-> > >   # of unsupported:  0
-> > >   # of xfailed:  0
-> > >   # of undefined(test bug):  0
-> > >   
-> > 
-> > Good catch!
-> > 
-> > Fixes: 91e6f1ce8657 ("ftracetest: Add instance created, delete, read and enable event test")
-> > 
-> > It seems this tests internally broken but the result is same because this disabled
-> > error checking ('set +e').  
-> 
-> And
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+This underline is too short :/
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+--D7ZcV3Z0Ccixd94M
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- Steve
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKyInAAKCRB4tDGHoIJi
+0rEwAQCYddZNxdTtB8VIuBY8H5RzTdEtz8EP5J62N/KTxodlPQD/UOlv4155wrff
+VqMQUpTDU8K8uut/ONPsUSWLS7LDvgE=
+=w2Wn
+-----END PGP SIGNATURE-----
 
-> 
-> Thanks!
-> 
-> > 
-> >   
-> > > Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-> > > ---
-> > >  .../testing/selftests/ftrace/test.d/instances/instance-event.tc | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-> > > index 0eb47fbb3f44..42422e425107 100644
-> > > --- a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-> > > +++ b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-> > > @@ -39,7 +39,7 @@ instance_read() {
-> > >  
-> > >  instance_set() {
-> > >          while :; do
-> > > -                echo 1 > foo/events/sched/sched_switch
-> > > +                echo 1 > foo/events/sched/sched_switch/enable
-> > >          done 2> /dev/null
-> > >  }
-> > >  
-> > > -- 
-> > > 2.25.1
-> > >   
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>  
-> 
-> 
-
+--D7ZcV3Z0Ccixd94M--
