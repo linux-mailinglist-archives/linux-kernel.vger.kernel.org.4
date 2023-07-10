@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB91874D3F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8820374D446
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbjGJKzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S231336AbjGJLJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjGJKy5 (ORCPT
+        with ESMTP id S231341AbjGJLJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:54:57 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E725BCC;
-        Mon, 10 Jul 2023 03:54:50 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A8ZASL019211;
-        Mon, 10 Jul 2023 10:54:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=8LCSMAKm1ZqPLKYXRzvM3CzSOKdJTxyt7kA4dOURNFQ=;
- b=Lwc41t1og1MtbmQYgaIPRgq3q5mAXXXblK/eeliaM5d8CxwGVXVHad0cSoHog3ZMfLHp
- BjJ+wPbr/cWOLtghQASHpDAs5X8qTKttanl2/ilrzhWiddjcTd1Wa4NkrHkLR/3qX3L1
- 6KQf+pl4FWtjYSEGOqKUFd7BR4WDzX39OYUR4MY7qaVv7gqrni81GqY1EdLnq5Ta8L08
- P8YHUWPrsAPtZumsTEmt3DFGQFu76/s4dL82pHcwRiLD0gOR0ZTr3/257uk9eH34Sqy1
- pN0sVBt2YJJ0mu3i/sQPZAhkO6/pndxj+zhnmjZr9cv5VfZxLfLzXHpUvPZskRG/SOJV Kg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpyd6uc5g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 10:54:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36AAskgQ001679
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 10:54:46 GMT
-Received: from hu-kathirav-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 10 Jul 2023 03:54:42 -0700
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 10 Jul 2023 07:09:14 -0400
+X-Greylist: delayed 804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Jul 2023 04:09:09 PDT
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEF6DD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:09:09 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; b=CR46z7G4pA2j7R2rcjI+mkhCZYT1XWYJGu1dQEzzmhgtUNbvWyaYNp872JW/90qIoFMq2FVaCS6EqRUCixG6EjivzZZg0/Ye7/6lTbDGjJ5eyUD9krSWI+6LouQg0kBcXTH6Bk4oPLVmuOibVMQrFAN7HqvK4q2nFYIzk7X4iI7/22SxRhmewhyb4MbkNJSSJnlSyXTEfsb0avRfLpkhiSf4fcL0gJxd6h5318mWTeOphgQy+ncB1OZFO5Jn51To8PMKRpFQ40ScrhyulVXnLf+cheCdYsuCbBfafqDMkQdyC+ZOk674oOoezz9D7KzLAb2m3FyuRkLFSPRvuAO81A==; s=purelymail1; d=iskren.info; v=1; bh=lV9ppPsaEOEUAnUrflv2EQZQzeibRC/rcgeYGnMmG3E=; h=Received:Subject:To:From;
+DKIM-Signature: a=rsa-sha256; b=sQP16rDNnb/IEgmYI3OUskIyrc79nOrvoGvb7vdLe0Pzx2xit27ukgMVj1r9rX6nWpmI4tnz+SMTzL14Zg0RFhNXk9tTfEoP40HUvObGdvg/G30fwjAmQwjyC6du/5G/N8AdSSvibB48/mIbX075QUUnlTEPkCGOIsvpd8vMpKxJWXciV1tBS755N52Iwa5xP6qt0Pr7CMDDxnXcSMVTv99ZkPSRc2OKqQ2I025hFJFDOIOk3lSeMAt1Oal1yjI43rozpUFC+FXKDLgkeMLCxp965Mx5PhaRCqwa6t96ogVqDAYjQnZ65KtvBw6Mi9pvo6HLxmTzFGB7sg1kldEd9Q==; s=purelymail1; d=purelymail.com; v=1; bh=lV9ppPsaEOEUAnUrflv2EQZQzeibRC/rcgeYGnMmG3E=; h=Feedback-ID:Received:Subject:To:From;
+Feedback-ID: 10275:2339:null:purelymail
+X-Pm-Original-To: linux-kernel@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1418986860;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Mon, 10 Jul 2023 10:55:13 +0000 (UTC)
+Message-ID: <5dbd78ee-6726-650f-31d4-526382001e68@iskren.info>
+Date:   Mon, 10 Jul 2023 13:55:09 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] dt-bindings: leds: Convert Panasonic AN30259A to DT
+ schema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_saahtoma@quicinc.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH 2/2] soc: qcom: socinfo: drop the IPQ5019 SoC ID
-Date:   Mon, 10 Jul 2023 16:24:19 +0530
-Message-ID: <20230710105419.1228966-3-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230710105419.1228966-1-quic_kathirav@quicinc.com>
-References: <20230710105419.1228966-1-quic_kathirav@quicinc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: MJg3QluK1KwwGb8dA9EiUu_mIl6gbxga
-X-Proofpoint-ORIG-GUID: MJg3QluK1KwwGb8dA9EiUu_mIl6gbxga
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_08,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- adultscore=0 spamscore=0 phishscore=0 mlxlogscore=729 priorityscore=1501
- clxscore=1015 bulkscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307100098
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Simon Shields <simon@lineageos.org>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Daniele Debernardi <drebrez@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+References: <20230707210653.868907-1-robh@kernel.org>
+ <361a4706-6a64-9322-3210-d9cd45827a2a@linaro.org>
+From:   Iskren Chernev <me@iskren.info>
+In-Reply-To: <361a4706-6a64-9322-3210-d9cd45827a2a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ5019 SoC is not available in production. Lets drop it.
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
- drivers/soc/qcom/socinfo.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 4d49945b3a35..78293ab13c87 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -406,7 +406,6 @@ static const struct soc_id soc_id[] = {
- 	{ qcom_board_id(QRU1000) },
- 	{ qcom_board_id(QDU1000) },
- 	{ qcom_board_id(QDU1010) },
--	{ qcom_board_id(IPQ5019) },
- 	{ qcom_board_id(QRU1032) },
- 	{ qcom_board_id(QRU1052) },
- 	{ qcom_board_id(QRU1062) },
--- 
-2.34.1
+On 7/10/23 12:13, Krzysztof Kozlowski wrote:
+> On 07/07/2023 23:06, Rob Herring wrote:
+>> Convert the Panasonic AN30259A 3-channel LED controller binding to DT
+>> schema format.
+>>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> ---
+> 
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+>>  .../bindings/leds/leds-an30259a.txt           | 55 ------------
+>>  .../bindings/leds/panasonic,an30259a.yaml     | 84 +++++++++++++++++++
+> 
+> ...
+> 
+>> diff --git a/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml b/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
+>> new file mode 100644
+>> index 000000000000..f55f8c232bc6
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/leds/panasonic,an30259a.yaml
+>> @@ -0,0 +1,84 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/leds/panasonic,an30259a.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Panasonic AN30259A 3-channel LED controller
+>> +
+>> +maintainers:
+>> +  - Simon Shields <simon@lineageos.org>
+> 
+> Device is used in qcom-msm8974pro-samsung-klte.dts, so maybe its main
+> authors would maintain this binding?
+> 
+> Iskren Chernev <me@iskren.info>
 
+I'll be happy to be listed as a maintainer of that binding.
+
+> Daniele Debernardi <drebrez@gmail.com>
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
