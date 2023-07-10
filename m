@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBE274CCF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D5774CCFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjGJGas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S230237AbjGJGba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjGJGap (ORCPT
+        with ESMTP id S229560AbjGJGb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:30:45 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10F4E123;
-        Sun,  9 Jul 2023 23:30:43 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 36A6URIR016678;
-        Mon, 10 Jul 2023 08:30:27 +0200
-Date:   Mon, 10 Jul 2023 08:30:27 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v1 4/5] selftests/nolibc: report: extrude the test status
- line
-Message-ID: <ZKulgwwDjubkZuTa@1wt.eu>
-References: <20230709085453.GB9321@1wt.eu>
- <20230709192652.97668-1-falcon@tinylab.org>
+        Mon, 10 Jul 2023 02:31:28 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB391E1
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:31:24 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QzvKM561DzBHXh8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 14:31:19 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688970679; x=1691562680; bh=aTlm6Xb7XXh6jhxQV0R2zMsPiDO
+        qv5eG9s4lBNA59SU=; b=ltMav5J8wazDv3YZNCFgd3oFcSatAp7nwnZXwjxtiqi
+        nm/jKVHuqLGU/QE4ekoH223zlVF2k5VKU7TTK0DtD4tpwdlvfXJOFlujJq/GnhuA
+        /NRAwxvXTbVG26RhyUEmsvl4HUICeHmmK1ssjBw/3CDMQIFpj+3bP4/Q5dww0lbE
+        OVlzx5F3j6eOwk0VDR+HdGzE3p7Nbh3l/AeGXVGVRP3LA+5Xi9eFmAgUXEMgJuZx
+        34W+ZDx0e3W20KY3Hw0sMCHmYX1a8yj1aQc7sC1Wj401QHSrYQf7pPZbPMmF9WQn
+        Ebfs+OcD0m9fbiO/omEH8Y2hSaUFS2y21jizxcgGVZA==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4L-vFI1UoHlo for <linux-kernel@vger.kernel.org>;
+        Mon, 10 Jul 2023 14:31:19 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QzvKM2q8MzBHXgl;
+        Mon, 10 Jul 2023 14:31:19 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230709192652.97668-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Mon, 10 Jul 2023 14:31:15 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/i2c: do not use assignment in if condition
+In-Reply-To: <20230710062932.53655-1-xujianghui@cdjrlc.com>
+References: <20230710062932.53655-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <7ab55aa7169d6a3bd0309b43c3de592e@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+Assignments in if condition are less readable and error-prone.  Fixes
+also checkpatch warning:
 
-On Mon, Jul 10, 2023 at 03:26:52AM +0800, Zhangjin Wu wrote:
-> > On Thu, Jul 06, 2023 at 05:11:17PM +0800, Zhangjin Wu wrote:
-> > > two newlines are added around the test summary line to extrude the test
-> > > status.
-> > 
-> > But then we're back to making it annoying to check, having to figure
-> > if we need to grep -A or grep -B etc. With grep 'status:' we would get
-> > a synthetic status and the counters together. Why do you think it's
-> > not convenient ? Or am I the only one considering it useful to just
-> > run grep "status:" on all output files and figure a global status at
-> > once ?
-> 
-> Sorry, Willy, my commit message may mislead you a little.
-> 
-> The newlines are added around the whole test summary line (with the
-> status info), not only around the 'status info' ;-)
+ERROR: do not use assignment in if condition
 
-Ah OK, thanks for clarifying this!
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
 
-> It is not for status grep, it is for developers to easily see the whole
-> summary line at a glance
-
-I understand but both work hand-in-hand, as every time you'll perform
-a slight change, you'll necessarily rerun the whole series on all archs
-to confirm, which is why I'm particularly annoying about the ability to
-grep!
-
-> And further, if not consider pure-text, the colors may be more helpful,
-> for example, red for failed/failure, yellow for skipped/warning, green
-> for passed/success, for example:
-> 
->     $ echo | awk 'END{printf("138 test(s): \033[32m135\033[0m passed, \033[33m  2\033[0m skipped, \033[31m  1\033[0m failed => status: \033[31mfailure\033[0m\n");}'
->     138 test(s): 135 passed,   2 skipped,   1 failed => status: failure
-> 
-> But as we can see, the color control code is not readable and it may
-> break the simple "status: failure" grep, we should use something like
-> "status: .*failure" ;-)
-
-Colors may only be used when stdout is a terminal, and still, some might
-find it annonying (for example some distros use unreadably dark colors
-that were apparently never tested over a black background, forcing users
-to highlight the text by selecting it with the mouse to read it). Better
-not start to play with this IMO, that's not really needed and may be more
-annoying to some than helpful to most.
-
-Thanks,
-Willy
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c 
+b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c
+index d063d0dc13c5..098051d3755c 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c
+@@ -209,7 +209,8 @@ nvkm_i2c_aux_new_(const struct nvkm_i2c_aux_func 
+*func,
+            struct nvkm_i2c_pad *pad, int id,
+            struct nvkm_i2c_aux **paux)
+  {
+-    if (!(*paux = kzalloc(sizeof(**paux), GFP_KERNEL)))
++    *paux = kzalloc(sizeof(**paux), GFP_KERNEL);
++    if (!*paux)
+          return -ENOMEM;
+      return nvkm_i2c_aux_ctor(func, pad, id, *paux);
+  }
