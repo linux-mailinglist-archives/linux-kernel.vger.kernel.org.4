@@ -2,155 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C390974DB0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CEC74DB14
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjGJQ1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S229897AbjGJQ3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGJQ1g (ORCPT
+        with ESMTP id S229663AbjGJQ3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:27:36 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D648611A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:27:34 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3159d5e409dso662103f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689006453; x=1691598453;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVlZJd24DRUTRrQURnZ7yN63fxP+eJTyjrLPGCN3yY4=;
-        b=Bnwq/Qi/JmJjvgrXJcJ4mxBmPQeRQvv390HGFGyUuTvK+3qjIUcYFRnHUurd+gHv3i
-         USKmOQi84077zEMtO7p2FhECnBcE9G7vjQgZ19Kds60m7VHN0MpNvyJc4V5XavGlJpQm
-         tjZrqL2UC/kdcEONl+g1Uc+2eRQ7ftePacgIlBr5xUWoDde/to5RoEqMdvh8dD0JioYY
-         Z79ws2GNv5acVnlc8DqjGQE8i58IFkKYB/YyLALneu1RcQGXdztWFuVVlVueOY/+fE7A
-         6tajkBjIlsf57ytcpElDPl7q4gUgmS5UOyD7x10Y4Kew82jwdMv5HIQAswHYrbSUZ1md
-         X7Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689006453; x=1691598453;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WVlZJd24DRUTRrQURnZ7yN63fxP+eJTyjrLPGCN3yY4=;
-        b=J4LQi/7soLYJQ1abAg2+3KNNU3hF/ViaNFjL8nQhm363cPeJqL0Ak2VPy2+RNcSqND
-         D1192uF7M1p6ZZ75jcmK9hnZxgW2fSdewm1omxZWO6PrJA/9vwKwbBR9Y1Py7uNxCWTF
-         rJadAheCAP9XtFI11yCtsknveCGtbrF91ItzYEjJWjwbRaDZDmIglFdVRq4Z4w/e8SNu
-         bORqrwPH0QUxCYYACwrHLy4m2Uq6a88g/WGdEkDDF3nhhF4TqASTythi0hJmBU/huLxY
-         I6C+H4jiZWe1XCQy6kMUWQCSlEml/YG13W3+suu20TLnfTR1XLCYkcd4uUHlBbobyebk
-         tDnQ==
-X-Gm-Message-State: ABy/qLZZTXG+dpCl5fZ1FG1U0EjY5MwXdOmlhKWBkP89+/vgONpCB8NK
-        9T5nEgxAi877lxNjnQRSow+0vQ==
-X-Google-Smtp-Source: APBJJlFhwyy6ydGp2WjaMZUpUK1JbYJNqOtWi+1SPoy1P4WD5lmV5bX0C2TlnZFlc4ZK4sKA1DrIFQ==
-X-Received: by 2002:a5d:65ce:0:b0:315:7f1d:7790 with SMTP id e14-20020a5d65ce000000b003157f1d7790mr6145269wrw.6.1689006453352;
-        Mon, 10 Jul 2023 09:27:33 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h16-20020adff190000000b003144b95e1ecsm12029064wro.93.2023.07.10.09.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 09:27:33 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH] hwmon: (peci/cputemp) Add Intel Sapphire Rapids support
-Date:   Mon, 10 Jul 2023 18:27:23 +0200
-Message-ID: <20230710162724.827833-1-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.41.0
+        Mon, 10 Jul 2023 12:29:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C9123;
+        Mon, 10 Jul 2023 09:29:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79FD561063;
+        Mon, 10 Jul 2023 16:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771B0C433C7;
+        Mon, 10 Jul 2023 16:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689006570;
+        bh=ae6QFQNElQd1BKJDZoXkx4iL3ughYws6hFQur12yufk=;
+        h=Subject:From:To:Cc:Date:From;
+        b=hUCDxWsHhARI3B5PrEurFf7cbATDizmyuaZ6X/wA8vTZzptNdoa4cKwOv1z1rebLw
+         AiOwF55RAzzcEck4zSQsQC/+0OreK6zF3aNPyr1NQPVNgEfPw6l94j4SDI+QRHi1I7
+         09zI2gxgow/80qSASd4jeDN2WX24l8FMfrXXkB22mhE0g5iBQTzUY68noBj5fvRo2a
+         aq6oxMRd4ohv2liFlTSWL2AzNo/0dlZ4tVA90/8fUNaRiWFu8jVuLPobOLBBeTOgDQ
+         1EOXkh5NUJ6hQKsZ14kjqfJ18GIouoEh+Mf1aY50ISGY4uYb/p7Wchj7pk4SsRX3P0
+         GNv5nE5oFsgyQ==
+Message-ID: <17881cf776b2c19dcd5a6d628fdfb54dae0eb4f8.camel@kernel.org>
+Subject: xfs WARNING on v6.5-rc1 kernel
+From:   Jeff Layton <jlayton@kernel.org>
+To:     linux-xfs <linux-xfs@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Date:   Mon, 10 Jul 2023 12:29:29 -0400
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+I hit this this morning while running generic/013 (fsstress), with a
+kernel based on v6.5-rc1. The main changes on top of this are timestamp
+related, so I doubt they're a factor here.
 
-Add support to read DTS for reading Intel Sapphire Rapids platform.
+Is this some of the flexarray hardening?
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/hwmon/peci/cputemp.c | 18 ++++++++++++++++++
- drivers/peci/cpu.c           |  5 +++++
- 2 files changed, 23 insertions(+)
+[ 2704.665314] run fstests generic/013 at 2023-07-10 16:09:58
+[ 2705.646507] XFS (loop16): Unmounting Filesystem 3058c032-3f67-4fb9-b24e-=
+c1414b0b532b
+[ 2705.820402] XFS (loop16): Mounting V5 Filesystem 3058c032-3f67-4fb9-b24e=
+-c1414b0b532b
+[ 2705.838655] XFS (loop16): Ending clean mount
+[ 2705.916080] ------------[ cut here ]------------
+[ 2705.917615] memcpy: detected field-spanning write (size 2) of single fie=
+ld "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c:1559 (size =
+1)
+[ 2705.921569] WARNING: CPU: 6 PID: 48206 at fs/xfs/libxfs/xfs_attr_leaf.c:=
+1559 xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
+[ 2705.926783] Modules linked in: xfs nls_iso8859_1 nls_cp437 vfat fat ext4=
+ 9p crc16 mbcache netfs jbd2 kvm_intel cirrus virtio_net kvm joydev drm_shm=
+em_helper net_failover pcspkr virtio_balloon 9pnet_virtio psmouse irqbypass=
+ failover drm_kms_helper evdev button drm loop dm_mod zram zsmalloc crct10d=
+if_pclmul crc32_pclmul ghash_clmulni_intel sha512_ssse3 sha512_generic nvme=
+ virtio_blk nvme_core t10_pi aesni_intel virtio_pci crc64_rocksoft_generic =
+crypto_simd cryptd crc64_rocksoft virtio i6300esb crc64 virtio_pci_legacy_d=
+ev virtio_pci_modern_dev virtio_ring serio_raw btrfs blake2b_generic libcrc=
+32c crc32c_generic crc32c_intel xor raid6_pq autofs4
+[ 2705.942668] CPU: 6 PID: 48206 Comm: fsstress Not tainted 6.5.0-rc1+ #13
+[ 2705.945361] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.1=
+6.2-1.fc38 04/01/2014
+[ 2705.947758] RIP: 0010:xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
+[ 2705.949442] Code: fe ff ff b9 01 00 00 00 4c 89 fe 48 c7 c2 c8 2e fc c0 =
+48 c7 c7 10 2f fc c0 48 89 44 24 08 c6 05 ac 9c 0e 00 01 e8 a2 de 67 d0 <0f=
+> 0b 48 8b 44 24 08 e9 88 fe ff ff 80 3d 93 9c 0e 00 00 0f 85 bd
+[ 2705.953536] RSP: 0018:ffffb52ac29bb8c0 EFLAGS: 00010282
+[ 2705.954925] RAX: 0000000000000000 RBX: ffffb52ac29bb990 RCX: 00000000000=
+00000
+[ 2705.956604] RDX: 0000000000000002 RSI: ffffffff92612d95 RDI: 00000000fff=
+fffff
+[ 2705.958998] RBP: ffffb52ac29bb924 R08: 0000000000000000 R09: ffffb52ac29=
+bb760
+[ 2705.960903] R10: 0000000000000003 R11: ffffffff928c1aa8 R12: ffff8ecf3ad=
+c8050
+[ 2705.962537] R13: ffff8ecf3adc8000 R14: ffff8ecf3adc8fcc R15: 00000000000=
+00002
+[ 2705.964083] FS:  00007fcb152f4740(0000) GS:ffff8ed077d80000(0000) knlGS:=
+0000000000000000
+[ 2705.965752] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 2705.967124] CR2: 00007ff8022cd2d8 CR3: 000000015e1d2005 CR4: 00000000000=
+60ee0
+[ 2705.969279] Call Trace:
+[ 2705.970318]  <TASK>
+[ 2705.971321]  ? xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
+[ 2705.973729]  ? __warn+0x7d/0x130
+[ 2705.974822]  ? xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
+[ 2705.976251]  ? report_bug+0x18d/0x1c0
+[ 2705.977242]  ? handle_bug+0x3c/0x80
+[ 2705.978282]  ? exc_invalid_op+0x13/0x60
+[ 2705.979310]  ? asm_exc_invalid_op+0x16/0x20
+[ 2705.980648]  ? xfs_attr3_leaf_add_work+0x4ee/0x530 [xfs]
+[ 2705.982645]  xfs_attr3_leaf_add+0x173/0x1e0 [xfs]
+[ 2705.984131]  xfs_attr_shortform_to_leaf+0x21d/0x230 [xfs]
+[ 2705.985415]  xfs_attr_set_iter+0x766/0x900 [xfs]
+[ 2705.986514]  ? path_setxattr+0xc7/0xe0
+[ 2705.987324]  xfs_xattri_finish_update+0x18/0x50 [xfs]
+[ 2705.988486]  xfs_attr_finish_item+0x1a/0xb0 [xfs]
+[ 2705.989566]  xfs_defer_finish_noroll+0x192/0x6e0 [xfs]
+[ 2705.990714]  __xfs_trans_commit+0x242/0x360 [xfs]
+[ 2705.991768]  xfs_attr_set+0x462/0x680 [xfs]
+[ 2705.993079]  xfs_xattr_set+0x89/0xe0 [xfs]
+[ 2705.994183]  __vfs_setxattr+0x95/0xd0
+[ 2705.995160]  __vfs_setxattr_noperm+0x73/0x1d0
+[ 2705.996536]  vfs_setxattr+0x9b/0x180
+[ 2705.997510]  setxattr+0x88/0xa0
+[ 2705.998249]  ? __pfx_free_object_rcu+0x10/0x10
+[ 2705.999190]  ? __call_rcu_common.constprop.0+0x107/0x220
+[ 2706.000196]  ? user_path_at_empty+0x40/0x50
+[ 2706.001045]  ? kmem_cache_free+0x160/0x380
+[ 2706.001881]  ? preempt_count_add+0x47/0xa0
+[ 2706.002719]  ? __mnt_want_write+0x61/0x90
+[ 2706.003528]  path_setxattr+0xc7/0xe0
+[ 2706.004277]  __x64_sys_setxattr+0x27/0x30
+[ 2706.005074]  do_syscall_64+0x3b/0x90
+[ 2706.005800]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+[ 2706.006739] RIP: 0033:0x7fcb1540515e
+[ 2706.007628] Code: 48 8b 0d ad 6c 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 =
+2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 bc 00 00 00 0f 05 <48=
+> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 7a 6c 0c 00 f7 d8 64 89 01 48
+[ 2706.010450] RSP: 002b:00007fffe4df12d8 EFLAGS: 00000246 ORIG_RAX: 000000=
+00000000bc
+[ 2706.011976] RAX: ffffffffffffffda RBX: 0000000000000061 RCX: 00007fcb154=
+0515e
+[ 2706.013103] RDX: 0000000001548010 RSI: 00007fffe4df1320 RDI: 00000000015=
+5cf50
+[ 2706.014103] RBP: 0000000001548071 R08: 0000000000000000 R09: 00000000000=
+00000
+[ 2706.015177] R10: 0000000000000061 R11: 0000000000000246 R12: 00000000015=
+48010
+[ 2706.016236] R13: 0000000001548071 R14: 0410410410410411 R15: 00000000015=
+26450
+[ 2706.017238]  </TASK>
+[ 2706.017817] ---[ end trace 0000000000000000 ]---
+[ 2706.737755] ------------[ cut here ]------------
+[ 2706.739255] memmove: detected field-spanning write (size 24) of single f=
+ield "entry" at fs/xfs/libxfs/xfs_attr_leaf.c:2235 (size 8)
+[ 2706.743694] WARNING: CPU: 1 PID: 48206 at fs/xfs/libxfs/xfs_attr_leaf.c:=
+2235 xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
+[ 2706.747045] Modules linked in: xfs nls_iso8859_1 nls_cp437 vfat fat ext4=
+ 9p crc16 mbcache netfs jbd2 kvm_intel cirrus virtio_net kvm joydev drm_shm=
+em_helper net_failover pcspkr virtio_balloon 9pnet_virtio psmouse irqbypass=
+ failover drm_kms_helper evdev button drm loop dm_mod zram zsmalloc crct10d=
+if_pclmul crc32_pclmul ghash_clmulni_intel sha512_ssse3 sha512_generic nvme=
+ virtio_blk nvme_core t10_pi aesni_intel virtio_pci crc64_rocksoft_generic =
+crypto_simd cryptd crc64_rocksoft virtio i6300esb crc64 virtio_pci_legacy_d=
+ev virtio_pci_modern_dev virtio_ring serio_raw btrfs blake2b_generic libcrc=
+32c crc32c_generic crc32c_intel xor raid6_pq autofs4
+[ 2706.763271] CPU: 1 PID: 48206 Comm: fsstress Tainted: G        W        =
+  6.5.0-rc1+ #13
+[ 2706.765484] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.1=
+6.2-1.fc38 04/01/2014
+[ 2706.767821] RIP: 0010:xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
+[ 2706.769821] Code: c7 c2 00 30 fc c0 48 89 c6 48 c7 c7 08 2e fc c0 44 89 =
+44 24 14 4c 89 4c 24 08 48 89 04 24 c6 05 30 6e 0e 00 01 e8 29 b0 67 d0 <0f=
+> 0b 44 8b 44 24 14 4c 8b 4c 24 08 48 8b 04 24 e9 62 fd ff ff e8
+[ 2706.774843] RSP: 0018:ffffb52ac29bba20 EFLAGS: 00010282
+[ 2706.776465] RAX: 0000000000000000 RBX: 0000000000000f08 RCX: 00000000000=
+00000
+[ 2706.778427] RDX: 0000000000000002 RSI: ffffffff92612d95 RDI: 00000000fff=
+fffff
+[ 2706.780343] RBP: ffffb52ac29bbc70 R08: 0000000000000000 R09: ffffb52ac29=
+bb8c0
+[ 2706.782170] R10: 0000000000000003 R11: ffffffff928c1aa8 R12: ffff8ecf3ad=
+c8050
+[ 2706.783934] R13: ffff8ecf61308900 R14: ffff8ecf3adc8000 R15: 00000000000=
+00fcc
+[ 2706.786138] FS:  00007fcb152f4740(0000) GS:ffff8ed077c40000(0000) knlGS:=
+0000000000000000
+[ 2706.788370] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 2706.790691] CR2: 0000000001606000 CR3: 000000015e1d2005 CR4: 00000000000=
+60ee0
+[ 2706.792692] Call Trace:
+[ 2706.793721]  <TASK>
+[ 2706.794717]  ? xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
+[ 2706.796542]  ? __warn+0x7d/0x130
+[ 2706.797701]  ? xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
+[ 2706.799435]  ? report_bug+0x18d/0x1c0
+[ 2706.800684]  ? handle_bug+0x3c/0x80
+[ 2706.801938]  ? exc_invalid_op+0x13/0x60
+[ 2706.803272]  ? asm_exc_invalid_op+0x16/0x20
+[ 2706.804474]  ? xfs_attr3_leaf_remove+0x4a7/0x4d0 [xfs]
+[ 2706.806068]  xfs_attr_leaf_removename+0xad/0x110 [xfs]
+[ 2706.808661]  ? xfs_defer_add+0x57/0x160 [xfs]
+[ 2706.810164]  xfs_attr_set_iter+0x63/0x900 [xfs]
+[ 2706.811611]  ? removexattr+0x77/0x110
+[ 2706.812779]  xfs_xattri_finish_update+0x18/0x50 [xfs]
+[ 2706.814338]  xfs_attr_finish_item+0x1a/0xb0 [xfs]
+[ 2706.815799]  xfs_defer_finish_noroll+0x192/0x6e0 [xfs]
+[ 2706.817405]  __xfs_trans_commit+0x242/0x360 [xfs]
+[ 2706.818916]  xfs_attr_set+0x462/0x680 [xfs]
+[ 2706.820252]  xfs_xattr_set+0x89/0xe0 [xfs]
+[ 2706.822251]  __vfs_removexattr+0x7f/0xb0
+[ 2706.823463]  __vfs_removexattr_locked+0xb7/0x140
+[ 2706.824648]  vfs_removexattr+0x54/0x100
+[ 2706.825667]  removexattr+0x77/0x110
+[ 2706.826830]  ? __pfx_free_object_rcu+0x10/0x10
+[ 2706.827853]  ? __call_rcu_common.constprop.0+0x107/0x220
+[ 2706.828989]  ? user_path_at_empty+0x40/0x50
+[ 2706.830468]  ? kmem_cache_free+0x160/0x380
+[ 2706.831638]  ? preempt_count_add+0x47/0xa0
+[ 2706.832611]  ? __mnt_want_write+0x61/0x90
+[ 2706.833569]  path_removexattr+0x9f/0xc0
+[ 2706.834506]  __x64_sys_removexattr+0x17/0x20
+[ 2706.835443]  do_syscall_64+0x3b/0x90
+[ 2706.836267]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+[ 2706.837302] RIP: 0033:0x7fcb1540512b
+[ 2706.838118] Code: f0 ff ff 73 01 c3 48 8b 0d da 6c 0c 00 f7 d8 64 89 01 =
+48 83 c8 ff c3 0f 1f 84 00 00 00 00 00 f3 0f 1e fa b8 c5 00 00 00 0f 05 <48=
+> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ad 6c 0c 00 f7 d8 64 89 01 48
+[ 2706.841389] RSP: 002b:00007fffe4df1318 EFLAGS: 00000246 ORIG_RAX: 000000=
+00000000c5
+[ 2706.842767] RAX: ffffffffffffffda RBX: 000000000000019e RCX: 00007fcb154=
+0512b
+[ 2706.844024] RDX: 0000000000000000 RSI: 00007fffe4df1340 RDI: 00000000015=
+5d270
+[ 2706.845254] RBP: 00000000015345a0 R08: 0000000000000064 R09: 00000000000=
+00000
+[ 2706.846557] R10: 0000000000000000 R11: 0000000000000246 R12: 028f5c28f5c=
+28f5c
+[ 2706.847786] R13: 8f5c28f5c28f5c29 R14: 00000000004054b0 R15: 00007fcb152=
+f46c8
+[ 2706.849029]  </TASK>
+[ 2706.849578] ---[ end trace 0000000000000000 ]---
 
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-index e5b65a382772..a812c15948d9 100644
---- a/drivers/hwmon/peci/cputemp.c
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -363,6 +363,7 @@ static int init_core_mask(struct peci_cputemp *priv)
- 	switch (peci_dev->info.model) {
- 	case INTEL_FAM6_ICELAKE_X:
- 	case INTEL_FAM6_ICELAKE_D:
-+	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
- 					     reg->func, reg->offset + 4, &data);
- 		if (ret)
-@@ -531,6 +532,13 @@ static struct resolved_cores_reg resolved_cores_reg_icx = {
- 	.offset = 0xd0,
- };
- 
-+static struct resolved_cores_reg resolved_cores_reg_spr = {
-+	.bus = 31,
-+	.dev = 30,
-+	.func = 6,
-+	.offset = 0x80,
-+};
-+
- static const struct cpu_info cpu_hsx = {
- 	.reg		= &resolved_cores_reg_hsx,
- 	.min_peci_revision = 0x33,
-@@ -549,6 +557,12 @@ static const struct cpu_info cpu_icx = {
- 	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
- };
- 
-+static const struct cpu_info cpu_spr = {
-+	.reg		= &resolved_cores_reg_spr,
-+	.min_peci_revision = 0x40,
-+	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
-+};
-+
- static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 	{
- 		.name = "peci_cpu.cputemp.hsx",
-@@ -574,6 +588,10 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 		.name = "peci_cpu.cputemp.icxd",
- 		.driver_data = (kernel_ulong_t)&cpu_icx,
- 	},
-+	{
-+		.name = "peci_cpu.cputemp.spr",
-+		.driver_data = (kernel_ulong_t)&cpu_spr,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
-diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
-index de4a7b3e5966..3668a908d259 100644
---- a/drivers/peci/cpu.c
-+++ b/drivers/peci/cpu.c
-@@ -318,6 +318,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
- 		.model	= INTEL_FAM6_ICELAKE_X,
- 		.data	= "icx",
- 	},
-+	{ /* Sapphire Rapids Xeon */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
-+		.data	= "spr",
-+	},
- 	{ /* Icelake Xeon D */
- 		.family	= 6,
- 		.model	= INTEL_FAM6_ICELAKE_D,
 
-base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
--- 
-2.41.0
+For reference:
 
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 1555)        if (entry->flags & XFS_ATTR_LOCAL) {
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 1556)                name_loc =3D xfs_attr3_leaf_name_local=
+(leaf, args->index);
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 1557)                name_loc->namelen =3D args->namelen;
+053b5758cbc09 fs/xfs/xfs_attr_leaf.c        (Nathan Scott        2006-03-17=
+ 17:29:09 +1100 1558)                name_loc->valuelen =3D cpu_to_be16(arg=
+s->valuelen);
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 1559)                memcpy((char *)name_loc->nameval, args=
+->name, args->namelen);
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 1560)                memcpy((char *)&name_loc->nameval[args=
+->namelen], args->value,
+053b5758cbc09 fs/xfs/xfs_attr_leaf.c        (Nathan Scott        2006-03-17=
+ 17:29:09 +1100 1561)                                   be16_to_cpu(name_lo=
+c->valuelen));
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 1562)        } else {
+
+[...]
+
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 2233)=20
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2234)        tmp =3D (ichdr.count - args->index) * sizeof(x=
+fs_attr_leaf_entry_t);
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2235)        memmove(entry, entry + 1, tmp);
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2236)        ichdr.count--;
+1d9025e56143c fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2012-06-22=
+ 18:50:14 +1000 2237)        xfs_trans_log_buf(args->trans, bp,
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2238)            XFS_DA_LOGRANGE(leaf, entry, tmp + sizeof(=
+xfs_attr_leaf_entry_t)));
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2239)=20
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2240)        entry =3D &xfs_attr3_leaf_entryp(leaf)[ichdr.c=
+ount];
+517c22207b045 fs/xfs/xfs_attr_leaf.c        (Dave Chinner        2013-04-24=
+ 18:58:55 +1000 2241)        memset(entry, 0, sizeof(xfs_attr_leaf_entry_t)=
+);
+^1da177e4c3f4 fs/xfs/xfs_attr_leaf.c        (Linus Torvalds      2005-04-16=
+ 15:20:36 -0700 2242)=20
+
+
+--=20
+Jeff Layton <jlayton@kernel.org>
