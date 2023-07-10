@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DE574E259
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7407B74E25B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjGJXzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
+        id S230099AbjGJX6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGJXzD (ORCPT
+        with ESMTP id S229801AbjGJX6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:55:03 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112AFA9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:55:02 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b9ed206018so43735ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689033301; x=1691625301;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vcjm6rctdmCVEw3eNu9IlJAGWa+qJbqrhCH/HfvBY3I=;
-        b=jzE6HHKT4khAjtgHJeghNLeX83XHL3xu1fQTeM3FeihJENdhKBl05Z2xpbV58BJ1MB
-         LlaQLDbWtEbfev+8PCPW63jYHiNMhmBTIwdEkAlDrZht/VFhuXtK08i/A6XCopFPMyc2
-         8dCPvHK81PbKRXb5KlrxOulRZvIUPlq2uHQ0slt1hdDxG+tChRNv9g+ypTYT4MNZpKhx
-         W0Z7sHF8L/+CGhqiDdcHZt9uq/UcToSHBJIEKLpDtbW4D19+JdXzCDzGax60sAjKLlsC
-         yt8qO4cTJswjJpT9B+1bOqDBK/y6rJtfK6zEsmD0Uqd7iWY4N0POuA+t2x7umoK53+bB
-         jodw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689033301; x=1691625301;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcjm6rctdmCVEw3eNu9IlJAGWa+qJbqrhCH/HfvBY3I=;
-        b=flJ+37qlmpPVCgfU7IlUvPFQptqFNMHFedmVtis2KF3svpHXnziEfzFFNfZa/0XPlX
-         /E1pJOxdnRNOjlqEvEnQJiQmXYCCLGUtvXkX0nC6nCTulKvyWTdOknMZi/FToR50dBiY
-         5iaYe2bKKclWj7d2yEbRas4oTVnm7yna8xkrrFjDqvsO627MKuKhEgdj2fxsUlP2S+hf
-         jemjtY7O6os6RafB9Bioxd4YEXaT7WkVQTg6Yhy3F9M0qD0+OV4D3W7sx27ZALl5PYMX
-         7Zxck5/tMuYmwHUb93YCTXJdIsHTR5ks4dtPFF8wakJFeMOSXDpIydtC/JQJ8AvILLIT
-         JX2g==
-X-Gm-Message-State: ABy/qLbN9ilskhvysD7SZo3P6iAypdvQUhVOmVezpgR/xN2/Dh7Nfe0i
-        w1XF1BXMiaxt3nwmR6s7vKzPdw==
-X-Google-Smtp-Source: APBJJlFRZtb6Xi+TpHQHh4qJpvOR4DuHkV5Uj2ZeTzaG2RoSuO0pme8pA9LSQeJWBvuqYn846h/XYQ==
-X-Received: by 2002:a17:902:e88f:b0:1b9:e9f3:b4d4 with SMTP id w15-20020a170902e88f00b001b9e9f3b4d4mr124218plg.4.1689033301006;
-        Mon, 10 Jul 2023 16:55:01 -0700 (PDT)
-Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
-        by smtp.gmail.com with ESMTPSA id a18-20020a1709027d9200b001ac7f583f72sm435076plm.209.2023.07.10.16.54.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 16:55:00 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 2/2] Sched/fair: Block nohz tick_stop when cfs
- bandwidth in use
-References: <20230707195748.2918490-1-pauld@redhat.com>
-        <20230707195748.2918490-3-pauld@redhat.com>
-Date:   Mon, 10 Jul 2023 16:54:58 -0700
-In-Reply-To: <20230707195748.2918490-3-pauld@redhat.com> (Phil Auld's message
-        of "Fri, 7 Jul 2023 15:57:48 -0400")
-Message-ID: <xm26lefnfhkd.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Mon, 10 Jul 2023 19:58:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EC81A8;
+        Mon, 10 Jul 2023 16:58:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDCA261142;
+        Mon, 10 Jul 2023 23:58:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3260EC433C8;
+        Mon, 10 Jul 2023 23:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689033521;
+        bh=irRYoyD2g2+00LlYqM5wE8Ub9YnQWH+M3sbXLQm91hQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SJeSt6n1RSXZToMdezxkj1NDAFYtgzm1PY9cyhRtCtnDfAxX9bXFZff+zJh1uE8q6
+         g+T9MinEvdr8yF8VL/mEt+cr8kl78oTd421IHbzPl/F5EhGLZ93zeevjXVvA+BivPO
+         7m9r6uhGad09LL5csHd/xClQoxeZWbdOot4vNNRdblQYJGIa+qE9cFAwvpYMWfMZO8
+         SDEUgwFVKdyvvHwBcCIyS1qxM/UbvYRwZArJxwJ2B+p4KNU3cfmIBM4pI/9fHgKvh5
+         mLcW1Q9oYzV+99ylZbvJkVdSohyGxlPcaJeBxc+8/A55a7SB3meXKNleUoc8AtlnUn
+         4ecxOx+AdiWWQ==
+Date:   Tue, 11 Jul 2023 08:58:37 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] x86/kprobes: Prohibit probing on compiler
+ generated CFI checking code
+Message-Id: <20230711085837.fac80c964ea7667cb75bd6e5@kernel.org>
+In-Reply-To: <20230710161643.GB3040258@hirez.programming.kicks-ass.net>
+References: <168899125356.80889.17967397360941194229.stgit@devnote2>
+        <168899127520.80889.15418363018799407058.stgit@devnote2>
+        <20230710161643.GB3040258@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,68 +61,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Phil Auld <pauld@redhat.com> writes:
+On Mon, 10 Jul 2023 18:16:43 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-> CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> can easily run well past their quotas before a remote tick does
-> accounting.  This leads to long, multi-period stalls before such
-> tasks can run again. Currently, when presented with these conflicting
-> requirements the scheduler is favoring nohz_full and letting the tick
-> be stopped. However, nohz tick stopping is already best-effort, there
-> are a number of conditions that can prevent it, whereas cfs runtime
-> bandwidth is expected to be enforced.
->
-> Make the scheduler favor bandwidth over stopping the tick by setting
-> TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> runtime limit enabled. We use cfs_b->hierarchical_quota to
-> determine if the task requires the tick.
->
-> Add check in pick_next_task_fair() as well since that is where
-> we have a handle on the task that is actually going to be running.
->
-> Add check in sched_can_stop_tick() to cover some edge cases such 
-> as nr_running going from 2->1 and the 1 remains the running task.
->
-> Add sched_feat HZ_BW (off by default) to control the tick_stop
-> behavior.
->
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
+> On Mon, Jul 10, 2023 at 09:14:35PM +0900, Masami Hiramatsu (Google) wrote:
+> > +	if (IS_ENABLED(CONFIG_CFI_CLANG)) {
+> > +		/*
+> > +		 * The compiler generates the following instruction sequence
+> > +		 * for indirect call checks and cfi.c decodes this;
+> > +		 *
+> > +		 *   movl    -<id>, %r10d       ; 6 bytes
+> > +		 *   addl    -4(%reg), %r10d    ; 4 bytes
+> > +		 *   je      .Ltmp1             ; 2 bytes
+> > +		 *   ud2                        ; <- regs->ip
+> > +		 *   .Ltmp1:
+> > +		 *
+> > +		 * Also, these movl and addl are used for showing expected
+> > +		 * type. So those must not be touched.
+> > +		 */
+> > +		__addr = recover_probed_instruction(buf, addr);
+> > +		if (!__addr)
+> > +			return 0;
+> > +
+> > +		if (insn_decode_kernel(&insn, (void *)__addr) < 0)
+> > +			return 0;
+> > +
+> > +		if (insn.opcode.value == 0xBA)
+> > +			offset = 12;
+> > +		else if (insn.opcode.value == 0x3)
+> > +			offset = 6;
+> > +		else
+> > +			goto out;
+> 
+> Notably, the JE will already be avoided?
+> 
+> > +
+> > +		/* This movl/addl is used for decoding CFI. */
+> > +		if (is_cfi_trap(addr + offset))
+> > +			return 0;
+> > +	}
+> >  
+> > +out:
+> >  	return (addr == paddr);
+> >  }
+> 
+> Hmm, so I was thinking something like the below, which also catches
+> things when we rewrite kCFI to FineIBT, except I don't think we care if
+> the FineIBT callsite gets re-written. FineIBT only relies on the __cfi_
+> symbol not getting poked at (which the previous patches should ensure).
+
+Oh, is FineIBT different from kCFI? I thought those are same. But anyway
+for kCFI=y && FineIBT=n case, I think this code still needed.
+
+> 
+> Additionally is_cfi_trap() is horrifically slow -- it's a full linear
+> search of the entire kcfi_traps array, it doesn't have any smarts on
+> (#UD can hardly be considered a fast path).
+
+Yeah, register_kprobe() is not a fast path in most cases. So I think
+this is OK at this point. We can speed it up by sorting the array by
+address and binary search later.
+
+> 
+> So I tihnk I'm ok with the above, just adding the below for reference
+> (completely untested and everything).
+
+I wonder the distance can be used outside of x86. CFI implementation
+depends on the arch?
+
+> 
+> 
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Thanks!
+
+> 
+> 
 > ---
->  kernel/sched/core.c     | 12 ++++++++++
->  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
->  kernel/sched/features.h |  2 ++
->  kernel/sched/sched.h    |  1 +
->  4 files changed, 64 insertions(+)
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 1b214e10c25d..4b8534abdf4f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1229,6 +1229,18 @@ bool sched_can_stop_tick(struct rq *rq)
->  	if (rq->nr_running > 1)
->  		return false;
->  
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index f7f6042eb7e6..b812dee76909 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -293,6 +293,11 @@ static int can_probe(unsigned long paddr)
+>  #endif
+>  		addr += insn.length;
+>  	}
 > +	/*
-> +	 * If there is one task and it has CFS runtime bandwidth constraints
-> +	 * and it's on the cpu now we don't want to stop the tick.
-> +	 * This check prevents clearing the bit if a newly enqueued task here is
-> +	 * dequeued by migrating while the constrained task continues to run.
-> +	 * E.g. going from 2->1 without going through pick_next_task().
+> +	 * Don't allow poking the kCFI/FineIBT callsites.
 > +	 */
-> +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && task_on_rq_queued(rq->curr)) {
-> +		if (cfs_task_bw_constrained(rq->curr))
-> +			return false;
-> +	}
+> +	if (IS_ENABLED(CONFIG_CFI_CLANG) && cfi_call_site(addr))
+> +		return 0;
+>  
+>  	return (addr == paddr);
+>  }
+> diff --git a/kernel/cfi.c b/kernel/cfi.c
+> index 08caad776717..2656e6ffa013 100644
+> --- a/kernel/cfi.c
+> +++ b/kernel/cfi.c
+> @@ -31,16 +31,22 @@ static inline unsigned long trap_address(s32 *p)
+>  	return (unsigned long)((long)p + (long)*p);
+>  }
+>  
+> -static bool is_trap(unsigned long addr, s32 *start, s32 *end)
+> +static long cfi_trap_distance(unsigned long addr, s32 *start, s32 *end)
+>  {
+> +	long dist = LONG_MAX;
+>  	s32 *p;
+>  
+>  	for (p = start; p < end; ++p) {
+> -		if (trap_address(p) == addr)
+> -			return true;
+> +		long d = trap_address(p) - addr;
 > +
+> +		if (abs(dist) < abs(d)) {
+> +			dist = d;
+> +			if (dist == 0)
+> +				return 0;
+> +		}
+>  	}
+>  
+> -	return false;
+> +	return dist;
+>  }
+>  
+>  #ifdef CONFIG_MODULES
+> @@ -66,25 +72,25 @@ void module_cfi_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+>  	}
+>  }
+>  
+> -static bool is_module_cfi_trap(unsigned long addr)
+> +static long module_cfi_trap_distance(unsigned long addr)
+>  {
+>  	struct module *mod;
+> -	bool found = false;
+> +	long dist = LONG_MAX;
+>  
+>  	rcu_read_lock_sched_notrace();
+>  
+>  	mod = __module_address(addr);
+>  	if (mod)
+> -		found = is_trap(addr, mod->kcfi_traps, mod->kcfi_traps_end);
+> +		dist = cfi_trap_distance(addr, mod->kcfi_traps, mod->kcfi_traps_end);
+>  
+>  	rcu_read_unlock_sched_notrace();
+>  
+>  	return found;
+>  }
+>  #else /* CONFIG_MODULES */
+> -static inline bool is_module_cfi_trap(unsigned long addr)
+> +static long module_cfi_trap_distance(unsigned long addr)
+>  {
+> -	return false;
+> +	return LONG_MAX;
+>  }
+>  #endif /* CONFIG_MODULES */
+>  
+> @@ -93,9 +99,24 @@ extern s32 __stop___kcfi_traps[];
+>  
+>  bool is_cfi_trap(unsigned long addr)
+>  {
+> -	if (is_trap(addr, __start___kcfi_traps, __stop___kcfi_traps))
+> +	long dist = cfi_trap_distance(addr, __start___kcfi_traps, __stop___kcfi_traps);
+> +	if (!dist)
+> +		return true;
+> +
+> +	return module_cfi_trap_distance(addr) == 0;
+> +}
+> +
+> +bool cfi_call_site(unsigned long addr)
+> +{
+> +	long dist = cfi_trap_distance(addr, __start___kcfi_traps, __stop___kcfi_traps);
+> +	if (dist >= -12 && dist <= 0)
+> +		return true;
+> +
+> +	dist = module_cfi_trap_distance(addr);
+> +	if (dist >= -12 && dist <= 0)
+>  		return true;
+>  
+> -	return is_module_cfi_trap(addr);
+> +	return false;
+>  }
+> +
+>  #endif /* CONFIG_ARCH_USES_CFI_TRAPS */
 
-I think we still need the fair_sched_class check with the bit being on
-cfs_rq/tg rather than task.
 
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
