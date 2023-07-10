@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6591874CDC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A596274CDC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjGJG7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S230252AbjGJHAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGJG7k (ORCPT
+        with ESMTP id S229481AbjGJHAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:59:40 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DB4E8
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:59:38 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6fbf0c0e2so61715451fa.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 23:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688972377; x=1691564377;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KIClO8Lu4EpQRuSM4dQTJsPgeAAmg04f9ozvN8hppFU=;
-        b=h66ZEBNcpH4beV2RchzHrF9JSa2iIMx5RlJAfNSm8AGigvGOOjV9G7p6RRYhousOsW
-         lJJb6oIBLNS+yiR4Tyasz0GXII2E82fddz4qffWTzaJ690Zj/5Iynl3AbgNJWKsE65z5
-         kK77k+ChrwSl7CcEKr1boDwtV4zPhuLnVrTab6Fj6ITEu50v2d72pv/u0hROlb3f65dw
-         DcCi5uU4Hxa5nfZBY7nmBEf13SUVa6uDmmjBwaeiovBd5KSTnf5KxGfd2fzdEA/Ed620
-         rrdLhq1u/I3ob9diGm4amyOYDQs5CRpYn48AlfyRpgvjOPIEK4eitNzuqgDfXI5obFK0
-         HDWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688972377; x=1691564377;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIClO8Lu4EpQRuSM4dQTJsPgeAAmg04f9ozvN8hppFU=;
-        b=j5/TJlS7Dj0PCyBbRgUMaMpSuZ5829yS1owNkyj+q6QGMYGbHquZ1IM391JoYOffrY
-         4MBZZqYSRPa51/7vgQCVQNGjUxf3JojcZMhoD4ipEwGSewGXXPKPwGd612cv8on9EkaM
-         5kBNqp7q4Xy6DAv2O2LrA60TncDh0RClE8YF5/2pA7ilMqD0/dI4a7qOKzStK86Gi5YJ
-         kiGiZff1NJ/yrr5OzaW9jm/lkpdmS7YWxD17E4LrPkpR8DFqsXMhVIz24bU7yQlJVvs4
-         MLMez3owjgYaTHtFpoW6gE2y54SVDpzVj8hD8BGojf3zn0zGVMGkQpJciDVqq+1vqKQQ
-         oOOg==
-X-Gm-Message-State: ABy/qLbmuU8E9aIgn02mS0Rxd6kKXxSe+FuXgln+wfR4jrVvWbXhzXFZ
-        9HdNxz3PlxyZkqI4JXhT9zWBjQ==
-X-Google-Smtp-Source: APBJJlHdBzz0FIIHNvRSRvaVIuA6CJ8sE0O8DPjVl2svOP7xogmqgfwctSl4QSYL+FVPc+RlxhQs/Q==
-X-Received: by 2002:a2e:740a:0:b0:2b6:da66:2d69 with SMTP id p10-20020a2e740a000000b002b6da662d69mr8748695ljc.28.1688972377077;
-        Sun, 09 Jul 2023 23:59:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id le26-20020a170907171a00b00987e2f84768sm5687713ejc.0.2023.07.09.23.59.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jul 2023 23:59:36 -0700 (PDT)
-Message-ID: <98b39071-cbfa-bc58-032e-56f6e9dd5c2a@linaro.org>
-Date:   Mon, 10 Jul 2023 08:59:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/3] ARM: dts: exynos/i9100: Fix LCD screen's physical
- size
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, stable@vger.kernel.org
-References: <20230708084027.18352-1-paul@crapouillou.net>
- <20230708084027.18352-4-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230708084027.18352-4-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mon, 10 Jul 2023 03:00:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C16E5;
+        Mon, 10 Jul 2023 00:00:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B2081F38D;
+        Mon, 10 Jul 2023 07:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688972411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8lsYU8eTR/+2vxTT2ktjYy/lbIGikqZVqJISjVkDRtU=;
+        b=SAiFS8bt3oIoIjNAkhH/jJ5HPdyfxiXucL0tM8Mli0hsVI313mfFGPPNIvnbqw9dhfE8A8
+        R1bQm1u2oLNujzhILJAl8xcqc/A5y2BKAtTFli04SRbB8edImnqWZk6jxtSNh2UY1aFwJZ
+        FgOWNst2w50UC9aNhqX3mzKinGjPRBo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688972411;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8lsYU8eTR/+2vxTT2ktjYy/lbIGikqZVqJISjVkDRtU=;
+        b=VK/0YYUxyWgb7TXPucwL/gw+iaHL6jQupqHrwbxhabF/nOZtUMDTBl5vKABHVwtHmgQMiF
+        eHC/PJ6YNWbSr8CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 30AB61361C;
+        Mon, 10 Jul 2023 07:00:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xGgzCnusq2S1YgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 10 Jul 2023 07:00:11 +0000
+Date:   Mon, 10 Jul 2023 09:00:09 +0200
+Message-ID: <87wmz8i746.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     =?ISO-8859-1?Q?=22N=EDcolas_F=2E_R=2E_A=2E=22?= Prado 
+        <nfraprado@collabora.com>, Jaroslav Kysela <perex@perex.cz>,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration from 4 to 2 seconds
+In-Reply-To: <06b8bfde-e4f1-48ea-aa3e-35d2fe5df046@sirena.org.uk>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+        <20230620220839.2215057-3-nfraprado@collabora.com>
+        <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+        <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+        <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+        <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
+        <87352krcz5.wl-tiwai@suse.de>
+        <f5cab2c2-1638-4d19-aff3-d46ed34b857e@sirena.org.uk>
+        <87wmzwptu0.wl-tiwai@suse.de>
+        <06b8bfde-e4f1-48ea-aa3e-35d2fe5df046@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,21 +84,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/07/2023 10:40, Paul Cercueil wrote:
-> The previous values were completely bogus, and resulted in the computed
-> DPI ratio being much lower than reality, causing applications and UIs to
-> misbehave.
+On Wed, 21 Jun 2023 20:19:46 +0200,
+Mark Brown wrote:
 > 
-> The new values were measured by myself with a ruler.
+> On Wed, Jun 21, 2023 at 08:13:11PM +0200, Takashi Iwai wrote:
+> > Mark Brown wrote:
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the Galaxy S2")
-> Cc: <stable@vger.kernel.org> # v5.8+
-> ---
+> > > It feels like it might be good to let it cook for a bit longer before
+> > > going to Linus (eg, applying after the merge window) so we've more
+> > > chance to see what the impact is on other boards?
+> 
+> > I'm fine with that option, too.  Are most of selftests performed on
+> > linux-next basis, or rather on Linus tree?
+> 
+> For KernelCI we've got coverage on both.  I can also run stuff on the
+> boards I have in my lab on demand of course, but there's more coverage
+> in KernelCI.
 
-This does not apply. You rebased your work on some older version/tree,
-without new layout. Please work on linux-next.
+OK, now I applied those two patches to for-next branch (i.e. for 6.6
+kernel).  Let's watch out.
 
-Best regards,
-Krzysztof
 
+thanks,
+
+Takashi
