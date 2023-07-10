@@ -2,135 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0E574DF69
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5128574DF6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjGJUha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S231696AbjGJUix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjGJUh2 (ORCPT
+        with ESMTP id S229560AbjGJUit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:37:28 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE328127;
-        Mon, 10 Jul 2023 13:37:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1689021445; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=c153HvdjWNLM9GC+AIiNmIDr3Y7Tr0ZVH9xqbSZ3O9x6GDqNWrXqoN+j5hUXtr101e
-    gRTTbNu596vKJRbfAoujJ23DHny5Y4xSfZ7VWuObhMvxWLLgbVjj/v2Pn+in5K92f888
-    rw3B1bC5PRk7TNgiFMyb4fRez4SsInTqKjNhi/Sckrsgc90t1ExB4ULMClz17fm1QuaP
-    FqruQBS1b0mufzbOfJhaumE3yWywbx1HyHiW4TLXCRUNDpTKe/DAqYUrB7IQ8AAKXZXY
-    BO8uvMamSwk0Lj9VQMCR35SoQG/z7k0IM+E5Bhkmg6VqQ956dVQiiSWgbx0+MFv/mBLp
-    9uNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1689021445;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=O0/nLsGKuz9y9JiZ+HIeDIwhM0vfV03x0I6Z5++zIlg=;
-    b=LYOy0HpziynsvV/huMdf27Ch+v6mljBkbpEXXa3NcN4k0d9hq+Gfm0aAlV5Azlk7DA
-    3HP4xOLLbgfW0bumPbUvaHxiELJq9ewFssMCI5yMiZDaXIYDit882gpJcLblADx4dmjb
-    tt10zPBsHXeDa/hd3fvhVTDuCbaKTanlLcBUSF7Pj//XJymYhQ5LhWHPOrO4OBAyC66+
-    hwUHjVQ3sxrz3+O+SM2NVuJqm1V91TEtMJK3XpDie3ZsWiwTghxlA8whxHGbTp/77HkA
-    jvZk/UgGpjf+izxuDwLveL+KqCGDyCxci3GP6IL+fD7Nfl6P1qRYfshyNHSIrq2wrXdi
-    cEiA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1689021445;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=O0/nLsGKuz9y9JiZ+HIeDIwhM0vfV03x0I6Z5++zIlg=;
-    b=TMAb4VcZ9mlbzZZDJ56Ru8vJhCsPQw+UCG8dwxuoASUPPu7Fi81xeYBCTpCVDxxDGW
-    CRx+t0ZsbqSrZKmoyNjHfOPGZ8KGm649xiJFCzFBxro6MLAUHdj2zvbL4bMDsOe2/R0v
-    VzNUJncrf5pyxCyBmOiZOato3FVixFsE3ilhB+aQA3otIpKSL5ZEZRYusjhCJnK+37Zm
-    K0U0IUeVul2czCH/4m9SfmNsiIsOiWcdy4e0hQKfpupCcjjKqkDe/Q73z9FmWJHHmknV
-    yGP5XzHLOl81I6JZWQc0cIaNALkTWhN34HuN/ow5nzOFpk240K/T0bzL/IFmI/CNgMTN
-    kC5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1689021445;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=O0/nLsGKuz9y9JiZ+HIeDIwhM0vfV03x0I6Z5++zIlg=;
-    b=L9mVg9F6ODNQLWVVIS9FGGA8j0Plvro3SxPm2XZ3ixwIGwUEYhujPmvMFGKeK0cUQU
-    Y9P33bj34GmE1wxrzFBA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA+53h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z6AKbPEot
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 10 Jul 2023 22:37:25 +0200 (CEST)
-Date:   Mon, 10 Jul 2023 22:37:10 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] remoteproc: qcom: Handle reserved-memory
- allocation issues
-Message-ID: <ZKxr6hyqq3s7nqix@gerhold.net>
-References: <20230529-rproc-of-rmem-v2-0-95e39b959585@gerhold.net>
- <20230529-rproc-of-rmem-v2-1-95e39b959585@gerhold.net>
- <c3f59fb4-4dd8-f27a-d3f5-b1870006a75c@linaro.org>
- <ZIsld-MAdkKvdzTx@gerhold.net>
+        Mon, 10 Jul 2023 16:38:49 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB81195;
+        Mon, 10 Jul 2023 13:38:49 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b9e9765f2cso6389985ad.3;
+        Mon, 10 Jul 2023 13:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689021528; x=1691613528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AANwmYnIjrNG1ny8ADZlcMF6VhBoiSpdnMPHT/u0j+U=;
+        b=a9vlDHib/vMGEM7aj5ZziEIfVB9053U+yrZ7to7Yd8hR15TTgPRZXqM+aIlJDlWKPY
+         CrJBsGBouks3CfFEd3QRv1Yh7dQm6xNAOqgHHU3VN9DNSaL1+tpwRU5rlXJO9ismFxe4
+         Hq/4DleBOQdSXFD+XjWaDWY5xLt3mvgWf3U05EAxLNXXbn71AVZT33qR+hN/ZA7W5iti
+         j2FlnXR+XTocZTLDWBsxKRyv8pcEf/x0EXhFXyFuz/MUiowyCCXOmCwW+UUzggU47gSN
+         4bXR7XPV2Dca04qA0GJHy7NqllrEwRZPjVMgpFgoNDCPdqsRtEzr3a5JOoqHOKvIgcfJ
+         pOfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689021528; x=1691613528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AANwmYnIjrNG1ny8ADZlcMF6VhBoiSpdnMPHT/u0j+U=;
+        b=jfc5ZugQLFri2Phl+plsTHes12Ah8ake1U3fyrvQZ6Bq1naVi6PE/3bPjpSijP2PID
+         0JzlE1eJa4WoGHWtZFjw6xqPnepn46RY+6mF5vb8gvP8e9OHZOwL6c0XAqSyqNtvR6zQ
+         4/UgFxGs7QgulX2+Kyo76cBU8jkkUXyl+g3pPV++yAGbleF2sGpvKb1H8xE/L1P/EwBg
+         VTUx1Y6b7jBADEOpo6LaJbnh6U0W5gOsYiceyGa9QYVKxKfsshGGDLAuup8hztn+IJxL
+         RONwK31w54a7YNd/M6mC4zxuz/3f8YPgpZjmDs1Z7jUF0nDn4G0myK2dt42edYruNAwm
+         BwUg==
+X-Gm-Message-State: ABy/qLa5hEe1qNwldFMg7/1YoXEwDykei4Yd9HVQweubANhpaFLYd7af
+        Qc+iO5VRpOQsgCfjOnBBafc=
+X-Google-Smtp-Source: APBJJlEZWuY/msbyREsMLqJ7pXCL+z6hIoLk4MAu/D5lqGRN52QX2Ydh0HXQ3I0i0YHXmtzXIStPwQ==
+X-Received: by 2002:a17:902:da92:b0:1b8:50ae:557 with SMTP id j18-20020a170902da9200b001b850ae0557mr12453868plx.36.1689021528394;
+        Mon, 10 Jul 2023 13:38:48 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id y2-20020a1709029b8200b001b891259eddsm300297plp.197.2023.07.10.13.38.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 13:38:48 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 10:38:46 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>, peterz@infradead.org,
+        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+Message-ID: <ZKxsVuDqdr6IJeyv@slm.duckdns.org>
+References: <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
+ <20230628-spotten-anzweifeln-e494d16de48a@brauner>
+ <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
+ <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
+ <2023062845-stabilize-boogieman-1925@gregkh>
+ <CAJuCfpFqYytC+5GY9X+jhxiRvhAyyNd27o0=Nbmt_Wc5LFL1Sw@mail.gmail.com>
+ <ZJyZWtK4nihRkTME@slm.duckdns.org>
+ <CAJuCfpFKjhmti8k6OHoDHAu6dPvqP0jn8FFdSDPqmRfH97bkiQ@mail.gmail.com>
+ <CAJuCfpH3JcwADEYPBhzUcunj0dcgYNRo+0sODocdhbuXQsbsUQ@mail.gmail.com>
+ <20230630-fegefeuer-urheber-0a25a219520d@brauner>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZIsld-MAdkKvdzTx@gerhold.net>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230630-fegefeuer-urheber-0a25a219520d@brauner>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 04:51:44PM +0200, Stephan Gerhold wrote:
-> On Thu, Jun 15, 2023 at 11:44:06AM +0100, Caleb Connolly wrote:
-> > On 6/14/23 17:31, Stephan Gerhold wrote:
-> > > If Linux fails to allocate the dynamic reserved memory specified in the
-> > > device tree, the size of the reserved_mem will be 0. Add a check for
-> > > this to avoid using an invalid reservation.
-> > > 
-> > > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> > 
-> > Other uses of of_reserved_mem_lookup() also have unchecked uses of rmem [1],
-> > or check different things [2].
-> > 
-> > Does it make sense to put this check in the function itself?
-> > 
-> > I can't think of any obvious scenarios where it makes sense to differentiate
-> > between rmem being NULL vs having a size of zero at the time where a driver
-> > is fetching it.
-> > 
-> > As Bjorn described in the rmtfs patch, the memory allocation is essentially
-> > ignored, wouldn't it be better to print an error and invalidate the rmem in
-> > [3]?
-> > 
-> 
-> "Invalidating" isn't that easy because the reserved_mem is currently
-> stored in a simple array. Removing an entry would require shifting all
-> following values. But I suppose it would be easy to add the rmem->size
-> != 0 check in of_reserved_mem_lookup() so it doesn't have to be checked
-> on all usages.
-> 
-> Given that no one seems to check for this at the moment I'm inclined to
-> agree with you that it would be better to handle this directly in
-> of_reserved_mem. Bjorn, what do you think?
-> 
+Hello,
 
-I sent a v3 with the additional checks reverted. I'll work on a separate
-patch series to improve this independently of this one for all users
-(directly in of_reserved_mem).
+On Fri, Jun 30, 2023 at 10:21:17AM +0200, Christian Brauner wrote:
+> What I'm mostly reacting to is that there's a kernfs_ops->release()
+> method which mirrors f_op->release() but can be called when there are
+> still users which is counterintuitive for release semantics. And that
+> ultimately caused this UAF issue which was rather subtle given how long
+> it took to track down the root cause.
+> 
+> A rmdir() isn't triggering a f_op->release() if there are still file
+> references but it's apparently triggering a kernfs_ops->release(). It
+> feels like this should at least be documented in struct kernfs_ops...
 
-Thanks,
-Stephan
+Oh yeah, better documentation would be great. The core part here is that
+kernfs is the layer which is implementing the revoke-like semantics
+specifically to allow kernfs users (the ones that implement kernfs_ops) can
+synchronously abort their involvement at will. So, from those users' POV,
+->release is being called when it should be. The problem here was that PSI
+was mixing objects from two layers with different lifetime rules, which
+obviously causes issues.
+
+As Suren's new fix shows, the fix is just using the matching object whose
+lifetime is governed by kernfs. While this shows up in a subtle way for
+poll, for all other operations, this is almost completely transprent.
+
+Thanks.
+
+-- 
+tejun
