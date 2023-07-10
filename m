@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD55274CD3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CC574CD3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjGJGjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S230295AbjGJGkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjGJGjl (ORCPT
+        with ESMTP id S230379AbjGJGkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:39:41 -0400
+        Mon, 10 Jul 2023 02:40:01 -0400
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5FC0B137;
-        Sun,  9 Jul 2023 23:39:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 45A7B18F;
+        Sun,  9 Jul 2023 23:39:57 -0700 (PDT)
 Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 8BB4E602A8713;
-        Mon, 10 Jul 2023 14:39:36 +0800 (CST)
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 61FF3602B2DC6;
+        Mon, 10 Jul 2023 14:39:55 +0800 (CST)
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From:   Su Hui <suhui@nfschina.com>
-To:     qiang.zhao@nxp.com, davem@davemloft.net, edumazet@google.com,
+To:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
         kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        wuych <yunchuan@nfschina.com>
-Subject: [PATCH net-next v2 01/10] net: wan: Remove unnecessary (void*) conversions
-Date:   Mon, 10 Jul 2023 14:39:33 +0800
-Message-Id: <20230710063933.172926-1-suhui@nfschina.com>
+Cc:     yunchuan@nfschina.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH net-next v2 02/10] net: atlantic: Remove unnecessary (void*) conversions
+Date:   Mon, 10 Jul 2023 14:39:52 +0800
+Message-Id: <20230710063952.173055-1-suhui@nfschina.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,28 +46,84 @@ Pointer variables of void * type do not require type cast.
 
 Signed-off-by: wuych <yunchuan@nfschina.com>
 ---
- drivers/net/wan/fsl_ucc_hdlc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c | 12 ++++++------
+ .../aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c     |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/wan/fsl_ucc_hdlc.c b/drivers/net/wan/fsl_ucc_hdlc.c
-index 47c2ad7a3e42..73c73d8f4bb2 100644
---- a/drivers/net/wan/fsl_ucc_hdlc.c
-+++ b/drivers/net/wan/fsl_ucc_hdlc.c
-@@ -350,11 +350,11 @@ static int uhdlc_init(struct ucc_hdlc_private *priv)
- static netdev_tx_t ucc_hdlc_tx(struct sk_buff *skb, struct net_device *dev)
- {
- 	hdlc_device *hdlc = dev_to_hdlc(dev);
--	struct ucc_hdlc_private *priv = (struct ucc_hdlc_private *)hdlc->priv;
--	struct qe_bd *bd;
--	u16 bd_status;
-+	struct ucc_hdlc_private *priv = hdlc->priv;
- 	unsigned long flags;
- 	__be16 *proto_head;
-+	struct qe_bd *bd;
-+	u16 bd_status;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
+index 5dfc751572ed..220400a633f5 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
++++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
+@@ -93,7 +93,7 @@ static u32 hw_atl2_sem_act_rslvr_get(struct aq_hw_s *self)
  
- 	switch (dev->type) {
- 	case ARPHRD_RAWHDLC:
+ static int hw_atl2_hw_reset(struct aq_hw_s *self)
+ {
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
++	struct hw_atl2_priv *priv = self->priv;
+ 	int err;
+ 
+ 	err = hw_atl2_utils_soft_reset(self);
+@@ -378,8 +378,8 @@ static int hw_atl2_hw_init_tx_path(struct aq_hw_s *self)
+ 
+ static void hw_atl2_hw_init_new_rx_filters(struct aq_hw_s *self)
+ {
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
+ 	u8 *prio_tc_map = self->aq_nic_cfg->prio_tc_map;
++	struct hw_atl2_priv *priv = self->priv;
+ 	u16 action;
+ 	u8 index;
+ 	int i;
+@@ -433,7 +433,7 @@ static void hw_atl2_hw_new_rx_filter_vlan_promisc(struct aq_hw_s *self,
+ 	u16 off_action = (!promisc &&
+ 			  !hw_atl_rpfl2promiscuous_mode_en_get(self)) ?
+ 				HW_ATL2_ACTION_DROP : HW_ATL2_ACTION_DISABLE;
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
++	struct hw_atl2_priv *priv = self->priv;
+ 	u8 index;
+ 
+ 	index = priv->art_base_index + HW_ATL2_RPF_VLAN_PROMISC_OFF_INDEX;
+@@ -445,7 +445,7 @@ static void hw_atl2_hw_new_rx_filter_vlan_promisc(struct aq_hw_s *self,
+ static void hw_atl2_hw_new_rx_filter_promisc(struct aq_hw_s *self, bool promisc)
+ {
+ 	u16 off_action = promisc ? HW_ATL2_ACTION_DISABLE : HW_ATL2_ACTION_DROP;
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
++	struct hw_atl2_priv *priv = self->priv;
+ 	bool vlan_promisc_enable;
+ 	u8 index;
+ 
+@@ -539,8 +539,8 @@ static int hw_atl2_hw_init(struct aq_hw_s *self, const u8 *mac_addr)
+ 		[AQ_HW_IRQ_MSIX]    = { 0x20000022U, 0x20000026U },
+ 	};
+ 
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
+ 	struct aq_nic_cfg_s *aq_nic_cfg = self->aq_nic_cfg;
++	struct hw_atl2_priv *priv = self->priv;
+ 	u8 base_index, count;
+ 	int err;
+ 
+@@ -770,7 +770,7 @@ static struct aq_stats_s *hw_atl2_utils_get_hw_stats(struct aq_hw_s *self)
+ static int hw_atl2_hw_vlan_set(struct aq_hw_s *self,
+ 			       struct aq_rx_filter_vlan *aq_vlans)
+ {
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
++	struct hw_atl2_priv *priv = self->priv;
+ 	u32 queue;
+ 	u8 index;
+ 	int i;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
+index 674683b54304..52e2070a4a2f 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
++++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
+@@ -413,8 +413,8 @@ do { \
+ 
+ static int aq_a2_fw_update_stats(struct aq_hw_s *self)
+ {
+-	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
+ 	struct aq_stats_s *cs = &self->curr_stats;
++	struct hw_atl2_priv *priv = self->priv;
+ 	struct statistics_s stats;
+ 	struct version_s version;
+ 	int err;
 -- 
 2.30.2
 
