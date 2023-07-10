@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7E474D3BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C283474D3C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbjGJKjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S229992AbjGJKkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbjGJKjs (ORCPT
+        with ESMTP id S229786AbjGJKkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:39:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0B3BD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:39:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DDE9D2189D;
-        Mon, 10 Jul 2023 10:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688985562; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CYxrrYnUqrkMy59GTjELve4cJ3+ZVeFvdL7z1zpjvkY=;
-        b=uz0YFn4CeP6lKsNjbqQROnOqL+V0G7gRIEXTnEXfg5hF/N/LxIToBI9g9eRO0nOJXn7FBe
-        VDttgRpBlSHdIS82z3NdQ3Nz8JUEwBaAl5oxT2vS44D+CTt4hJJVz5APzYaJty8kJRibwf
-        FsZeEnPn2GMt932m6OcfRAUDqm6Q/tM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688985562;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CYxrrYnUqrkMy59GTjELve4cJ3+ZVeFvdL7z1zpjvkY=;
-        b=LXZpglhQB1Z4Hol7lzeZKTYfjLkf4FMw5iA1Vj9D67B5RXhN7GhGdYzdwDfuqCCrhUfQnb
-        KuRTJ9RKcQR2wqCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B128813A05;
-        Mon, 10 Jul 2023 10:39:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id s6kgKtrfq2Q4SQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 10:39:22 +0000
-Message-ID: <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
-Date:   Mon, 10 Jul 2023 12:39:21 +0200
+        Mon, 10 Jul 2023 06:40:37 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBC7EE;
+        Mon, 10 Jul 2023 03:40:31 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9741caaf9d4so497058066b.0;
+        Mon, 10 Jul 2023 03:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688985630; x=1691577630;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=67xmh9LVZnEPITxD2YUcmJFqrGxMBcWoYDKnu4sd8OU=;
+        b=MkvayJ0Jv4m9lUG9hPeO2Sk9U7JdJTItupZQZNN0hK0qhYLlxr7Yypva2rkiiuOwYG
+         Z6L9Rzl6YMpdkaIRcvx/+M2KapmF7H62wQjv8FunJu9xTRVF+/FOcewCj6YDRWUtxZ5E
+         170gBHvl/dBUHNhnxFV8YbiCLUVUXEwe7B1klfxyq0T0eMoKQg/mr63Bh+WeSBPx7Vin
+         FW+LEFgQm9jL+62O80oF/2LdMbFUdBBfQ6eW3wy4Cj0QbjzsTkJ94hsZazBJDvVlcqdT
+         1ao91Ri6huYsg3U8qL5rADNu5c4rnPLyXDwJIk6/8sHcbvQulBVEogjEipkLD6xAygEf
+         eR2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688985630; x=1691577630;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=67xmh9LVZnEPITxD2YUcmJFqrGxMBcWoYDKnu4sd8OU=;
+        b=UXPr7th2boJSwyiQiYXJnCBgnwWba0tYWUZR1mq57V5jqsGa0SEdkiRp5tf3wq2EYe
+         nWbWvKIWH2t9TQhZMLR1ATqC7iOfQGdAtk4ksM+Er7clxgC6xTGmzz78JA52GpzztNh4
+         iT+wFtZcNGy+CIrObVn927URnlwGFr3+txmHbCYvKTvhQdpK7Tzz+LTAoUoRBNJ6ZhKb
+         eGo3GnDUyQkm9H5r0FaNdGT8EznBw8YzYfeUliTRK7xrfR+MHhegVDpqCBPqwzAFW3R9
+         M5a8sGVX/KGEzaKLQ16k3Pc/vSWAtFmYkHMIOTwDCCLXZ7OdOF/1OL8nGTulqa50mKUh
+         E6sw==
+X-Gm-Message-State: ABy/qLbod14pZvMAFOhIixvRIblBkllAilHuC4dowYCrF1q61sq69HCo
+        IqaBSpgkh55GuUwfoykxcyQ=
+X-Google-Smtp-Source: APBJJlHEl/N+Os9L08/l1QjO2uw8ozmQRNKcElRRC0XE2Nyi2fEqOHcZd5I3eMYuRCGyGmGHOvypUg==
+X-Received: by 2002:a17:906:1de:b0:993:fdb4:327f with SMTP id 30-20020a17090601de00b00993fdb4327fmr5526132ejj.4.1688985629738;
+        Mon, 10 Jul 2023 03:40:29 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id gg11-20020a170906e28b00b0098921e1b064sm5893786ejb.181.2023.07.10.03.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 03:40:29 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 12:40:27 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Stanimir Varbanov <svarbanov@suse.de>
+Cc:     linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [RFC PATCH] iommu: arm-smmu-nvidia: Add default domain type
+ implementation op
+Message-ID: <ZKvgG4-IzqiYPSUT@orome>
+References: <20230710082252.9702-1-svarbanov@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/loongson: Remove a useless check in
- cursor_plane_atomic_async_check()
-Content-Language: en-US
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Dan Carpenter <dan.carpenter@linaro.org>
-References: <20230710102411.257970-1-suijingfeng@loongson.cn>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230710102411.257970-1-suijingfeng@loongson.cn>
 Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------4NzYHQ0meXnyjp5NUHEctiO8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        protocol="application/pgp-signature"; boundary="pT5OYcSxwNIoLEou"
+Content-Disposition: inline
+In-Reply-To: <20230710082252.9702-1-svarbanov@suse.de>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,102 +79,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------4NzYHQ0meXnyjp5NUHEctiO8
-Content-Type: multipart/mixed; boundary="------------gHC0UBfbZfbysQI57TF0upCZ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sui Jingfeng <suijingfeng@loongson.cn>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- loongson-kernel@lists.loongnix.cn, Dan Carpenter <dan.carpenter@linaro.org>
-Message-ID: <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
-Subject: Re: [PATCH] drm/loongson: Remove a useless check in
- cursor_plane_atomic_async_check()
-References: <20230710102411.257970-1-suijingfeng@loongson.cn>
-In-Reply-To: <20230710102411.257970-1-suijingfeng@loongson.cn>
 
---------------gHC0UBfbZfbysQI57TF0upCZ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+--pT5OYcSxwNIoLEou
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-DQoNCkFtIDEwLjA3LjIzIHVtIDEyOjI0IHNjaHJpZWIgU3VpIEppbmdmZW5nOg0KPiBCZWNh
-dXNlIHNtYXRjaCB3YXJuaW5nczoNCj4gDQo+IGRyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9s
-c2RjX3BsYW5lLmM6MTk5DQo+IGxzZGNfY3Vyc29yX3BsYW5lX2F0b21pY19hc3luY19jaGVj
-aygpDQo+IHdhcm46IHZhcmlhYmxlIGRlcmVmZXJlbmNlZCBiZWZvcmUgY2hlY2sgJ3N0YXRl
-JyAoc2VlIGxpbmUgMTgwKQ0KPiANCj4gdmltICsvc3RhdGUgKzE5OSBkcml2ZXJzL2dwdS9k
-cm0vbG9vbmdzb24vbHNkY19wbGFuZS5jDQo+IA0KPiAxNzQgIHN0YXRpYyBpbnQNCj4gICAg
-ICAgbHNkY19jdXJzb3JfcGxhbmVfYXRvbWljX2FzeW5jX2NoZWNrKHN0cnVjdCBkcm1fcGxh
-bmUgKnBsYW5lLA0KPiAxNzUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqc3RhdGUpDQo+IDE3NiAgew0KPiAxNzcgICAg
-ICAgICAgc3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqbmV3X3N0YXRlOw0KPiAxNzggICAgICAg
-ICAgc3RydWN0IGRybV9jcnRjX3N0YXRlICpjcnRjX3N0YXRlOw0KPiAxNzkNCj4gMTgwICAg
-ICAgICAgIG5ld19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19wbGFuZV9zdGF0ZShzdGF0
-ZSwgcGxhbmUpOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBeXl5eXg0KPiBzdGF0ZSBpcyBkZXJlZmVyZW5jZWQgaW5zaWRl
-IHRoaXMgZnVuY3Rpb24NCj4gDQo+IDE4MQ0KPiAxODIgIGlmICghcGxhbmUtPnN0YXRlIHx8
-ICFwbGFuZS0+c3RhdGUtPmZiKSB7DQo+IDE4MyAgICAgICAgICBkcm1fZGJnKHBsYW5lLT5k
-ZXYsICIlczogc3RhdGUgaXMgTlVMTFxuIiwgcGxhbmUtPm5hbWUpOw0KPiAxODQgICAgICAg
-ICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsNCj4gMTg1ICB9DQo+IDE4Ng0KPiAxODcgIGlm
-IChuZXdfc3RhdGUtPmNydGNfdyAhPSBuZXdfc3RhdGUtPmNydGNfaCkgew0KPiAxODggICAg
-ICAgICAgZHJtX2RiZyhwbGFuZS0+ZGV2LCAidW5zdXBwb3J0ZWQgY3Vyc29yIHNpemU6ICV1
-eCV1XG4iLA0KPiAxODkgICAgICAgICAgICAgICAgICBuZXdfc3RhdGUtPmNydGNfdywgbmV3
-X3N0YXRlLT5jcnRjX2gpOw0KPiAxOTAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+IDE5
-MSAgfQ0KPiAxOTINCj4gMTkzICBpZiAobmV3X3N0YXRlLT5jcnRjX3cgIT0gNjQgJiYgbmV3
-X3N0YXRlLT5jcnRjX3cgIT0gMzIpIHsNCj4gMTk0ICAgICAgICAgIGRybV9kYmcocGxhbmUt
-PmRldiwgInVuc3VwcG9ydGVkIGN1cnNvciBzaXplOiAldXgldVxuIiwNCj4gMTk1ICAgICAg
-ICAgICAgICAgICAgbmV3X3N0YXRlLT5jcnRjX3csIG5ld19zdGF0ZS0+Y3J0Y19oKTsNCj4g
-MTk2ICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiAxOTcgIH0NCj4gMTk4DQo+IDE5OSAg
-aWYgKHN0YXRlKSB7DQo+ICAgICAgICAgICBeXl5eXg0KPiBDaGVja2VkIHRvbyBsYXRlIQ0K
-PiANCj4gUmVwb3J0ZWQtYnk6IERhbiBDYXJwZW50ZXIgPGRhbi5jYXJwZW50ZXJAbGluYXJv
-Lm9yZz4NCj4gQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjMwNzEwMDQy
-My5yVjdEMDVVcS1sa3BAaW50ZWwuY29tLw0KPiBTaWduZWQtb2ZmLWJ5OiBTdWkgSmluZ2Zl
-bmcgPHN1aWppbmdmZW5nQGxvb25nc29uLmNuPg0KDQpBY2tlZC1ieTogVGhvbWFzIFppbW1l
-cm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkJUVywgeW91J3JlIHBvc3RpbmcgdGhl
-c2UgcGF0Y2hlcyBmb3IgbG9vbmdzb24sIGJ1dCB0aGF0IGRyaXZlciBpcyBub3QgDQp5ZXQg
-aW4gb3VyIHRyZWU/DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCg0KPiAtLS0NCj4gICBk
-cml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbHNkY19wbGFuZS5jIHwgOCArLS0tLS0tLQ0KPiAg
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNyBkZWxldGlvbnMoLSkNCj4gDQo+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbHNkY19wbGFuZS5jIGIv
-ZHJpdmVycy9ncHUvZHJtL2xvb25nc29uL2xzZGNfcGxhbmUuYw0KPiBpbmRleCAyYWIzZGI5
-ODJhYTMuLjBkNTA5NDYzMzIyMiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2xv
-b25nc29uL2xzZGNfcGxhbmUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24v
-bHNkY19wbGFuZS5jDQo+IEBAIC0xOTYsMTMgKzE5Niw3IEBAIHN0YXRpYyBpbnQgbHNkY19j
-dXJzb3JfcGxhbmVfYXRvbWljX2FzeW5jX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5l
-LA0KPiAgIAkJcmV0dXJuIC1FSU5WQUw7DQo+ICAgCX0NCj4gICANCj4gLQlpZiAoc3RhdGUp
-IHsNCj4gLQkJY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X2V4aXN0aW5nX2NydGNfc3Rh
-dGUoc3RhdGUsIG5ld19zdGF0ZS0+Y3J0Yyk7DQo+IC0JfSBlbHNlIHsNCj4gLQkJY3J0Y19z
-dGF0ZSA9IHBsYW5lLT5jcnRjLT5zdGF0ZTsNCj4gLQkJZHJtX2RiZyhwbGFuZS0+ZGV2LCAi
-JXM6IGF0b21pYyBzdGF0ZSBpcyBOVUxMXG4iLCBwbGFuZS0+bmFtZSk7DQo+IC0JfQ0KPiAt
-DQo+ICsJY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X2V4aXN0aW5nX2NydGNfc3RhdGUo
-c3RhdGUsIG5ld19zdGF0ZS0+Y3J0Yyk7DQo+ICAgCWlmICghY3J0Y19zdGF0ZS0+YWN0aXZl
-KQ0KPiAgIAkJcmV0dXJuIC1FSU5WQUw7DQo+ICAgDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1h
-bm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25z
-IEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdl
-cm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBC
-b3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
+On Mon, Jul 10, 2023 at 11:22:52AM +0300, Stanimir Varbanov wrote:
+> Add def_domain_type implementation op and override default IOMMU
+> domain Kconfig option (CONFIG_IOMMU_DEFAULT_PASSTHROUGH=3Dy), which
+> could be enabled on some distros. The current quirk has been done
+> for Tegra234 machine, because I found the issue on it. The issue
+> itself appears on USB host controller which cannot be initialized
+> without IOMMU translation. Something more, we proved that IOMMU
+> translation is needed for display and GPU drivers as well.
+>=20
+> I evaluated few possible options to solve that:
+>=20
+>  a) select default IOMMU domain from .def_domain_type op
+>  b) Unset CONFIG_IOMMU_DEFAULT_PASSTHROUGH=3Dn
+>  c) add iommu.passthrough=3D0 on the kernel cmdline
+>  d) firmware - ACPI / DT
+>=20
+> a) This option is implemented in the proposed patch.
+>=20
+> b) Since that the community has agreed that pass-through is preferred
+> as a default IOMMU domain option because this will avoid performance
+> impacts on some of the platforms [1]. On the other side we have examples
+> where you cannot even install Linux distribution on a machine where the
+> storage media cannot be detected and the system just hangs.
 
---------------gHC0UBfbZfbysQI57TF0upCZ--
+That's not how I read that thread. It sounds more to me like Will and
+Robin had ideas on how to improve the performance and were planning to
+address these issues. It doesn't exactly sound to me like there was
+concensus to make passthrough the default.
 
---------------4NzYHQ0meXnyjp5NUHEctiO8
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Having said that, given that it's possible for distributions and users
+to set CONFIG_IOMMU_DEFAULT_PASSTHROUGH=3Dy, I think it would be useful in
+general to have a way of enforcing IOMMU translations if it's needed by
+the hardware.
+
+I'm not sure I fully understand the particular problems that you're
+seeing on Tegra234, though. I'm not aware of anything in the USB host
+controller driver (or hardware, for that matter) that would require the
+IOMMU to be enabled. The only peculiarity that I can think of is the
+firmware, which is typically loaded by an early bootloader and therefore
+might perhaps need the IOMMU to properly map this in the kernel.
+However, my understanding is that this firmware is loaded into special
+carveout regions which don't require remapping.
+
+However, passthrough is admittedly not something that we've thoroughly
+tested, so it's possible you're running into a use-case that I'm not
+aware of. In that case, could you provide a few more specifics (such as
+the DTB and .config) of your build configuration so that I can try and
+reproduce?
+
+Thanks,
+Thierry
+
+>=20
+> c) - This option involves installer's knowledge of platforms/devices
+> which needs IOMMU translations.
+>=20
+> d) - IORT ACPI table / DT - I'm not sure is that option even possible
+> but firmware looks like a good place for such.
+>=20
+> Please, treat this as an RFC and a call for proper solution.
+>=20
+> [1] https://marc.info/?l=3Dlinux-arm-kernel&m=3D148864682514762
+>=20
+> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
+> ---
+>  drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>=20
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c b/drivers/iommu=
+/arm/arm-smmu/arm-smmu-nvidia.c
+> index 87bf522b9d2e..691b57d1e699 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+> @@ -286,6 +286,22 @@ static int nvidia_smmu_init_context(struct arm_smmu_=
+domain *smmu_domain,
+>  	return 0;
+>  }
+> =20
+> +static int nvidia_smmu_def_domain_type(struct device *dev)
+> +{
+> +	if (of_machine_is_compatible("nvidia,tegra234"))
+> +		return IOMMU_DOMAIN_DMA;
+> +
+> +	return 0;
+> +}
+> +
+> +static int nvidia_smmu_single_def_domain_type(struct device *dev)
+> +{
+> +	if (of_machine_is_compatible("nvidia,tegra234"))
+> +		return IOMMU_DOMAIN_DMA;
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct arm_smmu_impl nvidia_smmu_impl =3D {
+>  	.read_reg =3D nvidia_smmu_read_reg,
+>  	.write_reg =3D nvidia_smmu_write_reg,
+> @@ -297,11 +313,13 @@ static const struct arm_smmu_impl nvidia_smmu_impl =
+=3D {
+>  	.context_fault =3D nvidia_smmu_context_fault,
+>  	.probe_finalize =3D nvidia_smmu_probe_finalize,
+>  	.init_context =3D nvidia_smmu_init_context,
+> +	.def_domain_type =3D nvidia_smmu_def_domain_type,
+>  };
+> =20
+>  static const struct arm_smmu_impl nvidia_smmu_single_impl =3D {
+>  	.probe_finalize =3D nvidia_smmu_probe_finalize,
+>  	.init_context =3D nvidia_smmu_init_context,
+> +	.def_domain_type =3D nvidia_smmu_single_def_domain_type,
+>  };
+> =20
+>  struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device *sm=
+mu)
+> --=20
+> 2.41.0
+>=20
+
+--pT5OYcSxwNIoLEou
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSr39kFAwAAAAAACgkQlh/E3EQov+AG
-YBAApa6MqDvII6lUjrhDQf7muKdgzsn40UQB/YfdsvISa2AhZ9fu/hbns/alX/fwVJNqUJcQoMVw
-XiGVgbhxsqlTUIaP0EaftZGsAItfzMEWm0NF/JE3vKHTm8xca6RItiWmXbW/U2o0mqv7E4etmmOH
-2OCnRTSwTpNAxiBwclThu0NWoxBF6mc4JT+dPghIMuu32f3bkjPmzwvEb1cbvvvdWBLH2icl+CBy
-mH6N1GmlPwFR2vFWM9+E8ChgbJrCR2D9jE5lGDnRRNm7OMmMQBTD2cppKLzmn7KP/le5ZUmWUriZ
-EupfNIA3Bxz7rMAxddqoY/FjF7jYo54yU1gCzqmRGpHtkOpbCkh8XdifGCTeCDzeymGoqG5HX4Qj
-IX4Ep21g1xp/W6D/j04DwGgA3Kq5tnTnbE+H62CT0Dr45JjQY/kscrwyiUB9YykEpAKVh3ffPf4r
-Dg07H1IqunB+ABgkqTXCBAaPrsRdUDGItaWB+ke+ndMbOn9e5TwEtidG0dP6Iqjiuc0yA6Iz4rW5
-QWf2xT/XJeU8Ep8qTnHNTPrVOr240pPcypnmZYNnmx862WkDkAFwTNMG6p6MTR0W6OiHtFb2IBWm
-zx5zWnnVo6vHq4J2UKGmQAImkCVyw5lN3whkB2t9ZsHtTVYiYcXeTpHOZ/d8HwvHC7DGbA6DZApv
-zm4=
-=7Co2
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSr4BgACgkQ3SOs138+
+s6F74g//VwtSTp6dhR5zDoIqJA8hR6PncaF9faNfSTqWj83cNF/5VG2zJxdS2JIm
+f2EHElN8YUvlQympiraEQP+DnE1SdLNbsG2j+DSQQS3h0HYmYhh2V8sLVNnY5AJ2
+pacvdCD7GZfZX3E19MBcMXsqRv+IFZNFg99bMZBJeYjWm2QKtFn16piOYdzuqmLG
+HuxG5u0un0WKnAM/Q35uGVdSBMueOF24pq8WrHc5FNVmzE7Z3sJ30V1g9IqJoIcU
+NhqHbAfsQHt20n2r9KRnn742fj7GD0IrOI185n8B/NxoedyfhkGIJDocTiYMxgcv
+x7lNmrWwzqRHE8QM96YPfqiTnokkTtZmcgH82E8mCvbHiHD3ekp83xZBfN8eY1qD
+Zx3iJgs08FfFjnYFuV0Ijv+pVLNyxPZkTSv7Dy0jz7l4yYjdn9LYmw2FuX1HRZkA
+NFJNVDZk2YXSEbaUgbD4qwhvRBn6veucBP3DcSfmoXB9ljF7t5LuuA1eDBEj/2j2
+YknEMjnmjmScpxsNKHY55sraVWaS9Am3mQ3oXAKh6qPVxTkpMYE0EkjsBqOSlVmy
+LrFXeh28dZ9oxmB/bMC3B45TDoVbljsAwV7Azm1zOSC14bccrHQlwTRMWBj57w4i
+ZgAZUW1TAACUaDinTehCvBfuZisRqt/GWwm8/G0nFl7R8C6jE5w=
+=9RJq
 -----END PGP SIGNATURE-----
 
---------------4NzYHQ0meXnyjp5NUHEctiO8--
+--pT5OYcSxwNIoLEou--
