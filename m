@@ -2,228 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1585774D4EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056A174D4F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjGJMKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
+        id S231317AbjGJMKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjGJMKG (ORCPT
+        with ESMTP id S230103AbjGJMKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:10:06 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F955F4
+        Mon, 10 Jul 2023 08:10:08 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B2100
         for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:10:01 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fc03aa6e04so23038725e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1688991000; x=1691583000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+JMKDNGrwhDe4HBcYBuaXlqFjTwAt1vMreVme3OFY8=;
-        b=MD2tvasVfOO4Nxy8SwUpBNEofYhK1a76YN7YTyJ6XCk4qvq1spePWJ5U2HolrrDdOT
-         pzotR5LDEF25B41YlghYLyVcJkdw7vYJckcNJXxzoVzx8DbQ+6hEFFhdUj6XuU5/JwTS
-         de7OJ/wZbyomxDR6RlVAoOvpDOADSoZgTnFR2HGAnnoWaFFoubJOc/2oATJfKeVSTYBJ
-         xp2eDZ1l4OxeIVU/voQMubWmuIrIVwG/CaH7gXvloqVZatO1QXMFsWy7LlP8TddCh4qu
-         5Do8+o8pothhSJMw+0Mm75HDNlA3gJgbKA3Vb5t+JO+ihvcYFSzAincJ4KCt7QFMv+p/
-         CNRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688991000; x=1691583000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H+JMKDNGrwhDe4HBcYBuaXlqFjTwAt1vMreVme3OFY8=;
-        b=Jl97sIqaI+WUjoaEGenli+w7M7bMZzlskH0THlBkltRFYgKwAd/xNpaFU/cp2V8P7U
-         HPYFYoFHGXz5vgbcI7sIrLDFEq6+9YSMVVbV2H0CHrv7X/2AwN32YCOnLErVji7Syb9E
-         Kzc4dNQXq5Nz7iMqNxuIQ6FY+BVZYwoKKVjtWllmgG+EQkZz1M+/P2vy5ThUBKZkpv7r
-         Ny6dxfEKqJocFoFbxHSCrHbZn/xtsvZoUYo9y5JUmU5w7A2Y5vA/p/EHsuEfwthm35Ib
-         6EYflSutdJ1jzt2pxifL8r0u2YAuFJV3fo+KCNufTfsRqnq/E1hKlpfKf9c0W2w8U3Ni
-         A3sg==
-X-Gm-Message-State: ABy/qLaVwXZsrJCVQM/GQgzAAi2WGxkEOQkku0O74qblyu1W7hOEymGA
-        mjM8tFThX3eHdHkfValBx5Jdzw==
-X-Google-Smtp-Source: APBJJlG6iRHARThiiqxbJc+oH1dUx5jylRNEM8Djmjy4H8sNg1Su/SyUt7SEHMg58iXBXU/0NBUMLA==
-X-Received: by 2002:a05:600c:2209:b0:3fc:b86:d3fa with SMTP id z9-20020a05600c220900b003fc0b86d3famr4756381wml.1.1688990999804;
-        Mon, 10 Jul 2023 05:09:59 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id z13-20020a7bc7cd000000b003fc0062f0f8sm9128556wmk.9.2023.07.10.05.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 05:09:59 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qIpiI-0005DA-69; Mon, 10 Jul 2023 14:09:58 +0200
+Message-ID: <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
 Date:   Mon, 10 Jul 2023 14:09:57 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
-Cc:     "kuba@kernel.org" <kuba@kernel.org>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "vadfed@fb.com" <vadfed@fb.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
-Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
-Message-ID: <ZKv1FRTXWLnLGRRS@nanopsycho>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <ZJq3a6rl6dnPMV17@nanopsycho>
- <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <ZJwWXZmZe4lQ04iK@nanopsycho>
- <DM6PR11MB4657751607C36FC711271D639B30A@DM6PR11MB4657.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4657751607C36FC711271D639B30A@DM6PR11MB4657.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+Content-Language: en-US, de-DE
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Maksim Panchenko <maks@meta.com>,
+        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev,
+        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
+        kernelci@lists.linux.dev,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
+ <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+ <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
+ <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
+ <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <2023052247-bobtail-factsheet-d104@gregkh>
+ <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
+ <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
+ <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
+ <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
+ <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688991001;abb26610;
+X-HE-SMSGID: 1qIpiI-0005DA-69
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jul 10, 2023 at 12:07:30PM CEST, arkadiusz.kubalewski@intel.com wrote:
->>From: Jiri Pirko <jiri@resnulli.us>
->>Sent: Wednesday, June 28, 2023 1:16 PM
->>Wed, Jun 28, 2023 at 11:15:11AM CEST, arkadiusz.kubalewski@intel.com wrote:
->>>>From: Jiri Pirko <jiri@resnulli.us>
->>>>Sent: Tuesday, June 27, 2023 12:18 PM
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
+
+Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
+progress made to address this? Or is this maybe (accidentally?) fixed
+with 6.5-rc1?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+On 20.06.23 06:19, Masahiro Yamada wrote:
+> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
+> <shreeya.patel@collabora.com> wrote:
+>> On 24/05/23 02:57, Nick Desaulniers wrote:
+>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
+>>> <shreeya.patel@collabora.com> wrote:
+>>>> Hi Nick and Masahiro,
 >>>>
->>>>Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
->>>>wrote:
+>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
+>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
+>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>>>>>>>> It could be; if the link order was changed, it's possible that this
+>>>>>>>> target may be hitting something along the lines of:
+>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
+>>>>>>>> initialization order fiasco"
+>>>>>>>>
+>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
+>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
+>>>>>>>> think I was playing with converting Kbuild to use Ninja rather than
+>>>>>>>> Make; the resulting kernel image wouldn't boot because I had modified
+>>>>>>>> the order the object files were linked in.  If you were to randomly
+>>>>>>>> shuffle the object files in the kernel, I recall some hazard that may
+>>>>>>>> prevent boot.
+>>>>>>> I thought that was specifically a C++ problem? But then again, the
+>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
+>>>>>>> significant in some instances [1]:
+>>>>>> Yes, it matters, you can not change it.  If you do, systems will break.
+>>>>>> It is the only way we have of properly ordering our init calls within
+>>>>>> the same "level".
+>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
+>>>>>
+>>>>> (There's a joke in there similar to the use of regexes to solve a
+>>>>> problem resulting in two new problems; initcalls have levels for
+>>>>> ordering, but we still have (unexpressed) dependencies between calls
+>>>>> of the same level; brittle!).
+>>>>>
+>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
+>>>>>
+>>>>> Ricardo,
+>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
+>>>>> mentions that there's a kernel command line param `initcall_debug`.
+>>>>> Perhaps that can be used to see if
+>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
+>>>>> ordering, resulting in a config that cannot boot?
 >>>>
->>>>>v8 -> v9:
+>>>> Here are the links to Lava jobs ran with initcall_debug added to the
+>>>> kernel command line.
 >>>>
->>>>Could you please address all the unresolved issues from v8 and send v10?
->>>>I'm not reviewing this one.
+>>>> 1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
+>>>> https://lava.collabora.dev/scheduler/job/10417706
+>>>> <https://lava.collabora.dev/scheduler/job/10417706>
 >>>>
->>>>Thanks!
+>>>> 2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
+>>>> https://lava.collabora.dev/scheduler/job/10418012
+>>>> <https://lava.collabora.dev/scheduler/job/10418012>
+>>> Thanks!
 >>>
->>>Sure, will do, but first missing to-do/discuss list:
->>>1) remove mode_set as not used by any driver
->
->I have implemented in ice (also added back the DPLL_MODE_FREERUN).
-
-Uh :/ Why exactly is it needed in this initial submission?
-
-
->
->>>2) remove "no-added-value" static functions descriptions in
->>>   dpll_core/dpll_netlink
->
->Removed.
->
->>>3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
->>>   after each patch apply
->
->Hope Vadim will decide on this, the thing is merging in two patches
->doesn't make much sense as there won't be any linking until both patches
->are there, so most sense it would be if 3 are merged into one, but
->then we will be back to one big blob patch issue.
->
->>>4) remove function return values descriptions/lists
->
->Fixed.
->
->>>5) Fix patch [05/10]:
->>>   - status Supported
->>>   - additional maintainers
->>>   - remove callback:
->>>     int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
->>>6) Fix patch [08/10]: rethink ice mutex locking scheme
->
->Fixed.
->
->>>7) Fix patch [09/10]: multiple comments on
->>>https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
->>>8) add PPS DPLL phase offset to the netlink get-device API
+>>> Yeah, I can see a diff in the initcall ordering as a result of
+>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
 >>>
->
->Added few things on this matter
->- 1 dpll level attribute:
->  - phase-shift - measuring the phase difference between dpll input
->    and it's output
->- 1 dpll-pin tuple level attribute:
->  - pin-phase-adjust - set/get phase adjust of a pin on a dpll
->- 2 pin level attributes:
->  - pin-phase-adjust-min - provide user with min value that can be set
->  - pin-phase-adjust-max - provide user with max value that can be set
->- a constant:
->  - DPLL_PHASE_SHIFT_DIVIDER similar to DPLL_TEMP_DIVIDER for producing
->    fraction value of measured DPLL_A_PHASE_SHIFT
-
-Again, why do we need this in this initial submission? Why it can't be a
-follow-up patchset to extend this? This way we never converge :/
-Please focus on what we have now and bring it in. Let the extensions to
-be addressed later on, please.
-
-
-
->- implemented in dpll netlink and in ice
->
+>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
+>>>
+>>> Not just different orderings, but some initcalls seem unique to the
+>>> before vs. after, which is troubling. (example init_events and
+>>> init_fs_sysctls respectively)
+>>>
+>>> That isn't conclusive evidence that changes to initcall ordering are
+>>> to blame, but I suspect confirming that precisely to be very very time
+>>> consuming.
+>>>
+>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
+>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
+>>> mainline.
 >>
->>You are missing removal of pin->prop.package_label = dev_name(dev); in
->>ice.
+>> I'm not sure if you followed the conversation but we are still seeing
+>> this regression with the latest kernel builds and would like to know if
+>> you plan to revert 5750121ae738?
+> 
+> 
+> Reverting 5750121ae738 does not solve the issue
+> because the issue happens even before 5750121ae738.
+> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
+> fails to boot in the same way.
+> 
+> The revert would hide the issue on a particular build setup.
+> 
+> 
+> I submitted a patch to more pin-point the issue.
+> Let's see how it goes.
+> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
+> 
+> 
+> (BTW, the initcall order is unrelated)
+> 
+> 
+> 
+> 
+> 
 >>
->
->I didn't touch it, as we still need to discuss it, Jakub didn't respond
->on v8 thread.
->I don't see why we shall not name it the way. This is most meaningful
->label for those pins for the user right now.
-
-This is not meaningful, at all. dev_name() changes upon which pci slot
-you plug the card into. package_label should be an actual label on a
-silicon package. Why you think this two are related in aby way, makes me
-really wonder. Could you elaborate the meaningfulness of this?
-
-
->
->Thank you!
->Arkadiusz
->
 >>
->>>Thank you!
->>>Arkadiusz
+>> Thanks,
+>> Shreeya Patel
+>>
+>>>>
+>>>> Thanks,
+>>>> Shreeya Patel
+>>>>
+>>>
+> 
+> --
+> Best Regards
+> Masahiro Yamada
+> 
+> 
