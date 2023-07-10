@@ -2,174 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DB974D158
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0929974D169
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjGJJ0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S231410AbjGJJ2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjGJJ0j (ORCPT
+        with ESMTP id S232072AbjGJJ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:26:39 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C911B1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:26:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vn0gHB3_1688981190;
-Received: from 30.97.48.56(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vn0gHB3_1688981190)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Jul 2023 17:26:31 +0800
-Message-ID: <36747b09-8141-019f-85dd-59f3d4623ec1@linux.alibaba.com>
-Date:   Mon, 10 Jul 2023 17:26:51 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] mm: compaction: skip the memory hole rapidly when
- isolating free pages
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
-        vbabka@suse.cz, david@redhat.com, linux-mm@kvack.org,
+        Mon, 10 Jul 2023 05:27:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED6AFE;
+        Mon, 10 Jul 2023 02:27:48 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A9HpX1025086;
+        Mon, 10 Jul 2023 09:27:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=rDDZtmypGPN4A6hdBTIzFD4WFJjliNYyRWC5mwV6BxA=;
+ b=qXn8UC003w/hqSbrzEigZXWHC4QaIXVA16aFDghGXLt7or+6PyuUlXazDs1m2ChPTps9
+ 0/41jtB5YZzLbHrLINox74tzJj8TlONpo3vl+aHQSgVUnBEWJUB5WoX4pg3NnIlNUVyb
+ zPMYWYTRPI+UP/dTVMguncHH8cdU+1DPNS4wmMd2V8Mu4CP/3ABJnou0FZbWr0wdgJoA
+ ZmAMkFa8laZbIiD/nTKuWDAuDU3GQDoygkbsJsJAI2yGuKSJRB8Kb+WH/yAX2n4TlSW0
+ q5gMmhi1uddKEsrCAyeBbEQQxyhONNfa9WdSD6ivWqIq0ohn6WOAAKDil3pNQsuN8RVt uA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rrf7r06xy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 09:27:41 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36A2lQZd025773;
+        Mon, 10 Jul 2023 09:27:39 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3rpy2e158y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 09:27:38 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36A9RZur19202590
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jul 2023 09:27:35 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7404720043;
+        Mon, 10 Jul 2023 09:27:35 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 782BC20040;
+        Mon, 10 Jul 2023 09:27:33 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.85.154])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Jul 2023 09:27:33 +0000 (GMT)
+From:   Kajol Jain <kjain@linux.ibm.com>
+To:     mpe@ellerman.id.au
+Cc:     linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, disgoel@linux.ibm.com,
+        kjain@linux.ibm.com, linux-perf-users@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <b21cd8e2e32b9a1d9bc9e43ebf8acaf35e87f8df.1688715750.git.baolin.wang@linux.alibaba.com>
- <d2ba7e41ee566309b594311207ffca736375fc16.1688715750.git.baolin.wang@linux.alibaba.com>
- <87pm50fg88.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87pm50fg88.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2 00/10] Add sysfs interface files to hv_gpci device to expose system information
+Date:   Mon, 10 Jul 2023 14:57:07 +0530
+Message-Id: <20230710092717.55317-1-kjain@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YLSQjVPeIWUg3xjZ_xZ-DD6XA3rV8ZxK
+X-Proofpoint-ORIG-GUID: YLSQjVPeIWUg3xjZ_xZ-DD6XA3rV8ZxK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_07,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307100082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The hcall H_GET_PERF_COUNTER_INFO can be used to get data related to
+chips, dimms and system topology, by passing different counter request
+values.
+Patchset adds sysfs files to "/sys/devices/hv_gpci/interface/"
+of hv_gpci pmu driver, which will expose system topology information
+using H_GET_PERF_COUNTER_INFO hcall. The added sysfs files are
+available for power10 and above platforms and needs root access
+to read the data.
 
+Patches 1,3,5,7,9 adds sysfs interface files to the hv_gpci
+pmu driver, to get system topology information.
 
-On 7/10/2023 2:11 PM, Huang, Ying wrote:
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> 
->> On my machine with below memory layout, and I can see it will take more
->> time to skip the larger memory hole (range: 0x100000000 - 0x1800000000)
->> when isolating free pages. So adding a new helper to skip the memory
->> hole rapidly, which can reduce the time consumed from about 70us to less
->> than 1us.
->>
->> [    0.000000] Zone ranges:
->> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
->> [    0.000000]   DMA32    empty
->> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
-> 
-> The memory hole is at the beginning of zone NORMAL?  If so, should zone
+List of added sysfs files:
+-> processor_bus_topology (Counter request value : 0xD0)
+-> processor_config (Counter request value : 0x90)
+-> affinity_domain_via_virtual_processor (Counter request value : 0xA0)
+-> affinity_domain_via_domain (Counter request value : 0xB0)
+-> affinity_domain_via_partition (Counter request value : 0xB1)
 
-No, the memory hole range is 0x1000000000 - 0x1800000000, and the normal 
-zone is start from 0x100000000.
+Patches 2,4,6,8,10 adds details of the newly added hv_gpci
+interface files listed above in the ABI documentation.
 
-I'm sorry I made a typo in the commit message, which confuses you. The 
-memory hole range should be: 0x1000000000 - 0x1800000000. I updated the 
-commit message to the following and addressed David's comment:
+Patches 2,4,6,8,10 adds details of the newly added hv_gpci
+interface files listed above in the ABI documentation.
 
-"
-Just like commit 9721fd82351d ("mm: compaction: skip memory hole rapidly
-when isolating migratable pages"), I can see it will also take more
-time to skip the larger memory hole (range: 0x1000000000 - 0x1800000000)
-when isolating free pages on my machine with below memory layout. So 
-like commit 9721fd82351d, adding a new helper to skip the memory hole 
-rapidly, which can reduce the time consumed from about 70us to less than 
-1us.
+Changelog:
+v1 -> v2
+-> Incase the HCALL fails with errors that can be resolve during runtime,
+   then only add sysinfo interface attributes to the interface_attrs
+   attribute array. Even if one of the counter request value HCALL fails,
+   don't add any sysinfo attribute to the interface_attrs attribute array.
+   Add the code changes to make sure sysinfo interface added only when all
+   the requirements met as suggested by Michael Ellerman.
+-> Make changes in documentation, adds detail of errors type
+   which can be resolved at runtime as suggested by Michael Ellerman.
+-> Add new enum and sysinfo_counter_request array to get required
+   counter request value in hv-gpci.c file.
+-> Move the macros for interface attribute array index to hv-gpci.c, as
+   these macros currently only used in hv-gpci.c file
 
-[    0.000000] Zone ranges:
-[    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
-[    0.000000]   DMA32    empty
-[    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
-[    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
-[    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
-[    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
-[    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
-[    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
-[    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
-[    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
-[    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
-[    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
-"
+Kajol Jain (10):
+  powerpc/hv_gpci: Add sysfs file inside hv_gpci device to show
+    processor bus topology information
+  docs: ABI: sysfs-bus-event_source-devices-hv_gpci: Document
+    processor_bus_topology sysfs interface file
+  powerpc/hv_gpci: Add sysfs file inside hv_gpci device to show
+    processor config information
+  docs: ABI: sysfs-bus-event_source-devices-hv_gpci: Document
+    processor_config sysfs interface file
+  powerpc/hv_gpci: Add sysfs file inside hv_gpci device to show affinity
+    domain via virtual processor information
+  docs: ABI: sysfs-bus-event_source-devices-hv_gpci: Document
+    affinity_domain_via_virtual_processor sysfs interface file
+  powerpc/hv_gpci: Add sysfs file inside hv_gpci device to show affinity
+    domain via domain information
+  docs: ABI: sysfs-bus-event_source-devices-hv_gpci: Document
+    affinity_domain_via_domain sysfs interface file
+  powerpc/hv_gpci: Add sysfs file inside hv_gpci device to show affinity
+    domain via partition information
+  docs: ABI: sysfs-bus-event_source-devices-hv_gpci: Document
+    affinity_domain_via_partition sysfs interface file
 
-> NORMAL start at 0x1800000000?  And, the free pages will not be scanned
-> there?  Or my understanding were wrong. >
->> [    0.000000] Movable zone start for each node
->> [    0.000000] Early memory node ranges
->> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
->> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
->> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
->> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
->> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   mm/compaction.c | 30 +++++++++++++++++++++++++++++-
->>   1 file changed, 29 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/compaction.c b/mm/compaction.c
->> index 43358efdbdc2..9641e2131901 100644
->> --- a/mm/compaction.c
->> +++ b/mm/compaction.c
->> @@ -249,11 +249,31 @@ static unsigned long skip_offline_sections(unsigned long start_pfn)
->>   
->>   	return 0;
->>   }
->> +
->> +static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
->> +{
->> +	unsigned long start_nr = pfn_to_section_nr(start_pfn);
->> +
->> +	if (!start_nr || online_section_nr(start_nr))
->> +		return 0;
->> +
->> +	while (start_nr-- > 0) {
->> +		if (online_section_nr(start_nr))
->> +			return section_nr_to_pfn(start_nr) + PAGES_PER_SECTION - 1;
->> +	}
->> +
->> +	return 0;
->> +}
->>   #else
->>   static unsigned long skip_offline_sections(unsigned long start_pfn)
->>   {
->>   	return 0;
->>   }
->> +
->> +static unsigned long skip_offline_sections_reverse(unsigned long start_pfn)
->> +{
->> +	return 0;
->> +}
->>   #endif
->>   
->>   /*
->> @@ -1668,8 +1688,16 @@ static void isolate_freepages(struct compact_control *cc)
->>   
->>   		page = pageblock_pfn_to_page(block_start_pfn, block_end_pfn,
->>   									zone);
->> -		if (!page)
->> +		if (!page) {
->> +			unsigned long next_pfn;
->> +
->> +			next_pfn = skip_offline_sections_reverse(block_start_pfn);
->> +			if (next_pfn)
->> +				block_start_pfn = max(pageblock_start_pfn(next_pfn),
->> +						      low_pfn);
->> +
->>   			continue;
->> +		}
->>   
->>   		/* Check the block is suitable for migration */
->>   		if (!suitable_migration_target(cc, page))
+ .../sysfs-bus-event_source-devices-hv_gpci    | 160 +++++
+ arch/powerpc/perf/hv-gpci.c                   | 640 +++++++++++++++++-
+ 2 files changed, 798 insertions(+), 2 deletions(-)
+
+-- 
+2.31.1
+
