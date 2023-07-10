@@ -2,163 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C6E74D254
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EE474D25C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjGJJzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
+        id S229469AbjGJJ5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjGJJyo (ORCPT
+        with ESMTP id S229795AbjGJJ5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:54:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E283C16;
-        Mon, 10 Jul 2023 02:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688982585; x=1689587385; i=deller@gmx.de;
- bh=3Fhk4S+KBpOnob+kEitQvs6om2f8v6w/tRZ9oWyic+g=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=rIlLn6b29I6Ct09EJYNArofs8uticSLQ2GcOTXsnKAeI6CQINWrD1HXivM2tQE/C5UV12by
- AQDPgK3+wxn4PTHC8aWrPGrT66vKg0N7td+r7Ay4g8FRqb0XdysywzBag0LMrVWUuGMbzfmKT
- 8hidQ58vTDCgYFTb2MVnOKjcODlF6EEwQMgqzaJ9/Hc5PHJv6KbN2v+vV1Wkb6SA8KM4pz4xc
- jzR78KXrL2MoFMEP6qr/GF0BrY6x7H94xwBKkB4OKez9VYdIZ5Qupd0Cdwj2/9LDindQIrGHC
- qYkFsD5akq/hyqqEPs+un2jHdBJKHtHEiUolQtG2zJrsY14x/nTw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.144.196]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MJE6F-1qXJbP3tlb-00KeCK; Mon, 10
- Jul 2023 11:49:44 +0200
-Message-ID: <375f48de-8093-a540-b78c-e90d57cfbf27@gmx.de>
-Date:   Mon, 10 Jul 2023 11:49:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] fbdev: imxfb: Convert to devm_platform_ioremap_resource()
+        Mon, 10 Jul 2023 05:57:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6864C02;
+        Mon, 10 Jul 2023 02:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688982831; x=1720518831;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=E2IK45v9icWY1i6ACfQDVoL1dWsBiiU69FEJa8Njl7Y=;
+  b=EyekJg+Lj53rHS9fDXJDTBLcWoHsnXX6A+YIYiN7wfWb9yBLNXhvHc14
+   H3IvNjNiVnWwiASThCDLOwdy/XbaJtsE2XsZn7di7WZUKJlxkIslqJoz3
+   FNzOITgfMBYn4jPxoTD+fHRcRzlISFoSWk4F07OpsnPtW+rHO3NUF1b7N
+   5WQoZ/d9PNeeYW7nsNnD7dQM62CnpHYq5CeSh4AimFV4n56nXLajILZkp
+   QuZ6GY7TEKYNEfgdIPr5ghI3RNtUr3MPT0kfcU3oEKyn/V83pPH5AthAU
+   k9k3/proVT/TMYMIdphwERMhF+JrPNm+Q87aBrKaJJpYqSUsrG3ujZbsG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="349102722"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="349102722"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 02:50:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="865287182"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="865287182"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Jul 2023 02:50:51 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 02:50:50 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 10 Jul 2023 02:50:50 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 10 Jul 2023 02:50:50 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 10 Jul 2023 02:50:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QZ7+tSuMTS03pCs3yra0lAb0BLoctzFad0oqEfHOVijHefqsWtzZ9nzZNFrom2UJrhXzHRG/+KXQfMiRV3rZ96u+y6TrgvQWTAPfQFPJS0tUkJITjwh4qAj/gt5cay31NNANc8N68P7Pwp3EY/xOMG8VKcOVWVcAHeCoyREgH4zq+xuHsgkef7DE/lHe2TjFCoV3pPwfQw6ztB2c9sDQAli4gt4g1T39CeH4BjNW59g81viiQVQR3uMzou+eCLBA0UY8An1m2tcwtYvsyuvHmbKfDYIgk5VW3zPplTREYglsufAshYlZt4MB45QcswOgxDszFXTtPH0PCfXFDtXtxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hGl7+6ORT2MpiMtxV5Fdnf7mAPRi1F8jNJ2IGE11weE=;
+ b=bKmuFWS+SXJ8ls8aqbF5E/a8NH1vudAFk1joo4hFenNyQeT7MHIIcQee+wuem58f4I6FGAChEl3J/3y/gZGG2jmF/S42h3nxfFsyrRZqmb5VcVXpkcxEy4053JDidVZaBQB+FDM3CiHZ8c97l67QOwDsgpqJH4BebTSPsiVsnc4qANdEuDsdsFhBTwCtl+nnvkNP72rrlnegCY1C636Hn5K2CZKFAAa65zfN84qeGK6p2hss/Yiaa36cpV+/7oN/IYd5qp2OKpfx1kaW5gL4SxpUt8U3SlnpxBCjXwBFtY+5WB4rM3rKFYaW6XkzAFxgMzld25MImaHbgOfhwDPTiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4657.namprd11.prod.outlook.com (2603:10b6:5:2a6::7) by
+ DM4PR11MB5325.namprd11.prod.outlook.com (2603:10b6:5:390::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.30; Mon, 10 Jul 2023 09:50:48 +0000
+Received: from DM6PR11MB4657.namprd11.prod.outlook.com
+ ([fe80::24bd:974b:5c01:83d6]) by DM6PR11MB4657.namprd11.prod.outlook.com
+ ([fe80::24bd:974b:5c01:83d6%3]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 09:50:48 +0000
+From:   "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+To:     Jiri Pirko <jiri@resnulli.us>
+CC:     "kuba@kernel.org" <kuba@kernel.org>,
+        "vadfed@meta.com" <vadfed@meta.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "vadfed@fb.com" <vadfed@fb.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "M, Saeed" <saeedm@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "sj@kernel.org" <sj@kernel.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jacek.lawrynowicz@linux.intel.com" 
+        <jacek.lawrynowicz@linux.intel.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux@zary.sk" <linux@zary.sk>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "kuniyu@amazon.com" <kuniyu@amazon.com>,
+        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
+        "razor@blackwall.org" <razor@blackwall.org>,
+        "idosch@nvidia.com" <idosch@nvidia.com>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "phil@nwl.cc" <phil@nwl.cc>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
+Subject: RE: [RFC PATCH v9 03/10] dpll: core: Add DPLL framework base
+ functions
+Thread-Topic: [RFC PATCH v9 03/10] dpll: core: Add DPLL framework base
+ functions
+Thread-Index: AQHZpc/+2+ilbDjNIkao6LxAthBNeq+hd5yAgBFjgzA=
+Date:   Mon, 10 Jul 2023 09:50:48 +0000
+Message-ID: <DM6PR11MB465793F80239C1C87F1C095A9B30A@DM6PR11MB4657.namprd11.prod.outlook.com>
+References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
+ <20230623123820.42850-4-arkadiusz.kubalewski@intel.com>
+ <ZJ09N2TI4wHrA4rB@nanopsycho>
+In-Reply-To: <ZJ09N2TI4wHrA4rB@nanopsycho>
+Accept-Language: pl-PL, en-US
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yangtao Li <frank.li@vivo.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-fbdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-References: <20230704093652.18191-1-frank.li@vivo.com>
- <CAMuHMdWrBY1+JDuwODyqLrwJJivt=ewCOKfK41xq+0Hpaf8akQ@mail.gmail.com>
- <da543602-f88e-45ee-d7fd-8fddd0b0ac56@vivo.com>
- <CAMuHMdVa3RmtFouTYk_rPoxO1EswGzTtt855-eFcvtTYObgUCA@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAMuHMdVa3RmtFouTYk_rPoxO1EswGzTtt855-eFcvtTYObgUCA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR11MB4657:EE_|DM4PR11MB5325:EE_
+x-ms-office365-filtering-correlation-id: ae91bff2-2a2c-445e-757e-08db812b239e
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: igSfhPum8FbdzVZGmzgEYpxDi88X0xPLqsFo6bdHHyhxsaIcLXfq0YvUPIycpGUkIVAhx4HxzDNpCcBxa+1jCiaTpBgtI/Eh0OD76U7XeAIeH1m12SaudbJ7YbIuOmYnZzDji2w+2Q0Ayw4kLgMzNcSDvtj/OQz+aZfEZNE8VD9r2MVC84A/lYYJCOzOD13h8Mh6MBU5zC+BqdkR6T+lYP3lqbHGPD2PqiH9u4/0CnT/EOnPhgk1q5X4x65iihV6iMBHtx48wXiMMmdzPn+25T2QKUPSHoq1fhKrXrtMh1CnlvTK3ciFNPhHJQ3Z7L5wn4gKr1h7Uc1iaN1ZsYTDmkF1IlP8TPsDuch0BNCd2Rxp4PBUKbEnNHyId64NhPX7e/rmyqqE/ELnFDoVKGKYwOlngEFRIqp2IWgLgmf7il8ITiDroVRE8TA1c2KKbKw765ZM0lR9ADqGA+D/rw9KD0gkXHjauJiffS1VWmX8eiLesx/d++WtL/blbt8o7qPRUvlWtw31k3x541chPAcNWafNXXE+sTbb4krewImnnYPV4dANJfRaxnNyVG7fuQILgu0rWbFtOZfgK+/cdvHN+aFbltjiQWgdXn2GbTQR1w5cXdPS8mHydaaHsjDKGeP+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199021)(186003)(9686003)(26005)(6506007)(83380400001)(41300700001)(4326008)(64756008)(66446008)(66476007)(2906002)(66556008)(52536014)(316002)(7416002)(5660300002)(7406005)(8936002)(8676002)(6916009)(478600001)(66946007)(7696005)(76116006)(71200400001)(54906003)(55016003)(33656002)(122000001)(82960400001)(38070700005)(38100700002)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uV90vHJJqg7yEP4wn2MQD1viUa+a6TEFMAi3sWQFCGKBscG+Ru6I13Lv7bpf?=
+ =?us-ascii?Q?QKfJPpGWNJcTsqgTAMKG3KBwBkprDCHBGzeWJkqY4EZ9OJziRPrZ1EDJPkAZ?=
+ =?us-ascii?Q?ek52iJzaehs7kAaqvKayT51IlnB1JyilVFvX3nV+qSF7duPqd6A7zjUDO62k?=
+ =?us-ascii?Q?EwyCBbwLuOzW+SQsz6OKlmm9wS3I8tTJq5BtsOFyR84mDcG0/1Iwr/Tdwz3f?=
+ =?us-ascii?Q?rR+ZPJZ4G4WNLT2vPyz2nHHjX03uwcFk21Rs5QuKtN4MQhSS0WMwb3wmafQy?=
+ =?us-ascii?Q?nHZvS7z56GxhQU/8Kp2hqP6y0yq1K4W9wKq0NPOM0cVOVnWHXJEFMzc1oUP/?=
+ =?us-ascii?Q?1r5ap3fG7u1xKveACpW13JS3bucGjpPv1BsCx1oJVq9oPmsExVkYlP0WOAmR?=
+ =?us-ascii?Q?NSoeg7uQbO76gLWnduV3r+UgYmcqDDd3raQyC4sJd/OcR00wHq4QQxu66p4g?=
+ =?us-ascii?Q?ftfm7gdk9Zj6LF+Dqa/RXL+pC9AYQXqkM4QbW1Nf3fBWxwDZbZTYmYextKGU?=
+ =?us-ascii?Q?5PC/i1o2pP6kllWCZkKtGg90zYIzv80EJ1llRPYmQa1UGxNsDqNuE7k7zVCb?=
+ =?us-ascii?Q?XD/TdM59I6rXSqsRaQWt3o0Rc3ruU21uZ7M08zS3DSc1Re+NRRjfTAijbwzz?=
+ =?us-ascii?Q?y/YWPru1wytv/dEVmq+ZHS8qis3qIQdIob6s5aWFEHfgw8u5ve2nUvuo/aet?=
+ =?us-ascii?Q?VHGbVh7J7I2Dam8ra7AifHqQx6KOnwLIoTZH35dWNeOJ8FUizcfX6bc9cyzq?=
+ =?us-ascii?Q?XNk6ZYGPOiw31jQyqdmOZGNIbvsC9A6t0t02rYrPvr6CfIFws7Lws6KcUO+v?=
+ =?us-ascii?Q?L2snShiW18L2di/T71AlNNPMedOrbaJkK4PqtbKg0YWPETP3bRR56GS5UWUs?=
+ =?us-ascii?Q?bJv1bZd89BymITfa8C+lhV/4jY3vsG5b8vvmIXqTwJDLfDScXWv72Tg0fhju?=
+ =?us-ascii?Q?Ay4A+eprJIepSigFJ+eayMXHQFHcF9Z9pC5Uy/4gruthsz/Z/llMvN69Y7Lc?=
+ =?us-ascii?Q?VSw1L9QYTirZ4OLhXPHNA1xmbWrrBaL9ezFvXY+vg7pML+z0GRoEAnlNsn7r?=
+ =?us-ascii?Q?9Fk6c1h9+NWEARvuC7FRA6dZdB3vQbflfL1yzmilqP3eU8R7VRk+j/pH2KMQ?=
+ =?us-ascii?Q?dpFGD/kdbkiSMhcJSUzfW2wxrCYSuQLg9AfXomhOppkmOlXnwSR9iNUCJBqz?=
+ =?us-ascii?Q?kyX2/2tHjYniMLsCxiP/IFDXTMYH6H/3ssQv12PTZq6D58VOeB3P6S7MMaqp?=
+ =?us-ascii?Q?Et53Qr0iglWOJqIwLN2oNvyFl//BlLSesg0gIdlWqpQfD9jbya37f97OBfnQ?=
+ =?us-ascii?Q?e37AtPJVl5RtYw9gqMQlICLmirGAvqRsjjAIPJiKhs+3N35WEcpTGZKjtk9i?=
+ =?us-ascii?Q?raFspzt3V5t+I3aMUnY82OX5nuk7FLWNp4AqFr7lxqGgHZ5o90LEy07Lv345?=
+ =?us-ascii?Q?qV1dHzwl1zkYo6yIwAQ7j6ObtdVoP5ikic4FLMbuCyRQz9NUAKwiwL56nOkW?=
+ =?us-ascii?Q?Kqse50lcxNMQM4xP9scU0QumBvXhm/mQ5YicoJHHkqGsfzrvKI+InrYaqflu?=
+ =?us-ascii?Q?lTXJfAmgjmz+PbthLTn5CLATX9wbmsWVJ6XUeziop/wfJeL3SqOGBndbwcKX?=
+ =?us-ascii?Q?Gg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:DsiWJcWkamKBqNIa2GdiC72CIgoQwSWSK1m6aAfAC0vch6GdTrs
- sIlHka91R5JbhbzUUBAz4dIpvs2cEIwaJ7AjNg3TXv8DKpvFtgG0rYeBi+nt7DmrP/w4YN8
- ptwjV0czdgK0UCysI0BBunVyxZmKdcqtv5R28Kr+2S+vAmkI48AinyiE+7dfxAJK3lI/02W
- cdX7VM8QtUSYk6ybr8QZQ==
-UI-OutboundReport: notjunk:1;M01:P0:U8Djpdcbr3g=;4HQKtk8oZRgrTXuEqs9zKM185TG
- 5Z5uiyYmJ5ytgCE0KzhutdG/0FUntlRUmL6/sI2rPnnWjatXIlRg7Y76OpQ73DtRSEtxU7x33
- uHMzzgkZU3kS9Ju5RoFnp+8WYxYqjLahlyBsf96t6j5J+cnolZ8qrlQM/sNc1PEvZVtn6prbG
- SBdHmco1xtupqjNhS+aavds4wCo92wCmrMYricknDdRRjsAvYHdUNWgczOBXnJO12afy9Zjw2
- p+2ab4rMVBPQDeqDO1yV6vFj55ENdRyJ7V+5gXwzusQ5NBRItzH5bC+u8H0mLtgZy7npvxaZG
- kTfJBUJEOJ7jaOaettIrmrycb0tQgdenFLUhlsDpuqPf2KqXqoU+xDFPlvaNraRLkRMbp3J7B
- IZtqOBOSXiAmJTsPjUezdbtPWnjybhkBy3lVeKEh6+1gyRodoZV9IzU6YDvyv4hbKKS927XLe
- 4mhFi9qXGLQtPObX/977jTC+CSBlTKJakIj/y0r1E0cImnFrE97ZzX7raJu30Eiiz7483yzzi
- gto/HS7DpKMIGDhNAIuCR8SdggZT6qImvp8GK4MNzwmJx5PP1reIj61TGqxPfWMpjvx812NgD
- T6MpdT0DGMgh12y8jQt2rAfMv/3ckMknXLfWk0BnF8wYytd45EebwsljhI31TdcBGq0XBlz7v
- PDXiysDMV9Tb+T7YiiGSncTFS7bzPb2Kzwa6uoN4dChrcoZ3aCV53KAB/2/8MJse4QFBdGNcP
- 7GVeQXlmBHdv0Mp6teTuGzc6dTdNY/HRTEZWjVTFHGUqiIPCmGmzRVUhu6+GfrgNsxGy7914E
- g5w2OzPdDFGxBvqCjDR3LZBo+NWHMm87B+6okXQDwfIo5xI1GAz0y6pY1Pn9+hRT/FNLKwpHs
- hQeTZwgK2Joc7p7Q+zRYP3BynyXKBzuyCEeS67Bi+z4FUHZUT2Rp4MEXK7poQQTKc9YLM0k/M
- WktucR0nhQtfV5WFJ4fJ1HxoJlk=
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4657.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae91bff2-2a2c-445e-757e-08db812b239e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 09:50:48.3776
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vdkURKb0JAZZh+vIrn+KcGUNvnZERKJIeaXIS9o+71UDNmnI0p4QBvpgZGrsCGaW3NuoxHC4f6llyrAsVEgl9bqkMrV96ycYdApZ/7vqpRo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5325
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/23 09:41, Geert Uytterhoeven wrote:
-> Hi Yangtao,
+>From: Jiri Pirko <jiri@resnulli.us>
+>Sent: Thursday, June 29, 2023 10:14 AM
 >
-> On Mon, Jul 10, 2023 at 9:25=E2=80=AFAM Yangtao Li <frank.li@vivo.com> w=
-rote:
->> On 2023/7/10 15:10, Geert Uytterhoeven wrote:
->>> [=E4=BD=A0=E9=80=9A=E5=B8=B8=E4=B8=8D=E4=BC=9A=E6=94=B6=E5=88=B0=E6=9D=
-=A5=E8=87=AA geert@linux-m68k.org =E7=9A=84=E7=94=B5=E5=AD=90=E9=82=AE=E4=
-=BB=B6=E3=80=82=E8=AF=B7=E8=AE=BF=E9=97=AE https://aka.ms/LearnAboutSender=
-Identification=EF=BC=8C=E4=BB=A5=E4=BA=86=E8=A7=A3=E8=BF=99=E4=B8=80=E7=82=
-=B9=E4=B8=BA=E4=BB=80=E4=B9=88=E5=BE=88=E9=87=8D=E8=A6=81]
->>> On Tue, Jul 4, 2023 at 11:38=E2=80=AFAM Yangtao Li <frank.li@vivo.com>=
- wrote:
->>>> Use devm_platform_ioremap_resource() to simplify code.
->>>>
->>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>> Thanks for your patch, which is now commit c1cd7a7a231a26c6 ("fbdev:
->>> imxfb: Convert to devm_platform_ioremap_resource()") in fbdev/for-next
->>>
->>>> --- a/drivers/video/fbdev/imxfb.c
->>>> +++ b/drivers/video/fbdev/imxfb.c
->>>> @@ -868,7 +868,6 @@ static int imxfb_probe(struct platform_device *pd=
-ev)
->>>>           struct imxfb_info *fbi;
->>>>           struct lcd_device *lcd;
->>>>           struct fb_info *info;
->>>> -       struct resource *res;
->>>>           struct imx_fb_videomode *m;
->>>>           const struct of_device_id *of_id;
->>>>           struct device_node *display_np;
->>>> @@ -885,10 +884,6 @@ static int imxfb_probe(struct platform_device *p=
-dev)
->>>>           if (of_id)
->>>>                   pdev->id_entry =3D of_id->data;
->>>>
->>>> -       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>>> -       if (!res)
->>>> -               return -ENODEV;
->>>> -
->>>>           info =3D framebuffer_alloc(sizeof(struct imxfb_info), &pdev=
-->dev);
->>>>           if (!info)
->>>>                   return -ENOMEM;
->>>> @@ -970,7 +965,7 @@ static int imxfb_probe(struct platform_device *pd=
-ev)
->>>>                   goto failed_getclock;
->>>>           }
->>>>
->>>> -       fbi->regs =3D devm_ioremap_resource(&pdev->dev, res);
->>>> +       fbi->regs =3D devm_platform_ioremap_resource(pdev, 0);
->>>>           if (IS_ERR(fbi->regs)) {
->>>>                   ret =3D PTR_ERR(fbi->regs);
->>>>                   goto failed_ioremap;
->>>> @@ -1043,7 +1038,6 @@ static int imxfb_probe(struct platform_device *=
-pdev)
->>>>    failed_map:
->>>>    failed_ioremap:
->>>>    failed_getclock:
->>>> -       release_mem_region(res->start, resource_size(res));
->>> This part is not directly related, but a bug fix for commit
->>> b083c22d51148f3d ("video: fbdev: imxfb: Convert request_mem_region +
->>> ioremap to devm_ioremap_resource") in v6.0.
+>Fri, Jun 23, 2023 at 02:38:13PM CEST, arkadiusz.kubalewski@intel.com wrote=
+:
+>>From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
 >>
->>
->> IIUC, split this patch into two, remove release_mem_region in one and
->>
->> mark it as Fixes: b083c22d51148f3d ("video: fbdev: imxfb: Convert
->> request_mem_region +
->>
->> ioremap to devm_ioremap_resource")?
 >
-> Exactly.  But as Helge has already applied this patch to his tree, we ha=
-ve
-> to check with him if this is still feasible...
+>One thing I forgot to point out the last time:
+>
+>[...]
+>
+>>+int
+>>+dpll_pin_register(struct dpll_device *dpll, struct dpll_pin *pin,
+>>+		  const struct dpll_pin_ops *ops, void *priv)
+>>+{
+>>+	int ret;
+>>+
+>>+	if (WARN_ON(!ops) ||
+>>+	    WARN_ON(!ops->state_on_dpll_get) ||
+>>+	    WARN_ON(!ops->direction_get))
+>
+>Please add check that you don't register to dpll instance which is
+>unregistered. Similar check needs to be added to pin_on_pin register.
+>
+>Also, make sure you don't unregister dpll device/pin which has child
+>pins registered under it.
+>
 
-Sure. Just send them to the list and I apply those patches instead.
+Fixed for v10.
 
-Thanks!
-Helge
+Thank you!
+Arkadiusz
 
+>
+>>+		return -EINVAL;
+>>+
+>>+	mutex_lock(&dpll_lock);
+>>+	if (WARN_ON(!(dpll->module =3D=3D pin->module &&
+>>+		      dpll->clock_id =3D=3D pin->clock_id)))
+>>+		ret =3D -EINVAL;
+>>+	else
+>>+		ret =3D __dpll_pin_register(dpll, pin, ops, priv);
+>>+	mutex_unlock(&dpll_lock);
+>>+
+>>+	return ret;
+>>+}
+>
+>[...]
