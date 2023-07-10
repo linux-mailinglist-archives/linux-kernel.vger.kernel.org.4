@@ -2,80 +2,440 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E597874DE97
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5321874DE9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjGJTv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S231334AbjGJTwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjGJTv5 (ORCPT
+        with ESMTP id S229883AbjGJTwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:51:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0CC1BF;
-        Mon, 10 Jul 2023 12:51:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15E8F611BC;
-        Mon, 10 Jul 2023 19:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04CDFC433C8;
-        Mon, 10 Jul 2023 19:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689018703;
-        bh=NXlbhj/0cxgH0ijFVF/EaGRYBQvflqeLcwwZA4/SIPo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oN1TkI7ZXaoq0KTpySKiSK/s908C0xnNLG1SvQplQx/czSaY3eWHSip+bIPQRoc1D
-         4Dv65d6rXWMzB6m7nKCS6EcehhLtZDNJqfeYNn3o1ht/2rZWB0qQeRnNgD/c+vMV3t
-         W+GJoj+PG8cwrQGc4/KQJDudoatitcxCk7xy5hI8=
-Date:   Mon, 10 Jul 2023 21:51:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [RFC PATCH v1 0/3] docs: stable-kernel-rules: add delayed
- backporting option and a few tweaks
-Message-ID: <2023071002-phrasing-tranquil-49d6@gregkh>
-References: <cover.1689008220.git.linux@leemhuis.info>
+        Mon, 10 Jul 2023 15:52:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00BE13E;
+        Mon, 10 Jul 2023 12:52:38 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36AJLhvL032553;
+        Mon, 10 Jul 2023 19:52:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gjFGz0+qAIfAiEzkSyOdDcBRq0BPkbLjQ/QDgMw2sMo=;
+ b=W38riQZWNpBhjivsmldrTrjZ/vac/ksgdQjn/0XJU+ucRC/TkRWUCXH9OLcbQqgpkGQZ
+ 60E1tZKD4X48AHAMMm7sHXmJncEoKswjB6/ArNsar03a9OqE5LplpCHaR1xTrVAVpbj3
+ vcsL6nftN8p+SG7FEKg6fIOzvmMGzLJBn0b/n7E8wgPLd7oAGU89+kgpzcaWrwF6boVi
+ tOTarA3iUr3s9vHNB0dVydgirHUeo6mZLBwhaM6ET/3THNxJXvi+FCI8FxWPQF/Ar2Rb
+ 7nTBK5MyDB4oSEA2HHWOR6HFMCDqukS94+5P1lNrPg/2a2IsNliLWav+eUaUTri3r0QK jA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rrfw29dre-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 19:52:12 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36AJqBg2018593
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 19:52:11 GMT
+Received: from [10.71.109.168] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 12:52:10 -0700
+Message-ID: <eb78b4d6-6da2-1cb5-5fab-01d7bf233111@quicinc.com>
+Date:   Mon, 10 Jul 2023 12:51:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1689008220.git.linux@leemhuis.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+Subject: Re: [PATCH RFC v4 2/7] drm: Introduce pixel_source DRM plane property
+To:     Pekka Paalanen <ppaalanen@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <quic_abhinavk@quicinc.com>, <contact@emersion.fr>,
+        <laurent.pinchart@ideasonboard.com>, <sebastian.wick@redhat.com>,
+        <ville.syrjala@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>,
+        <wayland-devel@lists.freedesktop.org>
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+ <20230404-solid-fill-v4-2-f4ec0caa742d@quicinc.com>
+ <6e3eec49-f798-ff91-8b4d-417d31089296@linaro.org>
+ <20230630112708.4d3a08a7@eldfell>
+Content-Language: en-US
+In-Reply-To: <20230630112708.4d3a08a7@eldfell>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iIh--FRmjm6GgigNJR8aQnQPODVeeMsa
+X-Proofpoint-GUID: iIh--FRmjm6GgigNJR8aQnQPODVeeMsa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_15,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307100180
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 07:10:10PM +0200, Thorsten Leemhuis wrote:
-> This is a RFC and a bit rough for now. I only set down to create the
-> first of the three patches. But while doing so I noticed a few things
-> that seemed odd for me with my background on writing and editing texts.
-> So I just quickly performed a few additional changes to fix those to see
-> if the stable team would appreciate them, as this document is clearly
-> their domain.
+
+
+On 6/30/2023 1:27 AM, Pekka Paalanen wrote:
+> On Fri, 30 Jun 2023 03:42:28 +0300
+> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
 > 
-> If those changes or even the initial patch are not welcomed, I'll simply
-> drop them. I'd totally understand this, as texts like these are delicate
-> and it's easy to accidentlly change the intent or the meaning while
-> adjusting things in good faith.
+>> On 30/06/2023 03:25, Jessica Zhang wrote:
+>>> Add support for pixel_source property to drm_plane and related
+>>> documentation.
+>>>
+>>> This enum property will allow user to specify a pixel source for the
+>>> plane. Possible pixel sources will be defined in the
+>>> drm_plane_pixel_source enum.
+>>>
+>>> The current possible pixel sources are DRM_PLANE_PIXEL_SOURCE_FB and
+>>> DRM_PLANE_PIXEL_SOURCE_COLOR. The default value is *_SOURCE_FB.
+>>
+>> I think, this should come before the solid fill property addition. First
+>> you tell that there is a possibility to define other pixel sources, then
+>> additional sources are defined.
 > 
-> At the same time I might be willing to do a few more changes, if people
-> like the direction this takes and want a bit more fine tuning.
+> Hi,
+> 
+> that would be logical indeed.
 
-I do like it, many thanks for taking the time to do this work, it's much
-appreciated.
+Hi Dmitry and Pekka,
 
-If you resend the first 2 as a non-RFC patch, I'll be glad to queue up,
-the last one needs some more work as mentioned.
+Sorry for the delay in response, was out of office last week.
 
-thanks,
+Acked.
 
-greg k-h
+> 
+>>>
+>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>> ---
+>>>    drivers/gpu/drm/drm_atomic_state_helper.c |  1 +
+>>>    drivers/gpu/drm/drm_atomic_uapi.c         |  4 ++
+>>>    drivers/gpu/drm/drm_blend.c               | 81 +++++++++++++++++++++++++++++++
+>>>    include/drm/drm_blend.h                   |  2 +
+>>>    include/drm/drm_plane.h                   | 21 ++++++++
+>>>    5 files changed, 109 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/drm_atomic_state_helper.c
+>>> index fe14be2bd2b2..86fb876efbe6 100644
+>>> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
+>>> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+>>> @@ -252,6 +252,7 @@ void __drm_atomic_helper_plane_state_reset(struct drm_plane_state *plane_state,
+>>>    
+>>>    	plane_state->alpha = DRM_BLEND_ALPHA_OPAQUE;
+>>>    	plane_state->pixel_blend_mode = DRM_MODE_BLEND_PREMULTI;
+>>> +	plane_state->pixel_source = DRM_PLANE_PIXEL_SOURCE_FB;
+>>>    
+>>>    	if (plane_state->solid_fill_blob) {
+>>>    		drm_property_blob_put(plane_state->solid_fill_blob);
+>>> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+>>> index a28b4ee79444..6e59c21af66b 100644
+>>> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+>>> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+>>> @@ -596,6 +596,8 @@ static int drm_atomic_plane_set_property(struct drm_plane *plane,
+>>>    		drm_property_blob_put(solid_fill);
+>>>    
+>>>    		return ret;
+>>> +	} else if (property == plane->pixel_source_property) {
+>>> +		state->pixel_source = val;
+>>>    	} else if (property == plane->alpha_property) {
+>>>    		state->alpha = val;
+>>>    	} else if (property == plane->blend_mode_property) {
+>>
+>> I think, it was pointed out in the discussion that drm_mode_setplane()
+>> (a pre-atomic IOCTL to turn the plane on and off) should also reset
+>> pixel_source to FB.
+
+I don't remember drm_mode_setplane() being mentioned in the pixel_source 
+discussion... can you share where it was mentioned?
+
+I'd prefer to avoid having driver change the pixel_source directly as it 
+could cause some unexpected side effects. In general, I would like 
+userspace to assign the value of pixel_source without driver doing 
+anything "under the hood".
+
+>>
+>>> @@ -671,6 +673,8 @@ drm_atomic_plane_get_property(struct drm_plane *plane,
+>>>    	} else if (property == plane->solid_fill_property) {
+>>>    		*val = state->solid_fill_blob ?
+>>>    			state->solid_fill_blob->base.id : 0;
+>>> +	} else if (property == plane->pixel_source_property) {
+>>> +		*val = state->pixel_source;
+>>>    	} else if (property == plane->alpha_property) {
+>>>    		*val = state->alpha;
+>>>    	} else if (property == plane->blend_mode_property) {
+>>> diff --git a/drivers/gpu/drm/drm_blend.c b/drivers/gpu/drm/drm_blend.c
+>>> index 38c3c5d6453a..8c100a957ee2 100644
+>>> --- a/drivers/gpu/drm/drm_blend.c
+>>> +++ b/drivers/gpu/drm/drm_blend.c
+>>> @@ -189,6 +189,18 @@
+>>>     *	solid_fill is set up with drm_plane_create_solid_fill_property(). It
+>>>     *	contains pixel data that drivers can use to fill a plane.
+>>>     *
+>>> + * pixel_source:
+>>> + *	pixel_source is set up with drm_plane_create_pixel_source_property().
+>>> + *	It is used to toggle the source of pixel data for the plane.
+> 
+> Other sources than the selected one are ignored?
+
+Yep, the plane will only display the data from the set pixel_source.
+
+So if pixel_source == FB and solid_fill_blob is non-NULL, 
+solid_fill_blob will be ignored and the plane will display the FB that 
+is set.
+
+Will add a note about this in the comment docs.
+
+> 
+>>> + *
+>>> + *	Possible values:
+> 
+> Wouldn't hurt to explicitly mention here that this is an enum.
+
+Acked.
+
+> 
+>>> + *
+>>> + *	"FB":
+>>> + *		Framebuffer source
+>>> + *
+>>> + *	"COLOR":
+>>> + *		solid_fill source
+> 
+> I think these two should be more explicit. Framebuffer source is the
+> usual source from the property "FB_ID". Solid fill source comes from
+> the property "solid_fill".
+
+Acked.
+
+> 
+> Why "COLOR" and not, say, "SOLID_FILL"?
+
+Ah, that would make more sense :)
+
+I'll change this to "SOLID_FILL".
+
+> 
+>>> + *
+>>>     * Note that all the property extensions described here apply either to the
+>>>     * plane or the CRTC (e.g. for the background color, which currently is not
+>>>     * exposed and assumed to be black).
+>>> @@ -648,3 +660,72 @@ int drm_plane_create_solid_fill_property(struct drm_plane *plane)
+>>>    	return 0;
+>>>    }
+>>>    EXPORT_SYMBOL(drm_plane_create_solid_fill_property);
+>>> +
+>>> +/**
+>>> + * drm_plane_create_pixel_source_property - create a new pixel source property
+>>> + * @plane: drm plane
+>>> + * @supported_sources: bitmask of supported pixel_sources for the driver (NOT
+>>> + *                     including DRM_PLANE_PIXEL_SOURCE_FB, as it will be supported
+>>> + *                     by default).
+>>
+>> I'd say this is too strong. I'd suggest either renaming this to
+>> extra_sources (mentioning that FB is enabled for all the planes) or
+>> allowing any source bitmask (mentioning that FB should be enabled by the
+>> caller, unless there is a good reason not to do so).
+> 
+> Right. I don't see any problem with having planes of type OVERLAY that
+> support only solid_fill and no FB. Planes of type PRIMARY and CURSOR I
+> would expect to always support at least FB.
+> 
+> Atomic userspace is prepared to have an OVERLAY plane fail for any
+> arbitrary reason. Legacy userspace probably should not ever see a plane
+> that does not support FB.
+
+Got it... If we allow the possibility of FB sources not being supported, 
+then should the default pixel_source per plane be decided by the driver too?
+
+I'd forced FB support so that I could set pixel_source to FB in 
+__drm_atomic_helper_plane_state_reset(). If we allow more flexibility in 
+the default pixel_source value, I guess we can also store a 
+default_pixel_source value in the plane_state.
+
+> 
+>>> + *
+>>> + * This creates a new property describing the current source of pixel data for the
+>>> + * plane.
+>>> + *
+>>> + * The property is exposed to userspace as an enumeration property called
+>>> + * "pixel_source" and has the following enumeration values:
+>>> + *
+>>> + * "FB":
+>>> + *	Framebuffer pixel source
+>>> + *
+>>> + * "COLOR":
+>>> + *	Solid fill color pixel source
+>>> + *
+>>> + * Returns:
+>>> + * Zero on success, negative errno on failure.
+>>> + */
+>>> +int drm_plane_create_pixel_source_property(struct drm_plane *plane,
+>>> +					   unsigned int supported_sources)
+>>> +{
+>>> +	struct drm_device *dev = plane->dev;
+>>> +	struct drm_property *prop;
+>>> +	const struct drm_prop_enum_list enum_list[] = {
+>>> +		{ DRM_PLANE_PIXEL_SOURCE_FB, "FB" },
+>>> +		{ DRM_PLANE_PIXEL_SOURCE_COLOR, "COLOR" },
+>>> +	};
+>>> +	unsigned int valid_source_mask = BIT(DRM_PLANE_PIXEL_SOURCE_FB) |
+>>> +				       BIT(DRM_PLANE_PIXEL_SOURCE_COLOR);
+>>
+>>
+>> static const?
+
+Acked.
+
+>>
+>>> +	int i;
+>>> +
+>>> +	/* FB is supported by default */
+>>> +	supported_sources |= BIT(DRM_PLANE_PIXEL_SOURCE_FB);
+>>> +
+>>> +	if (WARN_ON(supported_sources & ~valid_source_mask))
+>>> +		return -EINVAL;
+>>> +
+>>> +	prop = drm_property_create(dev, DRM_MODE_PROP_ENUM, "pixel_source",
+> 
+> Shouldn't this be an atomic prop?
+
+Acked.
+
+> 
+> 
+>>> +			hweight32(supported_sources));
+>>> +
+>>> +	if (!prop)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	for (i = 0; i < ARRAY_SIZE(enum_list); i++) {
+>>> +		int ret;
+>>> +
+>>> +		if (!(BIT(enum_list[i].type) & supported_sources))
+>>
+>> test_bit?
+
+Acked.
+
+>>
+>>> +			continue;
+>>> +
+>>> +		ret = drm_property_add_enum(prop, enum_list[i].type, enum_list[i].name);
+>>> +
+>>
+>> No need for an empty line in such cases. Please drop it.
+
+Acked.
+
+>>
+>>> +		if (ret) {
+>>> +			drm_property_destroy(dev, prop);
+>>> +
+>>> +			return ret;
+>>> +		}
+>>> +	}
+>>> +
+>>> +	drm_object_attach_property(&plane->base, prop, DRM_PLANE_PIXEL_SOURCE_FB);
+>>> +	plane->pixel_source_property = prop;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +EXPORT_SYMBOL(drm_plane_create_pixel_source_property);
+>>> diff --git a/include/drm/drm_blend.h b/include/drm/drm_blend.h
+>>> index 0338a860b9c8..31af7cfa5b1b 100644
+>>> --- a/include/drm/drm_blend.h
+>>> +++ b/include/drm/drm_blend.h
+>>> @@ -59,4 +59,6 @@ int drm_atomic_normalize_zpos(struct drm_device *dev,
+>>>    int drm_plane_create_blend_mode_property(struct drm_plane *plane,
+>>>    					 unsigned int supported_modes);
+>>>    int drm_plane_create_solid_fill_property(struct drm_plane *plane);
+>>> +int drm_plane_create_pixel_source_property(struct drm_plane *plane,
+>>> +					   unsigned int supported_sources);
+>>>    #endif
+>>> diff --git a/include/drm/drm_plane.h b/include/drm/drm_plane.h
+>>> index f6ab313cb83e..73fb6cf8a5d9 100644
+>>> --- a/include/drm/drm_plane.h
+>>> +++ b/include/drm/drm_plane.h
+>>> @@ -59,6 +59,12 @@ struct drm_solid_fill {
+>>>    	uint32_t b;
+>>>    };
+>>>    
+>>> +enum drm_plane_pixel_source {
+>>> +	DRM_PLANE_PIXEL_SOURCE_FB,
+>>> +	DRM_PLANE_PIXEL_SOURCE_COLOR,
+>>> +	DRM_PLANE_PIXEL_SOURCE_MAX
+>>> +};
+> 
+> Just to be very clear that I'm not confusing you with my comment about
+> UAPI headers in the previous patch, this enum is already in a good
+> place. It does not belong in a UAPI header, because userspace
+> recognises enum values by the name string.
+
+Got it.
+
+Thanks,
+
+Jessica Zhang
+
+> 
+> 
+> Thanks,
+> pq
+> 
+>>> +
+>>>    /**
+>>>     * struct drm_plane_state - mutable plane state
+>>>     *
+>>> @@ -152,6 +158,14 @@ struct drm_plane_state {
+>>>    	 */
+>>>    	struct drm_solid_fill solid_fill;
+>>>    
+>>> +	/*
+>>> +	 * @pixel_source:
+>>> +	 *
+>>> +	 * Source of pixel information for the plane. See
+>>> +	 * drm_plane_create_pixel_source_property() for more details.
+>>> +	 */
+>>> +	enum drm_plane_pixel_source pixel_source;
+>>> +
+>>>    	/**
+>>>    	 * @alpha:
+>>>    	 * Opacity of the plane with 0 as completely transparent and 0xffff as
+>>> @@ -742,6 +756,13 @@ struct drm_plane {
+>>>    	 */
+>>>    	struct drm_property *solid_fill_property;
+>>>    
+>>> +	/*
+>>> +	 * @pixel_source_property:
+>>> +	 * Optional pixel_source property for this plane. See
+>>> +	 * drm_plane_create_pixel_source_property().
+>>> +	 */
+>>> +	struct drm_property *pixel_source_property;
+>>> +
+>>>    	/**
+>>>    	 * @alpha_property:
+>>>    	 * Optional alpha property for this plane. See
+>>>    
+>>
+> 
