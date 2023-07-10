@@ -2,75 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8063474C9B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 03:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8AB74C9BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 03:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjGJBrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 21:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S230064AbjGJB5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 21:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGJBrt (ORCPT
+        with ESMTP id S229517AbjGJB5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 21:47:49 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9F35EC;
-        Sun,  9 Jul 2023 18:47:45 -0700 (PDT)
-X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTPS Server V6.0(1160032:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>)
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Mon, 10 Jul 2023 09:47:26 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 10 Jul
- 2023 09:47:25 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Mon, 10 Jul 2023 09:47:25 +0800
-Date:   Mon, 10 Jul 2023 09:47:25 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     <broonie@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>
-CC:     <robh+dt@kernel.org>, <lgirdwood@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] Add compatible support for RT5733
-Message-ID: <20230710014725.GA12147@linuxcarl2.richtek.com>
-References: <1688048996-25606-1-git-send-email-cy_huang@richtek.com>
+        Sun, 9 Jul 2023 21:57:10 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C842BEE;
+        Sun,  9 Jul 2023 18:57:08 -0700 (PDT)
+X-UUID: 06188fefb575434da11446c1d3861c80-20230710
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:809c74b7-40f3-4e1c-85dc-7d90e1d84bb3,IP:15,
+        URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-INFO: VERSION:1.1.27,REQID:809c74b7-40f3-4e1c-85dc-7d90e1d84bb3,IP:15,UR
+        L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:ba820968-314d-4083-81b6-6a74159151eb,B
+        ulkID:230710095658WWG00CKR,BulkQuantity:0,Recheck:0,SF:44|24|17|19|102,TC:
+        nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,
+        TF_CID_SPAM_FSI
+X-UUID: 06188fefb575434da11446c1d3861c80-20230710
+X-User: jianghaoran@kylinos.cn
+Received: from localhost.localdomain [(39.156.73.12)] by mailgw
+        (envelope-from <jianghaoran@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
+        with ESMTP id 1691520724; Mon, 10 Jul 2023 09:56:57 +0800
+From:   Haoran Jiang <jianghaoran@kylinos.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     loongarch@lists.linux.dev, llvm@lists.linux.dev,
+        bpf@vger.kernel.org, chenhuacai@kernel.org, trix@redhat.com,
+        ndesaulniers@google.com, nathan@kernel.org, jolsa@kernel.org,
+        haoluo@google.com, sdf@google.com, kpsingh@kernel.org,
+        john.fastabend@gmail.com, yhs@fb.com, song@kernel.org,
+        martin.lau@linux.dev, andrii@kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, kernel@xen0n.name, yangtiezhu@loongson.cn
+Subject: [PATCH] samples/bpf: Fix compilation failure for samples/bpf on Loongarch Fedora
+Date:   Mon, 10 Jul 2023 09:51:20 +0800
+Message-Id: <20230710015120.44818-1-jianghaoran@kylinos.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1688048996-25606-1-git-send-email-cy_huang@richtek.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 10:29:54PM +0800, cy_huang@richtek.com wrote:
-Hi,
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> This series is to add the compatible support for rt5733 based on rt5739.
-> 
-Sorry, not intend to ping, just want to check the current review status.
+When building the latest samples/bpf on Loongarch Fedora
 
-Any comment about this patch series?
-> Version change listed below each comment message.
-> 
-> ChiYuan Huang (2):
->   regulator: dt-bindings: rt5739: Add compatible for rt5733
->   regulator: rt5739: Add DID check and compatible for rt5733
-> 
->  .../bindings/regulator/richtek,rt5739.yaml    |  1 +
->  drivers/regulator/rt5739.c                    | 36 +++++++++++++++----
->  2 files changed, 30 insertions(+), 7 deletions(-)
-> 
-> 
-> base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
-> -- 
-> 2.40.1
-> 
+     make M=samples/bpf
+
+There are compilation errors as follows:
+
+In file included from ./linux/samples/bpf/sockex2_kern.c:2:
+In file included from ./include/uapi/linux/in.h:25:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:9:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/loongarch/include/asm/thread_info.h:15:
+In file included from ./arch/loongarch/include/asm/processor.h:13:
+In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
+./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
+         ^~~~~~~~~~~~~~~
+1 error generated.
+
+larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
+and the header file location is specified at compile time.
+
+Test on Loongarch Fedora:
+https://github.com/fedora-remix-loongarch/releases-info
+
+Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+---
+ samples/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 615f24ebc49c..b301796a3862 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
+ 	@echo "  CLANG-bpf " $@
+ 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
+ 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
+-		-I$(LIBBPF_INCLUDE) \
++		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+ 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
+ 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
+ 		-Wno-gnu-variable-sized-type-not-at-end \
+-- 
+2.27.0
+
