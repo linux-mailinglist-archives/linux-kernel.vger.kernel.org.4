@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EF374D77F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C82774D783
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjGJN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S232058AbjGJN3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbjGJN2V (ORCPT
+        with ESMTP id S231986AbjGJN3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:28:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48003103
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:28:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7BE02B;
-        Mon, 10 Jul 2023 06:29:01 -0700 (PDT)
-Received: from [10.57.77.63] (unknown [10.57.77.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC7BC3F67D;
-        Mon, 10 Jul 2023 06:28:16 -0700 (PDT)
-Message-ID: <4dc1d2e1-d5d7-2812-aa8b-f8ba6b9fb207@arm.com>
-Date:   Mon, 10 Jul 2023 14:28:15 +0100
+        Mon, 10 Jul 2023 09:29:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D21EEB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:29:19 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9924ac01f98so601126266b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688995758; x=1691587758;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k9UOUiiYpLeZoevckgJr9J8JUa+Ud+RYHSYC0luWiKI=;
+        b=HsToygUrUgn71pI6VeP1OcdkLE6ca9RRwF2heZdv0NXu/F+Y1oixsKbUsOxDwAt7LR
+         a3Lb2p2FX0cArsgRKux2NdWODDlLx4wjpsYNuf10nxQTYKWUnGfHl5P+aA4EzKXsWuhF
+         rVndwS6EuI0TGNOgKt4QfljrCK7/OKpMJbHco6Jj0cDQb/XJffUhZ3orhlnasES5Tnfi
+         VWiSiqYIZ8FDxZocJusseaPlqrFJAfIlMkcAOKMat3w5idwjwCKJ26e54U5qa1FBDFsW
+         CuUoyi3VChTosFiYulTl/yA6Sdx3N9wxXkbgC+xZEGq7UYsvFiNYQjWZo149I3PjOk/K
+         sjmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688995758; x=1691587758;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k9UOUiiYpLeZoevckgJr9J8JUa+Ud+RYHSYC0luWiKI=;
+        b=YID8pgwaupmzE6d9fCDzXwvzGlPfk4WqbvzOHMcQI9Gx2xvBUnrWQbAQFhlcNFVivk
+         ExR/VYIHDCe5lJxe9AVxKn6g4ws1L51L7J7mKUKNUeglAmcmQTyBh7qM0vUgTG0faxTV
+         3e7Opw0myS/1C6D33s+fgQ4Y0zpE4SOo6JCE8MufwyIzOdPNB0NHdxiDfJfKKYwPQFbt
+         SWYty0X9/6mkouJVPIrsKk4PHSfYq4FGRYV44NxJMdIbRzwI2cI0xH+Saw1lBhW9rFMG
+         +KKwCEc7RyWuubAQKMUytnvDm+gdy0ldVyIA7q+kqM5B2QzGGbqBXHTSFyZ4Ba8Ajtz4
+         nbfw==
+X-Gm-Message-State: ABy/qLb5unwlUoTqI6fBbnT9kVzutJPQAz85uRNMsg9o+8Q5Wmhzqp4g
+        0pXF5CII9TJfO6HKJ/TYFmhVIQ==
+X-Google-Smtp-Source: APBJJlFSkacruVQJMp7GdUScVpgieU1tXcsK8x/WfftHxSb5guRgl5MBGtWiAbIyLhTEqgBMmFPt6g==
+X-Received: by 2002:a17:907:d30d:b0:965:6075:d100 with SMTP id vg13-20020a170907d30d00b009656075d100mr13915267ejc.39.1688995758132;
+        Mon, 10 Jul 2023 06:29:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id o12-20020a17090608cc00b00982be08a9besm6163959eje.172.2023.07.10.06.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 06:29:17 -0700 (PDT)
+Message-ID: <1ebfbbec-d5cf-c6ac-2cf1-eab970903500@linaro.org>
+Date:   Mon, 10 Jul 2023 15:29:15 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 00/14] Transparent Contiguous PTEs for User Mappings
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230622144210.2623299-1-ryan.roberts@arm.com>
- <CAGsJ_4x4b5Qe2RNTHyR2MQqSkRxcuchrUgrap9WTaDtuMUttcA@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAGsJ_4x4b5Qe2RNTHyR2MQqSkRxcuchrUgrap9WTaDtuMUttcA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] memory: tegra: Add dummy implementation on Tegra194
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230629160132.768940-1-thierry.reding@gmail.com>
+ <1fd1d5d7-7296-0e62-9f65-7347ac0f0500@linaro.org> <ZKwCYjKXtuDsOF9E@orome>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZKwCYjKXtuDsOF9E@orome>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2023 13:05, Barry Song wrote:
-> On Thu, Jun 22, 2023 at 11:00 PM Ryan Roberts <ryan.roberts@arm.com> wrote:
+On 10/07/2023 15:06, Thierry Reding wrote:
+> On Mon, Jul 10, 2023 at 12:10:43PM +0200, Krzysztof Kozlowski wrote:
+>> On 29/06/2023 18:01, Thierry Reding wrote:
+>>> From: Thierry Reding <treding@nvidia.com>
+>>>
+>>> With the introduction of commit 9365bf006f53 ("PCI: tegra194: Add
+>>> interconnect support in Tegra234"), the PCI driver on Tegra194 and later
+>>> requires an interconnect provider. However, a provider is currently only
+>>> exposed on Tegra234 and this causes PCI on Tegra194 to defer probe
+>>> indefinitely.
+>>>
+>>> Fix this by adding a dummy implementation on Tegra194. This allows nodes
+>>> to be provided to interconnect consumers, but doesn't do any bandwidth
+>>> accounting or frequency scaling.
+>>>
+>>> Fixes: 9365bf006f53 ("PCI: tegra194: Add interconnect support in Tegra234")
+>>> Reported-by: Jon Hunter <jonathanh@nvidia.com>
 >>
->> Hi All,
->>
-[...]
->>
->> Performance
->> -----------
->>
->> Below results show 2 benchmarks; kernel compilation and speedometer 2.0 (a
->> javascript benchmark running in Chromium). Both cases are running on Ampere
->> Altra with 1 NUMA node enabled, Ubuntu 22.04 and XFS filesystem. Each benchmark
->> is repeated 15 times over 5 reboots and averaged.
->>
->> All improvements are relative to baseline-4k. anonfolio and exefolio are as
->> described above. contpte is this series. (Note that exefolio only gives an
->> improvement because contpte is already in place).
->>
->> Kernel Compilation (smaller is better):
->>
->> | kernel       |   real-time |   kern-time |   user-time |
->> |:-------------|------------:|------------:|------------:|
->> | baseline-4k  |        0.0% |        0.0% |        0.0% |
->> | anonfolio    |       -5.4% |      -46.0% |       -0.3% |
->> | contpte      |       -6.8% |      -45.7% |       -2.1% |
->> | exefolio     |       -8.4% |      -46.4% |       -3.7% |
+>> Applied with checkpatch warning. Please be sure you run checkpatch
+>> before sending the patches.
 > 
-> sorry i am a bit confused. in exefolio case, is anonfolio included?
-> or it only has large cont-pte folios on exe code? in the other words,
-> Does the 8.4% improvement come from iTLB miss reduction only,
-> or from both dTLB and iTLB miss reduction?
+> Are you referring to the Reported-by/Closes complaint? 
 
-The anonfolio -> contpte -> exefolio results are incremental. So:
+Yes.
 
-anonfolio: baseline-4k + anonfolio changes
-contpte: anonfolio + contpte changes
-exefolio: contpte + exefolio changes
+> I didn't include
+> a URL here because this came from an internal test report and there's no
+> corresponding public reference.
 
-So yes, exefolio includes anonfolio. Sorry for the confusion.
+Ah, ok, apologies for pickiness then. :)
 
 > 
->> | baseline-16k |       -8.7% |      -49.2% |       -3.7% |
->> | baseline-64k |      -10.5% |      -66.0% |       -3.5% |
->>
->> Speedometer 2.0 (bigger is better):
->>
->> | kernel       |   runs_per_min |
->> |:-------------|---------------:|
->> | baseline-4k  |           0.0% |
->> | anonfolio    |           1.2% |
->> | contpte      |           3.1% |
->> | exefolio     |           4.2% |
-> 
-> same question as above.
+> I suppose I could've left out the Reported-by altogether.
 
-same answer as above.
-
-Thanks,
-Ryan
+I think it is fine. Checkpatch warning is just advisory.
 
 
-> 
->> | baseline-16k |           5.3% |
->>
+Best regards,
+Krzysztof
 
