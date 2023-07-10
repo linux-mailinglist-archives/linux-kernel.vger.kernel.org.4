@@ -2,92 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DD974DC79
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF3874DC82
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjGJR31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S231307AbjGJRaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjGJR3T (ORCPT
+        with ESMTP id S229669AbjGJRar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:29:19 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890ED1A7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:29:14 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-635e5b06aaeso26744236d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689010153; x=1691602153;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NijMvu4hDPVcn1xdPqxC+coZ9Y8AUqtC5nBuqj5T3eI=;
-        b=HmtbopGCZEIoAGeA5xKlxgRxdSMmaMPuZJWEYjL6F+XIVF0kfNo4CmzxEH1m/e0WND
-         BhKOOFPKkYxasJc4m2T36ZUAZi00BY25GduLfqKHLtYS++CuX7+7XyZlzEDYkQxBU7qV
-         BA0b+CXNhHQX4UMb92RWjyFn8xejGejJwbsgmreeYsPVULuHm0DiHfIpJuT5k3QV418f
-         9lbpUjDIYxRtqzlku2I6LGbzKWcejoFilD2TU3jeRYLdSMEmoZcy1RIxQgozCmcZ19dD
-         XWYnpDcg53JFw1PCji7ANmzN+g3fAH4fgSBMY55TwdlC9UKKAMBWJJqztH3bum6ArnOw
-         9bSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689010153; x=1691602153;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NijMvu4hDPVcn1xdPqxC+coZ9Y8AUqtC5nBuqj5T3eI=;
-        b=S2Q/QI0DXpG89I5moWgFjBZRYOcTavt5S5RCPzD2EHY9UGGuq/advobkpC+792AXPW
-         1mbujkGt14A/EX5E6sb5SPNjTqll2uDBpyyTyAD5+GqSlxnNDxYMwfPY3qN+ikhc28ZR
-         azGGmXiIkKcCBZOmnbkE6UtVzUcRUxzPzTwLIxE3P5Apwiv+xeGol6WfSmq35Px0w3nJ
-         HQAKfKfLB0y/v6CwSvqiasEnUN8soD+PFBYyvj5guGglM1cJkKlHi5CZoQezJy/S8uqp
-         iwm4JVRJ5MUiKjrSlfvsKQMD170MzfbGmopWwS3oQoF2ktao401Ha+n6vnxOrQsTZ518
-         oBGg==
-X-Gm-Message-State: ABy/qLYWyl+gZ5MW8YBZhyRfl3lBJliojievExey8ZpRh2cQONX0oG4q
-        m2yi6FC6dnB+cmumYYUUHnR4VA==
-X-Google-Smtp-Source: APBJJlEt/sUmDLXrLxo45lionjYNQmEHJgq3ERqjFIlGob/IwNHCoqaKp2l5acb5H1OG3gitrRV6Fg==
-X-Received: by 2002:a0c:cb8f:0:b0:62d:feee:2520 with SMTP id p15-20020a0ccb8f000000b0062dfeee2520mr6258429qvk.51.1689010153723;
-        Mon, 10 Jul 2023 10:29:13 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id h16-20020a0cf210000000b00636bde318bcsm47891qvk.61.2023.07.10.10.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 10:29:13 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qIuhE-0004Gy-QG;
-        Mon, 10 Jul 2023 14:29:12 -0300
-Date:   Mon, 10 Jul 2023 14:29:12 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Tina Zhang <tina.zhang@intel.com>
-Cc:     Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Michael Shavit <mshavit@google.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 6/6] mm: Deprecate pasid field
-Message-ID: <ZKw/6O4QmJMIRRP9@ziepe.ca>
-References: <20230707013441.365583-1-tina.zhang@intel.com>
- <20230707013441.365583-7-tina.zhang@intel.com>
+        Mon, 10 Jul 2023 13:30:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E48095;
+        Mon, 10 Jul 2023 10:30:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D15E96116A;
+        Mon, 10 Jul 2023 17:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B727C433C9;
+        Mon, 10 Jul 2023 17:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689010245;
+        bh=8daJmCsRggn9xziEjmtzfB/+TEmSHGqfTrQOxt4tg1U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t2qoXUnSHuV+TbWU69K3xBxeG6UAs5r8JvEuI+8qIwEdTjDJX9HPZn++uZHMNIQaD
+         86g42vDDjo+xgTS9/scrmuWADvN0R48PLgUPQA8lzB5uIE7gczU7YsGie2UjWiD40Y
+         soETF0P1p+D4lt8Jw6O9FNAf5+tzNnhQ6U1GTpxDacTetMTQd4tHQO7p92dxIvPKDo
+         vCacGl+XShxk3g8tnOVtoXP+PJNeX8VjY17MSNUMQyZxhOaFwy902auPvHxrZTYMla
+         iILw2xA2Gbqp0/Iihh6sd5pNaL6Cxsx8tHLlJ00pYbON+m3jOCfuniILkrN7AJJX38
+         Zx5bmFaJNvHKA==
+Date:   Mon, 10 Jul 2023 18:30:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 04/15] spi: Replace open coded
+ spi_controller_xfer_timeout()
+Message-ID: <cfaffa00-4b61-4d81-8675-70295844513b@sirena.org.uk>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+ <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IbZ/DrTRficzGRpW"
 Content-Disposition: inline
-In-Reply-To: <20230707013441.365583-7-tina.zhang@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230710154932.68377-5-andriy.shevchenko@linux.intel.com>
+X-Cookie: Do you have lysdexia?
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 09:34:41AM +0800, Tina Zhang wrote:
-> Drop the pasid field, as all the information needed for sva domain
-> management has been moved to the newly added iommu_mm field.
-> 
-> Signed-off-by: Tina Zhang <tina.zhang@intel.com>
-> ---
->  mm/init-mm.c | 1 -
->  1 file changed, 1 deletion(-)
 
-Shouldn't this remove the field from the mmu_struct as well??
+--IbZ/DrTRficzGRpW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Jason
+On Mon, Jul 10, 2023 at 06:49:21PM +0300, Andy Shevchenko wrote:
+
+> Since the new spi_controller_xfer_timeout() helper appeared,
+> we may replace open coded variant in spi_transfer_wait().
+
+> + * Assume speed to be 100 kHz if it's not defined at the time of invocation.
+> + *
+
+You didn't mention this bit in the changelog, and I'm not 100% convinced
+it was the best idea in the first place.  It's going to result in some
+very big timeouts if it goes off, and we really should be doing
+validation much earlier in the process.
+
+> +	u32 speed_hz = xfer->speed_hz ?: 100000;
+
+Not only the ternery operator, but the version without the second
+argument for extra clarity!
+
+--IbZ/DrTRficzGRpW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsQDcACgkQJNaLcl1U
+h9DEzgf/dy9EpgGVS5JKG+2sOnEEWzJ1/z92vL5sQoHWJT0M7rzfGdRlGddYvj2k
+yOJg6fvzzY2vbGoYuqkSlYi95WyUFmwqjd+BwayzJ5gH0xKRXo4MwCHKIET3z44z
+8pD55r1ow40GOeztLTsLwgiADUQSMRLm/Y33rrf2I1J+/AgrEV6V+oZnbWsmoI+I
+0QS2ZIQk8m1oDghyOmEOzW+jqJQbDR6HAP0L9dUbd/zcJK9LDXHE5hepkLjQbC6v
+oGrJJVbs+IYFbaNJrDNtxtF3JwlAtVWWSten66FG3fmreSDQwcKATVKiHWtLlhJb
+a/T8TlFW3ianwYVf2yMOEojOIbZvQw==
+=d1Us
+-----END PGP SIGNATURE-----
+
+--IbZ/DrTRficzGRpW--
