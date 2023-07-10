@@ -2,84 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2F574D2DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458E574D323
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjGJKHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S233210AbjGJKRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbjGJKG4 (ORCPT
+        with ESMTP id S229907AbjGJKQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:06:56 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3F4215;
-        Mon, 10 Jul 2023 03:03:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vn109gM_1688983371;
-Received: from 30.97.48.56(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vn109gM_1688983371)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Jul 2023 18:02:53 +0800
-Message-ID: <6f5ca23d-4f23-4030-2196-35026e936145@linux.alibaba.com>
-Date:   Mon, 10 Jul 2023 18:03:12 +0800
+        Mon, 10 Jul 2023 06:16:53 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5504FE7C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:16:28 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R00255XydzBHXhD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 18:03:25 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688983405; x=1691575406; bh=9eGsasZCdvlfGHZbPBuBp6LJrAr
+        WhWGbB1Y1Gl7O060=; b=cMhE0ZzDYHXQtRtw2S7cGuQ+AEgRA92QIB0jpxylIQw
+        v7Um2xeXdYWbxagnj8oqKVD3yQbl9wkkxhyFXfYE9JKSc92hxnyy2kqouopzyPwO
+        yAzz5HqO7VDhBcMap+ckhSt3A5eOfijX5BTKhwYUIC6h6htnRQpkAsMO5iZZ9f3B
+        5JUAoAjWQQ6i9WPPp+T10cOlVETKtkTVBG68XlIywX2F1KAzpwm5FeiidKl6kf00
+        PmGIOAlzr2S7tdcQ8tkv1AAwg9M2iHQNcTbP4bhrhKN/GiXy8IVQVVr17Df6WqJM
+        AEX4/ZwMnWkuwHIV+DePS/03wHY8sMjot+OiDu/lRfg==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ixD7zODK_b95 for <linux-kernel@vger.kernel.org>;
+        Mon, 10 Jul 2023 18:03:25 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R00252j4hzBHXhC;
+        Mon, 10 Jul 2023 18:03:25 +0800 (CST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] serial: sprd: Fix DMA buffer leak issue
-To:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230710080348.4137875-1-chunyan.zhang@unisoc.com>
- <20230710080348.4137875-2-chunyan.zhang@unisoc.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230710080348.4137875-2-chunyan.zhang@unisoc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Mon, 10 Jul 2023 18:03:25 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/radeon: ERROR: "(foo*)" should be "(foo *)"
+In-Reply-To: <20230710091057.64085-1-xujianghui@cdjrlc.com>
+References: <20230710091057.64085-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <3a541f425a1ab6d2664a6d74cc4c3a51@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix five occurrences of the checkpatch.pl error:
+ERROR: "(foo*)" should be "(foo *)"
 
+Signed-off-by: Ran Sun <sunran001@208suo.com>
+---
+  drivers/gpu/drm/radeon/radeon_kms.c | 10 +++++-----
+  1 file changed, 5 insertions(+), 5 deletions(-)
 
-On 7/10/2023 4:03 PM, Chunyan Zhang wrote:
-> Release DMA buffer when _probe() returns fail to avoid memory leak.
-> 
-> Fixes: f4487db58eb7 ("serial: sprd: Add DMA mode support")
-> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-> ---
->   drivers/tty/serial/sprd_serial.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
-> index 942808517393..e1f11382fc39 100644
-> --- a/drivers/tty/serial/sprd_serial.c
-> +++ b/drivers/tty/serial/sprd_serial.c
-> @@ -1203,7 +1203,7 @@ static int sprd_probe(struct platform_device *pdev)
->   		ret = uart_register_driver(&sprd_uart_driver);
->   		if (ret < 0) {
->   			pr_err("Failed to register SPRD-UART driver\n");
-> -			return ret;
-> +			goto free_rx_buf;
->   		}
->   	}
->   	sprd_ports_num++;
-> @@ -1222,6 +1222,8 @@ static int sprd_probe(struct platform_device *pdev)
->   	sprd_port[index] = NULL;
->   	sprd_ports_num--;
->   	uart_unregister_driver(&sprd_uart_driver); > +free_rx_buf:
-> +	sprd_rx_free_buf(sport);
->   	return ret;
->   }
->   
+diff --git a/drivers/gpu/drm/radeon/radeon_kms.c 
+b/drivers/gpu/drm/radeon/radeon_kms.c
+index e0214cf1b43b..a16590c6247f 100644
+--- a/drivers/gpu/drm/radeon/radeon_kms.c
++++ b/drivers/gpu/drm/radeon/radeon_kms.c
+@@ -444,7 +444,7 @@ int radeon_info_ioctl(struct drm_device *dev, void 
+*data, struct drm_file *filp)
+              DRM_DEBUG_KMS("timestamp is r6xx+ only!\n");
+              return -EINVAL;
+          }
+-        value = (uint32_t*)&value64;
++        value = (uint32_t *)&value64;
+          value_size = sizeof(uint64_t);
+          value64 = radeon_get_gpu_clock_counter(rdev);
+          break;
+@@ -543,18 +543,18 @@ int radeon_info_ioctl(struct drm_device *dev, void 
+*data, struct drm_file *filp)
+          *value = rdev->vce.fb_version;
+          break;
+      case RADEON_INFO_NUM_BYTES_MOVED:
+-        value = (uint32_t*)&value64;
++        value = (uint32_t *)&value64;
+          value_size = sizeof(uint64_t);
+          value64 = atomic64_read(&rdev->num_bytes_moved);
+          break;
+      case RADEON_INFO_VRAM_USAGE:
+-        value = (uint32_t*)&value64;
++        value = (uint32_t *)&value64;
+          value_size = sizeof(uint64_t);
+          man = ttm_manager_type(&rdev->mman.bdev, TTM_PL_VRAM);
+          value64 = ttm_resource_manager_usage(man);
+          break;
+      case RADEON_INFO_GTT_USAGE:
+-        value = (uint32_t*)&value64;
++        value = (uint32_t *)&value64;
+          value_size = sizeof(uint64_t);
+          man = ttm_manager_type(&rdev->mman.bdev, TTM_PL_TT);
+          value64 = ttm_resource_manager_usage(man);
+@@ -614,7 +614,7 @@ int radeon_info_ioctl(struct drm_device *dev, void 
+*data, struct drm_file *filp)
+          DRM_DEBUG_KMS("Invalid request %d\n", info->request);
+          return -EINVAL;
+      }
+-    if (copy_to_user(value_ptr, (char*)value, value_size)) {
++    if (copy_to_user(value_ptr, (char *)value, value_size)) {
+          DRM_ERROR("copy_to_user %s:%u\n", __func__, __LINE__);
+          return -EFAULT;
+      }
