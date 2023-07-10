@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A9A74D564
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E8574D567
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjGJM2u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 08:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S231714AbjGJM30 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 08:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGJM2s (ORCPT
+        with ESMTP id S229793AbjGJM3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:28:48 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD18B1;
-        Mon, 10 Jul 2023 05:28:46 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-579de633419so49838557b3.3;
-        Mon, 10 Jul 2023 05:28:46 -0700 (PDT)
+        Mon, 10 Jul 2023 08:29:25 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57063B1;
+        Mon, 10 Jul 2023 05:29:24 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-57a4a476bbfso48946707b3.2;
+        Mon, 10 Jul 2023 05:29:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688992125; x=1691584125;
+        d=1e100.net; s=20221208; t=1688992163; x=1691584163;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZT9CKdoaGzp+O12vl3GuigdiF8zJ9pYS+HKgANR0KzU=;
-        b=TPfMAC0NDY5yXle1ZFfO7jGh+5HBt2DgxBrWTsnPLzSIVuFet4i2tt1X9X5EpQcbzN
-         1gKzzzji3fdoXemDhqaGApm1cISpWU4kaerbiOp+FC/HxqcjCnQMEuWLJnzw41OlrSsb
-         f2LIFxrwRrK468JFDHUoxIOU4XE5yvDP77Lhro+/y5aUOyIu3/Y5Fw6a9zOg9261fUj+
-         h5Mj3wzUYg2v1gvcPmXG/an8SrBkX6uW1n4B+HauJcojcBvxG7vV/ydb1GWXTbnbCMzN
-         OIrMSGaKekzgiPshz+N8cc17V8ui7d8JKQL2EZPvgI4cBTjhr154dTA+KZ+ub3hqC7tV
-         xP4A==
-X-Gm-Message-State: ABy/qLa0Xgrb11Dz2sPPk49QZb6vBUCWcJlb6R27ygCqzbpdX2IAsu3Y
-        PzFvQHtB1B6cypG7yZxeXHncYMGk3Q2ing==
-X-Google-Smtp-Source: APBJJlFmyUDslYw4bsisARYLp9dhoGFNYdphCyVP2HVXRku7labrNNjh+lZcfMjqoIQ+Za7op5jivg==
-X-Received: by 2002:a81:d554:0:b0:570:899f:3a52 with SMTP id l20-20020a81d554000000b00570899f3a52mr11482022ywj.35.1688992125440;
-        Mon, 10 Jul 2023 05:28:45 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id s185-20020a0de9c2000000b0056d2a19ad91sm3005837ywe.103.2023.07.10.05.28.44
+        bh=or6rkwZciDsGs8AiN7LjUfjmq1Ctoaqk6zMA59vRMOg=;
+        b=CYdSyYRdRR0In0lITNa3S5QLixZ5gKFLx0HmAQ4re1HA1xHHQDy9xrnYD77mH7u1on
+         YkD3hiSTe6nsilLscJegvgRNvZXDM2K9EtNWQ4Q2Q4YFZoAOaatCsW+ZCqWp1pfz8SdH
+         BPVWsSCzTPXrfj/VeSi48LezdNXHERaMXJLm7YvnD/4URjEy6gLrWBFfu+4Xsa8EKCdk
+         mBU5tasOB2Ick87xancqUl5uY0xKNfNIj3B1ydW2w6PY1RP9CI21JAU4Qnp7KWTpl2xX
+         1Yec6hFGFKrFeg2NKnhOHin1VNcVVGjoJ+yU6+DFD5f22CwJSs3Mqpy03lqulVqCyV9V
+         yEjw==
+X-Gm-Message-State: ABy/qLYbCp71ImrbqFi16NOkqrGwLkAQoNr22cB/IWfgTLonfhjSUbf/
+        rXcOgx2kB+ZR78HVyJqM4t/7Qha5PG2xtw==
+X-Google-Smtp-Source: APBJJlFrWUCqHQ1xzy0QHUf4v/CguahtRTvSB2Llw6Kx+lGuhu7TBujPCdUedy9k9JxqlrNpJuK4tg==
+X-Received: by 2002:a81:5a08:0:b0:565:3749:c24d with SMTP id o8-20020a815a08000000b005653749c24dmr12827396ywb.14.1688992163416;
+        Mon, 10 Jul 2023 05:29:23 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id i194-20020a816dcb000000b0057726fce046sm2985593ywc.26.2023.07.10.05.29.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:28:44 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso4000294276.1;
-        Mon, 10 Jul 2023 05:28:44 -0700 (PDT)
-X-Received: by 2002:a5b:90:0:b0:c8f:cf3e:20c4 with SMTP id b16-20020a5b0090000000b00c8fcf3e20c4mr453872ybp.52.1688992124098;
- Mon, 10 Jul 2023 05:28:44 -0700 (PDT)
+        Mon, 10 Jul 2023 05:29:23 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso4001061276.1;
+        Mon, 10 Jul 2023 05:29:23 -0700 (PDT)
+X-Received: by 2002:a25:a063:0:b0:c83:27d4:c0d6 with SMTP id
+ x90-20020a25a063000000b00c8327d4c0d6mr2502200ybh.37.1688992162968; Mon, 10
+ Jul 2023 05:29:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710024550.59544-1-frank.li@vivo.com> <20230710024550.59544-5-frank.li@vivo.com>
-In-Reply-To: <20230710024550.59544-5-frank.li@vivo.com>
+References: <20230710024550.59544-1-frank.li@vivo.com> <20230710024550.59544-6-frank.li@vivo.com>
+In-Reply-To: <20230710024550.59544-6-frank.li@vivo.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 14:28:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVajhN1LhmkTNDNMHO=nCEWQNt91+tgsTz6yBnu4KXd7g@mail.gmail.com>
-Message-ID: <CAMuHMdVajhN1LhmkTNDNMHO=nCEWQNt91+tgsTz6yBnu4KXd7g@mail.gmail.com>
-Subject: Re: [PATCH v3 05/11] ata: sata_rcar: drop useless initializer
+Date:   Mon, 10 Jul 2023 14:29:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX7GGPW2a57a9xme5bi56gOX79e7VRvbCJKNck+Bbiofg@mail.gmail.com>
+Message-ID: <CAMuHMdX7GGPW2a57a9xme5bi56gOX79e7VRvbCJKNck+Bbiofg@mail.gmail.com>
+Subject: Re: [PATCH v3 06/11] ata: sata_rcar: Remove unnecessary return value check
 To:     Yangtao Li <frank.li@vivo.com>
 Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         Damien Le Moal <dlemoal@kernel.org>,
@@ -68,7 +69,9 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Jul 10, 2023 at 4:47 AM Yangtao Li <frank.li@vivo.com> wrote:
-> There is no need to initialize the variable ret.
+> As commit ce753ad1549c ("platform: finally disallow IRQ0 in
+> platform_get_irq() and its ilk") says, there is no need to
+> check if the platform_get_irq return value is 0. Let's remove it.
 >
 > Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
