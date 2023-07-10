@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E76C74CCD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F1D74CCD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjGJG0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S230386AbjGJG0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjGJGZo (ORCPT
+        with ESMTP id S230487AbjGJGZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:25:44 -0400
+        Mon, 10 Jul 2023 02:25:53 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8045B118;
-        Sun,  9 Jul 2023 23:25:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4901E75;
+        Sun,  9 Jul 2023 23:25:43 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 559741FB;
-        Sun,  9 Jul 2023 23:26:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 664591FB;
+        Sun,  9 Jul 2023 23:26:25 -0700 (PDT)
 Received: from a077893.blr.arm.com (a077893.blr.arm.com [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4AAE73F67D;
-        Sun,  9 Jul 2023 23:25:30 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B82823F67D;
+        Sun,  9 Jul 2023 23:25:36 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
         suzuki.poulose@arm.com, gregkh@linuxfoundation.org,
@@ -38,9 +38,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
         Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V6 3/6] coresight: etm4x: Drop pid argument from etm4_probe()
-Date:   Mon, 10 Jul 2023 11:54:57 +0530
-Message-Id: <20230710062500.45147-4-anshuman.khandual@arm.com>
+Subject: [PATCH V6 4/6] coresight: etm4x: Change etm4_platform_driver driver for MMIO devices
+Date:   Mon, 10 Jul 2023 11:54:58 +0530
+Message-Id: <20230710062500.45147-5-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230710062500.45147-1-anshuman.khandual@arm.com>
 References: <20230710062500.45147-1-anshuman.khandual@arm.com>
@@ -55,11 +55,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coresight device pid can be retrieved from its iomem base address, which is
-stored in 'struct etm4x_drvdata'. This drops pid argument from etm4_probe()
-and 'struct etm4_init_arg'. Instead etm4_check_arch_features() derives the
-coresight device pid with a new helper coresight_get_pid(), right before it
-is consumed in etm4_hisi_match_pid().
+Add support for handling MMIO based devices via platform driver. We need to
+make sure that :
+
+1) The APB clock, if present is enabled at probe and via runtime_pm ops
+2) Use the ETM4x architecture or CoreSight architecture registers to
+   identify a device as CoreSight ETM4x, instead of relying a white list of
+   "Peripheral IDs"
+
+The driver doesn't get to handle the devices yet, until we wire the ACPI
+changes to move the devices to be handled via platform driver than the
+etm4_amba driver.
 
 Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
 Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
@@ -68,125 +74,231 @@ Cc: Leo Yan <leo.yan@linaro.org>
 Cc: coresight@lists.linaro.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- .../coresight/coresight-etm4x-core.c          | 29 ++++++++++---------
- include/linux/coresight.h                     | 12 ++++++++
- 2 files changed, 27 insertions(+), 14 deletions(-)
+ .../coresight/coresight-etm4x-core.c          | 58 ++++++++++++++++++-
+ drivers/hwtracing/coresight/coresight-etm4x.h |  4 ++
+ include/linux/coresight.h                     | 47 +++++++++++++++
+ 3 files changed, 107 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index bf93147c23ca..e91e59ecec53 100644
+index e91e59ecec53..43f583987250 100644
 --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
 +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -66,7 +66,6 @@ static u64 etm4_get_access_type(struct etmv4_config *config);
- static enum cpuhp_state hp_online;
+@@ -30,6 +30,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/property.h>
++#include <linux/clk/clk-conf.h>
  
- struct etm4_init_arg {
--	unsigned int		pid;
- 	struct device		*dev;
- 	struct csdev_access	*csa;
- };
-@@ -370,9 +369,17 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
+ #include <asm/barrier.h>
+ #include <asm/sections.h>
+@@ -1073,11 +1074,21 @@ static bool etm4_init_sysreg_access(struct etmv4_drvdata *drvdata,
+ 	return true;
  }
  
- static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
--				      unsigned int id)
-+				     struct csdev_access *csa)
- {
--	if (etm4_hisi_match_pid(id))
-+	/*
-+	 * TRCPIDR* registers are not required for ETMs with system
-+	 * instructions. They must be identified by the MIDR+REVIDRs.
-+	 * Skip the TRCPID checks for now.
-+	 */
-+	if (!csa->io_mem)
-+		return;
++static bool is_devtype_cpu_trace(void __iomem *base)
++{
++	u32 devtype = readl(base + TRCDEVTYPE);
 +
-+	if (etm4_hisi_match_pid(coresight_get_pid(csa)))
- 		set_bit(ETM4_IMPDEF_HISI_CORE_COMMIT, drvdata->arch_features);
- }
- #else
-@@ -385,7 +392,7 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
- }
- 
- static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
--				     unsigned int id)
-+				     struct csdev_access *csa)
++	return (devtype == CS_DEVTYPE_PE_TRACE);
++}
++
+ static bool etm4_init_iomem_access(struct etmv4_drvdata *drvdata,
+ 				   struct csdev_access *csa)
  {
- }
- #endif /* CONFIG_ETM4X_IMPDEF_FEATURE */
-@@ -1161,7 +1168,7 @@ static void etm4_init_arch_data(void *info)
- 	etm4_os_unlock_csa(drvdata, csa);
- 	etm4_cs_unlock(drvdata, csa);
+ 	u32 devarch = readl_relaxed(drvdata->base + TRCDEVARCH);
  
--	etm4_check_arch_features(drvdata, init_arg->pid);
-+	etm4_check_arch_features(drvdata, csa);
++	if (!is_coresight_device(drvdata->base) || !is_devtype_cpu_trace(drvdata->base))
++		return false;
++
+ 	/*
+ 	 * All ETMs must implement TRCDEVARCH to indicate that
+ 	 * the component is an ETMv4. Even though TRCIDR1 also
+@@ -2135,6 +2146,7 @@ static int etm4_probe_amba(struct amba_device *adev, const struct amba_id *id)
  
- 	/* find all capabilities of the tracing unit */
- 	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
-@@ -2044,7 +2051,7 @@ static int etm4_add_coresight_dev(struct etm4_init_arg *init_arg)
+ static int etm4_probe_platform_dev(struct platform_device *pdev)
+ {
++	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	struct etmv4_drvdata *drvdata;
+ 	int ret;
+ 
+@@ -2142,7 +2154,18 @@ static int etm4_probe_platform_dev(struct platform_device *pdev)
+ 	if (!drvdata)
+ 		return -ENOMEM;
+ 
+-	drvdata->base = NULL;
++	drvdata->pclk = coresight_get_enable_apb_pclk(&pdev->dev);
++	if (IS_ERR(drvdata->pclk))
++		return -ENODEV;
++
++	if (res) {
++		drvdata->base = devm_ioremap_resource(&pdev->dev, res);
++		if (IS_ERR(drvdata->base)) {
++			clk_put(drvdata->pclk);
++			return PTR_ERR(drvdata->base);
++		}
++	}
++
+ 	dev_set_drvdata(&pdev->dev, drvdata);
+ 	pm_runtime_get_noresume(&pdev->dev);
+ 	pm_runtime_set_active(&pdev->dev);
+@@ -2188,7 +2211,7 @@ static struct amba_cs_uci_id uci_id_etm4[] = {
+ 		/*  ETMv4 UCI data */
+ 		.devarch	= ETM_DEVARCH_ETMv4x_ARCH,
+ 		.devarch_mask	= ETM_DEVARCH_ID_MASK,
+-		.devtype	= 0x00000013,
++		.devtype	= CS_DEVTYPE_PE_TRACE,
+ 	}
+ };
+ 
+@@ -2244,6 +2267,10 @@ static int __exit etm4_remove_platform_dev(struct platform_device *pdev)
+ 	if (drvdata)
+ 		etm4_remove_dev(drvdata);
+ 	pm_runtime_disable(&pdev->dev);
++
++	if (drvdata->pclk)
++		clk_put(drvdata->pclk);
++
  	return 0;
  }
  
--static int etm4_probe(struct device *dev, u32 etm_pid)
-+static int etm4_probe(struct device *dev)
- {
- 	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
- 	struct csdev_access access = { 0 };
-@@ -2073,7 +2080,6 @@ static int etm4_probe(struct device *dev, u32 etm_pid)
+@@ -2288,6 +2315,32 @@ static struct amba_driver etm4x_amba_driver = {
+ 	.id_table	= etm4_ids,
+ };
  
- 	init_arg.dev = dev;
- 	init_arg.csa = &access;
--	init_arg.pid = etm_pid;
++#ifdef CONFIG_PM
++static int etm4_runtime_suspend(struct device *dev)
++{
++	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
++
++	if (drvdata->pclk && !IS_ERR(drvdata->pclk))
++		clk_disable_unprepare(drvdata->pclk);
++
++	return 0;
++}
++
++static int etm4_runtime_resume(struct device *dev)
++{
++	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
++
++	if (drvdata->pclk && !IS_ERR(drvdata->pclk))
++		clk_prepare_enable(drvdata->pclk);
++
++	return 0;
++}
++#endif
++
++static const struct dev_pm_ops etm4_dev_pm_ops = {
++	SET_RUNTIME_PM_OPS(etm4_runtime_suspend, etm4_runtime_resume, NULL)
++};
++
+ static const struct of_device_id etm4_sysreg_match[] = {
+ 	{ .compatible	= "arm,coresight-etm4x-sysreg" },
+ 	{ .compatible	= "arm,embedded-trace-extension" },
+@@ -2301,6 +2354,7 @@ static struct platform_driver etm4_platform_driver = {
+ 		.name			= "coresight-etm4x",
+ 		.of_match_table		= etm4_sysreg_match,
+ 		.suppress_bind_attrs	= true,
++		.pm			= &etm4_dev_pm_ops,
+ 	},
+ };
  
- 	/*
- 	 * Serialize against CPUHP callbacks to avoid race condition
-@@ -2120,7 +2126,7 @@ static int etm4_probe_amba(struct amba_device *adev, const struct amba_id *id)
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+index 27c8a9901868..20e2e4cb7614 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x.h
++++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+@@ -701,6 +701,8 @@
+ #define ETM_DEVARCH_ETE_ARCH						\
+ 	(ETM_DEVARCH_ARCHITECT_ARM | ETM_DEVARCH_ARCHID_ETE | ETM_DEVARCH_PRESENT)
  
- 	drvdata->base = base;
- 	dev_set_drvdata(dev, drvdata);
--	ret = etm4_probe(dev, id->id);
-+	ret = etm4_probe(dev);
- 	if (!ret)
- 		pm_runtime_put(&adev->dev);
++#define CS_DEVTYPE_PE_TRACE		0x00000013
++
+ #define TRCSTATR_IDLE_BIT		0
+ #define TRCSTATR_PMSTABLE_BIT		1
+ #define ETM_DEFAULT_ADDR_COMP		0
+@@ -944,6 +946,7 @@ struct etmv4_save_state {
  
-@@ -2142,12 +2148,7 @@ static int etm4_probe_platform_dev(struct platform_device *pdev)
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
--	/*
--	 * System register based devices could match the
--	 * HW by reading appropriate registers on the HW
--	 * and thus we could skip the PID.
--	 */
--	ret = etm4_probe(&pdev->dev, 0);
-+	ret = etm4_probe(&pdev->dev);
- 
- 	pm_runtime_put(&pdev->dev);
- 	return ret;
+ /**
+  * struct etm4_drvdata - specifics associated to an ETM component
++ * @pclk        APB clock if present, otherwise NULL
+  * @base:       Memory mapped base address for this component.
+  * @csdev:      Component vitals needed by the framework.
+  * @spinlock:   Only one at a time pls.
+@@ -1009,6 +1012,7 @@ struct etmv4_save_state {
+  * @arch_features: Bitmap of arch features of etmv4 devices.
+  */
+ struct etmv4_drvdata {
++	struct clk			*pclk;
+ 	void __iomem			*base;
+ 	struct coresight_device		*csdev;
+ 	spinlock_t			spinlock;
 diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-index bf70987240e4..255cfd283883 100644
+index 255cfd283883..a269fffaf991 100644
 --- a/include/linux/coresight.h
 +++ b/include/linux/coresight.h
-@@ -386,6 +386,18 @@ static inline u32 csdev_access_relaxed_read32(struct csdev_access *csa,
+@@ -6,6 +6,8 @@
+ #ifndef _LINUX_CORESIGHT_H
+ #define _LINUX_CORESIGHT_H
+ 
++#include <linux/amba/bus.h>
++#include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/io.h>
+ #include <linux/perf_event.h>
+@@ -386,6 +388,51 @@ static inline u32 csdev_access_relaxed_read32(struct csdev_access *csa,
  	return csa->read(offset, true, false);
  }
  
-+#define CORESIGHT_PIDRn(i)	(0xFE0 + ((i) * 4))
++#define CORESIGHT_CIDRn(i)	(0xFF0 + ((i) * 4))
 +
-+static inline u32 coresight_get_pid(struct csdev_access *csa)
++static inline u32 coresight_get_cid(void __iomem *base)
 +{
-+	u32 i, pid = 0;
++	u32 i, cid = 0;
 +
 +	for (i = 0; i < 4; i++)
-+		pid |= csdev_access_relaxed_read32(csa, CORESIGHT_PIDRn(i)) << (i * 8);
++		cid |= readl(base + CORESIGHT_CIDRn(i)) << (i * 8);
 +
-+	return pid;
++	return cid;
 +}
 +
- static inline u64 csdev_access_relaxed_read_pair(struct csdev_access *csa,
- 						 u32 lo_offset, u32 hi_offset)
- {
++static inline bool is_coresight_device(void __iomem *base)
++{
++	u32 cid = coresight_get_cid(base);
++
++	return cid == CORESIGHT_CID;
++}
++
++/*
++ * Attempt to find and enable "APB clock" for the given device
++ *
++ * Returns:
++ *
++ * clk   - Clock is found and enabled
++ * NULL  - clock is not found
++ * ERROR - Clock is found but failed to enable
++ */
++static inline struct clk *coresight_get_enable_apb_pclk(struct device *dev)
++{
++	struct clk *pclk;
++	int ret;
++
++	pclk = clk_get(dev, "apb_pclk");
++	if (IS_ERR(pclk))
++		return NULL;
++
++	ret = clk_prepare_enable(pclk);
++	if (ret) {
++		clk_put(pclk);
++		return ERR_PTR(ret);
++	}
++	return pclk;
++}
++
+ #define CORESIGHT_PIDRn(i)	(0xFE0 + ((i) * 4))
+ 
+ static inline u32 coresight_get_pid(struct csdev_access *csa)
 -- 
 2.25.1
 
