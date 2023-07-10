@@ -2,153 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367E874DECA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D58E74DF13
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjGJUHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S230527AbjGJUSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjGJUH2 (ORCPT
+        with ESMTP id S231224AbjGJUSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:07:28 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E089192
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689019646; x=1720555646;
-  h=date:from:to:cc:subject:message-id;
-  bh=1NKNF4A2cFuMuLHeg66WsjLqJoK7yRwwvhSB3yqq7PE=;
-  b=WbW2IgJWu5ug0V8EFtXH7+Wz9m3guA4LEZ+SZ1vgCVR3UndVYkAt1ShE
-   b8KL3Fu3ry2N15mEblH6KYBS42fplybG02rchu3HgAAqjS5jbvXnVA/m3
-   3DcRwzkzFmrZh1Cj0Bb7iLkzK9akofvNy11UFgCcxXppNF/MIFMlD7uDi
-   liS3nX7uGzxfzXT078oJYaC6kGCCA1dHpzj8bFCEKIvJh0vMI7U+zXF2g
-   z5nEexO+yXaQU29ReHNotJ8UMG9s2iinrgf+2j4yfnmxou3omapbmQJCi
-   op+nVMDriGQ6o1EbPN6cBbhwZ3ZWR4mZ4yf400C2EgSGC+Ql6amWu4YJt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344764963"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="344764963"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 13:07:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714904877"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="714904877"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 10 Jul 2023 13:07:25 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qIxAK-0003vh-2A;
-        Mon, 10 Jul 2023 20:07:24 +0000
-Date:   Tue, 11 Jul 2023 04:06:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 04505bbbbb15da950ea0239e328a76a3ad2376e0
-Message-ID: <202307110435.IriPej6X-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Mon, 10 Jul 2023 16:18:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804EB198
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689020256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YmlAnwDpnt7QnZH9R1+eVRqHntPGLtyJNksmlK12GAU=;
+        b=EOkQN6twhZrgUcYmbPrfnWduq5z+Beqp4QwpmPbVKca1sFR4o28fzHL8eHxF3lo2/wWoK+
+        Yr5bkI4ILbZg0t8YecAngOG5aphu/vvbZfDk0AVYcn3ozYeSLIDNEHb4sZUzYBhVcI6Cud
+        O7A+BHxx7H4rlgWAxaE0CA7Wvq2xU4o=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-636-xPsx2sS_PEKw8R3Mym_dpw-1; Mon, 10 Jul 2023 16:17:35 -0400
+X-MC-Unique: xPsx2sS_PEKw8R3Mym_dpw-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1b74e921a7aso351954fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 13:17:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689020254; x=1691612254;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YmlAnwDpnt7QnZH9R1+eVRqHntPGLtyJNksmlK12GAU=;
+        b=PeDLRCP5hWqZitSPE1QqLwCFw2/WAQnZPIkMHxj+76N8Bs2h5iUmhv5RTRrvfOSWp2
+         hznE+2K+C7GMqSOIKxcj991tK6mCK1QjEnPKlmAwgwAYT07BQka7cXiYsaxJcjpQHXSL
+         7dFe/3rzoBAMTqFNFTCW6jYMPBbLWd84+d25fVE45maCDbR8fZjCRNic0xrXBNvS4+zG
+         W7ktNtVMW96xyQUhTw5ab1qit59Gw89nswj8581BZMFuefXnBghSwHYMGPnGS0bXtOKp
+         4F2CGo+h0XcKntjhWUnNbbk0JPIiuZrsh+3PJh2sySebGiuN4P+ZzzFI54ZxP+jFqs4l
+         vGtw==
+X-Gm-Message-State: ABy/qLb2yPzOv5cl2FJxKDVr/OL0ASIFHLuVjrQp3ecp6kzwK/FY7355
+        pmsEuVbVzapi1EQlcuN3uxm7C8TtLEOJlE7eJ+Xm15h2+K62gzjzZX/Oh0SUUZV2fN9sgfXiRTt
+        cdlLXtYS3OrOV8fx51nkvX+TktdIpoH2KdZxK6aTN3CU1TXcrAWNBB7V67Lm5w5jH2iGRica1Yy
+        zVYHdCWEgw
+X-Received: by 2002:a05:6870:5254:b0:1b0:4fc5:2e4b with SMTP id o20-20020a056870525400b001b04fc52e4bmr13438916oai.9.1689020254731;
+        Mon, 10 Jul 2023 13:17:34 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFmKqPEtPtyW1H2DGn/G9uxqGi6UQiom7uSU/SpIgU9Y6/TP9FG19pTfynkVg73dr92H4bGyw==
+X-Received: by 2002:a05:6870:5254:b0:1b0:4fc5:2e4b with SMTP id o20-20020a056870525400b001b04fc52e4bmr13438882oai.9.1689020254461;
+        Mon, 10 Jul 2023 13:17:34 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id j12-20020a81920c000000b0056d2a19ad91sm155097ywg.103.2023.07.10.13.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 13:17:34 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        mcoquelin.stm32@gmail.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, joabreu@synopsys.com,
+        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
+        bhupesh.sharma@linaro.org, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, andrew@lunn.ch,
+        simon.horman@corigine.com, Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH net-next v2 1/3] net: stmmac: dwmac-qcom-ethqos: Use of_get_phy_mode() over device_get_phy_mode()
+Date:   Mon, 10 Jul 2023 15:06:37 -0500
+Message-ID: <20230710201636.200412-2-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230710201636.200412-1-ahalaney@redhat.com>
+References: <20230710201636.200412-1-ahalaney@redhat.com>
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/urgent
-branch HEAD: 04505bbbbb15da950ea0239e328a76a3ad2376e0  x86/fineibt: Poison ENDBR at +0
+Since this driver only uses devicetree, let's move over to
+of_get_phy_mode(). That API has an explicit error return and produces a
+phy_interface_t directly instead of an int when representing the phy
+mode.
 
-elapsed time: 728m
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
 
-configs tested: 76
-configs skipped: 89
+Changes since v1:
+    * Convert to using of_get_phy_mode() instead of continuing to use
+      device_get_phy_mode() (Andrew Lunn)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ .../net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c    | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                          collie_defconfig   clang
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230710   clang
-hexagon              randconfig-r045-20230710   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230710   gcc  
-i386         buildonly-randconfig-r005-20230710   gcc  
-i386         buildonly-randconfig-r006-20230710   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230710   gcc  
-i386                 randconfig-i002-20230710   gcc  
-i386                 randconfig-i003-20230710   gcc  
-i386                 randconfig-i004-20230710   gcc  
-i386                 randconfig-i005-20230710   gcc  
-i386                 randconfig-i006-20230710   gcc  
-i386                 randconfig-i011-20230710   clang
-i386                 randconfig-i012-20230710   clang
-i386                 randconfig-i013-20230710   clang
-i386                 randconfig-i014-20230710   clang
-i386                 randconfig-i015-20230710   clang
-i386                 randconfig-i016-20230710   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                 mpc832x_rdb_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230710   clang
-riscv                          rv32_defconfig   gcc  
-s390                 randconfig-r044-20230710   clang
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230710   gcc  
-x86_64       buildonly-randconfig-r002-20230710   gcc  
-x86_64       buildonly-randconfig-r003-20230710   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230710   clang
-x86_64               randconfig-x002-20230710   clang
-x86_64               randconfig-x003-20230710   clang
-x86_64               randconfig-x004-20230710   clang
-x86_64               randconfig-x005-20230710   clang
-x86_64               randconfig-x006-20230710   clang
-x86_64               randconfig-x011-20230710   gcc  
-x86_64               randconfig-x012-20230710   gcc  
-x86_64               randconfig-x013-20230710   gcc  
-x86_64               randconfig-x014-20230710   gcc  
-x86_64               randconfig-x015-20230710   gcc  
-x86_64               randconfig-x016-20230710   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+index e62940414e54..ebafdadb28d5 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+@@ -4,10 +4,10 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/of_net.h>
+ #include <linux/platform_device.h>
+ #include <linux/phy.h>
+ #include <linux/phy/phy.h>
+-#include <linux/property.h>
+ 
+ #include "stmmac.h"
+ #include "stmmac_platform.h"
+@@ -104,7 +104,7 @@ struct qcom_ethqos {
+ 	struct clk *link_clk;
+ 	struct phy *serdes_phy;
+ 	unsigned int speed;
+-	int phy_mode;
++	phy_interface_t phy_mode;
+ 
+ 	const struct ethqos_emac_por *por;
+ 	unsigned int num_por;
+@@ -720,7 +720,9 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 	if (!ethqos)
+ 		return -ENOMEM;
+ 
+-	ethqos->phy_mode = device_get_phy_mode(dev);
++	ret = of_get_phy_mode(np, &ethqos->phy_mode);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to get phy mode\n");
+ 	switch (ethqos->phy_mode) {
+ 	case PHY_INTERFACE_MODE_RGMII:
+ 	case PHY_INTERFACE_MODE_RGMII_ID:
+@@ -731,8 +733,6 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 	case PHY_INTERFACE_MODE_SGMII:
+ 		ethqos->configure_func = ethqos_configure_sgmii;
+ 		break;
+-	case -ENODEV:
+-		return -ENODEV;
+ 	default:
+ 		return -EINVAL;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
