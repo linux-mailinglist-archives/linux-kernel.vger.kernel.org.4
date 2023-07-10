@@ -2,79 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0F674DC69
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1568574DC6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbjGJR0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S233194AbjGJR0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjGJR0D (ORCPT
+        with ESMTP id S233055AbjGJR0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:26:03 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD51E40
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:25:27 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c6dd0e46a52so4016893276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:25:27 -0700 (PDT)
+        Mon, 10 Jul 2023 13:26:12 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174D71991
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:25:43 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3a3a8d21208so4188683b6e.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:25:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689009899; x=1691601899;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GFtR5Yswn2zIsqAIyfzUxYZ7lIpXaSTx1psXxqq1XD8=;
-        b=Yvz/elt/8HhORKMK799Ibn1sDr2Dq9plYlzqq+7JfZAwP/Ecu8JGjv0uk42yktW3X0
-         gb2jmQPf5M4psBXrzLoRyZlX10c2mBsSm+Nit4smH1P5gSG8etQu6lLokNXyrBPGddaS
-         zgzzamsGCJvpEwO0qkj4EXb9FIzAW4i3rjcfgR5swd1DGVVisKo31MuHjExEJgXsqIex
-         W9ldSnv8iw+zeZrGEiqUhs2evRsqWk206i5cFLYa+x8EscJTdlQWmSnu0r4NadwLJBFT
-         kIOv0et6JH2aTtJG1CJGYEHJv8nCkwCL0jS2DSnp4bggZv4PF/QFvry4rfo46QjjnohM
-         3png==
+        d=gmail.com; s=20221208; t=1689009941; x=1691601941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QwgPAnsoGImOTpKq/zgwf6map72bf6KrCfvboKElITA=;
+        b=DnCRB6tsdzjlZdKHrMnTb+fC53VCqYuDwixkgrKRM5vkGYDJ6nsznyKJbdq55hSYir
+         mFzCJQA1nH7WVsRT814upyrlygD8ernOA230UGe35rMY0mRqzasAH9olSl2vrbuMF7GJ
+         Hi9NqqnbgQUWtLUHVa4+cQgOxLdcucRMuFEEPCwgLMMYWFBfDAaKCESSQUqk5LLYS9rx
+         So7fu0G4QstJOO+fjRuIYdM0Ov+YkF9F3a0ycLNIcK7qqF15+UyKhpdwKyNdqA4yjjdK
+         WFqpyuTYa58MYkQT5vNszobbwT6ex9gjhFkYReikjFaICWssNy4t521UH339mhzP3S33
+         dHXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689009899; x=1691601899;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GFtR5Yswn2zIsqAIyfzUxYZ7lIpXaSTx1psXxqq1XD8=;
-        b=A+nVMCe+MBO+clvm4JXWl3tVY75eW2ru94yDZn24D8fJFmK8S50UZCxWBWU08LoOM9
-         n2EOmJ7dgihW7OQ1X1y4/52Qyt3hW5d9Rw8ubYh7KBdjmeXH9Dikin3eL3vFpuS3UUw0
-         iSgIqetA17jQvLNSxL9//e9aZC3c8cKsBeS8soYo4+IfOKTiwgJnma4XjMJGkilJ/6Uv
-         4ahS+mb70xcF7YtAueHTXvHuuB7KYOMWE9c5s21KZY+kQSGrMHLiijRJHsvMDfaV6Fvy
-         w5sZ4RKQvTPjJuN6Ii9o7HUGhDjqYfhzyUkz9qkDPlYlT9sMnnk4U6wCDIaG1puMzTp0
-         rYGg==
-X-Gm-Message-State: ABy/qLZb+HsSyu9pYcEo1QK/gb73wyedQW2IVDSpjQpWMq2PlAu4Dvgj
-        uzjQ7xNS8DxpM6OI+mFrjEWkhik=
-X-Google-Smtp-Source: APBJJlEEa2VOrjsQ01outn5Z4Dad68mUZLHGeqsd4BArFPiF9L06bVj/vezdwfgcbq3nUgkeriQMIb0=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6902:508:b0:c4b:6ed6:6147 with SMTP id
- x8-20020a056902050800b00c4b6ed66147mr116654ybs.9.1689009898868; Mon, 10 Jul
- 2023 10:24:58 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 10:24:57 -0700
-In-Reply-To: <20230710055614.1030300-1-sanpeqf@gmail.com>
-Mime-Version: 1.0
-References: <20230710055614.1030300-1-sanpeqf@gmail.com>
-Message-ID: <ZKw+6edWZJoSPGdn@google.com>
-Subject: Re: [PATCH v2 2/2] libbpf: fix some typo of hashmap init
-From:   Stanislav Fomichev <sdf@google.com>
-To:     John Sanpe <sanpeqf@gmail.com>
-Cc:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1689009941; x=1691601941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QwgPAnsoGImOTpKq/zgwf6map72bf6KrCfvboKElITA=;
+        b=PlO3vxFX7BUlBq4FO+kCdyHnT8vqA9pKQk3xZieQdp1OAJPtvLalYkCjbCxIcKvrnq
+         IoSHtmoz9UDXG0d0/eCv5Ve8EEMlE+qYCtfL94SEoCUIBiTfM0j1GQ5v9alSDOkoWjUJ
+         oLlRRYIYXEQKowNresrjcOb7y1h7AkQCXAOq1u1Om7c9tNZEgB26Q+gAn3FkYy9wms0d
+         OmL05Ok+r9KNnu1UaJRi85NnStF1zLJREyx5iBxPvsW0nugNRF7yyYjMNUpjSc1G/bOU
+         FytvdHFD8CQNXHNimlJVF/M/lBvs+t8QLVy44NodKtYawy6HVYsjJ49zyO5UoeuMznEA
+         2QBw==
+X-Gm-Message-State: ABy/qLZkPTwlFppEKgkyQywTiwDYMQC+z9emNrSVNTU15EvUpUDkYnUE
+        ssMlLgCGds07+r/NbN96yeYOz+3GkgqNpyoKGTw=
+X-Google-Smtp-Source: APBJJlH/RdvKZQnN1ndDfZW8FAy2oHtzFDZlusBzzOd+2kexWvU0EPGCZvfCyy3cnsNAgi5CdTrlDwOygmJybHGlQDk=
+X-Received: by 2002:aca:2308:0:b0:3a1:b638:9c2c with SMTP id
+ e8-20020aca2308000000b003a1b6389c2cmr11821118oie.55.1689009941122; Mon, 10
+ Jul 2023 10:25:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230710082515.54604-1-xujianghui@cdjrlc.com> <0cd737878affc60b7b34d58ea9e10e50@208suo.com>
+In-Reply-To: <0cd737878affc60b7b34d58ea9e10e50@208suo.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 10 Jul 2023 13:25:30 -0400
+Message-ID: <CADnq5_MAcyk=h8BebxrZ52n0Dsh3vj9PtjEUaD=PfDmhkej-cg@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: ERROR: "(foo*)" should be "(foo *)"
+To:     sunran001@208suo.com
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10, John Sanpe wrote:
-> Remove the whole HASHMAP_INIT. It's not used anywhere in libbpf.
-> 
-> Signed-off-by: John Sanpe <sanpeqf@gmail.com>
+Applied.  Thanks!
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
-
-Doesn't look like it was ever used.
+On Mon, Jul 10, 2023 at 4:27=E2=80=AFAM <sunran001@208suo.com> wrote:
+>
+> Fix four occurrences of the checkpatch.pl error:
+> ERROR: "(foo*)" should be "(foo *)"
+>
+> Signed-off-by: Ran Sun <sunran001@208suo.com>
+> ---
+>   drivers/gpu/drm/radeon/radeon_atombios.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c
+> b/drivers/gpu/drm/radeon/radeon_atombios.c
+> index bf3c411a55c5..85c4bb186203 100644
+> --- a/drivers/gpu/drm/radeon/radeon_atombios.c
+> +++ b/drivers/gpu/drm/radeon/radeon_atombios.c
+> @@ -1389,7 +1389,7 @@ bool radeon_atombios_get_ppll_ss_info(struct
+> radeon_device *rdev,
+>
+>           num_indices =3D (size - sizeof(ATOM_COMMON_TABLE_HEADER)) /
+>               sizeof(ATOM_SPREAD_SPECTRUM_ASSIGNMENT);
+> -        ss_assign =3D (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT*)
+> +        ss_assign =3D (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT *)
+>               ((u8 *)&ss_info->asSS_Info[0]);
+>           for (i =3D 0; i < num_indices; i++) {
+>               if (ss_assign->ucSS_Id =3D=3D id) {
+> @@ -1402,7 +1402,7 @@ bool radeon_atombios_get_ppll_ss_info(struct
+> radeon_device *rdev,
+>                   ss->refdiv =3D ss_assign->ucRecommendedRef_Div;
+>                   return true;
+>               }
+> -            ss_assign =3D (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT*)
+> +            ss_assign =3D (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT *)
+>                   ((u8 *)ss_assign + sizeof(struct
+> _ATOM_SPREAD_SPECTRUM_ASSIGNMENT));
+>           }
+>       }
+> @@ -3406,7 +3406,7 @@ static ATOM_VOLTAGE_OBJECT_V2
+> *atom_lookup_voltage_object_v2(ATOM_VOLTAGE_OBJECT
+>   {
+>       u32 size =3D le16_to_cpu(v2->sHeader.usStructureSize);
+>       u32 offset =3D offsetof(ATOM_VOLTAGE_OBJECT_INFO_V2,
+> asVoltageObj[0]);
+> -    u8 *start =3D (u8*)v2;
+> +    u8 *start =3D (u8 *)v2;
+>
+>       while (offset < size) {
+>           ATOM_VOLTAGE_OBJECT_V2 *vo =3D (ATOM_VOLTAGE_OBJECT_V2 *)(start=
+ +
+> offset);
+> @@ -3423,7 +3423,7 @@ static ATOM_VOLTAGE_OBJECT_V3
+> *atom_lookup_voltage_object_v3(ATOM_VOLTAGE_OBJECT
+>   {
+>       u32 size =3D le16_to_cpu(v3->sHeader.usStructureSize);
+>       u32 offset =3D offsetof(ATOM_VOLTAGE_OBJECT_INFO_V3_1,
+> asVoltageObj[0]);
+> -    u8 *start =3D (u8*)v3;
+> +    u8 *start =3D (u8 *)v3;
+>
+>       while (offset < size) {
+>           ATOM_VOLTAGE_OBJECT_V3 *vo =3D (ATOM_VOLTAGE_OBJECT_V3 *)(start=
+ +
+> offset);
