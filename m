@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199BA74DD24
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC7874DCFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjGJSOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S231728AbjGJSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjGJSOb (ORCPT
+        with ESMTP id S230153AbjGJSDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:14:31 -0400
-Received: from hel-mailgw-01.vaisala.com (hel-mailgw-01.vaisala.com [193.143.230.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A5012B;
-        Mon, 10 Jul 2023 11:14:29 -0700 (PDT)
-Received: from HEL-SMTP.corp.vaisala.com (HEL-SMTP.corp.vaisala.com [172.24.1.225])
-        by hel-mailgw-01.vaisala.com (Postfix) with ESMTP id A4A34601F18C;
-        Mon, 10 Jul 2023 20:58:20 +0300 (EEST)
-Received: from yocto-vm.localdomain ([172.24.253.44]) by HEL-SMTP.corp.vaisala.com over TLS secured channel with Microsoft SMTPSVC(8.5.9600.16384);
-         Mon, 10 Jul 2023 20:58:20 +0300
-From:   =?UTF-8?q?Vesa=20J=C3=A4=C3=A4skel=C3=A4inen?= 
-        <vesa.jaaskelainen@vaisala.com>
-Cc:     vesa.jaaskelainen@vaisala.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 10 Jul 2023 14:03:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3329EAB;
+        Mon, 10 Jul 2023 11:03:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C421361181;
+        Mon, 10 Jul 2023 18:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294D8C433C7;
+        Mon, 10 Jul 2023 18:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689012233;
+        bh=6jWr+jA+0JNwfJGO7rMuTRMnUOpHYMJXNBO85uDITqM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PQsgoUiMLpkyP7vtJuEwEAMo3jCKKGy1US+o+5BaYt/MSKqNLZ/CM5qUqIzUtsyyV
+         OQNFweG5QBYir79Liyb5oPFoFoMg3O8QA3XlWRKQfjxaF9VZn5r1NNsRWBs2C8+8H7
+         v8HktTDdM7+9gWIlJwzjpBoXTSKyXOMNWE7tFv++0jKN3K8K68xmnNyzrbYiwAthCj
+         QJJ3f+ALPYssacJ9DhEli5f5puxP9OmQ/8zRHwVQHrk1B4Xg91d1XhtrDetYGM9gO+
+         wjZYFU2l6PLAnCQbkVZWErL9rbekt6CcQ/iUaj0SsW/cu+XueqO6cE3P45BhKwOTBS
+         RJcTwii+BGEmQ==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so78318131fa.1;
+        Mon, 10 Jul 2023 11:03:53 -0700 (PDT)
+X-Gm-Message-State: ABy/qLawb4UpVUETWCcOKX3s6zQuMTNZt19lkkmFwcIgykNk/sxONxaz
+        Bf3bsv2/fzYhMpXnEqPynci/QF+ZHJ1QXiKX2A==
+X-Google-Smtp-Source: APBJJlFV86eCbBcABOMtsF7FRn2kX3cRrkY/rjIhBwqAFjzhX7m8M9va+DiWdMEGyh1uipSuuLjcUqWkTHuIPrYkNWI=
+X-Received: by 2002:a2e:95d4:0:b0:2b6:d89e:74e2 with SMTP id
+ y20-20020a2e95d4000000b002b6d89e74e2mr11255205ljh.7.1689012231160; Mon, 10
+ Jul 2023 11:03:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230707210646.868758-1-robh@kernel.org> <20230710-underling-angelfish-c47d363a59f5@spud>
+In-Reply-To: <20230710-underling-angelfish-c47d363a59f5@spud>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 10 Jul 2023 12:03:38 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+5mtgCAfFZOZTUjqFLW0DM5A6exD+PbznO71A8SDyyTA@mail.gmail.com>
+Message-ID: <CAL_Jsq+5mtgCAfFZOZTUjqFLW0DM5A6exD+PbznO71A8SDyyTA@mail.gmail.com>
+Subject: Re: [PATCH] media: dt-bindings: Convert Omnivision OV7251 to DT schema
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Davis <afd@ti.com>, netdev@vger.kernel.org,
+        Todor Tomov <todor.too@gmail.com>, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] net: phy: dp83822: Add support for line class driver configuration
-Date:   Mon, 10 Jul 2023 20:56:20 +0300
-Message-Id: <20230710175621.8612-3-vesa.jaaskelainen@vaisala.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230710175621.8612-1-vesa.jaaskelainen@vaisala.com>
-References: <20230710175621.8612-1-vesa.jaaskelainen@vaisala.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 10 Jul 2023 17:58:20.0539 (UTC) FILETIME=[1CC644B0:01D9B358]
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line driver can be configured either in Class A or in Class B modes.
+On Mon, Jul 10, 2023 at 11:57=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> On Fri, Jul 07, 2023 at 03:06:46PM -0600, Rob Herring wrote:
+> > Convert the OmniVision OV7251 Image Sensor binding to DT schema format.
+> >
+> > vddd-supply was listed as required, but the example and actual user
+> > don't have it. Also, the data brief says it has an internal regulator,
+> > so perhaps it is truly optional.
+>
+> ov7251.c:
+>         ov7251->core_regulator =3D devm_regulator_get(dev, "vddd");
+>         if (IS_ERR(ov7251->core_regulator)) {
+>                 dev_err(dev, "cannot get core regulator\n");
+>                 return PTR_ERR(ov7251->core_regulator);
+>         }
+>
+> Looks like the driver's probe function disagrees?
 
-By default the PHY is in Class B mode.
+Doesn't the regulator framework return a dummy regulator if missing?
 
-Signed-off-by: Vesa Jääskeläinen <vesa.jaaskelainen@vaisala.com>
----
- drivers/net/phy/dp83822.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> I was going to ask how it worked, but the one user has
+> status =3D "disabled"...
 
-diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
-index b7cb71817780..5c144d22b64e 100644
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -31,12 +31,17 @@
- #define MII_DP83822_FCSCR	0x14
- #define MII_DP83822_RCSR	0x17
- #define MII_DP83822_RESET_CTRL	0x1f
-+#define MII_DP83822_LDCSEL	0x404
- #define MII_DP83822_GENCFG	0x465
- #define MII_DP83822_SOR1	0x467
- 
- /* GENCFG */
- #define DP83822_SIG_DET_LOW	BIT(0)
- 
-+/* Line Driver Class Selection (LDCSEL) */
-+#define DP83822_LDCSEL_CLASS_A	0x24
-+#define DP83822_LDCSEL_CLASS_B	0x20
-+
- /* Control Register 2 bits */
- #define DP83822_FX_ENABLE	BIT(14)
- 
-@@ -118,6 +123,7 @@ struct dp83822_private {
- 	bool fx_signal_det_low;
- 	int fx_enabled;
- 	u16 fx_sd_enable;
-+	bool line_driver_class_a;
- };
- 
- static int dp83822_set_wol(struct phy_device *phydev,
-@@ -416,6 +422,16 @@ static int dp83822_config_init(struct phy_device *phydev)
- 					MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
- 	}
- 
-+	/* Configure line driver class */
-+	if (dp83822->line_driver_class_a)
-+		/* full MLT-3 on both Tx+ and Tx–.*/
-+		phy_write_mmd(phydev, DP83822_DEVADDR, MII_DP83822_LDCSEL,
-+			      DP83822_LDCSEL_CLASS_A);
-+	else
-+		/* reduced MLT-3 */
-+		phy_write_mmd(phydev, DP83822_DEVADDR, MII_DP83822_LDCSEL,
-+			      DP83822_LDCSEL_CLASS_B);
-+
- 	if (dp83822->fx_enabled) {
- 		err = phy_modify(phydev, MII_DP83822_CTRL_2,
- 				 DP83822_FX_ENABLE, 1);
-@@ -507,6 +523,12 @@ static int dp83822_of_init(struct phy_device *phydev)
- 		dp83822->fx_enabled = device_property_present(dev,
- 							      "ti,fiber-mode");
- 
-+	/* DP83822 defaults to line driver class B - enable configuration for
-+	 * class A
-+	 */
-+	dp83822->line_driver_class_a = device_property_present(dev,
-+							       "ti,line-driver-class-a");
-+
- 	return 0;
- }
- #else
--- 
-2.34.1
+Saw that too, but figured there's some other include with that
+overridden. We should really add a built .dts output target to avoid
+trying to manually walk includes.
 
+
+> /shrug, what's here looks fine to me, whatever Qualcomm person cares
+> about the driver can make sure it works for them I guess.
+>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks.
+
+Rob
