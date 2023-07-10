@@ -2,161 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1057874E251
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DE574E259
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjGJXvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S230035AbjGJXzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjGJXvH (ORCPT
+        with ESMTP id S229505AbjGJXzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:51:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38F91AC;
-        Mon, 10 Jul 2023 16:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689033063;
-        bh=0rZ8py8WFbjd+KaEuTNOvnpKq7U/hktOERHZwfzmUpg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cnq9/c/h6BYOykcOL2njRHa0bEH0yqKzEZoYO0A0rHffCs8kx67jM1ZGm+aIHsw//
-         VnVUeUfAXGnSEfD44L3I4GNQsGkBMpRBUFBVc5ZHg5/8yQhK8WVGPeScK05ca3XG9L
-         U+NcTpd2JCjggwwfF01F3RsGVmMqEW31R/HOaSCsUt6gQG38vFqQq9sRrX20Ed8hHh
-         RiqHFIGmIvOhhTPUpV+glcmAaafUBBZ9F6aT4vT2Wt2ozPr0ga1fSHHKnXxLWo2CC6
-         ZXqxPB7Z/J82yr/U1ldB2npinnul/jqrrc7Z+C3XIealYLFR6ToBjVoWhdg84xqFMN
-         X0rQEGIzOpUTA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0LP26Nszz4wb5;
-        Tue, 11 Jul 2023 09:51:02 +1000 (AEST)
-Date:   Tue, 11 Jul 2023 09:51:01 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the aspeed tree
-Message-ID: <20230711095101.6277674b@canb.auug.org.au>
+        Mon, 10 Jul 2023 19:55:03 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112AFA9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:55:02 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b9ed206018so43735ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689033301; x=1691625301;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vcjm6rctdmCVEw3eNu9IlJAGWa+qJbqrhCH/HfvBY3I=;
+        b=jzE6HHKT4khAjtgHJeghNLeX83XHL3xu1fQTeM3FeihJENdhKBl05Z2xpbV58BJ1MB
+         LlaQLDbWtEbfev+8PCPW63jYHiNMhmBTIwdEkAlDrZht/VFhuXtK08i/A6XCopFPMyc2
+         8dCPvHK81PbKRXb5KlrxOulRZvIUPlq2uHQ0slt1hdDxG+tChRNv9g+ypTYT4MNZpKhx
+         W0Z7sHF8L/+CGhqiDdcHZt9uq/UcToSHBJIEKLpDtbW4D19+JdXzCDzGax60sAjKLlsC
+         yt8qO4cTJswjJpT9B+1bOqDBK/y6rJtfK6zEsmD0Uqd7iWY4N0POuA+t2x7umoK53+bB
+         jodw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689033301; x=1691625301;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vcjm6rctdmCVEw3eNu9IlJAGWa+qJbqrhCH/HfvBY3I=;
+        b=flJ+37qlmpPVCgfU7IlUvPFQptqFNMHFedmVtis2KF3svpHXnziEfzFFNfZa/0XPlX
+         /E1pJOxdnRNOjlqEvEnQJiQmXYCCLGUtvXkX0nC6nCTulKvyWTdOknMZi/FToR50dBiY
+         5iaYe2bKKclWj7d2yEbRas4oTVnm7yna8xkrrFjDqvsO627MKuKhEgdj2fxsUlP2S+hf
+         jemjtY7O6os6RafB9Bioxd4YEXaT7WkVQTg6Yhy3F9M0qD0+OV4D3W7sx27ZALl5PYMX
+         7Zxck5/tMuYmwHUb93YCTXJdIsHTR5ks4dtPFF8wakJFeMOSXDpIydtC/JQJ8AvILLIT
+         JX2g==
+X-Gm-Message-State: ABy/qLbN9ilskhvysD7SZo3P6iAypdvQUhVOmVezpgR/xN2/Dh7Nfe0i
+        w1XF1BXMiaxt3nwmR6s7vKzPdw==
+X-Google-Smtp-Source: APBJJlFRZtb6Xi+TpHQHh4qJpvOR4DuHkV5Uj2ZeTzaG2RoSuO0pme8pA9LSQeJWBvuqYn846h/XYQ==
+X-Received: by 2002:a17:902:e88f:b0:1b9:e9f3:b4d4 with SMTP id w15-20020a170902e88f00b001b9e9f3b4d4mr124218plg.4.1689033301006;
+        Mon, 10 Jul 2023 16:55:01 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
+        by smtp.gmail.com with ESMTPSA id a18-20020a1709027d9200b001ac7f583f72sm435076plm.209.2023.07.10.16.54.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 16:55:00 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v5 2/2] Sched/fair: Block nohz tick_stop when cfs
+ bandwidth in use
+References: <20230707195748.2918490-1-pauld@redhat.com>
+        <20230707195748.2918490-3-pauld@redhat.com>
+Date:   Mon, 10 Jul 2023 16:54:58 -0700
+In-Reply-To: <20230707195748.2918490-3-pauld@redhat.com> (Phil Auld's message
+        of "Fri, 7 Jul 2023 15:57:48 -0400")
+Message-ID: <xm26lefnfhkd.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xjvL+9c_VqmQQBErHBcvQqV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xjvL+9c_VqmQQBErHBcvQqV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Phil Auld <pauld@redhat.com> writes:
 
-Hi all,
+> CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+> can easily run well past their quotas before a remote tick does
+> accounting.  This leads to long, multi-period stalls before such
+> tasks can run again. Currently, when presented with these conflicting
+> requirements the scheduler is favoring nohz_full and letting the tick
+> be stopped. However, nohz tick stopping is already best-effort, there
+> are a number of conditions that can prevent it, whereas cfs runtime
+> bandwidth is expected to be enforced.
+>
+> Make the scheduler favor bandwidth over stopping the tick by setting
+> TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+> runtime limit enabled. We use cfs_b->hierarchical_quota to
+> determine if the task requires the tick.
+>
+> Add check in pick_next_task_fair() as well since that is where
+> we have a handle on the task that is actually going to be running.
+>
+> Add check in sched_can_stop_tick() to cover some edge cases such 
+> as nr_running going from 2->1 and the 1 remains the running task.
+>
+> Add sched_feat HZ_BW (off by default) to control the tick_stop
+> behavior.
+>
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> ---
+>  kernel/sched/core.c     | 12 ++++++++++
+>  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
+>  kernel/sched/features.h |  2 ++
+>  kernel/sched/sched.h    |  1 +
+>  4 files changed, 64 insertions(+)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 1b214e10c25d..4b8534abdf4f 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1229,6 +1229,18 @@ bool sched_can_stop_tick(struct rq *rq)
+>  	if (rq->nr_running > 1)
+>  		return false;
+>  
+> +	/*
+> +	 * If there is one task and it has CFS runtime bandwidth constraints
+> +	 * and it's on the cpu now we don't want to stop the tick.
+> +	 * This check prevents clearing the bit if a newly enqueued task here is
+> +	 * dequeued by migrating while the constrained task continues to run.
+> +	 * E.g. going from 2->1 without going through pick_next_task().
+> +	 */
+> +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && task_on_rq_queued(rq->curr)) {
+> +		if (cfs_task_bw_constrained(rq->curr))
+> +			return false;
+> +	}
+> +
 
-After merging the aspeed tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+I think we still need the fair_sched_class check with the bit being on
+cfs_rq/tg rather than task.
 
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:238.6-19: Warning (reg_=
-format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a/eeprom@50:reg: p=
-roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
-=3D=3D 1)
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:247.6-19: Warning (reg_=
-format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b/eeprom@50:reg: p=
-roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
-=3D=3D 1)
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:256.6-19: Warning (reg_=
-format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c/eeprom@50:reg: p=
-roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
-=3D=3D 1)
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:265.6-19: Warning (reg_=
-format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d/eeprom@50:reg: p=
-roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
-=3D=3D 1)
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (pci_device_re=
-g): Failed prerequisite 'reg_format'
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (pci_device_bu=
-s_num): Failed prerequisite 'reg_format'
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:233.27-240.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a: incorre=
-ct #address-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:233.27-240.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a: incorre=
-ct #size-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:242.27-249.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b: incorre=
-ct #address-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:242.27-249.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b: incorre=
-ct #size-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:251.27-258.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c: incorre=
-ct #address-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:251.27-258.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c: incorre=
-ct #size-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:260.27-267.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d: incorre=
-ct #address-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:260.27-267.6: Warning (=
-i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d: incorre=
-ct #size-cells for I2C bus
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (i2c_bus_reg):=
- Failed prerequisite 'reg_format'
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (i2c_bus_reg):=
- Failed prerequisite 'i2c_bus_bridge'
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (spi_bus_reg):=
- Failed prerequisite 'reg_format'
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:236.15-239.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a=
-/eeprom@50: Relying on default #address-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:236.15-239.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a=
-/eeprom@50: Relying on default #size-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:245.15-248.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b=
-/eeprom@50: Relying on default #address-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:245.15-248.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b=
-/eeprom@50: Relying on default #size-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:254.15-257.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c=
-/eeprom@50: Relying on default #address-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:254.15-257.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c=
-/eeprom@50: Relying on default #size-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:263.15-266.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d=
-/eeprom@50: Relying on default #address-cells value
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:263.15-266.7: Warning (=
-avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d=
-/eeprom@50: Relying on default #size-cells value
-
-Presumably introduced by commit
-
-  267c95dc9f80 ("ARM: dts: aspeed: bonnell: Add DIMM SPD")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xjvL+9c_VqmQQBErHBcvQqV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsmWUACgkQAVBC80lX
-0GzRGQf/dAe/VENSmdR4P9TLNb19qI7LKRcCpq+WVf1hrwPZaX58QHjGtmCZPBb9
-kvF7E2hQ+ojLPTevrTqC64pvAu6tSbWCYI4FSGLKTp9S3SvgIYtGge8lWg6WOe1/
-WuCoi93Fa/bjKRU1JhDrM7v20wgYVk40GASpoa02nFdROSmcupkyVT7CFXAEkRU4
-MCKdsdopS6khOzdYBqZmbzVSbflPadrWZXiD3SBO84bO0kQcHfwroYDbXwzRSe8n
-CJT7A/i32wwVzHKvADtc7VCivh0F23l26LNXTmxklQIWBuC5gMkBA88r4hvtc1FQ
-CJP6rNNccJnGjlONPV1UFp/nI9HWbA==
-=X+r/
------END PGP SIGNATURE-----
-
---Sig_/xjvL+9c_VqmQQBErHBcvQqV--
