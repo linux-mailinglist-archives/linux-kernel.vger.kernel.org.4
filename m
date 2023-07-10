@@ -2,140 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD43F74DC4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E03174DC44
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjGJRXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        id S230162AbjGJRXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbjGJRXg (ORCPT
+        with ESMTP id S232792AbjGJRXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:23:36 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1200CA;
-        Mon, 10 Jul 2023 10:23:34 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id ef76e861deac5928; Mon, 10 Jul 2023 19:23:33 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id F273B660DCF;
-        Mon, 10 Jul 2023 19:23:32 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Saket Dumbre <saket.dumbre@intel.com>
-Subject: [PATCH 13/14] ACPICA: RHCT: Add flags, CMO and MMU nodes
-Date:   Mon, 10 Jul 2023 19:22:41 +0200
-Message-ID: <3437779.QJadu78ljV@kreacher>
-In-Reply-To: <5698695.DvuYhMxLoT@kreacher>
-References: <5698695.DvuYhMxLoT@kreacher>
+        Mon, 10 Jul 2023 13:23:03 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880F7C4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1689009778;
+        bh=Po8zatGdqlYMZWOZUJg6IjuWUDm0hMZ3hfIyOjTmbbA=;
+        h=From:Date:Subject:To:Cc:From;
+        b=inHcvuHgJ6+kGglivZs+J5puItQ/9KKRtdW4br3T8Wj5PZ8ofQIXRsUryd28xMPrB
+         xxtn6A+NEvS66/jVTHg22sJHvPzfJTaA4xnx1ImAmQvv7ZqlR32hWspayqicXHkSpn
+         HB3lQJmPf5kLh2fA1EGRnUQM4CDo8MirfNqRqZ40=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Mon, 10 Jul 2023 19:22:53 +0200
+Subject: [PATCH] tools/nolibc: completely remove optional environ support
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrkhgvthdrughumhgsrhgv
- sehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230710-nolibc-environ-v1-1-173831573af6@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAGw+rGQC/x3MTQqAIBBA4avIrBP8yaKuEi3KphqIMRQkCO+et
+ PwW772QMBImGMULETMlClyhGwH+XPhASVs1GGWs6rWSHC5avUTOFAPLfthb4zx21rVQozviTs8
+ /nOZSPrDxIJBgAAAA
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689009774; l=3008;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Po8zatGdqlYMZWOZUJg6IjuWUDm0hMZ3hfIyOjTmbbA=;
+ b=41gS/HHhHLxlE9tEok/zIl0587jw7tWgppPEkfHInFScwMONZQMd1GgNhT164GZSOmVQTcZnB
+ LVa0Y71qSheC4WyGwPdV4NK2Y8nfzA49DcMpX9TBM4vymxf/ENvb1Us
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sunil V L <sunilvl@ventanamicro.com>
+In commit 52e423f5b93e ("tools/nolibc: export environ as a weak symbol on i386")
+and friends the asm startup logic was extended to directly populate the
+"environ" array.
 
-ACPICA commit 2eded5a6a13d892b7dc3be6096e7b1e8d4407600
+This makes it impossible for "environ" to be dropped by the linker.
+Therefore also drop the other logic to handle non-present "environ".
 
-Update RHCT table with below details.
-
- 1) Add additional structure to describe the Cache Management
-    Operation (CMO) related information.
-
- 2) Add structure to describe MMU type.
-
- 3) Convert the current reserved field to flags and define
-    a flag to indicate timer capability.
-
-This codefirst ECR is approved by UEFI forum and will
-be part of next ACPI spec version.
-
-Link: https://github.com/acpica/acpica/commit/2eded5a6
-Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- include/acpi/actbl2.h | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+Note:
 
-diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
-index 280ab4c7f77a..3751ae69432f 100644
---- a/include/acpi/actbl2.h
-+++ b/include/acpi/actbl2.h
-@@ -2778,12 +2778,15 @@ enum acpi_rgrt_image_type {
- 
- struct acpi_table_rhct {
- 	struct acpi_table_header header;	/* Common ACPI table header */
--	u32 reserved;
-+	u32 flags;		/* RHCT flags */
- 	u64 time_base_freq;
- 	u32 node_count;
- 	u32 node_offset;
- };
- 
-+/* RHCT Flags */
-+
-+#define ACPI_RHCT_TIMER_CANNOT_WAKEUP_CPU       (1)
- /*
-  * RHCT subtables
+Given that nowadays both _auxv and environ are mandatory symbols imposed
+by nolibc of pointer size does it make sense to keep the code to make
+int-sized errno optional?
+---
+ tools/include/nolibc/stdlib.h                | 12 ++----------
+ tools/testing/selftests/nolibc/nolibc-test.c |  7 +------
+ 2 files changed, 3 insertions(+), 16 deletions(-)
+
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 902162f80337..bacfd35c5156 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -83,11 +83,10 @@ void free(void *ptr)
+  * declared as a char **, and must be terminated by a NULL (it is recommended
+  * to set this variable to the "envp" argument of main()). If the requested
+  * environment variable exists its value is returned otherwise NULL is
+- * returned. getenv() is forcefully inlined so that the reference to "environ"
+- * will be dropped if unused, even at -O0.
++ * returned.
   */
-@@ -2797,6 +2800,9 @@ struct acpi_rhct_node_header {
+ static __attribute__((unused))
+-char *_getenv(const char *name, char **environ)
++char *getenv(const char *name)
+ {
+ 	int idx, i;
  
- enum acpi_rhct_node_type {
- 	ACPI_RHCT_NODE_TYPE_ISA_STRING = 0x0000,
-+	ACPI_RHCT_NODE_TYPE_CMO = 0x0001,
-+	ACPI_RHCT_NODE_TYPE_MMU = 0x0002,
-+	ACPI_RHCT_NODE_TYPE_RESERVED = 0x0003,
- 	ACPI_RHCT_NODE_TYPE_HART_INFO = 0xFFFF,
+@@ -102,13 +101,6 @@ char *_getenv(const char *name, char **environ)
+ 	return NULL;
+ }
+ 
+-static __inline__ __attribute__((unused,always_inline))
+-char *getenv(const char *name)
+-{
+-	extern char **environ;
+-	return _getenv(name, environ);
+-}
+-
+ static __attribute__((unused))
+ unsigned long getauxval(unsigned long type)
+ {
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 486334981e60..7f4611ce1795 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -40,9 +40,6 @@
+ #endif
+ #endif
+ 
+-/* will be used by nolibc by getenv() */
+-char **environ;
+-
+ /* definition of a series of tests */
+ struct test {
+ 	const char *name;              /* test name */
+@@ -939,7 +936,7 @@ static const struct test test_names[] = {
+ 	{ 0 }
  };
  
-@@ -2810,6 +2816,24 @@ struct acpi_rhct_isa_string {
- 	char isa[];
- };
+-int main(int argc, char **argv, char **envp)
++int main(int argc, char **argv)
+ {
+ 	int min = 0;
+ 	int max = INT_MAX;
+@@ -948,8 +945,6 @@ int main(int argc, char **argv, char **envp)
+ 	int idx;
+ 	char *test;
  
-+struct acpi_rhct_cmo_node {
-+	u8 reserved;		/* Must be zero */
-+	u8 cbom_size;		/* CBOM size in powerof 2 */
-+	u8 cbop_size;		/* CBOP size in powerof 2 */
-+	u8 cboz_size;		/* CBOZ size in powerof 2 */
-+};
-+
-+struct acpi_rhct_mmu_node {
-+	u8 reserved;		/* Must be zero */
-+	u8 mmu_type;		/* Virtual Address Scheme */
-+};
-+
-+enum acpi_rhct_mmu_type {
-+	ACPI_RHCT_MMU_TYPE_SV39 = 0,
-+	ACPI_RHCT_MMU_TYPE_SV48 = 1,
-+	ACPI_RHCT_MMU_TYPE_SV57 = 2
-+};
-+
- /* Hart Info node structure */
- struct acpi_rhct_hart_info {
- 	u16 num_offsets;
+-	environ = envp;
+-
+ 	/* when called as init, it's possible that no console was opened, for
+ 	 * example if no /dev file system was provided. We'll check that fd#1
+ 	 * was opened, and if not we'll attempt to create and open /dev/console
+
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230710-nolibc-environ-79f425ce6354
+
+Best regards,
 -- 
-2.35.3
-
-
-
+Thomas Weißschuh <linux@weissschuh.net>
 
