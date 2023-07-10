@@ -2,143 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D82174D718
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8339D74D720
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjGJNLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S230213AbjGJNMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjGJNL1 (ORCPT
+        with ESMTP id S231176AbjGJNL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:11:27 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58B7A8;
-        Mon, 10 Jul 2023 06:11:26 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-992dcae74e0so590220566b.3;
-        Mon, 10 Jul 2023 06:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688994685; x=1691586685;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7+Sj+CwJeYIb9YiBPuGCzCzTBVYAtf6z/Ku6fc72G2E=;
-        b=FS46eo5yjS6DqXLbArty/6G2Q/3VjDmv9tgGS3BEb/KgL1glnMzOS7VcrOhzhUo13U
-         Pe9s5zG6Nqdt9sfeBKWZH5BnuRCiVvIHkKZqQOxZhKTdt5xT0kGQ62MPL/rCdrgkFkov
-         tJz0roaWL5/c9t8+qTOYZLJjMb2fUhvqLFyrECikyUVj1RltOq1FAZ0NdD3YVKDxTGga
-         A8CavPcYyjYAro3umKDprZp0uquDnZKhayLJVLtBoG+G90+hkLwuFecdF2P37632e/Tz
-         5MTD4yZNdFbbGjr77GhIf2omgHCVAdglPvw0eoYiYUwtXxBnuzBHp8e1bP4Ljc8+M7Ak
-         pBJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688994685; x=1691586685;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7+Sj+CwJeYIb9YiBPuGCzCzTBVYAtf6z/Ku6fc72G2E=;
-        b=Tde6/dpPKFHxo3YiKaVuA6DA+583LuV2hgyz4/U8SwFgxWff5Ursu9EXxiaMQt1/kP
-         qfCwnotrYhaGenD5ZbcKbGCiNIEJ/lLrJc1ui6Zosa31kqlOexJW84+ixoo1EqYb2DYN
-         +O71Vg3h41eetO9reRdkpCM+QRxMf2QhwP3XuYYuvgWY1IUBn+A5Hb+LJwuUk69Q8rWa
-         xGhHsS0PlUZhd9V2A9kkTaYCd/5lihMd78U3TvVK0b3HPjdwB8TjzknJvv3GcoWMIZc9
-         I2cNjZh3vWOELhmosNMH7i5eacKZLgRHzc39kDwr9pFHEVscCBDOh/fXCaghizK5BEuT
-         u6LA==
-X-Gm-Message-State: ABy/qLaFRoGhaMKlUZGc4aYz/lEU8RAlwuw38l/mBcE4aIUq1TVTqNW4
-        3UyuMezcb1OOlVDb/E5GnJ79lrtvvus=
-X-Google-Smtp-Source: APBJJlF1kaMLPpu8IWN45q9maOQ/+xLzkln+KHH7qgAVhCq/HJqmld6n7/tnKAoQDNfgm229y8lJsQ==
-X-Received: by 2002:a17:906:728a:b0:993:d54b:3e4a with SMTP id b10-20020a170906728a00b00993d54b3e4amr10626237ejl.15.1688994685133;
-        Mon, 10 Jul 2023 06:11:25 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id h13-20020a17090634cd00b0099316c56db9sm6056440ejb.127.2023.07.10.06.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 06:11:24 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:11:23 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-input@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: tegra-kbc - use devm_platform_ioremap_resource
-Message-ID: <ZKwDe77yPmaaNoiE@orome>
-References: <20230709134109.182418-1-martin@kaiser.cx>
+        Mon, 10 Jul 2023 09:11:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28EB194;
+        Mon, 10 Jul 2023 06:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688994704; x=1720530704;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DJgY4ciUiCYZnuYn9MihHuASvS84fRZSA2ENwfBYIiU=;
+  b=LUorezlukmWp3Vh4ech/a7g+ulF1IxEc7VJO5c+BGVmDUff7pA9Ukgwn
+   uGkuz3F/rm22RAmzHM4vCHPV9dLIQ4meXDXdIaujYCcF5+tCUIgNa6dGV
+   D0htRAFM887s4Xpu6e6pDt+Ply7H+EAhVxR6jzxmY2icYrnBITrvNAJzW
+   SeUR43FgYoMxeqprniKUa+dV2dRp0Q5lFgO6xqRW7Ok13DC64PtjBDK4J
+   xMxQIL6gJsLp2fQjCd81XyQlUjyPfJM/3EtscKgpPh/qT36BFj+jiXE7v
+   xUW8m48FSiiaKlv5VwSgsCIcuAm7ioB8/5YzpVCAq/VM0MIfx61lf/w+i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344665577"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="344665577"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 06:11:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="697985342"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="697985342"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2023 06:11:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1152F1FC; Mon, 10 Jul 2023 16:11:44 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v1 1/1] range.h: Move resource API and constant to respective headers
+Date:   Mon, 10 Jul 2023 16:11:42 +0300
+Message-Id: <20230710131142.32284-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="o7S8PluLd+rG5rXR"
-Content-Disposition: inline
-In-Reply-To: <20230709134109.182418-1-martin@kaiser.cx>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+range.h works with struct range data type. The resource_size_t
+is an alien here. Move the related pieces to the respective
+headers and rename MAX_RESOURCE using pattern ${TYPE}_MAX.
 
---o7S8PluLd+rG5rXR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/mips/cavium-octeon/setup.c | 2 +-
+ arch/x86/pci/amd_bus.c          | 8 ++++++++
+ arch/x86/pci/bus_numa.c         | 2 +-
+ include/linux/limits.h          | 2 ++
+ include/linux/range.h           | 8 --------
+ 5 files changed, 12 insertions(+), 10 deletions(-)
 
-On Sun, Jul 09, 2023 at 03:41:08PM +0200, Martin Kaiser wrote:
-> devm_platform_get_and_ioremap_resource maps a resource and returns its
-> physical address. If we don't need the physical address, we should call
-> devm_platform_ioremap_resource instead.
->=20
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->  drivers/input/keyboard/tegra-kbc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
+index c5561016f577..1ad2602a0383 100644
+--- a/arch/mips/cavium-octeon/setup.c
++++ b/arch/mips/cavium-octeon/setup.c
+@@ -1240,7 +1240,7 @@ static int __init octeon_no_pci_init(void)
+ 	 */
+ 	octeon_dummy_iospace = vzalloc(IO_SPACE_LIMIT);
+ 	set_io_port_base((unsigned long)octeon_dummy_iospace);
+-	ioport_resource.start = MAX_RESOURCE;
++	ioport_resource.start = RESOURCE_SIZE_MAX;
+ 	ioport_resource.end = 0;
+ 	return 0;
+ }
+diff --git a/arch/x86/pci/amd_bus.c b/arch/x86/pci/amd_bus.c
+index dd40d3fea74e..631512f7ec85 100644
+--- a/arch/x86/pci/amd_bus.c
++++ b/arch/x86/pci/amd_bus.c
+@@ -51,6 +51,14 @@ static struct pci_root_info __init *find_pci_root_info(int node, int link)
+ 	return NULL;
+ }
+ 
++static inline resource_size_t cap_resource(u64 val)
++{
++	if (val > RESOURCE_SIZE_MAX)
++		return RESOURCE_SIZE_MAX;
++
++	return val;
++}
++
+ /**
+  * early_root_info_init()
+  * called before pcibios_scan_root and pci_scan_bus
+diff --git a/arch/x86/pci/bus_numa.c b/arch/x86/pci/bus_numa.c
+index 2752c02e3f0e..e4a525e59eaf 100644
+--- a/arch/x86/pci/bus_numa.c
++++ b/arch/x86/pci/bus_numa.c
+@@ -101,7 +101,7 @@ void update_res(struct pci_root_info *info, resource_size_t start,
+ 	if (start > end)
+ 		return;
+ 
+-	if (start == MAX_RESOURCE)
++	if (start == RESOURCE_SIZE_MAX)
+ 		return;
+ 
+ 	if (!merge)
+diff --git a/include/linux/limits.h b/include/linux/limits.h
+index f6bcc9369010..38eb7f6f7e88 100644
+--- a/include/linux/limits.h
++++ b/include/linux/limits.h
+@@ -10,6 +10,8 @@
+ #define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
+ #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
+ 
++#define RESOURCE_SIZE_MAX	((resource_size_t)~0)
++
+ #define U8_MAX		((u8)~0U)
+ #define S8_MAX		((s8)(U8_MAX >> 1))
+ #define S8_MIN		((s8)(-S8_MAX - 1))
+diff --git a/include/linux/range.h b/include/linux/range.h
+index 7efb6a9b069b..6ad0b73cb7ad 100644
+--- a/include/linux/range.h
++++ b/include/linux/range.h
+@@ -31,12 +31,4 @@ int clean_sort_range(struct range *range, int az);
+ 
+ void sort_range(struct range *range, int nr_range);
+ 
+-#define MAX_RESOURCE ((resource_size_t)~0)
+-static inline resource_size_t cap_resource(u64 val)
+-{
+-	if (val > MAX_RESOURCE)
+-		return MAX_RESOURCE;
+-
+-	return val;
+-}
+ #endif
+-- 
+2.40.0.1.gaa8946217a0b
 
-Different variations of these have been going around for a while now. I
-don't really see much use in these tiny conversions.
-
-But the patch also isn't wrong, so while I'm at it:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
-
->=20
-> diff --git a/drivers/input/keyboard/tegra-kbc.c b/drivers/input/keyboard/=
-tegra-kbc.c
-> index d5a6c7d8eb25..c9a823ea45d0 100644
-> --- a/drivers/input/keyboard/tegra-kbc.c
-> +++ b/drivers/input/keyboard/tegra-kbc.c
-> @@ -640,7 +640,7 @@ static int tegra_kbc_probe(struct platform_device *pd=
-ev)
-> =20
->  	timer_setup(&kbc->timer, tegra_kbc_keypress_timer, 0);
-> =20
-> -	kbc->mmio =3D devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-> +	kbc->mmio =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(kbc->mmio))
->  		return PTR_ERR(kbc->mmio);
-> =20
-> --=20
-> 2.30.2
->=20
-
---o7S8PluLd+rG5rXR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSsA3oACgkQ3SOs138+
-s6F5cw//YZueXXDV1NfMlou+p4d28iz0CUuuGL06TRczgNlcyG4RS67X93IejGAP
-mmEMgX4CN0chNM/rdwTIXg9+jJ05ri5SuM+PPtzLstDWmoJ+S3ySLU89m0Tj8P81
-Xrk/JAEXxMTbVPvQPoG1MlQssNrA80Kis+ZLvQNAavkTIidBBeUnvojhsoMTbCkK
-eG06ldA0XvUNhFfdyQk1cNM2BpnEQEKgH7s4LMmHkc6HbHFUDpCZNzL3OCpluPi+
-uEWE3BCs2uMuhdYTvjd2gCMhQDrkTx+DLDM4Xvz+J0n1UbFWwGz7u/NPMwwnzEbZ
-UtN4NjqhWTKW/dF2m9mtiVahMXBLjGRumgwgupxK80fPdpVWQkwLCQklb/1mwqe3
-1ARD145VNSe0Qi7mvsXpO8gz9ZdpUyqZZ2muNBWfDSkRVm9qDRsbtfkwG/smw8rv
-vb/tN+rwnDu75QnGeGzifk9VldnODoATkAiOClLwmE3oBU6MXd7x59qmSZb8JguJ
-bMlE/zL+Z5wzjdGxn63aCFaz4QEuZ/JBe1JUeDzUE5a8V9U9T6m000oXnRTnB0pC
-hf1yd39lw7BPssSNFUhrCxOZqB8DM7HzEw3GbXitBFJcVVQHf0LGUYGAM7mvgIX/
-c5a7YgodKGCa8kHBwC9ATGKQ3gxvv6ZdvdbZGcnEmWd8gQOOgCI=
-=AfGr
------END PGP SIGNATURE-----
-
---o7S8PluLd+rG5rXR--
