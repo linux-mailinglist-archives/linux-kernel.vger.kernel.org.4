@@ -2,233 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE1174D8B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05B674D8BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjGJOOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S233094AbjGJOO0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 10:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjGJOOW (ORCPT
+        with ESMTP id S233024AbjGJOOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:14:22 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B943CD2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:14:21 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-666e6541c98so4003168b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688998461; x=1691590461;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mv8u75UgPYyw3J1c9x8u8HK0vBlvX+2V/eWoGzYtNdA=;
-        b=EnnUPxjQSRVAftNOSQhQMjO52wPL4wQUmZ9WZbSnktt9md1Ol3cg6GnBkmpRFi1qCR
-         sL8jv0E56Ymlc0CfjwkNSK2MF06DXTJfLqLchxLzGLp9GugiIQ9NA78Nx4cYFx4mf0+x
-         lflaF910uZF8eRd/t+tfVMa1e5ef3HkxZ89E0yTAlZaHTJcXb9xQduW9RH2gWYgiakMe
-         A8hqCiXb6qHUA6l/vTA+Qw847QlvJ/aS30/+1hPZ7QO7oLGdoiWETZUmuR+Rem1dmXqD
-         HVyR2kIRjwI/TDNEODrsMuRVKOgACfucnYVKAoWYkgQQLOES5SjtLQ0PAUgbKHbEjJVf
-         IKbw==
+        Mon, 10 Jul 2023 10:14:23 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56D9DF;
+        Mon, 10 Jul 2023 07:14:22 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-579ef51428eso58731147b3.2;
+        Mon, 10 Jul 2023 07:14:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688998461; x=1691590461;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mv8u75UgPYyw3J1c9x8u8HK0vBlvX+2V/eWoGzYtNdA=;
-        b=l3ldNH6Y1XOLHas2tOYenh+J8j/umE50aw9Ephk2Jv2KdpGOHBBa9Y42dRJodW99/K
-         7z1+TM8bT5Vrigwv8NCZylhbBkDUpzQfZbweAeDDIJL+AHbZZC8aMl8+uNqoFOBmlHJy
-         ZxJEdDYsQxUIiCZ+eEIQAyoAMwMy5RTBfTDYo5+uxdQniTtm5jMW+lxh2vfJUPVJJXx7
-         FpT7Ssr6u0JCWc0+uvmp0g6C0e40soGN8QxKcjYUTzYi3cwHdrwHh4bqQLMp+/q3AN88
-         vszrovnRb3ECvydq8f430Yesa8axjWdAKf/CPfk3Iq7ya84ndTmX3Er/wPZ0vXm9WZ5z
-         5QSA==
-X-Gm-Message-State: ABy/qLY6s+6jL9ZAhulrYWaQZ1tRJ9oXOoj2ufLt59rkpBmIABh9AJAv
-        A6t/ouLYBXIuXlQa6ccQP8c=
-X-Google-Smtp-Source: APBJJlHsZpjqp1tOUsGLo2NIwaH4oWoc0CdMZFihBn4V9/gyCo4grpssGwQBRVOssU7NBeu0jaLAJQ==
-X-Received: by 2002:a05:6a00:15d3:b0:67f:1d30:9e51 with SMTP id o19-20020a056a0015d300b0067f1d309e51mr17644702pfu.33.1688998461035;
+        d=1e100.net; s=20221208; t=1688998462; x=1691590462;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F1SoVYt/eXkCUju2ZrXSBXhCNBA/PkoSDQudNUVgxBk=;
+        b=c1z2zbn3OBnf/1vczT/XxCqWvTdV6D1lr+28xgEtUglq/HWORcK3Ay5Glgz3kZmc7u
+         AMZhwSFZDTwA5ffhDrq/wTSkKnQBM2mjdhGzKoqFeCWgWBmnoxgTt8s2fB6cwUHfeEMM
+         q7RREyFthliodB429vnFOFQQdCGNEr8MlFColV9u6Flj1oXAigJ1YCNBR1Ct7n5iyEvs
+         2zFZsf39owNxjQnFUui12hapvNKI+ssX1h9tXwnu3RCwJFGxBfNmwYnAdJSFvlbFf3t6
+         KcOs7vR+S2K///gCf9KNJKFCVfo91tUePGm+BhobVzoomoO6IENn/kntdHCMrs2579Xi
+         B72A==
+X-Gm-Message-State: ABy/qLZVvHZXedcftpeeIb3nf9ArFNJs9k98/rngljj79Oz+8smn9WlJ
+        pxns3OJwblka1s16/OVBGlL1rxCUVxLnTA==
+X-Google-Smtp-Source: APBJJlFh7o9jWx4DnSqYHfBCQNCZRRxzuJ4L+XjicDHfb+e/2TVk5hLjcP+XSDD6OCBzs5hCYY8f6Q==
+X-Received: by 2002:a0d:e884:0:b0:56f:ff55:2b7d with SMTP id r126-20020a0de884000000b0056fff552b7dmr15566918ywe.17.1688998461736;
         Mon, 10 Jul 2023 07:14:21 -0700 (PDT)
-Received: from localhost ([58.38.26.179])
-        by smtp.gmail.com with ESMTPSA id a9-20020a62bd09000000b0066884d4efdbsm7432182pff.12.2023.07.10.07.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 07:14:20 -0700 (PDT)
-From:   Liam Ni <zhiguangni01@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev
-Cc:     zhoubinbin@loongson.cn, chenfeiyang@loongson.cn,
-        jiaxun.yang@flygoat.com, rppt@kernel.org,
-        akpm@linux-foundation.org, hpa@zytor.com, x86@kernel.org,
-        bp@alien8.de, mingo@redhat.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, dave.hansen@linux.intel.com,
-        kernel@xen0n.name, chenhuacai@kernel.org,
-        Liam Ni <zhiguangni01@gmail.com>
-Subject: [PATCH V3] [PATCH V3] NUMA:Improve the efficiency of calculating pages loss
-Date:   Mon, 10 Jul 2023 22:14:08 +0800
-Message-Id: <20230710141408.9998-1-zhiguangni01@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id p135-20020a0de68d000000b005707d7686ddsm3078088ywe.76.2023.07.10.07.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 07:14:21 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-57a6df91b1eso27582177b3.1;
+        Mon, 10 Jul 2023 07:14:21 -0700 (PDT)
+X-Received: by 2002:a25:68ca:0:b0:c85:a84:d87e with SMTP id
+ d193-20020a2568ca000000b00c850a84d87emr2850225ybc.10.1688998461286; Mon, 10
+ Jul 2023 07:14:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230630120433.49529-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230630120433.49529-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <OS0PR01MB592217C4028606B67B39C6858629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CA+V-a8sXcHP2AYYLLONLLBDVctMb=fnU=D4+6hNoHGx5Dk2O3Q@mail.gmail.com> <OS0PR01MB592285AB361A6C25CEDC21F68629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB592285AB361A6C25CEDC21F68629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jul 2023 16:14:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVoDVMczVRt98GgimZviAHWy3c=P84+nrKOpxtaLVc4RQ@mail.gmail.com>
+Message-ID: <CAMuHMdVoDVMczVRt98GgimZviAHWy3c=P84+nrKOpxtaLVc4RQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
+ RZG2L_GPIO_PORT_PACK() macro
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of pages in memblock that doesn't have the node
-assigned,which also means that these pages are not in numa_info.
-So these pages can represent the number of lose pages.
+Hi Biju,
 
-V2:https://lore.kernel.org/all/20230619075315.49114-1-zhiguangni01@gmail.com/
-V1:https://lore.kernel.org/all/20230615142016.419570-1-zhiguangni01@gmail.com/
+On Mon, Jul 3, 2023 at 4:13 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > -----Original Message-----
+> > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
+> > Sent: Monday, July 3, 2023 1:43 PM
+> > To: Biju Das <biju.das.jz@bp.renesas.com>
+> > Cc: Geert Uytterhoeven <geert+renesas@glider.be>; Magnus Damm
+> > <magnus.damm@gmail.com>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+> > Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Linus Walleij
+> > <linus.walleij@linaro.org>; linux-renesas-soc@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
+> > kernel@vger.kernel.org; linux-gpio@vger.kernel.org; Prabhakar Mahadev
+> > Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Subject: Re: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
+> > RZG2L_GPIO_PORT_PACK() macro
+> >
+> > On Mon, Jul 3, 2023 at 12:42 PM Biju Das <biju.das.jz@bp.renesas.com>
+> > wrote:
+> > > > -----Original Message-----
+> > > > From: Prabhakar <prabhakar.csengg@gmail.com>
+> > > > Sent: Friday, June 30, 2023 1:05 PM
+> > > > To: Geert Uytterhoeven <geert+renesas@glider.be>; Magnus Damm
+> > > > <magnus.damm@gmail.com>
+> > > > Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > > > <krzysztof.kozlowski+dt@linaro.org>; Linus Walleij
+> > > > <linus.walleij@linaro.org>; linux-renesas-soc@vger.kernel.org;
+> > > > devicetree@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
+> > > > kernel@vger.kernel.org; linux-gpio@vger.kernel.org; Biju Das
+> > > > <biju.das.jz@bp.renesas.com>; Prabhakar
+> > > > <prabhakar.csengg@gmail.com>; Prabhakar Mahadev Lad
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > Subject: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
+> > > > RZG2L_GPIO_PORT_PACK() macro
+> > > >
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Currently we assume all the port pins are sequential ie always PX_0
+> > > > to PX_n (n=1..7) exist, but on RZ/Five SoC we have additional pins
+> > > > P19_1 to
+> > > > P28_5 which have holes in them, for example only one pin on port19
+> > > > is available and that is P19_1 and not P19_0.
+> > > >
+> > > > So to handle such cases include pinmap for each port which would
+> > > > indicate the pin availability on each port. With this we also get
+> > > > additional pin validation, for example on the RZ/G2L SOC P0 has two
+> > > > pins
+> > > > P0_1 and P0_0 but with DT/SYSFS could use the P0_2-P0_7.
+> > > >
+> > > > While at it, update rzg2l_validate_gpio_pin() to use the port pinmap
+> > > > to validate the gpio pin.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > >  drivers/pinctrl/renesas/pinctrl-rzg2l.c | 167
+> > > > ++++++++++++------------
+> > > >  1 file changed, 86 insertions(+), 81 deletions(-)
+> > > >
+> > > > diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > index 9511d920565e..a0c2e585e765 100644
+> > > > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > @@ -67,10 +67,12 @@
+> > > >                                        PIN_CFG_FILCLKSEL)
+> > > >
+> > > >  /*
+> > > > - * n indicates number of pins in the port, a is the register index
+> > > > - * and f is pin configuration capabilities supported.
+> > > > + * m indicates the bitmap of supported pins, n indicates number
+> > > > + * of pins in the port, a is the register index and f is pin
+> > > > + * configuration capabilities supported.
+> > > >   */
+> > > > -#define RZG2L_GPIO_PORT_PACK(n, a, f)        (((n) << 28) | ((a) <<
+> > 20) |
+> > > > (f))
+> > > > +#define RZG2L_GPIO_PORT_PACK(m, n, a, f)     ((UL(m) << 32) |
+> > (UL(n) << 28)
+> > > > | ((a) << 20) | (f))
+> > >
+> > > I guess, you can still achieve RZG2L_GPIO_PORT_PACK(n, a, f) with
+> > > ((UL(PINMAP(n)) << 32) | (UL(n) << 28) | ((a) << 20) | (f))
+> > >
+> > > #define PINMAP(n) GENMASK(n,0) ?? Then you don't need to modify
+> > rzg2l_gpio_configs.
+> > >
+> > Good point, but this would work if port pins didn't have any holes.
+> > For example on RZ/Five port P19 we have P19_1 pin only and P19_0 is not
+> > available (and similarly for port P25 we have P25_1).
+>
+> Maybe introduce a helper macro to address this case.
+>
+> #define RZG2L_GPIO_PORT_PACK_WITH_HOLES(m, n, a, f) for these 2 cases
 
-Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
----
- arch/loongarch/kernel/numa.c | 23 ++++++++---------------
- arch/x86/mm/numa.c           | 26 +++++++-------------------
- include/linux/mm.h           |  1 +
- mm/mm_init.c                 | 20 ++++++++++++++++++++
- 4 files changed, 36 insertions(+), 34 deletions(-)
+"sparse" is the terse term.
 
-diff --git a/arch/loongarch/kernel/numa.c b/arch/loongarch/kernel/numa.c
-index 708665895b47..0239891e4d19 100644
---- a/arch/loongarch/kernel/numa.c
-+++ b/arch/loongarch/kernel/numa.c
-@@ -262,25 +262,18 @@ static void __init node_mem_init(unsigned int node)
-  * Sanity check to catch more bad NUMA configurations (they are amazingly
-  * common).  Make sure the nodes cover all memory.
-  */
--static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
-+static bool __init memblock_validate_numa_coverage(const u64 limit)
- {
--	int i;
--	u64 numaram, biosram;
-+	u64 lo_pg;
- 
--	numaram = 0;
--	for (i = 0; i < mi->nr_blks; i++) {
--		u64 s = mi->blk[i].start >> PAGE_SHIFT;
--		u64 e = mi->blk[i].end >> PAGE_SHIFT;
-+	lo_pg = max_pfn - calculate_without_node_pages_in_range();
- 
--		numaram += e - s;
--		numaram -= __absent_pages_in_range(mi->blk[i].nid, s, e);
--		if ((s64)numaram < 0)
--			numaram = 0;
-+	/* We seem to lose 3 pages somewhere. Allow 1M of slack. */
-+	if (lo_pg >= limit) {
-+		pr_err("NUMA: We lost 1m size page.\n");
-+		return false;
- 	}
--	max_pfn = max_low_pfn;
--	biosram = max_pfn - absent_pages_in_range(0, max_pfn);
- 
--	BUG_ON((s64)(biosram - numaram) >= (1 << (20 - PAGE_SHIFT)));
- 	return true;
- }
- 
-@@ -428,7 +421,7 @@ int __init init_numa_memory(void)
- 		return -EINVAL;
- 
- 	init_node_memblock();
--	if (numa_meminfo_cover_memory(&numa_meminfo) == false)
-+	if (memblock_validate_numa_coverage(SZ_1M) == false)
- 		return -EINVAL;
- 
- 	for_each_node_mask(node, node_possible_map) {
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 2aadb2019b4f..14feec144675 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -451,30 +451,18 @@ EXPORT_SYMBOL(__node_distance);
-  * Sanity check to catch more bad NUMA configurations (they are amazingly
-  * common).  Make sure the nodes cover all memory.
-  */
--static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
-+static bool __init memblock_validate_numa_coverage(const u64 limit)
- {
--	u64 numaram, e820ram;
--	int i;
-+	u64 lo_pg;
- 
--	numaram = 0;
--	for (i = 0; i < mi->nr_blks; i++) {
--		u64 s = mi->blk[i].start >> PAGE_SHIFT;
--		u64 e = mi->blk[i].end >> PAGE_SHIFT;
--		numaram += e - s;
--		numaram -= __absent_pages_in_range(mi->blk[i].nid, s, e);
--		if ((s64)numaram < 0)
--			numaram = 0;
--	}
--
--	e820ram = max_pfn - absent_pages_in_range(0, max_pfn);
-+	lo_pg = max_pfn - calculate_without_node_pages_in_range();
- 
- 	/* We seem to lose 3 pages somewhere. Allow 1M of slack. */
--	if ((s64)(e820ram - numaram) >= (1 << (20 - PAGE_SHIFT))) {
--		printk(KERN_ERR "NUMA: nodes only cover %LuMB of your %LuMB e820 RAM. Not used.\n",
--		       (numaram << PAGE_SHIFT) >> 20,
--		       (e820ram << PAGE_SHIFT) >> 20);
-+	if (lo_pg >= limit) {
-+		pr_err("NUMA: We lost 1m size page.\n");
- 		return false;
- 	}
-+
- 	return true;
- }
- 
-@@ -583,7 +571,7 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
- 			return -EINVAL;
- 		}
- 	}
--	if (!numa_meminfo_cover_memory(mi))
-+	if (!memblock_validate_numa_coverage(SZ_1M))
- 		return -EINVAL;
- 
- 	/* Finally register nodes. */
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 0daef3f2f029..b32457ad1ae3 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3043,6 +3043,7 @@ unsigned long __absent_pages_in_range(int nid, unsigned long start_pfn,
- 						unsigned long end_pfn);
- extern unsigned long absent_pages_in_range(unsigned long start_pfn,
- 						unsigned long end_pfn);
-+extern unsigned long calculate_without_node_pages_in_range(void);
- extern void get_pfn_range_for_nid(unsigned int nid,
- 			unsigned long *start_pfn, unsigned long *end_pfn);
- 
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 3ddd18a89b66..13a4883787e3 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -1132,6 +1132,26 @@ static void __init adjust_zone_range_for_zone_movable(int nid,
- 	}
- }
- 
-+/**
-+ * @start_pfn: The start PFN to start searching for holes
-+ * @end_pfn: The end PFN to stop searching for holes
-+ *
-+ * Return: Return the number of page frames without node assigned within a range.
-+ */
-+unsigned long __init calculate_without_node_pages_in_range(void)
-+{
-+	unsigned long num_pages;
-+	unsigned long start_pfn, end_pfn;
-+	int nid, i;
-+
-+	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
-+		if (nid == NUMA_NO_NODE)
-+			num_pages += end_pfn - start_pfn;
-+	}
-+
-+	return num_pages;
-+}
-+
- /*
-  * Return the number of holes in a range on a node. If nid is MAX_NUMNODES,
-  * then all holes in the requested range will be accounted for.
+#define RZG2L_GPIO_PORT_PACK_SPARSE(m, a, f)
+as "n" can be derived from "m"
+
+> and use RZG2L_GPIO_PORT_PACK(n, a, f) for the one without holes.
+
+Exactly.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
