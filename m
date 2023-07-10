@@ -2,465 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A23274D1A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6C174D1A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjGJJec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        id S231917AbjGJJe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbjGJJd7 (ORCPT
+        with ESMTP id S232159AbjGJJd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:33:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F76110D3;
-        Mon, 10 Jul 2023 02:32:30 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A8e92o005226;
-        Mon, 10 Jul 2023 09:32:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=16ATSE0CtOFh/8jVPBIuN4he3PgzMAsFGOsa7cmjT4s=;
- b=KSzAimm9fYvukMPecgMqnkPFezO7oE4vvZlwHQbyTNiQkaP3/7LIa7ngRxNyYv7QBX/+
- 0aTeNSp9cIh+bDb/TIdtqjr9YJutPNShb1wnoy1I05ZfcIbJ6L06L47DbCLIKJ5Ch3hB
- KxEKcGBOrJS691VYmoHGwQfe5lnwIeTBVKoaXf/Yoo9grvspshJehKUvLRtdTpKdSSOg
- Sbugaya5jVsX0AOvVHep+tXOLHxqXLqignd8mYSx39SaEEFdiSaA12ZR1EXN/cXVWXbU
- 4jPUVjAqDl6DXu/7s5NXlf+VYvuGTUL+PL+79xpiZXfe7kcVbYhy0mFsafKUw8qhQVOZ ng== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rpwgm38nb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:32:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36A9WOv4019457
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 09:32:24 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+        Mon, 10 Jul 2023 05:33:58 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B210CE
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:32:21 -0700 (PDT)
+X-UUID: a81504761f0411eeb20a276fd37b9834-20230710
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=97twSx+tssjHq6sYy0J1LN13I9UHOht8fnfCiNaxMUw=;
+        b=T1kwnOfu/PE4pcGRzUybs+aIUNTleLXtnit+AOb7DRow10SfkXykxMYW8ytyfitr6kC07zHMsrOohiz5JPiPun4+lz+MqEDHq4pBzzZZPfj11ze+6WiPePmvpdlHhhIY9jMy3bz8AyPOf7z7+asenuw5IlJE5G33pStf4hoX2Xk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:880d1cbb-27af-4e70-9657-61beb0aa0e26,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+        N:release,TS:73
+X-CID-INFO: VERSION:1.1.27,REQID:880d1cbb-27af-4e70-9657-61beb0aa0e26,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:73
+X-CID-META: VersionHash:01c9525,CLOUDID:677cc30d-26a8-467f-b838-f99719a9c083,B
+        ulkID:230710111355BJ460XCR,BulkQuantity:20,Recheck:0,SF:28|17|19|48|38|29|
+        102,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40|20,QS:nil,BEC:ni
+        l,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB,TF_CID_SPAM_FCD,
+        TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC
+X-UUID: a81504761f0411eeb20a276fd37b9834-20230710
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1199935159; Mon, 10 Jul 2023 17:32:15 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 10 Jul 2023 02:32:19 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_saahtoma@quicinc.com>
-Subject: [PATCH] clk: qcom: clk-alpha-pll: Use determine_rate instead of round_rate
-Date:   Mon, 10 Jul 2023 15:02:06 +0530
-Message-ID: <20230710093206.18894-1-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+ 15.2.1118.26; Mon, 10 Jul 2023 17:32:14 +0800
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 10 Jul 2023 17:32:14 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j3qAkfhZieNPpbS6jdzJCFp7OXmpQsmspbL30n27TGLWopZ2iY73MKqeHMk0cJq2Uomh+mtgroPk2p+7exReUW2MYFVmlqBYsUcoeUoVpUhmDZqpvMwi/w8EWgdtlQpRC4XIq6yx4uGAa9CBZ2Zbd+KB/TcBxms9/beTvV7RuKWiCe9FdG/Ku/XU1Y27FTs6tSXXVv6RnrAo4gjtApt7RPJX72h8macFNV/WbgbzZxG0IaOq+CFjBYkkkiZPwKpodwqgODanjkipjEECVw6V0d5CB4nDcotaWXBc7bPBDvS6LFcxndL/LmC4FtkyuqKv20qH7RBwVQP7Th7yfzv0KQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=97twSx+tssjHq6sYy0J1LN13I9UHOht8fnfCiNaxMUw=;
+ b=ODP0XA8sG9fvNyFSR0yZ5iIoXnRf6YtvQUmiQ+u4FafvBGYFscFLv572PjcN/DLcB9UPjeq9RdtQrafhXzADJA3ECynGfh31R8JBonIDyNj7v2rsIZ/ovQoQc2py2OZkKm7T4JrllTwyhR0MhVnaVFK4Fk2m/JCzMOFFrGsjyoZ1GCSRqGzJkRYvIRpn84V0f8bIBZyyKPWYIIA6zWdiKmoLzXL0eRKrAXKXF4Nm8g81P1TYM2JwIX1NXu22ZAu0RbtdCe+Agh7wrjW53t8Xk5XFvy+a2sYQ3HkuLds/7iORcBcOxaTBgWD9OsTb0Qhl3ZuLazol5p0qxXLVl8di+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=97twSx+tssjHq6sYy0J1LN13I9UHOht8fnfCiNaxMUw=;
+ b=RWI+pRTXtfZ1U7Wln1EzFwwj8M04KMc36o/R5WnpHhvP3JZEhBfZi/UcNxAwoXa+3FZfkG2zM9zDTxdFZUac6H2HhZ5Cv0+gIsLQYgK92PBzRFn6vmEpt5clLnzduHbEgR5bFe71HjG6tPfvyf5WkzJqBMuinEiOsXwhT13Lqzw=
+Received: from KL1PR03MB7669.apcprd03.prod.outlook.com (2603:1096:820:e2::6)
+ by SI2PR03MB6485.apcprd03.prod.outlook.com (2603:1096:4:1a4::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 09:32:12 +0000
+Received: from KL1PR03MB7669.apcprd03.prod.outlook.com
+ ([fe80::937a:67d9:405c:7eec]) by KL1PR03MB7669.apcprd03.prod.outlook.com
+ ([fe80::937a:67d9:405c:7eec%6]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 09:32:12 +0000
+From:   =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>
+To:     "amergnat@baylibre.com" <amergnat@baylibre.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>
+CC:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        =?utf-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= 
+        <Johnson.Wang@mediatek.com>,
+        =?utf-8?B?SmFzb24tY2ggQ2hlbiAo6Zmz5bu66LGqKQ==?= 
+        <Jason-ch.Chen@mediatek.com>,
+        =?utf-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
+        <Shawn.Sung@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/mediatek: Fix iommu fault during crtc enabling
+Thread-Topic: [PATCH v2 2/2] drm/mediatek: Fix iommu fault during crtc
+ enabling
+Thread-Index: AQHZsoJHiSxKBEMvxEGs4Pxt5vriP6+yphIAgAAXt4A=
+Date:   Mon, 10 Jul 2023 09:32:12 +0000
+Message-ID: <efaa46e998e3ca3db787ab178e2f88276977b84f.camel@mediatek.com>
+References: <20230709162641.6405-1-jason-jh.lin@mediatek.com>
+         <20230709162641.6405-3-jason-jh.lin@mediatek.com>
+         <56a8fc90-337b-5ac2-be13-5420f2de6c5a@collabora.com>
+In-Reply-To: <56a8fc90-337b-5ac2-be13-5420f2de6c5a@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: KL1PR03MB7669:EE_|SI2PR03MB6485:EE_
+x-ms-office365-filtering-correlation-id: 5c820a1a-b3a8-49aa-3d54-08db81288a8b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0hyVsCnHhAPCQ6pVj2y2TUYImPNsj93k5YXZqR6NnoI03VZZwRfYoa63pPdOeIaD68oeYF0/eeut77tMYFp3CDiCiv2koK0ogjbZZ20+VWinKWlMqeYeLwiQq1fKHnWTCgX/DmH9sJk1mYrLQuaPUMef/2iPqKKX/7DJldq87i6vEV/4nwB/NN1r/gdr5RJPlxKO2ot/cJCEqC3jpGPhuPRRzOwSQI3nYIdpG03JJ2wDLDkZ1QC0yiZOUjpcYKohTp774Fv4wsFkGxbmx3/7fwIGmwBDcZj4ZYElgvszAyZKdrs7ObB6rLrlJikr/ZgiklzETq7Gow8+GAZnOuaBcfX/wOCmnpDAZ07pAKA8TERHOZ5Y+zLlE3jFyOQzdzvAGd+uMpoLOb9B9ytYJaGqnTDbNwJqxdep3O9XQuQKn1MqyypvxMfEXaKA6MkYmaXUrKi+cZHr5Fw1ZOHLtRzE4C+rKhfpyoLWyEZ+b901/QwgR7I9opfyfy68qpbHCnLsnJUrd/GkbdtcN6jzKwlZNPRCT5s3gXtvy+5dI0Ozsb+4V1iJuT2JgG3emOEx4RBH6OVU8q+QC8m9ZGSJyw/xYWsjFZCi+Y0umZifwKt7D26QjXdpYVLvZH3p3SAwOIIOtPNT5wG9dwkL1hrlWOZ4CnCiyBKbJw74Gu1X7EbDZvs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB7669.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(39860400002)(346002)(136003)(451199021)(86362001)(38100700002)(38070700005)(36756003)(85182001)(71200400001)(6486002)(110136005)(54906003)(76116006)(91956017)(122000001)(26005)(6506007)(186003)(6512007)(2616005)(5660300002)(2906002)(66556008)(316002)(478600001)(66946007)(8936002)(66476007)(8676002)(83380400001)(4326008)(64756008)(66446008)(4744005)(41300700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RTAzSW0xTzNFNUREVU1HNzc4Wmc5bHpLNWRabGpJUGl6OFU0ZVdUMExqUFFJ?=
+ =?utf-8?B?SHR1ZldqUHpjdndGYUVObm4zaFJuMjNTOG12U1NJL1AyTDI1azlxeGZEM256?=
+ =?utf-8?B?bDV5eWt3Z2hOMlE1ZWFna2RYVHhiYWpISmZBU3ZaRTdhNW5oVVJQd1JnN3NS?=
+ =?utf-8?B?S0IzV01jN0duTWl1MW9nZ0kyYVRaeTErN0NLdFAvR2Z1L0c0WFNqOHBVWjN3?=
+ =?utf-8?B?Q09oNHo3NUhhbDVkSHlkL1FCYUZuUXBlT09qQ3dxY3BncG45bTBXdTdRRGti?=
+ =?utf-8?B?eGlCK1NOMTRMYVpzdEsxOWlXWXQyMlJSQWx5ZGRFZ0s4K2gzWVZ4TzlIRjJp?=
+ =?utf-8?B?UUYyRWhsWlg0VEMwTmIzcUdxRis0R1Irdi9OUjl5SkowNUlHTlMyaEtwTFNP?=
+ =?utf-8?B?aDZPMEN4VnV5UUhJNUxlbFZxRWY3NGNNZjZoZHVDZ1lxYnhXSUttbVdFWFBG?=
+ =?utf-8?B?UGNuWjNZMVk0Zk1iU3d0UHgwRndlM3VOeDhZWDhRdWRVN25seFNrbW5Ja0cz?=
+ =?utf-8?B?dW05NjBjVzFaSm5BV2V6YThxZWx4bXE5OWRNdVZOZ3JRd3FWOVZOYUt5bHJH?=
+ =?utf-8?B?RDVacFJZamg2NGJMcVpyb2txR0tCam9hNVZBQTBjTGV3WGttd0RnbzRJTjNM?=
+ =?utf-8?B?U1RNQ3ZxVFkyMFNQVjJnV3R0VU94MFdqWU5BWStNTGZtbzNkTXc4Y1BPM0cw?=
+ =?utf-8?B?U0JnUHhMMUpjYTdzMlZESGdVcXljZWdBWTNZeERhbUdsSFhGQkVkTFlNbDQr?=
+ =?utf-8?B?TzRIb1BTSWMyeU9XQnREcVZpcWxDWEpmWTN4RDNUV2U2MnROOGxnaUhYTEtr?=
+ =?utf-8?B?MTZhRldXQ3c3bitNV29aSTRldUVZRDRzRmpOL3FqTTdGU1c4MDJnL3MybUM0?=
+ =?utf-8?B?ZWNwSGhCY29nSlViMFpBN1NqWGhIMTJGRDhaWnVueUVvVU1hZjcyN1R2Ymwr?=
+ =?utf-8?B?VGRLcXEwTW5BS2pyK3hSci85SmVJa3RQMHQ4c0NzVEtMODk3NmtQdnRqcmhv?=
+ =?utf-8?B?cE5tcGhNcjFlS21xR1FTUzJVemp2elR1WTJnVXV2Q28wZlpkalFTS3ozQjAw?=
+ =?utf-8?B?bXlwRExzQ0FFN2h4S1AyREhOdUJ1ZmdLdU9mVm5PNmhJNTFLVUVsNE8xbVBU?=
+ =?utf-8?B?WnZ0eDJRc1FHTWI3Rm15aVJZQnhmTWNmbExBTHRCa1dHY24xWUtzc1dpZXRu?=
+ =?utf-8?B?OTl4eE82MjlpL1RWa01adUZVSVU1cEZpc2g5WTVyRWdSZU1pcVg2RHRQU29q?=
+ =?utf-8?B?RUw4aDR0a3F4MUJ4dWhsTGVTWkVKdjNheGZEVldQQWhnbktaUk56RUhNVjdq?=
+ =?utf-8?B?d2NBSWJOaytITFZHV2Y4TDVKQVE5TkVrV08rZXBWTFluWHB6MkorRDl1SDNC?=
+ =?utf-8?B?TXI0QkJjRjBXZHVpcjB5L3hyTFRjWWdHaVFwRFVHNzVZcTg1ZVhmcUV5MnV0?=
+ =?utf-8?B?eVlwTzdPaEt1cVh5d25QR3RXbFNoYStYUnVVbWRMVndwOVNNRXZva0xCd3FG?=
+ =?utf-8?B?YUMzMTZDbnNZSW9qREFvNURFL2wzSXNaK3doRmJSNWNyellsU2VLLy9ac0s2?=
+ =?utf-8?B?QWg4YTAvSlk5a1FrcTlVWGtlRFBJSWxlWld5bUNiREcwcnZCQlM5U01kMEVw?=
+ =?utf-8?B?ZFlVS3psTXhjK2orK0lJNW9xQ0tlMlBaMFJld3NiV09CZVJ1VXkvN3pHcVVk?=
+ =?utf-8?B?OFVOdW9IbnI4SzUwTE1DVFpHVnpaS2VsRWxWRDZmc08xd3h1T1EwM0NUeFNB?=
+ =?utf-8?B?dVhKNlFkV2hvQ1NTWGJqR0xNeGhZVC9hb1ZUMTNZcE1JdktEVnJOdGlyZXRX?=
+ =?utf-8?B?YmltL2RLcmFvMXpka3hmcGdGRG9iVFZJc2ZWbCtiUDBMdklLeld4dTRPbDV0?=
+ =?utf-8?B?R3haUy9HcklRYkpyN3U4VTdWdlkrMStwVUR4aVdYOEs2SzEzNWNBc2c5Z1Q2?=
+ =?utf-8?B?VkNJQk1RcVpNeUJNQkZ4RXNlWGR5aVNQdlFXYzJmSUo1R3dNdHBqUk5pa240?=
+ =?utf-8?B?ZXBJZzFIaVdMRERCWGlLSU42bFJFTC9oNkxwbjV5ajlrUTRWODJBNlZJZGRa?=
+ =?utf-8?B?T3AzV3YxWXVHMW9iTDR2OXRqSmwyREV3RTVlb3UySDBFSDF6dmJYOSt4SWpU?=
+ =?utf-8?B?a0NMTzVuL1FKT0VodXN6K0FPR25WQy9VR0Fad0xHTzZXb1NCYW5PRE1JNzJ6?=
+ =?utf-8?B?SGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6065B93182B0844E80DCB3A4BF5A60FC@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: j5arkFWOqtWuhqFNVF84zutg5zDlv7vl
-X-Proofpoint-ORIG-GUID: j5arkFWOqtWuhqFNVF84zutg5zDlv7vl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_05,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=914 mlxscore=0
- phishscore=0 adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
- spamscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307100086
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB7669.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c820a1a-b3a8-49aa-3d54-08db81288a8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 09:32:12.5708
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tzEbgkJTivPEqSh6A7yIKxotD+ZoE93DT6OtrrDk5T7QPo092SUFkkNix2zF3Qe7Paxe61rDkb656gP/ZG0UdZvUzuagpjLMA24592kqoYM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB6485
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The round_rate() API returns a long value as the errors are reported using
-negative error codes. This leads to long overflow when the clock rate
-exceeds 2GHz.As the clock controller treats the clock rate above signed
-long max as an error, use determine_rate in place of round_rate as the
-determine_rate API does not possess such limitations.
-
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- drivers/clk/qcom/clk-alpha-pll.c | 128 +++++++++++++++++--------------
- 1 file changed, 71 insertions(+), 57 deletions(-)
-
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index e4ef645f65d1..4d9085f83d6b 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -744,22 +744,24 @@ static int clk_alpha_pll_hwfsm_set_rate(struct clk_hw *hw, unsigned long rate,
- 					clk_alpha_pll_hwfsm_is_enabled);
- }
- 
--static long clk_alpha_pll_round_rate(struct clk_hw *hw, unsigned long rate,
--				     unsigned long *prate)
-+static int clk_alpha_pll_determine_rate(struct clk_hw *hw,
-+					struct clk_rate_request *req)
- {
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	u32 l, alpha_width = pll_alpha_width(pll);
- 	u64 a;
- 	unsigned long min_freq, max_freq;
- 
--	rate = alpha_pll_round_rate(rate, *prate, &l, &a, alpha_width);
--	if (!pll->vco_table || alpha_pll_find_vco(pll, rate))
--		return rate;
-+	req->rate = alpha_pll_round_rate(req->rate, req->best_parent_rate,
-+					 &l, &a, alpha_width);
-+	if (!pll->vco_table || alpha_pll_find_vco(pll, req->rate))
-+		return 0;
- 
- 	min_freq = pll->vco_table[0].min_freq;
- 	max_freq = pll->vco_table[pll->num_vco - 1].max_freq;
- 
--	return clamp(rate, min_freq, max_freq);
-+	req->rate = clamp(req->rate, min_freq, max_freq);
-+	return 0;
- }
- 
- static unsigned long
-@@ -906,12 +908,15 @@ static int alpha_pll_huayra_set_rate(struct clk_hw *hw, unsigned long rate,
- 	return 0;
- }
- 
--static long alpha_pll_huayra_round_rate(struct clk_hw *hw, unsigned long rate,
--					unsigned long *prate)
-+static int alpha_pll_huayra_determine_rate(struct clk_hw *hw,
-+					   struct clk_rate_request *req)
- {
- 	u32 l, a;
- 
--	return alpha_huayra_pll_round_rate(rate, *prate, &l, &a);
-+	req->rate = alpha_huayra_pll_round_rate(req->rate,
-+						req->best_parent_rate,
-+						&l, &a);
-+	return 0;
- }
- 
- static int trion_pll_is_enabled(struct clk_alpha_pll *pll,
-@@ -1030,7 +1035,7 @@ const struct clk_ops clk_alpha_pll_ops = {
- 	.disable = clk_alpha_pll_disable,
- 	.is_enabled = clk_alpha_pll_is_enabled,
- 	.recalc_rate = clk_alpha_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = clk_alpha_pll_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_ops);
-@@ -1040,7 +1045,7 @@ const struct clk_ops clk_alpha_pll_huayra_ops = {
- 	.disable = clk_alpha_pll_disable,
- 	.is_enabled = clk_alpha_pll_is_enabled,
- 	.recalc_rate = alpha_pll_huayra_recalc_rate,
--	.round_rate = alpha_pll_huayra_round_rate,
-+	.determine_rate = alpha_pll_huayra_determine_rate,
- 	.set_rate = alpha_pll_huayra_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_huayra_ops);
-@@ -1050,7 +1055,7 @@ const struct clk_ops clk_alpha_pll_hwfsm_ops = {
- 	.disable = clk_alpha_pll_hwfsm_disable,
- 	.is_enabled = clk_alpha_pll_hwfsm_is_enabled,
- 	.recalc_rate = clk_alpha_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = clk_alpha_pll_hwfsm_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_hwfsm_ops);
-@@ -1060,7 +1065,7 @@ const struct clk_ops clk_alpha_pll_fixed_trion_ops = {
- 	.disable = clk_trion_pll_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_trion_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_trion_ops);
- 
-@@ -1094,25 +1099,25 @@ static const struct clk_div_table clk_alpha_2bit_div_table[] = {
- 	{ }
- };
- 
--static long
--clk_alpha_pll_postdiv_round_rate(struct clk_hw *hw, unsigned long rate,
--				 unsigned long *prate)
-+static int clk_alpha_pll_postdiv_determine_rate(struct clk_hw *hw,
-+						struct clk_rate_request *req)
- {
- 	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
- 	const struct clk_div_table *table;
-+	unsigned long rate = req->rate;
- 
- 	if (pll->width == 2)
- 		table = clk_alpha_2bit_div_table;
- 	else
- 		table = clk_alpha_div_table;
- 
--	return divider_round_rate(hw, rate, prate, table,
--				  pll->width, CLK_DIVIDER_POWER_OF_TWO);
-+	req->rate = divider_round_rate(hw, rate, &req->best_parent_rate, table,
-+				       pll->width, CLK_DIVIDER_POWER_OF_TWO);
-+	return 0;
- }
- 
--static long
--clk_alpha_pll_postdiv_round_ro_rate(struct clk_hw *hw, unsigned long rate,
--				    unsigned long *prate)
-+static int clk_alpha_pll_postdiv_determine_ro_rate(struct clk_hw *hw,
-+						   struct clk_rate_request *req)
- {
- 	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
- 	u32 ctl, div;
-@@ -1124,9 +1129,11 @@ clk_alpha_pll_postdiv_round_ro_rate(struct clk_hw *hw, unsigned long rate,
- 	div = 1 << fls(ctl);
- 
- 	if (clk_hw_get_flags(hw) & CLK_SET_RATE_PARENT)
--		*prate = clk_hw_round_rate(clk_hw_get_parent(hw), div * rate);
-+		req->best_parent_rate = clk_hw_round_rate(clk_hw_get_parent(hw),
-+							  div * req->rate);
-+	req->rate = DIV_ROUND_UP_ULL((u64)req->best_parent_rate, div);
- 
--	return DIV_ROUND_UP_ULL((u64)*prate, div);
-+	return 0;
- }
- 
- static int clk_alpha_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -1145,13 +1152,13 @@ static int clk_alpha_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- const struct clk_ops clk_alpha_pll_postdiv_ops = {
- 	.recalc_rate = clk_alpha_pll_postdiv_recalc_rate,
--	.round_rate = clk_alpha_pll_postdiv_round_rate,
-+	.determine_rate = clk_alpha_pll_postdiv_determine_rate,
- 	.set_rate = clk_alpha_pll_postdiv_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_ops);
- 
- const struct clk_ops clk_alpha_pll_postdiv_ro_ops = {
--	.round_rate = clk_alpha_pll_postdiv_round_ro_rate,
-+	.determine_rate = clk_alpha_pll_postdiv_determine_ro_rate,
- 	.recalc_rate = clk_alpha_pll_postdiv_recalc_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_ro_ops);
-@@ -1393,7 +1400,7 @@ const struct clk_ops clk_alpha_pll_fabia_ops = {
- 	.is_enabled = clk_alpha_pll_is_enabled,
- 	.set_rate = alpha_pll_fabia_set_rate,
- 	.recalc_rate = alpha_pll_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_fabia_ops);
- 
-@@ -1402,7 +1409,7 @@ const struct clk_ops clk_alpha_pll_fixed_fabia_ops = {
- 	.disable = alpha_pll_fabia_disable,
- 	.is_enabled = clk_alpha_pll_is_enabled,
- 	.recalc_rate = alpha_pll_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_fabia_ops);
- 
-@@ -1452,14 +1459,16 @@ clk_trion_pll_postdiv_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	return (parent_rate / div);
- }
- 
--static long
--clk_trion_pll_postdiv_round_rate(struct clk_hw *hw, unsigned long rate,
--				 unsigned long *prate)
-+static int
-+clk_trion_pll_postdiv_determine_rate(struct clk_hw *hw,
-+				     struct clk_rate_request *req)
- {
- 	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
- 
--	return divider_round_rate(hw, rate, prate, pll->post_div_table,
--				  pll->width, CLK_DIVIDER_ROUND_CLOSEST);
-+	req->rate = divider_round_rate(hw, req->rate, &req->best_parent_rate,
-+				       pll->post_div_table, pll->width,
-+				       CLK_DIVIDER_ROUND_CLOSEST);
-+	return 0;
- };
- 
- static int
-@@ -1485,18 +1494,21 @@ clk_trion_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- const struct clk_ops clk_alpha_pll_postdiv_trion_ops = {
- 	.recalc_rate = clk_trion_pll_postdiv_recalc_rate,
--	.round_rate = clk_trion_pll_postdiv_round_rate,
-+	.determine_rate = clk_trion_pll_postdiv_determine_rate,
- 	.set_rate = clk_trion_pll_postdiv_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_trion_ops);
- 
--static long clk_alpha_pll_postdiv_fabia_round_rate(struct clk_hw *hw,
--				unsigned long rate, unsigned long *prate)
-+static int
-+clk_alpha_pll_postdiv_fabia_determine_rate(struct clk_hw *hw,
-+					   struct clk_rate_request *req)
- {
- 	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
- 
--	return divider_round_rate(hw, rate, prate, pll->post_div_table,
--				pll->width, CLK_DIVIDER_ROUND_CLOSEST);
-+	req->rate = divider_round_rate(hw, req->rate, &req->best_parent_rate,
-+				       pll->post_div_table, pll->width,
-+					CLK_DIVIDER_ROUND_CLOSEST);
-+	return 0;
- }
- 
- static int clk_alpha_pll_postdiv_fabia_set_rate(struct clk_hw *hw,
-@@ -1531,7 +1543,7 @@ static int clk_alpha_pll_postdiv_fabia_set_rate(struct clk_hw *hw,
- 
- const struct clk_ops clk_alpha_pll_postdiv_fabia_ops = {
- 	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
-+	.determine_rate = clk_alpha_pll_postdiv_fabia_determine_rate,
- 	.set_rate = clk_alpha_pll_postdiv_fabia_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_fabia_ops);
-@@ -1683,7 +1695,7 @@ const struct clk_ops clk_alpha_pll_trion_ops = {
- 	.disable = clk_trion_pll_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_trion_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = alpha_pll_trion_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_trion_ops);
-@@ -1694,14 +1706,14 @@ const struct clk_ops clk_alpha_pll_lucid_ops = {
- 	.disable = clk_trion_pll_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_trion_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = alpha_pll_trion_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_lucid_ops);
- 
- const struct clk_ops clk_alpha_pll_postdiv_lucid_ops = {
- 	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
-+	.determine_rate = clk_alpha_pll_postdiv_fabia_determine_rate,
- 	.set_rate = clk_alpha_pll_postdiv_fabia_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_ops);
-@@ -1753,7 +1765,7 @@ const struct clk_ops clk_alpha_pll_agera_ops = {
- 	.disable = clk_alpha_pll_disable,
- 	.is_enabled = clk_alpha_pll_is_enabled,
- 	.recalc_rate = alpha_pll_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = clk_alpha_pll_agera_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_agera_ops);
-@@ -1918,7 +1930,7 @@ const struct clk_ops clk_alpha_pll_lucid_5lpe_ops = {
- 	.disable = alpha_pll_lucid_5lpe_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_trion_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = alpha_pll_lucid_5lpe_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_lucid_5lpe_ops);
-@@ -1928,13 +1940,13 @@ const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops = {
- 	.disable = alpha_pll_lucid_5lpe_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_trion_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_lucid_5lpe_ops);
- 
- const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops = {
- 	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
-+	.determine_rate = clk_alpha_pll_postdiv_fabia_determine_rate,
- 	.set_rate = clk_lucid_5lpe_pll_postdiv_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_5lpe_ops);
-@@ -2087,7 +2099,7 @@ const struct clk_ops clk_alpha_pll_zonda_ops = {
- 	.disable = clk_zonda_pll_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_trion_pll_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = clk_zonda_pll_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_zonda_ops);
-@@ -2277,13 +2289,13 @@ const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops = {
- 	.disable = alpha_pll_lucid_evo_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = alpha_pll_lucid_evo_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_lucid_evo_ops);
- 
- const struct clk_ops clk_alpha_pll_postdiv_lucid_evo_ops = {
- 	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
--	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
-+	.determine_rate = clk_alpha_pll_postdiv_fabia_determine_rate,
- 	.set_rate = clk_lucid_evo_pll_postdiv_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_evo_ops);
-@@ -2294,7 +2306,7 @@ const struct clk_ops clk_alpha_pll_lucid_evo_ops = {
- 	.disable = alpha_pll_lucid_evo_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = alpha_pll_lucid_evo_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = alpha_pll_lucid_5lpe_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_lucid_evo_ops);
-@@ -2305,7 +2317,7 @@ const struct clk_ops clk_alpha_pll_reset_lucid_evo_ops = {
- 	.disable = alpha_pll_reset_lucid_evo_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = alpha_pll_lucid_evo_recalc_rate,
--	.round_rate = clk_alpha_pll_round_rate,
-+	.determine_rate = clk_alpha_pll_determine_rate,
- 	.set_rate = alpha_pll_lucid_5lpe_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_reset_lucid_evo_ops);
-@@ -2341,22 +2353,24 @@ static unsigned long clk_rivian_evo_pll_recalc_rate(struct clk_hw *hw,
- 	return parent_rate * l;
- }
- 
--static long clk_rivian_evo_pll_round_rate(struct clk_hw *hw, unsigned long rate,
--					  unsigned long *prate)
-+static int clk_rivian_evo_pll_determine_rate(struct clk_hw *hw,
-+					     struct clk_rate_request *req)
- {
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	unsigned long min_freq, max_freq;
- 	u32 l;
- 	u64 a;
- 
--	rate = alpha_pll_round_rate(rate, *prate, &l, &a, 0);
--	if (!pll->vco_table || alpha_pll_find_vco(pll, rate))
--		return rate;
-+	req->rate = alpha_pll_round_rate(req->rate, req->best_parent_rate,
-+					 &l, &a, 0);
-+	if (!pll->vco_table || alpha_pll_find_vco(pll, req->rate))
-+		return 0;
- 
- 	min_freq = pll->vco_table[0].min_freq;
- 	max_freq = pll->vco_table[pll->num_vco - 1].max_freq;
- 
--	return clamp(rate, min_freq, max_freq);
-+	req->rate = clamp(req->rate, min_freq, max_freq);
-+	return 0;
- }
- 
- const struct clk_ops clk_alpha_pll_rivian_evo_ops = {
-@@ -2364,7 +2378,7 @@ const struct clk_ops clk_alpha_pll_rivian_evo_ops = {
- 	.disable = alpha_pll_lucid_5lpe_disable,
- 	.is_enabled = clk_trion_pll_is_enabled,
- 	.recalc_rate = clk_rivian_evo_pll_recalc_rate,
--	.round_rate = clk_rivian_evo_pll_round_rate,
-+	.determine_rate = clk_rivian_evo_pll_determine_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_rivian_evo_ops);
- 
--- 
-2.17.1
-
+SGkgQW5nZWxvLA0KDQpUaGFua3MgZm9yIHRoZSByZXZpZXdzLg0KDQpPbiBNb24sIDIwMjMtMDct
+MTAgYXQgMTA6MDcgKzAyMDAsIEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25vIHdyb3RlOg0KPiAg
+CSANCj4gRXh0ZXJuYWwgZW1haWwgOiBQbGVhc2UgZG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
+YXR0YWNobWVudHMgdW50aWwNCj4geW91IGhhdmUgdmVyaWZpZWQgdGhlIHNlbmRlciBvciB0aGUg
+Y29udGVudC4NCj4gIElsIDA5LzA3LzIzIDE4OjI2LCBKYXNvbi1KSC5MaW4gaGEgc2NyaXR0bzoN
+Cj4gPiBPVkwgbGF5ZXIgc2hvdWxkIG5vdCBiZSBlbmFibGVkIGJlZm9yZSBjcnRjIGlzIGVuYWJs
+ZWQuDQo+ID4gVGhlIHBsYW5lX3N0YXRlIG9mIGRybV9hdG9taWNfc3RhdGUgaXMgbm90IHN5bmMg
+dG8NCj4gPiB0aGUgcGxhbmVfc3RhdGUgc3RvcmVkIGluIG10a19jcnRjIGR1cmluZyBjcnRjIGVu
+YWJsaW5nLA0KPiA+IHNvIGp1c3Qgc2V0IGFsbCBwbGFuZXMgdG8gZGlzYWJsZWQuDQo+ID4gDQo+
+IA0KPiBQbGVhc2UgYWRkIHRoZSByZWxldmFudCBGaXhlcyB0YWcgYW5kIHJlc2VuZC4NCj4gDQo+
+IFRoYW5rcywNCj4gQW5nZWxvDQoNCk9LLCBJJ2xsIGFkZCBGaXhlcyB0YWcgYXQgdGhlIG5leHQg
+dmVyc2lvbi4NCg0KUmVnYXJkcywNCkphc29uLUpILkxpbg0K
