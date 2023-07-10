@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F0274CB2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9191474CB2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjGJEWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 00:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
+        id S230320AbjGJEZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 00:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjGJEWq (ORCPT
+        with ESMTP id S229569AbjGJEZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 00:22:46 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06F1FF
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 21:22:32 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7672303c831so364818085a.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 21:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1688962952; x=1691554952;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KdPVtuGWSeh+e/CBypa8yvniv55q4NGBxX2TleYGOls=;
-        b=k/MmSA+GB3nUSHuzTWAKdW+rACKSvV3MdhyKgDGKnyuWIjHUbMCagmypEOkZVV55Io
-         iBYxTr0uz75WTg64Y7k3kiOIOZ7IrWbZscHM1Qk1xj3ZLi5QvlB8+n0zze9JPcLVG7YY
-         /+1/D8rhY6FVGZDJyIpACRvoYHbU0e1L2lxCE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688962952; x=1691554952;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KdPVtuGWSeh+e/CBypa8yvniv55q4NGBxX2TleYGOls=;
-        b=FCHSxceXLFHQcJDUFvVp2Fl510QMLe4U/NaQaGAbXXs7HruKiMxvXdfHmRiQbJIliM
-         8XjzLEbGEXdWqTNlmb+8Da7O33FRDHO9LOhthFGJN4yhK6OqvAxXfGzRygcjkxhGF+EO
-         H8g1XqjBMKdkGD/kKgfTQaWS+SMFYUkou+Oy9KoEv/nPXezSU7gs7sF5+zv/gq/DuS6e
-         UB4radCSvbNz+FMHKP2uFuNTfP1U5Xl/ydEJFX5xAuJOodMlFsn+wXVG3dmdmkQkWOLq
-         +gSkAQicbgwBDZDHvEHQXS1dUojCXlXN5jDx+mDQa13Y4+OgMrdoispO1GSM91UE7PU1
-         i2PQ==
-X-Gm-Message-State: ABy/qLYyAZ1ZwXGF+4WSi5PVOOSdb+eQmzXJyuNkucp0mJDxnUG+GEEA
-        Qydwle/A2ZD3tq2IX5sIIRuVtSHkc6JXvlaflRg=
-X-Google-Smtp-Source: APBJJlFPmu/OpSM3hi2YqcI2sfhcz7s1RLQ6X0BZQcnNGXKfqOg1DMVVigKZ89Mqohjn+kNP2hZxf+s2peyir5k6h7U=
-X-Received: by 2002:a05:622a:1313:b0:3fd:eca6:8aed with SMTP id
- v19-20020a05622a131300b003fdeca68aedmr13615111qtk.44.1688962952027; Sun, 09
- Jul 2023 21:22:32 -0700 (PDT)
+        Mon, 10 Jul 2023 00:25:57 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2114.outbound.protection.outlook.com [40.107.215.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D84E9
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 21:25:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gREy369J+X8lWvyW5CFcVrqvf6IVLy7b57kxyobVg7QGvp7BRfxQBXHk/tve02eHy3Czr+LdBRP/IbDUbj4IBPJ6gB/CKreedbFttCYdk4vyyS1plw3mSG7/h01k7yOQ1/b6PDIsnHC/En54nE9/zq+gnbFiOCVzJbFj9E+b8btZ7w1KrxvOUEUcaMQgQK+K3GyN9XZK/TeV0jh58w+gKxEvpJhF/Tosveh1wYGOIZ6mhgG9REOz464u2EvGWO+s1Td6zhfPscTMIPTdhDEQ7cl/7Pas2xUzFZyfn1QgdSKtPUk09rgb4eITvJSxGGVCwJL3a+wbE1Oq6uEzgb8cBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=but9xGWUClSCNyz/budytUTSCviuryC7CaZzX6GmDN4=;
+ b=DbT0+JFhrCiuAbAqK0lyCBQ9ae79kvWl//0+//kSfrWOwh3yRykLnbkJlH8zYyHEIQEASYm4NWT26pwcEdYbF6GMZQjD10SZ7nY+cIi+hZrN+DiaaoDZeEhFWrLuGIh12FqEjkhH5HzPQnvFlW/OjZhf+v2xHo45dCifsHaa6A/oYnttIfxKVE/xUfvKKjDUxyiRYQCoTR39/wd0daWn2LRgnSLN9AyGbEWsTQzCECx9q1PAjG7Ym0mCbhpOyFu3yis2ueIsrALy7zVKK/Ft6AU2YM6xJsgnDIstI0SOkQgAtFOcHTcmmzgOLB62QV8BkEjriyeubfRP5qoJ0f9AsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=but9xGWUClSCNyz/budytUTSCviuryC7CaZzX6GmDN4=;
+ b=BbNVcOeYp4NCwPeKXa9lLvEOc5fRwEk1sEMB8MO2SpigBggyPTL08SjNJxdlNKmX9lc5pp8UvoipULnjKj1lZOhd6F7iIYwaAGdGAc9SiTVnBLgIMSUaMn/+VL+rA6hZc1gM7aelVqnuDx9G2d+2x1GejSoy5gwHrDmQIXIWspHUmGK/Fxpjf2PbgW3MeobwE3dkpbizwZklhX/IZrgduU1OCJ0CJu6wgqRkoNxBRcNBfBC0Gj1s8KWUEjqMUVm5ltDAjAMoREny/VKSGRWDUpXfq1BTU8PDejOpjdA3+0vHIUbElcVogn6kAIF++abvI/wFnTuvoMToiYzf7fXpog==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3338.apcprd06.prod.outlook.com (2603:1096:4:97::23) by
+ TYZPR06MB4109.apcprd06.prod.outlook.com (2603:1096:400:2a::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.26; Mon, 10 Jul 2023 04:25:50 +0000
+Received: from SG2PR06MB3338.apcprd06.prod.outlook.com
+ ([fe80::a05b:2f8b:fba5:50fb]) by SG2PR06MB3338.apcprd06.prod.outlook.com
+ ([fe80::a05b:2f8b:fba5:50fb%7]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 04:25:50 +0000
+From:   Chunhai Guo <guochunhai@vivo.com>
+To:     xiang@kernel.org, chao@kernel.org
+Cc:     huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Chunhai Guo <guochunhai@vivo.com>
+Subject: [PATCH] erofs: avoid unnecessary loops in z_erofs_pcluster_readmore() when read page beyond EOF
+Date:   Mon, 10 Jul 2023 12:25:31 +0800
+Message-Id: <20230710042531.28761-1-guochunhai@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0023.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::17) To SG2PR06MB3338.apcprd06.prod.outlook.com
+ (2603:1096:4:97::23)
 MIME-Version: 1.0
-References: <20230628083735.19946-2-zev@bewilderbeest.net>
-In-Reply-To: <20230628083735.19946-2-zev@bewilderbeest.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 10 Jul 2023 04:22:18 +0000
-Message-ID: <CACPK8Xei-295TNmkjg53qXyQHwSUf3s+Sj87_o7ZEw1G0+NPpw@mail.gmail.com>
-Subject: Re: [PATCH] soc: aspeed: uart-routing: Use __sysfs_match_string
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, linux-aspeed@lists.ozlabs.org,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        Oskar Senft <osk@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3338:EE_|TYZPR06MB4109:EE_
+X-MS-Office365-Filtering-Correlation-Id: 724ee590-16f6-44cf-9848-08db80fdbdf4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6sLh54XM3cTBcQQwqV3YZNT6HMj849pQm05xl2dMXiCHTiiCSMky5JrJoxSEQGS+Ot/KlSCyzivKmQzwQ5oJVfIR3gKvPG4zdDLOMTtvGp4RCaCmLU4tfi56gdBVBGdnpdeQGNgwBQi/7bIPvz4xT38AhOtvADHjupRL9P/W4YYO6zjFVtJtG5DJ1fMN7ZSpsJjz0Yj39cZ7Y84241amhesUitbDZ57PskaOMuE4hj8sTWBaFEgr+RJcf8gkNdx8sYFy03jM6kmTjynUXL+DjCgGc/05MInp4UNtUiwzId4fRnWjt80iLPplfebEWLY3ctwytNUoRRrrCPyb2wXTbGjiGseCXPCZyVTS60L9sLuDsdZ6eZ2sVeT4N2azgW4GFYSv5Aa2B5M9jZMAong1V+R92MKMW0MIBlzl6vrAq79KzZHUPnp0raB8g4s3S7HWpmvD9yzB8lxyURi0M0NJBIgDnaV597nO2kg8pQk1RXy7mDC5iDM29V315GwQXn91o/CiA/c7Cax32Vn9ghtEU4MDQRaI0u+cESFoYsEYR2gzIdBCnI3W32xMj+Zo7wAqV15A8/znPlKNJF4VHMU9nqlcti2l35pdZ/l84+DS9J8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3338.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(136003)(376002)(396003)(366004)(346002)(451199021)(6666004)(4326008)(66556008)(66946007)(66476007)(38100700002)(2616005)(38350700002)(86362001)(186003)(26005)(107886003)(6506007)(1076003)(83380400001)(52116002)(36756003)(478600001)(4744005)(41300700001)(5660300002)(8936002)(8676002)(6512007)(6486002)(316002)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DlGh5m+wm4exOdPjIa11oK4Jo+rx2W1/DF4tSwAbAflcPpDSmGz5deiUL1ek?=
+ =?us-ascii?Q?Q9xCoKNu6haQtCHkvGWh+olxSO1DaabTmRiPG96o2ExVGWBnQ3BOVj/08SPJ?=
+ =?us-ascii?Q?Fq+KV6SbnAgLP1gi3phrqxS2T8v7HyGRM7ZCBDxMoC06z0Z259Hsi2Mznrc5?=
+ =?us-ascii?Q?Xee5TB07j5Uw4SYRBS2XSNbiCmAHM6qdMU1s7XrKuW24W4bMFyOQhQc6xkyj?=
+ =?us-ascii?Q?Xg3IPeBwc+IjGG5ZHb/YTND7/X8dDcfh4kN5YS99ZtH1rQ0Sdgh3fCbA3gvd?=
+ =?us-ascii?Q?OJuNFJqw2vOY4sg6VB5mxMmmbU4R8fPs4BFzjyf3E1EOgvYLZR60uZKmuC5d?=
+ =?us-ascii?Q?MeYBZwVvl6YdFb67GvaO+1iTADgqeO4eXXWUPwBaKaAwQjIrml2cRw1TmFPo?=
+ =?us-ascii?Q?At5JuQH8V704iqKPTTvN3UVJRer2NGd7xDMfpZLHK2MBvMhnnTucpTMyyo2a?=
+ =?us-ascii?Q?buVyXYv7NFdfKVFSw9GR9b243K3SIGLGEUU/vh/6Gxuk+d3KrX7JJCAlGvqs?=
+ =?us-ascii?Q?1GdBnhcQ3Z1nj+37kIRpcPoIg/yxEm3k2cp1fPzTG58g+HltTQfhgRmXSyOl?=
+ =?us-ascii?Q?HD5VfwzMqRc3aJIyjoWZkHJVn+oz9Pbl+G/YD5brNhNTCKxjOiIm1z2993p+?=
+ =?us-ascii?Q?4v6VAJUMBYikV2bz7k3eA2rr+G4lRpd9en/noLnUXaCjYuaTioMvjaiDgeCJ?=
+ =?us-ascii?Q?/OACE1KUUakc5dftgT4S/Sk2iTrQron/WVyMRXHd/N9K9FfLmw5D4QqqvhXq?=
+ =?us-ascii?Q?M1rnqIgi7m/+0XaIoW2DiLyNACNFJjcUYYFYoGv10Vse+JgssgZ6tIJTCREP?=
+ =?us-ascii?Q?QYIyMe8b/7vU0WQzOM1G+EDwmKhUUBey+eQAWZaY0Z4Nyho2dCocAq6CKboR?=
+ =?us-ascii?Q?BlWfA0lP8q6+dub/qgFeJYqoNAq4cgFAi5HIQKuq4Llmfqyu4CycbCW830wi?=
+ =?us-ascii?Q?aktFyf1PjgG7BRCkLUvKqanCLxc6hLXCQ2NjyTSgKneaYZpwCCdQ1mUZkxQT?=
+ =?us-ascii?Q?ngVl3UiMUv3T79nwC9xmxz1/FlQhC/ZqO8wTwL1i0o+Ygct6B72nFFCVSKId?=
+ =?us-ascii?Q?9lacMdgZvDqBTne1FsmXxOxj/El0S1/WSqtzWjVYbsxyiUBUagvLPd/V8JGB?=
+ =?us-ascii?Q?N+remP51qUtV/zGa6HCiMJiDwjyVa5gVfW1uKKiL6Wy8PIZHwUNfVXxY7RM4?=
+ =?us-ascii?Q?phOcGiR8VM7KwrVsUJBsC+CNeA4+fno2ppWIn8/KAg0zq6YUXVR9AsZZH6Tm?=
+ =?us-ascii?Q?j1ZlAH7xk1KJ/sCm0vIZRErd7y7/H9FBtSnXDkC0tFURLU2JjcJ4b/bNLi/I?=
+ =?us-ascii?Q?pyDLNCrj0mVX/t/kme1JJN5qb3li78F35U6mwEc192YGAZ7K15anSup6c3VB?=
+ =?us-ascii?Q?EoZ9Rpx20CCkI7tLpuueunX+hUcblrik8cDiZPeqzxY6GeNhWqQ21IzWRzsR?=
+ =?us-ascii?Q?EjuGrDJe4VZaat5Kw++05IWVkdWFQzSvoE/gHfD6MKVKWkn+xnJfD7fnjQCJ?=
+ =?us-ascii?Q?71KWO7P1huJoSZaFmz8VXHSQyaJyJVpynzmnPDB8y0Q6mdnUzwzNcvOARBJA?=
+ =?us-ascii?Q?eVKuxn+m1IyO95WV+552gBk99saJjA/F+XjydgdM?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 724ee590-16f6-44cf-9848-08db80fdbdf4
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3338.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 04:25:50.6277
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H0VWPcOmRPTpL5O1IRR2Q7MQSutGtvr4Nn3n05Reg5h16mRVycnXjMEMKaLLcN4xpWzUdo5xc9kLmLr52rQCWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4109
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 08:43, Zev Weiss <zev@bewilderbeest.net> wrote:
->
-> The existing use of match_string() caused it to reject 'echo foo' due
-> to the implicitly appended newline, which was somewhat ergonomically
-> awkward and inconsistent with typical sysfs behavior.  Using the
-> __sysfs_* variant instead provides more convenient and consistent
-> linefeed-agnostic behavior.
+z_erofs_pcluster_readmore() may take a long time to loop when the page
+offset is large enough, which is unnecessary should be prevented.
+For example, when the following case is encountered, it will loop 4691368
+times, taking about 27 seconds.
+    - offset = 19217289215
+    - inode_size = 1442672
 
-Nice.
+Signed-off-by: Chunhai Guo <guochunhai@vivo.com>
+---
+ fs/erofs/zdata.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes: c6807970c3bc ("soc: aspeed: Add UART routing support")
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 5f1890e309c6..d9a0763f4595 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -1841,7 +1841,7 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
+ 	}
+ 
+ 	cur = map->m_la + map->m_llen - 1;
+-	while (cur >= end) {
++	while ((cur >= end) && (cur < i_size_read(inode))) {
+ 		pgoff_t index = cur >> PAGE_SHIFT;
+ 		struct page *page;
+ 
+-- 
+2.25.1
 
->
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  drivers/soc/aspeed/aspeed-uart-routing.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/soc/aspeed/aspeed-uart-routing.c b/drivers/soc/aspeed/aspeed-uart-routing.c
-> index ef8b24fd1851..59123e1f27ac 100644
-> --- a/drivers/soc/aspeed/aspeed-uart-routing.c
-> +++ b/drivers/soc/aspeed/aspeed-uart-routing.c
-> @@ -524,7 +524,7 @@ static ssize_t aspeed_uart_routing_store(struct device *dev,
->         struct aspeed_uart_routing_selector *sel = to_routing_selector(attr);
->         int val;
->
-> -       val = match_string(sel->options, -1, buf);
-> +       val = __sysfs_match_string(sel->options, -1, buf);
->         if (val < 0) {
->                 dev_err(dev, "invalid value \"%s\"\n", buf);
->                 return -EINVAL;
-> --
-> 2.40.0.5.gf6e3b97ba6d2.dirty
->
