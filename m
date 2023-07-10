@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C60674DCC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C8E74DCC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjGJRtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S231687AbjGJRv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjGJRth (ORCPT
+        with ESMTP id S230004AbjGJRv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:49:37 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9564128
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:49:36 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so9518934a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxeverywhere.org; s=google; t=1689011375; x=1691603375;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3fPDJkJSayhRNB4BcC6rS+X8788M3CNjhDGuen+6y4=;
-        b=D9JhgLsqr9QZNB692aU86cCtBh/ZGjpD7pyQX908xwIRqYXkThYqltBoTeLa2ZF3dh
-         y0ox+g0uZNFpbk4lL+fpikRLCfSb/MelWdr+qspy6JnBnhCzirhdNOTDL3bwrAt3tEqb
-         04/h0wxTNJX2HIKjnLb/5fpRPChjzMH07W5qc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689011375; x=1691603375;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3fPDJkJSayhRNB4BcC6rS+X8788M3CNjhDGuen+6y4=;
-        b=ZY+WJgrgxXW22WboHmwrHLk2EPJC2YnvnNcuyjiBJ+guCq+lRHL3muGcGDlX1wxlm9
-         ktvivhT2M6l/jkvxVFufStI7RPcQQrNYRJ8CgHugAjWFJutMCoUyAL247uNquW/VlFHs
-         enXV/RKwEUHGkX98LkKVRixlWjyv+fEpUoG8wsDTBAP6ZBQMmu3orWAp5qgpyyIXSD9z
-         tiUubtuEAqw9i26ITOVWvyDWPmyLW2PsL7NnY2ExXjTlhsClkRInc95nfvY64Hkg0tOE
-         chEvtuqeoW8oUYlIYwN1vJPtgQvNWF30H23B+LfGPlPExMTX2OO0z9UjVmB+knq2gD0D
-         NTPA==
-X-Gm-Message-State: ABy/qLY7ISw14SjpUp0+Oi1Qbwnp0rFYiWLy8p65NX82n1WYXIVhw+OG
-        U4WGJRtEqFdShzgSCeyFnfNSpA==
-X-Google-Smtp-Source: APBJJlFFKXHt2Q96u8BmShNFV74GO43Bjf0If8DEYBq8SooT0TpOvc70Sq9JQlj01rldsaOtWmOx9Q==
-X-Received: by 2002:a05:6402:1e89:b0:51e:3341:a9b5 with SMTP id f9-20020a0564021e8900b0051e3341a9b5mr18502684edf.18.1689011374986;
-        Mon, 10 Jul 2023 10:49:34 -0700 (PDT)
-Received: from localhost (83-84-189-87.cable.dynamic.v4.ziggo.nl. [83.84.189.87])
-        by smtp.gmail.com with ESMTPSA id m23-20020a056402051700b0051ddf53c623sm17683edv.2.2023.07.10.10.49.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 10:49:34 -0700 (PDT)
-From:   Jan Visser <starquake@linuxeverywhere.org>
-To:     mario.limonciello@amd.com
-Cc:     Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
-        andriy.shevchenko@linux.intel.com, dridri85@gmail.com,
-        friedrich.vock@gmx.de, hdegoede@redhat.com,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nmschulte@gmail.com,
-        npliashechnikov@gmail.com,
-        Jan Visser <starquake@linuxeverywhere.org>
-Subject: Re: [PATCH v2 0/4] Fix for interrupt storm on ASUS TUF A16
-Date:   Mon, 10 Jul 2023 19:49:26 +0200
-Message-ID: <20230710174926.5760-1-starquake@linuxeverywhere.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <994042dd-9532-0dfb-8f86-98c897db75fd@amd.com>
-References: <994042dd-9532-0dfb-8f86-98c897db75fd@amd.com>
+        Mon, 10 Jul 2023 13:51:57 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F543AD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1689011514; bh=WV6iTHNAjUAk0vrAhPrfPwRXuH5RztHU4ZrjaCHu7cw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NBUV/JAfZ0D6p37Vd/VeBxPU22HScKokphUudTTze53QL+8HUrp20Dw2m0dT1s2En
+         +qyT8K2eOUrZlaigDMSXcN5xVzCQgZuU1rG2y90W00w/iW+/jPDnTqHglGN5ZtXjq1
+         Kjr7tJE8Np6VGb5JhrB+tQ87sijtGqDFo/DfDZ84=
+Date:   Mon, 10 Jul 2023 19:51:53 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>
+Subject: Re: [PATCH] tools/nolibc: completely remove optional environ support
+Message-ID: <804671ba-3884-4700-b367-2f84dace89f4@t-8ch.de>
+References: <20230710-nolibc-environ-v1-1-173831573af6@weissschuh.net>
+ <ZKxDP3YrIdKxWaIN@1wt.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZKxDP3YrIdKxWaIN@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes keyboard issues on my Asus TUF Gaming A16 Advantage Edition FA617NS-N3085W
+On 2023-07-10 19:43:27+0200, Willy Tarreau wrote:
+> Hi Thomas,
+> 
+> On Mon, Jul 10, 2023 at 07:22:53PM +0200, Thomas Weißschuh wrote:
+> > In commit 52e423f5b93e ("tools/nolibc: export environ as a weak symbol on i386")
+> > and friends the asm startup logic was extended to directly populate the
+> > "environ" array.
+> > 
+> > This makes it impossible for "environ" to be dropped by the linker.
+> > Therefore also drop the other logic to handle non-present "environ".
+> 
+> Hmmm OK but at least I'd like that we continue to reference it from
+> nolibc-test to make sure it's still visible. Maybe we could just check
+> that it's always equal to envp ? If we drop its reference from there,
+> sooner or later someone will find it interesting to rename it and some
+> programs referencing it will break.
 
-Thanks!
+Easy enough to test for. I'll send a v2.
 
-Tested-by: Jan Visser <starquake@linuxeverywhere.org>
+> > Note:
+> > 
+> > Given that nowadays both _auxv and environ are mandatory symbols imposed
+> > by nolibc of pointer size does it make sense to keep the code to make
+> > int-sized errno optional?
+> 
+> While it indeed used to be related to having a data segment or not
+> initially, it still has an impact on our ability to completely drop
+> the errno setting code from all syscalls. Given the SET_ERRNO() macro
+> now I guess it's very cheap to keep it, don't you think ?
+
+SET_ERRNO irks me a tiny bit :-)
+
+But it's easy enough to keep, let's do so.
+Just wanted to have brought it up.
+
+Thomas
