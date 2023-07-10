@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2489974D93A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EE274D939
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbjGJOnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S232139AbjGJOmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGJOmo (ORCPT
+        with ESMTP id S229663AbjGJOmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:42:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BC1C3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:42:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8554D6103E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 14:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89EA2C433C7;
-        Mon, 10 Jul 2023 14:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689000161;
-        bh=Wu+duyOH7hgJOuFokRvIdbi+c935axibdDhN7x79hL8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WyO5YjjyoFiKVOWDebCbwAk1wJw1SqM+YKCVmI4cUNbYxYZ6AN18AhiIUEiRVsLL3
-         5IqymXfvWU/K2isVwk04dCZX2e85p6z+QJyTZgbT22l0rrtKlC304r869z8EMpubQt
-         6yWCQRZmAxQa52mKkI7gzbndc9Ks1SoXLgCn5QgB6vBrzSPPuY7rm5xJWBV0QbWn3p
-         tVHp6xcTk48loiqTRd9v1blPRQ5HCUSUMK3E9S/NVam/wW16g0Sebjl1ssThU+/QV2
-         hbQDF3qXhmAnWo/lNIqpEjRcD/a28MT/ufvhmdg+g+myUfDN5UWE/RFrSY2fIzZpa8
-         GRowH0sVmkQQw==
-Date:   Mon, 10 Jul 2023 15:42:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        regressions@leemhuis.info, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 12/32] mm/vmalloc: vmalloc_to_page() use
- pte_offset_kernel()
-Message-ID: <42279f1f-7b82-40dc-8546-86171018729c@sirena.org.uk>
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
- <696386a-84f8-b33c-82e5-f865ed6eb39@google.com>
+        Mon, 10 Jul 2023 10:42:42 -0400
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1906C3;
+        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-345ff33d286so24253225ab.3;
+        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689000160; x=1691592160;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9youPIImCCAcdEckdoxFQrNpLYrygdk7W9ZtiP8w15k=;
+        b=RNoulLSZHnHbR/2BYwKnhB6ZCVD59ktpzYmSlC+pFzHu5labOYQjxCMLjg4wmUaXA9
+         5vfXG/4I3tImqbWLvdIksMoDeccqRRvd95Z32GFS3nPDNTnlnPJSrEEj7eJXJ/lWUeVr
+         KE0J6gWiBOMpY2LkMZbDHluq+5lcDdGcHnLJ7RBFruBMlvha04KUuNUfZoQzW+chBW5k
+         tYpEHrU4YrdlJ4bvtl7C/W8gUJqi1OXND3pnVB8oYKf6q004qRo/Ok5OdvnmQ5Zmd0bZ
+         nJHvdsoQNiMnmosuh/Y9qGz6npMn4TZDJsXIpqcogTrhPKfeBcRGSvFNYBmn+el3NcTe
+         /V7w==
+X-Gm-Message-State: ABy/qLb0UTDG/EF+3cYvmQZXUUxjYHEQEXmHqRWXEJnqZ28alAfM/g8I
+        jLTwmVejLmJaAiz/gfQnPg==
+X-Google-Smtp-Source: APBJJlG3K/ro2oZtTnsZ7Banw1CdZJLy4OFKR61udj8GbrxlXMYjo+jeaSBEKYBDTKO2X9W4TkNn0w==
+X-Received: by 2002:a92:502:0:b0:345:c8ce:ff4e with SMTP id q2-20020a920502000000b00345c8ceff4emr11579387ile.3.1689000160019;
+        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id x7-20020a92d307000000b00342f537e3c3sm3560577ila.2.2023.07.10.07.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 07:42:39 -0700 (PDT)
+Received: (nullmailer pid 1938541 invoked by uid 1000);
+        Mon, 10 Jul 2023 14:42:35 -0000
+Date:   Mon, 10 Jul 2023 08:42:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
+        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
+        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
+        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
+        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        arnd@kernel.org, richardcochran@gmail.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
+ description in binding files
+Message-ID: <20230710144235.GA1922048-robh@kernel.org>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
+ <20230706145108.GA3858320-robh@kernel.org>
+ <0aaace47-1bb4-82c5-57a5-6f5d27eb4d45@foss.st.com>
+ <20230707152056.GA317056-robh@kernel.org>
+ <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6EsuOK1fDi4bcNLc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <696386a-84f8-b33c-82e5-f865ed6eb39@google.com>
-X-Cookie: You have taken yourself too seriously.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,128 +86,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 10, 2023 at 10:22:10AM +0200, Gatien CHEVALLIER wrote:
+> 
+> 
+> On 7/7/23 17:20, Rob Herring wrote:
+> > On Fri, Jul 07, 2023 at 02:28:28PM +0200, Gatien CHEVALLIER wrote:
+> > > Hello Rob,
+> > > 
+> > > On 7/6/23 16:51, Rob Herring wrote:
+> > > > On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
+> > > > > feature-domains is an optional property that allows a peripheral to
+> > > > > refer to one or more feature domain controller(s).
+> > > > > 
+> > > > > Description of this property is added to all peripheral binding files of
+> > > > > the peripheral under the STM32 firewall controllers. It allows an accurate
+> > > > > representation of the hardware, where various peripherals are connected
+> > > > > to this firewall bus. The firewall can then check the peripheral accesses
+> > > > > before allowing it to probe.
+> > > > > 
+> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> > > > > ---
+> > > > > 
+> > > > > Disclaimer: Some error with dtbs_check will be observed as I've
+> > > > > considered the property to be generic, as Rob asked
+> > > > > 
+> > > > >    Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
+> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
+> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
+> > > > >    Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
+> > > > >    Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
+> > > > >    .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
+> > > > >    Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
+> > > > >    .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
+> > > > >    Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
+> > > > >    .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
+> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
+> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
+> > > > >    Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
+> > > > >    Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
+> > > > >    Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
+> > > > >    .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
+> > > > >    Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
+> > > > >    Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
+> > > > >    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
+> > > > >    Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
+> > > > >    .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
+> > > > >    Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
+> > > > >    Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
+> > > > >    Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
+> > > > >    24 files changed, 97 insertions(+)
+> > > > > 
+> > > > > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> > > > > index b767ec72a999..daf8dcaef627 100644
+> > > > > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> > > > > @@ -50,6 +50,10 @@ properties:
+> > > > >      power-domains:
+> > > > >        maxItems: 1
+> > > > > +  feature-domains:
+> > > > > +    minItems: 1
+> > > > > +    maxItems: 3
+> > > > 
+> > > > What are the 3 entries?
+> > > > 
+> > > > Rob
+> > > 
+> > > I thought I was benefiting from the description of the pattern-property in
+> > > the RIFSC YAML file. But yes anyway, it seems like it needs some description
+> > > here as the dependency does not appear in this file.
+> > 
+> > Humm, that should limit the maximum entries to 2, so 3 would never work
+> > (if RIFSC is the parent).
+> > 
+> > > I picked 3 as a maxItems for our ST needs, I'll give it some more thought
+> > > when coming back with something clearer.
+> > 
+> > I'd expect you have 1 entry for register bus and 1 entry for DMA bus if
+> > there is one. It's block specific for how many entries, so the RIFSC
+> > schema should not be setting that. You could possibly say that
+> > 'feature-domains' is required for all the child nodes though.
+> 
+> Ok, I will change to not specifying the number of entries in the
+> RIFSC YAML file for V2.
+> 
+> > 
+> > Rob
+> Some hardware blocks may have a firewall ID for their device part and
+> another ID for their master part as well. In the end, the number of
+> entries could very well vary between different platforms. And the YAML
+> files are common to these platforms.
 
---6EsuOK1fDi4bcNLc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A given device has a fixed number of buses. Usually 1 or 2. That does 
+*not* vary by platform (unless the device is modified). You could have 
+the same firewall controller and id for multiple buses, but that 
+should not change the number of entries for the device. Now maybe a bus 
+has no firewall on some platforms. In that case, you should make the 
+optional firewall entry the last one, have a null phandle (0 or -1), or 
+use -names to distinguish the entries.
 
-On Thu, Jun 08, 2023 at 06:21:41PM -0700, Hugh Dickins wrote:
-> vmalloc_to_page() was using pte_offset_map() (followed by pte_unmap()),
-> but it's intended for userspace page tables: prefer pte_offset_kernel().
->=20
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> This property could be used for "extra" arguments as well, that are not
+> firewall IDs.
 
-Currently Linus' tree is reliably failing to boot on pine64plus, an
-arm64 SBC.  Most other boards seem fine, though I am seeing some
-additional instability on Tritium which is another Allwinner platform,
-I've not dug into that yet and Tritium is generally less stable.
+The arg cells are dictated by the provider and opaque to the client.
 
-We end up seeing NULL or otherwise bad pointer dereferences, the
-specific error does vary a bit though it mostly appears to be in the
-pinctrl code.  A bisect (full log below) identified this patch as
-introducing the failure, nothing is jumping out at me about the patch
-and it's not affecting everything so I'd not be surprised if it's just
-unconvering some bug in the platform support but I'm not super familiar
-with the code.
+> What do you suggest between picking a high maxItems value that would
+> (hopefully) cover all cases and not specifying maxItems at all? Or maybe
+> another property dedicated to such arguments?
 
-Sample backtrace:
+You should not specify maxItems in the firewall controller binding.
 
-[    1.919725] Unable to handle kernel NULL pointer dereference at virtual =
-address 0000000000000000
-[    1.928551] Mem abort info:
-[    1.931359]   ESR =3D 0x0000000096000044
-
-=2E..
-
-[    1.968870] [0000000000000000] user address but active_mm is swapper
-
-=2E..
-
-[    2.093969] Call trace:
-[    2.096414]  dt_remember_or_free_map+0xc8/0x120
-[    2.100949]  pinctrl_dt_to_map+0x23c/0x364
-[    2.105050]  create_pinctrl+0x68/0x3ec
-[    2.108803]  pinctrl_get+0xb0/0x124
-[    2.112294]  devm_pinctrl_get+0x48/0x90
-[    2.116133]  pinctrl_bind_pins+0x58/0x158
-[    2.120148]  really_probe+0x54/0x2b0
-[    2.123724]  __driver_probe_device+0x78/0x12c
-
-Another common theme is the same but with an address like 0x4c and:
-
-[    2.098328]  __kmem_cache_alloc_node+0x1bc/0x2dc
-[    2.102947]  kmalloc_trace+0x20/0x2c
-[    2.106524]  pinctrl_register_mappings+0x98/0x178
-
-Full boot log from a failure:
-
-    https://lava.sirena.org.uk/scheduler/job/712456
-
-git bisect start
-# bad: [06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5] Linux 6.5-rc1
-git bisect bad 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-# good: [6995e2de6891c724bfeb2db33d7b87775f913ad1] Linux 6.4
-git bisect good 6995e2de6891c724bfeb2db33d7b87775f913ad1
-# bad: [1b722407a13b7f8658d2e26917791f32805980a2] Merge tag 'drm-next-2023-=
-06-29' of git://anongit.freedesktop.org/drm/drm
-git bisect bad 1b722407a13b7f8658d2e26917791f32805980a2
-# bad: [3a8a670eeeaa40d87bd38a587438952741980c18] Merge tag 'net-next-6.5' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
-git bisect bad 3a8a670eeeaa40d87bd38a587438952741980c18
-# bad: [6e17c6de3ddf3073741d9c91a796ee696914d8a0] Merge tag 'mm-stable-2023=
--06-24-19-15' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-git bisect bad 6e17c6de3ddf3073741d9c91a796ee696914d8a0
-# good: [2605e80d3438c77190f55b821c6575048c68268e] Merge tag 'arm64-upstrea=
-m' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
-git bisect good 2605e80d3438c77190f55b821c6575048c68268e
-# good: [72dc6db7e3b692f46f3386b8dd5101d3f431adef] Merge tag 'wq-for-6.5-cl=
-eanup-ordered' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq
-git bisect good 72dc6db7e3b692f46f3386b8dd5101d3f431adef
-# bad: [179d3e4f3bfa5947821c1b1bc6aa49a4797b7f21] mm/madvise: clean up forc=
-e_shm_swapin_readahead()
-git bisect bad 179d3e4f3bfa5947821c1b1bc6aa49a4797b7f21
-# good: [523716770e63e229dbb6307d663f03d990dfefc5] maple_tree: rework mtree=
-_alloc_{range,rrange}()
-git bisect good 523716770e63e229dbb6307d663f03d990dfefc5
-# good: [b764253c18821da31c49a260f92f5d093cf1637e] selftests/mm: fix "warni=
-ng: expression which evaluates to zero..." in mlock2-tests.c
-git bisect good b764253c18821da31c49a260f92f5d093cf1637e
-# good: [5c7f3bf04a6cf266567fdea1ae4987875e92619f] s390: allow pte_offset_m=
-ap_lock() to fail
-git bisect good 5c7f3bf04a6cf266567fdea1ae4987875e92619f
-# good: [0d940a9b270b9220dcff74d8e9123c9788365751] mm/pgtable: allow pte_of=
-fset_map[_lock]() to fail
-git bisect good 0d940a9b270b9220dcff74d8e9123c9788365751
-# bad: [0d1c81edc61e553ed7a5db18fb8074c8b78e1538] mm/vmalloc: vmalloc_to_pa=
-ge() use pte_offset_kernel()
-git bisect bad 0d1c81edc61e553ed7a5db18fb8074c8b78e1538
-# good: [2798bbe75b9c2752b46d292e5c2a49f49da36418] mm/page_vma_mapped: pte_=
-offset_map_nolock() not pte_lockptr()
-git bisect good 2798bbe75b9c2752b46d292e5c2a49f49da36418
-# good: [be872f83bf571f4f9a0ac25e2c9c36e905a36619] mm/pagewalk: walk_pte_ra=
-nge() allow for pte_offset_map()
-git bisect good be872f83bf571f4f9a0ac25e2c9c36e905a36619
-# good: [e5ad581c7f1c32d309ae4e895eea0cd1a3d9f363] mm/vmwgfx: simplify pmd =
-& pud mapping dirty helpers
-git bisect good e5ad581c7f1c32d309ae4e895eea0cd1a3d9f363
-# first bad commit: [0d1c81edc61e553ed7a5db18fb8074c8b78e1538] mm/vmalloc: =
-vmalloc_to_page() use pte_offset_kernel()
-
---6EsuOK1fDi4bcNLc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsGNYACgkQJNaLcl1U
-h9A3dwf9HcI/brPRam8JmuslRrwSUKfGz416vFe73WUvxrAmgk+wclCndU4Ntgl1
-xZsSpEVcJkI9LpnPudX/letTj9LdMxBcIDGw1OIXYjGFysv+4Rnwqnt9aKM06nQG
-m4B3XlTNG0L0q6p125iuz4lGJRU2Jum/VRGdtM1hgg+jBa96wxFdP1T+JZgPRRq5
-7b66rlzClMJmzPiXx6mNaol0jhu7ex1ltrn0Rfsq47zpgobIrG6Q0pKOlcIT5yT6
-1IP+GoOVaR1DkATN7G35PF4vHSl56xd4lCyG0+KZJvWtQOWQNJYIAdgWwu4/GQfJ
-/5y10aucaSA7vu2WeTafTU9wYj+YxA==
-=cEJt
------END PGP SIGNATURE-----
-
---6EsuOK1fDi4bcNLc--
+Rob
