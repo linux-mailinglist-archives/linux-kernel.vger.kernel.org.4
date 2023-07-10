@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C7674DE71
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E5F74DE75
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjGJTp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S231220AbjGJTqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjGJTp4 (ORCPT
+        with ESMTP id S229954AbjGJTqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:45:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27A1187
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wlZXOKJa51A2yn9rFVOOCYfWPuKQ4LE1eseiahlKuQE=; b=O12EtDyVlkYWB77dt/sbDpNf/1
-        hvFN1ez0Gu+NJFMypF92VghNCI2Kr0YW0dKnaV6wQeC5iH9AtPJFtKo49/E0SLw8vfnm+zJT7BDOD
-        NMAJc6cOCZVKwSh14t0wAxkicbAzX0/jlIPsvCJ1/IOp5pFl8shiLsOm3EsxuoPP/Zb9Ar94xsAi5
-        FlZnbj6S67X2LaRJH78Lhe5OpJ8xIKQpm2YEGcg8Y41tkyuqBrKI2lb/8djGj0nonEA8aNgWdoLxy
-        NpX02x8Yf0uTqYgSxSoqa9N0GzD0mnVi4GWRK59BDVwDVCeXV8AFrYzbBCWN/mzr7o2vVZn0TTaG9
-        qAiunhHw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIwpW-00CaUu-1g;
-        Mon, 10 Jul 2023 19:45:54 +0000
-Date:   Mon, 10 Jul 2023 12:45:54 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     rdunlap@infradead.org, thomas@t-8ch.de,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] module: Ignore RISC-V mapping symbols too
-Message-ID: <ZKxf8jK8m+073rBE@bombadil.infradead.org>
-References: <20230707160051.2305-2-palmer@rivosinc.com>
+        Mon, 10 Jul 2023 15:46:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7416A136;
+        Mon, 10 Jul 2023 12:46:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 109C2611C1;
+        Mon, 10 Jul 2023 19:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00CEFC433C7;
+        Mon, 10 Jul 2023 19:46:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689018378;
+        bh=cWBikRqm4V+QGDEJy1FHTID+jQ9XAUzubNrpwx2bKHs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0A0Cm+OgFgclQaBEOZbd54lsQg2oEzc/LNuQNMVmTEQoGnlvCdfgTWNsM/IO9TpXH
+         Ttgw/Ul0zhw6BK7+L3ME0ijRWgCKk2w9ImhjEG2h/1M+KqWLr9Qcx7SB82ADfFXCIz
+         uAlDXdGvH6snGmGtzD4l6ayCQUIL3njtAGJcYnnw=
+Date:   Mon, 10 Jul 2023 21:46:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [RFC PATCH v1 3/3] docs: stable-kernel-rules: improve structure
+ to optimize reading flow
+Message-ID: <2023071035-pristine-plus-0c11@gregkh>
+References: <cover.1689008220.git.linux@leemhuis.info>
+ <e25941af193a99b70ee27fcbaa61974fc63a50fd.1689008220.git.linux@leemhuis.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230707160051.2305-2-palmer@rivosinc.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <e25941af193a99b70ee27fcbaa61974fc63a50fd.1689008220.git.linux@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 09:00:51AM -0700, Palmer Dabbelt wrote:
-> RISC-V has an extended form of mapping symbols that we use to encode
-> the ISA when it changes in the middle of an ELF.  This trips up modpost
-> as a build failure, I haven't yet verified it yet but I believe the
-> kallsyms difference should result in stacks looking sane again.
+On Mon, Jul 10, 2023 at 07:10:13PM +0200, Thorsten Leemhuis wrote:
+> Optimize the text flow to make things more straight forward to follow:
 > 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/9d9e2902-5489-4bf0-d9cb-556c8e5d71c2@infradead.org/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> * remove a subheading without real purpose
+> * after outlining the three options add a section that explains them in
+>   more detail; move the "Following the submission" text that set in the
+>   middle of this to a later place in the document
+> * a few small clarifications along the way
 
-Thanks, applied and pushed!
+All of this churn makes it really hard to determine what the end result
+is.  Do you have a before/after result anywhere?
 
-  Luis
+Or maybe split this out into 3 different patches?
+
+thanks,
+
+greg k-h
