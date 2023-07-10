@@ -2,159 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379EA74D9C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1BF74D9D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbjGJPWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S233322AbjGJPYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjGJPWg (ORCPT
+        with ESMTP id S230399AbjGJPYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:22:36 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6FCE0;
-        Mon, 10 Jul 2023 08:22:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 70CED2232F;
-        Mon, 10 Jul 2023 15:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689002549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f9YU6kgr3AZQPI61sCH8br42+ZI0/eMwmpIZNMLHoAU=;
-        b=ezCgR6kKuGW9mblw/tGNpY2UO/8YJ9bKkXOg4xTKLNGdaFJgQseaLq2Vc6QmZWUJezl8LN
-        M3rAgmeSHvU5hKJ3DAecHMtv2/yTk6g8P1nOPsAsCcyiM4pnjL4H6aCuQQd5Ygl/U6ybNX
-        o2t3cvD7nJP0LgPIFmZhoFAxDq7q81Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689002549;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f9YU6kgr3AZQPI61sCH8br42+ZI0/eMwmpIZNMLHoAU=;
-        b=wDueoqD1Mdn9akcq6CIKGnH4rgtpH0NVskooCq4SrpwD9YhD3cZsyz4LBZ8BDaaOYCbr83
-        VtXhwhAmUptxwGBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11E851361C;
-        Mon, 10 Jul 2023 15:22:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lz9gAzUirGTGXwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 15:22:29 +0000
-Message-ID: <733273ad-89e1-d952-37ee-bb75c3ab8188@suse.de>
-Date:   Mon, 10 Jul 2023 17:22:28 +0200
+        Mon, 10 Jul 2023 11:24:15 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2A0E0;
+        Mon, 10 Jul 2023 08:24:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1689002652; bh=gF6Cgjfm2RT/MVzn+Sfn38XhDQPM8dJ2IqE7l+3UyAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OvJqikWWAeGiVgaKzmOJfTh9Q97CaqnMQuvhNg8IvqaNg1axxezRT8c6XcItgAzw4
+         np/HIczAKRkJdo63g1HjovIcUNjBxpN4UlE7bboYMkWdeoAuThkTCJs90Zj4NGSw+4
+         Cn7M7GueCiwf+USYIoDki6WuOq5Fzcfrba3YNxmc=
+Date:   Mon, 10 Jul 2023 17:24:11 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
+Message-ID: <195a189b-b9d5-45a1-8901-c9bdb52da2f3@t-8ch.de>
+References: <4e23cc1c-2fe0-413e-9fe1-a9428c0861b9@t-8ch.de>
+ <20230710092643.19310-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 09/17] auxdisplay: Remove flag FBINFO_FLAG_DEFAULT from
- fbdev drivers
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     deller@gmx.de, javierm@redhat.com, linux-sh@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
-        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>
-References: <20230710130113.14563-1-tzimmermann@suse.de>
- <20230710130113.14563-10-tzimmermann@suse.de>
- <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jUsPVU9eO41Mfau4JMej3ZiU"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710092643.19310-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jUsPVU9eO41Mfau4JMej3ZiU
-Content-Type: multipart/mixed; boundary="------------isGioYLGE6aLAoHpvCKZCjXA";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: deller@gmx.de, javierm@redhat.com, linux-sh@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, linux-input@vger.kernel.org,
- linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
- linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- Miguel Ojeda <ojeda@kernel.org>, Robin van der Gracht <robin@protonic.nl>
-Message-ID: <733273ad-89e1-d952-37ee-bb75c3ab8188@suse.de>
-Subject: Re: [PATCH 09/17] auxdisplay: Remove flag FBINFO_FLAG_DEFAULT from
- fbdev drivers
-References: <20230710130113.14563-1-tzimmermann@suse.de>
- <20230710130113.14563-10-tzimmermann@suse.de>
- <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
-In-Reply-To: <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
+On 2023-07-10 17:26:43+0800, Zhangjin Wu wrote:
+> > On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
+> > > As the environ and _auxv support added for nolibc, the assembly _start
+> > > function becomes more and more complex and therefore makes the porting
+> > > of nolibc to new architectures harder and harder.
+> > > 
+> > > To simplify portability, this c version of _start_c() is added to do
+> > > most of the assembly start operations in C, which reduces the complexity
+> > > a lot and will eventually simplify the porting of nolibc to the new
+> > > architectures.
+> > > 
+> > > The new _start_c() only requires a stack pointer argument, it will find
+> > > argv, envp and _auxv for us, and then call main(), finally, it exit()
+> > > with main's return status. With this new _start_c(), the future new
+> > > architectures only require to add very few assembly instructions.
+> > 
+> > I like it!
+> > 
+> > A quick test indicates that the initialization of the stackprotectors
+> > could also be moved into the C function.
+> >
+> 
+> Cool, do you mean directly call __stack_chk_init() at the beginning of
+> _start_c()?
 
---------------isGioYLGE6aLAoHpvCKZCjXA
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Yes, exactly.
 
-SGkNCg0KQW0gMTAuMDcuMjMgdW0gMTY6MjQgc2NocmllYiBNaWd1ZWwgT2plZGE6DQo+IE9u
-IE1vbiwgSnVsIDEwLCAyMDIzIGF0IDM6MDHigK9QTSBUaG9tYXMgWmltbWVybWFubiA8dHpp
-bW1lcm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4gVGhlIGZsYWcgRkJJTkZPX0ZMQUdf
-REVGQVVMVCBpcyAwIGFuZCBoYXMgbm8gZWZmZWN0LCBhcyBzdHJ1Y3QNCj4+IGZiaW5mby5m
-bGFncyBoYXMgYmVlbiBhbGxvY2F0ZWQgdG8gemVybyBieSBmcmFtZWJ1ZmZlcl9hbGxvYygp
-LiBTbyBkbw0KPj4gbm90IHNldCBpdC4NCj4gDQo+IGBmcmFtZWJ1ZmZlcl9hbGxvYygpYCBk
-b2VzIGluZGVlZCB1c2UgYGt6YWxsb2MoKWAsIGJ1dCB0aGUgZG9jcyBkbyBub3QNCj4gbWVu
-dGlvbiB0aGUgemVyb2luZy4gU2hvdWxkIHRoYXQgZ3VhcmFudGVlIGJlIGRvY3VtZW50ZWQ/
-DQoNCkknbGwgYXBwZW5kIGEgcGF0Y2ggdG8gdGhlIHNlcmllcyB0aGF0IGRvY3VtZW50cyB0
-aGlzLg0KDQo+IA0KPj4gRmxhZ3Mgc2hvdWxkIHNpZ25hbCBkaWZmZXJlbmNlcyBmcm9tIHRo
-ZSBkZWZhdWx0IHZhbHVlcy4gQWZ0ZXIgY2xlYW5pbmcNCj4+IHVwIGFsbCBvY2N1cmVuY2Vz
-IG9mIEZCSU5GT19GTEFHX0RFRkFVTFQsIHRoZSB0b2tlbiBjYW4gYmUgcmVtb3ZlZC4NCj4g
-DQo+IG9jY3VyZW5jZXMgLT4gb2NjdXJyZW5jZXMNCj4gDQo+IGNhbiAtPiB3aWxsIG1heWJl
-PyBTaW5jZSB0aGUgaW50ZW50aW9uIG9mIHRoZSBwYXRjaCBzZXJpZXMgaXMgdG8NCj4gcmVt
-b3ZlIGl0ICh0aGVtKSBhbHRvZ2V0aGVyKS4NCg0KU3VyZS4NCg0KQmVzdCByZWdhcmRzDQpU
-aG9tYXMNCg0KPiANCj4gVGhhbmtzIQ0KPiANCj4gQ2hlZXJzLA0KPiBNaWd1ZWwNCg0KLS0g
-DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
-b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkw
-NDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBB
-bmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJl
-cmcpDQo=
+> > It also seems like a good opportunity to add some tests for
+> > argv/environment variable passing.
+> 
+> Yes, and even further, we can do more on auxv, just like musl does in
+> src/env/__libc_start_main.c, not that urgent currently:
 
---------------isGioYLGE6aLAoHpvCKZCjXA--
+With tests I mean nolibc-test.c to make sure we don't introduce any
+regressions.
+Only some tiny testcases to validate that argv and environ are picked
+up correctly by the startup code on all arches.
 
---------------jUsPVU9eO41Mfau4JMej3ZiU
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> 
+>     libc.auxv = auxv = (void *)(envp+i+1);
+>     ...
+>     __hwcap = aux[AT_HWCAP];
+>     if (aux[AT_SYSINFO]) __sysinfo = aux[AT_SYSINFO];
+>     ...
+>     libc.page_size = aux[AT_PAGESZ];
+> 
+>     if (!pn) pn = (void*)aux[AT_EXECFN];
+>     if (!pn) pn = "";
+>     __progname = __progname_full = pn;
+>     for (i=0; pn[i]; i++) if (pn[i]=='/') __progname = pn+i+1;
+> 
+>     __init_tls(aux);
+>     __init_ssp((void *)aux[AT_RANDOM]);
+> 
+>     if (aux[AT_UID]==aux[AT_EUID] && aux[AT_GID]==aux[AT_EGID]
+>             && !aux[AT_SECURE]) return;
+> 
+>     ...
+>     libc.secure = 1;
+> 
+> > 
+> > And as general note to the full series I think that splitting the arch
+> > files is not necessary and confusing.
+> >
+> 
+> Ok, welcome to discuss more in this thread:
+> 
+>     https://lore.kernel.org/lkml/20230710072340.10798-1-falcon@tinylab.org/
+> 
+> and let's choose a better method as possible as we can, Just replied Willy to
+> explain more.
 
------BEGIN PGP SIGNATURE-----
+Will do.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSsIjQFAwAAAAAACgkQlh/E3EQov+D4
-nQ/8D7mlMiLl4N+aerXFpIUKe6RRa+C9U1qxWDMdALRg57be/CZeoU44owAwYkvN4Jx4zPYal16M
-UQZFheDfymtdS8RFepV3E+U2K3PcgOvNPK98EZOF3feIlw5q8CScIy/xjBSeGTSG8AupE117C+OF
-MMI6G6GVt92ap4zsSx+i6gcgUB0BtdM+xfKqeHEfba+n76ZfKNAbTK4v8jPtc+0gAsBWsSJ5JiaC
-/QIyWDHgQN2dxXFmRmU+gBJsa/IrONfkK3hCseKd8ap3O1BfA5+KT2Sk6mBj1nuF0gbQJPBh1tGs
-7RJ4fGW45T2pNXrcmx7Y9no0iPUd21ogZKBd55zfO8pdIR0fLdVgY87oEABsadmVL6L4YAlH1hen
-0sriL3WOxFXWqXmZtbehB9xDyetXAndystyRjnz+CGHCJnd5kplrJpVeGiNsBiBhbeftk5sOLvf4
-U17WksvIF9WuBvvdf9pB5jK8EYNCoYTUdeME3uNfu2QqPwszn8/2GYP84Ywtn0woTPZFhnsMD1Ez
-nN8DPXKR0BKIufo/1U7AgfdUb27t5dGrIcCtgRVar60tsrwmX79ajodm2//KOvEeRcS3WidRXF1v
-KRC5d32icnvnTr6PC5jx1m/BsmPRdlPCEM2zqvJWi8URGSKFdS+rvoXLFfBXCw01YKUU4P6PI4ia
-7Ks=
-=lZHg
------END PGP SIGNATURE-----
+> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > ---
+> > >  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 44 insertions(+)
+> > > 
+> > > diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+> > > index 221b7c5346ca..b269294e9664 100644
+> > > --- a/tools/include/nolibc/crt.h
+> > > +++ b/tools/include/nolibc/crt.h
+> > > @@ -13,4 +13,48 @@
+> > >  char **environ __attribute__((weak));
+> > 
+> > The old code seems to avoid putting "environ" into the global symbol
+> > namespace. Could this declaration be moved into the function like in
+> > getenv()?
+> >
+> 
+> ok, do you mean just move it to stdlib.h like this? I moved _auxv (used
+> by getauxv()) to stdlib.h too:
 
---------------jUsPVU9eO41Mfau4JMej3ZiU--
+Nevermind, I got confused by the in-function declaration of
+"extern char **environ" inside "getenv()".
+Actually this in-function declaration doesn't do anything and can be
+dropped.
+
+> 
+>         tools/nolibc: move environ and _auxv from crt.h to stdlib.h
+>         
+>         Move the definitions of environ and _auxv from crt.h to stdlib.h, where
+>         the place who uses those definitions.
+>         
+>         - getenv uses environ
+>         - getauxv uses _auxcv
+>         
+>         Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+>     
+>     diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+>     index b269294e9664..d2f84cbe73d0 100644
+>     --- a/tools/include/nolibc/crt.h
+>     +++ b/tools/include/nolibc/crt.h
+>     @@ -10,14 +10,13 @@
+>      #include "compiler.h"
+>      #include "crt_arch.h"
+>      
+>     -char **environ __attribute__((weak));
+>     -const unsigned long *_auxv __attribute__((weak));
+>     -
+>      int main(int argc, char *argv[], char **envp);
+>      static void exit(int);
+>      
+>      void _start_c(long *sp)
+>      {
+>     +       extern char **environ;
+>     +       extern const unsigned long *_auxv;
+>             int argc, i;
+>             char **argv;
+>             char **envp;
+>     diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+>     index 2f9b4b3c6d26..5eadadc2d0f5 100644
+>     --- a/tools/include/nolibc/stdlib.h
+>     +++ b/tools/include/nolibc/stdlib.h
+>     @@ -14,6 +14,9 @@
+>      #include "string.h"
+>      #include <linux/auxvec.h>
+>      
+>     +char **environ __attribute__((weak));
+>     +const unsigned long *_auxv __attribute__((weak));
+>     +
+>      struct nolibc_heap {
+>             size_t  len;
+>             char    user_p[] __attribute__((__aligned__));
+> 
+> > >  const unsigned long *_auxv __attribute__((weak));
+> > >  
+> > > +int main(int argc, char *argv[], char **envp);
+> > 
+> > This will lead to conflicting declarations if the users use a different
+> > signature. I'm not (yet?) sure how to work around this.
+> >
+> 
+> Ah yes, I forgot this critical case, people may use something like:
+> 
+>     int main(void)
+>     int main(int argc, char *argv[])
+
+> [..]
+
+I thought about this general problem and it turns out that there is
+nothing that any libc can do to distinguish these special cases.
+So it has to be handled in the compiler and we do not have to care.
+
+Thomas
