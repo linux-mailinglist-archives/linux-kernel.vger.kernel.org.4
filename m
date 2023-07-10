@@ -2,108 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372CA74DC52
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BC974DC37
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjGJRXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
+        id S230248AbjGJRVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjGJRXh (ORCPT
+        with ESMTP id S232661AbjGJRVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:23:37 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196EE10D;
-        Mon, 10 Jul 2023 10:23:35 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 3cdba6adcf6c635b; Mon, 10 Jul 2023 19:23:34 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 32067660DCF;
-        Mon, 10 Jul 2023 19:23:34 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Saket Dumbre <saket.dumbre@intel.com>
-Subject: [PATCH 11/14] ACPICA: Add AML_NO_OPERAND_RESOLVE flag to Timer
-Date:   Mon, 10 Jul 2023 19:21:00 +0200
-Message-ID: <5856120.MhkbZ0Pkbq@kreacher>
-In-Reply-To: <5698695.DvuYhMxLoT@kreacher>
-References: <5698695.DvuYhMxLoT@kreacher>
+        Mon, 10 Jul 2023 13:21:33 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F80E5C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:21:14 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-766fd5f9536so332767585a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689009674; x=1691601674;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDKqe6h9VsjQuDpKI9KRg1N7kbgZMbKA4ecQ1xozFqs=;
+        b=IMsBYjy3Toq+G3vBDgnvPIjgdoK/8dHggIY3Hs7qoUt25YkpzOmPBi/nHn//DrOYJB
+         /Ua+/QBa5Use8IJESRSiFunKdkGqNHd+YUqoRuJfQ4kcz9FzGR8GIZXsQpoAByEtiRoW
+         aHShM1l7QbL76OMNkc1lG2qoSZ//vH0KwhSWZJu3JAj2Jxo8XWZBsa1X0VxWF2oEWd2s
+         Qu1lVdsr/969sUuC9+ClJLKaydssewFZiIszGWbW/S6Cjo7VrKDsSxZ7RPNvyFeMxk1W
+         6TYZEng5dbEcOdn1U6fXy08kcBT33/DATCe+/VchSTeFDgqF+J/WUVPSVonRZqpbV4JY
+         T2ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689009674; x=1691601674;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vDKqe6h9VsjQuDpKI9KRg1N7kbgZMbKA4ecQ1xozFqs=;
+        b=kPIplTuqw6AK82mSQCSykAu8RhwaFCBzsV2pxGuW18lUFD2ektIUudBE+zvr6Pfh3/
+         2ailg8e792EBqrr9IhpkipVAAOcQ6B5on8C0H+V+cN9LjcuRYxF8cm4unSHP9pZzqrrR
+         soZHwSs+0x6LeJa9mAA4moHAFHQn2V7rvbLAw/oqZKqqizWpCBh/nvC89f197xHG7PlT
+         H8YrHrqEYa/QIAX9SzYvPm0xRDDPBlGhzG+30uSkQ/tzHXJngxhoGphjvUGG4iompLLS
+         ktFRD82EpszzrfYXUBBY7yViUVtk9YBI9ZHdVk2/NEMKUkhF2UDW/YcICqAaictNKttr
+         YvpA==
+X-Gm-Message-State: ABy/qLbtN46jQqaDnbPoIlBwiMD5TfWN7RKp3rGp9bd6jY94lFKEHhvX
+        73WSmzr6s9Czu7inUaH9YLXrbA==
+X-Google-Smtp-Source: APBJJlEZjgv87sGoqCoA2OyNTenIrI3xxoXPoRV2o/wxukY2mPE0POHCvXNINrLxikThI/IjdSHCSQ==
+X-Received: by 2002:a05:620a:198f:b0:767:205b:7f4b with SMTP id bm15-20020a05620a198f00b00767205b7f4bmr13197531qkb.41.1689009673882;
+        Mon, 10 Jul 2023 10:21:13 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id g6-20020ae9e106000000b00767dc4c539bsm61695qkm.44.2023.07.10.10.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 10:21:13 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qIuZT-0004Dq-J0;
+        Mon, 10 Jul 2023 14:21:11 -0300
+Date:   Mon, 10 Jul 2023 14:21:11 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
+ page
+Message-ID: <ZKw+BxRUrGC8LW5P@ziepe.ca>
+References: <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com>
+ <20230628211624.531cdc58@thinkpad-T15>
+ <cd7c2851-1440-7220-6c53-16b343b1474@google.com>
+ <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca>
+ <20230629175645.7654d0a8@thinkpad-T15>
+ <edaa96f-80c1-1252-acbb-71c4f045b035@google.com>
+ <7bef5695-fa4a-7215-7e9d-d4a83161c7ab@google.com>
+ <20230704171905.1263478f@thinkpad-T15>
+ <e678affb-5eee-a055-7af1-1d29a965663b@google.com>
+ <20230705145516.7d9d554d@thinkpad-T15>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrkhgvthdrughumhgsrhgv
- sehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705145516.7d9d554d@thinkpad-T15>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Mainkar <abmainkar@nvidia.com>
+On Wed, Jul 05, 2023 at 02:55:16PM +0200, Gerald Schaefer wrote:
 
-ACPICA commit 90310989a0790032f5a0140741ff09b545af4bc5
+> Ah ok, I was aware of that "semi-RCU" fallback logic in tlb_remove_table(),
+> but that is rather a generic issue, and not s390-specific. I thought you
+> meant some s390-oddity here, of which we have a lot, unfortunately...
+> Of course, we call tlb_remove_table() from our page_table_free_rcu(), so
+> I guess you could say that page_table_free_rcu() cannot guarantee what
+> tlb_remove_table() cannot guarantee.
 
-According to the ACPI specification 19.6.134, no argument is required to be passed for ASL Timer instruction. For taking care of no argument, AML_NO_OPERAND_RESOLVE flag is added to ASL Timer instruction opcode.
+The issue is the arches don't provide a reliable way to RCU free
+things, so the core code creates an RCU situation using the MMU
+batch. With the non-RCU compatible IPI fallback. So it isn't actually
+RCU, it is IPI but optimized with RCU in some cases.
 
-When ASL timer instruction interpreted by ACPI interpreter, getting error. After adding AML_NO_OPERAND_RESOLVE flag to ASL Timer instruction opcode, issue is not observed.
+When Hugh introduces a reliable way to RCU free stuff we could fall
+back to that in the TLB code instead of invoking the synchronize_rcu()
 
-=============================================================
-UBSAN: array-index-out-of-bounds in acpica/dswexec.c:401:12 index -1 is out of range for type 'union acpi_operand_object *[9]'
-CPU: 37 PID: 1678 Comm: cat Not tainted
-6.0.0-dev-th500-6.0.y-1+bcf8c46459e407-generic-64k
-HW name: NVIDIA BIOS v1.1.1-d7acbfc-dirty 12/19/2022 Call trace:
- dump_backtrace+0xe0/0x130
- show_stack+0x20/0x60
- dump_stack_lvl+0x68/0x84
- dump_stack+0x18/0x34
- ubsan_epilogue+0x10/0x50
- __ubsan_handle_out_of_bounds+0x80/0x90
- acpi_ds_exec_end_op+0x1bc/0x6d8
- acpi_ps_parse_loop+0x57c/0x618
- acpi_ps_parse_aml+0x1e0/0x4b4
- acpi_ps_execute_method+0x24c/0x2b8
- acpi_ns_evaluate+0x3a8/0x4bc
- acpi_evaluate_object+0x15c/0x37c
- acpi_evaluate_integer+0x54/0x15c
- show_power+0x8c/0x12c [acpi_power_meter]
+For lots of arches, S390 included after this series, this would be
+pretty easy.
 
-Link: https://github.com/acpica/acpica/commit/90310989
-Signed-off-by: Abhishek Mainkar <abmainkar@nvidia.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/psopcode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What I see now as the big trouble is that this series only addresses
+PTE RCU'ness and making all the other levels RCUable would be much
+harder on some arches like power.
 
-diff --git a/drivers/acpi/acpica/psopcode.c b/drivers/acpi/acpica/psopcode.c
-index 09029fe545f1..39e31030e5f4 100644
---- a/drivers/acpi/acpica/psopcode.c
-+++ b/drivers/acpi/acpica/psopcode.c
-@@ -603,7 +603,7 @@ const struct acpi_opcode_info acpi_gbl_aml_op_info[AML_NUM_OPCODES] = {
- 
- /* 7E */ ACPI_OP("Timer", ARGP_TIMER_OP, ARGI_TIMER_OP, ACPI_TYPE_ANY,
- 			 AML_CLASS_EXECUTE, AML_TYPE_EXEC_0A_0T_1R,
--			 AML_FLAGS_EXEC_0A_0T_1R),
-+			 AML_FLAGS_EXEC_0A_0T_1R | AML_NO_OPERAND_RESOLVE),
- 
- /* ACPI 5.0 opcodes */
- 
--- 
-2.35.3
+In short we could create a CONFIG_ARCH_RCU_SAFE_PAGEWALK and it could
+be done on alot of arches quite simply, but at least not power. Which
+makes me wonder about the value, but maybe it could shame power into
+doing something..
 
+However, calling things 'page_table_free_rcu()' when it doesn't
+actually always do RCU but IPI optimzed RCU is an unfortunate name :(
+As long as you never assume it does RCU anywhere else, and don't use
+rcu_read_lock(), it is fine :)
 
+The corner case is narrow, you have to OOM the TLB batching before you
+loose the RCU optimization of the IPI.  Then you can notice that
+rcu_read_lock() doesn't actually protect against concurrent free.
 
-
+Jason
