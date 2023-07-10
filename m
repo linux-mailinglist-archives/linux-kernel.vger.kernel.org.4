@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CBD74D24C
+	by mail.lfdr.de (Postfix) with ESMTP id AC31174D24D
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbjGJJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S229608AbjGJJwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjGJJvk (ORCPT
+        with ESMTP id S231136AbjGJJvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:51:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D07B183;
-        Mon, 10 Jul 2023 02:48:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB6760F35;
-        Mon, 10 Jul 2023 09:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABEB5C433C8;
-        Mon, 10 Jul 2023 09:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688982489;
-        bh=PnEAbXpDkS/2DQfknA13T3c/Xhi5kSmvuGgopFlpfSs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hMyjk8BPbQPAZeekXCM9QGCSkOmYufC5Kz4eRl+JqNXld+HVoT3vIQmV6gQegS3xc
-         Xf90C5kC8Z9/BPfe67aoRDY5IJSC4rMMsDrrpZH0+sRIo4TzLNu/km+NAXS/BNYy8d
-         ah6ZlZqnmK8rnmjM/IRNEN0MFD1123nEhzbDEFmJT6fBRM7Mgx4DfD+x1/t1+Dw6Nn
-         8SjYXvpvMGtGT8n5+59votu043HaMFg/0P3ibfuq8IW+gTpsUDWu7ruvzunGs882Dt
-         X7yY29/50WXR9C31E3zE8/sQFtZCq6tpcip9paUnZSF2WrZT3Gp5mmDu48HnO4w2pY
-         nf5qH2vuO95yg==
-From:   Robert Foss <rfoss@kernel.org>
-To:     Jonas Karlman <jonas@kwiboo.se>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Robert Foss <rfoss@kernel.org>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3] drm/bridge: tc358767: Use devm_clk_get_enabled() helper
-Date:   Mon, 10 Jul 2023 11:48:01 +0200
-Message-ID: <168898247567.1224956.8670900854330995667.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <208a15ce4e01973daf039ad7bc0f9241f650b3af.1672415956.git.christophe.jaillet@wanadoo.fr>
-References: <208a15ce4e01973daf039ad7bc0f9241f650b3af.1672415956.git.christophe.jaillet@wanadoo.fr>
+        Mon, 10 Jul 2023 05:51:41 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CA4E67;
+        Mon, 10 Jul 2023 02:48:17 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36A9m7kg130589;
+        Mon, 10 Jul 2023 04:48:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688982487;
+        bh=zDGEcLXLb/jmYr7sBksF2Y6lvpdbjUzDyNzFNGroX/E=;
+        h=From:To:CC:Subject:Date;
+        b=p7ciZghwzHQV6xLzL1+gEy1v+I9ls09Gm4XGfy87ar69VRNFInXEK6V767x6iahVF
+         p/rHc8bq/uG9IibxUgF0VAAmgxPHJy1tRRjRsAMn8PVJOZo6vSxcCQK2/grhOZ9k55
+         ym9ISs4VqO51lo5CFOXzWp0cEqebZfRA506zC+NA=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36A9m7Di121026
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Jul 2023 04:48:07 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
+ Jul 2023 04:48:07 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 10 Jul 2023 04:48:07 -0500
+Received: from udit-HP-Z2-Tower-G9-Workstation-Desktop-PC.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36A9m4rW013958;
+        Mon, 10 Jul 2023 04:48:05 -0500
+From:   Udit Kumar <u-kumar1@ti.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <=martin.petersen@oracle.com>, <jejb@linux.ibm.com>, <nm@ti.com>,
+        <vigneshr@ti.com>
+CC:     Udit Kumar <u-kumar1@ti.com>
+Subject: [PATCH] scsi: ufs: TI UFS host controller expose device tree aliases
+Date:   Mon, 10 Jul 2023 15:18:01 +0530
+Message-ID: <20230710094801.183149-1-u-kumar1@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Jul 2023 08:05:35 +0200, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
-> 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
-> 
-> [...]
+When TI UFS host controller driver is built as kernel module,
+It was not getting auto loaded due to missing aliases in modules.
 
-Applied, thanks!
+This patch adds device tree related aliases.
 
-[1/1] drm/bridge: tc358767: Use devm_clk_get_enabled() helper
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=70d3c92d852f
+Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+---
+ drivers/ufs/host/ti-j721e-ufs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-
-Rob
+diff --git a/drivers/ufs/host/ti-j721e-ufs.c b/drivers/ufs/host/ti-j721e-ufs.c
+index 122d650d0810..117eb7da92ac 100644
+--- a/drivers/ufs/host/ti-j721e-ufs.c
++++ b/drivers/ufs/host/ti-j721e-ufs.c
+@@ -81,6 +81,8 @@ static const struct of_device_id ti_j721e_ufs_of_match[] = {
+ 	{ },
+ };
+ 
++MODULE_DEVICE_TABLE(of, ti_j721e_ufs_of_match);
++
+ static struct platform_driver ti_j721e_ufs_driver = {
+ 	.probe	= ti_j721e_ufs_probe,
+ 	.remove	= ti_j721e_ufs_remove,
+-- 
+2.34.1
 
