@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235BF74DA5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BC774DA58
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbjGJPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S233572AbjGJPuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbjGJPtw (ORCPT
+        with ESMTP id S233562AbjGJPtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:49:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31048120;
-        Mon, 10 Jul 2023 08:49:49 -0700 (PDT)
+        Mon, 10 Jul 2023 11:49:50 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE4C194;
+        Mon, 10 Jul 2023 08:49:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689004189; x=1720540189;
+  t=1689004188; x=1720540188;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NaAUtfuKUjWfIyo2AvU+b2/TN3c63zF3Fr8TWiuiUkI=;
-  b=UEuBUyQIf112A0i0q6pGwKi1pkCsjIwGATrnpBMOAra8u0HNKs9vxoqZ
-   4n79vyWu1/O+eYCzIehP1WTi+MX2+j6xWW1Nf4G98PFZA9SkC/klwMbda
-   lG2D1fLKLGu7AcP8cs0veblCHVFYgTIUfPlarHX9FSe6/0PSci8E6Uw+D
-   G45yI+K54YsQr362x06CLWgixx76+Aclk5uuPeTXCt0qrq2ICLdtLQiYk
-   jYSFwv9oNJhkQYHSChY5nqBa2wjYYoMLtQME/YRWhMZIiea+af1aeFFPg
-   9mdtJB/hHJLW7sa40HLacjQIZJaYDCypXpt8DhbCNKpPalSA2e6ncQBTc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="349185443"
+  bh=eCA4jmpHdK4tCQy+WYVaMHkZ61alyGNaPi2evxW0e9A=;
+  b=Xhe7Uc3bWEFAN7lTH3RBzaljG/Fz36zbn7OKy5oU4TrvfA5Ud/5M7hkU
+   oQnmtNIPm+s7VmlHK+IYqbqRVymvGWNefM8fWm0XyUiL1uTUR4IYgd9GF
+   ZBmE09Qzq/nxtAgf22erwg3StRH5OBXMFD3jtepn/ff0ZH+f8iOALlDno
+   n6vvCLCVy2LguzMpQgEWwD6sP17tJl4IMAXxo/LKHUPQ/FqYn3iJ/gtbx
+   VysSzGU4T91AAH5NWHk0aR4ymr1+2Itze/L1OSnxhjzTa2iQ08Xh/SOTO
+   8mSdyodJxNsQlokgzsoM7HsowdViZFNXJQQYD2i9sTsfOuNQ+uKZcodpE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361842484"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="349185443"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 08:49:46 -0700
+   d="scan'208";a="361842484"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 08:49:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="844921872"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="720743959"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="844921872"
+   d="scan'208";a="720743959"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jul 2023 08:49:35 -0700
+  by orsmga002.jf.intel.com with ESMTP; 10 Jul 2023 08:49:35 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8BD3669A; Mon, 10 Jul 2023 18:49:34 +0300 (EEST)
+        id 9C17069F; Mon, 10 Jul 2023 18:49:34 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
@@ -94,126 +94,86 @@ Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Richard Cochran <richardcochran@gmail.com>
-Subject: [PATCH v2 07/15] spi: Sort headers alphabetically
-Date:   Mon, 10 Jul 2023 18:49:24 +0300
-Message-Id: <20230710154932.68377-8-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 08/15] spi: Clean up headers
+Date:   Mon, 10 Jul 2023 18:49:25 +0300
+Message-Id: <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
 References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorting headers alphabetically helps locating duplicates, and
-make it easier to figure out where to insert new headers.
+There is a few things done:
+- include only the headers we are direct user of
+- when pointer is in use, provide a forward declaration
+- add missing headers
+- group generic headers and subsystem headers
+- sort each group alphabetically
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi.c       | 42 ++++++++++++++++++++---------------------
- include/linux/spi/spi.h | 14 +++++++-------
- 2 files changed, 28 insertions(+), 28 deletions(-)
+ include/linux/spi/spi.h | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index cfb1c985d940..06a92a3a5746 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -4,36 +4,36 @@
- // Copyright (C) 2005 David Brownell
- // Copyright (C) 2008 Secret Lab Technologies Ltd.
- 
--#include <linux/kernel.h>
--#include <linux/device.h>
--#include <linux/init.h>
-+#include <linux/acpi.h>
- #include <linux/cache.h>
--#include <linux/dma-mapping.h>
-+#include <linux/clk/clk-conf.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
- #include <linux/dmaengine.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/export.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/highmem.h>
-+#include <linux/idr.h>
-+#include <linux/init.h>
-+#include <linux/ioport.h>
-+#include <linux/kernel.h>
-+#include <linux/kthread.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/mutex.h>
- #include <linux/of_device.h>
- #include <linux/of_irq.h>
--#include <linux/clk/clk-conf.h>
--#include <linux/slab.h>
--#include <linux/mod_devicetable.h>
--#include <linux/spi/spi.h>
--#include <linux/spi/spi-mem.h>
--#include <linux/gpio/consumer.h>
--#include <linux/pm_runtime.h>
-+#include <linux/percpu.h>
-+#include <linux/platform_data/x86/apple.h>
- #include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
- #include <linux/property.h>
--#include <linux/export.h>
-+#include <linux/ptp_clock_kernel.h>
- #include <linux/sched/rt.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi.h>
-+#include <linux/spi/spi-mem.h>
- #include <uapi/linux/sched/types.h>
--#include <linux/delay.h>
--#include <linux/kthread.h>
--#include <linux/ioport.h>
--#include <linux/acpi.h>
--#include <linux/highmem.h>
--#include <linux/idr.h>
--#include <linux/platform_data/x86/apple.h>
--#include <linux/ptp_clock_kernel.h>
--#include <linux/percpu.h>
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/spi.h>
 diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 0ce1cb18a076..2026eae97329 100644
+index 2026eae97329..c9479badf38c 100644
 --- a/include/linux/spi/spi.h
 +++ b/include/linux/spi/spi.h
-@@ -6,19 +6,19 @@
+@@ -6,27 +6,41 @@
  #ifndef __LINUX_SPI_H
  #define __LINUX_SPI_H
  
-+#include <linux/acpi.h>
- #include <linux/bits.h>
-+#include <linux/completion.h>
- #include <linux/device.h>
--#include <linux/mod_devicetable.h>
--#include <linux/slab.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kthread.h>
--#include <linux/completion.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/scatterlist.h>
--#include <linux/gpio/consumer.h>
--
--#include <uapi/linux/spi/spi.h>
 -#include <linux/acpi.h>
-+#include <linux/slab.h>
+ #include <linux/bits.h>
+ #include <linux/completion.h>
++#include <linux/container_of.h>
+ #include <linux/device.h>
+-#include <linux/gpio/consumer.h>
++#include <linux/export.h>
+ #include <linux/kthread.h>
++#include <linux/limits.h>
++#include <linux/list.h>
++#include <linux/minmax.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/mutex.h>
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
++#include <linux/smp.h>
++#include <linux/spinlock_types.h>
++#include <linux/string.h>
++#include <linux/types.h>
  #include <linux/u64_stats_sync.h>
  
-+#include <uapi/linux/spi/spi.h>
++#include <asm/byteorder.h>
 +
+ #include <uapi/linux/spi/spi.h>
+ 
++struct acpi_device;
  struct dma_chan;
- struct software_node;
+-struct software_node;
++struct gpio_desc;
  struct ptp_system_timestamp;
++struct software_node;
++
+ struct spi_controller;
+-struct spi_transfer;
+ struct spi_controller_mem_ops;
+ struct spi_controller_mem_caps;
++struct spi_device_id;
+ struct spi_message;
++struct spi_transfer;
+ 
+ /*
+  * INTERFACES between SPI master-side drivers and SPI slave protocol handlers,
 -- 
 2.40.0.1.gaa8946217a0b
 
