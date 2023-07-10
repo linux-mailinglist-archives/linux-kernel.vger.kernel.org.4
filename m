@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108E874D090
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A34074D08D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjGJItL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S230297AbjGJIsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjGJItK (ORCPT
+        with ESMTP id S229450AbjGJIsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:49:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB5C2;
-        Mon, 10 Jul 2023 01:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688978949; x=1720514949;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xqv7COd6hx5eNITZ+ROLIM2dvqJtaATG8L0ZEM94FuE=;
-  b=O5/LSjoVtGpYu62sjcwmK9XW+eQtZSqmahTbjxcSKFvOblO6se3Nqhq2
-   kp+tZalqMrwTigkBEKuc48bwl74XpVBg+K6sxqgXqowLKgmCUKJoBxNA3
-   5fmCiAC+k6oYCfbDrVCt5cxCuCf2lWGNZgGtVT/OPO/K1wcNY22JCrZMk
-   b9i2iHcRoGYPwcF9B0h2eDySm9t7ksxgJuz+h0xEwYAmuzdoX03ggmO8q
-   Wrr9xm0woQVD464lu6mcFsKiOM6fDOmRTVK6wg/DesGjL0gfGxGLGajKb
-   BOG/3POjqTiK83VE5cDGSoi4bw9rx1ZL2ZammeUlXSe70AIHZP3OhK9O3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="427982141"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="427982141"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 01:48:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="790720541"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="790720541"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2023 01:48:47 -0700
-Date:   Mon, 10 Jul 2023 16:47:20 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] fpga: fpga-mgr: socfpga: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZKvFmIQ2T3Zt2/Lj@yilunxu-OptiPlex-7050>
-References: <20230705094655.44753-1-frank.li@vivo.com>
- <20230705094655.44753-6-frank.li@vivo.com>
+        Mon, 10 Jul 2023 04:48:20 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F88C9;
+        Mon, 10 Jul 2023 01:48:19 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9A2783F323;
+        Mon, 10 Jul 2023 08:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688978898;
+        bh=Z/gL9U9h5Em+3aV81BCbewJzSllI5Ghayx0OULbP+so=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ewXq8l5DS0FT2hJCD5L9XG29STBWwsin2ywcbmZbyIth2YiSTym/obgmS6z2LUjvZ
+         FN2zHtdCgalJMKVvNKfv59Z6RGSieq8v5CXpiLokMXShOiWEnlVB9oDZyYsZlZT9EX
+         yjjc7s1PD65ejF97zvfcbi/+aGb1l+o9N/ik7udsLyvODvENfu7xEO1LWLPGDnwqwx
+         ZhzjVkOCWj3e4hE29upYa53rVmkEX4eX2j2ulWiUN2YmErnHPU6y7cOH7PyGUHpDfi
+         rB6ZXSOnlcHNzUoW6YLtSyB1RfDIZncKRKgfdxYQnrlC/2UifMaPmo/+xHUQuEv7Wg
+         yBttjRbY10TFQ==
+Message-ID: <685315da-3a6d-6d1e-03cb-1fc07ff68121@canonical.com>
+Date:   Mon, 10 Jul 2023 01:48:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705094655.44753-6-frank.li@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH -next] apparmor: Fix some kernel-doc comments
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230707080737.49899-1-yang.lee@linux.alibaba.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20230707080737.49899-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,46 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-05 at 17:46:53 +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
+On 7/7/23 01:07, Yang Li wrote:
+> Use colons to separate parameter names from their specific meanings.
+> silencethe warnings:
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Unfortunately Gaosheng Cui beat you to this fix on 6/24 with
+[PATCH -next 08/11] apparmor: Fix kernel-doc warnings in apparmor/resource.c
 
-Applied.
+thankyou for taking the time to help make apparmor better
 
+-
+john
+
+> security/apparmor/resource.c:111: warning: Function parameter or member 'label' not described in 'aa_task_setrlimit'
+> security/apparmor/resource.c:111: warning: Function parameter or member 'task' not described in 'aa_task_setrlimit'
+> security/apparmor/resource.c:111: warning: Function parameter or member 'resource' not described in 'aa_task_setrlimit'
+> security/apparmor/resource.c:111: warning: Function parameter or member 'new_rlim' not described in 'aa_task_setrlimit'
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  drivers/fpga/socfpga.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>   security/apparmor/resource.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/fpga/socfpga.c b/drivers/fpga/socfpga.c
-> index 7e0741f99696..723ea0ad3f09 100644
-> --- a/drivers/fpga/socfpga.c
-> +++ b/drivers/fpga/socfpga.c
-> @@ -545,20 +545,17 @@ static int socfpga_fpga_probe(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	struct socfpga_fpga_priv *priv;
->  	struct fpga_manager *mgr;
-> -	struct resource *res;
->  	int ret;
->  
->  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
->  		return -ENOMEM;
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	priv->fpga_base_addr = devm_ioremap_resource(dev, res);
-> +	priv->fpga_base_addr = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(priv->fpga_base_addr))
->  		return PTR_ERR(priv->fpga_base_addr);
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> -	priv->fpga_data_addr = devm_ioremap_resource(dev, res);
-> +	priv->fpga_data_addr = devm_platform_ioremap_resource(pdev, 1);
->  	if (IS_ERR(priv->fpga_data_addr))
->  		return PTR_ERR(priv->fpga_data_addr);
->  
-> -- 
-> 2.39.0
-> 
+> diff --git a/security/apparmor/resource.c b/security/apparmor/resource.c
+> index e85948164896..2bebc5d9e741 100644
+> --- a/security/apparmor/resource.c
+> +++ b/security/apparmor/resource.c
+> @@ -97,10 +97,10 @@ static int profile_setrlimit(struct aa_profile *profile, unsigned int resource,
+>   
+>   /**
+>    * aa_task_setrlimit - test permission to set an rlimit
+> - * @label - label confining the task  (NOT NULL)
+> - * @task - task the resource is being set on
+> - * @resource - the resource being set
+> - * @new_rlim - the new resource limit  (NOT NULL)
+> + * @label: label confining the task  (NOT NULL)
+> + * @task: task the resource is being set on
+> + * @resource: the resource being set
+> + * @new_rlim: the new resource limit  (NOT NULL)
+>    *
+>    * Control raising the processes hard limit.
+>    *
+
