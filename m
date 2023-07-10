@@ -2,84 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8C774D73C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7FE74D739
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjGJNRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
+        id S230300AbjGJNQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjGJNRV (ORCPT
+        with ESMTP id S229451AbjGJNQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:17:21 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F9AE9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:16:56 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso6963424e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:16:56 -0700 (PDT)
+        Mon, 10 Jul 2023 09:16:50 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0807BB;
+        Mon, 10 Jul 2023 06:16:48 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb94b1423eso6483467e87.1;
+        Mon, 10 Jul 2023 06:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688995014; x=1691587014;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4n0uH620C2sWk1GmzpQB7W6JnujnPRr8xlLs9TDOuw=;
-        b=UHFBRtl6stRiqdz+gvR0Ggfua66yR1rcgejJmNDmKj25AqPb0Lo3RljiAOsydCV2xT
-         1AXHRyZoba5W3p7Z0MDUhTptDC0wlJd/zb1adRVOe2aS2uuvkvXNgTCljRGRU7SdHN1a
-         POkQz/8qmaeO9lHZdKlWzEUGMb1C7VGd5sYyWBrU1z+pPCjlYnXih/seJGfXwKFNit33
-         n9zPqN58mdbanfR7b1/v1idIhmJvqcOeZDQszOZ/DoGzACBG2XWfGZwfZNWVEa/YB2nV
-         3qsGlCJEOubBVvRBYv+cpvo+Gcl7oxo9q/3J0evbOBZuwOLMObqRME71/h7ss3BRhYsb
-         hmJw==
+        d=gmail.com; s=20221208; t=1688995007; x=1691587007;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X5GqN4zHZ7sVr+Rkj7hPCd7AvnhbMJXPabgQ821enKM=;
+        b=njaB++BxIGfwGEEMVUfuIFlHWz1wfSeDZVMHke/vyiuksHuKdk7fCcsSpaUUT1X1B/
+         cWO5qLeTbs9V1iTLva+Ws5hPDM+gMvhW9W1sHM+wsAYlReP1lulufjt6UG0n1YTOaHpQ
+         YqKpuBaFqPBJxujHl6Nz6TryTL8y0neD1ZpwxU+6bG8sP0AmXg1uPIur59HGwr0bBHk+
+         bleqr5Qg+ibaONi76hsqcW+H3z85+kCD9gBPAjt/lRUGom323XAJkhWmveYIaLbfcAFw
+         1J35co/Eaocba/ighLTd2upuo47p360NuuFB6XgnJ5ZKNV3SdUyaNhVcl7JlxbEqrcXn
+         WpKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688995014; x=1691587014;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F4n0uH620C2sWk1GmzpQB7W6JnujnPRr8xlLs9TDOuw=;
-        b=QfruU0OwSx2P4XwBGL3KI+uryjkO00P8AvrPhSJ3rOFcGsE0Z0LMC/j982/vWOhcLY
-         B1BBMh9W50EaDV5j74ofB2MsvGskoguS+Sv9IQzvaqUcIbeaagKwo9VhqflPWQJMSoUj
-         7WYXtf23bXdqXu69QbgHCfBiafh8kxWHGCvOme+9OIMgP6aLZAFSsXNhwRMpFiCmBCwi
-         NXXrLKzpMpuxBDuNNrtdfBUsgT2H9IRwgcNrBI6vJzxmkeaWki6oKDc5ktHj72mxioYh
-         dx8tVdYWoSpdloZaWlUbJ2Jh8SYFWlJ15Og4XnUcOHX99pxdE4sLwESI0OM04M5V4Tu/
-         pcBQ==
-X-Gm-Message-State: ABy/qLZWbK8NmMnBHnuOKd7acnVh3bQCoW7Sv9PM39XP04L/y8ePrO/q
-        fVUPv3T/+WsPZQDajfcJM5KhlwoY4filjEOn0FvxSA==
-X-Google-Smtp-Source: APBJJlECk0IdfI/txKD8DxyQxVreN7bf/a8GY0kNcS71aeW8pnW+ghnKKJLPA0xx83fjuWNTOzC6tjlQeE7Z0VxVW1k=
-X-Received: by 2002:a05:6512:32d0:b0:4f8:6dfd:faa0 with SMTP id
- f16-20020a05651232d000b004f86dfdfaa0mr9434275lfg.2.1688995014501; Mon, 10 Jul
- 2023 06:16:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230707044613.1169103-1-hezhongkun.hzk@bytedance.com>
- <ZKfFVfZovt4PnMsy@dhcp22.suse.cz> <CACSyD1M9rSadO7xb8-H0dU2-xtrZnJMBgqEMTSHhE6M5vFgC-Q@mail.gmail.com>
- <ZKgk0HfuuxsyBBXI@dhcp22.suse.cz> <CACSyD1NX7sfPu2Wi1ep0gJ-wt1O8-+++321Uhw4YK1Uz4rxj-g@mail.gmail.com>
- <ZKvgTTqwTnUXiY3m@dhcp22.suse.cz>
-In-Reply-To: <ZKvgTTqwTnUXiY3m@dhcp22.suse.cz>
-From:   =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
-Date:   Mon, 10 Jul 2023 21:16:42 +0800
-Message-ID: <CACSyD1NkvXuyjUEc_pb_89B-5XyBd8sSSD1XmKKkDBssMV5FhA@mail.gmail.com>
-Subject: Re: [External] Re: [RFC PATCH 0/2] zram: objects charge to mem_cgroup
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     minchan@kernel.org, senozhatsky@chromium.org, david@redhat.com,
-        yosryahmed@google.com, linux-mm@kvack.org,
+        d=1e100.net; s=20221208; t=1688995007; x=1691587007;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X5GqN4zHZ7sVr+Rkj7hPCd7AvnhbMJXPabgQ821enKM=;
+        b=VPoVYm/XDX+uWf//pSSzUza61HnrxIR06cZlaF4S1iaARsjqxqIiXIqwqWOo2cv0n8
+         TmYMVnlVWsQ0Rq5KwwVtAsNy0C6cp3IbehYUMdH7gJ/t7L3tkatnmPaARPfJ09epGcu9
+         WpNlrbo+vkSnMg3svF+Rj/hPuHgitltd3/QIeRvIDFLOeHoifkG1EmJvwQ40Nrwm/KvF
+         SLw/+XEhMll5BCY2RyiuGxLgsjpq9Y9E5yoelpi1hrZ9ojGGOw9w9OQZquMyuIccNIv6
+         9guPs9Pbu98rclrp/xP9hU7wmQNPwbg8Bg+pLiu3LvkWPi/+MDCXGbAgnD8H90y2gB4h
+         2yeQ==
+X-Gm-Message-State: ABy/qLYMEI6TNLvVrNouJRDAG/gJXgNZaoZ+kDdsqEU+mhhGGZkXunL7
+        +jHDdaaBuAV3bbnPuslrs6w=
+X-Google-Smtp-Source: APBJJlEeGGiO7Snf+Fnq7YXLff7DVQ4xFrb7LcjYermR5SHIXwl5FrKuGpSZCDOxkuqT50xsVK+bSw==
+X-Received: by 2002:a05:6512:551:b0:4fb:7559:aea3 with SMTP id h17-20020a056512055100b004fb7559aea3mr9507796lfl.39.1688995006649;
+        Mon, 10 Jul 2023 06:16:46 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u20-20020a17090617d400b009829d2e892csm6241461eje.15.2023.07.10.06.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 06:16:46 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:16:44 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 05/21] thermal/drivers/tegra: convert to use
+ devm_request*_irq_probe()
+Message-ID: <ZKwEvJR5tYVsC0HM@orome>
+References: <20230710095926.15614-1-frank.li@vivo.com>
+ <20230710095926.15614-5-frank.li@vivo.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="th+TRJ0H9nCr/rwD"
+Content-Disposition: inline
+In-Reply-To: <20230710095926.15614-5-frank.li@vivo.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> OK, this is an important detail to mention. Also have tried to get some
-> numbers of how much excess is happening for a mixed bag of compressible
-> memory?
 
-Yes, I've done the test many times.  The numbers of excess depend on the
-compression ratio only. The maximum amount will not exceed 400KB,and will be
-smaller than the hard limit finally.
+--th+TRJ0H9nCr/rwD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> --
-> Michal Hocko
-> SUSE Labs
+On Mon, Jul 10, 2023 at 05:59:09PM +0800, Yangtao Li wrote:
+> There are more than 700 calls to devm_request_threaded_irq method and
+> more than 1000 calls to devm_request_irq method. Most drivers only
+> request one interrupt resource, and these error messages are basically
+> the same. If error messages are printed everywhere, more than 2000 lines
+> of code can be saved by removing the msg in the driver.
+>=20
+> And tglx point out that:
+>=20
+>   If we actually look at the call sites of
+>   devm_request_threaded_irq() then the vast majority of them print more or
+>   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+>=20
+>      519 messages total (there are probably more)
+>=20
+>      352 unique messages
+>=20
+>      323 unique messages after lower casing
+>=20
+>          Those 323 are mostly just variants of the same patterns with
+>          slight modifications in formatting and information provided.
+>=20
+>      186 of these messages do not deliver any useful information,
+>          e.g. "no irq", "
+>=20
+>      The most useful one of all is: "could request wakeup irq: %d"
+>=20
+>   So there is certainly an argument to be made that this particular
+>   function should print a well formatted and informative error message.
+>=20
+>   It's not a general allocator like kmalloc(). It's specialized and in the
+>   vast majority of cases failing to request the interrupt causes the
+>   device probe to fail. So having proper and consistent information why
+>   the device cannot be used _is_ useful.
+>=20
+> So convert to use devm_request*_irq_probe() API, which ensure that all
+> error handling branches print error information.
+>=20
+> In this way, when this function fails, the upper-layer functions can
+> directly return an error code without missing debugging information.
+> Otherwise, the error message will be printed redundantly or missing.
+
+Do we really need to keep repeating this same commit message for each
+and everyone of these commits? It's already in the cover letter and
+presumably on the patch that introduces the new helper, so surely we can
+come up with a denser version for individual subsystem patches.
+
+Other than that this looks good:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--th+TRJ0H9nCr/rwD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSsBLwACgkQ3SOs138+
+s6HXABAAjvoOmTWpBG/OvtzxxCxThQCLPbvGV4rC/l0dEuQqqJWc5/4l8BuJHZEx
+RM28LGiMupozR9yL6SNErs/r3OkjeVM2mv+La5HtO/ukcjQlrjHA/VPhA+q5BF5t
+D3SUxtywPNwtHGUutEt5QCR/2reZks32DIZQx6hG+DAz1sIUd2JNtgDR/CAci3J0
+w6x/vevGYXqYlftphXfGG0pL8bncYz2v6dzJIjY5f4GGiBREJs38MaHjaSqNT+uv
+uxUNLL97FwGmSprBgDk2/gWMPiZQXH1kIB8/jx+lWXyX6PVS9f49emBC0grSPdUK
+gIeW4dVwQkiSfg+TJDiHNNfrC71jeUuAluQr83C3JBRq6AnBXd/YvsFL9JYAfn2q
+iAGvFECNjDDvAMogcgLJw2LIbYhNrT9RjRQGHAymoYSMA3KqhItFrAp3BQrnlOT2
+opV3E9ZGPYn6QtL/lVgdTY8if2JuOLXOGwP7okvYmzXzMuX2AkVHJk58FK6MbytC
+5PfjvzQ373Yy8+q+dfGYw7fF9n8jiTCOB7oUNIihJpPSo2twCA6g9dmB9sPewf6x
+t12R76CLTzp/lwCTKMi7VPg9cW0EygXXgYs35+03Hon3xjM+GgKqH79BE29672b0
+v62y68umxB+crKZZ5T1YPsMQmL1fAUYTl+LSweiXUYlsHEbiEHQ=
+=i8B+
+-----END PGP SIGNATURE-----
+
+--th+TRJ0H9nCr/rwD--
