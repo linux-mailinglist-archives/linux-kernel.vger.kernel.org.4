@@ -2,179 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983E674D836
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE21974D83C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjGJNwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S230048AbjGJNzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGJNwP (ORCPT
+        with ESMTP id S229451AbjGJNzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:52:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F0EB6;
-        Mon, 10 Jul 2023 06:52:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A3A391FFD8;
-        Mon, 10 Jul 2023 13:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688997133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4v5LeT3wEH/C9m2+W9XtcTPFhOIw+YSARWF0KgYWOtU=;
-        b=Oi9TRHgWi+luule3ABD/ucSz147ye4oeC2K/JMDAOmAYTcgUWwXxeVPSKpDjXHpYa11W1b
-        8C8Bt5/wUHu0a0OA32pmcll5SgGi043elwFxPW+2k+HMXFbILx2HOWYjXc6HGezxJD9KXX
-        FIAJ8QgYE8tryF9ig8pdWfFgJafJlOQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688997133;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4v5LeT3wEH/C9m2+W9XtcTPFhOIw+YSARWF0KgYWOtU=;
-        b=jbYxkndX4Ti6Gn7nfRuP5KqH7ubZaqVqLQV4PJNSTcJTuw6/+68QjeWVEL52sklq3WE3DB
-        U2LYGNcP3Dc/M0BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38D491361C;
-        Mon, 10 Jul 2023 13:52:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id L6LYDA0NrGQpMAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 13:52:13 +0000
-Message-ID: <54e3e070-52fb-9ccb-bc47-0f41690f6bfa@suse.de>
-Date:   Mon, 10 Jul 2023 15:52:12 +0200
+        Mon, 10 Jul 2023 09:55:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF0BD2;
+        Mon, 10 Jul 2023 06:55:10 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36ADPucq026574;
+        Mon, 10 Jul 2023 13:55:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=whUwVB7INIWJNXg+OG8YCm4ASRp/lBqDVjOAb8dV+KY=;
+ b=gynTmW7cezZV7+q+Mc/Rr3Q0sCRPndMs8M82x6Yi3ZzTdkixGhXMN3plN5Z1OT9q6hN7
+ PGIEK0Crmo+lpRA+aFlChKY78vF/hYu7T4+k4ObskHSQeuyY/yncUYg90VzMuNLbnWrc
+ Xyyc1hK4du6YTzFymOPrrLGtkRIZ5oThlNg81ZlvLWGcq7HZtpOvaGp/XD/ygg3A8YOL
+ veIbXWPvDTxddTuiLF2cVc4+vesrPLLL8CPfUMmBfRynocQ6Q9Z1aO/Iecg0TTzVZMUv
+ 1kcuoGfpeD9TUOMcYM6sbmuhSHENPy2FzpA8dOPJ7VDtGubHsdinchZ+JjbjJ8xUiaVP QQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rrf5mgtcj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 13:55:05 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36ADt4vv027070
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 13:55:04 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
+ 2023 06:54:59 -0700
+Message-ID: <6c2ac08b-c36a-510a-944c-26baffe74b9d@quicinc.com>
+Date:   Mon, 10 Jul 2023 19:24:56 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 08/17] arch/sh: Do not assign FBINFO_FLAG_DEFAULT to
- fb_videomode.flag
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: ipq5332: Add thermal zone nodes
 Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        deller@gmx.de, javierm@redhat.com
-Cc:     linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
-        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-References: <20230710130113.14563-1-tzimmermann@suse.de>
- <20230710130113.14563-9-tzimmermann@suse.de>
- <0a47ed93fe90a77180533f8c2e42e402827e8f1c.camel@physik.fu-berlin.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <0a47ed93fe90a77180533f8c2e42e402827e8f1c.camel@physik.fu-berlin.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------ObI0DIYuPayIMER65keWCwGm"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-6-quic_ipkumar@quicinc.com>
+ <3f6ab4b4-b5f5-5807-0cb4-8ae782bd6044@linaro.org>
+ <b1346bc7-4bf0-e885-c3d4-6fac01516bf4@linaro.org>
+ <01149ed4-8a8c-e0e0-d140-1f17a1f0c1fd@quicinc.com>
+In-Reply-To: <01149ed4-8a8c-e0e0-d140-1f17a1f0c1fd@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rPBxY3TrhAXrbiFmTRmkA1vO92Lmy5f9
+X-Proofpoint-ORIG-GUID: rPBxY3TrhAXrbiFmTRmkA1vO92Lmy5f9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 bulkscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307100125
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------ObI0DIYuPayIMER65keWCwGm
-Content-Type: multipart/mixed; boundary="------------y6Z9f06cQd6qaNtFSEQ4zER5";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, deller@gmx.de,
- javierm@redhat.com
-Cc: linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- linux-input@vger.kernel.org, linux-media@vger.kernel.org,
- linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-geode@lists.infradead.org,
- linux-nvidia@lists.surfsouth.com, linux-hyperv@vger.kernel.org,
- linux-omap@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- kvm@vger.kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>,
- Rich Felker <dalias@libc.org>
-Message-ID: <54e3e070-52fb-9ccb-bc47-0f41690f6bfa@suse.de>
-Subject: Re: [PATCH 08/17] arch/sh: Do not assign FBINFO_FLAG_DEFAULT to
- fb_videomode.flag
-References: <20230710130113.14563-1-tzimmermann@suse.de>
- <20230710130113.14563-9-tzimmermann@suse.de>
- <0a47ed93fe90a77180533f8c2e42e402827e8f1c.camel@physik.fu-berlin.de>
-In-Reply-To: <0a47ed93fe90a77180533f8c2e42e402827e8f1c.camel@physik.fu-berlin.de>
 
---------------y6Z9f06cQd6qaNtFSEQ4zER5
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-SGkNCg0KQW0gMTAuMDcuMjMgdW0gMTU6NDIgc2NocmllYiBKb2huIFBhdWwgQWRyaWFuIEds
-YXViaXR6Og0KPiBIaSBUaG9tYXMhDQo+IA0KPiBPbiBNb24sIDIwMjMtMDctMTAgYXQgMTQ6
-NTAgKzAyMDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gRkJJTkZPX0ZMQUdfREVG
-QVVMVCBpcyBhIGZsYWcgZm9yIGEgZnJhbWVidWZmZXIgaW4gc3RydWN0IGZiX2luZm8uDQo+
-PiBGbGFncyBmb3IgdmlkZW9tb2RlcyBhcmUgcHJlZml4ZWQgd2l0aCBGQl9NT0RFXy4gRkJJ
-TkZPX0ZMQUdfREVGQVVMVA0KPj4gaXMgMCBhbmQgdGhlIHN0YXRpYyBkZWNsYXJhdGlvbiBh
-bHJlYWR5IGNsZWFycyB0aGUgbWVtb3J5IGFyZWEgb2YNCj4+IHNoNzc2M2ZiX3ZpZGVvbW9k
-ZS4gU28gcmVtb3ZlIHRoZSBhc3NpZ25tZW50Lg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFRo
-b21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPj4gQ2M6IFlvc2hpbm9y
-aSBTYXRvIDx5c2F0b0B1c2Vycy5zb3VyY2Vmb3JnZS5qcD4NCj4+IENjOiBSaWNoIEZlbGtl
-ciA8ZGFsaWFzQGxpYmMub3JnPg0KPj4gQ2M6IEpvaG4gUGF1bCBBZHJpYW4gR2xhdWJpdHog
-PGdsYXViaXR6QHBoeXNpay5mdS1iZXJsaW4uZGU+DQo+PiAtLS0NCj4+ICAgYXJjaC9zaC9i
-b2FyZHMvbWFjaC1zaDc3NjNyZHAvc2V0dXAuYyB8IDEgLQ0KPj4gICAxIGZpbGUgY2hhbmdl
-ZCwgMSBkZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3NoL2JvYXJkcy9t
-YWNoLXNoNzc2M3JkcC9zZXR1cC5jIGIvYXJjaC9zaC9ib2FyZHMvbWFjaC1zaDc3NjNyZHAv
-c2V0dXAuYw0KPj4gaW5kZXggOTdlNzE1ZTRlOWIzLi4zNDVmMmI3NmM4NWEgMTAwNjQ0DQo+
-PiAtLS0gYS9hcmNoL3NoL2JvYXJkcy9tYWNoLXNoNzc2M3JkcC9zZXR1cC5jDQo+PiArKysg
-Yi9hcmNoL3NoL2JvYXJkcy9tYWNoLXNoNzc2M3JkcC9zZXR1cC5jDQo+PiBAQCAtMTE5LDcg
-KzExOSw2IEBAIHN0YXRpYyBzdHJ1Y3QgZmJfdmlkZW9tb2RlIHNoNzc2M2ZiX3ZpZGVvbW9k
-ZSA9IHsNCj4+ICAgCS52c3luY19sZW4gPSAxLA0KPj4gICAJLnN5bmMgPSAwLA0KPj4gICAJ
-LnZtb2RlID0gRkJfVk1PREVfTk9OSU5URVJMQUNFRCwNCj4+IC0JLmZsYWcgPSBGQklORk9f
-RkxBR19ERUZBVUxULA0KPj4gICB9Ow0KPj4gICANCj4+ICAgc3RhdGljIHN0cnVjdCBzaDc3
-NjBmYl9wbGF0ZGF0YSBzaDc3NjNmYl9kZWZfcGRhdGEgPSB7DQo+IA0KPiBJIHdvdWxkIGFy
-Z3VlIHRoYXQgdGhlIGN1cnJlbnQgY29kZSBpcyBtb3JlIHJlYWRhYmxlIHRoYXQgeW91ciBw
-cm9wb3NlZCBjaGFuZ2UuDQo+IA0KPiBJIGFncmVlIHRoYXQgaXQncyBhIG5vLW9wLCBidXQg
-Y29kZSBpcyBub3QganVzdCBhYm91dCBmdW5jdGlvbmFsaXR5IGJ1dCBhbHNvDQo+IHJlYWRh
-YmlsaXR5LCBpc24ndCBpdD8NCg0KSSB3b24ndCBhcmd1ZSB3aXRoIHRoYXQsIGJ1dCB0aGUg
-ZmxhZyBpdHNlbGYgaXMgd3JvbmcuIA0KRkJJTkZPX0ZMQUdfREVGQVVMVCBpcy93YXMgZm9y
-IHN0cnVjdCBmYl9pbmZvLmZsYWdzLiBZb3UgaGF2ZSBzdHJ1Y3QgDQpmYl92aWRlb21vZGUu
-ZmxhZy4gVGhlIHZhbGlkIGZsYWdzIGZvciB0aGlzIGZpZWxkIGFyZSBhdCBbMV0uIElmIA0K
-YW55dGhpbmcsIHRoZSBmaWVsZCBjb3VsZCBiZSBpbml0aWFsaXplZCB0byBGQl9NT0RFX0lT
-X1VOS05PV04sIHdoaWNoIA0KaGFzIHRoZSBzYW1lIHZhbHVlLg0KDQpbMV0gaHR0cHM6Ly9l
-bGl4aXIuYm9vdGxpbi5jb20vbGludXgvbGF0ZXN0L3NvdXJjZS9pbmNsdWRlL2xpbnV4L2Zi
-LmgjTDY4MQ0KDQo+IA0KPiBBbHNvLCBJIHByZWZlciAic2g6IiBhcyB0aGUgYXJjaGl0ZWN0
-dXJlIHByZWZpeCwgbm90ICJhcmNoL3NoOiIuDQoNCk9rLg0KDQpCZXN0IHJlZ2FyZHMNClRo
-b21hcw0KPiANCj4gVGhhbmtzLA0KPiBBZHJpYW4NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1l
-cm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRp
-b25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcs
-IEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxk
-LCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
-
---------------y6Z9f06cQd6qaNtFSEQ4zER5--
-
---------------ObI0DIYuPayIMER65keWCwGm
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSsDQwFAwAAAAAACgkQlh/E3EQov+Dq
-UxAAgxMgxU6Vr1M0nKcJyYj4sBGwi4F9uEC7pJWH9/enjSUh+BceCBIJjCWRNv6aEUdyY0PT5sdz
-dYTeYaX+5Wm02K1aKeDauyMFsWlLCopJjZMbXgEaUTAqSWCnWSZR3G8S/+crcCG7HNMrNrL3cMPn
-azjGASDNtOZNOjcei6o2k1mEzVy/no+UPAP6VUY2PD3lfpd+1qXm7bNpsGrK7vJJYZQPfPa2NpSe
-aslguDTa278xr+dD9Rf2qJbNt/USGI/Nn8jHi+IW9FigyKiG/tKLu5vf8zYYUihidWYe2YuV1zl5
-ALOxcb0CK+KW1htlRCGyOe+YPmY67Qd7iWSQQ4Q/ljzuXy3BfCAZhoTLLhs/26Ne1Gtg/o1Ey59i
-v5KC77N8Y41+VgnUuTdjT6vFeIgaZQxTvq/8OTsJ5eAmteQqyUTFZ/Ls+ohLOOtyT7Stjfbv9z8w
-/mdVDcfD5sVho5w4yOnVPl1/yNY+WAM9amQq3vJaPwD03CgAYhc/LsfMUKlVsxvPZIpYScmxK0Vg
-NugH4iNcFKdkVQxhuwXH7bcINQj7y9TfBTQnG51LfaBrtldkMzbO5IN/m10bkS42GiBQpSNBL6NR
-+4AlANALC2HzJi0pctl2TXlRuVJHBQpwyukgc06o5FMJfF6w8fZ3jOU2wxODUTat8spdC/CORdgv
-of4=
-=M2aI
------END PGP SIGNATURE-----
-
---------------ObI0DIYuPayIMER65keWCwGm--
+On 7/10/2023 7:04 PM, Praveenkumar I wrote:
+>
+> On 7/10/2023 5:44 PM, Konrad Dybcio wrote:
+>> On 10.07.2023 13:23, Dmitry Baryshkov wrote:
+>>> On 10/07/2023 13:37, Praveenkumar I wrote:
+>>>> This patch adds thermal zone nodes for sensors present in
+>>>> IPQ5332.
+>>>>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/ipq5332.dtsi | 72 
+>>>> +++++++++++++++++++++++++++
+>>>>    1 file changed, 72 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
+>>>> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>>>> index a1e3527178c0..8b276aeca53e 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>>>> @@ -527,4 +527,76 @@ timer {
+>>>>                     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | 
+>>>> IRQ_TYPE_LEVEL_LOW)>,
+>>>>                     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | 
+>>>> IRQ_TYPE_LEVEL_LOW)>;
+>>>>        };
+>>>> +
+>>>> +    thermal-zones {
+>>>> +        rfa-0-thermal{
+>> thermal {
+> In all other DTS, name is 'thermal-zones". Hence followed the same.
+Sorry, understood now. Will give space after "rfa-0-thermal"
+>>
+>>>> +            polling-delay-passive = <0>;
+>>>> +            polling-delay = <0>;
+>>>> +            thermal-sensors = <&tsens 11>;
+>>>> +
+>>>> +            trips {
+>> Indentation seems off, tab size for kernel code is 8 spaces.
+> Sure, will check the indent and update in next patch.
+>>
+>> Konrad
+>>>> +                rfa-0-critical {
+>>>> +                    temperature = <125000>;
+>>>> +                    hysteresis = <1000>;
+>>>> +                    type = "critical";
+>>>> +                };
+>>>> +            };
+>>>> +        };
+>>>> +
+>>>> +        rfa-1-thermal {
+>>>> +            polling-delay-passive = <0>;
+>>>> +            polling-delay = <0>;
+>>>> +            thermal-sensors = <&tsens 12>;
+>>>> +
+>>>> +            trips {
+>>>> +                rfa-1-critical {
+>>>> +                    temperature = <125000>;
+>>>> +                    hysteresis = <1000>;
+>>>> +                    type = "critical";
+>>>> +                };
+>>>> +            };
+>>>> +        };
+>>>> +
+>>>> +        misc-thermal {
+>>>> +            polling-delay-passive = <0>;
+>>>> +            polling-delay = <0>;
+>>>> +            thermal-sensors = <&tsens 13>;
+>>>> +
+>>>> +            trips {
+>>>> +                misc-critical {
+>>>> +                    temperature = <125000>;
+>>>> +                    hysteresis = <1000>;
+>>>> +                    type = "critical";
+>>>> +                };
+>>>> +            };
+>>>> +        };
+>>>> +
+>>>> +        cpu-top-thermal {
+>>>> +            polling-delay-passive = <0>;
+>>>> +            polling-delay = <0>;
+>>>> +            thermal-sensors = <&tsens 14>;
+>>>> +
+>>>> +            trips {
+>>>> +                cpu-top-critical {
+>>>> +                    temperature = <125000>;
+>>>> +                    hysteresis = <1000>;
+>>>> +                    type = "critical";
+>>>> +                };
+>>>> +            };
+>>> Could you please add a passive cooling devices for the CPU?
+>>>
+>>>> +        };
+>>>> +
+>>>> +        top-glue-thermal {
+>>>> +            polling-delay-passive = <0>;
+>>>> +            polling-delay = <0>;
+>>>> +            thermal-sensors = <&tsens 15>;
+>>>> +
+>>>> +            trips {
+>>>> +                top-glue-critical {
+>>>> +                    temperature = <125000>;
+>>>> +                    hysteresis = <1000>;
+>>>> +                    type = "critical";
+>>>> +                };
+>>>> +            };
+>>>> +        };
+>>>> +    };
+>>>>    };
+> -- 
+> Thanks,
+> Praveenkumar
