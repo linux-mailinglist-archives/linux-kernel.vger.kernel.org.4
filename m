@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C8574D0DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB96474D0E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjGJJAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:00:51 -0400
+        id S231356AbjGJJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:00:57 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjGJJA0 (ORCPT
+        with ESMTP id S232819AbjGJJA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:00:26 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A61D103
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:00:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbab0d0b88so40381375e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:00:22 -0700 (PDT)
+        Mon, 10 Jul 2023 05:00:28 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B57F4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:00:23 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbf1b82dc7so43528315e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1688979620; x=1691571620;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1688979622; x=1691571622;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yqDy168k4TnvbweySqHfEZPadstBh9VaBWlyLgmDoG4=;
-        b=4XppJ28QA7t1JSx0zGkQYQE+lcFRMRgyUHUeOKT+Xb+l3oojEo474/baSa9CEHJVne
-         46K5dUKzG2MlT2LlVRJ0H3VLK8/N6g7abwGtGNIt6+86GEtrq+WfFChXBlEH3JEzc2GJ
-         8B/OV4JOl7El3bon1Tay6tQJaN5Pxb4P+TGVcZQeMta3xTx7KUmSPulUle2T9DZ50ECR
-         M2EahG5SrsyoXTudBFezKfkh15XlnV5D9LVqXJrY7OfTkvhaOcpd6I37kqOqwKr2oRnq
-         JQhwD/InEs072T6LGrq39NcYZaCXUr1gyUwSQVCPX6GXfQa74MrVmCDsIemdY7LkSd3l
-         Pq6w==
+        bh=0pIcENny5wyN4aPPTX4E5kR9KARmjXxn8moCsW/zSJ4=;
+        b=qHi6944tfn6w2OwrVVheZEXG2d9WTo+xLq3PZ0U82Cb2ffAvFnmHpBpLdSUkfDWe4O
+         ++6LVWYpeg4A2sxrONLsAJ7jjLcBfSilqscpHFXoMCMPDles2G2b5wMYWiIE6KqLpRdM
+         ZOu3tTL9l6a/GJ1rsZl0aaySX9bD08RyXQbv+Z+zuP6/EiVAHWuGiZSSBdhua72/5Xdp
+         nYegQtgjuflcZjTUXTrnTupLwVq2GMQBVAzJyl8aJ7ItI6FuhNFkjJb4Fe5FUzE0sjtf
+         aQioqMAwNhSnuFvTALABdUSvclfKnb+6B+hTesZ5qU6vPEKqtdIt2dSyeWY2bNyYgsIB
+         7l1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688979620; x=1691571620;
+        d=1e100.net; s=20221208; t=1688979622; x=1691571622;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yqDy168k4TnvbweySqHfEZPadstBh9VaBWlyLgmDoG4=;
-        b=Gp9HXv5lCO2o1flpxOwVm9Se5QBjsaHPAHgXE7YQfgTsWo+HbVEgea7w+PFE3f0uEk
-         7H4Y+yQFZirJouWYjmZPo/LPlt3Cdes8r4uFRcePWornB062IXPK5Sz6muYMeGD8YJdy
-         lCBfXlFUaa9V3kcQLwnSGRydUMnRaKMHPT/D3LeuMVljnPfca4sp+bkITsZFim8jQzNw
-         IJutsqF9iBg2S0HN6IuADtZxec+3W1M/GjvvUfJPNyhB1pZrBtJaWyA7beTKAhttyee1
-         +HCKRWARouO9K/nBt78k0RzKhTgqqG1EyUvvtV2TjvGCayZp6Xib7l2QlJNt+XG9m8eG
-         i0eA==
-X-Gm-Message-State: ABy/qLbZ08nJKF3gXqRyF1BKVtiZxc0CnOjVmmxPYpuy0shifvNhbu17
-        mNzBJCr8Xo2Ndk9uKmKfm2QKPA==
-X-Google-Smtp-Source: APBJJlGujN4ftiSWThZXtM38s/Sf7sj7je+92ZALarqYsh+BvUKgcmZFzFsl5agwyjWOpH818Z6ueA==
-X-Received: by 2002:a1c:cc02:0:b0:3fb:4064:7e22 with SMTP id h2-20020a1ccc02000000b003fb40647e22mr4839145wmb.19.1688979620728;
-        Mon, 10 Jul 2023 02:00:20 -0700 (PDT)
+        bh=0pIcENny5wyN4aPPTX4E5kR9KARmjXxn8moCsW/zSJ4=;
+        b=S214yO9cApEoztmnTZzWZthYD5kl+KnC2OFbTpWDpFVV1QY3+6Eu6Yy0QMObhH4QeV
+         adBdMAeUC19sy4N0baneWWsqIqwYArR5WgYdzhnwsXWJbbS0f//ms9TFdvImMBa3OL1D
+         d2zkm68C6YU9vDXAD4vJLAaDR7Bxk++CAAsnfxs+mu7NFJrYPlEQAsAOqXips6neYRr4
+         b6cVrrBJL8zD0WXxelFoBUKlAoH2AOceyMb1sb65uYvEcri0g3JFPoXw7TN7YBRl3RAt
+         kLvyqSoKed19lJ0H6ikWjZjeoGhv6wKzXjaLJVD0kOAPZQN/57rtm8Dh0yb27+K5bTsw
+         ZaSw==
+X-Gm-Message-State: ABy/qLbk5TubHTh5oMUptzJdYWLMc2VAxN+Mr2PE71CfPfYicOnEGK8r
+        /WDXnuWUFmWR0/ULrAHrrrFWIQ==
+X-Google-Smtp-Source: APBJJlF3vmekHxIVb3j8B+wKlmnAbsnqe6QaDOHCTG1RL+70XHfWoQqWSxwZM3a9bpcOPWpDVPhiBQ==
+X-Received: by 2002:a7b:c7d2:0:b0:3fb:b18e:9b1a with SMTP id z18-20020a7bc7d2000000b003fbb18e9b1amr11633905wmk.8.1688979622013;
+        Mon, 10 Jul 2023 02:00:22 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:6002:540:6954:abdd])
-        by smtp.gmail.com with ESMTPSA id k6-20020a05600c0b4600b003fc00702f65sm8581045wmr.46.2023.07.10.02.00.19
+        by smtp.gmail.com with ESMTPSA id k6-20020a05600c0b4600b003fc00702f65sm8581045wmr.46.2023.07.10.02.00.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 02:00:20 -0700 (PDT)
+        Mon, 10 Jul 2023 02:00:21 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
@@ -76,9 +76,9 @@ Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-mediatek@lists.infradead.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next v3 07/12] net: stmmac: replace the vlan_fail_q_en field with a flag
-Date:   Mon, 10 Jul 2023 10:59:56 +0200
-Message-Id: <20230710090001.303225-8-brgl@bgdev.pl>
+Subject: [PATCH net-next v3 08/12] net: stmmac: replace the multi_msi_en field with a flag
+Date:   Mon, 10 Jul 2023 10:59:57 +0200
+Message-Id: <20230710090001.303225-9-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230710090001.303225-1-brgl@bgdev.pl>
 References: <20230710090001.303225-1-brgl@bgdev.pl>
@@ -101,58 +101,85 @@ simple bitfield flag.
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 2 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 3 ++-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 4 ++--
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 7 ++++---
  include/linux/stmmac.h                            | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index faa6f4ec6838..1f1bc99571a5 100644
+index 1f1bc99571a5..d8bcf9452197 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -560,7 +560,7 @@ static int intel_mgbe_common_data(struct pci_dev *pdev,
- 	/* Set the maxmtu to a default of JUMBO_LEN */
- 	plat->maxmtu = JUMBO_LEN;
+@@ -953,7 +953,7 @@ static int stmmac_config_single_msi(struct pci_dev *pdev,
  
--	plat->vlan_fail_q_en = true;
-+	plat->flags |= STMMAC_FLAG_VLAN_FAIL_Q_EN;
+ 	res->irq = pci_irq_vector(pdev, 0);
+ 	res->wol_irq = res->irq;
+-	plat->multi_msi_en = 0;
++	plat->flags &= ~STMMAC_FLAG_MULTI_MSI_EN;
+ 	dev_info(&pdev->dev, "%s: Single IRQ enablement successful\n",
+ 		 __func__);
  
- 	/* Use the last Rx queue */
- 	plat->vlan_fail_q = plat->rx_queues_to_use - 1;
+@@ -1005,7 +1005,7 @@ static int stmmac_config_multi_msi(struct pci_dev *pdev,
+ 	if (plat->msi_sfty_ue_vec < STMMAC_MSI_VEC_MAX)
+ 		res->sfty_ue_irq = pci_irq_vector(pdev, plat->msi_sfty_ue_vec);
+ 
+-	plat->multi_msi_en = 1;
++	plat->flags |= STMMAC_FLAG_MULTI_MSI_EN;
+ 	dev_info(&pdev->dev, "%s: multi MSI enablement successful\n", __func__);
+ 
+ 	return 0;
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index d444514db07e..c5763f60c6ef 100644
+index c5763f60c6ef..ebe82e7b50fc 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -6923,7 +6923,8 @@ static int stmmac_hw_init(struct stmmac_priv *priv)
- 	if (priv->dma_cap.tsoen)
- 		dev_info(priv->device, "TSO supported\n");
+@@ -3711,7 +3711,7 @@ static int stmmac_request_irq(struct net_device *dev)
+ 	int ret;
  
--	priv->hw->vlan_fail_q_en = priv->plat->vlan_fail_q_en;
-+	priv->hw->vlan_fail_q_en =
-+		(priv->plat->flags & STMMAC_FLAG_VLAN_FAIL_Q_EN);
- 	priv->hw->vlan_fail_q = priv->plat->vlan_fail_q;
+ 	/* Request the IRQ lines */
+-	if (priv->plat->multi_msi_en)
++	if (priv->plat->flags & STMMAC_FLAG_MULTI_MSI_EN)
+ 		ret = stmmac_request_irq_multi_msi(dev);
+ 	else
+ 		ret = stmmac_request_irq_single(dev);
+@@ -5954,7 +5954,7 @@ static void stmmac_poll_controller(struct net_device *dev)
+ 	if (test_bit(STMMAC_DOWN, &priv->state))
+ 		return;
  
- 	/* Run HW quirks, if any */
+-	if (priv->plat->multi_msi_en) {
++	if (priv->plat->flags & STMMAC_FLAG_MULTI_MSI_EN) {
+ 		for (i = 0; i < priv->plat->rx_queues_to_use; i++)
+ 			stmmac_msi_intr_rx(0, &priv->dma_conf.rx_queue[i]);
+ 
+@@ -7169,7 +7169,8 @@ int stmmac_dvr_probe(struct device *device,
+ 	priv->plat = plat_dat;
+ 	priv->ioaddr = res->addr;
+ 	priv->dev->base_addr = (unsigned long)res->addr;
+-	priv->plat->dma_cfg->multi_msi_en = priv->plat->multi_msi_en;
++	priv->plat->dma_cfg->multi_msi_en =
++		(priv->plat->flags & STMMAC_FLAG_MULTI_MSI_EN);
+ 
+ 	priv->dev->irq = res->irq;
+ 	priv->wol_irq = res->wol_irq;
 diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index aeb3e75dc748..155cb11b1c8a 100644
+index 155cb11b1c8a..3365b8071686 100644
 --- a/include/linux/stmmac.h
 +++ b/include/linux/stmmac.h
-@@ -210,6 +210,7 @@ struct dwmac4_addrs {
- #define STMMAC_FLAG_HAS_SUN8I			BIT(3)
+@@ -211,6 +211,7 @@ struct dwmac4_addrs {
  #define STMMAC_FLAG_TSO_EN			BIT(4)
  #define STMMAC_FLAG_SERDES_UP_AFTER_PHY_LINKUP	BIT(5)
-+#define STMMAC_FLAG_VLAN_FAIL_Q_EN		BIT(6)
+ #define STMMAC_FLAG_VLAN_FAIL_Q_EN		BIT(6)
++#define STMMAC_FLAG_MULTI_MSI_EN		BIT(7)
  
  struct plat_stmmacenet_data {
  	int bus_id;
-@@ -278,7 +279,6 @@ struct plat_stmmacenet_data {
- 	bool en_tx_lpi_clockgating;
- 	bool rx_clk_runs_in_lpi;
- 	int has_xgmac;
--	bool vlan_fail_q_en;
- 	u8 vlan_fail_q;
- 	unsigned int eee_usecs_rate;
- 	struct pci_dev *pdev;
+@@ -286,7 +287,6 @@ struct plat_stmmacenet_data {
+ 	int ext_snapshot_num;
+ 	bool int_snapshot_en;
+ 	bool ext_snapshot_en;
+-	bool multi_msi_en;
+ 	int msi_mac_vec;
+ 	int msi_wol_vec;
+ 	int msi_lpi_vec;
 -- 
 2.39.2
 
