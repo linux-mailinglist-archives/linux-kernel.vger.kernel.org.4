@@ -2,136 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9DB74DC73
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A216B74DC78
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjGJR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S231704AbjGJR2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjGJR2n (ORCPT
+        with ESMTP id S231656AbjGJR2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:28:43 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6657D187
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:28:39 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-635eedf073eso31177456d6.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:28:39 -0700 (PDT)
+        Mon, 10 Jul 2023 13:28:51 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60214120
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:28:50 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-565f3881cbeso3706035eaf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689010118; x=1691602118;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wLpjzQEenkbJ/gFlghd5REGFAGYnm9xmo03pfq2YYWo=;
-        b=fSUBtljW2tupPgc7JdOUNMdW4laZhz1EUL6fRhFT3oIYk6LXlb8eDlvz5YyQcxCMhu
-         aZqXgl3kHe/jI8ubKGqhnPmNH6yInPwogwdX9CwU5R/3lEEEXDaFIPIhhjoQNvbXGrIl
-         +4oTH2UIJ+qNtwFB07Mi+9f41IUPzZV5Ui1ZnRzxAoLUclWyzjeEzZ903j5wwRW4zGoM
-         aPjpSdDi+Wg/CDofCt429PZLE2hcKYYCt31G3IPKCA0aln05ua500196g40qrnXORZWw
-         dYbf5r/HTkrGgweFngOzWZft3EaMNRxq/N0Ui6aL1pZMCkcd7Pw9/Tj/YchoqE9TRrEK
-         2rGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689010118; x=1691602118;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1689010129; x=1691602129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wLpjzQEenkbJ/gFlghd5REGFAGYnm9xmo03pfq2YYWo=;
-        b=gKFvuiQqOguJpVaZreK1AgMr/k232Pg4v2z/k8CefqUmiMIf3awUkSOpA6s18IorZ0
-         ckhOTMd3ae3tGceYXbcudQP/OuvreD3jnJNZ4NiZAOsKRVweqDsUrlJBc6gkqZ0lFiQ3
-         iPPkeAXTuN8XvonrnrlhNAuEpX/bZA297ZZ6FGI8YEycZghazCb/8lnBL2OpkAGNvq4J
-         2/5HI4KyZbMTYoYkkz3PAzI6JPaG1JZ6zKkSojyvhQzv7rMWa9U1DExo2S0enqkJp/jy
-         9UQjFz/L3jJfOZXcdza81f1pQUEWYJDsAV4N3YPtZvCa0XdFYpxYRz795LFCUu5VoaIN
-         50dw==
-X-Gm-Message-State: ABy/qLaLhd9qpKEcuLkCrrqpEgopgMbC8y0aMt9V/fTNCzbGPd81/zBV
-        O+juiaArmEHlO4mIxMgpngMYlg==
-X-Google-Smtp-Source: APBJJlFExA2moLbyNhVmA2Jybezw3b+s7HmTxgqMtHVXfr1jnmQ18NRx3XeqvNVgeBiLSgTXM+41bw==
-X-Received: by 2002:a0c:dc01:0:b0:636:836e:8064 with SMTP id s1-20020a0cdc01000000b00636836e8064mr11800445qvk.63.1689010118491;
-        Mon, 10 Jul 2023 10:28:38 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id d25-20020a0cb2d9000000b006166d870243sm54803qvf.43.2023.07.10.10.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 10:28:38 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qIugf-0004Gb-F9;
-        Mon, 10 Jul 2023 14:28:37 -0300
-Date:   Mon, 10 Jul 2023 14:28:37 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Tina Zhang <tina.zhang@intel.com>
-Cc:     Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Michael Shavit <mshavit@google.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 5/6] iommu: Support mm PASID 1:1 with sva domain
-Message-ID: <ZKw/xS7wOoRvNfnH@ziepe.ca>
-References: <20230707013441.365583-1-tina.zhang@intel.com>
- <20230707013441.365583-6-tina.zhang@intel.com>
+        bh=ul2VBha0pA5JbrKTfyVeWSobOhwcf7C0x71pvrwyrgQ=;
+        b=o6mVXqDTJmoHlgZBvx002DCMmHK4ChjFvLlY6gU+ePOdej0BSjQFyLY8olhCtj6mu2
+         wZDy9aP75QBVXpumDWx2MtwtuMIIxxxVJroOi4cAtqcIqzCudfXUZvzccob7nUYqsiJu
+         PkYuHINFZaecU/9Sa50Uqp7GpIEgq8GZY4qH9jg743AJlaItRqXN5y8W+xZryx2ztouF
+         wPofLGnW5VmLI2i1Xhvr8gLvDIqkW+uBqlwGK9X0vCT7bPizpyT+Qmqg93VDYj+B4ovZ
+         ZSwRJ3e4pufvumMwOC+j3Pdo40J+zN9LTZEaCTtXpgkwsNOs0dRS2qhYBCdVqx0EJImD
+         nxDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689010129; x=1691602129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ul2VBha0pA5JbrKTfyVeWSobOhwcf7C0x71pvrwyrgQ=;
+        b=dunNtnAUUfOTUVTJ6pmcLmpkgszOd8bGZjCM8JWctETJZBZkcNWK8L8fgs9Ge/iMIR
+         2aRacUlrhCmVZBtGpDG8nYTVMiqQOmELpzMrSh5VLK1UwqeBbSaZcpNkv1s/TjEHcXbC
+         fPZl5LIAVUIezfHJ65fog921u3J8ioqaEkKLBMZKvFnMzcSlYQ7DzqXJKAJDo/wXv/dG
+         ii/71c23JTSpJtbBx8Dv0HWrAjXUGJMvvx+eWHDDKc13SKmFcDhf5A2QVdDWgzhHqr28
+         v4woahUQSRNVWv27XaGbeInsenG7ErBg3yp6Y30FVVSkdBAvgZF7zEKSrMOf4p1OlO3a
+         4SKg==
+X-Gm-Message-State: ABy/qLZgParJ+NPntIESr7Q8VOXTgrGp67qPTtVCszpNltePTpyVHz5G
+        a1vu2rGsUsr6SWTZ6gqcnmZ3PlX1SwsP2xS5+7U=
+X-Google-Smtp-Source: APBJJlFBwe80s58hgF1p9KknrluN6s31yo6PZL7GCWDUtGNihirysQsJpLLHIFLcfpxDoBlymOQh450Xi90ohXdtI94=
+X-Received: by 2002:a4a:4f0a:0:b0:565:97f9:d2fb with SMTP id
+ c10-20020a4a4f0a000000b0056597f9d2fbmr10945664oob.3.1689010129387; Mon, 10
+ Jul 2023 10:28:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230707013441.365583-6-tina.zhang@intel.com>
+References: <20230710090421.61623-1-xujianghui@cdjrlc.com> <77876ef2908eda36cb7f843145ec8cec@208suo.com>
+In-Reply-To: <77876ef2908eda36cb7f843145ec8cec@208suo.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 10 Jul 2023 13:28:38 -0400
+Message-ID: <CADnq5_PzKrkt7_=8VGMbAeXw+HD3Wch1VXaTTbeds3jHO2j+vg@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: ERROR: that open brace { should be on the
+ previous line
+To:     sunran001@208suo.com
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 09:34:40AM +0800, Tina Zhang wrote:
-> Each mm bound to devices gets a PASID and a corresponding sva domain
-> allocated in iommu_sva_bind_device(), which are referenced by iommu_mm
-> field of the mm. And that PASID and sva domain get released in iommu_sva_
-> unbind_device() when no devices are binding to that mm. As a result,
-> during the life cycle, sva domain has 1:1 with mm PASID.
-> 
-> Since the required info of PASID and sva domain are kept in struct
-> iommu_mm_data of a mm, use mm->iommu_mm field instead of the old pasid
-> field in mm struct.
+Applied.  Thanks!
 
-This is not technically right, the domains need to be a list, and we
-need to search the list. Almost always the list will have 0 or 1
-entries in it.
-
-> @@ -88,31 +98,41 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm
->  		goto out_unlock;
->  	}
->  
-> -	if (domain) {
-> -		domain->users++;
-> -		goto out;
-> +	if (unlikely(domain)) {
-> +		/* Re-attach the device to the same domain? */
-> +		if (domain == sva_domain) {
-> +			goto out;
-> +		} else {
-> +			/* Didn't get detached from the previous domain? */
-> +			ret = -EBUSY;
-> +			goto out_unlock;
-> +		}
->  	}
-
-And if we do all of this we should just get rid of the horrible
-iommu_get_domain_for_dev_pasid() entirely.
-
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 20135912584ba..1511ded7bc910 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -1175,20 +1175,20 @@ static inline bool tegra_dev_iommu_get_stream_id(struct device *dev, u32 *stream
->  #ifdef CONFIG_IOMMU_SVA
->  static inline void mm_pasid_init(struct mm_struct *mm)
->  {
-> -	mm->pasid = IOMMU_PASID_INVALID;
-> +	mm->iommu_mm = &default_iommu_mm;
->  }
->  static inline bool mm_valid_pasid(struct mm_struct *mm)
->  {
-> -	return mm->pasid != IOMMU_PASID_INVALID;
-> +	return mm->iommu_mm->pasid != IOMMU_PASID_INVALID;
->  }
-
-And these can now just test if the iommu_mmu->sva_domain is NULL
-
-Jaon
+On Mon, Jul 10, 2023 at 5:06=E2=80=AFAM <sunran001@208suo.com> wrote:
+>
+> Fix eleven occurrences of the checkpatch.pl error:
+> ERROR: that open brace { should be on the previous line
+>
+> Signed-off-by: Ran Sun <sunran001@208suo.com>
+> ---
+>   drivers/gpu/drm/radeon/rv770.c | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/rv770.c
+> b/drivers/gpu/drm/radeon/rv770.c
+> index a5ce59d4a485..9ce12fa3c356 100644
+> --- a/drivers/gpu/drm/radeon/rv770.c
+> +++ b/drivers/gpu/drm/radeon/rv770.c
+> @@ -136,7 +136,7 @@ int rv770_set_uvd_clocks(struct radeon_device *rdev,
+> u32 vclk, u32 dclk)
+>       return 0;
+>   }
+>
+> -static const u32 r7xx_golden_registers[] =3D{
+> +static const u32 r7xx_golden_registers[] =3D {
+>       0x8d00, 0xffffffff, 0x0e0e0074,
+>       0x8d04, 0xffffffff, 0x013a2b34,
+>       0x9508, 0xffffffff, 0x00000002,
+> @@ -151,7 +151,7 @@ static const u32 r7xx_golden_registers[] =3D{
+>       0x7300, 0xffffffff, 0x001000f0
+>   };
+>
+> -static const u32 r7xx_golden_dyn_gpr_registers[] =3D{
+> +static const u32 r7xx_golden_dyn_gpr_registers[] =3D {
+>       0x8db0, 0xffffffff, 0x98989898,
+>       0x8db4, 0xffffffff, 0x98989898,
+>       0x8db8, 0xffffffff, 0x98989898,
+> @@ -163,7 +163,7 @@ static const u32 r7xx_golden_dyn_gpr_registers[] =3D{
+>       0x88c4, 0xffffffff, 0x00000082
+>   };
+>
+> -static const u32 rv770_golden_registers[] =3D{
+> +static const u32 rv770_golden_registers[] =3D {
+>       0x562c, 0xffffffff, 0,
+>       0x3f90, 0xffffffff, 0,
+>       0x9148, 0xffffffff, 0,
+> @@ -172,7 +172,7 @@ static const u32 rv770_golden_registers[] =3D{
+>       0x9698, 0x18000000, 0x18000000
+>   };
+>
+> -static const u32 rv770ce_golden_registers[] =3D{
+> +static const u32 rv770ce_golden_registers[] =3D {
+>       0x562c, 0xffffffff, 0,
+>       0x3f90, 0xffffffff, 0x00cc0000,
+>       0x9148, 0xffffffff, 0x00cc0000,
+> @@ -183,7 +183,7 @@ static const u32 rv770ce_golden_registers[] =3D{
+>       0x9698, 0x18000000, 0x18000000
+>   };
+>
+> -static const u32 rv770_mgcg_init[] =3D{
+> +static const u32 rv770_mgcg_init[] =3D {
+>       0x8bcc, 0xffffffff, 0x130300f9,
+>       0x5448, 0xffffffff, 0x100,
+>       0x55e4, 0xffffffff, 0x100,
+> @@ -340,7 +340,7 @@ static const u32 rv770_mgcg_init[] =3D{
+>       0x92a4, 0xffffffff, 0x00080007
+>   };
+>
+> -static const u32 rv710_golden_registers[] =3D{
+> +static const u32 rv710_golden_registers[] =3D {
+>       0x3f90, 0x00ff0000, 0x00fc0000,
+>       0x9148, 0x00ff0000, 0x00fc0000,
+>       0x3f94, 0x00ff0000, 0x00fc0000,
+> @@ -349,7 +349,7 @@ static const u32 rv710_golden_registers[] =3D{
+>       0xa180, 0xffffffff, 0x00003f3f
+>   };
+>
+> -static const u32 rv710_mgcg_init[] =3D{
+> +static const u32 rv710_mgcg_init[] =3D {
+>       0x8bcc, 0xffffffff, 0x13030040,
+>       0x5448, 0xffffffff, 0x100,
+>       0x55e4, 0xffffffff, 0x100,
+> @@ -407,7 +407,7 @@ static const u32 rv710_mgcg_init[] =3D{
+>       0x9150, 0xffffffff, 0x4d940000
+>   };
+>
+> -static const u32 rv730_golden_registers[] =3D{
+> +static const u32 rv730_golden_registers[] =3D {
+>       0x3f90, 0x00ff0000, 0x00f00000,
+>       0x9148, 0x00ff0000, 0x00f00000,
+>       0x3f94, 0x00ff0000, 0x00f00000,
+> @@ -417,7 +417,7 @@ static const u32 rv730_golden_registers[] =3D{
+>       0xa180, 0xffffffff, 0x00003f3f
+>   };
+>
+> -static const u32 rv730_mgcg_init[] =3D{
+> +static const u32 rv730_mgcg_init[] =3D {
+>       0x8bcc, 0xffffffff, 0x130300f9,
+>       0x5448, 0xffffffff, 0x100,
+>       0x55e4, 0xffffffff, 0x100,
+> @@ -538,7 +538,7 @@ static const u32 rv730_mgcg_init[] =3D{
+>       0x92a4, 0xffffffff, 0x00000005
+>   };
+>
+> -static const u32 rv740_golden_registers[] =3D{
+> +static const u32 rv740_golden_registers[] =3D {
+>       0x88c4, 0xffffffff, 0x00000082,
+>       0x28a50, 0xfffffffc, 0x00000004,
+>       0x2650, 0x00040000, 0,
+> @@ -574,7 +574,7 @@ static const u32 rv740_golden_registers[] =3D{
+>       0x9698, 0x18000000, 0x18000000
+>   };
+>
+> -static const u32 rv740_mgcg_init[] =3D{
+> +static const u32 rv740_mgcg_init[] =3D {
+>       0x8bcc, 0xffffffff, 0x13030100,
+>       0x5448, 0xffffffff, 0x100,
+>       0x55e4, 0xffffffff, 0x100,
