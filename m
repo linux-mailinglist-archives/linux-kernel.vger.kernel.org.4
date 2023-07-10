@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B2074D38A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF59F74D38D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjGJKbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S231370AbjGJKcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbjGJKbP (ORCPT
+        with ESMTP id S229793AbjGJKcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:31:15 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6791AE2;
-        Mon, 10 Jul 2023 03:30:50 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A6C3Ak021884;
-        Mon, 10 Jul 2023 03:30:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=Ht0zG3SbuK8XFLIxJVSHU6f9E9fnWCCCBF1cwN6I8+k=;
- b=C4xTBNk4+rsv4RdMFMwHpmE68X+RvLYqqA36/koS52T+7ucEdhqNR1B1KKZUOVpwiLq2
- ls8pLwgeVHfRRnsG6BClgvgX83nzuVEOFRsraa/iY/ydu3N0uPqGKOoxbvs2Oi9aZXOZ
- 6pp83opENIZUspeaBHzaxHXxYA9+YsXWK2a8XySPsZdepw6ef+yNKPsTNcGW41zGJeD8
- g5jmxZOS4CND8Hsiu0k/kL5uYriVSfZEsm5bexHIrS24feJh7uRhRo5Nk+rk9m82I91L
- EM7SVbM6hw8Lq8LzuuBsRI60efjkk4TwKfMtEPE9SYXo4v551iSEPGzIqBF/YHnBy+AY TQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3rq7ajv3qg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 03:30:36 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 10 Jul
- 2023 03:30:34 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 10 Jul 2023 03:30:34 -0700
-Received: from localhost.localdomain (unknown [10.28.36.166])
-        by maili.marvell.com (Postfix) with ESMTP id 0F27C3F7069;
-        Mon, 10 Jul 2023 03:30:30 -0700 (PDT)
-From:   Suman Ghosh <sumang@marvell.com>
-To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Suman Ghosh <sumang@marvell.com>
-Subject: [net PATCH V5] octeontx2-pf: Add additional check for MCAM rules
-Date:   Mon, 10 Jul 2023 16:00:27 +0530
-Message-ID: <20230710103027.2244139-1-sumang@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Jul 2023 06:32:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F03B8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688985129; x=1720521129;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=tz2zZQ8f/yg7gZP7NI81aF7OXMQPyUOJOe7LMRyGsrg=;
+  b=hTEB5lfkiX7nq1GG2J5NIzcwCh6dAIZik24Snz74FYooKgd/kyUWoTlG
+   q8fpYbh+3CxuEL/ydfAQUW5odLjSbRNLI6jJzchEc9OGyBUrhqwklQimM
+   DjmHwhNLGN8RP+gnL9WXntjCXCnyzZZXRgfBh9Vr6BKXS9oUFcR2As8Iq
+   D9NzHTiGC2dseUqI+74Mu8gTh88J9z12IKEA9D00CmVHTRr9Kjc02jKZp
+   IjW/8reBPUMzkan/0rcqC1WJ8OwkXzOdgWEJEYmNJXHyOKcjjqmj085E2
+   cb3GtpRbQWOJ76RGl4ADzky5WkpZripf0q+wUzMIcHy3lmvQm9j66fFex
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="349110577"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="349110577"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:32:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="723960814"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="723960814"
+Received: from stoicaan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.170])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:32:05 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?utf-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH RESEND] drm/bridge: anx7625: Use common macros for DP
+ power sequencing commands
+In-Reply-To: <20230710090929.1873646-1-wenst@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230710090929.1873646-1-wenst@chromium.org>
+Date:   Mon, 10 Jul 2023 13:32:03 +0300
+Message-ID: <87edlgjbvg.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: -qDacU7kfu9c9CqdMDMTKKPRdi4zztPP
-X-Proofpoint-GUID: -qDacU7kfu9c9CqdMDMTKKPRdi4zztPP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_08,2023-07-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to hardware limitation, MCAM drop rule with
-ether_type == 802.1Q and vlan_id == 0 is not supported. Hence rejecting
-such rules.
+On Mon, 10 Jul 2023, Chen-Yu Tsai <wenst@chromium.org> wrote:
+> The DRM DP code has macros for the DP power sequencing commands. Use
+> them in the anx7625 driver instead of raw numbers.
+>
+> Fixes: 548b512e144f ("drm/bridge: anx7625: send DPCD command to downstrea=
+m")
+> Fixes: 27f26359de9b ("drm/bridge: anx7625: Set downstream sink into norma=
+l status")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+> Collected tags and rebased on v6.5-rc1.
+>
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/=
+bridge/analogix/anx7625.c
+> index 8b985efdc086..9db3784cb554 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -931,8 +931,8 @@ static void anx7625_dp_start(struct anx7625_data *ctx)
+>=20=20
+>  	dev_dbg(dev, "set downstream sink into normal\n");
+>  	/* Downstream sink enter into normal mode */
+> -	data =3D 1;
+> -	ret =3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
+> +	data =3D DP_SET_POWER_D0;
+> +	ret =3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER, 1, &d=
+ata);
 
-Fixes: dce677da57c0 ("octeontx2-pf: Add vlan-etype to ntuple filters")
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
----
-changes since v4:
-- Reformatted text in file otx2_tc.c as per review comment.
+So you have code to implement the drm dp aux abstractions, why aren't
+you using drm_dp_dpcd_writeb() and friends here?
 
- .../ethernet/marvell/octeontx2/nic/otx2_flows.c   |  8 ++++++++
- .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c  | 15 +++++++++++++++
- 2 files changed, 23 insertions(+)
+BR,
+Jani.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 10e11262d48a..2d7713a1a153 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -872,6 +872,14 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
- 				return -EINVAL;
- 
- 			vlan_etype = be16_to_cpu(fsp->h_ext.vlan_etype);
-+
-+			/* Drop rule with vlan_etype == 802.1Q
-+			 * and vlan_id == 0 is not supported
-+			 */
-+			if (vlan_etype == ETH_P_8021Q && !fsp->m_ext.vlan_tci &&
-+			    fsp->ring_cookie == RX_CLS_FLOW_DISC)
-+				return -EINVAL;
-+
- 			/* Only ETH_P_8021Q and ETH_P_802AD types supported */
- 			if (vlan_etype != ETH_P_8021Q &&
- 			    vlan_etype != ETH_P_8021AD)
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-index 044cc211424e..d3498f3ecaac 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-@@ -604,6 +604,21 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
- 			return -EOPNOTSUPP;
- 		}
- 
-+		if (!match.mask->vlan_id) {
-+			struct flow_action_entry *act;
-+			int i;
-+
-+			flow_action_for_each(i, act, &rule->action) {
-+				if (act->id == FLOW_ACTION_DROP) {
-+					netdev_err(nic->netdev,
-+						   "vlan tpid 0x%x with vlan_id %d is not supported for DROP rule.\n",
-+						   ntohs(match.key->vlan_tpid),
-+						   match.key->vlan_id);
-+					return -EOPNOTSUPP;
-+				}
-+			}
-+		}
-+
- 		if (match.mask->vlan_id ||
- 		    match.mask->vlan_dei ||
- 		    match.mask->vlan_priority) {
--- 
-2.25.1
 
+>  	if (ret < 0)
+>  		dev_err(dev, "IO error : set sink into normal mode fail\n");
+>=20=20
+> @@ -971,8 +971,8 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+>=20=20
+>  	dev_dbg(dev, "notify downstream enter into standby\n");
+>  	/* Downstream monitor enter into standby mode */
+> -	data =3D 2;
+> -	ret |=3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data=
+);
+> +	data =3D DP_SET_POWER_D3;
+> +	ret |=3D anx7625_aux_trans(ctx, DP_AUX_NATIVE_WRITE, DP_SET_POWER, 1, &=
+data);
+>  	if (ret < 0)
+>  		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
