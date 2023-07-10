@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEB574CA47
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E0D74CA4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 05:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjGJDPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 23:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S229659AbjGJDR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 23:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjGJDPq (ORCPT
+        with ESMTP id S229555AbjGJDRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 23:15:46 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF9AEC;
-        Sun,  9 Jul 2023 20:15:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VmxC.uy_1688958934;
-Received: from 30.240.113.134(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VmxC.uy_1688958934)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Jul 2023 11:15:37 +0800
-Message-ID: <1fe4f86e-63ce-3702-4e08-4bc0e7bb391b@linux.alibaba.com>
-Date:   Mon, 10 Jul 2023 11:15:31 +0800
+        Sun, 9 Jul 2023 23:17:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A26EC
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 20:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688959006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a62DSLSpXeASP7dYpa5HsA33PutQ3KjJO6C/G/Q8iAk=;
+        b=EtDC9taNDHxe3UhqS0Y14C9GRRrvbHW+ueIqProwcxJlRByuZtx+cnvnRc7Z+G7cq9wh87
+        wU5+SGTKeEdB3+kJ+G22FYsTIEf30g1tID9cqbrtAlJhwKGWro5WCVQVlKI7XiccCJngZH
+        P42ZiJogMaJfuwV5F7AvW0EP+f4sVCc=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-29-oALFH_XQNfKjMc1ul4UMUA-1; Sun, 09 Jul 2023 23:16:45 -0400
+X-MC-Unique: oALFH_XQNfKjMc1ul4UMUA-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2b701e0bb10so33311791fa.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 20:16:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688959004; x=1691551004;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a62DSLSpXeASP7dYpa5HsA33PutQ3KjJO6C/G/Q8iAk=;
+        b=PBKz+/J31retzRxRbTiDtlun1w5AW6dmKoZK+Yvge2KEhDRY2V9v/gMTN+ocnk/K02
+         FghOOkTaXwbUZJZY6FQyIKo3jI9Kxz3/S+GwDM64t5iE265jqsJNgQO358rmusVBG/QB
+         HA4R5hhtHsOhZJLIw6NWzu8go3+tA2X2fldYfbAySWpox3yl2i8BSu4KCYk6VwPJ98Q+
+         LxR9houAtp5Tq28+4XUj6bzkHG6gi4JBXWpGbnUFv7scUaP2Po54McZdKpd0r2dvi5CR
+         XUXW0LMP5PqtveB33T4ixUvQy1F2p3s8e4E3HJiVUp09ez3C2d8Z1pqbnA0n0OtOgd1I
+         deKQ==
+X-Gm-Message-State: ABy/qLY1DtJhd0v8ExzJvKWsj6CMaH0BS/J7sgcdm9A8eSlAvk/+eFo/
+        nLN8qYH9okjZv/jPz9C+N2mIOiEUvuboNAcGObKuPcTLz7s8qPA6LkTShZ8Bqrto8E/rxMwnR1E
+        ohQ/brDl9nO8HAjPui7oV+9RdoOZi6+h+wY5gznhF
+X-Received: by 2002:a05:651c:1025:b0:2b6:a22f:9fb9 with SMTP id w5-20020a05651c102500b002b6a22f9fb9mr8375727ljm.27.1688959004008;
+        Sun, 09 Jul 2023 20:16:44 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEnVegvrkpNt0TR6XRnujYIiNrsRYYJzxc37gJtNWKUE7a5YX0jPBMxs0gFC9cJdQNoUf+kMZdSTNMkLAa3IKo=
+X-Received: by 2002:a05:651c:1025:b0:2b6:a22f:9fb9 with SMTP id
+ w5-20020a05651c102500b002b6a22f9fb9mr8375700ljm.27.1688959002988; Sun, 09 Jul
+ 2023 20:16:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [RESEND PATCH v7 0/2] ACPI: APEI: handle synchronous exceptions
- with proper si_code
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     rafael@kernel.org, wangkefeng.wang@huawei.com,
-        tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
-        naoya.horiguchi@nec.com
-Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, justin.he@arm.com,
-        akpm@linux-foundation.org, ardb@kernel.org, ashish.kalra@amd.com,
-        baolin.wang@linux.alibaba.com, bp@alien8.de,
-        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
-        linmiaohe@huawei.com, lvying6@huawei.com, xiexiuqi@huawei.com,
-        zhuo.song@linux.alibaba.com
-References: <20230606074238.97166-1-xueshuai@linux.alibaba.com>
- <a2b16cca-5449-1d16-f49c-7b83fb45771c@linux.alibaba.com>
-Content-Language: en-US
-In-Reply-To: <a2b16cca-5449-1d16-f49c-7b83fb45771c@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230706231718.54198-1-shannon.nelson@amd.com>
+In-Reply-To: <20230706231718.54198-1-shannon.nelson@amd.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 10 Jul 2023 11:16:32 +0800
+Message-ID: <CACGkMEuD9DgK7CEp0cW-he3FAbzDVsvnhvouLWAMv9bUrq+ATA@mail.gmail.com>
+Subject: Re: [PATCH virtio] pds_vdpa: protect Makefile from unconfigured debugfs
+To:     Shannon Nelson <shannon.nelson@amd.com>
+Cc:     rdunlap@infradead.org, mst@redhat.com,
+        virtualization@lists.linux-foundation.org, brett.creeley@amd.com,
+        netdev@vger.kernel.org, drivers@pensando.io, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 7, 2023 at 7:17=E2=80=AFAM Shannon Nelson <shannon.nelson@amd.c=
+om> wrote:
+>
+> debugfs.h protects itself from an undefined DEBUG_FS, so it is
+> not necessary to check it in the driver code or the Makefile.
+> The driver code had been updated for this, but the Makefile had
+> missed the update.
+>
+> Link: https://lore.kernel.org/linux-next/fec68c3c-8249-7af4-5390-0495386a=
+76f9@infradead.org/
+> Fixes: a16291b5bcbb ("pds_vdpa: Add new vDPA driver for AMD/Pensando DSC"=
+)
+> Signed-off-by: Shannon Nelson <shannon.nelson@amd.com>
 
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-On 2023/6/16 15:15, Shuai Xue wrote:
-> 
-> 
-> On 2023/6/6 15:42, Shuai Xue wrote:
->> changes since v6:
->> - add more explicty error message suggested by Xiaofei
->> - pick up reviewed-by tag from Xiaofei
->> - pick up internal reviewed-by tag from Baolin
->>
->> changes since v5 by addressing comments from Kefeng:
->> - document return value of memory_failure()
->> - drop redundant comments in call site of memory_failure() 
->> - make ghes_do_proc void and handle abnormal case within it
->> - pick up reviewed-by tag from Kefeng Wang 
->>
->> changes since v4 by addressing comments from Xiaofei:
->> - do a force kill only for abnormal sync errors
->>
->> changes since v3 by addressing comments from Xiaofei:
->> - do a force kill for abnormal memory failure error such as invalid PA,
->> unexpected severity, OOM, etc
->> - pcik up tested-by tag from Ma Wupeng
->>
->> changes since v2 by addressing comments from Naoya:
->> - rename mce_task_work to sync_task_work
->> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
->> - add steps to reproduce this problem in cover letter
->>
->> changes since v1:
->> - synchronous events by notify type
->> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
->>
->>
->> Shuai Xue (2):
->>   ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
->>     synchronous events
->>   ACPI: APEI: handle synchronous exceptions in task work
->>
->>  arch/x86/kernel/cpu/mce/core.c |   9 +--
->>  drivers/acpi/apei/ghes.c       | 113 ++++++++++++++++++++++-----------
->>  include/acpi/ghes.h            |   3 -
->>  mm/memory-failure.c            |  17 +----
->>  4 files changed, 79 insertions(+), 63 deletions(-)
->>
-> 
-> 
-> Hi, Rafael,
-> 
-> Gentle ping.
-> 
-> Are you happy to queue this patch set or anything I can do to improve it?
-> As @Kefeng said, this issue is met in Alibaba and Huawei products, we hope it
-> could be fixed ASAP.
+Thanks
 
-Hi Rafael, Tony, and Naoya,
+> ---
+>  drivers/vdpa/pds/Makefile | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/vdpa/pds/Makefile b/drivers/vdpa/pds/Makefile
+> index 2e22418e3ab3..c2d314d4614d 100644
+> --- a/drivers/vdpa/pds/Makefile
+> +++ b/drivers/vdpa/pds/Makefile
+> @@ -5,6 +5,5 @@ obj-$(CONFIG_PDS_VDPA) :=3D pds_vdpa.o
+>
+>  pds_vdpa-y :=3D aux_drv.o \
+>               cmds.o \
+> +             debugfs.o \
+>               vdpa_dev.o
+> -
+> -pds_vdpa-$(CONFIG_DEBUG_FS) +=3D debugfs.o
+> --
+> 2.17.1
+>
 
-Gentle ping. I am sorry to see that we have missed v6.3 and v6.4 merge window
-since three Reviewed-by tags and one Tested-by tag.
-
-Do we still need any designated APEI reviewers Reviewed-by? Could you give me your
-Reviewed-by @Tony, and @Naoya if you are happy with the change.
-
-Or Please could you Ack this change if you are happy with the proposal and the
-change? @Rafael
-
-> 
-> Thank you.
-> 
-> Best Regards,
-> Shuai
