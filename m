@@ -2,172 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC85274D4A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4186774D4AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjGJLew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S230222AbjGJLhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGJLev (ORCPT
+        with ESMTP id S229583AbjGJLhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:34:51 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CABFE1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:34:48 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxNvHW7KtkCB8DAA--.9167S3;
-        Mon, 10 Jul 2023 19:34:46 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxviPE7Ktk5DwnAA--.5489S3;
-        Mon, 10 Jul 2023 19:34:45 +0800 (CST)
-Message-ID: <8182fecd-d290-293a-d963-ddbea79dbf03@loongson.cn>
-Date:   Mon, 10 Jul 2023 19:34:28 +0800
+        Mon, 10 Jul 2023 07:37:52 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2649E3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:37:51 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51e5e4c6026so413364a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688989070; x=1691581070;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mS49Wtz3TzRcx25R7DDNtuIqce10iBXCdR5Hdk2vgrA=;
+        b=iU+M+r71BtUY/oZSjRY/hyhQMcK14jxslw0ePhv0rlRL0pxcSqeE3jppUK200SYR96
+         ieERUpDDjd1BqSyPc9TI80p6owY2zi989cjQ5617ZdksfVtY8M+RMM2L9FqKbVYDxC6/
+         501MNT67p1egcawEx7hNsX0jK6mGz7Gt4m9WwY0OycapuevPjINwJuGE7hUIjL63u7p5
+         vKezK74Hp1sf+PW99U3FPWffRmhJ9nkNyPKoT/Hlb24Lb3wSxsgube81Fte8kW/rfdxg
+         hfQzOMu1lg1y1A2xoYJR5nEpAMzFeERv2epyXA1Pyg+l/RSEh3ffptKtWedQJp7n9YHt
+         PjYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688989070; x=1691581070;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mS49Wtz3TzRcx25R7DDNtuIqce10iBXCdR5Hdk2vgrA=;
+        b=dJFC17dRDYaMnTScEqRltgsFj0D3ln4WGo0fE+jNmqUkZxWOl2ijec+hXtp3czn6WZ
+         ra35SWd9a8f2xh+NsSm7qU4AuU+nM9bZcdf+u9EMwuhrXZQCCPEwdBP72lx2ApF3EsQc
+         +9LPiUrfD/u1B21jOC9ZU/ZVJEx/stPI5UGbJyI3uJ9/5wyBXAW6ON0dvgzwIIL4/Mjp
+         Y26tDfowakokEVkw2irVKKOCeqANmJVxOILNpvvUOkfNsGGt818SlgQXKaCCfQ/Hj+zl
+         XKMW76XfKyXQp4bBKz9DDYKghWxmKqdhjw64zHoFfDTmQ/YkjLKcgwlUs+x0MigDG47J
+         thrA==
+X-Gm-Message-State: ABy/qLb5/LAG8xPI1J2uwTLqyTQ/K/0G6iDLRFyF4KOlmyaUB/4Dh1+a
+        bMABBtlvKejOEyjwvgT/EMAxGw==
+X-Google-Smtp-Source: APBJJlG/ythdjVOEGhXXPzG6fsYC/s5Hx+kLbmBV7fACvh0QaTgNc2JsK6P/IaMxUnP/Jvb9324wAw==
+X-Received: by 2002:a05:6402:2ce:b0:51e:293e:eb96 with SMTP id b14-20020a05640202ce00b0051e293eeb96mr8499341edx.40.1688989070227;
+        Mon, 10 Jul 2023 04:37:50 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id l9-20020aa7c309000000b0051def9be785sm5645491edq.85.2023.07.10.04.37.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 04:37:49 -0700 (PDT)
+Message-ID: <d752e5e0-3c34-02ad-6768-42eb2c66e582@linaro.org>
+Date:   Mon, 10 Jul 2023 13:37:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/loongson: Remove a useless check in
- cursor_plane_atomic_async_check()
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Dan Carpenter <dan.carpenter@linaro.org>
-References: <20230710102411.257970-1-suijingfeng@loongson.cn>
- <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom,ids: drop the IPQ5019 SoC ID
 Content-Language: en-US
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <6c7bbce7-5521-b868-019f-bce26f309730@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxviPE7Ktk5DwnAA--.5489S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCr1DKF47Gw4UWr1kWw17urX_yoWrJF1kpr
-        WkJry8CrWUJr1xJr9rJr1Utry5uw47tw1xWF1UJF1UtFWUtr1Yqr1UXryjgr4UArW8Gr1U
-        Jr1UJFn8ZF1UtrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        XVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
-        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4oGQDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Kathiravan T <quic_kathirav@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_anusha@quicinc.com, quic_saahtoma@quicinc.com
+References: <20230710105419.1228966-1-quic_kathirav@quicinc.com>
+ <20230710105419.1228966-2-quic_kathirav@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230710105419.1228966-2-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 10/07/2023 12:54, Kathiravan T wrote:
+> IPQ5019 SoC is not available in production. Lets drop it.
+> 
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> ---
+>  include/dt-bindings/arm/qcom,ids.h | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+> index bcbe9ee2cdaf..179dd56b2d95 100644
+> --- a/include/dt-bindings/arm/qcom,ids.h
+> +++ b/include/dt-bindings/arm/qcom,ids.h
+> @@ -250,7 +250,6 @@
+>  #define QCOM_ID_QRU1000			539
+>  #define QCOM_ID_QDU1000			545
+>  #define QCOM_ID_QDU1010			587
+> -#define QCOM_ID_IPQ5019			569
 
-On 2023/7/10 18:39, Thomas Zimmermann wrote:
->
->
-> Am 10.07.23 um 12:24 schrieb Sui Jingfeng:
->> Because smatch warnings:
->>
->> drivers/gpu/drm/loongson/lsdc_plane.c:199
->> lsdc_cursor_plane_atomic_async_check()
->> warn: variable dereferenced before check 'state' (see line 180)
->>
->> vim +/state +199 drivers/gpu/drm/loongson/lsdc_plane.c
->>
->> 174  static int
->>       lsdc_cursor_plane_atomic_async_check(struct drm_plane *plane,
->> 175                                       struct drm_atomic_state 
->> *state)
->> 176  {
->> 177          struct drm_plane_state *new_state;
->> 178          struct drm_crtc_state *crtc_state;
->> 179
->> 180          new_state = drm_atomic_get_new_plane_state(state, plane);
->>                                                          ^^^^^
->> state is dereferenced inside this function
->>
->> 181
->> 182  if (!plane->state || !plane->state->fb) {
->> 183          drm_dbg(plane->dev, "%s: state is NULL\n", plane->name);
->> 184                  return -EINVAL;
->> 185  }
->> 186
->> 187  if (new_state->crtc_w != new_state->crtc_h) {
->> 188          drm_dbg(plane->dev, "unsupported cursor size: %ux%u\n",
->> 189                  new_state->crtc_w, new_state->crtc_h);
->> 190          return -EINVAL;
->> 191  }
->> 192
->> 193  if (new_state->crtc_w != 64 && new_state->crtc_w != 32) {
->> 194          drm_dbg(plane->dev, "unsupported cursor size: %ux%u\n",
->> 195                  new_state->crtc_w, new_state->crtc_h);
->> 196          return -EINVAL;
->> 197  }
->> 198
->> 199  if (state) {
->>           ^^^^^
->> Checked too late!
->>
->> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
->> Closes: https://lore.kernel.org/r/202307100423.rV7D05Uq-lkp@intel.com/
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
->
-> BTW, you're posting these patches for loongson, 
-
-I'm posting these patches for the drm/loongson driver in drm-misc and/or 
-drm-tip branch,
-
-what do you means for *loongson*,
-
-> but that driver is not yet in our tree?
->
-
-I already applied(push) drm/loongson driver to drm-misc-next branch,
-
-What do you means that by "not yet in our tree", linux kernel side?
-
-Am I missing something ?
+What about users of this binding? What's the impact on them? When did
+the SoC become obsolete and unsupported by Qualcomm? Remember that
+ceasing a production does not mean that magically all users of a product
+disappear...
 
 
-> Best regards
-> Thomas
->
->
->> ---
->>   drivers/gpu/drm/loongson/lsdc_plane.c | 8 +-------
->>   1 file changed, 1 insertion(+), 7 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/loongson/lsdc_plane.c 
->> b/drivers/gpu/drm/loongson/lsdc_plane.c
->> index 2ab3db982aa3..0d5094633222 100644
->> --- a/drivers/gpu/drm/loongson/lsdc_plane.c
->> +++ b/drivers/gpu/drm/loongson/lsdc_plane.c
->> @@ -196,13 +196,7 @@ static int 
->> lsdc_cursor_plane_atomic_async_check(struct drm_plane *plane,
->>           return -EINVAL;
->>       }
->>   -    if (state) {
->> -        crtc_state = drm_atomic_get_existing_crtc_state(state, 
->> new_state->crtc);
->> -    } else {
->> -        crtc_state = plane->crtc->state;
->> -        drm_dbg(plane->dev, "%s: atomic state is NULL\n", plane->name);
->> -    }
->> -
->> +    crtc_state = drm_atomic_get_existing_crtc_state(state, 
->> new_state->crtc);
->>       if (!crtc_state->active)
->>           return -EINVAL;
->
+Best regards,
+Krzysztof
 
