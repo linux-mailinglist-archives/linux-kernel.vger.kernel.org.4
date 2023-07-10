@@ -2,103 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D7674DBF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E5174DBF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjGJRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S232083AbjGJRJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjGJRJS (ORCPT
+        with ESMTP id S231978AbjGJRJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:09:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E80C0;
-        Mon, 10 Jul 2023 10:09:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFEFB61127;
-        Mon, 10 Jul 2023 17:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822D8C433C9;
-        Mon, 10 Jul 2023 17:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689008956;
-        bh=nKZycr1bbDIhX+7r/umilV/wuLHcsLLg8WWLjNqfVGw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ks7RL3h40J9Gsg6+T5tGMhXUPebOkMtv2HYbINZYkE0HBcDFe3InO0uHvSLO6Ywfd
-         z9dbScYbXDyBfN0KKzvhwsevIOZI2Wa4nTPSPcqSdIk9dVy3t4CwrMIhESNVB8EcTq
-         DHcqHiLwexT4fjkOSD7WRFfWxwr4oLox+CN38zoYAqwcwq7DLt0YYhvaSCGjOeZdC6
-         /OMp7mPT/0W9iS9bRuPwjhjEgn3ZN4a3GPUVex+MO83a5hpzqpvTmLwha1tCaAJG7B
-         IOQDzu3lMvKgzC08AKXIF8wSz30WvJ3WDseHtgBrUd0ZFYjZe2rdpVVbiRnkMjF1jV
-         sbYhTW/HyF8mg==
-Date:   Mon, 10 Jul 2023 18:09:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 02/15] spi: Drop duplicate IDR allocation code in
- spi_register_controller()
-Message-ID: <97f3436a-78ca-4a94-a409-ef04bd3b593f@sirena.org.uk>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
+        Mon, 10 Jul 2023 13:09:23 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E8AC0;
+        Mon, 10 Jul 2023 10:09:21 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qIuNj-000676-Ls; Mon, 10 Jul 2023 19:09:03 +0200
+Message-ID: <c76eae67-b391-a39e-a907-988b8277a72b@leemhuis.info>
+Date:   Mon, 10 Jul 2023 19:09:02 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ugTz/0iIbXaMesMQ"
-Content-Disposition: inline
-In-Reply-To: <20230710154932.68377-3-andriy.shevchenko@linux.intel.com>
-X-Cookie: Do you have lysdexia?
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: 3 more broken Zaurii - SL-5600, A300, C700
+Content-Language: en-US, de-DE
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ross Maynard <bids.7405@bigpond.com>,
+        Dave Jones <davej@codemonkey.org.uk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+References: <7ea9abd8-c35d-d329-f0d4-c8bd220cf691@gmail.com>
+ <50f4c10d-260c-cb98-e7d2-124f5519fa68@gmail.com>
+ <e1fdc435-089c-8ce7-d536-ce3780a4ba95@leemhuis.info>
+ <ZKbuoRBi50i8OZ9d@codemonkey.org.uk>
+ <62a9e058-c853-1fcd-5663-e2e001f881e9@bigpond.com>
+ <14fd48c8-3955-c933-ab6f-329e54da090f@bigpond.com>
+ <05a229e8-b0b6-4d29-8561-70d02f6dc31b@lunn.ch>
+ <ac957af4-f265-3ba0-0373-3a71d134a57e@leemhuis.info>
+ <20230710095519.5056c98b@kernel.org>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230710095519.5056c98b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689008961;6a1d2bdd;
+X-HE-SMSGID: 1qIuNj-000676-Ls
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -107,48 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10.07.23 18:55, Jakub Kicinski wrote:
+> On Sun, 9 Jul 2023 06:36:32 +0200 Linux regression tracking (Thorsten
+> Leemhuis) wrote:
+>> To chime in here: I most agree, but FWIW, it broke more than a decade
+>> ago in v3.0, so maybe this is better suited for net-next. But of course
+>> that up to the -net maintainers.
+> 
+> I'm surprised to see you suggest -next for a fix to a user reported bug.
+> IMO it's very firmly net material.
 
---ugTz/0iIbXaMesMQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes, yes, normally it would argue the other way around. :-D
 
-On Mon, Jul 10, 2023 at 06:49:19PM +0300, Andy Shevchenko wrote:
+But Linus a few times in one way or another argued that time is a factor
+when it comes to regressions. Here for example:
 
-> Refactor spi_register_controller() to drop duplicate IDR allocation.
-> Instead of if-else-if branching use two sequential if:s, which allows
-> to re-use the logic of IDR allocation in all cases.
+https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/
 
-For legibility this should have been split into a separate factoring out
-of the shared code and rewriting of the logic, that'd make it trivial to
-review.
+But there are no "semantic changes that now mean that fixing the
+regression could cause a _new_ regression" here I guess. And what he was
+talking about there is quite different from this case as well (I vaguely
+remember a better example, but I can't find it; whatever).
 
-> -		mutex_lock(&board_lock);
-> -		id = idr_alloc(&spi_master_idr, ctlr, first_dynamic,
-> -			       0, GFP_KERNEL);
-> -		mutex_unlock(&board_lock);
-> -		if (WARN(id < 0, "couldn't get idr"))
-> -			return id;
-> -		ctlr->bus_num = id;
-> +		status = spi_controller_id_alloc(ctlr, first_dynamic, 0);
-> +		if (status)
-> +			return status;
+In the end this is one of issue where I don't care much. :-D
 
-The original does not do the remapping of return codes that the previous
-two copies do...
-
---ugTz/0iIbXaMesMQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsOysACgkQJNaLcl1U
-h9Bj2wf/eujSGQes7B4PBTQ3n1oBhkcL7Y24XQnkT5q6FXhb+PNy2gOUL7X4u8/s
-jewRdgc+ViUGaokkDON2TN26dLdi/+KEGq7rPGhgLMeyGSqKJx5uRaCQSSdKa2Y2
-w1zSdEXhWd9SZsgsLa18k9bVMBbmyuylLjQYrLlHktiuD4/baW1HQ5SqKICkb1Bg
-/ZdcRGqcKDfgJWnVfK4loF7rFNMRBY0rXsSdOVE3yOKeZE2uS46s2BPPN+xc7UaA
-KTSUu8JjCacwP+V70yrm4VGRb5/c0NJ++iO44yiykKNRvcJWCDemwAYhj9zV1ja/
-5l/fUqxd3+5Kv3hbc1rSnyAywM7/4g==
-=1GBL
------END PGP SIGNATURE-----
-
---ugTz/0iIbXaMesMQ--
+Ciao, Thorsten
