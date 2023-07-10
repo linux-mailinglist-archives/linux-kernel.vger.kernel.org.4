@@ -2,94 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B3A74D958
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D35E74D956
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbjGJOyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S232582AbjGJOyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjGJOyT (ORCPT
+        with ESMTP id S231201AbjGJOyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:54:19 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8DEC4;
-        Mon, 10 Jul 2023 07:54:18 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbf1b82d9cso48273525e9.2;
-        Mon, 10 Jul 2023 07:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689000857; x=1691592857;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bvcwHkM7LCO7a024nl7ZUkA0CE5fAJDEqmEoltxDZF8=;
-        b=G/qarMcW7fFBzgrDu5zSH8J7IilZkk0efzZgM3OS6gXKXTkj/EzjCMgNYO4z9LhzvP
-         zIOdCVpWQxm+gG8mknm1k5ohFJ8fmzqE3p2tON72cH88LPR1BWwspGYCgCtG1izi8fnq
-         dXsXPhtiB5OWJ51DPRKUyfYd8cQH1Crr51CYDJBqjwnj+E3DmTFdTYW/YFqXfWsV/Fq1
-         yR+S7ZJnqTa8ExenmTLYyjq88/huzG5Au/pxN6VBR7TBq1HkXMwIMT2sKlzxoals2B/W
-         NY96aBaHGSckwIzfiAfLWu8OV1V8vYBT7S6Gxzpx2Ys3IPHqo0mg2TdBHa7xBYkRpleb
-         A+IA==
+        Mon, 10 Jul 2023 10:54:16 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39643BC;
+        Mon, 10 Jul 2023 07:54:15 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7835ffc53bfso95944639f.1;
+        Mon, 10 Jul 2023 07:54:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689000857; x=1691592857;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bvcwHkM7LCO7a024nl7ZUkA0CE5fAJDEqmEoltxDZF8=;
-        b=U3gaejIkFpWIaFlxZjXnGzyEfDayvmeyjnojJ98u9LJqMcrEHOYyVsWOXou/J93oqz
-         5O2lwQbwJy+S7U2rqjVAv5x4aHrkLY7uNgh51NVSixYmgeynysV42ybK6uwnkVDYwctZ
-         5bT4dJNmt4zo0P7Z5TEVl9N2plOir6+t5UlE1y4Hs5Bt4niJ6a08wqFFyzs2FeobIeRF
-         fheeaQb5i1p1C2OcaNOrSjWNz2xeKeX03ZGGaKAktLGBEMWz20RcVrx8qQbMP6qOsgV2
-         QRTvZCdbfcebt9wptbN89UMY165DXqzTTV+uXiCmv/bzZj211sDVG62M5KxhSazqEV5s
-         IHVg==
-X-Gm-Message-State: ABy/qLYwiw+BNNSzU73m5H5JYgQWWfDKPhAGC0zZlj77kYrk0FejJIch
-        ByNVroYqk/2qvIe9Hxmvoec=
-X-Google-Smtp-Source: APBJJlEo2lYuWjQRxe6vAZ11uL6QOzP/K/X4bUawUM2P4R5WwY/eGCznfd28+zuEnX1TtriUzrqhNQ==
-X-Received: by 2002:a05:600c:c8:b0:3fb:b05d:f27c with SMTP id u8-20020a05600c00c800b003fbb05df27cmr10986477wmm.34.1689000856477;
-        Mon, 10 Jul 2023 07:54:16 -0700 (PDT)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id l22-20020a7bc456000000b003fbb5142c4bsm10509928wmi.18.2023.07.10.07.54.10
+        d=1e100.net; s=20221208; t=1689000854; x=1691592854;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=knPR9yYz2WPKjMufisii9UreVZbTEUXAVqzrTii1/pc=;
+        b=iB2P/liM2qawVfb9Mg8keb3ejKKJLhkE80DwSaDp8wfgTRiH5J+NPxsK/ovH+lSYA8
+         k37yq30ka8a7/hUBeY85uZ+DOUFKaEr2swKFxU8ZWPDgt3lujjZHbJUo0Yw/ZrmIxjXa
+         uEoxitcrAcecgpf7hTCHgDmT+nnytQZ18Ptc+7qUPU4OJ9qscWdVM6e3jZ2Sy0IR/Rvz
+         llpGEo5H5tC/hstM86lg7/G12C+y7IzMfS35sy06HRPAi2639Q2g+haejUDW7XW8cG6+
+         T8wks9DrZ522kfT9ZvNcPjeO4CYgeut85F89MgyIVmLSu0TFSdeC/XFgza5VnE58lT6f
+         nAGQ==
+X-Gm-Message-State: ABy/qLb6nz6qo82ndIID0aKEBQqeicQj+wQ1yGbTFFOoGgY1/YAbHxi2
+        /K5gEXRn8bmeVh3Jgm+Arw==
+X-Google-Smtp-Source: APBJJlGPm/9hK472s8BUH0Uh4raLcJ8oAan5K6rZW4ED77sMyiI/8jfWetBwTIUn6yLeXrs3JcbMWw==
+X-Received: by 2002:a6b:e817:0:b0:783:63d6:4c3 with SMTP id f23-20020a6be817000000b0078363d604c3mr6441287ioh.10.1689000854497;
+        Mon, 10 Jul 2023 07:54:14 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id a22-20020a6b6616000000b0078702f4894asm1629889ioc.9.2023.07.10.07.54.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 07:54:16 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 16:54:05 +0200
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
-        tom@herbertland.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gal@nvidia.com
-Subject: Re: [PATCH 1/1] net: gro: fix misuse of CB in udp socket lookup
-Message-ID: <20230710145403.GA22009@debian>
-References: <20230707121650.GA17677@debian>
- <20230707122627.GA17845@debian>
- <CANn89i+gm=0J3aR_9ikhroQmAvuQ+-dPMH1em9WrmE1o1pfi7w@mail.gmail.com>
+        Mon, 10 Jul 2023 07:54:13 -0700 (PDT)
+Received: (nullmailer pid 1959292 invoked by uid 1000);
+        Mon, 10 Jul 2023 14:54:10 -0000
+Date:   Mon, 10 Jul 2023 08:54:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     devicetree@vger.kernel.org, mturquette@baylibre.com,
+        kernel test robot <lkp@intel.com>,
+        Jonathan.Cameron@huawei.com, maz@kernel.org, vkoul@kernel.org,
+        dragan.cvetic@amd.com, edumazet@google.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, linux-kernel@vger.kernel.org,
+        frowand.list@gmail.com, eli.billauer@gmail.com,
+        derek.kiernan@amd.com, kuba@kernel.org, sboyd@kernel.org,
+        schnelle@linux.ibm.com, robh+dt@kernel.org,
+        linus.walleij@linaro.org, arnd@arndb.de, pabeni@redhat.com,
+        davem@davemloft.net, linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux@dominikbrodowski.net, gregkh@linuxfoundation.org,
+        joyce.ooi@intel.com
+Subject: Re: [PATCH 8/8] of: make OF_EARLY_FLATTREE depend on HAS_IOMEM
+Message-ID: <168900051598.1946989.3367114616050746231.robh@kernel.org>
+References: <20230707135852.24292-1-bhe@redhat.com>
+ <20230707135852.24292-9-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89i+gm=0J3aR_9ikhroQmAvuQ+-dPMH1em9WrmE1o1pfi7w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230707135852.24292-9-bhe@redhat.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, I will send a v2 with the fixes.
 
-> ipv6_rcv() inits
+On Fri, 07 Jul 2023 21:58:52 +0800, Baoquan He wrote:
+> On s390 systems (aka mainframes), it has classic channel devices for
+> networking and permanent storage that are currently even more common
+> than PCI devices. Hence it could have a fully functional s390 kernel
+> with CONFIG_PCI=n, then the relevant iomem mapping functions
+> [including ioremap(), devm_ioremap(), etc.] are not available.
 > 
-> IP6CB(skb)->iif = skb_dst(skb) ?
-> ip6_dst_idev(skb_dst(skb))->dev->ifindex : dev->ifindex;
+> In LKP error report at below on s390:
+> ------
+> ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+> coherent.c:(.text+0x102): undefined reference to `memremap'
+> ld: coherent.c:(.text+0x226): undefined reference to `memunmap'
+> ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+> coherent.c:(.text+0x8b8): undefined reference to `memunmap'
+> ld: kernel/dma/coherent.o: in function `dma_release_coherent_memory':
+> coherent.c:(.text+0x9aa): undefined reference to `memunmap'
+> ------
 > 
-> You chose to always use skb->dev->ifindex instead ?
+> In the config file, several Kconfig options are:
+> ------
+> '# CONFIG_PCI is not set'
+> CONFIG_OF_EARLY_FLATTREE=y
+> CONFIG_DMA_DECLARE_COHERENT=y
+> ------
 > 
-> You might add a comment why it is okay.
+> So, enabling OF_EARLY_FLATTREE will select DMA_DECLARE_COHERENT
+> and cause above building errors even though they are not needed
+> because CONFIG_PCI is disabled.
+> 
+> Here let OF_EARLY_FLATTREE depend on HAS_IOMEM so that it won't
+> be built to cause compiling error if PCI is unset.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  drivers/of/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-It looks like this assignment ("ip6_dst_idev(skb_dst(skb))->dev->ifindex")
-is relevant only in case of sending traffic on loopback.
-It does not seem relevant in GRO stack.
-That is why I chose to use only the `skb->dev->ifindex` part.
-Do you think that's correct?
+Applied, thanks!
+
