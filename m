@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D09E74DA11
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C2874DA14
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjGJPkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S231886AbjGJPl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjGJPkb (ORCPT
+        with ESMTP id S229848AbjGJPl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:40:31 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E58AD1;
-        Mon, 10 Jul 2023 08:40:28 -0700 (PDT)
-Received: from i53875a50.versanet.de ([83.135.90.80] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qIszV-0001o1-8T; Mon, 10 Jul 2023 17:39:57 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Mark Kettenis <mark.kettenis@xs4all.nl>, robh+dt@kernel.org,
-        conor+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     d3adme4t@gmail.com, macromorgan@hotmail.com, jbx6244@gmail.com,
-        f.kardame@manjaro.org, amadeus@jmu.edu.cn, linux.amoon@gmail.com,
-        aurelien@aurel32.net, anarsoul@gmail.com, wiagn233@outlook.com,
-        frattaroli.nicolas@gmail.com, strit@manjaro.org,
-        luiz.von.dentz@intel.com, zonyitoo@gmail.com, wens@csie.org,
-        jensenhuang@friendlyarm.com, lasstp5011@gmail.com,
-        frank-w@public-files.de, pgwipeout@gmail.com, leo@nabam.net,
-        andyshrk@163.com, michael.riesch@wolfvision.net, jonas@kwiboo.se,
-        festevam@denx.de, tobetter@gmail.com, jagan@amarulasolutions.com,
-        cnsztl@gmail.com, cristian.ciocaltea@collabora.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH] arm64: dts: rockchip: Drop invalid regulator-init-microvolt
- property
-Date:   Mon, 10 Jul 2023 17:39:55 +0200
-Message-ID: <4519023.cEBGB3zze1@phil>
-In-Reply-To: <87wmz7q1fr.fsf@bloch.sibelius.xs4all.nl>
-References: <20230707162217.675390-1-cristian.ciocaltea@collabora.com>
- <168899855919.1747213.9998138836668928892.b4-ty@sntech.de>
- <87wmz7q1fr.fsf@bloch.sibelius.xs4all.nl>
+        Mon, 10 Jul 2023 11:41:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FE3129
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689003639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F0D7PqDIktc2dtIxI/bE8WlEAjuSUexO7v405cL9P8Q=;
+        b=UjxRtMV7Z4eK+0yiYCTKg7uKq/umX8OWTgMmkOkNIwPmpNwDbRP8J+YUnp6J6T65W2UdGU
+        59K7WXzbL4X64tRe2iUHoC+DDFlFbFlPx4Qo1bP/zrf+Zyb4ZwZFHTBbHsNiiuFck5u/Pl
+        2GPtWVPU5CWNveZnKrMx5QXoN/MhzRo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-gsY0jYqTNUyCCf89q1R_CQ-1; Mon, 10 Jul 2023 11:40:37 -0400
+X-MC-Unique: gsY0jYqTNUyCCf89q1R_CQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF55D185A792;
+        Mon, 10 Jul 2023 15:40:36 +0000 (UTC)
+Received: from [10.22.33.187] (unknown [10.22.33.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 67DFB2166B26;
+        Mon, 10 Jul 2023 15:40:36 +0000 (UTC)
+Message-ID: <74f1906e-fe58-c745-a851-b160374f7acf@redhat.com>
+Date:   Mon, 10 Jul 2023 11:40:36 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] cgroup/cpuset: update parent subparts cpumask while
+ holding css refcnt
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Miaohe Lin <linmiaohe@huawei.com>
+Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230701065049.1758266-1-linmiaohe@huawei.com>
+ <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,44 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 10. Juli 2023, 16:35:36 CEST schrieb Mark Kettenis:
-> > From: Heiko Stuebner <heiko@sntech.de>
-> > Date: Mon, 10 Jul 2023 16:16:16 +0200
-> > 
-> > On Fri, 7 Jul 2023 19:22:17 +0300, Cristian Ciocaltea wrote:
-> > > The 'regulator-init-microvolt' property is not currently supported by
-> > > any driver, it was simply carried on from downstream kernels.
-> > > 
-> > > The problem is also indicated by the following dtbs_check warning:
-> > > 
-> > >   rk3588-rock-5b.dtb: pmic@0: regulators:dcdc-reg4: Unevaluated properties are not allowed ('regulator-init-microvolt' was unexpected)
-> > > 
-> > > [...]
-> > 
-> > Applied, thanks!
-> > 
-> > [1/1] arm64: dts: rockchip: Drop invalid regulator-init-microvolt property
-> >       commit: 4d08b19629495b29601991d09d07865694c25199
-> 
-> This property *is used* by the drivers in U-Boot.  Dropping this from
-> the Linux DTBs will likely result in broken boards the next time the
-> U-Boot DTBs are synched again from Linux.  At least that is what
-> happened before...
-> 
-> I think the right solution is to add this property to the DT binding
-> instead.
+On 7/10/23 11:11, Michal Koutný wrote:
+> Hello.
+>
+> On Sat, Jul 01, 2023 at 02:50:49PM +0800, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -1806,9 +1806,12 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+>>   		cpuset_for_each_child(cp, css, parent)
+>>   			if (is_partition_valid(cp) &&
+>>   			    cpumask_intersects(trialcs->cpus_allowed, cp->cpus_allowed)) {
+>> +				if (!css_tryget_online(&cp->css))
+>> +					continue;
+>>   				rcu_read_unlock();
+>>   				update_parent_subparts_cpumask(cp, partcmd_invalidate, NULL, &tmp);
+>>   				rcu_read_lock();
+>> +				css_put(&cp->css);
+> Apologies for a possibly noob question -- why is RCU read lock
+> temporarily dropped within the loop?
+> (Is it only because of callback_lock or cgroup_file_kn_lock (via
+> notify_partition_change()) on PREEMPT_RT?)
+>
+>
+>
+> [
+> OT question:
+> 	cpuset_for_each_child(cp, css, parent)				(1)
+> 		if (is_partition_valid(cp) &&
+> 		    cpumask_intersects(trialcs->cpus_allowed, cp->cpus_allowed)) {
+> 			if (!css_tryget_online(&cp->css))
+> 				continue;
+> 			rcu_read_unlock();
+> 			update_parent_subparts_cpumask(cp, partcmd_invalidate, NULL, &tmp);
+> 			  ...
+> 			  update_tasks_cpumask(cp->parent)
+> 			    ...
+> 			    css_task_iter_start(&cp->parent->css, 0, &it);	(2)
+> 			      ...
+> 			rcu_read_lock();
+> 			css_put(&cp->css);
+> 		}
+>
+> May this touch each task same number of times as its depth within
+> herarchy?
 
-I do have this vague memory of this coming up in the past, though don't
-remember what the resolution was then? Though it definitly doesn't look
-like the property was added to the binding in the meantime.
+I believe the primary reason is because update_parent_subparts_cpumask() 
+can potential run for quite a while. So we don't want to hold the 
+rcu_read_lock for too long. There may also be a potential that 
+schedule() may be called.
 
-Also I think that setting up initial regulator state would be (and
-seemingly is) for firmware to handle, so that property should instead
-be in the -uboot.dtsi.
-
-That DT isn't a configuration-space also is a decade long mantra.
-
-
-Heiko
-
+Cheers,
+Longman
 
