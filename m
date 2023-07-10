@@ -2,172 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AC974DCAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A79174DCB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjGJRoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
+        id S231715AbjGJRpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjGJRoJ (ORCPT
+        with ESMTP id S230133AbjGJRpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:44:09 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9808A120
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:44:07 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-76714caf466so432387485a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689011047; x=1691603047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AOnVzen9HDghW2bswxVCUVsZLhlFm73bqh1O1PTU2i4=;
-        b=WLQs6EGun6B4BulXmKogPdCt5oDVFVpE2okzj27FHCHNnLDGIi5Czr14p89ybAaXYJ
-         lhMk1w685GxTpiUrgFlizkUlyNVVz8nobylcjl30cPaLaTPeJE3z6JVgYmXjCN3ss5vo
-         Q82dok6ccsNwR6dZZeC5Uc8sSHaM9gSRZNnou3UkB0vrGQPnuGeSrm1Q/3KZboxAzoVb
-         H13lwGXwQ6e6Km+Dl3IMJxRHMGkEVGEkOp0D+LLl6byPLvxeJpBIju++uVvCt5NYV2/7
-         7w/6QRlieWrNTaKDG74MRdVrZ5SqOcAGw5ip54VjrxKSNLq8BAtYgaaEz7vgDQF4W/kA
-         ufBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689011047; x=1691603047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AOnVzen9HDghW2bswxVCUVsZLhlFm73bqh1O1PTU2i4=;
-        b=XvIxiXQDYcnOLgwioFM+1o0TTkTFK6dJsB8PkXpkuPIsP6e5JeZT5Z5yVIx+ZNVRng
-         7IkN+1/fKBM/B5OejqeRfd2TISfO2GU1H/8fzsfbefNQl3J0gK2m8wvgUEebfNKamQnj
-         je4vdMqDt1d+LhcHDOlI+w+Vsdsg/j71uLHkRo1BNmaYGa6KQ+haE7+qRXJhWI1i918B
-         8eRZMojBErboM8dapNJpd4ZxVlNuVA5o2LO1MHhyqSogW7uj8HKOaHxFBGG3fd1KqOoq
-         Nu3ueJ4qPYmttdID3vbQbX+4r5FKsZHsmLR2/CUrxEHegBXVohZSbSH4VkkkY/XS8eHt
-         2uyw==
-X-Gm-Message-State: ABy/qLYh5kEaKR8AJ+J1kpMgv1Cu5m25coNr50+e6aKhBFsoSpf5+L3H
-        VRzCJSYPH+7FLrxQVv6JJiQ7wg==
-X-Google-Smtp-Source: APBJJlEadY1dI3vNQ2N0fmgDC+Ual1DpU2psFdVln3u1qHl6Z/3ncb0HysMERESWP4YSo180rdHzZw==
-X-Received: by 2002:a37:b645:0:b0:75d:4e8b:9d19 with SMTP id g66-20020a37b645000000b0075d4e8b9d19mr14672746qkf.26.1689011046739;
-        Mon, 10 Jul 2023 10:44:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id o8-20020a0cf4c8000000b0063007ccaf42sm59906qvm.57.2023.07.10.10.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 10:44:06 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qIuvd-0004KO-KO;
-        Mon, 10 Jul 2023 14:44:05 -0300
-Date:   Mon, 10 Jul 2023 14:44:05 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <ZKxDZfVAbVHgNgIM@ziepe.ca>
-References: <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
- <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
- <20230616122140.6e889357@kernel.org>
- <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
- <20230619110705.106ec599@kernel.org>
- <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
- <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
- <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
- <ZKNA9Pkg2vMJjHds@ziepe.ca>
- <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+        Mon, 10 Jul 2023 13:45:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E119EDD;
+        Mon, 10 Jul 2023 10:45:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75C5561169;
+        Mon, 10 Jul 2023 17:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B492C433C8;
+        Mon, 10 Jul 2023 17:45:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689011105;
+        bh=JYkWJasgvckBZ5AB6t/6gw7izBFHjFqNwBX/W6Q7n2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pEgXBy9VXc/yXTnnLhVCIsDLJUjNz4cwRaxzrg4INUE5BYM3JyF1PLdsG+HhfWFma
+         ieCM0QEA+X322SDIl4SapO+6AhAW/rwZUewqlYe9HpyFIuRPjdlucY9SUvHZuWeji/
+         EGh7w22R+wwwXkJEROT3EoSjJ4zcu3B+FV4p2eKBPxWzjWaB3/YtU3JntbN/xn2Ubo
+         Ir5mIv6fnL1kMNTdZliTB4UjFiZ2QH3xr3q5ch4bCg3/f7WCvJNJ4o+OaAc8Ze1ay5
+         nQFkq4fNl2hIDG6blt/m2DV4PbD1FWv7dSZZc+P4ufwh+UA3BsU4JG9WxTrrc04u3k
+         5FRkpdMX35Z9g==
+Date:   Mon, 10 Jul 2023 18:45:00 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] media: dt-bindings: Merge OV5695 into OV5693 binding
+Message-ID: <20230710-unsold-simplify-5a339036ff38@spud>
+References: <20230707210604.868002-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t+svSrsy1jWs8uVm"
 Content-Disposition: inline
-In-Reply-To: <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230707210604.868002-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 06:17:39PM -0700, Mina Almasry wrote:
 
-> Another issue is that in networks with low MTU, we could be DMAing
-> 1400/1500 bytes into each allocation, which is problematic if the
-> allocation is 8K+. I would need to investigate a bit to see if/how to
-> solve that, and we may end up having to split the page and again run
-> into the 'not enough room in struct page' problem.
+--t+svSrsy1jWs8uVm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-You don't have an intree driver to use this with, so who knows, but
-the out of tree GPU drivers tend to use a 64k memory management page
-size, and I don't expect you'd make progress with a design where a 64K
-naturaly sized allocator is producing 4k/8k non-compound pages just
-for netdev. We are still struggling with pagemap support for variable
-page size folios, so there is a bunch of technical blockers before
-drivers could do this.
+On Fri, Jul 07, 2023 at 03:06:04PM -0600, Rob Herring wrote:
+> The OV5695 binding is almost the same as the OV5693 binding. The only
+> difference is 'clock-names' is defined for OV5695. However, the lack of
+> clock-names is an omission as the Linux OV5693 driver expects the same
+> 'xvclk' clock name.
+>=20
+> 'link-frequencies' is required by OV5693, but not OV5695. Just drop it
+> from being required. Expressing it conditionally would be ugly. It
+> shouldn't really be required either as the driver only supports 1
+> frequency anyways.
 
-This is why it is so important to come with a complete in-tree
-solution, as we cannot review this design if your work is done with
-hacked up out of tree drivers.
+I suppose the intent here is something like "the driver only supports 1
+frequency and never bothers to read the property"?
 
-Fully and properly adding P2P ZONE_DEVICE to a real world driver is a
-pretty big ask still.
+Either way,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-> > Or allocate per page memory and do a memdesc like thing..
-> 
-> I need to review memdesc more closely. Do you imagine I add a pointer
-> in struct page that points to the memdesc? 
+Cheers,
+Conor.
 
-Pointer to extra memory from the PFN has been the usual meaning of
-memdesc, so doing an interm where the pointer is in the struct page is
-a reasonable starting point.
+>=20
+> The rockchip-isp1 binding example is missing required properties, so it
+> has to be updated as well.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/media/i2c/ov5695.txt  | 41 -------------------
+>  .../bindings/media/i2c/ovti,ov5693.yaml       | 19 +++++----
+>  .../bindings/media/rockchip-isp1.yaml         |  1 +
+>  3 files changed, 13 insertions(+), 48 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5695.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5695.txt b/Doc=
+umentation/devicetree/bindings/media/i2c/ov5695.txt
+> deleted file mode 100644
+> index 640a63717d96..000000000000
+> --- a/Documentation/devicetree/bindings/media/i2c/ov5695.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -* Omnivision OV5695 MIPI CSI-2 sensor
+> -
+> -Required Properties:
+> -- compatible: shall be "ovti,ov5695"
+> -- clocks: reference to the xvclk input clock
+> -- clock-names: shall be "xvclk"
+> -- avdd-supply: Analog voltage supply, 2.8 volts
+> -- dovdd-supply: Digital I/O voltage supply, 1.8 volts
+> -- dvdd-supply: Digital core voltage supply, 1.2 volts
+> -- reset-gpios: Low active reset gpio
+> -
+> -The device node shall contain one 'port' child node with an
+> -'endpoint' subnode for its digital output video port,
+> -in accordance with the video interface bindings defined in
+> -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> -The endpoint optional property 'data-lanes' shall be "<1 2>".
+> -
+> -Example:
+> -&i2c7 {
+> -	ov5695: camera-sensor@36 {
+> -		compatible =3D "ovti,ov5695";
+> -		reg =3D <0x36>;
+> -		pinctrl-names =3D "default";
+> -		pinctrl-0 =3D <&clk_24m_cam>;
+> -
+> -		clocks =3D <&cru SCLK_TESTCLKOUT1>;
+> -		clock-names =3D "xvclk";
+> -
+> -		avdd-supply =3D <&pp2800_cam>;
+> -		dovdd-supply =3D <&pp1800>;
+> -		dvdd-supply =3D <&pp1250_cam>;
+> -		reset-gpios =3D <&gpio2 5 GPIO_ACTIVE_LOW>;
+> -
+> -		port {
+> -			wcam_out: endpoint {
+> -				remote-endpoint =3D <&mipi_in_wcam>;
+> -				data-lanes =3D <1 2>;
+> -			};
+> -		};
+> -	};
+> -};
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml=
+ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> index 359dc08440a8..a3d73a87d797 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> @@ -5,26 +5,29 @@
+>  $id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: Omnivision OV5693 CMOS Sensor
+> +title: Omnivision OV5693/OV5695 CMOS Sensors
+> =20
+>  maintainers:
+>    - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> =20
+>  description: |
+> -  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CM=
+OS
+> -  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
+> +  The Omnivision OV5693/OV5695 are high performance, 1/4-inch, 5 megapix=
+el, CMOS
+> +  image sensors that deliver 2592x1944 at 30fps. It provides full-frame,
+>    sub-sampled, and windowed 10-bit MIPI images in various formats via the
+>    Serial Camera Control Bus (SCCB) interface.
+> =20
+> -  OV5693 is controlled via I2C and two-wire Serial Camera Control Bus (S=
+CCB).
+> -  The sensor output is available via CSI-2 serial data output (up to 2-l=
+ane).
+> +  OV5693/OV5695 are controlled via I2C and two-wire Serial Camera Contro=
+l Bus
+> +  (SCCB). The sensor output is available via CSI-2 serial data output (u=
+p to
+> +  2-lane).
+> =20
+>  allOf:
+>    - $ref: /schemas/media/video-interface-devices.yaml#
+> =20
+>  properties:
+>    compatible:
+> -    const: ovti,ov5693
+> +    enum:
+> +      - ovti,ov5693
+> +      - ovti,ov5695
+> =20
+>    reg:
+>      maxItems: 1
+> @@ -34,6 +37,9 @@ properties:
+>        System input clock (aka XVCLK). From 6 to 27 MHz.
+>      maxItems: 1
+> =20
+> +  clock-names:
+> +    const: xvclk
+> +
+>    dovdd-supply:
+>      description:
+>        Digital I/O voltage supply, 1.8V.
+> @@ -72,7 +78,6 @@ properties:
+> =20
+>          required:
+>            - data-lanes
+> -          - link-frequencies
+> =20
+>  required:
+>    - compatible
+> diff --git a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b=
+/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+> index 0bad7e640148..e466dff8286d 100644
+> --- a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+> +++ b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+> @@ -199,6 +199,7 @@ examples:
+>              wcam: camera@36 {
+>                  compatible =3D "ovti,ov5695";
+>                  reg =3D <0x36>;
+> +                clocks =3D <&cru SCLK_TESTCLKOUT1>;
+> =20
+>                  port {
+>                      wcam_out: endpoint {
+> --=20
+> 2.40.1
+>=20
 
-> > Though overall, you won't find devices creating struct pages for their
-> > P2P memory today, so I'm not sure what the purpose is. Jonathan
-> > already got highly slammed for proposing code to the kernel that was
-> > unusable. Please don't repeat that. Other than a special NVMe use case
-> > the interface for P2P is DMABUF right now and it is not struct page
-> > backed.
-> >
-> 
-> Our approach is actually to extend DMABUF to provide struct page
-> backed attachment mappings, which as far as I understand sidesteps the
-> issues Jonathan ran into.
+--t+svSrsy1jWs8uVm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-No DMABUF exporters do this today, so your patch series is just as
-incomplete as the prior ones. Please don't post it as non-RFC,
-unusable code like this must not be merged.
+-----BEGIN PGP SIGNATURE-----
 
-> that supports dmabuf and in fact a lot of my tests use udmabuf to
-> minimize the dependencies. The RFC may come with a udmabuf selftest to
-> showcase that any dmabuf, even a mocked one, would be supported.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKxDnAAKCRB4tDGHoIJi
+0qn2AP0Wcor69ow4Yy2tBjgcVPKKkO5rO0cMvw977bU0zkbU2wEA03fAzCzyJ+yv
+Ng2oGxRY7uXq/PVcTmI/dsBcudBCXwY=
+=1DQl
+-----END PGP SIGNATURE-----
 
-That is not good enough to get merged. You need to get agreement and
-coded merged from actual driver owners of dmabuf exporters that they
-want to support this direction. As above it has surprising road
-blocks outside netdev :\
-
-Jason
+--t+svSrsy1jWs8uVm--
