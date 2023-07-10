@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAC074CF30
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948AB74CF33
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjGJHz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S232223AbjGJH4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjGJHzv (ORCPT
+        with ESMTP id S230361AbjGJH4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:55:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FABFE1;
-        Mon, 10 Jul 2023 00:55:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D81160EC3;
-        Mon, 10 Jul 2023 07:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F05C433C9;
-        Mon, 10 Jul 2023 07:55:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688975749;
-        bh=mE8T9raCZQxGqUFQxblBiYTVl8i4RD8O6zIOxWyJ2lg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qg21zURAYemicOfYEuQP8Y8CH44/KN0cVAPBuDrGrqVUXPSbf9jDWsZ7XclfwaYHh
-         cjwIAI3HBTiqJrfujLBb7HLHps595Iw/pX4NG2vXSkIBjd0jhf72eGlzBHzrf3NsYQ
-         li3msNgMn/5xEXBOY9dfbgfzogT+6P8bDBR6rNxmN9V/K+4iHSa4zxpyQZq805p8sv
-         v2Pc+FNvtm65VTWQqFMo52PIo39ikFn0tKVGTTizZ/AMmxIAwvaTdmVaZB3UmsIJyW
-         oK/zGX++3g6rUt4QbpmpJOSWEIw5/Lv+SIOiwhGn+WJ63lSBbJhqOdmGlnsbRGijDG
-         XT4HBvxh+zJRA==
-Date:   Mon, 10 Jul 2023 09:55:44 +0200
-From:   Benjamin Tissoires <bentiss@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Basavaraj Natikar <bnatikar@amd.com>, basavaraj.natikar@amd.com,
-        mario.limonciello@amd.com, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: amd_sfh: Increase bitwidth to avoid
- shift-out-of-bounds
-Message-ID: <ob7rzwq5ow4unzin37yheqihbjtmo3ls5mmfwxrpbzte572qss@hobn4vpm6nyt>
-References: <20230704081724.2308195-1-kai.heng.feng@canonical.com>
- <29b68182-cb58-6a3f-0fdf-b919851e5524@amd.com>
- <CAAd53p7-Cyqt-aGkzDNu2sqWejJQgbLcs8BBQvOZxj-FfHmo2g@mail.gmail.com>
+        Mon, 10 Jul 2023 03:56:21 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78F71A1;
+        Mon, 10 Jul 2023 00:56:08 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36A7tu1Z098404;
+        Mon, 10 Jul 2023 02:55:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688975756;
+        bh=J7xkdooH54yvU8aeLNT+cg6gn7q0YbpZfhHdD5QhiMY=;
+        h=From:To:CC:Subject:Date;
+        b=BUZiHJGIiSDNUVauBGB4MdnD279bj7dmW2FphpvAFpBbYxWClpCfvHf8MdxB8RdR3
+         7yZ6zy16dXTXPG+8YK9MdZzDALA72ZvT1b6bJObnVBWaSOHElqFBPTYb81+X8xvV9s
+         l5xJV0X6np1RzikNK8NE3LJQ1pAsluXHM1g9oN+U=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36A7tup5012298
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Jul 2023 02:55:56 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
+ Jul 2023 02:55:56 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 10 Jul 2023 02:55:56 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36A7tqnX030856;
+        Mon, 10 Jul 2023 02:55:53 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <afd@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH v2] arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports with GESI
+Date:   Mon, 10 Jul 2023 13:25:51 +0530
+Message-ID: <20230710075551.1109024-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAd53p7-Cyqt-aGkzDNu2sqWejJQgbLcs8BBQvOZxj-FfHmo2g@mail.gmail.com>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,83 +65,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 10 2023, Kai-Heng Feng wrote:
-> Hi Basavaraj,
-> 
-> On Fri, Jul 7, 2023 at 3:36 PM Basavaraj Natikar <bnatikar@amd.com> wrote:
-> >
-> >
-> > On 7/4/2023 1:47 PM, Kai-Heng Feng wrote:
-> > > UBSAN complains shift-out-of-bounds on amd_sfh:
-> > > [    7.593412] input: SYNA3105:00 06CB:CEA3 Mouse as /devices/platform/AMDI0010:00/i2c-0/i2c-SYNA3105:00/0018:06CB:CEA3.0001/input/input11
-> > > [    7.593541] input: SYNA3105:00 06CB:CEA3 Touchpad as /devices/platform/AMDI0010:00/i2c-0/i2c-SYNA3105:00/0018:06CB:CEA3.0001/input/input12
-> > > [    7.593625] hid-multitouch 0018:06CB:CEA3.0001: input,hidraw0: I2C HID v1.00 Mouse [SYNA3105:00 06CB:CEA3] on i2c-SYNA3105:00
-> > > [    7.664537] ================================================================================
-> > > [    7.664540] UBSAN: shift-out-of-bounds in drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c:149:50
-> > > [    7.664544] shift exponent 103 is too large for 64-bit type 'long unsigned int'
-> > > [    7.664547] CPU: 5 PID: 124 Comm: kworker/5:1 Tainted: G        W          6.4.0-next-20230703 #1
-> > > [    7.664549] Hardware name: HP HP EliteBook 835 13 inch G10 Notebook PC/8C10, BIOS V83 Ver. 01.01.09 06/05/2023
-> > > [    7.664551] Workqueue: events amd_sfh_work_buffer [amd_sfh]
-> > > [    7.664562] Call Trace:
-> > > [    7.664564]  <TASK>
-> > > [    7.664567]  dump_stack_lvl+0x48/0x70
-> > > [    7.664576]  dump_stack+0x10/0x20
-> > > [    7.664578]  __ubsan_handle_shift_out_of_bounds+0x156/0x310
-> > > [    7.664584]  ? sched_clock_noinstr+0x9/0x10
-> > > [    7.664589]  ? sched_clock_cpu+0x12/0x1d0
-> > > [    7.664594]  ? raw_spin_rq_lock_nested+0x1e/0xa0
-> > > [    7.664597]  ? psi_group_change+0x237/0x520
-> > > [    7.664600]  float_to_int.cold+0x18/0xcf [amd_sfh]
-> > > [    7.664606]  ? __pfx_get_input_rep+0x10/0x10 [amd_sfh]
-> > > [    7.664611]  get_input_rep+0x241/0x340 [amd_sfh]
-> > > [    7.664617]  amd_sfh_work_buffer+0x91/0x190 [amd_sfh]
-> > > [    7.664622]  process_one_work+0x229/0x450
-> > > [    7.664627]  worker_thread+0x50/0x3f0
-> > > [    7.664629]  ? __pfx_worker_thread+0x10/0x10
-> > > [    7.664632]  kthread+0xf4/0x130
-> > > [    7.664635]  ? __pfx_kthread+0x10/0x10
-> > > [    7.664638]  ret_from_fork+0x29/0x50
-> > > [    7.664644]  </TASK>
-> > > [    7.664652] ================================================================================
-> > >
-> > > So increase the variable bitwidth to solve the issue.
-> > >
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > ---
-> > >  drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c b/drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c
-> > > index 6f0d332ccf51..550639ef8bfe 100644
-> > > --- a/drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c
-> > > +++ b/drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_desc.c
-> > > @@ -134,7 +134,8 @@ static void get_common_inputs(struct common_input_property *common, int report_i
-> > >
-> > >  static int float_to_int(u32 float32)
-> > >  {
-> > > -     int fraction, shift, mantissa, sign, exp, zeropre;
-> > > +     int fraction, shift, sign, exp, zeropre;
-> > > +     s128 mantissa;
-> > >
-> > >       mantissa = float32 & GENMASK(22, 0);
-> > >       sign = (float32 & BIT(31)) ? -1 : 1;
-> >
-> > Could you please check below patch which covers more scenario's and corner cases
-> > for UBSAN: shift-out-of-bounds.
-> > https://lore.kernel.org/all/20230707065722.9036-1-Basavaraj.Natikar@amd.com/T/#m67e0b7aa6a288ea074b3bfa61e7f085f7e036172
-> 
-> Thanks for the patch. Please add my tag:
-> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+The J7 GESI EXP board for J721E Common-Proc-Board supports RGMII mode.
+Use the overlay to configure CPSW9G ports in RGMII-RXID mode.
 
-Thanks. I'll add the tags to Basavaraj's series and push it to Linus
-ASAP.
+Add aliases for CPSW9G ports to enable kernel to fetch MAC addresses
+directly from U-Boot.
 
-Cheers,
-Benjamin
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+v1:
+https://lore.kernel.org/r/20230529094222.512675-1-s-vadapalli@ti.com/
+Changes since v1:
+- Rebase on linux-next tagged next-20230710.
 
-> 
-> >
-> > Thanks,
-> > --
-> > Basavaraj
-> >
+ arch/arm64/boot/dts/ti/Makefile               |   2 +
+ .../dts/ti/k3-j721e-evm-gesi-exp-board.dtso   | 196 ++++++++++++++++++
+ 2 files changed, 198 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso
+
+diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+index 6dd7b6f1d6ab..01d58aa8b06e 100644
+--- a/arch/arm64/boot/dts/ti/Makefile
++++ b/arch/arm64/boot/dts/ti/Makefile
+@@ -46,6 +46,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-evm.dtb
+ k3-j721e-evm-dtbs := k3-j721e-common-proc-board.dtb k3-j721e-evm-quad-port-eth-exp.dtbo
+ dtb-$(CONFIG_ARCH_K3) += k3-j721e-beagleboneai64.dtb
+ dtb-$(CONFIG_ARCH_K3) += k3-j721e-evm.dtb
++dtb-$(CONFIG_ARCH_K3) += k3-j721e-evm-gesi-exp-board.dtbo
+ dtb-$(CONFIG_ARCH_K3) += k3-j721e-sk.dtb
+ 
+ # Boards with J721s2 SoC
+@@ -58,3 +59,4 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
+ 
+ # Enable support for device-tree overlays
+ DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
++DTC_FLAGS_k3-j721e-common-proc-board += -@
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso b/arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso
+new file mode 100644
+index 000000000000..5a8e074a924b
+--- /dev/null
++++ b/arch/arm64/boot/dts/ti/k3-j721e-evm-gesi-exp-board.dtso
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0
++/**
++ * DT Overlay for CPSW9G in RGMII mode using J7 GESI EXP BRD board with
++ * J721E board.
++ *
++ * GESI Board Product Link: https://www.ti.com/tool/J7EXPCXEVM
++ *
++ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
++ */
++
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/net/ti-dp83867.h>
++
++#include "k3-pinctrl.h"
++
++&{/} {
++	aliases {
++		ethernet1 = "/bus@100000/ethernet@c000000/ethernet-ports/port@1";
++		ethernet2 = "/bus@100000/ethernet@c000000/ethernet-ports/port@2";
++		ethernet3 = "/bus@100000/ethernet@c000000/ethernet-ports/port@3";
++		ethernet4 = "/bus@100000/ethernet@c000000/ethernet-ports/port@4";
++	};
++};
++
++&cpsw0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&rgmii1_pins_default
++		     &rgmii2_pins_default
++		     &rgmii3_pins_default
++		     &rgmii4_pins_default>;
++};
++
++&cpsw0_port1 {
++	status = "okay";
++	phy-handle = <&cpsw9g_phy12>;
++	phy-mode = "rgmii-rxid";
++	mac-address = [00 00 00 00 00 00];
++	phys = <&cpsw0_phy_gmii_sel 1>;
++};
++
++&cpsw0_port2 {
++	status = "okay";
++	phy-handle = <&cpsw9g_phy15>;
++	phy-mode = "rgmii-rxid";
++	mac-address = [00 00 00 00 00 00];
++	phys = <&cpsw0_phy_gmii_sel 2>;
++};
++
++&cpsw0_port3 {
++	status = "okay";
++	phy-handle = <&cpsw9g_phy0>;
++	phy-mode = "rgmii-rxid";
++	mac-address = [00 00 00 00 00 00];
++	phys = <&cpsw0_phy_gmii_sel 3>;
++};
++
++&cpsw0_port4 {
++	status = "okay";
++	phy-handle = <&cpsw9g_phy3>;
++	phy-mode = "rgmii-rxid";
++	mac-address = [00 00 00 00 00 00];
++	phys = <&cpsw0_phy_gmii_sel 4>;
++};
++
++&cpsw9g_mdio {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&mdio0_pins_default>;
++	bus_freq = <1000000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	cpsw9g_phy0: ethernet-phy@0 {
++		reg = <0>;
++		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
++		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
++		ti,min-output-impedance;
++	};
++	cpsw9g_phy3: ethernet-phy@3 {
++		reg = <3>;
++		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
++		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
++		ti,min-output-impedance;
++	};
++	cpsw9g_phy12: ethernet-phy@12 {
++		reg = <12>;
++		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
++		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
++		ti,min-output-impedance;
++	};
++	cpsw9g_phy15: ethernet-phy@15 {
++		reg = <15>;
++		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
++		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
++		ti,min-output-impedance;
++	};
++};
++
++&exp1 {
++	p15-hog {
++		/* P15 - EXP_MUX2 */
++		gpio-hog;
++		gpios = <13 GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "EXP_MUX2";
++	};
++
++	p16-hog {
++		/* P16 - EXP_MUX3 */
++		gpio-hog;
++		gpios = <14 GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "EXP_MUX3";
++	};
++};
++
++&main_pmx0 {
++	mdio0_pins_default: mdio0-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x1bc, PIN_OUTPUT, 0) /* (V24) MDIO0_MDC */
++			J721E_IOPAD(0x1b8, PIN_INPUT, 0) /* (V26) MDIO0_MDIO */
++		>;
++	};
++
++	rgmii1_pins_default: rgmii1-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x4, PIN_INPUT, 4) /* (AC23) PRG1_PRU0_GPO0.RGMII1_RD0 */
++			J721E_IOPAD(0x8, PIN_INPUT, 4) /* (AG22) PRG1_PRU0_GPO1.RGMII1_RD1 */
++			J721E_IOPAD(0xc, PIN_INPUT, 4) /* (AF22) PRG1_PRU0_GPO2.RGMII1_RD2 */
++			J721E_IOPAD(0x10, PIN_INPUT, 4) /* (AJ23) PRG1_PRU0_GPO3.RGMII1_RD3 */
++			J721E_IOPAD(0x1c, PIN_INPUT, 4) /* (AD22) PRG1_PRU0_GPO6.RGMII1_RXC */
++			J721E_IOPAD(0x14, PIN_INPUT, 4) /* (AH23) PRG1_PRU0_GPO4.RGMII1_RX_CTL */
++			J721E_IOPAD(0x30, PIN_OUTPUT, 4) /* (AF24) PRG1_PRU0_GPO11.RGMII1_TD0 */
++			J721E_IOPAD(0x34, PIN_OUTPUT, 4) /* (AJ24) PRG1_PRU0_GPO12.RGMII1_TD1 */
++			J721E_IOPAD(0x38, PIN_OUTPUT, 4) /* (AG24) PRG1_PRU0_GPO13.RGMII1_TD2 */
++			J721E_IOPAD(0x3c, PIN_OUTPUT, 4) /* (AD24) PRG1_PRU0_GPO14.RGMII1_TD3 */
++			J721E_IOPAD(0x44, PIN_OUTPUT, 4) /* (AE24) PRG1_PRU0_GPO16.RGMII1_TXC */
++			J721E_IOPAD(0x40, PIN_OUTPUT, 4) /* (AC24) PRG1_PRU0_GPO15.RGMII1_TX_CTL */
++		>;
++	};
++
++	rgmii2_pins_default: rgmii2-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x58, PIN_INPUT, 4) /* (AE22) PRG1_PRU1_GPO0.RGMII2_RD0 */
++			J721E_IOPAD(0x5c, PIN_INPUT, 4) /* (AG23) PRG1_PRU1_GPO1.RGMII2_RD1 */
++			J721E_IOPAD(0x60, PIN_INPUT, 4) /* (AF23) PRG1_PRU1_GPO2.RGMII2_RD2 */
++			J721E_IOPAD(0x64, PIN_INPUT, 4) /* (AD23) PRG1_PRU1_GPO3.RGMII2_RD3 */
++			J721E_IOPAD(0x70, PIN_INPUT, 4) /* (AE23) PRG1_PRU1_GPO6.RGMII2_RXC */
++			J721E_IOPAD(0x68, PIN_INPUT, 4) /* (AH24) PRG1_PRU1_GPO4.RGMII2_RX_CTL */
++			J721E_IOPAD(0x84, PIN_OUTPUT, 4) /* (AJ25) PRG1_PRU1_GPO11.RGMII2_TD0 */
++			J721E_IOPAD(0x88, PIN_OUTPUT, 4) /* (AH25) PRG1_PRU1_GPO12.RGMII2_TD1 */
++			J721E_IOPAD(0x8c, PIN_OUTPUT, 4) /* (AG25) PRG1_PRU1_GPO13.RGMII2_TD2 */
++			J721E_IOPAD(0x90, PIN_OUTPUT, 4) /* (AH26) PRG1_PRU1_GPO14.RGMII2_TD3 */
++			J721E_IOPAD(0x98, PIN_OUTPUT, 4) /* (AJ26) PRG1_PRU1_GPO16.RGMII2_TXC */
++			J721E_IOPAD(0x94, PIN_OUTPUT, 4) /* (AJ27) PRG1_PRU1_GPO15.RGMII2_TX_CTL */
++		>;
++	};
++
++	rgmii3_pins_default: rgmii3-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0xb0, PIN_INPUT, 4) /* (AF28) PRG0_PRU0_GPO0.RGMII3_RD0 */
++			J721E_IOPAD(0xb4, PIN_INPUT, 4) /* (AE28) PRG0_PRU0_GPO1.RGMII3_RD1 */
++			J721E_IOPAD(0xb8, PIN_INPUT, 4) /* (AE27) PRG0_PRU0_GPO2.RGMII3_RD2 */
++			J721E_IOPAD(0xbc, PIN_INPUT, 4) /* (AD26) PRG0_PRU0_GPO3.RGMII3_RD3 */
++			J721E_IOPAD(0xc8, PIN_INPUT, 4) /* (AE26) PRG0_PRU0_GPO6.RGMII3_RXC */
++			J721E_IOPAD(0xc0, PIN_INPUT, 4) /* (AD25) PRG0_PRU0_GPO4.RGMII3_RX_CTL */
++			J721E_IOPAD(0xdc, PIN_OUTPUT, 4) /* (AJ28) PRG0_PRU0_GPO11.RGMII3_TD0 */
++			J721E_IOPAD(0xe0, PIN_OUTPUT, 4) /* (AH27) PRG0_PRU0_GPO12.RGMII3_TD1 */
++			J721E_IOPAD(0xe4, PIN_OUTPUT, 4) /* (AH29) PRG0_PRU0_GPO13.RGMII3_TD2 */
++			J721E_IOPAD(0xe8, PIN_OUTPUT, 4) /* (AG28) PRG0_PRU0_GPO14.RGMII3_TD3 */
++			J721E_IOPAD(0xf0, PIN_OUTPUT, 4) /* (AH28) PRG0_PRU0_GPO16.RGMII3_TXC */
++			J721E_IOPAD(0xec, PIN_OUTPUT, 4) /* (AG27) PRG0_PRU0_GPO15.RGMII3_TX_CTL */
++		>;
++	};
++
++	rgmii4_pins_default: rgmii4-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x100, PIN_INPUT, 4) /* (AE29) PRG0_PRU1_GPO0.RGMII4_RD0 */
++			J721E_IOPAD(0x104, PIN_INPUT, 4) /* (AD28) PRG0_PRU1_GPO1.RGMII4_RD1 */
++			J721E_IOPAD(0x108, PIN_INPUT, 4) /* (AD27) PRG0_PRU1_GPO2.RGMII4_RD2 */
++			J721E_IOPAD(0x10c, PIN_INPUT, 4) /* (AC25) PRG0_PRU1_GPO3.RGMII4_RD3 */
++			J721E_IOPAD(0x118, PIN_INPUT, 4) /* (AC26) PRG0_PRU1_GPO6.RGMII4_RXC */
++			J721E_IOPAD(0x110, PIN_INPUT, 4) /* (AD29) PRG0_PRU1_GPO4.RGMII4_RX_CTL */
++			J721E_IOPAD(0x12c, PIN_OUTPUT, 4) /* (AG26) PRG0_PRU1_GPO11.RGMII4_TD0 */
++			J721E_IOPAD(0x130, PIN_OUTPUT, 4) /* (AF27) PRG0_PRU1_GPO12.RGMII4_TD1 */
++			J721E_IOPAD(0x134, PIN_OUTPUT, 4) /* (AF26) PRG0_PRU1_GPO13.RGMII4_TD2 */
++			J721E_IOPAD(0x138, PIN_OUTPUT, 4) /* (AE25) PRG0_PRU1_GPO14.RGMII4_TD3 */
++			J721E_IOPAD(0x140, PIN_OUTPUT, 4) /* (AG29) PRG0_PRU1_GPO16.RGMII4_TXC */
++			J721E_IOPAD(0x13c, PIN_OUTPUT, 4) /* (AF29) PRG0_PRU1_GPO15.RGMII4_TX_CTL */
++		>;
++	};
++};
+-- 
+2.34.1
+
