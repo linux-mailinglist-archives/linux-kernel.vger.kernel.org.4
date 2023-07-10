@@ -2,151 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A1E74D367
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093C674D372
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbjGJK2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S233358AbjGJK3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233369AbjGJK2G (ORCPT
+        with ESMTP id S233421AbjGJK3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:28:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B66DF;
-        Mon, 10 Jul 2023 03:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688984884; x=1720520884;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8VTp2VvPftW0K82t/UQGFNBKatn1Y+wh44m0tYwuY/M=;
-  b=g8kHiAPP6TGGFqXvjn72yC75JytBHRgumZGRrrzUhyAvMZZNw5IpkR3Y
-   8TY+MxqZN0gu8mgzyNIlp8/8dNpi8LqyDyYFoiJ/WhVMA0VxzMAR3/+uZ
-   8Uetc3yk3jZowfmo1dLQEFKEPFArGoTqWhDqoTBInGfNdCDV2F3xeLOwP
-   jG2bh7URQQSAea3yVp7NEGfS/ex8wba7SlKYuUaOKV8ADz0wMNdADv/uZ
-   CQEvXtytuU96weI8/YeNyaeQdKssZ2xSDVbt1AujmKbyFs/NvmGn2BR0L
-   avcmFtMpSLEuFZiA7rhsZpK1YiQe9QtN+ftuVllq42XRFstf2aY9sq9wf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="367803792"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="367803792"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 03:28:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="755956019"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="755956019"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 10 Jul 2023 03:27:55 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6D8A169F; Mon, 10 Jul 2023 13:27:53 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>, Kris Bahnsen <kris@embeddedTS.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
-Cc:     Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: [PATCH v1 8/8] spi: Use struct_size() helper
-Date:   Mon, 10 Jul 2023 13:27:51 +0300
-Message-Id: <20230710102751.83314-9-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
-References: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
+        Mon, 10 Jul 2023 06:29:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8138C9;
+        Mon, 10 Jul 2023 03:28:52 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36A9DPIS019969;
+        Mon, 10 Jul 2023 10:28:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=ISiuR4TfQERhwJZYv0yi/JPjED7i7kGHRGpeUjLNigc=;
+ b=Dtl2eLT9DKeO9j3HBLafXFb/HrzLYzzPPaEk5xCZP+uOr2OtkAo9n2FFgCdhOYKJKr/O
+ nNGngGfML8Yr/2I4eMRTGec8EqlBWYaJeIJJTAWUmVj0Y7atPDtH8tCbCN1PPjVWUtRX
+ 0Wzfz/DY3tNW86t41vssquv3w2FtDsbuf2FvRsSRDkJXVMwDLleE8WhgZZIBRO+BjvUE
+ 34NccEYQK+xRw+GTM59WyRdsnGO4joWhpbfp15yDqjw2FyBI8OPiszpRSdYY8sHK7RJ0
+ DX4xLCk+1gszbed533BgKYjhWDJa7Y3IhNJ5DkEZ0urbofLS15GERp1asAvM0UR3FW/3 iQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rrf5mg7tv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 10:28:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36AASTO7009767
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jul 2023 10:28:29 GMT
+Received: from hu-kathirav-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 10 Jul 2023 03:28:24 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_saahtoma@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH 0/2] Drop the mem noc clocks from the IPQ5332 GCC driver
+Date:   Mon, 10 Jul 2023 15:58:05 +0530
+Message-ID: <20230710102807.1189942-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: sJX6HCos2V0Wl6K2NgSoxN9wAbRe5H0v
+X-Proofpoint-ORIG-GUID: sJX6HCos2V0Wl6K2NgSoxN9wAbRe5H0v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-10_08,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=581 malwarescore=0
+ spamscore=0 bulkscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307100095
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prefer struct_size() over open-coded versions.
+Due to the recent design changes, all the mem noc clocks will be
+configured by the bootloaders and it will be access protected by the TZ
+firmware. Also there are no comsumers for these clocks in the kernel. So
+drop these clocks from the GCC driver.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/spi/spi.h | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+With these clocks removal, remove the gcc_apss_axi_clk_src clock as well
+since no clocks uses this as a parent.
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index e9fb96016dc1..d4d686af76bd 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -17,6 +17,7 @@
- #include <linux/minmax.h>
- #include <linux/mod_devicetable.h>
- #include <linux/mutex.h>
-+#include <linux/overflow.h>
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/smp.h>
-@@ -1100,6 +1101,8 @@ struct spi_transfer {
-  * @state: for use by whichever driver currently owns the message
-  * @resources: for resource management when the SPI message is processed
-  * @prepared: spi_prepare_message was called for the this message
-+ * @t: for use with spi_message_alloc() when memory has message and transfers
-+ *	together
-  *
-  * A @spi_message is used to execute an atomic sequence of data transfers,
-  * each represented by a struct spi_transfer.  The sequence is "atomic"
-@@ -1154,6 +1157,9 @@ struct spi_message {
- 
- 	/* List of spi_res resources when the SPI message is processed */
- 	struct list_head        resources;
-+
-+	/* For embedding transfers into the memory of the message */
-+	struct spi_transfer	t[];
- };
- 
- static inline void spi_message_init_no_memset(struct spi_message *m)
-@@ -1214,16 +1220,13 @@ static inline struct spi_message *spi_message_alloc(unsigned ntrans, gfp_t flags
- {
- 	struct spi_message *m;
- 
--	m = kzalloc(sizeof(struct spi_message)
--			+ ntrans * sizeof(struct spi_transfer),
--			flags);
-+	m = kzalloc(struct_size(m, t, ntrans), flags);
- 	if (m) {
- 		unsigned i;
--		struct spi_transfer *t = (struct spi_transfer *)(m + 1);
- 
- 		spi_message_init_no_memset(m);
--		for (i = 0; i < ntrans; i++, t++)
--			spi_message_add_tail(t, m);
-+		for (i = 0; i < ntrans; i++)
-+			spi_message_add_tail(&m->t[i], m);
- 	}
- 	return m;
- }
+Kathiravan T (2):
+  clk: qcom: ipq5332: drop the mem noc clocks
+  clk: qcom: ipq5332: drop the gcc_apss_axi_clk_src clock
+
+ drivers/clk/qcom/gcc-ipq5332.c | 206 +++++++--------------------------
+ 1 file changed, 39 insertions(+), 167 deletions(-)
+
 -- 
-2.40.0.1.gaa8946217a0b
+2.34.1
 
