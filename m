@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580DF74E24F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1057874E251
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjGJXub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S230410AbjGJXvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjGJXu1 (ORCPT
+        with ESMTP id S229617AbjGJXvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:50:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80641A2;
-        Mon, 10 Jul 2023 16:50:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 10 Jul 2023 19:51:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38F91AC;
+        Mon, 10 Jul 2023 16:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689033063;
+        bh=0rZ8py8WFbjd+KaEuTNOvnpKq7U/hktOERHZwfzmUpg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cnq9/c/h6BYOykcOL2njRHa0bEH0yqKzEZoYO0A0rHffCs8kx67jM1ZGm+aIHsw//
+         VnVUeUfAXGnSEfD44L3I4GNQsGkBMpRBUFBVc5ZHg5/8yQhK8WVGPeScK05ca3XG9L
+         U+NcTpd2JCjggwwfF01F3RsGVmMqEW31R/HOaSCsUt6gQG38vFqQq9sRrX20Ed8hHh
+         RiqHFIGmIvOhhTPUpV+glcmAaafUBBZ9F6aT4vT2Wt2ozPr0ga1fSHHKnXxLWo2CC6
+         ZXqxPB7Z/J82yr/U1ldB2npinnul/jqrrc7Z+C3XIealYLFR6ToBjVoWhdg84xqFMN
+         X0rQEGIzOpUTA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63141611A5;
-        Mon, 10 Jul 2023 23:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA55AC433C8;
-        Mon, 10 Jul 2023 23:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689033025;
-        bh=VD/tpU/eNJTlw2/chOqcbgRdtXfwm4YHsFrm91jQzac=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Cze55vC2yZSvF5pub95qzYvtk3UPQNfgCU3ha3zsUHm1x4WsN1QC/DvOvDq+g3bjt
-         FT5wvi6c2jJhtKixMWJqIvcDI2J0bSGcsz6Q5xF7RKwvbzzOAB3xHPiOtuy1t5UiGX
-         9LhvtoMfupbyF8y6GgPGmq/fjwFzMBHhq3MDuYk1UAO3crqEw6dPaqASuA/WRpmeYN
-         wTK9MDtwxfrP2VIxVlxNLcwATSEqamRJFKQcVGllWno7J3Rbxup/ObGMlszPkEKfb0
-         3JdTE7tpeLnNn8hioJFaNIWcs1jqNe+gg4klBvrSx+vt0O46bBWp/YiiIrrscD4DBW
-         H7kGHkqF1VyaA==
-Date:   Tue, 11 Jul 2023 08:50:21 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] kprobes: Prohibit probing on CFI preamble
- symbol
-Message-Id: <20230711085021.9b32eeaac1070439bae0b8a8@kernel.org>
-In-Reply-To: <20230710153724.GA3040258@hirez.programming.kicks-ass.net>
-References: <168899125356.80889.17967397360941194229.stgit@devnote2>
-        <168899126450.80889.16200438320430187434.stgit@devnote2>
-        <20230710153724.GA3040258@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0LP26Nszz4wb5;
+        Tue, 11 Jul 2023 09:51:02 +1000 (AEST)
+Date:   Tue, 11 Jul 2023 09:51:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the aspeed tree
+Message-ID: <20230711095101.6277674b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/xjvL+9c_VqmQQBErHBcvQqV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 17:37:24 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+--Sig_/xjvL+9c_VqmQQBErHBcvQqV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, Jul 10, 2023 at 09:14:24PM +0900, Masami Hiramatsu (Google) wrote:
-> 
-> 
-> > +#ifdef CONFIG_CFI_CLANG
-> > +static bool is_cfi_preamble_symbol(unsigned long addr)
-> > +{
-> > +	char symbuf[KSYM_NAME_LEN];
-> > +
-> > +	if (lookup_symbol_name(addr, symbuf))
-> > +		return false;
-> > +
-> > +	return str_has_prefix("__cfi_", symbuf)
-> 		|| str_has_prefix("__pfx_", symbol);
-> 
-> The __pfx_ symbols can happen when !CFI_CLANG but still having
-> FUNCTION_PADDING_BYTES.
+Hi all,
 
-Indeed. Currently __pfx is not probed via tracefs interface because it is
-notrace function but kprobe itself should also prohibit that.
+After merging the aspeed tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-> 
-> > +}
-> > +#else
-> > +#define is_cfi_preamble_symbol(addr)	(0)
-> > +#endif
-> 
-> As such I think we can do the above unconditionally, without either
-> there should not be any matching symbols.
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:238.6-19: Warning (reg_=
+format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a/eeprom@50:reg: p=
+roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
+=3D=3D 1)
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:247.6-19: Warning (reg_=
+format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b/eeprom@50:reg: p=
+roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
+=3D=3D 1)
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:256.6-19: Warning (reg_=
+format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c/eeprom@50:reg: p=
+roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
+=3D=3D 1)
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:265.6-19: Warning (reg_=
+format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d/eeprom@50:reg: p=
+roperty has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =
+=3D=3D 1)
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (pci_device_re=
+g): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (pci_device_bu=
+s_num): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:233.27-240.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a: incorre=
+ct #address-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:233.27-240.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a: incorre=
+ct #size-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:242.27-249.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b: incorre=
+ct #address-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:242.27-249.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b: incorre=
+ct #size-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:251.27-258.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c: incorre=
+ct #address-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:251.27-258.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c: incorre=
+ct #size-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:260.27-267.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d: incorre=
+ct #address-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:260.27-267.6: Warning (=
+i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d: incorre=
+ct #size-cells for I2C bus
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (i2c_bus_reg):=
+ Failed prerequisite 'reg_format'
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (i2c_bus_reg):=
+ Failed prerequisite 'i2c_bus_bridge'
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (spi_bus_reg):=
+ Failed prerequisite 'reg_format'
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:236.15-239.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a=
+/eeprom@50: Relying on default #address-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:236.15-239.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a=
+/eeprom@50: Relying on default #size-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:245.15-248.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b=
+/eeprom@50: Relying on default #address-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:245.15-248.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b=
+/eeprom@50: Relying on default #size-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:254.15-257.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c=
+/eeprom@50: Relying on default #address-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:254.15-257.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c=
+/eeprom@50: Relying on default #size-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:263.15-266.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d=
+/eeprom@50: Relying on default #address-cells value
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:263.15-266.7: Warning (=
+avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d=
+/eeprom@50: Relying on default #size-cells value
 
-OK.
+Presumably introduced by commit
 
-Thank you!
+  267c95dc9f80 ("ARM: dts: aspeed: bonnell: Add DIMM SPD")
 
-> 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/xjvL+9c_VqmQQBErHBcvQqV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsmWUACgkQAVBC80lX
+0GzRGQf/dAe/VENSmdR4P9TLNb19qI7LKRcCpq+WVf1hrwPZaX58QHjGtmCZPBb9
+kvF7E2hQ+ojLPTevrTqC64pvAu6tSbWCYI4FSGLKTp9S3SvgIYtGge8lWg6WOe1/
+WuCoi93Fa/bjKRU1JhDrM7v20wgYVk40GASpoa02nFdROSmcupkyVT7CFXAEkRU4
+MCKdsdopS6khOzdYBqZmbzVSbflPadrWZXiD3SBO84bO0kQcHfwroYDbXwzRSe8n
+CJT7A/i32wwVzHKvADtc7VCivh0F23l26LNXTmxklQIWBuC5gMkBA88r4hvtc1FQ
+CJP6rNNccJnGjlONPV1UFp/nI9HWbA==
+=X+r/
+-----END PGP SIGNATURE-----
+
+--Sig_/xjvL+9c_VqmQQBErHBcvQqV--
