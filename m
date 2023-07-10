@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36F574CBCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E09D74CC03
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjGJFG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
+        id S232114AbjGJFI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjGJFFk (ORCPT
+        with ESMTP id S231651AbjGJFHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:05:40 -0400
+        Mon, 10 Jul 2023 01:07:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68D71734;
-        Sun,  9 Jul 2023 22:04:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1B6198;
+        Sun,  9 Jul 2023 22:05:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40F9C60DFE;
-        Mon, 10 Jul 2023 05:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0A8CC433C9;
-        Mon, 10 Jul 2023 05:04:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CFF360E0A;
+        Mon, 10 Jul 2023 05:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B9EC433CD;
+        Mon, 10 Jul 2023 05:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688965490;
-        bh=uYrZinyxjtM3C+Zwi30CqZShpGUZzWaVEMY6wPUrJ7U=;
+        s=k20201202; t=1688965491;
+        bh=f4aOjTCTgpASfAkNjrE6WOZbK8/oyOiowxT0COexb68=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=c0igG2T6c9FLJ7zx3bMyopS04Re0Aba8iFquIyEHQBUX+hfYoLa3gd8mnOiQ1SoIX
-         QoSvnIqkm/NmTazF5z8Sk+hln+6ykO5N2kWh7hZL2uG6R9Izd08S8H5UIAPME3duG5
-         +oQVy4t8AJoViqyKNV2gVTJjR7TeqKKI57WOXxIsz6KqiF1WDgtQGP9BL50AMv2W+Q
-         SU4SIs5dzaPT0+YpwtpOTV2QFdbh/LoQz3cgUbG24EwGlUJ5CEexKay92uewkwDsAj
-         LRN324E25QUhUlp2kBO1Sx/R4N8LdgPWymGlZ+0Fll5N+vh8nWv+2x2XnXH/h9UXdC
-         g58AZR3gFm/sw==
+        b=mtmrMlHS90w2b1GHxj2gx5qWScYxRg+vWljsqxgAzAqodqSu+6xxdKTm+Ws83h6cZ
+         O6uAItPFrtIlZGI4JxWDjvpXNFS7VoBumRWe5HyNnW4+7aTAdkwuUb0puzKMYLE5Je
+         F8fwtt4bYWXcncclKNT4UFHz7at6tSte3dyxX7Usd1Xbx6uzOx0Sx7UJMmVkaPOJPZ
+         v34cB3tAdFG+VW7VERkoPE9+gP0jUOEyydEEWNn3rSjXtXUhK95NZIi0on69uyWsu5
+         VBIRbpmseqF/Bm1LZGb53QrE3Ua0WowMvciiSL3tjPbMWaJ6pwXRkbmaNlWUWfUIuK
+         6zYcFEjquF2PQ==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH 1/4] ARM: dts: qcom: ipq4019: use generic node names for USB
-Date:   Sun,  9 Jul 2023 22:07:30 -0700
-Message-ID: <168896565961.1376307.8043255655713464820.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH 1/7] arm64: dts: qcom: sm8350-hdk: correct FSA4480 port
+Date:   Sun,  9 Jul 2023 22:07:31 -0700
+Message-ID: <168896565958.1376307.14051968542242639160.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
-References: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
+References: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,28 +65,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 19 Jun 2023 19:01:48 +0200, Krzysztof Kozlowski wrote:
-> Device node names should be generic which is also expected by USB
-> bindings:
+On Sun, 18 Jun 2023 13:44:36 +0200, Krzysztof Kozlowski wrote:
+> FSA4480 has only one port according to bindings:
 > 
->   qcom-ipq4018-jalapeno.dtb: dwc3@6000000: $nodename:0: 'dwc3@6000000' does not match '^usb(@.*)?'
+>   sm8350-hdk.dtb: typec-mux@42: 'port' is a required property
 > 
-> Override also the DWC3 node in qcom-ipq4018-ap120c-ac.dtsi by
-> label/phandle, not via node path, because it is less error-prone and
-> makes the overriding node-name independent.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/4] ARM: dts: qcom: ipq4019: use generic node names for USB
-      commit: 7caf09215ca32f1020df1559027d77770ca2e901
-[2/4] ARM: dts: qcom: sdx55: use generic node names for USB
-      commit: 9a3b29c33b5d3d3dd446c1fa314a79f7a905886a
-[3/4] ARM: dts: qcom: ipq8064: drop spi-max-frequency from controller
-      commit: 1bfeee1aeef0e6070e9ca2f06d310eb1c3058464
-[4/4] ARM: dts: qcom: msm8960: drop spi-max-frequency from controller
-      commit: 594ccb8d24726c89dd6601b2322b399648da7a8c
+[1/7] arm64: dts: qcom: sm8350-hdk: correct FSA4480 port
+      commit: 44f2f74df42910ae3a2289f1020788a348089718
+[2/7] arm64: dts: qcom: sm8450-hdk: correct FSA4480 port
+      commit: dea98746f90ab368ec51dc7a070090165560a5de
+[3/7] arm64: dts: qcom: sm6125-pdx201: correct ramoops pmsg-size
+      commit: c42f5452de6ad2599c6e5e2a64c180a4ac835d27
+[4/7] arm64: dts: qcom: sm6125-sprout: correct ramoops pmsg-size
+      commit: 2951e7e7611a3ea04de98d0f1bfc4e7ec609ef29
+[5/7] arm64: dts: qcom: sm6350: correct ramoops pmsg-size
+      commit: c86b97a72065e06eacb993dc71fa9febc93422af
+[6/7] arm64: dts: qcom: sm8150-kumano: correct ramoops pmsg-size
+      commit: 4e6b942f092653ebcdbbc0819b2d1f08ab415bdc
+[7/7] arm64: dts: qcom: sm8250-edo: correct ramoops pmsg-size
+      commit: 7dc3606f91427414d00a2fb09e6e0e32c14c2093
 
 Best regards,
 -- 
