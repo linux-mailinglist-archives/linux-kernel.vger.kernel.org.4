@@ -2,78 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA7F74E242
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F385974E248
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjGJXjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S230268AbjGJXpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjGJXjP (ORCPT
+        with ESMTP id S229528AbjGJXpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:39:15 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ABBCC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:39:13 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57059e6f9c7so74537857b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:39:13 -0700 (PDT)
+        Mon, 10 Jul 2023 19:45:47 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6367F19A;
+        Mon, 10 Jul 2023 16:45:44 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b702319893so79876691fa.3;
+        Mon, 10 Jul 2023 16:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689032353; x=1691624353;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPV4yRyL4/s25LnuLR3Abqfyd1kD/q0hgy+72dsX+RI=;
-        b=JivYvyrNd89WKD5Iym+pt7XI1Sezwfj50YlasTQvKOyw47y1vDafeSAYj0SHh61TPT
-         n41hTixKVN2lV8jfA3eQbgTRSfcQbZHM/yFrpzObIWgYNXIgOoSuSYjTQ2JYz1U7lNwi
-         W50TcrtbvoMVAnEkPNWj/lCI6eJdgc/qSZwhKpGRrkR1I20ve1J967fFpqSP5Z/bZYfc
-         zRZkZMqcz+Y5JJiQ+0FCHWUP8fsbxn2ORjg4Un9uo6YddqTF4OtBi97a4G9xSL5rt9TE
-         nE472U3K5mJbYtZnbMe893KLsDFgEVaKVYPsRB/XujaEchDANnMBNv49EJTsGlFlSEzt
-         /00w==
+        d=gmail.com; s=20221208; t=1689032742; x=1691624742;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lOzkIFoqf25CqB9hUyPl1DnkRcrfld+HOSpLgyRrDcI=;
+        b=ZdWzHzRengZ9OTY5kYzIhNizMIm4bJBEhtBcpNLzYf8bkufwXdpeZzSjumeSma1n7K
+         XC2HvBGNTrYT7QAMvIQIHwpwCf75tsGFftgIaUUv02L6P/cLIvW8+2iQVl2nwII1gK8D
+         iWhWIQHbIK4ESR5cShCFBrJjjbRS1aNbz6et5bmomCrEOxZ+TB1KFdA3zgvMuhAexklA
+         JWwyVgGFwB7hhXIbXEZqvsSgIqjBaenaPPHzDTH2OzNNc54b7pGLIPx8emn6EI5fwRmF
+         4r46gtvcR0mN6dt4DmzKUP4FZ1ghVaQXJqWk6HvGMAa+AHku5sxKf6l+6v53jk3t0Oxh
+         OziA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689032353; x=1691624353;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPV4yRyL4/s25LnuLR3Abqfyd1kD/q0hgy+72dsX+RI=;
-        b=iN21rpOkNPjl4ig69HHEKzrrzghAF1/qyJJojLuOjCqbbp+rC5slg6cpyXVfapCwLr
-         fDEdq4alcFPTAIRDfcAbCMv9MOAKMjulzVtacp4Z6UQwUTvl0x8U94mt8YHbajrFiKyL
-         XT8cqfbudubdhqt3dMYilvcxuEVibQl4q+sQvxk8UMN5oR/Eo/F5XYbgWvoQ65xu09l4
-         n/4cORpN3RzrsRynSv9ND9SSibw2wUOem3R3G2qj6fzB2odvPhuPWZY8EVe2ymIGEKnm
-         ukqgvhcC41qpIjACITHem9R2/fDGrOTw6hrZD1sUd12WLbnLqchRVNMRg8sBkr4hzA5k
-         YtjQ==
-X-Gm-Message-State: ABy/qLaVXsJObxacH8UTER7RvD4Yjlm86lIgd3LOA1NOTTSnXvltfEky
-        paZ20XaOzy/9znVyTxzYlllBtwEIC9M=
-X-Google-Smtp-Source: APBJJlHRU33B//Lf94Rxl2oQGlfI56m0S4fCd6asV6MRwDJRFDxF49UkUqsUhBgexG6JJ3xXpcGAp2uOpko=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:b384:0:b0:56c:ed45:442c with SMTP id
- r126-20020a81b384000000b0056ced45442cmr191609ywh.5.1689032352836; Mon, 10 Jul
- 2023 16:39:12 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 16:39:11 -0700
-In-Reply-To: <0000000000001f8ae4060029cff1@google.com>
-Mime-Version: 1.0
-References: <ZKyGn5UsJaAx7Ghy@google.com> <0000000000001f8ae4060029cff1@google.com>
-Message-ID: <ZKyWn0h9hDzfU0cs@google.com>
-Subject: Re: [syzbot] [kvm?] general protection fault in vmx_vcpu_run (2)
-From:   Sean Christopherson <seanjc@google.com>
-To:     syzbot <syzbot+42a71c84ef04577f1aef@syzkaller.appspotmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1689032742; x=1691624742;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lOzkIFoqf25CqB9hUyPl1DnkRcrfld+HOSpLgyRrDcI=;
+        b=kfMvgNuFC17vOibYVtTesaowZpKmx+EFqOcfa0Asfx5bOpFPtDTod1JT9GfgbVtLZ5
+         7kAZ4wo/mlwqKTN38qgOY7aWL51HEtgE0wHzTXkzqsjAn1OMrW6fy5mOIv3WkOmxyDv8
+         hj5nt5x9RI9r6Cg4fJ1hNvKBefuIban0i+7y7G7VyjhON98SmeWCtXqsh7ZhEdsQ/Ykn
+         8QZ2KJnoI2iUBY+wrrFGh7bMYmet7kPn3lW5KT5N4uzpPIgwnxAJloi07AUDxVjbbrSo
+         OouzeeoJeU5EccZWKuEdP7++5DvUhMmFS0CqMzB8zaYK/oAR2Ob+XG615sY+3Jaml8mL
+         rHgA==
+X-Gm-Message-State: ABy/qLa07zOuEAZ5W5N+llRc5nSKgDfyKGTvSbNLrC1K0mtFLNDQGdYe
+        AiSeXpIXcAMMrxGYLpBqFsd4QHGKOjBaS1Km+iA=
+X-Google-Smtp-Source: APBJJlFULHT8iLhB9w681CsXgyMHt2EsFqaBNl+XwT2OviAPgDtyoJbasP6q7D6vPnHpAvi/reCyP4wyfRqLiqoZsqE=
+X-Received: by 2002:a2e:780d:0:b0:2b6:d582:5a0 with SMTP id
+ t13-20020a2e780d000000b002b6d58205a0mr11825737ljc.12.1689032742222; Mon, 10
+ Jul 2023 16:45:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230708040750.72570-1-hffilwlqm@gmail.com> <20230708040750.72570-3-hffilwlqm@gmail.com>
+In-Reply-To: <20230708040750.72570-3-hffilwlqm@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 10 Jul 2023 16:45:30 -0700
+Message-ID: <CAADnVQK5RLqVhc9AxaCSuQxFRDAb8wohmUDNrYEViXLf5mEMNQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: Introduce bpf user log
+To:     Leon Hwang <hffilwlqm@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> SYZFAIL: wrong response packet
+On Fri, Jul 7, 2023 at 9:08=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.com> wro=
+te:
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 34fa334938ba5..8a458cfcd91bd 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1549,7 +1549,6 @@ union bpf_attr {
+>                 };
+>                 __u32           attach_type;    /* attach type */
+>                 __u32           flags;          /* extra flags */
+> -               struct bpf_generic_user_log log; /* user log */
+>                 union {
+>                         __u32           target_btf_id;  /* btf_id of targ=
+et to attach to */
+>                         struct {
+> @@ -1585,6 +1584,9 @@ union bpf_attr {
+>                                 __s32           priority;
+>                                 __u32           flags;
+>                         } netfilter;
+> +                       struct {
+> +                               struct bpf_generic_user_log ulog; /* user=
+ log */
+> +                       } xdp;
 
-Heh, well that wasn't helpful.  I'm going to close this, worst case scenario
-syzbot will provide a fresh new reproducer.
+1.
+You cannot break api in patch 1 and fix it in patch 2.
 
-#syz invalid
+2.
+libbpf side is missing.
+
+3.
+selftest is missing.
+
+4.
+bpf_vlog_finalize() should be used and error propagated back through
+link_create.
+Same api must be used: log_level, log_size, log_buf, log_true_size.
+
+But considering all that I agree with Daniel Xu that
+tracepoint would be better here.
