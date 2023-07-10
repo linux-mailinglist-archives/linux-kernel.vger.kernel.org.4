@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572B674DE61
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B23574DE64
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjGJTmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S230196AbjGJTns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjGJTmi (ORCPT
+        with ESMTP id S229635AbjGJTnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:42:38 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAB5136;
-        Mon, 10 Jul 2023 12:42:37 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-66767d628e2so3149900b3a.2;
-        Mon, 10 Jul 2023 12:42:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689018157; x=1691610157;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=04iwNdcQJeXG0mTcbAUJlB0Fp+3icsLoRreQ0OBOOd0=;
-        b=AGJpRLLNY7gr0IHt75298Nt4r3trlw/X1GxvHxpZDpWIBel3ffomXdOFl/zKWLJMbT
-         +3+hj2WsVbhtAYidOO3xWJfj0OTUE8z+lt3Sd8amPfkDdqXb2JIoVJkc65M21b/cR2OU
-         lYzb7D8DRoaLl8DIvJrxAj3GGhA2ByTs08appnDyJdSMtjPidfvS2ve1/bP6zHl7rPvy
-         pKhIW/mIuik4FyvRwit7g6MHsB3CYu1gFTKqAa6HN8m2H9UMbfujbFGJemUUD2SA/ygn
-         Mv5+l0G0dVGPIkP81ySNtyl4njy+ClQc3b6WL4zBm2vFOvrB5QDSntI98bqAFOYHPrkI
-         0OLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689018157; x=1691610157;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=04iwNdcQJeXG0mTcbAUJlB0Fp+3icsLoRreQ0OBOOd0=;
-        b=Mhtnk3vgcijrCpAzheHBGM9qqxxLqSvhvxXJ67WUPEJ54kwr0HCMyo3eXsZp6uXz23
-         jokBYDYZLbgYt9dojwwf4XFtlUL1OqlIcp3H7yyPeIJ97fUnBoNKg0ZZoFVGJkX0YgA4
-         mDhQimcYmGb1MdM/1IsuQYx8nqRH7zcsGlzuipI5m7jOijtzkNOq3B6pAi9bIaGhMQde
-         HWIM5oaTaQKEQdXvuyffbZkv1syUTjrHPA6qQPI+aBalI3THzFfCtOQVpFK67icgsoBW
-         xjrkaazISqNsrBgA71NwldHqyBC8ByK94Qm2p+dydr1wvjvXqw8OqGqQbIiNig9RSeoB
-         Lbvw==
-X-Gm-Message-State: ABy/qLa3qyq2/KGBw/D1Gs1PdE5B4F2lrawuXlNmdJjcVSjTdnS0gZCO
-        +mgHaXiPEHDoAyDUbjv1lZU=
-X-Google-Smtp-Source: APBJJlGmlqcVyGDxNAqJ3GDBVll6Xd+YVNZXf0l5iLDCGbJCkXlBQ3AwPoKYCNT3QomWU3oAJfjpBA==
-X-Received: by 2002:a05:6a00:148b:b0:681:6169:e403 with SMTP id v11-20020a056a00148b00b006816169e403mr13384559pfu.8.1689018156995;
-        Mon, 10 Jul 2023 12:42:36 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id fk25-20020a056a003a9900b00682a0184742sm160002pfb.148.2023.07.10.12.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 12:42:36 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 09:42:35 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     chengming.zhou@linux.dev
-Cc:     axboe@kernel.dk, hch@lst.de, ming.lei@redhat.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhouchengming@bytedance.com
-Subject: Re: [PATCH v5] blk-mq: fix start_time_ns and alloc_time_ns for
- pre-allocated rq
-Message-ID: <ZKxfK-cWyvkujSR0@slm.duckdns.org>
-References: <20230710105516.2053478-1-chengming.zhou@linux.dev>
+        Mon, 10 Jul 2023 15:43:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB6A136;
+        Mon, 10 Jul 2023 12:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADA97611BE;
+        Mon, 10 Jul 2023 19:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F9BC433C7;
+        Mon, 10 Jul 2023 19:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689018225;
+        bh=pkwoJ3JUWcuy1L56cv3pBQtYv5n7K4Wkqp0Ozdrh8Kc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SZiv/W1kcs3bSYUDKnQ0ATpNSQB8Aq1TuAW4yaaA895AWP/tlhNRim2/woRT2g15B
+         o2DIMc4ysY7I8mzzikaYAGe3LnbJDqGVqrPNcWdRDXEPmuj1vV2gj1uHdSk+KB0M+U
+         ljPv8wJekZLUhbu+pmq+JTtLTfzn/VRD3Zcv7M0s=
+Date:   Mon, 10 Jul 2023 21:43:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [RFC PATCH v1 1/3] docs: stable-kernel-rules: mention other
+ usages for stable tag comments
+Message-ID: <2023071003-slab-underling-2b50@gregkh>
+References: <cover.1689008220.git.linux@leemhuis.info>
+ <d30686781c47c83927e0a41f6a1167a679fa822c.1689008220.git.linux@leemhuis.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230710105516.2053478-1-chengming.zhou@linux.dev>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <d30686781c47c83927e0a41f6a1167a679fa822c.1689008220.git.linux@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 06:55:16PM +0800, chengming.zhou@linux.dev wrote:
-> From: Chengming Zhou <zhouchengming@bytedance.com>
+On Mon, Jul 10, 2023 at 07:10:11PM +0200, Thorsten Leemhuis wrote:
+> Document how to delay backporting or send a note to the stable team
+> using shell-style inline comments attached to stable tags.
 > 
-> The iocost rely on rq start_time_ns and alloc_time_ns to tell saturation
-> state of the block device. Most of the time request is allocated after
-> rq_qos_throttle() and its alloc_time_ns or start_time_ns won't be affected.
+> CC: Greg KH <gregkh@linuxfoundation.org>
+> CC: Sasha Levin <sashal@kernel.org>
+> CC: Jonathan Corbet <corbet@lwn.net>
+> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+> ---
+>  Documentation/process/stable-kernel-rules.rst | 22 ++++++++++++++++---
+>  1 file changed, 19 insertions(+), 3 deletions(-)
 > 
-> But for plug batched allocation introduced by the commit 47c122e35d7e
-> ("block: pre-allocate requests if plug is started and is a batch"), we can
-> rq_qos_throttle() after the allocation of the request. This is what the
-> blk_mq_get_cached_request() does.
-> 
-> In this case, the cached request alloc_time_ns or start_time_ns is much
-> ahead if blocked in any qos ->throttle().
-> 
-> Fix it by setting alloc_time_ns and start_time_ns to now when the allocated
-> request is actually used.
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
+> index 51df1197d5ab..6e4026dd6882 100644
+> --- a/Documentation/process/stable-kernel-rules.rst
+> +++ b/Documentation/process/stable-kernel-rules.rst
+> @@ -55,9 +55,10 @@ To have the patch automatically included in the stable tree, add the tag
+>  
+>       Cc: stable@vger.kernel.org
+>  
+> -in the sign-off area. Once the patch is merged it will be applied to
+> -the stable tree without anything else needing to be done by the author
+> -or subsystem maintainer.
+> +in the sign-off area; to accompany a note to the stable team, use a shell-style
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Is that how a ';' is really used?  I never can remember, so it's an
+honest question here :)
 
-Thanks.
+> +inline comment (see below for details). Once the patch is merged it will be
+> +applied to the stable tree without anything else needing to be done by the
+> +author or subsystem maintainer.
+>  
+>  .. _option_2:
+>  
+> @@ -139,6 +140,21 @@ The tag has the meaning of:
+>  
+>  For each "-stable" tree starting with the specified version.
+>  
+> +To delay pick up of patches submitted via :ref:`option_1`, use the following
+> +format:
+> +
+> +.. code-block:: none
+> +
+> +     Cc: <stable@vger.kernel.org> # after 4 weeks in mainline
+> +
+> +For any other requests related to patches submitted via :ref:`option_1`, just
+> +add a note to the stable tag. This for example can be used to point out known
+> +problems:
+> +
+> +.. code-block:: none
+> +
+> +     Cc: <stable@vger.kernel.org> # see patch description, needs adjustments for >= 6.3
+> +
 
--- 
-tejun
+This looks great to me, so I'll be glad to take it.
+
+thanks,
+
+greg k-h
