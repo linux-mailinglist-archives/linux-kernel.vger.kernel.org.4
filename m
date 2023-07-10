@@ -2,95 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB4074D200
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76B474D1FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 11:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjGJJlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 05:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S230247AbjGJJl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 05:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjGJJkF (ORCPT
+        with ESMTP id S232248AbjGJJkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:40:05 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D6DB7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:38:10 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b7541d885cso3303361a34.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 02:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1688981890; x=1691573890;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ajnJvW3EoQVJM0A0noZ1rC2u8boZf4rH9jk39u5cacQ=;
-        b=gw73FRuZrFPnkV5NTcmHiATnoKGdlzBbk7Zha3RsDNwHj1pXcT7rz3tSc1f4hJwzJU
-         ZjtxAGIihXOLHxbL/Uehbm9jhqvqJbEL8EqcmyI3Vir7NACkhcGy8YyQK1fANGfNI8CK
-         OP0tLpTYfL8RIAztdrIBBst02TVn8QF/cvOzBE8KKFTobjUU/XwcbYuSUwLLNFE4Jvf3
-         1DQ3l4bHad7clIktBN8GpVZLbX9wWeLHL1P5tglldY06oBIcnYxao5hQsIybyhucUlcY
-         252LqvYSm5IKrUGcIc/JFjzD2QQ3wse4XpjsOoFYYSlqA0P45VShI3YYGdoEa0MBBAqV
-         s/dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688981890; x=1691573890;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ajnJvW3EoQVJM0A0noZ1rC2u8boZf4rH9jk39u5cacQ=;
-        b=Egg3CmA6/8fzrbr5nn8rz+DOp9LBO32Bdvz6zOAeYn3gnXqQ30uQWsUxcd6cjaaUrM
-         bWC7s4qL1rqtj/D+IziAbXz0wU9z5JIiyr6jWGvCTN8XjFVXmB1i6eMCTLiAWeiXlMDr
-         PUTnh4ZkYNYtZc7XFJ7+KS/wuB/7eYihBPVmerk2WrXbL9PuYC6cUFSvzB4z1lt1yFr9
-         MT/8mlBpCMq9tUo7TTmPFQRQ60wudF0ryGl9/dGLuAVKC7QUz/R2VhtVvQx62hy2gnJT
-         jOizJLJX/4niCm7deqx/DBB8S9n8l2FQeghppiOFlOYlILudAX3ChIawpvLMvnlZxKjl
-         D5gA==
-X-Gm-Message-State: ABy/qLbLaoVzGijDO1IiMBZvnJBMbVn/VTH6i6fxa2qLZQ5f+AcnlyXs
-        o2bFsAFtSOSgjJQUMKGDSrJUkTYa7+NaJdwMKS6mHA==
-X-Google-Smtp-Source: APBJJlFeI5XDX0P4b55BqbdbW60MiTpiZFi6tmEd+sPge9ZvH4xhIrTPEag4qJO0cBuMkhwjZQWJ+g==
-X-Received: by 2002:a05:6830:22f6:b0:6b7:4e25:4c08 with SMTP id t22-20020a05683022f600b006b74e254c08mr10815570otc.12.1688981889863;
-        Mon, 10 Jul 2023 02:38:09 -0700 (PDT)
-Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id w18-20020a639352000000b0055c430c311asm2089032pgm.33.2023.07.10.02.38.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 02:38:09 -0700 (PDT)
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-To:     rppt@kernel.org
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH] mm/mm_init.c: mark check_for_memory() as __init
-Date:   Mon, 10 Jul 2023 09:37:50 +0000
-Message-Id: <20230710093750.1294-1-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Jul 2023 05:40:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14396185;
+        Mon, 10 Jul 2023 02:37:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C53960F08;
+        Mon, 10 Jul 2023 09:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD20C433C7;
+        Mon, 10 Jul 2023 09:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688981878;
+        bh=5Va+D1vw5krsXXAHovHsEdN5okJNaHBciX0Ka1Bh8LI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d6ONynozQ5yTBS3WIdfoSmySH1DMQUcdlpG87TnWQ/PJ+obKufkZgO3RmSMsbcrAi
+         zBwni1vClKRr6CI8ZxlAA6QtTrrAZqs7elCyzW04nLbF13gDk0t6YtuCjDlyXzoxat
+         DjS0rTX9Y2rHrkkTs8xigbT5sF/U+odpM8JZ8nXKlMEX7Wd7R2BfzAyn5oi09tOlUg
+         OyZeeBpjq95SqZO5pHYdeSKUogtXzvxubYPdyc6yAKLuu6yVSf5ZzoHYADa9G0QxDi
+         HQhrA31+iFzk/tPKy64/KjMRIZ3qUgSwx0NIcgEaWEajdWwlIMXSZTH/HOtZwRlNEg
+         OHdM1WBmoBhZQ==
+Date:   Mon, 10 Jul 2023 10:37:52 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Maria Yu <quic_aiquny@quicinc.com>
+Cc:     corbet@lwn.net, catalin.marinas@arm.com, maz@kernel.org,
+        quic_pkondeti@quicinc.com, quic_kaushalk@quicinc.com,
+        quic_satyap@quicinc.com, quic_shashim@quicinc.com,
+        quic_songxue@quicinc.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: Add the arm64.nolse_atomics command line option
+Message-ID: <20230710093751.GC32673@willie-the-truck>
+References: <20230710055955.36551-1-quic_aiquny@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710055955.36551-1-quic_aiquny@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only caller of check_for_memory() is free_area_init(), which
-is annotated with __init, so it should be safe to also mark the
-former as __init.
+On Mon, Jul 10, 2023 at 01:59:55PM +0800, Maria Yu wrote:
+> In order to be able to disable lse_atomic even if cpu
+> support it, most likely because of memory controller
+> cannot deal with the lse atomic instructions, use a
+> new idreg override to deal with it.
 
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
----
- mm/mm_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This should not be a problem for cacheable memory though, right?
 
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index a1963c3322af..a313d1828a6c 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -1737,7 +1737,7 @@ static void __init free_area_init_node(int nid)
- }
- 
- /* Any regular or high memory on that node ? */
--static void check_for_memory(pg_data_t *pgdat)
-+static void __init check_for_memory(pg_data_t *pgdat)
- {
- 	enum zone_type zone_type;
- 
--- 
-2.25.1
+Given that Linux does not issue atomic operations to non-cacheable mappings,
+I'm struggling to see why there's a problem here.
 
+Please can you explain the problem that you are trying to solve?
+
+Will
