@@ -2,144 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B089E74DC3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A78B74DC4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbjGJRWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S232775AbjGJRXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjGJRWD (ORCPT
+        with ESMTP id S231373AbjGJRXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:22:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C33B10D;
-        Mon, 10 Jul 2023 10:21:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 10 Jul 2023 13:23:36 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8255ACC;
+        Mon, 10 Jul 2023 10:23:35 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 03179bec3a6c6835; Mon, 10 Jul 2023 19:23:34 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE666112F;
-        Mon, 10 Jul 2023 17:21:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7CBC433C7;
-        Mon, 10 Jul 2023 17:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689009717;
-        bh=CpTuLljbdaBkyoyitx9Zt2kT2mpNPwthrmEzA4FZh0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jH9O9AHymoIzZncRhS0boDcQENihuPJ9tiOMacCBW9S1HyXoS4fmk05l3yiGNAo2K
-         KI1hyt+ZX+7NEHBvWCqXjT4yNe/LtAsjRDwPWtbPDyinDXBlqwNxiz4igGDEvFujjT
-         HvuvVf7zfJpIqBT2DHBv4rYYp+mzBEGWoHelZgtBRzC5a9ODbB3jbYPRYOu+MpK8DF
-         3DKPCT3xy2bGoPblEhEFYavUFRlVpmVElN1x+riHF3GGBKfZ16h5m4CDQWCrPt/Kv/
-         vK54neWN9FR7qTjWY6hgaJiuvxPLSkqkKUC983rTnSx7XHJONotnyRARakAtXoacgn
-         BzkLNw5lEztpw==
-Date:   Mon, 10 Jul 2023 18:21:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 08/15] spi: Clean up headers
-Message-ID: <54bb9fe7-fb62-4c2e-ae36-d2c10648ee27@sirena.org.uk>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id 8E2E4660DCF;
+        Mon, 10 Jul 2023 19:23:33 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>,
+        Saket Dumbre <saket.dumbre@intel.com>
+Subject: [PATCH 12/14] ACPICA: MADT: Add RISC-V external interrupt controllers
+Date:   Mon, 10 Jul 2023 19:21:57 +0200
+Message-ID: <8291255.NyiUUSuA9g@kreacher>
+In-Reply-To: <5698695.DvuYhMxLoT@kreacher>
+References: <5698695.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w5h1T0k99Bnkn5Gc"
-Content-Disposition: inline
-In-Reply-To: <20230710154932.68377-9-andriy.shevchenko@linux.intel.com>
-X-Cookie: Do you have lysdexia?
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrvdekgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrkhgvthdrughumhgsrhgv
+ sehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Sunil V L <sunilvl@ventanamicro.com>
 
---w5h1T0k99Bnkn5Gc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+ACPICA commit 8c048cee4ea7b9ded8db3e1b3b9c14e21e084a2c
 
-On Mon, Jul 10, 2023 at 06:49:25PM +0300, Andy Shevchenko wrote:
-> There is a few things done:
-> - include only the headers we are direct user of
-> - when pointer is in use, provide a forward declaration
-> - add missing headers
-> - group generic headers and subsystem headers
-> - sort each group alphabetically
+This adds 3 different external interrupt controller
+definitions in MADT for RISC-V.
 
-The previous commit was supposed to be sorting things and AFAICT did
-so...
+ 1) RISC-V PLIC is a platform interrupt controller for
+    handling wired interrupt in a RISC-V systems.
 
-> +struct spi_device_id;
+ 2) RISC-V IMSIC is MSI interrupt controller to
+    support MSI interrupts.
 
-Why are we adding this given that there's also an inclusion of
-mod_devicetable that you didn't remove?
+ 3) RISC-V APLIC has dual functionality. First it can
+    act like PLIC and direct all wired interrupts to
+    the CPU which doesn't have MSI controller. Second,
+    when the CPU has MSI controller (IMSIC), it will
+    act as a converter from wired interrupts to MSI.
 
---w5h1T0k99Bnkn5Gc
-Content-Type: application/pgp-signature; name="signature.asc"
+Update the existing RINTC structure also to support
+these external interrupt controllers.
 
------BEGIN PGP SIGNATURE-----
+This codefirst ECR is approved by UEFI forum and will
+be part of next ACPI spec version.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsPicACgkQJNaLcl1U
-h9CPUAf/RRQIrb0PfZnRSA7kc94fTv5rQbNfPboY9/94tcd2SIZjbZezvGfMuSZp
-6KHTd2Kkiwzya3J0dExwrNiIzmVrIGl+uWJWbvppEpglEeE0BNrEl1a9mRgzaQUk
-Ys7HqCSSbbtJqGSlgQAODJPS7eaPIw1ChR5Wv5B+4AlUGavA+iCrwDK+TD0dFZpQ
-ovdLIOvU+8RA2XrWSPmDSi4ywOFt9I70VxOWbR9rbfQcvXLRaJA1FOJa2ZArMhHy
-CULubdIfA4BO7mOmyLX63DXgjZqu703oW4W5RFmjc+sa9xmoSdlCYflpgXX/xSqG
-VmDSPECCeUQc9NZwlOM4i7+iPwCymQ==
-=E/m2
------END PGP SIGNATURE-----
+Link: https://github.com/acpica/acpica/commit/8c048cee
+Signed-off-by: Haibo, Xu <haibo1.xu@intel.com>
+Co-developed-by: Haibo, Xu <haibo1.xu@intel.com>
+Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/acpi/actbl2.h | 50 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 49 insertions(+), 1 deletion(-)
 
---w5h1T0k99Bnkn5Gc--
+diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
+index 0029336775a9..280ab4c7f77a 100644
+--- a/include/acpi/actbl2.h
++++ b/include/acpi/actbl2.h
+@@ -893,7 +893,10 @@ enum acpi_madt_type {
+ 	ACPI_MADT_TYPE_BIO_PIC = 22,
+ 	ACPI_MADT_TYPE_LPC_PIC = 23,
+ 	ACPI_MADT_TYPE_RINTC = 24,
+-	ACPI_MADT_TYPE_RESERVED = 25,	/* 25 to 0x7F are reserved */
++	ACPI_MADT_TYPE_IMSIC = 25,
++	ACPI_MADT_TYPE_APLIC = 26,
++	ACPI_MADT_TYPE_PLIC = 27,
++	ACPI_MADT_TYPE_RESERVED = 28,	/* 28 to 0x7F are reserved */
+ 	ACPI_MADT_TYPE_OEM_RESERVED = 0x80	/* 0x80 to 0xFF are reserved for OEM use */
+ };
+ 
+@@ -1261,6 +1264,9 @@ struct acpi_madt_rintc {
+ 	u32 flags;
+ 	u64 hart_id;
+ 	u32 uid;		/* ACPI processor UID */
++	u32 ext_intc_id;	/* External INTC Id */
++	u64 imsic_addr;		/* IMSIC base address */
++	u32 imsic_size;		/* IMSIC size */
+ };
+ 
+ /* Values for RISC-V INTC Version field above */
+@@ -1271,6 +1277,48 @@ enum acpi_madt_rintc_version {
+ 	ACPI_MADT_RINTC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+ };
+ 
++/* 25: RISC-V IMSIC */
++struct acpi_madt_imsic {
++	struct acpi_subtable_header header;
++	u8 version;
++	u8 reserved;
++	u32 flags;
++	u16 num_ids;
++	u16 num_guest_ids;
++	u8 guest_index_bits;
++	u8 hart_index_bits;
++	u8 group_index_bits;
++	u8 group_index_shift;
++};
++
++/* 26: RISC-V APLIC */
++struct acpi_madt_aplic {
++	struct acpi_subtable_header header;
++	u8 version;
++	u8 id;
++	u32 flags;
++	u8 hw_id[8];
++	u16 num_idcs;
++	u16 num_sources;
++	u32 gsi_base;
++	u64 base_addr;
++	u32 size;
++};
++
++/* 27: RISC-V PLIC */
++struct acpi_madt_plic {
++	struct acpi_subtable_header header;
++	u8 version;
++	u8 id;
++	u8 hw_id[8];
++	u16 num_irqs;
++	u16 max_prio;
++	u32 flags;
++	u32 size;
++	u64 base_addr;
++	u32 gsi_base;
++};
++
+ /* 80: OEM data */
+ 
+ struct acpi_madt_oem_data {
+-- 
+2.35.3
+
+
+
+
