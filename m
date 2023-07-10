@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3260E74CFE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFA574CFE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjGJI1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        id S232933AbjGJI1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjGJI1C (ORCPT
+        with ESMTP id S232530AbjGJI1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:27:02 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7152E91
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:26:57 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qzxtj3PgdzBHXhD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:26:53 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688977613; x=1691569614; bh=5Vej+dXMd1ZoKmxJ2xQ73LD2u5v
-        65N0RUybJgRNbepE=; b=PU50xK1vmhNd6ANYnwm68oL8AGrTs00gHkm458ai71P
-        2XcQxiMyhua1stxu0sv4Zt2ocNrD63DZrDEENwU5XMKgMQPUtVO8fj2mMeEWO3qb
-        z5+36ufFc0eGfpGxcI0u2PsccqjzT2MtTR8eCUiSJsEutz3Y6aplmMIf7l34xGTI
-        hKtHQtDTC2hb/5jxkmzxv2AQJtry12t7wWT4HVcwPt4r1f6bDh0McDxEA1/aUqN6
-        1PKhHx4sj1aJdPmjpggal0Nm16VrOhPG0x30RoWvD+jX2PJe1G7nzTyCGiXeVn9c
-        PrkiKxnTzVW3hoM4rAZk52AT0AJu4p6xro8VDKuUblA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4P8Z4kr0E1Oj for <linux-kernel@vger.kernel.org>;
-        Mon, 10 Jul 2023 16:26:53 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qzxtj14DnzBHXgt;
-        Mon, 10 Jul 2023 16:26:53 +0800 (CST)
+        Mon, 10 Jul 2023 04:27:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D07124;
+        Mon, 10 Jul 2023 01:27:19 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 24C5021E8D;
+        Mon, 10 Jul 2023 08:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688977638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UIZvDVy9k/7OMTz4A4x2ug9kFE4VMtfrWhDBOUfK4Mg=;
+        b=D1duItWpVprF4m7rIL37r/2RswiHoIOPBjUPTljv7afso5npmgIyJIhZSxI3AZ0eTshORs
+        /tebehspJiJRXL2HV5l6iJoOUmp82xp00hPCVB+waC4mSljUy1O9bQKZ04cpEMzHTO8+fc
+        xsv7x5IJro01X+CKAIujb3+/2TyKE9c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688977638;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UIZvDVy9k/7OMTz4A4x2ug9kFE4VMtfrWhDBOUfK4Mg=;
+        b=h9IHnAzUbdOUzsHPmGdRZwgsRo3pBNef5WKps6f8Bm7OFmvWtfW2VYZo9J99N4Td0t7/p5
+        qCgCRAyov7EpJrBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1402E1361C;
+        Mon, 10 Jul 2023 08:27:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Wm0iBObAq2ShDQAAMHmgww
+        (envelope-from <dwagner@suse.de>); Mon, 10 Jul 2023 08:27:18 +0000
+Date:   Mon, 10 Jul 2023 10:27:17 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Max Gurtovoy <mgurtovoy@nvidia.com>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>,
+        Martin Belanger <Martin.Belanger@dell.com>
+Subject: Re: [PATCH blktests v1 2/3] nvme/rc: Avoid triggering host nvme-cli
+ autoconnect
+Message-ID: <bz2s6nyjwl6l7yfrd4wtjdtousv23ypcdleckibps5lyjpwi4x@wqq6qqesevpk>
+References: <20230620132703.20648-1-dwagner@suse.de>
+ <20230620132703.20648-3-dwagner@suse.de>
+ <9c07e4f6-2cf5-b53b-6b48-bd4df8798ee9@nvidia.com>
 MIME-Version: 1.0
-Date:   Mon, 10 Jul 2023 16:26:53 +0800
-From:   sunran001@208suo.com
-To:     airlied@gmail.com, daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/radeon: ERROR: "(foo*)" should be "(foo *)"
-In-Reply-To: <20230710082515.54604-1-xujianghui@cdjrlc.com>
-References: <20230710082515.54604-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <0cd737878affc60b7b34d58ea9e10e50@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9c07e4f6-2cf5-b53b-6b48-bd4df8798ee9@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix four occurrences of the checkpatch.pl error:
-ERROR: "(foo*)" should be "(foo *)"
+On Thu, Jul 06, 2023 at 07:11:58PM +0300, Max Gurtovoy wrote:
+> 
+> 
+> On 20/06/2023 16:27, Daniel Wagner wrote:
+> > When the host has enabled the udev/systemd autoconnect services for the
+> > fc transport it interacts with blktests and make tests break.
+> > 
+> > nvme-cli learned to ignore connects attemps when using the
+> > --context command line option paired with a volatile configuration. Thus
+> > we can mark all the resources created by blktests and avoid any
+> > interaction with the systemd autoconnect scripts.
+> 
+> why would we like to ignore connect attempts during blktests ?
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/gpu/drm/radeon/radeon_atombios.c | 8 ++++----
-  1 file changed, 4 insertions(+), 4 deletions(-)
+The problem I observed is that there were two connect attempts (one triggered
+via udev and one via the test itself) which disturbed the test. The interference
+resulted into a complete hang of the test case:
 
-diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c 
-b/drivers/gpu/drm/radeon/radeon_atombios.c
-index bf3c411a55c5..85c4bb186203 100644
---- a/drivers/gpu/drm/radeon/radeon_atombios.c
-+++ b/drivers/gpu/drm/radeon/radeon_atombios.c
-@@ -1389,7 +1389,7 @@ bool radeon_atombios_get_ppll_ss_info(struct 
-radeon_device *rdev,
+https://lore.kernel.org/linux-nvme/6g53yj5afhhonwf2psf7ft2gkakkwewy7klkix3y3u6uclpa5w@tt2yfzigyxgg/
 
-          num_indices = (size - sizeof(ATOM_COMMON_TABLE_HEADER)) /
-              sizeof(ATOM_SPREAD_SPECTRUM_ASSIGNMENT);
--        ss_assign = (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT*)
-+        ss_assign = (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT *)
-              ((u8 *)&ss_info->asSS_Info[0]);
-          for (i = 0; i < num_indices; i++) {
-              if (ss_assign->ucSS_Id == id) {
-@@ -1402,7 +1402,7 @@ bool radeon_atombios_get_ppll_ss_info(struct 
-radeon_device *rdev,
-                  ss->refdiv = ss_assign->ucRecommendedRef_Div;
-                  return true;
-              }
--            ss_assign = (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT*)
-+            ss_assign = (struct _ATOM_SPREAD_SPECTRUM_ASSIGNMENT *)
-                  ((u8 *)ss_assign + sizeof(struct 
-_ATOM_SPREAD_SPECTRUM_ASSIGNMENT));
-          }
-      }
-@@ -3406,7 +3406,7 @@ static ATOM_VOLTAGE_OBJECT_V2 
-*atom_lookup_voltage_object_v2(ATOM_VOLTAGE_OBJECT
-  {
-      u32 size = le16_to_cpu(v2->sHeader.usStructureSize);
-      u32 offset = offsetof(ATOM_VOLTAGE_OBJECT_INFO_V2, 
-asVoltageObj[0]);
--    u8 *start = (u8*)v2;
-+    u8 *start = (u8 *)v2;
+> We define unique nqn/ids/etc. So we never should disturb other running
+> services, unless it uses the same parameters, which shouldn't happen.
 
-      while (offset < size) {
-          ATOM_VOLTAGE_OBJECT_V2 *vo = (ATOM_VOLTAGE_OBJECT_V2 *)(start + 
-offset);
-@@ -3423,7 +3423,7 @@ static ATOM_VOLTAGE_OBJECT_V3 
-*atom_lookup_voltage_object_v3(ATOM_VOLTAGE_OBJECT
-  {
-      u32 size = le16_to_cpu(v3->sHeader.usStructureSize);
-      u32 offset = offsetof(ATOM_VOLTAGE_OBJECT_INFO_V3_1, 
-asVoltageObj[0]);
--    u8 *start = (u8*)v3;
-+    u8 *start = (u8 *)v3;
+Yes, that should do the decoupling between udev and blktests.
 
-      while (offset < size) {
-          ATOM_VOLTAGE_OBJECT_V3 *vo = (ATOM_VOLTAGE_OBJECT_V3 *)(start + 
-offset);
+> Agree on setting the hard coded values for hostnqn and hostid instead of
+> reading the /etc/nvme/* files. This should do the work IMO, isn't it ?
+
+Do you mean that nvme-cli will ignore the udev trigger when a different hostnqn
+is invovled? At least for the well-known discover controller the hostqnq
+doesn't work. Though not sure if I understood you correctly here.
