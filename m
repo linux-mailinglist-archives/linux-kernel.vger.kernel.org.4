@@ -2,83 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1946974DA6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FD774DA8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjGJPwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S233352AbjGJPyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbjGJPvy (ORCPT
+        with ESMTP id S233615AbjGJPwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:51:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7326CE6A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:50:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 10 Jul 2023 11:52:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE105E50;
+        Mon, 10 Jul 2023 08:52:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF4E661063
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 15:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB981C433C9;
-        Mon, 10 Jul 2023 15:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689004230;
-        bh=ujUND67ysedfOJcnpq0izCtjDzDV1Go55+afJoHmEzg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PDuthxJZis4IrtB0OZr1lgi9c6fhan+1dxoIiOFPXVmmoNmJzRgzzpqpwOi7Wuyis
-         ZmOWtDRBdLONBahbvZ/nc7q1ZiMTt71yHzj5EONkd03wlG1+TCRdFecU41tHCOG8yI
-         JJo9Bdx0Tgg3qWm3SQFYssbUo6zDZJyXOIluEcu9rjNoezuPvLRIa9MHV9iRJqxJP5
-         9+CJuE1stgv2zItirDHPfHvHYAaIevutuwL2QJQCzcv5F6WGpJ/L8r6lIEupifKHJY
-         kuLN3dpEztjy3QrLobCkDr8b97dH2T4XxyL2pRJ48lAMO+ve6qRV5eS/IFdrqYHj1K
-         bbQcxMSREpirw==
-Message-ID: <2291aa12-3081-5e65-dc64-bf3d4349dfea@kernel.org>
-Date:   Mon, 10 Jul 2023 09:50:28 -0600
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 937A41FEB0;
+        Mon, 10 Jul 2023 15:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689004285; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o3Yl6KJ5iaf9hnfCzXQRl84Iaqux0AkHxDIFY4RqjNw=;
+        b=RZVYDWZ3/urg8+OJrIGYGpUrF751dlFkNaykpkxGQn+RqXVDGewk43zN/vQ2i0TKnuoxE/
+        s7uQLUU69qyMXv11RQzR4bprnARgyqFrYmMNWSbM1NRZ3Q442UZgzD6NFe5dgPpxB63CnK
+        wdVjoFlpxkXACX6TRNmKaO0oBArtHfg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 646901361C;
+        Mon, 10 Jul 2023 15:51:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SBCfF/0orGQjbQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 10 Jul 2023 15:51:25 +0000
+Date:   Mon, 10 Jul 2023 17:51:24 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, tj@kernel.org,
+        hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: update parent subparts cpumask while
+ holding css refcnt
+Message-ID: <ag6ed2ebb3azrienshnvn775ejp6jsftx66we7mwcavv74q4s7@xm5djhor7bjl>
+References: <20230701065049.1758266-1-linmiaohe@huawei.com>
+ <fbabnjfly5w6fxrhe3eu6ebspngz2hd3tqs6rrbropcdvylnhs@ayjdpq73kwui>
+ <74f1906e-fe58-c745-a851-b160374f7acf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 1/1] net: gro: fix misuse of CB in udp socket lookup
-Content-Language: en-US
-To:     Richard Gobert <richardbgobert@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
-        tom@herbertland.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gal@nvidia.com
-References: <20230707121650.GA17677@debian> <20230707122627.GA17845@debian>
- <1340947f-2f66-e93d-9dab-055e40e1f9f9@kernel.org>
- <20230710145817.GB22009@debian>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230710145817.GB22009@debian>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ktauyloq4o6i5icy"
+Content-Disposition: inline
+In-Reply-To: <74f1906e-fe58-c745-a851-b160374f7acf@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/23 8:58 AM, Richard Gobert wrote:
->> put your cover letter details in here; no need for a cover letter for a
->> single patch.
-> 
-> I believe some details are irrelevant to the bugfix itself,
-> I prefer to avoid overloading the commit message...
-> Do you think there is a specific part of the cover letter that
-> should be added to the commit message?
-> 
->> there are existing iif and sdif lookup functions. I believe this gro
->> path needs a different version, but it should have a comment of when it
->> can be used vs the existing ones. Also, it is small enough to be an
->> inline like the existing ones. e.g., see inet_sdif
-> 
-> I was under the impression the coding style of Linux does not
-> encourage placing the inline keyword.
-> In which cases do you think I should add it?
 
-See the existing *_sdif helpers in include/net/ip.h,
-include/linux/ipv6.h and include/net/tcp.h.
+--ktauyloq4o6i5icy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Jul 10, 2023 at 11:40:36AM -0400, Waiman Long <longman@redhat.com> wrote:
+> I believe the primary reason is because update_parent_subparts_cpumask() can
+> potential run for quite a while. So we don't want to hold the rcu_read_lock
+> for too long.
+
+But holding cpuset_mutex is even worse than rcu_read_lock()? IOW is the
+relieve with this reason worth it?
+
+> There may also be a potential that schedule() may be called.
+
+Do you mean the spinlocks with PREEMPT_RT or anything else? (That seems
+like the actual reason IIUC.)
+
+Thanks,
+Michal
+
+--ktauyloq4o6i5icy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZKwo+gAKCRAGvrMr/1gc
+jvoTAQDxUP5rRDvddw1/LeVeB6ciZXYjqioRtToDzNWdWiOIFAEAi10plOPMMm5q
+0JhePeVrhp89P6ZsW9Vqi4y25ZY1mA4=
+=qaQM
+-----END PGP SIGNATURE-----
+
+--ktauyloq4o6i5icy--
