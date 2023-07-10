@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEE274D4DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C656274D4E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 14:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjGJMBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 08:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S230052AbjGJMBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 08:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGJMBA (ORCPT
+        with ESMTP id S230501AbjGJMBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 08:01:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C4AD1;
-        Mon, 10 Jul 2023 05:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7a3aObqALZ0RGVJNPU87pW+rmJD5s/3iTVbIQ9L7MVY=; b=jK+jMf+l74JDzsvgKRmBF4nw95
-        wxZTqNU1gg/WKprlF0LO8D2en3yOA61Kshjq/DxDa+/kqZ8nFhKca0gXFfKQ9qfbo3n54C4MiC+T8
-        T+QNDSKZM+ucpPDLOZKvE4Wlu59PAFYBtGhMoaFzuK+hRQAa5dP8UxK+rVrEbFgt+4iAYDthzC1bs
-        SogNMxPbjzWK3WpN02v+NQIvlaG+N8WLW6/HjEjuC2psnZ7/fUnr6xR8ijWA9XaGX2czu7u6g2WAD
-        Uzc/C+ixvg5d7maGag0HUi3Zjetl5ab3nfcGsNdvPTGTr7597PFKqsPoIfJuekshDJoV42NZSZz7Z
-        2pLsxtPg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qIpZ6-00EZpt-FH; Mon, 10 Jul 2023 12:00:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 10 Jul 2023 08:01:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCA8F9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 05:01:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 87F0630017D;
-        Mon, 10 Jul 2023 14:00:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6B79B2B3B25E1; Mon, 10 Jul 2023 14:00:26 +0200 (CEST)
-Date:   Mon, 10 Jul 2023 14:00:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     alexander.shishkin@linux.intel.com, james.clark@arm.com,
-        leo.yan@linaro.org, mingo@redhat.com,
-        baolin.wang@linux.alibaba.com, acme@kernel.org,
-        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [Patch v2] perf/core: Bail out early if the request AUX area is
- out of bound
-Message-ID: <20230710120026.GA3034907@hirez.programming.kicks-ass.net>
-References: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9A0060FD8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:01:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18618C433C8;
+        Mon, 10 Jul 2023 12:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688990471;
+        bh=hi2KjYVNB1fgMeU4P1IicTBxc+ULEU0k8ide4WBCPI0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eUf+bOsBAEEtyVa+Tu1NcCxNEphDSnC05lrP4V2VIQBaufImErwI42F5EzPJ0MezX
+         SKXml0eAJvfoOhNufaG/FFftOj5O85WkSU+EoDWLvENzmFx3yMOfr58/Cf1Z0cKQvc
+         43NWvDGjxTh58W/y+ucwfNf12IomMSRZh9iZUPtDAl5l8bAoI9bLjUJsyy6Qp9O1kt
+         VpP37cZyPeIkUkFQe9ycH3/S/plF5OkiXOA8SZ92QcKQshxDOzXiWgPQIWhgciIf05
+         JfSeULY9SLcRUHCMIBMkqQxmfAjcqdKcFA/++E4awkkOmZtLjY1Rea/dBIhZx/KQSh
+         baWFwlbKT/rGg==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qIpaD-0003Lu-15;
+        Mon, 10 Jul 2023 14:01:37 +0200
+Date:   Mon, 10 Jul 2023 14:01:37 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Alex Elder <elder@linaro.org>
+Subject: Re: [PATCH 7/8] ASoC: topology: suppress probe deferral errors
+Message-ID: <ZKvzITFLCQzmw72w@hovoldconsulting.com>
+References: <20230705123018.30903-1-johan+linaro@kernel.org>
+ <20230705123018.30903-8-johan+linaro@kernel.org>
+ <ac232872-734f-d192-d46c-555ebe3625c5@linux.intel.com>
+ <ZKZbzctgLpV-67hJ@hovoldconsulting.com>
+ <f464d5b1-c708-4b3f-f1d1-031c5def5b38@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f464d5b1-c708-4b3f-f1d1-031c5def5b38@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 08:32:11PM +0800, Shuai Xue wrote:
+On Thu, Jul 06, 2023 at 09:25:26AM +0200, Amadeusz Sławiński wrote:
+> On 7/6/2023 8:14 AM, Johan Hovold wrote:
 
->  kernel/events/ring_buffer.c              | 13 +++++++++++++
->  tools/perf/Documentation/perf-record.txt |  3 ++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-> index a0433f37b024..e514aaba9d42 100644
-> --- a/kernel/events/ring_buffer.c
-> +++ b/kernel/events/ring_buffer.c
-> @@ -673,6 +673,7 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
->  	bool overwrite = !(flags & RING_BUFFER_WRITABLE);
->  	int node = (event->cpu == -1) ? -1 : cpu_to_node(event->cpu);
->  	int ret = -ENOMEM, max_order;
-> +	size_t bytes;
->  
->  	if (!has_aux(event))
->  		return -EOPNOTSUPP;
-> @@ -699,6 +700,18 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
->  		watermark = 0;
->  	}
->  
-> +	/*
-> +	 * 'rb->aux_pages' allocated by kcalloc() is a pointer array which is
-> +	 * used to maintains AUX trace pages. The allocated page for this array
-> +	 * is physically contiguous (and virtually contiguous) with an order of
-> +	 * 0..MAX_ORDER. If the size of pointer array crosses the limitation set
-> +	 * by MAX_ORDER, it reveals a WARNING.
-> +	 *
-> +	 * So bail out early if the request AUX area is out of bound.
-> +	 */
-> +	if (check_mul_overflow(nr_pages, sizeof(void *), &bytes) ||
-> +	    get_order(bytes) > MAX_ORDER)
-> +		return -EINVAL;
+> > In short, it is not correct to use dev_err_probe() here as this is not a
+> > probe function.
+> > 
+> > dev_err_probe() is tied to driver core and will specifically allocate
+> > and associate an error message with the struct device on probe
+> > deferrals, which is later freed when the struct device is bound to a
+> > driver (or released).
 
-This is all quite horrific :/ What's wrong with something simple:
+> I guess you mean call to: device_set_deferred_probe_reason(dev, &vaf);
+> perhaps functionality could be extended to allow to skip this call and 
+> just do prints? Or just add separate dev_err_defer function without this 
+> step, although it would be best if they could share parts of code.
 
-	/* Can't allocate more than MAX_ORDER  */
-	if (get_order((unsigned long)nr_pages * sizeof(void*)) > MAX_ORDER)
-		return -EINVAL;
+Feel free to suggest adding such a function if you think it's
+worthwhile. It doesn't exist today it should not be a prerequisite for
+suppressing these error messages.
 
-If you're on 32bit then nr_pages should never be big enough to overflow,
-fundamentally you'll only have 32-PAGE_SHIFT bits in nr_pages.
-
-
->  	rb->aux_pages = kcalloc_node(nr_pages, sizeof(void *), GFP_KERNEL,
->  				     node);
-
-
+Johan
