@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DE174CF22
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25D874CF28
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 09:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjGJHx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 03:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S232401AbjGJHyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 03:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjGJHxP (ORCPT
+        with ESMTP id S231917AbjGJHxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:53:15 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F19EB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:53:13 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f14865fcc0so3036e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688975591; x=1691567591;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5oH0pdHc/AD7BbguQ+ExRoTK+qQ+GGDnFEytO7M0Ysg=;
-        b=D/b8pVSiZ0dxeIVyTNBG/kXk5BuAoTTUhvLuB8mewl8H3Xq/H1raK18eutRDR3ZLTT
-         2ntFe0SCXuQDGkNmx8Th/yZFBz0Ncgi5k9RMwVP0aunBHGTmrW5FZ73NsbdzUkqGQchO
-         ZE0sp9JySeX+IHneqt8dYNTE6WVOy1bhCkl/jgtUsZlrtwspSztvrgG10dnPpnCeMdwk
-         c4VyJCj2TzQA9E53yFqFX9N75F84D+cWSJ0cHypW2o1cvQ9LyYyHbYwxgVmrOBt2cNF8
-         E0pUwaWqsTL2u7YJP7Wdw6p8bCfxlASGWqAZiJEXTkZhIGHlIP/W9hCY7ZazgPnXJH08
-         o7Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688975591; x=1691567591;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5oH0pdHc/AD7BbguQ+ExRoTK+qQ+GGDnFEytO7M0Ysg=;
-        b=Wq3svgK00egNurSq55LNk/+F3+21gOmDXFwlRZx9LqU/2X7sZxHdNcK4cM2lXgD0RL
-         wdagJyn+y4uFblKw+zW2bslvCEQrBj2XDVQAGLKLMH6A66YLMiK4ETH71T3ts3vCvfDj
-         Bl6DEpIp5VS5O8tucoYRftNlagMqjIdWGfAQMXM7hHzL0nBCrGXLEv9iXQA+u8rgbyvY
-         l0J1ioYQi+rMIikmMbU06mXxQMrYH/HCFTCWTMUD7Akqoea29mOe4xrgGEGLwmKtJ81r
-         2vCIFQUBb84URHh5PPLR3LmDCDM0z03gf11DC1oiuhj2G06zp4rQM3B4rzKPRXYyE1+9
-         T+Cw==
-X-Gm-Message-State: ABy/qLb7MEakbNUq6UzLO3h2dt61gBdLsKBhCqTJsMx+5n2noe/84qsl
-        c1VcYX9HtLHC9GZyWqEvbXb7UQUYDq2VUtqRWLPDZA==
-X-Google-Smtp-Source: APBJJlGc3lYZALIVe3sVT2b3SJUhc20g3H9PeZrAu3bfJGvs01tzOAQx7gJxAJeiFaeg642Dynrv6K6m+7JlQWZYv/A=
-X-Received: by 2002:ac2:42c2:0:b0:4f7:5f7d:2f9b with SMTP id
- n2-20020ac242c2000000b004f75f7d2f9bmr51935lfl.1.1688975590656; Mon, 10 Jul
- 2023 00:53:10 -0700 (PDT)
+        Mon, 10 Jul 2023 03:53:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F2E75
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6C660E9E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2380C433C9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688975616;
+        bh=Qmnrxtp2tVTiIKeDr6PzWwhoq+AXMYmOqhQmbX2jJEA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=me5X+1vMmbkCFoCblOI/6sz+FZwvBOq4e/BYklHzHPC7pwS+qVuFmXBpgx8JrIa0r
+         V7KTIKh+Rf597EnmBiZTTmH1JX0HJsImSgY3iimRTVpPHrBVnkeaojDt+gPt61T4gW
+         RshlctRNBefMm4u2EiUGZQ1mxejx8DTWSLZQbbyMIsUqzg9YyFInm2+c0cNGCm1Kxd
+         DCApn7BLIf6hIgfWTKdEZ4LUydtYcX/Ou6G8SjnEpI8o/I4D4uDULgRv3DlNPg72+f
+         WKsBPDc/0VFBNUzsC2mW8wlwHoWs4Y8Eb0vL/F724lcDCAWwk4EJe7EB/VO3Cj8vlN
+         inlniG9oCh0aA==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4fb73ba3b5dso6415859e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 00:53:36 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZhlCpqOj1B4zf60wYzGpOMCLv9/P/Vs7UykLJkGPRS+j6AT4oq
+        oSWEBXyhkGR4RhFJYzxO2rZS7Yuj9clGFA3MQ5o=
+X-Google-Smtp-Source: APBJJlGrklgwHO1qTgGjnKuzcyOdT3q0J8ogI9MWBIiWxlqTGfnoiRQZ9grmnfmcQOLwKf0YrCEcsSSO40htVXcdsY0=
+X-Received: by 2002:ac2:4e07:0:b0:4f9:5a0c:85b8 with SMTP id
+ e7-20020ac24e07000000b004f95a0c85b8mr10308007lfr.36.1688975614593; Mon, 10
+ Jul 2023 00:53:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000002373f005ff843b58@google.com> <1bb83e9d-6d7e-3c80-12f6-847bf2dc865e@google.com>
- <CACT4Y+akPvTGG0WdPdSuUFU6ZuQkRbVZByiROzqwyPVd8Pz8fQ@mail.gmail.com>
- <61032955-4200-662b-ace8-bad47d337cdc@os.amperecomputing.com>
- <CACT4Y+YAyK02ORyzS79ub+XOK6x5LV8_2k4aztwzjP=0dm--RQ@mail.gmail.com> <81008a82-1012-0b3e-134d-cd4a6502482c@suse.cz>
-In-Reply-To: <81008a82-1012-0b3e-134d-cd4a6502482c@suse.cz>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 10 Jul 2023 09:52:58 +0200
-Message-ID: <CACT4Y+YKhrpWJcngv3ux_gKeFOY2DEGK9qBJ4RZs-QdPr8Embg@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] [reiserfs?] kernel panic: stack is corrupted in ___slab_alloc
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Lameter, Christopher" <cl@os.amperecomputing.com>,
-        David Rientjes <rientjes@google.com>,
-        syzbot <syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com>,
-        42.hyeyoo@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
-        iamjoonsoo.kim@lge.com, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        penberg@kernel.org, reiserfs-devel@vger.kernel.org,
-        roman.gushchin@linux.dev, syzkaller-bugs@googlegroups.com,
-        Jan Kara <jack@suse.cz>
+References: <MEYP282MB2597CD6E861D659E3218148DD933A@MEYP282MB2597.AUSP282.PROD.OUTLOOK.COM>
+ <CAAhV-H5P_NgJ5kTQ1iO-eL577D=-COjEZ6u9_OgvrHpWJLqsXw@mail.gmail.com> <62e81ce06e69d549b12d1145429730f8b27ad156.camel@hotmail.com>
+In-Reply-To: <62e81ce06e69d549b12d1145429730f8b27ad156.camel@hotmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 10 Jul 2023 15:53:22 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7ihMnYD3LZi4kfJ1SQHxpX=j8D39Riinbvbb0AMo2oDg@mail.gmail.com>
+Message-ID: <CAAhV-H7ihMnYD3LZi4kfJ1SQHxpX=j8D39Riinbvbb0AMo2oDg@mail.gmail.com>
+Subject: Re: [PATCH] loongarch: Make CONFIG_CMDLINE work with
+ CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_BOOTLOADER
+To:     donmor <donmor3000@hotmail.com>
+Cc:     "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "kernel@xen0n.name" <kernel@xen0n.name>,
+        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
+        "zhoubinbin@loongson.cn" <zhoubinbin@loongson.cn>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "tangyouling@loongson.cn" <tangyouling@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jul 2023 at 09:48, Vlastimil Babka <vbabka@suse.cz> wrote:
+On Mon, Jul 10, 2023 at 1:35=E2=80=AFAM =E2=80=8E donmor <donmor3000@hotmai=
+l.com> wrote:
 >
-> On 7/10/23 09:43, Dmitry Vyukov wrote:
-> > On Thu, 6 Jul 2023 at 20:33, Lameter, Christopher
-> > <cl@os.amperecomputing.com> wrote:
-> >>
-> >> On Mon, 3 Jul 2023, Dmitry Vyukov wrote:
-> >>
-> >> >> This is happening during while mounting reiserfs, so I'm inclined to think
-> >> >> it's more of a reisterfs issue than a slab allocator issue :/
-> >>
-> >> Have you tried to run with the "slub_debug" kernel option to figure out
-> >> what got corrupted?
-> >
-> > Can slub_debug detect anything that KASAN can't?
+> =E5=9C=A8 2023-07-09=E6=98=9F=E6=9C=9F=E6=97=A5=E7=9A=84 23:30 +0800=EF=
+=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+> > How to reproduce? If you use UEFI firmware, this is handled in
+> > drivers/firmware/efi/libstub/efi-stub.c; if you use non-UEFI firmware,
+> > this is handled in drivers/of/fdt.c.
 >
-> Probably not, KASAN will find out a bad write at the moment it happens,
-> while slub_debug only later from corrupted red zone/poison.
->
-> > I would assume KASAN can detect more bugs (e.g. stack/globals) and
-> > report way better. And it was already enabled in the config.
->
-> Anyway this is a stack corruption, not slab layout corruption. It's probably
-> hard to distinguish a legitimate stack write from an overrun so even KASAN
-> could not catch it immediately?
+> In fact it 's not command line retrieved from efi or fdt, but the built-i=
+n
+> command line to be concerned. CONFIG_CMDLINE was never been touched durin=
+g
+> boot on loongarch, unless CONFIG_CMDLINE_FORCE is set because there is co=
+de
+> handling this. There should be code handling CONFIG_CMDLINE_FORCE and
+> CONFIG_CMDLINE_EXTEND as well but is absent by now.
 
-KASAN can detect stack out-of-bounds writes.
-However, use-after-return detection support was never implemented in
-KASAN (user-space ASAN can detect them as well).
-User-space MSAN can also detect use-after-scope, I think it's not
-implemented in KMSAN as well.
+I mean the code in drivers/of/fdt.c already handles
+CONFIG_CMDLINE_EXTEND and CONFIG_CMDLINE_FORCE, understand?
 
-If we ever get to the root cause of this bug, it may be useful to
-analyze why it wasn't detected and if it's possible to make such bugs
-detected.
+On the other hand, I found that for non-FDT system
+CONFIG_CMDLINE_FORCE indeed doesn't work, but
+CONFIG_CMDLINE_BOOTLOADER works, so you needn't fix
+CONFIG_CMDLINE_BOOTLOADER, and you need add "goto out" in the "if
+(initial_boot_params)" condition.
+
+Huacai
