@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3222374D7A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4FF74D7A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjGJNbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S231394AbjGJNcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjGJNbq (ORCPT
+        with ESMTP id S232383AbjGJNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:31:46 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06FCC4;
-        Mon, 10 Jul 2023 06:31:36 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5703cb4bcb4so48530157b3.3;
-        Mon, 10 Jul 2023 06:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688995896; x=1691587896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HEOfSXv87Bm4Z+tbiK3JsYBP/IVkAFqD0bwLShJxCUI=;
-        b=Xy1TLRv9OvYpAvq+TlWB5MDHyPR3XIJ22HXPyH3DzMJrHtBi/j8sUSjqx4l+LwkeeA
-         WGK1yLdiIUQnnJrVm63U8Mfnbqn/rBoHNXA1M6qrURLlScfkMf4NCJW9AMzCra1chzrb
-         8xG8lPQN1VJtAi/Xnpz6sbC1VOt1/ZftUAcwHiIy+XhvQQOKlWzKEejJkSR+BVPCZ+cd
-         DHqWlUgMdSmxQXjemBX3ziIoDyHQYwPGjQuMutMqw9bT9EXGB4+Pj1fBFd69fvfA8BMZ
-         Yl9BUwugHyFnGo5Fn9DJa36s+0eDC82jPJmsfpRCjjcoaxfg5cXx9brP4r0BmtEDAQTx
-         xW7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688995896; x=1691587896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HEOfSXv87Bm4Z+tbiK3JsYBP/IVkAFqD0bwLShJxCUI=;
-        b=ayMk7k21QJ8NfIz47Bo8HSLaN4xdPW9CFiH43uakLr6wnJjtotp05DTfKV95hJ4T6t
-         qQzedteqHgxXKmyAD6G7eCWFCShdXXsUkyavVUK3tG3XZt94FSqH+gWDdwUSmKh8TO/G
-         Rnu5oe7lDTebgoSP0QRmDEoO99CA+0L5NGssW+mxsRzLHUtal0PmwAIj+uTlBqn1rDwA
-         V+xPQZXg5YidXWiiEoF/E/6UM+gqYrhvAGPEUmgX3Jg5wqJmVUkFuTvTFIgcIzm/fAAN
-         iizscbdMJl6ybUkNXUgDh13MqbINWd2qYYDWUdfQyw5J95Gl5soDDbs8ZFJRPb5gA+OG
-         hnFg==
-X-Gm-Message-State: ABy/qLYDYtLT6lspe7oMV8pwggysVdV83N2pm/SWIQ/HgVC2366BAvuh
-        xE7aVpC0ohQtxw+AvM+ZSfxy+zYvCvM=
-X-Google-Smtp-Source: APBJJlGzHHUhE2yTEOppAblNk2+rHZSW1OOSHERzIjvmq5DCUaz3bwMEdihmcNST+6tTZMuh5+3+aQ==
-X-Received: by 2002:a81:4e85:0:b0:56d:34:893c with SMTP id c127-20020a814e85000000b0056d0034893cmr13577609ywb.4.1688995895778;
-        Mon, 10 Jul 2023 06:31:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f10-20020a816a0a000000b0057a8de72338sm278404ywc.68.2023.07.10.06.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 06:31:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 10 Jul 2023 06:31:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-Subject: Re: [PATCH 6.3 000/426] 6.3.13-rc3 review
-Message-ID: <ea9d1cf7-87e3-4191-a239-de8bd67a1786@roeck-us.net>
-References: <20230710054619.475084489@linuxfoundation.org>
+        Mon, 10 Jul 2023 09:32:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426FD118;
+        Mon, 10 Jul 2023 06:31:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B86B6100A;
+        Mon, 10 Jul 2023 13:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDCEC433C7;
+        Mon, 10 Jul 2023 13:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688995905;
+        bh=Zae0sXZ1apKn8b44P9R9P2lKldy08yGANk4vIqeZlU0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TpEBMDbsZ4zuGsGTLnbNkZkxD78Qop9PdG2mTF/3in+XYZINwiy8E3DnGYBxT56uW
+         FlwZUAutSZxHaHaF1bH1+/kdeO+zm2oH7pdw7iGFgDsJiznuRIATXGV6PNA3e+kEFC
+         TpC/CsbKeigp0h5giJ5GNEoojyvUdk+mpZPQE7jU=
+Date:   Mon, 10 Jul 2023 15:31:42 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
+        mark.rutland@arm.com, amit.kachhap@arm.com, maz@kernel.org,
+        anshuman.khandual@arm.com, joey.gouly@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.4 07/12] arm64: cpufeature: detect FEAT_HCX
+Message-ID: <2023071024-unpaved-washed-4d7d@gregkh>
+References: <20230702195057.1787686-1-sashal@kernel.org>
+ <20230702195057.1787686-7-sashal@kernel.org>
+ <b37a9f79-97a8-4f74-a25c-b51128fbc9bb@sirena.org.uk>
+ <ZKrKjS7sDFxhKoJT@sashalap>
+ <ZKsi+UOdjlmDnhdj@finisterre.sirena.org.uk>
+ <20230710094438.GD32673@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230710054619.475084489@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+In-Reply-To: <20230710094438.GD32673@willie-the-truck>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 07:47:20AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.13 release.
-> There are 426 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Jul 10, 2023 at 10:44:38AM +0100, Will Deacon wrote:
+> On Sun, Jul 09, 2023 at 10:13:29PM +0100, Mark Brown wrote:
+> > On Sun, Jul 09, 2023 at 10:56:13AM -0400, Sasha Levin wrote:
+> > > On Mon, Jul 03, 2023 at 12:51:57PM +0100, Mark Brown wrote:
+> > > > On Sun, Jul 02, 2023 at 03:50:52PM -0400, Sasha Levin wrote:
+> > 
+> > > > > KVM currently relies on the register being present on all CPUs (or
+> > > > > none), so the kernel will panic if that is not the case. Fortunately no
+> > > > > such systems currently exist, but this can be revisited if they appear.
+> > > > > Note that the kernel will not panic if CONFIG_KVM is disabled.
+> > 
+> > > > This is a new feature, it's not clear why we'd backport it (especially
+> > > > since it's a new feature which is a dependency for other features rather
+> > > > than something that people can use outside of the kernel)?
+> > 
+> > > The second paragraph (above) suggested it should be.
+> > 
+> > That's saying that the code won't work properly on systems where some
+> > but not all of the CPUs support the feature.  Note that the changelog
+> > says nothing about fixing any issue here.
 > 
-> Responses should be made by Wed, 12 Jul 2023 05:45:32 +0000.
-> Anything received after that time might be too late.
+> Try reading it like a GPU running an ML model:
 > 
+>   "This is not a new feature, it's especially clear why we'd backport it."
+> 
+> Makes sense. *sigh*
+> 
+> We've been considering opting arm64 out of this for a while, but I don't
+> think we do a great job of CC'ing stable either (I certainly forget to
+> add it all the time and then hope that the Fixes: tag does the job),so
+> it's not obviously going to improve things.
+> 
+> Maybe we just need a commit hook that yells if something with a Fixes:
+> tag doesn't have a CC: stable on it?
 
-Preliminary results.
+I could start doing that, it's going to be really noisy...
 
-Building mips:allmodconfig ... failed
---------------
-Error log:
-arch/mips/boot/dts/ingenic/ci20.dts:242.19-247.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/DCDC1: Reference to non-existent node or label "vcc_33v"
-arch/mips/boot/dts/ingenic/ci20.dts:248.18-253.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/DCDC2: Reference to non-existent node or label "vcc_33v"
-arch/mips/boot/dts/ingenic/ci20.dts:254.18-259.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/DCDC3: Reference to non-existent node or label "vcc_33v"
-arch/mips/boot/dts/ingenic/ci20.dts:265.17-270.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO5: Reference to non-existent node or label "vcc_33v"
-arch/mips/boot/dts/ingenic/ci20.dts:271.18-276.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO6: Reference to non-existent node or label "vcc_33v"
-arch/mips/boot/dts/ingenic/ci20.dts:277.20-282.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO7: Reference to non-existent node or label "vcc_33v"
-arch/mips/boot/dts/ingenic/ci20.dts:283.20-288.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO8: Reference to non-existent node or label "vcc_33v"
-ERROR: Input tree has errors, aborting (use -f to force output)
-
-Introduced with "MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators"
-which uses vcc_33v without introducing it (it was introduced with commit
-c9f4b25272843).
-
-Guenter
+greg k-h
