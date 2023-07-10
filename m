@@ -2,52 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E501174D43F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7B374D442
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjGJLIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S230433AbjGJLIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjGJLH4 (ORCPT
+        with ESMTP id S231173AbjGJLIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:07:56 -0400
-Received: from out-42.mta0.migadu.com (out-42.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3213EFE
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:07:25 -0700 (PDT)
-Message-ID: <8928ca13-6a21-b2b4-4a19-82caa62088d0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688987243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+BxwmB/IVzDHyLZLGoqDjs9171gZUFnngYqFZMutAq4=;
-        b=WRv7ZPTPu2m7PPyDENKW/5UnJFCAwVpmEanVUF8Lfb5zE4oZqCydFXOu7EyN4TOhs71y1t
-        WsfUzJ8gkSVOtPIsbtcOdqxXx63T3LusFve3O5xppmeApI/8dMH2YCVVPx7Jx82qLznB0U
-        uzatbsgLpwJyo8Q5F8pLTTrz3HR0Jhc=
-Date:   Mon, 10 Jul 2023 19:07:13 +0800
+        Mon, 10 Jul 2023 07:08:34 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5705610D;
+        Mon, 10 Jul 2023 04:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688987294; x=1720523294;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VFbT1YSYy4BNeDq7qC0WXbC9ofiSs7SR6qU8CkE8Ddw=;
+  b=J8/3l5FQh9eXSIGZFCIgPwQcQjsO7bmOqfP4T8l0nPWzmKPzqITFQoR4
+   bQFSiUei2hrJqasHv8rRYvBBFckmtA09FCKjsDU/gpbxxXhzxIX2xBTu+
+   qvT5g6acBz7Y28lx73bYZMnsI+rs4Pq41kH33uBPRz0NdocFhpTKSDbkv
+   S4P7n5Mr2YjYGW9eInWffhNLugVF+Qgum9upfTWJqYj4h6L3r5g9/3YLl
+   V+CbkkMUPPg6G4YvCatrIjaAS13+P6hWsKYyNXi3o63AIxqQAo0AVtsF2
+   FrQ5MO7dxYJUvRETSpFaZOtFlSNP5bgMeuu6H1FuEirhtZ6Y1z4SMK5Bg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="349117630"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="349117630"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 04:08:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="967393168"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="967393168"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Jul 2023 04:08:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qIokK-001XII-18;
+        Mon, 10 Jul 2023 14:08:00 +0300
+Date:   Mon, 10 Jul 2023 14:08:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>, Kris Bahnsen <kris@embeddedts.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v1 4/8] spi: Get rid of old SPI_MASTER_NO_.X and
+ SPI_MASTER_MUST_.X
+Message-ID: <ZKvmkAP5ZuT6lGLN@smile.fi.intel.com>
+References: <20230710102751.83314-1-andriy.shevchenko@linux.intel.com>
+ <20230710102751.83314-5-andriy.shevchenko@linux.intel.com>
+ <1ffd5603-4140-4bf6-bfed-af70a6759bda@sirena.org.uk>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/3] blk-mq: always use __blk_mq_alloc_requests() to
- alloc and init rq
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, tj@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ming.lei@redhat.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20230628124546.1056698-1-chengming.zhou@linux.dev>
- <20230628124546.1056698-2-chengming.zhou@linux.dev>
- <20230629052828.GD16819@lst.de>
- <f91c32b3-1d3b-b28c-40cb-2edf02448f22@bytedance.com>
- <20230710073631.GA29077@lst.de>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Chengming Zhou <chengming.zhou@linux.dev>
-In-Reply-To: <20230710073631.GA29077@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ffd5603-4140-4bf6-bfed-af70a6759bda@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,191 +93,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/10 15:36, Christoph Hellwig wrote:
-> On Thu, Jun 29, 2023 at 03:40:03PM +0800, Chengming Zhou wrote:
->> Thanks for your review!
->>
->> Since hctx-specific allocation path always has BLK_MQ_REQ_NOWAIT flag,
->> it won't retry.
->>
->> But I agree, this makes the general __blk_mq_alloc_requests() more complex.
+On Mon, Jul 10, 2023 at 12:04:35PM +0100, Mark Brown wrote:
+> On Mon, Jul 10, 2023 at 01:27:47PM +0300, Andy Shevchenko wrote:
 > 
-> And also very confusing as it pretends to share some code, while almost
-> nothing of __blk_mq_alloc_requests is actually used.
-
-You are right.
-
-I will not mess with reusing __blk_mq_alloc_requests() in the next version.
-
+> > Convert the users to SPI_CONTROLLER_NO_?X and SPI_CONTROLLER_MUST_.X
+> > and kill the not used anymore definitions.
 > 
->> The reason is blk_mq_rq_ctx_init() has some data->rq_flags initialization:
->>
->> ```
->> if (data->flags & BLK_MQ_REQ_PM)
->> 	data->rq_flags |= RQF_PM;
->> if (blk_queue_io_stat(q))
->> 	data->rq_flags |= RQF_IO_STAT;
->> rq->rq_flags = data->rq_flags;
->> ```
->>
->> Because we need this data->rq_flags to tell if we need start_time_ns,
->> we need to put these initialization in the callers of blk_mq_rq_ctx_init().
-> 
-> Why can't we just always initialize the time stampts after
-> blk_mq_rq_ctx_init? Something like this (untested) variant of your
-> patch 2 from the latest iteration:
+> The above is not what this change does:
 
-I get what you mean: always initialize the two time stamps after blk_mq_rq_ctx_init(),
-so we know whether the time stamps are needed in blk_mq_rq_time_init().
+How to improve it? I was sure that the form of "converting to something and
+something" is clear...
 
-It seems better and clearer indeed, I will try to change as you suggest.
+> > -	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
+> > +	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
 
-> 
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 5504719b970d59..55bf1009f3e32a 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -328,8 +328,26 @@ void blk_rq_init(struct request_queue *q, struct request *rq)
->  }
->  EXPORT_SYMBOL(blk_rq_init);
->  
-> +/* Set alloc and start time when pre-allocated rq is actually used */
-> +static inline void blk_mq_rq_time_init(struct request *rq, bool set_alloc_time)
-
-We need to pass "u64 alloc_time_ns" here, which includes depth and tag waits time by definition.
-
-So:
-1. for non-batched request that need alloc_time_ns: passed alloc_time_ns != 0
-2. for batched request that need alloc_time_ns: passed alloc_time_ns == 0, will be set to start_time_ns
-
-I have just updated the patch:
-https://lore.kernel.org/all/20230710105516.2053478-1-chengming.zhou@linux.dev/
-
-Thanks!
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> +{
-> +	if (blk_mq_need_time_stamp(rq)) {
-> +		u64 now = ktime_get_ns();
-> +
-> +#ifdef CONFIG_BLK_RQ_ALLOC_TIME
-> +		/*
-> +		 * The alloc time is only used by iocost for now,
-> +		 * only possible when blk_mq_need_time_stamp().
-> +		 */
-> +		if (set_alloc_time)
-> +			rq->alloc_time_ns = now;
-> +#endif
-> +		rq->start_time_ns = now;
-> +	}
-> +}
-> +
->  static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
-> -		struct blk_mq_tags *tags, unsigned int tag, u64 alloc_time_ns)
-> +		struct blk_mq_tags *tags, unsigned int tag)
->  {
->  	struct blk_mq_ctx *ctx = data->ctx;
->  	struct blk_mq_hw_ctx *hctx = data->hctx;
-> @@ -356,14 +374,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
->  	}
->  	rq->timeout = 0;
->  
-> -	if (blk_mq_need_time_stamp(rq))
-> -		rq->start_time_ns = ktime_get_ns();
-> -	else
-> -		rq->start_time_ns = 0;
->  	rq->part = NULL;
-> -#ifdef CONFIG_BLK_RQ_ALLOC_TIME
-> -	rq->alloc_time_ns = alloc_time_ns;
-> -#endif
->  	rq->io_start_time_ns = 0;
->  	rq->stats_sectors = 0;
->  	rq->nr_phys_segments = 0;
-> @@ -393,8 +404,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
->  }
->  
->  static inline struct request *
-> -__blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
-> -		u64 alloc_time_ns)
-> +__blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data)
->  {
->  	unsigned int tag, tag_offset;
->  	struct blk_mq_tags *tags;
-> @@ -413,7 +423,7 @@ __blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
->  		tag = tag_offset + i;
->  		prefetch(tags->static_rqs[tag]);
->  		tag_mask &= ~(1UL << i);
-> -		rq = blk_mq_rq_ctx_init(data, tags, tag, alloc_time_ns);
-> +		rq = blk_mq_rq_ctx_init(data, tags, tag);
->  		rq_list_add(data->cached_rq, rq);
->  		nr++;
->  	}
-> @@ -427,12 +437,13 @@ __blk_mq_alloc_requests_batch(struct blk_mq_alloc_data *data,
->  static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
->  {
->  	struct request_queue *q = data->q;
-> +	bool set_alloc_time = blk_queue_rq_alloc_time(q);
->  	u64 alloc_time_ns = 0;
->  	struct request *rq;
->  	unsigned int tag;
->  
->  	/* alloc_time includes depth and tag waits */
-> -	if (blk_queue_rq_alloc_time(q))
-> +	if (set_alloc_time)
->  		alloc_time_ns = ktime_get_ns();
->  
->  	if (data->cmd_flags & REQ_NOWAIT)
-> @@ -474,9 +485,11 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
->  	 * Try batched alloc if we want more than 1 tag.
->  	 */
->  	if (data->nr_tags > 1) {
-> -		rq = __blk_mq_alloc_requests_batch(data, alloc_time_ns);
-> -		if (rq)
-> +		rq = __blk_mq_alloc_requests_batch(data);
-> +		if (rq) {
-> +			blk_mq_rq_time_init(rq, true);
->  			return rq;
-> +		}
->  		data->nr_tags = 1;
->  	}
->  
-> @@ -499,8 +512,10 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
->  		goto retry;
->  	}
->  
-> -	return blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag,
-> -					alloc_time_ns);
-> +	rq = blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag);
-> +	if (rq)
-> +		blk_mq_rq_time_init(rq, set_alloc_time);
-> +	return rq;
->  }
->  
->  static struct request *blk_mq_rq_cache_fill(struct request_queue *q,
-> @@ -555,6 +570,7 @@ static struct request *blk_mq_alloc_cached_request(struct request_queue *q,
->  			return NULL;
->  
->  		plug->cached_rq = rq_list_next(rq);
-> +		blk_mq_rq_time_init(rq, blk_queue_rq_alloc_time(rq->q));
->  	}
->  
->  	rq->cmd_flags = opf;
-> @@ -656,8 +672,8 @@ struct request *blk_mq_alloc_request_hctx(struct request_queue *q,
->  	tag = blk_mq_get_tag(&data);
->  	if (tag == BLK_MQ_NO_TAG)
->  		goto out_queue_exit;
-> -	rq = blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag,
-> -					alloc_time_ns);
-> +	rq = blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag);
-> +	blk_mq_rq_time_init(rq, blk_queue_rq_alloc_time(rq->q));
->  	rq->__data_len = 0;
->  	rq->__sector = (sector_t) -1;
->  	rq->bio = rq->biotail = NULL;
-> @@ -2896,6 +2912,7 @@ static inline struct request *blk_mq_get_cached_request(struct request_queue *q,
->  	plug->cached_rq = rq_list_next(rq);
->  	rq_qos_throttle(q, *bio);
->  
-> +	blk_mq_rq_time_init(rq, blk_queue_rq_alloc_time(rq->q));
->  	rq->cmd_flags = (*bio)->bi_opf;
->  	INIT_LIST_HEAD(&rq->queuelist);
->  	return rq;
