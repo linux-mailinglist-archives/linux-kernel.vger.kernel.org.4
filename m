@@ -2,234 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62D974DD3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945E674DD41
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjGJSVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S229458AbjGJSWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjGJSVu (ORCPT
+        with ESMTP id S233220AbjGJSWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:21:50 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CAB12A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:21:49 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-786bb09e595so119161039f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1689013308; x=1691605308;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cwxmDXvJD3NsbffCmOC5dnwY1lZ0odAj3XcveB97mZM=;
-        b=OGMvVpi1rYc0Qi/oyauzrmGOgBTGRYAfFkJBB/Bmyz0KZrAuPnNdcLQyN9HDVJkIZJ
-         H/9QKxUbW1Jxj66WgFtM846LbqDTxDat6NQmyDqGMaOuY6IiXoKnPwMfWOrrlB3QSQQI
-         9nh1zE3V6Rq25z8scJGG1+XE4JXNhVi9rVOBY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689013308; x=1691605308;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cwxmDXvJD3NsbffCmOC5dnwY1lZ0odAj3XcveB97mZM=;
-        b=VN21SklODCNS0D/q56hyt9cEIRlHxOdjwQHe9VeyWDDaN8MytN5Mx1+ji85vLwMqfZ
-         q8xFcbIpFqghUAUz0Ebs8+CM66Dhmb4FSG7Ajd4Hzu858CgAQmpWzgpusUvNQE610UvZ
-         R08LJLt56IWpVL1qWTIYeNsN7yjWR86ELsX4UMqGCO70Q5LTHy1hWudHmk8drYDt61lv
-         CXpn30aPkpZvr4kzdL7bOltbQtfw7NpWowqQmei0mKToW6dkAV0lI1Q2WmANCaGMu7+O
-         ZqhmG+ZeLbHKqjevX0/8WnoYRUvDzK3SGw+yzGMvH/3x4VAmiyIa+RR2DwbnTV8ZuaHR
-         u3WQ==
-X-Gm-Message-State: ABy/qLaNcoWi1bozScPC++JfOiq2nyhFGrDvoP28ZuAF9bg/0SQDwIQF
-        +dEDlVS+Wp6VQC5ZAUqc51GZX+1L+2nZwBdMtfPjug==
-X-Google-Smtp-Source: APBJJlEv3m/u5U4PB18pMEq0F4FC27n+LMf7xpyTdt0yeKSmA9TlGT/2doO4oGPoOvjnhbDd+RdZDXaQVjenkTmx/24=
-X-Received: by 2002:a92:c808:0:b0:345:b728:f588 with SMTP id
- v8-20020a92c808000000b00345b728f588mr9999692iln.8.1689013308526; Mon, 10 Jul
- 2023 11:21:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230710063351.17490-1-frank.li@vivo.com> <20230710063351.17490-3-frank.li@vivo.com>
-In-Reply-To: <20230710063351.17490-3-frank.li@vivo.com>
-From:   Kamal Dasu <kamal.dasu@broadcom.com>
-Date:   Mon, 10 Jul 2023 14:21:11 -0400
-Message-ID: <CAKekbeux2ApVp1Jcjdn-+8CS+hGtR5LGE2kL_x12MOzq41ZF-w@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] i2c: brcmstb: Convert to devm_platform_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Mon, 10 Jul 2023 14:22:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ED9D7;
+        Mon, 10 Jul 2023 11:22:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04EF76118E;
+        Mon, 10 Jul 2023 18:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A35C433C7;
+        Mon, 10 Jul 2023 18:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689013330;
+        bh=DwcO+o1R/a+Nt11F/Q0QjUAVGt2AFDVhptU2LgCMxXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hc5I5dE/g0HP68D/v/e1stZsGfwtImR7MDxceRcvfTdWld9g4vQoaGIBM5OOoB1cR
+         5daWfnLXpAFb474s6+jEeDGfIvex1vVxx2sBtDyMx40AGumVhmxHx9SyNnRc7LrON0
+         x4VvbMgTlR+8C7jan+PXYjH9NJx6CyrJ5FDhEA/aX4RFE5tf/t6KSnEnSmT2v9Ypqe
+         9SPZHjNONzc1CG1XQswn/EtqhzPBQPGmF2/YvRbT5XE+BEkONs61UkLak+mdVC9VIJ
+         VVGv+FqrgE800kRf/2Qn+tVfOitEd2pQkYRWNvG4T6gFcFv/pS9qja+TwUFwPBBNBg
+         1oS4KB5lApM8g==
+Date:   Mon, 10 Jul 2023 19:22:06 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004ae3be0600260eef"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dt-bindings: serial: Remove obsolete nxp,lpc1850-uart.txt
+Message-ID: <20230710-ladybug-floral-a5c51a7bd97f@spud>
+References: <20230707221607.1064888-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Cym97/vo2kOTosYm"
+Content-Disposition: inline
+In-Reply-To: <20230707221607.1064888-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004ae3be0600260eef
-Content-Type: text/plain; charset="UTF-8"
+
+--Cym97/vo2kOTosYm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 10, 2023 at 2:34=E2=80=AFAM Yangtao Li <frank.li@vivo.com> wrot=
-e:
->
-> Use devm_platform_ioremap_resource() to simplify code.
->
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Fri, Jul 07, 2023 at 04:16:06PM -0600, Rob Herring wrote:
+> nxp,lpc1850-uart.txt binding is already covered by 8250.yaml, so remove
+> it.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by:  Kamal Dasu <kamal.dasu@broadcom.com>
-> ---
->  drivers/i2c/busses/i2c-brcmstb.c | 19 ++++++-------------
->  1 file changed, 6 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-br=
-cmstb.c
-> index cf92cbcb8c86..0d422487161a 100644
-> --- a/drivers/i2c/busses/i2c-brcmstb.c
-> +++ b/drivers/i2c/busses/i2c-brcmstb.c
-> @@ -594,11 +594,10 @@ static int bcm2711_release_bsc(struct brcmstb_i2c_d=
-ev *dev)
->
->  static int brcmstb_i2c_probe(struct platform_device *pdev)
->  {
-> -       int rc =3D 0;
->         struct brcmstb_i2c_dev *dev;
->         struct i2c_adapter *adap;
-> -       struct resource *iomem;
->         const char *int_name;
-> +       int rc;
->
->         /* Allocate memory for private data structure */
->         dev =3D devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-> @@ -614,18 +613,15 @@ static int brcmstb_i2c_probe(struct platform_device=
- *pdev)
->         init_completion(&dev->done);
->
->         /* Map hardware registers */
-> -       iomem =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       dev->base =3D devm_ioremap_resource(dev->device, iomem);
-> -       if (IS_ERR(dev->base)) {
-> -               rc =3D -ENOMEM;
-> -               goto probe_errorout;
-> -       }
-> +       dev->base =3D devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(dev->base))
-> +               return PTR_ERR(dev->base);
->
->         if (of_device_is_compatible(dev->device->of_node,
->                                     "brcm,bcm2711-hdmi-i2c")) {
->                 rc =3D bcm2711_release_bsc(dev);
->                 if (rc)
-> -                       goto probe_errorout;
-> +                       return rc;
->         }
->
->         rc =3D of_property_read_string(dev->device->of_node, "interrupt-n=
-ames",
-> @@ -678,16 +674,13 @@ static int brcmstb_i2c_probe(struct platform_device=
- *pdev)
->         adap->dev.of_node =3D pdev->dev.of_node;
->         rc =3D i2c_add_adapter(adap);
->         if (rc)
-> -               goto probe_errorout;
-> +               return rc;
->
->         dev_info(dev->device, "%s@%dhz registered in %s mode\n",
->                  int_name ? int_name : " ", dev->clk_freq_hz,
->                  (dev->irq >=3D 0) ? "interrupt" : "polling");
->
->         return 0;
-> -
-> -probe_errorout:
-> -       return rc;
->  }
->
->  static void brcmstb_i2c_remove(struct platform_device *pdev)
-> --
-> 2.39.0
->
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
---0000000000004ae3be0600260eef
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Cheers,
+Conor.
 
-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
-DxuNuBlySpn/GYqPcDcRZd8EENWqnZrjtjHMk0j7ZfrPGXq8sQkbG3OX+DOwSaefPRq1pLGWBZaZ
-YuUo5O7CNHo7h7Hc9GgjiW+6X9BjKAzSaDy8jwIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdrYW1hbC5kYXN1QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUcRYSWvAVyA3hgTrQ2c4AFquBsG0wDQYJ
-KoZIhvcNAQELBQADggEBAIKB2IOweF2sIYGBZTDm+Hwmhga+sjekM167Sk/KwxxvQFwZYP6i0SnR
-7aR59vbfVQVaAiZH/a+35EYxP/sXaIM4+E3bFykBuXwcGEnYyEn6MceiOCkjkWQq1Co2JyOdNvkP
-nAxyPoWlsJtr+N/MF1EYKGpYMdPM7S2T/gujjO9N56BCGu9yJElszWcXHmBl5IsaQqMS36vhsV0b
-NxffjNkeAdgfN/SS9S9Rj4WXD7pF1M0Xq8gPLCLyXrx1i2KkYOYJsj0PWlC6VRg6E1xXkYDte0VL
-fAAG4QsETU27E1HBNQyp5zF1PoPCPvq3EnWQnbLgYk+Jz2iwIUwiqwr/bDgxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw89WX2Pp7ue922QVkwDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBT89c1IUYpBCyRR2pzdBsUc+t+TkW202gJ2VHN3
-zSSJMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcxMDE4MjE0
-OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQCgvZ2Qvj04/EAb3K5/xvoURQ2W4yzQ0T1eeFzl7gK5AFGkjDQyRmMWDaKq
-rhCjlC2j+QvVbOcBPmNlJGeA/qjpyqWHaqYfwbGK6x7KKLwenSfUKGV0C7xEu1uYyorRiMcvm8J4
-8dkyKM01S+6HqClaqYD+hLqqHRTuXSc9+yVLa8flyyHiTMCytB1l0IUKBRonHe9Utyse4ou3+ZbS
-RC3tThC5RKjZAjBO4m25Y5MZ3TF1bSYHMeybHCw9rB0Z62DjMtmkyo6HCkB6cZvZkckwwqc2zugB
-qMlRHAhU+j0YFBLPp8mZS6L4jGDX7K3y17sS7hIyte0hIaS/pXuO2lZx
---0000000000004ae3be0600260eef--
+--Cym97/vo2kOTosYm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKxMTgAKCRB4tDGHoIJi
+0oUaAQCGLVZ9mPDkEzjAABmyDv0H/Xa573HgVjZkJj+dNKaoTAEApKgGem1VPjk6
+NhbOa0G1XvGusevOs+Z1ku8BolcVRww=
+=ZEY3
+-----END PGP SIGNATURE-----
+
+--Cym97/vo2kOTosYm--
