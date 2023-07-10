@@ -2,134 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3FD74E071
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7AA74E074
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjGJVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 17:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S229890AbjGJVva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 17:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjGJVum (ORCPT
+        with ESMTP id S229844AbjGJVv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 17:50:42 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CB4F4;
-        Mon, 10 Jul 2023 14:50:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UuOBKGxXqHguSfzLCLhHqTo1bNDaWtHnbSUhrSRIWAlL51m1WuYzZ6tr8wWgQwydjnKZ5+QtNBohzyRFygmOaGYdk/kZzx4OJDrql+es7IvhOHig6uZCa1aSujrhMBVfIbYI5ghCkZYWAnwemDOh7s1UssALo7ZwQwsOCig69BZ0ZuzJPRtD8N2RTNC642JfGlSxaa90CHuxka9kZeB3MJt3C+aaIdRXeoC9g0xcGcjinQzi8KdBJunzgSbwsf+7SU27bmko1eKYTb9bJW4F9TDGrROs8IwjXNYZ05vw7TbBkD4F5w7QZ1c22K6+AOg9uD/g/xv7aCfh8EsR+Tv4FA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VxwxI3FRDYrBtr1PjrLBWHJB78rDVxOpMoI1t4n5p4Q=;
- b=NaPZ3/AioXxWiJcVLfdsofoWwoo9X1i1tgDSicUbxWxUzTyG4qgsl/omIGrlVuZMcGU2veDsRXWtB1Fqo2vxl2ONY86c4GD3f/CyOQ6koRz//NQIyg6U4YA5xD/L/TNgyUftvBetgLW0zO5gWwZB2tMIBAxh573PSkLnbj29Mnh9lECc1ES1KO9SPeK6V5Y9HhYT2F7UskGzbOCL8lMrFRxqakbAnnSZQqYO0uqF/iQ/du6QvAszcAYk5POsJvqAVmLBP31WomS37+w+fjFhFVeYVERRrFvhqFmE8HIli8rQ01DR5SvPk6Cq0VLDosbRRY7/whUHb6CL+uWOhL7QZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VxwxI3FRDYrBtr1PjrLBWHJB78rDVxOpMoI1t4n5p4Q=;
- b=lXk0q96ydqMwRyxSDkeDZAedS2j4Oa7OH0gE25LsYrM17fKWalnnNAS+GqzjhkG12pf0CBoTdraOEv9HfoDqDAc2fB1QxELphSAoH2N4X2u835Q8QsXQ5aMDn4D58goVV28jeFcXen8FrhtrR1ie/uOghNS508u4dqi0OgmW/RZuwP3itToqBhdv/LfA3ewot9f84qu3zOaFRzvhY+D5d7/5vyZDz15V3dY9OHcFAiWcVoFA2XevTRBCAC8U8mRbRuEBwO4gepZslxAvucFHzuEcJJidX83Z1vMyJ4nyI3vvnXzbqeGbhZ71RUMzZAV+kuRAN8cgkEO456xuKH4fWQ==
-Received: from BN8PR07CA0036.namprd07.prod.outlook.com (2603:10b6:408:ac::49)
- by CY5PR12MB6251.namprd12.prod.outlook.com (2603:10b6:930:21::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.29; Mon, 10 Jul
- 2023 21:50:38 +0000
-Received: from BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ac:cafe::b7) by BN8PR07CA0036.outlook.office365.com
- (2603:10b6:408:ac::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31 via Frontend
- Transport; Mon, 10 Jul 2023 21:50:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT100.mail.protection.outlook.com (10.13.177.100) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.18 via Frontend Transport; Mon, 10 Jul 2023 21:50:38 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Jul 2023
- 14:50:27 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Jul
- 2023 14:50:26 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Mon, 10 Jul
- 2023 14:50:25 -0700
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
-        <bgolaszewski@baylibre.com>, <brgl@bgdev.pl>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Asmaa Mnebhi <asmaa@nvidia.com>, <davthompson@nvidia.com>
-Subject: [PATCH v2] gpio: mmio: fix calculation of bgpio_bits
-Date:   Mon, 10 Jul 2023 17:50:23 -0400
-Message-ID: <20230710215023.679-1-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        Mon, 10 Jul 2023 17:51:28 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDBF11B;
+        Mon, 10 Jul 2023 14:51:28 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b9ecf0cb4cso2492565ad.2;
+        Mon, 10 Jul 2023 14:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689025887; x=1691617887;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9S6N5y4xR1Mwz7JsLB8Y+2L4nPmqA79cUA7WUOzNa4A=;
+        b=PR9IUNeCLww0G3YNvD38T3sg67j0v9zzxifS9kVOFgcChWBplUH/jI/nxFV3v2fU42
+         JQhdL4Vmm/VmjLGsBmkBo5Zu1IIbanZwPmjy3kr4UuuHN2umgVp7q3zBxI3NOlvBEUm+
+         PB2YVIrj9NuWsWjN2uCD1eVuC6X9lVvKdQOKJaQSw30iA31YUxsQ1cp1hFSa5QFiht0N
+         RZ3sLRVfezdor+8WuJrKkPdV7taSJi5nmHE3u/IOW7BqCmgQGeKWjiG3nlt/8kd95UQn
+         KWMuqD39xrSx4kPrHzHpBkbKVUNp4aAOStVXGudEq2aD7W56+T8GAjR+XUF5ZkE1YlZz
+         KAOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689025887; x=1691617887;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9S6N5y4xR1Mwz7JsLB8Y+2L4nPmqA79cUA7WUOzNa4A=;
+        b=llWnb3HHPQAQLaFkcOKdjQiOs6UAQAAhQS5YvFKyjbOrZc1yWNsYliuK6foy9T193V
+         xuj6K007gTuXWllmrtpe4jO093GGtYMTfZvIvIYzPxM4pkBfR1ulZBNDcaVrosQvHgZ9
+         aSK+w27ES3kM3y83+7/EI8Oj3904sO4+aYV0nrLVWDQAKKr72MsOunpZ7jAv+gW5Jvfj
+         990mtXfLlBZvrAjIQDaH+YkNkSv/QqIubBLpZZlzkzn5UgQw5LSk2UidB9sIM0L9skaD
+         mt6F1ubJTsXyFxwbGmtIy8SOt0gwO3fwif18rAWF6fZ0hH3rFfoYR7DDVJSTZEX6KVQJ
+         adJw==
+X-Gm-Message-State: ABy/qLaq54bnnJMo1x35drdDbY4JntNWtl5gHVI7KQnDI4167UKIQ7Xj
+        4VDbWQ0popzn1SAor2mDWW8=
+X-Google-Smtp-Source: APBJJlGmbWSXN1azF3qSDawF9LKNrJlAj+HBGMvkfnU1MVvdsvPADMeDsDvhiZUO4HEsez0iqnDd8g==
+X-Received: by 2002:a17:903:2305:b0:1b8:9b17:f63d with SMTP id d5-20020a170903230500b001b89b17f63dmr13872377plh.23.1689025887292;
+        Mon, 10 Jul 2023 14:51:27 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:76f2:d743:45e6:d02:e038])
+        by smtp.gmail.com with ESMTPSA id c23-20020a170902cb1700b001b9bebbc621sm358380ply.136.2023.07.10.14.51.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 14:51:26 -0700 (PDT)
+From:   Anup Sharma <anupnewsmail@gmail.com>
+X-Google-Original-From: Anup Sharma <AnupSharma>
+Date:   Tue, 11 Jul 2023 03:21:19 +0530
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Anup Sharma <anupnewsmail@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] scripts: python: Introduce thread sample
+ processing to create thread
+Message-ID: <ZKx9V3o3VZAfBz4e@yoga>
+References: <cover.1688585597.git.anupnewsmail@gmail.com>
+ <df4773a4ebb43a6c855bad5a2bbc338bc2669ca7.1688585597.git.anupnewsmail@gmail.com>
+ <CAM9d7chNwcCD6J-twSTTxm6uLoNbMT8ZYKHcDiZxXjcfEVfDfw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT100:EE_|CY5PR12MB6251:EE_
-X-MS-Office365-Filtering-Correlation-Id: be2f2d3b-2f62-4b15-de57-08db818fb2c7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dqgeZdQyK/UVUvnpNKEP+PF0rVUfSvdzUBLnngc8ZhJ/oShPn7FlThumJDWD6DsgVNpV4cgMvn2xOG+tk4Pri7Vyeeik1lPQ7tFp8tMk4wTsgHPOkaGKglmHOb46or3646KWfCBOhP4Gd1FHSg6hdhys0lNKtkL7z1ZaN1bHlSYTdgoRD/bfS9KOEnJerb0PYVFX9uIlDA59T0YmG84BBoPHTEisdCjjdYCr8ktVUVK8tz50XnfsD2LeeJso4P6AnKlc5QGgcmPFVFPcu+kpzJZc8TEhq0FdfH16dcg71cUdFdKavszqhAvaHGxexyTmEbNs3Lo1OcF6ogHLsyJ5xk19e2YLaoLz/AzBXoADBxyJg7gb0aZS2UCfOOGY9VpkdoiV25/tWoq5gnG/OjkqmCxdi88JYmWakrL0ZFGzZ6CHQJkmoGTSuL4DqtiKs/EvmMckihDLvDy+2aPvIp5kFyOB30EpmNHD3Wd2zbQNUqB7yaiS0iv6KqI8X6UZe+Oc0nhRvKN9sPhqmy/do+05HNPIZV41+0laBMvU9TQ/I02yUiicjkR7E8fLEwPMjrAYa9eRhleE2m/ushLOIGrePRqgrIGDEWRMLP6bWL41sPiA79p2f2imKlAe6yA3dY6SwYBWr0y2TxLbeH27MlpW9vTGB8+tvcQB2Qk16SOh2l9eRjUYnV/92eItrc97wk7IYiB7DngSFGp9MatQXpcjVBAdeAqPkgkiBMJMPUdn6UJRR7j4n/izvN6ISW4ugfQKTB8bYprU2RlF8bQoRhGaFQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(186003)(2616005)(26005)(36860700001)(1076003)(107886003)(426003)(83380400001)(336012)(47076005)(4326008)(41300700001)(316002)(2906002)(8676002)(8936002)(5660300002)(478600001)(7696005)(110136005)(54906003)(70586007)(70206006)(40480700001)(36756003)(356005)(7636003)(82740400003)(86362001)(82310400005)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 21:50:38.0775
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: be2f2d3b-2f62-4b15-de57-08db818fb2c7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6251
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7chNwcCD6J-twSTTxm6uLoNbMT8ZYKHcDiZxXjcfEVfDfw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the "ngpios" property is specified, bgpio_bits is calculated
-as the round up value of ngpio. At the moment, the only requirement
-specified is that the round up value must be a multiple of 8 but
-it should also be a power of 2 because we provide accessors based
-on the bank size in bgpio_setup_accessors().
+On Wed, Jul 05, 2023 at 10:42:47PM -0700, Namhyung Kim wrote:
+> On Wed, Jul 5, 2023 at 12:44 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> >
+> > The _addThreadSample function is responsible for adding a sample to a specific
+> > thread. It first checks if the thread exists in the thread_map dictionary.
+> > If not, it creates a new thread using the _createtread function and assigns
+> > it to the thread_map. Finally, it calls the 'addSample' method of the thread,
+> > passing the thread name, stack, and timestamp.
+> >
+> > Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> > ---
+> >  .../perf/scripts/python/firefox-gecko-converter.py  | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> >
+> > diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > index ce663840d212..95b061a97cbc 100644
+> > --- a/tools/perf/scripts/python/firefox-gecko-converter.py
+> > +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > @@ -18,7 +18,20 @@ sys.path.append(os.environ['PERF_EXEC_PATH'] + \
+> >  from perf_trace_context import *
+> >  from Core import *
+> >
+> > +thread_map = {}
+> > +start_time = None
+> > +
+> >  def process_event(param_dict):
+> > +       global start_time
+> > +       global thread_map
+> > +
+> > +       def _addThreadSample(pid, tid, threadName, time_stamp, stack):
+> > +               thread = thread_map.get(tid)
+> > +               if not thread:
+> > +                       thread = _createtread(threadName, pid, tid)
+> 
+> Shouldn't it be '_createThread'?
 
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/gpio/gpio-mmio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, it should be '_createThread'. I will fix it in the next version.
 
-diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
-index b52a3dd511ca..74fdf0d87b2c 100644
---- a/drivers/gpio/gpio-mmio.c
-+++ b/drivers/gpio/gpio-mmio.c
-@@ -623,7 +623,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
- 	if (ret)
- 		gc->ngpio = gc->bgpio_bits;
- 	else
--		gc->bgpio_bits = round_up(gc->ngpio, 8);
-+		gc->bgpio_bits = roundup_pow_of_two(round_up(gc->ngpio, 8));
- 
- 	ret = bgpio_setup_io(gc, dat, set, clr, flags);
- 	if (ret)
--- 
-2.30.1
+> > +                       thread_map[tid] = thread
+> > +               thread['addSample'](threadName, stack, time_stamp)
+> 
+> Why is it like this?  What do you intend with the thread['addSample']
+> method?  Can it be simpler like a direct function call?
 
+The purpose of the addSample function is to append stack frames to the
+samples['data'] collection. While it could be implemented as a standalone
+function, doing so would increase complexity due to shared properties
+among threads such as pid, tid, and threadName. Although a decorator
+could potentially address this, it would likely result in code that
+is functionally and structurally similar. Alternatively, if addSample
+were implemented as a separate function, the shared elements would need
+to be repeatedly passed to the function.
+
+> And more importantly, you'd better make each patch work properly.
+> AFAICS it won't do the job because both _createtread() and
+> thread['addSample'] are not implemented yet.
+>
+> You can either move those definitions to this commit or have the
+> commit implementing them before this one.
+
+Thanks, Preparing commit in series is new to me. I will try to fix
+it in the next version.
+
+> Thanks,
+> Namhyung
+> 
+> 
+> > +
+> >         time_stamp = (param_dict['sample']['time'] // 1000) / 1000
+> >         pid = param_dict['sample']['pid']
+> >         tid = param_dict['sample']['tid']
+> > --
+> > 2.34.1
+> >
