@@ -2,148 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1BC74DBA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26EB74DBA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjGJQyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S231406AbjGJQzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjGJQyN (ORCPT
+        with ESMTP id S231552AbjGJQzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:54:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F5410C0;
-        Mon, 10 Jul 2023 09:53:48 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36AGSd40021649;
-        Mon, 10 Jul 2023 16:53:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=E9e+S4RTkTmosg86zIZupvfEJdyllZyc0Xf2MkrqOZw=;
- b=Ay5VLjm+Hgo0O1eWfngPTKmTY4GK/VHcySc8qhlc8/50lbzxjYew/BWL+i4BpyzP6isk
- wR2seSoW4fmiKfdFdH1TPTFK7WhmkMKux/JsYvidUbfTVI5ohjMiFUr/sLs8/M0ukj7a
- E7hNV/bE5uvzKnQYkPTpH9ewxj2j+l6t2Of6aRzLXSok1rxfXbdZEwHEX3+8+n2eZTBC
- NU4COAAJdbxHiQIp2Jqfxb8KPOL5iQQmQMoazrCvWDx7yt0o2O7A0lNKDp1IlZJR84pf
- b47015ndJ/H7sDZnH1xUPCmYLpChJ5ooEmlTrFpfl/KStmAOxH4SJYDXmxihjvxLgorh tQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rrg5mh290-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 16:53:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36AGr1Z8015118
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jul 2023 16:53:01 GMT
-Received: from [10.110.55.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 10 Jul
- 2023 09:53:00 -0700
-Message-ID: <c1a6f23d-17d9-6f4b-407a-142913e88a35@quicinc.com>
-Date:   Mon, 10 Jul 2023 09:52:59 -0700
+        Mon, 10 Jul 2023 12:55:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C689E58
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:54:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hmq/83vPYPWcN5iZwyyLP+rr2WSeJYw0COMYvu0jj6Yvqll1j5CLT8RvPRAzZGcQ617oHK9gwjzg7yhvj0MfJVpVrCQBNoHwDd41Hhiq4vMsrMfu5o9jiYcIds+qhCdIoDej0+ltdaK3OwJ3wwyIfaJmV9Ue3TMA1iS8KMklwjuhLQY+vrzvRJcHZV9FQT8ZpIC+iYu3u8CjdkzWbgyFhzkR4cIAT0gtroUIPzD9L9ssYQRuVOcTuxZIbVfnXyp+zncE8zmSd0qoN0YMdVofh+Ckk0CVWPZR4B4RR541yPBgdoZ+2yoYPnOvbDpA1YkS6BktfVe9Z6oq01AlZBm1WQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lzj6JWmGezlQEOdya9p+ygIwZcsZWchF/CPxyXZ1fSM=;
+ b=RUwCZsH1t/7CPI4t11+KxgTI4cNb/+a6yYw5F60Z/kr41wXOWg4fGPZRJBVRHrf4PQmCpgZx7ckkJBzWn0o8e2bJC6BkeSX7U1JinFPeyAfbq5Gv4shMZ357KkwZn+wiktWf7MwqdUx587PCEwcqBo1uyenUihTnUwAgeqg70Nn4qWhT37kh1g8HyIt88ixTUQ1epLM6spD2os8LDc2FERFUQebSIcSHjN/E2zMnRHRbhZfsLmlkl6W5yU27Ob0U3DbB/ae1wNLW5TuEZyjfseWyOe2Y9yo2kkXibOxGeMBchioy8vsHj012U/V9LACr5rZYSilwlwZWbtcd6ACjSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lzj6JWmGezlQEOdya9p+ygIwZcsZWchF/CPxyXZ1fSM=;
+ b=JWy2m/4OR0Wzl93Tcq0+IFSSWzZLBSEu+nZj+9jEOGJRKfk7hSk/rtSUACif5FEVGCmcALab+amsWfe4rK1wGptV0xoYF+Ka1tHX1ZtMEV3Udt6I9VXylK8Bl8AQ1Fyj06+bSk0FHA7lQictX6JdNMrXAtoT0rigSqQuYh6AZ0KI/c+xgYQnQ41fyL/MLGwaxqndLu1bHVXnbjvWX7Qc1Wwb6HBlJOm8j/MfzOCp+jPsIOQs9xNgx4KXOHKSNwi21kI8ipsZCt4EgxwujwCdxrEa02PBAc9qtsBeWvObqLiglh6JTyaFw0CGoBqiv7LD1bEzsdWZGTxin0DeTE7WtA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ PH7PR12MB5877.namprd12.prod.outlook.com (2603:10b6:510:1d5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
+ 2023 16:53:37 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::12b7:fbc0:80e1:4b8b]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::12b7:fbc0:80e1:4b8b%3]) with mapi id 15.20.6565.028; Mon, 10 Jul 2023
+ 16:53:37 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2 0/5] variable-order, large folios for anonymous memory
+Date:   Mon, 10 Jul 2023 12:53:33 -0400
+X-Mailer: MailMate (1.14r5964)
+Message-ID: <C56EA745-E112-4887-8C22-B74FCB6A14EB@nvidia.com>
+In-Reply-To: <bfa13f35-bca9-c4e8-25f3-e8021f85f223@redhat.com>
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <78159ed0-a233-9afb-712f-2df1a4858b22@redhat.com>
+ <4d4c45a2-0037-71de-b182-f516fee07e67@arm.com>
+ <d9cb4563-c622-9660-287b-a2f35121aec7@redhat.com>
+ <ZKgPIXSrxqymWrsv@casper.infradead.org>
+ <bfa13f35-bca9-c4e8-25f3-e8021f85f223@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL0PR05CA0007.namprd05.prod.outlook.com
+ (2603:10b6:208:91::17) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 3/5] drm/msm/dp: delete EV_HPD_INIT_SETUP
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
- <1688773943-3887-4-git-send-email-quic_khsieh@quicinc.com>
- <b70e6e98-e5a8-71d7-891a-889c268a7e06@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <b70e6e98-e5a8-71d7-891a-889c268a7e06@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Bki10N1UghQumq-vGKZ8Q-beFnD87KIi
-X-Proofpoint-ORIG-GUID: Bki10N1UghQumq-vGKZ8Q-beFnD87KIi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-10_12,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 phishscore=0 adultscore=0 spamscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 mlxscore=0 suspectscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307100152
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|PH7PR12MB5877:EE_
+X-MS-Office365-Filtering-Correlation-Id: eadceeb5-86fe-43f2-890a-08db81663444
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KU9Cm1z8reaX5347tSaoVgGsXbcib4Y8vSOYn0abJlCT1wZqO95uz9Vor0d/he4GzJZ6RO7sloOehu6wUD3wmFLn0GgPjNBSBlmeyy+u4tmPwNyNxZ5a6up2NMHV9aNFMBSl+Ar1k2r8R3J+j6JJHDWtj0ATiIdMMeB2pukzxaRfaUtGj0XUdx5x4r1juVyNmt30FLNMgEF5eTDCM7UMhdWNpvWemzz42Ows48dVRXBWjZSbyx9drf3gutHAAwgComkjQRyTevVIZN6RpqfFUW8qeyEG0UhXayHnySfj4GqcjmNzXRvs+Z4tsiA0EWU42NXT8WcCPef60vOwiBMwVA3PCt+KfQjcy/EvQS3B5YViNWU1g1+PfHOvJm+acWIDhIUDfc6cVmNzLq4hdbyjC7GmdXHvbct8He8cK/gSkjuNT4NfWbR4oaiQJKsOpB25lsddelL3LLjAhBxIazQoCEJ6CJbBOX1Ddc9Y1gNmXg8A6MQcDHY66YrV3FE1tp9G8S8v1hCUWbKakjFTt72/Duvc8npZBxnGW38DFELW19NsTMGnSYM3U9DihVGEdpvFhFHbgs/5Pbb2ccn4FZZqiolxVjvTeraB7eqgRCvedbtPFRH7NpxucqRuMydiFrFcwCPKRp0hU5zO9Xf3g9txYw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(376002)(396003)(39860400002)(451199021)(36756003)(33656002)(86362001)(38100700002)(478600001)(6666004)(54906003)(6486002)(6512007)(8936002)(8676002)(5660300002)(235185007)(7416002)(316002)(2906002)(6916009)(4326008)(66946007)(66556008)(66476007)(41300700001)(2616005)(26005)(53546011)(6506007)(83380400001)(186003)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2VFYneL+LKduAiEgqAgLiva2EwQlD3V0xGFpkbFVqrAVZex7zAp3/BxJsOEW?=
+ =?us-ascii?Q?YzgQ4kXyD3ZOwu4ALpPYki2mr2g9v4/NQyakSTl0q5T75oIsyxP+lOPB4Jdt?=
+ =?us-ascii?Q?UhNHJjjpvVJursh/BaCPvMa8ad0Nc6fFZ4BfoZYKaGpzF83HF0MQQDBZYQO/?=
+ =?us-ascii?Q?eC20QlDqDtqDHWi7r8OPGOGDFKyjjS2yBRtKYq8V0o/Zm9aeYCXN+ClXWay8?=
+ =?us-ascii?Q?7s1fIwVtVBw21gvUjGm3/TAxgFuGOJmpsps3T2F9sMSzzbp6Q4FocrInijn+?=
+ =?us-ascii?Q?8qQOJpcIKtxMSU3ImI4jZ206lI4bMlUl5ID3jeSk02wYjcUO0U23nPOgksaX?=
+ =?us-ascii?Q?EIG92O4gDWtP/1+zgWaD3mx7l1qJSP9EA5Io3E+rCjOtqwT2qMFNE4RkmYPG?=
+ =?us-ascii?Q?DmHIHVIo5B6lAy+aTH1Db/qDb+98KdWtSdhXxe0CZUZFwYiwQk6K8YskY2T0?=
+ =?us-ascii?Q?dxOZSX8YMR0e/B5UgARUiRG+Hx5Ilx1mChUtwt5xFL1N/vmal+apN95ZBWfn?=
+ =?us-ascii?Q?RcCfC3GnepBRGeMDNagG5rs+wCgQlZHE8B9olcbP8Pj1NZ80Nsk/vCuIVg2O?=
+ =?us-ascii?Q?LKIqsUt+Px0cqqGlL6IkN0ThbrxZ+drNQ9Vmh3/GFvN/8+BAMQplseObvlko?=
+ =?us-ascii?Q?y0eK5j0rSZpjRq/hE0OcopGoRY9/nLjZHQkpK86Bv2En68E3esSyX0TwRj3H?=
+ =?us-ascii?Q?L8qDX6hMcSCdO8Dk4EzFIR+FqbHrOeEp92+IeXBuwaEny9X8Bmrw4QuCGD6t?=
+ =?us-ascii?Q?esTl7V6pDPeUyAG257/IQJyufxNMN4/HAuK0aohE8oR82Ii94kAXMkNjGuBa?=
+ =?us-ascii?Q?uB327tJlNmejhcKmEvGcFCaAINIB0p5Vi+NXdxUlepWQ224Rb2w2/H6niGAg?=
+ =?us-ascii?Q?WbPs6bqx1kr3Kw/Fk52O/EuG/+kLkc4ZReOLHQXzeOc8wugeszo1J5U+7mi2?=
+ =?us-ascii?Q?f279NOg6dLRVm6yxngKl9F31DtNNkxW0FqtDtn7JMb/AG9M4jpFa0Ih72gIm?=
+ =?us-ascii?Q?dZIBQtR5WH6+6qPyQ0A4zKs8W1ummhnpapIrEmZFWXDTPjASwtgNqm4fnwBG?=
+ =?us-ascii?Q?/cNE3Qhj84KcLeQp7Ng4bO+DdgNngeZO4tJRd9HhESORmyfKGs8mXmHua6nQ?=
+ =?us-ascii?Q?sexMJ0JIa7Np6z2IrnEkhM5AQqDT9ZfvJ00t7dj8COnLF/1c+QpauBSwi0cK?=
+ =?us-ascii?Q?E9p3lyxr6zSooKqLGw+AatbZS2zj9l3FCc7qOdLxgPlvkWmeHl6LgjiVA/pb?=
+ =?us-ascii?Q?98nZGEsy7g32JMBYlxadPJgSDKF7wfSWx/2eQ3FUNTi3J3JspF5IswagCpAq?=
+ =?us-ascii?Q?rk40z8GdA7de9siiUm1NxMtBVSZYSojFIM6IpJWIPOIq7yU7nBW0lZOhR7uW?=
+ =?us-ascii?Q?YpnqcFqe8cY+uKXdvm+qKrFpPd+X+WiilwuLL0NGk2+8ILWpT7iHkxSy6B9n?=
+ =?us-ascii?Q?I4Bs17BVn+FWBsDNX6K4HLxPzaCBoOoHPM7MBWsntaGAsIzvaQaPmFAOAc2a?=
+ =?us-ascii?Q?s8kp0wJ6b8fDuyAAOaBjbmVCVRZDmogsLSDBAC7dla0MjsiSedVMWSC6MA52?=
+ =?us-ascii?Q?HCjkKsD+yJ+XOrDfAJM=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eadceeb5-86fe-43f2-890a-08db81663444
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 16:53:36.9387
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +sjSAx/A4Biz7FvsaoVtD+sC2V3CuzQqiWA43Iv9McZxMndjeBJEbsi+43E11Au1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5877
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On 7/7/2023 5:34 PM, Dmitry Baryshkov wrote:
-> On 08/07/2023 02:52, Kuogee Hsieh wrote:
->> EV_HPD_INIT_SETUP flag is used to trigger the initialization of external
->> DP host controller. Since external DP host controller initialization had
->> been incorporated into pm_runtime_resume(), this flag become obsolete.
->> Lets get rid of it.
+On 7 Jul 2023, at 9:24, David Hildenbrand wrote:
+
+> On 07.07.23 15:12, Matthew Wilcox wrote:
+>> On Fri, Jul 07, 2023 at 01:40:53PM +0200, David Hildenbrand wrote:
+>>> On 06.07.23 10:02, Ryan Roberts wrote:
+>>> But can you comment on the page migration part (IOW did you try it al=
+ready)?
+>>>
+>>> For example, memory hotunplug, CMA, MCE handling, compaction all rely=
+ on
+>>> page migration of something that was allocated using GFP_MOVABLE to a=
+ctually
+>>> work.
+>>>
+>>> Compaction seems to skip any higher-order folios, but the question is=
+ if the
+>>> udnerlying migration itself works.
+>>>
+>>> If it already works: great! If not, this really has to be tackled ear=
+ly,
+>>> because otherwise we'll be breaking the GFP_MOVABLE semantics.
+>>
+>> I have looked at this a bit.  _Migration_ should be fine.  _Compaction=
+_
+>> is not.
 >
-> And another question. Between patches #2 and #3 we have both 
-> INIT_SETUP event and the PM doing dp_display_host_init(). Will it work 
-> correctly?
-
-yes,  i had added  if (!dp->core_initialized)  into dp_display_host_init().
-
-should I merge this patch into patch #2?
-
+> Thanks! Very nice if at least ordinary migration works.
 >
 >>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dp/dp_display.c | 12 ------------
->>   1 file changed, 12 deletions(-)
+>> If you look at a function like folio_migrate_mapping(), it all seems
+>> appropriately folio-ised.  There might be something in there that is
+>> slightly wrong, but that would just be a bug to fix, not a huge
+>> architectural problem.
 >>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->> b/drivers/gpu/drm/msm/dp/dp_display.c
->> index 2c5706a..44580c2 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -55,7 +55,6 @@ enum {
->>   enum {
->>       EV_NO_EVENT,
->>       /* hpd events */
->> -    EV_HPD_INIT_SETUP,
->>       EV_HPD_PLUG_INT,
->>       EV_IRQ_HPD_INT,
->>       EV_HPD_UNPLUG_INT,
->> @@ -1119,9 +1118,6 @@ static int hpd_event_thread(void *data)
->>           spin_unlock_irqrestore(&dp_priv->event_lock, flag);
->>             switch (todo->event_id) {
->> -        case EV_HPD_INIT_SETUP:
->> -            dp_display_host_init(dp_priv);
->> -            break;
->>           case EV_HPD_PLUG_INT:
->>               dp_hpd_plug_handle(dp_priv, todo->data);
->>               break;
->> @@ -1483,15 +1479,7 @@ void __exit msm_dp_unregister(void)
->>     void msm_dp_irq_postinstall(struct msm_dp *dp_display)
->>   {
->> -    struct dp_display_private *dp;
->> -
->> -    if (!dp_display)
->> -        return;
->> -
->> -    dp = container_of(dp_display, struct dp_display_private, 
->> dp_display);
->>   -    if (!dp_display->is_edp)
->> -        dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
->>   }
->>     bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+>> The problem comes in the callers of migrate_pages().  They pass a
+>> new_folio_t callback.  alloc_migration_target() is the usual one passe=
+d
+>> and as far as I can tell is fine.  I've seen no problems reported with=
+ it.
+>>
+>> compaction_alloc() is a disaster, and I don't know how to fix it.
+>> The compaction code has its own allocator which is populated with orde=
+r-0
+>> folios.  How it populates that freelist is awful ... see split_map_pag=
+es()
 >
+> Yeah, all that code was written under the assumption that we're moving =
+order-0 pages (which is what the anon+pagecache pages part).
+>
+> From what I recall, we're allocating order-0 pages from the high memory=
+ addresses, so we can migrate from low memory addresses, effectively free=
+ing up low memory addresses and filling high memory addresses.
+>
+> Adjusting that will be ... interesting. Instead of allocating order-0 p=
+ages from high addresses, we might want to allocate "as large as possible=
+" ("grab what we can") from high addresses and then have our own kind of =
+buddy for allocating from that pool a compaction destination page, depend=
+ing on our source page. Nasty.
+
+We probably do not need a pool, since before migration, we have isolated =
+folios to
+be migrated and can come up with a stats on how many folios there are at =
+each order.
+Then, we can isolate free pages based on the stats and do not split free =
+pages
+all the way down to order-0. We can sort the source folios based on their=
+ orders
+and isolate free pages from largest order to smallest order. That could a=
+void
+a free page pool.
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmSsN44PHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhU4HkP/2eqrpsuhW5eSauD0tKhtXtsn8/juJr03m1u
+UwxvfrM3tZXCp9FqPmMs3XKSeec/3/EZJKLr2arXy9fHm/U8AY9F5K7TUtZ6q1V0
+fF4xIXa/FLMv069x5A0sX8RgkNWeUoxODWMdIEBCPAmCdDuNa2tlXDx7QYl0JcJb
+leujrshinZXi0+77MuFUCoOuqzjiggkSOrX70dFAl8CQffYsaHx9RnXreNRC9AIa
+9Nc5deqP+Zx7HtDrC2MSEh2unEhz8RuIavM00at96/iFKRqVWlhVkttc8e0rY6f1
+/3QtCBmudHAYFUvZ8DD7ouFTmyWEZ+Vpc4H/7kJYap05aS9AzX5D4yIehCNBtLOT
+BsWPcivTbwtundDHMhuUqICjh1L76quVtyD62puo6nu4KnZSCh0lpK3ZiumSFpa7
+Tk+o5B7fIOaK6GycRswF5+9sr72x5IXR//tcE7Pf4id3AcoXWzhXQpnbZZHH6p9f
+YWDd5riXzVXziCy5KGvPRoFdBE3t5jK/IRCGfNfi1Wo0DqUDvJ6TeVISi/Wf3C7O
+0mrXD0AjqsVb1/v936OvCUi/1WIUzM6nWTHIumR/lo7pqO+xto6KfDhLGpYlUA/Y
+jn2J7yEjR6S05Jw+uo1Nz3HW3GvzAj8exg0pRFiNO5Kyq6K8eM+kl68IlUuBRjSF
+9pE8FQKC
+=Y9or
+-----END PGP SIGNATURE-----
+
+--=_MailMate_3D248BAE-60AA-46E6-B80D-515FFD38B7CF_=--
