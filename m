@@ -2,235 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490BB74CB5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C022D74CB5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 06:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjGJEpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 00:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S230091AbjGJEp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 00:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjGJEps (ORCPT
+        with ESMTP id S229629AbjGJEpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 00:45:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED19D118;
-        Sun,  9 Jul 2023 21:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688964347; x=1720500347;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H8FsJEDpdcP+jyEgEwdZYjOOerdTEzQ5/CpOqwU86vU=;
-  b=WONv7AnP4xl1MleoayhOwD8Pc8RVhQwYkyxpDfRz5+0NUQuCEJTjclMm
-   rf6zOUTOx2U1I9lT6qq3xKke+Vb7H7ARuPtA2N5m/4a8UP1xIqYJgutRy
-   cO0puJ+BkkqDm3dvPP33Ov0sngoaKTPSr2hyXO/N48+5d0reTuf+r6sNV
-   SeIkPEdWpYq9SbKy7+pI5SbUdT73Et+VwqD2dt6cJUhaq//DHDikjKTk/
-   xBTpvaaieWKeLW+z4FWPUgdA6SjJm1dLPcJHrZwwtJFBLzPEn8riUFpVF
-   hJEjosZfwJ2xA0hgMgN4fmhEsJqH8vMj7VfEKiIGSqITlob1F2GkqOBQ9
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="364292281"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="364292281"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 21:45:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="720568357"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="720568357"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jul 2023 21:45:45 -0700
-Date:   Mon, 10 Jul 2023 12:44:18 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] fpga: add an initial KUnit suite for the FPGA
- Manager
-Message-ID: <ZKuMosEu242BrY0K@yilunxu-OptiPlex-7050>
-References: <20230630152507.30219-1-marpagan@redhat.com>
- <20230630152507.30219-2-marpagan@redhat.com>
+        Mon, 10 Jul 2023 00:45:22 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720F118;
+        Sun,  9 Jul 2023 21:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1688964317; bh=nIwe2M/K3NQxgFY9TidL4zat/EkEm3ppvGS805ltn0Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IgmaXU1t56yfNOvUBbXMAV5UkrjaHK6Vsn4HnnThZx5mazGwlEeGxejhyB4Zheo5c
+         DThGe01Wvw7ZpeECCJVYhXUNa3w5uCjz6DQd9anvI0LG+mc+uzBLIBeOKK7o7C70Sc
+         HRuacz4YfI3J0RbA8pgIXpvPX0SxTwwjNLfxq1jw=
+Received: from [100.100.34.13] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0F71F600AE;
+        Mon, 10 Jul 2023 12:45:17 +0800 (CST)
+Message-ID: <51181fd7-fc1f-2222-9b8a-8ce44fe85ea5@xen0n.name>
+Date:   Mon, 10 Jul 2023 12:45:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630152507.30219-2-marpagan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] LoongArch: Fix module relocation error with binutils 2.41
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <20230710042924.2518198-1-chenhuacai@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20230710042924.2518198-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-30 at 17:25:04 +0200, Marco Pagani wrote:
-> The suite tests the basic behaviors of the FPGA Manager including
-> programming using a single contiguous buffer and a scatter gather table.
+On 2023/7/10 12:29, Huacai Chen wrote:
+> Binutils 2.41 enable linker relaxation by default, but kernel module
+
+"enables" / "will enable"
+
+> loader doesn't support that, so disable it. Otherwise we get such an
+> error when loading modules: "Unknown relocation type 102".
+
+IMO it could be better to also justify the disabling (instead of adding 
+proper support): linker relaxation is relatively large complexity that 
+may or may not bring a similar gain, and we don't really want to include 
+this linker pass in the kernel.
+
 > 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  drivers/fpga/tests/fpga-mgr-test.c | 311 +++++++++++++++++++++++++++++
->  1 file changed, 311 insertions(+)
->  create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
+>   arch/loongarch/Makefile | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
-> new file mode 100644
-> index 000000000000..6fd2e235f195
-> --- /dev/null
-> +++ b/drivers/fpga/tests/fpga-mgr-test.c
-> @@ -0,0 +1,311 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the FPGA Manager
-> + *
-> + * Copyright (C) 2023 Red Hat, Inc.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <linux/device.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/module.h>
-> +#include <linux/scatterlist.h>
-> +#include <linux/types.h>
-> +
-> +#define HEADER_FILL		'H'
-> +#define IMAGE_FILL		'P'
-> +#define IMAGE_BLOCK		1024
-> +
-> +#define HEADER_SIZE		IMAGE_BLOCK
-> +#define IMAGE_SIZE		(IMAGE_BLOCK * 4)
-> +
-> +struct mgr_stats {
-> +	bool header_match;
-> +	bool image_match;
-> +	u32 seq_num;
-> +	u32 op_parse_header_seq;
-> +	u32 op_write_init_seq;
-> +	u32 op_write_seq;
-> +	u32 op_write_sg_seq;
-> +	u32 op_write_complete_seq;
-> +	enum fpga_mgr_states op_parse_header_state;
-> +	enum fpga_mgr_states op_write_init_state;
-> +	enum fpga_mgr_states op_write_state;
-> +	enum fpga_mgr_states op_write_sg_state;
-> +	enum fpga_mgr_states op_write_complete_state;
-> +};
-> +
-> +struct mgr_ctx {
-> +	struct fpga_image_info *img_info;
-> +	struct fpga_manager *mgr;
-> +	struct platform_device *pdev;
-> +	struct mgr_stats stats;
-> +};
-> +
-> +/**
-> + * init_test_buffer() - Allocate and initialize a test image in a buffer.
-> + * @test: KUnit test context object.
-> + * @count: image size in bytes.
-> + *
-> + * Return: pointer to the newly allocated image.
-> + */
-> +static char *init_test_buffer(struct kunit *test, size_t count)
-> +{
-> +	char *buf;
-> +
-> +	KUNIT_ASSERT_GE(test, count, HEADER_SIZE);
-> +
-> +	buf = kunit_kzalloc(test, count, GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
-> +
-> +	memset(buf, HEADER_FILL, HEADER_SIZE);
-> +	memset(buf + HEADER_SIZE, IMAGE_FILL, count - HEADER_SIZE);
-> +
-> +	return buf;
-> +}
-> +
-> +static int op_parse_header(struct fpga_manager *mgr, struct fpga_image_info *info,
-> +			   const char *buf, size_t count)
-> +{
-> +	struct mgr_stats *stats = mgr->priv;
-> +	size_t i;
-> +
-> +	/* Set header_size and data_size for later */
-> +	info->header_size = HEADER_SIZE;
-> +	info->data_size = info->count - HEADER_SIZE;
-> +
-> +	stats->header_match = true;
-> +
-> +	/* Check header */
-> +	for (i = 0; i < info->header_size; i++)
-> +		if (buf[i] != HEADER_FILL)
-> +			stats->header_match = false;
-> +
-> +	stats->op_parse_header_state = mgr->state;
-> +	stats->op_parse_header_seq = stats->seq_num++;
-> +
-> +	return 0;
-> +}
-> +
-> +static int op_write_init(struct fpga_manager *mgr, struct fpga_image_info *info,
-> +			 const char *buf, size_t count)
-> +{
-> +	struct mgr_stats *stats = mgr->priv;
-> +
-> +	stats->op_write_init_state = mgr->state;
-> +	stats->op_write_init_seq = stats->seq_num++;
-> +
-> +	return 0;
-> +}
-> +
-> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
-> +{
-> +	struct mgr_stats *stats = mgr->priv;
-> +	size_t i;
-> +
-> +	/* Check the image */
-> +	stats->image_match = true;
-> +	for (i = 0; i < count; i++)
-> +		if (buf[i] != IMAGE_FILL)
-> +			stats->image_match = false;
-> +
-> +	stats->op_write_state = mgr->state;
-> +	stats->op_write_seq = stats->seq_num++;
-> +
-> +	return 0;
-> +}
-> +
-> +static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
-> +{
-> +	struct mgr_stats *stats = mgr->priv;
-> +	struct sg_mapping_iter miter;
-> +	char *img;
-> +	size_t i;
-> +
-> +	/*
-> +	 * Check the image, but first skip the header since write_sg will get
-> +	 * the whole image in sg_table.
-> +	 */
-> +	stats->image_match = true;
-> +	sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
-> +
-> +	if (!sg_miter_skip(&miter, HEADER_SIZE))
-> +		stats->image_match = false;
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 09ba338a64de..7466d3b15db8 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -68,6 +68,8 @@ LDFLAGS_vmlinux			+= -static -n -nostdlib
+>   ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+>   cflags-y			+= $(call cc-option,-mexplicit-relocs)
+>   KBUILD_CFLAGS_KERNEL		+= $(call cc-option,-mdirect-extern-access)
+> +KBUILD_AFLAGS_MODULE		+= $(call cc-option,-mno-relax) $(call cc-option,-Wa$(comma)-mno-relax)
+> +KBUILD_CFLAGS_MODULE		+= $(call cc-option,-mno-relax) $(call cc-option,-Wa$(comma)-mno-relax)
+>   else
+>   cflags-y			+= $(call cc-option,-mno-explicit-relocs)
+>   KBUILD_AFLAGS_KERNEL		+= -Wa,-mla-global-with-pcrel
 
-If this fails, should we continue?
+The code changes are good. With the commit message improved:
 
-> +
-> +	while (sg_miter_next(&miter)) {
-> +		img = miter.addr;
-> +		for (i = 0; i < miter.length; i++) {
-> +			if (img[i] != IMAGE_FILL)
-> +				stats->image_match = false;
-> +		}
-> +	}
-> +
-> +	sg_miter_stop(&miter);
-> +
-> +	stats->op_write_sg_state = mgr->state;
-> +	stats->op_write_sg_seq = stats->seq_num++;
-> +
-> +	return 0;
-> +}
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
