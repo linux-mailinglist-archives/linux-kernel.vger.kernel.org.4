@@ -2,150 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEF274DB55
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FE574DB60
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 18:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjGJQmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 12:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S230286AbjGJQqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 12:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjGJQmT (ORCPT
+        with ESMTP id S229940AbjGJQp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:42:19 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37ECD2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:42:17 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so2962462a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 09:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689007337; x=1691599337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qyi+g/4iN33+N4r7PmkYNOIpNbVkOIVV3SbpVL/0f78=;
-        b=xmE/dpStOPoOn/tGY/8KyGhVQRn4mEfShDCdd6LU8SRddth8exKS6tDSgXfAdH6+gq
-         +0+vOwSXUFPJyZ3MoYLLFa7IJcVC1ba0u6+8yYcgewZBF+YWg7FIFwnAAbwHOav/Zcrd
-         XGHh/rjQIusc2SoGg12X/t+TuQuUSbJULC/TBlZ2RNLktoGUekoJkMIDgZ+O0ZbxCNOl
-         lxEf+rdCkkevPj6uNS8uUH630/mu9gX6Kk1GMR28xQ2Z4Sf8rkyyU06u0Q/LbYn2HboC
-         GsCh1uHQqkcuRC10wYt6yae6IYLkvzsF/784TfHZ6hfEQXQPmK2NpMMcmLJELvtMJkKK
-         hFzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689007337; x=1691599337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qyi+g/4iN33+N4r7PmkYNOIpNbVkOIVV3SbpVL/0f78=;
-        b=DpDky5QNnkhOdX6pPlEESKBDpEJysyWosRvpzTwTO+XVkTmhurFis0/KNi1bCovSLZ
-         KwwErIth0bHBP0SfKZkOv5LDx9OhgFmp9ftgdeJe9R4cY215wu4SMTI3dHcC996+XWS6
-         CMB5q130e2YCxy4TH2UuBdNMph7a3p7NVYbZ4jcZwmgd07bY5+t9joVnXIhIOp9xDR2V
-         LO+oqmput9o8huxB3pyy0R4yAARUNihipqmYIfTDf10URrqFCdT+o2fbWdmmzmH+qlrN
-         6nlYIiUeB/3XXb5tAU3clpnbIf3zOyxn0U02nZw2KFU4jg0+BV8P9hbX7B4VAMi4tExW
-         Gb8w==
-X-Gm-Message-State: ABy/qLZrScJEXoyNlIh8gf6c58oN5hsHVOZuujdn1mZ/8MoM5pKe772d
-        nGFrAaks95P2yPQu0/jGUV1/Zw==
-X-Google-Smtp-Source: APBJJlGjPfyzkP5hzN8DXAx5SI3f2kqPRoqJacRX6cKy96iaNXVUSCslRKvAST+6RpCpSUG3SWkAIQ==
-X-Received: by 2002:a17:90b:897:b0:265:780e:5edc with SMTP id bj23-20020a17090b089700b00265780e5edcmr17815145pjb.10.1689007336914;
-        Mon, 10 Jul 2023 09:42:16 -0700 (PDT)
-Received: from google.com (41.183.143.34.bc.googleusercontent.com. [34.143.183.41])
-        by smtp.gmail.com with ESMTPSA id o18-20020a17090ad25200b00263f8915aa3sm6551689pjw.31.2023.07.10.09.42.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 09:42:16 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 22:12:07 +0530
-From:   Ajay Agarwal <ajayagarwal@google.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Sajid Dalvi <sdalvi@google.com>
-Subject: Re: [PATCH] Revert "PCI: dwc: Wait for link up only if link is
- started"
-Message-ID: <ZKw03xjH5VdL/JHD@google.com>
-References: <20230706082610.26584-1-johan+linaro@kernel.org>
- <20230706125811.GD4808@thinkpad>
- <ZKgJfG5Mi-e77LQT@hovoldconsulting.com>
- <ZKwwAin4FcCETGq/@google.com>
+        Mon, 10 Jul 2023 12:45:59 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA93F4;
+        Mon, 10 Jul 2023 09:45:56 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1689007545tbaedb4v
+Received: from linux-lab-host.localdomain ( [116.30.126.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 11 Jul 2023 00:45:44 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: Lc4bMlOoZUFbRFKipiqts0TvmsJAMcFxqII+5IdR+oOiXLeiNhln7Mh30GDGA
+        tjJBIIKTMmHa9uTxTjXqHzdRPbv0r7b/foWfvRj13r8YfV2jN207PeP8t5P3As/t/d2lVOq
+        qgXdZqFDhdX1WVfZJzebVzp/fJt3iTdR6EBQjZdF4JCW2/xQ7gg4ut/3cyeJ1Bust1Z1fY0
+        e5sjnXX+csYHdmU66n3qqXtR0fQpYRXcBDgz/KjMAWifUAmY2GdyZejTzH7nUfGW8BpNf3j
+        oTAiuhLayvFn0s1SfR7iNqm9cv3UYG3a+G6oXUe93kB3D7uW7MjTPpoKcA7AnFuBi4B44Sv
+        TeAp8Dteuy/2hVdoSGwesX+CBo3EA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 4750259835239617674
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v2 04/12] tools/nolibc: crt.h: add _start_c
+Date:   Tue, 11 Jul 2023 00:45:43 +0800
+Message-Id: <20230710164543.6284-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <195a189b-b9d5-45a1-8901-c9bdb52da2f3@t-8ch.de>
+References: <195a189b-b9d5-45a1-8901-c9bdb52da2f3@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKwwAin4FcCETGq/@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 09:51:22PM +0530, Ajay Agarwal wrote:
-> On Fri, Jul 07, 2023 at 02:47:56PM +0200, Johan Hovold wrote:
-> > On Thu, Jul 06, 2023 at 06:28:11PM +0530, Manivannan Sadhasivam wrote:
-> > > On Thu, Jul 06, 2023 at 10:26:10AM +0200, Johan Hovold wrote:
-> > 
-> > > > Finally, note that the intel-gw driver is the only driver currently not
-> > > > providing a start_link callback and instead starts the link in its
-> > > > host_init callback, and which may avoid an additional one-second timeout
-> > > > during probe by making the link-up wait conditional. If anyone cares,
-> > > > that can be done in a follow-up patch with a proper motivation.
-> > 
-> > > The offending commit is bogus since it makes the intel-gw _special_ w.r.t
-> > > waiting for the link up. Most of the drivers call dw_pcie_host_init() during the
-> > > probe time and they all have to wait for 1 sec if the slot is empty.
-> Mani, can you please explain how my commit made the intel-gw driver
-> special? The intel driver actually fails the dw_pcie_host_init if the
-> link does not come up. That was my motivation behind adding the fail
-> logic in the core driver as well.
-> > 
-> > Just to clarify, the intel-gw driver starts the link and waits for link
-> > up in its host_init() callback, which is called during probe. That wait
-> > could possibly just be dropped in favour of the one in
-> > dw_pcie_host_init() and/or the driver could be reworked to implement
-> > start_link().
-> > 
-> > Either way, the call in dw_pcie_host_init() will only add an additional
-> > 1 second delay in cases where the link did *not* come up.
-> > 
-> > > As Johan noted, intel-gw should make use of the async probe to avoid the boot
-> > > delay instead of adding a special case.
-> > 
-> > Indeed.
-> > 
-> > Johan
-> Johan, Mani
-> My apologies for adding this regression in some of the SOCs.
-> May I suggest to keep my patch and make the following change instead?
-> This shall keep the existing behavior as is, and save the boot time
-> for drivers that do not define the start_link()?
+Hi, Thomas
+
+> On 2023-07-10 17:26:43+0800, Zhangjin Wu wrote:
+> > > On 2023-07-08 23:29:58+0800, Zhangjin Wu wrote:
+[...]
 > 
-> ```
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index cf61733bf78d..af6a7cd060b1 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -492,11 +492,8 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
->                 if (ret)
->                         goto err_remove_edma;
+> > > It also seems like a good opportunity to add some tests for
+> > > argv/environment variable passing.
+> > 
+> > Yes, and even further, we can do more on auxv, just like musl does in
+> > src/env/__libc_start_main.c, not that urgent currently:
 > 
-> -               if (pci->ops && pci->ops->start_link) {
-> -                       ret = dw_pcie_wait_for_link(pci);
-> -                       if (ret)
-> -                               goto err_stop_link;
-> -               }
-> +               if (pci->ops && pci->ops->start_link)
-> +                       dw_pcie_wait_for_link(pci);
->         }
+> With tests I mean nolibc-test.c to make sure we don't introduce any
+> regressions.
+> Only some tiny testcases to validate that argv and environ are picked
+> up correctly by the startup code on all arches.
+>
+
+Thomas, seems we already have some testcases for argv, environ and auxv
+currently:
+
+    run_syscall: chmod_argv0 <-- argv[0]
+		 chdir_root  <-- chdir(getenv("PWD"))
+                 getpagesize <-- getauxval(AT_PAGESZ)
+    run_stdlib : getenv_TERM <-- getenv
+
+> > 
+[...]
+> > >
+> > 
+> > Ok, welcome to discuss more in this thread:
+> > 
+> >     https://lore.kernel.org/lkml/20230710072340.10798-1-falcon@tinylab.org/
+> > 
+> > and let's choose a better method as possible as we can, Just replied Willy to
+> > explain more.
 > 
->         bridge->sysdata = pp;
-> ```
-I just realized that Fabio pushed exactly the same patch as I suggested
-here:
-https://lore.kernel.org/all/20230704122635.1362156-1-festevam@gmail.com/.
-I think it is better we take it instead of reverting my commit.
+> Will do.
+> 
+> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > > ---
+> > > >  tools/include/nolibc/crt.h | 44 ++++++++++++++++++++++++++++++++++++++
+> > > >  1 file changed, 44 insertions(+)
+> > > > 
+> > > > diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+> > > > index 221b7c5346ca..b269294e9664 100644
+> > > > --- a/tools/include/nolibc/crt.h
+> > > > +++ b/tools/include/nolibc/crt.h
+> > > > @@ -13,4 +13,48 @@
+> > > >  char **environ __attribute__((weak));
+> > > 
+> > > The old code seems to avoid putting "environ" into the global symbol
+> > > namespace. Could this declaration be moved into the function like in
+> > > getenv()?
+> > >
+> > 
+> > ok, do you mean just move it to stdlib.h like this? I moved _auxv (used
+> > by getauxv()) to stdlib.h too:
+> 
+> Nevermind, I got confused by the in-function declaration of
+> "extern char **environ" inside "getenv()".
+> Actually this in-function declaration doesn't do anything and can be
+> dropped.
+>
+
+Yes. for nolibc application is in one-file style, let's remove it.
+
+> > 
+[...]
+> > > 
+> > > This will lead to conflicting declarations if the users use a different
+> > > signature. I'm not (yet?) sure how to work around this.
+> > >
+> > 
+> > Ah yes, I forgot this critical case, people may use something like:
+> > 
+> >     int main(void)
+> >     int main(int argc, char *argv[])
+> 
+> > [..]
+> 
+> I thought about this general problem and it turns out that there is
+> nothing that any libc can do to distinguish these special cases.
+> So it has to be handled in the compiler and we do not have to care.
+
+Ok.
+
+Thanks,
+Zhangjin
+
+> 
+> Thomas
