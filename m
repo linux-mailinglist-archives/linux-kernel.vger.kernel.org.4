@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DE174E037
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D55E74E040
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 23:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjGJV2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 17:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S230247AbjGJVaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 17:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjGJV2O (ORCPT
+        with ESMTP id S229612AbjGJVaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 17:28:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F82DE;
-        Mon, 10 Jul 2023 14:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689024493; x=1720560493;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=0qkWoxl+0canLRzNJ94V2V3aItW8Yk1wz+ICURPIxH4=;
-  b=G/ymhnV+CoUBRd5IBgbrMSXUs3qT8Pdi8iViGEBH3WOhYPW639KVjlfO
-   fIQjPi8n/Q/lJIArm52fM/sKpJHVK0iqYaP+CsMvpUghA0IHY2g8Ssakf
-   5DFrZMuMek1jEwDPdAx6W1yt0YXVUzUzocQPrFmpGYO2rx++37kje8d+x
-   /MlQ65r6IBQQ/H4fpMIja8qc0hXbczz8uiuWwR+fEhG2nFsrxMfXD5N57
-   IvVqcSHfjsk1jJ9wKsi+OSFDtCmwzECjJuNkRW3JNTrokyKBUumM2gDEU
-   7piOwk29Z92dbAsztOujhnHCJl7Q4BVXzmnSCEjILnhZtPkbm3HqtHVSd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="354321747"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="354321747"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 14:28:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="967554592"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="967554592"
-Received: from britta5x-mobl1.amr.corp.intel.com ([10.212.44.7])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 14:28:11 -0700
-Message-ID: <60b70751a1a1ad786f534ca0b7fd3cc423736f0a.camel@linux.intel.com>
-Subject: Re: [PATCH] dmaengine:idxd: Use local64_try_cmpxchg in
- perfmon_pmu_event_update
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Dave Jiang <dave.jiang@intel.com>, Uros Bizjak <ubizjak@gmail.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Date:   Mon, 10 Jul 2023 16:28:10 -0500
-In-Reply-To: <e816aa75-4588-dae4-2d01-6f5ba9d4a4f3@intel.com>
-References: <20230703145346.5206-1-ubizjak@gmail.com>
-         <e816aa75-4588-dae4-2d01-6f5ba9d4a4f3@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Mon, 10 Jul 2023 17:30:15 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC6FDE;
+        Mon, 10 Jul 2023 14:30:14 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso2565446b3a.2;
+        Mon, 10 Jul 2023 14:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689024614; x=1691616614;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EuY7YWF+Kh1UKEuVmzs1ImB1X2StsWyaHb8EJ2edbSU=;
+        b=b3unhp+1fEq1qyFirSnAUKqpNzuFjhYYSuty9IalbkDlKvc7XoIUkCzsQX53+qqMso
+         NwXyfA1g9Xij5ua20EZYWee/MO0shqL3wMkRZAmF3/qpeczM4vPXnasiWO7nmM4zPbpr
+         0hXqvIK9ovnj6bBskOJYe09WNUA7ZqVrWMXhlSpXhpAhs0U/uUmVhjPB3K5UT9VZvAox
+         7vtXOPRSOOHV8Ak+7M8NJNupp2LhUxzIWpQk6ViFHF13n0NiADBRyjZyT1Y1TJstujDg
+         qypPLEV3FJqR1rVskyvFRj9wLqdVoPTFtB/kSQLbNmTPRoK8nmjff2VZGWr2tnc4YlPm
+         3/2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689024614; x=1691616614;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EuY7YWF+Kh1UKEuVmzs1ImB1X2StsWyaHb8EJ2edbSU=;
+        b=RmspFaZmcZcgZ1PyGHc4kwrbbfrv/8VXziY8AVnNbahfyo8x8pdl3F21VaG3fcox4O
+         OZQpkXl+mvCBfCwlMAlPu4qszUeMnsTU2z6ZZDt31pBGt35tW3nUQqx/k0cFy9A6W2mv
+         NAxM/wUaS+xFbFyFq+sXLndt39ITM4+vjBGzUnge8gVoMCwv66LB83vf5SxOZEujfLYH
+         pkmh5UshbDMtKHo0x5rwSu5c2Lml4ZalooMDRxxVisn3h+oGwaAqp4da/fNlkEc8HDUl
+         9MPmX+W4X3K0PuD5CGiv4WZ2DRVa2KoTOCCTuLdE0gFTZUnjxOdFk9/4UHnCYPbEhcaO
+         tarw==
+X-Gm-Message-State: ABy/qLZAOqwITqQaQUFjC1FvjTnhze3u8XnT9qC3Ntygf+KDrlCDEJpT
+        Vl2j0QW6ef/Vw5VqyMB81phzU4ixrOVt/A==
+X-Google-Smtp-Source: APBJJlEw5l9hIhPZnhlmln9tqLygtL8HWCz1m+ezNtvsanxXvgqKiIThDzls38J3M8LUWfBPuFLq+w==
+X-Received: by 2002:a05:6a00:1782:b0:666:8403:9f4 with SMTP id s2-20020a056a00178200b00666840309f4mr16380908pfg.16.1689024613985;
+        Mon, 10 Jul 2023 14:30:13 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id a10-20020a62bd0a000000b0067db7c32419sm266518pff.15.2023.07.10.14.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 14:30:13 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 11:30:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [PATCH v4 8/9] cgroup/cpuset: Documentation update for partition
+Message-ID: <ZKx4ZJowRhRtjZxB@slm.duckdns.org>
+References: <20230627143508.1576882-1-longman@redhat.com>
+ <20230627143508.1576882-9-longman@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627143508.1576882-9-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-07-05 at 07:53 -0700, Dave Jiang wrote:
->=20
->=20
-> On 7/3/23 07:52, Uros Bizjak wrote:
-> > Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) =3D=
-=3D old
-> > in perfmon_pmu_event_update.=C2=A0 x86 CMPXCHG instruction returns succ=
-ess in
-> > ZF flag, so this change saves a compare after cmpxchg (and related move
-> > instruction in front of cmpxchg).
-> >=20
-> > Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxc=
-hg
-> > fails. There is no need to re-read the value in the loop.
-> >=20
-> > No functional change intended.
-> >=20
-> > Cc: Fenghua Yu <fenghua.yu@intel.com>
-> > Cc: Dave Jiang <dave.jiang@intel.com>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
->=20
->=20
-> Cc: Tom Zanussi
->=20
-> Tom do you mind review this patch? Thanks!
+Hello,
 
-Looks fine to me.
+On Tue, Jun 27, 2023 at 10:35:07AM -0400, Waiman Long wrote:
+...
+> +	There are two types of partitions - local and remote.  A local
+> +	partition is one whose parent cgroup is also a valid partition
+> +	root.  A remote partition is one whose parent cgroup is not a
+> +	valid partition root itself.  Writing to "cpuset.cpus.exclusive"
+> +	is not mandatory for the creation of a local partition as its
+> +	"cpuset.cpus.exclusive" file will be filled in automatically if
+> +	it is not set.	The automaticaly set value will be based on its
+> +	"cpuset.cpus" value.  Writing the proper "cpuset.cpus.exclusive"
+> +	values down the cgroup hierarchy is mandatory for the creation
+> +	of a remote partition.
 
-Thanks,
+Wouldn't a partition root's cpus.exclusive always contain all of the CPUs in
+its cpus? Would it make sense for cpus.exclusive to be different from .cpus?
 
-Reviewed-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+Thanks.
 
->=20
-> > ---
-> > =C2=A0 drivers/dma/idxd/perfmon.c | 7 +++----
-> > =C2=A0 1 file changed, 3 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/dma/idxd/perfmon.c b/drivers/dma/idxd/perfmon.c
-> > index d73004f47cf4..fdda6d604262 100644
-> > --- a/drivers/dma/idxd/perfmon.c
-> > +++ b/drivers/dma/idxd/perfmon.c
-> > @@ -245,12 +245,11 @@ static void perfmon_pmu_event_update(struct perf_=
-event *event)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int shift =3D 64 - idxd=
-->idxd_pmu->counter_width;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct hw_perf_event *h=
-wc =3D &event->hw;
-> > =C2=A0=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0prev_raw_count =3D local64_r=
-ead(&hwc->prev_count);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0do {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0prev_raw_count =3D local64_read(&hwc->prev_count);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0new_raw_count =3D perfmon_pmu_read_counter(event=
-);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} while (local64_cmpxchg(&hw=
-c->prev_count, prev_raw_count,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0new_ra=
-w_count) !=3D prev_raw_count);
-> > -
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} while (!local64_try_cmpxch=
-g(&hwc->prev_count,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &p=
-rev_raw_count, new_raw_count));
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0n =3D (new_raw_count <<=
- shift);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0p =3D (prev_raw_count <=
-< shift);
-> > =C2=A0=20
-
+-- 
+tejun
