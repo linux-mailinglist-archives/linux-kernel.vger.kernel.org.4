@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF30C74DBD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E7374DBDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjGJRAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
+        id S231136AbjGJRC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjGJRAf (ORCPT
+        with ESMTP id S230040AbjGJRCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:00:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A64D7;
-        Mon, 10 Jul 2023 10:00:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB9961063;
-        Mon, 10 Jul 2023 17:00:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9BEBC433C7;
-        Mon, 10 Jul 2023 17:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689008433;
-        bh=olt/eE72Fe/WemTa8hX4qWzKexWxP3mHF33PZCU7i9I=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=myb7n+TDAMq+1aoTOqi2avGRFtbWQ0Xwo2eeJDzqim66ZnirfK67FwKBqW7Q8PBVR
-         Y1KmAjtfvL+d1MlUYOD54vWBG7KNDuLtIPYhbPCtyVyPXHrjbe5wWQRjWNn4qVlN8f
-         F/t/3gimacqsqfL46+vXf/Mhkc2iIe7oCYXO+mTc4d2sc3kaKiWnAOE8WIzHrlNuFY
-         XtwZgvJR+I2qXtk1CCIogxqOy/YWRfvb1g5PSNR4RCCjHWKlBtMR3xOu+Ddnw1g7BF
-         jTrqA+h1kxzLg7n0lPjAJVu91ykBZHxdOHZBc5gH+QgQLzmjHa+fhpoCN7CE2ZI32s
-         T7WnBRuNQFqhQ==
-Message-ID: <d380ea85b375c861067d01a2561150039e8c3491.camel@kernel.org>
-Subject: Re: [PATCH v3 4/4] tpm_tis: Resend command to recover from data
- transfer errors
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 10 Jul 2023 20:00:29 +0300
-In-Reply-To: <20230613180259.3525-5-Alexander.Steffen@infineon.com>
-References: <20230613180259.3525-1-Alexander.Steffen@infineon.com>
-         <20230613180259.3525-5-Alexander.Steffen@infineon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1-0ubuntu1 
+        Mon, 10 Jul 2023 13:02:25 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB08ABB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:02:23 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-682ae5d4184so1016627b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689008543; x=1691600543;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=twIKQ2MHmWju5IY9XdGeqwYNLAm5VOVmCmH1cwAeJvk=;
+        b=sprGqyuTIkmhlp/iXd5gmNH66qzxiDBk8Cam7K03v2kzxqK9/AFYFQvGhIE1D4y/PY
+         mgSHU0aplUx66upCzdNow5DVpTrfAY2q407OHNIoA+nTIyH3oMpGtxM8Cb3gIHwlGpWN
+         l6v3kltpBon+nO1yEEILHeHPbORVFoQ6qJ2DwMiqvrNWHdwr3LAJtsr0xoTCAyloTuR7
+         5VekZ5DWDlNYCoXiZc6B3++nUd6Pxl4xfJFwEGeQX5hADWaGGbYzlUl5DSYc9B3CROP4
+         kxkNeIbm6TmTeZDMzQo4TSmhUXqz9V/lVHLrEpjVqIqdIvjfLg0XDCVu+4kkSWpW++Kp
+         FT5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689008543; x=1691600543;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=twIKQ2MHmWju5IY9XdGeqwYNLAm5VOVmCmH1cwAeJvk=;
+        b=ZxhouXaVsfCVUQ4pwObdOAYvFVi0VZxs4d2ev3d/4F7VBCaOofDWVlISASe10GNh9v
+         W6M7Rj2ZbE/JL9AyCBFTComHDmuWa2r+5kKR1zfCaC72jZU8Eac8HiEQRxB4K3cEAASs
+         BCybiva723LN1QSZ4syC+2Era7heu1zKiCMurEw2FSJm3RHWm/ycYfRIgWNx4TQ1r+2X
+         qtmA3aNPqI/GPU/m7IKWzGvxbLvXo9C8CGeVTYISAUGKMFInxAcPamAWkrmMnimTLLnk
+         7hi3eMGXgQq3eY9/i2eWO8R/gz9H2E1+MjXQCalORFf6kQTuIQp+frvPWq99+IIFaUzb
+         nA5g==
+X-Gm-Message-State: ABy/qLYRlnYbtYC16ZUqdLnhsJADk5c7prtNHrHEF3thkW/oJOY8dG50
+        2c7sM0uGC2gAjXOaLjRbkiiKJSDWLuhjnbGWck4=
+X-Google-Smtp-Source: APBJJlHedqKsKuyUaPZ0noHnVu/heeqrZZBf1PjMGnOYJMAaqmONjhnkrTFZWY2hVKZgNlfBPFnRDw==
+X-Received: by 2002:a05:6a00:3a2a:b0:675:8521:ddc7 with SMTP id fj42-20020a056a003a2a00b006758521ddc7mr15664306pfb.0.1689008543234;
+        Mon, 10 Jul 2023 10:02:23 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id a17-20020aa78651000000b006828ee9fdaesm29514pfo.127.2023.07.10.10.02.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 10:02:22 -0700 (PDT)
+Message-ID: <7e8c910f-4938-01c2-ac38-7ce89236cec1@kernel.dk>
+Date:   Mon, 10 Jul 2023 11:02:21 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] io_uring: Redefined the meaning of io_alloc_async_data's
+ return value
+Content-Language: en-US
+To:     Gabriel Krisman Bertazi <krisman@suse.de>,
+        Lu Hongfei <luhongfei@vivo.com>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+References: <20230710090957.10463-1-luhongfei@vivo.com>
+ <87o7kjr9d9.fsf@suse.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <87o7kjr9d9.fsf@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-13 at 20:02 +0200, Alexander Steffen wrote:
-> Similar to the transmission of TPM responses, also the transmission of TP=
-M
-> commands may become corrupted. Instead of aborting when detecting such
-> issues, try resending the command again.
->=20
-> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index a6d1396413a7..7b13ad4bd6dd 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -532,10 +532,17 @@ static int tpm_tis_send_main(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	int rc;
->  	u32 ordinal;
->  	unsigned long dur;
-> +	unsigned int try;
-> =20
-> -	rc =3D tpm_tis_send_data(chip, buf, len);
-> -	if (rc < 0)
-> -		return rc;
-> +	for (try =3D 0; try < TPM_RETRY; try++) {
-> +		rc =3D tpm_tis_send_data(chip, buf, len);
-> +		if (rc >=3D 0)
-> +			/* Data transfer done successfully */
-> +			break;
-> +		else if (rc !=3D -EIO)
-> +			/* Data transfer failed, not recoverable */
-> +			return rc;
-> +	}
-> =20
->  	/* go and do it */
->  	rc =3D tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+On 7/10/23 10:58?AM, Gabriel Krisman Bertazi wrote:
+> Lu Hongfei <luhongfei@vivo.com> writes:
+> 
+>> Usually, successful memory allocation returns true and failure returns false,
+>> which is more in line with the intuitive perception of most people. So it
+>> is necessary to redefine the meaning of io_alloc_async_data's return value.
+>>
+>> This could enhance the readability of the code and reduce the possibility
+>> of confusion.
+> 
+> just want to say, this is the kind of patch that causes bugs in
+> downstream kernels.  It is not fixing anything, and when we backport a
+> future bugfix around it, it is easy to miss it and slightly break the
+> semantics.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Exactly! This is also why I'm not a fan of patches like this, and was
+not intending to apply it.
 
-BR, Jarkko
+> That's my downstream problem, of course. But at least it would be good
+
+Strictly speaking it is, but I think we have a responsibility to not
+have core bits be different upstream "just because". IOW, making it
+harder to introduce problems when backporting.
+
+And fwiw, I'm not sure I agree on the idiomatic part of it. Lots of
+functions return 0 for success and non-zero for an error. It's a bit odd
+as this one is a bool, but I'm pretty sure it used to return an actual
+error and this is why it looks the way it currently does.
+
+-- 
+Jens Axboe
+
