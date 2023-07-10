@@ -2,111 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E67F74CFD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED6974CFDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjGJIXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S232830AbjGJIY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbjGJIX0 (ORCPT
+        with ESMTP id S232995AbjGJIYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:23:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC6291
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:23:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qImAv-0001mB-0n; Mon, 10 Jul 2023 10:23:17 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qImAt-00DNI3-Sv; Mon, 10 Jul 2023 10:23:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qImAs-003kVg-O1; Mon, 10 Jul 2023 10:23:14 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org
-Subject: [PATCH] misc: tps6594-esm: Convert to platform remove callback returning void
-Date:   Mon, 10 Jul 2023 10:23:11 +0200
-Message-Id: <20230710082311.3474785-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Mon, 10 Jul 2023 04:24:08 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EA0E74
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:23:57 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-992ace062f3so548624066b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 01:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1688977436; x=1691569436;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lVVTTcakGIJzotpbfodORieW7nDILC8yQwEKuMOUYLA=;
+        b=v8PbxExQdeZ1rHkHw7LZ/7j9U0WaA1dkJRr1esV51tDnEYnz1yXdBnwheipucQw7iU
+         Dwny0J0H5BLnpfGCG5wzHd2FnzlN2eKCW8gMzeSEoxaUGxTKsnw6EvOsEUU4TK67JfFM
+         Fphyzekktczmyd9ASIWTNFAeo2y/sK6qzV5gvKJEWK5UQrHLGo1bEQy410Gg0pjYZAno
+         l+f8A80ndIBgzckm1LdIX5bAeQYPaJaXuB13ipB3GplwZOJY/GVnmBg1MPjebry6Ueg9
+         L5E9ztuma8giElufrDqCE9zHYDHjDcl1vKgQ9QXsO3zircBl8jFsHwzGNf5dL/40PtRb
+         4zSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688977436; x=1691569436;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lVVTTcakGIJzotpbfodORieW7nDILC8yQwEKuMOUYLA=;
+        b=RxH2gvJPorBVpvcTZRn7d3hNxEXie2mJs1e07GHlK79eVGSQNKqtkszWYBschqrpo8
+         d/PHrKSd6SG/yq5GV4K8fy/8K3yrYGc4l9yVSWoeLGKFOM+STsi1tYr3sz7dI0zZVKr9
+         Lw7+dLuD/nbJkhn59iDAKJOt/hJLur94e/FV9pDYhTsMTcAQK6+2UNz3YIIIKR7poghI
+         GpxlF5oX1Zn2mix5/GG8Kd2k+s+Lzz28ER0NEmnA4bphA6xV68Ep5/ydhRLbp2/N9Rh+
+         88zBHbaSOKMIDXVfrp8OPL68A9fNn87lSc7zQf7nxhtoLrTIqulT/1gIPmqTMWZrzm7w
+         it8Q==
+X-Gm-Message-State: ABy/qLYwvoN2JzL1Ji7DoJHRE8VWNBkltZPNFk9UTxKFcEmpxlfoPXPE
+        eodH+ZAphJgbqs2mjeJCHbXWCg==
+X-Google-Smtp-Source: APBJJlF/N78SzaPnYo5KIYgXXWBnknej6T2zV2RqWE8pAe5WopCVgqY0xM4CSFkpZNpYhf0+V/cUNg==
+X-Received: by 2002:a17:906:101e:b0:993:fba5:cdf3 with SMTP id 30-20020a170906101e00b00993fba5cdf3mr5110018ejm.6.1688977436009;
+        Mon, 10 Jul 2023 01:23:56 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id u2-20020a1709063b8200b0098e42bef732sm5733689ejf.183.2023.07.10.01.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 01:23:55 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 10:23:53 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     "kuba@kernel.org" <kuba@kernel.org>,
+        "vadfed@meta.com" <vadfed@meta.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "vadfed@fb.com" <vadfed@fb.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "M, Saeed" <saeedm@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "sj@kernel.org" <sj@kernel.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jacek.lawrynowicz@linux.intel.com" 
+        <jacek.lawrynowicz@linux.intel.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux@zary.sk" <linux@zary.sk>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "kuniyu@amazon.com" <kuniyu@amazon.com>,
+        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
+        "razor@blackwall.org" <razor@blackwall.org>,
+        "idosch@nvidia.com" <idosch@nvidia.com>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "phil@nwl.cc" <phil@nwl.cc>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
+Subject: Re: [RFC PATCH v8 08/10] ice: implement dpll interface to control cgu
+Message-ID: <ZKvAGSwbJWEQmESs@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-9-arkadiusz.kubalewski@intel.com>
+ <ZISmmH0jqxZRB4VX@nanopsycho>
+ <DM6PR11MB4657161D2871747A7B404EDD9B5FA@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZJLtR0c+tvCbUgri@nanopsycho>
+ <ZJ0hQRcm6S05r8VE@nanopsycho>
+ <DM6PR11MB465726733894C7E64AD3367E9B29A@DM6PR11MB4657.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2117; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=0OjzaYWz21aAqHhnSpRTgIdIhlM9Z7hOSmfvvIr5peY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkq7/u+8QE2G1Y2r9DttJvLZfpG8lSffzjc8zZn tQsDGdr7EqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZKu/7gAKCRCPgPtYfRL+ TvwUB/48hHp2WY1rKzEyMaHXicXxkS0fnihtw0F7QbXKqeaLgeHEo9LjgPONoCi5UOaCC7nfYB1 i7W93Zy7tFklyXk1q++VJ4SUNcnylHrORjijFlXrktE64D5arsdNRJwJpq8dLJZ/R9FsZadcP9N vW5CbjyiATJzKMKXMDynSNajt98rlzHd58NEdA2G/PhB0NVDxlNMgwpoQVnAeYLjgY1tpyReBp/ kN90iw0862J8rJlRKMKsCVNriU6UJkmwdRRbTywWGByiUukbDUncUmiHySLO0/Jl3ZiiW49Damd z0nFoh5suKTr29WnH79vqLVZR23oxAF/X6zDH0oKTYsX15LP
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB465726733894C7E64AD3367E9B29A@DM6PR11MB4657.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is ignored (apart
-from emitting a warning) and this typically results in resource leaks.
-To improve here there is a quest to make the remove callback return
-void. In the first step of this quest all drivers are converted to
-.remove_new() which already returns void. Eventually after all drivers
-are converted, .remove_new() is renamed to .remove().
+Mon, Jul 03, 2023 at 02:37:18PM CEST, arkadiusz.kubalewski@intel.com wrote:
+>>From: Jiri Pirko <jiri@resnulli.us>
+>>Sent: Thursday, June 29, 2023 8:14 AM
+>>
+>>Wed, Jun 21, 2023 at 02:29:59PM CEST, jiri@resnulli.us wrote:
+>>>Mon, Jun 19, 2023 at 10:34:12PM CEST, arkadiusz.kubalewski@intel.com
+>>wrote:
+>>>>>From: Jiri Pirko <jiri@resnulli.us>
+>>>>>Sent: Saturday, June 10, 2023 6:37 PM
+>>>>>
+>>>>>Fri, Jun 09, 2023 at 02:18:51PM CEST, arkadiusz.kubalewski@intel.com
+>>>>>wrote:
+>>>>>
+>>>>>[...]
+>>>>>
+>>>>>
+>>>>>>+static int ice_dpll_mode_get(const struct dpll_device *dpll, void *priv,
+>>>>>>+			     enum dpll_mode *mode,
+>>>>>>+			     struct netlink_ext_ack *extack)
+>>>>>>+{
+>>>>>>+	*mode = DPLL_MODE_AUTOMATIC;
+>>>>>
+>>>>>I don't understand how the automatic mode could work with SyncE. The
+>>>>>There is one pin exposed for one netdev. The SyncE daemon should select
+>>>>>exacly one pin. How do you achieve that?
+>>>>>Is is by setting DPLL_PIN_STATE_SELECTABLE on the pin-netdev you want to
+>>>>>select and DPLL_PIN_STATE_DISCONNECTED on the rest?
+>>>>>
+>>>>>
+>>>>>[...]
+>>>>
+>>>>AUTOMATIC mode autoselects highest priority valid signal.
+>>>>As you have pointed out, for SyncE selection, the user must be able to
+>>>>manually
+>>>>select a pin state to enable recovery of signal from particular port.
+>>>>
+>>>>In "ice" case there are 2 pins for network PHY clock signal recovery, and
+>>>>both
+>>>>are parent pins (MUX-type). There are also 4 pins assigned to netdevs
+>>>>(one per
+>>>>port). Thus passing a signal from PHY to the pin is done through the MUX-
+>>>>pin,
+>>>>by selecting proper state on pin-parent pair (where parent pins is highest
+>>>>prio
+>>>>pin on dpll).
+>>>
+>>>Could you show me some examples please?
+>>
+>>Arkadiusz, could you please reply to this?
+>>Thanks!
+>>
+>
+>Sure, sorry for the delays, let's try that.
+>
+>'ice' use case:
+>Enabling a PHY clock recovery for DPLL_MODE_AUTOMATIC dpll (ID#0) with PHY
+>recovered clock signals (PIN_ID#13) being muxed using MUX-type pin (PIN_ID#2)
+>
+>1. Set MUX-type pin to state selectable and highest priority on a dpll device
+>(or make sure it is already configured):
+>CMD_PIN_SET:
+>	PIN_ID			2
+>	PIN_PARENT_DEVICE	(nest)
+>		ID		0
+>		PIN_STATE	SELECTABLE
+>		PIN_PRIO	0
+>(assume all the other pins have prio >=1)
+>
+>2. Set connected state on a pin-parent_pin tuple where parent is a pin from #1
+>CMD_PIN_SET:
+>	PIN_ID			13
+>	PIN_PARENT_PIN		(nest)
+>		PIN_ID		2
+>		PIN_STATE	CONNECTED
 
-There are two calls that can go wrong in tps6594_esm_remove(); for both
-there is already an error message. Not returning the error code has the
-only side effect of suppressing (another) error message by the core
-about the error being ignored. So tps6594_esm_remove() can be converted
-to return void without any loss.
+How does this look from the perspective of a SyncE flow. Let's say you
+have eth0 and eth1, both is connected with a DPLL pin. Could you show
+how you select eth0 and then eth1?
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/misc/tps6594-esm.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/tps6594-esm.c b/drivers/misc/tps6594-esm.c
-index b488f704f104..a32da1c4ba61 100644
---- a/drivers/misc/tps6594-esm.c
-+++ b/drivers/misc/tps6594-esm.c
-@@ -65,7 +65,7 @@ static int tps6594_esm_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int tps6594_esm_remove(struct platform_device *pdev)
-+static void tps6594_esm_remove(struct platform_device *pdev)
- {
- 	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
- 	struct device *dev = &pdev->dev;
-@@ -86,8 +86,6 @@ static int tps6594_esm_remove(struct platform_device *pdev)
- out:
- 	pm_runtime_put_sync(dev);
- 	pm_runtime_disable(dev);
--
--	return ret;
- }
- 
- static int tps6594_esm_suspend(struct device *dev)
-@@ -121,7 +119,7 @@ static struct platform_driver tps6594_esm_driver = {
- 		.pm = pm_sleep_ptr(&tps6594_esm_pm_ops),
- 	},
- 	.probe = tps6594_esm_probe,
--	.remove = tps6594_esm_remove,
-+	.remove_new = tps6594_esm_remove,
- };
- 
- module_platform_driver(tps6594_esm_driver);
 
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
--- 
-2.39.2
-
+>
+>Thank you!
+>Arkadiusz
+>
+>>>
+>>>
+>>>>
+>>>>Thank you!
+>>>>Arkadiusz
