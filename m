@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9D674DDF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B47474DDFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjGJTLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S232008AbjGJTLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 15:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjGJTK6 (ORCPT
+        with ESMTP id S232147AbjGJTLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:10:58 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3C51BE7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:10:27 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-79702eee5a8so1098735241.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689016220; x=1691608220;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AgH9bF19P9qYpMUHf3fyLYC3kSHrwYWcNQb61WkbBZM=;
-        b=Vq6UPox4lPif5+gZBUK67g6LMD1TrK55l2nw0aD1kQj6CrQU75rL3OkeKstIaTW+k3
-         g5okbcseJqWyHbjqk5tXX+SU9k/63P4kMMCvsd+cvTZ6Fjlm7S3Hl8ZBGysF+9ug85Uw
-         B+HGFKaHOkZ/xmCH3UmQoZaEQStjNdr0bdgyF13tXSsU5vKuc5xQ7P30MDukQDiAIRE6
-         yMmGOUXBqr9RIbR0weNg2MOSf0Le3kMyXf0WWfomiX5CnsQ4gpd5CsCK8DblqI89eQI7
-         0Rv11udrWvi1MQeSWav9uZ3yRvhDb31QrKCBPtSByef5zq2rHfZ0F1mPMmw/CIlFKuCm
-         ADkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689016220; x=1691608220;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AgH9bF19P9qYpMUHf3fyLYC3kSHrwYWcNQb61WkbBZM=;
-        b=TO11bRdGQopUgid/vPkJR/QDX/FkxqQ5e6ORgF5EeLA3wx6Ja7CQHGAFID6oqTleTv
-         PKWNvEUuBOJnEkMgoShLzQItkKgqIbO9Uz5k23tT083P9j9Bv8BH62lmhoGTsXGToK0A
-         R0Q5RRhn6p+4kSWcqYaEE1Zh2RddrthHShv5Y7qVmzOdStRcZz20H/XjxDMQpClUnzrn
-         us4uXb6zH2Xm0l4OIPStJfC0E5j4IoHbGU094dMLXlDvFkHutwS8aXSO2DqG5ajxkO5+
-         61bHeVcI6V6FbbYUTl2qR1rJSnHtT+q1qy9UmXIQzv0VZ6dA/OVDXyA7niT567koyC7L
-         7hgQ==
-X-Gm-Message-State: ABy/qLbYT/GAVdaX/zsSu9Z0sRNwoMHA5KFjgZo/lqsiGepV+Zv4ZwfW
-        iZwM4R2uOMS4s4ra5UqCTrdakeFeWEL5WwkFtrB4Pg==
-X-Google-Smtp-Source: APBJJlHXLYWRAK1TBPKRFK/U6CdwCO/hIgM870hTN2HBPd2woVKEs0qGvIqr0RD5faSdTjY9gqOFBzI0QfJO5AnH+i4=
-X-Received: by 2002:a05:6102:2845:b0:443:874b:7d60 with SMTP id
- az5-20020a056102284500b00443874b7d60mr5970316vsb.26.1689016219912; Mon, 10
- Jul 2023 12:10:19 -0700 (PDT)
+        Mon, 10 Jul 2023 15:11:18 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2684510CC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:10:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qIwHP-00057Q-Im; Mon, 10 Jul 2023 21:10:39 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qIwHO-00DUHC-7r; Mon, 10 Jul 2023 21:10:38 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qIwHN-003rOB-I8; Mon, 10 Jul 2023 21:10:37 +0200
+Date:   Mon, 10 Jul 2023 21:10:35 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Helge Deller <deller@gmx.de>, Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 4/4] fbdev: imxfb: remove unneeded lable
+Message-ID: <20230710191035.nxazpwdhqulbegsg@pengutronix.de>
+References: <20230710132001.50764-1-frank.li@vivo.com>
+ <20230710132001.50764-4-frank.li@vivo.com>
 MIME-Version: 1.0
-References: <20230306211237.14876-1-asmaa@nvidia.com> <ZAZrKPw38ERSbzXg@surfacebook>
- <CH2PR12MB3895877A81288A737B702129D730A@CH2PR12MB3895.namprd12.prod.outlook.com>
-In-Reply-To: <CH2PR12MB3895877A81288A737B702129D730A@CH2PR12MB3895.namprd12.prod.outlook.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 10 Jul 2023 21:10:09 +0200
-Message-ID: <CAMRc=McBXyzdCqEBi9ymVHL09xKzWOhjWKpE6xxzhVJotqnngw@mail.gmail.com>
-Subject: Re: [PATCH v4] gpio: mmio: handle "ngpios" properly in bgpio_init()
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eidfnx3p3pfbmdcd"
+Content-Disposition: inline
+In-Reply-To: <20230710132001.50764-4-frank.li@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 7:26=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wro=
-te:
->
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->
-> Hi Bart,
->
-> Could you please add this patch to the tree?
->
-> Thanks.
-> Asmaa
 
-No, because it doesn't apply to v6.5-rc1. Please rebase and resend to
-my current email address.
+--eidfnx3p3pfbmdcd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bartosz
+On Mon, Jul 10, 2023 at 09:20:01PM +0800, Yangtao Li wrote:
+> These lables are redundant and don't do anything, let's remove it.
+
+s/lable/label/ here an in the subject line.
+
+Are you using this driver, or did you just stumble over it while looking
+for some janitorial todo? If the former, I suggest you look into the drm
+driver (imx-lcdc) instead.
+
+Having said that, I'm not sure this cleanup is really valuable. While
+a single jump target position has several names,=20
+
+  	ret =3D imxfb_of_read_mode(&pdev->dev, display_np, fbi->mode);
+  	of_node_put(display_np);
+  	if (ret)
+  		goto failed_of_parse;
+
+is more obvious correct than
+
+  	ret =3D imxfb_of_read_mode(&pdev->dev, display_np, fbi->mode);
+  	of_node_put(display_np);
+  	if (ret)
+  		goto failed_init;
+
+=2E *shrug*
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--eidfnx3p3pfbmdcd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSsV6sACgkQj4D7WH0S
+/k5b8Qf+IN365SKDDLXyi0u6+8iebC+94VaaWfL3Hts3Nqmhkz8dU+3pFLTznxyp
+3LSfnYLL1r1wmZZmXwjmam8547qkxRe6RNWr6jXCZT5DLbENHn/tHIU9dhHnHee6
+QL/HzDAX3BGDfxMI75KeUzJ+KYJA/XsYIMePLs6Y2GeAVZUxm3EzucMX1pSiBqpb
+GVe0X14LefFTVCA1OfZPjgGuDWxc0v9KE6NhlGdQRn8q16vbyyZMtfKzjbEBMew9
+wWD6Uh77bUTlnDCB83Xyf61Vun5wNZl8sN7F+7EAAVwTHAFXaHZV71Qsr0UEtA2y
+c8n7vRCUrmhVVdLSQ8soWv3GdkBeAA==
+=5kPp
+-----END PGP SIGNATURE-----
+
+--eidfnx3p3pfbmdcd--
