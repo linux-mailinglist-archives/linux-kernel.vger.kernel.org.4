@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B211974D79E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3222374D7A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjGJNb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S232320AbjGJNbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjGJNbS (ORCPT
+        with ESMTP id S232171AbjGJNbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:31:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA633E9;
-        Mon, 10 Jul 2023 06:31:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DDC860B8D;
-        Mon, 10 Jul 2023 13:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D03C433C7;
-        Mon, 10 Jul 2023 13:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688995876;
-        bh=1TvHTk0OvZW5mauoWR+EvpE5IuZ2XI67qVt1FK3GGiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EBHY3sJD7EWCavU+5I3QVagZ5RrjcoWTRlOqCjdxndRxyARrJv6y64nXnrKcDGhvl
-         yE1E5RyOPOIpv0cwUlhUItiysrnmmS7fGqEE5xRcGwUQB+SK1+52uTmQQ5l5PduAbz
-         8alNCnMB5IF7Ezy6fvQxEgPcJlnmNnusOXZgCLGc=
-Date:   Mon, 10 Jul 2023 15:31:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-Message-ID: <2023071052-hedging-blurb-2a20@gregkh>
-References: <20230709201309.274306-1-dmitry.baryshkov@linaro.org>
- <20230709201309.274306-3-dmitry.baryshkov@linaro.org>
- <0408a6f6-356e-af6a-3e32-1781aec2854f@linaro.org>
- <74aa7196-e76c-a1c8-9b0f-1d5f236d3467@linaro.org>
- <CAA8EJpppsaKqKY0V9O1JMUGiE8USzg8b0ZPZwn-0bwg1wYD6Tw@mail.gmail.com>
+        Mon, 10 Jul 2023 09:31:46 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06FCC4;
+        Mon, 10 Jul 2023 06:31:36 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5703cb4bcb4so48530157b3.3;
+        Mon, 10 Jul 2023 06:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688995896; x=1691587896;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HEOfSXv87Bm4Z+tbiK3JsYBP/IVkAFqD0bwLShJxCUI=;
+        b=Xy1TLRv9OvYpAvq+TlWB5MDHyPR3XIJ22HXPyH3DzMJrHtBi/j8sUSjqx4l+LwkeeA
+         WGK1yLdiIUQnnJrVm63U8Mfnbqn/rBoHNXA1M6qrURLlScfkMf4NCJW9AMzCra1chzrb
+         8xG8lPQN1VJtAi/Xnpz6sbC1VOt1/ZftUAcwHiIy+XhvQQOKlWzKEejJkSR+BVPCZ+cd
+         DHqWlUgMdSmxQXjemBX3ziIoDyHQYwPGjQuMutMqw9bT9EXGB4+Pj1fBFd69fvfA8BMZ
+         Yl9BUwugHyFnGo5Fn9DJa36s+0eDC82jPJmsfpRCjjcoaxfg5cXx9brP4r0BmtEDAQTx
+         xW7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688995896; x=1691587896;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HEOfSXv87Bm4Z+tbiK3JsYBP/IVkAFqD0bwLShJxCUI=;
+        b=ayMk7k21QJ8NfIz47Bo8HSLaN4xdPW9CFiH43uakLr6wnJjtotp05DTfKV95hJ4T6t
+         qQzedteqHgxXKmyAD6G7eCWFCShdXXsUkyavVUK3tG3XZt94FSqH+gWDdwUSmKh8TO/G
+         Rnu5oe7lDTebgoSP0QRmDEoO99CA+0L5NGssW+mxsRzLHUtal0PmwAIj+uTlBqn1rDwA
+         V+xPQZXg5YidXWiiEoF/E/6UM+gqYrhvAGPEUmgX3Jg5wqJmVUkFuTvTFIgcIzm/fAAN
+         iizscbdMJl6ybUkNXUgDh13MqbINWd2qYYDWUdfQyw5J95Gl5soDDbs8ZFJRPb5gA+OG
+         hnFg==
+X-Gm-Message-State: ABy/qLYDYtLT6lspe7oMV8pwggysVdV83N2pm/SWIQ/HgVC2366BAvuh
+        xE7aVpC0ohQtxw+AvM+ZSfxy+zYvCvM=
+X-Google-Smtp-Source: APBJJlGzHHUhE2yTEOppAblNk2+rHZSW1OOSHERzIjvmq5DCUaz3bwMEdihmcNST+6tTZMuh5+3+aQ==
+X-Received: by 2002:a81:4e85:0:b0:56d:34:893c with SMTP id c127-20020a814e85000000b0056d0034893cmr13577609ywb.4.1688995895778;
+        Mon, 10 Jul 2023 06:31:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f10-20020a816a0a000000b0057a8de72338sm278404ywc.68.2023.07.10.06.31.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 06:31:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 10 Jul 2023 06:31:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+Subject: Re: [PATCH 6.3 000/426] 6.3.13-rc3 review
+Message-ID: <ea9d1cf7-87e3-4191-a239-de8bd67a1786@roeck-us.net>
+References: <20230710054619.475084489@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpppsaKqKY0V9O1JMUGiE8USzg8b0ZPZwn-0bwg1wYD6Tw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230710054619.475084489@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 01:57:06PM +0300, Dmitry Baryshkov wrote:
-> On Mon, 10 Jul 2023 at 13:04, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >
-> > On 10.07.2023 12:02, Bryan O'Donoghue wrote:
-> > > On 09/07/2023 21:13, Dmitry Baryshkov wrote:
-> > >> The current approach to handling DP on bridge-enabled platforms requires
-> > >> a chain of DP bridges up to the USB-C connector. Register a last DRM
-> > >> bridge for such chain.
-> > >>
-> > >> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > >> ---
-> > >>   drivers/usb/typec/tcpm/Kconfig                |  1 +
-> > >>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 39 +++++++++++++++++++
-> > >>   2 files changed, 40 insertions(+)
-> > >>
-> > >> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> > >> index 5d393f520fc2..0b2993fef564 100644
-> > >> --- a/drivers/usb/typec/tcpm/Kconfig
-> > >> +++ b/drivers/usb/typec/tcpm/Kconfig
-> > >> @@ -79,6 +79,7 @@ config TYPEC_WCOVE
-> > >>   config TYPEC_QCOM_PMIC
-> > >>       tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
-> > >>       depends on ARCH_QCOM || COMPILE_TEST
-> > >> +    depends on DRM || DRM=n
-> > >>       help
-> > >>         A Type-C port and Power Delivery driver which aggregates two
-> > >>         discrete pieces of silicon in the PM8150b PMIC block: the
-> > >> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> > >> index a905160dd860..0722fb8d75c4 100644
-> > >> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> > >> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> > >> @@ -17,6 +17,9 @@
-> > >>   #include <linux/usb/role.h>
-> > >>   #include <linux/usb/tcpm.h>
-> > >>   #include <linux/usb/typec_mux.h>
-> > >> +
-> > >> +#include <drm/drm_bridge.h>
-> > >> +
-> > >>   #include "qcom_pmic_typec_pdphy.h"
-> > >>   #include "qcom_pmic_typec_port.h"
-> > >>   @@ -33,6 +36,9 @@ struct pmic_typec {
-> > >>       struct pmic_typec_port    *pmic_typec_port;
-> > >>       bool            vbus_enabled;
-> > >>       struct mutex        lock;        /* VBUS state serialization */
-> > >> +#ifdef CONFIG_DRM
-> > >> +    struct drm_bridge    bridge;
-> > >> +#endif
-> > >
-> > > IMO there's no reason to ifdef the structure. Its up to you if you want to change it nor not, I have no strong feelings about it.
-> > +1, there's no ifdefs in the drm_bridge.h header that would make this not compile
+On Mon, Jul 10, 2023 at 07:47:20AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.13 release.
+> There are 426 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> It is quite typical to idef unused structure fields. For example
-> OF-related fields are frequently ifdef'ed.
-> Let's see what the maintainers will say.
+> Responses should be made by Wed, 12 Jul 2023 05:45:32 +0000.
+> Anything received after that time might be too late.
+> 
 
-Please do not put #ifdef in .c files.
+Preliminary results.
 
-If it's not needed, please remove.
+Building mips:allmodconfig ... failed
+--------------
+Error log:
+arch/mips/boot/dts/ingenic/ci20.dts:242.19-247.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/DCDC1: Reference to non-existent node or label "vcc_33v"
+arch/mips/boot/dts/ingenic/ci20.dts:248.18-253.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/DCDC2: Reference to non-existent node or label "vcc_33v"
+arch/mips/boot/dts/ingenic/ci20.dts:254.18-259.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/DCDC3: Reference to non-existent node or label "vcc_33v"
+arch/mips/boot/dts/ingenic/ci20.dts:265.17-270.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO5: Reference to non-existent node or label "vcc_33v"
+arch/mips/boot/dts/ingenic/ci20.dts:271.18-276.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO6: Reference to non-existent node or label "vcc_33v"
+arch/mips/boot/dts/ingenic/ci20.dts:277.20-282.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO7: Reference to non-existent node or label "vcc_33v"
+arch/mips/boot/dts/ingenic/ci20.dts:283.20-288.6: ERROR (phandle_references): /i2c@10050000/act8600@5a/regulators/LDO8: Reference to non-existent node or label "vcc_33v"
+ERROR: Input tree has errors, aborting (use -f to force output)
 
-thanks,
+Introduced with "MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators"
+which uses vcc_33v without introducing it (it was introduced with commit
+c9f4b25272843).
 
-greg k-h
+Guenter
