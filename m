@@ -2,81 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C8E74DCC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCFF74DCC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjGJRv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S232382AbjGJRwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjGJRv5 (ORCPT
+        with ESMTP id S230004AbjGJRwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:51:57 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F543AD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1689011514; bh=WV6iTHNAjUAk0vrAhPrfPwRXuH5RztHU4ZrjaCHu7cw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NBUV/JAfZ0D6p37Vd/VeBxPU22HScKokphUudTTze53QL+8HUrp20Dw2m0dT1s2En
-         +qyT8K2eOUrZlaigDMSXcN5xVzCQgZuU1rG2y90W00w/iW+/jPDnTqHglGN5ZtXjq1
-         Kjr7tJE8Np6VGb5JhrB+tQ87sijtGqDFo/DfDZ84=
-Date:   Mon, 10 Jul 2023 19:51:53 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org, Zhangjin Wu <falcon@tinylab.org>
-Subject: Re: [PATCH] tools/nolibc: completely remove optional environ support
-Message-ID: <804671ba-3884-4700-b367-2f84dace89f4@t-8ch.de>
-References: <20230710-nolibc-environ-v1-1-173831573af6@weissschuh.net>
- <ZKxDP3YrIdKxWaIN@1wt.eu>
+        Mon, 10 Jul 2023 13:52:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A030AB;
+        Mon, 10 Jul 2023 10:52:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D433361178;
+        Mon, 10 Jul 2023 17:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B72C433C8;
+        Mon, 10 Jul 2023 17:52:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689011530;
+        bh=YKlGppxljjRcSI8ysxSVnU0A/O3Ow0tYV8rhEbSSGJ4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uGimDA5f7tHbu5ZnNKK0X2tAluzDf4gKIGrpXUKKBTM433d+k55de/sRbA4FZbdfZ
+         EK0Zb0dncnNL7qRdCdEIal0QdH4iy5BuLfpdqZ14dMVug5wF5pLnCEmqroYzCzAJxJ
+         yneEIaDnZiWWj+/fo7QxqzNGO3KGnY++Q2l0zTqTigTkvCFNUOLF38NvRp8g5sAbk9
+         1wojaFpn1NSUgvihyaqvdcK/jBtXLuLZes1CnExuGyxaahCm090ZYcso1o2IbsUszD
+         f5xObQiHhPJ9fo39WwWp0qKjktXLk3HAZhwWctMMsCqqSd5f+oeKgYJVZ9rDnz5ldw
+         1UbXpJIe60EQw==
+Message-ID: <ccc0f8d4-3900-a766-7303-85e44bffd875@kernel.org>
+Date:   Mon, 10 Jul 2023 10:52:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZKxDP3YrIdKxWaIN@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: linux-next: branches to be removed
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+References: <20230710172602.05d32c03@canb.auug.org.au>
+Content-Language: en-US
+From:   Vineet Gupta <vgupta@kernel.org>
+In-Reply-To: <20230710172602.05d32c03@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-10 19:43:27+0200, Willy Tarreau wrote:
-> Hi Thomas,
-> 
-> On Mon, Jul 10, 2023 at 07:22:53PM +0200, Thomas Weißschuh wrote:
-> > In commit 52e423f5b93e ("tools/nolibc: export environ as a weak symbol on i386")
-> > and friends the asm startup logic was extended to directly populate the
-> > "environ" array.
-> > 
-> > This makes it impossible for "environ" to be dropped by the linker.
-> > Therefore also drop the other logic to handle non-present "environ".
-> 
-> Hmmm OK but at least I'd like that we continue to reference it from
-> nolibc-test to make sure it's still visible. Maybe we could just check
-> that it's always equal to envp ? If we drop its reference from there,
-> sooner or later someone will find it interesting to rename it and some
-> programs referencing it will break.
+Hi Stephen,
 
-Easy enough to test for. I'll send a v2.
+On 7/10/23 00:26, Stephen Rothwell wrote:
+> Hi all,
+>
+> I will remove the following branches from linux-next tomorrow as they have
+> not been updated in over a year.  If you want your branch retained or
+> reinstated, please just send me an email letting me know.
+>
+> Tree			Last commit date
+> ----			----------------
+> arc			2022-06-05 17:18:54 -0700
+>    git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git    for-next
 
-> > Note:
-> > 
-> > Given that nowadays both _auxv and environ are mandatory symbols imposed
-> > by nolibc of pointer size does it make sense to keep the code to make
-> > int-sized errno optional?
-> 
-> While it indeed used to be related to having a data segment or not
-> initially, it still has an impact on our ability to completely drop
-> the errno setting code from all syscalls. Given the SET_ERRNO() macro
-> now I guess it's very cheap to keep it, don't you think ?
+Would request to please keep arc next around even though upstream dev is 
+slow'ish these days.
+I do have some patches for absolute near future as well.
 
-SET_ERRNO irks me a tiny bit :-)
-
-But it's easy enough to keep, let's do so.
-Just wanted to have brought it up.
-
-Thomas
+Thx,
+-Vineet
