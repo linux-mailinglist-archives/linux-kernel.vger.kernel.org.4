@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9142774D89B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318B974D89E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjGJOJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S232830AbjGJOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjGJOJK (ORCPT
+        with ESMTP id S230263AbjGJOJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:09:10 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E4E123
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 07:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=from:to:cc:subject:date:message-id
-        :mime-version:content-transfer-encoding; s=k1; bh=iNzNDD5W5pPBSK
-        U0n/acKnkO5UiphrUtev01tlu21FI=; b=EB60NbhgFX5/WtalbJ117dKcJh9FD/
-        qsrqRyy8aYo9csnEPNEYC4sWdea87vQIsp40wytcHA9RKxzwsAByrHooD/ulh6lN
-        H6tI3Ph99KyuvranQAKskZKNffsP0gF8zwQV4U/UPdEFcfNX8DCjYmtMt7OoFBKt
-        pMOe0+qaZrB0+uyGsbHDEuJ8XDK60M+3N050NkHepBHvsxCuigVQFkeOQdaWjXkB
-        ABb2LtLAR1FuY7RAQJ5X6upL3kSfVDbH1O28DdGP4nXSz0AYu+rxYFgz2vGqcRDI
-        tARUXKF8wdx0o8fYPpvzJJ51mEUJj9dEn6Y1TMqr3CPf+h3+e9rsr2yA==
-Received: (qmail 936683 invoked from network); 10 Jul 2023 16:08:42 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jul 2023 16:08:42 +0200
-X-UD-Smtp-Session: l3s3148p1@QC2ahCIA/IMqAjAyAhFxdwAj+2Ptlp2z
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org, linux-mmc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFT] mmc: renesas_sdhi: register irqs before registering controller
-Date:   Mon, 10 Jul 2023 16:08:25 +0200
-Message-Id: <20230710140825.47793-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 10 Jul 2023 10:09:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D9124;
+        Mon, 10 Jul 2023 07:09:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F75A6101C;
+        Mon, 10 Jul 2023 14:09:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 262B7C433C8;
+        Mon, 10 Jul 2023 14:09:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688998149;
+        bh=C36xu6wBoW/W96lEbYEUdJv0CyRZvg+7c1KBlH/u/0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k9P5OsfbUDbGVOc7sjYlOe7Gtfvq995tNMGjLfG6oRrIymAoTfWsS5x1elsisuiGr
+         KRgBStHqtaN1N4Ssmuyxpwrda9Qcl5yTYtvzSDcOKdjGzhp6l+vk0pRwCBDPTiym5S
+         y9K14tl0bT9+hF/kEWYwQc/8KeQ9/A9zfXo5R3Gk=
+Date:   Mon, 10 Jul 2023 16:09:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
+        mark.rutland@arm.com, amit.kachhap@arm.com, maz@kernel.org,
+        anshuman.khandual@arm.com, joey.gouly@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.4 07/12] arm64: cpufeature: detect FEAT_HCX
+Message-ID: <2023071004-engaged-garter-171c@gregkh>
+References: <20230702195057.1787686-1-sashal@kernel.org>
+ <20230702195057.1787686-7-sashal@kernel.org>
+ <b37a9f79-97a8-4f74-a25c-b51128fbc9bb@sirena.org.uk>
+ <ZKrKjS7sDFxhKoJT@sashalap>
+ <ZKsi+UOdjlmDnhdj@finisterre.sirena.org.uk>
+ <20230710094438.GD32673@willie-the-truck>
+ <2023071024-unpaved-washed-4d7d@gregkh>
+ <0404e7ef-8b1f-483c-a167-56140b29f0cc@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0404e7ef-8b1f-483c-a167-56140b29f0cc@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IRQs should be ready to serve when we call mmc_add_host() via
-tmio_mmc_host_probe(). To achieve that, ensure that all irqs are masked
-before registering the handlers.
+On Mon, Jul 10, 2023 at 02:47:12PM +0100, Mark Brown wrote:
+> On Mon, Jul 10, 2023 at 03:31:42PM +0200, Greg KH wrote:
+> > On Mon, Jul 10, 2023 at 10:44:38AM +0100, Will Deacon wrote:
+> 
+> > > Maybe we just need a commit hook that yells if something with a Fixes:
+> > > tag doesn't have a CC: stable on it?
+> 
+> > I could start doing that, it's going to be really noisy...
+> 
+> It would need to exclude commits that are only in -next since that's a
+> common legitimate use case for Fixes which shouldn't have a Cc to
+> stable, and there's going to be a bunch of false positives from people
+> who are overly enthusiastic in their use of fixes tags.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+My scripts today already know where the original Fix tag came from, it's
+not hard to detect.  So this should not be an issue, we don't even
+consider any commit with "Fixes:" in it for a kernel that has not
+already been released.
 
-Based on 6.5-rc1 with bf54dec9e953 ("Revert "mmc: Revert "mmc: core:
-Allow mmc_start_host() synchronously detect a card") reverted. That base
-alone shows the regression. This patch works fine on a Salvator-X with a
-M3-W. I'll test more boards. Yet, I send it out so people can tests with
-boards I don't have.
+thanks,
 
- drivers/mmc/host/renesas_sdhi_core.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/mmc/host/renesas_sdhi_core.c b/drivers/mmc/host/renesas_sdhi_core.c
-index 345934e4f59e..499d043f034f 100644
---- a/drivers/mmc/host/renesas_sdhi_core.c
-+++ b/drivers/mmc/host/renesas_sdhi_core.c
-@@ -1004,10 +1004,11 @@ int renesas_sdhi_probe(struct platform_device *pdev,
- 		host->ops.start_signal_voltage_switch =
- 			renesas_sdhi_start_signal_voltage_switch;
- 		host->sdcard_irq_setbit_mask = TMIO_STAT_ALWAYS_SET_27;
--		host->sdcard_irq_mask_all = TMIO_MASK_ALL_RCAR2;
- 		host->reset = renesas_sdhi_reset;
- 	}
- 
-+	host->sdcard_irq_mask_all = TMIO_MMC_MIN_RCAR2 ? TMIO_MASK_ALL_RCAR2 : TMIO_MASK_ALL;
-+
- 	/* Orginally registers were 16 bit apart, could be 32 or 64 nowadays */
- 	if (!host->bus_shift && resource_size(res) > 0x100) /* old way to determine the shift */
- 		host->bus_shift = 1;
-@@ -1100,9 +1101,7 @@ int renesas_sdhi_probe(struct platform_device *pdev,
- 		host->ops.hs400_complete = renesas_sdhi_hs400_complete;
- 	}
- 
--	ret = tmio_mmc_host_probe(host);
--	if (ret < 0)
--		goto edisclk;
-+	sd_ctrl_write32_as_16_and_16(host, CTL_IRQ_MASK, host->sdcard_irq_mask_all);
- 
- 	num_irqs = platform_irq_count(pdev);
- 	if (num_irqs < 0) {
-@@ -1129,6 +1128,10 @@ int renesas_sdhi_probe(struct platform_device *pdev,
- 			goto eirq;
- 	}
- 
-+	ret = tmio_mmc_host_probe(host);
-+	if (ret < 0)
-+		goto edisclk;
-+
- 	dev_info(&pdev->dev, "%s base at %pa, max clock rate %u MHz\n",
- 		 mmc_hostname(host->mmc), &res->start, host->mmc->f_max / 1000000);
- 
--- 
-2.35.1
-
+greg k-h
