@@ -2,130 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5949874DD63
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5190A74DD67
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjGJSdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S232397AbjGJSfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjGJSdo (ORCPT
+        with ESMTP id S229848AbjGJSfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:33:44 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F5C198
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:33:42 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666e64e97e2so2456474b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:33:42 -0700 (PDT)
+        Mon, 10 Jul 2023 14:35:50 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD95B197
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:35:48 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-55c1c7f872bso3709420a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:35:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1689014021; x=1691606021;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfOFwa2MqGzUVHMgMbaymeSQf/jXq0PE9ZHxapBD3Wg=;
-        b=L6sqxAkYvprfFLOpuEhxBMp3KNnplB0ZZcAipTraoZiFvvCxf5cGIkbNgr1XsLKwwt
-         dYDuePFBEKrJay9FP/gc2BkJQgoUC0I4JXHljZAkscoST0FgIb9tIOctKtBoElAIOCeJ
-         RLip2ZlDiqlYFlPsq3R684aqltWpmCQoDLRgg=
+        d=google.com; s=20221208; t=1689014148; x=1691606148;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ii//NdDJV9WujsqukD3lwiIq5e/LyG2Fswag+05zH+E=;
+        b=cRgD+oRUns5YzG9+1bpiaTGIpy4DKL/Xz7bJ7gRd9oD3Xn4lyqRtw/KGJjiH510MA6
+         XYA0ZB6HRLE5cy7jDThnf/lxpm2EXODNGbqaAbL6N2igI2KXl0cOiRj7U/evNbfGna2K
+         HfzwAQizTxP1bXa+6SRrdzB8mvpoeP9CEQhZ21NmL3Ag+Slaua582VWcKupdcO7zVBf0
+         3ekYXBaPC6LyH8OID/IYa3j0DKmstgsoJ5ggVCFOEqoG3LW1b2AZF0q9ItrxjeqGDa7k
+         W2tg6ArEqP2N38xhU5sfVF6WGzPabfsrUm/dNMJIzHuUVJkB9Nk1fhln4NbzAJ43fllB
+         mmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689014021; x=1691606021;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KfOFwa2MqGzUVHMgMbaymeSQf/jXq0PE9ZHxapBD3Wg=;
-        b=g0etvl8heuRWEHKkeNDq97mMBcCxagLf0407etWOPFrOCy5+NiPb9ZvT8pYNxbT39e
-         FeKvRzd5I37V6h+mTB7hLetk8cG+rReOFYCc6nmH93kIk3n7UzXLfsSPfIFRLuklZ+7+
-         Q6eG/q85fomo9B6MytxGflmiElC7CN/23egf/vbxPLx4g/DOv//JquKn9sLpbSW4MgZm
-         Tvb5JiLqBs1ssMkjQsnvJXmsOtmQYuUu0Wtij1wwvbEmw9xYAp7u9QFrs+ByoDHJXJSK
-         6F5jsmWuquwU3ksxXKByqhZBz+lAbqiQ6vwIpEi0tnnXaUVcnRDTnWa6J7NfOJdLdA/g
-         K2Zw==
-X-Gm-Message-State: ABy/qLa7kcZDb9n8VNakHrZ546DMc67bWMYC/rnwy7B+fSOjmWqQZ+iM
-        RFMWV8ui5ltYJPKu4usAjelwxw==
-X-Google-Smtp-Source: APBJJlEqVexQ6jN2gO3KWfYqkBJoMzaqpFqQyvVnVP9eqYxWtYJk6TKV2fjLJpZdKtiKiwtFwVEYsg==
-X-Received: by 2002:a05:6a00:1915:b0:64a:2dd6:4f18 with SMTP id y21-20020a056a00191500b0064a2dd64f18mr12947103pfi.13.1689014021308;
-        Mon, 10 Jul 2023 11:33:41 -0700 (PDT)
-Received: from localhost ([2601:644:200:aea:60e1:d34a:f5f6:64b5])
-        by smtp.gmail.com with ESMTPSA id t17-20020aa79391000000b00679d3fb2f92sm96713pfe.154.2023.07.10.11.33.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 11:33:41 -0700 (PDT)
-From:   Ivan Babrou <ivan@cloudflare.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     kernel-team@cloudflare.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ivan Babrou <ivan@cloudflare.com>
-Subject: [PATCH] kernfs: attach uuid for every kernfs and report it in fsid
-Date:   Mon, 10 Jul 2023 11:33:38 -0700
-Message-ID: <20230710183338.58531-1-ivan@cloudflare.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1689014148; x=1691606148;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ii//NdDJV9WujsqukD3lwiIq5e/LyG2Fswag+05zH+E=;
+        b=kKpx820x21Uh9SdRJvoXTgsG0qNF5vHKQbjv67zoWYm6YBfch4Rj3vS8DLuotv6e4M
+         IjTns4Sabm1MtLIms9hDPyqJXPBjv8LH2af6EdrEwv5ytX+jkrZLSBX0rFQzMlyUx3WJ
+         HrZ7rQcAdazatu6N6SQQexQRszsSkKIO0ikf3AKI3Ht4HLNr/OsK0qFywsib50KAUru5
+         xqda12lyO5OY1prRSbtL8jwcDux3QXn7scTsuBO5UgwE0MACJZKmqM79UfoNAIfhVDGl
+         LI0IF14iNOxzzVYGgdcCBKabyeUuZmpN+qFDvaCOmCPNMLRsGpGtrffbj/5e6jNuOJ+W
+         ER8A==
+X-Gm-Message-State: ABy/qLbMafKGPGeR+RqtFECLHZ7lAfCQoItj6B24j26NCCFQ7pumsm2t
+        7CuCDYqeZHoKmPWN5r9xTblo8VHrzr1cCTC8piY=
+X-Google-Smtp-Source: APBJJlGr9RJyCy/NTtd4U3G8YBzsr03Efxb2b0r6mb2spZfsYM39frOrlzfVt4txYLqSsSFhpgcb57zUbCLWzB6Duj0=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a63:7747:0:b0:55c:5c30:33aa with SMTP
+ id s68-20020a637747000000b0055c5c3033aamr174205pgc.9.1689014148087; Mon, 10
+ Jul 2023 11:35:48 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 18:35:45 +0000
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3192; i=samitolvanen@google.com;
+ h=from:subject; bh=7OU2bpD9UM9q2xXwG7ynEd3jeDD83obc/zqrCIV8X8k=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBkrE+AhS2yuHhEWb37FLulyBDG6hxPDOCPp4ma4
+ 1wBuy7vRHaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZKxPgAAKCRBMtfaEi7xW
+ 7roEC/4igkmPPv4O8DtGnr3voPUmeALLQLdA+F8M9Bn3HTFaVz4ioIvWtKmMezopiYJbIDUHGbt
+ SDhgD1cRQvrBs4Uusc/ekdt5I3RNrXi0z6DJy+BoH4v1bwxQAurRzapGETRjEeAZGXacIEm8iRj
+ 54IfAkdnmWdi11rza4Efd2TxMPQquQLui+dmgNiuK9E/7Vo2/j5KWn8MyGP8axxbZgVM2KpGWHd
+ EoHqu2niCWANM+elksiJly2S1XiaMQN5TpxUusyMQ01Bm9GtsZpSbF+RLl+P15RO7BuV+ToDSe9
+ +C052grMu1y/NaRQqJlPq3RnHTsjhT6yCR7PvqfV2Nz8gbFi/JwVWQG6+bkISVbVah15Fpr5s9f
+ 6tL8b0o4dsMBjjN1mqqpKOSNfrFbOvrYSt/TtzIZnAxO/nYTEPNrAxdLxLnmW0ormlBt2YFgOjV H7GkBVLFi8Hs3P0GfQIei8SHfcJ+DZAIc5Q+SAJuUMabYv7kWkgKAb0PyzLv00PgaoHUk=
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230710183544.999540-8-samitolvanen@google.com>
+Subject: [PATCH v2 0/6] riscv: KCFI support
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following two commits added the same thing for tmpfs:
+This series adds KCFI support for RISC-V. KCFI is a fine-grained
+forward-edge control-flow integrity scheme supported in Clang >=16,
+which ensures indirect calls in instrumented code can only branch to
+functions whose type matches the function pointer type, thus making
+code reuse attacks more difficult.
 
-* commit 2b4db79618ad ("tmpfs: generate random sb->s_uuid")
-* commit 59cda49ecf6c ("shmem: allow reporting fanotify events with file handles on tmpfs")
+Patch 1 implements a pt_regs based syscall wrapper to address
+function pointer type mismatches in syscall handling. Patches 2 and 3
+annotate indirectly called assembly functions with CFI types. Patch 4
+implements error handling for indirect call checks. Patch 5 disables
+CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
+to be enabled for RISC-V.
 
-Having fsid allows using fanotify, which is especially handy for cgroups,
-where one might be interested in knowing when they are created or removed.
+Note that Clang 16 has a generic architecture-agnostic KCFI
+implementation, which does work with the kernel, but doesn't produce
+a stable code sequence for indirect call checks, which means
+potential failures just trap and won't result in informative error
+messages. Clang 17 includes a RISC-V specific back-end implementation
+for KCFI, which emits a predictable code sequence for the checks and a
+.kcfi_traps section with locations of the traps, which patch 5 uses to
+produce more useful errors.
 
-Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+The type mismatch fixes and annotations in the first three patches
+also become necessary in future if the kernel decides to support
+fine-grained CFI implemented using the hardware landing pad
+feature proposed in the in-progress Zicfisslp extension. Once the
+specification is ratified and hardware support emerges, implementing
+runtime patching support that replaces KCFI instrumentation with
+Zicfisslp landing pads might also be feasible (similarly to KCFI to
+FineIBT patching on x86_64), allowing distributions to ship a unified
+kernel binary for all devices.
+
 ---
- fs/kernfs/mount.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-index d49606accb07..930026842359 100644
---- a/fs/kernfs/mount.c
-+++ b/fs/kernfs/mount.c
-@@ -16,6 +16,8 @@
- #include <linux/namei.h>
- #include <linux/seq_file.h>
- #include <linux/exportfs.h>
-+#include <linux/uuid.h>
-+#include <linux/statfs.h>
- 
- #include "kernfs-internal.h"
- 
-@@ -45,8 +47,15 @@ static int kernfs_sop_show_path(struct seq_file *sf, struct dentry *dentry)
- 	return 0;
- }
- 
-+int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-+{
-+	simple_statfs(dentry, buf);
-+	buf->f_fsid = uuid_to_fsid(dentry->d_sb->s_uuid.b);
-+	return 0;
-+}
-+
- const struct super_operations kernfs_sops = {
--	.statfs		= simple_statfs,
-+	.statfs		= kernfs_statfs,
- 	.drop_inode	= generic_delete_inode,
- 	.evict_inode	= kernfs_evict_inode,
- 
-@@ -351,6 +360,8 @@ int kernfs_get_tree(struct fs_context *fc)
- 		}
- 		sb->s_flags |= SB_ACTIVE;
- 
-+		uuid_gen(&sb->s_uuid);
-+
- 		down_write(&root->kernfs_supers_rwsem);
- 		list_add(&info->node, &info->root->supers);
- 		up_write(&root->kernfs_supers_rwsem);
+Changes in v2:
+  - Rebased on 6.5-rc1.
+  - Sorted Kconfig entries alphabetically.
+
+
+Sami Tolvanen (6):
+  riscv: Implement syscall wrappers
+  riscv: Add types to indirectly called assembly functions
+  riscv: Add ftrace_stub_graph
+  riscv: Add CFI error handling
+  riscv/purgatory: Disable CFI
+  riscv: Allow CONFIG_CFI_CLANG to be selected
+
+ arch/riscv/Kconfig                       |  3 +
+ arch/riscv/include/asm/cfi.h             | 22 ++++++
+ arch/riscv/include/asm/insn.h            | 10 +++
+ arch/riscv/include/asm/syscall.h         |  5 +-
+ arch/riscv/include/asm/syscall_wrapper.h | 87 ++++++++++++++++++++++++
+ arch/riscv/kernel/Makefile               |  2 +
+ arch/riscv/kernel/cfi.c                  | 77 +++++++++++++++++++++
+ arch/riscv/kernel/compat_syscall_table.c |  8 ++-
+ arch/riscv/kernel/mcount.S               |  9 ++-
+ arch/riscv/kernel/suspend_entry.S        |  5 +-
+ arch/riscv/kernel/sys_riscv.c            |  6 ++
+ arch/riscv/kernel/syscall_table.c        |  8 ++-
+ arch/riscv/kernel/traps.c                |  4 +-
+ arch/riscv/purgatory/Makefile            |  4 ++
+ 14 files changed, 238 insertions(+), 12 deletions(-)
+ create mode 100644 arch/riscv/include/asm/cfi.h
+ create mode 100644 arch/riscv/include/asm/syscall_wrapper.h
+ create mode 100644 arch/riscv/kernel/cfi.c
+
+
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
 -- 
-2.41.0
+2.41.0.255.g8b1d071c50-goog
 
