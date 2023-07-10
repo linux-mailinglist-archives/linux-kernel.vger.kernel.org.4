@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264CF74CB78
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABED674CB79
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 07:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjGJFBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 01:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S230351AbjGJFDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 01:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjGJFBh (ORCPT
+        with ESMTP id S230107AbjGJFDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 01:01:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63924BC;
-        Sun,  9 Jul 2023 22:01:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC35E60B90;
-        Mon, 10 Jul 2023 05:01:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6081BC433CA;
-        Mon, 10 Jul 2023 05:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688965295;
-        bh=hIQ/sg02GFBnzX1+ASxA+DzxH1Q7XpDP1DHHVadqzVY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OU6WT/nmkF0xVZpwzeynXEPdiEXvp1jRykp6qezpi4pzCBBSnmwN7rSXqOC9a9vwr
-         e9wvJdvvIMAVk/67DF83HUI3ZlJLsi8ZwpuPVY/XSC+rw/9V6w49CHKv7ytfyg8J2r
-         PCXlUKKDwOlysIbvIWzVv7OZi+A94pangwNKoD6Xy6DiFUM19quvFsoqPgLfNf1XWh
-         JdBmjaZ1Q1GfPe8rrz7crAi+1fAN491/vGXZCVBHPTu0EPgkoeyT8kMvGtdjUde0bR
-         KVxaeFJ/Q/cRmWuD0n8uKUcYEIXcONezt0aL2lrIEvr3+YQ+k0YZGgEJJFloJoVJ4H
-         cMtYtmVetZFOg==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-51d885b0256so5646839a12.2;
-        Sun, 09 Jul 2023 22:01:35 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZ+Qja5r78eE7Btm8gnGnN4WPsnq0khTkDQUeMEuJOCInfO4+GU
-        9J4ug948G60ZAykAmpNCsYJiTMP6AbuHqpXCouQ=
-X-Google-Smtp-Source: APBJJlF+4I+G7utuLWVS5lbi6CtAFHjK+Y1xhwackTMfiYlKNeyUhIcWsEyB5b00uUlr6oVeTR90rHmEZi31wQbPaa4=
-X-Received: by 2002:a05:6402:1b0b:b0:51d:9b4d:66bd with SMTP id
- by11-20020a0564021b0b00b0051d9b4d66bdmr10171546edb.9.1688965293643; Sun, 09
- Jul 2023 22:01:33 -0700 (PDT)
+        Mon, 10 Jul 2023 01:03:05 -0400
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE0D120
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 22:03:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vmy4O50_1688965378;
+Received: from 30.97.48.247(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vmy4O50_1688965378)
+          by smtp.aliyun-inc.com;
+          Mon, 10 Jul 2023 13:02:59 +0800
+Message-ID: <1a107593-e411-70a0-b6b8-3c34a9036ff3@linux.alibaba.com>
+Date:   Mon, 10 Jul 2023 13:02:58 +0800
 MIME-Version: 1.0
-References: <20230710042924.2518198-1-chenhuacai@loongson.cn> <51181fd7-fc1f-2222-9b8a-8ce44fe85ea5@xen0n.name>
-In-Reply-To: <51181fd7-fc1f-2222-9b8a-8ce44fe85ea5@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 10 Jul 2023 13:01:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5MW+X17H9vj4jCp5eLcyFdQm4O1jVrSVOfRc64uE=08g@mail.gmail.com>
-Message-ID: <CAAhV-H5MW+X17H9vj4jCp5eLcyFdQm4O1jVrSVOfRc64uE=08g@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Fix module relocation error with binutils 2.41
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] erofs: fix two loop issues when read page beyond EOF
+To:     Chunhai Guo <guochunhai@vivo.com>,
+        "xiang@kernel.org" <xiang@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>
+Cc:     "huyue2@coolpad.com" <huyue2@coolpad.com>,
+        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>,
+        "linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230708062432.67344-1-guochunhai@vivo.com>
+ <97875049-8df9-e041-61ca-d90723ba6e82@linux.alibaba.com>
+ <d6ee4571-64d6-ebd2-4adb-83f33e5e608d@vivo.com>
+ <fd738d38-17de-4b61-e4e8-d4f98ef8d1db@linux.alibaba.com>
+ <ac05d6e3-79b4-a470-2a30-8c809c277209@vivo.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <ac05d6e3-79b4-a470-2a30-8c809c277209@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,57 +51,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 12:45=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wr=
-ote:
->
-> On 2023/7/10 12:29, Huacai Chen wrote:
-> > Binutils 2.41 enable linker relaxation by default, but kernel module
->
-> "enables" / "will enable"
->
-> > loader doesn't support that, so disable it. Otherwise we get such an
-> > error when loading modules: "Unknown relocation type 102".
->
-> IMO it could be better to also justify the disabling (instead of adding
-> proper support): linker relaxation is relatively large complexity that
-> may or may not bring a similar gain, and we don't really want to include
-> this linker pass in the kernel.
-OK, thanks.
 
-Huacai
->
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/Makefile | 2 ++
-> >   1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> > index 09ba338a64de..7466d3b15db8 100644
-> > --- a/arch/loongarch/Makefile
-> > +++ b/arch/loongarch/Makefile
-> > @@ -68,6 +68,8 @@ LDFLAGS_vmlinux                     +=3D -static -n -=
-nostdlib
-> >   ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
-> >   cflags-y                    +=3D $(call cc-option,-mexplicit-relocs)
-> >   KBUILD_CFLAGS_KERNEL                +=3D $(call cc-option,-mdirect-ex=
-tern-access)
-> > +KBUILD_AFLAGS_MODULE         +=3D $(call cc-option,-mno-relax) $(call =
-cc-option,-Wa$(comma)-mno-relax)
-> > +KBUILD_CFLAGS_MODULE         +=3D $(call cc-option,-mno-relax) $(call =
-cc-option,-Wa$(comma)-mno-relax)
-> >   else
-> >   cflags-y                    +=3D $(call cc-option,-mno-explicit-reloc=
-s)
-> >   KBUILD_AFLAGS_KERNEL                +=3D -Wa,-mla-global-with-pcrel
->
-> The code changes are good. With the commit message improved:
->
-> Reviewed-by: WANG Xuerui <git@xen0n.name>
->
-> --
-> WANG "xen0n" Xuerui
->
-> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
->
->
+
+On 2023/7/10 12:35, Chunhai Guo wrote:
+> 
+> 
+> On 2023/7/10 11:37, Gao Xiang wrote:
+>>
+>>
+>> On 2023/7/10 11:32, Chunhai Guo wrote:
+>>> Hi Xiang,
+>>>
+>>> On 2023/7/8 17:00, Gao Xiang wrote:
+>>>> Hi Chunhai,
+>>>>
+>>>> On 2023/7/8 14:24, Chunhai Guo wrote:
+>>>>> When z_erofs_read_folio() reads a page with an offset far beyond EOF, two
+>>>>> issues may occur:
+>>>>> - z_erofs_pcluster_readmore() may take a long time to loop when the offset
+>>>>>      is big enough, which is unnecessary.
+>>>>>        - For example, it will loop 4691368 times and take about 27 seconds
+>>>>>          with following case.
+>>>>>            - offset = 19217289215
+>>>>>            - inode_size = 1442672
+>>>>> - z_erofs_do_read_page() may loop infinitely due to the inappropriate
+>>>>>      truncation in the below statement. Since the offset is 64 bits and
+>>>>> min_t() truncates the result to 32 bits. The solution is to replace
+>>>>> unsigned int with another 64-bit type, such as erofs_off_t.
+>>>>>        cur = end - min_t(unsigned int, offset + end - map->m_la, end);
+>>>>>        - For example:
+>>>>>            - offset = 0x400160000
+>>>>>            - end = 0x370
+>>>>>            - map->m_la = 0x160370
+>>>>>            - offset + end - map->m_la = 0x400000000
+>>>>>            - offset + end - map->m_la = 0x00000000 (truncated as unsigned int)
+>>>>
+>>>> Thanks for the catch!
+>>>>
+>>>> Could you split these two into two patches?
+>>>>
+>>>> how about using:
+>>>> cur = end - min_t(erofs_off_t, offend + end - map->m_la, end)
+>>>> for this?
+>>>>
+>>>> since cur and end are all [0, PAGE_SIZE - 1] for now, and
+>>>> folio_size() later.
+>>>
+>>> OK. I will split the patch.
+>>>
+>>> Sorry that I can not understand what is 'offend' refer to and what do you mean. Could you please describe it more clearly?
+>>
+>> Sorry, there is a typo here, I meant 'offset'.
+>>
+>> `cur` and `end` both are not exceed 4096 if your page_size
+>> is 4096.
+>>
+>> Does
+>> cur = end - min_t(erofs_off_t, offset + end - map->m_la, end)
+>>
+>> fix your issue?
+> 
+> Yes. I think this will fix this issue. Do you mean the below change is unncessary?
+>  >>>> -    unsigned int cur, end, spiltted;
+>  >>>> +    erofs_off_t cur, end;
+>  >>>> +    unsigned int spiltted;
+
+Yes, please help send a fix for this!
+
+Thanks,
+Gao Xiang
+
