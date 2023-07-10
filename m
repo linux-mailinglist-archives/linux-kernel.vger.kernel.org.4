@@ -2,111 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BA474D9B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379EA74D9C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 17:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjGJPVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 11:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S233144AbjGJPWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 11:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjGJPV2 (ORCPT
+        with ESMTP id S230399AbjGJPWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:21:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94081E0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689002438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 10 Jul 2023 11:22:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6FCE0;
+        Mon, 10 Jul 2023 08:22:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 70CED2232F;
+        Mon, 10 Jul 2023 15:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689002549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=KB94weOwoWMBQ4tLFhB7umLrTAyrFqDhZCrrtSY4RjA=;
-        b=jDIL6TdyewuocuKx6Zitng999/jJNc5NcQi1Tj166pUZkeNBPNLSAA6a1xwlmamQvAfCTE
-        IOJUdmKvONkOwf/I9fFN3E7AgKWa0KPkwKW9mY1ZAsRAgYBGooI7F8P6NYU4cgwkkkJcmP
-        MqoqLkzWs/c06lZLNH7JJ9XwfsYIxZY=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-533-_zgcX4ABMoK33OGLp0bdQw-1; Mon, 10 Jul 2023 11:20:37 -0400
-X-MC-Unique: _zgcX4ABMoK33OGLp0bdQw-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-57704af0e64so54512837b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 08:20:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689002436; x=1691594436;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KB94weOwoWMBQ4tLFhB7umLrTAyrFqDhZCrrtSY4RjA=;
-        b=lB5WRE1Ut5aPEzbBMa7jkcroFPPww8kRMuHI3YwgPRI70RVQB3WN8/3iUPdAImoKLq
-         LST/ICfzg+9s2Q6rV1LrXTpd0U6Vu0o/+kVFnTP5DjUN2rFtn0N/bOQ2vUBafBjU4KmW
-         hZEB1fUxCUHuwQyw4KvE2jMr8EDeYKDkiN5957pg5V2Wn+S0waVD3Tr+0ZlShnD8Vni+
-         T7CMzzcF23QkJoXmLTy5jnlOuXoo3IuyRfhgPWw8nLxlOXrGmncTGeblUPcAZEYzqt4s
-         WLKfpqX4P6dpzvtQ2W6xHJWIPqQOXgCrQEP2IC+/NHfLdHLV6BAjAcsYtDYM6abccwrT
-         A7FQ==
-X-Gm-Message-State: ABy/qLaOL9/q16yzcKDIlW8uttbqhj8PVpCq130aAYcfrG1SUXZj738t
-        x1M45A+hH8h/lGaULGO2c3Rdjl67pIhcj1Vn9A+AOagmDCNOwbwGJc3OWu5IEM8u17icdHAsrHT
-        DWmiYgD5oe8YoowLK/R6Anlgr
-X-Received: by 2002:a81:6604:0:b0:575:4b1c:e5ea with SMTP id a4-20020a816604000000b005754b1ce5eamr12259979ywc.47.1689002436578;
-        Mon, 10 Jul 2023 08:20:36 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlH+YQLgXa3ThTm8gLDWAioQ62hJ6Tirv8hlhia+ImkkyVm4OGmEzS4D5sR6FzMA+VXStzjR8Q==
-X-Received: by 2002:a81:6604:0:b0:575:4b1c:e5ea with SMTP id a4-20020a816604000000b005754b1ce5eamr12259953ywc.47.1689002436338;
-        Mon, 10 Jul 2023 08:20:36 -0700 (PDT)
-Received: from brian-x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id h126-20020a0df784000000b00559f1cb8444sm9956ywf.70.2023.07.10.08.20.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 08:20:35 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 11:20:33 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V7 0/2] firmware: Add support for boot_stats
-Message-ID: <ZKwhwUnKR7vqQZms@brian-x1>
-References: <cover.1688533340.git.quic_schowdhu@quicinc.com>
+        bh=f9YU6kgr3AZQPI61sCH8br42+ZI0/eMwmpIZNMLHoAU=;
+        b=ezCgR6kKuGW9mblw/tGNpY2UO/8YJ9bKkXOg4xTKLNGdaFJgQseaLq2Vc6QmZWUJezl8LN
+        M3rAgmeSHvU5hKJ3DAecHMtv2/yTk6g8P1nOPsAsCcyiM4pnjL4H6aCuQQd5Ygl/U6ybNX
+        o2t3cvD7nJP0LgPIFmZhoFAxDq7q81Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689002549;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f9YU6kgr3AZQPI61sCH8br42+ZI0/eMwmpIZNMLHoAU=;
+        b=wDueoqD1Mdn9akcq6CIKGnH4rgtpH0NVskooCq4SrpwD9YhD3cZsyz4LBZ8BDaaOYCbr83
+        VtXhwhAmUptxwGBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11E851361C;
+        Mon, 10 Jul 2023 15:22:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lz9gAzUirGTGXwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 10 Jul 2023 15:22:29 +0000
+Message-ID: <733273ad-89e1-d952-37ee-bb75c3ab8188@suse.de>
+Date:   Mon, 10 Jul 2023 17:22:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1688533340.git.quic_schowdhu@quicinc.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 09/17] auxdisplay: Remove flag FBINFO_FLAG_DEFAULT from
+ fbdev drivers
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     deller@gmx.de, javierm@redhat.com, linux-sh@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
+        linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin van der Gracht <robin@protonic.nl>
+References: <20230710130113.14563-1-tzimmermann@suse.de>
+ <20230710130113.14563-10-tzimmermann@suse.de>
+ <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------jUsPVU9eO41Mfau4JMej3ZiU"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 11:02:30AM +0530, Souradeep Chowdhury wrote:
-> Qualcomm's proprietary Android boot-loaders capture boot time
-> stats, like the time when the bootloader started execution and at what
-> point the bootloader handed over control to the kernel etc. in the IMEM
-> region. This information is captured by the bootloader and populated on
-> the device tree properties "pre-abl-time" and "abl-time" which can be
-> be viewed from the user space like as follows:-
-> 
-> /sys/firmware/devicetree/base/bootstats # cat abl_time
-> 17898
-> 
-> As a part of this patch series added the bindings for boot-stats which
-> was suggested in the v6 of the series. The link for the same is as
-> follows:-
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------jUsPVU9eO41Mfau4JMej3ZiU
+Content-Type: multipart/mixed; boundary="------------isGioYLGE6aLAoHpvCKZCjXA";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: deller@gmx.de, javierm@redhat.com, linux-sh@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, linux-input@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-geode@lists.infradead.org, linux-nvidia@lists.surfsouth.com,
+ linux-hyperv@vger.kernel.org, linux-omap@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ Miguel Ojeda <ojeda@kernel.org>, Robin van der Gracht <robin@protonic.nl>
+Message-ID: <733273ad-89e1-d952-37ee-bb75c3ab8188@suse.de>
+Subject: Re: [PATCH 09/17] auxdisplay: Remove flag FBINFO_FLAG_DEFAULT from
+ fbdev drivers
+References: <20230710130113.14563-1-tzimmermann@suse.de>
+ <20230710130113.14563-10-tzimmermann@suse.de>
+ <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
+In-Reply-To: <CANiq72=9PoV3FOcXx9FdiSLePKXDG4BSY_5-jddBkqDL=ua3FA@mail.gmail.com>
 
-Should boot statistics be exposed to userspace through the qcom socinfo
-driver? I see that the socinfo v19 metadata has fields for the boot core
-and boot cluster [1], so boot timing wouldn't be out of place.
+--------------isGioYLGE6aLAoHpvCKZCjXA
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Brian
+SGkNCg0KQW0gMTAuMDcuMjMgdW0gMTY6MjQgc2NocmllYiBNaWd1ZWwgT2plZGE6DQo+IE9u
+IE1vbiwgSnVsIDEwLCAyMDIzIGF0IDM6MDHigK9QTSBUaG9tYXMgWmltbWVybWFubiA8dHpp
+bW1lcm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4gVGhlIGZsYWcgRkJJTkZPX0ZMQUdf
+REVGQVVMVCBpcyAwIGFuZCBoYXMgbm8gZWZmZWN0LCBhcyBzdHJ1Y3QNCj4+IGZiaW5mby5m
+bGFncyBoYXMgYmVlbiBhbGxvY2F0ZWQgdG8gemVybyBieSBmcmFtZWJ1ZmZlcl9hbGxvYygp
+LiBTbyBkbw0KPj4gbm90IHNldCBpdC4NCj4gDQo+IGBmcmFtZWJ1ZmZlcl9hbGxvYygpYCBk
+b2VzIGluZGVlZCB1c2UgYGt6YWxsb2MoKWAsIGJ1dCB0aGUgZG9jcyBkbyBub3QNCj4gbWVu
+dGlvbiB0aGUgemVyb2luZy4gU2hvdWxkIHRoYXQgZ3VhcmFudGVlIGJlIGRvY3VtZW50ZWQ/
+DQoNCkknbGwgYXBwZW5kIGEgcGF0Y2ggdG8gdGhlIHNlcmllcyB0aGF0IGRvY3VtZW50cyB0
+aGlzLg0KDQo+IA0KPj4gRmxhZ3Mgc2hvdWxkIHNpZ25hbCBkaWZmZXJlbmNlcyBmcm9tIHRo
+ZSBkZWZhdWx0IHZhbHVlcy4gQWZ0ZXIgY2xlYW5pbmcNCj4+IHVwIGFsbCBvY2N1cmVuY2Vz
+IG9mIEZCSU5GT19GTEFHX0RFRkFVTFQsIHRoZSB0b2tlbiBjYW4gYmUgcmVtb3ZlZC4NCj4g
+DQo+IG9jY3VyZW5jZXMgLT4gb2NjdXJyZW5jZXMNCj4gDQo+IGNhbiAtPiB3aWxsIG1heWJl
+PyBTaW5jZSB0aGUgaW50ZW50aW9uIG9mIHRoZSBwYXRjaCBzZXJpZXMgaXMgdG8NCj4gcmVt
+b3ZlIGl0ICh0aGVtKSBhbHRvZ2V0aGVyKS4NCg0KU3VyZS4NCg0KQmVzdCByZWdhcmRzDQpU
+aG9tYXMNCg0KPiANCj4gVGhhbmtzIQ0KPiANCj4gQ2hlZXJzLA0KPiBNaWd1ZWwNCg0KLS0g
+DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
+b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkw
+NDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBB
+bmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJl
+cmcpDQo=
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/soc/qcom/socinfo.c#n572
+--------------isGioYLGE6aLAoHpvCKZCjXA--
 
+--------------jUsPVU9eO41Mfau4JMej3ZiU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSsIjQFAwAAAAAACgkQlh/E3EQov+D4
+nQ/8D7mlMiLl4N+aerXFpIUKe6RRa+C9U1qxWDMdALRg57be/CZeoU44owAwYkvN4Jx4zPYal16M
+UQZFheDfymtdS8RFepV3E+U2K3PcgOvNPK98EZOF3feIlw5q8CScIy/xjBSeGTSG8AupE117C+OF
+MMI6G6GVt92ap4zsSx+i6gcgUB0BtdM+xfKqeHEfba+n76ZfKNAbTK4v8jPtc+0gAsBWsSJ5JiaC
+/QIyWDHgQN2dxXFmRmU+gBJsa/IrONfkK3hCseKd8ap3O1BfA5+KT2Sk6mBj1nuF0gbQJPBh1tGs
+7RJ4fGW45T2pNXrcmx7Y9no0iPUd21ogZKBd55zfO8pdIR0fLdVgY87oEABsadmVL6L4YAlH1hen
+0sriL3WOxFXWqXmZtbehB9xDyetXAndystyRjnz+CGHCJnd5kplrJpVeGiNsBiBhbeftk5sOLvf4
+U17WksvIF9WuBvvdf9pB5jK8EYNCoYTUdeME3uNfu2QqPwszn8/2GYP84Ywtn0woTPZFhnsMD1Ez
+nN8DPXKR0BKIufo/1U7AgfdUb27t5dGrIcCtgRVar60tsrwmX79ajodm2//KOvEeRcS3WidRXF1v
+KRC5d32icnvnTr6PC5jx1m/BsmPRdlPCEM2zqvJWi8URGSKFdS+rvoXLFfBXCw01YKUU4P6PI4ia
+7Ks=
+=lZHg
+-----END PGP SIGNATURE-----
+
+--------------jUsPVU9eO41Mfau4JMej3ZiU--
