@@ -2,598 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC1674DC33
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCEE74DC30
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbjGJRVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S231414AbjGJRUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjGJRVQ (ORCPT
+        with ESMTP id S232359AbjGJRUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:21:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FF2C3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689009630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xqUaTeBr0KBRtm/gUMUzB93wI8Oz+mvASuf08xEeHyg=;
-        b=enrQBlNnNHvsCqMdlu74o0fsDVcANz6JklHvzIlBovACclTlvwt5Put8fUBsgghXcGp+YS
-        BAPCyt2cwpV7e4uNCQ+54I1id68FbNNoe+GKOFLg65PWL7242sPeqMA6i64gVv2L1r2cTv
-        5ryBOYlH67dwxnh8SktthdkI5IShqTU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-489-ScA4enwlPqey8toYsVcNog-1; Mon, 10 Jul 2023 13:20:25 -0400
-X-MC-Unique: ScA4enwlPqey8toYsVcNog-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7537E8022EF;
-        Mon, 10 Jul 2023 17:20:24 +0000 (UTC)
-Received: from rotkaeppchen (unknown [10.39.194.181])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 04329492B01;
-        Mon, 10 Jul 2023 17:20:20 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 19:20:18 +0200
-From:   Philipp Rudo <prudo@redhat.com>
-To:     Dave Young <dyoung@redhat.com>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, thunder.leizhen@huawei.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, horms@kernel.org,
-        chenjiahao16@huawei.com, linux-riscv@lists.infradead.org,
-        x86@kernel.org, bp@alien8.de
-Subject: Re: [RFC PATCH 0/4] kdump: add generic functions to simplify
- crashkernel crashkernel in architecture
-Message-ID: <20230710192018.031c9912@rotkaeppchen>
-In-Reply-To: <ZKjG2R8RhWmJex53@darkstar.users.ipa.redhat.com>
-References: <20230619055951.45620-1-bhe@redhat.com>
-        <ZKjG2R8RhWmJex53@darkstar.users.ipa.redhat.com>
-Organization: Red Hat inc.
+        Mon, 10 Jul 2023 13:20:37 -0400
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020027.outbound.protection.outlook.com [52.101.56.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7EF128;
+        Mon, 10 Jul 2023 10:20:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=koGy4WCn2juc4D9ovzx3ZCKCYLiFVthtag4H4qOpd5fhLAHNKBHdI4VBpiIIxtEhVk35XB5Of69cljZ1zkqtunaGYpaDPcqE7J78+OUsdDjvKcBXYIKN41DYo7QA8lw6mgYDzZqkDIIR1n+ETGsU/NciJfrwaPdttgHgrE+gH6G7D8THCIpb8A9OlZtYylGu3vK/04yiqgQzT6s3189i9a8GZLA+q/iBVIqtbT3/3Y9onb+IuEi62ge9WnI8huFgdWFLQHiGX/bWX4KrytvHG4LJUDtiwwWyWltF2rRYqqMIOUhyHAXojBmzigEtW9JuCFwOQaRlblpPzx3ofiEpvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HNo4sehsNFZJYkmI9cgiZceIAYbtHkQujVvN08U5e5o=;
+ b=BmYAAuYOrrTKBdqtE1jdlbaiWINSIJCYzfQ4OwRlEOFvDeAOpjrlJXDfT2qRHhODXNA6nNMDVHofl515kHR61CFB62taPH8FbLHL0X2RH9+bUFAL4xeBacQ3dnRyPLC5jtE1UhuKgbxiI4mDrlgaZ1is6nJXgJWFQ0IE7vJACXK4Amj9y31UYP8Vri4Ggf+mNfL69kAf/xpfHL4B2loKbbGDZe6fOrUQsf1/yoJbKiKTz1HFlda6gaCbqJq0iRUROwkMgex0t7eSUC3l4xY2gjz8EmCUglC2QbDzuj/pBHViGrKRrCovrMJHddOaBt02CXWLg4p6oz4LFMfON3NhJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HNo4sehsNFZJYkmI9cgiZceIAYbtHkQujVvN08U5e5o=;
+ b=IW9ZyLRgBmnzI25BUqDUUdPq+ufESwOS7Yk8FhYemlFClks6vfu1DAiF+sZoxRLqzaUaB3v6TW+ix/Dw261qGCYGADExfbc1530ysMCO6C2y0rrodWX9LRwL8qUSmzAKX7ZjsXQpWPmJNrhR7KmZlJuInuVw0caYB8eh/sqItu8=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by DS7PR21MB3525.namprd21.prod.outlook.com (2603:10b6:8:92::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.6; Mon, 10 Jul
+ 2023 17:20:32 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::718a:bd58:c08f:f54d]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::718a:bd58:c08f:f54d%4]) with mapi id 15.20.6609.003; Mon, 10 Jul 2023
+ 17:20:32 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
+Subject: RE: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
+Thread-Topic: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
+Thread-Index: AQHZqesomMpIPtubN0K/S6c9+nGnj6+gi4RwgBLE6uA=
+Date:   Mon, 10 Jul 2023 17:20:32 +0000
+Message-ID: <SA1PR21MB133517719A03FCE05A9251C0BF30A@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230621191317.4129-1-decui@microsoft.com>
+ <ZJx2cm1HaMEcNIYy@liuwe-devbox-debian-v2>
+ <SA1PR21MB133517262C2D1DFB881BE8B2BF24A@SA1PR21MB1335.namprd21.prod.outlook.com>
+In-Reply-To: <SA1PR21MB133517262C2D1DFB881BE8B2BF24A@SA1PR21MB1335.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9b79af80-4a3e-40cf-8e4e-0deac849eee3;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-28T18:38:05Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DS7PR21MB3525:EE_
+x-ms-office365-filtering-correlation-id: ce9a62ea-b732-4b28-1d6a-08db8169f77b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KpIrwYNztoTspE5GBrDkDMdj3L2QF8bAt/UmuAc8OYU60GiprI3z3IF8wrKHG0LG78sA416VGFNId722a4o/m99yeROe7SELQV1iWRzdlMThxRMi8d8n6BCOcbJQCACwbnW2RUyjaFZHghYOxEtvXh3qEf3iilvcgWwjegr6XuWTEQM/dWt5OYawMFzulOGG+fjdqIXkDZZoDntpJ/zMq0590Ca11ElJcLvs3sckcOltzW4QSLFKLBj4flJbbLROekqdTV1au2Qs+lJkG2ShFXu78GA2JhuSd78DwqvZIgJw92RNyIUn/2Kpi1t1NvsLitilc4/4MjFGpbkGwf88uAyvKoX2f1DdSZDNuv3TAoKekyyuUen856Xg/eR3K1Bv0Ij+nMWZychZZSkj2DcBZE7lOvzzmrt8umZmfGxs6Uu6Dlsp9A9tvuLumQSx88RTzteVakR5yBro2QGnVqAAPm8+PSlgDxl6j++V6197hCrom8NtN8u/gAg9JPmBctmj+hluNLiTNecBUvYH9bIG2f0iZQlnb7tMUJ9LvzJy4GIYCzCM6aM1JvV1soQo+3B0XktJmR/1F3FmvfGKxld7Ilm4hX05TN851GGK3I9BbzKK1BW4MtkMv4ceePHGVU2hsVx8PgI7C30gpAwqr8OtLv+XPXfupliQ2TK2k0skB5Y=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199021)(71200400001)(33656002)(10290500003)(478600001)(55016003)(9686003)(186003)(26005)(53546011)(6506007)(7696005)(2906002)(316002)(41300700001)(38100700002)(4326008)(66556008)(66476007)(66446008)(66946007)(64756008)(122000001)(76116006)(82950400001)(82960400001)(7416002)(5660300002)(86362001)(38070700005)(8936002)(8676002)(52536014)(54906003)(110136005)(8990500004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fqe9FbYSg8T17C4OE60C2GHcZVTfIa2Kb6j8mY0Yl3HBB2Dcp1G3w/HFESP6?=
+ =?us-ascii?Q?m+8kylR8cnzcNDfxuP3/DVhAWGet5HiPnUT7pZMVAQmgwrbYL4G0Lf0jMBwo?=
+ =?us-ascii?Q?++DHIUwc2GKU1ogAmxrUjj3uLnaWuALJjF0J2JNLJO/cqxHq3TEvH2/JUw7B?=
+ =?us-ascii?Q?po0xaIAUfSG4G2tCBHjqtNMsXctqOx/btXTjQcFtbSlC8JXa3ZTpLjSnlCln?=
+ =?us-ascii?Q?lLyUkRffsVoX34aAgR14ipBQVmqbQ9L+j3ymXr2IeXFA5iQSjbfMI0XxzjR/?=
+ =?us-ascii?Q?e/7292ccpbRGgFR7tK/asfCx3EuzPkUQAoF0x1+/kr2vb3buaN5+SmMs6Zh7?=
+ =?us-ascii?Q?xSAHTKvWkCwJIVxmCffpOptwf4uKc3dABmb8nt3RJTXi7zcYoLfH0F7613Lt?=
+ =?us-ascii?Q?YdUpdQPI9V3Aiz+P9yqDiL/KIRwNehNUZ+2ptbYXmAN64f3EgNsu7z0p31h2?=
+ =?us-ascii?Q?pOqe5a8Z0N/rvWBkDifPHGrnCpqVxieDRTfo+00lxNzmk+OF8/72JPH+rxI+?=
+ =?us-ascii?Q?7PUXv8aHnsQBDQqta0DkQ8aaoNXPsBtY6g5XC+CtNKBVZSbY5l4Exd3bIji9?=
+ =?us-ascii?Q?BhgPbnu5aB7Rv4A2I1U2w8PQUjkkPxJNjNijXCeHNWxtJrkQ87AIOpzlECkD?=
+ =?us-ascii?Q?UNEHFxdC76XJyNvu3bsHZfnU7NWa7U5O9oNINoBlW7mHwBzoAEF5J7vXgobN?=
+ =?us-ascii?Q?sAQIoStNg+uZzoMIMeZFKvmuTmZ/S+JZsDWbgmV9e+y4D/S7gJ0bbotUVcj/?=
+ =?us-ascii?Q?RJVk0vsrYqz08JgMIyqzwTwQrfZxDuHX+rQVlNkJ+khMf83ZspB1U/OOCXzm?=
+ =?us-ascii?Q?jC2OYVbDGJSyhR6wU1CdvBkW5Q5PevGqKLjIv7jBqke3NG0GR49pVdx7qRAX?=
+ =?us-ascii?Q?ApryYmS4gCwzJrLvGxqd7D/je4bG4xUuVi+GHQzxK2bM9Xlu4wubjDGdFrG0?=
+ =?us-ascii?Q?VWwyu+IiUeAEKDfJSjBhYG5shq0eppk+6FNzTFYd+5VtAodELcAtOySjg3VN?=
+ =?us-ascii?Q?eeHOVLHXIwuBfru8dPASUKdf+yna4xdLIsIE/lsSG4bn8/hMAuoOp1BXmoyd?=
+ =?us-ascii?Q?P6zuHGWcWvJHNNYqI1SrVn42ms/LbGE3cO1z9EFzBeyU1FFKu/4hL16Gabsa?=
+ =?us-ascii?Q?bLk77zAP02Ci7tyTQyixqy+YtF1KlkpS45rg7scp1c+3DN5R4RHZGOOx9GOf?=
+ =?us-ascii?Q?cn0amdkOL74xvtqqzCHwF7XhNaOZ4+RI4BxAEUxb6PZmy4ko118sETUmnFnw?=
+ =?us-ascii?Q?nSafqlexQFa0D6fNoaVuA211boF02RWXA43dLQTpfvdUCE3GsnpV2rVQHzQA?=
+ =?us-ascii?Q?ceJWjBokSzgxIf6TbsmQDRi9Mn4LTtwIhWQuI/wiZTgvYhhCcd1CgdaqiXTM?=
+ =?us-ascii?Q?431ZgSleD0ghrw4i3BprWmJytRSe0ELRf/qNHe7fTLv9TLZ1aQVLpsB8zd8n?=
+ =?us-ascii?Q?//T/em3ufM7lwOlKsbeBgTwagYQnpIaetglEFFBEmgR4u9heoovt9KKzOfLw?=
+ =?us-ascii?Q?tiz3mRmhotyppFUGmAEKy3Al+iTuVpW2TuqOVlRT45msN7QQdlPJkaq1j8Sg?=
+ =?us-ascii?Q?1tLJw83ZWKRQ8TK89r9AwTvgPIVG+6GxmYCnFU8J?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce9a62ea-b732-4b28-1d6a-08db8169f77b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 17:20:32.6222
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lpg4NqrN5LAEsb0Cnwd1lu5pWj3KOvul1usOZyTO/KPO/juwXW3IXz53yxyNn0H8YLgT2vxHX9eqwEY5hu1wKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3525
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
-Hi Dave,
+> From: Dexuan Cui <decui@microsoft.com>
+> Sent: Wednesday, June 28, 2023 11:45 AM
+> To: Wei Liu <wei.liu@kernel.org>
+> ...
+> > From: Wei Liu <wei.liu@kernel.org>
+> > Sent: Wednesday, June 28, 2023 11:06 AM
+> > To: Dexuan Cui <decui@microsoft.com>
+> > Subject: Re: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx
+> > part)
+> >
+> > On Wed, Jun 21, 2023 at 12:13:15PM -0700, Dexuan Cui wrote:
+> > > The two patches are based on today's tip.git's master branch.
+> > >
+> > > Note: the two patches don't apply to the current x86/tdx branch, whic=
+h
+> > > doesn't have commit 75d090fd167a ("x86/tdx: Add unaccepted memory
+> > support").
+> > >
+> > > As Dave suggested, I moved some local variables of tdx_map_gpa() to
+> > > inside the loop. I added Sathyanarayanan's Reviewed-by.
+> > >
+> > > Please review.
+> > > ...
+> > > Dexuan Cui (2):
+> > >   x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+> > >   x86/tdx: Support vmalloc() for tdx_enc_status_changed()
+> > ...
+> > Dexuan, do you expect these to go through the Hyper-V tree?
+> >
+> > Thanks,
+> > Wei.
+>=20
+> I suppose Dave and/or other x86 folks would like the 2 patches to go
+> through the tip tree if the patches look good.
+>=20
+> Hi Dave, any comments on the patches?
 
-On Sat, 8 Jul 2023 10:15:53 +0800
-Dave Young <dyoung@redhat.com> wrote:
+Hi Dave, would you please take a look at the 2 patches?
 
-> On 06/19/23 at 01:59pm, Baoquan He wrote:
-> > In the current arm64, crashkernel=,high support has been finished after
-> > several rounds of posting and careful reviewing. The code in arm64 which
-> > parses crashkernel kernel parameters firstly, then reserve memory can be
-> > a good example for other ARCH to refer to.
-> > 
-> > Whereas in x86_64, the code mixing crashkernel parameter parsing and
-> > memory reserving is twisted, and looks messy. Refactoring the code to
-> > make it more readable maintainable is necessary.
-> > 
-> > Here, try to abstract the crashkernel parameter parsing code into a
-> > generic function parse_crashkernel_generic(), and the crashkernel memory
-> > reserving code into a generic function reserve_crashkernel_generic().
-> > Then, in ARCH which crashkernel=,high support is needed, a simple
-> > arch_reserve_crashkernel() can be added to call above two generic
-> > functions. This can remove the duplicated implmentation code in each
-> > ARCH, like arm64, x86_64.  
-> 
-> Hi Baoquan, the parse_crashkernel_common and parse_crashkernel_generic
-> are confusion to me.  Thanks for the effort though.
-
-I agree, having both parse_crashkernel_common and
-parse_crashkernel_generic is pretty confusing.
-
-> I'm not sure if it will be easy or not, but ideally I think the parse
-> function can be arch independent, something like a general funtion
-> parse_crashkernel() which can return the whole necessary infomation of
-> crashkenrel for arch code to use, for example return like
-> below pseudo stucture(just a concept, may need to think more):
-> 
-> structure crashkernel_range {
-> 	size,
-> 	range,
-> 	struct list_head list;
-> }
-> 
-> structure crashkernel{
->   structure crashkernel_range *range_list;
->   union {
->   	offset,
->   	low_high
->   }
-> }
-> 
-> So the arch code can just get the data of crashkernel and then check
-> about the details, if it does not support low and high reservation then
-> it can just ignore the option.
-> 
-> Thoughts?
-
-Sounds reasonable. The only thing I would make different is for the
-parser to take the systems ram into account and simply return the size
-that needs to be allocated in case multiple ranges are given.
-
-I've played around a little on how this might look like (probably
-wasting way too much time on it) and came up with the patch below. With
-that patch parse_crashkernel_{common,high,low} and friends could be
-removed once all architectures are ported to the new parse_crashkernel
-function.
-
-Please note that I never tested the patch. So it probably doesn't even
-compile. Nevertheless I hope it helps to get an idea on what I think
-should work :-)
-
-Thanks
-Philipp
-
-----
-
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index fb904cc57ab1..fd5d01872c53 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -66,22 +66,12 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
- 
- static void __init arch_reserve_crashkernel(void)
- {
--	unsigned long long low_size = 0;
--	unsigned long long crash_base, crash_size;
- 	char *cmdline = boot_command_line;
--	bool high = false;
--	int ret;
- 
- 	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
- 		return;
- 
--	ret = parse_crashkernel_generic(cmdline, &crash_size, &crash_base,
--					&low_size, &high);
--	if (ret)
--		return;
--
--	reserve_crashkernel_generic(cmdline, crash_size, crash_base,
--				    low_size, high);
-+	reserve_crashkernel_generic(cmdline);
- }
- 
- /*
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index b26221022283..4a78bf8ad494 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -486,28 +486,17 @@ unsigned long crash_low_size_default(void)
- 
- static void __init arch_reserve_crashkernel(void)
- {
--	unsigned long long crash_base, crash_size, low_size = 0;
- 	char *cmdline = boot_command_line;
--	bool high = false;
--	int ret;
- 
- 	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
- 		return;
- 
--	ret = parse_crashkernel_generic(cmdline, &crash_size, &crash_base,
--					&low_size, &high);
--	if (ret)
--		return;
--
- 	if (xen_pv_domain()) {
- 		pr_info("Ignoring crashkernel for a Xen PV domain\n");
- 		return;
- 	}
- 
--	reserve_crashkernel_generic(cmdline, crash_size, crash_base,
--				    low_size, high);
--
--	return;
-+	reserve_crashkernel_generic(cmdline);
- }
- 
- static struct resource standard_io_resources[] = {
-diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
-index 1b12868cad1b..a1ebd6c47467 100644
---- a/include/linux/crash_core.h
-+++ b/include/linux/crash_core.h
-@@ -84,35 +84,25 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
- int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
- 		unsigned long long *crash_size, unsigned long long *crash_base);
- 
--#ifdef CONFIG_ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
--int __init parse_crashkernel_generic(char *cmdline,
--				 unsigned long long *crash_size,
--				 unsigned long long *crash_base,
--				 unsigned long long *low_size,
--				 bool *high);
--
--void __init reserve_crashkernel_generic(char *cmdline,
--		unsigned long long crash_size,
--		unsigned long long crash_base,
--		unsigned long long crash_low_size,
--		bool high);
--#else
--
--static inline int __init parse_crashkernel_generic(char *cmdline,
--		unsigned long long *crash_size,
--		unsigned long long *crash_base,
--		unsigned long long *low_size,
--		bool *high)
--{
--	return 0;
-+enum crashkernel_type {
-+	CRASHKERNEL_NORMAL,
-+	CRASHKERNEL_FIXED_OFFSET,
-+	CRASHKERNEL_HIGH,
-+	CRASHKERNEL_LOW
- }
- 
--static inline void __init reserve_crashkernel_generic(char *cmdline,
--		unsigned long long crash_size,
--		unsigned long long crash_base,
--		unsigned long long crash_low_size,
--		bool high)
--{}
-+struct crashkernl {
-+	enum crashkernel_type type;
-+	unsigned long long size;
-+	unsigned long long offet;
-+};
-+
-+int __init parse_crashkernel(char *cmdline, struct crashkernel *ck);
-+
-+#ifdef CONFIG_ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
-+void __init reserve_crashkernel_generic(char *cmdline);
-+#else
-+void __init reserve_crashkernel_generic(char *cmdline) {}
- #endif
- 
- #endif /* LINUX_CRASH_CORE_H */
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index b82dc8c970de..c04a8675446b 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -203,8 +203,7 @@ static int __init parse_crashkernel_suffix(char *cmdline,
- }
- 
- static __init char *get_last_crashkernel(char *cmdline,
--			     const char *name,
--			     const char *suffix)
-+					 const char *name)
- {
- 	char *p = cmdline, *ck_cmdline = NULL;
- 
-@@ -217,23 +216,6 @@ static __init char *get_last_crashkernel(char *cmdline,
- 		if (!end_p)
- 			end_p = p + strlen(p);
- 
--		if (!suffix) {
--			int i;
--
--			/* skip the one with any known suffix */
--			for (i = 0; suffix_tbl[i]; i++) {
--				q = end_p - strlen(suffix_tbl[i]);
--				if (!strncmp(q, suffix_tbl[i],
--					     strlen(suffix_tbl[i])))
--					goto next;
--			}
--			ck_cmdline = p;
--		} else {
--			q = end_p - strlen(suffix);
--			if (!strncmp(q, suffix, strlen(suffix)))
--				ck_cmdline = p;
--		}
--next:
- 		p = strstr(p+1, name);
- 	}
- 
-@@ -314,42 +296,144 @@ static int __init parse_crashkernel_dummy(char *arg)
- early_param("crashkernel", parse_crashkernel_dummy);
- 
- 
--#ifdef CONFIG_ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
--int __init parse_crashkernel_generic(char *cmdline,
--			     unsigned long long *crash_size,
--			     unsigned long long *crash_base,
--			     unsigned long long *low_size,
--			     bool *high)
-+/*
-+ * This function parses command lines in the format
-+ *
-+ *   crashkernel=[start1-end1:]size1[,...][@offset|,high|,low]
-+ *
-+ * The function returns 0 on success and -EINVAL on failure.
-+ */
-+static int __init _parse_crashkernel(char *cmdline, struct crashkernel *ck)
- {
--	int ret;
-+	unsigned long long start, end, size, offset;
-+	unsigned long long system_ram;
-+	char *next, *cur = cmdline;
- 
--	/* crashkernel=X[@offset] */
--	ret = parse_crashkernel_common(cmdline, memblock_phys_mem_size(),
--				crash_size, crash_base);
--	if (ret == -ENOENT) {
--		ret = parse_crashkernel_high(cmdline, 0, crash_size, crash_base);
--		if (ret || !*crash_size)
--			return -1;
--
--		/*
--		 * crashkernel=Y,low can be specified or not, but invalid value
--		 * is not allowed.
--		 */
--		ret = parse_crashkernel_low(cmdline, 0, low_size, crash_base);
--		if (ret == -ENOENT)
--			*low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
--		else if (ret)
--			return -1;
--
--		*high = true;
--	} else if (ret || !*crash_size) {
--		/* The specified value is invalid */
--		return -1;
-+	/*
-+	 * Firmware sometimes reserves some memory regions for its own use,
-+	 * so the system memory size is less than the actual physical memory
-+	 * size. Work around this by rounding up the total size to 128M,
-+	 * which is enough for most test cases.
-+	 */
-+	system_ram = memblock_phys_mem_size()
-+	system_ram = roundup(system_mem, SZ_128M);
-+
-+	start = 0;
-+	end = ULLONG_MAX;
-+	size = memparse(cur, &next);
-+	if (cur == next) {
-+		pr_warn("crashkernel: Memory value expected\n");
-+		return -EINVAL;
-+	}
-+	cur = next;
-+	ck->type=CRASHKERNEL_NORMAL;
-+
-+	/* case crashkerne=size[@offset|,high|,low] */
-+	if (!strchr(cmdline, '-')) {
-+		ck->size = size;
-+	}
-+
-+	while (*cur != ' ' && *cur != '\0') {
-+		switch (*cur) {
-+		case '@':
-+			offset = memparse(++cur, &next);
-+			if (*next != ' ' && *next != '\0') {
-+				pr_warn("crashkernel: Offset must be at the end\n");
-+				return -EINVAL;
-+			}
-+			/* allow corner cases with @0 */
-+			ck->type=CRASHKERNEL_FIXED_OFFSET;
-+			ck->offset = offset;
-+			break;
-+
-+		case '-':
-+			start = size;
-+			end = memparse(++cur, &next);
-+			/* allow <start>-:<size> */
-+			if (cur == next) {
-+				end = system_ram;
-+				next++;
-+			}
-+
-+			if (*next != ':') {
-+				pr_warn("crashkernel: ':' expected\n");
-+				return -EINVAL;
-+			}
-+
-+			cur = next + 1;
-+			size = memparse(cur, &next);
-+			if (cur == next) {
-+				pr_warn("crashkernel: No size provided\n");
-+				return -EINVAL;
-+			}
-+
-+			if (end <= start) {
-+				pr_warn("crashkernel: end <= start\n");
-+				return -EINVAL;
-+			}
-+
-+			if (start <= system_ram && end > system_ram)
-+				ck->size = size;
-+
-+
-+			cur = next + 1;
-+			break;
-+
-+		case ',':
-+			cur++;
-+
-+			/* check for ,high, ,low */
-+			if (strncmp(cur, "high", strlen("high"))) {
-+				ck->type=CRASHKERNEL_HIGH;
-+				cur+=strlen("high");
-+				if (*cur != ' ' || *cur != '\0') {
-+					pr_warn("crashkernel: ,high must be at the end\n");
-+					return -EINVAL;
-+				}
-+				break;
-+			} else if (strncmp(cur, "low". strlen("low"))) {
-+				ck->type=CRASHKERNEL_LOW;
-+				cur+=strlen("low");
-+				if (*cur != ' ' || *cur != '\0') {
-+					pr_warn("crashkernel: ,high must be at the end\n");
-+					return -EINVAL;
-+				}
-+				break;
-+			}
-+
-+			/* start with next entry */
-+			size = memparse(cur, &next);
-+			if (cur == next) {
-+				pr_warn("crashkernel: Memory value expected\n");
-+				return -EINVAL;
-+			}
-+			cur = next;
-+			break;
-+
-+		default:
-+			pr_warn("crashkernel: Invalid character '%c' provided\n", *cur);
-+			return -EINVAL;
-+		}
- 	}
- 
- 	return 0;
- }
- 
-+#ifdef CONFIG_ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
-+int __init parse_crashkernel(char *cmdline, struct crashkernel *ck)
-+{
-+	const char *name="crashkernel=";
-+	char *ck_cmdline;
-+
-+	BUG_ON(!ck);
-+
-+	ck_cmdline = get_last_crashkernel(cmdline, name);
-+	if (!ck_cmdline)
-+		return -ENOENT;
-+	ck_cmdline += strlen(name);
-+	return _parse_crashkernel(ck_cmdline, ck);
-+}
-+
- static int __init reserve_crashkernel_low(unsigned long long low_size)
- {
- #ifdef CONFIG_64BIT
-@@ -371,70 +455,57 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
- 	return 0;
- }
- 
--void __init reserve_crashkernel_generic(char *cmdline,
--			     unsigned long long crash_size,
--			     unsigned long long crash_base,
--			     unsigned long long crash_low_size,
--			     bool high)
-+void __init reserve_crashkernel_generic(char *cmdline)
- {
--	unsigned long long search_end = CRASH_ADDR_LOW_MAX, search_base = 0;
--	bool fixed_base = false;
--
--	/* User specifies base address explicitly. */
--	if (crash_base) {
--		fixed_base = true;
--		search_base = crash_base;
--		search_end = crash_base + crash_size;
--	}
-+	struct ck = { 0 };
- 
--	if (high) {
--		search_base = CRASH_ADDR_LOW_MAX;
--		search_end = CRASH_ADDR_HIGH_MAX;
--	}
-+	parse_crashkernel(cmdline, &ck);
- 
--retry:
--	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
--					       search_base, search_end);
--	if (!crash_base) {
--		/*
--		 * For crashkernel=size[KMG]@offset[KMG], print out failure
--		 * message if can't reserve the specified region.
--		 */
--		if (fixed_base) {
--			pr_warn("crashkernel reservation failed - memory is in use.\n");
--			return;
--		}
-+	if (!ck.size)
-+		return;
- 
--		/*
--		 * For crashkernel=size[KMG], if the first attempt was for
--		 * low memory, fall back to high memory, the minimum required
--		 * low memory will be reserved later.
--		 */
--		if (!high && search_end == CRASH_ADDR_LOW_MAX) {
--			search_end = CRASH_ADDR_HIGH_MAX;
--			search_base = CRASH_ADDR_LOW_MAX;
--			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
--			goto retry;
-+	switch (ck.type) {
-+	CRASHKERNEL_FIXED_OFFSET:
-+		crash_base = memblock_phys_alloc_range(ck.size, CRASH_ALIGN,
-+						       ck.offset,
-+						       ck.offset + ck.size);
-+		break;
-+
-+	CRASHKERNEL_NORMAL:
-+		if (DEFAULT_CRASH_KERNEL_LOW_SIZE) {
-+			/* Simply continue in case we fail to allocate the low
-+			 * memory */
-+			if (!reserve_crashkernel_low(DEFAULT_CRASH_KERNEL_LOW_SIZE))
-+				ck.size -= DEFAULT_CRASH_KERNEL_LOW_SIZE;
- 		}
- 
--		/*
--		 * For crashkernel=size[KMG],high, if the first attempt was
--		 * for high memory, fall back to low memory.
--		 */
--		if (high && search_end == CRASH_ADDR_HIGH_MAX) {
--			search_end = CRASH_ADDR_LOW_MAX;
--			search_base = 0;
--			goto retry;
--		}
--		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
--			crash_size);
-+		fallthrough;
-+	CRASHKERNEL_HIGH:
-+		crash_base = memblock_phys_alloc_range(ck.size, CRASH_ALIGN,
-+						       CRASH_ADDR_LOW_MAX,
-+						       CRASH_ADDR_HIGH_MAX);
-+		if (crash_base)
-+			break;
-+
-+		fallthrough;
-+	CRASHKERNEL_LOW:
-+		crash_base = memblock_phys_alloc_range(ck.size, CRASH_ALIGN, 0,
-+						       CRASH_ADDR_LOW_MAX);
-+		break;
-+
-+	default:
-+		pr_warn("Invalid crashkernel type %i\n", ck.type);
- 		return;
- 	}
- 
--	if ((crash_base > CRASH_ADDR_LOW_MAX) &&
--	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
--		memblock_phys_free(crash_base, crash_size);
--		return;
-+	if (!crash_base) {
-+		pr_warn("could not allocate crashkernel (size:0x%llx)\n",
-+			ck.size);
-+		if (crashk_low_res.end) {
-+			memblock_phys_free(crashk_low_res.start,
-+					   crashk_low_res.end - crashk_low_res.start + 1);
-+		}
-+		return
- 	}
- 
- 	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
-@@ -449,7 +520,7 @@ void __init reserve_crashkernel_generic(char *cmdline,
- 		kmemleak_ignore_phys(crashk_low_res.start);
- 
- 	crashk_res.start = crash_base;
--	crashk_res.end = crash_base + crash_size - 1;
-+	crashk_res.end = crash_base + ck.size - 1;
- 	insert_resource(&iomem_resource, &crashk_res);
- }
- #endif
+The patches have got Reviewed-by/Acked-by from Kirill, Sathyanarayanan
+and Michael.
+The patches can still apply cleanly on today's tip tree's master branch.
+=20
+Thanks,
+Dexuan
 
