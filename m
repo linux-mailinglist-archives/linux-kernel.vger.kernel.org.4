@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC65674CCAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CAB74CCAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjGJGKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
+        id S230144AbjGJGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjGJGKo (ORCPT
+        with ESMTP id S230431AbjGJGLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:10:44 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F7D129;
-        Sun,  9 Jul 2023 23:10:42 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-98e39784a85so1025211366b.1;
-        Sun, 09 Jul 2023 23:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688969440; x=1691561440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from:sender
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oLTUVpDUrCdQ0Mh9V452LJhSttkDbQuVjJuiw5M94EM=;
-        b=rrqf0vLe63238HBXYxc9MbUtq9PE0OwcLwvS83zt0Ua72s9Yox1nlmtiMqXhVloXWB
-         qNGJ+0vSZiHf/VEeI7LsepUphkiF7JdKVpk9/UZl3a91apK3ocDgLolYXMwTFWzy81lN
-         kpi9h2Uev82N5eIe9Mrg7l6sBjne/Q7R4u53wRM2JTs07iofv4lt+CZc7Ct3K/K2Vwlv
-         gsLIWL0cMJftioj5TzPnMH7WkF/zg8O/Mvuir65/dR4mUEFFScFtjMBs5voN5ISCIlVN
-         5WehgfVtIL7rrh494c+4J8ICjbGJ34Pq7m0tymrfF7CaGX76IoQFT8eV9OZQCkZIu5rQ
-         ylQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688969440; x=1691561440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from:sender
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oLTUVpDUrCdQ0Mh9V452LJhSttkDbQuVjJuiw5M94EM=;
-        b=Cj+BkWgNkOXTaa12m9wDBN6gCJa5Pst2XL6qZCP2m/MZgCc5unrOEdhlQcPWW2e0WO
-         9Uug4HE9bbWdmo/ob9fC+V3xjy9aUpHqmjflSkHApfEkIipb4OfrZ4o0/TpC1oN9vG4U
-         ZaNDkX3oCAdCiaCL0h+RzalUA+qPurGBdVKtsdDAj1ai8qP7BQr2rtnR+IdE8grU6eq2
-         aZurtzEvxkBd7BCoKeFvvhw5yWrUaJeLzYbArhEkwKLf6BQfx85r2fgqbaurL12nFMYX
-         EZ9+Do2JnZ1GNqgeni20e4VupDami0HRoqb5MWBbxvlhJYJb9sLDvNP0UzF48gt/ggTO
-         ZWRw==
-X-Gm-Message-State: ABy/qLZEuugP9jXa3+9RasaQYpIbR4ictoWxXIXGkY2Vr1Loyk72VT6p
-        RAOywHTo0ORwjPcLFEic7GdpYmz3f0RgIkFIHvo=
-X-Google-Smtp-Source: APBJJlG8WySmNViWhWLOy/pzqrFUtn6w3LYifEj/AYQ5vGB3qAzzF9DLE0yHc2K5DJABsZjmg7oSnuFlKl7y1jcjo78=
-X-Received: by 2002:a17:907:da9:b0:992:74e0:6f76 with SMTP id
- go41-20020a1709070da900b0099274e06f76mr18128543ejc.4.1688969440668; Sun, 09
- Jul 2023 23:10:40 -0700 (PDT)
+        Mon, 10 Jul 2023 02:11:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D60132
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:11:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EF4C60DE8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:11:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7040AC433C7;
+        Mon, 10 Jul 2023 06:11:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688969463;
+        bh=POVkwNRnXDTfSq2EQOtvr5EVAKm/0LZO6D8+9fhg9qo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aVlZps9/ljtmmOZ258zRJ3em8y5MKFcpsgUk5gQ2I0RfOelUVPcNP3v4Kje8iStoY
+         Wgx7DUbELlRfQ09wzhWlxTys4GqfDbj/ctlfZb7CfNZQzQJPA4cLCuTv9lyU/bZ6dT
+         SQ+WU9IelPcfdOZjl4yRnmP7tcqzU+bhR1fi1o6W2LAW1eshtdD2oxdoA7KtXSJOJ3
+         02NOZBgZ8CoYrSX9liEIb0q6DDv24srL47b9Dpo3PXFRXR1goSEwulRo2Kvd98pjQj
+         qEXO2u+4R4cDosRFb6MeVGT5sw6MegBWj1KlPDwuMBczMODIYJ6AdI5PiXhd6lNs1U
+         iuDyi/mUe8o8w==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: don't handle error case of f2fs_compress_alloc_page()
+Date:   Mon, 10 Jul 2023 14:10:58 +0800
+Message-Id: <20230710061058.2303767-1-chao@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <tencent_4D921A8D1F69E70C85C28875DC829E28EC09@qq.com> <63c6f039-4b33-cdfc-1e49-fc9fc35d513e@web.de>
-In-Reply-To: <63c6f039-4b33-cdfc-1e49-fc9fc35d513e@web.de>
-Sender: cl1ntlov3@gmail.com
-X-Google-Sender-Delegation: cl1ntlov3@gmail.com
-From:   linke li <lilinke99@gmail.com>
-Date:   Mon, 10 Jul 2023 14:10:29 +0800
-X-Google-Sender-Auth: pHqwLt7ft6InGgiUU7y9kioNch0
-Message-ID: <CAKdjhyD8U4vd=DhNqkZvCFiNnH=47e7=HdrWHe1YRuTxx6NspA@mail.gmail.com>
-Subject: Re: [PATCH] isofs: fix undefined behavior in iso_date()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-fsdevel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Jan Kara <jack@suse.cz>,
-        Linke Li <lilinke99@foxmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Markus,
+f2fs_compress_alloc_page() uses mempool to allocate memory, it never
+fail, don't handle error case in its callers.
 
-Thank you for your valuable feedback, I apologize for my typo in the
-description.
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/compress.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-> How do you think about to add the tag =E2=80=9CFixes=E2=80=9D?
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index 236d890f560b..9662d635efbe 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -649,13 +649,8 @@ static int f2fs_compress_pages(struct compress_ctx *cc)
+ 		goto destroy_compress_ctx;
+ 	}
+ 
+-	for (i = 0; i < cc->nr_cpages; i++) {
++	for (i = 0; i < cc->nr_cpages; i++)
+ 		cc->cpages[i] = f2fs_compress_alloc_page();
+-		if (!cc->cpages[i]) {
+-			ret = -ENOMEM;
+-			goto out_free_cpages;
+-		}
+-	}
+ 
+ 	cc->rbuf = f2fs_vmap(cc->rpages, cc->cluster_size);
+ 	if (!cc->rbuf) {
+@@ -1574,8 +1569,6 @@ static int f2fs_prepare_decomp_mem(struct decompress_io_ctx *dic,
+ 		}
+ 
+ 		dic->tpages[i] = f2fs_compress_alloc_page();
+-		if (!dic->tpages[i])
+-			return -ENOMEM;
+ 	}
+ 
+ 	dic->rbuf = f2fs_vmap(dic->tpages, dic->cluster_size);
+@@ -1656,11 +1649,6 @@ struct decompress_io_ctx *f2fs_alloc_dic(struct compress_ctx *cc)
+ 		struct page *page;
+ 
+ 		page = f2fs_compress_alloc_page();
+-		if (!page) {
+-			ret = -ENOMEM;
+-			goto out_free;
+-		}
+-
+ 		f2fs_set_compressed_page(page, cc->inode,
+ 					start_idx + i + 1, dic);
+ 		dic->cpages[i] = page;
+-- 
+2.40.1
 
-I agree with that.
