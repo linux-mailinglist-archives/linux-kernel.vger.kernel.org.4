@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BC474D498
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DAC74D49B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 13:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjGJL1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 07:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S230167AbjGJL1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 07:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbjGJL1F (ORCPT
+        with ESMTP id S232541AbjGJL1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 07:27:05 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59516100
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:27:02 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fba1288bbdso6065499e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:27:02 -0700 (PDT)
+        Mon, 10 Jul 2023 07:27:18 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E797115
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:27:14 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so6648013e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 04:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688988420; x=1691580420;
+        d=linaro.org; s=google; t=1688988432; x=1691580432;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4+Ouigov7V/f0TWefy/omICdopKlzJ8egLhg1vkm8FQ=;
-        b=O8UkG2zgu8nXebCjlfLQ879phf7e4jpqFeV3T1p18QkJZH0bd8D0XQyHPWdgYYxqIS
-         cy9WQhPs1HJA1iW5sZNc1M1XitXWd3pnn7vRGG8MxhMWWdNea7m7eFiBqkCdtGOzCkTO
-         NM/jY+Gbj805A2c8RCrbgyuQejW9RVvPXag45UZ7ocz+UXG4SMkmeLzPxk2qbe03TaF0
-         VeOP6I8TDtA95fgAnP2HSm1+/gUpTOrzWRKrQtbFclZQRc12jQY+Ji9X4S6A7zXXtK5o
-         2fu7g9KrxFLQU2zrrM3lVHwXrfET/hIofj8OCgy6n4RIdhMmr3kgA3BuJmr9H7zV2en9
-         SvKw==
+        bh=V49SdTgWSJVm+8H0cDj3W1KdF5iv0fx1nxbNVddDqD4=;
+        b=j+ubNvFsU35Gx9khBQyVcoeJTZpuCjph4XLlySFF8Z2nE9eVk8V1SOKNb7msbucIUs
+         DAEyViZMvQLPOgeVyo6QbxTZ0lSZXMl/yGvaw/nYloMuSjyMVlYFg5OrvWPYNhmbQHcp
+         ipDlG7bSpds/wxSI2uNp2rZUxHTB7a/x6nglRxuOkoYziha0PvmVQs3SP8XTggew6JHY
+         +zADg2zhanlCBwNXlob/nQy1XLaz+stwbY3+5VO+HK1nyEHHHjT8WGkEflND3pj3hmpm
+         4SrfA/bN8/8QqegPJffOHvb00AOMBNOaktN6oP1tDT5MNjZuPykN/Dj5d0NgcKXJuGQG
+         P1Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688988420; x=1691580420;
+        d=1e100.net; s=20221208; t=1688988432; x=1691580432;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4+Ouigov7V/f0TWefy/omICdopKlzJ8egLhg1vkm8FQ=;
-        b=YM9ezUqOH+vzBBxMhN3KOBJEtEUK31IvUIRPIFx9Iekevxlb3dIJ6Gh1HOvsHqlhlz
-         c5nvjl2wkuB8PoCFwazkzTsLFz68tnAY0zPb/Le2wV31iuR2QHi9vDZINJ/safUziYk/
-         atd+DQmdzGCoXug5cU0LcKWsLLq8zDmpcdbrqNNlEUSefoX7pTyV4cA/kbKo8tX3yTg5
-         YCFj+01AIZ+6g1D1yaWI0p6RhIeLOwS0fgkT4EjhtSUCAzN6rzW7tmsAvOCqsqeNKdqT
-         zqVq8cYGp0suLqlmv5ocU8N9T7o5AZPuk5+iBxQIqIzUzWL6N3ngWUCzaTBCqH6aC+2p
-         7WJg==
-X-Gm-Message-State: ABy/qLZKr0uYzWEsIcqqoMqE1PAJNo7b7ithmtjXOxWMz1yJ0tphOm+D
-        xXPnboL9HjdCbeWTV3sP0f+hKQ==
-X-Google-Smtp-Source: APBJJlHxFXD2/i4ZnHH56AzsZRq63Gn+i9WYZ0lInXyBG1ewVCdnt+gE8Y5+1u46kLrPXik16E6V1Q==
-X-Received: by 2002:a05:6512:1146:b0:4fb:7a4e:b573 with SMTP id m6-20020a056512114600b004fb7a4eb573mr9921600lfg.5.1688988420517;
-        Mon, 10 Jul 2023 04:27:00 -0700 (PDT)
+        bh=V49SdTgWSJVm+8H0cDj3W1KdF5iv0fx1nxbNVddDqD4=;
+        b=YQfVr7TihD6hU1m84Xd/jmwofX1bhXvzwGgZ49J0xIfesd7dfSoM2iIl1RLxwt/LOc
+         ydolxD8a5JN594NRQz90diCBK/RVsXXrJwsYQyg4r9tAj1wbiJHxUq4O/mzYIRlgyMpG
+         RoGCkvwCz89pgogM++i3eK/uNO+KNVNv7VCTsgYYRxsh6Mfs5U0P0TzknFJCIstmiv0w
+         DCC9FcZmdQhh+JOXwspp4AkGd45UVrjlKxcFhgtokH5x6KjWHcViZ0Ukg4VM2PIjPz6j
+         GUXSVgkeCJXXMXJeB2JVchSS1HTwpPacItL9UcKCSj2UmtDt1YKFawUewWhplejDNx5L
+         xFUw==
+X-Gm-Message-State: ABy/qLYYB2945Lquai+c2g/nmSGk5W3343f12AogghAG7ZzE9ckoZPIS
+        pRkJxbNa4GRu/bx6zFhMDy+KtA==
+X-Google-Smtp-Source: APBJJlHbmEzUGQGMe1oZoR+rASq12BLSBpneDA42HeklwM38Tw1z6hVETNPfigi6EZp91VUBQVYntw==
+X-Received: by 2002:a05:6512:4023:b0:4f9:5316:d5b with SMTP id br35-20020a056512402300b004f953160d5bmr11636082lfb.64.1688988432670;
+        Mon, 10 Jul 2023 04:27:12 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id j16-20020ac25510000000b004fbb20791f3sm1664280lfk.31.2023.07.10.04.26.59
+        by smtp.gmail.com with ESMTPSA id d7-20020ac25ec7000000b004fb75943aa0sm1656386lfq.196.2023.07.10.04.27.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 04:27:00 -0700 (PDT)
-Message-ID: <7b14955f-be89-b04a-a0d1-0988a0c77501@linaro.org>
-Date:   Mon, 10 Jul 2023 14:26:59 +0300
+        Mon, 10 Jul 2023 04:27:12 -0700 (PDT)
+Message-ID: <ce12d48d-1830-4200-0350-557d4a648190@linaro.org>
+Date:   Mon, 10 Jul 2023 14:27:11 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v4 18/21] thermal/drivers/qcom/tsens-v0_1: convert to use
+Subject: Re: [PATCH v4 19/21] thermal: qcom-spmi-adc-tm5: convert to use
  devm_request*_irq_probe()
 Content-Language: en-GB
-To:     Yangtao Li <frank.li@vivo.com>, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
+To:     Yangtao Li <frank.li@vivo.com>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
@@ -75,9 +75,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230710095926.15614-1-frank.li@vivo.com>
- <20230710095926.15614-18-frank.li@vivo.com>
+ <20230710095926.15614-19-frank.li@vivo.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230710095926.15614-18-frank.li@vivo.com>
+In-Reply-To: <20230710095926.15614-19-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -139,8 +139,8 @@ On 10/07/2023 12:59, Yangtao Li wrote:
 > Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
 > Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->   drivers/thermal/qcom/tsens.c | 23 ++++++++++-------------
->   1 file changed, 10 insertions(+), 13 deletions(-)
+>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
