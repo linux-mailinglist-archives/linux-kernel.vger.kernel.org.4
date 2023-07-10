@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019C574CFFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0081A74D004
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 10:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjGJIdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 04:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S232401AbjGJIde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 04:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbjGJIct (ORCPT
+        with ESMTP id S233025AbjGJIcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 04:32:49 -0400
+        Mon, 10 Jul 2023 04:32:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CB7E4A;
-        Mon, 10 Jul 2023 01:32:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6161A8;
+        Mon, 10 Jul 2023 01:32:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A40C60F18;
-        Mon, 10 Jul 2023 08:32:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F16C433C7;
-        Mon, 10 Jul 2023 08:32:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 973C960EDC;
+        Mon, 10 Jul 2023 08:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A03C433C9;
+        Mon, 10 Jul 2023 08:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688977960;
-        bh=Tg59EI5XYoytzopU9nzX+VHp5yfaRWW7FwRvoJROPmU=;
+        s=k20201202; t=1688977964;
+        bh=QfdpOJufGRxZLWUtMMbsusxDTqQQ4hp88nK+JkhFgoM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=H1kZ2YAN8eg8wu0chSIFRQIS8L6b2LeIAhOwpqmQR01tYAOCo805e1oIGRic6OTVq
-         ijq71TKYe+kgTzH3kmYqcS/N13M4hV3J0H2/3cg4yO4oB05/KFLC1AVoSClwe4zmPh
-         t7X2g/8RVZaMt6zPfgeoa2G9U749Y6wCTW/QjgKS0tMoYkv4U7KgXoqW3iwdOA6HVZ
-         rE3ubulobJj60m4sANZi7xFrlgwDQj1jZeDwQWW1lpt+IM5S97vxO90yB77tCzs4dV
-         yq587brvnCC2YkmSoAxDdiboiNI6zjyqlgU94XqtOPgDWLk//MiveDYejPJxeIwCgC
-         vZSwBlcpqYh3A==
+        b=EB4SmIyjYeENzT8JjzrFUBbDaJsjkfXMBltQs0uh6HJmjMTtfEawhxFVQ7kIaCYoR
+         m9CpRZSpjxGsQ7cOVQzUIjpt8sQqmEqotmSwfjhWra0YZFCrGw3wLw/JiKP2g7/RZs
+         v2H9ejbHnqYXhZ9J9vNs6ShNJGxzi2kNA72g2XfyOyCVYw0JDDlB8d2rIbcdJ8ccVl
+         uEBhMY4fEcmV18RlxZ8LzG7twHPNRLmfLM6JkcdFUUoMWNBvFytH68zHx/GSyCU5+L
+         r1TAXzqmBObhZgHtyZeyZvlsIjtz/Mpcl4GnKNq4vbI7pWWRVTQi4tlCKdsfw0YTPm
+         Y784USZ9sh7Mg==
 From:   Benjamin Tissoires <bentiss@kernel.org>
-To:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Benjamin Tissoires <bentiss@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dawei Li <set_pte_at@outlook.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230709-fix-selftests-v1-1-57d0878114cc@kernel.org>
-References: <20230709-fix-selftests-v1-1-57d0878114cc@kernel.org>
-Subject: Re: [PATCH] selftests: hid: fix vmtests.sh not running make
- headers
-Message-Id: <168897795922.315593.13314743916178846811.b4-ty@kernel.org>
-Date:   Mon, 10 Jul 2023 10:32:39 +0200
+In-Reply-To: <20230705140242.844167-1-arnd@kernel.org>
+References: <20230705140242.844167-1-arnd@kernel.org>
+Subject: Re: [PATCH] HID: hyperv: avoid struct memcpy overrun warning
+Message-Id: <168897796090.315593.7282926562695249988.b4-ty@kernel.org>
+Date:   Mon, 10 Jul 2023 10:32:40 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -58,20 +67,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 09 Jul 2023 12:06:56 +0200, Benjamin Tissoires wrote:
-> According to commit 01d6c48a828b ("Documentation: kselftest:
-> "make headers" is a prerequisite"), running the kselftests requires
-> to run "make headers" first.
+On Wed, 05 Jul 2023 16:02:24 +0200, Arnd Bergmann wrote:
+> A previous patch addressed the fortified memcpy warning for most
+> builds, but I still see this one with gcc-9:
 > 
-> Do that in "vmtest.sh" as well to fix the HID CI.
-> 
+> In file included from include/linux/string.h:254,
+>                  from drivers/hid/hid-hyperv.c:8:
+> In function 'fortify_memcpy_chk',
+>     inlined from 'mousevsc_on_receive' at drivers/hid/hid-hyperv.c:272:3:
+> include/linux/fortify-string.h:583:4: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+>   583 |    __write_overflow_field(p_size_field, size);
+>       |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
 > [...]
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git (for-6.5/upstream-fixes), thanks!
 
-[1/1] selftests: hid: fix vmtests.sh not running make headers
-      https://git.kernel.org/hid/hid/c/f9abdcc617da
+[1/1] HID: hyperv: avoid struct memcpy overrun warning
+      https://git.kernel.org/hid/hid/c/5f151364b1da
 
 Cheers,
 -- 
