@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5C574CCDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10DF74CCD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjGJG0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S231429AbjGJG0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjGJG0D (ORCPT
+        with ESMTP id S230501AbjGJGZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:26:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5BA010DA;
-        Sun,  9 Jul 2023 23:25:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5C5D1FB;
-        Sun,  9 Jul 2023 23:26:38 -0700 (PDT)
-Received: from a077893.blr.arm.com (a077893.blr.arm.com [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6DFD33F67D;
-        Sun,  9 Jul 2023 23:25:50 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        Steve Clevenger <scclevenger@os.amperecomputing.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V6 6/6] coresight: etm4x: Add ACPI support in platform driver
-Date:   Mon, 10 Jul 2023 11:55:00 +0530
-Message-Id: <20230710062500.45147-7-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230710062500.45147-1-anshuman.khandual@arm.com>
-References: <20230710062500.45147-1-anshuman.khandual@arm.com>
+        Mon, 10 Jul 2023 02:25:45 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2A413D
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:25:37 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51e57874bfdso1115121a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jul 2023 23:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688970336; x=1691562336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=drdnhLURZEPaimksDzGGidvaf1tZatFdFlk35KUhevU=;
+        b=U7YuqLDpKYEf9nFKzVz4vye09/kMzj5aemcbwPVozSJkkwnHdtJ1eyyPPWPzaWt2mF
+         52butmA+muHWdPkw7MDVrxrN1mOVrdzw69/rl2Aog0gJ2826pubwKGD1BJlJVKk3hB44
+         1chwtX0ucx4A0cJI0SWS5sOF7FPEPlnJkiUX7+famdaJmkOCGKMCjL6ErTfOpHMRFTTv
+         YTJnZQcYilUyCZ9rV6uVB/w7HtUl/QelZwHZVIaB5OpvcmzrZiTEoXTIBTpre1izibLV
+         B5JJyRWUEDzxT8OwuM8UnpButRjJI74TN6zFSVzFnOpd4liV8IV1grxv+aUj/tCNnYEp
+         O/+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688970336; x=1691562336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=drdnhLURZEPaimksDzGGidvaf1tZatFdFlk35KUhevU=;
+        b=luImChjDQ2EvpKjjOzDRkA3h4kF4iHsj0bBinM2MntnAspQIDoDy+dlacOtZUBc74f
+         h+ILodMdfjSGJMp5ngzYiqOdrs1azvoKBZhm/bCdhVWop6OW63NLkUkODPcIyP8I22p4
+         AFTlOQljT3cyMnNsk+8EV4UO1Vrk4uXh7sAVgFXVL+eem5HzPynSLZB6JFr0yhT//5t5
+         uMuSYAynq6DRzIKiCttmqyWLpepTmK9ElThBg1PtgBve9oJLkPYeU3AwS2YKV8bMUBh/
+         XtHnkPXbR4pTkgoA/MozLw2tT4+3+b2eCbfC59U0thypQLvYnDRs2PoByUFMCVWVJtx6
+         uicA==
+X-Gm-Message-State: ABy/qLYvBHVHI+afOqQ3vuhPOEMMAl7zpsU4ELX0EdAZjxdxAp5yrpqM
+        DKHMRkeujFXe6RTfk7Sjl26BZQ==
+X-Google-Smtp-Source: APBJJlFa7JPuu2IaQBSIWHdBfw2zDOJRj6l7fKN0eBLvqoDyOgCh3F6VxVDLOfWmn47k0KvG1/4mkg==
+X-Received: by 2002:a05:6402:1ac4:b0:51b:cee4:fc21 with SMTP id ba4-20020a0564021ac400b0051bcee4fc21mr11060214edb.39.1688970335883;
+        Sun, 09 Jul 2023 23:25:35 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id i25-20020aa7dd19000000b0051dd19d6d6esm5373971edv.73.2023.07.09.23.25.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jul 2023 23:25:35 -0700 (PDT)
+Message-ID: <10b2f68f-20b7-d226-467e-ef2b5ab34333@linaro.org>
+Date:   Mon, 10 Jul 2023 08:25:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] arm64: dts: imx8ulp-evk: add caam jr
+Content-Language: en-US
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Varun Sethi <V.Sethi@nxp.com>
+References: <20230616174050.644880-1-pankaj.gupta@nxp.com>
+ <DU2PR04MB86300C782DC7637C469599EC9526A@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <PAXPR04MB8638AD814BC6A3BFF6A822209530A@PAXPR04MB8638.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PAXPR04MB8638AD814BC6A3BFF6A822209530A@PAXPR04MB8638.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
+On 10/07/2023 07:27, Pankaj Gupta wrote:
+> Hi All,
+> 
+> Gentle reminder. Please review this patch.
 
-Drop ETM4X ACPI ID from the AMBA ACPI device list, and instead just move it
-inside the new ACPI devices list detected and used via platform driver.
+Why do you ping just after the merge window? You sent the patch during
+or just before the merge window when SoC's maintainer tree is obviously
+closed, so why so impatient? Instead try to adjust to Linux kernel
+process instead of pinging us...
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: linux-acpi@vger.kernel.org
-Cc: coresight@lists.linaro.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for ACPI specific changes)
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- drivers/acpi/acpi_amba.c                           |  1 -
- drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
-index f5b443ab01c2..099966cbac5a 100644
---- a/drivers/acpi/acpi_amba.c
-+++ b/drivers/acpi/acpi_amba.c
-@@ -22,7 +22,6 @@
- static const struct acpi_device_id amba_id_list[] = {
- 	{"ARMH0061", 0}, /* PL061 GPIO Device */
- 	{"ARMH0330", 0}, /* ARM DMA Controller DMA-330 */
--	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
- 	{"ARMHC501", 0}, /* ARM CoreSight ETR */
- 	{"ARMHC502", 0}, /* ARM CoreSight STM */
- 	{"ARMHC503", 0}, /* ARM CoreSight Debug */
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index 43f583987250..703b6fcbb6a5 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2014, The Linux Foundation. All rights reserved.
-  */
- 
-+#include <linux/acpi.h>
- #include <linux/bitops.h>
- #include <linux/kernel.h>
- #include <linux/moduleparam.h>
-@@ -2347,12 +2348,21 @@ static const struct of_device_id etm4_sysreg_match[] = {
- 	{}
- };
- 
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id etm4x_acpi_ids[] = {
-+	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, etm4x_acpi_ids);
-+#endif
-+
- static struct platform_driver etm4_platform_driver = {
- 	.probe		= etm4_probe_platform_dev,
- 	.remove		= etm4_remove_platform_dev,
- 	.driver			= {
- 		.name			= "coresight-etm4x",
- 		.of_match_table		= etm4_sysreg_match,
-+		.acpi_match_table	= ACPI_PTR(etm4x_acpi_ids),
- 		.suppress_bind_attrs	= true,
- 		.pm			= &etm4_dev_pm_ops,
- 	},
--- 
-2.25.1
+Best regards,
+Krzysztof
 
