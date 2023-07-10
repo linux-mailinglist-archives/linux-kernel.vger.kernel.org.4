@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8850A74D707
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2C074D714
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 15:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjGJNJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 09:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S229954AbjGJNKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 09:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbjGJNIc (ORCPT
+        with ESMTP id S229939AbjGJNKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:08:32 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A1B128;
-        Mon, 10 Jul 2023 06:08:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99364ae9596so577511166b.1;
-        Mon, 10 Jul 2023 06:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688994500; x=1691586500;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4Yu4nZ9o/MAugiHNW1oP2TWBog7+wh9NiTblk14kDg=;
-        b=ViKLx3vuJ5Z2OZiH/tMNs7+36C5ErzoM+wXhMsBLmBioA4d/87VvFYg9xu7yF9NYI7
-         eW0cRRSun9o7/uBwbj9nMt1MxZ2ILgZ8TJL6Qbw0qOjL3bsRT3ZUoCACT5dzlbz+CGVp
-         t9wLe+JD8luMvDMLgGkXaC6r/WstGA6qKjIKBmIAn8B2ibPW+yuWsRN7leV1a+r4uxNj
-         u+hZVI2YPLOuz3AeCDWCh2PiCBEMstSEL2fBx8AVNUXNq28fWnwYpknz6ZRs8fdzmGFB
-         KpjD24mWQEkMUYbgDUeKuX3D9Tr0BjxOh9BA1kgHsmGbRKIljItY/qy8B4DcqhccOgkC
-         y3fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688994500; x=1691586500;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t4Yu4nZ9o/MAugiHNW1oP2TWBog7+wh9NiTblk14kDg=;
-        b=WirI5RBBL8Jd9POeObAP2ic3AidoARfZZNLBO4/aTN345lvjR6N/1h41q18gpkjYt+
-         mTPHyNKkvv5CkUpsgZ5EBw4+2cY/U+6oXW2DNgFBXs2GaUrBvudy6pbTp9oMGLLv8l3J
-         ECm72GuAQtJJ0oms6V5Ih2TEnX4eCAdNs05FtXJwWkEgiSp6/k0NWcesrVPxN7Zyfa+J
-         X7Bik6eKV2yWOeM3aS4vG0biZjvDzgE6NkA/Agj3efKgAiJJESdyCSbPhyRSbBmiYMwB
-         iiIoWOYSE536GF/IoGm2uETHiF//JyQv7OlX1AZO3CTEMpnMLH47k/yNlQM3u8x9/H1T
-         q2Dg==
-X-Gm-Message-State: ABy/qLbUwDvkNR42qEsNylS9w9btTStPt8r+4vMgGikUlZsLB3eAxJLR
-        QOH9roAI/OKm020OKUcMbak=
-X-Google-Smtp-Source: APBJJlEZSid4m5LqiMkjIuq9pqoFUus2yiqHgqNIdRxQzpkVtb3ChiIS1Aia+iMuLU7ts1DBLslKyg==
-X-Received: by 2002:a17:907:9008:b0:988:9621:d85f with SMTP id ay8-20020a170907900800b009889621d85fmr11123647ejc.58.1688994500400;
-        Mon, 10 Jul 2023 06:08:20 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i18-20020a170906851200b0098669cc16b2sm6048866ejx.83.2023.07.10.06.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 06:08:19 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 15:08:18 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 14/18] soc: tegra: Move powergate-bpmp driver to the
- genpd dir
-Message-ID: <ZKwCwqHwqCEIHMKv@orome>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-15-ulf.hansson@linaro.org>
+        Mon, 10 Jul 2023 09:10:43 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 813A0FA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:10:28 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Cx7+tBA6xkUCsDAA--.8164S3;
+        Mon, 10 Jul 2023 21:10:25 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX89BA6xkv1snAA--.45620S3;
+        Mon, 10 Jul 2023 21:10:25 +0800 (CST)
+Message-ID: <afbbda82-0635-bef3-b9ff-d5c6575631b8@loongson.cn>
+Date:   Mon, 10 Jul 2023 21:10:25 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bFL+MChN9/7KXUcr"
-Content-Disposition: inline
-In-Reply-To: <20230707140434.723349-15-ulf.hansson@linaro.org>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/loongson: Fix two warnings because of passing wrong
+ type
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Li Yi <liyi@loongson.cn>
+Cc:     loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>
+References: <20230710100931.255234-1-suijingfeng@loongson.cn>
+ <87h6qcjc46.fsf@intel.com>
+From:   suijingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <87h6qcjc46.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxX89BA6xkv1snAA--.45620S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZr47KFWrKr48Zr43tw13trc_yoW5XFW8pF
+        s8Ca4Utr4DJr12yrs7WF1jq34Fv3Z3XFWSqrZrC3Z09w1DJr1UZF1kuay5Kry3ZFWjy3Wa
+        yrs3GrW3K3ZFvwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jb_-
+        PUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,54 +71,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---bFL+MChN9/7KXUcr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023/7/10 18:26, Jani Nikula wrote:
+> On Mon, 10 Jul 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+>> When accessing I/O memory, we should pass '__iomem *' type instead of
+>> 'void *' simply, otherwise sparse tests will complain. After applied
+>> this patch, the following two sparse warnings got fixed.
+> Usually the commit message should explain why it's okay to cast away the
+> warning.
+>
+> Because realistically this doesn't "fix" the warning, this merely hides
+> it.
 
-On Fri, Jul 07, 2023 at 04:04:30PM +0200, Ulf Hansson wrote:
-> Let's moves the powergate-bpmp driver, while we leave the pmc driver in t=
-he
-> soc directory. To move the latter, we first need to split it up in a few
-> pieces so the genpd parts can be moved alone.
->=20
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Mikko Perttunen <mperttunen@nvidia.com>
-> Cc: <linux-tegra@vger.kernel.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/genpd/Makefile                        | 1 +
->  drivers/genpd/tegra/Makefile                  | 2 ++
->  drivers/{soc =3D> genpd}/tegra/powergate-bpmp.c | 0
->  drivers/soc/tegra/Makefile                    | 1 -
->  4 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/genpd/tegra/Makefile
->  rename drivers/{soc =3D> genpd}/tegra/powergate-bpmp.c (100%)
 
-Fine with me:
+My understanding is that a point itself is just a variable where store a 
+address,
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+if this address originally point to I/O memory,
 
---bFL+MChN9/7KXUcr
-Content-Type: application/pgp-signature; name="signature.asc"
+then, we can other cast it to u64 type, then cast it back to '__iomem *' 
+again.
 
------BEGIN PGP SIGNATURE-----
+as long as the type's  bit-width is width enough to store this address, 
+we won't lost the information.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSsAsIACgkQ3SOs138+
-s6GpGw/+PL9CvgiLkda1wJNl1l2p4aij2hHBUbv5HmJ26j99KaMSJHfXSr+FU8zE
-hY/w1nVVm2hUjn0k3rLo6Pe/vNGw4XzeA+Ifp17KoqHhEk2aboOZdLyLK/KULYS+
-ADH9C+s2nunBpXTbwODqP8/8GysMwTotkKPGn3l0VvD7pzKE6Bsx4cUdi0LV1vwr
-AVfHAOBOy1HB27K3oM5tppuA3OiRcwCUJPtFty3FMv5UDHFOcKmYOYLRK6R0PIA5
-o+SANCTlpioBcQIW8rQo4yJwFHvllTr6j8slRvzbmuL++vwKYNZTPoZXhiy2rKD7
-squsr1qQNjJRHayNKoapV1ElZNan1L7X8zgoqW29FAGuJeuRx6ecqlBTEiD0bgsp
-daoiZAdfPLc9ZmR+A9aNDtXzM5owlXoxG6ZRLqo4J93nQDT+8S1PyN3cbIWQB7PL
-uq/m/aFpLGzfsw+82q9XfVdtZpjEe9F4JcEhAeP5ZrdmMthzAra/aYxd+IyGDdE0
-I34tGGKOLOw4EeCYJ/4XlLrCVEz4oHlXHEJtqmrMFUM1fKwvZY12X2RIfOw9v+Mk
-f4Jej8JDO4LkYaQKZh2myc/XoqniY5FR5NMRbhSEiKDAqq9MIBhCPfBqIRA1U79s
-TfYkYPBbSqZ2QtJLSeIrH61+7CkXCySKqSNU+lRJk3DUbERgnYo=
-=rRak
------END PGP SIGNATURE-----
 
---bFL+MChN9/7KXUcr--
+'void *' or 'u64' is just a intermediate represent of the address.
+
+we can other cast it to u64 type, then cast it back to 'void __iomem *' 
+or 'void *' again.
+
+
+Why it's okay ? My answer is that
+
+As long as a address is really point to the I/O memory, cast it to 'void 
+__iomem *' is OK.
+
+As long as a address is really point to the system memory, cast it to 
+'void *' is OK.
+
+
+> BR,
+> Jani.
+>
+>> 1) drivers/gpu/drm/loongson/lsdc_benchmark.c:27:35:
+>>     sparse:     expected void volatile [noderef] __iomem *
+>>     sparse:     got void *kptr
+>>
+>> 2) drivers/gpu/drm/loongson/lsdc_benchmark.c:42:51:
+>>     sparse:     expected void const volatile [noderef] __iomem *
+>>     sparse:     got void *kptr
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202307100243.v3hv6aes-lkp@intel.com/
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/loongson/lsdc_benchmark.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/loongson/lsdc_benchmark.c b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>> index b088646a2ff9..36e352820bdb 100644
+>> --- a/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>> +++ b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>> @@ -24,7 +24,7 @@ static void lsdc_copy_gtt_to_vram_cpu(struct lsdc_bo *src_bo,
+>>   	lsdc_bo_kmap(dst_bo);
+>>   
+>>   	while (n--)
+>> -		memcpy_toio(dst_bo->kptr, src_bo->kptr, size);
+>> +		memcpy_toio((void __iomem *)dst_bo->kptr, src_bo->kptr, size);
+>>   
+>>   	lsdc_bo_kunmap(src_bo);
+>>   	lsdc_bo_kunmap(dst_bo);
+>> @@ -39,7 +39,7 @@ static void lsdc_copy_vram_to_gtt_cpu(struct lsdc_bo *src_bo,
+>>   	lsdc_bo_kmap(dst_bo);
+>>   
+>>   	while (n--)
+>> -		memcpy_fromio(dst_bo->kptr, src_bo->kptr, size);
+>> +		memcpy_fromio(dst_bo->kptr, (void __iomem *)src_bo->kptr, size);
+>>   
+>>   	lsdc_bo_kunmap(src_bo);
+>>   	lsdc_bo_kunmap(dst_bo);
+
