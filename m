@@ -2,125 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F385974E248
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3E874E24D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 01:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjGJXpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 19:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S230327AbjGJXtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 19:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjGJXpr (ORCPT
+        with ESMTP id S230048AbjGJXta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 19:45:47 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6367F19A;
-        Mon, 10 Jul 2023 16:45:44 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b702319893so79876691fa.3;
-        Mon, 10 Jul 2023 16:45:44 -0700 (PDT)
+        Mon, 10 Jul 2023 19:49:30 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE6E1A8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:49:28 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-635dbfa710dso30181676d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 16:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689032742; x=1691624742;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lOzkIFoqf25CqB9hUyPl1DnkRcrfld+HOSpLgyRrDcI=;
-        b=ZdWzHzRengZ9OTY5kYzIhNizMIm4bJBEhtBcpNLzYf8bkufwXdpeZzSjumeSma1n7K
-         XC2HvBGNTrYT7QAMvIQIHwpwCf75tsGFftgIaUUv02L6P/cLIvW8+2iQVl2nwII1gK8D
-         iWhWIQHbIK4ESR5cShCFBrJjjbRS1aNbz6et5bmomCrEOxZ+TB1KFdA3zgvMuhAexklA
-         JWwyVgGFwB7hhXIbXEZqvsSgIqjBaenaPPHzDTH2OzNNc54b7pGLIPx8emn6EI5fwRmF
-         4r46gtvcR0mN6dt4DmzKUP4FZ1ghVaQXJqWk6HvGMAa+AHku5sxKf6l+6v53jk3t0Oxh
-         OziA==
+        d=ziepe.ca; s=google; t=1689032967; x=1691624967;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C1+7UfAMLI/Nu08LQwOr0R45kQ38N0MvpsViC9OWNis=;
+        b=lOjm4Lx/2UPcQ0vl1fIalkQvnZK8D4gJI18w5QRFNsP45noSZ/Hlwqq9fLf6qno8S0
+         GvM986sAXOOWD+3KlsW4spYFl1h5PPJyrFeDcdlNkEDclq35TvtosJh62CTCTkoRD9GK
+         MqGXs6RSufFFgYmbGJAlQr1lrEr/1f2OYUXg5i3nLAJvb7ECX/2/AfZpA3lyMOZeND1n
+         lFl8txf7CyG92a7kngcJ7Vq6bV3YMDykveds9sCnMS+V3OZ/EyLY8FCZCXVFPUP4B0LH
+         qdqAHT53dGIFQ6ev9mJkB5oMnZhst31KWNYei6EFEyMLWMXAOhxl5/HniRY/5EQC+kez
+         oVfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689032742; x=1691624742;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lOzkIFoqf25CqB9hUyPl1DnkRcrfld+HOSpLgyRrDcI=;
-        b=kfMvgNuFC17vOibYVtTesaowZpKmx+EFqOcfa0Asfx5bOpFPtDTod1JT9GfgbVtLZ5
-         7kAZ4wo/mlwqKTN38qgOY7aWL51HEtgE0wHzTXkzqsjAn1OMrW6fy5mOIv3WkOmxyDv8
-         hj5nt5x9RI9r6Cg4fJ1hNvKBefuIban0i+7y7G7VyjhON98SmeWCtXqsh7ZhEdsQ/Ykn
-         8QZ2KJnoI2iUBY+wrrFGh7bMYmet7kPn3lW5KT5N4uzpPIgwnxAJloi07AUDxVjbbrSo
-         OouzeeoJeU5EccZWKuEdP7++5DvUhMmFS0CqMzB8zaYK/oAR2Ob+XG615sY+3Jaml8mL
-         rHgA==
-X-Gm-Message-State: ABy/qLa07zOuEAZ5W5N+llRc5nSKgDfyKGTvSbNLrC1K0mtFLNDQGdYe
-        AiSeXpIXcAMMrxGYLpBqFsd4QHGKOjBaS1Km+iA=
-X-Google-Smtp-Source: APBJJlFULHT8iLhB9w681CsXgyMHt2EsFqaBNl+XwT2OviAPgDtyoJbasP6q7D6vPnHpAvi/reCyP4wyfRqLiqoZsqE=
-X-Received: by 2002:a2e:780d:0:b0:2b6:d582:5a0 with SMTP id
- t13-20020a2e780d000000b002b6d58205a0mr11825737ljc.12.1689032742222; Mon, 10
- Jul 2023 16:45:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230708040750.72570-1-hffilwlqm@gmail.com> <20230708040750.72570-3-hffilwlqm@gmail.com>
-In-Reply-To: <20230708040750.72570-3-hffilwlqm@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 10 Jul 2023 16:45:30 -0700
-Message-ID: <CAADnVQK5RLqVhc9AxaCSuQxFRDAb8wohmUDNrYEViXLf5mEMNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: Introduce bpf user log
-To:     Leon Hwang <hffilwlqm@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        d=1e100.net; s=20221208; t=1689032967; x=1691624967;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C1+7UfAMLI/Nu08LQwOr0R45kQ38N0MvpsViC9OWNis=;
+        b=ZENmCFJCfZrc/urs9NGYegqUMiJNGt9vOZQpfjFtL1Gb2byphpVe92yI/WK4aF1uOf
+         o0vbICmpMmECWuOPt39IxKUdY+TxJIbjid/0G/j2W5vD/Ek2Dt4LxJXW3upFFiZWIN8Y
+         coyCOXxOAPs3P1ct8D+5HXIIXLZ3MBpgiJkSf2282+ljA2LKkdAcdeq4FNRwk6QOLFkT
+         uSvO6KqDYut38JOgf7nn+AvjmIDwbaSsfdGjxu8N7/1A0aehKTjRL8QtZSM3jSmcg6/M
+         hcGIedN+tuz6O+go2WCwn1tha0HPzxLzBbPrOewQBG1Ruzsa1WtCLOFvsBIQx9OyILuy
+         nOnw==
+X-Gm-Message-State: ABy/qLYRMWhZ5hpeuYM0RLM91YpSeQuaZuiRoY90IlqW/5IBDscwDqB2
+        fX9yWmVZWh9Xqo9dVbl4SPWNnA==
+X-Google-Smtp-Source: APBJJlEaSNhVB0rSanYyr8pEV+vVSyEFUXx0WrPVnHkD5VoRVa+WNmm9a90Aeu3n/gnPT2vgrqrtcw==
+X-Received: by 2002:a0c:b3ce:0:b0:636:fda0:a23 with SMTP id b14-20020a0cb3ce000000b00636fda00a23mr10701191qvf.27.1689032967061;
+        Mon, 10 Jul 2023 16:49:27 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id u14-20020a0c8dce000000b00632191a70a2sm370778qvb.103.2023.07.10.16.49.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 16:49:26 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qJ0dB-00063Y-Eu;
+        Mon, 10 Jul 2023 20:49:25 -0300
+Date:   Mon, 10 Jul 2023 20:49:25 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mina Almasry <almasrymina@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
-        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZKyZBbKEpmkFkpWV@ziepe.ca>
+References: <20230616122140.6e889357@kernel.org>
+ <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
+ <20230619110705.106ec599@kernel.org>
+ <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+ <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <ZKNA9Pkg2vMJjHds@ziepe.ca>
+ <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
+ <ZKxDZfVAbVHgNgIM@ziepe.ca>
+ <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 9:08=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.com> wro=
-te:
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 34fa334938ba5..8a458cfcd91bd 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1549,7 +1549,6 @@ union bpf_attr {
->                 };
->                 __u32           attach_type;    /* attach type */
->                 __u32           flags;          /* extra flags */
-> -               struct bpf_generic_user_log log; /* user log */
->                 union {
->                         __u32           target_btf_id;  /* btf_id of targ=
-et to attach to */
->                         struct {
-> @@ -1585,6 +1584,9 @@ union bpf_attr {
->                                 __s32           priority;
->                                 __u32           flags;
->                         } netfilter;
-> +                       struct {
-> +                               struct bpf_generic_user_log ulog; /* user=
- log */
-> +                       } xdp;
+On Mon, Jul 10, 2023 at 04:02:59PM -0700, Mina Almasry wrote:
+> On Mon, Jul 10, 2023 at 10:44 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> >
+> > On Wed, Jul 05, 2023 at 06:17:39PM -0700, Mina Almasry wrote:
+> >
+> > > Another issue is that in networks with low MTU, we could be DMAing
+> > > 1400/1500 bytes into each allocation, which is problematic if the
+> > > allocation is 8K+. I would need to investigate a bit to see if/how to
+> > > solve that, and we may end up having to split the page and again run
+> > > into the 'not enough room in struct page' problem.
+> >
+> > You don't have an intree driver to use this with, so who knows, but
+> > the out of tree GPU drivers tend to use a 64k memory management page
+> > size, and I don't expect you'd make progress with a design where a 64K
+> > naturaly sized allocator is producing 4k/8k non-compound pages just
+> > for netdev. We are still struggling with pagemap support for variable
+> > page size folios, so there is a bunch of technical blockers before
+> > drivers could do this.
+> >
+> > This is why it is so important to come with a complete in-tree
+> > solution, as we cannot review this design if your work is done with
+> > hacked up out of tree drivers.
+> >
+> 
+> I think you're assuming the proposal requires dma-buf exporter driver
+> changes, and I have a 'hacked up out of tree driver' not visible to
+> you.
 
-1.
-You cannot break api in patch 1 and fix it in patch 2.
+Oh, I thought it was obvious what you did in patch 1 was a total
+non-starter when I said you can't abuse the ZONE_DEVICE pages like
+this.
 
-2.
-libbpf side is missing.
+You must create ZONE_DEVICE P2P pages, not MEMORY_DEVICE_PRIVATE to
+represent P2P memory, and you can't do that automatically from the
+dmabuf core code.
 
-3.
-selftest is missing.
+Without doing this the DMA API doesn't actually work properly because
+it doesn't have enough information to know about what the underlying
+exporter is.
 
-4.
-bpf_vlog_finalize() should be used and error propagated back through
-link_create.
-Same api must be used: log_level, log_size, log_buf, log_true_size.
+The entire point of DEVICE_PRIVATE is that the page content, and
+access to the page's physical location, is *explicitly* unavailable to
+anyone but the pgmap owner.
 
-But considering all that I agree with Daniel Xu that
-tracepoint would be better here.
+> > Fully and properly adding P2P ZONE_DEVICE to a real world driver is a
+> > pretty big ask still.
+> 
+> There is no such ask.
+
+Well, there is from me if you want to use stuct pages as handles for
+P2P memory. That is what we have defined in the pgmap area.
+
+Also I should warn you that your 'option 2' is being NAK'd by
+Christoph for now, we are not adding any new code around DMABUF's
+hacky use of NULL sg_page scatterlist for P2P memory either. I've been
+working on solutions here but it is slow going.
+
+> On dma-buf changes required. I do need approval from the dma-buf
+> maintainers,
+
+It is a neat hack, of sorts, to abuse DEVICE_PRIVATE to create struct
+pages for the exclusive use of pagepool - but you need more approval
+than just dmabuf maintainers to abuse the pgmap framework like
+this.
+
+At least from my position I want to see MEMORY_DEVICE_PCI_P2PDMA used
+to represent P2P memory. You haven't CC'd anyone from the mm community
+so I've added some people here to see if there are other opinions.
+
+To be clear, you need an explicit ack from mm people on the abusive
+use of pgmap in patch 1.
+
+I know it is not what you want to hear, but there are actual reasons
+why the P2P DMA problem has been festering for so long, and hacky
+quick fixes like this are not going to be enough..
+
+Jason
