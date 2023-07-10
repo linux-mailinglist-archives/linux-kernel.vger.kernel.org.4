@@ -2,143 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098EB74D2FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1636F74D304
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 12:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjGJKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 06:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S233288AbjGJKLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 06:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjGJKKU (ORCPT
+        with ESMTP id S233214AbjGJKKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 06:10:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15E19129
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:08:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B09FE2B;
-        Mon, 10 Jul 2023 03:08:34 -0700 (PDT)
-Received: from [10.57.77.63] (unknown [10.57.77.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4203F3F740;
-        Mon, 10 Jul 2023 03:07:49 -0700 (PDT)
-Message-ID: <8304d1e2-2848-858d-e25b-5eeef8606754@arm.com>
-Date:   Mon, 10 Jul 2023 11:07:47 +0100
+        Mon, 10 Jul 2023 06:10:33 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749241B1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:08:30 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51e5da802afso403860a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 03:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688983706; x=1691575706;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w3sqS4bojILuL92ZC495XYl2JlnTpUbFIE0CWiiAUhc=;
+        b=gJbilxCDQBQvcs4/gwK8Ww9nf+9IoWoZLv1/oNh4S3ZDftLc+kXe+1wq0QlSFgkLSK
+         la4F11+0aNwpYPSRtXgoBZuNMB0RUXfglpZKSCLC8Uq/WREFnP8T4KgkLSeBopOjyXPT
+         T9XJNlNyRSSsYyNbic+vC56y9ZVq5k6J2nprAIxDS3osGrFtXy5a8MWkp0wiye5CxKZ4
+         vb3DVrKb6b09iGTHhlzOz52JeCiK21x3YLEAYlb5raPZ3oyilNfbWkBaivzW1ak0bHRR
+         ODBLb15iWEFZpaGpSOxFiszESjQPmDUzWPq6itSe+5cvVcyoSmbQ5Rh+xq28HHaM4shf
+         LxKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688983706; x=1691575706;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3sqS4bojILuL92ZC495XYl2JlnTpUbFIE0CWiiAUhc=;
+        b=OwAHglk+3INiYybbMWgToGP/Ue59cbUW5z9zo8THWFEJCelFbZlQNAjHxWWIaa1Sl8
+         2GKs/9XCNnA+wjwYXebOrGb7cXerk01KeyYTjxbPDQVGfoMDDdZ0Z20CYctR2do9COHH
+         jfIEUFlY6lWjb0/lFtFnZqK9YDaGXp/NK4K0w7vQR3onwaT1Tvait8oYWqQYhBngvPxn
+         upUpc/LZV5Ul8+PvFL9P5LpF6TH5StNa8ymzCthUX9DviJxV01DwglM6wgElUwKojBUq
+         /4eiTerqwzrt4XR3aXusrjDYrcT8UlEpsL9MTDhFFPnYYO1qO9hUvs+FOUlsJcRA756p
+         hycg==
+X-Gm-Message-State: ABy/qLZpD+AImj4jvviHLbj6x1uR92CtmOZguICbWhJNC4QWlvIdm5Js
+        2y5rHsgNWwSapQtc9ca0NX8c1aRxaHrUuBi729nCQw==
+X-Google-Smtp-Source: APBJJlGRZMAzcx/sDR/CCdV+GJ20Ofgu/uXyGDE9G/URN8lOuANnybASq6RMBCtCwIgGvvFa5fSbrw==
+X-Received: by 2002:a17:906:73d5:b0:994:577:f9df with SMTP id n21-20020a17090673d500b009940577f9dfmr2645385ejl.4.1688983706495;
+        Mon, 10 Jul 2023 03:08:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id l25-20020a1709066b9900b0099342c87775sm5869504ejr.20.2023.07.10.03.08.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 03:08:25 -0700 (PDT)
+Message-ID: <abdff39a-5306-b431-ae28-1e1a03c0a555@linaro.org>
+Date:   Mon, 10 Jul 2023 12:08:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 0/5] variable-order, large folios for anonymous memory
-To:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <78159ed0-a233-9afb-712f-2df1a4858b22@redhat.com>
- <4d4c45a2-0037-71de-b182-f516fee07e67@arm.com>
- <d9cb4563-c622-9660-287b-a2f35121aec7@redhat.com>
- <ZKgPIXSrxqymWrsv@casper.infradead.org>
- <bfa13f35-bca9-c4e8-25f3-e8021f85f223@redhat.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <bfa13f35-bca9-c4e8-25f3-e8021f85f223@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [Patch RESEND 1/4] memory: tegra: sort tegra234_mc_clients table
+ as per register offsets
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Cc:     bbasu@nvidia.com, talho@nvidia.com
+References: <20230621134400.23070-1-sumitg@nvidia.com>
+ <20230621134400.23070-2-sumitg@nvidia.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621134400.23070-2-sumitg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2023 14:24, David Hildenbrand wrote:
-> On 07.07.23 15:12, Matthew Wilcox wrote:
->> On Fri, Jul 07, 2023 at 01:40:53PM +0200, David Hildenbrand wrote:
->>> On 06.07.23 10:02, Ryan Roberts wrote:
->>> But can you comment on the page migration part (IOW did you try it already)?
->>>
->>> For example, memory hotunplug, CMA, MCE handling, compaction all rely on
->>> page migration of something that was allocated using GFP_MOVABLE to actually
->>> work.
->>>
->>> Compaction seems to skip any higher-order folios, but the question is if the
->>> udnerlying migration itself works.
->>>
->>> If it already works: great! If not, this really has to be tackled early,
->>> because otherwise we'll be breaking the GFP_MOVABLE semantics.
->>
->> I have looked at this a bit.  _Migration_ should be fine.  _Compaction_
->> is not.
-> 
-> Thanks! Very nice if at least ordinary migration works.
+On 21/06/2023 15:43, Sumit Gupta wrote:
+> Sort the MC client entries in "tegra234_mc_clients" table as per the
+> override and security register offsets. This will help to avoid
+> creating duplicate entries.
 
-That's good to hear - I hadn't personally investigated.
+If person cannot search for existing symbol before adding new entry, I
+doubt that sorting would solve it. OTOH, this patch makes backporting
+changes trickier, so I don't think this is good approach. Are all other
+Tegra files ordered in this matter?
 
-> 
->>
->> If you look at a function like folio_migrate_mapping(), it all seems
->> appropriately folio-ised.  There might be something in there that is
->> slightly wrong, but that would just be a bug to fix, not a huge
->> architectural problem.
->>
->> The problem comes in the callers of migrate_pages().  They pass a
->> new_folio_t callback.  alloc_migration_target() is the usual one passed
->> and as far as I can tell is fine.  I've seen no problems reported with it.
->>
->> compaction_alloc() is a disaster, and I don't know how to fix it.
->> The compaction code has its own allocator which is populated with order-0
->> folios.  How it populates that freelist is awful ... see split_map_pages()
 
-I think this compaction issue also affects large folios in the page cache? So
-really it is a pre-existing bug in the code base that needs to be fixed
-independently of large anon folios? Should I assume you are tackling this, Matthew?
-
-> 
-> Yeah, all that code was written under the assumption that we're moving order-0
-> pages (which is what the anon+pagecache pages part).
-> 
-> From what I recall, we're allocating order-0 pages from the high memory
-> addresses, so we can migrate from low memory addresses, effectively freeing up
-> low memory addresses and filling high memory addresses.
-> 
-> Adjusting that will be ... interesting. Instead of allocating order-0 pages from
-> high addresses, we might want to allocate "as large as possible" ("grab what we
-> can") from high addresses and then have our own kind of buddy for allocating
-> from that pool a compaction destination page, depending on our source page. Nasty.
-> 
-> What should always work is the split->migrate. But that's definitely not what we
-> want in many cases.
-> 
->>
->>> Is swapping working as expected? zswap?
->>
->> Suboptimally.  Swap will split folios in order to swap them.  Somebody
->> needs to fix that, but it should work.
-> 
-> Good!
-> 
-> It would be great to have some kind of a feature matrix that tells us what works
-> perfectly, sub-optimally, barely, not at all (and what has not been tested).
-> Maybe (likely!) we'll also find things that are sub-optimal for ordinary THP
-> (like swapping, not even sure about).
-
-I'm building a list of known issues, but so far it has been based on code I've
-found during review and things raised by people in these threads. Are there test
-suites that explicitly test these features? If so I'll happily run them against
-large anon folios, but at the moment I'm ignorant I'm afraid. I have been trying
-to get mm selftests up and running, but I currently have a bunch of failures on
-arm64, even without any of my patches - somthing I'm working through.
-
-> 
-> I suspect that KSM should work mostly fine with flexible-thp. When
-> deduplciating, we'll simply split the compound page and proceed as expected. But
-> might be worth testing as well.
-> 
+Best regards,
+Krzysztof
 
