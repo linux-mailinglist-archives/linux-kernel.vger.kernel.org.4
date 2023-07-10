@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4484374DCD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5B174DCDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjGJRyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S232397AbjGJR5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjGJRyB (ORCPT
+        with ESMTP id S229543AbjGJR5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:54:01 -0400
-Received: from mail-pl1-f207.google.com (mail-pl1-f207.google.com [209.85.214.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9026912E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:53:58 -0700 (PDT)
-Received: by mail-pl1-f207.google.com with SMTP id d9443c01a7336-1b8a7734734so59341165ad.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 10:53:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689011638; x=1691603638;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s7hVIe12owKpTtlFQGjlo8cdWND75WSN9V3GkFsCPlY=;
-        b=EtSSSzLe9xIBSd/T8b748wymfFrZzeJk+Nj5GCq30HdspygxHo1hhBorAtgbyQxDOz
-         3h1vVSRhsqbsA1yBSwkL8G1nCqeyjFGnZ7JddMwAJ4RrtZhccO5iFKApUAs843Aus+n1
-         VXCLMBY3+AlzUVUmDu2r/Y7gbC618xv8TwLWF9ITn6xCIIm0SAQSiqShEtrk7wlh4Toa
-         VSiowMNQj4258Pilue6t1JuMCCzcj27pm564/64ZmXQB6LG1pc5HGkAptlaqHhRnzRmy
-         Yd1HIHGgZjsrorfRXbnEvMGifXC/0d23P7eWV0byVEx839Rsh1REVZemiIlruPo+6DXC
-         LGgQ==
-X-Gm-Message-State: ABy/qLY41o9Xmu0TaSpCxt6qEphF06GRlmEODuPtCK3QkYp7wtbCTGcW
-        mDydJrDoBwT504a2BGTejCG5q5wI9+xnNAMzaFekOBrv1QcQ
-X-Google-Smtp-Source: APBJJlF20JdbFgJIJ2erkANhjva4OnNJRkaqCIcJELYiOog2zSMJ12R399YCvikukee25Q+HZ2YihzlC8eoh2JmBTrOKP1CVq7ar
+        Mon, 10 Jul 2023 13:57:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DC611B;
+        Mon, 10 Jul 2023 10:57:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5359D6117A;
+        Mon, 10 Jul 2023 17:57:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A8BC433C7;
+        Mon, 10 Jul 2023 17:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689011820;
+        bh=Px7QK0/CIhxyfFoDIS5WoyTBeFeYYT4CZjAXRojlvr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l5WSKl2QJCawfVz0mI2LQ3iM6ykcZAPrC4ZYoJ6NSX3c2uGhqbQGKGTUloALL+lbo
+         33xaWsLy3gwx3c2CHtDmmM52fzr4aUauxQWOU8uGhsI1p+tPSMB1g42o69EuX+nLf4
+         TTz2gxm+OBuSXKW+ncijFQu5kUH2BRAw7lMciCaezZ3d9JTbcGc6koTenOTIHFX45P
+         aUi85m2narwsC/MCxa27q4Gf8/axd6ETd19twX/NzF566cUECYTZVWyNvtl7DxGk1T
+         HF3w55otnCNeeRnNb8V6WE6O2gPntxC59BmmSMeJ5p3jmI+OTRV0xJTvMO0Lc2PYWx
+         dS8aM9sV3I2MQ==
+Date:   Mon, 10 Jul 2023 18:56:56 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: dt-bindings: Convert Omnivision OV7251 to DT
+ schema
+Message-ID: <20230710-underling-angelfish-c47d363a59f5@spud>
+References: <20230707210646.868758-1-robh@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:dacc:b0:1b8:866f:6fc1 with SMTP id
- q12-20020a170902dacc00b001b8866f6fc1mr13436030plx.0.1689011638072; Mon, 10
- Jul 2023 10:53:58 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 10:53:57 -0700
-In-Reply-To: <0000000000008981d905ffa345de@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b57ce3060025aa46@google.com>
-Subject: Re: [syzbot] [can?] possible deadlock in j1939_sk_errqueue (2)
-From:   syzbot <syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com>
-To:     astrajoan@yahoo.com, davem@davemloft.net, dvyukov@google.com,
-        edumazet@google.com, ivan.orlov0322@gmail.com,
-        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        mkl@pengutronix.de, netdev@vger.kernel.org,
-        o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl,
-        skhan@linuxfoundation.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PyGC2IQryHzgfMSp"
+Content-Disposition: inline
+In-Reply-To: <20230707210646.868758-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,236 +60,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    e40939bbfc68 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17ce67d8a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c84f463eb74eab24
-dashboard link: https://syzkaller.appspot.com/bug?extid=1591462f226d9cbf0564
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1580fc5ca80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178f78d4a80000
+--PyGC2IQryHzgfMSp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/257596b75aaf/disk-e40939bb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9c75b8d61081/vmlinux-e40939bb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8f0233129f4f/Image-e40939bb.gz.xz
+On Fri, Jul 07, 2023 at 03:06:46PM -0600, Rob Herring wrote:
+> Convert the OmniVision OV7251 Image Sensor binding to DT schema format.
+>=20
+> vddd-supply was listed as required, but the example and actual user
+> don't have it. Also, the data brief says it has an internal regulator,
+> so perhaps it is truly optional.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com
+ov7251.c:
+	ov7251->core_regulator =3D devm_regulator_get(dev, "vddd");
+	if (IS_ERR(ov7251->core_regulator)) {
+		dev_err(dev, "cannot get core regulator\n");
+		return PTR_ERR(ov7251->core_regulator);
+	}
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc7-syzkaller-ge40939bbfc68 #0 Not tainted
-------------------------------------------------------
-syz-executor375/6045 is trying to acquire lock:
-ffff0000d2e690d0 (&priv->j1939_socks_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff0000d2e690d0 (&priv->j1939_socks_lock){+.-.}-{2:2}, at: j1939_sk_errqueue+0x90/0x144 net/can/j1939/socket.c:1081
+Looks like the driver's probe function disagrees?
+I was going to ask how it worked, but the one user has
+status =3D "disabled"...
 
-but task is already holding lock:
-ffff0000d2e69088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff0000d2e69088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
-ffff0000d2e69088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_cancel_active_session+0x54/0x414 net/can/j1939/transport.c:2183
+/shrug, what's here looks fine to me, whatever Qualcomm person cares
+about the driver can make sure it works for them I guess.
 
-which lock already depends on the new lock.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
 
-the existing dependency chain (in reverse order) is:
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/media/i2c/ov7251.txt  |  52 ---------
+>  .../bindings/media/i2c/ovti,ov7251.yaml       | 105 ++++++++++++++++++
+>  2 files changed, 105 insertions(+), 52 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov7251.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov72=
+51.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov7251.txt b/Doc=
+umentation/devicetree/bindings/media/i2c/ov7251.txt
+> deleted file mode 100644
+> index 8281151f7493..000000000000
+> --- a/Documentation/devicetree/bindings/media/i2c/ov7251.txt
+> +++ /dev/null
+> @@ -1,52 +0,0 @@
+> -* Omnivision 1/7.5-Inch B&W VGA CMOS Digital Image Sensor
+> -
+> -The Omnivision OV7251 is a 1/7.5-Inch CMOS active pixel digital image se=
+nsor
+> -with an active array size of 640H x 480V. It is programmable through a s=
+erial
+> -I2C interface.
+> -
+> -Required Properties:
+> -- compatible: Value should be "ovti,ov7251".
+> -- clocks: Reference to the xclk clock.
+> -- clock-names: Should be "xclk".
+> -- clock-frequency: Frequency of the xclk clock.
+> -- enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This cor=
+responds
+> -  to the hardware pin XSHUTDOWN which is physically active low.
+> -- vdddo-supply: Chip digital IO regulator.
+> -- vdda-supply: Chip analog regulator.
+> -- vddd-supply: Chip digital core regulator.
+> -
+> -The device node shall contain one 'port' child node with a single 'endpo=
+int'
+> -subnode for its digital output video port, in accordance with the video
+> -interface bindings defined in
+> -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> -
+> -Example:
+> -
+> -	&i2c1 {
+> -		...
+> -
+> -		ov7251: camera-sensor@60 {
+> -			compatible =3D "ovti,ov7251";
+> -			reg =3D <0x60>;
+> -
+> -			enable-gpios =3D <&gpio1 6 GPIO_ACTIVE_HIGH>;
+> -			pinctrl-names =3D "default";
+> -			pinctrl-0 =3D <&camera_bw_default>;
+> -
+> -			clocks =3D <&clks 200>;
+> -			clock-names =3D "xclk";
+> -			clock-frequency =3D <24000000>;
+> -
+> -			vdddo-supply =3D <&camera_dovdd_1v8>;
+> -			vdda-supply =3D <&camera_avdd_2v8>;
+> -			vddd-supply =3D <&camera_dvdd_1v2>;
+> -
+> -			port {
+> -				ov7251_ep: endpoint {
+> -					clock-lanes =3D <1>;
+> -					data-lanes =3D <0>;
+> -					remote-endpoint =3D <&csi0_ep>;
+> -				};
+> -			};
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml=
+ b/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml
+> new file mode 100644
+> index 000000000000..8d939858d950
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov7251.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: OmniVision OV7251 Image Sensor
+> +
+> +description:
+> +  The Omnivision OV7251 is a 1/7.5-Inch CMOS active pixel digital image =
+sensor
+> +  with an active array size of 640H x 480V. It is programmable through a=
+ serial
+> +  I2C interface.
+> +
+> +maintainers:
+> +  - Todor Tomov <todor.too@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov7251
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: XCLK Input Clock
+> +
+> +  clock-names:
+> +    const: xclk
+> +
+> +  clock-frequency:
+> +    description: Frequency of the xclk clock in Hz.
+> +
+> +  vdda-supply:
+> +    description: Analog voltage supply, 2.8 volts
+> +
+> +  vddd-supply:
+> +    description: Digital core voltage supply, 1.2 volts
+> +
+> +  vdddo-supply:
+> +    description: Digital I/O voltage supply, 1.8 volts
+> +
+> +  enable-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the XSHUTDOWN pin, if any. Pola=
+rity
+> +      is GPIO_ACTIVE_HIGH.
+> +
+> +  port:
+> +    description: Digital Output Port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          clock-lanes:
+> +            maximum: 1
+> +
+> +          data-lanes:
+> +            maxItems: 1
+> +
+> +        required:
+> +          - data-lanes
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - vdddo-supply
+> +  - vdda-supply
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        camera@3c {
+> +            compatible =3D "ovti,ov7251";
+> +            reg =3D <0x3c>;
+> +            clocks =3D <&clks 1>;
+> +            clock-frequency =3D <24000000>;
+> +            vdddo-supply =3D <&ov7251_vdddo_1v8>;
+> +            vdda-supply =3D <&ov7251_vdda_2v8>;
+> +            vddd-supply =3D <&ov7251_vddd_1v5>;
+> +            enable-gpios =3D <&gpio1 19 GPIO_ACTIVE_HIGH>;
+> +
+> +            port {
+> +                ov7251_ep: endpoint {
+> +                    remote-endpoint =3D <&csi0_ep>;
+> +                    clock-lanes =3D <1>;
+> +                    data-lanes =3D <0>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
+> --=20
+> 2.40.1
+>=20
 
--> #2 (&priv->active_session_list_lock){+.-.}-{2:2}:
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x48/0x60 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
-       j1939_session_activate+0x60/0x378 net/can/j1939/transport.c:1564
-       j1939_sk_queue_activate_next_locked net/can/j1939/socket.c:181 [inline]
-       j1939_sk_queue_activate_next+0x230/0x3b4 net/can/j1939/socket.c:208
-       j1939_session_deactivate_activate_next net/can/j1939/transport.c:1108 [inline]
-       j1939_session_completed net/can/j1939/transport.c:1222 [inline]
-       j1939_xtp_rx_eoma_one net/can/j1939/transport.c:1395 [inline]
-       j1939_xtp_rx_eoma+0x2c0/0x4c0 net/can/j1939/transport.c:1410
-       j1939_tp_cmd_recv net/can/j1939/transport.c:2099 [inline]
-       j1939_tp_recv+0x714/0xe14 net/can/j1939/transport.c:2144
-       j1939_can_recv+0x5bc/0x930 net/can/j1939/main.c:112
-       deliver net/can/af_can.c:572 [inline]
-       can_rcv_filter+0x308/0x714 net/can/af_can.c:606
-       can_receive+0x338/0x498 net/can/af_can.c:663
-       can_rcv+0x128/0x23c net/can/af_can.c:687
-       __netif_receive_skb_one_core net/core/dev.c:5493 [inline]
-       __netif_receive_skb+0x18c/0x400 net/core/dev.c:5607
-       process_backlog+0x3c0/0x70c net/core/dev.c:5935
-       __napi_poll+0xb4/0x648 net/core/dev.c:6498
-       napi_poll net/core/dev.c:6565 [inline]
-       net_rx_action+0x5e4/0xdc4 net/core/dev.c:6698
-       __do_softirq+0x2d0/0xd54 kernel/softirq.c:571
-       run_ksoftirqd+0x6c/0x158 kernel/softirq.c:939
-       smpboot_thread_fn+0x4b0/0x920 kernel/smpboot.c:164
-       kthread+0x288/0x310 kernel/kthread.c:379
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:853
+--PyGC2IQryHzgfMSp
+Content-Type: application/pgp-signature; name="signature.asc"
 
--> #1 (&jsk->sk_session_queue_lock){+.-.}-{2:2}:
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x48/0x60 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       j1939_sk_queue_drop_all+0x4c/0x200 net/can/j1939/socket.c:139
-       j1939_sk_netdev_event_netdown+0xe0/0x144 net/can/j1939/socket.c:1280
-       j1939_netdev_notify+0xf0/0x144 net/can/j1939/main.c:381
-       notifier_call_chain+0x1a4/0x510 kernel/notifier.c:93
-       raw_notifier_call_chain+0x3c/0x50 kernel/notifier.c:461
-       __dev_notify_flags+0x2bc/0x544
-       dev_change_flags+0xd0/0x15c net/core/dev.c:8645
-       do_setlink+0xc68/0x35c8 net/core/rtnetlink.c:2867
-       __rtnl_newlink net/core/rtnetlink.c:3648 [inline]
-       rtnl_newlink+0x1354/0x1b1c net/core/rtnetlink.c:3695
-       rtnetlink_rcv_msg+0x744/0xdb8 net/core/rtnetlink.c:6417
-       netlink_rcv_skb+0x214/0x3c4 net/netlink/af_netlink.c:2546
-       rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6435
-       netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-       netlink_unicast+0x660/0x8d4 net/netlink/af_netlink.c:1365
-       netlink_sendmsg+0x834/0xb18 net/netlink/af_netlink.c:1913
-       sock_sendmsg_nosec net/socket.c:724 [inline]
-       sock_sendmsg net/socket.c:747 [inline]
-       ____sys_sendmsg+0x568/0x81c net/socket.c:2503
-       ___sys_sendmsg net/socket.c:2557 [inline]
-       __sys_sendmsg+0x26c/0x33c net/socket.c:2586
-       __do_sys_sendmsg net/socket.c:2595 [inline]
-       __se_sys_sendmsg net/socket.c:2593 [inline]
-       __arm64_sys_sendmsg+0x80/0x94 net/socket.c:2593
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
-       el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
-       el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+-----BEGIN PGP SIGNATURE-----
 
--> #0 (&priv->j1939_socks_lock){+.-.}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:3113 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
-       validate_chain kernel/locking/lockdep.c:3847 [inline]
-       __lock_acquire+0x3308/0x7604 kernel/locking/lockdep.c:5088
-       lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5705
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x48/0x60 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       j1939_sk_errqueue+0x90/0x144 net/can/j1939/socket.c:1081
-       __j1939_session_release net/can/j1939/transport.c:294 [inline]
-       kref_put include/linux/kref.h:65 [inline]
-       j1939_session_put+0xf0/0x4b4 net/can/j1939/transport.c:299
-       j1939_session_deactivate_locked net/can/j1939/transport.c:1086 [inline]
-       j1939_cancel_active_session+0x2ec/0x414 net/can/j1939/transport.c:2194
-       j1939_netdev_notify+0xe8/0x144 net/can/j1939/main.c:380
-       notifier_call_chain+0x1a4/0x510 kernel/notifier.c:93
-       raw_notifier_call_chain+0x3c/0x50 kernel/notifier.c:461
-       __dev_notify_flags+0x2bc/0x544
-       dev_change_flags+0xd0/0x15c net/core/dev.c:8645
-       do_setlink+0xc68/0x35c8 net/core/rtnetlink.c:2867
-       __rtnl_newlink net/core/rtnetlink.c:3648 [inline]
-       rtnl_newlink+0x1354/0x1b1c net/core/rtnetlink.c:3695
-       rtnetlink_rcv_msg+0x744/0xdb8 net/core/rtnetlink.c:6417
-       netlink_rcv_skb+0x214/0x3c4 net/netlink/af_netlink.c:2546
-       rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6435
-       netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-       netlink_unicast+0x660/0x8d4 net/netlink/af_netlink.c:1365
-       netlink_sendmsg+0x834/0xb18 net/netlink/af_netlink.c:1913
-       sock_sendmsg_nosec net/socket.c:724 [inline]
-       sock_sendmsg net/socket.c:747 [inline]
-       ____sys_sendmsg+0x568/0x81c net/socket.c:2503
-       ___sys_sendmsg net/socket.c:2557 [inline]
-       __sys_sendmsg+0x26c/0x33c net/socket.c:2586
-       __do_sys_sendmsg net/socket.c:2595 [inline]
-       __se_sys_sendmsg net/socket.c:2593 [inline]
-       __arm64_sys_sendmsg+0x80/0x94 net/socket.c:2593
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
-       el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
-       el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKxGaAAKCRB4tDGHoIJi
+0o+TAQDMgP01G5qDmyjHDrR0Md9+bWv1tOgbiBNn2qOuo17xVwEAhPC40p7RB0rF
+qg3uSSnzkBNHuXXYu9TlUA17W+ILDAM=
+=Zopw
+-----END PGP SIGNATURE-----
 
-other info that might help us debug this:
-
-Chain exists of:
-  &priv->j1939_socks_lock --> &jsk->sk_session_queue_lock --> &priv->active_session_list_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&priv->active_session_list_lock);
-                               lock(&jsk->sk_session_queue_lock);
-                               lock(&priv->active_session_list_lock);
-  lock(&priv->j1939_socks_lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor375/6045:
- #0: ffff80009080db68 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:78 [inline]
- #0: ffff80009080db68 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x700/0xdb8 net/core/rtnetlink.c:6414
- #1: ffff0000d2e69088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
- #1: ffff0000d2e69088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
- #1: ffff0000d2e69088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_cancel_active_session+0x54/0x414 net/can/j1939/transport.c:2183
-
-stack backtrace:
-CPU: 1 PID: 6045 Comm: syz-executor375 Not tainted 6.4.0-rc7-syzkaller-ge40939bbfc68 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2066
- check_noncircular+0x2cc/0x378 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3113 [inline]
- check_prevs_add kernel/locking/lockdep.c:3232 [inline]
- validate_chain kernel/locking/lockdep.c:3847 [inline]
- __lock_acquire+0x3308/0x7604 kernel/locking/lockdep.c:5088
- lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5705
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x48/0x60 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- j1939_sk_errqueue+0x90/0x144 net/can/j1939/socket.c:1081
- __j1939_session_release net/can/j1939/transport.c:294 [inline]
- kref_put include/linux/kref.h:65 [inline]
- j1939_session_put+0xf0/0x4b4 net/can/j1939/transport.c:299
- j1939_session_deactivate_locked net/can/j1939/transport.c:1086 [inline]
- j1939_cancel_active_session+0x2ec/0x414 net/can/j1939/transport.c:2194
- j1939_netdev_notify+0xe8/0x144 net/can/j1939/main.c:380
- notifier_call_chain+0x1a4/0x510 kernel/notifier.c:93
- raw_notifier_call_chain+0x3c/0x50 kernel/notifier.c:461
- __dev_notify_flags+0x2bc/0x544
- dev_change_flags+0xd0/0x15c net/core/dev.c:8645
- do_setlink+0xc68/0x35c8 net/core/rtnetlink.c:2867
- __rtnl_newlink net/core/rtnetlink.c:3648 [inline]
- rtnl_newlink+0x1354/0x1b1c net/core/rtnetlink.c:3695
- rtnetlink_rcv_msg+0x744/0xdb8 net/core/rtnetlink.c:6417
- netlink_rcv_skb+0x214/0x3c4 net/netlink/af_netlink.c:2546
- rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6435
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x660/0x8d4 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x834/0xb18 net/netlink/af_netlink.c:1913
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg net/socket.c:747 [inline]
- ____sys_sendmsg+0x568/0x81c net/socket.c:2503
- ___sys_sendmsg net/socket.c:2557 [inline]
- __sys_sendmsg+0x26c/0x33c net/socket.c:2586
- __do_sys_sendmsg net/socket.c:2595 [inline]
- __se_sys_sendmsg net/socket.c:2593 [inline]
- __arm64_sys_sendmsg+0x80/0x94 net/socket.c:2593
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+--PyGC2IQryHzgfMSp--
