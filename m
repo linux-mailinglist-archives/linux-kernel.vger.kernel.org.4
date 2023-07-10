@@ -2,155 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91F074DD2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B98374DD3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 20:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjGJSP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 14:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S233189AbjGJSU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 14:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjGJSPX (ORCPT
+        with ESMTP id S229655AbjGJSUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 14:15:23 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EED12E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:15:19 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b70bfc8db5so61561131fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689012917; x=1691604917;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xLZ34OPni3Wb11pi8Qg03ECcQSNGfoxA5NTOQgO19hQ=;
-        b=Dpe5ss5mB58PPKBTTW895kxDoVtmMqx988GMUWU1zuvtQ8fUMRdwge/GQdQxTrnXgp
-         +t5NEIAdDH0oaGelCTjrAp4LG/mzoy3YHrEs+s3Om7KmT1CBPb0iRDBgPo0pvCehYWze
-         XDIIy6HbuzsUHn80yc7zBLJaswJ/O4oNJFViWoIJybQJ/GaRTfzZ/Br7x4T0WVh1qfLr
-         nd/QWxtSg/Js9NJhqEoeK87LxG4GC4Eo5iD24jbQA/UPSPxD6FySgOarILv1Frfxx15l
-         0PS4ONBQEKVWAMWAR8DrnTn7aE5orVOc4QL1n3R/pP3vURLaSJsgilXy96ds4PRACD4B
-         PY4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689012917; x=1691604917;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLZ34OPni3Wb11pi8Qg03ECcQSNGfoxA5NTOQgO19hQ=;
-        b=N0S62xdywL3TkWPK7bUf0ZE4Misr82ONV7mxWqQHlObaBKWnybrhehuAwsAvuFLRpP
-         62H6Xc9fGjV/SqGTeyJvpBLkT/cVmA8m1XnG7xrHTVBwuNrfycgZWzAOY+AhVYz6pocS
-         R6Jjts0z/0VrLhmFw5OOfcHgp+sey1xsvQht2XqF3o60BhbqzDHxfJz8CERqB1pZWpM8
-         BJxfprHJGvOyqiAxaFs+FzKDxX9Dw2SG8a9zvTRL8vVGoGB9IXvYAwDaK7Yh6MbtkR4R
-         v1k9qwdo1p961X/tBmjaA4bCGnrf1X6H4WHF3zSAtrA6gP+xhLtDbXr7IbaYwwQsO52+
-         G5Ew==
-X-Gm-Message-State: ABy/qLaPIlxWZwULo1v15fAdJTL3DnASVF74nlTtxS2+wx14SAGezEiQ
-        8Bntadbf7J3DyJ79tloaG+P88g==
-X-Google-Smtp-Source: APBJJlE5fKuaEMgO2n/ZJOqQpr8b/TTCOx37vIHH5DimqJlxKxMgkSWql8+/7zXs+qnHQWkRAUSCqw==
-X-Received: by 2002:a2e:9455:0:b0:2b7:29b:d5a5 with SMTP id o21-20020a2e9455000000b002b7029bd5a5mr10499077ljh.34.1689012917454;
-        Mon, 10 Jul 2023 11:15:17 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id z12-20020a2e964c000000b002b719138b7esm81047ljh.114.2023.07.10.11.15.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 11:15:17 -0700 (PDT)
-Message-ID: <bd16c829-183c-9898-8890-e94c6039f4d9@linaro.org>
-Date:   Mon, 10 Jul 2023 21:15:16 +0300
+        Mon, 10 Jul 2023 14:20:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF512B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 11:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689013212;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Nv5fweDCngTesnKRLAb8mrwCNzQpSKJUun6VW1O8oHw=;
+        b=PIXtxUBbnkvzYmJ3ifPqJiWLgLXJGzCDSTbWXpVrx52HvIx9K5ygU4sNSclcgi9XNyNIuu
+        TAXfmgg90reK/hh8SFQYF83WqukkzcWaxmAQQiZXefeJMbaJ5ncflzrt24hTmp+5bkyler
+        40N3S816fXBuYwhPjyLnphMHVQ5aovs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-58-2YG5B3anO1epJciQrdsgsA-1; Mon, 10 Jul 2023 14:20:06 -0400
+X-MC-Unique: 2YG5B3anO1epJciQrdsgsA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 74BCB1044589;
+        Mon, 10 Jul 2023 18:20:06 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1974F40C6CD1;
+        Mon, 10 Jul 2023 18:20:06 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2] perf/arm-dmc620: Reverse locking order in dmc620_pmu_get_irq()
+Date:   Mon, 10 Jul 2023 14:19:59 -0400
+Message-Id: <20230710181959.2750269-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 3/5] drm/msm/dp: delete EV_HPD_INIT_SETUP
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1688773943-3887-1-git-send-email-quic_khsieh@quicinc.com>
- <1688773943-3887-4-git-send-email-quic_khsieh@quicinc.com>
- <b70e6e98-e5a8-71d7-891a-889c268a7e06@linaro.org>
- <c1a6f23d-17d9-6f4b-407a-142913e88a35@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <c1a6f23d-17d9-6f4b-407a-142913e88a35@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2023 19:52, Kuogee Hsieh wrote:
-> 
-> On 7/7/2023 5:34 PM, Dmitry Baryshkov wrote:
->> On 08/07/2023 02:52, Kuogee Hsieh wrote:
->>> EV_HPD_INIT_SETUP flag is used to trigger the initialization of external
->>> DP host controller. Since external DP host controller initialization had
->>> been incorporated into pm_runtime_resume(), this flag become obsolete.
->>> Lets get rid of it.
->>
->> And another question. Between patches #2 and #3 we have both 
->> INIT_SETUP event and the PM doing dp_display_host_init(). Will it work 
->> correctly?
-> 
-> yes,  i had added  if (!dp->core_initialized)  into dp_display_host_init().
-> 
-> should I merge this patch into patch #2?
+The following circular locking dependency was reported when running
+cpus online/offline test on an arm64 system.
 
-You can remove a call to dp_display_host_init() in patch #2 and then 
-drop EV_HOST_INIT / msm_dp_irq_postinstall() here.
+[   84.195923] Chain exists of:
+                 dmc620_pmu_irqs_lock --> cpu_hotplug_lock --> cpuhp_state-down
 
-> 
->>
->>>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/dp/dp_display.c | 12 ------------
->>>   1 file changed, 12 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->>> b/drivers/gpu/drm/msm/dp/dp_display.c
->>> index 2c5706a..44580c2 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->>> @@ -55,7 +55,6 @@ enum {
->>>   enum {
->>>       EV_NO_EVENT,
->>>       /* hpd events */
->>> -    EV_HPD_INIT_SETUP,
->>>       EV_HPD_PLUG_INT,
->>>       EV_IRQ_HPD_INT,
->>>       EV_HPD_UNPLUG_INT,
->>> @@ -1119,9 +1118,6 @@ static int hpd_event_thread(void *data)
->>>           spin_unlock_irqrestore(&dp_priv->event_lock, flag);
->>>             switch (todo->event_id) {
->>> -        case EV_HPD_INIT_SETUP:
->>> -            dp_display_host_init(dp_priv);
->>> -            break;
->>>           case EV_HPD_PLUG_INT:
->>>               dp_hpd_plug_handle(dp_priv, todo->data);
->>>               break;
->>> @@ -1483,15 +1479,7 @@ void __exit msm_dp_unregister(void)
->>>     void msm_dp_irq_postinstall(struct msm_dp *dp_display)
->>>   {
->>> -    struct dp_display_private *dp;
->>> -
->>> -    if (!dp_display)
->>> -        return;
->>> -
->>> -    dp = container_of(dp_display, struct dp_display_private, 
->>> dp_display);
->>>   -    if (!dp_display->is_edp)
->>> -        dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
->>>   }
->>>     bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
->>
+[   84.207305]  Possible unsafe locking scenario:
 
+[   84.213212]        CPU0                    CPU1
+[   84.217729]        ----                    ----
+[   84.222247]   lock(cpuhp_state-down);
+[   84.225899]                                lock(cpu_hotplug_lock);
+[   84.232068]                                lock(cpuhp_state-down);
+[   84.238237]   lock(dmc620_pmu_irqs_lock);
+[   84.242236]
+                *** DEADLOCK ***
+
+The problematic locking order seems to be
+
+	lock(dmc620_pmu_irqs_lock) --> lock(cpu_hotplug_lock)
+
+This locking order happens when dmc620_pmu_get_irq() is called from
+dmc620_pmu_device_probe(). Since dmc620_pmu_irqs_lock is used for
+protecting the dmc620_pmu_irqs structure only, we don't actually need
+to hold the lock when adding a new instance to the CPU hotplug subsystem.
+
+Fix this possible deadlock scenario by releasing the lock when a new
+dmc620_pmu_irq needs to be created and reacquring it again when the
+new irq is inserted into dmc620_pmu_irqs.
+
+Suggested-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ drivers/perf/arm_dmc620_pmu.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
+index 9d0f01c4455a..dbf67c122420 100644
+--- a/drivers/perf/arm_dmc620_pmu.c
++++ b/drivers/perf/arm_dmc620_pmu.c
+@@ -419,13 +419,16 @@ static irqreturn_t dmc620_pmu_handle_irq(int irq_num, void *data)
+ }
+ 
+ static struct dmc620_pmu_irq *__dmc620_pmu_get_irq(int irq_num)
++	__releases(&dmc620_pmu_irqs_lock)
+ {
+ 	struct dmc620_pmu_irq *irq;
+ 	int ret;
+ 
+ 	list_for_each_entry(irq, &dmc620_pmu_irqs, irqs_node)
+ 		if (irq->irq_num == irq_num && refcount_inc_not_zero(&irq->refcount))
+-			return irq;
++			goto out_unlock;
++
++	mutex_unlock(&dmc620_pmu_irqs_lock);
+ 
+ 	irq = kzalloc(sizeof(*irq), GFP_KERNEL);
+ 	if (!irq)
+@@ -452,8 +455,12 @@ static struct dmc620_pmu_irq *__dmc620_pmu_get_irq(int irq_num)
+ 		goto out_free_irq;
+ 
+ 	irq->irq_num = irq_num;
++
++	mutex_lock(&dmc620_pmu_irqs_lock);
+ 	list_add(&irq->irqs_node, &dmc620_pmu_irqs);
+ 
++out_unlock:
++	mutex_unlock(&dmc620_pmu_irqs_lock);
+ 	return irq;
+ 
+ out_free_irq:
+@@ -469,7 +476,7 @@ static int dmc620_pmu_get_irq(struct dmc620_pmu *dmc620_pmu, int irq_num)
+ 
+ 	mutex_lock(&dmc620_pmu_irqs_lock);
+ 	irq = __dmc620_pmu_get_irq(irq_num);
+-	mutex_unlock(&dmc620_pmu_irqs_lock);
++	/* mutex_unlock() called inside __dmc620_pmu_get_irq() */
+ 
+ 	if (IS_ERR(irq))
+ 		return PTR_ERR(irq);
 -- 
-With best wishes
-Dmitry
+2.31.1
 
