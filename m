@@ -2,63 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F0174DC83
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B63374DC89
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 19:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjGJRa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 13:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S229759AbjGJRbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 13:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjGJRat (ORCPT
+        with ESMTP id S230402AbjGJRb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 13:30:49 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC43C4;
-        Mon, 10 Jul 2023 10:30:47 -0700 (PDT)
-Received: from mg.bb.i.ssi.bg (localhost [127.0.0.1])
-        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 7D8AE18F34;
-        Mon, 10 Jul 2023 20:30:44 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id 63C5D191B4;
-        Mon, 10 Jul 2023 20:30:44 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [213.16.62.126])
-        by ink.ssi.bg (Postfix) with ESMTPSA id 625F53C0803;
-        Mon, 10 Jul 2023 20:30:37 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
-        t=1689010240; bh=GTzycfPTuL6xYhwrHAUqSMOXS9y7swYh/taQTI/rhUo=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=o+Pqd5sLAlDt8AtdXenR/ZT1D2AWctaPbUeBWEAqkXC277L3wKh8qIR5/cvopEjSx
-         hd1gczybHTnm13BnmtgUTSJVA1FcgYkLuqscDKNjNxWmLxCsa2AuEGPFC/iQ/r3ysR
-         WT6rOpnXNWqqPyl/GuJD13mSWkL/7J/Pc38M4X/A=
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.17.1) with ESMTP id 36AHUYve107992;
-        Mon, 10 Jul 2023 20:30:36 +0300
-Date:   Mon, 10 Jul 2023 20:30:34 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Dust Li <dust.li@linux.alibaba.com>
-cc:     Jiejian Wu <jiejian@linux.alibaba.com>,
-        Simon Horman <horms@verge.net.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: Re: [PATCH net-next] ipvs: make ip_vs_svc_table and ip_vs_svc_fwm_table
- per netns
-In-Reply-To: <20230710152809.GD6751@linux.alibaba.com>
-Message-ID: <3d37360e-846a-3b01-f2ad-9c1c5720a568@ssi.bg>
-References: <20230707020708.75168-1-dust.li@linux.alibaba.com> <28a87ee9-5f94-2506-3cb9-8a19144e2061@ssi.bg> <20230710152809.GD6751@linux.alibaba.com>
+        Mon, 10 Jul 2023 13:31:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B03E187;
+        Mon, 10 Jul 2023 10:31:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BA1D61169;
+        Mon, 10 Jul 2023 17:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DD5C433C7;
+        Mon, 10 Jul 2023 17:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689010285;
+        bh=yBEMuGoWHM9zUe+iAIatKlGNoEB//1WfSxUw+0SuQ6A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VttBOl+eNlj1/cgq3G8qxJc+Ah7b5ZQ04PTV+EG6CFR2pRgYe6JyXMHkH1/K5bemV
+         K7OqUHz9qrkCqPetZgj1nNcc9MMYdr/B9tGDE8jYkIXmiDAP6OS06Xl3q0kgh5hEpC
+         MvMnLChy3z1cQdkugx0ULecDib0F8BZscQJjcD6lCQGmAOZWkJumwmB1iP89ewG1mK
+         rAm6IHAnieSj0S2DZ5vLDOR0ISwF5BNq2Bv8GkENsnzbMGMTAKoGpz+DIGvt6qDstD
+         H+akvWxjFGPRQ19Fycx48iyLC1xdJ/ddnyN9qoFnjn+84u3R5jM1KfNYx9ZqQrj7XX
+         kUC1BkFYkCtCQ==
+Date:   Mon, 10 Jul 2023 18:31:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kumar Mahapatra via Alsa-devel 
+        <alsa-devel@alsa-project.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v2 00/15] spi: Header and core clean up and refactoring
+Message-ID: <58c6f76a-8028-4ce8-a101-d5feb3b40897@sirena.org.uk>
+References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Mtt0ZQ3K6jQ9xKnG"
+Content-Disposition: inline
+In-Reply-To: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
+X-Cookie: Do you have lysdexia?
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,87 +106,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-	Hello,
+--Mtt0ZQ3K6jQ9xKnG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 10 Jul 2023, Dust Li wrote:
+On Mon, Jul 10, 2023 at 06:49:17PM +0300, Andy Shevchenko wrote:
+> Various cleanups and refactorings of the SPI header and core parts
+> united in a single series. It also touches drivers under SPI subsystem
+> folder on the pure renaming purposes of some constants.
 
-> On Sun, Jul 09, 2023 at 08:45:19PM +0300, Julian Anastasov wrote:
-> >
-> >	Hello,
-> >
-> >On Fri, 7 Jul 2023, Dust Li wrote:
-> >
-> >> @@ -2303,9 +2293,9 @@ static struct ip_vs_service *ip_vs_info_array(struct seq_file *seq, loff_t pos)
-> >>  
-> >>  	/* look in hash by protocol */
-> >>  	for (idx = 0; idx < IP_VS_SVC_TAB_SIZE; idx++) {
-> >> -		hlist_for_each_entry_rcu(svc, &ip_vs_svc_table[idx], s_list) {
-> >> +		hlist_for_each_entry_rcu(svc, &ipvs->ip_vs_svc_table[idx], s_list) {
-> >>  			if ((svc->ipvs == ipvs) && pos-- == 0) {
-> >> -				iter->table = ip_vs_svc_table;
-> >> +				iter->table = ipvs->ip_vs_svc_table;
-> >
-> >	We can change iter->table to int table_id, 0 (ip_vs_svc_table)
-> >and 1 (ip_vs_svc_fwm_table), for all these ip_vs_info_* funcs.
-> 
-> Sorry, I don't get this. Why do we need to change this ?
+I've queued 1-3, 6-8 and 11- for CI thanks.
 
-	It is a hint which table to walk, no need for such
-dereferences. For example:
+--Mtt0ZQ3K6jQ9xKnG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	iter->table = ip_vs_svc_table;
-	becomes
-	iter->table_id = 0;
+-----BEGIN PGP SIGNATURE-----
 
-	iter->table = ip_vs_svc_fwm_table;
-	becomes
-	iter->table_id = 1;
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSsQF8ACgkQJNaLcl1U
+h9CQ2gf+NebuHlkBa9zrhzmcGhSrtVx5yFCLP0dHaZVPMEHj6t0rIpQGodx2xOq0
+MawEB/JvvnMHpCvUoGGUXGsTcLiBB3uxADywJKyPkitWM3W/9LMAGRwpdnyV/zbN
+i4RuTGjLyFnoHuDdf82cL/5f3EFsLn1J3rl3cUDAv1c3U+WpZReA4OO9s9QhlqJU
+GfQoV1As2DUX49504bC2EfuPpa4wYIWrR1fT8ApGCZXs3KUQpgTWQ7iH4X48fdbY
+5gE1rQID66FMT2d78FRZkVmqej6wFqYr34G0zD2Lf/qC+ZsTSvvy4YExJhNnts1Q
+Md56GS1p2fjwWtBGCvs3Gmlg6zcmtQ==
+=CQab
+-----END PGP SIGNATURE-----
 
-	etc
-
-> >> @@ -3392,9 +3384,9 @@ static int ip_vs_genl_dump_services(struct sk_buff *skb,
-> >>  	struct net *net = sock_net(skb->sk);
-> >>  	struct netns_ipvs *ipvs = net_ipvs(net);
-> >>  
-> >> -	mutex_lock(&__ip_vs_mutex);
-> >> +	mutex_lock(&ipvs->service_mutex);
-> >
-> >	While do_ip_vs_get_ctl is a reader that can block we
-> >can not use RCU but in ip_vs_genl_dump_services() we can replace
-> >the __ip_vs_mutex with rcu_read_lock because we just fill the skb.
-> >
-> 
-> I think we can replace mutex in ip_vs_genl_dump_services() by RCU.
-> Do you prefer replacing it in this patch or later ?
-
-	You can include these RCU conversions
-
-> >	Also, there is more work if we want independent
-> >namespaces and to give power to users:
-> >
-> >- account memory: GFP_KERNEL -> GFP_KERNEL_ACCOUNT
-> >
-> >- the connections table is still global but it should be possible
-> >to make all tables per-net and to grow on load from NULL to max bits
-> >
-> >- convert GENL_ADMIN_PERM -> GENL_UNS_ADMIN_PERM and make
-> >sysctls visible to other namespaces
-> >
-> >	If the plan is to have multiple netns loaded with many
-> >conns may be I can follow your patch with more optimization
-> >patches.
-> 
-> Yes, we do missed those details. I think moving those into different
-> netns is good, besides we already have netns supported. So why not do
-> it more completely ?
-> 
-> If it is convenient for you to do more optimizations, we would greatly
-> appreciate it !
-
-	Yes, I'll prepare more patches on top of your patch.
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+--Mtt0ZQ3K6jQ9xKnG--
