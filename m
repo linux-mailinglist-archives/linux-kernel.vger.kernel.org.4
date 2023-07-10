@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFE274D880
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B541774D881
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjGJOG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S232397AbjGJOG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbjGJOGG (ORCPT
+        with ESMTP id S232599AbjGJOGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:06:06 -0400
+        Mon, 10 Jul 2023 10:06:09 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1AFFA;
-        Mon, 10 Jul 2023 07:06:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB73106;
+        Mon, 10 Jul 2023 07:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688997963; x=1720533963;
+  t=1688997968; x=1720533968;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0cQUe9pkwTFEo2qElR85DPOsKIH6ISqvOwLIiL5AbLE=;
-  b=arvXzGIbj+I592EQjuMUeDyaPU6MWEWlGMnvLc29xF41RGhsFBp8T1Qi
-   N3GqpMbg0A59/OpLdWXKNaI7jc89FQcHYM4o3LwYPrNTp1bXS6Z8iXlIn
-   LB+LH8xZUhaVC97VNj/BgFEg6B3m5wryv5WIf/Ch1YDNfP2wtEk2Sr6r4
-   POkk30ehGx33lora7LCsELwu0tEN0tTYuJwVPjAMbgyvqmAfkR3mjtSvV
-   YOM8aWqt7heaVrK/yM97kcRwV70CSdQICkrxWd7MtxNsh5AZSonJDpx7e
-   zWzl7wbRiflENwZJ2ti10w8WiO1ftoYvLKI8wYqH7IpxN8kUAieTEDkqE
+  bh=zvF0j2M9B1BUhzbABbr+1jFZh1ePQjGp/ib8cl72g98=;
+  b=ZOO1F8VWojMmehBRG6vu5AQqQbN1wugh+tt/Z9z94JGo/9bHbdC8YLRe
+   lFEWllmEuf5C6kpYHe1ufJv0pexdhDVdhsY9NjYE/m307SalYesUwIrR8
+   irEqtPgegS/c3Dc4ZXdev3YgTQmp8INUMBHg5TUo1Kg9cfJFallf5Kian
+   oZgs6jWw1Ne7JzeLjP1/UHlfzYH3LwVeeD3OWDZeFotxvl+wbVo31SViv
+   xCNtfqmnuDHs9jPx0++IpAuApVM2NBGxYvsghlVsIQiyfEmuWbbB/wYUs
+   0uS57s7d4EQAwz5Y83cQsC4XAfjMiYMcje+gG5PKCaQA0C8w+jExWYULZ
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361814888"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="361814918"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="361814888"
+   d="scan'208";a="361814918"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:17 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714822707"
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="714822784"
 X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="714822707"
+   d="scan'208";a="714822784"
 Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:13 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 07:05:18 -0700
 From:   Michal Wilczynski <michal.wilczynski@intel.com>
 To:     linux-acpi@vger.kernel.org
 Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
@@ -46,10 +46,11 @@ Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
         dave.hansen@linux.intel.com, hpa@zytor.com, lenb@kernel.org,
         jgross@suse.com, linux-kernel@vger.kernel.org, x86@kernel.org,
         Michal Wilczynski <michal.wilczynski@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v4 2/9] acpi: Move processor_physically_present() to acpi_processor.c
-Date:   Mon, 10 Jul 2023 17:03:30 +0300
-Message-ID: <20230710140337.1434060-3-michal.wilczynski@intel.com>
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 3/9] acpi: Refactor arch_acpi_set_pdc_bits()
+Date:   Mon, 10 Jul 2023 17:03:31 +0300
+Message-ID: <20230710140337.1434060-4-michal.wilczynski@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230710140337.1434060-1-michal.wilczynski@intel.com>
 References: <20230710140337.1434060-1-michal.wilczynski@intel.com>
@@ -65,176 +66,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since _PDC method is deprecated and a preferred method of communicating
-OSPM processor power management capabilities is _OSC, there is a need to
-move function checking whether processor is present as this logic is not
-_PDC specific.
-
-Move processor_physically_present() to acpi_processor.c.
+Capabilities buffer modified by the arch_acpi_set_pdc_bits() is not
+_PDC specific, as it is used by _OSC method as well. Change function
+name to better reflect it's independence from _PDC. Change function
+expected argument to pass capability buffer directly without any
+offset, as the offset differ among _OSC and _PDC methods.
 
 Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/acpi/acpi_processor.c | 52 ++++++++++++++++++++++++++++++++++-
- drivers/acpi/internal.h       |  1 +
- drivers/acpi/processor_pdc.c  | 49 ---------------------------------
- 3 files changed, 52 insertions(+), 50 deletions(-)
+ arch/ia64/include/asm/acpi.h |  4 ++--
+ arch/x86/include/asm/acpi.h  | 10 +++++-----
+ drivers/acpi/processor_pdc.c |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index f9aa02cac6d1..ebb4efd3d0aa 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -12,6 +12,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/device.h>
-+#include <linux/dmi.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -21,6 +22,8 @@
- 
- #include <asm/cpu.h>
- 
-+#include <xen/xen.h>
-+
- #include "internal.h"
- 
- DEFINE_PER_CPU(struct acpi_processor *, processors);
-@@ -508,7 +511,54 @@ static void acpi_processor_remove(struct acpi_device *device)
- }
- #endif /* CONFIG_ACPI_HOTPLUG_CPU */
- 
--#ifdef CONFIG_X86
-+#ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
-+bool __init processor_physically_present(acpi_handle handle)
-+{
-+	int cpuid, type;
-+	u32 acpi_id;
-+	acpi_status status;
-+	acpi_object_type acpi_type;
-+	unsigned long long tmp;
-+	union acpi_object object = {};
-+	struct acpi_buffer buffer = { sizeof(union acpi_object), &object };
-+
-+	status = acpi_get_type(handle, &acpi_type);
-+	if (ACPI_FAILURE(status))
-+		return false;
-+
-+	switch (acpi_type) {
-+	case ACPI_TYPE_PROCESSOR:
-+		status = acpi_evaluate_object(handle, NULL, NULL, &buffer);
-+		if (ACPI_FAILURE(status))
-+			return false;
-+		acpi_id = object.processor.proc_id;
-+		break;
-+	case ACPI_TYPE_DEVICE:
-+		status = acpi_evaluate_integer(handle, METHOD_NAME__UID,
-+					       NULL, &tmp);
-+		if (ACPI_FAILURE(status))
-+			return false;
-+		acpi_id = tmp;
-+		break;
-+	default:
-+		return false;
-+	}
-+
-+	if (xen_initial_domain())
-+		/*
-+		 * When running as a Xen dom0 the number of processors Linux
-+		 * sees can be different from the real number of processors on
-+		 * the system, and we still need to execute _PDC or _OSC for
-+		 * all of them.
-+		 */
-+		return xen_processor_present(acpi_id);
-+
-+	type = (acpi_type == ACPI_TYPE_DEVICE) ? 1 : 0;
-+	cpuid = acpi_get_cpuid(handle, type, acpi_id);
-+
-+	return !invalid_logical_cpuid(cpuid);
-+}
-+
- static bool acpi_hwp_native_thermal_lvt_set;
- static acpi_status __init acpi_hwp_native_thermal_lvt_osc(acpi_handle handle,
- 							  u32 lvl,
-diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index 90d199ab271c..87c343f79900 100644
---- a/drivers/acpi/internal.h
-+++ b/drivers/acpi/internal.h
-@@ -155,6 +155,7 @@ int acpi_wakeup_device_init(void);
- void acpi_early_processor_set_pdc(void);
- 
- void acpi_proc_quirk_dmi_check(void);
-+bool processor_physically_present(acpi_handle handle);
- #else
- static inline void acpi_early_processor_set_pdc(void) {}
+diff --git a/arch/ia64/include/asm/acpi.h b/arch/ia64/include/asm/acpi.h
+index 87927eb824cc..43797cb44383 100644
+--- a/arch/ia64/include/asm/acpi.h
++++ b/arch/ia64/include/asm/acpi.h
+@@ -69,9 +69,9 @@ extern int __initdata nid_to_pxm_map[MAX_NUMNODES];
  #endif
+ 
+ static inline bool arch_has_acpi_pdc(void) { return true; }
+-static inline void arch_acpi_set_pdc_bits(u32 *buf)
++static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
+ {
+-	buf[2] |= ACPI_PDC_EST_CAPABILITY_SMP;
++	*cap |= ACPI_PDC_EST_CAPABILITY_SMP;
+ }
+ 
+ #ifdef CONFIG_ACPI_NUMA
+diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
+index 8eb74cf386db..6a498d1781e7 100644
+--- a/arch/x86/include/asm/acpi.h
++++ b/arch/x86/include/asm/acpi.h
+@@ -100,23 +100,23 @@ static inline bool arch_has_acpi_pdc(void)
+ 		c->x86_vendor == X86_VENDOR_CENTAUR);
+ }
+ 
+-static inline void arch_acpi_set_pdc_bits(u32 *buf)
++static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
+ {
+ 	struct cpuinfo_x86 *c = &cpu_data(0);
+ 
+-	buf[2] |= ACPI_PDC_C_CAPABILITY_SMP;
++	*cap |= ACPI_PDC_C_CAPABILITY_SMP;
+ 
+ 	if (cpu_has(c, X86_FEATURE_EST))
+-		buf[2] |= ACPI_PDC_EST_CAPABILITY_SWSMP;
++		*cap |= ACPI_PDC_EST_CAPABILITY_SWSMP;
+ 
+ 	if (cpu_has(c, X86_FEATURE_ACPI))
+-		buf[2] |= ACPI_PDC_T_FFH;
++		*cap |= ACPI_PDC_T_FFH;
+ 
+ 	/*
+ 	 * If mwait/monitor is unsupported, C2/C3_FFH will be disabled
+ 	 */
+ 	if (!cpu_has(c, X86_FEATURE_MWAIT))
+-		buf[2] &= ~(ACPI_PDC_C_C2C3_FFH);
++		*cap &= ~(ACPI_PDC_C_C2C3_FFH);
+ }
+ 
+ static inline bool acpi_has_cpu_in_madt(void)
 diff --git a/drivers/acpi/processor_pdc.c b/drivers/acpi/processor_pdc.c
-index 34bb06de2afb..6d2d521a068d 100644
+index 6d2d521a068d..b2c6f17fc87c 100644
 --- a/drivers/acpi/processor_pdc.c
 +++ b/drivers/acpi/processor_pdc.c
-@@ -9,61 +9,12 @@
+@@ -24,7 +24,7 @@ static void acpi_set_pdc_bits(u32 *buf)
+ 	buf[2] = ACPI_PDC_SMP_T_SWCOORD;
  
- #define pr_fmt(fmt) "ACPI: " fmt
+ 	/* Twiddle arch-specific bits needed for _PDC */
+-	arch_acpi_set_pdc_bits(buf);
++	arch_acpi_set_proc_cap_bits(&buf[2]);
+ }
  
--#include <linux/dmi.h>
- #include <linux/slab.h>
- #include <linux/acpi.h>
- #include <acpi/processor.h>
- 
--#include <xen/xen.h>
--
- #include "internal.h"
- 
--static bool __init processor_physically_present(acpi_handle handle)
--{
--	int cpuid, type;
--	u32 acpi_id;
--	acpi_status status;
--	acpi_object_type acpi_type;
--	unsigned long long tmp;
--	union acpi_object object = { 0 };
--	struct acpi_buffer buffer = { sizeof(union acpi_object), &object };
--
--	status = acpi_get_type(handle, &acpi_type);
--	if (ACPI_FAILURE(status))
--		return false;
--
--	switch (acpi_type) {
--	case ACPI_TYPE_PROCESSOR:
--		status = acpi_evaluate_object(handle, NULL, NULL, &buffer);
--		if (ACPI_FAILURE(status))
--			return false;
--		acpi_id = object.processor.proc_id;
--		break;
--	case ACPI_TYPE_DEVICE:
--		status = acpi_evaluate_integer(handle, "_UID", NULL, &tmp);
--		if (ACPI_FAILURE(status))
--			return false;
--		acpi_id = tmp;
--		break;
--	default:
--		return false;
--	}
--
--	if (xen_initial_domain())
--		/*
--		 * When running as a Xen dom0 the number of processors Linux
--		 * sees can be different from the real number of processors on
--		 * the system, and we still need to execute _PDC for all of
--		 * them.
--		 */
--		return xen_processor_present(acpi_id);
--
--	type = (acpi_type == ACPI_TYPE_DEVICE) ? 1 : 0;
--	cpuid = acpi_get_cpuid(handle, type, acpi_id);
--
--	return !invalid_logical_cpuid(cpuid);
--}
--
- static void acpi_set_pdc_bits(u32 *buf)
- {
- 	buf[0] = ACPI_PDC_REVISION_ID;
+ static struct acpi_object_list *acpi_processor_alloc_pdc(void)
 -- 
 2.41.0
 
