@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CAB74CCAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291D974CCAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 08:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjGJGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 02:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S230406AbjGJGLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 02:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjGJGLH (ORCPT
+        with ESMTP id S229629AbjGJGLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 02:11:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D60132
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:11:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EF4C60DE8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 06:11:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7040AC433C7;
-        Mon, 10 Jul 2023 06:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688969463;
-        bh=POVkwNRnXDTfSq2EQOtvr5EVAKm/0LZO6D8+9fhg9qo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aVlZps9/ljtmmOZ258zRJ3em8y5MKFcpsgUk5gQ2I0RfOelUVPcNP3v4Kje8iStoY
-         Wgx7DUbELlRfQ09wzhWlxTys4GqfDbj/ctlfZb7CfNZQzQJPA4cLCuTv9lyU/bZ6dT
-         SQ+WU9IelPcfdOZjl4yRnmP7tcqzU+bhR1fi1o6W2LAW1eshtdD2oxdoA7KtXSJOJ3
-         02NOZBgZ8CoYrSX9liEIb0q6DDv24srL47b9Dpo3PXFRXR1goSEwulRo2Kvd98pjQj
-         qEXO2u+4R4cDosRFb6MeVGT5sw6MegBWj1KlPDwuMBczMODIYJ6AdI5PiXhd6lNs1U
-         iuDyi/mUe8o8w==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH] f2fs: don't handle error case of f2fs_compress_alloc_page()
-Date:   Mon, 10 Jul 2023 14:10:58 +0800
-Message-Id: <20230710061058.2303767-1-chao@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Mon, 10 Jul 2023 02:11:38 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC3BFA
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jul 2023 23:11:37 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QzttY24yqzBHXh5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 14:11:33 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688969492; x=1691561493; bh=azaJMEJAgL47SIIml1shBWGLWae
+        rskcRy12zpLCLts0=; b=dA5Ro6S2v9dpjMVbyDn97YTVeqaEvSTZRHV9OmE6O4n
+        KAFHOMBfDzniX1jwJk5AW4EZLg7SKBt6BTyR+SpYlk5o5E3JqH7P39BbRxaNQz+A
+        cwc34INwJWAe/JGHjn7ckj4U9mmLYj5zNNt6vaCvR1R5lCY85Wz/m0VmYOctW3rH
+        r3w9qLvD0upxPbkgZ0mDvzLKO9zdbeKGGcbpEpvVZWbI/zcfMRSYIDFXzo73pTo4
+        +feEpWcj9YyyRkpqSAVYFMESlzMF6Wym1wcUJjrTto/LQTErBGNXIr1EdLkSf7pg
+        vk0yps3mK1SL0Lp3q8vW4t+z7ArM3+B7/YQC88si3LQ==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 7i5rJhvPfX03 for <linux-kernel@vger.kernel.org>;
+        Mon, 10 Jul 2023 14:11:32 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QzttX52cdzBHXgl;
+        Mon, 10 Jul 2023 14:11:32 +0800 (CST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Mon, 10 Jul 2023 14:11:32 +0800
+From:   sunran001@208suo.com
+To:     airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/i2c: do not use assignment in if condition
+In-Reply-To: <20230710055219.53210-1-xujianghui@cdjrlc.com>
+References: <20230710055219.53210-1-xujianghui@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <2fb128f812c7bf59d7af52193e307cdc@208suo.com>
+X-Sender: sunran001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-f2fs_compress_alloc_page() uses mempool to allocate memory, it never
-fail, don't handle error case in its callers.
+Assignments in if condition are less readable and error-prone.  Fixes
+also checkpatch warning:
 
-Signed-off-by: Chao Yu <chao@kernel.org>
+ERROR: do not use assignment in if condition
+
+Signed-off-by: Ran Sun <sunran001@208suo.com>
 ---
- fs/f2fs/compress.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+  drivers/gpu/drm/nouveau/nvkm/subdev/i2c/busnv04.c | 0
+  1 file changed, 0 insertions(+), 0 deletions(-)
+  mode change 100755 => 100644 
+drivers/gpu/drm/nouveau/nvkm/subdev/i2c/busnv04.c
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 236d890f560b..9662d635efbe 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -649,13 +649,8 @@ static int f2fs_compress_pages(struct compress_ctx *cc)
- 		goto destroy_compress_ctx;
- 	}
- 
--	for (i = 0; i < cc->nr_cpages; i++) {
-+	for (i = 0; i < cc->nr_cpages; i++)
- 		cc->cpages[i] = f2fs_compress_alloc_page();
--		if (!cc->cpages[i]) {
--			ret = -ENOMEM;
--			goto out_free_cpages;
--		}
--	}
- 
- 	cc->rbuf = f2fs_vmap(cc->rpages, cc->cluster_size);
- 	if (!cc->rbuf) {
-@@ -1574,8 +1569,6 @@ static int f2fs_prepare_decomp_mem(struct decompress_io_ctx *dic,
- 		}
- 
- 		dic->tpages[i] = f2fs_compress_alloc_page();
--		if (!dic->tpages[i])
--			return -ENOMEM;
- 	}
- 
- 	dic->rbuf = f2fs_vmap(dic->tpages, dic->cluster_size);
-@@ -1656,11 +1649,6 @@ struct decompress_io_ctx *f2fs_alloc_dic(struct compress_ctx *cc)
- 		struct page *page;
- 
- 		page = f2fs_compress_alloc_page();
--		if (!page) {
--			ret = -ENOMEM;
--			goto out_free;
--		}
--
- 		f2fs_set_compressed_page(page, cc->inode,
- 					start_idx + i + 1, dic);
- 		dic->cpages[i] = page;
--- 
-2.40.1
-
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/busnv04.c 
+b/drivers/gpu/drm/nouveau/nvkm/subdev/i2c/busnv04.c
+old mode 100755
+new mode 100644
