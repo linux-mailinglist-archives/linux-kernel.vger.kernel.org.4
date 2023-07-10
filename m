@@ -2,88 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FF174DF27
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED58A74DF2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 22:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjGJUX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 16:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S229528AbjGJUY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 16:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjGJUX6 (ORCPT
+        with ESMTP id S230465AbjGJUYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 16:23:58 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C58C195;
-        Mon, 10 Jul 2023 13:23:57 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-5634d8d1db0so3577965eaf.0;
-        Mon, 10 Jul 2023 13:23:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689020636; x=1691612636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9g3hnCKeeyeonNdi0zcIUQvwxiCz8ApNLGQhrycIqAg=;
-        b=InVMQ/VHuNqtCpU4ma8Y21k3oB+fidG93tXHBhrC3ZOKYvY/UZG4FsP66pjY0mgpDJ
-         3pv3u/0paL3IwW9nRC9ZrNoiMMuKN25Im4NcY3lF2dlzQp/b/DmcluJqVVszIH0AsKRC
-         AtUnniXbcxTE5nJE3D6iTs/yjmGh3dcJ+n6U7bWrJikla5ZnWTEiNJS7mFcIoYiqJce2
-         xgwrPsTcojI/lkJZ/N7crWEIaywUMgnpBk2+FlYr5pwtxxiYXRVrFCmbz3CCtQc29kuK
-         U2B8zjrFqdM9TEIyFlPRnPLd1uxDwlPRZ1wOeOXzAPXK3qujLb2mGu+byssJ+BclvlX3
-         x5jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689020636; x=1691612636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9g3hnCKeeyeonNdi0zcIUQvwxiCz8ApNLGQhrycIqAg=;
-        b=CakTbI7kDVTmVifreAxPuwwMxOQf+xmTgsev9dQykQRj+v/XpWDmGqPbn1Kebi3c1J
-         L8csZ6baS6G0AV+jY88YLST2a70f5H0nPuX0ULRhK6P6QxuDKH8/YIfE1QCYVb8xcLt4
-         j519IaO46d+LxkabsUdR8aV5kHu3cirUqrCYHLtBZVl8uXKhRVJqs5NCGDpXGO5lZ+Qe
-         oXsXOJ2lxso9HJXsJ2Dyedft6Y7ArB52z0UW+/LNq0AajLLvqjAvWByGIQ4TWu1Z3lpR
-         WYPLKUKs+vfrd1beLywC77gYTDnZJn4NGgQK5rUifhu73x47UDnCpGC1w3pEoOFc+jkf
-         e8YA==
-X-Gm-Message-State: ABy/qLbU5rSOJW8DkHbxbwFXoL/hsNd+pE64ZLZQ+zS5txGB+CH4WLu6
-        yUSHMyWfVYE3QvGcTGqOUK0=
-X-Google-Smtp-Source: APBJJlH0t8DAII3NgZX7psR9fvgTvIW8NuVL5fe4+b79ZE/gryTOABuHFUNrDks7dfRmKdaTjH2VCA==
-X-Received: by 2002:a05:6808:2022:b0:3a3:6e43:e681 with SMTP id q34-20020a056808202200b003a36e43e681mr14341272oiw.58.1689020636419;
-        Mon, 10 Jul 2023 13:23:56 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id u22-20020aa78496000000b00682b4e5246csm213060pfn.23.2023.07.10.13.23.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 13:23:55 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 10:23:54 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     hannes@cmpxchg.org, lizefan.x@bytedance.com,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup: minor cleanup for cgroup_extra_stat_show()
-Message-ID: <ZKxo2gzxmBMCKrE5@slm.duckdns.org>
-References: <20230706094242.1707709-1-linmiaohe@huawei.com>
+        Mon, 10 Jul 2023 16:24:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4CB198;
+        Mon, 10 Jul 2023 13:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=G0ut9Msx8avXgkOpqAa+A7Dar6d8OWfnht1FICkF8CU=; b=FOqO3cdm12VAe6nUmn7GX8ljm1
+        IVWHYgztJseuOAdpb0Kl7UTesY1zGNKYMs5e5EBFqrZ0ooTqGXwH4QeLUQbdv8JXL7fENKqEe6VjM
+        SQXo/iyUUboIV1vXsJOTyGvNvvsYwJ5gWy8hUjxBQylojeQqUVVDk4Ovc3cmoCOmdphg5mAVEP7Uf
+        kRZ+dXmJA1uRht41tVmc5AzHGP5F+rFYYcIAo7BH8Z6T/u7Q9ThfhPZILyYI1SpBKAx3x4ScvmVJX
+        IrVLMuAKMIcKwmG/6tZECnJSU/lD3HpvUDf7IhlthMI3jSUs6ymuZ6XM25REdQ3J2tYwnjueQOVet
+        T7JE38Vg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qIxQd-00Etrn-OE; Mon, 10 Jul 2023 20:24:15 +0000
+Date:   Mon, 10 Jul 2023 21:24:15 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v4 20/36] powerpc: Implement the new page table range API
+Message-ID: <ZKxo79JYjEvMGAW3@casper.infradead.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-21-willy@infradead.org>
+ <1743d96f-8efe-0127-2cae-7368ce0eb2e6@csgroup.eu>
+ <c7f08247-8bcd-184c-5e06-91f91257f1f6@csgroup.eu>
+ <ZBPizB6TmDp0psOl@casper.infradead.org>
+ <eb8ad2f2-06ae-4daf-5163-11b950e640ad@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230706094242.1707709-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <eb8ad2f2-06ae-4daf-5163-11b950e640ad@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 05:42:42PM +0800, Miaohe Lin wrote:
-> Make it under CONFIG_CGROUP_SCHED to rid of __maybe_unused annotation.
-> And further fetch cgrp inside cgroup_extra_stat_show() directly to rid
-> of __maybe_unused annotation of cgrp. No functional change intended.
+On Sat, Mar 18, 2023 at 09:19:04AM +0000, Christophe Leroy wrote:
+> void set_ptes(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> 		pte_t pte, unsigned int nr)
+> {
+> 	pgprot_t prot;
+> 	unsigned long pfn;
+> 	/*
+> 	 * Make sure hardware valid bit is not set. We don't do
+> 	 * tlb flush for this update.
+> 	 */
+> 	VM_WARN_ON(pte_hw_valid(*ptep) && !pte_protnone(*ptep));
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 	/* Note: mm->context.id might not yet have been assigned as
+> 	 * this context might not have been activated yet when this
+> 	 * is called.
+> 	 */
+> 	pte = set_pte_filter(pte);
+> 
+> 	prot = pte_pgprot(pte);
+> 	pfn = pte_pfn(pte);
+> 	/* Perform the setting of the PTE */
+> 	for (;;) {
+> 		__set_pte_at(mm, addr, ptep, pfn_pte(pfn, prot), 0);
+> 		if (--nr == 0)
+> 			break;
+> 		ptep++;
+> 		pfn++;
+> 		addr += PAGE_SIZE;
+> 	}
+> }
 
-Applied to cgroup/for-6.6.
-
-Thanks.
-
--- 
-tejun
+I'd rather the per-arch code were as similar to each other and the
+generic implementation as possible.  Fewer bugs that way and easier
+for other people to make changes that have to touch every architecture
+in the future.
