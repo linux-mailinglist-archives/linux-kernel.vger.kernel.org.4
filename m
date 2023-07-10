@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1F274CA1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 04:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA37F74CA20
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 04:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjGJCyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jul 2023 22:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S230034AbjGJC6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jul 2023 22:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjGJCyP (ORCPT
+        with ESMTP id S229539AbjGJC6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jul 2023 22:54:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65964E9;
-        Sun,  9 Jul 2023 19:54:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 308571FB;
-        Sun,  9 Jul 2023 19:54:56 -0700 (PDT)
-Received: from [10.162.40.20] (a077893.blr.arm.com [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BEBB43F740;
-        Sun,  9 Jul 2023 19:54:10 -0700 (PDT)
-Message-ID: <bc9c2d09-8c6c-e5b2-a5be-545b4bb0a1b4@arm.com>
-Date:   Mon, 10 Jul 2023 08:24:07 +0530
+        Sun, 9 Jul 2023 22:58:46 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F24DF1;
+        Sun,  9 Jul 2023 19:58:42 -0700 (PDT)
+X-UUID: aa8857e41ecd11ee9cb5633481061a41-20230710
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=fE00NnLQgBtiRlH8pNZTvBFtXrfctUjKvaoZn2+eQSU=;
+        b=pHqxHFmYTg8UZscqq0xhoQCm4uOGIF2Q4s7idknb0Jl+3tpgAkLCYnGYyed0HVOo6Ae4jZ0NElMqM0kjLXrhbo9uGIc/TKRh9uAkd8O7kjpZit/+T0p+O7LVGkDKKEecVGDCQjMy/dFmzaHZ3lJ3WOAgHDEgZAtHAbbMyIirvNk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:a0074fd3-ad69-4618-9acb-a5fbd03a7e1e,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.27,REQID:a0074fd3-ad69-4618-9acb-a5fbd03a7e1e,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:01c9525,CLOUDID:bc8eceda-b4fa-43c8-9c3e-0d3fabd03ec0,B
+        ulkID:230710105839Q2KVK0SQ,BulkQuantity:0,Recheck:0,SF:17|19|48|38|29|28,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
+        TF_CID_SPAM_FSD
+X-UUID: aa8857e41ecd11ee9cb5633481061a41-20230710
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1862014506; Mon, 10 Jul 2023 10:58:37 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 10 Jul 2023 10:58:35 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 10 Jul 2023 10:58:35 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] arm64: dts: mediatek: mt8192: Add SVS node
+Date:   Mon, 10 Jul 2023 10:58:34 +0800
+Message-ID: <20230710025834.20513-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC 1/4] arm64/mm: Add SW and HW dirty state helpers
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230707053331.510041-1-anshuman.khandual@arm.com>
- <20230707053331.510041-2-anshuman.khandual@arm.com>
- <0d035a57-b502-32b3-0010-d029f62d7757@redhat.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <0d035a57-b502-32b3-0010-d029f62d7757@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,164 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add MediaTek Smart Voltage Scaling (SVS) node for MT8192 SoC.
 
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-On 7/7/23 17:39, David Hildenbrand wrote:
-> On 07.07.23 07:33, Anshuman Khandual wrote:
->> This factors out low level SW and HW state changes i.e make and clear into
->> separate helpers making them explicit improving readability. This also adds
->> pte_rdonly() helper as well. No functional change is intended.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   arch/arm64/include/asm/pgtable.h | 52 ++++++++++++++++++++++++++------
->>   1 file changed, 42 insertions(+), 10 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->> index 0bd18de9fd97..fb03be697819 100644
->> --- a/arch/arm64/include/asm/pgtable.h
->> +++ b/arch/arm64/include/asm/pgtable.h
->> @@ -103,6 +103,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->>   #define pte_young(pte)        (!!(pte_val(pte) & PTE_AF))
->>   #define pte_special(pte)    (!!(pte_val(pte) & PTE_SPECIAL))
->>   #define pte_write(pte)        (!!(pte_val(pte) & PTE_WRITE))
->> +#define pte_rdonly(pte)        (!!(pte_val(pte) & PTE_RDONLY))
->>   #define pte_user(pte)        (!!(pte_val(pte) & PTE_USER))
->>   #define pte_user_exec(pte)    (!(pte_val(pte) & PTE_UXN))
->>   #define pte_cont(pte)        (!!(pte_val(pte) & PTE_CONT))
->> @@ -120,7 +121,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->>       (__boundary - 1 < (end) - 1) ? __boundary : (end);            \
->>   })
->>   -#define pte_hw_dirty(pte)    (pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
->> +#define pte_hw_dirty(pte)    (pte_write(pte) && !pte_rdonly(pte))
->>   #define pte_sw_dirty(pte)    (!!(pte_val(pte) & PTE_DIRTY))
->>   #define pte_dirty(pte)        (pte_sw_dirty(pte) || pte_hw_dirty(pte))
->>   @@ -174,6 +175,39 @@ static inline pmd_t clear_pmd_bit(pmd_t pmd, pgprot_t prot)
->>       return pmd;
->>   }
->>   +static inline pte_t pte_hw_mkdirty(pte_t pte)
-> 
-> I'd have called this "pte_mkhw_dirty", similar to "pte_mksoft_dirty".
-> 
->> +{
->> +    if (pte_write(pte))
->> +        pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
->> +
->> +    return pte;
->> +}
->> +
->> +static inline pte_t pte_sw_mkdirty(pte_t pte)
-> 
-> pte_mksw_dirty
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 5e94cb4aeb44..0131cfefc0a1 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -790,6 +790,18 @@
+ 			status = "disabled";
+ 		};
+ 
++		svs: svs@1100b000 {
++			compatible = "mediatek,mt8192-svs";
++			reg = <0 0x1100b000 0 0x1000>;
++			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg CLK_INFRA_THERM>;
++			clock-names = "main";
++			nvmem-cells = <&svs_calibration>, <&lvts_e_data1>;
++			nvmem-cell-names = "svs-calibration-data", "t-calibration-data";
++			resets = <&infracfg MT8192_INFRA_RST3_THERM_CTRL_PTP_SWRST>;
++			reset-names = "svs_rst";
++		};
++
+ 		pwm0: pwm@1100e000 {
+ 			compatible = "mediatek,mt8183-disp-pwm";
+ 			reg = <0 0x1100e000 0 0x1000>;
+-- 
+2.18.0
 
-Sure, will change them as pte_mkhw_dirty()/pte_mksw_dirty() instead.
-
-> 
->> +{
->> +    return set_pte_bit(pte, __pgprot(PTE_DIRTY));
->> +}
->> +
->> +static inline __always_unused pte_t pte_hw_clr_dirty(pte_t pte)
-> 
-> pte_clear_hw_dirty (again, similar to pte_clear_soft_dirty )
-> 
->> +{
->> +    return set_pte_bit(pte, __pgprot(PTE_RDONLY));
->> +}
->> +
->> +static inline pte_t pte_sw_clr_dirty(pte_t pte)
-> 
-> pte_clear_sw_dirty
-
-Sure, will change them as pte_clear_hw_dirty()/pte_clear_sw_dirty() instead.
-
-> 
->> +{
->> +    pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
->> +
->> +    /*
->> +     * Clearing the software dirty state requires clearing
->> +     * the PTE_DIRTY bit along with setting the PTE_RDONLY
->> +     * ensuring a page fault on subsequent write access.
->> +     *
->> +     * NOTE: Setting the PTE_RDONLY (as a coincident) also
->> +     * implies clearing the HW dirty state.
->> +     */
->> +    return set_pte_bit(pte, __pgprot(PTE_RDONLY));
->> +}
->> +
->>   static inline pmd_t set_pmd_bit(pmd_t pmd, pgprot_t prot)
->>   {
->>       pmd_val(pmd) |= pgprot_val(prot);
->> @@ -189,19 +223,17 @@ static inline pte_t pte_mkwrite(pte_t pte)
->>     static inline pte_t pte_mkclean(pte_t pte)
->>   {
->> -    pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
->> -    pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
->> -
->> -    return pte;
->> +    /*
->> +     * Subsequent call to pte_hw_clr_dirty() is not required
->> +     * because pte_sw_clr_dirty() in turn does that as well.
->> +     */
->> +    return pte_sw_clr_dirty(pte);
-> 
-> Hm, I'm not sure if that simplifies things.
-> 
-> You call pte_sw_clr_dirty() and suddenly your hw dirty bit is clear?
-
-Because clearing HW dirty bit just needs setting PTE_RDONLY bit, which as
-a coincidence is also required, after clearing the SW dirty bit to enable
-a subsequent write fault. Here pte_sw_clr_dirty() just happen to contain
-pte_hw_clr_dirty().
-
-> 
-> In that case I think the current implementation is clearer: it doesn't provide primitives that don't make any sense.
-
-It actually does a SW dirty bit clearing which also takes care of HW dirty
-bit clearing without saying so explicitly. These new helpers demonstrate
-bit clearly what is happening.
-
-> 
->>   }
->>     static inline pte_t pte_mkdirty(pte_t pte)
->>   {
->> -    pte = set_pte_bit(pte, __pgprot(PTE_DIRTY));
->> -
->> -    if (pte_write(pte))
->> -        pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
->> -
->> +    pte = pte_sw_mkdirty(pte);
->> +    pte = pte_hw_mkdirty(pte);
-> 
-> That looks weird. Especially, pte_hw_mkdirty() only does something if pte_write().
-
-pte_write() check asserts if DBM is implemented and being used before clearing
-PTE_RDONLY making it a HW dirty state. If pte_write() is cleared, either DBM
-is not implemented or it's a non-writable entry, either way dirty state cannot
-be tracked in HW.
-
-> 
-> Shouldn't pte_hw_mkdirty() bail out if it cannot do anything reasonable (IOW, !writable)?
-
-static inline pte_t pte_hw_mkdirty(pte_t pte)
-{
-	if (pte_write(pte))
-		pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
-
-	return pte;
-}
-
-If pte_write() is not positive, it's in !writable state on DBM enabled systems.
-Otherwise pte_write() state does not matter, as the bit position does not make
-sense on non DBM enabled systems.
-
-> 
->>       return pte;
->>   }
->>   
-> 
