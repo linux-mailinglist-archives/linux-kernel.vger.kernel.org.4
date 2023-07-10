@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B47474DDFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0F774DDF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 21:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjGJTLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 15:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S231393AbjGJTL2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jul 2023 15:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbjGJTLS (ORCPT
+        with ESMTP id S231685AbjGJTLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 15:11:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2684510CC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 12:10:50 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qIwHP-00057Q-Im; Mon, 10 Jul 2023 21:10:39 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qIwHO-00DUHC-7r; Mon, 10 Jul 2023 21:10:38 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qIwHN-003rOB-I8; Mon, 10 Jul 2023 21:10:37 +0200
-Date:   Mon, 10 Jul 2023 21:10:35 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Helge Deller <deller@gmx.de>, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] fbdev: imxfb: remove unneeded lable
-Message-ID: <20230710191035.nxazpwdhqulbegsg@pengutronix.de>
-References: <20230710132001.50764-1-frank.li@vivo.com>
- <20230710132001.50764-4-frank.li@vivo.com>
+        Mon, 10 Jul 2023 15:11:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5905AE78;
+        Mon, 10 Jul 2023 12:10:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3858611B6;
+        Mon, 10 Jul 2023 19:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5AEC433C8;
+        Mon, 10 Jul 2023 19:10:38 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 15:10:37 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ching-lin Yu <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
+Message-ID: <20230710151037.14560969@gandalf.local.home>
+In-Reply-To: <20230710150731.4ec2b9f8@gandalf.local.home>
+References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
+        <1685610013-33478-4-git-send-email-akaher@vmware.com>
+        <20230701095417.3de5baab@rorschach.local.home>
+        <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
+        <20230703110857.2d051af5@rorschach.local.home>
+        <84CA259A-8A99-471C-B44C-08D289972F43@vmware.com>
+        <20230703155226.1ab27bc1@gandalf.local.home>
+        <20230709215447.536defa6@rorschach.local.home>
+        <285B9992-4DFB-4343-BD64-DAE9CCEFEE6B@vmware.com>
+        <20230710150606.2c8d2236@gandalf.local.home>
+        <20230710150731.4ec2b9f8@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eidfnx3p3pfbmdcd"
-Content-Disposition: inline
-In-Reply-To: <20230710132001.50764-4-frank.li@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 10 Jul 2023 15:07:30 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
---eidfnx3p3pfbmdcd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Mon, 10 Jul 2023 15:06:06 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > > Something was broken in your mail (I guess cc list) and couldn’t reach to lkml or
+> > > ignored by lkml. I just wanted to track the auto test results from linux-kselftest.    
+> > 
+> > Yeah, claws-mail has an issue with some emails with quotes in it (sometimes
+> > drops the second quote). Sad part is, it happens after I hit send, and it
+> > is not part of the email. I'll send this reply now, but I bet it's going to happen again.
+> > 
+> > Let's see :-/  I checked the To and Cc's and they all have the proper
+> > quotes. Let's see what ends up in my "Sent" folder.  
+> 
+> This time it worked!
+> 
 
-On Mon, Jul 10, 2023 at 09:20:01PM +0800, Yangtao Li wrote:
-> These lables are redundant and don't do anything, let's remove it.
+But this reply did not :-p
 
-s/lable/label/ here an in the subject line.
+It was fine before I sent, but the email in my Sent folder shows:
 
-Are you using this driver, or did you just stumble over it while looking
-for some janitorial todo? If the former, I suggest you look into the drm
-driver (imx-lcdc) instead.
+Cc: "mhiramat@kernel.org" <mhiramat@kernel.org>, "shuah@kernel.org"  <shuah@kernel.org>, "linux-kernel@vger.kernel.org"  <linux-kernel@vger.kernel.org>, "linux-trace-kernel@vger.kernel.org\"          <linux-trace-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"  <linux-kselftest@vger.kernel.org>, Ching-lin Yu <chinglinyu@google.com>,  Nadav Amit <namit@vmware.com>, "srivatsa@csail.mit.edu"  <srivatsa@csail.mit.edu>, Alexey Makhalov <amakhalov@vmware.com>, Vasavi  Sirnapalli <vsirnapalli@vmware.com>, Tapas Kundu <tkundu@vmware.com>,  "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
 
-Having said that, I'm not sure this cleanup is really valuable. While
-a single jump target position has several names,=20
+Claw's injected a backslash into:  "linux-trace-kernel@vger.kernel.org\"          <linux-trace-kernel@vger.kernel.org>
 
-  	ret =3D imxfb_of_read_mode(&pdev->dev, display_np, fbi->mode);
-  	of_node_put(display_np);
-  	if (ret)
-  		goto failed_of_parse;
+I have my own build of claws-mail, let me update it and perhaps this will
+go away.
 
-is more obvious correct than
-
-  	ret =3D imxfb_of_read_mode(&pdev->dev, display_np, fbi->mode);
-  	of_node_put(display_np);
-  	if (ret)
-  		goto failed_init;
-
-=2E *shrug*
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---eidfnx3p3pfbmdcd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSsV6sACgkQj4D7WH0S
-/k5b8Qf+IN365SKDDLXyi0u6+8iebC+94VaaWfL3Hts3Nqmhkz8dU+3pFLTznxyp
-3LSfnYLL1r1wmZZmXwjmam8547qkxRe6RNWr6jXCZT5DLbENHn/tHIU9dhHnHee6
-QL/HzDAX3BGDfxMI75KeUzJ+KYJA/XsYIMePLs6Y2GeAVZUxm3EzucMX1pSiBqpb
-GVe0X14LefFTVCA1OfZPjgGuDWxc0v9KE6NhlGdQRn8q16vbyyZMtfKzjbEBMew9
-wWD6Uh77bUTlnDCB83Xyf61Vun5wNZl8sN7F+7EAAVwTHAFXaHZV71Qsr0UEtA2y
-c8n7vRCUrmhVVdLSQ8soWv3GdkBeAA==
-=5kPp
------END PGP SIGNATURE-----
-
---eidfnx3p3pfbmdcd--
+-- Steve
