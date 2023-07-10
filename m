@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EE274D939
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0FE74D941
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jul 2023 16:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjGJOmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 10:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S231269AbjGJOo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 10:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGJOmm (ORCPT
+        with ESMTP id S229469AbjGJOo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 10:42:42 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1906C3;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-345ff33d286so24253225ab.3;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689000160; x=1691592160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9youPIImCCAcdEckdoxFQrNpLYrygdk7W9ZtiP8w15k=;
-        b=RNoulLSZHnHbR/2BYwKnhB6ZCVD59ktpzYmSlC+pFzHu5labOYQjxCMLjg4wmUaXA9
-         5vfXG/4I3tImqbWLvdIksMoDeccqRRvd95Z32GFS3nPDNTnlnPJSrEEj7eJXJ/lWUeVr
-         KE0J6gWiBOMpY2LkMZbDHluq+5lcDdGcHnLJ7RBFruBMlvha04KUuNUfZoQzW+chBW5k
-         tYpEHrU4YrdlJ4bvtl7C/W8gUJqi1OXND3pnVB8oYKf6q004qRo/Ok5OdvnmQ5Zmd0bZ
-         nJHvdsoQNiMnmosuh/Y9qGz6npMn4TZDJsXIpqcogTrhPKfeBcRGSvFNYBmn+el3NcTe
-         /V7w==
-X-Gm-Message-State: ABy/qLb0UTDG/EF+3cYvmQZXUUxjYHEQEXmHqRWXEJnqZ28alAfM/g8I
-        jLTwmVejLmJaAiz/gfQnPg==
-X-Google-Smtp-Source: APBJJlG3K/ro2oZtTnsZ7Banw1CdZJLy4OFKR61udj8GbrxlXMYjo+jeaSBEKYBDTKO2X9W4TkNn0w==
-X-Received: by 2002:a92:502:0:b0:345:c8ce:ff4e with SMTP id q2-20020a920502000000b00345c8ceff4emr11579387ile.3.1689000160019;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id x7-20020a92d307000000b00342f537e3c3sm3560577ila.2.2023.07.10.07.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 07:42:39 -0700 (PDT)
-Received: (nullmailer pid 1938541 invoked by uid 1000);
-        Mon, 10 Jul 2023 14:42:35 -0000
-Date:   Mon, 10 Jul 2023 08:42:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-Message-ID: <20230710144235.GA1922048-robh@kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
- <20230706145108.GA3858320-robh@kernel.org>
- <0aaace47-1bb4-82c5-57a5-6f5d27eb4d45@foss.st.com>
- <20230707152056.GA317056-robh@kernel.org>
- <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
+        Mon, 10 Jul 2023 10:44:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8543DC3;
+        Mon, 10 Jul 2023 07:44:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 38B7721AE8;
+        Mon, 10 Jul 2023 14:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689000295; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2dSDCIryhoqYz8ZS1bBqRNqc86fubisnGZKJq77QBlA=;
+        b=ZOh9PSn4qAb49Y/vRW4RvILvHVqDNm8r7BSRKjNFgqVMKsAHnK+MLjUCMjalAB1ujYKCXP
+        VH9Y13+ev6/vDr7W357nCLvnoVwnsFHEaGMUZGMQZXiDaIpzdjn2cZa1YiBoRWsDx1qnAW
+        cfgvONSAD46IH0pcuEFK25CaUCcA8C8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0743A13A05;
+        Mon, 10 Jul 2023 14:44:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mijkAGcZrGSrSgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 10 Jul 2023 14:44:55 +0000
+Date:   Mon, 10 Jul 2023 16:44:53 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     cgroups@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: Expensive memory.stat + cpu.stat reads
+Message-ID: <gbqumqkxixvvrbbqh55rw6thgfa67tw2kkcuauc4xj5t6pnivd@3yfkokngo43w>
+References: <CABWYdi0c6__rh-K7dcM_pkf9BJdTRtAU08M43KO9ME4-dsgfoQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b77s5ccberk4hrjr"
 Content-Disposition: inline
-In-Reply-To: <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CABWYdi0c6__rh-K7dcM_pkf9BJdTRtAU08M43KO9ME4-dsgfoQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,113 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 10:22:10AM +0200, Gatien CHEVALLIER wrote:
-> 
-> 
-> On 7/7/23 17:20, Rob Herring wrote:
-> > On Fri, Jul 07, 2023 at 02:28:28PM +0200, Gatien CHEVALLIER wrote:
-> > > Hello Rob,
-> > > 
-> > > On 7/6/23 16:51, Rob Herring wrote:
-> > > > On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
-> > > > > feature-domains is an optional property that allows a peripheral to
-> > > > > refer to one or more feature domain controller(s).
-> > > > > 
-> > > > > Description of this property is added to all peripheral binding files of
-> > > > > the peripheral under the STM32 firewall controllers. It allows an accurate
-> > > > > representation of the hardware, where various peripherals are connected
-> > > > > to this firewall bus. The firewall can then check the peripheral accesses
-> > > > > before allowing it to probe.
-> > > > > 
-> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > > > > ---
-> > > > > 
-> > > > > Disclaimer: Some error with dtbs_check will be observed as I've
-> > > > > considered the property to be generic, as Rob asked
-> > > > > 
-> > > > >    Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
-> > > > >    Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
-> > > > >    .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
-> > > > >    .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
-> > > > >    Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
-> > > > >    .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
-> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
-> > > > >    Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
-> > > > >    Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
-> > > > >    Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
-> > > > >    .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
-> > > > >    Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
-> > > > >    .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
-> > > > >    Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
-> > > > >    Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
-> > > > >    24 files changed, 97 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > index b767ec72a999..daf8dcaef627 100644
-> > > > > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > @@ -50,6 +50,10 @@ properties:
-> > > > >      power-domains:
-> > > > >        maxItems: 1
-> > > > > +  feature-domains:
-> > > > > +    minItems: 1
-> > > > > +    maxItems: 3
-> > > > 
-> > > > What are the 3 entries?
-> > > > 
-> > > > Rob
-> > > 
-> > > I thought I was benefiting from the description of the pattern-property in
-> > > the RIFSC YAML file. But yes anyway, it seems like it needs some description
-> > > here as the dependency does not appear in this file.
-> > 
-> > Humm, that should limit the maximum entries to 2, so 3 would never work
-> > (if RIFSC is the parent).
-> > 
-> > > I picked 3 as a maxItems for our ST needs, I'll give it some more thought
-> > > when coming back with something clearer.
-> > 
-> > I'd expect you have 1 entry for register bus and 1 entry for DMA bus if
-> > there is one. It's block specific for how many entries, so the RIFSC
-> > schema should not be setting that. You could possibly say that
-> > 'feature-domains' is required for all the child nodes though.
-> 
-> Ok, I will change to not specifying the number of entries in the
-> RIFSC YAML file for V2.
-> 
-> > 
-> > Rob
-> Some hardware blocks may have a firewall ID for their device part and
-> another ID for their master part as well. In the end, the number of
-> entries could very well vary between different platforms. And the YAML
-> files are common to these platforms.
 
-A given device has a fixed number of buses. Usually 1 or 2. That does 
-*not* vary by platform (unless the device is modified). You could have 
-the same firewall controller and id for multiple buses, but that 
-should not change the number of entries for the device. Now maybe a bus 
-has no firewall on some platforms. In that case, you should make the 
-optional firewall entry the last one, have a null phandle (0 or -1), or 
-use -names to distinguish the entries.
+--b77s5ccberk4hrjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> This property could be used for "extra" arguments as well, that are not
-> firewall IDs.
+Hello.
 
-The arg cells are dictated by the provider and opaque to the client.
+On Fri, Jun 30, 2023 at 04:22:28PM -0700, Ivan Babrou <ivan@cloudflare.com>=
+ wrote:
+> As you might've noticed from the output, splitting the loop into two
+> makes the code run 10x faster.
 
-> What do you suggest between picking a high maxItems value that would
-> (hopefully) cover all cases and not specifying maxItems at all? Or maybe
-> another property dedicated to such arguments?
+That is curious.
 
-You should not specify maxItems in the firewall controller binding.
+> We're running Linux v6.1 (the output is from v6.1.25) with no patches
+> that touch the cgroup or mm subsystems, so you can assume vanilla
+> kernel.
 
-Rob
+Have you watched for this on older kernels too?
+
+> I am happy to try out patches or to do some tracing to help understand
+> this better.
+
+I see in your reproducer you tried swapping order of controllers
+flushed.=20
+Have you also tried flushing same controller twice (in the inner loop)?
+(Despite the expectation is that it shouldn't be different from half the
+scenario where ran two loops.)
+
+Thanks,
+Michal
+
+--b77s5ccberk4hrjr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZKwZYwAKCRAGvrMr/1gc
+jkiaAP0cMXwbvKMrd3UFe9bkgPZXxl1WeME+caCgKNQqMZaS1AD/eGWbOeKD5V7A
+KBibSziS+oGtgU+Wg7XvKGBFaasJZA4=
+=jPdL
+-----END PGP SIGNATURE-----
+
+--b77s5ccberk4hrjr--
