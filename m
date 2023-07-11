@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC35E74F3E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D3474F3F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 17:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjGKPnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 11:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S232586AbjGKPoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 11:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbjGKPm7 (ORCPT
+        with ESMTP id S231932AbjGKPn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:42:59 -0400
+        Tue, 11 Jul 2023 11:43:57 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB721BCC;
-        Tue, 11 Jul 2023 08:42:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3AC7F2275C;
-        Tue, 11 Jul 2023 15:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689090134; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184CC1BE4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 08:43:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CCD2E2278D;
+        Tue, 11 Jul 2023 15:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689090219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rQYkKfGFGC5pVN3aJkpbpkhHDlSbsj+GelqxV7zZTRk=;
-        b=UfQ4urB4+8BgTndkCc7fCiD3ME3yHDkc4GP5nB/e9EIsE/TMJJFKSb8Uo+WvN9EmPVizRO
-        1zbuOk0jlFMYDrrqOoJ0UJd4woZwQ8jdxnOUDtwwSXYvkzL/FhicmT6qrzsRWIN8eYjy2L
-        pCOcupFyxCMKJEu/HUUsyjdzYRa1gKc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689090134;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rQYkKfGFGC5pVN3aJkpbpkhHDlSbsj+GelqxV7zZTRk=;
-        b=TYUBrLVvAW/nJukV/0wT380gWBhvaXjoaLokOXLrdH4Dys9++VALmNxWyyZx+Q4jrleDfB
-        PTQsaFoVjhbLmMDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=D8gS/AatCmSxkrWIi2yEwTN/4nvo6p/jXtb6v9XP55U=;
+        b=qwnkeimNpLDCjqlXCrtOCMCENwgeu1LAClk9C8cKCC9YAjpz6dtJcOzHiiK6ijZRGzsUrS
+        TKgDQc6qZEbJs/8Q8kPdjm2CKwmARe8A1nhA7CB7uGBpHsx9R8eba55wBX3dRztfpDFNTV
+        psR+tPEFkGu39VYPz0YoWDCaODSnpPw=
+Received: from suse.cz (pmladek.tcp.ovpn1.nue.suse.de [10.163.16.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EAE081390F;
-        Tue, 11 Jul 2023 15:42:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FWnaN1V4rWRKIgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 11 Jul 2023 15:42:13 +0000
-Date:   Tue, 11 Jul 2023 17:42:13 +0200
-Message-ID: <87jzv6h2ui.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Amadeusz =?ISO-8859-2?Q?S=B3awi=F1ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 00/13] PCI: Define Intel PCI IDs and use them in drivers
-In-Reply-To: <46d612f4-24a4-4493-aa9f-0ace5225a38b@sirena.org.uk>
-References: <20230711125726.3509391-1-amadeuszx.slawinski@linux.intel.com>
-        <bc2484ba-3bb2-7d74-fcd1-55c9ec253b9c@linux.intel.com>
-        <46d612f4-24a4-4493-aa9f-0ace5225a38b@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-2
-Content-Transfer-Encoding: 8bit
+        by relay2.suse.de (Postfix) with ESMTPS id 6BF902C142;
+        Tue, 11 Jul 2023 15:43:39 +0000 (UTC)
+Date:   Tue, 11 Jul 2023 17:43:35 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v2 2/5] printk: Add NMI safety to
+ console_flush_on_panic() and console_unblank()
+Message-ID: <ZK14p-ocWuuHkSAQ@alley>
+References: <20230710134524.25232-1-john.ogness@linutronix.de>
+ <20230710134524.25232-3-john.ogness@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230710134524.25232-3-john.ogness@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,28 +57,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 17:36:20 +0200,
-Mark Brown wrote:
-> 
-> On Tue, Jul 11, 2023 at 05:24:07PM +0200, Pierre-Louis Bossart wrote:
-> > On 7/11/23 14:57, Amadeusz S³awiñski wrote:
-> 
-> > > Simplify things, by adding PCI IDs to global header and make use of them
-> > > in drivers. This allows for removal of comments by having IDs themselves
-> > > being self explanatory. Additionally it allows for removal of existing
-> > > inconsistencies by having one source of truth.
-> 
-> > I'd like to hear from Takashi and Mark on how this would work, we have
-> > to provide new PCI IDs for both trees using a common 'pci_ids.h' file.
-> 
-> We can probably just agree on a tree to apply things and work from
-> there.
+On Mon 2023-07-10 15:51:21, John Ogness wrote:
+> The printk path is NMI safe because it only adds content to the
+> buffer and then triggers the delayed output via irq_work. If the
+> console is flushed or unblanked on panic (from NMI context) then it
+> can deadlock in down_trylock_console_sem() because the semaphore is
+> not NMI safe.
 
-Yes, simply apply on top of 6.5-rc1 or such a stable point and tag it.
-Then other trees can merging it.
+<thinking loudly>
 
-I can do it if both Bjorn and Mark agree (after all patches get
-reviewed and no objection comes up).
+Just to be sure. The semaphore is not NMI safe because even the
+trylock takes an internal spin lock. Am I right, please?
+
+Alternative solution would be to make down_trylock() NMI safe
+by using raw_spin_trylock_irqsave() for the internal lock.
+
+But this actually would not solve the whole problem. If the NMI safe
+down_trylock() succeeded then up() would need to be called
+in NMI as well. And up() really needs to take the spin lock
+which might get blocked in the meantime.
 
 
-Takashi
+Another question is whether we want to call c->unblank()
+in NMI even when down_trylock() was NMI safe. It seems that it
+is implemented only for struct console vt_console_driver.
+I am pretty sure that it takes more internal locks which
+are not NMI safe either.
+
+On the other hand, if we would risk calling c->write() then
+we might risk calling c->unblank() either.
+
+
+Finally, it is not only about NMI. Any locks might cause a deadlock
+in panic() in any context. It is because other CPUs are stopped
+and might block some locks.
+
+</thinking loudly>
+
+
+In my opinion, we should handle c->unblank() in panic() the same way
+as c->write() in panic().
+
+I suggest to create
+
+void __console_unblank(void)
+{
+	struct console *c;
+	int cookie;
+
+	cookie = console_srcu_read_lock();
+	for_each_console_srcu(c) {
+		if ((console_srcu_read_flags(c) & CON_ENABLED) && c->unblank)
+			c->unblank();
+	}
+	console_srcu_read_unlock(cookie);
+}
+
+and call this in console_flush_on_panic() without the console_lock().
+
+We still need to take the lock during Oops when the system tries
+to continue. In this case, the NMI check makes perfect sense.
+NMI might cause a deadlock. Other contexts should be safe
+because the CPUs are not stopped.
+
+
+> Avoid taking the console lock when flushing in panic. To prevent
+> other CPUs from taking the console lock while flushing, have
+> console_lock() block and console_trylock() fail for non-panic CPUs
+> during panic.
+
+I really like the trick that console_lock() and console_trylock()
+would start failing on non-panic CPUs. It should prevent races
+when the other CPUs were not stopped for some reasons.
+
+I am still slightly afraid to do this even before stopping other CPUs.
+But I do not have any real scenario where it might be a problem.
+And it is only about console_lock() which should preferably be
+available for the panic-CPU. Also we should _not_ rely on the other
+CPUs during panic() anyway. So, it should be fine after all.
+
+
+Well, would you mind to split this into two patches?
+
+1st patch would split __console_unblank(), call it from
+	console_flush_on_panic() after the trylock().
+
+	Also it would add the NMI check into the original
+	console_unblank() which would still be called in
+	bust_spinlocks().
+
+	The commit message should explain the motivation
+	(primary the internal spinlock in the semaphore
+	implementation). Also it should explain why only NMI
+	is a problem when called in the Oops path.
+	And why the locks are problem in any context
+	when called in panic() after CPUs were stopped.
+
+
+2nd patch would prevent taking console_lock on non-panic CPUs.
+	And it would remove console_trylock()/console_unlock() from
+	console_flush_on_panic().
+
+	The commit message should explain the motivation
+	(the internal spinlock in the semaphore code).
+	Also it would solve a problem with a potential
+	double unlock. And it should mention that it should
+	not be worse then before when the trylock() result
+	was ignored.
+
+IMHO, both patches has a potential to cause regressions.
+And it is better to do it in smaller steps.
+
+Best Regards,
+Petr
