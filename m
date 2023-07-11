@@ -2,205 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FD874F131
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2692574F132
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjGKOHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S233333AbjGKOH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbjGKOHU (ORCPT
+        with ESMTP id S233313AbjGKOHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:07:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9E512A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:07:18 -0700 (PDT)
+        Tue, 11 Jul 2023 10:07:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081B8BC;
+        Tue, 11 Jul 2023 07:07:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D61861516
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 14:07:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BAFC43391;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ABC861519;
+        Tue, 11 Jul 2023 14:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5057C433C7;
         Tue, 11 Jul 2023 14:07:17 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1qJE1M-0007mp-1k;
+        id 1qJE1M-0007nN-2Q;
         Tue, 11 Jul 2023 10:07:16 -0400
-Message-ID: <20230711140716.357016966@goodmis.org>
+Message-ID: <20230711140716.561714719@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 11 Jul 2023 10:06:56 -0400
+Date:   Tue, 11 Jul 2023 10:06:57 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [for-linus][PATCH 4/5] tracing: arm64: Avoid missing-prototype warnings
+        stable@vger.kernel.org, Beau Belgrave <beaub@linux.microsoft.com>
+Subject: [for-linus][PATCH 5/5] tracing/user_events: Fix struct arg size match check
 References: <20230711140652.217008556@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Beau Belgrave <beaub@linux.microsoft.com>
 
-These are all tracing W=1 warnings in arm64 allmodconfig about missing
-prototypes:
+When users register an event the name of the event and it's argument are
+checked to ensure they match if the event already exists. Normally all
+arguments are in the form of "type name", except for when the type
+starts with "struct ". In those cases, the size of the struct is passed
+in addition to the name, IE: "struct my_struct a 20" for an argument
+that is of type "struct my_struct" with a field name of "a" and has the
+size of 20 bytes.
 
-kernel/trace/trace_kprobe_selftest.c:7:5: error: no previous prototype for 'kprobe_trace_selftest_target' [-Werror=missing-pro
-totypes]
-kernel/trace/ftrace.c:329:5: error: no previous prototype for '__register_ftrace_function' [-Werror=missing-prototypes]
-kernel/trace/ftrace.c:372:5: error: no previous prototype for '__unregister_ftrace_function' [-Werror=missing-prototypes]
-kernel/trace/ftrace.c:4130:15: error: no previous prototype for 'arch_ftrace_match_adjust' [-Werror=missing-prototypes]
-kernel/trace/fgraph.c:243:15: error: no previous prototype for 'ftrace_return_to_handler' [-Werror=missing-prototypes]
-kernel/trace/fgraph.c:358:6: error: no previous prototype for 'ftrace_graph_sleep_time_control' [-Werror=missing-prototypes]
-arch/arm64/kernel/ftrace.c:460:6: error: no previous prototype for 'prepare_ftrace_return' [-Werror=missing-prototypes]
-arch/arm64/kernel/ptrace.c:2172:5: error: no previous prototype for 'syscall_trace_enter' [-Werror=missing-prototypes]
-arch/arm64/kernel/ptrace.c:2195:6: error: no previous prototype for 'syscall_trace_exit' [-Werror=missing-prototypes]
+The current code does not honor the above case properly when comparing
+a match. This causes the event register to fail even when the same
+string was used for events that contain a struct argument within them.
+The example above "struct my_struct a 20" generates a match string of
+"struct my_struct a" omitting the size field.
 
-Move the declarations to an appropriate header where they can be seen
-by the caller and callee, and make sure the headers are included where
-needed.
+Add the struct size of the existing field when generating a comparison
+string for a struct field to ensure proper match checking.
 
-Link: https://lore.kernel.org/linux-trace-kernel/20230517125215.930689-1-arnd@kernel.org
+Link: https://lkml.kernel.org/r/20230629235049.581-2-beaub@linux.microsoft.com
 
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Florent Revest <revest@chromium.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-[ Fixed ftrace_return_to_handler() to handle CONFIG_HAVE_FUNCTION_GRAPH_RETVAL case ]
+Cc: stable@vger.kernel.org
+Fixes: e6f89a149872 ("tracing/user_events: Ensure user provided strings are safely formatted")
+Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/arm64/include/asm/ftrace.h      | 4 ++++
- arch/arm64/include/asm/syscall.h     | 3 +++
- arch/arm64/kernel/syscall.c          | 3 ---
- include/linux/ftrace.h               | 8 ++++++++
- kernel/trace/fgraph.c                | 1 +
- kernel/trace/ftrace_internal.h       | 5 +++--
- kernel/trace/trace_kprobe_selftest.c | 3 +++
- 7 files changed, 22 insertions(+), 5 deletions(-)
+ kernel/trace/trace_events_user.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 21ac1c5c71d3..ab158196480c 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -211,6 +211,10 @@ static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs
- {
- 	return ret_regs->fp;
- }
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index dbb14705d0d3..83c0536ff41c 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -1223,6 +1223,9 @@ static int user_field_set_string(struct ftrace_event_field *field,
+ 	pos += snprintf(buf + pos, LEN_OR_ZERO, " ");
+ 	pos += snprintf(buf + pos, LEN_OR_ZERO, "%s", field->name);
+ 
++	if (str_has_prefix(field->type, "struct "))
++		pos += snprintf(buf + pos, LEN_OR_ZERO, " %d", field->size);
 +
-+void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
-+			   unsigned long frame_pointer);
-+
- #endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER  */
- #endif
+ 	if (colon)
+ 		pos += snprintf(buf + pos, LEN_OR_ZERO, ";");
  
-diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
-index 4cfe9b49709b..ab8e14b96f68 100644
---- a/arch/arm64/include/asm/syscall.h
-+++ b/arch/arm64/include/asm/syscall.h
-@@ -85,4 +85,7 @@ static inline int syscall_get_arch(struct task_struct *task)
- 	return AUDIT_ARCH_AARCH64;
- }
- 
-+int syscall_trace_enter(struct pt_regs *regs);
-+void syscall_trace_exit(struct pt_regs *regs);
-+
- #endif	/* __ASM_SYSCALL_H */
-diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index da84cf855c44..32f49f8f1b91 100644
---- a/arch/arm64/kernel/syscall.c
-+++ b/arch/arm64/kernel/syscall.c
-@@ -75,9 +75,6 @@ static inline bool has_syscall_work(unsigned long flags)
- 	return unlikely(flags & _TIF_SYSCALL_WORK);
- }
- 
--int syscall_trace_enter(struct pt_regs *regs);
--void syscall_trace_exit(struct pt_regs *regs);
--
- static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
- 			   const syscall_fn_t syscall_table[])
- {
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 8e59bd954153..2abd20d9211d 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -41,6 +41,14 @@ struct ftrace_ops;
- struct ftrace_regs;
- struct dyn_ftrace;
- 
-+char *arch_ftrace_match_adjust(char *str, const char *search);
-+
-+#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-+unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
-+#else
-+unsigned long ftrace_return_to_handler(unsigned long frame_pointer);
-+#endif
-+
- #ifdef CONFIG_FUNCTION_TRACER
- /*
-  * If the arch's mcount caller does not support all of ftrace's
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index cd2c35b1dd8f..c83c005e654e 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -15,6 +15,7 @@
- #include <trace/events/sched.h>
- 
- #include "ftrace_internal.h"
-+#include "trace.h"
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define ASSIGN_OPS_HASH(opsname, val) \
-diff --git a/kernel/trace/ftrace_internal.h b/kernel/trace/ftrace_internal.h
-index 382775edf690..5012c04f92c0 100644
---- a/kernel/trace/ftrace_internal.h
-+++ b/kernel/trace/ftrace_internal.h
-@@ -2,6 +2,9 @@
- #ifndef _LINUX_KERNEL_FTRACE_INTERNAL_H
- #define  _LINUX_KERNEL_FTRACE_INTERNAL_H
- 
-+int __register_ftrace_function(struct ftrace_ops *ops);
-+int __unregister_ftrace_function(struct ftrace_ops *ops);
-+
- #ifdef CONFIG_FUNCTION_TRACER
- 
- extern struct mutex ftrace_lock;
-@@ -15,8 +18,6 @@ int ftrace_ops_test(struct ftrace_ops *ops, unsigned long ip, void *regs);
- 
- #else /* !CONFIG_DYNAMIC_FTRACE */
- 
--int __register_ftrace_function(struct ftrace_ops *ops);
--int __unregister_ftrace_function(struct ftrace_ops *ops);
- /* Keep as macros so we do not need to define the commands */
- # define ftrace_startup(ops, command)					\
- 	({								\
-diff --git a/kernel/trace/trace_kprobe_selftest.c b/kernel/trace/trace_kprobe_selftest.c
-index 16548ee4c8c6..3851cd1e6a62 100644
---- a/kernel/trace/trace_kprobe_selftest.c
-+++ b/kernel/trace/trace_kprobe_selftest.c
-@@ -1,4 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
-+
-+#include "trace_kprobe_selftest.h"
-+
- /*
-  * Function used during the kprobe self test. This function is in a separate
-  * compile unit so it can be compile with CC_FLAGS_FTRACE to ensure that it
 -- 
 2.40.1
