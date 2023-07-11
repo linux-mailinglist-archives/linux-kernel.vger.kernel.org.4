@@ -2,71 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF5D74EACB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C4574EAE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjGKJhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S231439AbjGKJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjGKJh2 (ORCPT
+        with ESMTP id S231537AbjGKJkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:37:28 -0400
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C571A2;
-        Tue, 11 Jul 2023 02:37:15 -0700 (PDT)
-Received: from [134.238.52.102] (helo=rainbowdash)
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1qJ9o0-00BpMC-Q6; Tue, 11 Jul 2023 10:37:12 +0100
-Received: from ben by rainbowdash with local (Exim 4.96)
-        (envelope-from <ben@rainbowdash>)
-        id 1qJ9nx-0006AL-2p;
-        Tue, 11 Jul 2023 10:37:09 +0100
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-To:     nvdimm@lists.linux.dev
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lenb@kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: [PATCH v2] ACPI: NFIT: limit string attribute write
-Date:   Tue, 11 Jul 2023 10:37:08 +0100
-Message-Id: <20230711093708.23692-1-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Jul 2023 05:40:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6B9172A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689068399; x=1720604399;
+  h=date:from:to:cc:subject:message-id;
+  bh=MgWIlI5zMFXpvDcSNfOj0wRHK4j2b+NbeLMYhwVTgpo=;
+  b=VAdxqfWZ+aO7cEzGMEQnO6pR5R8rrSYMfGfKiEPXbwqYgGFXKa75VCTP
+   SohSCqP5EwR9ldjFRfOOGRso9GxvJrqPcJNocb6Uetlo4VJjbM273LliR
+   6x4MbXwy/7e3DLsrbvpCZotAr/fqmjWAqeu0in0gsfQ3UKf0mtKhC5B3Z
+   xK+wvp0R+7D08nf524Fmwv+huB8pGMCBXYJCdmBTbZTlL7SktQaFo3t49
+   u/oPp0sKZi9Y6KPiYvGSgEb2dO6WBlm5CF2+qDTPsgKlalDtNFbl06sE0
+   MRxeEzakjjPTRg0sqZHMqGqGVzTj9BcwmRtz1NzdTv3eMwL6QJsZIVOBU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="368073051"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="368073051"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 02:39:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="865690353"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="865690353"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 02:39:57 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJ9qe-0004gF-2f;
+        Tue, 11 Jul 2023 09:39:56 +0000
+Date:   Tue, 11 Jul 2023 17:39:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230710] BUILD REGRESSION
+ 58f872f0089daa911786fdbd13d48a0c9147e5b1
+Message-ID: <202307111704.af0nVAgh-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we're writing what could be an arbitrary sized string into an attribute
-we should probably use sysfs_emit() just to be safe. Most of the other
-attriubtes are some sort of integer so unlikely to be an issue so not
-altered at this time.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230710
+branch HEAD: 58f872f0089daa911786fdbd13d48a0c9147e5b1  openprom: Use struct_size() helper
 
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
----
-v2:
-  - use sysfs_emit() instead of snprintf.
----
- drivers/acpi/nfit/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Error/Warning reports:
 
-diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
-index 9213b426b125..d7e9d9cd16d2 100644
---- a/drivers/acpi/nfit/core.c
-+++ b/drivers/acpi/nfit/core.c
-@@ -1579,7 +1579,7 @@ static ssize_t id_show(struct device *dev,
- {
- 	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
- 
--	return sprintf(buf, "%s\n", nfit_mem->id);
-+	return snprintf(buf, PAGE_SIZE, "%s\n", nfit_mem->id);
- }
- static DEVICE_ATTR_RO(id);
- 
+https://lore.kernel.org/oe-kbuild-all/202307110949.RG8TpHLo-lkp@intel.com
+
+Error/Warning: (recently discovered and may have been fixed)
+
+arch/sh/include/asm/io.h:29:49: warning: array subscript 0 is outside array bounds of 'volatile u8[0]' {aka 'volatile unsigned char[]'} [-Warray-bounds]
+arch/sparc/mm/init_64.c:3057:31: error: array subscript -1 is outside array bounds of 'char[]' [-Werror=array-bounds]
+include/asm-generic/io.h:547:13: warning: array subscript 0 is outside array bounds of 'volatile u8[0]' {aka 'volatile unsigned char[]'} [-Warray-bounds]
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- sh-allmodconfig
+|   |-- arch-sh-include-asm-io.h:warning:array-subscript-is-outside-array-bounds-of-volatile-u8-aka-volatile-unsigned-char
+|   `-- include-asm-generic-io.h:warning:array-subscript-is-outside-array-bounds-of-volatile-u8-aka-volatile-unsigned-char
+|-- sparc-allyesconfig
+|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+|-- sparc-randconfig-r053-20230710
+|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+|-- sparc-randconfig-r063-20230710
+|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+|-- sparc64-defconfig
+|   `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+`-- sparc64-randconfig-r002-20230710
+    `-- arch-sparc-mm-init_64.c:error:array-subscript-is-outside-array-bounds-of-char
+
+elapsed time: 720m
+
+configs tested: 124
+configs skipped: 5
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              alldefconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r024-20230710   gcc  
+arc                  randconfig-r043-20230711   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                       netwinder_defconfig   clang
+arm                  randconfig-r035-20230710   clang
+arm                  randconfig-r046-20230711   clang
+arm                           sama5_defconfig   gcc  
+arm                        spear3xx_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r025-20230710   clang
+arm64                randconfig-r033-20230710   gcc  
+csky                                defconfig   gcc  
+hexagon                             defconfig   clang
+hexagon              randconfig-r006-20230710   clang
+hexagon              randconfig-r041-20230711   clang
+hexagon              randconfig-r045-20230711   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230710   gcc  
+i386         buildonly-randconfig-r005-20230710   gcc  
+i386         buildonly-randconfig-r006-20230710   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230710   gcc  
+i386                 randconfig-i002-20230710   gcc  
+i386                 randconfig-i003-20230710   gcc  
+i386                 randconfig-i004-20230710   gcc  
+i386                 randconfig-i005-20230710   gcc  
+i386                 randconfig-i006-20230710   gcc  
+i386                 randconfig-i011-20230710   clang
+i386                 randconfig-i012-20230710   clang
+i386                 randconfig-i013-20230710   clang
+i386                 randconfig-i014-20230710   clang
+i386                 randconfig-i015-20230710   clang
+i386                 randconfig-i016-20230710   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r011-20230710   gcc  
+loongarch            randconfig-r022-20230710   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5307c3_defconfig   gcc  
+m68k                 randconfig-r001-20230710   gcc  
+m68k                 randconfig-r004-20230710   gcc  
+m68k                 randconfig-r013-20230710   gcc  
+m68k                 randconfig-r026-20230710   gcc  
+m68k                 randconfig-r036-20230710   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath25_defconfig   clang
+mips                        bcm47xx_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r023-20230710   gcc  
+openrisc             randconfig-r016-20230710   gcc  
+openrisc             randconfig-r021-20230710   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     mpc83xx_defconfig   gcc  
+powerpc                       ppc64_defconfig   gcc  
+powerpc              randconfig-r032-20230710   gcc  
+powerpc                     skiroot_defconfig   clang
+powerpc                     tqm8555_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r003-20230710   gcc  
+riscv                randconfig-r042-20230711   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230711   gcc  
+sh                               allmodconfig   gcc  
+sh                   rts7751r2dplus_defconfig   gcc  
+sh                   secureedge5410_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64              randconfig-r002-20230710   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r005-20230710   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230710   gcc  
+x86_64       buildonly-randconfig-r002-20230710   gcc  
+x86_64       buildonly-randconfig-r003-20230710   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r015-20230710   clang
+x86_64               randconfig-x001-20230710   clang
+x86_64               randconfig-x002-20230710   clang
+x86_64               randconfig-x003-20230710   clang
+x86_64               randconfig-x004-20230710   clang
+x86_64               randconfig-x005-20230710   clang
+x86_64               randconfig-x006-20230710   clang
+x86_64               randconfig-x011-20230710   gcc  
+x86_64               randconfig-x012-20230710   gcc  
+x86_64               randconfig-x013-20230710   gcc  
+x86_64               randconfig-x014-20230710   gcc  
+x86_64               randconfig-x015-20230710   gcc  
+x86_64               randconfig-x016-20230710   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                           alldefconfig   gcc  
+xtensa               randconfig-r014-20230710   gcc  
+xtensa               randconfig-r034-20230710   gcc  
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
