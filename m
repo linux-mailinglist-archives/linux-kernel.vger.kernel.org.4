@@ -2,109 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED7D74EB20
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFACD74EB17
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjGKJuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S231515AbjGKJtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjGKJtk (ORCPT
+        with ESMTP id S230478AbjGKJtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:49:40 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6944FBE;
-        Tue, 11 Jul 2023 02:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1689068974;
-        bh=83SeGYY069UVxi94jP42yD5YlEmP07oKsxDCaS0DfLI=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=TNM11yR3/EprBB8Zbx+0ReDPGkWTXEKW/tR6mFLRKWeS0yDsvVYAvKCvNEj22jmXr
-         QiruHvFuP7v+Ul65XonvTuwOJZUx2xPR5HXMQba2CRi1TDBarqS/7JYXYhXhiHjTia
-         Yw9+hHwo52a1ZdtdUwY6lPhwCKBGcvweP2NSDX7g=
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Tue, 11 Jul 2023 11:48:42 +0200
-Subject: [PATCH 4/4] selftests/nolibc: avoid gaps in test numbers
+        Tue, 11 Jul 2023 05:49:19 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D44591;
+        Tue, 11 Jul 2023 02:49:17 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-78caeb69125so1949550241.3;
+        Tue, 11 Jul 2023 02:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689068956; x=1691660956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cgTQWK83Q6lSONgCo8OzSJU3WKSIiULajv7A0glKus8=;
+        b=SKiWdbryeyTtX1nzsOkUQ3ulE0JKKwe1cRwSAp+Z75vs3LMIdpm+2BSaoraEk/cBs+
+         2fcdpFxelIs5hSAnKrIWjQKhkC+5b6TRvDQE96zdN7qE2AmwvnU8yPNAhj9ZFySIQB/A
+         vbuqpCLHXCZ1psfpPlT7fixcRkg+KYIkJsH75WzfyMbLwgKkFXt3vnXafDTyrDutEEsa
+         oU7L7ltPua2vUjRTGrEljK2oU26wUXuZBVOJpXnfazMcx1pfDA3ZZ+eYDCbMb7UjCiB5
+         Q5s2Sx9evpa67plRQVvfXtpyOTlycAycxbHoL+H+JalSgihYx4Q6pghUuINvkapK/uEq
+         Cv8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689068956; x=1691660956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cgTQWK83Q6lSONgCo8OzSJU3WKSIiULajv7A0glKus8=;
+        b=D9d6q5BxcUbsYoZTVARUsHgaGB4QhkQo1WRRnh1wwVvL0cInzgroYI+hD/9lcU68zR
+         +wJoOjH58e/WjmwAgUeokuoqXVgQyA0WDjWI16oFWkyqLb9gNLAbRMQBdzKV9wis825k
+         3YwhBeTs5McxTnCXqAhGfKYRLS5DCjWpp+iZ3JjMWB22SBZJ4d5PKLklyK+S1XptVlll
+         h09DI1HvK9HuwsCVN7kUNK/yYcG4v9GYXnuVV1K0xOWTMMtBtB8LfErdA09JUFX0M4Jv
+         Bqwz6uEhqHSg2WFIEovcd2XH0dkd5vw91Q15rR8OZOAna1N6XEHz6U8WMT+yaIGEaiJ8
+         +ucw==
+X-Gm-Message-State: ABy/qLYL6mjU2o9tIRgjNKwdug/eInZ993emnAPVvlHqA2NsViNswyYl
+        NGAYSsqNgDVFaJzsQ2/rpKqMNhTkAl0iZ3SOPQw=
+X-Google-Smtp-Source: APBJJlFElt/mewgggUaWv+mWuHddxobQX6Zbn+xh+SVRMcR+13/oYImdOysOkzAuoDZf01XJU0PKOjHHSAKScwaZEKs=
+X-Received: by 2002:a67:b646:0:b0:443:687a:e518 with SMTP id
+ e6-20020a67b646000000b00443687ae518mr5891068vsm.35.1689068956447; Tue, 11 Jul
+ 2023 02:49:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230711-nolibc-sizeof-long-gaps-v1-4-dc78c3b85fc3@weissschuh.net>
-References: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
-In-Reply-To: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhangjin Wu <falcon@tinylab.org>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689068953; l=4197;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=83SeGYY069UVxi94jP42yD5YlEmP07oKsxDCaS0DfLI=;
- b=8p8gHUPx37Id6K1WBhsyn1nlAsIFAof0sMQzd2/vZgcKJXeXQWUEwdPYT6QawzH40qigiipqz
- odYARoIC+dNAl6l63qU37l8GCLYsuDye8XNvqOWxRTy12Iuf6/MZ7pB
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <20230710183338.58531-1-ivan@cloudflare.com> <2023071039-negate-stalemate-6987@gregkh>
+ <CABWYdi39+TJd1qV3nWs_eYc7XMC0RvxG22ihfq7rzuPaNvn1cQ@mail.gmail.com>
+In-Reply-To: <CABWYdi39+TJd1qV3nWs_eYc7XMC0RvxG22ihfq7rzuPaNvn1cQ@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 11 Jul 2023 12:49:05 +0300
+Message-ID: <CAOQ4uxiFhkSM2pSNLCE6cLz6mhYOvk5D7vDsghVTqy9cDqeqew@mail.gmail.com>
+Subject: Re: [PATCH] kernfs: attach uuid for every kernfs and report it in fsid
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fsdevel@vger.kernel.org, kernel-team@cloudflare.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the test numbers are based on line numbers gaps without testcases are
-to be avoided.
-Instead use the already existing test condition logic to implement
-conditional execution.
+On Tue, Jul 11, 2023 at 12:21=E2=80=AFAM Ivan Babrou <ivan@cloudflare.com> =
+wrote:
+>
+> On Mon, Jul 10, 2023 at 12:40=E2=80=AFPM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Jul 10, 2023 at 11:33:38AM -0700, Ivan Babrou wrote:
+> > > The following two commits added the same thing for tmpfs:
+> > >
+> > > * commit 2b4db79618ad ("tmpfs: generate random sb->s_uuid")
+> > > * commit 59cda49ecf6c ("shmem: allow reporting fanotify events with f=
+ile handles on tmpfs")
+> > >
+> > > Having fsid allows using fanotify, which is especially handy for cgro=
+ups,
+> > > where one might be interested in knowing when they are created or rem=
+oved.
+> > >
+> > > Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+> > > ---
+> > >  fs/kernfs/mount.c | 13 ++++++++++++-
+> > >  1 file changed, 12 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
+> > > index d49606accb07..930026842359 100644
+> > > --- a/fs/kernfs/mount.c
+> > > +++ b/fs/kernfs/mount.c
+> > > @@ -16,6 +16,8 @@
+> > >  #include <linux/namei.h>
+> > >  #include <linux/seq_file.h>
+> > >  #include <linux/exportfs.h>
+> > > +#include <linux/uuid.h>
+> > > +#include <linux/statfs.h>
+> > >
+> > >  #include "kernfs-internal.h"
+> > >
+> > > @@ -45,8 +47,15 @@ static int kernfs_sop_show_path(struct seq_file *s=
+f, struct dentry *dentry)
+> > >       return 0;
+> > >  }
+> > >
+> > > +int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
+> > > +{
+> > > +     simple_statfs(dentry, buf);
+> > > +     buf->f_fsid =3D uuid_to_fsid(dentry->d_sb->s_uuid.b);
+> > > +     return 0;
+> > > +}
+> > > +
+> > >  const struct super_operations kernfs_sops =3D {
+> > > -     .statfs         =3D simple_statfs,
+> > > +     .statfs         =3D kernfs_statfs,
+> > >       .drop_inode     =3D generic_delete_inode,
+> > >       .evict_inode    =3D kernfs_evict_inode,
+> > >
+> > > @@ -351,6 +360,8 @@ int kernfs_get_tree(struct fs_context *fc)
+> > >               }
+> > >               sb->s_flags |=3D SB_ACTIVE;
+> > >
+> > > +             uuid_gen(&sb->s_uuid);
+> >
+> > Since kernfs has as lot of nodes (like hundreds of thousands if not mor=
+e
+> > at times, being created at boot time), did you just slow down creating
+> > them all, and increase the memory usage in a measurable way?
+>
+> This is just for the superblock, not every inode. The memory increase
+> is one UUID per kernfs instance (there are maybe 10 of them on a basic
+> system), which is trivial. Same goes for CPU usage.
+>
+> > We were trying to slim things down, what userspace tools need this
+> > change?  Who is going to use it, and what for?
+>
+> The one concrete thing is ebpf_exporter:
+>
+> * https://github.com/cloudflare/ebpf_exporter
+>
+> I want to monitor cgroup changes, so that I can have an up to date map
+> of inode -> cgroup path, so that I can resolve the value returned from
+> bpf_get_current_cgroup_id() into something that a human can easily
+> grasp (think system.slice/nginx.service). Currently I do a full sweep
+> to build a map, which doesn't work if a cgroup is short lived, as it
+> just disappears before I can resolve it. Unfortunately, systemd
+> recycles cgroups on restart, changing inode number, so this is a very
+> real issue.
+>
+> There's also this old wiki page from systemd:
+>
+> * https://freedesktop.org/wiki/Software/systemd/Optimizations
+>
+> Quoting from there:
+>
+> > Get rid of systemd-cgroups-agent. Currently, whenever a systemd cgroup =
+runs empty a tool "systemd-cgroups-agent" is invoked by the kernel which th=
+en notifies systemd about it. The need for this tool should really go away,=
+ which will save a number of forked processes at boot, and should make thin=
+gs faster (especially shutdown). This requires introduction of a new kernel=
+ interface to get notifications for cgroups running empty, for example via =
+fanotify() on cgroupfs.
+>
+> So a similar need to mine, but for different systemd-related needs.
+>
+> Initially I tried adding this for cgroup fs only, but the problem felt
+> very generic, so I pivoted to having it in kernfs instead, so that any
+> kernfs based filesystem would benefit.
+>
+> Given pretty much non-existing overhead and simplicity of this, I
+> think it's a change worth doing, unless there's a good reason to not
+> do it. I cc'd plenty of people to make sure it's not a bad decision.
+>
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 30 ++++++++++++----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+I agree. I think it was a good decision.
+I have some followup questions though.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 754815c142f6..09660b362645 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -815,23 +815,19 @@ int run_stdlib(int min, int max)
- 		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INT64_MIN); break;
- 		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INT64_MAX); break;
- 		CASE_TEST(limit_uint_fast64_max);   EXPECT_EQ(1, UINT_FAST64_MAX,  (uint_fast64_t)   UINT64_MAX); break;
--#if __SIZEOF_LONG__ == 8
--		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,       (intptr_t)        0x8000000000000000LL); break;
--		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,       (intptr_t)        0x7fffffffffffffffLL); break;
--		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX,      (uintptr_t)       0xffffffffffffffffULL); break;
--		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN,      (ptrdiff_t)       0x8000000000000000LL); break;
--		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX,      (ptrdiff_t)       0x7fffffffffffffffLL); break;
--		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,         (size_t)          0xffffffffffffffffULL); break;
--#elif __SIZEOF_LONG__ == 4
--		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,       (intptr_t)        0x80000000); break;
--		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,       (intptr_t)        0x7fffffff); break;
--		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX,      (uintptr_t)       0xffffffffU); break;
--		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN,      (ptrdiff_t)       0x80000000); break;
--		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX,      (ptrdiff_t)       0x7fffffff); break;
--		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,         (size_t)          0xffffffffU); break;
--#else
--# warning "__SIZEOF_LONG__ is undefined"
--#endif /* __SIZEOF_LONG__ */
-+		CASE_TEST(sizeof_long_sane);        EXPECT_EQ(1, sizeof(long) == 8 || sizeof(long) == 4, 1); break;
-+		CASE_TEST(limit_intptr_min_64);     EXPECT_EQ(sizeof(long) == 8, INTPTR_MIN,  (intptr_t)  0x8000000000000000LL); break;
-+		CASE_TEST(limit_intptr_max_64);     EXPECT_EQ(sizeof(long) == 8, INTPTR_MAX,  (intptr_t)  0x7fffffffffffffffLL); break;
-+		CASE_TEST(limit_uintptr_max_64);    EXPECT_EQ(sizeof(long) == 8, UINTPTR_MAX, (uintptr_t) 0xffffffffffffffffULL); break;
-+		CASE_TEST(limit_ptrdiff_min_64);    EXPECT_EQ(sizeof(long) == 8, PTRDIFF_MIN, (ptrdiff_t) 0x8000000000000000LL); break;
-+		CASE_TEST(limit_ptrdiff_max_64);    EXPECT_EQ(sizeof(long) == 8, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffffffffffffLL); break;
-+		CASE_TEST(limit_size_max_64);       EXPECT_EQ(sizeof(long) == 8, SIZE_MAX,    (size_t)    0xffffffffffffffffULL); break;
-+		CASE_TEST(limit_intptr_min_32);     EXPECT_EQ(sizeof(long) == 4, INTPTR_MIN,  (intptr_t)  0x80000000); break;
-+		CASE_TEST(limit_intptr_max_32);     EXPECT_EQ(sizeof(long) == 4, INTPTR_MAX,  (intptr_t)  0x7fffffff); break;
-+		CASE_TEST(limit_uintptr_max_32);    EXPECT_EQ(sizeof(long) == 4, UINTPTR_MAX, (uintptr_t) 0xffffffffU); break;
-+		CASE_TEST(limit_ptrdiff_min_32);    EXPECT_EQ(sizeof(long) == 4, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
-+		CASE_TEST(limit_ptrdiff_max_32);    EXPECT_EQ(sizeof(long) == 4, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
-+		CASE_TEST(limit_size_max_32);       EXPECT_EQ(sizeof(long) == 4, SIZE_MAX,    (size_t)    0xffffffffU); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
+I guess your use case cares about the creation of cgroups?
+as long as the only way to create a cgroup is via vfs
+vfs_mkdir() -> ... cgroup_mkdir()
+fsnotify_mkdir() will be called.
+Is that a correct statement?
+Because if not, then explicit fsnotify_mkdir() calls may be needed
+similar to tracefs/debugfs.
 
--- 
-2.41.0
+I don't think that the statement holds for dieing cgroups,
+so explicit fsnotify_rmdir() are almost certainly needed to make
+inotify/fanotify monitoring on cgroups complete.
 
+I am on the fence w.r.t making the above a prerequisite to merging
+your patch.
+
+One the one hand, inotify monitoring of cgroups directory was already
+possible (I think?) with the mentioned shortcomings for a long time.
+
+On the other hand, we have an opportunity to add support to fanotify
+monitoring of cgroups directory only after the missing fsnotify hooks
+are added, making fanotify API a much more reliable option for
+monitoring cgroups.
+
+So I am leaning towards requiring the missing fsnotify hooks before
+attaching a unique fsid to cgroups/kernfs.
+
+In any case, either with or without the missing hooks, I would not
+want this patch merged until Jan had a chance to look at the
+implications and weigh in on the missing hooks question.
+Jan is on vacation for three weeks, so in the meanwhile, feel free
+to implement and test the missing hooks or wait for his judgement.
+
+On an unrelated side topic,
+I would like to point your attention to this comment in the patch that
+was just merged to v6.5-rc1:
+
+69562eb0bd3e ("fanotify: disallow mount/sb marks on kernel internal pseudo =
+fs")
+
+        /*
+         * mount and sb marks are not allowed on kernel internal pseudo fs,
+         * like pipe_mnt, because that would subscribe to events on all the
+         * anonynous pipes in the system.
+         *
+         * SB_NOUSER covers all of the internal pseudo fs whose objects are=
+ not
+         * exposed to user's mount namespace, but there are other SB_KERNMO=
+UNT
+         * fs, like nsfs, debugfs, for which the value of allowing sb and m=
+ount
+         * mark is questionable. For now we leave them alone.
+         */
+
+My question to you, as the only user I know of for fanotify FAN_REPORT_FID
+on SB_KERNMOUNT, do you have plans to use a mount or filesystem mark
+to monitor cgroups? or only inotify-like directory watches?
+
+Thanks,
+Amir.
