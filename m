@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB14374E3E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB4874E3F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjGKCG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 22:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S231177AbjGKCLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 22:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjGKCG4 (ORCPT
+        with ESMTP id S229936AbjGKCLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 22:06:56 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B84290;
-        Mon, 10 Jul 2023 19:06:55 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R0PP80QK5z1FDgN;
-        Tue, 11 Jul 2023 10:06:20 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 11 Jul 2023 10:06:52 +0800
-Subject: Re: linux-next: build warning after merge of the cgroup tree
-To:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230711111509.1045f32e@canb.auug.org.au>
- <ZKyuwkDWB85Zs9R0@slm.duckdns.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <9031f42f-6ff3-3e60-049b-fc1917915da9@huawei.com>
-Date:   Tue, 11 Jul 2023 10:06:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 10 Jul 2023 22:11:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64035E1;
+        Mon, 10 Jul 2023 19:11:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEDB861143;
+        Tue, 11 Jul 2023 02:11:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A14FC433C7;
+        Tue, 11 Jul 2023 02:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689041479;
+        bh=m5zH5mj7zoJ1f1B+N42bt19Cic4vyFBBXFpmA2ahLKY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tlYYHe4Rh8gRp18dK7OwlfbtZDz3o6//XRmKFGCilyOCEehKXK7sk1pSnNr9frOxX
+         QDrlz0XK3OqbgBED3VESg+ZCpOPYW3H8h38zQwHHrLIP/9ynKKokYkcKHecsJnOjvT
+         nWJRyiTmqHVuzNgzxsqpYQ9Fvaej/kukm7afFmiDg4RW+FT7HU3LaZtc7TxlFpMqpI
+         tDdHA/y051j2xb5ACi/+7nbMvSU658nG0YNyjQujPVnBeH1/LQHnrd7mExEISQXrWB
+         bT/DsaH4lmqJoJUSY0RwIlcmdnFfir8MLmYq/UtzG9KxAkQgivp7t/IHRsGydIoNmB
+         iNTj7hp6cUC9w==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH v4 0/4] tracing/probes: Fix bugs in process_fetch_insn
+Date:   Tue, 11 Jul 2023 11:11:15 +0900
+Message-ID:  <168904147563.2908673.18054267804278861545.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-In-Reply-To: <ZKyuwkDWB85Zs9R0@slm.duckdns.org>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 9:22, Tejun Heo wrote:
-> On Tue, Jul 11, 2023 at 11:15:09AM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the cgroup tree, today's linux-next build (arm
->> multi_v7_defconfig) produced this warning:
->>
->> kernel/cgroup/cgroup.c:503:36: warning: 'cgroup_tryget_css' defined but not used [-Wunused-function]
->>   503 | static struct cgroup_subsys_state *cgroup_tryget_css(struct cgroup *cgrp,
->>       |                                    ^~~~~~~~~~~~~~~~~
->>
->> Introduced by commit
->>
->>   1299eb2b0ad5 ("cgroup: minor cleanup for cgroup_extra_stat_show()")
-> 
-> Miaohe, can you send a patch to either add __maybe_unused to
-> cgroup_tryget_css() or also put it inside CONFIG_CGROUP_SCHED?
+Hi,
 
-Will do. Sorry for my mistake.
+Here are the 4th version of fix bugs in process_fetch_insn_*().
+The previous version is here;
 
-Thanks.
+https://lore.kernel.org/all/168878450334.2721251.3030778817503575503.stgit@mhiramat.roam.corp.google.com/
 
+[4/4] is updated to simplify the code with set_data_loc().
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (4):
+      tracing/probes: Fix to avoid double count of the string length on the array
+      tracing/probes: Fix not to count error code to total length
+      Revert "tracing: Add "(fault)" name injection to kernel probes"
+      tracing/probes: Fix to record 0-length data_loc in fetch_store_string*() if fails
+
+
+ kernel/trace/trace.h              |    2 ++
+ kernel/trace/trace_probe.c        |    2 +-
+ kernel/trace/trace_probe_kernel.h |   30 ++++++++----------------------
+ kernel/trace/trace_probe_tmpl.h   |   10 +++++-----
+ kernel/trace/trace_uprobe.c       |    3 ++-
+ 5 files changed, 18 insertions(+), 29 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
