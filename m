@@ -2,189 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F1B74E519
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 05:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABEB74E47B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 04:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjGKDFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 23:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S229659AbjGKCzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 22:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjGKDFA (ORCPT
+        with ESMTP id S229505AbjGKCzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 23:05:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4344410F6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jul 2023 20:03:46 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R0Qf11jyzzVhlh;
-        Tue, 11 Jul 2023 11:02:33 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 11 Jul
- 2023 11:03:43 +0800
-From:   Zhang Zekun <zhangzekun11@huawei.com>
-To:     <robin.murphy@arm.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-CC:     <guohanjun@huawei.com>, <xuqiang36@huawei.com>,
-        <chenweilong@huawei.com>, <thunder.leizhen@huawei.com>,
-        <zhangzekun11@huawei.com>
-Subject: [PATCH -next 2/2] iommu/iova: allocate iova_rcache->depot dynamicly
-Date:   Tue, 11 Jul 2023 10:54:52 +0800
-Message-ID: <20230711025452.35475-3-zhangzekun11@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230711025452.35475-1-zhangzekun11@huawei.com>
-References: <20230711025452.35475-1-zhangzekun11@huawei.com>
+        Mon, 10 Jul 2023 22:55:46 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB5210D;
+        Mon, 10 Jul 2023 19:55:45 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-262ef07be72so2462624a91.1;
+        Mon, 10 Jul 2023 19:55:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689044145; x=1691636145;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rz2Z9uqGBu5n7dLxdjRn3DUHrI1c1OAJnAS4Abt85fE=;
+        b=endMdthOppBOwx2i6IgP0RGFV4c4vlhf4/1XIHyi++9rZ9OurjbQsSmg/GdSnsUOqR
+         /J3B2sQEfKDE0vjZVofernbv7j7JdCiYc0rNrgxzN0GrrBoO4ePWFrhlI9CG/CRHfBqD
+         aoUf/fFNmUdkoWwpfRPW91OJt/ML9PjfDTC8PVR3gsBRUt/HNpgUyjrCr+vINjcpeaOf
+         2m7q6z+L2bpl8+qO0mAdv0fGRBZdtSv6T/wRTbZVCOZES72ow8KerSa2NU/m5CmRkYeb
+         95Nx0sneUXojQv+SmR6oIWZ3FZ4NjEZMF7Kj/rjETxLosbo7VJMArRt9sAzIDlETUpty
+         e9kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689044145; x=1691636145;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rz2Z9uqGBu5n7dLxdjRn3DUHrI1c1OAJnAS4Abt85fE=;
+        b=JUMaf0qK0NaUnuRr/rewMx+nqmwKi9fpLs+h62Pj3RE7izQNW8jjSFE5Q7gWlM4FyE
+         mEBT3drSHRrv3lQvOjy7n3ZJ/qfy0fvpssXyysRBxHV37saOK0jC59DguTfZJG3x4KgQ
+         8lN+oe3khGN2aJgXhIRt0MxQPrD7zVuipInu+JIB5zXm4HvOPTs1eU6qzISyksh6hMLA
+         sXOTHu2Z/MJQL4zfS+yHm8aLQfncnLAPN0sA8/FriP51FTUzNPd9kQIRjy0yHouS/Rtu
+         TAHVrrRhHgyaMiyCA0RI/0/QyH+ufo8rdEu5kSnA464WgS/aCqOsko7fBz9dRXIYPtd0
+         43tw==
+X-Gm-Message-State: ABy/qLYMPuMTrXVcyoInZbzIdQFUhIrvC13Qw5i9oRn197KausEp0D3I
+        jfa2yxf6ybSenbup5do6no4=
+X-Google-Smtp-Source: APBJJlGefJaLDQ/qu9dj4CMlypbzscGGz+zUgXdw8Kd4Fm3x1UinASvZDF+IPR97JY0klBG1CT/Ziw==
+X-Received: by 2002:a17:90a:2a87:b0:262:d029:69fc with SMTP id j7-20020a17090a2a8700b00262d02969fcmr11103174pjd.34.1689044144557;
+        Mon, 10 Jul 2023 19:55:44 -0700 (PDT)
+Received: from [10.22.68.146] ([122.11.166.8])
+        by smtp.gmail.com with ESMTPSA id qe4-20020a17090b4f8400b0025c2c398d33sm600736pjb.39.2023.07.10.19.55.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 19:55:44 -0700 (PDT)
+Message-ID: <115c6eac-ab28-7220-e1e4-5747bf641bbe@gmail.com>
+Date:   Tue, 11 Jul 2023 10:55:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500022.china.huawei.com (7.185.36.66)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: Introduce bpf user log
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+References: <20230708040750.72570-1-hffilwlqm@gmail.com>
+ <20230708040750.72570-3-hffilwlqm@gmail.com>
+ <CAADnVQK5RLqVhc9AxaCSuQxFRDAb8wohmUDNrYEViXLf5mEMNQ@mail.gmail.com>
+From:   Leon Hwang <hffilwlqm@gmail.com>
+In-Reply-To: <CAADnVQK5RLqVhc9AxaCSuQxFRDAb8wohmUDNrYEViXLf5mEMNQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In fio test with 4k,read,and allowed cpus to 0-255, we observe a performance
-decrease of IOPS. The normal IOPS can reach up to 1980k, but we can only
-get about 1600k.
 
-abormal IOPS:
-Jobs: 12 (f=12): [R(12)][99.3%][r=6220MiB/s][r=1592k IOPS][eta 00m:12s]
-Jobs: 12 (f=12): [R(12)][99.4%][r=6215MiB/s][r=1591k IOPS][eta 00m:11s]
-Jobs: 12 (f=12): [R(12)][99.4%][r=6335MiB/s][r=1622k IOPS][eta 00m:10s]
-Jobs: 12 (f=12): [R(12)][99.5%][r=6194MiB/s][r=1586k IOPS][eta 00m:09s]
-Jobs: 12 (f=12): [R(12)][99.6%][r=6173MiB/s][r=1580k IOPS][eta 00m:08s]
-Jobs: 12 (f=12): [R(12)][99.6%][r=5984MiB/s][r=1532k IOPS][eta 00m:07s]
-Jobs: 12 (f=12): [R(12)][99.7%][r=6374MiB/s][r=1632k IOPS][eta 00m:06s]
-Jobs: 12 (f=12): [R(12)][99.7%][r=6343MiB/s][r=1624k IOPS][eta 00m:05s]
 
-normal IOPS:
-Jobs: 12 (f=12): [R(12)][99.3%][r=7736MiB/s][r=1980k IOPS][eta 00m:12s]
-Jobs: 12 (f=12): [R(12)][99.4%][r=7744MiB/s][r=1982k IOPS][eta 00m:11s]
-Jobs: 12 (f=12): [R(12)][99.4%][r=7737MiB/s][r=1981k IOPS][eta 00m:10s]
-Jobs: 12 (f=12): [R(12)][99.5%][r=7735MiB/s][r=1980k IOPS][eta 00m:09s]
-Jobs: 12 (f=12): [R(12)][99.6%][r=7741MiB/s][r=1982k IOPS][eta 00m:08s]
-Jobs: 12 (f=12): [R(12)][99.6%][r=7740MiB/s][r=1982k IOPS][eta 00m:07s]
-Jobs: 12 (f=12): [R(12)][99.7%][r=7736MiB/s][r=1981k IOPS][eta 00m:06s]
-Jobs: 12 (f=12): [R(12)][99.7%][r=7736MiB/s][r=1980k IOPS][eta 00m:05s]
+On 11/7/23 07:45, Alexei Starovoitov wrote:
+> On Fri, Jul 7, 2023 at 9:08 PM Leon Hwang <hffilwlqm@gmail.com> wrote:
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 34fa334938ba5..8a458cfcd91bd 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -1549,7 +1549,6 @@ union bpf_attr {
+>>                 };
+>>                 __u32           attach_type;    /* attach type */
+>>                 __u32           flags;          /* extra flags */
+>> -               struct bpf_generic_user_log log; /* user log */
+>>                 union {
+>>                         __u32           target_btf_id;  /* btf_id of target to attach to */
+>>                         struct {
+>> @@ -1585,6 +1584,9 @@ union bpf_attr {
+>>                                 __s32           priority;
+>>                                 __u32           flags;
+>>                         } netfilter;
+>> +                       struct {
+>> +                               struct bpf_generic_user_log ulog; /* user log */
+>> +                       } xdp;
+> 
+> 1.
+> You cannot break api in patch 1 and fix it in patch 2.
+> 
+> 2.
+> libbpf side is missing.
+> 
+> 3.
+> selftest is missing.
+> 
+> 4.
+> bpf_vlog_finalize() should be used and error propagated back through
+> link_create.
+> Same api must be used: log_level, log_size, log_buf, log_true_size.
+> 
+> But considering all that I agree with Daniel Xu that
+> tracepoint would be better here.
 
-The current struct of iova_rcache will have iova_cpu_rcache for every
-cpu, and these iova_cpu_rcaches use a common buffer iova_rcache->depot to
-exchange iovas among iova_cpu_rcaches. A machine with 256 cpus will have
-256 iova_cpu_rcaches and 1 iova_rcache->depot per iova_domain. However,
-the max size of iova_rcache->depot is fixed to MAX_GLOBAL_MAGS which equals
-to 32, and can't grow with the number of cpus, and this can cause problem
-in some condition.
+Sorry for missing 2&3.
 
-Some drivers will only free iovas in their irq call back function. For
-the driver in this case it has 16 thread irqs to free iova, but these
-irq call back function will only free iovas on 16 certain cpus(cpu{0,16,
-32...,240}). Thread irq which smp affinity is 0-15, will only free iova on
-cpu 0. However, the driver will alloc iova on all cpus(cpu{0-255}), cpus
-without free iova in local cpu_rcache need to get free iovas from
-iova_rcache->depot. The current size of iova_rcache->depot max size is 32,
-and it seems to be too small for 256 users (16 cpus will put iovas to
-iova_rcache->depot and 240 cpus will try to get iova from it). Set
-iova_rcache->depot grow with the num of possible cpus, and the decrease
-of IOPS disappear.
+Tracepoint is considered. I'll change it from user log to a tracepoint.
 
-Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
----
- drivers/iommu/iova.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+I'll submit tracepoint patch with libbpf&selftest patches later.
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 3c784a28e9ed..df37a4501e98 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -238,6 +238,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
- 
- static struct kmem_cache *iova_cache;
- static unsigned int iova_cache_users;
-+static unsigned int max_global_mags;
- static DEFINE_MUTEX(iova_cache_mutex);
- 
- static struct iova *alloc_iova_mem(void)
-@@ -625,7 +626,6 @@ EXPORT_SYMBOL_GPL(reserve_iova);
-  * will be wasted.
-  */
- #define IOVA_MAG_SIZE 127
--#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
- 
- struct iova_magazine {
- 	unsigned long size;
-@@ -641,7 +641,7 @@ struct iova_cpu_rcache {
- struct iova_rcache {
- 	spinlock_t lock;
- 	unsigned long depot_size;
--	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
-+	struct iova_magazine **depot;
- 	struct iova_cpu_rcache __percpu *cpu_rcaches;
- };
- 
-@@ -722,6 +722,13 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
- 	unsigned int cpu;
- 	int i, ret;
- 
-+	/*
-+	 * the size of max global mags should growth with the num of
-+	 * cpus
-+	 */
-+	if (!max_global_mags)
-+		max_global_mags = max_t(unsigned int, 32, num_possible_cpus());
-+
- 	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
- 				 sizeof(struct iova_rcache),
- 				 GFP_KERNEL);
-@@ -733,6 +740,12 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
- 		struct iova_rcache *rcache;
- 
- 		rcache = &iovad->rcaches[i];
-+		rcache->depot = kcalloc(max_global_mags, sizeof(struct iova_magazine *),
-+					GFP_KERNEL);
-+		if (!rcache->depot) {
-+			ret = -ENOMEM;
-+			goto out_err;
-+		}
- 		spin_lock_init(&rcache->lock);
- 		rcache->depot_size = 0;
- 		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache),
-@@ -798,7 +811,7 @@ static bool __iova_rcache_insert(struct iova_domain *iovad,
- 
- 		if (new_mag) {
- 			spin_lock(&rcache->lock);
--			if (rcache->depot_size < MAX_GLOBAL_MAGS) {
-+			if (rcache->depot_size < max_global_mags) {
- 				rcache->depot[rcache->depot_size++] =
- 						cpu_rcache->loaded;
- 			} else {
-@@ -903,8 +916,12 @@ static void free_iova_rcaches(struct iova_domain *iovad)
- 
- 	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
- 		rcache = &iovad->rcaches[i];
--		if (!rcache->cpu_rcaches)
-+		if (!rcache->depot)
-+			break;
-+		if (!rcache->cpu_rcaches) {
-+			kfree(rcache->depot);
- 			break;
-+		}
- 		for_each_possible_cpu(cpu) {
- 			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
- 			if (!cpu_rcache->loaded)
-@@ -917,6 +934,7 @@ static void free_iova_rcaches(struct iova_domain *iovad)
- 		free_percpu(rcache->cpu_rcaches);
- 		for (j = 0; j < rcache->depot_size; ++j)
- 			iova_magazine_free(rcache->depot[j]);
-+		kfree(rcache->depot);
- 	}
- 
- 	kfree(iovad->rcaches);
--- 
-2.17.1
-
+Thanks,
+Leon
