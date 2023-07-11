@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC2C74EA6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2C474EA6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 11:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbjGKJ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 05:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S232291AbjGKJ1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 05:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbjGKJ0q (ORCPT
+        with ESMTP id S232008AbjGKJ0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:26:46 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1602129
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:23:44 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b703a0453fso85353531fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:23:44 -0700 (PDT)
+        Tue, 11 Jul 2023 05:26:54 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF1D1993
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:24:08 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9891c73e0fbso1090499566b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 02:24:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689067423; x=1691659423;
+        d=linaro.org; s=google; t=1689067447; x=1691659447;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1MkNJHgAPws0bFEItNw2cu5t/katEcSSsqCNfTNtIEE=;
-        b=rPk689IpJEdRwo5vg0MKZiajwgZvIvybtvGwpxdIZ1GMD2GASawYoWQS6anf+n0Tqk
-         srzTaR13yOzCtQbcTxp2uaQPaWIs7X2qfCxdmr+Kh5smHOOyzk7xPVf5q1X/M4E8lrvx
-         EDi0foQ7jTixvvogj5K2e4Wm/Wa0Fjx2FcM+pmOtTVXS5QW4bSFB6UfPMgj7LY2U4Csg
-         lMKoZD12MP28KkxzixXJjqrNC5CNJXjJO1lYxqMgbjs8Rm7azm0xTo15f3sGvYdM4qvG
-         G8nAtTM33X5qmqDtwxCHMiKDIgd5bEy7JkhgIrp4y+m0a3vaqDPaPX0kgAOmhKHxYzgf
-         x9Sw==
+        bh=9riTVmn98ravk1kf9VetpeEIooDv8EP6TYpPc0Gyq/4=;
+        b=ZcsYx2KMegNgL5H5mwoVc6+Eki+YDCems49LqDyCRR0tMyDBD1BPXMZUqw2Ymw9Wmo
+         T+2Ejoe2hdztpcifiEODCvxQ09KJt5tiL/EZN6KQRG5duEAenUBsxDQ3ebGfu+X//7T5
+         fBS+fx0Jc7hz4MHBZtk5cCOePyIXmzjNjQ2s8ue+8zCgODXo+8NbC4vN7imsk+1Yvxs4
+         t50rVJyeKd7cZuTGlyHQOsQa5RljNAlPsWDuwH69aB2E5bA2mB4ohcdDCxtvWhj+9VmI
+         JLVk6YbDWCyZF0u5GI7BL4csQ3R+TzI/lysj3H0VQjt9fx9ACPXsDR6on05dEJ9br0b7
+         VrUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689067423; x=1691659423;
+        d=1e100.net; s=20221208; t=1689067447; x=1691659447;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1MkNJHgAPws0bFEItNw2cu5t/katEcSSsqCNfTNtIEE=;
-        b=P+KehOiF8zwzT/3IKRBjEPoUBbxEjI4I3619lWGtIPz0RrbXlmNRc0A8B9BOG0ghNr
-         Dcwav6HJ7U8vGd85wkLYOKTDOmKneQi5O60L/8+jVxK+4vLVVJuTwRdpcK9Q2cujUhbF
-         74v2zBuD3ELUQ+N431/YhZp5ddzV649VM5p3M2G0wYoSsUbff+VV0YYobSkt/tLjL0mk
-         U/Sj6W1ZSD0GAmUJJQBPBcw/JwgAt12LilokqyT57NgPCNkjVA27vED6QwDq+05QdcuD
-         +KlKuneiXOCI5Q3TKwiKCAlgqjx11PdMXsIhpPtXYQQK302DdVfOMdzXQv0EQZPmx/sF
-         VrHA==
-X-Gm-Message-State: ABy/qLZWnB8IAnzRIW1QOX07bLRgwYaAMp3bXm1Hnqg/aQdZNlzbxc3m
-        98sVk/ZerHplASvPUD7RZHzyqA==
-X-Google-Smtp-Source: APBJJlEw0DUDhK6ZC4TBUn1VdXA3pu2AdrU9K8FfyIOILdrL8ywyOGztPZgY7gAvu3XjjDWhXjQaqQ==
-X-Received: by 2002:a2e:8748:0:b0:2b6:c2e4:a57a with SMTP id q8-20020a2e8748000000b002b6c2e4a57amr14619059ljj.38.1689067422839;
-        Tue, 11 Jul 2023 02:23:42 -0700 (PDT)
+        bh=9riTVmn98ravk1kf9VetpeEIooDv8EP6TYpPc0Gyq/4=;
+        b=KM9ME/XxaSYG7H6HY+qBIX0B5ZFIlH/wM7Ha8IZqrvIzY+t2kQEBZHBmXzwuVGXNI6
+         xx6/PXg1yg1xthKEQKGxYDjgSI8LIfRiz7kfWSebK9zWrVWx1Myk5xWUoerN+ZZ1r7wI
+         rSUQvaCdG53YEnr4gLyqM6ayBJxBZMsFSoESxXgC2uPhUw1pRHujwDT7/02u/0+EU9H4
+         WFe9ygfBSux4m2V5uLrMhYu+v/JgRS/I+E3VLmBVrlmDRE3oQjv852wrovXdmLKAK0j1
+         Ji1rKz5bMG12paENxI6jxTWKDwJly0uTv+dYcCZebmbPYuj47ITTSgJYFs7FqOR/SeUH
+         +wVA==
+X-Gm-Message-State: ABy/qLbGnmTRXZ6yPNT/OQVvE+Mme9yRbNXTd6G9XpAsZ6t4ZjhdV1Nq
+        dt8YSNH0qGorOx+g8PSHyzawYg==
+X-Google-Smtp-Source: APBJJlH5jtjZoXkkXP8uicWU3SQdnDzJsT/tWEkbXi9ejkkaQwBXJriutjz87Tps4ySHGtEHnSQt+g==
+X-Received: by 2002:a17:907:1b89:b0:988:15f4:fdba with SMTP id mz9-20020a1709071b8900b0098815f4fdbamr19505435ejc.14.1689067446981;
+        Tue, 11 Jul 2023 02:24:06 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id cw13-20020a170906c78d00b0098748422178sm898553ejb.56.2023.07.11.02.23.41
+        by smtp.gmail.com with ESMTPSA id p27-20020a170906141b00b00977eec7b7e8sm905603ejc.68.2023.07.11.02.24.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 02:23:42 -0700 (PDT)
-Message-ID: <8d52eaa7-0934-97fd-0288-9e8ed2f82bee@linaro.org>
-Date:   Tue, 11 Jul 2023 11:23:40 +0200
+        Tue, 11 Jul 2023 02:24:06 -0700 (PDT)
+Message-ID: <7e1332bc-0757-bbe8-e087-7a0e52d6b97b@linaro.org>
+Date:   Tue, 11 Jul 2023 11:24:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: ti,rti-wdt: Add support for
- WDIOF_CARDRESET
+Subject: Re: [PATCH v2 2/3] arm64: dts: ti: Add reserved memory for watchdog
 Content-Language: en-US
 To:     huaqian.li@siemens.com, wim@linux-watchdog.org, linux@roeck-us.net,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -67,9 +66,9 @@ Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
         linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
         baocheng.su@siemens.com
 References: <20230711091713.1113010-1-huaqian.li@siemens.com>
- <20230711091713.1113010-2-huaqian.li@siemens.com>
+ <20230711091713.1113010-3-huaqian.li@siemens.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230711091713.1113010-2-huaqian.li@siemens.com>
+In-Reply-To: <20230711091713.1113010-3-huaqian.li@siemens.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,56 +84,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 11/07/2023 11:17, huaqian.li@siemens.com wrote:
 > From: Li Hua Qian <huaqian.li@siemens.com>
 > 
-> TI RTI (Real Time Interrupt) Watchdog doesn't support to record the
-> watchdog cause. Add a reserved memory to know the last reboot was caused
-> by the watchdog card. In the reserved memory, some specific info will be
-> saved to indicate whether the watchdog reset was triggered in last
-> boot.
+> This patch adds a reserved memory for the TI AM65X platform watchdog to
+> reserve the specific info, triggering the watchdog reset in last boot,
+> to know if the board reboot is due to a watchdog reset.
 > 
 > Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
 > ---
-
-Missing changelog.
-
->  .../devicetree/bindings/watchdog/ti,rti-wdt.yaml    | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> index fc553211e42d..f227db08dc70 100644
-> --- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> @@ -26,7 +26,18 @@ properties:
->        - ti,j7-rti-wdt
+> diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> index e26bd988e522..77380e52a334 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> @@ -63,6 +63,12 @@ rtos_ipc_memory_region: ipc-memories@a2000000 {
+>  			alignment = <0x1000>;
+>  			no-map;
+>  		};
+> +
+> +		/* To reserve the power-on(PON) reason for watchdog reset */
+> +		wdt_reset_memory_region: wdt-memory@a2200000 {
+> +			reg = <0x00 0xa2200000 0x00 0x00001000>;
+> +			no-map;
+> +		};
+>  	};
 >  
->    reg:
-> -    maxItems: 1
-> +    maxItems: 2
+>  	leds {
+> @@ -718,3 +724,8 @@ &mcu_r5fss0_core1 {
+>  			<&mcu_r5fss0_core1_memory_region>;
+>  	mboxes = <&mailbox0_cluster1>, <&mbox_mcu_r5fss0_core1>;
+>  };
+> +
+> +&mcu_rti1 {
+> +	reg = <0x0 0x40610000 0x0 0x100>,
+> +	      <0x0 0xa2200000 0x0 0x1000>;
 
-The expected syntax is in such case:
-  items:
-    - description: ...
-    - description: ...
+That's a total mess. reserved memory and IO address space. Nope.
 
-You will find plenty of examples for this.
 
-> +      description:
-> +	- Contains the address and the size of MCU RTI register.
-> +	- Contains the address and the size of reserved memory, which
-
-I don't think Conor suggested using reg of the device, but reg of
-reserved memory. This is not device address space, but just some random
-memory.
-
-memory-region seems proper to me. We were just discussing totally
-useless new property of size.
-
-What's more - you did not test it... so usual template:
-
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
 
 Best regards,
 Krzysztof
