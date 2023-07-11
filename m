@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA8174EE7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AB974EE85
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbjGKMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S232057AbjGKMVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbjGKMVH (ORCPT
+        with ESMTP id S230305AbjGKMVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:21:07 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F5A10FD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:19:58 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso9040843e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:19:58 -0700 (PDT)
+        Tue, 11 Jul 2023 08:21:08 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C3219BA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:20:01 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b701e41cd3so92160741fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 05:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689077953; x=1691669953;
+        d=linaro.org; s=google; t=1689077954; x=1691669954;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fUYkKYV4ujMuk/ZAzUO3GhIfjlSDACYKMYMpvbHOS0o=;
-        b=OgunhkVOF31gy38IhMYvZho9KhSZ47S9iBORV+B36TBHEI1JAGoOya2CnSx0xvAq5v
-         liYYiSZKkzTxHN0eE1ZHZN8GnyINqoW4vX9CzMfKqC0hymDNkSlYMuuikfxmmc7P/9/7
-         QnYrYgoJYopuQIMsxEfvJ9kVIrNI0I+g4ADspVcr0fibplX7pI1EzGfRHHMgQ6Np0IHL
-         yDbYoAPrLD0IkK/WKk8gep9brzNYyxwTw+8+AuldU48HIUA9tUlOECSDy4iFX7z/fabW
-         wyBC95Ln+K65PUff0VbhhPeTvbTFVNiXgUcujfvrW4UsdN2Qh5whMTACusaKtp54t7FN
-         uAqQ==
+        bh=3pF+62BSgddTAPKCaWz/3Ipd5EEzHkODMPLMBcdfC3I=;
+        b=QQ6AVn8GkrhIPnn/Y25w2TGlQrJrTSjFw41oH5TzJ4FrG9nVw8HqxfVHy8BTdGBLp2
+         sk8n1svoqhyPqEMcJGZyQ/H4/XNUFgdbhh3HmBpYWNbPmQdeFnnc7ULooJ5MT44745v7
+         CPNoa7axo7RE5VaQh8RxWhNzuE+aTpdXXk0vR8p6PlA0ZC9PKHjyMYX18vHXH7kqe/cR
+         bVXUneJq2tb8f5uOlSFKS168MfuPXfKDXP+LS/0wMY2D8C6sejbZYOgYYYzfxX/LdyOy
+         eQQEx+M07uBSxv1yPjcuQWpjrdR9NMd90RKi65DszrCdtdI0kck5RSpxT1oqpO+jJuEk
+         zPQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689077953; x=1691669953;
+        d=1e100.net; s=20221208; t=1689077954; x=1691669954;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fUYkKYV4ujMuk/ZAzUO3GhIfjlSDACYKMYMpvbHOS0o=;
-        b=hLvsR//0oQfrWlsmZ+ssYjWnVxBGP49BI/99cHZUdqh5dwKe8XMY6qNAdgPnlwOeLV
-         lXQnMh8JvPeaQKGTtCBSOGEvJd3Zx0/73akZB2MrouaUPfvdl+KAkLaYWNQ/QHmVNbzz
-         +M4biW8pxaqc93km3fXU4jnb0bfKllXvO+ggcxRaRC0L8c/SOZEi9WR4BTYMww2C4+ER
-         avWMDE8Tox9y8bliIgGg83/qj2Cu0LPNRvu48QyBjQpIPExhDns/i7GM2vYmUwLveU2f
-         oTmaiduJc99225JTOlgrGByW7S6LF6rqryKVmET76nhDIFyVVtn5pIdnh61hqMNceR2W
-         VdBQ==
-X-Gm-Message-State: ABy/qLadcdTx3pvz3/4K46gig9Zcu3N6IHdxBC+DaaygxViKMcAyx5WI
-        3bZF1EjU2HuOrKB984JJfngzvQ==
-X-Google-Smtp-Source: APBJJlFPUmyPSwMDVSzJWoSM+iefcHajI+de62524A0AkTML6/JzXuMpkaVh+NTJM4H+MO9OfFHL7w==
-X-Received: by 2002:a2e:8210:0:b0:2b6:dec9:2813 with SMTP id w16-20020a2e8210000000b002b6dec92813mr12673229ljg.29.1689077953345;
-        Tue, 11 Jul 2023 05:19:13 -0700 (PDT)
+        bh=3pF+62BSgddTAPKCaWz/3Ipd5EEzHkODMPLMBcdfC3I=;
+        b=YsKZ5gDO9b/P9i/6qru5BPIKN7SDEHT63OlPxiTTmjmWZ068jL+biW/S+vj1d6LVJu
+         mNIKaaFq84kCksX1c3h+dyjNCQjnjwipZQSl5ZLH/SLYNv6/X8Cx74ewQXplMgs+DwvZ
+         Me5MrqWFwQdlS+KUOT8+0ggXBhRDoDXptkjsweye9iaLbrFnzIMRps7eT6yiUp6p8yAp
+         Au4K+ufIeVNEEGQL04zUFhUTt+g0kCwjgEvjHqT0Fh1KgQzX6Z3qLfIbpPWisteYRGHL
+         wEzcq1yrJ/GNH0/SavgXCWGiSx1+5onPG99NKqwHxygt9Iczi+ufYijiNyYWqwI0L+8q
+         hNjA==
+X-Gm-Message-State: ABy/qLZRqHPava3pJ8igtoRef0zQdv+mhJcTkkzP2LjuKBHf7v/50itm
+        nKjQbuQOUFWT08NmZUnTinjocA==
+X-Google-Smtp-Source: APBJJlEOmCRxgEtcuv4MoDu09F3K6BxvXNh08C+sZ++tsAMXi1rnHdDQ08daifSH/QIk0TMHxBeiwg==
+X-Received: by 2002:a2e:8085:0:b0:2b6:d9b0:875d with SMTP id i5-20020a2e8085000000b002b6d9b0875dmr13300282ljg.34.1689077954579;
+        Tue, 11 Jul 2023 05:19:14 -0700 (PDT)
 Received: from [192.168.1.101] (abyl96.neoplus.adsl.tpnet.pl. [83.9.31.96])
-        by smtp.gmail.com with ESMTPSA id d18-20020a2e96d2000000b002b708450951sm435563ljj.88.2023.07.11.05.19.12
+        by smtp.gmail.com with ESMTPSA id d18-20020a2e96d2000000b002b708450951sm435563ljj.88.2023.07.11.05.19.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 05:19:13 -0700 (PDT)
+        Tue, 11 Jul 2023 05:19:14 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 11 Jul 2023 14:18:34 +0200
-Subject: [PATCH 35/53] arm64: dts: qcom: sc7180: add qcom,bcm-voter-idx
+Date:   Tue, 11 Jul 2023 14:18:35 +0200
+Subject: [PATCH 36/53] arm64: dts: qcom: sc7280: add qcom,bcm-voter-idx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230708-topic-rpmh_icc_rsc-v1-35-b223bd2ac8dd@linaro.org>
+Message-Id: <20230708-topic-rpmh_icc_rsc-v1-36-b223bd2ac8dd@linaro.org>
 References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
 In-Reply-To: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -71,11 +71,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689077904; l=644;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689077904; l=1025;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=xdrbax/ndnKE1dzVNPWI8e+2pkkV5TGwm4Tup9sPjbw=;
- b=ULJhbO/N8xan2DF4ZAbAkoTD8jZOS6LFAS8q/YqNYtwsRloh0iYcbUBoTNfPR7QB3ush0REIq
- 9YjPh6F2yYjATxZuvg5kiiV3rlOj8Y9dltoQtB+QSLrRjusYdbPNHcU
+ bh=nytm9EolJCU+y++LKFvuDAt/1VSGVvY9ubKWLH3kdjQ=;
+ b=MXIbUp80VLgVzHgAsczbdl+x2lP+g4cVPrIPNIvPVACY8QAdMnLDpC+0PiIwuQ9UpX4LYTGEF
+ j+ER9dzS1+7CkKnv6yiBlm4fqAn81IIWTPxCW61QjC8EHSbst3oJToZ
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,21 +92,29 @@ To improve the representation and ease handling, identify each BCM voter
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 179544ba12db..cf12f358fabb 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -3653,6 +3653,7 @@ rpmhpd_opp_turbo_l1: opp11 {
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 925428a5f6ae..a45d9e12eb97 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -14,6 +14,7 @@
+ #include <dt-bindings/clock/qcom,videocc-sc7280.h>
+ #include <dt-bindings/dma/qcom-gpi.h>
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interconnect/qcom,icc.h>
+ #include <dt-bindings/interconnect/qcom,osm-l3.h>
+ #include <dt-bindings/interconnect/qcom,sc7280.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+@@ -5294,6 +5295,7 @@ apps_rsc: rsc@18200000 {
  
  			apps_bcm_voter: bcm-voter {
  				compatible = "qcom,bcm-voter";
 +				qcom,bcm-voter-idx = <ICC_BCM_VOTER_APPS>;
  			};
- 		};
  
+ 			rpmhpd: power-controller {
 
 -- 
 2.41.0
