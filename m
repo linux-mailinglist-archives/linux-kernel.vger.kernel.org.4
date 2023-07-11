@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B670C74F4F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449A674F4F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 18:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjGKQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 12:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S233064AbjGKQUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 12:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjGKQTC (ORCPT
+        with ESMTP id S231458AbjGKQUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 12:19:02 -0400
+        Tue, 11 Jul 2023 12:20:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77701704;
-        Tue, 11 Jul 2023 09:18:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9722704;
+        Tue, 11 Jul 2023 09:19:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A8361562;
-        Tue, 11 Jul 2023 16:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C07EC433C7;
-        Tue, 11 Jul 2023 16:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689092303;
-        bh=H+sDqiglxa90HZqqkinNdJS6RR3oeOZptSHzXAiYaZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q/EJAHvkvCxH8K3zYpmHJQibelUtbSaI98TdbDGqhH0TceqglP/VbxVUZxGfOvCRS
-         lLtMTktx+DIua0+RKTc4QURukV1qEf347LJQPsv6l8UBoXo1TjIsi24EPa8whzPi+J
-         sH3j/4+r0zKJFLWILteYzrjRrQgdMFfFN+GEMf6oVo53j/X/ji09rICHxKeAj0V34a
-         ehnszcIbj5MH3memsgJJIe2r6Ovi9NygE228y5eDCy1Ovgz891GeOd7r63g9lQOfQL
-         STiwBDlXbP/E00HdxpKefh0Lc+m0jt9FmCprCm/lJKkzMYRmawZBaWQAbjZK3ujVVr
-         yheVm2XGdy/EA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BEBCA40516; Tue, 11 Jul 2023 13:18:20 -0300 (-03)
-Date:   Tue, 11 Jul 2023 13:18:20 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        jolsa@kernel.org, rostedt@goodmis.org, svens@linux.ibm.com,
-        gor@linux.ibm.com, sumanthk@linux.ibm.com, hca@linux.ibm.com
-Subject: Re: [PATCH v2] perf/build: fix broken dependency check for libtracefs
-Message-ID: <ZK2AzMwrsLVPMnuq@kernel.org>
-References: <20230711135338.397473-1-tmricht@linux.ibm.com>
- <ZK2AISIWZX5GlOZv@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60F0461556;
+        Tue, 11 Jul 2023 16:19:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53FADC433C7;
+        Tue, 11 Jul 2023 16:19:12 +0000 (UTC)
+Date:   Tue, 11 Jul 2023 12:19:10 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 4/5] Revert "tracing: Add "(fault)" name injection to
+ kernel probes"
+Message-ID: <20230711121910.1ac49973@gandalf.local.home>
+In-Reply-To: <168908495772.123124.1250788051922100079.stgit@devnote2>
+References: <168908491977.123124.16583481716284477889.stgit@devnote2>
+        <168908495772.123124.1250788051922100079.stgit@devnote2>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZK2AISIWZX5GlOZv@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jul 11, 2023 at 01:15:29PM -0300, Arnaldo Carvalho de Melo escreveu:
- 
-> Applied to perf-tools, for v6.5.
+On Tue, 11 Jul 2023 23:15:57 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-I also changed the subject line to add that this was caused by a change
-in the external library, it is reading like this in my local repo:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> This reverts commit 2e9906f84fc7c99388bb7123ade167250d50f1c0.
+> 
+> It was turned out that commit 2e9906f84fc7 ("tracing: Add "(fault)"
+> name injection to kernel probes") did not work correctly and probe
+> events still show just '(fault)' (instead of '"(fault)"'). Also,
+> current '(fault)' is more explicit that it faulted.
+> 
+> This also moves FAULT_STRING macro to trace.h so that synthetic
+> event can keep using it, and uses it in trace_probe.c too.
+> 
+> Link: https://lore.kernel.org/all/20230706230642.3793a593@rorschach.local.home/
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Tom Zanussi <zanussi@kernel.org>
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
 
-  perf build: Fix broken feature check for libtracefs due to external lib changes
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-- Arnaldo
+-- Steve
