@@ -2,91 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B1874E311
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2283A74E32B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 03:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjGKBNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jul 2023 21:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S231562AbjGKBPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jul 2023 21:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGKBNw (ORCPT
+        with ESMTP id S231361AbjGKBPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jul 2023 21:13:52 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D2AC995;
-        Mon, 10 Jul 2023 18:13:50 -0700 (PDT)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id EFE6C602AC886;
-        Tue, 11 Jul 2023 09:13:31 +0800 (CST)
-Message-ID: <5ed0fff8-52dd-4059-797b-4275d54ae86b@nfschina.com>
-Date:   Tue, 11 Jul 2023 09:13:31 +0800
+        Mon, 10 Jul 2023 21:15:21 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91106E6F;
+        Mon, 10 Jul 2023 18:14:45 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6689430d803so2674357b3a.0;
+        Mon, 10 Jul 2023 18:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689038084; x=1691630084;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+tYps2k7FntAJcDgxrMW3BMcrEpXH1yKukKcIVwMfEs=;
+        b=LQ5hYeAYtfLNdodZiytb8PmLv/7pqQYriIk9XN9F0YoCZOBRtpBG6s5q7rHnDTJHkK
+         +1GzxaM82IuCps5Bi3JbhDdo5DAWdOwQwj98wtDOxA+k0EIX5SsTpE0IuRwe8Ar1Mwmi
+         vpDfUbqdEEPVMxx+4KYrvSe45OY3KeKGJtcoHwTLoBaoQxjtBCNibkZ34Vky7o3aGXV0
+         qCSwnjx8biI7SXKgDTkWbjfgZZMKLgwDvCBB8EZkj0fOUj+cPWhI185p+ZmVfYUkI46y
+         4c+OAf58QQcy/vm/Id5ZU7a6/JM6v+KFvm3+NqjPrGuJ2jCG7W4Iboj7C5TSAacE2xjv
+         P/ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689038084; x=1691630084;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+tYps2k7FntAJcDgxrMW3BMcrEpXH1yKukKcIVwMfEs=;
+        b=VwtIT2FGZZCRyDVCx6zAK44TilKzkviz0Wzb10MP28b0yH0+L6vGe0FE+MLtMZsbE5
+         wEdoBcv/474RZFIL9D36ypIvleE3cns7GAZUuhKxkZl6Zi1K7WEWoDE3msKRHEkeTmP2
+         Ay4WiuNi4tnIrmrOxKm7Ru0/CbIAiDFF00de7fnZjkK2NEc2Vk962JQCJ1IRr1PZ8IMG
+         ENDQx62DG/j/lz0DmH19mbn41QBhe1bBoJ4XAkl6QFnWMWj2Yxdwpxfjoa1Q8XMjR1nB
+         um7Him3KJLceezzE6iHSmSD2OIIIisSOsL9r3VzE//aYzwVIpK1mvulyk9jJE676ucAl
+         7+iA==
+X-Gm-Message-State: ABy/qLb/C9bEWqvFU4hG31BL9TZLXWuSFL5Ej7s6tXYTLTumkrRaf+Ag
+        THcDsqW8Ws4nHEg5qMKxy5I=
+X-Google-Smtp-Source: APBJJlGPpL1xYZMLJSDkm+Qf23ZwEKCLUeqIjjpQcx4LazmwAoEtMWqUJipDcuAUrkgK3bByPkAvqg==
+X-Received: by 2002:a05:6a00:80f:b0:67f:e74a:d309 with SMTP id m15-20020a056a00080f00b0067fe74ad309mr14388426pfk.30.1689038084289;
+        Mon, 10 Jul 2023 18:14:44 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id m16-20020aa79010000000b006579b062d5dsm421669pfo.21.2023.07.10.18.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 18:14:43 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com, Tejun Heo <tj@kernel.org>
+Subject: [PATCH 14/34] sched_ext: Add sysrq-S which disables the BPF scheduler
+Date:   Mon, 10 Jul 2023 15:13:32 -1000
+Message-ID: <20230711011412.100319-15-tj@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230711011412.100319-1-tj@kernel.org>
+References: <20230711011412.100319-1-tj@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v2 01/10] net: wan: Remove unnecessary (void*)
- conversions
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     qiang.zhao@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@linaro.org>
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <23e98085-8f07-4ee2-8487-8e3b439b69f4@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/11 00:34, Andrew Lunn wrote:
-> On Mon, Jul 10, 2023 at 02:39:33PM +0800, Su Hui wrote:
->> From: wuych <yunchuan@nfschina.com>
->>
->> Pointer variables of void * type do not require type cast.
->>
->> Signed-off-by: wuych <yunchuan@nfschina.com>
->> ---
->>   drivers/net/wan/fsl_ucc_hdlc.c | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/net/wan/fsl_ucc_hdlc.c b/drivers/net/wan/fsl_ucc_hdlc.c
->> index 47c2ad7a3e42..73c73d8f4bb2 100644
->> --- a/drivers/net/wan/fsl_ucc_hdlc.c
->> +++ b/drivers/net/wan/fsl_ucc_hdlc.c
->> @@ -350,11 +350,11 @@ static int uhdlc_init(struct ucc_hdlc_private *priv)
->>   static netdev_tx_t ucc_hdlc_tx(struct sk_buff *skb, struct net_device *dev)
->>   {
->>   	hdlc_device *hdlc = dev_to_hdlc(dev);
->> -	struct ucc_hdlc_private *priv = (struct ucc_hdlc_private *)hdlc->priv;
->> -	struct qe_bd *bd;
->> -	u16 bd_status;
->> +	struct ucc_hdlc_private *priv = hdlc->priv;
->>   	unsigned long flags;
->>   	__be16 *proto_head;
->> +	struct qe_bd *bd;
->> +	u16 bd_status;
-> When dealing with existing broken reverse Christmas tree, please don't
-> make it worse with a change. But actually fixing it should be in a
-> different patch.
->
-> We want patches to be obviously correct. By removing the cast and
-> moving variables around, it is less obvious it is correct, than having
-> two patches.
-Got it, thanks.
-I will resend the v3 later  which remove the change of reverse Christmas 
-tree.
-So sorry for this!
+This enables the admin to abort the BPF scheduler and revert to CFS anytime.
 
-Wu Yunchuan
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
+---
+ drivers/tty/sysrq.c         |  1 +
+ include/linux/sched/ext.h   |  1 +
+ kernel/sched/build_policy.c |  1 +
+ kernel/sched/ext.c          | 20 ++++++++++++++++++++
+ 4 files changed, 23 insertions(+)
 
->
->         Andrew
+diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+index b6e70c5cfa17..ddfcdb6aecd7 100644
+--- a/drivers/tty/sysrq.c
++++ b/drivers/tty/sysrq.c
+@@ -520,6 +520,7 @@ static const struct sysrq_key_op *sysrq_key_table[62] = {
+ 	NULL,				/* P */
+ 	NULL,				/* Q */
+ 	NULL,				/* R */
++	/* S: May be registered by sched_ext for resetting */
+ 	NULL,				/* S */
+ 	NULL,				/* T */
+ 	NULL,				/* U */
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index 92011a63cc15..2f24642bbf2e 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -55,6 +55,7 @@ enum scx_exit_type {
+ 	SCX_EXIT_DONE,
+ 
+ 	SCX_EXIT_UNREG = 64,	/* BPF unregistration */
++	SCX_EXIT_SYSRQ,		/* requested by 'S' sysrq */
+ 
+ 	SCX_EXIT_ERROR = 1024,	/* runtime error, error msg contains details */
+ 	SCX_EXIT_ERROR_BPF,	/* ERROR but triggered through scx_bpf_error() */
+diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
+index 4c658b21f603..005025f55bea 100644
+--- a/kernel/sched/build_policy.c
++++ b/kernel/sched/build_policy.c
+@@ -28,6 +28,7 @@
+ #include <linux/suspend.h>
+ #include <linux/tsacct_kern.h>
+ #include <linux/vtime.h>
++#include <linux/sysrq.h>
+ #include <linux/percpu-rwsem.h>
+ 
+ #include <uapi/linux/sched/types.h>
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 51d77459d208..f33df61c24cb 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -1971,6 +1971,9 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
+ 	case SCX_EXIT_UNREG:
+ 		reason = "BPF scheduler unregistered";
+ 		break;
++	case SCX_EXIT_SYSRQ:
++		reason = "disabled by sysrq-S";
++		break;
+ 	case SCX_EXIT_ERROR:
+ 		reason = "runtime error";
+ 		break;
+@@ -2593,6 +2596,21 @@ struct bpf_struct_ops bpf_sched_ext_ops = {
+ 	.name = "sched_ext_ops",
+ };
+ 
++static void sysrq_handle_sched_ext_reset(int key)
++{
++	if (scx_ops_helper)
++		scx_ops_disable(SCX_EXIT_SYSRQ);
++	else
++		pr_info("sched_ext: BPF scheduler not yet used\n");
++}
++
++static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
++	.handler	= sysrq_handle_sched_ext_reset,
++	.help_msg	= "reset-sched-ext(S)",
++	.action_msg	= "Disable sched_ext and revert all tasks to CFS",
++	.enable_mask	= SYSRQ_ENABLE_RTNICE,
++};
++
+ void __init init_sched_ext_class(void)
+ {
+ 	int cpu;
+@@ -2616,6 +2634,8 @@ void __init init_sched_ext_class(void)
+ 
+ 		init_dsq(&rq->scx.local_dsq, SCX_DSQ_LOCAL);
+ 	}
++
++	register_sysrq_key('S', &sysrq_sched_ext_reset_op);
+ }
+ 
+ 
+-- 
+2.41.0
+
