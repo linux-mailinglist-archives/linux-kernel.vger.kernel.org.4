@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D3274F931
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC9F74F933
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 22:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjGKUjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 16:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S229884AbjGKUoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 16:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjGKUjU (ORCPT
+        with ESMTP id S229521AbjGKUn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:39:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01771AE;
-        Tue, 11 Jul 2023 13:39:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E69615D4;
-        Tue, 11 Jul 2023 20:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C0FC433C8;
-        Tue, 11 Jul 2023 20:39:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689107957;
-        bh=IUkMami0q8XF0yGB572r+2o8IYCDeaMrkBy4BDhJ9Ag=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gLHjwzndBZxh0m1Nwmqy8nrX9bXH8Vnv5+ZxrOfGDXN7jd40Msiv1J1bZGLXIH5z2
-         oJus6+FV8hP/WWNUuLuXoDk6kzGjM/xqn2z5cs0lsl0vJoXcsLz6mxPfoPzzyXOJk2
-         ORK7ZgszHiFGEYqHl5+9he/2D0jMNPJYBIXp5AuznXtKSF5+HOhzHJhAbxtRHoVsWv
-         QLF/dB+6GNTaQCV8o+aXrkly/dblANoUCP5yjOBckkEnDQh7KBZVIma1e2/6qhRLSB
-         INnioJnYNn4NmBgc4I1Wl8idrPvVBzvQ44p1B7prACsfxGgObO+QDbc+AaVYi/PQP3
-         aNkSejK68rzag==
-Date:   Tue, 11 Jul 2023 13:39:15 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     David Ahern <dsahern@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230711133915.03482fdc@kernel.org>
-In-Reply-To: <CAHS8izNHkLF0OowU=p=mSNZss700HKAzv1Oxqu2bvvfX_HxttA@mail.gmail.com>
-References: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
-        <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
-        <ZKNA9Pkg2vMJjHds@ziepe.ca>
-        <CAHS8izNB0qNaU8OTcwDYmeVPtCrEjTTOhwCHtVsLiyhXmPLsXQ@mail.gmail.com>
-        <ZKxDZfVAbVHgNgIM@ziepe.ca>
-        <CAHS8izO3h3yh=CLJgzhLwCVM4SLgf64nnmBtGrXs=vxuJQHnMQ@mail.gmail.com>
-        <ZKyZBbKEpmkFkpWV@ziepe.ca>
-        <20230711042708.GA18658@lst.de>
-        <20230710215906.49514550@kernel.org>
-        <20230711050445.GA19323@lst.de>
-        <ZK1FbjG+VP/zxfO1@ziepe.ca>
-        <20230711090047.37d7fe06@kernel.org>
-        <04187826-8dad-d17b-2469-2837bafd3cd5@kernel.org>
-        <20230711093224.1bf30ed5@kernel.org>
-        <CAHS8izNHkLF0OowU=p=mSNZss700HKAzv1Oxqu2bvvfX_HxttA@mail.gmail.com>
+        Tue, 11 Jul 2023 16:43:59 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A43195
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:43:59 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-682ae5d4184so1334049b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 13:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689108238; x=1691700238;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MjESMioTk0k963l+dIJZ6fHN9PlUT4kb3GUAAzx+6ok=;
+        b=lIvIGhlLp7xDZ3mlK6uVQ5LC/2MBJlp4mO63BiMRZ2Oq4WrMmWrZGiXfaMBnXYxAwp
+         qJuwXJCt58ZHsXkmYQOYmYu64jWejHPc+eHjrMmNC/6WnZBOd8icpbZnuRs79/dlQ92t
+         80B57VDMSwqyiOR7+aKoiNIKyr/8puY9XJ4bvs4ORpdjMHUYJ+Ro+MPxVe5rB9VVrDmx
+         3v2P3e9cxvjizOKAFhuGsPhsSoN+INImmxuQx5ksmR+lNFshWozIrVaVu6ae0LkPfYLi
+         Maz3Y2fwIkmnWz/criwg3WFvaMBunj8S4Z/FK7LOIOG/xHgwk8o4yyixG+jggDd3Zglv
+         x0/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689108239; x=1691700239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MjESMioTk0k963l+dIJZ6fHN9PlUT4kb3GUAAzx+6ok=;
+        b=ix4yF6s+MJqvl0r9mn2b0ghpRLzUitsVtWpwFUn2Vo74fdgjl+IdrMsOZsbVlCIzPD
+         oE2EJEtAUse+vr71AnW/yaV/ysj0C3+lNyDY9RJBrzzqA12yYnBmbskY/u4bsHnqOxdK
+         656cshmpgspRtrMx3t3NOqSazFKfJflKpxMj7trycOjyTEDVQb6m29KW9t07ZSjW+7W0
+         G99i+JtFogJrkhmr02/UGZ0N4G0gnXDf5XjyweR1fX4QbKY42FDUG8tnvrffopNN0FMt
+         7Z1gwBPbGwDVZw371gtsLAs5MzrcKHowMHBIJvzZGEkItdSgpLEWir7OWj9EgOYnEbFA
+         N+Rw==
+X-Gm-Message-State: ABy/qLbluJcXO0fDioiYygegqDjUMBdaNBPRA6JXrhqAQTqqVMeIXpT/
+        QwGJDWPA/LSScmP+Ps7lncsHKA==
+X-Google-Smtp-Source: APBJJlEtMP2E5bwfi5e13FjrN+dMiCc1084WVvCVnaPerCJ3mBn3ukG2cp01ykd4JNTkYx0JGAkpkg==
+X-Received: by 2002:a05:6a00:3a2a:b0:675:8521:ddc7 with SMTP id fj42-20020a056a003a2a00b006758521ddc7mr19669642pfb.0.1689108238650;
+        Tue, 11 Jul 2023 13:43:58 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id f7-20020aa78b07000000b00640ddad2e0dsm2124461pfd.47.2023.07.11.13.43.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 13:43:58 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     brauner@kernel.org, arnd@arndb.de
+Subject: [PATCHSET 0/5] Add io_uring support for waitid
+Date:   Tue, 11 Jul 2023 14:43:47 -0600
+Message-Id: <20230711204352.214086-1-axboe@kernel.dk>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jul 2023 10:06:28 -0700 Mina Almasry wrote:
-> > > Any reason not to allow an alternative representation for skb frags than
-> > > struct page?  
-> >
-> > I don't think there's a hard technical reason. We can make it work.  
-> 
-> I also think we can switch the representation for skb frags to
-> something else. However - please do correct me if I'm wrong - I don't
-> think that is sufficient for device memory TCP. My understanding is
-> that we also need to modify any NIC drivers that want to use device
-> memory TCP to understand a new memory type, and the page pool as well
-> if that's involved. I think in particular modifying the memory type in
-> all the NIC drivers that want to do device memory TCP is difficult. Do
-> you think this is feasible?
+Hi,
 
-That's why I was thinking about adding an abstraction between 
-the page pool and the driver. Instead of feeding driver pages
-a new abstraction could feed the driver just an identifier and a PA.
+This adds support for IORING_OP_WAITID, which is an async variant of
+the waitid(2) syscall. Rather than have a parent need to block waiting
+on a child task state change, it can now simply get an async notication
+when the requested state change has occured.
 
-Whether we want to support fragmentation in that model or not would 
-have to be decided.
+Patches 1..4 are purely prep patches, and should not have functional
+changes. They split out parts of do_wait() into __do_wait(), so that
+the prepare-to-wait and sleep parts are contained within do_wait().
 
-We can take pages from the page pool and feed them to drivers via
-such an API, but drivers need to stop expecting pages.
+Patch 5 adds io_uring support.
 
-That's for data buffers only, obviously. We can keep using pages 
-and raw page pool for headers.
+I wrote a few basic tests for this, which can be found in the
+'waitid' branch of liburing:
+
+https://git.kernel.dk/cgit/liburing/log/?h=waitid
+
+ include/linux/io_uring_types.h |   2 +
+ include/uapi/linux/io_uring.h  |   2 +
+ io_uring/Makefile              |   2 +-
+ io_uring/cancel.c              |   5 +
+ io_uring/io_uring.c            |   3 +
+ io_uring/opdef.c               |   9 ++
+ io_uring/waitid.c              | 271 +++++++++++++++++++++++++++++++++
+ io_uring/waitid.h              |  15 ++
+ kernel/exit.c                  | 132 +++++++++-------
+ kernel/exit.h                  |  30 ++++
+ 10 files changed, 411 insertions(+), 60 deletions(-)
+
+The code can also be found here:
+
+https://git.kernel.dk/cgit/linux/log/?h=io_uring-waitid
+
+-- 
+Jens Axboe
+
+
