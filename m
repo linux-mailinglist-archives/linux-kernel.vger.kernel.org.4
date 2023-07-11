@@ -2,108 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3625774ED81
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E73574ED84
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 14:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjGKMBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 08:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S231444AbjGKMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 08:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjGKMBj (ORCPT
+        with ESMTP id S231436AbjGKMB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:01:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FA4E77;
-        Tue, 11 Jul 2023 05:01:37 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-213-212.ewe-ip-backbone.de [91.248.213.212])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BE4E6607007;
-        Tue, 11 Jul 2023 13:01:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689076895;
-        bh=VpEG3ri1MmPk1vvBqKyVzFd1wmdbrZrML5Y0FqY4wUg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HQDJgxlTR8vo1RaEsB3D+nH2+IRG9QN4tbrCrAaA85UTPwMmgGSzMeLBmp8bq8Ej6
-         pgwZP23sqCYBHYEmhmfwkK6ZwddZDGY5nvAyjCHRxCLhh+PU1kHLVi4qEYii04KpmG
-         cZIBzK40pXQjgo62B5RaZ5YhAs3eAX9lyz/b27cO1rLw+fmbUEzB/bIkdWz6tNdnsD
-         l37m5GS8joB/wsoJ81rU7USdQhqBwTSytws8Gf8fo6kkpx4AITWu33A+o3yUYXuRI2
-         WpJS6erpP2P9LRQMv/o3BmpdZLgyRs0csbkK1sM9hkgaBX9fGW0SBkbzX/Ag+Cs0tn
-         nvbJMMzvoOh0A==
-Received: by mercury (Postfix, from userid 1000)
-        id 34BCD106765E; Tue, 11 Jul 2023 14:01:33 +0200 (CEST)
-Date:   Tue, 11 Jul 2023 14:01:33 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v2 05/15] spi: Remove code duplication in
- spi_add_device_locked()
-Message-ID: <20230711120133.45drgk46y4cz7aut@mercury.elektranox.org>
-References: <20230710154932.68377-1-andriy.shevchenko@linux.intel.com>
- <20230710154932.68377-6-andriy.shevchenko@linux.intel.com>
- <7557bada-3076-4d6e-a5c5-d368433706e2@sirena.org.uk>
- <ZK03rBqoQ0IZz617@smile.fi.intel.com>
+        Tue, 11 Jul 2023 08:01:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73CA410C4;
+        Tue, 11 Jul 2023 05:01:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 360B62B;
+        Tue, 11 Jul 2023 05:02:28 -0700 (PDT)
+Received: from [10.163.47.87] (unknown [10.163.47.87])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECD223F67D;
+        Tue, 11 Jul 2023 05:01:39 -0700 (PDT)
+Message-ID: <e111d9ac-c4f6-c541-313b-7a3a6acfb5d2@arm.com>
+Date:   Tue, 11 Jul 2023 17:31:37 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fcthwhge3iyvg2gl"
-Content-Disposition: inline
-In-Reply-To: <ZK03rBqoQ0IZz617@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/4] arm_pmu: Add PERF_PMU_CAP_EXTENDED_HW_TYPE capability
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, irogers@google.com
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230710122138.1450930-1-james.clark@arm.com>
+ <20230710122138.1450930-2-james.clark@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230710122138.1450930-2-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -111,93 +60,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---fcthwhge3iyvg2gl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 7/10/23 17:51, James Clark wrote:
+> This capability gives us the ability to open PERF_TYPE_HARDWARE and
+> PERF_TYPE_HW_CACHE events on a specific PMU for free. All the
+> implementation is contained in the Perf core and tool code so no change
+> to the Arm PMU driver is needed.
+> 
+> The following basic use case now results in Perf opening the event on
+> all PMUs rather than picking only one in an unpredictable way:
+> 
+>   $ perf stat -e cycles -- taskset --cpu-list 0,1 stress -c 2
+> 
+>    Performance counter stats for 'taskset --cpu-list 0,1 stress -c 2':
+> 
+>          963279620      armv8_cortex_a57/cycles/                (99.19%)
+>          752745657      armv8_cortex_a53/cycles/                (94.80%)
+> 
+> Fixes: 55bcf6ef314a ("perf: Extend PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE")
+> Suggested-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  drivers/perf/arm_pmu.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+> index 277e29fbd504..d8844a9461a2 100644
+> --- a/drivers/perf/arm_pmu.c
+> +++ b/drivers/perf/arm_pmu.c
+> @@ -875,8 +875,13 @@ struct arm_pmu *armpmu_alloc(void)
+>  		 * configuration (e.g. big.LITTLE). This is not an uncore PMU,
+>  		 * and we have taken ctx sharing into account (e.g. with our
+>  		 * pmu::filter callback and pmu::event_init group validation).
+> +		 *
+> +		 * PERF_PMU_CAP_EXTENDED_HW_TYPE is required to open the legacy
 
-On Tue, Jul 11, 2023 at 02:06:20PM +0300, Andy Shevchenko wrote:
-> On Mon, Jul 10, 2023 at 06:16:22PM +0100, Mark Brown wrote:
-> > On Mon, Jul 10, 2023 at 06:49:22PM +0300, Andy Shevchenko wrote:
-> > > Seems by unknown reason, probably some kind of mis-rebase,
-> > > the commit 0c79378c0199 ("spi: add ancillary device support")
-> > > adds a dozen of duplicating lines of code. Drop them.
-> > >=20
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > ---
-> > >  drivers/spi/spi.c | 11 -----------
-> > >  1 file changed, 11 deletions(-)
-> > >=20
-> > > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > > index c99ee4164f11..46cbda383228 100644
-> > > --- a/drivers/spi/spi.c
-> > > +++ b/drivers/spi/spi.c
-> > > @@ -712,17 +712,6 @@ EXPORT_SYMBOL_GPL(spi_add_device);
-> > >  static int spi_add_device_locked(struct spi_device *spi)
-> > >  {
-> > >  	struct spi_controller *ctlr =3D spi->controller;
-> > > -	struct device *dev =3D ctlr->dev.parent;
-> > > -
-> > > -	/* Chipselects are numbered 0..max; validate. */
-> > > -	if (spi_get_chipselect(spi, 0) >=3D ctlr->num_chipselect) {
-> > > -		dev_err(dev, "cs%d >=3D max %d\n", spi_get_chipselect(spi, 0),
-> > > -			ctlr->num_chipselect);
-> > > -		return -EINVAL;
-> > > -	}
-> > > -
-> > > -	/* Set the bus ID string */
-> > > -	spi_dev_set_name(spi);
-> >=20
-> > I see that this is duplicating spi_add_device() (and we really could do
-> > better with code sharing there I think) but I can't immediately see
-> > where the duplication that's intended to be elimiated is here - where
-> > else in the one call path that spi_add_device_locked() has would we do
-> > the above?  Based on the changelog I was expecting to see some
-> > duplicated code in the function itself.
->=20
-> Oh, by some reason Sebastian wasn't in this rather long Cc list.
-> Added him.
->=20
-> Reading again I don't see any useful explanation why that piece of code h=
-as to
-> be duplicated among these two functions. It's 100% a copy.
->=20
-> Sebastian, can you shed some light here?
+s/legacy/generic ? These hardware events are still around.
 
-The patch in this thread is obviously wrong. It results in the
-checks never beeing called for spi_add_device_locked(). The copy is
-in spi_add_device() and those two are not calling into each other.
-
-But it should be fine to move the code to the start of
-__spi_add_device(), which allows removing the duplication. In that
-case the code will be run with the add_lock held, which is probably
-what I was worried about two years ago. Looking at it again, the
-lock is held anyways in case of spi_add_device_locked().
-
-Greetings,
-
--- Sebastian
-
---fcthwhge3iyvg2gl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmStRJIACgkQ2O7X88g7
-+pp6dQ//QWqSMddfA8JIA4/cd4pYKRoojbIso2JQaAhIWBB48KjH/GX7xoNCH4Ig
-MRloAncuXxqH1quGGpphBRJL2bAKVRcinKKtYdwCyM6P422hjD5GqVDKOr2H1u2f
-4+wWcKeKNk5ect4iYj/kRZYYpdlJzxK1hsd7bCwBCz3I0k7rlxqIg5td7e/7Q7CC
-4bvNEtL0Ub1iB+vzDNoqNKN48Bp87xr+kM1wSDsDhPqf1TrTmxgOFIYNmy2x+XuV
-20ZRE4olEfUMFlPNNCaAurOPVZmclVstzBUwRhU7uVBH4/ZnbY02wsklP0D8SbV8
-inFOurRiLtWaRSQfkwMEF2DAp4l5a6eWVyuy5Rf0mdVmgq9bgeXFycbiYkOM6Gsz
-aQ0g5SV64PYZSwPljucB28GrWfLdDNlp693elljAeDElhbF1bqhbVozqhkyfH5Ih
-J4wpwr/DgZaW31B0V/sQVlJTIRtjAmIRgydid81aaSOzXmW0B+Pu74EU/cMNcy0f
-iSGRdSPX+eA5OPNHQWPz1RQvJOHMVrMBXTdSCeVzZdV4VSTZSv9/LL922e9qK2DB
-yGQTeUox+5d2hdcQlSmo+LQGhiZiiJ9qoVWPsWjhNwbb3fh3HCSP9X/BJHNNGzqr
-WU6SN8gRjCaL3/i5pT08DOL6WdKhn/qo8EzCnOBxloSjD2uF1Ic=
-=v6T3
------END PGP SIGNATURE-----
-
---fcthwhge3iyvg2gl--
+> +		 * PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events on a
+> +		 * specific PMU.
+>  		 */
+> -		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS,
+> +		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS |
+> +				  PERF_PMU_CAP_EXTENDED_HW_TYPE,
+>  	};
+>  
+>  	pmu->attr_groups[ARMPMU_ATTR_GROUP_COMMON] =
