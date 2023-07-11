@@ -2,152 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9229B74F221
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC6B74F1AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 16:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbjGKOYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 10:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
+        id S231344AbjGKOTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 10:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbjGKOYa (ORCPT
+        with ESMTP id S230329AbjGKOTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 10:24:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B67E12A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:23:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689085352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S2e0wUM/sdkEvMSMHJiuupQ8qcMYkXyrDarJeT0G2Zc=;
-        b=E7P8ToXesCIr5buV1eJoDgGC7PTTyaLP20bHjfwwWWaVXMrBUO+Ly01bqZKQUvREPFOQnQ
-        YUk2t7j51PBzdOrvRySk9U9FjQ3oJhgDe536XLGDZ9bw3qDA4CJbh3lv1GNPF190w3TMR/
-        kVeJcSvcW3W3VTOFV6HHt74mWfdRd7c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-nSLEsZUzOaafrIBJDdnmXQ-1; Tue, 11 Jul 2023 10:22:31 -0400
-X-MC-Unique: nSLEsZUzOaafrIBJDdnmXQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E8181C3725A;
-        Tue, 11 Jul 2023 14:18:47 +0000 (UTC)
-Received: from [10.39.208.24] (unknown [10.39.208.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 636D44CD0C6;
-        Tue, 11 Jul 2023 14:18:45 +0000 (UTC)
-Message-ID: <8c1f1d67-4b81-f33d-bbc0-1c84ad05e183@redhat.com>
-Date:   Tue, 11 Jul 2023 16:18:43 +0200
+        Tue, 11 Jul 2023 10:19:30 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDF91FC6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:19:01 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-66f5faba829so3287159b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 07:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689085137; x=1691677137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dv6dpDGQjr71q1bN/lbW9GuGtuBzZo7bmAZPkqqGTBo=;
+        b=gmJTHGcXpbnuUZLGkDrhJQ47+LLzkVlh8slDsu3vUaO+hfYUiC9aXipQJc59x6IglI
+         Ogg8RfX1gi3hSz4XZW00bsahw7U4DsKpZTUCSs2UN4wGAh4P7b0WWKQvAGTVr+7Kiqbt
+         rzQO4aObFvDM0HcoFETQ7EZ32BIgDahJSpCx+mVXrMS5G//6MyT/3EuQNFLbzRUPelvf
+         dnxunj59WVK/TSTp/2lqac81bxyaYdbjuq9R53PmJFG/VKB8DCMfOcSSTVJszFjrGEn3
+         HoWEf1ggbzV7mW3YBVPff6FKScIXb84lETn/LFJ9SctBxkhBIhVEkBRsgfCxfAqPcS0q
+         9LzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689085137; x=1691677137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dv6dpDGQjr71q1bN/lbW9GuGtuBzZo7bmAZPkqqGTBo=;
+        b=fEzlwi2UmuP+qXDvhIkGaMkdsWOFCPPD8xRn/yjWuU0xXj1aFmTSVqk7zCHJo4CvkK
+         xedN+TBIw+dcX3hBlSGsYiCAT3rclSsrC5RCr/Klx082udjexPrNMYFhOR8hCQeWRA1L
+         U2E9T72wViVZSFzQfvDPl/LgaOjnk51LC2eFN+K0Vy417By4tG14lB+AHB+ZK/A6nxeY
+         5QEoB2mmgRMgBqp98L8+ojZ6SZcAyHjOBOoGoENkeBjdArrP+iSTDmJcr6pelkgdPLWj
+         0XfnMpi7JRsvCqhy9u1CwrgMtFuoC5thkV5QUu/i/qI/JW3rAVOi2CBiLbIbkY6mPrq1
+         pN8w==
+X-Gm-Message-State: ABy/qLaKOMf8I5t2rVbR5cfR6N3PYi8/8ubkaDNVQeuVQMIl+aV1z67x
+        mggxjxqM4B5tAdi6QM5pkKPciw==
+X-Google-Smtp-Source: APBJJlECZpsM7dUkJEiPSoM9Sbh/e5i6HlXOsuPwcIZztMyqTFWCyi9iFfM0i97yLHg+jHZgnctPlg==
+X-Received: by 2002:a05:6a20:7da7:b0:132:7d4a:34b5 with SMTP id v39-20020a056a207da700b001327d4a34b5mr1028671pzj.37.1689085136930;
+        Tue, 11 Jul 2023 07:18:56 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id i23-20020aa78b57000000b00662610cf7a8sm1798466pfd.172.2023.07.11.07.18.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 07:18:56 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qJECc-000AW6-Pr;
+        Tue, 11 Jul 2023 11:18:54 -0300
+Date:   Tue, 11 Jul 2023 11:18:54 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Tina Zhang <tina.zhang@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Michael Shavit <mshavit@google.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 5/6] iommu: Support mm PASID 1:1 with sva domain
+Message-ID: <ZK1kzlAoGg8qayrT@ziepe.ca>
+References: <20230707013441.365583-1-tina.zhang@intel.com>
+ <20230707013441.365583-6-tina.zhang@intel.com>
+ <ZKw/xS7wOoRvNfnH@ziepe.ca>
+ <6e88db76-6903-cb7b-b608-811a97986592@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Cindy Lu <lulu@redhat.com>, jasowang@redhat.com, mst@redhat.com,
-        xieyongji@bytedance.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-References: <20230628065919.54042-1-lulu@redhat.com>
- <20230628065919.54042-3-lulu@redhat.com>
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-Subject: Re: [RFC 2/4] vduse: Add file operation for mmap
-In-Reply-To: <20230628065919.54042-3-lulu@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e88db76-6903-cb7b-b608-811a97986592@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/28/23 08:59, Cindy Lu wrote:
-> From: Your Name <you@example.com>
+On Tue, Jul 11, 2023 at 10:43:43AM +0800, Baolu Lu wrote:
+> On 2023/7/11 1:28, Jason Gunthorpe wrote:
+> > > @@ -88,31 +98,41 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm
+> > >   		goto out_unlock;
+> > >   	}
+> > > -	if (domain) {
+> > > -		domain->users++;
+> > > -		goto out;
+> > > +	if (unlikely(domain)) {
+> > > +		/* Re-attach the device to the same domain? */
+> > > +		if (domain == sva_domain) {
+> > > +			goto out;
+> > > +		} else {
+> > > +			/* Didn't get detached from the previous domain? */
+> > > +			ret = -EBUSY;
+> > > +			goto out_unlock;
+> > > +		}
+> > >   	}
+> > And if we do all of this we should just get rid of the horrible
+> > iommu_get_domain_for_dev_pasid() entirely.
 > 
-> Add the operation for mmap, The user space APP will
-> use this function to map the pages to userspace
-> 
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
-> ---
->   drivers/vdpa/vdpa_user/vduse_dev.c | 49 ++++++++++++++++++++++++++++++
->   1 file changed, 49 insertions(+)
-> 
-> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> index f845dc46b1db..1b833bf0ae37 100644
-> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> @@ -1313,6 +1313,54 @@ static struct vduse_dev *vduse_dev_get_from_minor(int minor)
->   	return dev;
->   }
->   
-> +
-> +static vm_fault_t vduse_vm_fault(struct vm_fault *vmf)
-> +{
-> +	struct vduse_dev *dev = vmf->vma->vm_file->private_data;
-> +	struct vm_area_struct *vma = vmf->vma;
-> +	u16 index = vma->vm_pgoff;
-> +
-> +	struct vdpa_reconnect_info *info;
-> +	info = &dev->reconnect_info[index];
-> +
-> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-> +	if (remap_pfn_range(vma, vmf->address & PAGE_MASK, PFN_DOWN(info->addr),
-> +			    PAGE_SIZE, vma->vm_page_prot))
-> +		return VM_FAULT_SIGBUS;
-> +	return VM_FAULT_NOPAGE;
-> +}
-> +
-> +static const struct vm_operations_struct vduse_vm_ops = {
-> +	.fault = vduse_vm_fault,
-> +};
-> +
-> +static int vduse_mmap(struct file *file, struct vm_area_struct *vma)
-> +{
-> +	struct vduse_dev *dev = file->private_data;
-> +	struct vdpa_reconnect_info *info;
-> +	unsigned long index = vma->vm_pgoff;
-> +
-> +	if (vma->vm_end - vma->vm_start != PAGE_SIZE)
-> +		return -EINVAL;
-> +	if ((vma->vm_flags & VM_SHARED) == 0)
-> +		return -EINVAL;
-> +
-> +	if (index > 65535)
-> +		return -EINVAL;
+> At the core level, we have no idea about whether an sva domain allocated
+> for one device is compatible with another device. Hence, we should loop
+> the sva domains in the list and if the attach interface feeds back
+> -EINVAL's (not compatible), we should allocate a new domain for the
+> attached device and put it in the list if the new attachment is
+> successful.
 
-You declare an array of 64 entries in patch 1, so it can overflow.
+Yes, generally.
 
-> +
-> +	info = &dev->reconnect_info[index];
-> +	if (info->addr & (PAGE_SIZE - 1))
-> +		return -EINVAL;
-> +	if (vma->vm_end - vma->vm_start != info->size) {
-> +		return -ENOTSUPP;
-> +	}
-> +
-> +	vm_flags_set(vma, VM_IO | VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP);
-> +	vma->vm_ops = &vduse_vm_ops;
-> +
-> +	return 0;
-> +}
-> +
->   static int vduse_dev_open(struct inode *inode, struct file *file)
->   {
->   	int ret;
-> @@ -1345,6 +1393,7 @@ static const struct file_operations vduse_dev_fops = {
->   	.unlocked_ioctl	= vduse_dev_ioctl,
->   	.compat_ioctl	= compat_ptr_ioctl,
->   	.llseek		= noop_llseek,
-> +	.mmap		= vduse_mmap,
->   };
->   
->   static struct vduse_dev *vduse_dev_create(void)
+It would be good to undertand if the drivers desire one sva domain per
+instance or one sva domain per driver - but with this approach it
+becomes a driver choice which to use. I would guess that one sva
+domain per instance is slightly simpler in the drivers..
 
+iommu_get_domain_for_dev_pasid() turns into a check if the group
+already has a SVA domain bound from a list, ie we turn it upside down
+and have it search the list under the xa_lock instead of trying to
+return a domain pointer back out.
+
+Jason
