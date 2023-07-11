@@ -2,149 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D3574F82F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CBA74F831
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 20:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjGKSyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 14:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
+        id S230314AbjGKS5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 14:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjGKSyN (ORCPT
+        with ESMTP id S229505AbjGKS5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:54:13 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2055.outbound.protection.outlook.com [40.107.244.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13704BC;
-        Tue, 11 Jul 2023 11:54:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FSEo5lv1f/BLskulr7knyySZN0mRsWpWkYOBZNaOJKrCo1f/8atiNah0n4Xd1lwl5Pf2nI/nHcB1kLZ5/ceACHJJRiNXHOQmsuSnAzrX6gf7Ji8ppikjOUZwU8+n7nhT4SeDNNcnEDWvRPX+8tQR1sIN4EbfzWWiDFzbQPNU9/Vm9xT7Pqsb9ny7tGPiDdXzQzerp53URpen1+/dGwBQHy9yJq4ONXluLTyMr7KIjhHBhDcQzlXB7Bou58Jjusv5WF7Na+VnTfJ+u2DPm4Jwh3k3uDArIZk7rqyO2c2nq9HoeQ3s/N0nfvlUw44KYO6QKAApHjU27hKY/QANrpmPiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9qPOywUylNDoD4N7IvkAXUdMQFOsCQl6ZNhHdj9+U/s=;
- b=DlyK8eBh7lrsKgQke34DEtQwzWsyPWu3ISYb8kb8g/OYjcq7DlNeXUUihcCzkMlnRhYn280fLvZQcbIZk0XMShL+I8A5XFmKy/1yzyVfxSGcuHLnbtuT1yLbH9p4HHNkqFRkVQrUdouYPQivXZQfeImCW7yxu6PCC5e4jJlebQHukROm2dj3uCQmnAOoUtG2l8v+5fNuB3ACQ3SNSv7wq5ciKvSYFywECct/kQN51RlBd95NAc+OI6c8TVq2Dzthk8B+shYEYKJ037S567fXRawjPg8rkf14gZTP3vx3jzI88G4GaWcyi0pIRC2A/reTny2fQzF8W6v+iLgqvR6raQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sightlineapplications.com; dmarc=pass action=none
- header.from=sightlineapplications.com; dkim=pass
- header.d=sightlineapplications.com; arc=none
+        Tue, 11 Jul 2023 14:57:11 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC83E4D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:57:07 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7835971026fso206147439f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 11:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sightlineapplications.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9qPOywUylNDoD4N7IvkAXUdMQFOsCQl6ZNhHdj9+U/s=;
- b=IARat9lDEEDl12jimYFD9ZC3YGRjl5HdGGHO0HInLey2u18YhfOYhkQjsvv4zbSy66KHi9a0HrJmeCWVffHY1dPAP789FF5TNlIBpMj8LT1ZeU56Tl06uNrbAGi5SNQPUBSPGq8el6AJSKQifM8ryXhCJTXBKPQ0rC4J8dRYCvxnIJn33CT1OtwT2hZFfZBJpvFWsbzhH/yBzqfXFUDXaT8U0xkSmPhv2pRv22qpLaNR+wUpyDzCk+bHuaEUQu/ADY9iB/GL8x9HDDHfgyBIZqPr6neNDLpYwXgJ5SOxzZSHkaciOaFNlFwBI4F/hb8545B7fgLJmdf1dkUqiu5MTQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=sightlineapplications.com;
-Received: from SN4PR18MB4918.namprd18.prod.outlook.com (2603:10b6:806:215::8)
- by LV3PR18MB5687.namprd18.prod.outlook.com (2603:10b6:408:1a4::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.32; Tue, 11 Jul
- 2023 18:54:09 +0000
-Received: from SN4PR18MB4918.namprd18.prod.outlook.com
- ([fe80::c27a:8a05:c369:eb0b]) by SN4PR18MB4918.namprd18.prod.outlook.com
- ([fe80::c27a:8a05:c369:eb0b%6]) with mapi id 15.20.6565.028; Tue, 11 Jul 2023
- 18:54:08 +0000
-From:   Patrick Whewell <patrick.whewell@sightlineapplications.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        William Gray <william.gray@linaro.org>,
-        Patrick Whewell <patrick.whewell@sightlineapplications.com>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] media: venus: Fix firmware path for sm8250
-Date:   Tue, 11 Jul 2023 11:53:30 -0700
-Message-Id: <20230711185330.10106-1-patrick.whewell@sightlineapplications.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SN7P220CA0009.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:806:123::14) To SN4PR18MB4918.namprd18.prod.outlook.com
- (2603:10b6:806:215::8)
+        d=gmail.com; s=20221208; t=1689101827; x=1691693827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+4g7wmRPCS24sQKjKjx9Grhgdi4yEVCkNGs4KXP0yN0=;
+        b=iN/yTwvk5Q4zCG6J3etEclLIcohE/1Uy6PhgIWKHFr+y350q6hCXtY/i8QaSpu25wO
+         Me4SMQxhIN6HkhoiQgJjF/uUivQYmfHw3aeCqtx4oWWbmzPNE5A7T8aqf6//sTy5hZdZ
+         IlVU9MJwQvq2WL5F8dB3DT+RMnn3kpHrmRbvPDCmJte2xQmVbok9smbLjVWwk+nwX6Cx
+         5QiAnA/YNsClKzyDvy/AQlsxhX1QY8vjbBqeYGPmqEkWbtKwNtmecIUY80JHW54VV2nl
+         GoJUcgbAhooDbOnkdVO/5HWAhti6rYwAKIZPBXKO/9NrNi7PC67OCzJRz/1SE+Gg7gBL
+         gDcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689101827; x=1691693827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+4g7wmRPCS24sQKjKjx9Grhgdi4yEVCkNGs4KXP0yN0=;
+        b=ke0b60+P3FNvFdfvqRvPaO8EiojKPpjyi7gIu7UAHl6dY0nUhXwc8D7SdztjyRnKIU
+         4AX00LVZppUH6gFirGZ2m3ddmUwYFtdTiA97jyX4NdajJcHvqgKImlVW+HQWTairj8W2
+         6GegmbP0x5+gBRJLop+3JHpQyx95URoHm3Q0BWdLXsR9eaNSuuEYGz+6SZ/kw7XKaa3s
+         aVgT/Rs3U8u9rA6atNQwDYUYveZsEMXjiT4+qhah6bT4LYxGF/+a3lWWQ6BW06wFgrXs
+         kV/NcgCK/ofvP6EPmS0vL1dB9ykViupV6lVD8KpKUmMLmOhGsZd6pYMZHJYkejXo1vAo
+         i0VQ==
+X-Gm-Message-State: ABy/qLYbEOSaL+/BCePbsBQcldpzDjU2Oj9aWdKbEWs/Of/hNznGBvLT
+        jglPCLd2VnTi9H77/4RcHm5ye1Ld3IJw/JaxwxE=
+X-Google-Smtp-Source: APBJJlG+HuLr7lbXc0khc4MS14dZTsNhQIO3urdmVmHprpMs5r4ImRy6krCtQ07/qU5CROdWPhIym/9WcfaFXgQ7nlQ=
+X-Received: by 2002:a05:6e02:549:b0:346:fe2:125a with SMTP id
+ i9-20020a056e02054900b003460fe2125amr14768607ils.26.1689101826689; Tue, 11
+ Jul 2023 11:57:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR18MB4918:EE_|LV3PR18MB5687:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9804f98-d278-4805-4b97-08db82403534
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V3nZ+nK8fIcQ3C3DdnkWmxBPwoSqxIxz3f1FjRdoJ2HxELG9/DZrMZioMf8IB6YF0Ap7V3loE4jZZbFXnZAbHm1n5FIkDwTWIzGny7vFb14V4k0aJdgvegfsV8Sd7aMm3VkJTxISyE2DyVrBKT+HLtzJ/F/OoDdnSfvA2B7zb8/SQ0Y8yuVu8kKsaMS9QTeCiuqi+Yp3QUZUb1K7dfw2BgnZfOLvauLqHsS+tFUqFHKrCp6Jt0kJaEZbgCkG6hb9swyW6IuaFpnsnK+yGtxJX+rwWzoMSTMqr1b2jXe/OlukGAKgFmLzX5sl80SHrJrWkeApx1Bch2fKyHMJjClYUH8h/hv24dWdaOAFUYTM+p2aoV39h/7azrnrW3w86CzWtTxFqnYzdjqX+RKqMJWldh4wUT+RylIS7AXMprkKKwZCddLVFZLc3O5kn9fsfoQmnu77jvNHZzJGwPYm4lCDfI7k+zNFCMn25flH0Nb/1SDqj2fz4E9udSzqzPIW0NuvsRVDzvtUCl4MeYz0cfr7UIqrsveolwuZn1qOrmlzkooZKoSYE73l02IxKzyS43EEvvc2ceMIVIazi0RmSuIP0Qz/TBqcdu6FqK3soyIKxwHYDgPaDcyNrrthaHKHs01Ypm00wrgdWyAJM5ky8j2/ZA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR18MB4918.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(136003)(396003)(376002)(39840400004)(109986019)(451199021)(38350700002)(38100700002)(36756003)(86362001)(8936002)(7416002)(5660300002)(478600001)(6506007)(1076003)(41300700001)(44832011)(8676002)(186003)(6512007)(26005)(2616005)(4744005)(2906002)(316002)(6666004)(4326008)(52116002)(66556008)(66946007)(6486002)(54906003)(83380400001)(66476007)(266003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gkgAxjnAKkziyMLGQYb/Y9OG2ldXcPSaBLlak41YsA6zSTgndUUPGa/WYb91?=
- =?us-ascii?Q?dNXxTKVhk8XT0c1Kb/6f4Z6IqMyyzuBYQU7miotGeuLuOfLaf1laYNldZHDm?=
- =?us-ascii?Q?owlsYM/TTTtJwiPHmbR8iFXZwS5YS6CDA0TwRg02v88uuZwLFcvwLu+BtX8S?=
- =?us-ascii?Q?BbBNUcURTyP8Ooua5F84vEJ9fzlzT6pJj+au42dtr0gtinkecVUJ6v0JPWJc?=
- =?us-ascii?Q?XAK+s3T9OABQjY/ZEAKHBUyhE4OlCkrKF9V2aAieZ7wojYN13hlpJxb/dL6W?=
- =?us-ascii?Q?9rpireIuJl7YVXOWFljsirSAtLgZ2CXcZRiU+VeRGBUSLa4EokWUYTXkse9H?=
- =?us-ascii?Q?034qElCWlkVWoKsS/NCZYZYCpLi7VfnK/LlQc+cbEsZlCYJvd3Nyq93puUPY?=
- =?us-ascii?Q?ls0SlUsbeqonGT9DQTIk4rlsOPhEildMDKBDhD9nMv82cGz++OpMwMP5YiWq?=
- =?us-ascii?Q?OMyN/iXDNndDV9+W3rWW9JjeFbQIOPASmS75DEgAf77oDGA1zTwoE7/iC0TF?=
- =?us-ascii?Q?nBsi/+fRrH4nXEnPfTmfB+oZq65AOHhZLwxJvhoptJk6qp/EjJtkTUxOKQRa?=
- =?us-ascii?Q?dgpijFgCwRx0o4knRN/T87LpqTA7QFSg4EZYDAhVgzMmrnwzBAuE9VVkLEyd?=
- =?us-ascii?Q?K7ghQdsux2+y4XJeSeN1E5dRmujDXeLgcaN0i9okihyR68xKgEz4WULzNNaf?=
- =?us-ascii?Q?9Dj9wobrFDo3JW7J+4BLb7wcBtWDFqibmhQq/4yRYZFE56uU03ZJQEom5nEo?=
- =?us-ascii?Q?JAKXNFwy8izBe7L5kRYSG5j9TO0450a6+TJNPH2pLvTTh0mLz/SJ09Me92NF?=
- =?us-ascii?Q?O5Aq13tBofIA5eflZxSczkxHX+5HTqg6ISdL/E9NJhkVqwTNenIodFeCDQMs?=
- =?us-ascii?Q?r0SH+Jw2Wxchb8oKgP7UNmkHEV0CLLpm7IEvb3ME5eeSaCzdm4J3AOForTcj?=
- =?us-ascii?Q?jgFKteynJoo5Xc0jr3nKToizWIhffBMsXwUm7IYr6cP67+qYEGDejyWX2zqD?=
- =?us-ascii?Q?zr4MwiFXgXRUGethccr4zeVyNOwrvbxsJlz/VMlQmYSrAAzsHnsOefMnkqkH?=
- =?us-ascii?Q?C8n+psJ9QQeLX0WbMAHJMZmmR7d067wqHvkspDgdjQSv6m0Tv85Ic+Cj8PMj?=
- =?us-ascii?Q?WhaPyvyrYfgRybvIFL2/uhOpBEaUykn8voJcv5CYnkX+jPU+ddoDsTxAHwOQ?=
- =?us-ascii?Q?ttuiDqdcilaMKKvHGosKT3ppcGcTgbi6xT6ZBDlRQ0VinhEc4dWGMb5cMYoq?=
- =?us-ascii?Q?+06ynjd7VrnDFS/A06o1QshicvPskSiiO37L3+bjfo28zPOYwagVCbwMWQm/?=
- =?us-ascii?Q?jvXWhnyHSIqNpjuYCXUuqIyGBapBG4vMP3l83t7TYLHQpGbQBElx0eQlinLp?=
- =?us-ascii?Q?A3bV0xdhTRkC9sworV+cOgMZDsvalT8ftuSd82bfSSrpqntboApkWYnKxfIK?=
- =?us-ascii?Q?T0ug7gWqBvhzmFpX+VQknOsKwXDCg7i+C0O6CPHc1qoNTEg/hcCmk+RTxDX/?=
- =?us-ascii?Q?kxh2TLLVgyVACuExCPUJDNR+61kbTw+spKJo5S+IgDdaryJjOhedjapL/d5k?=
- =?us-ascii?Q?k2Hg+sZYUes5AaKY1KP3XREKbUKLHk0LxhjJjJoFzYmlqSNAu5HmD/NhXWNA?=
- =?us-ascii?Q?KpEmcAcua6DYFHaX8HsRWo/Av3RzUWTs24DlE+SiZxEN?=
-X-OriginatorOrg: sightlineapplications.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9804f98-d278-4805-4b97-08db82403534
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR18MB4918.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2023 18:54:08.8349
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 6f56283c-2197-4913-9761-239c8b420cf0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DkSO9S4S7Qg0BGO/LLFqNg6cLE6RduoP3hNVVRl4HfbRdVj7zMjNLqEQjT1LHjs5ngl3ip+2IfmKXww58N32kNH5nSCdpZo/9EYUlsvgKd0s2OP5iPf5kSwr6kGAztrfb5jY7yTi99p/+IKKtoy6gg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR18MB5687
+References: <ZK1pVBJpbjujJNJW@kernel.org>
+In-Reply-To: <ZK1pVBJpbjujJNJW@kernel.org>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Tue, 11 Jul 2023 11:56:55 -0700
+Message-ID: <CAKEwX=NcTYje4c44=2J+3GYg4SPa4FEm20QsWu+UA4qoWRYczA@mail.gmail.com>
+Subject: Re: [PATCH 1/1 fyi] tools headers UAPI: Sync files changed by new
+ cachestat syscall with the kernel sources
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The firmware path for the sm8250 resources is incorrect. This fixes the
-path to address the firmware correctly.
+On Tue, Jul 11, 2023 at 7:38=E2=80=AFAM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> tldr; Just FYI, I'm carrying this on the perf tools tree.
+>
+> - Arnaldo
+>
+> Full explanation:
+>
+> There used to be no copies, with tools/ code using kernel headers
+> directly. From time to time tools/perf/ broke due to legitimate kernel
+> hacking. At some point Linus complained about such direct usage. Then we
+> adopted the current model.
+>
+> The way these headers are used in perf are not restricted to just
+> including them to compile something.
+>
+> There are sometimes used in scripts that convert defines into string
+> tables, etc, so some change may break one of these scripts, or new MSRs
+> may use some different #define pattern, etc.
+>
+> E.g.:
+>
+>   $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+>   tools/perf/trace/beauty/arch_errno_names.sh
+>   tools/perf/trace/beauty/drm_ioctl.sh
+>   tools/perf/trace/beauty/fadvise.sh
+>   tools/perf/trace/beauty/fsconfig.sh
+>   tools/perf/trace/beauty/fsmount.sh
+>   $
+>   $ tools/perf/trace/beauty/fadvise.sh
+>   static const char *fadvise_advices[] =3D {
+>         [0] =3D "NORMAL",
+>         [1] =3D "RANDOM",
+>         [2] =3D "SEQUENTIAL",
+>         [3] =3D "WILLNEED",
+>         [4] =3D "DONTNEED",
+>         [5] =3D "NOREUSE",
+>   };
+>   $
+>
+> The tools/perf/check-headers.sh script, part of the tools/ build
+> process, points out changes in the original files.
+>
+> So its important not to touch the copies in tools/ when doing changes in
+> the original kernel headers, that will be done later, when
+> check-headers.sh inform about the change to the perf tools hackers.
+>
+> ---
+>
+> To pick the changes in these csets:
+>
+>   cf264e1329fb0307 ("cachestat: implement cachestat syscall")
+>
+> That add support for this new syscall in tools such as 'perf trace'.
+>
+> For instance, this is now possible:
+>
+>   # perf trace -e cachestat
+>   ^C[root@five ~]#
+>   # perf trace -v -e cachestat
+>   Using CPUID AuthenticAMD-25-21-0
+>   event qualifier tracepoint filter: (common_pid !=3D 3163687 && common_p=
+id !=3D 3147) && (id =3D=3D 451)
+>   mmap size 528384B
+>   ^C[root@five ~]
+>
+>   # perf trace -v -e *stat* --max-events=3D10
+>   Using CPUID AuthenticAMD-25-21-0
+>   event qualifier tracepoint filter: (common_pid !=3D 3163713 && common_p=
+id !=3D 3147) && (id =3D=3D 4 || id =3D=3D 5 || id =3D=3D 6 || id =3D=3D 13=
+6 || id =3D=3D 137 || id =3D=3D 138 || id =3D=3D 262 || id =3D=3D 332 || id=
+ =3D=3D 451)
+>   mmap size 528384B
+>        0.000 ( 0.009 ms): Cache2 I/O/4544 statfs(pathname: 0x45635288, bu=
+f: 0x7f8745725b60)                     =3D 0
+>        0.012 ( 0.003 ms): Cache2 I/O/4544 newfstatat(dfd: CWD, filename: =
+0x45635288, statbuf: 0x7f874569d250)   =3D 0
+>        0.036 ( 0.002 ms): Cache2 I/O/4544 newfstatat(dfd: 138, filename: =
+0x541b7093, statbuf: 0x7f87457256f0, flag: 4096) =3D 0
+>        0.372 ( 0.006 ms): Cache2 I/O/4544 statfs(pathname: 0x45635288, bu=
+f: 0x7f8745725b10)                     =3D 0
+>        0.379 ( 0.003 ms): Cache2 I/O/4544 newfstatat(dfd: CWD, filename: =
+0x45635288, statbuf: 0x7f874569d250)   =3D 0
+>        0.390 ( 0.002 ms): Cache2 I/O/4544 newfstatat(dfd: 138, filename: =
+0x541b7093, statbuf: 0x7f87457256a0, flag: 4096) =3D 0
+>        0.609 ( 0.005 ms): Cache2 I/O/4544 statfs(pathname: 0x45635288, bu=
+f: 0x7f8745725b60)                     =3D 0
+>        0.615 ( 0.003 ms): Cache2 I/O/4544 newfstatat(dfd: CWD, filename: =
+0x45635288, statbuf: 0x7f874569d250)   =3D 0
+>        0.625 ( 0.002 ms): Cache2 I/O/4544 newfstatat(dfd: 138, filename: =
+0x541b7093, statbuf: 0x7f87457256f0, flag: 4096) =3D 0
+>        0.826 ( 0.005 ms): Cache2 I/O/4544 statfs(pathname: 0x45635288, bu=
+f: 0x7f8745725b10)                     =3D 0
+>   #
+>
+> That is the filter expression attached to the raw_syscalls:sys_{enter,exi=
+t}
+> tracepoints.
+>
+>   $ find tools/perf/arch/ -name "syscall*tbl" | xargs grep -w sys_cachest=
+at
+>   tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl:451       n64     c=
+achestat                       sys_cachestat
+>   tools/perf/arch/powerpc/entry/syscalls/syscall.tbl:451        common  c=
+achestat                       sys_cachestat
+>   tools/perf/arch/s390/entry/syscalls/syscall.tbl:451  common   cachestat=
+               sys_cachestat                   sys_cachestat
+>   tools/perf/arch/x86/entry/syscalls/syscall_64.tbl:451 common  cachestat=
+               sys_cachestat
+>   $
+>
+>   $ grep -w cachestat /tmp/build/perf-tools/arch/x86/include/generated/as=
+m/syscalls_64.c
+>         [451] =3D "cachestat",
+>   $
+>
+> This addresses these perf build warnings:
+>
+> Warning: Kernel ABI header differences:
+>   diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm-generi=
+c/unistd.h
+>   diff -u tools/include/uapi/linux/mman.h include/uapi/linux/mman.h
+>   diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/x86/entr=
+y/syscalls/syscall_64.tbl
+>   diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc=
+/kernel/syscalls/syscall.tbl
+>   diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kerne=
+l/syscalls/syscall.tbl
+>   diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/k=
+ernel/syscalls/syscall_n64.tbl
+>
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Nhat Pham <nphamcs@gmail.com>
+> Link: https://lore.kernel.org/lkml/
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>  tools/include/uapi/asm-generic/unistd.h            |  5 ++++-
+>  tools/include/uapi/linux/mman.h                    | 14 ++++++++++++++
+>  .../perf/arch/mips/entry/syscalls/syscall_n64.tbl  |  1 +
+>  tools/perf/arch/powerpc/entry/syscalls/syscall.tbl |  1 +
+>  tools/perf/arch/s390/entry/syscalls/syscall.tbl    |  1 +
+>  tools/perf/arch/x86/entry/syscalls/syscall_64.tbl  |  1 +
+>  6 files changed, 22 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi=
+/asm-generic/unistd.h
+> index dd7d8e10f16d83a1..fd6c1cb585db43c4 100644
+> --- a/tools/include/uapi/asm-generic/unistd.h
+> +++ b/tools/include/uapi/asm-generic/unistd.h
+> @@ -817,8 +817,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+>  #define __NR_set_mempolicy_home_node 450
+>  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+>
+> +#define __NR_cachestat 451
+> +__SYSCALL(__NR_cachestat, sys_cachestat)
+> +
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 451
+> +#define __NR_syscalls 452
+>
+>  /*
+>   * 32 bit systems traditionally used different
+> diff --git a/tools/include/uapi/linux/mman.h b/tools/include/uapi/linux/m=
+man.h
+> index f55bc680b5b0a45e..a246e11988d5e0e2 100644
+> --- a/tools/include/uapi/linux/mman.h
+> +++ b/tools/include/uapi/linux/mman.h
+> @@ -4,6 +4,7 @@
+>
+>  #include <asm/mman.h>
+>  #include <asm-generic/hugetlb_encode.h>
+> +#include <linux/types.h>
+>
+>  #define MREMAP_MAYMOVE         1
+>  #define MREMAP_FIXED           2
+> @@ -41,4 +42,17 @@
+>  #define MAP_HUGE_2GB   HUGETLB_FLAG_ENCODE_2GB
+>  #define MAP_HUGE_16GB  HUGETLB_FLAG_ENCODE_16GB
+>
+> +struct cachestat_range {
+> +       __u64 off;
+> +       __u64 len;
+> +};
+> +
+> +struct cachestat {
+> +       __u64 nr_cache;
+> +       __u64 nr_dirty;
+> +       __u64 nr_writeback;
+> +       __u64 nr_evicted;
+> +       __u64 nr_recently_evicted;
+> +};
+> +
+>  #endif /* _UAPI_LINUX_MMAN_H */
+> diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/=
+perf/arch/mips/entry/syscalls/syscall_n64.tbl
+> index 3f1886ad9d8060b4..cfda2511badf3ad0 100644
+> --- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+> +++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+> @@ -365,3 +365,4 @@
+>  448    n64     process_mrelease                sys_process_mrelease
+>  449    n64     futex_waitv                     sys_futex_waitv
+>  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_no=
+de
+> +451    n64     cachestat                       sys_cachestat
+> diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/p=
+erf/arch/powerpc/entry/syscalls/syscall.tbl
+> index a0be127475b1f761..8c0b08b7a80ec4b7 100644
+> --- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+> +++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+> @@ -537,3 +537,4 @@
+>  448    common  process_mrelease                sys_process_mrelease
+>  449    common  futex_waitv                     sys_futex_waitv
+>  450    nospu   set_mempolicy_home_node         sys_set_mempolicy_home_no=
+de
+> +451    common  cachestat                       sys_cachestat
+> diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf=
+/arch/s390/entry/syscalls/syscall.tbl
+> index b68f47541169f9af..a6935af2235cab6c 100644
+> --- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+> +++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+> @@ -453,3 +453,4 @@
+>  448  common    process_mrelease        sys_process_mrelease            s=
+ys_process_mrelease
+>  449  common    futex_waitv             sys_futex_waitv                 s=
+ys_futex_waitv
+>  450  common    set_mempolicy_home_node sys_set_mempolicy_home_node     s=
+ys_set_mempolicy_home_node
+> +451  common    cachestat               sys_cachestat                   s=
+ys_cachestat
+> diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/pe=
+rf/arch/x86/entry/syscalls/syscall_64.tbl
+> index c84d12608cd2de9e..227538b0ce801eeb 100644
+> --- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+> +++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+> @@ -372,6 +372,7 @@
+>  448    common  process_mrelease        sys_process_mrelease
+>  449    common  futex_waitv             sys_futex_waitv
+>  450    common  set_mempolicy_home_node sys_set_mempolicy_home_node
+> +451    common  cachestat               sys_cachestat
+>
+>  #
+>  # Due to a historical design error, certain syscalls are numbered differ=
+ently
+> --
+> 2.37.1
+>
 
-Signed-off-by: Patrick Whewell <patrick.whewell@sightlineapplications.com>
----
- drivers/media/platform/qcom/venus/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 2ae867cb4c48..348085f8fc9c 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -814,7 +814,7 @@ static const struct venus_resources sm8250_res = {
- 	.vmem_size = 0,
- 	.vmem_addr = 0,
- 	.dma_mask = 0xe0000000 - 1,
--	.fwname = "qcom/vpu-1.0/venus.mdt",
-+	.fwname = "qcom/vpu-1.0/venus.mbn",
- };
- 
- static const struct freq_tbl sc7280_freq_table[] = {
--- 
-2.25.1
-
+LGTM.
+Acked-by: Nhat Pham <nphamcs@gmail.com>
