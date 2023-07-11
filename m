@@ -2,198 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11D874EBD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A55274EBD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jul 2023 12:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjGKKjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jul 2023 06:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S231223AbjGKKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jul 2023 06:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjGKKjh (ORCPT
+        with ESMTP id S229837AbjGKKk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jul 2023 06:39:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870F5E60
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jul 2023 03:39:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3C9E2211C5;
-        Tue, 11 Jul 2023 10:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1689071975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=44KBJ+1im2SseuOl7OurwU90VSfXsPuN6bOH+bmXMeo=;
-        b=15QFgDP0OdSUp15wD7dzXcVtUkcaDFUKAcnNES6oIaMueCQa6cLRd58w86K+vVp2fsVbXU
-        QJHX0+k8um8wKtzxJugLV1Hb+jNABsbH8ZGWC8SZnaCnms4ESHK84aP3s8G1hdAwr+vaGl
-        BHv6v6YQxuJIujgMuiQM4ADEqUdgbxM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1689071975;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=44KBJ+1im2SseuOl7OurwU90VSfXsPuN6bOH+bmXMeo=;
-        b=CZrjNXKFDXgYrYygDLRtrle2FjF/Qex3slwU7zDZ5Xdu8iStTHkyJzqsBjj68JblYwAx7f
-        9/z6X8qmt/DeosBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 73DB31391C;
-        Tue, 11 Jul 2023 10:39:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Cgw0G2YxrWTnfwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 11 Jul 2023 10:39:34 +0000
-Message-ID: <53676850-539f-2813-d55d-a8bc0ec88092@suse.cz>
-Date:   Tue, 11 Jul 2023 12:39:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 00/33] Per-VMA locks
-To:     Leon Romanovsky <leon@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        paulmck@kernel.org, mingo@redhat.com, will@kernel.org,
-        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
-        david@redhat.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        regressions@leemhuis.info,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        maorg@nvidia.com, gal@nvidia.com, ranro@nvidia.com,
-        drort@nvidia.com, idok@nvidia.com, sergeyy@nvidia.com
-References: <20230227173632.3292573-1-surenb@google.com>
- <20230711103541.GA190975@unreal>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230711103541.GA190975@unreal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Jul 2023 06:40:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753651A2;
+        Tue, 11 Jul 2023 03:40:27 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BAQvTB007755;
+        Tue, 11 Jul 2023 10:40:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=wz/c7LCVr71XpNiEk8lSRfuaqQwPsMz6br/H0UTYKSk=;
+ b=hYzeoJuTsLXZbZUO7ncwKpCXfl7q5ZA8vwHNuz3bNUX2rs41kFJt+dUlw0Or/ZiEyXn6
+ JB7EvjF2b1c7KI3haJlzeTJGmGZ0eaRFEc012N4JRYfgcPyhRPxVKhZm3D68PtnrUAqY
+ E2JxM1s2hAOQvuLEDXu+QoC4wAq5Km00bBybVo6WUFag2M9PiyhOTv+wWsaBJWCuMFhN
+ /F/pIMr14/EpIdXgTjKmE4UcbKJ0oviOtR1aoPmmube+zRjAudXYcCXaT10yqj9WADwD
+ mMRv6795bBjUl2FziXjoyfW1gs9G1hquSzfwmGCRTBwVnkWyHub/ePnIGULURs4QCJj+ 1g== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs3vh866v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 10:40:17 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36BAeCwb021490;
+        Tue, 11 Jul 2023 10:40:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3rq0vkm64b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 11 Jul 2023 10:40:12 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36BAeCxO021485;
+        Tue, 11 Jul 2023 10:40:12 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 36BAeCNq021482;
+        Tue, 11 Jul 2023 10:40:12 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
+        id 7D7CD5000AA; Tue, 11 Jul 2023 16:10:11 +0530 (+0530)
+From:   Nitin Rawat <quic_nitirawa@quicinc.com>
+To:     mani@kernel.org, quic_cang@quicinc.com, stanley.chu@mediatek.com,
+        bvanassche@acm.org, quic_asutoshd@quicinc.com, avri.altman@wdc.com,
+        martin.petersen@oracle.com, beanhuo@micron.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        jejb@linux.ibm.com, linux-arm-msm@vger.kernel.org,
+        quic_ziqichen@quicinc.com, Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: [PATCH V1] scsi: ufs: ufs-qcom: Update UFS devfreq Parameters
+Date:   Tue, 11 Jul 2023 16:10:06 +0530
+Message-Id: <20230711104006.15872-1-quic_nitirawa@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UJ7Y_BAWWPbSWNj90E_0Y0dohvJHr415
+X-Proofpoint-ORIG-GUID: UJ7Y_BAWWPbSWNj90E_0Y0dohvJHr415
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_05,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=931
+ clxscore=1011 mlxscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110094
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/23 12:35, Leon Romanovsky wrote:
-> 
-> On Mon, Feb 27, 2023 at 09:35:59AM -0800, Suren Baghdasaryan wrote:
-> 
-> <...>
-> 
->> Laurent Dufour (1):
->>   powerc/mm: try VMA lock-based page fault handling first
-> 
-> Hi,
-> 
-> This series and specifically the commit above broke docker over PPC.
-> It causes to docker service stuck while trying to activate. Revert of
-> this commit allows us to use docker again.
+To support the periodic polling mode without stop
+caused by CPU idle state, enable delayed timer
+as default instead of deferrable timer for
+qualcomm platforms.
+And change UFS devfreq downdifferential threshold to 65
+for less aggresive downscaling.
 
-Hi,
+Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
+Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+---
+ drivers/ufs/host/ufs-qcom.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-there have been follow-up fixes, that are part of 6.4.3 stable (also
-6.5-rc1) Does that version work for you?
-
-Vlastimil
-
-> [user@ppc-135-3-200-205 ~]# sudo systemctl status docker
-> ● docker.service - Docker Application Container Engine
->      Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
->      Active: activating (start) since Mon 2023-06-26 14:47:07 IDT; 3h 50min ago
-> TriggeredBy: ● docker.socket
->        Docs: https://docs.docker.com
->    Main PID: 276555 (dockerd)
->      Memory: 44.2M
->      CGroup: /system.slice/docker.service
->              └─ 276555 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-> 
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129383166+03:00" level=info msg="Graph migration to content-addressability took 0.00 se>
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129666160+03:00" level=warning msg="Your kernel does not support cgroup cfs period"
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129684117+03:00" level=warning msg="Your kernel does not support cgroup cfs quotas"
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129697085+03:00" level=warning msg="Your kernel does not support cgroup rt period"
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129711513+03:00" level=warning msg="Your kernel does not support cgroup rt runtime"
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129720656+03:00" level=warning msg="Unable to find blkio cgroup in mounts"
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.129805617+03:00" level=warning msg="mountpoint for pids not found"
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.130199070+03:00" level=info msg="Loading containers: start."
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.132688568+03:00" level=warning msg="Running modprobe bridge br_netfilter failed with me>
-> Jun 26 14:47:07 ppc-135-3-200-205 dockerd[276555]: time="2023-06-26T14:47:07.271014050+03:00" level=info msg="Default bridge (docker0) is assigned with an IP addres>
-> 
-> Python script which we used for bisect:
-> 
-> import subprocess
-> import time
-> import sys
-> 
-> 
-> def run_command(cmd):
->     print('running:', cmd)
-> 
->     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-> 
->     try:
->         stdout, stderr = p.communicate(timeout=30)
-> 
->     except subprocess.TimeoutExpired:
->         return True
-> 
->     print(stdout.decode())
->     print(stderr.decode())
->     print('rc:', p.returncode)
-> 
->     return False
-> 
-> 
-> def main():
->     commands = [
->         'sudo systemctl stop docker',
->         'sudo systemctl status docker',
->         'sudo systemctl is-active docker',
->         'sudo systemctl start docker',
->         'sudo systemctl status docker',
->     ]
-> 
->     for i in range(1000):
->         title = f'Try no. {i + 1}'
->         print('*' * 50, title, '*' * 50)
-> 
->         for cmd in commands:
->             if run_command(cmd):
->                 print(f'Reproduced on try no. {i + 1}!')
->                 print(f'"{cmd}" is stuck!')
-> 
->                 return 1
-> 
->             print('\n')
->         time.sleep(30)
->     return 0
-> 
-> if __name__ == '__main__':
->     sys.exit(main())
-> 
-> Thanks
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 82d02e7f3b4f..a15815c951ca 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1388,8 +1388,9 @@ static void ufs_qcom_config_scaling_param(struct ufs_hba *hba,
+ 					struct devfreq_simple_ondemand_data *d)
+ {
+ 	p->polling_ms = 60;
++	p->timer = DEVFREQ_TIMER_DELAYED;
+ 	d->upthreshold = 70;
+-	d->downdifferential = 5;
++	d->downdifferential = 65;
+ }
+ #else
+ static void ufs_qcom_config_scaling_param(struct ufs_hba *hba,
+--
+2.17.1
 
